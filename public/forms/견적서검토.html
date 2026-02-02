@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>견적서 검토 시스템</title>
+  <style>
+    @page { size: A4; margin: 15mm; }
+    * { box-sizing: border-box; }
+    body { font-family: '맑은 고딕', 'Malgun Gothic', sans-serif; font-size: 12pt; line-height: 1.6; margin: 0; padding: 0; background: #f0f4f8; }
+    .toolbar { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 20px; position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+    .toolbar h2 { margin: 0; font-size: 16pt; }
+    .toolbar-buttons { display: flex; gap: 10px; }
+    .toolbar button { padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-size: 11pt; font-weight: 500; }
+    .btn-analyze { background: #10b981; color: white; }
+    .btn-clear { background: #ef4444; color: white; }
+    .btn-print { background: #f59e0b; color: white; }
+    .btn-download { background: #8b5cf6; color: white; }
+
+    .main-container { display: flex; min-height: calc(100vh - 60px); }
+
+    /* 왼쪽: 견적서 업로드/뷰어 */
+    .viewer-panel { width: 50%; background: #1f2937; padding: 20px; overflow-y: auto; }
+    .upload-zone { border: 3px dashed #4b5563; border-radius: 16px; padding: 60px 40px; text-align: center; background: #374151; cursor: pointer; transition: all 0.3s; }
+    .upload-zone:hover, .upload-zone.dragover { border-color: #8b5cf6; background: #4b5563; }
+    .upload-zone svg { width: 80px; height: 80px; color: #9ca3af; margin-bottom: 20px; }
+    .upload-zone h3 { color: white; margin: 0 0 10px 0; font-size: 18pt; }
+    .upload-zone p { color: #9ca3af; margin: 0; }
+    .upload-zone input { display: none; }
+
+    .preview-container { display: none; }
+    .preview-container.show { display: block; }
+    .preview-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+    .preview-header h3 { color: white; margin: 0; }
+    .preview-header button { background: #ef4444; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; }
+    .preview-image { width: 100%; border-radius: 8px; background: white; }
+    .preview-pdf { width: 100%; height: calc(100vh - 180px); border: none; border-radius: 8px; }
+    .preview-excel { background: white; border-radius: 8px; padding: 15px; max-height: calc(100vh - 180px); overflow: auto; }
+    .preview-excel h4 { margin: 0 0 15px 0; color: #059669; display: flex; align-items: center; gap: 10px; }
+    .preview-excel h4 svg { width: 24px; height: 24px; }
+    .excel-table { width: 100%; border-collapse: collapse; font-size: 10pt; }
+    .excel-table th, .excel-table td { border: 1px solid #d1d5db; padding: 6px 10px; text-align: left; }
+    .excel-table th { background: #ecfdf5; color: #065f46; font-weight: 600; position: sticky; top: 0; }
+    .excel-table tr:nth-child(even) { background: #f9fafb; }
+    .excel-table tr:hover { background: #f0fdf4; }
+    .excel-info { display: flex; gap: 15px; margin-bottom: 15px; flex-wrap: wrap; }
+    .excel-info span { background: #e5e7eb; padding: 4px 12px; border-radius: 20px; font-size: 10pt; color: #374151; }
+    .sheet-tabs { display: flex; gap: 5px; margin-bottom: 15px; flex-wrap: wrap; }
+    .sheet-tab { padding: 8px 16px; background: #e5e7eb; border: none; border-radius: 6px 6px 0 0; cursor: pointer; font-size: 10pt; }
+    .sheet-tab.active { background: #10b981; color: white; }
+
+    /* 오른쪽: 입력 및 분석 */
+    .input-panel { width: 50%; padding: 20px; overflow-y: auto; max-height: calc(100vh - 60px); }
+    .card { background: white; border-radius: 12px; padding: 25px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+    .card h3 { margin-top: 0; color: #4c1d95; border-bottom: 2px solid #e9d5ff; padding-bottom: 10px; }
+    .card.highlight { border: 2px solid #8b5cf6; background: linear-gradient(to bottom right, #faf5ff, #f3e8ff); }
+
+    .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; font-weight: 600; margin-bottom: 5px; color: #374151; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 12pt; transition: border-color 0.3s; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #8b5cf6; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-group .hint { font-size: 10pt; color: #6b7280; margin-top: 4px; }
+
+    .quick-input { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
+    .quick-input button { padding: 10px; background: #f3e8ff; border: 2px solid #e9d5ff; border-radius: 8px; cursor: pointer; font-size: 11pt; transition: all 0.2s; }
+    .quick-input button:hover { background: #e9d5ff; border-color: #8b5cf6; }
+
+    /* 리포트 스타일 */
+    .report { display: none; }
+    .report.show { display: block; }
+    .report-header { text-align: center; padding: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 12px 12px 0 0; margin: -25px -25px 25px -25px; }
+    .report-header h2 { margin: 0 0 10px 0; font-size: 24pt; }
+    .report-header p { margin: 0; opacity: 0.9; }
+    .report-section { margin-bottom: 25px; padding: 20px; background: #faf5ff; border-radius: 10px; border-left: 4px solid #8b5cf6; }
+    .report-section h4 { margin: 0 0 15px 0; color: #5b21b6; font-size: 14pt; }
+    .check-item { display: flex; align-items: flex-start; padding: 12px; margin-bottom: 10px; border-radius: 8px; background: white; }
+    .check-icon { font-size: 20pt; margin-right: 15px; flex-shrink: 0; }
+    .check-pass { color: #10b981; }
+    .check-warn { color: #f59e0b; }
+    .check-fail { color: #ef4444; }
+    .check-info { color: #3b82f6; }
+    .check-content { flex: 1; }
+    .check-content strong { display: block; margin-bottom: 5px; }
+    .check-content p { margin: 0; color: #6b7280; font-size: 11pt; }
+
+    .summary-box { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
+    .summary-item { text-align: center; padding: 20px; border-radius: 10px; }
+    .summary-item.pass { background: #dcfce7; color: #166534; }
+    .summary-item.warn { background: #fef3c7; color: #92400e; }
+    .summary-item.fail { background: #fee2e2; color: #991b1b; }
+    .summary-item .number { font-size: 28pt; font-weight: bold; }
+    .summary-item .label { font-size: 10pt; }
+
+    .grade-box { text-align: center; padding: 30px; border-radius: 15px; margin-bottom: 25px; }
+    .grade-box.A { background: linear-gradient(135deg, #10b981, #059669); color: white; }
+    .grade-box.B { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; }
+    .grade-box.C { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
+    .grade-box.D { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
+    .grade-letter { font-size: 60pt; font-weight: bold; }
+    .grade-text { font-size: 14pt; margin-top: 10px; }
+
+    .recommendation { background: #eff6ff; border: 2px solid #3b82f6; border-radius: 10px; padding: 20px; }
+    .recommendation h4 { color: #1e40af; margin-top: 0; }
+    .recommendation ul { margin: 0; padding-left: 20px; }
+    .recommendation li { margin-bottom: 8px; }
+
+    .toast { position: fixed; bottom: 20px; right: 20px; padding: 15px 25px; border-radius: 8px; color: white; font-weight: 500; opacity: 0; transition: opacity 0.3s; z-index: 1000; background: #8b5cf6; }
+    .toast.show { opacity: 1; }
+
+    .step-indicator { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+    .step { display: flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 30px; background: #e5e7eb; color: #6b7280; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+    .step:hover { transform: scale(1.05); box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+    .step.active { background: #8b5cf6; color: white; }
+    .step.done { background: #10b981; color: white; }
+    .step.disabled { opacity: 0.5; cursor: not-allowed; }
+    .step.disabled:hover { transform: none; box-shadow: none; }
+    .step-number { width: 24px; height: 24px; border-radius: 50%; background: rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; font-size: 12pt; }
+
+    @media print {
+      .toolbar, .viewer-panel, .card:not(.report-card), .toast, .step-indicator { display: none !important; }
+      body { background: white; }
+      .main-container { display: block; }
+      .input-panel { width: 100%; max-height: none; padding: 0; }
+      .report { display: block !important; }
+      .card { box-shadow: none; break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <h2>견적서 검토 시스템</h2>
+    <div class="toolbar-buttons">
+      <button class="btn-analyze" onclick="analyzeQuotation()">분석하기</button>
+      <button class="btn-print" onclick="window.print()">리포트 인쇄</button>
+      <button class="btn-download" onclick="downloadReport()">Word 저장</button>
+      <button class="btn-clear" onclick="clearAll()">초기화</button>
+    </div>
+  </div>
+
+  <div class="main-container">
+    <!-- 왼쪽: 견적서 업로드/뷰어 -->
+    <div class="viewer-panel">
+      <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+        </svg>
+        <h3>견적서를 업로드하세요</h3>
+        <p>이미지(JPG, PNG), PDF, Excel(.xlsx, .xls) 파일을 드래그하거나 클릭</p>
+        <input type="file" id="file-input" accept="image/*,.pdf,.xlsx,.xls,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" onchange="handleFileSelect(event)">
+      </div>
+
+      <div class="preview-container" id="preview-container">
+        <div class="preview-header">
+          <h3>📄 업로드된 견적서</h3>
+          <button onclick="removeFile()">삭제</button>
+        </div>
+        <div id="preview-content"></div>
+      </div>
+    </div>
+
+    <!-- 오른쪽: 입력 및 분석 -->
+    <div class="input-panel">
+      <div class="step-indicator">
+        <div class="step active" id="step1" onclick="goToStep(1)">
+          <span class="step-number">1</span>
+          <span>견적서 업로드</span>
+        </div>
+        <div class="step" id="step2" onclick="goToStep(2)">
+          <span class="step-number">2</span>
+          <span>정보 입력</span>
+        </div>
+        <div class="step disabled" id="step3" onclick="goToStep(3)">
+          <span class="step-number">3</span>
+          <span>분석 결과</span>
+        </div>
+      </div>
+
+      <!-- Step 1: 안내 카드 -->
+      <div class="card" id="welcome-card">
+        <div style="text-align: center; padding: 40px 20px;">
+          <div style="font-size: 60pt; margin-bottom: 20px;">📄</div>
+          <h3 style="border: none; color: #374151; font-size: 18pt;">견적서를 업로드해주세요</h3>
+          <p style="color: #6b7280; margin-bottom: 30px;">
+            왼쪽 영역에 견적서 파일을 드래그하거나<br>
+            클릭하여 업로드하세요
+          </p>
+          <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+            <span style="background: #dbeafe; color: #1e40af; padding: 8px 16px; border-radius: 20px; font-size: 11pt;">📷 이미지 (JPG, PNG)</span>
+            <span style="background: #fce7f3; color: #9d174d; padding: 8px 16px; border-radius: 20px; font-size: 11pt;">📑 PDF</span>
+            <span style="background: #dcfce7; color: #166534; padding: 8px 16px; border-radius: 20px; font-size: 11pt;">📊 Excel (xlsx, xls)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: 정보 입력 카드 -->
+      <div class="card highlight" id="input-card" style="display: none;">
+        <h3>📝 견적서 핵심 정보 입력</h3>
+        <p style="color: #6b7280; margin-top: -5px; margin-bottom: 20px;">업로드한 견적서를 보면서 아래 정보를 입력하세요</p>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label>계약 구분 *</label>
+            <select id="contract_type">
+              <option value="">선택하세요</option>
+              <option value="goods">물품구매</option>
+              <option value="service">용역</option>
+              <option value="construction">공사</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>업체명 *</label>
+            <input type="text" id="company_name" placeholder="(주)OO상사">
+          </div>
+          <div class="form-group">
+            <label>사업자등록번호</label>
+            <input type="text" id="biz_number" placeholder="123-45-67890">
+          </div>
+          <div class="form-group">
+            <label>견적일자</label>
+            <input type="date" id="quote_date">
+          </div>
+          <div class="form-group full">
+            <label>계약건명</label>
+            <input type="text" id="contract_name" placeholder="2026년도 사무용품 구매">
+          </div>
+        </div>
+
+        <h4 style="margin-top: 25px; color: #5b21b6;">💰 금액 정보</h4>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>견적 총액 (VAT 포함) *</label>
+            <input type="number" id="total_price" placeholder="11000000" onchange="formatPriceDisplay()">
+            <div class="hint" id="total_display"></div>
+          </div>
+          <div class="form-group">
+            <label>추정가격 (비교용)</label>
+            <input type="number" id="estimated_price" placeholder="10000000">
+            <div class="hint">추정가격을 입력하면 적정성 비교 가능</div>
+          </div>
+        </div>
+
+        <div class="quick-input">
+          <button onclick="setPrice(5000000)">500만원</button>
+          <button onclick="setPrice(10000000)">1,000만원</button>
+          <button onclick="setPrice(22000000)">2,200만원</button>
+          <button onclick="setPrice(50000000)">5,000만원</button>
+          <button onclick="setPrice(80000000)">8,000만원</button>
+          <button onclick="setPrice(100000000)">1억원</button>
+        </div>
+
+        <h4 style="margin-top: 25px; color: #5b21b6;">📋 추가 정보 (선택)</h4>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>견적 유효기간</label>
+            <input type="text" id="valid_period" placeholder="30일">
+          </div>
+          <div class="form-group">
+            <label>납품 기한</label>
+            <input type="text" id="delivery_date" placeholder="계약 후 7일 이내">
+          </div>
+          <div class="form-group full">
+            <label>특이사항 / 비고</label>
+            <textarea id="remarks" rows="2" placeholder="견적서에 특이사항이 있다면 입력하세요"></textarea>
+          </div>
+        </div>
+
+        <button class="btn-analyze" style="width: 100%; padding: 15px; font-size: 14pt; margin-top: 20px;" onclick="analyzeQuotation()">
+          🔍 견적서 분석하기
+        </button>
+      </div>
+
+      <!-- 분석 리포트 -->
+      <div class="card report report-card" id="report-section">
+        <div class="report-header">
+          <h2>견적서 검토 리포트</h2>
+          <p id="report-date"></p>
+        </div>
+
+        <div id="grade-container"></div>
+
+        <div class="summary-box" id="summary-box"></div>
+
+        <div class="report-section" id="basic-check">
+          <h4>1. 기본 적정성 검토</h4>
+          <div id="basic-check-items"></div>
+        </div>
+
+        <div class="report-section" id="price-check">
+          <h4>2. 가격 적정성 검토</h4>
+          <div id="price-check-items"></div>
+        </div>
+
+        <div class="report-section" id="legal-check">
+          <h4>3. 법규 준수 검토</h4>
+          <div id="legal-check-items"></div>
+        </div>
+
+        <div class="report-section" id="contract-check">
+          <h4>4. 계약 방법 검토</h4>
+          <div id="contract-check-items"></div>
+        </div>
+
+        <div class="recommendation" id="recommendation">
+          <h4>검토 의견 및 권고사항</h4>
+          <ul id="recommendation-list"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="https://unpkg.com/docx@8.5.0/build/index.umd.js"></script>
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+  <script>
+    // 드래그 앤 드롭
+    const uploadZone = document.getElementById('upload-zone');
+
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+      uploadZone.addEventListener(eventName, preventDefaults, false);
+    });
+
+    function preventDefaults(e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+      uploadZone.addEventListener(eventName, () => uploadZone.classList.add('dragover'), false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      uploadZone.addEventListener(eventName, () => uploadZone.classList.remove('dragover'), false);
+    });
+
+    uploadZone.addEventListener('drop', handleDrop, false);
+
+    function handleDrop(e) {
+      const files = e.dataTransfer.files;
+      if (files.length > 0) {
+        handleFile(files[0]);
+      }
+    }
+
+    function handleFileSelect(event) {
+      const file = event.target.files[0];
+      if (file) {
+        handleFile(file);
+      }
+    }
+
+    let excelData = null; // 엑셀 데이터 저장
+
+    function handleFile(file) {
+      const previewContainer = document.getElementById('preview-container');
+      const previewContent = document.getElementById('preview-content');
+      const uploadZone = document.getElementById('upload-zone');
+
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          previewContent.innerHTML = `<img src="${e.target.result}" class="preview-image" alt="견적서">`;
+          uploadZone.style.display = 'none';
+          previewContainer.classList.add('show');
+          updateStep(2);
+          updateVisibility(2);
+          showToast('견적서가 업로드되었습니다. 정보를 입력해주세요.');
+        };
+        reader.readAsDataURL(file);
+      } else if (file.type === 'application/pdf') {
+        const url = URL.createObjectURL(file);
+        previewContent.innerHTML = `<iframe src="${url}" class="preview-pdf"></iframe>`;
+        uploadZone.style.display = 'none';
+        previewContainer.classList.add('show');
+        updateStep(2);
+        updateVisibility(2);
+        showToast('견적서가 업로드되었습니다. 정보를 입력해주세요.');
+      } else if (file.name.endsWith('.xlsx') || file.name.endsWith('.xls') ||
+                 file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
+                 file.type === 'application/vnd.ms-excel') {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          try {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+            excelData = workbook;
+
+            renderExcelPreview(workbook, file.name);
+            uploadZone.style.display = 'none';
+            previewContainer.classList.add('show');
+            updateStep(2);
+            updateVisibility(2);
+            showToast('엑셀 파일이 업로드되었습니다. 정보를 입력해주세요.');
+          } catch (err) {
+            alert('엑셀 파일을 읽는 중 오류가 발생했습니다.');
+            console.error(err);
+          }
+        };
+        reader.readAsArrayBuffer(file);
+      } else {
+        alert('이미지(JPG, PNG), PDF 또는 Excel 파일만 업로드 가능합니다.');
+      }
+    }
+
+    function renderExcelPreview(workbook, fileName) {
+      const previewContent = document.getElementById('preview-content');
+      const sheetNames = workbook.SheetNames;
+
+      let html = `
+        <div class="preview-excel">
+          <h4>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            ${fileName}
+          </h4>
+          <div class="excel-info">
+            <span>시트 ${sheetNames.length}개</span>
+          </div>
+      `;
+
+      // 시트 탭
+      if (sheetNames.length > 1) {
+        html += `<div class="sheet-tabs">`;
+        sheetNames.forEach((name, idx) => {
+          html += `<button class="sheet-tab ${idx === 0 ? 'active' : ''}" onclick="showSheet(${idx})">${name}</button>`;
+        });
+        html += `</div>`;
+      }
+
+      // 각 시트 내용
+      sheetNames.forEach((name, idx) => {
+        const sheet = workbook.Sheets[name];
+        const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
+
+        html += `<div class="sheet-content" id="sheet-${idx}" style="${idx > 0 ? 'display:none;' : ''}">`;
+
+        if (jsonData.length > 0) {
+          html += `<table class="excel-table"><thead><tr>`;
+
+          // 헤더 (첫 번째 행)
+          const headerRow = jsonData[0] || [];
+          const maxCols = Math.min(Math.max(...jsonData.map(r => r.length)), 15); // 최대 15열
+
+          for (let c = 0; c < maxCols; c++) {
+            html += `<th>${headerRow[c] !== undefined ? headerRow[c] : ''}</th>`;
+          }
+          html += `</tr></thead><tbody>`;
+
+          // 데이터 행 (최대 100행)
+          const maxRows = Math.min(jsonData.length, 100);
+          for (let r = 1; r < maxRows; r++) {
+            const row = jsonData[r] || [];
+            html += `<tr>`;
+            for (let c = 0; c < maxCols; c++) {
+              let cellValue = row[c] !== undefined ? row[c] : '';
+              // 숫자 포맷팅
+              if (typeof cellValue === 'number' && cellValue > 1000) {
+                cellValue = formatNumber(Math.round(cellValue));
+              }
+              html += `<td>${cellValue}</td>`;
+            }
+            html += `</tr>`;
+          }
+          html += `</tbody></table>`;
+
+          if (jsonData.length > 100) {
+            html += `<p style="color: #6b7280; font-size: 10pt; margin-top: 10px;">* ${jsonData.length - 100}개 행이 더 있습니다.</p>`;
+          }
+        } else {
+          html += `<p style="color: #6b7280;">데이터가 없습니다.</p>`;
+        }
+
+        html += `</div>`;
+      });
+
+      html += `</div>`;
+      previewContent.innerHTML = html;
+
+      // 엑셀에서 금액 자동 추출 시도
+      tryExtractFromExcel(workbook);
+    }
+
+    function showSheet(idx) {
+      document.querySelectorAll('.sheet-content').forEach((el, i) => {
+        el.style.display = i === idx ? 'block' : 'none';
+      });
+      document.querySelectorAll('.sheet-tab').forEach((el, i) => {
+        el.classList.toggle('active', i === idx);
+      });
+    }
+
+    function tryExtractFromExcel(workbook) {
+      // 첫 번째 시트에서 금액 정보 추출 시도
+      const sheet = workbook.Sheets[workbook.SheetNames[0]];
+      const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
+
+      let totalFound = 0;
+      let companyFound = '';
+
+      // 금액 키워드 찾기
+      const priceKeywords = ['합계', '총액', '총계', '견적금액', '공급가액', 'total', '계'];
+      const companyKeywords = ['상호', '업체명', '회사명', '공급자'];
+
+      jsonData.forEach(row => {
+        row.forEach((cell, idx) => {
+          const cellStr = String(cell).toLowerCase();
+
+          // 금액 찾기
+          priceKeywords.forEach(keyword => {
+            if (cellStr.includes(keyword) && row[idx + 1]) {
+              const nextCell = row[idx + 1];
+              if (typeof nextCell === 'number' && nextCell > 10000) {
+                if (nextCell > totalFound) totalFound = nextCell;
+              }
+            }
+          });
+
+          // 업체명 찾기
+          companyKeywords.forEach(keyword => {
+            if (cellStr.includes(keyword) && row[idx + 1]) {
+              const nextCell = String(row[idx + 1]).trim();
+              if (nextCell && nextCell.length > 1 && !companyFound) {
+                companyFound = nextCell;
+              }
+            }
+          });
+        });
+      });
+
+      // 찾은 값 자동 입력
+      if (totalFound > 0) {
+        document.getElementById('total_price').value = Math.round(totalFound);
+        formatPriceDisplay();
+        showToast(`금액 ${formatNumber(Math.round(totalFound))}원이 자동 인식되었습니다.`);
+      }
+      if (companyFound) {
+        document.getElementById('company_name').value = companyFound;
+      }
+    }
+
+    function removeFile() {
+      document.getElementById('preview-container').classList.remove('show');
+      document.getElementById('upload-zone').style.display = 'block';
+      document.getElementById('preview-content').innerHTML = '';
+      document.getElementById('file-input').value = '';
+      excelData = null;
+      updateStep(1);
+      updateVisibility(1);
+    }
+
+    let currentStep = 1;
+    let analysisComplete = false;
+
+    function updateStep(step) {
+      currentStep = step;
+      document.querySelectorAll('.step').forEach((el, idx) => {
+        el.classList.remove('active', 'done', 'disabled');
+        if (idx + 1 < step) {
+          el.classList.add('done');
+        } else if (idx + 1 === step) {
+          el.classList.add('active');
+        } else if (idx + 1 === 3 && !analysisComplete) {
+          el.classList.add('disabled');
+        }
+      });
+    }
+
+    function goToStep(step) {
+      // Step 3은 분석 완료 후에만 이동 가능
+      if (step === 3 && !analysisComplete) {
+        showToast('먼저 분석을 실행해주세요.');
+        return;
+      }
+
+      updateStep(step);
+      updateVisibility(step);
+    }
+
+    function updateVisibility(step) {
+      const welcomeCard = document.getElementById('welcome-card');
+      const inputCard = document.getElementById('input-card');
+      const reportSection = document.getElementById('report-section');
+
+      if (step === 1) {
+        welcomeCard.style.display = 'block';
+        inputCard.style.display = 'none';
+        reportSection.classList.remove('show');
+      } else if (step === 2) {
+        welcomeCard.style.display = 'none';
+        inputCard.style.display = 'block';
+        reportSection.classList.remove('show');
+        inputCard.scrollIntoView({ behavior: 'smooth' });
+      } else if (step === 3) {
+        welcomeCard.style.display = 'none';
+        inputCard.style.display = 'none';
+        reportSection.classList.add('show');
+        reportSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    function formatNumber(num) {
+      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    function setPrice(amount) {
+      document.getElementById('total_price').value = amount;
+      formatPriceDisplay();
+    }
+
+    function formatPriceDisplay() {
+      const price = parseInt(document.getElementById('total_price').value) || 0;
+      document.getElementById('total_display').textContent = price > 0 ? `= ${formatNumber(price)}원` : '';
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    function clearAll() {
+      if (confirm('모든 내용을 초기화하시겠습니까?')) {
+        removeFile();
+        document.querySelectorAll('input, select, textarea').forEach(el => el.value = '');
+        document.getElementById('total_display').textContent = '';
+        document.getElementById('report-section').classList.remove('show');
+        analysisComplete = false;
+        document.getElementById('step3').classList.add('disabled');
+        updateStep(1);
+        showToast('초기화되었습니다.');
+      }
+    }
+
+    function analyzeQuotation() {
+      const contractType = document.getElementById('contract_type').value;
+      const totalPrice = parseInt(document.getElementById('total_price').value) || 0;
+      const estimatedPrice = parseInt(document.getElementById('estimated_price').value) || totalPrice;
+      const companyName = document.getElementById('company_name').value;
+      const bizNumber = document.getElementById('biz_number').value;
+      const contractName = document.getElementById('contract_name').value;
+      const quoteDate = document.getElementById('quote_date').value;
+
+      if (!contractType || !totalPrice || !companyName) {
+        alert('계약 구분, 업체명, 견적 총액은 필수 입력 항목입니다.');
+        return;
+      }
+
+      // 분석 결과 저장
+      const results = { pass: [], warn: [], fail: [], info: [] };
+
+      // 1. 기본 적정성 검토
+      const basicChecks = [];
+
+      // 업체 정보 확인
+      if (companyName && bizNumber) {
+        basicChecks.push({ status: 'pass', title: '업체 정보 확인', desc: '상호명 및 사업자등록번호가 확인되었습니다.' });
+        results.pass.push('업체정보');
+      } else if (companyName) {
+        basicChecks.push({ status: 'warn', title: '사업자등록번호 미확인', desc: '사업자등록번호가 입력되지 않았습니다. 사업자등록증 사본을 징구하세요.' });
+        results.warn.push('사업자번호');
+      } else {
+        basicChecks.push({ status: 'fail', title: '업체 정보 미비', desc: '업체 정보가 확인되지 않습니다.' });
+        results.fail.push('업체정보');
+      }
+
+      // 견적일자 확인
+      if (quoteDate) {
+        const daysDiff = Math.floor((new Date() - new Date(quoteDate)) / (1000 * 60 * 60 * 24));
+        if (daysDiff <= 30) {
+          basicChecks.push({ status: 'pass', title: '견적일자 유효', desc: `견적일로부터 ${daysDiff}일 경과 (유효기간 내)` });
+          results.pass.push('견적일자');
+        } else {
+          basicChecks.push({ status: 'warn', title: '견적일자 경과', desc: `견적일로부터 ${daysDiff}일 경과. 유효기간 확인 또는 재견적이 필요할 수 있습니다.` });
+          results.warn.push('견적일자');
+        }
+      } else {
+        basicChecks.push({ status: 'warn', title: '견적일자 미확인', desc: '견적일자를 확인해주세요.' });
+        results.warn.push('견적일자');
+      }
+
+      // 2. 가격 적정성 검토
+      const priceChecks = [];
+
+      // 추정가격 대비 견적가격 비교
+      if (estimatedPrice !== totalPrice) {
+        const priceRatio = (totalPrice / estimatedPrice * 100).toFixed(1);
+        if (priceRatio >= 95 && priceRatio <= 105) {
+          priceChecks.push({ status: 'pass', title: '견적가격 적정', desc: `추정가격 대비 ${priceRatio}%로 적정 범위입니다.` });
+          results.pass.push('가격적정');
+        } else if (priceRatio > 105 && priceRatio <= 120) {
+          priceChecks.push({ status: 'warn', title: '견적가격 다소 높음', desc: `추정가격 대비 ${priceRatio}%입니다. 가격 협상 또는 추가 견적 검토를 권장합니다.` });
+          results.warn.push('가격높음');
+        } else if (priceRatio > 120) {
+          priceChecks.push({ status: 'fail', title: '견적가격 과다', desc: `추정가격 대비 ${priceRatio}%로 과다 계상되었습니다. 재견적 또는 사유 확인이 필요합니다.` });
+          results.fail.push('가격과다');
+        } else if (priceRatio < 80) {
+          priceChecks.push({ status: 'warn', title: '견적가격 저가', desc: `추정가격 대비 ${priceRatio}%로 저가입니다. 품질 및 이행 가능성 확인이 필요합니다.` });
+          results.warn.push('저가견적');
+        } else {
+          priceChecks.push({ status: 'pass', title: '견적가격 적정', desc: `추정가격 대비 ${priceRatio}%입니다.` });
+          results.pass.push('가격적정');
+        }
+      } else {
+        priceChecks.push({ status: 'info', title: '가격 비교 불가', desc: '추정가격이 입력되지 않아 비교 분석이 제한됩니다.' });
+        results.info.push('가격미비교');
+      }
+
+      // 금액 규모 안내
+      priceChecks.push({ status: 'info', title: '견적 총액', desc: `${formatNumber(totalPrice)}원 (VAT 포함)` });
+
+      // 3. 법규 준수 검토
+      const legalChecks = [];
+      let contractMethod = '';
+      let methodThreshold = 0;
+
+      if (contractType === 'goods') {
+        methodThreshold = 22000000;
+        if (totalPrice <= methodThreshold) {
+          contractMethod = '수의계약';
+          legalChecks.push({ status: 'pass', title: '수의계약 가능', desc: `물품구매 ${formatNumber(methodThreshold)}원 이하로 수의계약이 가능합니다. (지방계약법 시행령 제25조)` });
+          results.pass.push('계약방법');
+        } else if (totalPrice <= 100000000) {
+          contractMethod = '지명경쟁입찰';
+          legalChecks.push({ status: 'warn', title: '경쟁입찰 검토 필요', desc: `물품구매 ${formatNumber(methodThreshold)}원 초과로 경쟁입찰 진행이 필요합니다.` });
+          results.warn.push('계약방법');
+        } else {
+          contractMethod = '일반경쟁입찰';
+          legalChecks.push({ status: 'warn', title: '일반경쟁입찰 필요', desc: `1억원 초과로 일반경쟁입찰을 진행해야 합니다.` });
+          results.warn.push('계약방법');
+        }
+      } else if (contractType === 'service') {
+        methodThreshold = 22000000;
+        if (totalPrice <= methodThreshold) {
+          contractMethod = '수의계약';
+          legalChecks.push({ status: 'pass', title: '수의계약 가능', desc: `용역 ${formatNumber(methodThreshold)}원 이하로 수의계약이 가능합니다.` });
+          results.pass.push('계약방법');
+        } else {
+          contractMethod = '경쟁입찰';
+          legalChecks.push({ status: 'warn', title: '경쟁입찰 검토 필요', desc: `용역 ${formatNumber(methodThreshold)}원 초과로 경쟁입찰 진행이 필요합니다.` });
+          results.warn.push('계약방법');
+        }
+      } else if (contractType === 'construction') {
+        methodThreshold = 80000000;
+        if (totalPrice <= methodThreshold) {
+          contractMethod = '수의계약';
+          legalChecks.push({ status: 'pass', title: '수의계약 가능', desc: `공사 ${formatNumber(methodThreshold)}원 이하로 수의계약이 가능합니다.` });
+          results.pass.push('계약방법');
+        } else {
+          contractMethod = '경쟁입찰';
+          legalChecks.push({ status: 'warn', title: '경쟁입찰 필요', desc: `공사 ${formatNumber(methodThreshold)}원 초과로 경쟁입찰이 필요합니다.` });
+          results.warn.push('계약방법');
+        }
+      }
+      results.info.push(contractMethod);
+
+      // 2인 이상 견적 권장
+      if (contractMethod === '수의계약' && totalPrice > 5000000) {
+        legalChecks.push({ status: 'warn', title: '복수 견적 권장', desc: '추정가격 500만원 초과 시 2개 이상 업체의 견적 비교를 권장합니다.' });
+        results.warn.push('복수견적');
+      }
+
+      // 4. 계약 방법 검토
+      const contractChecks = [];
+
+      if (contractMethod === '수의계약') {
+        contractChecks.push({ status: 'pass', title: '수의계약 진행 가능', desc: `금액 기준 수의계약 요건을 충족합니다.` });
+        contractChecks.push({ status: 'info', title: '필요 서류 안내', desc: '수의계약사유서, 예정가격조서, 견적서, 사업자등록증 사본을 준비하세요.' });
+      } else {
+        contractChecks.push({ status: 'info', title: '경쟁입찰 진행 필요', desc: `금액 기준으로 경쟁입찰 진행이 필요합니다. 계약 담당부서와 협의하세요.` });
+      }
+
+      // 견적 유효기간 확인
+      const validPeriod = document.getElementById('valid_period').value;
+      if (validPeriod) {
+        contractChecks.push({ status: 'pass', title: '견적 유효기간 확인', desc: `견적 유효기간: ${validPeriod}` });
+        results.pass.push('유효기간');
+      } else {
+        contractChecks.push({ status: 'warn', title: '견적 유효기간 미확인', desc: '견적 유효기간을 업체에 확인하세요.' });
+        results.warn.push('유효기간');
+      }
+
+      // 등급 산정
+      let grade, gradeText;
+      if (results.fail.length === 0 && results.warn.length <= 1) {
+        grade = 'A';
+        gradeText = '우수 - 견적서가 적정하게 작성되었습니다.';
+      } else if (results.fail.length === 0 && results.warn.length <= 3) {
+        grade = 'B';
+        gradeText = '양호 - 일부 확인 사항이 있으나 진행 가능합니다.';
+      } else if (results.fail.length <= 1) {
+        grade = 'C';
+        gradeText = '보통 - 수정 또는 보완이 필요합니다.';
+      } else {
+        grade = 'D';
+        gradeText = '미흡 - 재검토가 필요합니다.';
+      }
+
+      // 권고사항 생성
+      const recommendations = [];
+      if (results.warn.includes('사업자번호')) {
+        recommendations.push('사업자등록증 사본을 징구하여 업체 정보를 확인하세요.');
+      }
+      if (results.fail.includes('가격과다')) {
+        recommendations.push('견적가격이 추정가격을 크게 초과합니다. 가격 조정을 요청하거나 다른 업체 견적을 받아 비교하세요.');
+      }
+      if (results.warn.includes('가격높음')) {
+        recommendations.push('견적가격이 다소 높습니다. 가격 협상을 시도해보세요.');
+      }
+      if (results.warn.includes('복수견적')) {
+        recommendations.push('수의계약 시에도 2개 이상 업체의 견적을 비교하면 가격 적정성 확보에 도움이 됩니다.');
+      }
+      if (results.warn.includes('유효기간')) {
+        recommendations.push('견적 유효기간을 확인하여 계약 진행 일정을 계획하세요.');
+      }
+      if (contractMethod !== '수의계약') {
+        recommendations.push('금액 기준으로 경쟁입찰이 필요합니다. 계약 담당부서와 협의하세요.');
+      }
+      if (recommendations.length === 0) {
+        recommendations.push('견적서가 적정하게 작성되었습니다. 계약 진행을 추진하세요.');
+        recommendations.push('예정가격조서와 수의계약사유서를 작성하여 결재를 받으세요.');
+      }
+
+      // 리포트 렌더링
+      renderReport({
+        date: new Date().toLocaleDateString('ko-KR'),
+        contractName,
+        companyName,
+        totalPrice,
+        grade,
+        gradeText,
+        results,
+        basicChecks,
+        priceChecks,
+        legalChecks,
+        contractChecks,
+        recommendations
+      });
+
+      analysisComplete = true;
+      updateStep(3);
+      updateVisibility(3);
+      showToast('분석이 완료되었습니다!');
+    }
+
+    function renderReport(data) {
+      document.getElementById('report-date').textContent = `${data.contractName || '견적서'} | ${data.companyName} | 검토일: ${data.date}`;
+
+      document.getElementById('grade-container').innerHTML = `
+        <div class="grade-box ${data.grade}">
+          <div class="grade-letter">${data.grade}</div>
+          <div class="grade-text">${data.gradeText}</div>
+        </div>
+      `;
+
+      document.getElementById('summary-box').innerHTML = `
+        <div class="summary-item pass">
+          <div class="number">${data.results.pass.length}</div>
+          <div class="label">적합 항목</div>
+        </div>
+        <div class="summary-item warn">
+          <div class="number">${data.results.warn.length}</div>
+          <div class="label">확인 필요</div>
+        </div>
+        <div class="summary-item fail">
+          <div class="number">${data.results.fail.length}</div>
+          <div class="label">부적합</div>
+        </div>
+      `;
+
+      renderCheckItems('basic-check-items', data.basicChecks);
+      renderCheckItems('price-check-items', data.priceChecks);
+      renderCheckItems('legal-check-items', data.legalChecks);
+      renderCheckItems('contract-check-items', data.contractChecks);
+
+      document.getElementById('recommendation-list').innerHTML =
+        data.recommendations.map(r => `<li>${r}</li>`).join('');
+    }
+
+    function renderCheckItems(containerId, items) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = items.map(item => `
+        <div class="check-item">
+          <span class="check-icon check-${item.status}">
+            ${item.status === 'pass' ? '✓' : item.status === 'warn' ? '⚠' : item.status === 'fail' ? '✗' : 'ℹ'}
+          </span>
+          <div class="check-content">
+            <strong>${item.title}</strong>
+            <p>${item.desc}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function downloadReport() {
+      if (!document.getElementById('report-section').classList.contains('show')) {
+        alert('먼저 분석을 실행해주세요.');
+        return;
+      }
+
+      const { Document, Packer, Paragraph, TextRun, AlignmentType } = docx;
+      const contractName = document.getElementById('contract_name').value || '견적서';
+      const companyName = document.getElementById('company_name').value || '';
+      const date = new Date().toLocaleDateString('ko-KR');
+
+      const doc = new Document({
+        sections: [{
+          properties: {},
+          children: [
+            new Paragraph({
+              children: [new TextRun({ text: '견적서 검토 리포트', bold: true, size: 40 })],
+              alignment: AlignmentType.CENTER,
+              spacing: { after: 200 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `${contractName} | ${companyName} | 검토일: ${date}`, size: 22 })],
+              alignment: AlignmentType.CENTER,
+              spacing: { after: 400 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: document.querySelector('.grade-box').textContent.trim(), bold: true, size: 28 })],
+              alignment: AlignmentType.CENTER,
+              spacing: { after: 400 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: '검토 결과', bold: true, size: 26 })],
+              spacing: { after: 200 }
+            }),
+            ...Array.from(document.querySelectorAll('.check-item')).map(item =>
+              new Paragraph({
+                children: [new TextRun({
+                  text: `${item.querySelector('.check-icon').textContent.trim()} ${item.querySelector('strong').textContent}: ${item.querySelector('p').textContent}`,
+                  size: 22
+                })],
+                spacing: { after: 100 }
+              })
+            ),
+            new Paragraph({
+              children: [new TextRun({ text: '권고사항', bold: true, size: 26 })],
+              spacing: { before: 300, after: 200 }
+            }),
+            ...Array.from(document.querySelectorAll('#recommendation-list li')).map(li =>
+              new Paragraph({
+                children: [new TextRun({ text: `• ${li.textContent}`, size: 22 })],
+                spacing: { after: 100 }
+              })
+            )
+          ]
+        }]
+      });
+
+      const blob = await Packer.toBlob(doc);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `견적서검토_${contractName}_${companyName}.docx`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('리포트가 다운로드되었습니다!');
+    }
+  </script>
+</body>
+</html>

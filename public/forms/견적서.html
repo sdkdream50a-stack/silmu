@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>견적서</title>
+  <style>
+    @page { size: A4; margin: 15mm; }
+    * { box-sizing: border-box; }
+    body { font-family: '맑은 고딕', 'Malgun Gothic', sans-serif; font-size: 11pt; line-height: 1.5; margin: 0; padding: 0; background: #f5f5f5; }
+    .toolbar { background: #059669; color: white; padding: 15px 20px; position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+    .toolbar h2 { margin: 0; font-size: 16pt; }
+    .toolbar-buttons { display: flex; gap: 10px; }
+    .toolbar button { padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-size: 11pt; font-weight: 500; }
+    .btn-save { background: #10b981; color: white; }
+    .btn-load { background: #6366f1; color: white; }
+    .btn-print { background: #f59e0b; color: white; }
+    .btn-clear { background: #ef4444; color: white; }
+    .btn-download { background: #8b5cf6; color: white; }
+    .btn-calc { background: #3b82f6; color: white; }
+    .container { max-width: 800px; margin: 20px auto; padding: 30px; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    h1 { text-align: center; font-size: 24pt; margin-bottom: 20px; letter-spacing: 15px; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+    th, td { border: 1px solid #000; padding: 8px; }
+    th { background-color: #f5f5f5; text-align: center; }
+    input[type="text"], input[type="number"], input[type="date"] { width: 100%; border: none; background: #fffef0; padding: 4px; font-size: 11pt; font-family: inherit; }
+    input:focus { outline: 2px solid #10b981; background: #fff; }
+    .right { text-align: right; }
+    .center { text-align: center; }
+    .total-row { background-color: #ecfdf5; font-weight: bold; }
+    .stamp-area { width: 70px; height: 70px; border: 1px dashed #999; text-align: center; line-height: 70px; color: #999; font-size: 9pt; margin: 0 auto; }
+    .amount-display { font-size: 14pt; font-weight: bold; text-align: center; padding: 10px; background: #f0fdf4; }
+    .toast { position: fixed; bottom: 20px; right: 20px; padding: 15px 25px; border-radius: 8px; color: white; font-weight: 500; opacity: 0; transition: opacity 0.3s; z-index: 1000; }
+    .toast.show { opacity: 1; }
+    .toast.success { background: #10b981; }
+    .help { background-color: #f0f9ff; padding: 10px; margin-top: 15px; font-size: 9pt; border: 1px solid #bae6fd; border-radius: 6px; }
+    @media print {
+      .toolbar, .help { display: none !important; }
+      body { background: white; }
+      .container { box-shadow: none; margin: 0; padding: 15px; }
+      input { background: transparent !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <h2>견적서</h2>
+    <div class="toolbar-buttons">
+      <button class="btn-calc" onclick="calculateTotal()">🧮 자동계산</button>
+      <button class="btn-save" onclick="saveForm()">💾 저장</button>
+      <button class="btn-load" onclick="loadForm()">📂 불러오기</button>
+      <button class="btn-download" onclick="downloadAsDocx()">⬇️ Word저장 (한글 호환)</button>
+      <button class="btn-print" onclick="window.print()">🖨️ 인쇄/PDF</button>
+      <button class="btn-clear" onclick="clearForm()">🗑️ 초기화</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <h1>견 적 서</h1>
+
+    <div style="text-align: right; margin-bottom: 15px;">
+      견적일자: <input type="date" id="quote_date" style="width: 150px;">
+    </div>
+
+    <table>
+      <tr>
+        <th rowspan="4" style="width: 50px;">공<br>급<br>자</th>
+        <th style="width: 100px;">상호</th>
+        <td><input type="text" id="company_name" placeholder="(주)OO상사"></td>
+        <th style="width: 70px;">대표자</th>
+        <td style="width: 120px;"><input type="text" id="ceo_name" placeholder="홍길동"></td>
+        <td rowspan="4" style="width: 80px; vertical-align: middle;">
+          <div class="stamp-area">(인)</div>
+        </td>
+      </tr>
+      <tr>
+        <th>사업자번호</th>
+        <td><input type="text" id="biz_number" placeholder="123-45-67890"></td>
+        <th>연락처</th>
+        <td><input type="text" id="phone" placeholder="02-1234-5678"></td>
+      </tr>
+      <tr>
+        <th>주소</th>
+        <td colspan="3"><input type="text" id="address" placeholder="서울시 OO구 OO로 123"></td>
+      </tr>
+      <tr>
+        <th>업태/종목</th>
+        <td><input type="text" id="business_type" placeholder="도소매/사무용품"></td>
+        <th>이메일</th>
+        <td><input type="text" id="email" placeholder="email@company.com"></td>
+      </tr>
+    </table>
+
+    <table>
+      <tr>
+        <th style="width: 80px;">수신</th>
+        <td><input type="text" id="recipient" placeholder="OO시청 총무과"></td>
+      </tr>
+      <tr>
+        <th>건명</th>
+        <td><input type="text" id="project_name" placeholder="2026년도 사무용품 구매"></td>
+      </tr>
+    </table>
+
+    <p style="text-align: center; font-size: 12pt; margin: 15px 0;">아래와 같이 견적합니다.</p>
+
+    <table>
+      <tr>
+        <th style="width: 100px;">견적금액</th>
+        <td class="amount-display" id="total_display">일금                    원정 (₩0)</td>
+      </tr>
+      <tr>
+        <th>납품기한</th>
+        <td>계약 체결일로부터 <input type="text" id="delivery_days" style="width: 50px; text-align: center;" placeholder="7">일 이내</td>
+      </tr>
+      <tr>
+        <th>견적유효기간</th>
+        <td>견적일로부터 <input type="text" id="valid_days" style="width: 50px; text-align: center;" placeholder="30">일간</td>
+      </tr>
+      <tr>
+        <th>결제조건</th>
+        <td>
+          <label><input type="checkbox" id="payment_1"> 납품 후 현금</label>&nbsp;&nbsp;
+          <label><input type="checkbox" id="payment_2"> 선금+잔금</label>&nbsp;&nbsp;
+          <label><input type="checkbox" id="payment_etc"> 기타: <input type="text" id="payment_etc_text" style="width: 150px;"></label>
+        </td>
+      </tr>
+    </table>
+
+    <table id="item-table">
+      <thead>
+        <tr>
+          <th style="width: 35px;">No</th>
+          <th>품명 및 규격</th>
+          <th style="width: 50px;">단위</th>
+          <th style="width: 50px;">수량</th>
+          <th style="width: 90px;">단가</th>
+          <th style="width: 100px;">금액</th>
+          <th style="width: 70px;">비고</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="center">1</td>
+          <td><input type="text" id="item_1_name"></td>
+          <td><input type="text" id="item_1_unit" class="center" placeholder="EA"></td>
+          <td><input type="number" id="item_1_qty" class="center" onchange="calculateRow(1)"></td>
+          <td><input type="number" id="item_1_price" class="right" onchange="calculateRow(1)"></td>
+          <td class="right" id="item_1_amount">0</td>
+          <td><input type="text" id="item_1_note"></td>
+        </tr>
+        <tr>
+          <td class="center">2</td>
+          <td><input type="text" id="item_2_name"></td>
+          <td><input type="text" id="item_2_unit" class="center"></td>
+          <td><input type="number" id="item_2_qty" class="center" onchange="calculateRow(2)"></td>
+          <td><input type="number" id="item_2_price" class="right" onchange="calculateRow(2)"></td>
+          <td class="right" id="item_2_amount">0</td>
+          <td><input type="text" id="item_2_note"></td>
+        </tr>
+        <tr>
+          <td class="center">3</td>
+          <td><input type="text" id="item_3_name"></td>
+          <td><input type="text" id="item_3_unit" class="center"></td>
+          <td><input type="number" id="item_3_qty" class="center" onchange="calculateRow(3)"></td>
+          <td><input type="number" id="item_3_price" class="right" onchange="calculateRow(3)"></td>
+          <td class="right" id="item_3_amount">0</td>
+          <td><input type="text" id="item_3_note"></td>
+        </tr>
+        <tr>
+          <td class="center">4</td>
+          <td><input type="text" id="item_4_name"></td>
+          <td><input type="text" id="item_4_unit" class="center"></td>
+          <td><input type="number" id="item_4_qty" class="center" onchange="calculateRow(4)"></td>
+          <td><input type="number" id="item_4_price" class="right" onchange="calculateRow(4)"></td>
+          <td class="right" id="item_4_amount">0</td>
+          <td><input type="text" id="item_4_note"></td>
+        </tr>
+        <tr>
+          <td class="center">5</td>
+          <td><input type="text" id="item_5_name"></td>
+          <td><input type="text" id="item_5_unit" class="center"></td>
+          <td><input type="number" id="item_5_qty" class="center" onchange="calculateRow(5)"></td>
+          <td><input type="number" id="item_5_price" class="right" onchange="calculateRow(5)"></td>
+          <td class="right" id="item_5_amount">0</td>
+          <td><input type="text" id="item_5_note"></td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr class="total-row">
+          <td colspan="5" class="right">공급가액</td>
+          <td class="right" id="subtotal">0</td>
+          <td></td>
+        </tr>
+        <tr class="total-row">
+          <td colspan="5" class="right">부가가치세 (10%)</td>
+          <td class="right" id="vat">0</td>
+          <td></td>
+        </tr>
+        <tr class="total-row">
+          <td colspan="5" class="right" style="font-size: 12pt;">총 견적금액</td>
+          <td class="right" style="font-size: 12pt;" id="grand_total">0</td>
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <div class="help">
+      <strong>💡 사용 방법</strong>
+      <ul style="margin: 5px 0; padding-left: 20px;">
+        <li>품목별 수량과 단가를 입력하면 자동으로 금액이 계산됩니다.</li>
+        <li><strong>자동계산</strong> 버튼을 클릭하면 합계가 업데이트됩니다.</li>
+        <li><strong>인쇄/PDF</strong>로 깔끔하게 출력하거나 PDF 저장이 가능합니다.</li>
+        <li><strong>Word저장</strong>으로 .docx 파일 다운로드 (한글에서도 열기 가능)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="https://unpkg.com/docx@8.5.0/build/index.umd.js"></script>
+  <script>
+    function formatNumber(num) {
+      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    function numberToKorean(num) {
+      const units = ['', '만', '억', '조'];
+      const smallUnits = ['', '십', '백', '천'];
+      const nums = ['', '일', '이', '삼', '사', '오', '육', '칠', '팔', '구'];
+
+      if (num === 0) return '영';
+
+      let result = '';
+      let unitIndex = 0;
+
+      while (num > 0) {
+        let part = num % 10000;
+        if (part > 0) {
+          let partStr = '';
+          let smallIndex = 0;
+          while (part > 0) {
+            let digit = part % 10;
+            if (digit > 0) {
+              partStr = nums[digit] + smallUnits[smallIndex] + partStr;
+            }
+            part = Math.floor(part / 10);
+            smallIndex++;
+          }
+          result = partStr + units[unitIndex] + result;
+        }
+        num = Math.floor(num / 10000);
+        unitIndex++;
+      }
+
+      return result;
+    }
+
+    function calculateRow(row) {
+      const qty = parseInt(document.getElementById(`item_${row}_qty`).value) || 0;
+      const price = parseInt(document.getElementById(`item_${row}_price`).value) || 0;
+      const amount = qty * price;
+      document.getElementById(`item_${row}_amount`).textContent = formatNumber(amount);
+      calculateTotal();
+    }
+
+    function calculateTotal() {
+      let subtotal = 0;
+      for (let i = 1; i <= 5; i++) {
+        const qty = parseInt(document.getElementById(`item_${i}_qty`).value) || 0;
+        const price = parseInt(document.getElementById(`item_${i}_price`).value) || 0;
+        subtotal += qty * price;
+      }
+
+      const vat = Math.round(subtotal * 0.1);
+      const total = subtotal + vat;
+
+      document.getElementById('subtotal').textContent = formatNumber(subtotal);
+      document.getElementById('vat').textContent = formatNumber(vat);
+      document.getElementById('grand_total').textContent = formatNumber(total);
+      document.getElementById('total_display').textContent =
+        `일금 ${numberToKorean(total)}원정 (₩${formatNumber(total)})`;
+
+      showToast('계산 완료!', 'success');
+    }
+
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = `toast ${type} show`;
+      setTimeout(() => toast.classList.remove('show'), 2000);
+    }
+
+    function getFormData() {
+      const data = {};
+      document.querySelectorAll('input').forEach(el => {
+        if (el.id) {
+          data[el.id] = el.type === 'checkbox' ? el.checked : el.value;
+        }
+      });
+      // 계산된 값도 저장
+      data.subtotal = document.getElementById('subtotal').textContent;
+      data.vat = document.getElementById('vat').textContent;
+      data.grand_total = document.getElementById('grand_total').textContent;
+      return data;
+    }
+
+    function setFormData(data) {
+      document.querySelectorAll('input').forEach(el => {
+        if (el.id && data[el.id] !== undefined) {
+          if (el.type === 'checkbox') el.checked = data[el.id];
+          else el.value = data[el.id];
+        }
+      });
+      if (data.subtotal) document.getElementById('subtotal').textContent = data.subtotal;
+      if (data.vat) document.getElementById('vat').textContent = data.vat;
+      if (data.grand_total) document.getElementById('grand_total').textContent = data.grand_total;
+      calculateTotal();
+    }
+
+    function saveForm() {
+      localStorage.setItem('견적서', JSON.stringify(getFormData()));
+      showToast('저장되었습니다!');
+    }
+
+    function loadForm() {
+      const saved = localStorage.getItem('견적서');
+      if (saved) {
+        setFormData(JSON.parse(saved));
+        showToast('불러왔습니다!');
+      } else {
+        showToast('저장된 데이터가 없습니다.');
+      }
+    }
+
+    function clearForm() {
+      if (confirm('모든 내용을 초기화하시겠습니까?')) {
+        document.querySelectorAll('input').forEach(el => {
+          if (el.type === 'checkbox') el.checked = false;
+          else el.value = '';
+        });
+        for (let i = 1; i <= 5; i++) {
+          document.getElementById(`item_${i}_amount`).textContent = '0';
+        }
+        document.getElementById('subtotal').textContent = '0';
+        document.getElementById('vat').textContent = '0';
+        document.getElementById('grand_total').textContent = '0';
+        document.getElementById('total_display').textContent = '일금                    원정 (₩0)';
+        showToast('초기화되었습니다.');
+      }
+    }
+
+    async function downloadAsDocx() {
+      const data = getFormData();
+      const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, AlignmentType } = docx;
+
+      // 품목 내역 생성
+      const items = [];
+      for (let i = 1; i <= 5; i++) {
+        const name = data[`item_${i}_name`];
+        if (name) {
+          const qty = data[`item_${i}_qty`] || 0;
+          const unit = data[`item_${i}_unit`] || 'EA';
+          const price = data[`item_${i}_price`] || 0;
+          const amount = parseInt(qty) * parseInt(price);
+          items.push(new Paragraph({
+            children: [new TextRun({ text: `${i}. ${name} - ${qty}${unit} × ${formatNumber(price)}원 = ${formatNumber(amount)}원`, size: 22 })],
+            spacing: { after: 100 }
+          }));
+        }
+      }
+
+      const doc = new Document({
+        sections: [{
+          properties: {},
+          children: [
+            new Paragraph({
+              children: [new TextRun({ text: '견 적 서', bold: true, size: 48 })],
+              alignment: AlignmentType.CENTER,
+              spacing: { after: 400 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `견적일자: ${data.quote_date || ''}`, size: 22 })],
+              alignment: AlignmentType.RIGHT,
+              spacing: { after: 300 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: '[공급자 정보]', bold: true, size: 24 })],
+              spacing: { after: 200 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `상호: ${data.company_name || ''}  대표자: ${data.ceo_name || ''}`, size: 22 })],
+              spacing: { after: 100 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `사업자번호: ${data.biz_number || ''}  연락처: ${data.phone || ''}`, size: 22 })],
+              spacing: { after: 100 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `주소: ${data.address || ''}`, size: 22 })],
+              spacing: { after: 300 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `수신: ${data.recipient || ''}`, size: 22 })],
+              spacing: { after: 100 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `건명: ${data.project_name || ''}`, size: 22 })],
+              spacing: { after: 300 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: '아래와 같이 견적합니다.', size: 22 })],
+              alignment: AlignmentType.CENTER,
+              spacing: { after: 300 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: '[품목 내역]', bold: true, size: 24 })],
+              spacing: { after: 200 }
+            }),
+            ...items,
+            new Paragraph({
+              children: [new TextRun({ text: '', size: 22 })],
+              spacing: { after: 200 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `공급가액: ${data.subtotal || '0'}원`, size: 22 })],
+              spacing: { after: 100 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `부가가치세(10%): ${data.vat || '0'}원`, size: 22 })],
+              spacing: { after: 100 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `총 견적금액: ${data.grand_total || '0'}원`, bold: true, size: 26 })],
+              spacing: { after: 300 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `납품기한: 계약 체결일로부터 ${data.delivery_days || '7'}일 이내`, size: 22 })],
+              spacing: { after: 100 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `견적유효기간: 견적일로부터 ${data.valid_days || '30'}일간`, size: 22 })]
+            })
+          ]
+        }]
+      });
+
+      const blob = await Packer.toBlob(doc);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `견적서_${data.project_name || '작성중'}.docx`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('Word 파일이 다운로드되었습니다!');
+    }
+  </script>
+</body>
+</html>

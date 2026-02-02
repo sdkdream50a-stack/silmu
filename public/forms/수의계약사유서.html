@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>수의계약 요청 사유서</title>
+  <style>
+    @page { size: A4; margin: 20mm; }
+    * { box-sizing: border-box; }
+    body { font-family: '맑은 고딕', 'Malgun Gothic', sans-serif; font-size: 12pt; line-height: 1.6; margin: 0; padding: 0; background: #f5f5f5; }
+    .toolbar { background: #1e40af; color: white; padding: 15px 20px; position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+    .toolbar h2 { margin: 0; font-size: 16pt; }
+    .toolbar-buttons { display: flex; gap: 10px; }
+    .toolbar button { padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-size: 11pt; font-weight: 500; }
+    .btn-save { background: #10b981; color: white; }
+    .btn-load { background: #6366f1; color: white; }
+    .btn-print { background: #f59e0b; color: white; }
+    .btn-clear { background: #ef4444; color: white; }
+    .btn-download { background: #8b5cf6; color: white; }
+    .container { max-width: 800px; margin: 20px auto; padding: 40px; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    h1 { text-align: center; font-size: 20pt; margin-bottom: 30px; border-bottom: 2px solid #000; padding-bottom: 10px; }
+    .form-info { margin-bottom: 20px; text-align: right; font-size: 10pt; color: #666; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+    th, td { border: 1px solid #000; padding: 10px; text-align: left; }
+    th { background-color: #f5f5f5; width: 130px; text-align: center; vertical-align: middle; }
+    input[type="text"], input[type="date"], textarea { width: 100%; border: none; background: #fffef0; padding: 5px; font-size: 12pt; font-family: inherit; }
+    input[type="text"]:focus, textarea:focus { outline: 2px solid #3b82f6; background: #fff; }
+    textarea { min-height: 80px; resize: vertical; }
+    .checkbox-group label { display: block; margin: 5px 0; cursor: pointer; }
+    .checkbox-group input[type="checkbox"] { margin-right: 8px; transform: scale(1.2); }
+    .signature-area { margin-top: 40px; }
+    .signature-table { width: 60%; margin-left: auto; }
+    .signature-table th, .signature-table td { height: 60px; text-align: center; }
+    .date-area { text-align: center; margin: 30px 0; font-size: 14pt; }
+    .date-area input { width: 60px; text-align: center; }
+    .legal-note { background-color: #f0f9ff; padding: 15px; margin-top: 20px; font-size: 10pt; border: 1px solid #bae6fd; border-radius: 8px; }
+    .toast { position: fixed; bottom: 20px; right: 20px; padding: 15px 25px; border-radius: 8px; color: white; font-weight: 500; opacity: 0; transition: opacity 0.3s; z-index: 1000; }
+    .toast.show { opacity: 1; }
+    .toast.success { background: #10b981; }
+    .toast.info { background: #3b82f6; }
+    @media print {
+      .toolbar, .legal-note { display: none !important; }
+      body { background: white; }
+      .container { box-shadow: none; margin: 0; padding: 20px; }
+      input[type="text"], input[type="date"], textarea { background: transparent; border-bottom: 1px solid #ccc; }
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <h2>수의계약 요청 사유서</h2>
+    <div class="toolbar-buttons">
+      <button class="btn-save" onclick="saveForm()">💾 저장</button>
+      <button class="btn-load" onclick="loadForm()">📂 불러오기</button>
+      <button class="btn-download" onclick="downloadAsDocx()">⬇️ Word저장 (한글 호환)</button>
+      <button class="btn-print" onclick="window.print()">🖨️ 인쇄/PDF</button>
+      <button class="btn-clear" onclick="clearForm()">🗑️ 초기화</button>
+    </div>
+  </div>
+
+  <div class="container" id="form-container">
+    <div class="form-info">[별지 제5호 서식]</div>
+    <h1>수의계약 요청 사유서</h1>
+
+    <table>
+      <tr>
+        <th>계약건명</th>
+        <td colspan="3"><input type="text" id="contract_name" placeholder="예: 2026년도 사무용품 구매"></td>
+      </tr>
+      <tr>
+        <th>계약구분</th>
+        <td>
+          <label><input type="checkbox" id="type_goods"> 물품</label>&nbsp;&nbsp;
+          <label><input type="checkbox" id="type_service"> 용역</label>&nbsp;&nbsp;
+          <label><input type="checkbox" id="type_construction"> 공사</label>
+        </td>
+        <th>추정가격</th>
+        <td><input type="text" id="estimated_price" placeholder="15,000,000"> 원</td>
+      </tr>
+      <tr>
+        <th>계약기간</th>
+        <td colspan="3">
+          <input type="date" id="contract_start" style="width: 150px;"> ~ <input type="date" id="contract_end" style="width: 150px;">
+        </td>
+      </tr>
+      <tr>
+        <th>계약상대자</th>
+        <td><input type="text" id="contractor_name" placeholder="(주)OO상사"></td>
+        <th>대표자</th>
+        <td><input type="text" id="contractor_ceo" placeholder="홍길동"></td>
+      </tr>
+      <tr>
+        <th>사업자등록번호</th>
+        <td><input type="text" id="business_number" placeholder="123-45-67890"></td>
+        <th>연락처</th>
+        <td><input type="text" id="contact" placeholder="02-1234-5678"></td>
+      </tr>
+    </table>
+
+    <table>
+      <tr>
+        <th>수의계약<br>법적근거</th>
+        <td class="checkbox-group">
+          <p><strong>지방계약법 시행령 제25조 제1항</strong></p>
+          <label><input type="checkbox" id="legal_1"> 제1호: 천재지변, 긴급한 행사 등 경쟁에 부칠 여유가 없는 경우</label>
+          <label><input type="checkbox" id="legal_2"> 제2호: 국가기관, 다른 지방자치단체와 계약하는 경우</label>
+          <label><input type="checkbox" id="legal_3"> 제3호: 특정인의 기술/용역 또는 특정 위치/구조 등으로 경쟁 불가</label>
+          <label><input type="checkbox" id="legal_4"> 제4호: 추정가격이 수의계약 기준금액 이하인 경우</label>
+          <label><input type="checkbox" id="legal_etc"> 기타: <input type="text" id="legal_etc_text" style="width: 300px;" placeholder="기타 사유 입력"></label>
+        </td>
+      </tr>
+    </table>
+
+    <table>
+      <tr>
+        <th>수의계약<br>요청사유</th>
+        <td>
+          <textarea id="request_reason" placeholder="예: 본 건은 추정가격 15,000,000원으로 지방계약법 시행령 제25조 제1항 제4호에 따른 물품구매 수의계약 기준금액(2,200만원) 이하에 해당하여 수의계약으로 진행하고자 합니다."></textarea>
+        </td>
+      </tr>
+    </table>
+
+    <table>
+      <tr>
+        <th>계약상대자<br>선정사유</th>
+        <td>
+          <textarea id="selection_reason" placeholder="예: (주)OO상사는 당 기관과 다년간 거래 실적이 있으며, 최저가 견적을 제출하여 계약상대자로 선정하였습니다."></textarea>
+        </td>
+      </tr>
+    </table>
+
+    <table>
+      <tr>
+        <th>첨부서류</th>
+        <td class="checkbox-group">
+          <label><input type="checkbox" id="attach_1"> 견적서 <input type="text" id="attach_1_count" style="width: 30px; text-align: center;">부</label>
+          <label><input type="checkbox" id="attach_2"> 사업자등록증 사본</label>
+          <label><input type="checkbox" id="attach_3"> 예정가격 조서</label>
+          <label><input type="checkbox" id="attach_etc"> 기타: <input type="text" id="attach_etc_text" style="width: 200px;"></label>
+        </td>
+      </tr>
+    </table>
+
+    <div class="date-area">
+      <p>위와 같이 수의계약을 요청합니다.</p>
+      <p style="margin-top: 20px;">
+        <input type="text" id="year" style="width: 60px;" placeholder="2026">년
+        <input type="text" id="month" style="width: 40px;" placeholder="2">월
+        <input type="text" id="day" style="width: 40px;" placeholder="2">일
+      </p>
+    </div>
+
+    <div class="signature-area">
+      <p style="text-align: center; margin-bottom: 10px;"><strong>요청부서:</strong> <input type="text" id="department" style="width: 200px;" placeholder="총무과"></p>
+      <table class="signature-table">
+        <tr>
+          <th><input type="text" id="title_1" style="text-align: center; width: 100%; border: none; background: transparent; font-weight: bold;" value="담당"></th>
+          <th><input type="text" id="title_2" style="text-align: center; width: 100%; border: none; background: transparent; font-weight: bold;" value="팀장"></th>
+          <th><input type="text" id="title_3" style="text-align: center; width: 100%; border: none; background: transparent; font-weight: bold;" value="과장"></th>
+        </tr>
+        <tr>
+          <td><input type="text" id="sign_1" style="text-align: center;" placeholder="(인)"></td>
+          <td><input type="text" id="sign_2" style="text-align: center;" placeholder="(인)"></td>
+          <td><input type="text" id="sign_3" style="text-align: center;" placeholder="(인)"></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="legal-note">
+      <strong>💡 작성 도움말</strong>
+      <ul style="margin: 10px 0;">
+        <li><strong>저장:</strong> 작성 내용을 브라우저에 임시 저장합니다.</li>
+        <li><strong>불러오기:</strong> 저장된 내용을 불러옵니다.</li>
+        <li><strong>Word저장:</strong> Word 파일(.docx)로 다운로드합니다. 한글(HWP)에서도 열 수 있습니다.</li>
+        <li><strong>인쇄/PDF:</strong> 인쇄하거나 PDF로 저장합니다. (인쇄 대화상자에서 "PDF로 저장" 선택)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="https://unpkg.com/docx@8.5.0/build/index.umd.js"></script>
+  <script>
+    // 모든 input 요소의 ID 목록
+    const inputIds = [
+      'contract_name', 'type_goods', 'type_service', 'type_construction',
+      'estimated_price', 'contract_start', 'contract_end',
+      'contractor_name', 'contractor_ceo', 'business_number', 'contact',
+      'legal_1', 'legal_2', 'legal_3', 'legal_4', 'legal_etc', 'legal_etc_text',
+      'request_reason', 'selection_reason',
+      'attach_1', 'attach_1_count', 'attach_2', 'attach_3', 'attach_etc', 'attach_etc_text',
+      'year', 'month', 'day', 'department', 'title_1', 'title_2', 'title_3', 'sign_1', 'sign_2', 'sign_3'
+    ];
+
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = `toast ${type} show`;
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    function getFormData() {
+      const data = {};
+      inputIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          data[id] = el.type === 'checkbox' ? el.checked : el.value;
+        }
+      });
+      return data;
+    }
+
+    function setFormData(data) {
+      inputIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && data[id] !== undefined) {
+          if (el.type === 'checkbox') {
+            el.checked = data[id];
+          } else {
+            el.value = data[id];
+          }
+        }
+      });
+    }
+
+    function saveForm() {
+      const data = getFormData();
+      localStorage.setItem('수의계약사유서', JSON.stringify(data));
+      showToast('저장되었습니다!', 'success');
+    }
+
+    function loadForm() {
+      const saved = localStorage.getItem('수의계약사유서');
+      if (saved) {
+        setFormData(JSON.parse(saved));
+        showToast('불러왔습니다!', 'info');
+      } else {
+        showToast('저장된 데이터가 없습니다.', 'info');
+      }
+    }
+
+    function clearForm() {
+      if (confirm('모든 내용을 초기화하시겠습니까?')) {
+        const defaults = { title_1: '담당', title_2: '팀장', title_3: '과장' };
+        inputIds.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) {
+            if (el.type === 'checkbox') el.checked = false;
+            else if (defaults[id]) el.value = defaults[id];
+            else el.value = '';
+          }
+        });
+        showToast('초기화되었습니다.', 'info');
+      }
+    }
+
+    async function downloadAsDocx() {
+      const data = getFormData();
+      const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, AlignmentType, BorderStyle } = docx;
+
+      // 계약구분 텍스트
+      let contractType = [];
+      if (data.type_goods) contractType.push('물품');
+      if (data.type_service) contractType.push('용역');
+      if (data.type_construction) contractType.push('공사');
+
+      // 법적근거 텍스트
+      let legalBasis = [];
+      if (data.legal_1) legalBasis.push('제1호: 천재지변, 긴급한 행사 등');
+      if (data.legal_2) legalBasis.push('제2호: 국가기관, 다른 지방자치단체와 계약');
+      if (data.legal_3) legalBasis.push('제3호: 특정인의 기술/용역');
+      if (data.legal_4) legalBasis.push('제4호: 추정가격이 기준금액 이하');
+      if (data.legal_etc) legalBasis.push('기타: ' + (data.legal_etc_text || ''));
+
+      const doc = new Document({
+        sections: [{
+          properties: {},
+          children: [
+            new Paragraph({
+              children: [new TextRun({ text: '수의계약 요청 사유서', bold: true, size: 36 })],
+              alignment: AlignmentType.CENTER,
+              spacing: { after: 400 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `계약건명: ${data.contract_name || ''}`, size: 24 })],
+              spacing: { after: 200 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `계약구분: ${contractType.join(', ') || '-'}`, size: 24 })],
+              spacing: { after: 200 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `추정가격: ${data.estimated_price || ''} 원`, size: 24 })],
+              spacing: { after: 200 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `계약기간: ${data.contract_start || ''} ~ ${data.contract_end || ''}`, size: 24 })],
+              spacing: { after: 200 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `계약상대자: ${data.contractor_name || ''} (대표: ${data.contractor_ceo || ''})`, size: 24 })],
+              spacing: { after: 200 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `사업자등록번호: ${data.business_number || ''}`, size: 24 })],
+              spacing: { after: 200 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `연락처: ${data.contact || ''}`, size: 24 })],
+              spacing: { after: 400 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: '수의계약 법적근거 (지방계약법 시행령 제25조 제1항)', bold: true, size: 24 })],
+              spacing: { after: 200 }
+            }),
+            ...legalBasis.map(item => new Paragraph({
+              children: [new TextRun({ text: `• ${item}`, size: 24 })],
+              spacing: { after: 100 }
+            })),
+            new Paragraph({
+              children: [new TextRun({ text: '수의계약 요청사유', bold: true, size: 24 })],
+              spacing: { before: 300, after: 200 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: data.request_reason || '', size: 24 })],
+              spacing: { after: 300 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: '계약상대자 선정사유', bold: true, size: 24 })],
+              spacing: { after: 200 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: data.selection_reason || '', size: 24 })],
+              spacing: { after: 400 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: '위와 같이 수의계약을 요청합니다.', size: 24 })],
+              alignment: AlignmentType.CENTER,
+              spacing: { after: 300 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `${data.year || ''}년 ${data.month || ''}월 ${data.day || ''}일`, size: 24 })],
+              alignment: AlignmentType.CENTER,
+              spacing: { after: 300 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `요청부서: ${data.department || ''}`, size: 24 })],
+              alignment: AlignmentType.CENTER,
+              spacing: { after: 400 }
+            }),
+            new Paragraph({
+              children: [
+                new TextRun({ text: `${data.title_1 || '담당'}: ${data.sign_1 || '(인)'}    `, size: 22 }),
+                new TextRun({ text: `${data.title_2 || '팀장'}: ${data.sign_2 || '(인)'}    `, size: 22 }),
+                new TextRun({ text: `${data.title_3 || '과장'}: ${data.sign_3 || '(인)'}`, size: 22 })
+              ],
+              alignment: AlignmentType.RIGHT
+            })
+          ]
+        }]
+      });
+
+      const blob = await Packer.toBlob(doc);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `수의계약사유서_${data.contract_name || '작성중'}.docx`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('Word 파일이 다운로드되었습니다!', 'success');
+    }
+
+    // 자동 저장 (30초마다)
+    setInterval(() => {
+      const data = getFormData();
+      if (Object.values(data).some(v => v)) {
+        localStorage.setItem('수의계약사유서_자동저장', JSON.stringify(data));
+      }
+    }, 30000);
+
+    // 페이지 로드 시 자동저장 데이터 확인
+    window.onload = function() {
+      const autoSaved = localStorage.getItem('수의계약사유서_자동저장');
+      if (autoSaved) {
+        const data = JSON.parse(autoSaved);
+        if (Object.values(data).some(v => v)) {
+          if (confirm('자동 저장된 내용이 있습니다. 불러오시겠습니까?')) {
+            setFormData(data);
+          }
+        }
+      }
+    };
+  </script>
+</body>
+</html>
