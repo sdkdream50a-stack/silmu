@@ -1,0 +1,126 @@
+<%# 업무 가이드 목록 페이지 - Stitch 디자인 기반 %>
+
+<!-- 페이지 헤더 -->
+<section class="bg-gradient-to-r from-forest-600 to-forest-700 text-white py-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h1 class="text-3xl md:text-4xl font-bold mb-4">업무 가이드</h1>
+    <p class="text-forest-100 text-lg">공무원 업무 처리에 필요한 단계별 가이드</p>
+  </div>
+</section>
+
+<!-- 검색 및 필터 -->
+<section class="bg-white border-b sticky top-16 z-40">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <!-- 검색바 -->
+    <div class="flex items-center bg-gray-100 rounded-xl overflow-hidden mb-4">
+      <div class="flex items-center justify-center pl-4 text-gray-400">
+        <span class="material-symbols-outlined">search</span>
+      </div>
+      <input type="text" placeholder="가이드 검색" class="w-full border-none focus:ring-0 bg-transparent py-3 px-3 text-gray-800 placeholder:text-gray-400">
+    </div>
+
+    <!-- 카테고리 필터 -->
+    <div class="flex flex-wrap gap-2">
+      <button class="px-4 py-2 bg-forest-600 text-white rounded-full text-sm font-medium">전체</button>
+      <button class="px-4 py-2 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-full text-sm font-medium transition-colors">계약</button>
+      <button class="px-4 py-2 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-full text-sm font-medium transition-colors">예산</button>
+      <button class="px-4 py-2 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-full text-sm font-medium transition-colors">인사</button>
+      <button class="px-4 py-2 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-full text-sm font-medium transition-colors">복무</button>
+      <button class="px-4 py-2 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-full text-sm font-medium transition-colors">민원</button>
+    </div>
+  </div>
+</section>
+
+<section class="py-8">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="lg:flex lg:gap-8">
+      <!-- 메인 콘텐츠 -->
+      <div class="lg:w-[70%]">
+        <div class="flex items-center justify-between mb-6">
+          <p class="text-gray-600">총 <span class="font-semibold text-gray-900">18</span>개의 가이드</p>
+          <select class="border-gray-200 rounded-lg text-sm focus:ring-forest-500 focus:border-forest-500">
+            <option>최신순</option>
+            <option>인기순</option>
+          </select>
+        </div>
+
+        <div class="space-y-4">
+          <% [
+            { title: "물품 구매 및 검수 절차 가이드", summary: "물품 구매부터 검수, 대금 지급까지 전체 절차를 단계별로 설명합니다.", category: "계약", date: "2024.01.20", views: 2341, tag: "인기" },
+            { title: "수의계약 체결 실무 가이드", summary: "수의계약의 요건, 절차, 주의사항을 상세히 안내합니다.", category: "계약", date: "2024.01.18", views: 1892, tag: "업데이트" },
+            { title: "출장 여비 청구 가이드", summary: "국내/국외 출장 시 여비 청구 방법과 증빙 서류 안내", category: "예산", date: "2024.01.15", views: 1654, tag: nil },
+            { title: "연가 사용 및 관리 가이드", summary: "연가일수 계산, 사용 절차, 미사용 연가 처리 방법", category: "복무", date: "2024.01.12", views: 1432, tag: nil },
+            { title: "민원 응대 매뉴얼", summary: "민원인 응대 시 주의사항 및 처리 절차 안내", category: "민원", date: "2024.01.10", views: 1234, tag: "신규" },
+            { title: "예산 이월 실무 가이드", summary: "명시이월, 사고이월, 계속비이월의 요건과 절차", category: "예산", date: "2024.01.08", views: 987, tag: nil },
+          ].each do |guide| %>
+            <%= link_to guide_path(1), class: "block bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg hover:border-forest-200 transition-all" do %>
+              <div class="flex items-start justify-between mb-3">
+                <span class="text-xs font-semibold px-2 py-1 bg-forest-100 text-forest-600 rounded-full"><%= guide[:category] %></span>
+                <% if guide[:tag] %>
+                  <span class="text-xs font-semibold px-2 py-1 <%= guide[:tag] == '인기' ? 'bg-amber-100 text-amber-600' : guide[:tag] == '업데이트' ? 'bg-blue-100 text-blue-600' : 'bg-purple-100 text-purple-600' %> rounded-full"><%= guide[:tag] %></span>
+                <% end %>
+              </div>
+              <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-forest-600"><%= guide[:title] %></h3>
+              <p class="text-gray-600 text-sm mb-4"><%= guide[:summary] %></p>
+              <div class="flex items-center gap-4 text-xs text-gray-400">
+                <span><span class="material-symbols-outlined text-sm align-middle">calendar_today</span> <%= guide[:date] %></span>
+                <span><span class="material-symbols-outlined text-sm align-middle">visibility</span> <%= number_with_delimiter(guide[:views]) %></span>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+
+        <!-- 페이지네이션 -->
+        <div class="flex justify-center mt-12">
+          <nav class="flex items-center gap-1">
+            <button class="w-10 h-10 flex items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100">
+              <span class="material-symbols-outlined">chevron_left</span>
+            </button>
+            <button class="w-10 h-10 flex items-center justify-center rounded-lg bg-forest-600 text-white font-medium">1</button>
+            <button class="w-10 h-10 flex items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 font-medium">2</button>
+            <button class="w-10 h-10 flex items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 font-medium">3</button>
+            <button class="w-10 h-10 flex items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100">
+              <span class="material-symbols-outlined">chevron_right</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+
+      <!-- 사이드바 -->
+      <div class="lg:w-[30%] mt-8 lg:mt-0">
+        <div class="sticky top-24 space-y-6">
+          <!-- 인기 가이드 -->
+          <div class="bg-white rounded-xl border border-gray-200 p-6">
+            <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <span class="material-symbols-outlined text-amber-500">local_fire_department</span>
+              인기 가이드 TOP 5
+            </h3>
+            <ol class="space-y-3">
+              <% ["물품 구매 및 검수 절차", "수의계약 체결 실무", "출장 여비 청구", "연가 사용 및 관리", "민원 응대 매뉴얼"].each_with_index do |title, i| %>
+                <li class="flex items-center gap-3">
+                  <span class="w-6 h-6 flex items-center justify-center bg-gray-100 rounded-full text-xs font-bold text-gray-600"><%= i + 1 %></span>
+                  <%= link_to title, guide_path(1), class: "text-sm text-gray-700 hover:text-forest-600 transition-colors truncate" %>
+                </li>
+              <% end %>
+            </ol>
+          </div>
+
+          <!-- 최근 본 가이드 -->
+          <div class="bg-white rounded-xl border border-gray-200 p-6">
+            <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <span class="material-symbols-outlined text-gray-400">history</span>
+              최근 본 가이드
+            </h3>
+            <ul class="space-y-3">
+              <% ["수의계약 체결 실무", "출장 여비 청구"].each do |title| %>
+                <li>
+                  <%= link_to title, guide_path(1), class: "text-sm text-gray-700 hover:text-forest-600 transition-colors" %>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

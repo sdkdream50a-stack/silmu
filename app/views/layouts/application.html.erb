@@ -20,6 +20,12 @@
     <link rel="apple-touch-icon" href="/icon.png">
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link href="https://cdn.jsdelivr.net/gh/toss/tossface/dist/tossface.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+    </style>
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
@@ -43,10 +49,10 @@
 
           <!-- Desktop Menu -->
           <div class="hidden md:flex items-center space-x-8">
-            <%= link_to "도구", "#tools", class: "text-gray-600 hover:text-navy-600 font-medium transition-colors" %>
-            <%= link_to "가이드", "#guides", class: "text-gray-600 hover:text-navy-600 font-medium transition-colors" %>
+            <%= link_to "양식", templates_path, class: "text-gray-600 hover:text-navy-600 font-medium transition-colors" %>
+            <%= link_to "가이드", guides_path, class: "text-gray-600 hover:text-navy-600 font-medium transition-colors" %>
+            <%= link_to "도구", tools_path, class: "text-gray-600 hover:text-navy-600 font-medium transition-colors" %>
             <%= link_to "커뮤니티", "#community", class: "text-gray-600 hover:text-navy-600 font-medium transition-colors" %>
-            <%= link_to "퀴즈", "#quiz", class: "text-gray-600 hover:text-navy-600 font-medium transition-colors" %>
           </div>
 
           <!-- Auth Buttons -->
@@ -73,10 +79,10 @@
       <!-- Mobile Menu -->
       <div class="md:hidden hidden" id="mobile-menu">
         <div class="px-2 pt-2 pb-3 space-y-1 bg-white border-t">
-          <%= link_to "도구", "#tools", class: "block px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-md" %>
-          <%= link_to "가이드", "#guides", class: "block px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-md" %>
+          <%= link_to "양식", templates_path, class: "block px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-md" %>
+          <%= link_to "가이드", guides_path, class: "block px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-md" %>
+          <%= link_to "도구", tools_path, class: "block px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-md" %>
           <%= link_to "커뮤니티", "#community", class: "block px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-md" %>
-          <%= link_to "퀴즈", "#quiz", class: "block px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-md" %>
           <div class="border-t pt-2 mt-2">
             <% if user_signed_in? %>
               <%= button_to "로그아웃", destroy_user_session_path, method: :delete, class: "block w-full text-left px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-md" %>
@@ -136,10 +142,10 @@
           <div>
             <h3 class="font-semibold mb-4">서비스</h3>
             <ul class="space-y-2 text-navy-200">
-              <li><%= link_to "도구", "#tools", class: "hover:text-white transition-colors" %></li>
-              <li><%= link_to "가이드", "#guides", class: "hover:text-white transition-colors" %></li>
+              <li><%= link_to "양식", templates_path, class: "hover:text-white transition-colors" %></li>
+              <li><%= link_to "가이드", guides_path, class: "hover:text-white transition-colors" %></li>
+              <li><%= link_to "도구", tools_path, class: "hover:text-white transition-colors" %></li>
               <li><%= link_to "커뮤니티", "#community", class: "hover:text-white transition-colors" %></li>
-              <li><%= link_to "퀴즈", "#quiz", class: "hover:text-white transition-colors" %></li>
             </ul>
           </div>
 

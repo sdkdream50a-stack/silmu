@@ -1,0 +1,213 @@
+<%# 여비계산기 페이지 - Stitch 디자인 기반 %>
+
+<section class="py-8">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- 뒤로가기 -->
+    <div class="mb-6">
+      <%= link_to tools_path, class: "inline-flex items-center text-gray-600 hover:text-indigo-600 transition-colors" do %>
+        <span class="material-symbols-outlined mr-1">arrow_back</span>
+        도구 목록으로
+      <% end %>
+    </div>
+
+    <!-- 페이지 헤더 -->
+    <div class="mb-8">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center">
+          <span class="material-symbols-outlined text-2xl">directions_car</span>
+        </div>
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900">여비계산기</h1>
+          <p class="text-gray-500 text-sm">출장 여비를 자동으로 계산합니다</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="lg:flex lg:gap-8">
+      <!-- 입력 폼 -->
+      <div class="lg:w-[55%] mb-8 lg:mb-0">
+        <div class="bg-white rounded-xl border border-gray-200 p-6">
+          <h2 class="font-bold text-gray-900 mb-6 flex items-center gap-2">
+            <span class="material-symbols-outlined text-gray-400">edit_note</span>
+            출장 정보 입력
+          </h2>
+
+          <form class="space-y-6">
+            <!-- 출장 유형 -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">출장 유형</label>
+              <div class="flex gap-4">
+                <label class="flex items-center">
+                  <input type="radio" name="trip_type" value="domestic" checked class="text-blue-600 focus:ring-blue-500">
+                  <span class="ml-2 text-gray-700">국내 출장</span>
+                </label>
+                <label class="flex items-center">
+                  <input type="radio" name="trip_type" value="international" class="text-blue-600 focus:ring-blue-500">
+                  <span class="ml-2 text-gray-700">국외 출장</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- 출발지/목적지 -->
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">출발지</label>
+                <input type="text" placeholder="예: 서울" class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">목적지</label>
+                <input type="text" placeholder="예: 부산" class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+              </div>
+            </div>
+
+            <!-- 출장 기간 -->
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">출발일</label>
+                <input type="date" class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">도착일</label>
+                <input type="date" class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+              </div>
+            </div>
+
+            <!-- 직급 -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">직급</label>
+              <select class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <option value="">직급을 선택하세요</option>
+                <option value="1">1급 이상</option>
+                <option value="2">2급</option>
+                <option value="3">3급</option>
+                <option value="4">4급</option>
+                <option value="5" selected>5급</option>
+                <option value="6">6급</option>
+                <option value="7">7급</option>
+                <option value="8">8급</option>
+                <option value="9">9급</option>
+              </select>
+            </div>
+
+            <!-- 교통수단 -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">교통수단</label>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <label class="flex items-center justify-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-blue-300 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50 transition-colors">
+                  <input type="radio" name="transport" value="train" class="sr-only">
+                  <div class="text-center">
+                    <span class="material-symbols-outlined text-2xl text-gray-600">train</span>
+                    <p class="text-sm mt-1">기차</p>
+                  </div>
+                </label>
+                <label class="flex items-center justify-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-blue-300 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50 transition-colors">
+                  <input type="radio" name="transport" value="bus" class="sr-only">
+                  <div class="text-center">
+                    <span class="material-symbols-outlined text-2xl text-gray-600">directions_bus</span>
+                    <p class="text-sm mt-1">버스</p>
+                  </div>
+                </label>
+                <label class="flex items-center justify-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-blue-300 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50 transition-colors">
+                  <input type="radio" name="transport" value="car" class="sr-only">
+                  <div class="text-center">
+                    <span class="material-symbols-outlined text-2xl text-gray-600">directions_car</span>
+                    <p class="text-sm mt-1">자차</p>
+                  </div>
+                </label>
+                <label class="flex items-center justify-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-blue-300 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50 transition-colors">
+                  <input type="radio" name="transport" value="flight" class="sr-only">
+                  <div class="text-center">
+                    <span class="material-symbols-outlined text-2xl text-gray-600">flight</span>
+                    <p class="text-sm mt-1">항공</p>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <!-- 숙박 여부 -->
+            <div>
+              <label class="flex items-center">
+                <input type="checkbox" name="accommodation" checked class="text-blue-600 focus:ring-blue-500 rounded">
+                <span class="ml-2 text-gray-700">숙박 필요</span>
+              </label>
+            </div>
+
+            <!-- 계산 버튼 -->
+            <button type="submit" class="w-full py-4 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
+              <span class="material-symbols-outlined">calculate</span>
+              여비 계산하기
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- 결과 영역 -->
+      <div class="lg:w-[45%]">
+        <div class="bg-white rounded-xl border border-gray-200 p-6 sticky top-24">
+          <h2 class="font-bold text-gray-900 mb-6 flex items-center gap-2">
+            <span class="material-symbols-outlined text-green-600">receipt_long</span>
+            계산 결과
+          </h2>
+
+          <!-- 총액 -->
+          <div class="bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl p-6 text-white mb-6">
+            <p class="text-blue-100 text-sm mb-1">총 여비</p>
+            <p class="text-4xl font-bold">₩ 320,000</p>
+          </div>
+
+          <!-- 항목별 내역 -->
+          <div class="space-y-4">
+            <div class="flex justify-between items-center py-3 border-b border-gray-100">
+              <div>
+                <p class="font-medium text-gray-900">운임</p>
+                <p class="text-xs text-gray-500">KTX 왕복 (서울 ↔ 부산)</p>
+              </div>
+              <p class="font-bold text-gray-900">₩ 120,000</p>
+            </div>
+            <div class="flex justify-between items-center py-3 border-b border-gray-100">
+              <div>
+                <p class="font-medium text-gray-900">숙박비</p>
+                <p class="text-xs text-gray-500">70,000원 × 2박</p>
+              </div>
+              <p class="font-bold text-gray-900">₩ 140,000</p>
+            </div>
+            <div class="flex justify-between items-center py-3 border-b border-gray-100">
+              <div>
+                <p class="font-medium text-gray-900">식비</p>
+                <p class="text-xs text-gray-500">25,000원 × 2일</p>
+              </div>
+              <p class="font-bold text-gray-900">₩ 50,000</p>
+            </div>
+            <div class="flex justify-between items-center py-3">
+              <div>
+                <p class="font-medium text-gray-900">일비</p>
+                <p class="text-xs text-gray-500">20,000원 × 2일</p>
+              </div>
+              <p class="font-bold text-gray-900">₩ 40,000</p>
+            </div>
+          </div>
+
+          <!-- 버튼 -->
+          <div class="flex gap-3 mt-6">
+            <button class="flex-1 py-3 border border-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-2">
+              <span class="material-symbols-outlined">print</span>
+              인쇄
+            </button>
+            <button class="flex-1 py-3 border border-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-2">
+              <span class="material-symbols-outlined">picture_as_pdf</span>
+              PDF 저장
+            </button>
+          </div>
+
+          <!-- 관련 규정 -->
+          <div class="mt-6 pt-6 border-t">
+            <a href="#" class="text-sm text-blue-600 hover:underline flex items-center gap-1">
+              <span class="material-symbols-outlined text-lg">gavel</span>
+              관련 규정 확인하기
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

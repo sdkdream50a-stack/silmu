@@ -9,4 +9,20 @@ Rails.application.routes.draw do
 
   # 토픽 (법령 가이드)
   get "topics/:slug", to: "topics#show", as: :topic
+
+  # 문서 양식
+  resources :templates, only: [:index, :show]
+
+  # 업무 가이드
+  resources :guides, only: [:index, :show]
+
+  # 실무 도구
+  get "tools", to: "tools#index", as: :tools
+  get "tools/travel-calculator", to: "tools#travel_calculator", as: :travel_calculator
+
+  # 마이페이지
+  get "mypage", to: "mypage#index", as: :mypage
+
+  # 서비스 소개
+  get "about", to: "home#about", as: :about
 end

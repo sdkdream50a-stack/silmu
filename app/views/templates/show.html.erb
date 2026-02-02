@@ -1,0 +1,128 @@
+<%# 문서 양식 상세/미리보기 페이지 - Stitch 디자인 기반 %>
+
+<section class="py-8">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- 뒤로가기 -->
+    <div class="mb-6">
+      <%= link_to templates_path, class: "inline-flex items-center text-gray-600 hover:text-navy-600 transition-colors" do %>
+        <span class="material-symbols-outlined mr-1">arrow_back</span>
+        양식 목록으로
+      <% end %>
+    </div>
+
+    <div class="lg:flex lg:gap-8">
+      <!-- 미리보기 영역 (왼쪽 70%) -->
+      <div class="lg:w-[70%] mb-8 lg:mb-0">
+        <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div class="bg-gray-100 px-4 py-3 flex items-center justify-between border-b">
+            <div class="flex items-center gap-2">
+              <button class="p-2 hover:bg-gray-200 rounded-lg transition-colors">
+                <span class="material-symbols-outlined text-gray-600">zoom_out</span>
+              </button>
+              <span class="text-sm text-gray-600">100%</span>
+              <button class="p-2 hover:bg-gray-200 rounded-lg transition-colors">
+                <span class="material-symbols-outlined text-gray-600">zoom_in</span>
+              </button>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm text-gray-600">1 / 2 페이지</span>
+            </div>
+          </div>
+
+          <!-- 문서 미리보기 -->
+          <div class="aspect-[1/1.414] bg-white flex items-center justify-center p-8">
+            <div class="w-full h-full bg-gray-50 rounded-lg border-2 border-dashed border-gray-200 flex items-center justify-center">
+              <div class="text-center">
+                <span class="material-symbols-outlined text-8xl text-gray-300 mb-4">description</span>
+                <p class="text-gray-400">문서 미리보기</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 정보 패널 (오른쪽 30%) -->
+      <div class="lg:w-[30%]">
+        <div class="bg-white rounded-xl border border-gray-200 p-6 sticky top-24">
+          <span class="inline-block text-xs font-semibold px-3 py-1 bg-navy-100 text-navy-600 rounded-full mb-4">기안문</span>
+
+          <h1 class="text-2xl font-bold text-gray-900 mb-2">물품 구매 기안문</h1>
+          <p class="text-gray-600 mb-6">표준 물품 구매를 위한 품의 및 기안 양식입니다. 관련 법령에 따른 필수 항목이 포함되어 있습니다.</p>
+
+          <div class="space-y-3 mb-6 text-sm">
+            <div class="flex justify-between">
+              <span class="text-gray-500">최종 수정일</span>
+              <span class="text-gray-900 font-medium">2024.01.15</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-500">다운로드 수</span>
+              <span class="text-gray-900 font-medium">1,234회</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-500">파일 형식</span>
+              <span class="text-gray-900 font-medium">HWP, PDF, DOCX</span>
+            </div>
+          </div>
+
+          <!-- 다운로드 버튼들 -->
+          <div class="space-y-2 mb-6">
+            <button class="w-full py-3 bg-navy-600 text-white rounded-lg font-medium hover:bg-navy-700 transition-colors flex items-center justify-center gap-2">
+              <span class="material-symbols-outlined text-xl">download</span>
+              HWP 다운로드
+            </button>
+            <button class="w-full py-3 border border-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-2">
+              <span class="material-symbols-outlined text-xl">picture_as_pdf</span>
+              PDF 다운로드
+            </button>
+            <button class="w-full py-3 border border-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-2">
+              <span class="material-symbols-outlined text-xl">description</span>
+              DOCX 다운로드
+            </button>
+          </div>
+
+          <!-- 부가 기능 -->
+          <div class="flex gap-2 mb-6">
+            <button class="flex-1 py-2 border border-gray-200 text-gray-600 rounded-lg text-sm hover:bg-gray-50 transition-colors flex items-center justify-center gap-1">
+              <span class="material-symbols-outlined text-lg">bookmark_border</span>
+              저장
+            </button>
+            <button class="flex-1 py-2 border border-gray-200 text-gray-600 rounded-lg text-sm hover:bg-gray-50 transition-colors flex items-center justify-center gap-1">
+              <span class="material-symbols-outlined text-lg">print</span>
+              인쇄
+            </button>
+          </div>
+
+          <!-- 관련 가이드 -->
+          <div class="border-t pt-6">
+            <h3 class="font-semibold text-gray-900 mb-3">관련 가이드</h3>
+            <%= link_to guide_path(1), class: "flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors" do %>
+              <span class="material-symbols-outlined text-navy-600">menu_book</span>
+              <div>
+                <p class="font-medium text-gray-900 text-sm">물품 구매 절차 가이드</p>
+                <p class="text-gray-500 text-xs">단계별 구매 절차 안내</p>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 관련 양식 -->
+    <section class="mt-16">
+      <h2 class="text-xl font-bold text-gray-900 mb-6">이런 양식은 어떠세요?</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <% 4.times do %>
+          <div class="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
+            <div class="aspect-[4/3] bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
+              <span class="material-symbols-outlined text-5xl text-gray-300">description</span>
+            </div>
+            <div class="p-4">
+              <h3 class="font-bold text-gray-900 mb-1">관련 양식</h3>
+              <p class="text-gray-500 text-sm">양식 설명</p>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </section>
+  </div>
+</section>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>실무.kr - 로그인 및 회원가입</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1f3b61",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#14181e",
+                        "kakao": "#FEE500",
+                        "google-border": "#d4dae3"
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "Noto Sans KR", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: "Public Sans", sans-serif;
+        }
+        .form-input:focus {
+            border-color: #1f3b61 !important;
+            ring: 0 !important;
+        }
+    </style>
+</head>
+<body class="bg-[#F5F7FA] dark:bg-background-dark min-h-screen font-display text-[#101419] dark:text-white">
+<div class="flex flex-col min-h-screen items-center justify-center p-6">
+<!-- Logo Section -->
+<div class="mb-8 flex flex-col items-center">
+<div class="flex items-center gap-3 text-primary mb-2">
+<div class="size-10">
+<svg fill="currentColor" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M24 4H6V17.3333V30.6667H24V44H42V30.6667V17.3333H24V4Z" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h1 class="text-3xl font-extrabold tracking-tight">실무.kr</h1>
+</div>
+<p class="text-[#5b6f8b] font-medium">대한민국 공직자들을 위한 업무 포털</p>
+</div>
+<!-- Main Card Container -->
+<div class="w-full max-w-[480px] bg-white dark:bg-[#1c222b] rounded-xl shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden">
+<!-- Toggle Tabs (Segmented Buttons) -->
+<div class="p-6 pb-0">
+<div class="flex h-12 w-full items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800 p-1">
+<label class="flex cursor-pointer h-full grow items-center justify-center rounded-md px-2 transition-all has-[:checked]:bg-white dark:has-[:checked]:bg-[#2d3643] has-[:checked]:shadow-sm has-[:checked]:text-primary dark:has-[:checked]:text-white text-[#5b6f8b] text-base font-semibold leading-normal">
+<span class="truncate">로그인</span>
+<input checked="" class="invisible w-0" name="auth-mode" type="radio" value="login"/>
+</label>
+<label class="flex cursor-pointer h-full grow items-center justify-center rounded-md px-2 transition-all has-[:checked]:bg-white dark:has-[:checked]:bg-[#2d3643] has-[:checked]:shadow-sm has-[:checked]:text-primary dark:has-[:checked]:text-white text-[#5b6f8b] text-base font-semibold leading-normal">
+<span class="truncate">회원가입</span>
+<input class="invisible w-0" name="auth-mode" type="radio" value="signup"/>
+</label>
+</div>
+</div>
+<!-- Login View Content -->
+<div class="p-6 space-y-5">
+<!-- Login Fields -->
+<div class="space-y-4">
+<div class="flex flex-col w-full">
+<p class="text-[#101419] dark:text-gray-200 text-sm font-semibold pb-2">이메일</p>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">mail</span>
+<input class="form-input flex w-full rounded-lg text-[#101419] dark:text-white border border-[#d4dae3] dark:border-gray-700 bg-white dark:bg-[#2d3643] h-14 pl-12 pr-4 text-base font-normal placeholder:text-[#5b6f8b]" placeholder="example@korea.kr" type="email"/>
+</div>
+</div>
+<div class="flex flex-col w-full">
+<p class="text-[#101419] dark:text-gray-200 text-sm font-semibold pb-2">비밀번호</p>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">lock</span>
+<input class="form-input flex w-full rounded-lg text-[#101419] dark:text-white border border-[#d4dae3] dark:border-gray-700 bg-white dark:bg-[#2d3643] h-14 pl-12 pr-4 text-base font-normal placeholder:text-[#5b6f8b]" placeholder="비밀번호를 입력하세요" type="password"/>
+</div>
+</div>
+</div>
+<!-- Remember Me & Links -->
+<div class="flex items-center justify-between text-sm pt-1">
+<label class="flex items-center gap-2 cursor-pointer">
+<input class="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-[#5b6f8b] font-medium">로그인 상태 유지</span>
+</label>
+<div class="flex gap-3 text-primary font-semibold">
+<a class="hover:underline" href="#">아이디 찾기</a>
+<span class="text-gray-300">|</span>
+<a class="hover:underline" href="#">비밀번호 찾기</a>
+</div>
+</div>
+<!-- Primary Login Button -->
+<button class="w-full h-14 bg-primary hover:bg-opacity-90 text-white font-bold text-lg rounded-lg transition-colors shadow-md mt-2">
+                    로그인
+                </button>
+<!-- Divider -->
+<div class="relative flex items-center py-4">
+<div class="flex-grow border-t border-[#e9edf1] dark:border-gray-700"></div>
+<span class="flex-shrink mx-4 text-gray-400 text-sm font-medium">또는 소셜 계정으로 로그인</span>
+<div class="flex-grow border-t border-[#e9edf1] dark:border-gray-700"></div>
+</div>
+<!-- Social Login Buttons -->
+<div class="space-y-3">
+<button class="w-full h-12 flex items-center justify-center gap-3 bg-kakao text-[#3c1e1e] font-semibold rounded-lg hover:bg-opacity-90 transition-all">
+<span class="material-symbols-outlined text-xl">chat_bubble</span>
+                        카카오로 시작하기
+                    </button>
+<button class="w-full h-12 flex items-center justify-center gap-3 bg-white border border-google-border text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-all">
+<img alt="" class="size-5" data-alt="Google G logo in colors" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_rm5zPPjXpZAj1D0Uu9370F5-Sn1KX19sLRksqq6CL6yV8GLhXCWFbLvXSrNF-lodmawUj1VvStg30SvOcf7j4E9UDwxDB0EFLeMPMXUaoLILXXVjqYvuJNSbBuAf81AxcaOKx4aORpn3JMsbB0haC1G34GXlr9pSDLT3wI1bwuPv86RdLx9VGzBuu58YesfbV67nDNWmBkBb5BFZ6kxIj3ARF6_CBpg-qtsG9evz5r2DsImUz3vfMOClQJLsK15SzZQILjGVpUrF"/>
+                        Google로 시작하기
+                    </button>
+</div>
+</div>
+<!-- Header Image Banner (Subtle Decor) -->
+<div class="@container">
+<div class="p-6 pt-0">
+<div class="w-full bg-center bg-no-repeat bg-cover flex flex-col justify-end overflow-hidden bg-primary/10 rounded-lg min-h-[80px] p-4 border border-primary/5" data-alt="Abstract professional navy gradient pattern" style="background-image: linear-gradient(135deg, #1f3b61 0%, #3a5b8a 100%); opacity: 0.9;">
+<p class="text-white text-sm font-medium">현직 공무원을 위한 맞춤형 업무 솔루션, 실무.kr</p>
+</div>
+</div>
+</div>
+<!-- Footer Section -->
+<div class="px-6 pb-8 text-center">
+<p class="text-[#5b6f8b] text-sm">
+                    아직 계정이 없으신가요? <a class="text-primary font-bold hover:underline" href="#">회원가입 하기</a>
+</p>
+</div>
+</div>
+<!-- Bottom Support Links -->
+<footer class="mt-8 flex gap-6 text-sm text-[#5b6f8b]">
+<a class="hover:text-primary" href="#">고객센터</a>
+<a class="hover:text-primary" href="#">이용약관</a>
+<a class="hover:text-primary font-bold" href="#">개인정보처리방침</a>
+<a class="hover:text-primary" href="#">공지사항</a>
+</footer>
+</div>
+<!-- Hidden Template for Sign-up View (for conceptual representation) -->
+<!-- 
+    The sign-up view would replace the content inside the card with:
+    - Name (TextField)
+    - Email (TextField)
+    - Password (TextField)
+    - Institution Selection (Dropdown/TextField)
+    - Department (TextField)
+    - "회원가입 완료" Button (Primary Navy)
+    -->
+</body></html>
