@@ -8,7 +8,13 @@
     * { box-sizing: border-box; }
     body { font-family: '맑은 고딕', 'Malgun Gothic', sans-serif; font-size: 12pt; line-height: 1.6; margin: 0; padding: 0; background: #f5f5f5; }
     .toolbar { background: #1e40af; color: white; padding: 15px 20px; position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+    .toolbar-left { display: flex; align-items: center; gap: 20px; }
     .toolbar h2 { margin: 0; font-size: 16pt; }
+    .toolbar-nav { display: flex; gap: 5px; }
+    .toolbar-nav a { color: rgba(255,255,255,0.8); text-decoration: none; padding: 6px 12px; border-radius: 6px; font-size: 10pt; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+    .toolbar-nav a:hover { background: rgba(255,255,255,0.2); color: white; }
+    .toolbar-nav a svg { width: 16px; height: 16px; }
+    .toolbar-divider { width: 1px; height: 24px; background: rgba(255,255,255,0.3); }
     .toolbar-buttons { display: flex; gap: 10px; }
     .toolbar button { padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-size: 11pt; font-weight: 500; }
     .btn-save { background: #10b981; color: white; }
@@ -47,7 +53,20 @@
 </head>
 <body>
   <div class="toolbar">
-    <h2>수의계약 요청 사유서</h2>
+    <div class="toolbar-left">
+      <nav class="toolbar-nav">
+        <a href="/">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+          홈
+        </a>
+        <a href="/topics/private-contract">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          수의계약 가이드
+        </a>
+      </nav>
+      <div class="toolbar-divider"></div>
+      <h2>수의계약 요청 사유서</h2>
+    </div>
     <div class="toolbar-buttons">
       <button class="btn-save" onclick="saveForm()">💾 저장</button>
       <button class="btn-load" onclick="loadForm()">📂 불러오기</button>
