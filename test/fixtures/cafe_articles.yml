@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  article_id: 1
+  title: MyString
+  author: MyString
+  board: MyString
+  written_at: 2026-02-02 20:57:29
+  view_count: 1
+  comment_count: 1
+  like_count: 1
+  url: MyString
+
+two:
+  article_id: 1
+  title: MyString
+  author: MyString
+  board: MyString
+  written_at: 2026-02-02 20:57:29
+  view_count: 1
+  comment_count: 1
+  like_count: 1
+  url: MyString

@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>검수조서</title>
+  <style>
+    @page { size: A4; margin: 20mm; }
+    * { box-sizing: border-box; }
+    body { font-family: '맑은 고딕', 'Malgun Gothic', sans-serif; font-size: 12pt; line-height: 1.6; margin: 0; padding: 0; background: #f5f5f5; }
+    .toolbar { background: #7c3aed; color: white; padding: 15px 20px; position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+    .toolbar h2 { margin: 0; font-size: 16pt; }
+    .toolbar-buttons { display: flex; gap: 10px; }
+    .toolbar button { padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-size: 11pt; font-weight: 500; }
+    .btn-save { background: #10b981; color: white; }
+    .btn-load { background: #6366f1; color: white; }
+    .btn-print { background: #f59e0b; color: white; }
+    .btn-clear { background: #ef4444; color: white; }
+    .btn-download { background: #8b5cf6; color: white; }
+    .container { max-width: 800px; margin: 20px auto; padding: 40px; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    h1 { text-align: center; font-size: 20pt; margin-bottom: 30px; border-bottom: 2px solid #000; padding-bottom: 10px; }
+    h3 { margin-top: 20px; margin-bottom: 10px; color: #5b21b6; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+    th, td { border: 1px solid #000; padding: 8px; }
+    th { background-color: #ede9fe; text-align: center; }
+    input[type="text"], input[type="number"], input[type="date"], textarea { width: 100%; border: none; background: #faf5ff; padding: 5px; font-size: 12pt; font-family: inherit; }
+    input:focus, textarea:focus { outline: 2px solid #7c3aed; background: #fff; }
+    textarea { min-height: 60px; resize: vertical; }
+    .right { text-align: right; }
+    .center { text-align: center; }
+    .result-box { padding: 20px; text-align: center; margin: 20px 0; border-radius: 10px; }
+    .result-pass { background: #dcfce7; border: 3px solid #22c55e; }
+    .result-fail { background: #fee2e2; border: 3px solid #ef4444; }
+    .result-pending { background: #f3f4f6; border: 3px solid #9ca3af; }
+    .result-label { font-size: 18pt; font-weight: bold; }
+    .signature-area { margin-top: 30px; }
+    .signature-table { width: 80%; margin: 0 auto; }
+    .signature-table th, .signature-table td { height: 55px; text-align: center; }
+    .date-area { text-align: center; margin: 25px 0; }
+    .toast { position: fixed; bottom: 20px; right: 20px; padding: 15px 25px; border-radius: 8px; color: white; font-weight: 500; opacity: 0; transition: opacity 0.3s; z-index: 1000; }
+    .toast.show { opacity: 1; }
+    .toast.success { background: #7c3aed; }
+    .help { background-color: #f5f3ff; padding: 12px; margin-top: 20px; font-size: 10pt; border: 1px solid #ddd6fe; border-radius: 6px; }
+    .radio-group { display: flex; gap: 20px; justify-content: center; }
+    .radio-group label { cursor: pointer; padding: 10px 20px; border-radius: 8px; border: 2px solid #ddd; }
+    .radio-group input[type="radio"] { margin-right: 8px; transform: scale(1.3); }
+    .radio-group input[type="radio"]:checked + span { font-weight: bold; }
+    @media print {
+      .toolbar, .help { display: none !important; }
+      body { background: white; }
+      .container { box-shadow: none; margin: 0; padding: 20px; }
+      input, textarea { background: transparent !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <h2>검수조서</h2>
+    <div class="toolbar-buttons">
+      <button class="btn-save" onclick="saveForm()">💾 저장</button>
+      <button class="btn-load" onclick="loadForm()">📂 불러오기</button>
+      <button class="btn-download" onclick="downloadAsDocx()">⬇️ Word저장 (한글 호환)</button>
+      <button class="btn-print" onclick="window.print()">🖨️ 인쇄/PDF</button>
+      <button class="btn-clear" onclick="clearForm()">🗑️ 초기화</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <h1>검 수 조 서</h1>
+
+    <table>
+      <tr>
+        <th style="width: 110px;">계약건명</th>
+        <td colspan="3"><input type="text" id="contract_name" placeholder="예: 2026년도 사무용품 구매"></td>
+      </tr>
+      <tr>
+        <th>계약번호</th>
+        <td><input type="text" id="contract_number" placeholder="2026-총무-001"></td>
+        <th style="width: 90px;">계약금액</th>
+        <td><input type="number" id="contract_amount" placeholder="15000000"> 원</td>
+      </tr>
+      <tr>
+        <th>계약상대자</th>
+        <td><input type="text" id="contractor" placeholder="(주)OO상사"></td>
+        <th>대표자</th>
+        <td><input type="text" id="contractor_ceo" placeholder="홍길동"></td>
+      </tr>
+      <tr>
+        <th>계약기간</th>
+        <td colspan="3">
+          <input type="date" id="contract_start" style="width: 140px;"> ~ <input type="date" id="contract_end" style="width: 140px;">
+        </td>
+      </tr>
+      <tr>
+        <th>납품(완료)일</th>
+        <td><input type="date" id="delivery_date"></td>
+        <th>검수일</th>
+        <td><input type="date" id="inspection_date"></td>
+      </tr>
+    </table>
+
+    <h3>검수 내역</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 35px;">No</th>
+          <th>품명 및 규격</th>
+          <th style="width: 50px;">단위</th>
+          <th style="width: 60px;">계약<br>수량</th>
+          <th style="width: 60px;">납품<br>수량</th>
+          <th style="width: 60px;">검수<br>수량</th>
+          <th style="width: 70px;">결과</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="center">1</td>
+          <td><input type="text" id="item_1_name"></td>
+          <td><input type="text" id="item_1_unit" class="center" placeholder="EA"></td>
+          <td><input type="number" id="item_1_contract" class="center"></td>
+          <td><input type="number" id="item_1_delivery" class="center"></td>
+          <td><input type="number" id="item_1_inspect" class="center"></td>
+          <td>
+            <select id="item_1_result" style="width: 100%; padding: 3px;">
+              <option value="">선택</option>
+              <option value="pass">합격</option>
+              <option value="fail">불합격</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td class="center">2</td>
+          <td><input type="text" id="item_2_name"></td>
+          <td><input type="text" id="item_2_unit" class="center"></td>
+          <td><input type="number" id="item_2_contract" class="center"></td>
+          <td><input type="number" id="item_2_delivery" class="center"></td>
+          <td><input type="number" id="item_2_inspect" class="center"></td>
+          <td>
+            <select id="item_2_result" style="width: 100%; padding: 3px;">
+              <option value="">선택</option>
+              <option value="pass">합격</option>
+              <option value="fail">불합격</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td class="center">3</td>
+          <td><input type="text" id="item_3_name"></td>
+          <td><input type="text" id="item_3_unit" class="center"></td>
+          <td><input type="number" id="item_3_contract" class="center"></td>
+          <td><input type="number" id="item_3_delivery" class="center"></td>
+          <td><input type="number" id="item_3_inspect" class="center"></td>
+          <td>
+            <select id="item_3_result" style="width: 100%; padding: 3px;">
+              <option value="">선택</option>
+              <option value="pass">합격</option>
+              <option value="fail">불합격</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td class="center">4</td>
+          <td><input type="text" id="item_4_name"></td>
+          <td><input type="text" id="item_4_unit" class="center"></td>
+          <td><input type="number" id="item_4_contract" class="center"></td>
+          <td><input type="number" id="item_4_delivery" class="center"></td>
+          <td><input type="number" id="item_4_inspect" class="center"></td>
+          <td>
+            <select id="item_4_result" style="width: 100%; padding: 3px;">
+              <option value="">선택</option>
+              <option value="pass">합격</option>
+              <option value="fail">불합격</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td class="center">5</td>
+          <td><input type="text" id="item_5_name"></td>
+          <td><input type="text" id="item_5_unit" class="center"></td>
+          <td><input type="number" id="item_5_contract" class="center"></td>
+          <td><input type="number" id="item_5_delivery" class="center"></td>
+          <td><input type="number" id="item_5_inspect" class="center"></td>
+          <td>
+            <select id="item_5_result" style="width: 100%; padding: 3px;">
+              <option value="">선택</option>
+              <option value="pass">합격</option>
+              <option value="fail">불합격</option>
+            </select>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>검수 의견</h3>
+    <table>
+      <tr>
+        <td>
+          <textarea id="inspection_opinion" placeholder="예: 납품된 물품을 확인한 결과, 계약서 및 규격서에 명시된 규격/수량과 일치하며, 품질 상태가 양호하여 합격 처리함."></textarea>
+        </td>
+      </tr>
+    </table>
+
+    <div id="result-box" class="result-box result-pending">
+      <p style="margin-bottom: 10px;">검수결과</p>
+      <div class="radio-group">
+        <label style="background: #dcfce7;">
+          <input type="radio" name="final_result" value="pass" onchange="updateResult()">
+          <span style="color: #16a34a;">✓ 합격</span>
+        </label>
+        <label style="background: #fee2e2;">
+          <input type="radio" name="final_result" value="fail" onchange="updateResult()">
+          <span style="color: #dc2626;">✗ 불합격</span>
+        </label>
+      </div>
+    </div>
+
+    <p style="text-align: center; margin: 20px 0;">위와 같이 검수하였음을 확인합니다.</p>
+
+    <div class="date-area">
+      <p>
+        <input type="text" id="year" style="width: 60px; text-align: center;" placeholder="2026">년
+        <input type="text" id="month" style="width: 40px; text-align: center;" placeholder="2">월
+        <input type="text" id="day" style="width: 40px; text-align: center;" placeholder="2">일
+      </p>
+    </div>
+
+    <div class="signature-area">
+      <table class="signature-table">
+        <tr>
+          <th colspan="3" style="background: #f3f4f6;"><input type="text" id="group_1" style="text-align: center; width: 100%; border: none; background: transparent; font-weight: bold;" value="검수자"></th>
+          <th colspan="2" style="background: #f3f4f6;"><input type="text" id="group_2" style="text-align: center; width: 100%; border: none; background: transparent; font-weight: bold;" value="입회자"></th>
+        </tr>
+        <tr>
+          <th><input type="text" id="title_1" style="text-align: center; width: 100%; border: none; background: transparent; font-weight: bold;" value="담당"></th>
+          <th><input type="text" id="title_2" style="text-align: center; width: 100%; border: none; background: transparent; font-weight: bold;" value="팀장"></th>
+          <th><input type="text" id="title_3" style="text-align: center; width: 100%; border: none; background: transparent; font-weight: bold;" value="과장"></th>
+          <th><input type="text" id="title_4" style="text-align: center; width: 100%; border: none; background: transparent; font-weight: bold;" value="담당"></th>
+          <th><input type="text" id="title_5" style="text-align: center; width: 100%; border: none; background: transparent; font-weight: bold;" value="업체"></th>
+        </tr>
+        <tr>
+          <td><input type="text" id="sign_1" class="center" placeholder="(인)"></td>
+          <td><input type="text" id="sign_2" class="center" placeholder="(인)"></td>
+          <td><input type="text" id="sign_3" class="center" placeholder="(인)"></td>
+          <td><input type="text" id="sign_4" class="center" placeholder="(인)"></td>
+          <td><input type="text" id="sign_5" class="center" placeholder="(인)"></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="help">
+      <strong>💡 검수 시 유의사항</strong>
+      <ul style="margin: 8px 0; padding-left: 20px;">
+        <li>검수는 계약서, 설계서, 시방서 등에 따라 이행 여부 확인</li>
+        <li>검수조서는 대금지급의 근거 서류이므로 정확히 작성</li>
+        <li>검수 후 <strong>5일 이내</strong> 대금 지급 (지방계약법 시행령 제108조)</li>
+        <li>불합격 시 하자 보수 요청 후 재검수 실시</li>
+        <li><strong>Word저장</strong>: .docx 파일로 저장됩니다 (한글 HWP에서 열기 가능)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="https://unpkg.com/docx@8.5.0/build/index.umd.js"></script>
+  <script>
+    function updateResult() {
+      const result = document.querySelector('input[name="final_result"]:checked');
+      const box = document.getElementById('result-box');
+      box.classList.remove('result-pass', 'result-fail', 'result-pending');
+
+      if (result) {
+        if (result.value === 'pass') {
+          box.classList.add('result-pass');
+        } else {
+          box.classList.add('result-fail');
+        }
+      } else {
+        box.classList.add('result-pending');
+      }
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = 'toast success show';
+      setTimeout(() => toast.classList.remove('show'), 2000);
+    }
+
+    function getFormData() {
+      const data = {};
+      document.querySelectorAll('input, textarea, select').forEach(el => {
+        if (el.id) {
+          data[el.id] = el.value;
+        } else if (el.name === 'final_result' && el.checked) {
+          data.final_result = el.value;
+        }
+      });
+      return data;
+    }
+
+    function setFormData(data) {
+      document.querySelectorAll('input, textarea, select').forEach(el => {
+        if (el.id && data[el.id] !== undefined) {
+          el.value = data[el.id];
+        }
+      });
+      if (data.final_result) {
+        document.querySelector(`input[name="final_result"][value="${data.final_result}"]`).checked = true;
+        updateResult();
+      }
+    }
+
+    function saveForm() {
+      localStorage.setItem('검수조서', JSON.stringify(getFormData()));
+      showToast('저장되었습니다!');
+    }
+
+    function loadForm() {
+      const saved = localStorage.getItem('검수조서');
+      if (saved) {
+        setFormData(JSON.parse(saved));
+        showToast('불러왔습니다!');
+      } else {
+        showToast('저장된 데이터가 없습니다.');
+      }
+    }
+
+    function clearForm() {
+      if (confirm('모든 내용을 초기화하시겠습니까?')) {
+        const defaults = { group_1: '검수자', group_2: '입회자', title_1: '담당', title_2: '팀장', title_3: '과장', title_4: '담당', title_5: '업체' };
+        document.querySelectorAll('input, textarea, select').forEach(el => {
+          if (el.type === 'radio') el.checked = false;
+          else if (defaults[el.id]) el.value = defaults[el.id];
+          else el.value = '';
+        });
+        updateResult();
+        showToast('초기화되었습니다.');
+      }
+    }
+
+    function formatNumber(num) {
+      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    async function downloadAsDocx() {
+      const data = getFormData();
+      const { Document, Packer, Paragraph, TextRun, AlignmentType } = docx;
+
+      // 검수 내역
+      const items = [];
+      for (let i = 1; i <= 5; i++) {
+        if (data[`item_${i}_name`]) {
+          const result = data[`item_${i}_result`] === 'pass' ? '합격' : data[`item_${i}_result`] === 'fail' ? '불합격' : '-';
+          items.push(new Paragraph({
+            children: [new TextRun({
+              text: `${i}. ${data[`item_${i}_name`]} - 계약:${data[`item_${i}_contract`] || 0} / 납품:${data[`item_${i}_delivery`] || 0} / 검수:${data[`item_${i}_inspect`] || 0} [${result}]`,
+              size: 22
+            })],
+            spacing: { after: 100 }
+          }));
+        }
+      }
+
+      const finalResult = data.final_result === 'pass' ? '합격' : data.final_result === 'fail' ? '불합격' : '미정';
+
+      const doc = new Document({
+        sections: [{
+          properties: {},
+          children: [
+            new Paragraph({
+              children: [new TextRun({ text: '검 수 조 서', bold: true, size: 40 })],
+              alignment: AlignmentType.CENTER,
+              spacing: { after: 400 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `계약건명: ${data.contract_name || ''}`, size: 24 })],
+              spacing: { after: 200 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `계약번호: ${data.contract_number || ''}`, size: 22 })],
+              spacing: { after: 100 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `계약금액: ${formatNumber(data.contract_amount || 0)}원`, size: 22 })],
+              spacing: { after: 100 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `계약상대자: ${data.contractor || ''} (대표: ${data.contractor_ceo || ''})`, size: 22 })],
+              spacing: { after: 100 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `계약기간: ${data.contract_start || ''} ~ ${data.contract_end || ''}`, size: 22 })],
+              spacing: { after: 100 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `납품일: ${data.delivery_date || ''}  검수일: ${data.inspection_date || ''}`, size: 22 })],
+              spacing: { after: 300 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: '검수 내역', bold: true, size: 24 })],
+              spacing: { after: 200 }
+            }),
+            ...items,
+            new Paragraph({
+              children: [new TextRun({ text: '', size: 22 })],
+              spacing: { after: 200 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: '검수 의견', bold: true, size: 24 })],
+              spacing: { after: 200 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: data.inspection_opinion || '', size: 22 })],
+              spacing: { after: 300 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `최종 검수결과: ${finalResult}`, bold: true, size: 28 })],
+              alignment: AlignmentType.CENTER,
+              spacing: { after: 400 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: '위와 같이 검수하였음을 확인합니다.', size: 22 })],
+              alignment: AlignmentType.CENTER,
+              spacing: { after: 200 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `${data.year || ''}년 ${data.month || ''}월 ${data.day || ''}일`, size: 22 })],
+              alignment: AlignmentType.CENTER,
+              spacing: { after: 400 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `[${data.group_1 || '검수자'}]`, bold: true, size: 22 })],
+              spacing: { after: 100 }
+            }),
+            new Paragraph({
+              children: [
+                new TextRun({ text: `${data.title_1 || '담당'}: ${data.sign_1 || '(인)'}  `, size: 22 }),
+                new TextRun({ text: `${data.title_2 || '팀장'}: ${data.sign_2 || '(인)'}  `, size: 22 }),
+                new TextRun({ text: `${data.title_3 || '과장'}: ${data.sign_3 || '(인)'}`, size: 22 })
+              ],
+              spacing: { after: 200 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `[${data.group_2 || '입회자'}]`, bold: true, size: 22 })],
+              spacing: { after: 100 }
+            }),
+            new Paragraph({
+              children: [
+                new TextRun({ text: `${data.title_4 || '담당'}: ${data.sign_4 || '(인)'}  `, size: 22 }),
+                new TextRun({ text: `${data.title_5 || '업체'}: ${data.sign_5 || '(인)'}`, size: 22 })
+              ]
+            })
+          ]
+        }]
+      });
+
+      const blob = await Packer.toBlob(doc);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `검수조서_${data.contract_name || '작성중'}.docx`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('Word 파일이 다운로드되었습니다!');
+    }
+  </script>
+</body>
+</html>

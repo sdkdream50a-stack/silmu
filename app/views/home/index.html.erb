@@ -1,0 +1,350 @@
+<!-- Hero Section -->
+<section class="bg-gradient-to-br from-navy-600 via-navy-700 to-navy-800 text-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+    <div class="text-center">
+      <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+        감사 걱정 없는,<br>
+        <span class="text-forest-400">퇴근 있는,</span><br>
+        은퇴 준비되는 공무원
+      </h1>
+      <p class="text-xl md:text-2xl text-navy-100 mb-10 max-w-3xl mx-auto">
+        업무 효율을 높이고 워라밸을 지키는<br class="hidden sm:block">
+        공무원 실무 가이드 플랫폼
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <%= link_to "무료로 시작하기", new_user_registration_path, class: "bg-forest-500 hover:bg-forest-600 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all shadow-lg hover:shadow-xl" %>
+        <%= link_to "둘러보기", "#features", class: "bg-white/10 hover:bg-white/20 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all backdrop-blur-sm border border-white/20" %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Wave Divider -->
+  <div class="relative h-16 md:h-24">
+    <svg class="absolute bottom-0 w-full h-full" preserveAspectRatio="none" viewBox="0 0 1440 74">
+      <path fill="#f9fafb" d="M0,0 C480,74 960,74 1440,0 L1440,74 L0,74 Z"></path>
+    </svg>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section id="features" class="py-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">실무가 제공하는 가치</h2>
+      <p class="text-xl text-gray-600 max-w-2xl mx-auto">복잡한 공직 생활, 실무와 함께라면 쉬워집니다</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- Feature 1 -->
+      <div class="bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg transition-shadow border border-gray-100">
+        <div class="w-14 h-14 bg-navy-100 rounded-xl flex items-center justify-center mb-6">
+          <span class="text-3xl">&#x1F6E1;</span>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-3">감사 걱정 없는</h3>
+        <p class="text-gray-600 leading-relaxed">
+          법령과 규정에 맞는 업무 처리 가이드로 감사 지적 걱정 없이 자신있게 일하세요.
+        </p>
+      </div>
+
+      <!-- Feature 2 -->
+      <div class="bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg transition-shadow border border-gray-100">
+        <div class="w-14 h-14 bg-forest-100 rounded-xl flex items-center justify-center mb-6">
+          <span class="text-3xl">&#x1F3E0;</span>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-3">퇴근 있는</h3>
+        <p class="text-gray-600 leading-relaxed">
+          효율적인 업무 도구와 템플릿으로 야근을 줄이고 정시 퇴근하는 일상을 되찾으세요.
+        </p>
+      </div>
+
+      <!-- Feature 3 -->
+      <div class="bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg transition-shadow border border-gray-100">
+        <div class="w-14 h-14 bg-amber-100 rounded-xl flex items-center justify-center mb-6">
+          <span class="text-3xl">&#x1F4B0;</span>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-3">은퇴 준비되는</h3>
+        <p class="text-gray-600 leading-relaxed">
+          연금, 재테크, 전직 준비까지 안정적인 미래를 위한 정보를 제공합니다.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Tools Section -->
+<section id="tools" class="py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <span class="inline-block bg-navy-100 text-navy-600 px-4 py-2 rounded-full text-sm font-semibold mb-4">도구</span>
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">업무 효율을 높이는 도구</h2>
+      <p class="text-xl text-gray-600 max-w-2xl mx-auto">복잡하고 번거로운 업무, 도구가 대신 해결해드립니다</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+      <a href="/forms/견적서검토.html" target="_blank" class="group bg-gradient-to-br from-purple-50 to-indigo-50 hover:from-purple-600 hover:to-indigo-600 rounded-xl p-6 transition-all cursor-pointer border-2 border-purple-200 hover:border-purple-600">
+        <div class="text-4xl mb-4">📋</div>
+        <h3 class="font-bold text-gray-900 group-hover:text-white mb-2">견적서 검토</h3>
+        <p class="text-gray-600 group-hover:text-purple-100 text-sm">법규 적합성 자동 분석</p>
+        <span class="inline-block mt-2 text-xs bg-purple-100 group-hover:bg-white/20 text-purple-600 group-hover:text-white px-2 py-1 rounded-full">NEW</span>
+      </a>
+
+      <div class="group bg-gray-50 hover:bg-navy-600 rounded-xl p-6 transition-all cursor-pointer">
+        <div class="text-4xl mb-4">&#x1F4DD;</div>
+        <h3 class="font-bold text-gray-900 group-hover:text-white mb-2">품의서 작성기</h3>
+        <p class="text-gray-600 group-hover:text-navy-100 text-sm">쉽고 빠른 품의서 작성</p>
+      </div>
+
+      <div class="group bg-gray-50 hover:bg-navy-600 rounded-xl p-6 transition-all cursor-pointer">
+        <div class="text-4xl mb-4">&#x1F4C5;</div>
+        <h3 class="font-bold text-gray-900 group-hover:text-white mb-2">휴가 계산기</h3>
+        <p class="text-gray-600 group-hover:text-navy-100 text-sm">남은 연가 한눈에</p>
+      </div>
+
+      <div class="group bg-gray-50 hover:bg-navy-600 rounded-xl p-6 transition-all cursor-pointer">
+        <div class="text-4xl mb-4">&#x1F4B0;</div>
+        <h3 class="font-bold text-gray-900 group-hover:text-white mb-2">호봉 계산기</h3>
+        <p class="text-gray-600 group-hover:text-navy-100 text-sm">정확한 급여 계산</p>
+      </div>
+
+      <div class="group bg-gray-50 hover:bg-navy-600 rounded-xl p-6 transition-all cursor-pointer">
+        <div class="text-4xl mb-4">&#x1F4CA;</div>
+        <h3 class="font-bold text-gray-900 group-hover:text-white mb-2">연금 계산기</h3>
+        <p class="text-gray-600 group-hover:text-navy-100 text-sm">예상 연금액 조회</p>
+      </div>
+    </div>
+
+    <div class="text-center mt-10">
+      <%= link_to "모든 도구 보기 →", "#tools", class: "text-navy-600 hover:text-navy-700 font-semibold" %>
+    </div>
+  </div>
+</section>
+
+<!-- 업무 도우미 Section -->
+<section id="assistant" class="py-20 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <span class="inline-block bg-indigo-100 text-indigo-600 px-4 py-2 rounded-full text-sm font-semibold mb-4">업무 도우미</span>
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">주제별 업무 가이드</h2>
+      <p class="text-xl text-gray-600 max-w-2xl mx-auto">법령 · 서식 · 흐름도를 한눈에</p>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <%= link_to "/topics/private-contract", class: "group block bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all border-2 border-transparent hover:border-indigo-300" do %>
+        <div class="text-4xl mb-4">📝</div>
+        <h3 class="font-bold text-lg text-gray-900 group-hover:text-indigo-600 mb-2">수의계약</h3>
+        <p class="text-gray-500 text-sm">법령 3단비교 · 서식 · 흐름도</p>
+        <div class="mt-4 flex flex-wrap gap-2">
+          <span class="text-xs bg-indigo-100 text-indigo-600 px-2 py-1 rounded-full">법령</span>
+          <span class="text-xs bg-purple-100 text-purple-600 px-2 py-1 rounded-full">서식</span>
+          <span class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-full">검토도구</span>
+        </div>
+      <% end %>
+
+      <div class="group block bg-white rounded-2xl p-6 shadow-sm border-2 border-transparent opacity-60">
+        <div class="text-4xl mb-4">💼</div>
+        <h3 class="font-bold text-lg text-gray-900 mb-2">출장비</h3>
+        <p class="text-gray-500 text-sm">준비중</p>
+      </div>
+
+      <div class="group block bg-white rounded-2xl p-6 shadow-sm border-2 border-transparent opacity-60">
+        <div class="text-4xl mb-4">📅</div>
+        <h3 class="font-bold text-lg text-gray-900 mb-2">이월</h3>
+        <p class="text-gray-500 text-sm">준비중</p>
+      </div>
+
+      <div class="group block bg-white rounded-2xl p-6 shadow-sm border-2 border-transparent opacity-60">
+        <div class="text-4xl mb-4">🧾</div>
+        <h3 class="font-bold text-lg text-gray-900 mb-2">연말정산</h3>
+        <p class="text-gray-500 text-sm">준비중</p>
+      </div>
+    </div>
+
+    <div class="text-center">
+      <%= link_to chatbot_path, class: "inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all shadow-lg hover:shadow-xl" do %>
+        <span>🔍</span>
+        <span>업무 검색하기</span>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<!-- Guides Section -->
+<section id="guides" class="py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <span class="inline-block bg-forest-100 text-forest-600 px-4 py-2 rounded-full text-sm font-semibold mb-4">가이드</span>
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">실무 가이드</h2>
+      <p class="text-xl text-gray-600 max-w-2xl mx-auto">선배 공무원의 노하우를 담은 실전 가이드</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <article class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow">
+        <div class="h-48 bg-gradient-to-br from-navy-500 to-navy-700 flex items-center justify-center">
+          <span class="text-6xl">&#x1F4DA;</span>
+        </div>
+        <div class="p-6">
+          <span class="inline-block bg-navy-100 text-navy-600 px-3 py-1 rounded-full text-xs font-semibold mb-3">신규 공무원</span>
+          <h3 class="font-bold text-lg text-gray-900 mb-2">공무원 첫 출근 완벽 가이드</h3>
+          <p class="text-gray-600 text-sm mb-4">첫 출근부터 수습 기간까지 알아야 할 모든 것</p>
+          <%= link_to "읽어보기 →", "#", class: "text-navy-600 hover:text-navy-700 font-semibold text-sm" %>
+        </div>
+      </article>
+
+      <article class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow">
+        <div class="h-48 bg-gradient-to-br from-forest-500 to-forest-700 flex items-center justify-center">
+          <span class="text-6xl">&#x1F4DD;</span>
+        </div>
+        <div class="p-6">
+          <span class="inline-block bg-forest-100 text-forest-600 px-3 py-1 rounded-full text-xs font-semibold mb-3">업무</span>
+          <h3 class="font-bold text-lg text-gray-900 mb-2">감사 대비 문서 작성법</h3>
+          <p class="text-gray-600 text-sm mb-4">감사원 지적 사례로 배우는 안전한 문서 작성</p>
+          <%= link_to "읽어보기 →", "#", class: "text-forest-600 hover:text-forest-700 font-semibold text-sm" %>
+        </div>
+      </article>
+
+      <article class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow">
+        <div class="h-48 bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center">
+          <span class="text-6xl">&#x1F4B5;</span>
+        </div>
+        <div class="p-6">
+          <span class="inline-block bg-amber-100 text-amber-600 px-3 py-1 rounded-full text-xs font-semibold mb-3">재테크</span>
+          <h3 class="font-bold text-lg text-gray-900 mb-2">공무원 연금 완벽 정리</h3>
+          <p class="text-gray-600 text-sm mb-4">연금 제도부터 최적화 전략까지</p>
+          <%= link_to "읽어보기 →", "#", class: "text-amber-600 hover:text-amber-700 font-semibold text-sm" %>
+        </div>
+      </article>
+    </div>
+
+    <div class="text-center mt-10">
+      <%= link_to "모든 가이드 보기 →", "#guides", class: "text-navy-600 hover:text-navy-700 font-semibold" %>
+    </div>
+  </div>
+</section>
+
+<!-- Community Section -->
+<section id="community" class="py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="lg:flex lg:items-center lg:gap-16">
+      <div class="lg:w-1/2 mb-12 lg:mb-0">
+        <span class="inline-block bg-purple-100 text-purple-600 px-4 py-2 rounded-full text-sm font-semibold mb-4">커뮤니티</span>
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">함께하면 더 쉬워지는 공직 생활</h2>
+        <p class="text-xl text-gray-600 mb-8">
+          같은 고민을 나누고, 서로의 경험을 공유하며 함께 성장하세요.
+          익명으로 자유롭게 질문하고 답변할 수 있습니다.
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <div class="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-full">
+            <span class="text-xl">&#x1F465;</span>
+            <span class="text-gray-700 font-medium">직렬별 게시판</span>
+          </div>
+          <div class="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-full">
+            <span class="text-xl">&#x2753;</span>
+            <span class="text-gray-700 font-medium">익명 Q&A</span>
+          </div>
+          <div class="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-full">
+            <span class="text-xl">&#x1F4AC;</span>
+            <span class="text-gray-700 font-medium">실무 상담</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:w-1/2">
+        <div class="bg-gray-50 rounded-2xl p-6 space-y-4">
+          <!-- Sample Posts -->
+          <div class="bg-white rounded-xl p-4 shadow-sm">
+            <div class="flex items-center gap-3 mb-2">
+              <div class="w-10 h-10 bg-navy-100 rounded-full flex items-center justify-center">
+                <span class="text-navy-600 font-bold">익</span>
+              </div>
+              <div>
+                <span class="font-medium text-gray-900">익명의 공무원</span>
+                <span class="text-gray-400 text-sm ml-2">행정직</span>
+              </div>
+            </div>
+            <p class="text-gray-700">예산 집행 관련 질문인데요, 12월에 급하게 예산을 사용해야 하는 상황입니다...</p>
+            <div class="flex gap-4 mt-3 text-sm text-gray-500">
+              <span>&#x1F4AC; 답변 3</span>
+              <span>&#x2764; 좋아요 12</span>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl p-4 shadow-sm">
+            <div class="flex items-center gap-3 mb-2">
+              <div class="w-10 h-10 bg-forest-100 rounded-full flex items-center justify-center">
+                <span class="text-forest-600 font-bold">익</span>
+              </div>
+              <div>
+                <span class="font-medium text-gray-900">익명의 공무원</span>
+                <span class="text-gray-400 text-sm ml-2">기술직</span>
+              </div>
+            </div>
+            <p class="text-gray-700">7급 승진 준비 중인데, 업무 성과 정리하는 좋은 방법 있을까요?</p>
+            <div class="flex gap-4 mt-3 text-sm text-gray-500">
+              <span>&#x1F4AC; 답변 8</span>
+              <span>&#x2764; 좋아요 24</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Quiz Section -->
+<section id="quiz" class="py-20 bg-gradient-to-br from-navy-600 to-navy-800 text-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <span class="inline-block bg-white/20 text-white px-4 py-2 rounded-full text-sm font-semibold mb-4">퀴즈</span>
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">오늘의 실무 퀴즈</h2>
+      <p class="text-xl text-navy-100 max-w-2xl mx-auto">매일 새로운 퀴즈로 실무 지식을 점검하세요</p>
+    </div>
+
+    <div class="max-w-2xl mx-auto">
+      <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
+        <div class="flex items-center gap-2 mb-6">
+          <span class="bg-forest-500 text-white px-3 py-1 rounded-full text-sm font-semibold">문제 1/5</span>
+          <span class="text-navy-200 text-sm">예산회계</span>
+        </div>
+
+        <h3 class="text-xl font-bold mb-6">다음 중 예산의 이월에 해당하지 않는 것은?</h3>
+
+        <div class="space-y-3">
+          <button class="w-full text-left bg-white/10 hover:bg-white/20 rounded-xl p-4 transition-colors border border-white/10">
+            <span class="font-medium">1. 명시이월</span>
+          </button>
+          <button class="w-full text-left bg-white/10 hover:bg-white/20 rounded-xl p-4 transition-colors border border-white/10">
+            <span class="font-medium">2. 사고이월</span>
+          </button>
+          <button class="w-full text-left bg-white/10 hover:bg-white/20 rounded-xl p-4 transition-colors border border-white/10">
+            <span class="font-medium">3. 계속비이월</span>
+          </button>
+          <button class="w-full text-left bg-white/10 hover:bg-white/20 rounded-xl p-4 transition-colors border border-white/10">
+            <span class="font-medium">4. 예비비이월</span>
+          </button>
+        </div>
+
+        <div class="mt-8 flex justify-between items-center">
+          <span class="text-navy-200 text-sm">&#x1F525; 오늘 342명이 도전했어요</span>
+          <%= link_to "퀴즈 풀기 →", "#quiz", class: "bg-forest-500 hover:bg-forest-600 text-white px-6 py-3 rounded-xl font-semibold transition-colors" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-20 bg-gray-50">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+      지금 바로 실무와 함께<br>
+      더 나은 공직 생활을 시작하세요
+    </h2>
+    <p class="text-xl text-gray-600 mb-10">
+      회원가입 후 모든 도구와 가이드를 무료로 이용할 수 있습니다.
+    </p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <%= link_to "무료로 시작하기", new_user_registration_path, class: "bg-navy-600 hover:bg-navy-700 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all shadow-lg hover:shadow-xl" %>
+      <%= link_to "카카오로 시작하기", "#", class: "bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-8 py-4 rounded-xl text-lg font-semibold transition-all flex items-center justify-center gap-2" %>
+    </div>
+  </div>
+</section>

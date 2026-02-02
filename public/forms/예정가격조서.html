@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>예정가격 조서</title>
+  <style>
+    @page { size: A4; margin: 20mm; }
+    * { box-sizing: border-box; }
+    body { font-family: '맑은 고딕', 'Malgun Gothic', sans-serif; font-size: 12pt; line-height: 1.6; margin: 0; padding: 0; background: #f5f5f5; }
+    .toolbar { background: #d97706; color: white; padding: 15px 20px; position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+    .toolbar h2 { margin: 0; font-size: 16pt; }
+    .toolbar-buttons { display: flex; gap: 10px; }
+    .toolbar button { padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-size: 11pt; font-weight: 500; }
+    .btn-save { background: #10b981; color: white; }
+    .btn-load { background: #6366f1; color: white; }
+    .btn-print { background: #f59e0b; color: white; }
+    .btn-clear { background: #ef4444; color: white; }
+    .btn-download { background: #8b5cf6; color: white; }
+    .container { max-width: 800px; margin: 20px auto; padding: 40px; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    h1 { text-align: center; font-size: 20pt; margin-bottom: 30px; border-bottom: 2px solid #000; padding-bottom: 10px; }
+    h3 { margin-top: 25px; margin-bottom: 10px; color: #92400e; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+    th, td { border: 1px solid #000; padding: 10px; }
+    th { background-color: #fef3c7; text-align: center; width: 130px; }
+    input[type="text"], input[type="number"], input[type="date"], textarea { width: 100%; border: none; background: #fffef0; padding: 5px; font-size: 12pt; font-family: inherit; }
+    input:focus, textarea:focus { outline: 2px solid #d97706; background: #fff; }
+    textarea { min-height: 60px; resize: vertical; }
+    .checkbox-group label { display: block; margin: 8px 0; cursor: pointer; }
+    .checkbox-group input[type="checkbox"] { margin-right: 10px; transform: scale(1.2); }
+    .right { text-align: right; }
+    .center { text-align: center; }
+    .signature-table { width: 50%; margin-left: auto; margin-top: 30px; }
+    .signature-table th, .signature-table td { height: 50px; text-align: center; }
+    .total-price { font-size: 14pt; font-weight: bold; background: #fef3c7; }
+    .date-area { text-align: center; margin: 25px 0; }
+    .toast { position: fixed; bottom: 20px; right: 20px; padding: 15px 25px; border-radius: 8px; color: white; font-weight: 500; opacity: 0; transition: opacity 0.3s; z-index: 1000; }
+    .toast.show { opacity: 1; }
+    .toast.success { background: #d97706; }
+    .help { background-color: #fff7ed; padding: 12px; margin-top: 20px; font-size: 10pt; border: 1px solid #fed7aa; border-radius: 6px; }
+    @media print {
+      .toolbar, .help { display: none !important; }
+      body { background: white; }
+      .container { box-shadow: none; margin: 0; padding: 20px; }
+      input, textarea { background: transparent !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <h2>예정가격 조서</h2>
+    <div class="toolbar-buttons">
+      <button class="btn-save" onclick="saveForm()">💾 저장</button>
+      <button class="btn-load" onclick="loadForm()">📂 불러오기</button>
+      <button class="btn-download" onclick="downloadAsDocx()">⬇️ Word저장 (한글 호환)</button>
+      <button class="btn-print" onclick="window.print()">🖨️ 인쇄/PDF</button>
+      <button class="btn-clear" onclick="clearForm()">🗑️ 초기화</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <h1>예정가격 조서</h1>
+
+    <table>
+      <tr>
+        <th>계약건명</th>
+        <td colspan="3"><input type="text" id="contract_name" placeholder="예: 2026년도 사무용품 구매"></td>
+      </tr>
+      <tr>
+        <th>계약구분</th>
+        <td>
+          <label><input type="checkbox" id="type_goods"> 물품구매</label>&nbsp;&nbsp;
+          <label><input type="checkbox" id="type_service"> 용역</label>&nbsp;&nbsp;
+          <label><input type="checkbox" id="type_construction"> 공사</label>
+        </td>
+        <th>계약방법</th>
+        <td>
+          <label><input type="checkbox" id="method_private"> 수의계약</label>&nbsp;&nbsp;
+          <label><input type="checkbox" id="method_bid"> 경쟁입찰</label>
+        </td>
+      </tr>
+    </table>
+
+    <h3>1. 예정가격 작성방법</h3>
+    <table>
+      <tr>
+        <td class="checkbox-group">
+          <label><input type="checkbox" id="price_method_1"> <strong>거래실례가격</strong> - 조달청 나라장터, 시중 거래가격 조사</label>
+          <label><input type="checkbox" id="price_method_2"> <strong>원가계산</strong> - 재료비, 노무비, 경비 등 산출</label>
+          <label><input type="checkbox" id="price_method_3"> <strong>감정가격</strong> - 감정기관의 감정가격</label>
+          <label><input type="checkbox" id="price_method_4"> <strong>유사거래실례가격</strong> - 유사 물품/용역 거래가격</label>
+          <label><input type="checkbox" id="price_method_5"> <strong>견적가격</strong> - 2인 이상 견적 평균가격</label>
+        </td>
+      </tr>
+    </table>
+
+    <h3>2. 가격조사 내역</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 40px;">번호</th>
+          <th>조사처/출처</th>
+          <th style="width: 120px;">조사가격</th>
+          <th style="width: 100px;">조사일자</th>
+          <th>비고</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="center">1</td>
+          <td><input type="text" id="survey_1_source" placeholder="나라장터 쇼핑몰"></td>
+          <td><input type="number" id="survey_1_price" placeholder="10000000"></td>
+          <td><input type="date" id="survey_1_date"></td>
+          <td><input type="text" id="survey_1_note"></td>
+        </tr>
+        <tr>
+          <td class="center">2</td>
+          <td><input type="text" id="survey_2_source" placeholder="(주)OO상사 견적"></td>
+          <td><input type="number" id="survey_2_price"></td>
+          <td><input type="date" id="survey_2_date"></td>
+          <td><input type="text" id="survey_2_note"></td>
+        </tr>
+        <tr>
+          <td class="center">3</td>
+          <td><input type="text" id="survey_3_source"></td>
+          <td><input type="number" id="survey_3_price"></td>
+          <td><input type="date" id="survey_3_date"></td>
+          <td><input type="text" id="survey_3_note"></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>3. 예정가격 산출</h3>
+    <table>
+      <tr>
+        <th>산출근거</th>
+        <td>
+          <textarea id="calculation_basis" placeholder="예: 나라장터 쇼핑몰 조회 결과 및 2개 업체 견적가격을 비교하여 평균가격으로 예정가격을 산출하였음."></textarea>
+        </td>
+      </tr>
+    </table>
+
+    <table>
+      <tr>
+        <th>공급가액</th>
+        <td class="right"><input type="number" id="supply_price" placeholder="10000000" onchange="calcTotal()"> 원</td>
+        <th>부가가치세</th>
+        <td class="right"><input type="number" id="vat_price" placeholder="1000000" onchange="calcTotal()"> 원</td>
+      </tr>
+      <tr>
+        <th>예정가격</th>
+        <td colspan="3" class="total-price right">
+          일금 <input type="text" id="total_korean" style="width: 200px; text-align: center;" placeholder="일천일백만">원정
+          (₩<input type="text" id="total_price" style="width: 120px; text-align: right;" placeholder="11,000,000">)
+        </td>
+      </tr>
+    </table>
+
+    <div class="date-area">
+      <p>위와 같이 예정가격을 작성합니다.</p>
+      <p style="margin-top: 15px;">
+        <input type="text" id="year" style="width: 60px; text-align: center;" placeholder="2026">년
+        <input type="text" id="month" style="width: 40px; text-align: center;" placeholder="2">월
+        <input type="text" id="day" style="width: 40px; text-align: center;" placeholder="2">일
+      </p>
+    </div>
+
+    <table class="signature-table">
+      <tr>
+        <th><input type="text" id="title_1" style="text-align: center; width: 100%; border: none; background: transparent; font-weight: bold;" value="작성"></th>
+        <th><input type="text" id="title_2" style="text-align: center; width: 100%; border: none; background: transparent; font-weight: bold;" value="검토"></th>
+        <th><input type="text" id="title_3" style="text-align: center; width: 100%; border: none; background: transparent; font-weight: bold;" value="결재"></th>
+      </tr>
+      <tr>
+        <td><input type="text" id="sign_1" style="text-align: center;" placeholder="(인)"></td>
+        <td><input type="text" id="sign_2" style="text-align: center;" placeholder="(인)"></td>
+        <td><input type="text" id="sign_3" style="text-align: center;" placeholder="(인)"></td>
+      </tr>
+    </table>
+
+    <div class="help">
+      <strong>💡 예정가격 작성 유의사항</strong>
+      <ul style="margin: 8px 0; padding-left: 20px;">
+        <li>예정가격은 객관적 자료에 근거하여 적정하게 작성</li>
+        <li>거래실례가격 조사 시 2개소 이상 조사 권장</li>
+        <li>법적근거: 지방계약법 시행령 제7조 (예정가격의 결정기준)</li>
+        <li><strong>Word저장</strong>: .docx 파일로 저장됩니다 (한글 HWP에서 열기 가능)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="https://unpkg.com/docx@8.5.0/build/index.umd.js"></script>
+  <script>
+    function formatNumber(num) {
+      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    function calcTotal() {
+      const supply = parseInt(document.getElementById('supply_price').value) || 0;
+      const vat = parseInt(document.getElementById('vat_price').value) || 0;
+      const total = supply + vat;
+      document.getElementById('total_price').value = formatNumber(total);
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = 'toast success show';
+      setTimeout(() => toast.classList.remove('show'), 2000);
+    }
+
+    function getFormData() {
+      const data = {};
+      document.querySelectorAll('input, textarea').forEach(el => {
+        if (el.id) {
+          data[el.id] = el.type === 'checkbox' ? el.checked : el.value;
+        }
+      });
+      return data;
+    }
+
+    function setFormData(data) {
+      document.querySelectorAll('input, textarea').forEach(el => {
+        if (el.id && data[el.id] !== undefined) {
+          if (el.type === 'checkbox') el.checked = data[el.id];
+          else el.value = data[el.id];
+        }
+      });
+    }
+
+    function saveForm() {
+      localStorage.setItem('예정가격조서', JSON.stringify(getFormData()));
+      showToast('저장되었습니다!');
+    }
+
+    function loadForm() {
+      const saved = localStorage.getItem('예정가격조서');
+      if (saved) {
+        setFormData(JSON.parse(saved));
+        showToast('불러왔습니다!');
+      } else {
+        showToast('저장된 데이터가 없습니다.');
+      }
+    }
+
+    function clearForm() {
+      if (confirm('모든 내용을 초기화하시겠습니까?')) {
+        const defaults = { title_1: '작성', title_2: '검토', title_3: '결재' };
+        document.querySelectorAll('input, textarea').forEach(el => {
+          if (el.type === 'checkbox') el.checked = false;
+          else if (defaults[el.id]) el.value = defaults[el.id];
+          else el.value = '';
+        });
+        showToast('초기화되었습니다.');
+      }
+    }
+
+    async function downloadAsDocx() {
+      const data = getFormData();
+      const { Document, Packer, Paragraph, TextRun, AlignmentType } = docx;
+
+      // 계약구분 텍스트
+      let contractType = [];
+      if (data.type_goods) contractType.push('물품구매');
+      if (data.type_service) contractType.push('용역');
+      if (data.type_construction) contractType.push('공사');
+
+      // 가격조사 방법
+      let priceMethods = [];
+      if (data.price_method_1) priceMethods.push('거래실례가격');
+      if (data.price_method_2) priceMethods.push('원가계산');
+      if (data.price_method_3) priceMethods.push('감정가격');
+      if (data.price_method_4) priceMethods.push('유사거래실례가격');
+      if (data.price_method_5) priceMethods.push('견적가격');
+
+      // 가격조사 내역
+      const surveys = [];
+      for (let i = 1; i <= 3; i++) {
+        if (data[`survey_${i}_source`]) {
+          surveys.push(new Paragraph({
+            children: [new TextRun({
+              text: `${i}. ${data[`survey_${i}_source`]} - ${formatNumber(data[`survey_${i}_price`] || 0)}원 (${data[`survey_${i}_date`] || ''})`,
+              size: 22
+            })],
+            spacing: { after: 100 }
+          }));
+        }
+      }
+
+      const doc = new Document({
+        sections: [{
+          properties: {},
+          children: [
+            new Paragraph({
+              children: [new TextRun({ text: '예정가격 조서', bold: true, size: 40 })],
+              alignment: AlignmentType.CENTER,
+              spacing: { after: 400 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `계약건명: ${data.contract_name || ''}`, size: 24 })],
+              spacing: { after: 200 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `계약구분: ${contractType.join(', ') || '-'}`, size: 22 })],
+              spacing: { after: 300 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: '1. 예정가격 작성방법', bold: true, size: 24 })],
+              spacing: { after: 200 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: priceMethods.join(', ') || '-', size: 22 })],
+              spacing: { after: 300 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: '2. 가격조사 내역', bold: true, size: 24 })],
+              spacing: { after: 200 }
+            }),
+            ...surveys,
+            new Paragraph({
+              children: [new TextRun({ text: '', size: 22 })],
+              spacing: { after: 200 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: '3. 산출근거', bold: true, size: 24 })],
+              spacing: { after: 200 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: data.calculation_basis || '', size: 22 })],
+              spacing: { after: 300 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: '4. 예정가격', bold: true, size: 24 })],
+              spacing: { after: 200 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `공급가액: ${formatNumber(data.supply_price || 0)}원`, size: 22 })],
+              spacing: { after: 100 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `부가가치세: ${formatNumber(data.vat_price || 0)}원`, size: 22 })],
+              spacing: { after: 100 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `예정가격: 일금 ${data.total_korean || ''}원정 (₩${data.total_price || '0'})`, bold: true, size: 26 })],
+              spacing: { after: 400 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: '위와 같이 예정가격을 작성합니다.', size: 22 })],
+              alignment: AlignmentType.CENTER,
+              spacing: { after: 200 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `${data.year || ''}년 ${data.month || ''}월 ${data.day || ''}일`, size: 22 })],
+              alignment: AlignmentType.CENTER,
+              spacing: { after: 400 }
+            }),
+            new Paragraph({
+              children: [
+                new TextRun({ text: `${data.title_1 || '작성'}: ${data.sign_1 || '(인)'}    `, size: 22 }),
+                new TextRun({ text: `${data.title_2 || '검토'}: ${data.sign_2 || '(인)'}    `, size: 22 }),
+                new TextRun({ text: `${data.title_3 || '결재'}: ${data.sign_3 || '(인)'}`, size: 22 })
+              ],
+              alignment: AlignmentType.RIGHT
+            })
+          ]
+        }]
+      });
+
+      const blob = await Packer.toBlob(doc);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `예정가격조서_${data.contract_name || '작성중'}.docx`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('Word 파일이 다운로드되었습니다!');
+    }
+  </script>
+</body>
+</html>
