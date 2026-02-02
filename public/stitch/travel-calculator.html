@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Silmu.kr 여비계산기</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;900&amp;family=Noto+Sans+KR:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1f3a61",
+                        "secondary-green": "#2E7D32",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#14181e",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "Noto Sans KR", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: "Public Sans", "Noto Sans KR", sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-[#101419] dark:text-gray-100 min-h-screen">
+<!-- Top Navigation Bar -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#e9edf1] dark:border-b-gray-800 bg-white dark:bg-[#1c2128] px-10 py-3 sticky top-0 z-50">
+<div class="flex items-center gap-4 text-[#101419] dark:text-white">
+<div class="size-6 text-primary dark:text-blue-400">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M13.8261 30.5736C16.7203 29.8826 20.2244 29.4783 24 29.4783C27.7756 29.4783 31.2797 29.8826 34.1739 30.5736C36.9144 31.2278 39.9967 32.7669 41.3563 33.8352L24.8486 7.36089C24.4571 6.73303 23.5429 6.73303 23.1514 7.36089L6.64374 33.8352C8.00331 32.7669 11.0856 31.2278 13.8261 30.5736Z" fill="currentColor"></path>
+<path clip-rule="evenodd" d="M39.998 35.764C39.9944 35.7463 39.9875 35.7155 39.9748 35.6706C39.9436 35.5601 39.8949 35.4259 39.8346 35.2825C39.8168 35.2403 39.7989 35.1993 39.7813 35.1602C38.5103 34.2887 35.9788 33.0607 33.7095 32.5189C30.9875 31.8691 27.6413 31.4783 24 31.4783C20.3587 31.4783 17.0125 31.8691 14.2905 32.5189C12.0012 33.0654 9.44505 34.3104 8.18538 35.1832C8.17384 35.2075 8.16216 35.233 8.15052 35.2592C8.09919 35.3751 8.05721 35.4886 8.02977 35.589C8.00356 35.6848 8.00039 35.7333 8.00004 35.7388C8.00004 35.739 8 35.7393 8.00004 35.7388C8.00004 35.7641 8.0104 36.0767 8.68485 36.6314C9.34546 37.1746 10.4222 37.7531 11.9291 38.2772C14.9242 39.319 19.1919 40 24 40C28.8081 40 33.0758 39.319 36.0709 38.2772C37.5778 37.7531 38.6545 37.1746 39.3151 36.6314C39.9006 36.1499 39.9857 35.8511 39.998 35.764ZM4.95178 32.7688L21.4543 6.30267C22.6288 4.4191 25.3712 4.41909 26.5457 6.30267L43.0534 32.777C43.0709 32.8052 43.0878 32.8338 43.104 32.8629L41.3563 33.8352C43.104 32.8629 43.1038 32.8626 43.104 32.8629L43.1051 32.865L43.1065 32.8675L43.1101 32.8739L43.1199 32.8918C43.1276 32.906 43.1377 32.9246 43.1497 32.9473C43.1738 32.9925 43.2062 33.0545 43.244 33.1299C43.319 33.2792 43.4196 33.489 43.5217 33.7317C43.6901 34.1321 44 34.9311 44 35.7391C44 37.4427 43.003 38.7775 41.8558 39.7209C40.6947 40.6757 39.1354 41.4464 37.385 42.0552C33.8654 43.2794 29.133 44 24 44C18.867 44 14.1346 43.2794 10.615 42.0552C8.86463 41.4464 7.30529 40.6757 6.14419 39.7209C4.99695 38.7775 3.99999 37.4427 3.99999 35.7391C3.99999 34.8725 4.29264 34.0922 4.49321 33.6393C4.60375 33.3898 4.71348 33.1804 4.79687 33.0311C4.83898 32.9556 4.87547 32.8935 4.9035 32.8471C4.91754 32.8238 4.92954 32.8043 4.93916 32.7889L4.94662 32.777L4.95178 32.7688ZM35.9868 29.004L24 9.77997L12.0131 29.004C12.4661 28.8609 12.9179 28.7342 13.3617 28.6282C16.4281 27.8961 20.0901 27.4783 24 27.4783C27.9099 27.4783 31.5719 27.8961 34.6383 28.6282C35.082 28.7342 35.5339 28.8609 35.9868 29.004Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-[#101419] dark:text-white text-xl font-black leading-tight tracking-[-0.015em]">Silmu.kr</h2>
+</div>
+<div class="flex flex-1 justify-end gap-8 items-center">
+<nav class="flex items-center gap-9">
+<a class="text-[#101419] dark:text-gray-300 text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">여비계산기</a>
+<a class="text-[#101419] dark:text-gray-300 text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">규정사례</a>
+<a class="text-[#101419] dark:text-gray-300 text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">커뮤니티</a>
+</nav>
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90">
+<span>로그인</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border border-gray-200 dark:border-gray-700" data-alt="User avatar placeholder" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAIpCkAQIgOL9OlUEmww-qVzKrE8J3Yb3z9Ixds9pgNl0QMsjyGTC6a0Bq0dYEldIEQJyRP_D8nUxiD8Fxw7kiSq6FCP-JgcUhtvUr-dCYUxh4d4Dg8T_Ssa5o4HCaF1qgAkgMMG7Ah-C_WFqrL9zWXPHNL_53pYMYiyGtEjLck04OD_QOfoJSP-j-i3iG9ttDQwvZOP6n3jgbkg45UBqAG_ifuuCOQn0t0x6m2l_ttFozo0xXZu0QKgXYQDxtp3EkIxro_IEU-7US1");'></div>
+</div>
+</header>
+<main class="max-w-[1200px] mx-auto px-6 py-10">
+<!-- Page Heading -->
+<div class="flex flex-wrap justify-between items-end gap-3 mb-8">
+<div class="flex min-w-72 flex-col gap-3">
+<h1 class="text-[#101419] dark:text-white text-4xl font-black leading-tight tracking-[-0.033em]">공무원 여비 계산기</h1>
+<p class="text-[#5b6f8b] dark:text-gray-400 text-lg font-normal leading-normal">공무원 여비 규정에 맞춰 출장비를 빠르고 정확하게 계산합니다.</p>
+</div>
+<a class="flex items-center gap-1 text-primary dark:text-blue-400 font-bold hover:underline" href="#">
+<span class="material-symbols-outlined text-sm">description</span>
+                관련 규정 확인하기
+            </a>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Input Form Section -->
+<div class="lg:col-span-7 flex flex-col gap-6">
+<div class="bg-white dark:bg-[#1c2128] rounded-xl shadow-sm border border-[#e9edf1] dark:border-gray-800 p-6">
+<h2 class="text-primary dark:text-blue-400 text-xl font-bold mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined">edit_document</span>
+                        출장 정보 입력
+                    </h2>
+<!-- Trip Type Toggle -->
+<div class="mb-6">
+<p class="text-[#101419] dark:text-gray-200 text-base font-semibold mb-3">출장 유형</p>
+<div class="flex h-12 items-center justify-center rounded-lg bg-background-light dark:bg-gray-800 p-1">
+<label class="flex cursor-pointer h-full grow items-center justify-center rounded-lg px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-gray-700 has-[:checked]:shadow-sm has-[:checked]:text-primary dark:has-[:checked]:text-white text-[#5b6f8b] dark:text-gray-400 text-sm font-bold transition-all">
+<span class="truncate">국내 출장</span>
+<input checked="" class="invisible w-0" name="trip-type" type="radio" value="domestic"/>
+</label>
+<label class="flex cursor-pointer h-full grow items-center justify-center rounded-lg px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-gray-700 has-[:checked]:shadow-sm has-[:checked]:text-primary dark:has-[:checked]:text-white text-[#5b6f8b] dark:text-gray-400 text-sm font-bold transition-all">
+<span class="truncate">국외 출장</span>
+<input class="invisible w-0" name="trip-type" type="radio" value="international"/>
+</label>
+</div>
+</div>
+<!-- Destination Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+<label class="flex flex-col gap-2">
+<span class="text-[#101419] dark:text-gray-200 text-base font-semibold">출발지</span>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">location_on</span>
+<input class="w-full pl-10 pr-4 py-3 rounded-lg border border-[#d4dae3] dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-[#101419] dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none" placeholder="도시 또는 기관명 검색" value="서울"/>
+</div>
+</label>
+<label class="flex flex-col gap-2">
+<span class="text-[#101419] dark:text-gray-200 text-base font-semibold">목적지</span>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">flag</span>
+<input class="w-full pl-10 pr-4 py-3 rounded-lg border border-[#d4dae3] dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-[#101419] dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none" placeholder="도시 또는 기관명 검색" value=""/>
+</div>
+</label>
+</div>
+<!-- Date and Rank -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+<label class="flex flex-col gap-2">
+<span class="text-[#101419] dark:text-gray-200 text-base font-semibold">출장 기간</span>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">calendar_today</span>
+<input class="w-full pl-10 pr-4 py-3 rounded-lg border border-[#d4dae3] dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-[#101419] dark:text-white outline-none" placeholder="YYYY.MM.DD - YYYY.MM.DD" type="text" value="2024.05.20 - 2024.05.22"/>
+</div>
+</label>
+<label class="flex flex-col gap-2">
+<span class="text-[#101419] dark:text-gray-200 text-base font-semibold">직급 선택</span>
+<select class="w-full px-4 py-3 rounded-lg border border-[#d4dae3] dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-[#101419] dark:text-white outline-none">
+<option>5급 이하 (제2호)</option>
+<option>4급 이상 (제1호 라목)</option>
+<option>국장급 이상 (제1호 다목)</option>
+<option>차관급 이상 (제1호 나목)</option>
+</select>
+</label>
+</div>
+<!-- Transportation & Options -->
+<div class="mb-8">
+<p class="text-[#101419] dark:text-gray-200 text-base font-semibold mb-3">교통수단 및 숙박</p>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+<button class="flex flex-col items-center justify-center gap-2 p-3 border-2 border-primary bg-primary/5 rounded-xl text-primary font-bold transition-all">
+<span class="material-symbols-outlined">train</span>
+<span class="text-xs">철도</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-2 p-3 border-2 border-gray-200 dark:border-gray-700 rounded-xl text-gray-500 hover:border-primary/50 transition-all">
+<span class="material-symbols-outlined">directions_bus</span>
+<span class="text-xs">버스</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-2 p-3 border-2 border-gray-200 dark:border-gray-700 rounded-xl text-gray-500 hover:border-primary/50 transition-all">
+<span class="material-symbols-outlined">directions_car</span>
+<span class="text-xs">자가용</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-2 p-3 border-2 border-gray-200 dark:border-gray-700 rounded-xl text-gray-500 hover:border-primary/50 transition-all">
+<span class="material-symbols-outlined">flight</span>
+<span class="text-xs">항공</span>
+</button>
+</div>
+<div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">bed</span>
+<span class="text-sm font-medium dark:text-gray-200">숙박비 포함 여부</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-gray-300 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+<button class="w-full py-4 bg-primary hover:bg-primary/90 text-white rounded-xl font-bold text-lg shadow-md transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">calculate</span>
+                        여비 계산하기
+                    </button>
+</div>
+</div>
+<!-- Results Section -->
+<div class="lg:col-span-5 flex flex-col gap-6">
+<div class="bg-white dark:bg-[#1c2128] rounded-xl shadow-lg border-2 border-primary/10 p-6 flex flex-col">
+<div class="flex justify-between items-start mb-6">
+<div>
+<span class="inline-block px-3 py-1 rounded-full bg-secondary-green/10 text-secondary-green text-xs font-bold mb-2">계산 완료</span>
+<h2 class="text-2xl font-black text-primary dark:text-white">예상 총 여비</h2>
+</div>
+<div class="text-right">
+<p class="text-4xl font-black text-secondary-green">245,000원</p>
+</div>
+</div>
+<div class="space-y-4 mb-8">
+<div class="flex justify-between items-center py-3 border-b border-gray-100 dark:border-gray-800">
+<div class="flex flex-col">
+<span class="text-sm font-bold dark:text-white">운임 (철도)</span>
+<span class="text-xs text-gray-500">서울 ↔ 부산 (일반실 왕복)</span>
+</div>
+<span class="font-bold text-primary dark:text-blue-300">119,600원</span>
+</div>
+<div class="flex justify-between items-center py-3 border-b border-gray-100 dark:border-gray-800">
+<div class="flex flex-col">
+<span class="text-sm font-bold dark:text-white">숙박비</span>
+<span class="text-xs text-gray-500">70,000원 x 1박</span>
+</div>
+<span class="font-bold text-primary dark:text-blue-300">70,000원</span>
+</div>
+<div class="flex justify-between items-center py-3 border-b border-gray-100 dark:border-gray-800">
+<div class="flex flex-col">
+<span class="text-sm font-bold dark:text-white">식비</span>
+<span class="text-xs text-gray-500">20,000원 x 2일 (점심/저녁)</span>
+</div>
+<span class="font-bold text-primary dark:text-blue-300">40,000원</span>
+</div>
+<div class="flex justify-between items-center py-3 border-b border-gray-100 dark:border-gray-800">
+<div class="flex flex-col">
+<span class="text-sm font-bold dark:text-white">일비</span>
+<span class="text-xs text-gray-500">20,000원 x 2일</span>
+</div>
+<span class="font-bold text-primary dark:text-blue-300">40,000원</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-3 mb-6">
+<button class="flex items-center justify-center gap-2 py-3 border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-bold hover:bg-gray-50 dark:hover:bg-gray-800 transition-all dark:text-gray-300">
+<span class="material-symbols-outlined text-lg">print</span>
+                            결과 인쇄
+                        </button>
+<button class="flex items-center justify-center gap-2 py-3 border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-bold hover:bg-gray-50 dark:hover:bg-gray-800 transition-all dark:text-gray-300">
+<span class="material-symbols-outlined text-lg">picture_as_pdf</span>
+                            PDF 저장
+                        </button>
+</div>
+<div class="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-100 dark:border-blue-800">
+<p class="text-xs text-blue-700 dark:text-blue-300 flex items-start gap-2">
+<span class="material-symbols-outlined text-sm mt-0.5">info</span>
+<span>본 계산 결과는 2024년도 공무원 여비 규정(제2호)을 기준으로 산출되었으며, 실제 지급액은 소속 기관의 지침에 따라 차이가 있을 수 있습니다.</span>
+</p>
+</div>
+</div>
+<!-- Guidance Image/Card -->
+<div class="rounded-xl overflow-hidden relative h-40 group cursor-pointer">
+<div class="absolute inset-0 bg-gradient-to-r from-primary to-blue-500 opacity-90"></div>
+<div class="absolute inset-0 flex flex-col justify-center p-6 text-white z-10">
+<p class="text-sm font-medium opacity-80 mb-1">복잡한 출장비 정산도 한번에</p>
+<h3 class="text-xl font-bold mb-3">실무자를 위한 행정 가이드</h3>
+<div class="flex items-center gap-1 text-sm font-bold bg-white/20 w-fit px-3 py-1 rounded-full">
+                            더 알아보기 <span class="material-symbols-outlined text-xs">arrow_forward</span>
+</div>
+</div>
+<div class="absolute inset-0 bg-cover bg-center mix-blend-overlay opacity-30" data-alt="Abstract office pattern gradient" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBb2E3bUnHvCsEp4Byvmw3CZJp50rHNLTAxvK8quEthDeGof059jZi4sQ__4ysLmWDfuytx1yYvXhFS65JVx6isoTEWLYP_ZKf1qt3g9pDXEDsEyAb-0lB6Yj8bX-qwm-XYudV4D7gAN0vUY2wUcrMjk1vRKM0-_YDrbgG7JVsigckzMUe3Ym-P7T1U8uYyj6zIYRMDy2tdVjQOp89-yVjZg4SCWpQUZBoesB1DCNhhkwqMOTA53maJd1uUE1N97JFhxvfLQ-IHbwJy');"></div>
+</div>
+</div>
+</div>
+</main>
+<footer class="mt-20 border-t border-gray-200 dark:border-gray-800 py-10 bg-white dark:bg-[#1c2128]">
+<div class="max-w-[1200px] mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-2 text-primary dark:text-white">
+<span class="text-lg font-black">Silmu.kr</span>
+<span class="text-xs text-gray-400">© 2024 All Rights Reserved.</span>
+</div>
+<p class="text-sm text-gray-500">공공기관 실무자를 위한 스마트 업무 도구 플랫폼</p>
+</div>
+<div class="flex gap-6 text-sm text-gray-500">
+<a class="hover:text-primary transition-colors" href="#">이용약관</a>
+<a class="hover:text-primary transition-colors font-bold" href="#">개인정보처리방침</a>
+<a class="hover:text-primary transition-colors" href="#">고객센터</a>
+</div>
+</div>
+</footer>
+</body></html>

@@ -1,0 +1,135 @@
+<%# 마이페이지 - Stitch 디자인 기반 %>
+
+<section class="py-8">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="lg:flex lg:gap-8">
+      <!-- 사이드바 -->
+      <div class="lg:w-[280px] shrink-0 mb-8 lg:mb-0">
+        <div class="bg-white rounded-xl border border-gray-200 p-6 sticky top-24">
+          <!-- 프로필 -->
+          <div class="text-center mb-6">
+            <div class="w-20 h-20 bg-navy-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span class="text-3xl font-bold text-navy-600">김</span>
+            </div>
+            <h2 class="font-bold text-gray-900 text-lg">김철수 주무관</h2>
+            <p class="text-gray-500 text-sm">서울특별시청 행정지원과</p>
+          </div>
+
+          <button class="w-full py-2 border border-gray-200 text-gray-600 rounded-lg text-sm hover:bg-gray-50 transition-colors mb-6">
+            프로필 수정
+          </button>
+
+          <!-- 메뉴 -->
+          <nav class="space-y-1">
+            <a href="#" class="flex items-center gap-3 px-4 py-3 bg-navy-50 text-navy-600 rounded-lg font-medium">
+              <span class="material-symbols-outlined">dashboard</span>
+              대시보드
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
+              <span class="material-symbols-outlined">description</span>
+              저장한 양식
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
+              <span class="material-symbols-outlined">menu_book</span>
+              저장한 가이드
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
+              <span class="material-symbols-outlined">history</span>
+              최근 본 항목
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
+              <span class="material-symbols-outlined">settings</span>
+              설정
+            </a>
+          </nav>
+        </div>
+      </div>
+
+      <!-- 메인 콘텐츠 -->
+      <div class="flex-1 min-w-0">
+        <!-- 환영 메시지 -->
+        <div class="bg-gradient-to-r from-navy-600 to-navy-700 rounded-xl p-6 text-white mb-8">
+          <h1 class="text-2xl font-bold mb-2">안녕하세요, 김철수 주무관님!</h1>
+          <p class="text-navy-100">오늘도 힘내세요. 실무가 함께합니다.</p>
+        </div>
+
+        <!-- 활동 통계 -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div class="bg-white rounded-xl border border-gray-200 p-4 text-center">
+            <span class="material-symbols-outlined text-3xl text-blue-500 mb-2">download</span>
+            <p class="text-2xl font-bold text-gray-900">12</p>
+            <p class="text-gray-500 text-sm">다운로드</p>
+          </div>
+          <div class="bg-white rounded-xl border border-gray-200 p-4 text-center">
+            <span class="material-symbols-outlined text-3xl text-green-500 mb-2">bookmark</span>
+            <p class="text-2xl font-bold text-gray-900">5</p>
+            <p class="text-gray-500 text-sm">저장한 가이드</p>
+          </div>
+          <div class="bg-white rounded-xl border border-gray-200 p-4 text-center">
+            <span class="material-symbols-outlined text-3xl text-purple-500 mb-2">description</span>
+            <p class="text-2xl font-bold text-gray-900">8</p>
+            <p class="text-gray-500 text-sm">저장한 양식</p>
+          </div>
+          <div class="bg-white rounded-xl border border-gray-200 p-4 text-center">
+            <span class="material-symbols-outlined text-3xl text-amber-500 mb-2">build</span>
+            <p class="text-2xl font-bold text-gray-900">24</p>
+            <p class="text-gray-500 text-sm">도구 사용</p>
+          </div>
+        </div>
+
+        <!-- 저장한 양식 -->
+        <section class="mb-8">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-bold text-gray-900">저장한 양식</h2>
+            <a href="#" class="text-sm text-navy-600 hover:underline">전체보기</a>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <% ["물품 구매 기안문", "수의계약 사유서", "검수조서", "견적서"].each do |title| %>
+              <div class="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-lg transition-shadow">
+                <div class="w-full aspect-[4/3] bg-gray-100 rounded-lg flex items-center justify-center mb-3">
+                  <span class="material-symbols-outlined text-4xl text-gray-300">description</span>
+                </div>
+                <h3 class="font-medium text-gray-900 text-sm truncate"><%= title %></h3>
+                <div class="flex items-center justify-between mt-2">
+                  <span class="text-xs text-gray-400">HWP</span>
+                  <button class="text-gray-400 hover:text-red-500">
+                    <span class="material-symbols-outlined text-lg">delete</span>
+                  </button>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </section>
+
+        <!-- 저장한 가이드 -->
+        <section>
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-bold text-gray-900">저장한 가이드</h2>
+            <a href="#" class="text-sm text-navy-600 hover:underline">전체보기</a>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <% [
+              { title: "물품 구매 및 검수 절차 가이드", category: "계약" },
+              { title: "수의계약 체결 실무 가이드", category: "계약" },
+              { title: "출장 여비 청구 가이드", category: "예산" },
+              { title: "연가 사용 및 관리 가이드", category: "복무" },
+            ].each do |guide| %>
+              <%= link_to guide_path(1), class: "bg-white rounded-xl border border-gray-200 p-4 hover:shadow-lg transition-shadow flex gap-4" do %>
+                <div class="w-12 h-12 bg-forest-100 rounded-lg flex items-center justify-center shrink-0">
+                  <span class="material-symbols-outlined text-forest-600">menu_book</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <span class="text-xs font-semibold px-2 py-0.5 bg-forest-100 text-forest-600 rounded-full"><%= guide[:category] %></span>
+                  <h3 class="font-medium text-gray-900 mt-1 truncate"><%= guide[:title] %></h3>
+                </div>
+                <button class="text-gray-400 hover:text-red-500 shrink-0">
+                  <span class="material-symbols-outlined">bookmark_remove</span>
+                </button>
+              <% end %>
+            <% end %>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</section>

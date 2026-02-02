@@ -1,0 +1,184 @@
+<%# 가이드 상세 페이지 - Stitch 디자인 기반 %>
+
+<section class="py-8">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- 뒤로가기 -->
+    <div class="mb-6">
+      <%= link_to guides_path, class: "inline-flex items-center text-gray-600 hover:text-forest-600 transition-colors" do %>
+        <span class="material-symbols-outlined mr-1">arrow_back</span>
+        가이드 목록으로
+      <% end %>
+    </div>
+
+    <div class="lg:flex lg:gap-8">
+      <!-- 목차 사이드바 (왼쪽) -->
+      <div class="hidden lg:block lg:w-[250px] shrink-0">
+        <div class="sticky top-24 bg-white rounded-xl border border-gray-200 p-6">
+          <h3 class="font-bold text-gray-900 mb-4">목차</h3>
+          <nav class="space-y-2 text-sm">
+            <a href="#overview" class="block py-2 px-3 bg-forest-50 text-forest-600 rounded-lg font-medium">1. 개요</a>
+            <a href="#requirements" class="block py-2 px-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">2. 사전 준비 사항</a>
+            <a href="#step1" class="block py-2 px-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">3. Step 1: 구매 요청</a>
+            <a href="#step2" class="block py-2 px-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">4. Step 2: 견적 수집</a>
+            <a href="#step3" class="block py-2 px-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">5. Step 3: 계약 체결</a>
+            <a href="#step4" class="block py-2 px-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">6. Step 4: 검수 및 대금 지급</a>
+            <a href="#cautions" class="block py-2 px-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">7. 주의사항</a>
+            <a href="#related" class="block py-2 px-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">8. 관련 법령</a>
+          </nav>
+        </div>
+      </div>
+
+      <!-- 메인 콘텐츠 -->
+      <div class="flex-1 min-w-0">
+        <article class="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <!-- 헤더 -->
+          <div class="p-6 md:p-8 border-b">
+            <div class="flex items-center gap-3 mb-4">
+              <span class="text-xs font-semibold px-3 py-1 bg-forest-100 text-forest-600 rounded-full">계약</span>
+              <span class="text-xs font-semibold px-3 py-1 bg-amber-100 text-amber-600 rounded-full">인기</span>
+            </div>
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">물품 구매 및 검수 절차 가이드</h1>
+            <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500">
+              <span class="flex items-center gap-1">
+                <span class="material-symbols-outlined text-lg">calendar_today</span>
+                2024.01.20
+              </span>
+              <span class="flex items-center gap-1">
+                <span class="material-symbols-outlined text-lg">visibility</span>
+                2,341회
+              </span>
+              <span class="flex items-center gap-1">
+                <span class="material-symbols-outlined text-lg">person</span>
+                실무팀
+              </span>
+            </div>
+
+            <div class="flex gap-2 mt-6">
+              <button class="flex items-center gap-1 px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50 transition-colors">
+                <span class="material-symbols-outlined text-lg">bookmark_border</span>
+                저장
+              </button>
+              <button class="flex items-center gap-1 px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50 transition-colors">
+                <span class="material-symbols-outlined text-lg">share</span>
+                공유
+              </button>
+              <button class="flex items-center gap-1 px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50 transition-colors">
+                <span class="material-symbols-outlined text-lg">print</span>
+                인쇄
+              </button>
+            </div>
+          </div>
+
+          <!-- 본문 -->
+          <div class="p-6 md:p-8 prose prose-gray max-w-none">
+            <section id="overview" class="mb-12">
+              <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <span class="w-8 h-8 flex items-center justify-center bg-forest-100 text-forest-600 rounded-lg text-sm font-bold">1</span>
+                개요
+              </h2>
+              <p class="text-gray-700 leading-relaxed">
+                본 가이드는 공무원이 물품을 구매하고 검수하는 전체 절차를 단계별로 설명합니다.
+                지방계약법 및 관련 규정에 따른 절차를 준수하여 감사 지적 없이 안전하게 업무를 처리할 수 있도록 안내합니다.
+              </p>
+            </section>
+
+            <!-- 주의사항 박스 -->
+            <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg mb-8">
+              <div class="flex items-start gap-3">
+                <span class="material-symbols-outlined text-amber-600">warning</span>
+                <div>
+                  <h4 class="font-bold text-amber-800 mb-1">주의사항</h4>
+                  <p class="text-amber-700 text-sm">
+                    2천만원 이상의 물품 구매 시에는 반드시 입찰을 통해 계약해야 합니다.
+                    수의계약 사유에 해당하는지 먼저 확인하세요.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <section id="step1" class="mb-12">
+              <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <span class="w-8 h-8 flex items-center justify-center bg-forest-100 text-forest-600 rounded-lg text-sm font-bold">3</span>
+                Step 1: 구매 요청
+              </h2>
+              <ol class="space-y-4 text-gray-700">
+                <li class="flex gap-3">
+                  <span class="w-6 h-6 flex items-center justify-center bg-gray-100 rounded-full text-xs font-bold text-gray-600 shrink-0 mt-0.5">1</span>
+                  <p>수요 부서에서 물품 구매 요청서를 작성합니다.</p>
+                </li>
+                <li class="flex gap-3">
+                  <span class="w-6 h-6 flex items-center justify-center bg-gray-100 rounded-full text-xs font-bold text-gray-600 shrink-0 mt-0.5">2</span>
+                  <p>구매 요청서에는 품명, 규격, 수량, 예상 가격, 납품 희망일 등을 명시합니다.</p>
+                </li>
+                <li class="flex gap-3">
+                  <span class="w-6 h-6 flex items-center justify-center bg-gray-100 rounded-full text-xs font-bold text-gray-600 shrink-0 mt-0.5">3</span>
+                  <p>예산 배정 여부를 확인하고, 계약 담당 부서로 요청서를 전달합니다.</p>
+                </li>
+              </ol>
+            </section>
+
+            <!-- 관련 양식 -->
+            <div class="bg-gray-50 rounded-xl p-6 mb-8">
+              <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <span class="material-symbols-outlined text-navy-600">description</span>
+                관련 양식
+              </h4>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <%= link_to template_path(1), class: "flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200 hover:border-navy-300 transition-colors" do %>
+                  <span class="material-symbols-outlined text-gray-400">download</span>
+                  <div>
+                    <p class="font-medium text-gray-900 text-sm">물품 구매 기안문</p>
+                    <p class="text-gray-500 text-xs">HWP, PDF</p>
+                  </div>
+                <% end %>
+                <%= link_to template_path(1), class: "flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200 hover:border-navy-300 transition-colors" do %>
+                  <span class="material-symbols-outlined text-gray-400">download</span>
+                  <div>
+                    <p class="font-medium text-gray-900 text-sm">검수조서</p>
+                    <p class="text-gray-500 text-xs">HWP, PDF</p>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+
+            <!-- 관련 법령 -->
+            <div class="bg-blue-50 rounded-xl p-6">
+              <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <span class="material-symbols-outlined text-blue-600">gavel</span>
+                관련 법령
+              </h4>
+              <ul class="space-y-2 text-sm">
+                <li>
+                  <a href="https://www.law.go.kr" target="_blank" class="text-blue-600 hover:underline flex items-center gap-1">
+                    지방자치단체를 당사자로 하는 계약에 관한 법률 제9조
+                    <span class="material-symbols-outlined text-xs">open_in_new</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.law.go.kr" target="_blank" class="text-blue-600 hover:underline flex items-center gap-1">
+                    지방자치단체 물품관리 조례
+                    <span class="material-symbols-outlined text-xs">open_in_new</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <!-- 추천 가이드 -->
+        <section class="mt-12">
+          <h2 class="text-xl font-bold text-gray-900 mb-6">관련 가이드</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <% 3.times do %>
+              <%= link_to guide_path(1), class: "bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-shadow" do %>
+                <span class="text-xs font-semibold px-2 py-1 bg-forest-100 text-forest-600 rounded-full">계약</span>
+                <h3 class="font-bold text-gray-900 mt-3 mb-2">수의계약 체결 실무 가이드</h3>
+                <p class="text-gray-500 text-sm">수의계약의 요건과 절차 안내</p>
+              <% end %>
+            <% end %>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</section>
