@@ -201,12 +201,12 @@
 
             <!-- Social Links -->
             <div class="flex gap-3 mt-6">
-              <a href="#" class="w-10 h-10 bg-navy-800 hover:bg-navy-700 rounded-xl flex items-center justify-center transition-colors">
+              <a href="mailto:hello@silmu.kr" class="w-10 h-10 bg-navy-800 hover:bg-navy-700 rounded-xl flex items-center justify-center transition-colors" title="이메일 문의">
                 <span class="material-symbols-outlined text-navy-300">mail</span>
               </a>
-              <a href="#" class="w-10 h-10 bg-navy-800 hover:bg-navy-700 rounded-xl flex items-center justify-center transition-colors">
+              <%= link_to community_path, class: "w-10 h-10 bg-navy-800 hover:bg-navy-700 rounded-xl flex items-center justify-center transition-colors", title: "커뮤니티" do %>
                 <span class="material-symbols-outlined text-navy-300">forum</span>
-              </a>
+              <% end %>
             </div>
           </div>
 
