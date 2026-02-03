@@ -1,72 +1,82 @@
-<div class="min-h-screen bg-gray-50">
+<%# 챗봇 페이지 - 프리미엄 디자인 시스템 %>
+
+<div class="min-h-screen bg-surface-50">
   <!-- 헤더 -->
-  <div class="bg-blue-700 py-12">
+  <div class="gradient-premium py-12 lg:py-16">
     <div class="max-w-4xl mx-auto px-4 text-center">
+      <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 shadow-lg mx-auto mb-4">
+        <span class="material-symbols-outlined text-4xl text-white">support_agent</span>
+      </div>
       <h1 class="text-3xl font-bold mb-2 text-white">공무원 업무 도우미</h1>
-      <p class="text-blue-200">법령 · 예규 · 유권해석 · 실무 가이드</p>
+      <p class="text-navy-200">법령 · 예규 · 유권해석 · 실무 가이드</p>
     </div>
   </div>
 
   <!-- 검색 영역 -->
-  <div class="max-w-4xl mx-auto px-4 -mt-6">
-    <div class="bg-white rounded-xl shadow-lg p-6">
+  <div class="max-w-4xl mx-auto px-4 -mt-8">
+    <div class="card p-6 shadow-strong">
       <%= form_with url: chatbot_search_path, method: :get, data: { turbo_frame: "search-results" } do |f| %>
         <div class="flex gap-3">
           <div class="flex-1">
             <%= f.text_field :q,
                 placeholder: "궁금한 업무를 입력하세요 (예: 수의계약 가능 금액, 출장비 지급 방법)",
-                class: "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-lg",
+                class: "input input-lg",
                 autofocus: true %>
           </div>
-          <button type="submit" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium">
+          <button type="submit" class="btn btn-primary btn-lg">
+            <span class="material-symbols-outlined">search</span>
             검색
           </button>
         </div>
       <% end %>
 
       <!-- 인기 키워드 -->
-      <div class="mt-4 flex flex-wrap gap-2">
-        <span class="text-sm text-gray-500">인기 검색어:</span>
+      <div class="mt-4 flex flex-wrap gap-2 items-center">
+        <span class="text-sm text-navy-500 font-medium">인기 검색어:</span>
         <% %w[수의계약 연말정산 출장비 이월 기간제 보조금정산 겸직 일상경비].each do |keyword| %>
           <%= link_to keyword, chatbot_search_path(q: keyword),
-              class: "px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-blue-100 hover:text-blue-700",
+              class: "px-3 py-1.5 bg-surface-100 text-navy-700 rounded-full text-sm font-medium hover:bg-point-100 hover:text-point-700 transition-all",
               data: { turbo_frame: "search-results" } %>
         <% end %>
       </div>
     </div>
 
     <!-- 금액 기반 검색 -->
-    <div class="bg-white rounded-xl shadow-lg p-6 mt-4">
-      <h3 class="text-lg font-semibold mb-4 text-gray-800">💰 금액으로 계약방법 찾기</h3>
-      <div class="flex flex-wrap gap-3 items-end">
+    <div class="card p-6 mt-4 shadow-soft">
+      <h3 class="text-lg font-bold mb-4 text-navy-900 flex items-center gap-2">
+        <span class="material-symbols-outlined text-warm-500">payments</span>
+        금액으로 계약방법 찾기
+      </h3>
+      <div class="flex flex-wrap gap-4 items-end">
         <div class="flex-1 min-w-[200px]">
-          <label class="block text-sm font-medium text-gray-700 mb-1">계약 분야</label>
-          <select id="price-category" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+          <label class="block text-sm font-semibold text-navy-700 mb-2">계약 분야</label>
+          <select id="price-category" class="input">
             <option value="goods">물품</option>
             <option value="service">용역</option>
             <option value="construction">공사</option>
           </select>
         </div>
         <div class="flex-1 min-w-[200px]">
-          <label class="block text-sm font-medium text-gray-700 mb-1">추정가격 (원)</label>
+          <label class="block text-sm font-semibold text-navy-700 mb-2">추정가격 (원)</label>
           <input type="text" id="price-input"
                  placeholder="예: 30,000,000"
-                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                 class="input"
                  oninput="formatPrice(this)">
         </div>
-        <button onclick="searchByPrice()" class="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 font-medium">
+        <button onclick="searchByPrice()" class="btn btn-accent btn-md">
+          <span class="material-symbols-outlined">check</span>
           확인
         </button>
       </div>
 
       <!-- 빠른 금액 버튼 -->
-      <div class="mt-3 flex flex-wrap gap-2">
-        <span class="text-sm text-gray-500">빠른 선택:</span>
-        <button onclick="setPrice(10000000)" class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-emerald-100 hover:text-emerald-700">1천만원</button>
-        <button onclick="setPrice(22000000)" class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-emerald-100 hover:text-emerald-700">2,200만원</button>
-        <button onclick="setPrice(50000000)" class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-emerald-100 hover:text-emerald-700">5천만원</button>
-        <button onclick="setPrice(100000000)" class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-emerald-100 hover:text-emerald-700">1억원</button>
-        <button onclick="setPrice(200000000)" class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-emerald-100 hover:text-emerald-700">2억원</button>
+      <div class="mt-4 flex flex-wrap gap-2 items-center">
+        <span class="text-sm text-navy-500 font-medium">빠른 선택:</span>
+        <button onclick="setPrice(10000000)" class="px-3 py-1.5 bg-surface-100 text-navy-700 rounded-full text-sm font-medium hover:bg-forest-100 hover:text-forest-700 transition-all">1천만원</button>
+        <button onclick="setPrice(22000000)" class="px-3 py-1.5 bg-surface-100 text-navy-700 rounded-full text-sm font-medium hover:bg-forest-100 hover:text-forest-700 transition-all">2,200만원</button>
+        <button onclick="setPrice(50000000)" class="px-3 py-1.5 bg-surface-100 text-navy-700 rounded-full text-sm font-medium hover:bg-forest-100 hover:text-forest-700 transition-all">5천만원</button>
+        <button onclick="setPrice(100000000)" class="px-3 py-1.5 bg-surface-100 text-navy-700 rounded-full text-sm font-medium hover:bg-forest-100 hover:text-forest-700 transition-all">1억원</button>
+        <button onclick="setPrice(200000000)" class="px-3 py-1.5 bg-surface-100 text-navy-700 rounded-full text-sm font-medium hover:bg-forest-100 hover:text-forest-700 transition-all">2억원</button>
       </div>
 
       <!-- 금액 검색 결과 -->
@@ -74,28 +84,39 @@
     </div>
 
     <!-- 주제별 가이드 -->
-    <div class="bg-white rounded-xl shadow-lg p-6 mt-4">
-      <h3 class="text-lg font-semibold mb-4 text-gray-800">📚 주제별 상세 가이드</h3>
+    <div class="card p-6 mt-4 shadow-soft">
+      <h3 class="text-lg font-bold mb-4 text-navy-900 flex items-center gap-2">
+        <span class="material-symbols-outlined text-point-600">menu_book</span>
+        주제별 상세 가이드
+      </h3>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <a href="/topics/private-contract" class="group block p-4 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl border-2 border-transparent hover:border-indigo-300 hover:shadow-md transition-all">
-          <div class="text-2xl mb-2">📝</div>
-          <div class="font-medium text-gray-800 group-hover:text-indigo-700">수의계약</div>
-          <div class="text-xs text-gray-500 mt-1">법령·서식·흐름도</div>
+        <a href="/topics/private-contract" class="group block p-4 bg-gradient-to-br from-point-50 to-navy-50 rounded-xl border-2 border-transparent hover:border-point-300 hover:shadow-medium transition-all">
+          <div class="icon-container icon-container-md bg-point-100 group-hover:bg-point-600 transition-colors mb-3">
+            <span class="material-symbols-outlined text-xl text-point-600 group-hover:text-white transition-colors">edit_note</span>
+          </div>
+          <div class="font-semibold text-navy-800 group-hover:text-point-700">수의계약</div>
+          <div class="text-xs text-navy-500 mt-1">법령·서식·흐름도</div>
         </a>
-        <a href="#" class="group block p-4 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl border-2 border-transparent hover:border-emerald-300 hover:shadow-md transition-all opacity-60">
-          <div class="text-2xl mb-2">💼</div>
-          <div class="font-medium text-gray-800">출장비</div>
-          <div class="text-xs text-gray-500 mt-1">준비중</div>
+        <a href="#" class="group block p-4 bg-gradient-to-br from-forest-50 to-teal-50 rounded-xl border-2 border-transparent hover:border-forest-300 hover:shadow-medium transition-all opacity-60">
+          <div class="icon-container icon-container-md bg-forest-100 mb-3">
+            <span class="material-symbols-outlined text-xl text-forest-600">work</span>
+          </div>
+          <div class="font-semibold text-navy-800">출장비</div>
+          <div class="text-xs text-navy-500 mt-1">준비중</div>
         </a>
-        <a href="#" class="group block p-4 bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl border-2 border-transparent hover:border-amber-300 hover:shadow-md transition-all opacity-60">
-          <div class="text-2xl mb-2">📅</div>
-          <div class="font-medium text-gray-800">이월</div>
-          <div class="text-xs text-gray-500 mt-1">준비중</div>
+        <a href="#" class="group block p-4 bg-gradient-to-br from-warm-50 to-orange-50 rounded-xl border-2 border-transparent hover:border-warm-300 hover:shadow-medium transition-all opacity-60">
+          <div class="icon-container icon-container-md bg-warm-100 mb-3">
+            <span class="material-symbols-outlined text-xl text-warm-600">event</span>
+          </div>
+          <div class="font-semibold text-navy-800">이월</div>
+          <div class="text-xs text-navy-500 mt-1">준비중</div>
         </a>
-        <a href="#" class="group block p-4 bg-gradient-to-br from-rose-50 to-pink-50 rounded-xl border-2 border-transparent hover:border-rose-300 hover:shadow-md transition-all opacity-60">
-          <div class="text-2xl mb-2">🧾</div>
-          <div class="font-medium text-gray-800">연말정산</div>
-          <div class="text-xs text-gray-500 mt-1">준비중</div>
+        <a href="#" class="group block p-4 bg-gradient-to-br from-rose-50 to-pink-50 rounded-xl border-2 border-transparent hover:border-rose-300 hover:shadow-medium transition-all opacity-60">
+          <div class="icon-container icon-container-md bg-rose-100 mb-3">
+            <span class="material-symbols-outlined text-xl text-rose-600">receipt</span>
+          </div>
+          <div class="font-semibold text-navy-800">연말정산</div>
+          <div class="text-xs text-navy-500 mt-1">준비중</div>
         </a>
       </div>
     </div>
@@ -103,30 +124,36 @@
 
   <!-- 검색 결과 영역 -->
   <%= turbo_frame_tag "search-results" do %>
-    <div class="max-w-4xl mx-auto px-4 mt-8">
+    <div class="max-w-4xl mx-auto px-4 mt-8 pb-12">
       <!-- 기본 상태: 통계 및 인기 질문 표시 -->
       <div class="grid md:grid-cols-2 gap-6">
         <!-- 카테고리별 가이드 -->
-        <div class="bg-white rounded-xl shadow p-6">
-          <h2 class="text-lg font-semibold mb-4 text-gray-800">📚 업무 가이드</h2>
+        <div class="card p-6">
+          <h2 class="text-lg font-bold mb-4 text-navy-900 flex items-center gap-2">
+            <span class="material-symbols-outlined text-point-600">folder</span>
+            업무 가이드
+          </h2>
           <div class="space-y-2">
             <% Topic::CATEGORIES.each do |key, name| %>
-              <div class="flex items-center py-2 border-b border-gray-100">
-                <span class="text-gray-700"><%= name %></span>
+              <div class="flex items-center py-3 border-b border-gray-100 last:border-0">
+                <span class="text-navy-700 font-medium"><%= name %></span>
               </div>
             <% end %>
           </div>
         </div>
 
         <!-- 자주 묻는 질문 -->
-        <div class="bg-white rounded-xl shadow p-6">
-          <h2 class="text-lg font-semibold mb-4 text-gray-800">❓ 자주 묻는 질문</h2>
+        <div class="card p-6">
+          <h2 class="text-lg font-bold mb-4 text-navy-900 flex items-center gap-2">
+            <span class="material-symbols-outlined text-warm-500">help</span>
+            자주 묻는 질문
+          </h2>
           <div class="space-y-3">
             <% @recent_popular.each_with_index do |article, i| %>
-              <div class="p-2 rounded">
-                <div class="flex items-start gap-2">
-                  <span class="text-sm font-medium text-blue-600"><%= i + 1 %></span>
-                  <p class="text-sm text-gray-800"><%= article.title %></p>
+              <div class="p-3 bg-surface-50 rounded-xl hover:bg-surface-100 transition-colors">
+                <div class="flex items-start gap-3">
+                  <span class="w-6 h-6 flex items-center justify-center bg-point-100 text-point-600 rounded-full text-xs font-bold shrink-0"><%= i + 1 %></span>
+                  <p class="text-sm text-navy-800 font-medium"><%= article.title %></p>
                 </div>
               </div>
             <% end %>
@@ -134,7 +161,7 @@
         </div>
       </div>
 
-      <div class="text-center mt-8 text-sm text-gray-500">
+      <div class="text-center mt-10 text-sm text-navy-500">
         공무원 업무에 필요한 법령과 실무 가이드를 제공합니다
       </div>
     </div>
@@ -179,7 +206,7 @@ function searchByPrice() {
     if (price <= 22000000) {
       result = {
         method: '1인 견적 수의계약',
-        color: 'green',
+        color: 'forest',
         description: '1개 업체에서 견적서를 받아 계약 가능합니다.',
         checklist: ['예정가격 작성', '견적서 1부 징구', '수의계약 사유서 작성', '계약서 작성'],
         tips: ['나라장터 등록 없이 가능', '견적서는 반드시 계약 전에 징구']
@@ -187,7 +214,7 @@ function searchByPrice() {
     } else if (price <= 50000000) {
       result = {
         method: '2인 이상 견적 수의계약',
-        color: 'blue',
+        color: 'point',
         description: '2개 이상 업체에서 견적서를 받아 최저가로 계약합니다.',
         checklist: ['예정가격 작성', '2인 이상 견적서 징구 (동일 조건)', '최저가 업체 선정', '수의계약 사유서 작성', '계약서 작성'],
         tips: ['동일한 규격/조건으로 견적 요청', '견적 마감일시 명시하여 통보']
@@ -195,7 +222,7 @@ function searchByPrice() {
     } else {
       result = {
         method: '경쟁입찰',
-        color: 'purple',
+        color: 'navy',
         description: '나라장터를 통한 공개경쟁입찰을 진행해야 합니다.',
         checklist: ['입찰공고 (나라장터)', '현장설명회 (필요시)', '입찰서 접수', '개찰 및 낙찰자 결정', '계약 체결'],
         tips: ['공고기간 준수 (7일 이상)', '2회 유찰 시 수의계약 전환 가능']
@@ -205,7 +232,7 @@ function searchByPrice() {
     if (price <= 50000000) {
       result = {
         method: '1인 견적 수의계약',
-        color: 'green',
+        color: 'forest',
         description: '1개 업체에서 견적서를 받아 계약 가능합니다.',
         checklist: ['설계서/도면 준비', '예정가격 작성', '견적서 1부 징구', '수의계약 사유서 작성', '계약서 작성'],
         tips: ['건설업 등록 업체 확인', '설계변경 가능성 고려']
@@ -213,7 +240,7 @@ function searchByPrice() {
     } else if (price <= 200000000) {
       result = {
         method: '2인 이상 견적 수의계약',
-        color: 'blue',
+        color: 'point',
         description: '2개 이상 업체에서 견적서를 받아 최저가로 계약합니다.',
         checklist: ['설계서/도면 준비', '예정가격 작성', '2인 이상 견적서 징구', '최저가 업체 선정', '계약서 작성'],
         tips: ['건설업 등록증 확인', '시공능력평가액 확인']
@@ -221,7 +248,7 @@ function searchByPrice() {
     } else {
       result = {
         method: '경쟁입찰',
-        color: 'purple',
+        color: 'navy',
         description: '나라장터를 통한 공개경쟁입찰을 진행해야 합니다.',
         checklist: ['설계서/도면 확정', '입찰공고 (나라장터)', '현장설명회', '입찰/개찰', '적격심사 (추정가 300억 미만)', '계약 체결'],
         tips: ['공고기간 준수 (7일~40일)', '현장설명 필수 여부 확인']
@@ -229,43 +256,51 @@ function searchByPrice() {
     }
   }
 
-  const colorClasses = {
-    green: { bg: 'bg-green-50', border: 'border-green-500', text: 'text-green-700', badge: 'bg-green-100 text-green-800' },
-    blue: { bg: 'bg-blue-50', border: 'border-blue-500', text: 'text-blue-700', badge: 'bg-blue-100 text-blue-800' },
-    purple: { bg: 'bg-purple-50', border: 'border-purple-500', text: 'text-purple-700', badge: 'bg-purple-100 text-purple-800' }
+  const colorMap = {
+    forest: { bg: 'bg-forest-50', border: 'border-forest-500', text: 'text-forest-700', badge: 'bg-forest-100 text-forest-800' },
+    point: { bg: 'bg-point-50', border: 'border-point-500', text: 'text-point-700', badge: 'bg-point-100 text-point-800' },
+    navy: { bg: 'bg-navy-50', border: 'border-navy-500', text: 'text-navy-700', badge: 'bg-navy-100 text-navy-800' }
   };
-  const colors = colorClasses[result.color];
+  const colors = colorMap[result.color];
 
   resultDiv.innerHTML = `
-    <div class="${colors.bg} ${colors.border} border-2 rounded-xl p-6">
+    <div class="${colors.bg} ${colors.border} border-2 rounded-2xl p-6 shadow-soft">
       <div class="flex items-center justify-between mb-4">
         <div>
-          <span class="text-sm text-gray-500">${categoryName} · ${price.toLocaleString('ko-KR')}원</span>
+          <span class="text-sm text-navy-500">${categoryName} · ${price.toLocaleString('ko-KR')}원</span>
           <h4 class="text-xl font-bold ${colors.text}">${result.method}</h4>
         </div>
-        <span class="px-3 py-1 ${colors.badge} rounded-full text-sm font-medium">${result.method}</span>
+        <span class="px-4 py-1.5 ${colors.badge} rounded-full text-sm font-semibold">${result.method}</span>
       </div>
 
-      <p class="text-gray-700 mb-4">${result.description}</p>
+      <p class="text-navy-700 mb-4">${result.description}</p>
 
       <div class="grid md:grid-cols-2 gap-4">
         <div>
-          <h5 class="font-medium text-gray-800 mb-2">📋 체크리스트</h5>
-          <ul class="space-y-1">
-            ${result.checklist.map(item => `<li class="flex items-center gap-2 text-sm text-gray-600"><span class="w-4 h-4 border border-gray-300 rounded"></span>${item}</li>`).join('')}
+          <h5 class="font-semibold text-navy-800 mb-3 flex items-center gap-2">
+            <span class="material-symbols-outlined text-lg">checklist</span>
+            체크리스트
+          </h5>
+          <ul class="space-y-2">
+            ${result.checklist.map(item => `<li class="flex items-center gap-2 text-sm text-navy-600"><span class="w-4 h-4 border-2 border-gray-300 rounded"></span>${item}</li>`).join('')}
           </ul>
         </div>
         <div>
-          <h5 class="font-medium text-gray-800 mb-2">💡 실무 팁</h5>
-          <ul class="space-y-1">
-            ${result.tips.map(tip => `<li class="text-sm text-gray-600">• ${tip}</li>`).join('')}
+          <h5 class="font-semibold text-navy-800 mb-3 flex items-center gap-2">
+            <span class="material-symbols-outlined text-lg">lightbulb</span>
+            실무 팁
+          </h5>
+          <ul class="space-y-2">
+            ${result.tips.map(tip => `<li class="text-sm text-navy-600 flex items-start gap-2"><span class="text-warm-500 font-bold">•</span>${tip}</li>`).join('')}
           </ul>
         </div>
       </div>
 
-      <div class="mt-4 pt-4 border-t border-gray-200">
-        <a href="/topics/private-contract" class="text-indigo-600 hover:text-indigo-800 font-medium text-sm">
-          📚 수의계약 상세 가이드 보기 →
+      <div class="mt-5 pt-5 border-t border-gray-200">
+        <a href="/topics/private-contract" class="text-point-600 hover:text-point-700 font-semibold text-sm flex items-center gap-1 transition-colors">
+          <span class="material-symbols-outlined">menu_book</span>
+          수의계약 상세 가이드 보기
+          <span class="material-symbols-outlined text-lg">arrow_forward</span>
         </a>
       </div>
     </div>

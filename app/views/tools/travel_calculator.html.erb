@@ -1,10 +1,10 @@
-<%# 여비계산기 페이지 - Stitch 디자인 기반 %>
+<%# 여비계산기 페이지 - 프리미엄 디자인 시스템 %>
 
-<section class="py-8">
+<section class="section py-10">
   <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- 뒤로가기 -->
     <div class="mb-6">
-      <%= link_to tools_path, class: "inline-flex items-center text-gray-600 hover:text-indigo-600 transition-colors" do %>
+      <%= link_to tools_path, class: "inline-flex items-center text-navy-600 hover:text-point-600 transition-colors font-medium" do %>
         <span class="material-symbols-outlined mr-1">arrow_back</span>
         도구 목록으로
       <% end %>
@@ -12,13 +12,13 @@
 
     <!-- 페이지 헤더 -->
     <div class="mb-8">
-      <div class="flex items-center gap-3 mb-4">
-        <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center">
-          <span class="material-symbols-outlined text-2xl">directions_car</span>
+      <div class="flex items-center gap-4 mb-4">
+        <div class="icon-container icon-container-lg gradient-point shadow-lg">
+          <span class="material-symbols-outlined text-3xl text-white">directions_car</span>
         </div>
         <div>
-          <h1 class="text-2xl font-bold text-gray-900">여비계산기</h1>
-          <p class="text-gray-500 text-sm">출장 여비를 자동으로 계산합니다</p>
+          <h1 class="text-2xl font-bold text-navy-900">여비계산기</h1>
+          <p class="text-navy-500">출장 여비를 자동으로 계산합니다</p>
         </div>
       </div>
     </div>
@@ -26,24 +26,24 @@
     <div class="lg:flex lg:gap-8">
       <!-- 입력 폼 -->
       <div class="lg:w-[55%] mb-8 lg:mb-0">
-        <div class="bg-white rounded-xl border border-gray-200 p-6">
-          <h2 class="font-bold text-gray-900 mb-6 flex items-center gap-2">
-            <span class="material-symbols-outlined text-gray-400">edit_note</span>
+        <div class="card p-6">
+          <h2 class="font-bold text-navy-900 mb-6 flex items-center gap-2">
+            <span class="material-symbols-outlined text-navy-400">edit_note</span>
             출장 정보 입력
           </h2>
 
-          <form class="space-y-6">
+          <form id="travel-form" class="space-y-6">
             <!-- 출장 유형 -->
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">출장 유형</label>
-              <div class="flex gap-4">
-                <label class="flex items-center">
-                  <input type="radio" name="trip_type" value="domestic" checked class="text-blue-600 focus:ring-blue-500">
-                  <span class="ml-2 text-gray-700">국내 출장</span>
+              <label class="block text-sm font-semibold text-navy-700 mb-3">출장 유형</label>
+              <div class="flex gap-6">
+                <label class="flex items-center cursor-pointer group">
+                  <input type="radio" name="trip_type" value="domestic" checked class="text-point-600 focus:ring-point-500 w-4 h-4">
+                  <span class="ml-2 text-navy-700 group-hover:text-navy-900 transition-colors">국내 출장</span>
                 </label>
-                <label class="flex items-center">
-                  <input type="radio" name="trip_type" value="international" class="text-blue-600 focus:ring-blue-500">
-                  <span class="ml-2 text-gray-700">국외 출장</span>
+                <label class="flex items-center cursor-pointer group">
+                  <input type="radio" name="trip_type" value="international" class="text-point-600 focus:ring-point-500 w-4 h-4">
+                  <span class="ml-2 text-navy-700 group-hover:text-navy-900 transition-colors">국외 출장</span>
                 </label>
               </div>
             </div>
@@ -51,31 +51,31 @@
             <!-- 출발지/목적지 -->
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">출발지</label>
-                <input type="text" placeholder="예: 서울" class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <label class="block text-sm font-semibold text-navy-700 mb-2">출발지</label>
+                <input type="text" id="departure" placeholder="예: 서울" class="input" required>
               </div>
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">목적지</label>
-                <input type="text" placeholder="예: 부산" class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <label class="block text-sm font-semibold text-navy-700 mb-2">목적지</label>
+                <input type="text" id="destination" placeholder="예: 부산" class="input" required>
               </div>
             </div>
 
             <!-- 출장 기간 -->
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">출발일</label>
-                <input type="date" class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <label class="block text-sm font-semibold text-navy-700 mb-2">출발일</label>
+                <input type="date" id="start_date" class="input" required>
               </div>
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">도착일</label>
-                <input type="date" class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <label class="block text-sm font-semibold text-navy-700 mb-2">도착일</label>
+                <input type="date" id="end_date" class="input" required>
               </div>
             </div>
 
             <!-- 직급 -->
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">직급</label>
-              <select class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+              <label class="block text-sm font-semibold text-navy-700 mb-2">직급</label>
+              <select id="grade" class="input" required>
                 <option value="">직급을 선택하세요</option>
                 <option value="1">1급 이상</option>
                 <option value="2">2급</option>
@@ -91,34 +91,34 @@
 
             <!-- 교통수단 -->
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">교통수단</label>
-              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <label class="flex items-center justify-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-blue-300 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50 transition-colors">
-                  <input type="radio" name="transport" value="train" class="sr-only">
+              <label class="block text-sm font-semibold text-navy-700 mb-3">교통수단</label>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3" id="transport-options">
+                <label class="transport-label flex items-center justify-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-point-300 transition-all group">
+                  <input type="radio" name="transport" value="train" class="sr-only" checked>
                   <div class="text-center">
-                    <span class="material-symbols-outlined text-2xl text-gray-600">train</span>
-                    <p class="text-sm mt-1">기차</p>
+                    <span class="material-symbols-outlined text-2xl text-navy-400 group-hover:text-point-500 transition-colors transport-icon">train</span>
+                    <p class="text-sm mt-1 font-medium text-navy-600">기차</p>
                   </div>
                 </label>
-                <label class="flex items-center justify-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-blue-300 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50 transition-colors">
+                <label class="transport-label flex items-center justify-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-point-300 transition-all group">
                   <input type="radio" name="transport" value="bus" class="sr-only">
                   <div class="text-center">
-                    <span class="material-symbols-outlined text-2xl text-gray-600">directions_bus</span>
-                    <p class="text-sm mt-1">버스</p>
+                    <span class="material-symbols-outlined text-2xl text-navy-400 group-hover:text-point-500 transition-colors transport-icon">directions_bus</span>
+                    <p class="text-sm mt-1 font-medium text-navy-600">버스</p>
                   </div>
                 </label>
-                <label class="flex items-center justify-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-blue-300 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50 transition-colors">
+                <label class="transport-label flex items-center justify-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-point-300 transition-all group">
                   <input type="radio" name="transport" value="car" class="sr-only">
                   <div class="text-center">
-                    <span class="material-symbols-outlined text-2xl text-gray-600">directions_car</span>
-                    <p class="text-sm mt-1">자차</p>
+                    <span class="material-symbols-outlined text-2xl text-navy-400 group-hover:text-point-500 transition-colors transport-icon">directions_car</span>
+                    <p class="text-sm mt-1 font-medium text-navy-600">자차</p>
                   </div>
                 </label>
-                <label class="flex items-center justify-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-blue-300 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50 transition-colors">
+                <label class="transport-label flex items-center justify-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-point-300 transition-all group">
                   <input type="radio" name="transport" value="flight" class="sr-only">
                   <div class="text-center">
-                    <span class="material-symbols-outlined text-2xl text-gray-600">flight</span>
-                    <p class="text-sm mt-1">항공</p>
+                    <span class="material-symbols-outlined text-2xl text-navy-400 group-hover:text-point-500 transition-colors transport-icon">flight</span>
+                    <p class="text-sm mt-1 font-medium text-navy-600">항공</p>
                   </div>
                 </label>
               </div>
@@ -126,14 +126,14 @@
 
             <!-- 숙박 여부 -->
             <div>
-              <label class="flex items-center">
-                <input type="checkbox" name="accommodation" checked class="text-blue-600 focus:ring-blue-500 rounded">
-                <span class="ml-2 text-gray-700">숙박 필요</span>
+              <label class="flex items-center cursor-pointer group">
+                <input type="checkbox" id="accommodation" name="accommodation" checked class="text-point-600 focus:ring-point-500 rounded w-5 h-5">
+                <span class="ml-3 text-navy-700 font-medium group-hover:text-navy-900 transition-colors">숙박 필요</span>
               </label>
             </div>
 
             <!-- 계산 버튼 -->
-            <button type="submit" class="w-full py-4 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
+            <button type="submit" class="w-full btn btn-point btn-lg">
               <span class="material-symbols-outlined">calculate</span>
               여비 계산하기
             </button>
@@ -143,71 +143,222 @@
 
       <!-- 결과 영역 -->
       <div class="lg:w-[45%]">
-        <div class="bg-white rounded-xl border border-gray-200 p-6 sticky top-24">
-          <h2 class="font-bold text-gray-900 mb-6 flex items-center gap-2">
-            <span class="material-symbols-outlined text-green-600">receipt_long</span>
+        <div class="card p-6 sticky top-24">
+          <h2 class="font-bold text-navy-900 mb-6 flex items-center gap-2">
+            <span class="material-symbols-outlined text-forest-600">receipt_long</span>
             계산 결과
           </h2>
 
-          <!-- 총액 -->
-          <div class="bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl p-6 text-white mb-6">
-            <p class="text-blue-100 text-sm mb-1">총 여비</p>
-            <p class="text-4xl font-bold">₩ 320,000</p>
+          <!-- 초기 안내 메시지 -->
+          <div id="result-placeholder" class="text-center py-12">
+            <span class="material-symbols-outlined text-6xl text-navy-200 mb-4">calculate</span>
+            <p class="text-navy-500">출장 정보를 입력하고<br>계산하기 버튼을 눌러주세요</p>
           </div>
 
-          <!-- 항목별 내역 -->
-          <div class="space-y-4">
-            <div class="flex justify-between items-center py-3 border-b border-gray-100">
-              <div>
-                <p class="font-medium text-gray-900">운임</p>
-                <p class="text-xs text-gray-500">KTX 왕복 (서울 ↔ 부산)</p>
-              </div>
-              <p class="font-bold text-gray-900">₩ 120,000</p>
+          <!-- 계산 결과 (초기에는 숨김) -->
+          <div id="result-content" class="hidden">
+            <!-- 총액 -->
+            <div class="gradient-point rounded-2xl p-6 text-white mb-6 shadow-lg">
+              <p class="text-point-100 text-sm mb-1">총 여비</p>
+              <p class="text-4xl font-bold" id="total-amount">₩ 0</p>
             </div>
-            <div class="flex justify-between items-center py-3 border-b border-gray-100">
-              <div>
-                <p class="font-medium text-gray-900">숙박비</p>
-                <p class="text-xs text-gray-500">70,000원 × 2박</p>
-              </div>
-              <p class="font-bold text-gray-900">₩ 140,000</p>
-            </div>
-            <div class="flex justify-between items-center py-3 border-b border-gray-100">
-              <div>
-                <p class="font-medium text-gray-900">식비</p>
-                <p class="text-xs text-gray-500">25,000원 × 2일</p>
-              </div>
-              <p class="font-bold text-gray-900">₩ 50,000</p>
-            </div>
-            <div class="flex justify-between items-center py-3">
-              <div>
-                <p class="font-medium text-gray-900">일비</p>
-                <p class="text-xs text-gray-500">20,000원 × 2일</p>
-              </div>
-              <p class="font-bold text-gray-900">₩ 40,000</p>
-            </div>
-          </div>
 
-          <!-- 버튼 -->
-          <div class="flex gap-3 mt-6">
-            <button class="flex-1 py-3 border border-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-2">
-              <span class="material-symbols-outlined">print</span>
-              인쇄
-            </button>
-            <button class="flex-1 py-3 border border-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-2">
-              <span class="material-symbols-outlined">picture_as_pdf</span>
-              PDF 저장
-            </button>
-          </div>
+            <!-- 출장 정보 요약 -->
+            <div class="bg-surface-100 rounded-xl p-4 mb-6">
+              <p class="text-sm text-navy-600">
+                <span id="summary-route">서울 → 부산</span> ·
+                <span id="summary-days">2박 3일</span> ·
+                <span id="summary-transport">KTX</span>
+              </p>
+            </div>
 
-          <!-- 관련 규정 -->
-          <div class="mt-6 pt-6 border-t">
-            <a href="#" class="text-sm text-blue-600 hover:underline flex items-center gap-1">
-              <span class="material-symbols-outlined text-lg">gavel</span>
-              관련 규정 확인하기
-            </a>
+            <!-- 항목별 내역 -->
+            <div class="space-y-4" id="result-items">
+              <div class="flex justify-between items-center py-3 border-b border-gray-100">
+                <div>
+                  <p class="font-semibold text-navy-900">운임</p>
+                  <p class="text-xs text-navy-500" id="fare-desc">KTX 왕복</p>
+                </div>
+                <p class="font-bold text-navy-900" id="fare-amount">₩ 0</p>
+              </div>
+              <div id="accommodation-row" class="flex justify-between items-center py-3 border-b border-gray-100">
+                <div>
+                  <p class="font-semibold text-navy-900">숙박비</p>
+                  <p class="text-xs text-navy-500" id="accommodation-desc">0원 × 0박</p>
+                </div>
+                <p class="font-bold text-navy-900" id="accommodation-amount">₩ 0</p>
+              </div>
+              <div class="flex justify-between items-center py-3 border-b border-gray-100">
+                <div>
+                  <p class="font-semibold text-navy-900">식비</p>
+                  <p class="text-xs text-navy-500" id="meal-desc">0원 × 0일</p>
+                </div>
+                <p class="font-bold text-navy-900" id="meal-amount">₩ 0</p>
+              </div>
+              <div class="flex justify-between items-center py-3">
+                <div>
+                  <p class="font-semibold text-navy-900">일비</p>
+                  <p class="text-xs text-navy-500" id="daily-desc">0원 × 0일</p>
+                </div>
+                <p class="font-bold text-navy-900" id="daily-amount">₩ 0</p>
+              </div>
+            </div>
+
+            <!-- 버튼 -->
+            <div class="flex gap-3 mt-6">
+              <button onclick="window.print()" class="flex-1 btn btn-ghost btn-md">
+                <span class="material-symbols-outlined">print</span>
+                인쇄
+              </button>
+              <button class="flex-1 btn btn-ghost btn-md">
+                <span class="material-symbols-outlined">picture_as_pdf</span>
+                PDF 저장
+              </button>
+            </div>
+
+            <!-- 관련 규정 -->
+            <div class="mt-6 pt-6 border-t border-gray-100">
+              <a href="https://www.law.go.kr/법령/공무원여비규정" target="_blank" class="text-sm text-point-600 hover:text-point-700 font-medium flex items-center gap-1 transition-colors">
+                <span class="material-symbols-outlined text-lg">gavel</span>
+                공무원여비규정 확인하기
+              </a>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
 </section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // 오늘 날짜 설정
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('start_date').value = today;
+
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  document.getElementById('end_date').value = tomorrow.toISOString().split('T')[0];
+
+  // 교통수단 선택 UI
+  const transportLabels = document.querySelectorAll('.transport-label');
+  transportLabels.forEach(label => {
+    const radio = label.querySelector('input[type="radio"]');
+    if (radio.checked) {
+      label.classList.add('border-point-500', 'bg-point-50');
+      label.querySelector('.transport-icon').classList.add('text-point-500');
+    }
+
+    label.addEventListener('click', function() {
+      transportLabels.forEach(l => {
+        l.classList.remove('border-point-500', 'bg-point-50');
+        l.querySelector('.transport-icon').classList.remove('text-point-500');
+        l.querySelector('.transport-icon').classList.add('text-navy-400');
+      });
+      this.classList.add('border-point-500', 'bg-point-50');
+      this.querySelector('.transport-icon').classList.remove('text-navy-400');
+      this.querySelector('.transport-icon').classList.add('text-point-500');
+    });
+  });
+
+  // 여비 기준표 (국내, 2024년 기준)
+  const rates = {
+    // 숙박비 (1박당)
+    accommodation: {
+      '1': 70000, '2': 70000, '3': 70000, '4': 70000,
+      '5': 70000, '6': 60000, '7': 60000, '8': 50000, '9': 50000
+    },
+    // 식비 (1일당)
+    meal: {
+      '1': 25000, '2': 25000, '3': 25000, '4': 25000,
+      '5': 25000, '6': 20000, '7': 20000, '8': 20000, '9': 20000
+    },
+    // 일비 (1일당)
+    daily: {
+      '1': 20000, '2': 20000, '3': 20000, '4': 20000,
+      '5': 20000, '6': 20000, '7': 20000, '8': 20000, '9': 20000
+    },
+    // 운임 (왕복 기준, 서울-부산 예시)
+    fare: {
+      train: 120000,  // KTX
+      bus: 60000,     // 고속버스
+      car: 80000,     // 자차 (유류비 + 통행료)
+      flight: 200000  // 항공
+    }
+  };
+
+  const transportNames = {
+    train: 'KTX',
+    bus: '고속버스',
+    car: '자차',
+    flight: '항공'
+  };
+
+  // 폼 제출 처리
+  document.getElementById('travel-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const departure = document.getElementById('departure').value;
+    const destination = document.getElementById('destination').value;
+    const startDate = new Date(document.getElementById('start_date').value);
+    const endDate = new Date(document.getElementById('end_date').value);
+    const grade = document.getElementById('grade').value;
+    const transport = document.querySelector('input[name="transport"]:checked').value;
+    const needAccommodation = document.getElementById('accommodation').checked;
+
+    // 일수 계산
+    const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+    const nights = days - 1;
+
+    if (days < 1) {
+      alert('도착일은 출발일 이후여야 합니다.');
+      return;
+    }
+
+    // 금액 계산
+    const fareAmount = rates.fare[transport];
+    const accommodationAmount = needAccommodation ? rates.accommodation[grade] * nights : 0;
+    const mealAmount = rates.meal[grade] * days;
+    const dailyAmount = rates.daily[grade] * days;
+    const totalAmount = fareAmount + accommodationAmount + mealAmount + dailyAmount;
+
+    // 결과 표시
+    document.getElementById('result-placeholder').classList.add('hidden');
+    document.getElementById('result-content').classList.remove('hidden');
+
+    // 총액
+    document.getElementById('total-amount').textContent = '₩ ' + totalAmount.toLocaleString();
+
+    // 요약
+    document.getElementById('summary-route').textContent = `${departure} → ${destination}`;
+    document.getElementById('summary-days').textContent = nights > 0 ? `${nights}박 ${days}일` : `당일`;
+    document.getElementById('summary-transport').textContent = transportNames[transport];
+
+    // 운임
+    document.getElementById('fare-desc').textContent = `${transportNames[transport]} 왕복 (${departure} ↔ ${destination})`;
+    document.getElementById('fare-amount').textContent = '₩ ' + fareAmount.toLocaleString();
+
+    // 숙박비
+    if (needAccommodation && nights > 0) {
+      document.getElementById('accommodation-row').classList.remove('hidden');
+      document.getElementById('accommodation-desc').textContent = `${rates.accommodation[grade].toLocaleString()}원 × ${nights}박`;
+      document.getElementById('accommodation-amount').textContent = '₩ ' + accommodationAmount.toLocaleString();
+    } else {
+      document.getElementById('accommodation-row').classList.add('hidden');
+    }
+
+    // 식비
+    document.getElementById('meal-desc').textContent = `${rates.meal[grade].toLocaleString()}원 × ${days}일`;
+    document.getElementById('meal-amount').textContent = '₩ ' + mealAmount.toLocaleString();
+
+    // 일비
+    document.getElementById('daily-desc').textContent = `${rates.daily[grade].toLocaleString()}원 × ${days}일`;
+    document.getElementById('daily-amount').textContent = '₩ ' + dailyAmount.toLocaleString();
+
+    // 결과 영역으로 스크롤 (모바일)
+    if (window.innerWidth < 1024) {
+      document.getElementById('result-content').scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+});
+</script>

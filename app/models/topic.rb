@@ -1,6 +1,10 @@
 class Topic < ApplicationRecord
   include PgSearch::Model
 
+  # 부모-자식 관계 (서브토픽)
+  belongs_to :parent, class_name: 'Topic', optional: true
+  has_many :subtopics, class_name: 'Topic', foreign_key: 'parent_id', dependent: :destroy
+
   # 검색 설정
   pg_search_scope :search_by_keyword,
     against: [:name, :keywords, :summary],
@@ -13,6 +17,7 @@ class Topic < ApplicationRecord
   scope :published, -> { where(published: true) }
   scope :by_category, ->(cat) { where(category: cat) if cat.present? }
   scope :popular, -> { order(view_count: :desc) }
+  scope :root_topics, -> { where(parent_id: nil) }
 
   # Validations
   validates :name, presence: true
