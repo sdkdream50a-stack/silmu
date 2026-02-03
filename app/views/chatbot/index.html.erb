@@ -135,9 +135,10 @@
           </h2>
           <div class="space-y-2">
             <% Topic::CATEGORIES.each do |key, name| %>
-              <div class="flex items-center py-3 border-b border-gray-100 last:border-0">
-                <span class="text-navy-700 font-medium"><%= name %></span>
-              </div>
+              <a href="javascript:void(0)" onclick="alert('<%= name %> 가이드는 준비 중입니다.')" class="flex items-center justify-between py-3 border-b border-gray-100 last:border-0 hover:bg-surface-50 px-2 -mx-2 rounded-lg transition-colors cursor-pointer group">
+                <span class="text-navy-700 font-medium group-hover:text-point-600"><%= name %></span>
+                <span class="material-symbols-outlined text-gray-400 group-hover:text-point-600 text-lg">chevron_right</span>
+              </a>
             <% end %>
           </div>
         </div>
@@ -150,12 +151,12 @@
           </h2>
           <div class="space-y-3">
             <% @recent_popular.each_with_index do |article, i| %>
-              <div class="p-3 bg-surface-50 rounded-xl hover:bg-surface-100 transition-colors">
+              <a href="javascript:void(0)" onclick="alert('상세 페이지는 준비 중입니다.')" class="block p-3 bg-surface-50 rounded-xl hover:bg-surface-100 transition-colors cursor-pointer">
                 <div class="flex items-start gap-3">
                   <span class="w-6 h-6 flex items-center justify-center bg-point-100 text-point-600 rounded-full text-xs font-bold shrink-0"><%= i + 1 %></span>
-                  <p class="text-sm text-navy-800 font-medium"><%= article.title %></p>
+                  <p class="text-sm text-navy-800 font-medium hover:text-point-600"><%= article.title.gsub(/\(.*?\)/, '').strip %></p>
                 </div>
-              </div>
+              </a>
             <% end %>
           </div>
         </div>
