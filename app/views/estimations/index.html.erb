@@ -658,7 +658,7 @@
       </h3>
       <p class="desc">예산을 추정할 항목의 종류를 선택해주세요</p>
 
-      <div class="type-selector">
+      <div class="type-selector" style="grid-template-columns: repeat(4, 1fr);">
         <div class="type-btn" data-type="construction" onclick="selectType('construction')">
           <span class="material-symbols-outlined">construction</span>
           <span>공사</span>
@@ -673,6 +673,11 @@
           <span class="material-symbols-outlined">inventory_2</span>
           <span>물품</span>
           <small>가구, 전산장비, 비품 등<br>물품 구매</small>
+        </div>
+        <div class="type-btn" data-type="design_fee" onclick="selectType('design_fee')">
+          <span class="material-symbols-outlined">architecture</span>
+          <span>설계용역비</span>
+          <small>건축/토목/설비 등<br>설계비·감리비 산출</small>
         </div>
       </div>
 
@@ -811,6 +816,85 @@
         </div>
       </div>
 
+      <!-- 설계용역비 입력 -->
+      <div id="design-fee-form" style="display: none;">
+        <div class="form-section">
+          <h4>
+            <span class="material-symbols-outlined">payments</span>
+            공사비 입력
+          </h4>
+          <div class="form-grid">
+            <div class="form-group full">
+              <label>예상 공사비 (원)</label>
+              <input type="text" id="construction_cost" placeholder="예: 500,000,000" oninput="formatCurrency(this)">
+              <div class="hint">설계용역비 산출의 기준이 되는 공사 예정 금액을 입력하세요</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h4>
+            <span class="material-symbols-outlined">architecture</span>
+            설계 종류
+          </h4>
+          <div class="grade-selector" style="grid-template-columns: repeat(3, 1fr);">
+            <div class="grade-btn selected" data-design="architecture" onclick="selectDesignType('architecture')">
+              <strong>건축설계</strong>
+              <span>건축물 설계</span>
+            </div>
+            <div class="grade-btn" data-design="civil" onclick="selectDesignType('civil')">
+              <strong>토목설계</strong>
+              <span>도로, 구조물 등</span>
+            </div>
+            <div class="grade-btn" data-design="mechanical" onclick="selectDesignType('mechanical')">
+              <strong>기계설비설계</strong>
+              <span>기계, 배관 등</span>
+            </div>
+            <div class="grade-btn" data-design="electrical" onclick="selectDesignType('electrical')">
+              <strong>전기설계</strong>
+              <span>전기, 통신 등</span>
+            </div>
+            <div class="grade-btn" data-design="landscape" onclick="selectDesignType('landscape')">
+              <strong>조경설계</strong>
+              <span>조경, 식재 등</span>
+            </div>
+            <div class="grade-btn" data-design="interior" onclick="selectDesignType('interior')">
+              <strong>실내건축설계</strong>
+              <span>인테리어 설계</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h4>
+            <span class="material-symbols-outlined">engineering</span>
+            감리비 포함 여부
+          </h4>
+          <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+              <input type="checkbox" id="include_supervision" onchange="toggleSupervisionOptions()" style="width: 18px; height: 18px;">
+              <span style="font-size: 14px; color: var(--navy-900);">감리비 포함</span>
+            </label>
+          </div>
+          <div id="supervision-options" style="display: none;">
+            <div class="grade-selector" style="grid-template-columns: repeat(3, 1fr);">
+              <div class="grade-btn selected" data-supervision="periodic" onclick="selectSupervisionType('periodic')">
+                <strong>비상주감리</strong>
+                <span>책임감리 (일반)</span>
+              </div>
+              <div class="grade-btn" data-supervision="full_time" onclick="selectSupervisionType('full_time')">
+                <strong>상주감리</strong>
+                <span>대형 공사</span>
+              </div>
+              <div class="grade-btn" data-supervision="inspection" onclick="selectSupervisionType('inspection')">
+                <strong>검측감리</strong>
+                <span>소규모 공사</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- 등급 선택 (공통) -->
       <div class="form-section" id="grade-section">
         <h4>
@@ -910,6 +994,8 @@
   let currentStep = 1;
   let selectedType = null;
   let selectedGrade = 'standard';
+  let selectedDesignType = 'architecture';
+  let selectedSupervisionType = 'periodic';
   let lastResult = null;
 
   // 단위 정보
@@ -936,9 +1022,45 @@
   // 등급 선택
   function selectGrade(grade) {
     selectedGrade = grade;
-    document.querySelectorAll('.grade-btn').forEach(btn => {
+    document.querySelectorAll('#grade-section .grade-btn').forEach(btn => {
       btn.classList.toggle('selected', btn.dataset.grade === grade);
     });
+  }
+
+  // 설계 종류 선택
+  function selectDesignType(type) {
+    selectedDesignType = type;
+    document.querySelectorAll('[data-design]').forEach(btn => {
+      btn.classList.toggle('selected', btn.dataset.design === type);
+    });
+  }
+
+  // 감리 종류 선택
+  function selectSupervisionType(type) {
+    selectedSupervisionType = type;
+    document.querySelectorAll('[data-supervision]').forEach(btn => {
+      btn.classList.toggle('selected', btn.dataset.supervision === type);
+    });
+  }
+
+  // 감리 옵션 토글
+  function toggleSupervisionOptions() {
+    const checkbox = document.getElementById('include_supervision');
+    const options = document.getElementById('supervision-options');
+    options.style.display = checkbox.checked ? 'block' : 'none';
+  }
+
+  // 통화 형식 변환
+  function formatCurrency(input) {
+    let value = input.value.replace(/[^0-9]/g, '');
+    if (value) {
+      input.value = parseInt(value).toLocaleString('ko-KR');
+    }
+  }
+
+  // 통화 문자열을 숫자로 변환
+  function parseCurrency(str) {
+    return parseInt(str.replace(/[^0-9]/g, '')) || 0;
   }
 
   // 스텝 이동
@@ -988,12 +1110,14 @@
     const titles = {
       construction: '공사 항목 입력',
       service: '용역 정보 입력',
-      goods: '물품 목록 입력'
+      goods: '물품 목록 입력',
+      design_fee: '설계용역비 산출 정보'
     };
     const descs = {
       construction: '공사 항목별 면적/수량을 입력하고 자재 등급을 선택해주세요',
       service: '용역 종류와 기간, 투입 인력을 입력해주세요',
-      goods: '구매할 물품과 수량을 입력하고 품질 등급을 선택해주세요'
+      goods: '구매할 물품과 수량을 입력하고 품질 등급을 선택해주세요',
+      design_fee: '예상 공사비와 설계 종류를 입력해주세요'
     };
 
     document.getElementById('step2-title').textContent = titles[selectedType];
@@ -1002,6 +1126,10 @@
     document.getElementById('construction-form').style.display = selectedType === 'construction' ? 'block' : 'none';
     document.getElementById('service-form').style.display = selectedType === 'service' ? 'block' : 'none';
     document.getElementById('goods-form').style.display = selectedType === 'goods' ? 'block' : 'none';
+    document.getElementById('design-fee-form').style.display = selectedType === 'design_fee' ? 'block' : 'none';
+
+    // 설계용역비의 경우 등급 선택 숨김
+    document.getElementById('grade-section').style.display = selectedType === 'design_fee' ? 'none' : 'block';
   }
 
   // 항목 추가/삭제
@@ -1150,6 +1278,16 @@
         return;
       }
       requestData.items = items;
+    } else if (selectedType === 'design_fee') {
+      const constructionCost = parseCurrency(document.getElementById('construction_cost').value);
+      if (!constructionCost || constructionCost <= 0) {
+        showToast('공사비를 입력해주세요.');
+        return;
+      }
+      requestData.construction_cost = constructionCost;
+      requestData.design_type = selectedDesignType;
+      requestData.include_supervision = document.getElementById('include_supervision').checked;
+      requestData.supervision_type = selectedSupervisionType;
     }
 
     try {
@@ -1183,12 +1321,21 @@
 
   // 결과 렌더링
   function renderResult(result) {
-    const typeNames = { construction: '공사', service: '용역', goods: '물품' };
+    const typeNames = { construction: '공사', service: '용역', goods: '물품', design_fee: '설계용역비' };
     const gradeNames = { basic: '기본형', standard: '보통', premium: '고급', luxury: '프리미엄' };
+    const designNames = {
+      architecture: '건축설계', civil: '토목설계', mechanical: '기계설비설계',
+      electrical: '전기설계', landscape: '조경설계', interior: '실내건축설계'
+    };
     const today = new Date().toLocaleDateString('ko-KR');
 
-    document.getElementById('result-meta').textContent =
-      `${typeNames[result.type]} | ${gradeNames[selectedGrade]} 등급 | ${today}`;
+    if (result.type === 'design_fee') {
+      document.getElementById('result-meta').textContent =
+        `${typeNames[result.type]} | ${designNames[selectedDesignType]} | ${today}`;
+    } else {
+      document.getElementById('result-meta').textContent =
+        `${typeNames[result.type]} | ${gradeNames[selectedGrade]} 등급 | ${today}`;
+    }
 
     let html = `
       <div class="total-box">
@@ -1199,48 +1346,86 @@
     `;
 
     // 상세 내역
-    html += `
-      <div class="detail-section">
-        <h4>
-          <span class="material-symbols-outlined">receipt_long</span>
-          상세 내역
-        </h4>
-        <table class="detail-table">
-          <thead>
-            <tr>
-              <th>항목</th>
-              <th style="text-align: center;">수량</th>
-              <th style="text-align: right;">단가</th>
-              <th style="text-align: right;">금액</th>
-            </tr>
-          </thead>
-          <tbody>
-    `;
+    if (result.type === 'design_fee') {
+      // 설계용역비 상세 내역
+      html += `
+        <div class="detail-section">
+          <h4>
+            <span class="material-symbols-outlined">receipt_long</span>
+            산출 내역
+          </h4>
+          <div style="background: var(--surface-100); padding: 16px; border-radius: 10px; margin-bottom: 16px;">
+            <p style="margin: 0; font-size: 14px; color: var(--navy-700);">
+              <strong>기준 공사비:</strong> ${formatNumber(result.construction_cost)}원
+            </p>
+          </div>
+          <table class="detail-table">
+            <thead>
+              <tr>
+                <th>구분</th>
+                <th style="text-align: center;">적용 요율</th>
+                <th style="text-align: right;">금액</th>
+              </tr>
+            </thead>
+            <tbody>
+      `;
 
-    result.details.forEach(item => {
-      const qty = item.duration ? `${item.duration} ${item.unit}` : `${item.quantity} ${item.unit}`;
-      if (item.personnel && item.personnel > 1) {
-        html += `
-          <tr>
-            <td>${item.name} (${item.personnel}명)</td>
-            <td style="text-align: center;">${qty}</td>
-            <td class="number">${formatNumber(item.unit_price)}원</td>
-            <td class="number">${formatNumber(item.subtotal)}원</td>
-          </tr>
-        `;
-      } else {
+      result.details.forEach(item => {
         html += `
           <tr>
             <td>${item.name}</td>
-            <td style="text-align: center;">${qty}</td>
-            <td class="number">${formatNumber(item.unit_price)}원</td>
+            <td style="text-align: center;">${item.rate}%</td>
             <td class="number">${formatNumber(item.subtotal)}원</td>
           </tr>
         `;
-      }
-    });
+      });
 
-    html += `</tbody></table></div>`;
+      html += `</tbody></table></div>`;
+    } else {
+      // 기존 상세 내역 (공사/용역/물품)
+      html += `
+        <div class="detail-section">
+          <h4>
+            <span class="material-symbols-outlined">receipt_long</span>
+            상세 내역
+          </h4>
+          <table class="detail-table">
+            <thead>
+              <tr>
+                <th>항목</th>
+                <th style="text-align: center;">수량</th>
+                <th style="text-align: right;">단가</th>
+                <th style="text-align: right;">금액</th>
+              </tr>
+            </thead>
+            <tbody>
+      `;
+
+      result.details.forEach(item => {
+        const qty = item.duration ? `${item.duration} ${item.unit}` : `${item.quantity} ${item.unit}`;
+        if (item.personnel && item.personnel > 1) {
+          html += `
+            <tr>
+              <td>${item.name} (${item.personnel}명)</td>
+              <td style="text-align: center;">${qty}</td>
+              <td class="number">${formatNumber(item.unit_price)}원</td>
+              <td class="number">${formatNumber(item.subtotal)}원</td>
+            </tr>
+          `;
+        } else {
+          html += `
+            <tr>
+              <td>${item.name}</td>
+              <td style="text-align: center;">${qty}</td>
+              <td class="number">${formatNumber(item.unit_price)}원</td>
+              <td class="number">${formatNumber(item.subtotal)}원</td>
+            </tr>
+          `;
+        }
+      });
+
+      html += `</tbody></table></div>`;
+    }
 
     // 비용 요약
     html += `
@@ -1253,20 +1438,31 @@
           <tbody>
     `;
 
-    if (result.summary.direct_cost) {
-      html += `<tr><td>직접비</td><td class="number">${formatNumber(result.summary.direct_cost)}원</td></tr>`;
-    }
-    if (result.summary.overhead) {
-      html += `<tr><td>일반관리비</td><td class="number">${formatNumber(result.summary.overhead)}원</td></tr>`;
-    }
-    if (result.summary.profit) {
-      html += `<tr><td>이윤</td><td class="number">${formatNumber(result.summary.profit)}원</td></tr>`;
-    }
-    if (result.summary.safety) {
-      html += `<tr><td>안전관리비</td><td class="number">${formatNumber(result.summary.safety)}원</td></tr>`;
-    }
-    if (result.summary.insurance) {
-      html += `<tr><td>산재보험료</td><td class="number">${formatNumber(result.summary.insurance)}원</td></tr>`;
+    if (result.type === 'design_fee') {
+      // 설계용역비 비용 구성
+      if (result.summary.design_fee) {
+        html += `<tr><td>설계용역비</td><td class="number">${formatNumber(result.summary.design_fee)}원</td></tr>`;
+      }
+      if (result.summary.supervision_fee && result.summary.supervision_fee > 0) {
+        html += `<tr><td>감리비</td><td class="number">${formatNumber(result.summary.supervision_fee)}원</td></tr>`;
+      }
+    } else {
+      // 기존 비용 구성
+      if (result.summary.direct_cost) {
+        html += `<tr><td>직접비</td><td class="number">${formatNumber(result.summary.direct_cost)}원</td></tr>`;
+      }
+      if (result.summary.overhead) {
+        html += `<tr><td>일반관리비</td><td class="number">${formatNumber(result.summary.overhead)}원</td></tr>`;
+      }
+      if (result.summary.profit) {
+        html += `<tr><td>이윤</td><td class="number">${formatNumber(result.summary.profit)}원</td></tr>`;
+      }
+      if (result.summary.safety) {
+        html += `<tr><td>안전관리비</td><td class="number">${formatNumber(result.summary.safety)}원</td></tr>`;
+      }
+      if (result.summary.insurance) {
+        html += `<tr><td>산재보험료</td><td class="number">${formatNumber(result.summary.insurance)}원</td></tr>`;
+      }
     }
 
     html += `

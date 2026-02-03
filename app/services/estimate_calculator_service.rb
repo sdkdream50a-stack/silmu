@@ -3,6 +3,152 @@
 # 주의: 본 서비스의 추정 결과는 참고용이며 실제 금액과 차이가 있을 수 있습니다.
 
 class EstimateCalculatorService
+  # 설계용역비 요율표 (공사비 기준, 엔지니어링사업대가의기준 참고)
+  # 공사비 구간별 요율 (억원 단위)
+  DESIGN_FEE_RATES = {
+    # 건축설계
+    "architecture" => {
+      name: "건축설계",
+      rates: [
+        { max: 1, rate: 0.065 },      # 1억 이하: 6.5%
+        { max: 5, rate: 0.055 },      # 5억 이하: 5.5%
+        { max: 10, rate: 0.048 },     # 10억 이하: 4.8%
+        { max: 30, rate: 0.042 },     # 30억 이하: 4.2%
+        { max: 50, rate: 0.038 },     # 50억 이하: 3.8%
+        { max: Float::INFINITY, rate: 0.035 }  # 50억 초과: 3.5%
+      ]
+    },
+    # 토목설계
+    "civil" => {
+      name: "토목설계",
+      rates: [
+        { max: 1, rate: 0.055 },
+        { max: 5, rate: 0.048 },
+        { max: 10, rate: 0.042 },
+        { max: 30, rate: 0.038 },
+        { max: 50, rate: 0.035 },
+        { max: Float::INFINITY, rate: 0.032 }
+      ]
+    },
+    # 기계설비설계
+    "mechanical" => {
+      name: "기계설비설계",
+      rates: [
+        { max: 1, rate: 0.058 },
+        { max: 5, rate: 0.050 },
+        { max: 10, rate: 0.044 },
+        { max: 30, rate: 0.039 },
+        { max: 50, rate: 0.036 },
+        { max: Float::INFINITY, rate: 0.033 }
+      ]
+    },
+    # 전기설계
+    "electrical" => {
+      name: "전기설계",
+      rates: [
+        { max: 1, rate: 0.055 },
+        { max: 5, rate: 0.048 },
+        { max: 10, rate: 0.042 },
+        { max: 30, rate: 0.038 },
+        { max: 50, rate: 0.035 },
+        { max: Float::INFINITY, rate: 0.032 }
+      ]
+    },
+    # 조경설계
+    "landscape" => {
+      name: "조경설계",
+      rates: [
+        { max: 1, rate: 0.060 },
+        { max: 5, rate: 0.052 },
+        { max: 10, rate: 0.046 },
+        { max: 30, rate: 0.040 },
+        { max: 50, rate: 0.037 },
+        { max: Float::INFINITY, rate: 0.034 }
+      ]
+    },
+    # 실내건축설계
+    "interior" => {
+      name: "실내건축설계",
+      rates: [
+        { max: 1, rate: 0.070 },
+        { max: 5, rate: 0.060 },
+        { max: 10, rate: 0.052 },
+        { max: 30, rate: 0.045 },
+        { max: 50, rate: 0.040 },
+        { max: Float::INFINITY, rate: 0.037 }
+      ]
+    }
+  }.freeze
+
+  # 감리비 요율표 (공사비 기준)
+  SUPERVISION_FEE_RATES = {
+    "full_time" => {  # 상주감리
+      name: "상주감리",
+      rates: [
+        { max: 5, rate: 0.035 },
+        { max: 10, rate: 0.032 },
+        { max: 30, rate: 0.028 },
+        { max: 50, rate: 0.025 },
+        { max: 100, rate: 0.022 },
+        { max: Float::INFINITY, rate: 0.020 }
+      ]
+    },
+    "periodic" => {  # 비상주감리 (책임감리)
+      name: "비상주감리",
+      rates: [
+        { max: 5, rate: 0.025 },
+        { max: 10, rate: 0.022 },
+        { max: 30, rate: 0.020 },
+        { max: 50, rate: 0.018 },
+        { max: 100, rate: 0.016 },
+        { max: Float::INFINITY, rate: 0.015 }
+      ]
+    },
+    "inspection" => {  # 검측감리
+      name: "검측감리",
+      rates: [
+        { max: 5, rate: 0.018 },
+        { max: 10, rate: 0.016 },
+        { max: 30, rate: 0.014 },
+        { max: 50, rate: 0.012 },
+        { max: 100, rate: 0.011 },
+        { max: Float::INFINITY, rate: 0.010 }
+      ]
+    }
+  }.freeze
+
+  # 공사규모별 간접비율 (예정가격작성기준)
+  CONSTRUCTION_INDIRECT_RATES_BY_SCALE = {
+    small: {      # 5천만원 미만
+      threshold: 50_000_000,
+      overhead: 0.06,
+      profit: 0.05,
+      safety: 0.018,
+      insurance: 0.035
+    },
+    medium: {     # 5천만원 ~ 2억원
+      threshold: 200_000_000,
+      overhead: 0.06,
+      profit: 0.05,
+      safety: 0.022,
+      insurance: 0.035
+    },
+    large: {      # 2억원 ~ 5억원
+      threshold: 500_000_000,
+      overhead: 0.06,
+      profit: 0.05,
+      safety: 0.025,
+      insurance: 0.035
+    },
+    xlarge: {     # 5억원 이상
+      threshold: Float::INFINITY,
+      overhead: 0.06,
+      profit: 0.05,
+      safety: 0.027,
+      insurance: 0.035
+    }
+  }.freeze
+
   # 공사 종류별 기준 단가 (원/m² 또는 원/단위)
   CONSTRUCTION_BASE_PRICES = {
     # 인테리어/마감 공사
@@ -109,15 +255,15 @@ class EstimateCalculatorService
 
       return invalid_result("유효한 공사 항목이 없습니다.") if details.empty?
 
-      # 간접비 계산
-      rates = INDIRECT_COST_RATES[:construction]
+      # 공사규모별 간접비율 적용
+      rates = get_construction_indirect_rates(direct_cost)
       overhead = (direct_cost * rates[:overhead]).round(-3)
       profit = (direct_cost * rates[:profit]).round(-3)
       safety = (direct_cost * rates[:safety]).round(-3)
       insurance = (direct_cost * rates[:insurance]).round(-3)
 
       subtotal = direct_cost + overhead + profit + safety + insurance
-      vat = (subtotal * rates[:vat]).round(-3)
+      vat = (subtotal * INDIRECT_COST_RATES[:construction][:vat]).round(-3)
       total = subtotal + vat
 
       {
@@ -235,17 +381,87 @@ class EstimateCalculatorService
       }
     end
 
+    # 설계용역비 추정
+    def estimate_design_fee(construction_cost:, design_type:, include_supervision: false, supervision_type: "periodic")
+      return invalid_result("공사비를 입력해주세요.") if construction_cost.to_f <= 0
+      return invalid_result("설계 종류를 선택해주세요.") unless DESIGN_FEE_RATES[design_type]
+
+      cost_in_billions = construction_cost.to_f / 100_000_000  # 억원 단위로 변환
+      design_info = DESIGN_FEE_RATES[design_type]
+
+      # 적용 요율 계산 (구간별 누진 적용)
+      design_rate = calculate_progressive_rate(design_info[:rates], cost_in_billions)
+      design_fee = (construction_cost.to_f * design_rate).round(-3)
+
+      details = [
+        {
+          name: design_info[:name],
+          rate: (design_rate * 100).round(2),
+          subtotal: design_fee
+        }
+      ]
+
+      # 감리비 포함 여부
+      supervision_fee = 0
+      if include_supervision && SUPERVISION_FEE_RATES[supervision_type]
+        supervision_info = SUPERVISION_FEE_RATES[supervision_type]
+        supervision_rate = calculate_progressive_rate(supervision_info[:rates], cost_in_billions)
+        supervision_fee = (construction_cost.to_f * supervision_rate).round(-3)
+        details << {
+          name: supervision_info[:name],
+          rate: (supervision_rate * 100).round(2),
+          subtotal: supervision_fee
+        }
+      end
+
+      subtotal = design_fee + supervision_fee
+      vat = (subtotal * 0.10).round(-3)
+      total = subtotal + vat
+
+      {
+        success: true,
+        type: :design_fee,
+        construction_cost: construction_cost.to_i,
+        details: details,
+        summary: {
+          design_fee: design_fee,
+          supervision_fee: supervision_fee,
+          subtotal: subtotal,
+          vat: vat,
+          total: total
+        },
+        range: calculate_range(total),
+        disclaimer: design_fee_disclaimer
+      }
+    end
+
     # 가격 정보 조회 (프론트엔드용)
     def price_catalog
       {
         construction: CONSTRUCTION_BASE_PRICES.transform_values { |v| v.except(:base_price) },
         service: SERVICE_BASE_PRICES.transform_values { |v| v.except(:base_price) },
         goods: GOODS_BASE_PRICES.transform_values { |v| v.except(:base_price) },
-        grades: GRADE_MULTIPLIERS
+        grades: GRADE_MULTIPLIERS,
+        design_types: DESIGN_FEE_RATES.transform_values { |v| { name: v[:name] } },
+        supervision_types: SUPERVISION_FEE_RATES.transform_values { |v| { name: v[:name] } }
       }
     end
 
     private
+
+    # 구간별 누진 요율 계산
+    def calculate_progressive_rate(rates, value)
+      applicable_rate = rates.find { |r| value <= r[:max] }
+      applicable_rate ? applicable_rate[:rate] : rates.last[:rate]
+    end
+
+    # 공사규모별 간접비율 반환
+    def get_construction_indirect_rates(direct_cost)
+      CONSTRUCTION_INDIRECT_RATES_BY_SCALE.each do |_scale, config|
+        return config if direct_cost < config[:threshold]
+      end
+      CONSTRUCTION_INDIRECT_RATES_BY_SCALE[:xlarge]
+    end
 
     def calculate_range(total)
       # 추정 범위: -15% ~ +20%
@@ -286,6 +502,16 @@ class EstimateCalculatorService
         ※ 실제 구매 금액은 제조사, 모델, 구매 수량, 계약 조건 등에 따라 달라질 수 있습니다.
         ※ 조달청 나라장터(www.g2b.go.kr) 또는 디지털서비스몰 가격을 확인하시면 더 정확한 예산을 산정할 수 있습니다.
         ※ 대량 구매 시 할인이 적용될 수 있으며, 배송비가 별도로 발생할 수 있습니다.
+      DISCLAIMER
+    end
+
+    def design_fee_disclaimer
+      <<~DISCLAIMER
+        ※ 본 추정 금액은 「엔지니어링사업대가의 기준」을 참고하여 산출한 참고 자료입니다.
+        ※ 실제 설계용역비는 설계 범위, 난이도, 특수조건 등에 따라 달라질 수 있습니다.
+        ※ 건축물의 경우 건축사법에 따른 건축사 대가기준이 별도로 적용될 수 있습니다.
+        ※ 감리비는 공사 특성, 감리 범위 등에 따라 별도 협의가 필요합니다.
+        ※ 정확한 금액 산정을 위해서는 전문 업체의 견적을 받으시기 바랍니다.
       DISCLAIMER
     end
   end

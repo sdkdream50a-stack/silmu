@@ -10,13 +10,13 @@ class ChatbotController < ApplicationController
     @category = params[:category].to_s # goods, service, construction
     @price = params[:price].to_i
 
-    if @price > 0
+    if @price > 0 && @category.present?
       @result = calculate_contract_method(@category, @price)
       @topic = Topic.find_by(slug: 'private-contract')
     end
 
     respond_to do |format|
-      format.html { render partial: 'price_result' }
+      format.html
       format.turbo_stream
     end
   end

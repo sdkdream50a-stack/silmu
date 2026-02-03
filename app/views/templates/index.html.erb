@@ -42,7 +42,7 @@
 <section class="section py-10">
   <div class="container-wide">
     <div class="flex items-center justify-between mb-6">
-      <p class="text-navy-600">총 <span class="font-bold text-navy-900" id="item-count">8</span>개의 양식</p>
+      <p class="text-navy-600">총 <span class="font-bold text-navy-900" id="item-count">23</span>개의 양식</p>
       <select class="border-gray-200 rounded-xl text-sm focus:ring-point-500 focus:border-point-500 px-4 py-2">
         <option>최신순</option>
         <option>인기순</option>
@@ -51,29 +51,27 @@
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="items-grid">
-      <% [
-        { title: "물품 구매 기안문", desc: "표준 물품 구매를 위한 품의 및 기안 양식", category: "기안문", formats: ["HWP", "PDF"], downloads: 1234, color: "point" },
-        { title: "수의계약 사유서", desc: "수의계약 시 필요한 사유서 양식", category: "계약서", formats: ["HWP", "DOCX"], downloads: 892, color: "forest" },
-        { title: "검수조서", desc: "물품 검수 시 작성하는 표준 검수조서", category: "검수조서", formats: ["HWP", "PDF"], downloads: 756, color: "warm" },
-        { title: "견적서", desc: "2인 이상 견적서 표준 양식", category: "계약서", formats: ["HWP", "XLSX"], downloads: 654, color: "navy" },
-        { title: "예정가격조서", desc: "예정가격 산정을 위한 조서 양식", category: "계약서", formats: ["HWP", "PDF"], downloads: 543, color: "point" },
-        { title: "출장 복명서", desc: "국내/국외 출장 복명서 양식", category: "기안문", formats: ["HWP"], downloads: 432, color: "forest" },
-        { title: "업무 인수인계서", desc: "직위 변경 시 업무 인수인계 양식", category: "기타", formats: ["HWP", "DOCX"], downloads: 321, color: "warm" },
-        { title: "회의록", desc: "각종 회의 결과 기록 양식", category: "기타", formats: ["HWP", "PDF"], downloads: 210, color: "navy" },
-      ].each do |template| %>
+      <% @templates.each do |template| %>
         <div class="card card-interactive overflow-hidden group item-card" data-category="<%= template[:category] %>" data-title="<%= template[:title] %>">
-          <!-- 미리보기 영역 -->
-          <div class="aspect-[4/3] bg-gradient-to-br from-surface-50 to-surface-100 flex items-center justify-center relative">
+          <!-- 미리보기 영역 (클릭 가능) -->
+          <%= link_to template_path(template[:id]), class: "block aspect-[4/3] bg-gradient-to-br from-surface-50 to-surface-100 flex items-center justify-center relative" do %>
             <span class="material-symbols-outlined text-6xl text-navy-200 group-hover:text-<%= template[:color] %>-400 transition-colors">description</span>
             <div class="absolute top-3 left-3">
               <span class="badge badge-<%= template[:color] %>"><%= template[:category] %></span>
             </div>
-          </div>
+            <% if template[:badge] %>
+              <div class="absolute top-3 right-3">
+                <span class="badge <%= template[:badge] == 'NEW' ? 'badge-warm' : 'badge-point' %>"><%= template[:badge] %></span>
+              </div>
+            <% end %>
+          <% end %>
 
           <!-- 정보 영역 -->
           <div class="p-5">
-            <h3 class="font-bold text-navy-900 mb-1 group-hover:text-<%= template[:color] %>-600 transition-colors"><%= template[:title] %></h3>
-            <p class="text-navy-500 text-sm mb-3"><%= template[:desc] %></p>
+            <%= link_to template_path(template[:id]), class: "block" do %>
+              <h3 class="font-bold text-navy-900 mb-1 group-hover:text-<%= template[:color] %>-600 transition-colors"><%= template[:title] %></h3>
+              <p class="text-navy-500 text-sm mb-3"><%= template[:desc] %></p>
+            <% end %>
 
             <div class="flex items-center justify-between">
               <div class="flex gap-1.5">
@@ -88,12 +86,12 @@
             </div>
 
             <div class="flex gap-2 mt-4">
-              <%= link_to template_path(1), class: "flex-1 text-center py-2.5 border-2 border-gray-200 rounded-xl text-sm font-medium text-navy-700 hover:bg-surface-50 hover:border-navy-300 transition-all" do %>
+              <%= link_to template_path(template[:id]), class: "flex-1 text-center py-2.5 border-2 border-gray-200 rounded-xl text-sm font-medium text-navy-700 hover:bg-surface-50 hover:border-navy-300 transition-all" do %>
                 미리보기
               <% end %>
-              <button class="flex-1 py-2.5 btn btn-primary btn-sm">
+              <%= link_to template_path(template[:id]), class: "flex-1 py-2.5 btn btn-primary btn-sm text-center" do %>
                 다운로드
-              </button>
+              <% end %>
             </div>
           </div>
         </div>
