@@ -111,12 +111,15 @@
     font-size: 16px;
     line-height: 1.7;
     letter-spacing: -0.01em;
+    word-break: keep-all;
+    overflow-wrap: break-word;
   }
 
   /* Headings */
   h1, h2, h3, h4, h5, h6 {
     @apply font-bold tracking-tight;
     line-height: 1.3;
+    word-break: keep-all;
   }
 
   h1 { @apply text-4xl md:text-5xl lg:text-6xl; letter-spacing: -0.025em; }
@@ -433,6 +436,23 @@
   .icon-container-sm { @apply w-10 h-10; }
   .icon-container-md { @apply w-12 h-12; }
   .icon-container-lg { @apply w-16 h-16; }
+
+  /* Word Break - Korean Text */
+  .word-keep {
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+
+  /* Line Clamp with word-break */
+  .line-clamp-1 {
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+
+  .line-clamp-2 {
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
 }
 
 /* ===========================================

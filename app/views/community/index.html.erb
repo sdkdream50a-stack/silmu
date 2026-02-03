@@ -63,33 +63,33 @@
 
         <!-- 글쓰기 버튼 (모바일) -->
         <div class="lg:hidden mb-6">
-          <button class="w-full btn btn-point btn-lg">
+          <button class="w-full btn btn-point btn-lg" onclick="alert('글쓰기 기능은 준비 중입니다.')">
             <span class="material-symbols-outlined">edit</span>
             새 글 작성하기
           </button>
         </div>
 
         <!-- 게시글 목록 -->
-        <div class="space-y-4" id="posts-list">
+        <div class="space-y-3" id="posts-list">
           <!-- 공지사항 -->
-          <div class="card p-5 border-l-4 border-point-500 bg-point-50/50 item-card" data-category="공지">
-            <div class="flex items-start gap-4">
-              <div class="icon-container icon-container-sm bg-point-100 shrink-0">
-                <span class="material-symbols-outlined text-point-600">campaign</span>
+          <div class="card p-4 border-l-4 border-point-500 bg-point-50/50 item-card cursor-pointer" data-category="공지" onclick="alert('게시글 상세보기는 준비 중입니다.')">
+            <div class="flex items-start gap-3">
+              <div class="w-9 h-9 bg-point-100 rounded-lg flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-point-600 text-xl">campaign</span>
               </div>
               <div class="flex-1 min-w-0">
                 <div class="flex items-center gap-2 mb-1">
-                  <span class="badge badge-point">공지</span>
-                  <span class="badge bg-rose-100 text-rose-700">필독</span>
+                  <span class="badge badge-point text-xs">공지</span>
+                  <span class="badge bg-rose-100 text-rose-700 text-xs">필독</span>
                 </div>
-                <h3 class="font-bold text-navy-900 hover:text-point-600 transition-colors cursor-pointer">
+                <h3 class="font-semibold text-sm text-navy-900 hover:text-point-600 transition-colors">
                   커뮤니티 이용 가이드 및 주의사항 안내
                 </h3>
-                <div class="flex items-center gap-4 mt-2 text-sm text-navy-500">
+                <div class="flex items-center gap-3 mt-1.5 text-xs text-navy-500">
                   <span>운영자</span>
                   <span>2026.01.20</span>
                   <span class="flex items-center gap-1">
-                    <span class="material-symbols-outlined text-sm">visibility</span>
+                    <span class="material-symbols-outlined text-xs">visibility</span>
                     24
                   </span>
                 </div>
@@ -108,41 +108,41 @@
             { category: "질문", category_color: "forest", title: "물품 검수 시 하자 발견하면 어떻게 처리하나요?", author: "물품담당", date: "어제", views: 7, comments: 3, solved: true },
             { category: "서식", category_color: "point", title: "검수조서 작성 예시 및 체크리스트", author: "실무달인", date: "2일 전", views: 11, comments: 2, hot: false }
           ].each do |post| %>
-            <div class="card card-hover p-5 cursor-pointer item-card" data-category="<%= post[:category] %>">
-              <div class="flex items-start gap-4">
+            <div class="card card-hover p-4 cursor-pointer item-card" data-category="<%= post[:category] %>" onclick="alert('게시글 상세보기는 준비 중입니다.')">
+              <div class="flex items-start gap-3">
                 <div class="hidden sm:block">
-                  <div class="w-12 h-12 bg-<%= post[:category_color] %>-100 rounded-xl flex items-center justify-center">
-                    <span class="text-<%= post[:category_color] %>-600 font-bold text-sm"><%= post[:category] %></span>
+                  <div class="w-9 h-9 bg-<%= post[:category_color] %>-100 rounded-lg flex items-center justify-center">
+                    <span class="text-<%= post[:category_color] %>-600 font-bold text-xs"><%= post[:category] %></span>
                   </div>
                 </div>
                 <div class="flex-1 min-w-0">
-                  <div class="flex items-center gap-2 mb-1.5 flex-wrap">
-                    <span class="sm:hidden badge badge-<%= post[:category_color] %>"><%= post[:category] %></span>
+                  <div class="flex items-center gap-2 mb-1 flex-wrap">
+                    <span class="sm:hidden badge badge-<%= post[:category_color] %> text-xs"><%= post[:category] %></span>
                     <% if post[:solved] %>
-                      <span class="badge bg-forest-100 text-forest-700">
+                      <span class="badge bg-forest-100 text-forest-700 text-xs">
                         <span class="material-symbols-outlined text-xs mr-0.5">check_circle</span>
                         해결됨
                       </span>
                     <% end %>
                     <% if post[:hot] %>
-                      <span class="badge bg-rose-100 text-rose-700">
+                      <span class="badge bg-rose-100 text-rose-700 text-xs">
                         <span class="material-symbols-outlined text-xs mr-0.5">local_fire_department</span>
                         인기
                       </span>
                     <% end %>
                   </div>
-                  <h3 class="font-semibold text-navy-900 hover:text-point-600 transition-colors line-clamp-1">
+                  <h3 class="font-semibold text-sm text-navy-900 hover:text-point-600 transition-colors line-clamp-1">
                     <%= post[:title] %>
                   </h3>
-                  <div class="flex items-center gap-4 mt-2 text-sm text-navy-500">
+                  <div class="flex items-center gap-3 mt-1.5 text-xs text-navy-500">
                     <span class="font-medium"><%= post[:author] %></span>
                     <span><%= post[:date] %></span>
                     <span class="flex items-center gap-1">
-                      <span class="material-symbols-outlined text-sm">visibility</span>
+                      <span class="material-symbols-outlined text-xs">visibility</span>
                       <%= post[:views] %>
                     </span>
                     <span class="flex items-center gap-1 text-point-600">
-                      <span class="material-symbols-outlined text-sm">chat</span>
+                      <span class="material-symbols-outlined text-xs">chat</span>
                       <%= post[:comments] %>
                     </span>
                   </div>
@@ -173,7 +173,7 @@
         <div class="sticky top-24 space-y-6">
           <!-- 글쓰기 버튼 (데스크톱) -->
           <div class="hidden lg:block">
-            <button class="w-full btn btn-point btn-lg">
+            <button class="w-full btn btn-point btn-lg" onclick="alert('글쓰기 기능은 준비 중입니다.')">
               <span class="material-symbols-outlined">edit</span>
               새 글 작성하기
             </button>
@@ -207,7 +207,7 @@
                 { rank: 4, title: "수의계약 2천만원 이하 1인 견적 주의사항", comments: 2 },
                 { rank: 5, title: "감사 지적 피하는 서류 정리 노하우", comments: 2 }
               ].each do |post| %>
-                <a href="#" class="flex items-center gap-3 group">
+                <a href="javascript:void(0)" onclick="alert('게시글 상세보기는 준비 중입니다.')" class="flex items-center gap-3 group cursor-pointer">
                   <span class="w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold
                     <%= post[:rank] <= 3 ? 'bg-warm-500 text-white' : 'bg-surface-100 text-navy-500' %>">
                     <%= post[:rank] %>
@@ -279,39 +279,38 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const tabs = document.querySelectorAll('#category-tabs .tab-btn');
-  const items = document.querySelectorAll('.item-card');
+  const postsList = document.getElementById('posts-list');
   const searchInput = document.getElementById('search-input');
 
   function filterItems() {
     const activeTab = document.querySelector('#category-tabs .tab-btn.active');
     const category = activeTab ? activeTab.dataset.category : '전체';
     const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+    const items = postsList.querySelectorAll('.item-card');
 
     items.forEach(item => {
       const itemCategory = item.dataset.category;
       const itemText = item.textContent.toLowerCase();
       const matchesCategory = category === '전체' || itemCategory === category || itemCategory === '공지';
-      const matchesSearch = itemText.includes(searchTerm);
+      const matchesSearch = !searchTerm || itemText.includes(searchTerm);
 
-      if (matchesCategory && matchesSearch) {
-        item.style.display = '';
-      } else {
-        item.style.display = 'none';
-      }
+      item.style.display = (matchesCategory && matchesSearch) ? '' : 'none';
     });
   }
 
   tabs.forEach(tab => {
-    tab.addEventListener('click', function() {
+    tab.addEventListener('click', function(e) {
+      e.preventDefault();
+
       // 모든 탭 비활성화
       tabs.forEach(t => {
-        t.classList.remove('active', 'bg-navy-800', 'text-white', 'shadow-md');
-        t.classList.add('bg-surface-100', 'text-navy-600');
+        t.classList.remove('active', 'bg-navy-800', 'text-white', 'shadow-md', 'font-semibold');
+        t.classList.add('bg-surface-100', 'text-navy-600', 'font-medium');
       });
 
       // 클릭된 탭 활성화
-      this.classList.add('active', 'bg-navy-800', 'text-white', 'shadow-md');
-      this.classList.remove('bg-surface-100', 'text-navy-600');
+      this.classList.remove('bg-surface-100', 'text-navy-600', 'font-medium');
+      this.classList.add('active', 'bg-navy-800', 'text-white', 'shadow-md', 'font-semibold');
 
       filterItems();
     });

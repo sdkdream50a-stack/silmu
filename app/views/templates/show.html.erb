@@ -1,4 +1,4 @@
-<%# 문서 양식 상세/미리보기 페이지 - Stitch 디자인 기반 %>
+<%# 문서 양식 상세/미리보기 페이지 %>
 
 <section class="py-8">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -25,17 +25,171 @@
               </button>
             </div>
             <div class="flex items-center gap-2">
-              <span class="text-sm text-gray-600">1 / 2 페이지</span>
+              <span class="text-sm text-gray-600">1 / 1 페이지</span>
             </div>
           </div>
 
           <!-- 문서 미리보기 -->
-          <div class="aspect-[1/1.414] bg-white flex items-center justify-center p-8">
-            <div class="w-full h-full bg-gray-50 rounded-lg border-2 border-dashed border-gray-200 flex items-center justify-center">
-              <div class="text-center">
-                <span class="material-symbols-outlined text-8xl text-gray-300 mb-4">description</span>
-                <p class="text-gray-400">문서 미리보기</p>
-              </div>
+          <div class="aspect-[1/1.414] bg-white p-6 overflow-auto">
+            <div class="w-full h-full bg-white border border-gray-300 shadow-sm p-6 text-sm text-gray-800" style="font-family: 'Malgun Gothic', sans-serif;">
+              <% case @template[:category] %>
+              <% when "계약서" %>
+                <!-- 계약서 양식 -->
+                <div class="text-center mb-6">
+                  <h2 class="text-lg font-bold border-b-2 border-gray-800 pb-2 inline-block"><%= @template[:title] %></h2>
+                </div>
+                <div class="space-y-4 text-xs">
+                  <p class="leading-relaxed">
+                    <strong>OOO기관</strong>(이하 "갑"이라 한다)과 <strong>OOO업체</strong>(이하 "을"이라 한다)는 다음과 같이 계약을 체결한다.
+                  </p>
+                  <div class="border border-gray-400 mt-4">
+                    <div class="grid grid-cols-3 border-b border-gray-400">
+                      <div class="p-2 bg-gray-100 text-center font-bold border-r border-gray-400">계약명</div>
+                      <div class="p-2 col-span-2"></div>
+                    </div>
+                    <div class="grid grid-cols-3 border-b border-gray-400">
+                      <div class="p-2 bg-gray-100 text-center font-bold border-r border-gray-400">계약금액</div>
+                      <div class="p-2 col-span-2">금                        원정 (부가세 포함)</div>
+                    </div>
+                    <div class="grid grid-cols-3 border-b border-gray-400">
+                      <div class="p-2 bg-gray-100 text-center font-bold border-r border-gray-400">계약기간</div>
+                      <div class="p-2 col-span-2">20    년    월    일 ~ 20    년    월    일</div>
+                    </div>
+                    <div class="grid grid-cols-3">
+                      <div class="p-2 bg-gray-100 text-center font-bold border-r border-gray-400">납품장소</div>
+                      <div class="p-2 col-span-2"></div>
+                    </div>
+                  </div>
+                  <div class="mt-4 space-y-2">
+                    <p><strong>제1조(목적)</strong> 본 계약은 "갑"이 필요로 하는 물품(용역)을 "을"이 공급함에 있어 필요한 사항을 정함을 목적으로 한다.</p>
+                    <p><strong>제2조(계약금액)</strong> 계약금액은 위 표와 같으며, 부가가치세를 포함한다.</p>
+                    <p><strong>제3조(계약이행)</strong> "을"은 계약기간 내에 계약 내용을 성실히 이행하여야 한다.</p>
+                  </div>
+                  <div class="mt-6 text-center">
+                    <p class="mb-4">20    년      월      일</p>
+                    <div class="grid grid-cols-2 gap-8 mt-4">
+                      <div class="text-left">
+                        <p class="font-bold mb-2">"갑" (발주기관)</p>
+                        <p>기관명:</p>
+                        <p>주 소:</p>
+                        <p>대표자:                    (인)</p>
+                      </div>
+                      <div class="text-left">
+                        <p class="font-bold mb-2">"을" (계약상대자)</p>
+                        <p>상 호:</p>
+                        <p>주 소:</p>
+                        <p>대표자:                    (인)</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              <% when "검수조서" %>
+                <!-- 검수조서 양식 -->
+                <div class="text-center mb-6">
+                  <h2 class="text-lg font-bold"><%= @template[:title] %></h2>
+                </div>
+                <div class="space-y-4 text-xs">
+                  <div class="border border-gray-400">
+                    <div class="grid grid-cols-4 border-b border-gray-400">
+                      <div class="p-2 bg-gray-100 text-center font-bold border-r border-gray-400">검수일자</div>
+                      <div class="p-2 border-r border-gray-400">20    년    월    일</div>
+                      <div class="p-2 bg-gray-100 text-center font-bold border-r border-gray-400">검수장소</div>
+                      <div class="p-2"></div>
+                    </div>
+                    <div class="grid grid-cols-4 border-b border-gray-400">
+                      <div class="p-2 bg-gray-100 text-center font-bold border-r border-gray-400">계약명</div>
+                      <div class="p-2 col-span-3"></div>
+                    </div>
+                    <div class="grid grid-cols-4 border-b border-gray-400">
+                      <div class="p-2 bg-gray-100 text-center font-bold border-r border-gray-400">계약업체</div>
+                      <div class="p-2 border-r border-gray-400"></div>
+                      <div class="p-2 bg-gray-100 text-center font-bold border-r border-gray-400">계약금액</div>
+                      <div class="p-2"></div>
+                    </div>
+                  </div>
+                  <div class="border border-gray-400 mt-4">
+                    <div class="grid grid-cols-5 border-b border-gray-400 bg-gray-100">
+                      <div class="p-2 text-center font-bold border-r border-gray-400">품명</div>
+                      <div class="p-2 text-center font-bold border-r border-gray-400">규격</div>
+                      <div class="p-2 text-center font-bold border-r border-gray-400">단위</div>
+                      <div class="p-2 text-center font-bold border-r border-gray-400">수량</div>
+                      <div class="p-2 text-center font-bold">검수결과</div>
+                    </div>
+                    <div class="grid grid-cols-5 border-b border-gray-400">
+                      <div class="p-3 border-r border-gray-400"></div>
+                      <div class="p-3 border-r border-gray-400"></div>
+                      <div class="p-3 border-r border-gray-400"></div>
+                      <div class="p-3 border-r border-gray-400"></div>
+                      <div class="p-3"></div>
+                    </div>
+                  </div>
+                  <div class="mt-4 p-3 border border-gray-400">
+                    <p class="font-bold mb-2">검수의견:</p>
+                    <p class="text-gray-600">위 물품(용역)을 검수한 결과 계약 내용과 일치함을 확인합니다.</p>
+                  </div>
+                  <div class="mt-6 text-right">
+                    <p>검수자:                          (서명)</p>
+                    <p class="mt-2">입회자:                          (서명)</p>
+                  </div>
+                </div>
+
+              <% else %>
+                <!-- 기안문/기타 양식 -->
+                <div class="text-center mb-4">
+                  <h2 class="text-lg font-bold"><%= @template[:title] %></h2>
+                </div>
+                <div class="space-y-3 text-xs">
+                  <div class="border border-gray-400">
+                    <div class="grid grid-cols-6 border-b border-gray-400">
+                      <div class="p-2 bg-gray-100 text-center font-bold border-r border-gray-400 row-span-2">결<br>재</div>
+                      <div class="p-1 text-center border-r border-gray-400">담당</div>
+                      <div class="p-1 text-center border-r border-gray-400">팀장</div>
+                      <div class="p-1 text-center border-r border-gray-400">과장</div>
+                      <div class="p-1 text-center border-r border-gray-400">부장</div>
+                      <div class="p-1 text-center">기관장</div>
+                    </div>
+                    <div class="grid grid-cols-6">
+                      <div class="border-r border-gray-400"></div>
+                      <div class="p-3 border-r border-gray-400"></div>
+                      <div class="p-3 border-r border-gray-400"></div>
+                      <div class="p-3 border-r border-gray-400"></div>
+                      <div class="p-3 border-r border-gray-400"></div>
+                      <div class="p-3"></div>
+                    </div>
+                  </div>
+                  <div class="mt-4 space-y-2">
+                    <div class="flex border-b border-gray-300 pb-1">
+                      <span class="font-bold w-16">수 신:</span>
+                      <span class="flex-1"></span>
+                    </div>
+                    <div class="flex border-b border-gray-300 pb-1">
+                      <span class="font-bold w-16">제 목:</span>
+                      <span class="flex-1"><%= @template[:title] %></span>
+                    </div>
+                  </div>
+                  <div class="mt-6 space-y-3 leading-relaxed">
+                    <p>1. 관련:</p>
+                    <p>2. 위 호와 관련하여 아래와 같이 보고(품의)합니다.</p>
+                  </div>
+                  <div class="mt-4 text-center font-bold">- 아 래 -</div>
+                  <div class="mt-4 border border-gray-400">
+                    <div class="grid grid-cols-4 border-b border-gray-400 bg-gray-100">
+                      <div class="p-2 text-center font-bold border-r border-gray-400">항목</div>
+                      <div class="p-2 text-center font-bold border-r border-gray-400">내용</div>
+                      <div class="p-2 text-center font-bold border-r border-gray-400">금액</div>
+                      <div class="p-2 text-center font-bold">비고</div>
+                    </div>
+                    <div class="grid grid-cols-4">
+                      <div class="p-3 border-r border-gray-400"></div>
+                      <div class="p-3 border-r border-gray-400"></div>
+                      <div class="p-3 border-r border-gray-400"></div>
+                      <div class="p-3"></div>
+                    </div>
+                  </div>
+                  <div class="mt-6 text-center">끝.</div>
+                </div>
+              <% end %>
             </div>
           </div>
         </div>
@@ -44,10 +198,10 @@
       <!-- 정보 패널 (오른쪽 30%) -->
       <div class="lg:w-[30%]">
         <div class="bg-white rounded-xl border border-gray-200 p-6 sticky top-24">
-          <span class="inline-block text-xs font-semibold px-3 py-1 bg-navy-100 text-navy-600 rounded-full mb-4">기안문</span>
+          <span class="inline-block text-xs font-semibold px-3 py-1 bg-navy-100 text-navy-600 rounded-full mb-4"><%= @template[:category] %></span>
 
-          <h1 class="text-2xl font-bold text-gray-900 mb-2">물품 구매 기안문</h1>
-          <p class="text-gray-600 mb-6">표준 물품 구매를 위한 품의 및 기안 양식입니다. 관련 법령에 따른 필수 항목이 포함되어 있습니다.</p>
+          <h1 class="text-2xl font-bold text-gray-900 mb-2"><%= @template[:title] %></h1>
+          <p class="text-gray-600 mb-6"><%= @template[:desc] %></p>
 
           <div class="space-y-3 mb-6 text-sm">
             <div class="flex justify-between">
@@ -56,28 +210,29 @@
             </div>
             <div class="flex justify-between">
               <span class="text-gray-500">다운로드 수</span>
-              <span class="text-gray-900 font-medium">1,234회</span>
+              <span class="text-gray-900 font-medium"><%= number_with_delimiter(@template[:downloads]) %>회</span>
             </div>
             <div class="flex justify-between">
               <span class="text-gray-500">파일 형식</span>
-              <span class="text-gray-900 font-medium">HWP, PDF, DOCX</span>
+              <span class="text-gray-900 font-medium"><%= @template[:formats].join(", ") %></span>
             </div>
           </div>
 
           <!-- 다운로드 버튼들 -->
           <div class="space-y-2 mb-6">
-            <button class="w-full py-3 bg-navy-600 text-white rounded-lg font-medium hover:bg-navy-700 transition-colors flex items-center justify-center gap-2">
-              <span class="material-symbols-outlined text-xl">download</span>
-              HWP 다운로드
-            </button>
-            <button class="w-full py-3 border border-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-2">
-              <span class="material-symbols-outlined text-xl">picture_as_pdf</span>
-              PDF 다운로드
-            </button>
-            <button class="w-full py-3 border border-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-2">
-              <span class="material-symbols-outlined text-xl">description</span>
-              DOCX 다운로드
-            </button>
+            <% @template[:formats].each_with_index do |format, index| %>
+              <% if index == 0 %>
+                <button class="w-full py-3 bg-navy-600 text-white rounded-lg font-medium hover:bg-navy-700 transition-colors flex items-center justify-center gap-2">
+                  <span class="material-symbols-outlined text-xl">download</span>
+                  <%= format %> 다운로드
+                </button>
+              <% else %>
+                <button class="w-full py-3 border border-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-2">
+                  <span class="material-symbols-outlined text-xl"><%= format == 'PDF' ? 'picture_as_pdf' : 'description' %></span>
+                  <%= format %> 다운로드
+                </button>
+              <% end %>
+            <% end %>
           </div>
 
           <!-- 부가 기능 -->
@@ -111,16 +266,17 @@
     <section class="mt-16">
       <h2 class="text-xl font-bold text-gray-900 mb-6">이런 양식은 어떠세요?</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <% 4.times do %>
-          <div class="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
+        <% @related_templates.each do |related| %>
+          <%= link_to template_path(related[:id]), class: "bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow block" do %>
             <div class="aspect-[4/3] bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
               <span class="material-symbols-outlined text-5xl text-gray-300">description</span>
             </div>
             <div class="p-4">
-              <h3 class="font-bold text-gray-900 mb-1">관련 양식</h3>
-              <p class="text-gray-500 text-sm">양식 설명</p>
+              <span class="text-xs text-navy-600 font-medium"><%= related[:category] %></span>
+              <h3 class="font-bold text-gray-900 mb-1"><%= related[:title] %></h3>
+              <p class="text-gray-500 text-sm line-clamp-2"><%= related[:desc] %></p>
             </div>
-          </div>
+          <% end %>
         <% end %>
       </div>
     </section>

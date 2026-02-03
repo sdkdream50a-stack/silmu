@@ -53,14 +53,14 @@
 
         <div class="space-y-4" id="items-list">
           <% [
-            { title: "물품 구매 및 검수 절차 가이드", summary: "물품 구매부터 검수, 대금 지급까지 전체 절차를 단계별로 설명합니다.", category: "계약", date: "2026.02.01", views: 42, tag: "신규" },
-            { title: "수의계약 체결 실무 가이드", summary: "수의계약의 요건, 절차, 주의사항을 상세히 안내합니다.", category: "계약", date: "2026.01.28", views: 38, tag: "신규" },
-            { title: "출장 여비 청구 가이드", summary: "국내/국외 출장 시 여비 청구 방법과 증빙 서류 안내", category: "예산", date: "2026.01.25", views: 27, tag: nil },
-            { title: "연가 사용 및 관리 가이드", summary: "연가일수 계산, 사용 절차, 미사용 연가 처리 방법", category: "복무", date: "2026.01.22", views: 19, tag: nil },
-            { title: "민원 응대 매뉴얼", summary: "민원인 응대 시 주의사항 및 처리 절차 안내", category: "민원", date: "2026.01.20", views: 15, tag: nil },
-            { title: "예산 이월 실무 가이드", summary: "명시이월, 사고이월, 계속비이월의 요건과 절차", category: "예산", date: "2026.01.18", views: 12, tag: nil },
+            { id: 1, title: "물품 구매 및 검수 절차 가이드", summary: "물품 구매부터 검수, 대금 지급까지 전체 절차를 단계별로 설명합니다.", category: "계약", date: "2026.02.01", views: 42, tag: "신규" },
+            { id: 4, title: "수의계약 체결 실무 가이드", summary: "수의계약의 요건, 절차, 주의사항을 상세히 안내합니다.", category: "계약", date: "2026.01.28", views: 38, tag: "신규" },
+            { id: 5, title: "출장 여비 청구 가이드", summary: "국내/국외 출장 시 여비 청구 방법과 증빙 서류 안내", category: "예산", date: "2026.01.25", views: 27, tag: nil },
+            { id: 6, title: "연가 사용 및 관리 가이드", summary: "연가일수 계산, 사용 절차, 미사용 연가 처리 방법", category: "복무", date: "2026.01.22", views: 19, tag: nil },
+            { id: 7, title: "민원 응대 매뉴얼", summary: "민원인 응대 시 주의사항 및 처리 절차 안내", category: "민원", date: "2026.01.20", views: 15, tag: nil },
+            { id: 8, title: "예산 이월 실무 가이드", summary: "명시이월, 사고이월, 계속비이월의 요건과 절차", category: "예산", date: "2026.01.18", views: 12, tag: nil },
           ].each do |guide| %>
-            <%= link_to guide_path(1), class: "block card card-hover p-6 group item-card", data: { category: guide[:category], title: guide[:title] } do %>
+            <%= link_to guide_path(guide[:id]), class: "block card card-hover p-6 group item-card", data: { category: guide[:category], title: guide[:title] } do %>
               <div class="flex items-start justify-between mb-3">
                 <span class="badge badge-forest"><%= guide[:category] %></span>
                 <% if guide[:tag] %>
@@ -104,13 +104,13 @@
         <div class="sticky top-36 space-y-6">
           <!-- 사전 체크리스트 배너 -->
           <%= link_to pre_contract_checklist_path, class: "block card card-interactive overflow-hidden group" do %>
-            <div class="bg-gradient-to-br from-forest-600 to-forest-800 p-5 text-white">
+            <div class="gradient-forest p-5 text-white">
               <div class="flex items-center gap-3 mb-2">
                 <span class="material-symbols-outlined text-2xl">checklist_rtl</span>
                 <span class="font-bold">사전 체크리스트</span>
               </div>
-              <p class="text-forest-100 text-sm">계약 전 필수 확인사항을 단계별로 점검</p>
-              <div class="mt-3 text-xs text-forest-200 flex items-center gap-1 group-hover:text-white transition-colors">
+              <p class="text-white/80 text-sm">계약 전 필수 확인사항을 단계별로 점검</p>
+              <div class="mt-3 text-xs text-white/60 flex items-center gap-1 group-hover:text-white transition-colors">
                 바로가기
                 <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
               </div>
@@ -119,13 +119,13 @@
 
           <!-- 계약 흐름도 배너 -->
           <%= link_to contract_flow_path, class: "block card card-interactive overflow-hidden group" do %>
-            <div class="bg-gradient-to-br from-navy-700 to-navy-900 p-5 text-white">
+            <div class="gradient-navy p-5 text-white">
               <div class="flex items-center gap-3 mb-2">
                 <span class="material-symbols-outlined text-2xl">account_tree</span>
                 <span class="font-bold">계약 흐름도</span>
               </div>
-              <p class="text-navy-200 text-sm">물품/용역/공사 계약 전체 프로세스를 한눈에</p>
-              <div class="mt-3 text-xs text-navy-300 flex items-center gap-1 group-hover:text-white transition-colors">
+              <p class="text-white/80 text-sm">물품/용역/공사 계약 전체 프로세스를 한눈에</p>
+              <div class="mt-3 text-xs text-white/60 flex items-center gap-1 group-hover:text-white transition-colors">
                 자세히 보기
                 <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
               </div>
@@ -134,13 +134,13 @@
 
           <!-- 자료실 배너 -->
           <%= link_to guide_resources_path, class: "block card card-interactive overflow-hidden group" do %>
-            <div class="bg-gradient-to-br from-point-600 to-point-800 p-5 text-white">
+            <div class="gradient-point p-5 text-white">
               <div class="flex items-center gap-3 mb-2">
                 <span class="material-symbols-outlined text-2xl">library_books</span>
                 <span class="font-bold">자료실 / FAQ</span>
               </div>
-              <p class="text-point-100 text-sm">판례해설, 유권해석, 자주 묻는 질문</p>
-              <div class="mt-3 text-xs text-point-200 flex items-center gap-1 group-hover:text-white transition-colors">
+              <p class="text-white/80 text-sm">판례해설, 유권해석, 자주 묻는 질문</p>
+              <div class="mt-3 text-xs text-white/60 flex items-center gap-1 group-hover:text-white transition-colors">
                 자세히 보기
                 <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
               </div>
@@ -154,10 +154,16 @@
               인기 가이드 TOP 5
             </h3>
             <ol class="space-y-3">
-              <% ["물품 구매 및 검수 절차", "수의계약 체결 실무", "출장 여비 청구", "연가 사용 및 관리", "민원 응대 매뉴얼"].each_with_index do |title, i| %>
+              <% [
+                { id: 1, title: "물품 구매 및 검수 절차" },
+                { id: 4, title: "수의계약 체결 실무" },
+                { id: 5, title: "출장 여비 청구" },
+                { id: 6, title: "연가 사용 및 관리" },
+                { id: 7, title: "민원 응대 매뉴얼" }
+              ].each_with_index do |guide, i| %>
                 <li class="flex items-center gap-3 group">
                   <span class="w-7 h-7 flex items-center justify-center bg-<%= i < 3 ? 'forest' : 'surface' %>-100 rounded-full text-xs font-bold text-<%= i < 3 ? 'forest-600' : 'navy-500' %>"><%= i + 1 %></span>
-                  <%= link_to title, guide_path(1), class: "text-sm text-navy-700 group-hover:text-forest-600 transition-colors truncate" %>
+                  <%= link_to guide[:title], guide_path(guide[:id]), class: "text-sm text-navy-700 group-hover:text-forest-600 transition-colors truncate" %>
                 </li>
               <% end %>
             </ol>
@@ -170,9 +176,9 @@
               최근 본 가이드
             </h3>
             <ul class="space-y-3">
-              <% ["수의계약 체결 실무", "출장 여비 청구"].each do |title| %>
+              <% [{ id: 4, title: "수의계약 체결 실무" }, { id: 5, title: "출장 여비 청구" }].each do |guide| %>
                 <li>
-                  <%= link_to title, guide_path(1), class: "text-sm text-navy-700 hover:text-forest-600 transition-colors" %>
+                  <%= link_to guide[:title], guide_path(guide[:id]), class: "text-sm text-navy-700 hover:text-forest-600 transition-colors" %>
                 </li>
               <% end %>
             </ul>

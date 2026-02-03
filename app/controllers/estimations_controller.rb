@@ -29,6 +29,13 @@ class EstimationsController < ApplicationController
         items: items,
         grade: params[:grade] || "standard"
       )
+    when "design_fee"
+      EstimateCalculatorService.estimate_design_fee(
+        construction_cost: params[:construction_cost],
+        design_type: params[:design_type],
+        include_supervision: params[:include_supervision] == "true" || params[:include_supervision] == true,
+        supervision_type: params[:supervision_type] || "periodic"
+      )
     else
       { success: false, error: "유효하지 않은 추정 유형입니다." }
     end

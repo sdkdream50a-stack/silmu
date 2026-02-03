@@ -1,0 +1,856 @@
+<%# 계약방식 결정 도구 - 금액/유형별 적정 계약방식 안내 %>
+
+<style>
+  .method-tool {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  /* 입력 카드 */
+  .input-card {
+    background: white;
+    border-radius: 20px;
+    padding: 32px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    border: 1px solid #e2e8f0;
+    margin-bottom: 24px;
+  }
+  .input-card h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--navy-900);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .input-card .subtitle {
+    color: #64748b;
+    font-size: 14px;
+    margin-bottom: 28px;
+  }
+
+  /* 계약 유형 선택 */
+  .type-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .type-option {
+    padding: 12px 14px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s ease;
+    background: white;
+  }
+  .type-option:hover {
+    border-color: #4ade80;
+    background: #f0fdf4;
+  }
+  .type-option.selected {
+    border-color: #16a34a;
+    background: #f0fdf4;
+    box-shadow: 0 0 0 3px rgba(47, 129, 50, 0.15);
+  }
+  .type-option .material-symbols-outlined {
+    font-size: 24px;
+    color: #64748b;
+    margin-bottom: 4px;
+    display: block;
+  }
+  .type-option.selected .material-symbols-outlined {
+    color: #16a34a;
+  }
+  .type-option .name {
+    font-weight: 600;
+    color: #1e293b;
+    font-size: 13px;
+  }
+
+  /* 금액 입력 */
+  .amount-section {
+    margin-bottom: 24px;
+  }
+  .amount-section label {
+    display: block;
+    font-weight: 600;
+    color: var(--navy-800);
+    margin-bottom: 10px;
+    font-size: 15px;
+  }
+  .amount-input-wrap {
+    position: relative;
+  }
+  .amount-input-wrap input {
+    width: 100%;
+    padding: 18px 80px 18px 24px;
+    border: 2px solid #e2e8f0;
+    border-radius: 14px;
+    font-size: 24px;
+    font-weight: 700;
+    color: #1e293b;
+    background: #fff;
+    transition: all 0.2s;
+    text-align: right;
+  }
+  .amount-input-wrap input::placeholder {
+    color: #94a3b8;
+  }
+  .amount-input-wrap input:focus {
+    outline: none;
+    border-color: var(--forest-500);
+    box-shadow: 0 0 0 3px rgba(47, 129, 50, 0.15);
+  }
+  .amount-input-wrap .unit {
+    position: absolute;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: #64748b;
+    font-weight: 500;
+  }
+  .amount-hint {
+    margin-top: 10px;
+    font-size: 13px;
+    color: #64748b;
+  }
+  .quick-amounts {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    align-items: center;
+  }
+  .quick-amount {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 14px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    font-size: 13px;
+    color: #334155;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .quick-amount:hover {
+    background: var(--forest-50);
+    border-color: var(--forest-300);
+    color: var(--forest-700);
+  }
+  .quick-amount.reset-btn {
+    background: #fef3c7;
+    border-color: #fcd34d;
+    color: #b45309;
+    margin-left: 150px;
+  }
+  .quick-amount.reset-btn:hover {
+    background: #fde68a;
+    border-color: #f59e0b;
+    color: #92400e;
+  }
+
+  /* 특례기업 선택 */
+  .special-section {
+    padding: 20px;
+    background: var(--surface-50);
+    border-radius: 14px;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 24px;
+  }
+  .special-section summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--navy-800);
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .special-section summary .material-symbols-outlined {
+    font-size: 20px;
+    color: var(--warm-600);
+  }
+  .special-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .special-option {
+    padding: 10px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: white;
+  }
+  .special-option:hover {
+    border-color: var(--warm-400);
+  }
+  .special-option.selected {
+    border-color: var(--warm-500);
+    background: var(--warm-50);
+    color: var(--warm-700);
+    font-weight: 600;
+  }
+
+  /* 결정 버튼 */
+  .determine-btn {
+    width: 100%;
+    padding: 18px;
+    background: linear-gradient(135deg, #16a34a, #22c55e);
+    color: #ffffff !important;
+    border: none;
+    border-radius: 14px;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.2s;
+  }
+  .determine-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(47, 129, 50, 0.3);
+  }
+  .determine-btn:disabled {
+    background: #cbd5e1;
+    color: #64748b !important;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* 결과 카드 */
+  .result-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+    border: 1px solid #e2e8f0;
+    display: none;
+  }
+  .result-card.show {
+    display: block;
+    animation: slideUp 0.4s ease;
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .result-header {
+    padding: 32px;
+    text-align: center;
+  }
+  .result-header.입찰 {
+    background: linear-gradient(135deg, var(--point-600), var(--point-500));
+    color: white;
+  }
+  .result-header.수의계약 {
+    background: linear-gradient(135deg, var(--forest-600), var(--forest-500));
+    color: white;
+  }
+  .result-header.소액수의계약 {
+    background: linear-gradient(135deg, var(--navy-700), var(--navy-600));
+    color: white;
+  }
+  .result-method {
+    font-size: 14px;
+    opacity: 0.9;
+    margin-bottom: 8px;
+  }
+  .result-method-main {
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 4px;
+  }
+  .result-method-detail {
+    font-size: 16px;
+    opacity: 0.9;
+  }
+
+  .result-body {
+    padding: 28px;
+  }
+
+  /* 정보 박스 */
+  .info-box {
+    padding: 20px;
+    background: var(--surface-50);
+    border-radius: 14px;
+    margin-bottom: 20px;
+  }
+  .info-box h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--navy-800);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .info-box h4 .material-symbols-outlined {
+    font-size: 20px;
+    color: var(--navy-500);
+  }
+  .info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 14px;
+  }
+  .info-row:last-child {
+    border-bottom: none;
+  }
+  .info-row .label {
+    color: #64748b;
+  }
+  .info-row .value {
+    font-weight: 600;
+    color: var(--navy-900);
+  }
+
+  /* 법령 근거 */
+  .basis-box {
+    padding: 16px 20px;
+    background: var(--point-50);
+    border-left: 4px solid var(--point-500);
+    border-radius: 0 12px 12px 0;
+    margin-bottom: 20px;
+  }
+  .basis-box .title {
+    font-size: 12px;
+    color: var(--point-700);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .basis-box .content {
+    font-size: 14px;
+    color: var(--navy-800);
+  }
+
+  /* 경고/안내 박스 */
+  .alert-box {
+    padding: 16px 20px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .alert-box.warning {
+    background: var(--warm-50);
+    border: 1px solid var(--warm-200);
+  }
+  .alert-box.warning .material-symbols-outlined {
+    color: var(--warm-600);
+  }
+  .alert-box.info {
+    background: var(--point-50);
+    border: 1px solid var(--point-200);
+  }
+  .alert-box.info .material-symbols-outlined {
+    color: var(--point-600);
+  }
+  .alert-box .content h5 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--navy-900);
+    margin-bottom: 4px;
+  }
+  .alert-box .content p {
+    font-size: 13px;
+    color: var(--navy-700);
+    margin: 0;
+  }
+  .alert-box .content a {
+    color: var(--point-600);
+    text-decoration: underline;
+    font-size: 12px;
+  }
+
+  /* 필요 서류 */
+  .documents-section {
+    margin-top: 24px;
+  }
+  .documents-section h4 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--navy-800);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .doc-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .doc-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 14px;
+    color: var(--navy-800);
+  }
+  .doc-item .material-symbols-outlined {
+    font-size: 20px;
+    color: var(--forest-500);
+  }
+
+  /* 팁 섹션 */
+  .tips-section {
+    margin-top: 24px;
+    padding: 20px;
+    background: linear-gradient(135deg, var(--navy-50), white);
+    border-radius: 14px;
+    border: 1px solid var(--navy-100);
+  }
+  .tips-section h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--navy-800);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tips-section h4 .material-symbols-outlined {
+    color: var(--warm-500);
+  }
+  .tip-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+    font-size: 13px;
+    color: var(--navy-700);
+    line-height: 1.5;
+  }
+  .tip-item::before {
+    content: "💡";
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  /* 관련 링크 */
+  .links-section {
+    margin-top: 24px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .link-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    color: var(--navy-700);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+  .link-btn:hover {
+    border-color: var(--navy-400);
+    background: var(--surface-50);
+  }
+  .link-btn .material-symbols-outlined {
+    font-size: 20px;
+  }
+
+  /* 다시하기 버튼 */
+  .reset-btn {
+    width: 100%;
+    margin-top: 20px;
+    padding: 16px;
+    background: var(--surface-100);
+    color: var(--navy-700);
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s;
+  }
+  .reset-btn:hover {
+    background: var(--surface-200);
+  }
+
+  /* 반응형 */
+  @media (max-width: 768px) {
+    .type-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .doc-list {
+      grid-template-columns: 1fr;
+    }
+    .links-section {
+      flex-direction: column;
+    }
+    .link-btn {
+      justify-content: center;
+    }
+  }
+
+  /* 인쇄 */
+  @media print {
+    .input-card, .reset-btn {
+      display: none !important;
+    }
+    .result-card {
+      box-shadow: none;
+      border: 1px solid #333;
+    }
+  }
+</style>
+
+<!-- 페이지 헤더 -->
+<section class="gradient-forest text-white py-12 lg:py-16">
+  <div class="container-wide">
+    <div class="flex items-start gap-5">
+      <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 shadow-lg">
+        <span class="material-symbols-outlined text-4xl text-white">gavel</span>
+      </div>
+      <div>
+        <h1 class="text-3xl lg:text-4xl font-bold tracking-tight mb-2">계약방식 결정 도우미</h1>
+        <p class="text-forest-100 text-lg">추정가격과 계약유형으로 적정 계약방식을 확인하세요</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section py-10">
+  <div class="container-wide method-tool">
+    <!-- 입력 폼 -->
+    <div class="input-card" id="input-section">
+      <h2>
+        <span class="material-symbols-outlined">edit_note</span>
+        계약 정보 입력
+      </h2>
+      <p class="subtitle">계약 유형과 추정가격을 입력하면 적정 계약방식과 필요 서류를 안내해드립니다</p>
+
+      <!-- 계약 유형 선택 -->
+      <div class="type-grid">
+        <% [
+          { key: "goods", name: "물품", icon: "inventory_2" },
+          { key: "service", name: "용역", icon: "support_agent" },
+          { key: "construction_general", name: "종합공사", icon: "domain" },
+          { key: "construction_special", name: "전문공사", icon: "engineering" },
+          { key: "construction_etc", name: "전기/소방/정보통신", icon: "electrical_services" }
+        ].each do |type| %>
+          <div class="type-option" data-type="<%= type[:key] %>" onclick="selectType('<%= type[:key] %>')">
+            <span class="material-symbols-outlined"><%= type[:icon] %></span>
+            <span class="name"><%= type[:name] %></span>
+          </div>
+        <% end %>
+      </div>
+
+      <!-- 추정가격 입력 -->
+      <div class="amount-section">
+        <label>추정가격 (부가세 제외)</label>
+        <div class="amount-input-wrap">
+          <input type="text" id="estimated-price" placeholder="0" oninput="formatPrice(this)">
+          <span class="unit">원</span>
+        </div>
+        <p class="amount-hint">설계금액 또는 예정가격 작성 전 대략적인 예상 금액을 입력하세요</p>
+        <div class="quick-amounts">
+          <span class="quick-amount" onclick="setQuickAmount(10000000)">1천만원</span>
+          <span class="quick-amount" onclick="setQuickAmount(30000000)">3천만원</span>
+          <span class="quick-amount" onclick="setQuickAmount(50000000)">5천만원</span>
+          <span class="quick-amount" onclick="setQuickAmount(100000000)">1억원</span>
+          <span class="quick-amount" onclick="setQuickAmount(200000000)">2억원</span>
+          <span class="quick-amount" onclick="setQuickAmount(500000000)">5억원</span>
+          <span class="quick-amount reset-btn" onclick="resetAmount()">초기화</span>
+        </div>
+      </div>
+
+      <!-- 특례기업 선택 -->
+      <details class="special-section">
+        <summary>
+          <span class="material-symbols-outlined">star</span>
+          특례기업 여부 (여성기업, 사회적기업 등)
+        </summary>
+        <div class="special-options">
+          <span class="special-option" data-special="none" onclick="selectSpecial('none')">해당없음</span>
+          <span class="special-option" data-special="women" onclick="selectSpecial('women')">여성기업</span>
+          <span class="special-option" data-special="disabled" onclick="selectSpecial('disabled')">장애인기업</span>
+          <span class="special-option" data-special="social" onclick="selectSpecial('social')">사회적기업</span>
+          <span class="special-option" data-special="cooperative" onclick="selectSpecial('cooperative')">협동조합</span>
+          <span class="special-option" data-special="village" onclick="selectSpecial('village')">마을기업</span>
+          <span class="special-option" data-special="self_support" onclick="selectSpecial('self_support')">자활기업</span>
+        </div>
+      </details>
+
+      <button class="determine-btn" onclick="determineMethod()" id="determine-btn" disabled>
+        <span class="material-symbols-outlined">search</span>
+        계약방식 확인하기
+      </button>
+    </div>
+
+    <!-- 결과 카드 -->
+    <div class="result-card" id="result-section">
+      <div class="result-header" id="result-header">
+        <div class="result-method">추천 계약방식</div>
+        <div class="result-method-main" id="result-method"></div>
+        <div class="result-method-detail" id="result-detail"></div>
+      </div>
+
+      <div class="result-body">
+        <!-- 기본 정보 -->
+        <div class="info-box">
+          <h4>
+            <span class="material-symbols-outlined">info</span>
+            입력 정보
+          </h4>
+          <div class="info-row">
+            <span class="label">계약 유형</span>
+            <span class="value" id="info-type"></span>
+          </div>
+          <div class="info-row">
+            <span class="label">추정가격</span>
+            <span class="value" id="info-price"></span>
+          </div>
+          <div class="info-row" id="info-special-row" style="display: none;">
+            <span class="label">특례 적용</span>
+            <span class="value" id="info-special"></span>
+          </div>
+        </div>
+
+        <!-- 법령 근거 -->
+        <div class="basis-box">
+          <div class="title">법령 근거</div>
+          <div class="content" id="basis-content"></div>
+        </div>
+
+        <!-- 경고/안내 -->
+        <div id="warnings-container"></div>
+
+        <!-- 필요 서류 -->
+        <div class="documents-section">
+          <h4>
+            <span class="material-symbols-outlined">description</span>
+            필요 서류
+          </h4>
+          <div class="doc-list" id="doc-list"></div>
+        </div>
+
+        <!-- 팁 -->
+        <div class="tips-section">
+          <h4>
+            <span class="material-symbols-outlined">tips_and_updates</span>
+            실무 팁
+          </h4>
+          <div id="tips-container"></div>
+        </div>
+
+        <!-- 관련 링크 -->
+        <div class="links-section">
+          <a href="https://www.g2b.go.kr" target="_blank" class="link-btn">
+            <span class="material-symbols-outlined">open_in_new</span>
+            나라장터
+          </a>
+          <a href="https://www.s2b.kr" target="_blank" class="link-btn">
+            <span class="material-symbols-outlined">open_in_new</span>
+            학교장터
+          </a>
+          <a href="https://www.smpp.go.kr" target="_blank" class="link-btn">
+            <span class="material-symbols-outlined">open_in_new</span>
+            중소기업제품 공공구매
+          </a>
+          <%= link_to contract_documents_path, class: "link-btn" do %>
+            <span class="material-symbols-outlined">checklist</span>
+            서류 체크리스트
+          <% end %>
+        </div>
+
+        <button class="reset-btn" onclick="resetForm()">
+          <span class="material-symbols-outlined">refresh</span>
+          다시 확인하기
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  let selectedType = null;
+  let selectedSpecial = null;
+  let estimatedPrice = 0;
+
+  function selectType(type) {
+    selectedType = type;
+    document.querySelectorAll('.type-option').forEach(el => {
+      el.classList.toggle('selected', el.dataset.type === type);
+    });
+    checkFormValid();
+  }
+
+  function selectSpecial(special) {
+    selectedSpecial = special === 'none' ? null : special;
+    document.querySelectorAll('.special-option').forEach(el => {
+      el.classList.toggle('selected', el.dataset.special === special);
+    });
+  }
+
+  function formatPrice(input) {
+    let value = input.value.replace(/[^0-9]/g, '');
+    if (value) {
+      estimatedPrice = parseInt(value);
+      input.value = estimatedPrice.toLocaleString('ko-KR');
+    } else {
+      estimatedPrice = 0;
+    }
+    checkFormValid();
+  }
+
+  function setQuickAmount(amount) {
+    estimatedPrice = amount;
+    document.getElementById('estimated-price').value = amount.toLocaleString('ko-KR');
+    checkFormValid();
+  }
+
+  function resetAmount() {
+    estimatedPrice = 0;
+    document.getElementById('estimated-price').value = '';
+    checkFormValid();
+  }
+
+  function checkFormValid() {
+    const btn = document.getElementById('determine-btn');
+    btn.disabled = !(selectedType && estimatedPrice > 0);
+  }
+
+  async function determineMethod() {
+    if (!selectedType || estimatedPrice <= 0) return;
+
+    try {
+      const response = await fetch('/contract-methods/determine', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': document.querySelector('[name="csrf-token"]')?.content || ''
+        },
+        body: JSON.stringify({
+          contract_type: selectedType,
+          estimated_price: estimatedPrice,
+          special_enterprise: selectedSpecial
+        })
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        renderResult(result);
+      } else {
+        alert(result.error || '오류가 발생했습니다.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('서버 오류가 발생했습니다.');
+    }
+  }
+
+  function renderResult(result) {
+    // 헤더 색상 설정
+    const header = document.getElementById('result-header');
+    header.className = 'result-header ' + result.result.method;
+
+    // 계약방식 표시
+    document.getElementById('result-method').textContent = result.result.method;
+    document.getElementById('result-detail').textContent = result.result.method_detail;
+
+    // 기본 정보
+    document.getElementById('info-type').textContent = result.contract_type.name;
+    document.getElementById('info-price').textContent = result.formatted_price + '원';
+
+    // 특례 적용
+    const specialRow = document.getElementById('info-special-row');
+    if (result.result.special_applied && result.special_enterprise) {
+      specialRow.style.display = 'flex';
+      document.getElementById('info-special').textContent = result.special_enterprise.name + ' 특례';
+    } else {
+      specialRow.style.display = 'none';
+    }
+
+    // 법령 근거
+    document.getElementById('basis-content').textContent = result.result.basis;
+
+    // 경고/안내
+    const warningsHtml = result.warnings.map(w => `
+      <div class="alert-box ${w.level}">
+        <span class="material-symbols-outlined">${w.level === 'warning' ? 'warning' : 'info'}</span>
+        <div class="content">
+          <h5>${w.title}</h5>
+          <p>${w.message}</p>
+          ${w.link ? `<a href="${w.link}" target="_blank">자세히 보기 →</a>` : ''}
+        </div>
+      </div>
+    `).join('');
+
+    // 특별 조건 추가
+    if (result.result.special_condition) {
+      document.getElementById('warnings-container').innerHTML = `
+        <div class="alert-box info">
+          <span class="material-symbols-outlined">lightbulb</span>
+          <div class="content">
+            <h5>참고사항</h5>
+            <p>${result.result.special_condition}</p>
+          </div>
+        </div>
+      ` + warningsHtml;
+    } else {
+      document.getElementById('warnings-container').innerHTML = warningsHtml;
+    }
+
+    // 필요 서류
+    const docsHtml = result.result.documents.map(doc => `
+      <div class="doc-item">
+        <span class="material-symbols-outlined">description</span>
+        ${doc}
+      </div>
+    `).join('');
+    document.getElementById('doc-list').innerHTML = docsHtml;
+
+    // 팁
+    const tipsHtml = result.tips.map(tip => `
+      <div class="tip-item">${tip}</div>
+    `).join('');
+    document.getElementById('tips-container').innerHTML = tipsHtml;
+
+    // 결과 표시
+    document.getElementById('result-section').classList.add('show');
+    document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function resetForm() {
+    document.getElementById('result-section').classList.remove('show');
+    document.getElementById('input-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // 초기화
+  selectSpecial('none');
+</script>
