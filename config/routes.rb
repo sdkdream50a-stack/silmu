@@ -20,6 +20,13 @@ Rails.application.routes.draw do
   get "tools", to: "tools#index", as: :tools
   get "tools/travel-calculator", to: "tools#travel_calculator", as: :travel_calculator
 
+  # PDF 도구
+  get "tools/pdf", to: "pdf_tools#index", as: :pdf_tools
+  post "pdf_tools/split", to: "pdf_tools#split"
+  post "pdf_tools/merge", to: "pdf_tools#merge"
+  post "pdf_tools/add_page_numbers", to: "pdf_tools#add_page_numbers"
+  post "pdf_tools/info", to: "pdf_tools#info"
+
   # 커뮤니티
   get "community", to: "community#index", as: :community
 

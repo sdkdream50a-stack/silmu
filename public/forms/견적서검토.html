@@ -793,12 +793,68 @@
       background: var(--forest-500);
     }
     .btn-pdf {
-      background: white;
-      color: var(--navy-900);
-      border: 2px solid var(--navy-900);
+      background: #dc2626;
+      color: white;
+      border: none;
     }
     .btn-pdf:hover {
-      background: var(--navy-100);
+      background: #b91c1c;
+    }
+    .btn-print {
+      background: white;
+      color: var(--navy-900);
+      border: 2px solid #e2e8f0;
+    }
+    .btn-print:hover {
+      background: var(--surface-100);
+    }
+
+    /* 다음 단계 섹션 */
+    .next-step-section {
+      margin-top: 24px;
+      padding: 24px;
+      background: linear-gradient(135deg, var(--navy-100), white);
+      border-radius: 12px;
+      border: 2px solid var(--navy-900);
+    }
+    .next-step-section h4 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--navy-900);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .next-step-section p {
+      font-size: 14px;
+      color: var(--navy-700);
+      margin-bottom: 16px;
+    }
+    .btn-next-step {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 24px;
+      background: var(--navy-900);
+      color: white;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 15px;
+      transition: all 0.2s;
+    }
+    .btn-next-step:hover {
+      background: var(--navy-700);
+      transform: translateY(-2px);
+    }
+    .badge-coming {
+      padding: 4px 8px;
+      background: var(--warm-500);
+      color: white;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
     }
 
     /* 토스트 */
@@ -1219,6 +1275,20 @@
           </ul>
         </div>
 
+        <!-- 다음 단계 안내 -->
+        <div class="next-step-section" id="next-step-section">
+          <h4>
+            <span class="material-symbols-outlined">arrow_forward</span>
+            다음 단계
+          </h4>
+          <p>견적서 검토가 완료되었습니다. 계약 진행을 위해 과업지시서를 작성하세요.</p>
+          <a href="/forms/과업지시서.html" class="btn-next-step">
+            <span class="material-symbols-outlined">description</span>
+            과업지시서 작성하기
+            <span class="material-symbols-outlined" style="margin-left: auto;">arrow_forward</span>
+          </a>
+        </div>
+
         <!-- 바이럴 섹션 -->
         <div class="viral-section">
           <div class="viral-counter">
@@ -1227,11 +1297,15 @@
           <div class="viral-buttons">
             <button class="btn-viral btn-share" onclick="shareResult()">
               <span class="material-symbols-outlined">share</span>
-              결과 공유하기
+              공유하기
             </button>
-            <button class="btn-viral btn-pdf" onclick="window.print()">
+            <button class="btn-viral btn-pdf" onclick="downloadPDF()">
+              <span class="material-symbols-outlined">picture_as_pdf</span>
+              PDF 저장
+            </button>
+            <button class="btn-viral btn-print" onclick="window.print()">
               <span class="material-symbols-outlined">print</span>
-              인쇄하기
+              인쇄
             </button>
           </div>
         </div>
@@ -1242,6 +1316,8 @@
   <div id="toast" class="toast"></div>
 
   <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script>
     // 상태 관리
     let currentStep = 1;
@@ -1755,6 +1831,68 @@
       } else {
         navigator.clipboard.writeText(text).then(() => showToast('결과가 클립보드에 복사되었습니다!'));
       }
+    }
+
+    async function downloadPDF() {
+      showToast('PDF 생성 중...');
+
+      const reportSection = document.getElementById('report-section');
+      const viralSection = document.querySelector('.viral-section');
+      const nextStepSection = document.getElementById('next-step-section');
+
+      // 임시로 바이럴/다음단계 섹션 숨기기
+      viralSection.style.display = 'none';
+      nextStepSection.style.display = 'none';
+
+      try {
+        const canvas = await html2canvas(reportSection, {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: '#ffffff'
+        });
+
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const imgWidth = 210;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+        // 페이지 나누기
+        let heightLeft = imgHeight;
+        let position = 0;
+        const pageHeight = 297;
+
+        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+
+        while (heightLeft > 0) {
+          position = heightLeft - imgHeight;
+          pdf.addPage();
+          pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
+          heightLeft -= pageHeight;
+        }
+
+        // 워터마크 추가
+        const pageCount = pdf.internal.getNumberOfPages();
+        for (let i = 1; i <= pageCount; i++) {
+          pdf.setPage(i);
+          pdf.setFontSize(10);
+          pdf.setTextColor(150);
+          pdf.text('silmu.kr에서 검토됨', 105, 290, { align: 'center' });
+        }
+
+        const companyName = document.getElementById('company_name').value || '견적서';
+        const date = new Date().toISOString().split('T')[0];
+        pdf.save(`견적서검토_${companyName}_${date}.pdf`);
+
+        showToast('PDF가 다운로드되었습니다!');
+      } catch (error) {
+        console.error('PDF 생성 오류:', error);
+        showToast('PDF 생성에 실패했습니다. 인쇄 기능을 이용해주세요.');
+      }
+
+      // 섹션 다시 표시
+      viralSection.style.display = '';
+      nextStepSection.style.display = '';
     }
 
     function showToast(message) {
