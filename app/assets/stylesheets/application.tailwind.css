@@ -1,25 +1,499 @@
 @import "tailwindcss";
 
-@theme {
-  --color-navy-50: #e8ecf2;
-  --color-navy-100: #c5cdd9;
-  --color-navy-200: #9eabbd;
-  --color-navy-300: #7789a1;
-  --color-navy-400: #59708b;
-  --color-navy-500: #3c5775;
-  --color-navy-600: #1e3a5f;
-  --color-navy-700: #182f4c;
-  --color-navy-800: #122339;
-  --color-navy-900: #0c1826;
+/* ============================================
+   SILMU Design System v2.0
+   Modern, Clean, Premium
+   ============================================ */
 
-  --color-forest-50: #e6f4e6;
-  --color-forest-100: #c1e3c1;
-  --color-forest-200: #97d097;
-  --color-forest-300: #6dbd6d;
-  --color-forest-400: #4eae4e;
-  --color-forest-500: #2e7d32;
-  --color-forest-600: #286e2c;
-  --color-forest-700: #205e24;
-  --color-forest-800: #184e1c;
-  --color-forest-900: #0e3410;
+/* ===========================================
+   1. THEME CONFIGURATION
+   =========================================== */
+@theme {
+  /* Primary - Navy (신뢰, 전문성) */
+  --color-navy-50: #f0f4f8;
+  --color-navy-100: #d9e2ec;
+  --color-navy-200: #bcccdc;
+  --color-navy-300: #9fb3c8;
+  --color-navy-400: #829ab1;
+  --color-navy-500: #627d98;
+  --color-navy-600: #486581;
+  --color-navy-700: #334e68;
+  --color-navy-800: #243b53;
+  --color-navy-900: #102a43;
+  --color-navy-950: #0a1929;
+
+  /* Accent - Forest Green (성장, 안정) */
+  --color-forest-50: #e3f9e5;
+  --color-forest-100: #c1eac5;
+  --color-forest-200: #a3d9a5;
+  --color-forest-300: #7bc47f;
+  --color-forest-400: #57ae5b;
+  --color-forest-500: #3f9142;
+  --color-forest-600: #2f8132;
+  --color-forest-700: #207227;
+  --color-forest-800: #0e5814;
+  --color-forest-900: #05400a;
+
+  /* Point - Indigo (혁신, 창의) */
+  --color-point-50: #eef2ff;
+  --color-point-100: #e0e7ff;
+  --color-point-200: #c7d2fe;
+  --color-point-300: #a5b4fc;
+  --color-point-400: #818cf8;
+  --color-point-500: #6366f1;
+  --color-point-600: #4f46e5;
+  --color-point-700: #4338ca;
+  --color-point-800: #3730a3;
+  --color-point-900: #312e81;
+
+  /* Warm - Amber (활력, 주의) */
+  --color-warm-50: #fffbeb;
+  --color-warm-100: #fef3c7;
+  --color-warm-200: #fde68a;
+  --color-warm-300: #fcd34d;
+  --color-warm-400: #fbbf24;
+  --color-warm-500: #f59e0b;
+  --color-warm-600: #d97706;
+  --color-warm-700: #b45309;
+  --color-warm-800: #92400e;
+  --color-warm-900: #78350f;
+
+  /* Surface Colors */
+  --color-surface-50: #fafbfc;
+  --color-surface-100: #f4f6f8;
+  --color-surface-200: #ebeef2;
+
+  /* Shadows */
+  --shadow-soft: 0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04);
+  --shadow-medium: 0 4px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+  --shadow-strong: 0 10px 40px -10px rgba(0, 0, 0, 0.15), 0 20px 50px -10px rgba(0, 0, 0, 0.1);
+  --shadow-glow-navy: 0 0 40px rgba(16, 42, 67, 0.15);
+  --shadow-glow-forest: 0 0 40px rgba(47, 129, 50, 0.15);
+  --shadow-glow-point: 0 0 40px rgba(99, 102, 241, 0.2);
+
+  /* Border Radius */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+  --radius-2xl: 1.5rem;
+  --radius-3xl: 2rem;
+
+  /* Timing */
+  --transition-fast: 150ms;
+  --transition-normal: 250ms;
+  --transition-slow: 400ms;
+}
+
+/* ===========================================
+   2. TYPOGRAPHY SYSTEM
+   =========================================== */
+@layer base {
+  /* Pretendard 폰트 적용 */
+  @font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
+  }
+
+  html {
+    font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont,
+                 system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo',
+                 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji',
+                 'Segoe UI Symbol', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: 'kern' 1;
+  }
+
+  body {
+    @apply bg-surface-50 text-navy-900;
+    font-size: 16px;
+    line-height: 1.7;
+    letter-spacing: -0.01em;
+  }
+
+  /* Headings */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold tracking-tight;
+    line-height: 1.3;
+  }
+
+  h1 { @apply text-4xl md:text-5xl lg:text-6xl; letter-spacing: -0.025em; }
+  h2 { @apply text-3xl md:text-4xl; letter-spacing: -0.02em; }
+  h3 { @apply text-2xl md:text-3xl; }
+  h4 { @apply text-xl md:text-2xl; }
+  h5 { @apply text-lg md:text-xl; }
+  h6 { @apply text-base md:text-lg; }
+
+  /* Paragraphs */
+  p {
+    @apply text-navy-700;
+    line-height: 1.8;
+  }
+
+  /* Links */
+  a {
+    @apply transition-colors duration-200;
+  }
+
+  /* Selection */
+  ::selection {
+    @apply bg-point-200 text-point-900;
+  }
+
+  /* Focus */
+  :focus-visible {
+    @apply outline-none ring-2 ring-point-500 ring-offset-2;
+  }
+}
+
+/* ===========================================
+   3. COMPONENT STYLES
+   =========================================== */
+@layer components {
+  /* === Buttons === */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2
+           font-semibold rounded-xl
+           transition-all duration-200 ease-out
+           focus:outline-none focus:ring-2 focus:ring-offset-2
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-sm { @apply px-4 py-2 text-sm; }
+  .btn-md { @apply px-6 py-3 text-base; }
+  .btn-lg { @apply px-8 py-4 text-lg; }
+
+  .btn-primary {
+    @apply bg-navy-800 text-white
+           hover:bg-navy-900 hover:shadow-lg hover:-translate-y-0.5
+           active:translate-y-0 active:shadow-md
+           focus:ring-navy-500;
+  }
+
+  .btn-accent {
+    @apply bg-forest-600 text-white
+           hover:bg-forest-700 hover:shadow-lg hover:-translate-y-0.5
+           active:translate-y-0 active:shadow-md
+           focus:ring-forest-500;
+  }
+
+  .btn-point {
+    @apply bg-point-600 text-white
+           hover:bg-point-700 hover:shadow-lg hover:-translate-y-0.5
+           active:translate-y-0 active:shadow-md
+           focus:ring-point-500;
+  }
+
+  .btn-ghost {
+    @apply bg-transparent text-navy-700 border-2 border-navy-200
+           hover:bg-navy-50 hover:border-navy-300
+           focus:ring-navy-500;
+  }
+
+  .btn-glass {
+    @apply bg-white/10 backdrop-blur-md text-white border border-white/20
+           hover:bg-white/20 hover:border-white/30
+           focus:ring-white/50;
+  }
+
+  /* === Cards === */
+  .card {
+    @apply bg-white rounded-2xl border border-gray-100/80
+           shadow-soft hover:shadow-medium
+           transition-all duration-300 ease-out;
+  }
+
+  .card-hover {
+    @apply hover:-translate-y-1 hover:border-gray-200;
+  }
+
+  .card-interactive {
+    @apply cursor-pointer hover:-translate-y-2 hover:shadow-strong
+           active:translate-y-0 active:shadow-soft;
+  }
+
+  .card-glass {
+    @apply bg-white/70 backdrop-blur-xl border border-white/50
+           shadow-soft;
+  }
+
+  /* === Inputs === */
+  .input {
+    @apply w-full px-4 py-3
+           bg-white border-2 border-gray-200 rounded-xl
+           text-navy-900 placeholder-gray-400
+           transition-all duration-200
+           hover:border-gray-300
+           focus:border-point-500 focus:ring-4 focus:ring-point-100
+           focus:outline-none;
+  }
+
+  .input-lg {
+    @apply px-6 py-4 text-lg rounded-2xl;
+  }
+
+  /* === Badge === */
+  .badge {
+    @apply inline-flex items-center px-3 py-1
+           text-xs font-semibold rounded-full
+           transition-colors duration-200;
+  }
+
+  .badge-navy { @apply bg-navy-100 text-navy-700; }
+  .badge-forest { @apply bg-forest-100 text-forest-700; }
+  .badge-point { @apply bg-point-100 text-point-700; }
+  .badge-warm { @apply bg-warm-100 text-warm-700; }
+
+  /* === Navigation === */
+  .nav-link {
+    @apply relative text-navy-600 font-medium
+           hover:text-navy-900
+           transition-colors duration-200;
+  }
+
+  .nav-link::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-0 h-0.5
+           bg-point-500 rounded-full
+           transition-all duration-300;
+  }
+
+  .nav-link:hover::after {
+    @apply w-full;
+  }
+
+  .nav-link-active {
+    @apply text-navy-900;
+  }
+
+  .nav-link-active::after {
+    @apply w-full;
+  }
+
+  /* === Section === */
+  .section {
+    @apply py-20 md:py-28;
+  }
+
+  .section-lg {
+    @apply py-28 md:py-36;
+  }
+
+  .container-tight {
+    @apply max-w-5xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .container-wide {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* === Dividers === */
+  .divider {
+    @apply border-t border-gray-200;
+  }
+
+  .divider-gradient {
+    @apply h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent;
+  }
+
+  /* === Glass Effect === */
+  .glass {
+    @apply bg-white/70 backdrop-blur-xl border border-white/50;
+  }
+
+  .glass-dark {
+    @apply bg-navy-900/70 backdrop-blur-xl border border-white/10;
+  }
+}
+
+/* ===========================================
+   4. UTILITIES
+   =========================================== */
+@layer utilities {
+  /* Gradients */
+  .gradient-navy {
+    @apply bg-gradient-to-br from-navy-700 via-navy-800 to-navy-900;
+  }
+
+  .gradient-premium {
+    @apply bg-gradient-to-br from-navy-800 via-navy-900 to-navy-950;
+  }
+
+  .gradient-forest {
+    @apply bg-gradient-to-br from-forest-500 via-forest-600 to-forest-700;
+  }
+
+  .gradient-point {
+    @apply bg-gradient-to-br from-point-500 via-point-600 to-point-700;
+  }
+
+  .gradient-warm {
+    @apply bg-gradient-to-br from-warm-400 via-warm-500 to-warm-600;
+  }
+
+  .gradient-mesh {
+    background:
+      radial-gradient(at 40% 20%, rgba(99, 102, 241, 0.1) 0px, transparent 50%),
+      radial-gradient(at 80% 0%, rgba(47, 129, 50, 0.1) 0px, transparent 50%),
+      radial-gradient(at 0% 50%, rgba(16, 42, 67, 0.1) 0px, transparent 50%);
+  }
+
+  /* Text Gradients */
+  .text-gradient-navy {
+    @apply bg-gradient-to-r from-navy-600 to-navy-800 bg-clip-text text-transparent;
+  }
+
+  .text-gradient-point {
+    @apply bg-gradient-to-r from-point-500 to-point-700 bg-clip-text text-transparent;
+  }
+
+  /* Animations */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-pulse-soft {
+    animation: pulse-soft 3s ease-in-out infinite;
+  }
+
+  .animate-slide-up {
+    animation: slide-up 0.5s ease-out;
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.5s ease-out;
+  }
+
+  /* Hover Effects */
+  .hover-lift {
+    @apply transition-all duration-300 ease-out
+           hover:-translate-y-1 hover:shadow-medium;
+  }
+
+  .hover-glow-navy {
+    @apply transition-shadow duration-300
+           hover:shadow-[0_0_30px_rgba(16,42,67,0.2)];
+  }
+
+  .hover-glow-point {
+    @apply transition-shadow duration-300
+           hover:shadow-[0_0_30px_rgba(99,102,241,0.25)];
+  }
+
+  /* Spacing Helpers */
+  .space-section {
+    @apply space-y-16 md:space-y-24;
+  }
+
+  /* Prose Enhancement - Custom Typography */
+  .prose-premium {
+    @apply max-w-none text-navy-700 leading-relaxed;
+  }
+
+  .prose-premium h1,
+  .prose-premium h2,
+  .prose-premium h3,
+  .prose-premium h4 {
+    @apply font-bold tracking-tight text-navy-900 mb-4 mt-8;
+  }
+
+  .prose-premium p {
+    @apply mb-4 leading-relaxed;
+  }
+
+  .prose-premium a {
+    @apply text-point-600 hover:underline;
+  }
+
+  .prose-premium strong {
+    @apply text-navy-900 font-semibold;
+  }
+
+  .prose-premium code {
+    @apply text-point-600 bg-point-50 px-1.5 py-0.5 rounded-md text-sm;
+  }
+
+  .prose-premium ul,
+  .prose-premium ol {
+    @apply mb-4 pl-6;
+  }
+
+  .prose-premium li {
+    @apply mb-2;
+  }
+
+  /* Icon Containers */
+  .icon-container {
+    @apply flex items-center justify-center rounded-xl
+           transition-all duration-300;
+  }
+
+  .icon-container-sm { @apply w-10 h-10; }
+  .icon-container-md { @apply w-12 h-12; }
+  .icon-container-lg { @apply w-16 h-16; }
+}
+
+/* ===========================================
+   5. KEYFRAMES
+   =========================================== */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* ===========================================
+   6. SCROLLBAR
+   =========================================== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400;
+}
+
+/* ===========================================
+   7. PRINT STYLES
+   =========================================== */
+@media print {
+  .no-print {
+    display: none !important;
+  }
 }

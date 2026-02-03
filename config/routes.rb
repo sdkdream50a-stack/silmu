@@ -20,6 +20,9 @@ Rails.application.routes.draw do
   get "tools", to: "tools#index", as: :tools
   get "tools/travel-calculator", to: "tools#travel_calculator", as: :travel_calculator
 
+  # 커뮤니티
+  get "community", to: "community#index", as: :community
+
   # 마이페이지
   get "mypage", to: "mypage#index", as: :mypage
 
