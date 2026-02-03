@@ -2,7 +2,7 @@ class ChatbotController < ApplicationController
   def index
     @boards = CafeArticle.board_list.first(20)
     @total_count = CafeArticle.count
-    @recent_popular = CafeArticle.popular.limit(10)
+    @recent_popular = CafeArticle.popular.where.not("title LIKE ?", "%SOS!%").limit(10)
     @topics = Topic.published.popular.limit(10)
   end
 
