@@ -15,6 +15,9 @@ Rails.application.routes.draw do
 
   # 업무 가이드
   resources :guides, only: [:index, :show]
+  get "guides/contract-flow", to: "guides#contract_flow", as: :contract_flow
+  get "guides/pre-contract-checklist", to: "guides#pre_contract_checklist", as: :pre_contract_checklist
+  get "guides/resources", to: "guides#resources", as: :guide_resources
 
   # 실무 도구
   get "tools", to: "tools#index", as: :tools
@@ -30,6 +33,16 @@ Rails.application.routes.draw do
   # 소요예산 추정기
   get "tools/budget-estimator", to: "estimations#index", as: :budget_estimator
   post "estimations/calculate", to: "estimations#calculate"
+
+  # 계약서류 원클릭 생성기
+  get "tools/contract-documents", to: "contract_documents#index", as: :contract_documents
+  get "contract-documents/documents/:type", to: "contract_documents#documents", as: :contract_documents_by_type
+  post "contract-documents/generate", to: "contract_documents#generate"
+
+  # 계약방식 결정 도구
+  get "tools/contract-method", to: "contract_methods#index", as: :contract_method
+  post "contract-methods/determine", to: "contract_methods#determine"
+  get "contract-methods/table/:type", to: "contract_methods#table", as: :contract_method_table
 
   # 커뮤니티
   get "community", to: "community#index", as: :community

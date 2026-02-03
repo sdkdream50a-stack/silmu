@@ -51,9 +51,9 @@
 
           <!-- Desktop Menu -->
           <div class="hidden lg:flex items-center gap-8">
-            <%= link_to "양식", templates_path, class: "nav-link py-2" %>
             <%= link_to "가이드", guides_path, class: "nav-link py-2" %>
             <%= link_to "도구", tools_path, class: "nav-link py-2" %>
+            <%= link_to "양식", templates_path, class: "nav-link py-2" %>
             <%= link_to "커뮤니티", community_path, class: "nav-link py-2" %>
           </div>
 
@@ -83,9 +83,9 @@
       <!-- Mobile Menu -->
       <div class="lg:hidden hidden" id="mobile-menu">
         <div class="px-4 py-4 space-y-1 bg-white border-t border-gray-100">
-          <%= link_to "양식", templates_path, class: "block px-4 py-3 text-navy-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
           <%= link_to "가이드", guides_path, class: "block px-4 py-3 text-navy-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
           <%= link_to "도구", tools_path, class: "block px-4 py-3 text-navy-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
+          <%= link_to "양식", templates_path, class: "block px-4 py-3 text-navy-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
           <%= link_to "커뮤니티", community_path, class: "block px-4 py-3 text-navy-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
 
           <div class="h-px bg-gray-200 my-3"></div>
@@ -129,6 +129,61 @@
       <%= yield %>
     </main>
 
+    <!-- 퀵메뉴 (플로팅 버튼) -->
+    <div class="fixed bottom-6 right-6 z-50" id="quick-menu">
+      <!-- 펼쳐진 메뉴 -->
+      <div class="hidden mb-3 space-y-2" id="quick-menu-items">
+        <%= link_to contract_method_path, class: "flex items-center gap-3 px-4 py-3 bg-white rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-all group", title: "계약방식 결정" do %>
+          <span class="w-10 h-10 bg-forest-100 rounded-lg flex items-center justify-center group-hover:bg-forest-200 transition-colors">
+            <span class="material-symbols-outlined text-forest-600">gavel</span>
+          </span>
+          <span class="text-sm font-semibold text-navy-800">계약방식 결정</span>
+        <% end %>
+        <%= link_to contract_documents_path, class: "flex items-center gap-3 px-4 py-3 bg-white rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-all group", title: "서류 체크리스트" do %>
+          <span class="w-10 h-10 bg-point-100 rounded-lg flex items-center justify-center group-hover:bg-point-200 transition-colors">
+            <span class="material-symbols-outlined text-point-600">checklist</span>
+          </span>
+          <span class="text-sm font-semibold text-navy-800">서류 체크리스트</span>
+        <% end %>
+        <%= link_to pre_contract_checklist_path, class: "flex items-center gap-3 px-4 py-3 bg-white rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-all group", title: "사전 체크리스트" do %>
+          <span class="w-10 h-10 bg-navy-100 rounded-lg flex items-center justify-center group-hover:bg-navy-200 transition-colors">
+            <span class="material-symbols-outlined text-navy-600">checklist_rtl</span>
+          </span>
+          <span class="text-sm font-semibold text-navy-800">사전 체크리스트</span>
+        <% end %>
+        <%= link_to contract_flow_path, class: "flex items-center gap-3 px-4 py-3 bg-white rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-all group", title: "계약 흐름도" do %>
+          <span class="w-10 h-10 bg-warm-100 rounded-lg flex items-center justify-center group-hover:bg-warm-200 transition-colors">
+            <span class="material-symbols-outlined text-warm-600">account_tree</span>
+          </span>
+          <span class="text-sm font-semibold text-navy-800">계약 흐름도</span>
+        <% end %>
+        <a href="https://www.g2b.go.kr" target="_blank" class="flex items-center gap-3 px-4 py-3 bg-white rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-all group" title="나라장터">
+          <span class="w-10 h-10 bg-surface-100 rounded-lg flex items-center justify-center group-hover:bg-surface-200 transition-colors">
+            <span class="material-symbols-outlined text-navy-500">open_in_new</span>
+          </span>
+          <span class="text-sm font-semibold text-navy-800">나라장터</span>
+        </a>
+      </div>
+
+      <!-- 메인 버튼 -->
+      <button id="quick-menu-btn" class="w-14 h-14 bg-gradient-to-br from-navy-700 to-navy-900 text-white rounded-full shadow-lg hover:shadow-xl transition-all flex items-center justify-center group">
+        <span class="material-symbols-outlined text-2xl transition-transform group-hover:rotate-90" id="quick-menu-icon">widgets</span>
+      </button>
+    </div>
+
+    <style>
+      #quick-menu-items {
+        animation: slideUp 0.2s ease;
+      }
+      @keyframes slideUp {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      #quick-menu-items.hidden {
+        display: none !important;
+      }
+    </style>
+
     <!-- Footer -->
     <footer class="bg-navy-900 text-white mt-auto">
       <div class="container-wide py-16 lg:py-20">
@@ -159,9 +214,9 @@
           <div>
             <h3 class="font-semibold text-lg mb-5">서비스</h3>
             <ul class="space-y-3">
-              <li><%= link_to "양식", templates_path, class: "text-navy-300 hover:text-white transition-colors" %></li>
               <li><%= link_to "가이드", guides_path, class: "text-navy-300 hover:text-white transition-colors" %></li>
               <li><%= link_to "도구", tools_path, class: "text-navy-300 hover:text-white transition-colors" %></li>
+              <li><%= link_to "양식", templates_path, class: "text-navy-300 hover:text-white transition-colors" %></li>
               <li><%= link_to "커뮤니티", community_path, class: "text-navy-300 hover:text-white transition-colors" %></li>
             </ul>
           </div>
@@ -217,6 +272,32 @@
           nav.classList.remove('shadow-soft');
         }
       });
+
+      // Quick Menu Toggle
+      const quickMenuBtn = document.getElementById('quick-menu-btn');
+      const quickMenuItems = document.getElementById('quick-menu-items');
+      const quickMenuIcon = document.getElementById('quick-menu-icon');
+
+      if (quickMenuBtn && quickMenuItems) {
+        quickMenuBtn.addEventListener('click', () => {
+          quickMenuItems.classList.toggle('hidden');
+          if (quickMenuItems.classList.contains('hidden')) {
+            quickMenuIcon.textContent = 'widgets';
+            quickMenuIcon.style.transform = 'rotate(0deg)';
+          } else {
+            quickMenuIcon.textContent = 'close';
+            quickMenuIcon.style.transform = 'rotate(0deg)';
+          }
+        });
+
+        // 외부 클릭 시 닫기
+        document.addEventListener('click', (e) => {
+          if (!quickMenuBtn.contains(e.target) && !quickMenuItems.contains(e.target)) {
+            quickMenuItems.classList.add('hidden');
+            quickMenuIcon.textContent = 'widgets';
+          }
+        });
+      }
     </script>
   </body>
 </html>

@@ -1,0 +1,555 @@
+<%# 자료실/FAQ - 판례해설, FAQ, 유권해석 등 %>
+
+<style>
+  .resources-page {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* 카테고리 탭 */
+  .category-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .category-tab {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    background: var(--surface-100);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--navy-600);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .category-tab:hover {
+    background: var(--surface-200);
+  }
+  .category-tab.active {
+    background: var(--navy-800);
+    color: white;
+  }
+
+  /* 자료 카드 */
+  .resource-card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+    border: 1px solid #e2e8f0;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  .resource-card:hover {
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    transform: translateY(-2px);
+  }
+  .resource-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .resource-badge {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .resource-badge.판례해설 {
+    background: var(--point-100);
+    color: var(--point-700);
+  }
+  .resource-badge.FAQ {
+    background: var(--forest-100);
+    color: var(--forest-700);
+  }
+  .resource-badge.공지사항 {
+    background: var(--warm-100);
+    color: var(--warm-700);
+  }
+  .resource-badge.유권해석 {
+    background: var(--navy-100);
+    color: var(--navy-700);
+  }
+  .resource-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--navy-900);
+    margin-bottom: 8px;
+    line-height: 1.4;
+  }
+  .resource-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 13px;
+    color: #64748b;
+  }
+  .resource-meta span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .resource-meta .material-symbols-outlined {
+    font-size: 16px;
+  }
+
+  /* FAQ 아코디언 */
+  .faq-section {
+    margin-top: 40px;
+  }
+  .faq-section h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--navy-900);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .faq-item {
+    background: white;
+    border-radius: 14px;
+    margin-bottom: 12px;
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+  }
+  .faq-question {
+    width: 100%;
+    padding: 20px 24px;
+    background: none;
+    border: none;
+    text-align: left;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--navy-900);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background 0.2s;
+  }
+  .faq-question:hover {
+    background: var(--surface-50);
+  }
+  .faq-question .toggle-icon {
+    transition: transform 0.2s;
+    color: var(--navy-400);
+  }
+  .faq-question.open .toggle-icon {
+    transform: rotate(180deg);
+  }
+  .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+  }
+  .faq-answer.open {
+    max-height: 500px;
+    padding: 0 24px 20px;
+  }
+  .faq-answer-content {
+    padding-top: 16px;
+    border-top: 1px solid #e2e8f0;
+    font-size: 14px;
+    color: var(--navy-700);
+    line-height: 1.7;
+  }
+  .faq-answer-content .legal-ref {
+    margin-top: 12px;
+    padding: 12px 16px;
+    background: var(--point-50);
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--point-700);
+  }
+
+  /* 검색 */
+  .search-box {
+    background: white;
+    border-radius: 14px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+    border: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .search-box input {
+    flex: 1;
+    border: none;
+    font-size: 15px;
+    color: var(--navy-900);
+    outline: none;
+  }
+  .search-box input::placeholder {
+    color: #94a3b8;
+  }
+  .search-box .material-symbols-outlined {
+    color: var(--navy-400);
+    font-size: 24px;
+  }
+
+  /* 사이드바 */
+  .sidebar-card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+    border: 1px solid #e2e8f0;
+  }
+  .sidebar-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--navy-900);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    background: var(--surface-50);
+    border-radius: 10px;
+    margin-bottom: 8px;
+    color: var(--navy-700);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+  .sidebar-link:hover {
+    background: var(--forest-50);
+    color: var(--forest-700);
+  }
+  .sidebar-link:last-child {
+    margin-bottom: 0;
+  }
+  .sidebar-link .material-symbols-outlined {
+    font-size: 20px;
+  }
+
+  /* 반응형 */
+  @media (max-width: 768px) {
+    .category-tabs {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+    .category-tab {
+      flex-shrink: 0;
+    }
+  }
+</style>
+
+<!-- 페이지 헤더 -->
+<section class="gradient-forest text-white py-12 lg:py-16">
+  <div class="container-wide">
+    <div class="flex items-start gap-5">
+      <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 shadow-lg">
+        <span class="material-symbols-outlined text-4xl text-white">library_books</span>
+      </div>
+      <div>
+        <h1 class="text-3xl lg:text-4xl font-bold tracking-tight mb-2">자료실</h1>
+        <p class="text-forest-100 text-lg">판례해설, FAQ, 유권해석 등 계약 실무 자료</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section py-10">
+  <div class="container-wide resources-page">
+    <div class="lg:flex lg:gap-10">
+      <!-- 메인 콘텐츠 -->
+      <div class="lg:w-[70%]">
+        <!-- 검색 -->
+        <div class="search-box">
+          <span class="material-symbols-outlined">search</span>
+          <input type="text" id="search-input" placeholder="자료 검색 (예: 수의계약, 부정당업자)">
+        </div>
+
+        <!-- 카테고리 탭 -->
+        <div class="category-tabs">
+          <button class="category-tab active" data-category="전체" onclick="filterResources('전체')">전체</button>
+          <button class="category-tab" data-category="FAQ" onclick="filterResources('FAQ')">FAQ</button>
+          <button class="category-tab" data-category="판례" onclick="filterResources('판례')">판례해설</button>
+          <button class="category-tab" data-category="공지" onclick="filterResources('공지')">공지사항</button>
+        </div>
+
+        <!-- 자료 목록 -->
+        <div id="resources-list">
+          <% [
+            { title: "입찰자격제한 처분 관련 대법원 판례 해설", category: "판례", type: "판례해설", date: "2026.01.28", summary: "입찰자격제한 처분의 적법성 판단 기준과 취소 사유에 대한 대법원 판례를 해설합니다." },
+            { title: "수의계약 체결 시 주의사항 FAQ", category: "FAQ", type: "FAQ", date: "2026.01.25", summary: "수의계약 한도액, 2인 이상 견적, 분할계약 금지 등 자주 묻는 질문에 답변합니다." },
+            { title: "2026년 계약집행 특례 안내", category: "공지", type: "공지사항", date: "2026.01.20", summary: "2026년 적용되는 계약집행 특례 사항을 안내합니다." },
+            { title: "부정당업자 제재 절차 FAQ", category: "FAQ", type: "FAQ", date: "2026.01.18", summary: "부정당업자 제재 사유, 절차, 입찰참가자격 제한 기간 등에 대한 FAQ입니다." },
+            { title: "분할계약 금지 관련 유권해석", category: "판례", type: "유권해석", date: "2026.01.15", summary: "동일 목적 계약의 분할 수의계약 판단 기준에 대한 유권해석을 안내합니다." },
+            { title: "중소기업 경쟁제품 직접생산 확인 FAQ", category: "FAQ", type: "FAQ", date: "2026.01.12", summary: "중소기업자간 경쟁제품 해당 여부와 직접생산 확인 방법을 안내합니다." },
+          ].each do |resource| %>
+            <div class="resource-card" data-category="<%= resource[:category] %>" data-title="<%= resource[:title] %>">
+              <div class="resource-header">
+                <span class="resource-badge <%= resource[:type] %>"><%= resource[:type] %></span>
+              </div>
+              <h3 class="resource-title"><%= resource[:title] %></h3>
+              <p style="font-size: 14px; color: #64748b; margin-bottom: 12px; line-height: 1.6;"><%= resource[:summary] %></p>
+              <div class="resource-meta">
+                <span>
+                  <span class="material-symbols-outlined">calendar_today</span>
+                  <%= resource[:date] %>
+                </span>
+                <span>
+                  <span class="material-symbols-outlined">visibility</span>
+                  <%= rand(50..200) %>
+                </span>
+              </div>
+            </div>
+          <% end %>
+        </div>
+
+        <!-- FAQ 섹션 -->
+        <div class="faq-section">
+          <h2>
+            <span class="material-symbols-outlined" style="color: var(--forest-500);">help</span>
+            자주 묻는 질문
+          </h2>
+
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              <span>수의계약 한도액은 얼마인가요?</span>
+              <span class="material-symbols-outlined toggle-icon">expand_more</span>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-answer-content">
+                <p>지방자치단체 수의계약 한도액은 다음과 같습니다:</p>
+                <ul style="margin: 12px 0; padding-left: 20px;">
+                  <li><strong>물품·용역:</strong> 추정가격 2,000만원 이하</li>
+                  <li><strong>종합공사:</strong> 추정가격 2억원 이하</li>
+                  <li><strong>전문공사:</strong> 추정가격 1억원 이하</li>
+                  <li><strong>전기/소방/정보통신:</strong> 추정가격 8,000만원 이하</li>
+                </ul>
+                <div class="legal-ref">
+                  <strong>법령 근거:</strong> 지방자치단체를 당사자로 하는 계약에 관한 법률 시행령 제25조, 제30조
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              <span>2인 이상 견적은 언제 필요한가요?</span>
+              <span class="material-symbols-outlined toggle-icon">expand_more</span>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-answer-content">
+                <p>추정가격 <strong>2,000만원 초과</strong> 수의계약 시 2인 이상의 견적서를 받아야 합니다.</p>
+                <p style="margin-top: 12px;">단, 다음의 경우는 1인 견적이 가능합니다:</p>
+                <ul style="margin: 12px 0; padding-left: 20px;">
+                  <li>특허권, 저작권 등 지식재산권 관련 물품/용역</li>
+                  <li>해당 물품/용역의 생산자나 공급자가 1인인 경우</li>
+                  <li>긴급한 재해 복구 등 시급한 경우</li>
+                </ul>
+                <div class="legal-ref">
+                  <strong>법령 근거:</strong> 지방계약법 시행령 제30조제1항
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              <span>분할계약은 왜 금지되나요?</span>
+              <span class="material-symbols-outlined toggle-icon">expand_more</span>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-answer-content">
+                <p>동일한 목적의 계약을 나누어 수의계약하는 것은 <strong>경쟁입찰의 원칙을 회피</strong>하는 행위로 금지됩니다.</p>
+                <p style="margin-top: 12px;"><strong>분할계약 판단 기준:</strong></p>
+                <ul style="margin: 12px 0; padding-left: 20px;">
+                  <li>동일 사업 목적인지 여부</li>
+                  <li>시기적 연속성이 있는지 여부</li>
+                  <li>분리 발주의 합리적 사유가 있는지 여부</li>
+                </ul>
+                <p>다만, 예산 편성의 제약, 사업 특성 등 합리적인 사유가 있는 경우는 분할계약으로 보지 않습니다.</p>
+                <div class="legal-ref">
+                  <strong>법령 근거:</strong> 지방계약법 시행령 제26조(계약의 분할 금지)
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              <span>부정당업자 제재 기간은 얼마나 되나요?</span>
+              <span class="material-symbols-outlined toggle-icon">expand_more</span>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-answer-content">
+                <p>부정당업자 입찰참가자격 제한 기간은 <strong>위반 행위의 종류에 따라 1개월~2년</strong>입니다.</p>
+                <p style="margin-top: 12px;"><strong>주요 제재 사유별 기간:</strong></p>
+                <ul style="margin: 12px 0; padding-left: 20px;">
+                  <li>계약 미이행/불성실 이행: 1개월~6개월</li>
+                  <li>허위서류 제출: 6개월~1년</li>
+                  <li>입찰담합: 1년~2년</li>
+                  <li>뇌물공여: 2년</li>
+                </ul>
+                <div class="legal-ref">
+                  <strong>법령 근거:</strong> 지방계약법 제31조, 시행령 제92조
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              <span>계약보증금은 언제 면제 가능한가요?</span>
+              <span class="material-symbols-outlined toggle-icon">expand_more</span>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-answer-content">
+                <p>계약보증금은 원칙적으로 <strong>계약금액의 10% 이상</strong>을 납부해야 하지만, 다음의 경우 면제 가능합니다:</p>
+                <ul style="margin: 12px 0; padding-left: 20px;">
+                  <li>계약금액이 <strong>5,000만원 이하</strong>인 경우</li>
+                  <li>계약 상대방이 보험, 은행, 농·수협 등 신용도가 높은 기관인 경우</li>
+                  <li>국가, 지방자치단체 또는 공공기관과의 계약인 경우</li>
+                </ul>
+                <div class="legal-ref">
+                  <strong>법령 근거:</strong> 지방계약법 시행령 제51조
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 사이드바 -->
+      <div class="lg:w-[30%] mt-10 lg:mt-0">
+        <div class="sticky top-24 space-y-5">
+          <!-- 빠른 링크 -->
+          <div class="sidebar-card">
+            <h3>
+              <span class="material-symbols-outlined" style="color: var(--forest-500);">bolt</span>
+              빠른 링크
+            </h3>
+            <%= link_to pre_contract_checklist_path, class: "sidebar-link" do %>
+              <span class="material-symbols-outlined">checklist_rtl</span>
+              사전 체크리스트
+            <% end %>
+            <%= link_to contract_method_path, class: "sidebar-link" do %>
+              <span class="material-symbols-outlined">gavel</span>
+              계약방식 결정
+            <% end %>
+            <%= link_to contract_documents_path, class: "sidebar-link" do %>
+              <span class="material-symbols-outlined">description</span>
+              서류 체크리스트
+            <% end %>
+            <%= link_to contract_flow_path, class: "sidebar-link" do %>
+              <span class="material-symbols-outlined">account_tree</span>
+              계약 흐름도
+            <% end %>
+          </div>
+
+          <!-- 외부 사이트 -->
+          <div class="sidebar-card">
+            <h3>
+              <span class="material-symbols-outlined" style="color: var(--point-500);">link</span>
+              관련 사이트
+            </h3>
+            <a href="https://www.g2b.go.kr" target="_blank" class="sidebar-link">
+              <span class="material-symbols-outlined">open_in_new</span>
+              나라장터 (G2B)
+            </a>
+            <a href="https://www.s2b.kr" target="_blank" class="sidebar-link">
+              <span class="material-symbols-outlined">open_in_new</span>
+              학교장터 (S2B)
+            </a>
+            <a href="https://www.smpp.go.kr" target="_blank" class="sidebar-link">
+              <span class="material-symbols-outlined">open_in_new</span>
+              중소기업 공공구매
+            </a>
+            <a href="https://www.law.go.kr" target="_blank" class="sidebar-link">
+              <span class="material-symbols-outlined">open_in_new</span>
+              국가법령정보센터
+            </a>
+            <a href="https://www.kiscon.net" target="_blank" class="sidebar-link">
+              <span class="material-symbols-outlined">open_in_new</span>
+              건설산업종합정보망
+            </a>
+          </div>
+
+          <!-- AI 상담 -->
+          <div class="gradient-forest rounded-2xl p-6 text-white shadow-strong">
+            <div class="flex items-center gap-4 mb-4">
+              <div class="w-12 h-12 bg-white/10 backdrop-blur rounded-xl flex items-center justify-center">
+                <span class="material-symbols-outlined text-2xl">support_agent</span>
+              </div>
+              <div>
+                <h3 class="font-bold text-lg">궁금한 점이 있으신가요?</h3>
+                <p class="text-forest-100 text-sm">AI에게 물어보세요</p>
+              </div>
+            </div>
+            <%= link_to chatbot_path, class: "block w-full py-3 bg-white text-forest-700 rounded-xl font-semibold text-center hover:bg-forest-50 transition-colors shadow-soft" do %>
+              AI 상담 시작하기
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // 카테고리 필터
+  function filterResources(category) {
+    // 탭 활성화
+    document.querySelectorAll('.category-tab').forEach(tab => {
+      tab.classList.toggle('active', tab.dataset.category === category);
+    });
+
+    // 자료 필터링
+    document.querySelectorAll('.resource-card').forEach(card => {
+      if (category === '전체' || card.dataset.category === category) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  // FAQ 토글
+  function toggleFaq(btn) {
+    const answer = btn.nextElementSibling;
+    const isOpen = answer.classList.contains('open');
+
+    // 모든 FAQ 닫기
+    document.querySelectorAll('.faq-question').forEach(q => q.classList.remove('open'));
+    document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('open'));
+
+    // 클릭된 항목 열기/닫기
+    if (!isOpen) {
+      btn.classList.add('open');
+      answer.classList.add('open');
+    }
+  }
+
+  // 검색
+  document.getElementById('search-input').addEventListener('input', function(e) {
+    const term = e.target.value.toLowerCase();
+    document.querySelectorAll('.resource-card').forEach(card => {
+      const title = card.dataset.title.toLowerCase();
+      if (title.includes(term)) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  });
+</script>

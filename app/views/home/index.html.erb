@@ -144,51 +144,51 @@
 
     <!-- Tools Grid -->
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
-      <!-- Tool 1 - Featured -->
-      <a href="/forms/견적서검토.html" target="_blank" class="group card card-interactive p-6 md:p-8 bg-gradient-to-br from-point-50 to-purple-50 border-2 border-point-200 hover:border-point-400">
+      <!-- Tool 1 - 사전 체크리스트 -->
+      <%= link_to pre_contract_checklist_path, class: "group card card-interactive p-6 md:p-8 bg-gradient-to-br from-forest-50 to-emerald-50 border-2 border-forest-200 hover:border-forest-400" do %>
+        <div class="icon-container icon-container-lg bg-forest-100 group-hover:bg-forest-600 mb-5 transition-colors">
+          <span class="material-symbols-outlined text-2xl text-forest-600 group-hover:text-white transition-colors">checklist_rtl</span>
+        </div>
+        <h3 class="font-bold text-navy-900 group-hover:text-forest-700 mb-2 transition-colors">사전 체크리스트</h3>
+        <p class="text-navy-500 text-sm mb-3">계약 전 필수 점검</p>
+        <span class="badge badge-forest text-[10px]">NEW</span>
+      <% end %>
+
+      <!-- Tool 2 - 계약방식 결정 -->
+      <%= link_to contract_method_path, class: "group card card-interactive p-6 md:p-8" do %>
+        <div class="icon-container icon-container-lg bg-navy-100 group-hover:bg-navy-600 mb-5 transition-colors">
+          <span class="material-symbols-outlined text-2xl text-navy-600 group-hover:text-white transition-colors">gavel</span>
+        </div>
+        <h3 class="font-bold text-navy-900 group-hover:text-navy-700 mb-2 transition-colors">계약방식 결정</h3>
+        <p class="text-navy-500 text-sm">입찰/수의계약 판단</p>
+      <% end %>
+
+      <!-- Tool 3 - 서류 체크리스트 -->
+      <%= link_to contract_documents_path, class: "group card card-interactive p-6 md:p-8" do %>
         <div class="icon-container icon-container-lg bg-point-100 group-hover:bg-point-600 mb-5 transition-colors">
           <span class="material-symbols-outlined text-2xl text-point-600 group-hover:text-white transition-colors">fact_check</span>
         </div>
-        <h3 class="font-bold text-navy-900 group-hover:text-point-700 mb-2 transition-colors">견적서 검토</h3>
-        <p class="text-navy-500 text-sm mb-3">법규 적합성 자동 분석</p>
-        <span class="badge badge-point text-[10px]">NEW</span>
-      </a>
+        <h3 class="font-bold text-navy-900 group-hover:text-point-700 mb-2 transition-colors">서류 체크리스트</h3>
+        <p class="text-navy-500 text-sm">계약서류 원클릭 생성</p>
+      <% end %>
 
-      <!-- Tool 2 -->
-      <div class="group card card-interactive p-6 md:p-8">
-        <div class="icon-container icon-container-lg bg-navy-100 group-hover:bg-navy-600 mb-5 transition-colors">
-          <span class="material-symbols-outlined text-2xl text-navy-600 group-hover:text-white transition-colors">edit_document</span>
-        </div>
-        <h3 class="font-bold text-navy-900 group-hover:text-navy-700 mb-2 transition-colors">품의서 작성기</h3>
-        <p class="text-navy-500 text-sm">쉽고 빠른 품의서 작성</p>
-      </div>
-
-      <!-- Tool 3 -->
-      <div class="group card card-interactive p-6 md:p-8">
-        <div class="icon-container icon-container-lg bg-forest-100 group-hover:bg-forest-600 mb-5 transition-colors">
-          <span class="material-symbols-outlined text-2xl text-forest-600 group-hover:text-white transition-colors">event_available</span>
-        </div>
-        <h3 class="font-bold text-navy-900 group-hover:text-navy-700 mb-2 transition-colors">휴가 계산기</h3>
-        <p class="text-navy-500 text-sm">남은 연가 한눈에</p>
-      </div>
-
-      <!-- Tool 4 -->
-      <div class="group card card-interactive p-6 md:p-8">
+      <!-- Tool 4 - 계약 흐름도 -->
+      <%= link_to contract_flow_path, class: "group card card-interactive p-6 md:p-8" do %>
         <div class="icon-container icon-container-lg bg-warm-100 group-hover:bg-warm-500 mb-5 transition-colors">
-          <span class="material-symbols-outlined text-2xl text-warm-600 group-hover:text-white transition-colors">payments</span>
+          <span class="material-symbols-outlined text-2xl text-warm-600 group-hover:text-white transition-colors">account_tree</span>
         </div>
-        <h3 class="font-bold text-navy-900 group-hover:text-navy-700 mb-2 transition-colors">호봉 계산기</h3>
-        <p class="text-navy-500 text-sm">정확한 급여 계산</p>
-      </div>
+        <h3 class="font-bold text-navy-900 group-hover:text-warm-700 mb-2 transition-colors">계약 흐름도</h3>
+        <p class="text-navy-500 text-sm">전체 프로세스 확인</p>
+      <% end %>
 
-      <!-- Tool 5 -->
-      <div class="group card card-interactive p-6 md:p-8">
+      <!-- Tool 5 - 자료실 -->
+      <%= link_to guide_resources_path, class: "group card card-interactive p-6 md:p-8" do %>
         <div class="icon-container icon-container-lg bg-purple-100 group-hover:bg-purple-600 mb-5 transition-colors">
-          <span class="material-symbols-outlined text-2xl text-purple-600 group-hover:text-white transition-colors">monitoring</span>
+          <span class="material-symbols-outlined text-2xl text-purple-600 group-hover:text-white transition-colors">library_books</span>
         </div>
-        <h3 class="font-bold text-navy-900 group-hover:text-navy-700 mb-2 transition-colors">연금 계산기</h3>
-        <p class="text-navy-500 text-sm">예상 연금액 조회</p>
-      </div>
+        <h3 class="font-bold text-navy-900 group-hover:text-purple-700 mb-2 transition-colors">자료실 / FAQ</h3>
+        <p class="text-navy-500 text-sm">판례해설, 유권해석</p>
+      <% end %>
     </div>
 
     <!-- CTA -->
@@ -512,6 +512,95 @@
         });
       });
       </script>
+    </div>
+  </div>
+</section>
+
+<!-- 외부 시스템 바로가기 Section -->
+<section id="external-links" class="section bg-white">
+  <div class="container-wide">
+    <!-- Section Header -->
+    <div class="text-center mb-12">
+      <span class="badge badge-navy mb-4">바로가기</span>
+      <h2 class="text-navy-900 mb-6">자주 사용하는 외부 시스템</h2>
+      <p class="text-xl text-navy-600 max-w-2xl mx-auto">
+        계약·조달·행정 업무에 필요한 시스템을 빠르게 이동하세요
+      </p>
+    </div>
+
+    <!-- External Links Grid -->
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+      <a href="https://www.g2b.go.kr" target="_blank" rel="noopener" class="group card card-hover p-5 text-center">
+        <div class="w-14 h-14 mx-auto mb-4 bg-blue-100 rounded-2xl flex items-center justify-center group-hover:bg-blue-600 transition-colors">
+          <span class="material-symbols-outlined text-2xl text-blue-600 group-hover:text-white transition-colors">storefront</span>
+        </div>
+        <h4 class="font-bold text-navy-900 text-sm mb-1">나라장터</h4>
+        <p class="text-navy-500 text-xs">G2B 조달시스템</p>
+      </a>
+
+      <a href="https://www.s2b.kr" target="_blank" rel="noopener" class="group card card-hover p-5 text-center">
+        <div class="w-14 h-14 mx-auto mb-4 bg-green-100 rounded-2xl flex items-center justify-center group-hover:bg-green-600 transition-colors">
+          <span class="material-symbols-outlined text-2xl text-green-600 group-hover:text-white transition-colors">school</span>
+        </div>
+        <h4 class="font-bold text-navy-900 text-sm mb-1">학교장터</h4>
+        <p class="text-navy-500 text-xs">S2B 전자조달</p>
+      </a>
+
+      <a href="https://www.smpp.go.kr" target="_blank" rel="noopener" class="group card card-hover p-5 text-center">
+        <div class="w-14 h-14 mx-auto mb-4 bg-orange-100 rounded-2xl flex items-center justify-center group-hover:bg-orange-500 transition-colors">
+          <span class="material-symbols-outlined text-2xl text-orange-500 group-hover:text-white transition-colors">business</span>
+        </div>
+        <h4 class="font-bold text-navy-900 text-sm mb-1">중소기업제품</h4>
+        <p class="text-navy-500 text-xs">공공구매종합정보</p>
+      </a>
+
+      <a href="https://www.kiscon.net" target="_blank" rel="noopener" class="group card card-hover p-5 text-center">
+        <div class="w-14 h-14 mx-auto mb-4 bg-amber-100 rounded-2xl flex items-center justify-center group-hover:bg-amber-500 transition-colors">
+          <span class="material-symbols-outlined text-2xl text-amber-600 group-hover:text-white transition-colors">construction</span>
+        </div>
+        <h4 class="font-bold text-navy-900 text-sm mb-1">건설산업정보</h4>
+        <p class="text-navy-500 text-xs">KISCON</p>
+      </a>
+
+      <a href="https://www.law.go.kr" target="_blank" rel="noopener" class="group card card-hover p-5 text-center">
+        <div class="w-14 h-14 mx-auto mb-4 bg-purple-100 rounded-2xl flex items-center justify-center group-hover:bg-purple-600 transition-colors">
+          <span class="material-symbols-outlined text-2xl text-purple-600 group-hover:text-white transition-colors">gavel</span>
+        </div>
+        <h4 class="font-bold text-navy-900 text-sm mb-1">국가법령정보</h4>
+        <p class="text-navy-500 text-xs">법령 검색</p>
+      </a>
+
+      <a href="https://www.pps.go.kr" target="_blank" rel="noopener" class="group card card-hover p-5 text-center">
+        <div class="w-14 h-14 mx-auto mb-4 bg-teal-100 rounded-2xl flex items-center justify-center group-hover:bg-teal-600 transition-colors">
+          <span class="material-symbols-outlined text-2xl text-teal-600 group-hover:text-white transition-colors">account_balance</span>
+        </div>
+        <h4 class="font-bold text-navy-900 text-sm mb-1">조달청</h4>
+        <p class="text-navy-500 text-xs">PPS</p>
+      </a>
+    </div>
+
+    <!-- Secondary Links -->
+    <div class="mt-8 flex flex-wrap justify-center gap-3">
+      <a href="https://www.moef.go.kr" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 bg-surface-100 hover:bg-surface-200 rounded-full text-sm text-navy-600 transition-colors">
+        <span class="material-symbols-outlined text-lg">open_in_new</span>
+        기획재정부
+      </a>
+      <a href="https://www.mois.go.kr" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 bg-surface-100 hover:bg-surface-200 rounded-full text-sm text-navy-600 transition-colors">
+        <span class="material-symbols-outlined text-lg">open_in_new</span>
+        행정안전부
+      </a>
+      <a href="https://www.alio.go.kr" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 bg-surface-100 hover:bg-surface-200 rounded-full text-sm text-navy-600 transition-colors">
+        <span class="material-symbols-outlined text-lg">open_in_new</span>
+        공공기관 경영정보
+      </a>
+      <a href="https://www.openfiscaldata.go.kr" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 bg-surface-100 hover:bg-surface-200 rounded-full text-sm text-navy-600 transition-colors">
+        <span class="material-symbols-outlined text-lg">open_in_new</span>
+        열린재정
+      </a>
+      <a href="https://www.mss.go.kr" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 bg-surface-100 hover:bg-surface-200 rounded-full text-sm text-navy-600 transition-colors">
+        <span class="material-symbols-outlined text-lg">open_in_new</span>
+        중소벤처기업부
+      </a>
     </div>
   </div>
 </section>
