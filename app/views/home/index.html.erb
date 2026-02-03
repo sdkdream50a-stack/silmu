@@ -317,10 +317,10 @@
             { icon: "help", text: "익명 Q&A" },
             { icon: "forum", text: "실무 상담" }
           ].each do |feature| %>
-            <div class="flex items-center gap-2 bg-white px-4 py-2.5 rounded-xl shadow-soft border border-gray-100">
+            <button onclick="alert('<%= feature[:text] %> 기능은 준비 중입니다.')" class="flex items-center gap-2 bg-white px-4 py-2.5 rounded-xl shadow-soft border border-gray-100 hover:border-point-300 hover:shadow-md transition-all cursor-pointer">
               <span class="material-symbols-outlined text-point-600"><%= feature[:icon] %></span>
               <span class="text-navy-700 font-medium text-sm"><%= feature[:text] %></span>
-            </div>
+            </button>
           <% end %>
         </div>
       </div>
