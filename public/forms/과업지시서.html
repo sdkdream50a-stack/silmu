@@ -1,0 +1,1423 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>과업지시서 생성기 | 실무</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  <style>
+    @page { size: A4; margin: 15mm; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Pretendard', '맑은 고딕', sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+      background: #f8fafc;
+      color: #1e3a5f;
+    }
+
+    :root {
+      --navy-900: #1e3a5f;
+      --navy-700: #2d4a6f;
+      --navy-600: #3d5a7f;
+      --navy-100: #e8eef5;
+      --forest-600: #2e7d32;
+      --forest-500: #4caf50;
+      --forest-100: #e8f5e9;
+      --warm-500: #f59e0b;
+      --warm-100: #fef3c7;
+      --red-500: #ef4444;
+      --red-100: #fee2e2;
+      --surface-100: #f1f5f9;
+    }
+
+    /* 헤더 */
+    .header {
+      background: linear-gradient(135deg, var(--navy-900) 0%, var(--navy-700) 100%);
+      color: white;
+      padding: 16px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 20px rgba(30, 58, 95, 0.15);
+    }
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .logo {
+      font-size: 20px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: white;
+    }
+    .header-title {
+      font-size: 16px;
+      font-weight: 600;
+      padding-left: 16px;
+      border-left: 1px solid rgba(255,255,255,0.3);
+    }
+    .header-nav {
+      display: flex;
+      gap: 8px;
+    }
+    .header-nav a {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .header-nav a:hover {
+      background: rgba(255,255,255,0.1);
+      color: white;
+    }
+
+    /* 메인 */
+    .main-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    /* 스텝 인디케이터 */
+    .step-indicator {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 30px;
+      background: var(--surface-100);
+      color: #64748b;
+      font-weight: 500;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .step:hover:not(.disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .step.active {
+      background: var(--forest-600);
+      color: white;
+    }
+    .step.done {
+      background: var(--navy-900);
+      color: white;
+    }
+    .step.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .step-number {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* 카드 */
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      border: 1px solid #e2e8f0;
+    }
+    .card h3 {
+      color: var(--navy-900);
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card p.desc {
+      color: #64748b;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+    .card.highlight {
+      border: 2px solid var(--forest-500);
+      background: linear-gradient(to bottom right, #f0fdf4, #ffffff);
+    }
+
+    /* 종류 선택 */
+    .type-selector {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .type-btn {
+      padding: 24px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 16px;
+      background: white;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .type-btn:hover {
+      border-color: var(--forest-500);
+      transform: translateY(-2px);
+    }
+    .type-btn.selected {
+      border-color: var(--forest-600);
+      background: var(--forest-100);
+    }
+    .type-btn .material-symbols-outlined {
+      font-size: 40px;
+      color: var(--navy-600);
+      margin-bottom: 8px;
+    }
+    .type-btn.selected .material-symbols-outlined {
+      color: var(--forest-600);
+    }
+    .type-btn span {
+      display: block;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--navy-900);
+    }
+    .type-btn small {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 4px;
+      display: block;
+    }
+
+    /* 폼 */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group.full {
+      grid-column: 1 / -1;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--navy-900);
+      font-size: 14px;
+    }
+    .form-group label .required {
+      color: var(--red-500);
+      margin-left: 2px;
+    }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      outline: none;
+      border-color: var(--forest-500);
+    }
+    .form-group textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+    .form-group .hint {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 4px;
+    }
+
+    /* 동적 리스트 */
+    .dynamic-list {
+      margin-top: 12px;
+    }
+    .dynamic-item {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .dynamic-item input {
+      flex: 1;
+    }
+    .btn-remove-item {
+      padding: 12px;
+      background: var(--red-100);
+      color: var(--red-500);
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-remove-item:hover {
+      background: var(--red-500);
+      color: white;
+    }
+    .btn-add-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 16px;
+      background: var(--navy-100);
+      color: var(--navy-700);
+      border: 2px dashed #cbd5e1;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s;
+      width: 100%;
+      justify-content: center;
+    }
+    .btn-add-item:hover {
+      background: var(--forest-100);
+      border-color: var(--forest-500);
+      color: var(--forest-600);
+    }
+
+    /* 템플릿 선택 */
+    .template-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .template-btn {
+      padding: 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      background: white;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s;
+    }
+    .template-btn:hover {
+      border-color: var(--forest-500);
+    }
+    .template-btn.selected {
+      border-color: var(--forest-600);
+      background: var(--forest-100);
+    }
+    .template-btn strong {
+      display: block;
+      font-size: 14px;
+      color: var(--navy-900);
+      margin-bottom: 4px;
+    }
+    .template-btn span {
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    /* 버튼 */
+    .btn-primary {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--forest-600), var(--forest-500));
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(46, 125, 50, 0.3);
+    }
+    .btn-primary:disabled {
+      background: #cbd5e1;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    .btn-secondary {
+      padding: 16px;
+      background: var(--surface-100);
+      color: var(--navy-900);
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-secondary:hover {
+      background: #e2e8f0;
+    }
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .btn-row .btn-secondary {
+      flex: 1;
+    }
+    .btn-row .btn-primary {
+      flex: 2;
+    }
+
+    /* 미리보기 */
+    .preview-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .preview-header {
+      background: var(--navy-900);
+      color: white;
+      padding: 20px 24px;
+      text-align: center;
+    }
+    .preview-header h2 {
+      font-size: 20px;
+      margin-bottom: 4px;
+    }
+    .preview-header p {
+      font-size: 14px;
+      opacity: 0.8;
+    }
+    .preview-body {
+      padding: 24px;
+    }
+    .preview-section {
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .preview-section:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+    .preview-section h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--navy-900);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .preview-section h4 .material-symbols-outlined {
+      font-size: 20px;
+      color: var(--forest-600);
+    }
+    .preview-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .preview-table th, .preview-table td {
+      padding: 10px 12px;
+      text-align: left;
+      border: 1px solid #e2e8f0;
+      font-size: 13px;
+    }
+    .preview-table th {
+      background: var(--surface-100);
+      font-weight: 600;
+      color: var(--navy-900);
+      width: 120px;
+    }
+    .preview-list {
+      list-style: none;
+      padding: 0;
+    }
+    .preview-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .preview-list li:last-child {
+      border-bottom: none;
+    }
+    .preview-list li::before {
+      content: '•';
+      color: var(--forest-600);
+      font-weight: bold;
+    }
+    .preview-text {
+      font-size: 14px;
+      color: var(--navy-700);
+      line-height: 1.8;
+      white-space: pre-wrap;
+    }
+
+    /* 다운로드 섹션 */
+    .download-section {
+      margin-top: 24px;
+      padding: 24px;
+      background: linear-gradient(135deg, var(--forest-100), white);
+      border-radius: 12px;
+      text-align: center;
+    }
+    .download-section h4 {
+      font-size: 16px;
+      color: var(--navy-900);
+      margin-bottom: 16px;
+    }
+    .download-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-download {
+      padding: 14px 24px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .btn-download.word {
+      background: #2b579a;
+      color: white;
+      border: none;
+    }
+    .btn-download.word:hover {
+      background: #1e3f6f;
+    }
+    .btn-download.pdf {
+      background: #dc2626;
+      color: white;
+      border: none;
+    }
+    .btn-download.pdf:hover {
+      background: #b91c1c;
+    }
+    .btn-download.copy {
+      background: white;
+      color: var(--navy-900);
+      border: 2px solid var(--navy-900);
+    }
+    .btn-download.copy:hover {
+      background: var(--navy-100);
+    }
+
+    /* 면책 조항 */
+    .disclaimer {
+      margin-top: 24px;
+      padding: 16px;
+      background: #fef3c7;
+      border-radius: 10px;
+      border-left: 4px solid var(--warm-500);
+    }
+    .disclaimer h5 {
+      font-size: 13px;
+      color: #92400e;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .disclaimer ul {
+      margin: 0;
+      padding-left: 16px;
+      font-size: 12px;
+      color: #92400e;
+    }
+
+    /* 연결 섹션 */
+    .link-section {
+      margin-top: 24px;
+      padding: 20px;
+      background: var(--navy-100);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .link-section .material-symbols-outlined {
+      font-size: 32px;
+      color: var(--navy-600);
+    }
+    .link-section-content {
+      flex: 1;
+    }
+    .link-section-content strong {
+      display: block;
+      font-size: 14px;
+      color: var(--navy-900);
+      margin-bottom: 4px;
+    }
+    .link-section-content span {
+      font-size: 13px;
+      color: #64748b;
+    }
+    .link-section a {
+      padding: 10px 20px;
+      background: var(--navy-900);
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .link-section a:hover {
+      background: var(--navy-700);
+    }
+
+    /* 토스트 */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      padding: 16px 24px;
+      border-radius: 12px;
+      color: white;
+      font-weight: 500;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s;
+      z-index: 1000;
+      background: var(--navy-900);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* 반응형 */
+    @media (max-width: 768px) {
+      .type-selector, .template-grid {
+        grid-template-columns: 1fr;
+      }
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      .form-group.full {
+        grid-column: 1;
+      }
+      .download-buttons {
+        flex-direction: column;
+      }
+      .btn-download {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    /* 인쇄 */
+    @media print {
+      .header, .step-indicator, .btn-row, .download-section, .disclaimer, .link-section, .toast {
+        display: none !important;
+      }
+      body {
+        background: white;
+      }
+      .main-container {
+        max-width: 100%;
+        padding: 0;
+      }
+      .card {
+        box-shadow: none;
+        border: none;
+        padding: 0;
+      }
+      .preview-card {
+        border: 1px solid #333;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-left">
+        <a href="/" class="logo">
+          <span class="material-symbols-outlined">verified</span>
+          실무
+        </a>
+        <span class="header-title">과업지시서 생성기</span>
+      </div>
+      <nav class="header-nav">
+        <a href="/">
+          <span class="material-symbols-outlined">home</span>
+          홈
+        </a>
+        <a href="/forms/견적서검토.html">
+          <span class="material-symbols-outlined">fact_check</span>
+          견적서 검토
+        </a>
+        <a href="/tools">
+          <span class="material-symbols-outlined">handyman</span>
+          실무 도구
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="main-container">
+    <div class="step-indicator">
+      <div class="step active" id="step1" onclick="goToStep(1)">
+        <span class="step-number">1</span>
+        <span>종류 선택</span>
+      </div>
+      <div class="step disabled" id="step2" onclick="goToStep(2)">
+        <span class="step-number">2</span>
+        <span>기본 정보</span>
+      </div>
+      <div class="step disabled" id="step3" onclick="goToStep(3)">
+        <span class="step-number">3</span>
+        <span>과업 내용</span>
+      </div>
+      <div class="step disabled" id="step4" onclick="goToStep(4)">
+        <span class="step-number">4</span>
+        <span>조건/일정</span>
+      </div>
+      <div class="step disabled" id="step5" onclick="goToStep(5)">
+        <span class="step-number">5</span>
+        <span>미리보기</span>
+      </div>
+    </div>
+
+    <!-- Step 1: 종류 선택 -->
+    <div class="card" id="step1-card">
+      <h3>
+        <span class="material-symbols-outlined">category</span>
+        과업 종류 선택
+      </h3>
+      <p class="desc">작성할 과업지시서의 종류를 선택해주세요</p>
+
+      <div class="type-selector">
+        <div class="type-btn" data-type="construction" onclick="selectType('construction')">
+          <span class="material-symbols-outlined">construction</span>
+          <span>공사</span>
+          <small>시설공사, 수선공사 등</small>
+        </div>
+        <div class="type-btn" data-type="goods" onclick="selectType('goods')">
+          <span class="material-symbols-outlined">inventory_2</span>
+          <span>물품</span>
+          <small>비품, 소모품, 장비 등</small>
+        </div>
+        <div class="type-btn" data-type="service" onclick="selectType('service')">
+          <span class="material-symbols-outlined">support_agent</span>
+          <span>용역</span>
+          <small>연구용역, 시스템개발 등</small>
+        </div>
+      </div>
+
+      <!-- 템플릿 선택 -->
+      <div id="template-section" style="display: none;">
+        <h4 style="font-size: 15px; font-weight: 600; margin-bottom: 12px; color: var(--navy-900);">
+          <span class="material-symbols-outlined" style="vertical-align: middle;">article</span>
+          템플릿 선택 (선택사항)
+        </h4>
+        <div class="template-grid" id="template-grid"></div>
+      </div>
+
+      <button class="btn-primary" onclick="nextStep(2)" id="btn-step1" disabled>
+        <span class="material-symbols-outlined">arrow_forward</span>
+        다음 단계로
+      </button>
+    </div>
+
+    <!-- Step 2: 기본 정보 -->
+    <div class="card highlight" id="step2-card" style="display: none;">
+      <h3>
+        <span class="material-symbols-outlined">edit_note</span>
+        기본 정보 입력
+      </h3>
+
+      <div class="form-grid">
+        <div class="form-group full">
+          <label>과업명 <span class="required">*</span></label>
+          <input type="text" id="project_name" placeholder="예: 2026년도 OO시스템 유지보수 용역">
+        </div>
+        <div class="form-group">
+          <label>발주 기관 <span class="required">*</span></label>
+          <input type="text" id="organization" placeholder="예: OO시청 정보화담당관">
+        </div>
+        <div class="form-group">
+          <label>담당 부서</label>
+          <input type="text" id="department" placeholder="예: 정보시스템팀">
+        </div>
+        <div class="form-group">
+          <label>추정 금액</label>
+          <input type="number" id="budget" placeholder="50000000" onchange="formatBudget()">
+          <div class="hint" id="budget_display"></div>
+        </div>
+        <div class="form-group">
+          <label>계약 기간</label>
+          <input type="text" id="contract_period" placeholder="예: 계약일로부터 12개월">
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="goToStep(1)">
+          <span class="material-symbols-outlined">arrow_back</span>
+          이전
+        </button>
+        <button class="btn-primary" onclick="nextStep(3)">
+          <span class="material-symbols-outlined">arrow_forward</span>
+          다음 단계로
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 3: 과업 내용 -->
+    <div class="card" id="step3-card" style="display: none;">
+      <h3>
+        <span class="material-symbols-outlined">description</span>
+        과업 내용
+      </h3>
+
+      <div class="form-group">
+        <label>과업 목적 <span class="required">*</span></label>
+        <textarea id="purpose" placeholder="본 과업의 목적을 기술하세요.&#10;예: 효율적인 업무 수행을 위한 OO시스템의 안정적 운영 및 유지보수"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>과업 범위</label>
+        <textarea id="scope" placeholder="과업의 범위를 기술하세요.&#10;예: OO시스템 전반에 대한 유지보수, 기능 개선, 장애 대응 등"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>세부 과업 내용</label>
+        <div class="dynamic-list" id="tasks-list">
+          <div class="dynamic-item">
+            <input type="text" placeholder="세부 과업 내용을 입력하세요">
+            <button class="btn-remove-item" onclick="removeItem(this)">
+              <span class="material-symbols-outlined">close</span>
+            </button>
+          </div>
+        </div>
+        <button class="btn-add-item" onclick="addTask()">
+          <span class="material-symbols-outlined">add</span>
+          과업 항목 추가
+        </button>
+      </div>
+
+      <div class="form-group">
+        <label>납품물 (산출물)</label>
+        <div class="dynamic-list" id="deliverables-list">
+          <div class="dynamic-item">
+            <input type="text" placeholder="예: 유지보수 완료 보고서">
+            <button class="btn-remove-item" onclick="removeItem(this)">
+              <span class="material-symbols-outlined">close</span>
+            </button>
+          </div>
+        </div>
+        <button class="btn-add-item" onclick="addDeliverable()">
+          <span class="material-symbols-outlined">add</span>
+          납품물 추가
+        </button>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="goToStep(2)">
+          <span class="material-symbols-outlined">arrow_back</span>
+          이전
+        </button>
+        <button class="btn-primary" onclick="nextStep(4)">
+          <span class="material-symbols-outlined">arrow_forward</span>
+          다음 단계로
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 4: 수행 조건 및 일정 -->
+    <div class="card" id="step4-card" style="display: none;">
+      <h3>
+        <span class="material-symbols-outlined">event</span>
+        수행 조건 및 일정
+      </h3>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>착수일</label>
+          <input type="text" id="start_date" placeholder="예: 계약 체결일">
+        </div>
+        <div class="form-group">
+          <label>완료일</label>
+          <input type="text" id="end_date" placeholder="예: 계약 체결일로부터 12개월">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>투입 인력 요건</label>
+        <textarea id="personnel" placeholder="예: 책임기술자 1인 이상 (해당 분야 경력 5년 이상)"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>검수 방법</label>
+        <textarea id="inspection" placeholder="예: 납품물에 대한 담당자 확인 및 검수조서 작성"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>대금 지급 조건</label>
+        <textarea id="payment" placeholder="예: 검수 완료 후 14일 이내 일시불 지급"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>기타 특기사항</label>
+        <textarea id="remarks" placeholder="기타 특별히 명시할 사항이 있으면 입력하세요"></textarea>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="goToStep(3)">
+          <span class="material-symbols-outlined">arrow_back</span>
+          이전
+        </button>
+        <button class="btn-primary" onclick="generatePreview()">
+          <span class="material-symbols-outlined">visibility</span>
+          미리보기
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 5: 미리보기 -->
+    <div class="card" id="step5-card" style="display: none;">
+      <h3>
+        <span class="material-symbols-outlined">preview</span>
+        과업지시서 미리보기
+      </h3>
+
+      <div class="preview-card" id="preview-content">
+        <!-- 동적으로 생성됨 -->
+      </div>
+
+      <div class="download-section">
+        <h4>문서 다운로드</h4>
+        <div class="download-buttons">
+          <button class="btn-download word" onclick="downloadWord()">
+            <span class="material-symbols-outlined">description</span>
+            Word 다운로드
+          </button>
+          <button class="btn-download pdf" onclick="downloadPDF()">
+            <span class="material-symbols-outlined">picture_as_pdf</span>
+            PDF 다운로드
+          </button>
+          <button class="btn-download copy" onclick="copyToClipboard()">
+            <span class="material-symbols-outlined">content_copy</span>
+            텍스트 복사
+          </button>
+        </div>
+      </div>
+
+      <div class="disclaimer">
+        <h5>
+          <span class="material-symbols-outlined">warning</span>
+          면책 조항
+        </h5>
+        <ul>
+          <li>본 문서는 참고용 템플릿이며, 실제 사용 시 담당자의 검토가 필요합니다.</li>
+          <li>기관별 규정 및 지침에 따라 내용 수정이 필요할 수 있습니다.</li>
+          <li>법적 효력이 있는 문서 작성은 전문가와 상담하시기 바랍니다.</li>
+        </ul>
+      </div>
+
+      <div class="link-section">
+        <span class="material-symbols-outlined">fact_check</span>
+        <div class="link-section-content">
+          <strong>견적서 검토가 필요하신가요?</strong>
+          <span>견적서의 적정성을 검토하고 필요 서류를 확인하세요</span>
+        </div>
+        <a href="/forms/견적서검토.html">견적서 검토하기</a>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="goToStep(4)">
+          <span class="material-symbols-outlined">arrow_back</span>
+          수정하기
+        </button>
+        <button class="btn-primary" onclick="window.print()">
+          <span class="material-symbols-outlined">print</span>
+          인쇄하기
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://unpkg.com/docx@8.5.0/build/index.umd.js"></script>
+  <script>
+    // 상태
+    let currentStep = 1;
+    let selectedType = null;
+    let selectedTemplate = null;
+
+    // 템플릿 데이터
+    const templates = {
+      construction: [
+        { id: 'facility', name: '시설물 공사', desc: '건물 신축, 증축, 리모델링' },
+        { id: 'repair', name: '수선 공사', desc: '시설물 보수, 유지보수' },
+        { id: 'interior', name: '인테리어 공사', desc: '실내 인테리어, 환경개선' }
+      ],
+      goods: [
+        { id: 'office', name: '사무용품 구매', desc: '사무기기, 소모품' },
+        { id: 'equipment', name: '장비 구매', desc: '전산장비, 기자재' },
+        { id: 'furniture', name: '가구 구매', desc: '책상, 의자, 캐비닛' }
+      ],
+      service: [
+        { id: 'maintenance', name: '유지보수 용역', desc: '시스템, 시설물 유지보수' },
+        { id: 'research', name: '연구 용역', desc: '정책연구, 조사분석' },
+        { id: 'consulting', name: '컨설팅 용역', desc: '경영, IT 컨설팅' },
+        { id: 'development', name: '시스템 개발', desc: '소프트웨어 개발, 구축' }
+      ]
+    };
+
+    // 종류 선택
+    function selectType(type) {
+      selectedType = type;
+      selectedTemplate = null;
+
+      document.querySelectorAll('.type-btn').forEach(btn => {
+        btn.classList.toggle('selected', btn.dataset.type === type);
+      });
+
+      // 템플릿 표시
+      const templateSection = document.getElementById('template-section');
+      const templateGrid = document.getElementById('template-grid');
+      templateSection.style.display = 'block';
+
+      templateGrid.innerHTML = templates[type].map(t => `
+        <div class="template-btn" data-template="${t.id}" onclick="selectTemplate('${t.id}')">
+          <strong>${t.name}</strong>
+          <span>${t.desc}</span>
+        </div>
+      `).join('');
+
+      document.getElementById('btn-step1').disabled = false;
+    }
+
+    function selectTemplate(templateId) {
+      selectedTemplate = templateId;
+      document.querySelectorAll('.template-btn').forEach(btn => {
+        btn.classList.toggle('selected', btn.dataset.template === templateId);
+      });
+    }
+
+    // 스텝 이동
+    function updateStepIndicator() {
+      for (let i = 1; i <= 5; i++) {
+        const step = document.getElementById(`step${i}`);
+        step.classList.remove('active', 'done', 'disabled');
+        if (i < currentStep) step.classList.add('done');
+        else if (i === currentStep) step.classList.add('active');
+        else step.classList.add('disabled');
+      }
+    }
+
+    function goToStep(step) {
+      if (step > currentStep) return;
+      currentStep = step;
+      updateStepIndicator();
+      showCurrentStep();
+    }
+
+    function nextStep(step) {
+      // 유효성 검사
+      if (step === 2 && !selectedType) {
+        showToast('과업 종류를 선택해주세요.');
+        return;
+      }
+      if (step === 3) {
+        const projectName = document.getElementById('project_name').value.trim();
+        const organization = document.getElementById('organization').value.trim();
+        if (!projectName || !organization) {
+          showToast('과업명과 발주 기관은 필수입니다.');
+          return;
+        }
+      }
+      if (step === 4) {
+        const purpose = document.getElementById('purpose').value.trim();
+        if (!purpose) {
+          showToast('과업 목적을 입력해주세요.');
+          return;
+        }
+      }
+
+      currentStep = step;
+      updateStepIndicator();
+
+      // 스텝 활성화
+      for (let i = 2; i <= step; i++) {
+        document.getElementById(`step${i}`).classList.remove('disabled');
+      }
+
+      showCurrentStep();
+    }
+
+    function showCurrentStep() {
+      for (let i = 1; i <= 5; i++) {
+        document.getElementById(`step${i}-card`).style.display = i === currentStep ? 'block' : 'none';
+      }
+    }
+
+    // 동적 리스트
+    function addTask() {
+      const list = document.getElementById('tasks-list');
+      const item = document.createElement('div');
+      item.className = 'dynamic-item';
+      item.innerHTML = `
+        <input type="text" placeholder="세부 과업 내용을 입력하세요">
+        <button class="btn-remove-item" onclick="removeItem(this)">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      `;
+      list.appendChild(item);
+    }
+
+    function addDeliverable() {
+      const list = document.getElementById('deliverables-list');
+      const item = document.createElement('div');
+      item.className = 'dynamic-item';
+      item.innerHTML = `
+        <input type="text" placeholder="납품물을 입력하세요">
+        <button class="btn-remove-item" onclick="removeItem(this)">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      `;
+      list.appendChild(item);
+    }
+
+    function removeItem(btn) {
+      const list = btn.closest('.dynamic-list');
+      if (list.querySelectorAll('.dynamic-item').length > 1) {
+        btn.closest('.dynamic-item').remove();
+      } else {
+        showToast('최소 1개 항목이 필요합니다.');
+      }
+    }
+
+    // 금액 포맷
+    function formatNumber(num) {
+      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    function formatBudget() {
+      const budget = parseInt(document.getElementById('budget').value) || 0;
+      document.getElementById('budget_display').textContent = budget > 0 ? `= ${formatNumber(budget)}원` : '';
+    }
+
+    // 미리보기 생성
+    function generatePreview() {
+      const typeNames = { construction: '공사', goods: '물품 구매', service: '용역' };
+      const data = {
+        type: typeNames[selectedType],
+        projectName: document.getElementById('project_name').value || '-',
+        organization: document.getElementById('organization').value || '-',
+        department: document.getElementById('department').value || '-',
+        budget: document.getElementById('budget').value ? formatNumber(document.getElementById('budget').value) + '원' : '-',
+        contractPeriod: document.getElementById('contract_period').value || '-',
+        purpose: document.getElementById('purpose').value || '-',
+        scope: document.getElementById('scope').value || '-',
+        tasks: Array.from(document.querySelectorAll('#tasks-list input')).map(i => i.value).filter(v => v.trim()),
+        deliverables: Array.from(document.querySelectorAll('#deliverables-list input')).map(i => i.value).filter(v => v.trim()),
+        startDate: document.getElementById('start_date').value || '-',
+        endDate: document.getElementById('end_date').value || '-',
+        personnel: document.getElementById('personnel').value || '-',
+        inspection: document.getElementById('inspection').value || '-',
+        payment: document.getElementById('payment').value || '-',
+        remarks: document.getElementById('remarks').value || '-'
+      };
+
+      const today = new Date().toLocaleDateString('ko-KR');
+
+      document.getElementById('preview-content').innerHTML = `
+        <div class="preview-header">
+          <h2>과 업 지 시 서</h2>
+          <p>${data.type}</p>
+        </div>
+        <div class="preview-body">
+          <div class="preview-section">
+            <h4><span class="material-symbols-outlined">info</span> 기본 정보</h4>
+            <table class="preview-table">
+              <tr><th>과업명</th><td>${data.projectName}</td></tr>
+              <tr><th>발주 기관</th><td>${data.organization}</td></tr>
+              <tr><th>담당 부서</th><td>${data.department}</td></tr>
+              <tr><th>추정 금액</th><td>${data.budget}</td></tr>
+              <tr><th>계약 기간</th><td>${data.contractPeriod}</td></tr>
+            </table>
+          </div>
+
+          <div class="preview-section">
+            <h4><span class="material-symbols-outlined">target</span> 과업 목적</h4>
+            <p class="preview-text">${data.purpose}</p>
+          </div>
+
+          <div class="preview-section">
+            <h4><span class="material-symbols-outlined">category</span> 과업 범위</h4>
+            <p class="preview-text">${data.scope}</p>
+          </div>
+
+          <div class="preview-section">
+            <h4><span class="material-symbols-outlined">checklist</span> 세부 과업 내용</h4>
+            ${data.tasks.length > 0 ? `
+              <ul class="preview-list">
+                ${data.tasks.map(t => `<li>${t}</li>`).join('')}
+              </ul>
+            ` : '<p class="preview-text">-</p>'}
+          </div>
+
+          <div class="preview-section">
+            <h4><span class="material-symbols-outlined">inventory</span> 납품물 (산출물)</h4>
+            ${data.deliverables.length > 0 ? `
+              <ul class="preview-list">
+                ${data.deliverables.map(d => `<li>${d}</li>`).join('')}
+              </ul>
+            ` : '<p class="preview-text">-</p>'}
+          </div>
+
+          <div class="preview-section">
+            <h4><span class="material-symbols-outlined">event</span> 수행 일정</h4>
+            <table class="preview-table">
+              <tr><th>착수일</th><td>${data.startDate}</td></tr>
+              <tr><th>완료일</th><td>${data.endDate}</td></tr>
+            </table>
+          </div>
+
+          <div class="preview-section">
+            <h4><span class="material-symbols-outlined">group</span> 투입 인력 요건</h4>
+            <p class="preview-text">${data.personnel}</p>
+          </div>
+
+          <div class="preview-section">
+            <h4><span class="material-symbols-outlined">verified</span> 검수 방법</h4>
+            <p class="preview-text">${data.inspection}</p>
+          </div>
+
+          <div class="preview-section">
+            <h4><span class="material-symbols-outlined">payments</span> 대금 지급 조건</h4>
+            <p class="preview-text">${data.payment}</p>
+          </div>
+
+          ${data.remarks !== '-' ? `
+          <div class="preview-section">
+            <h4><span class="material-symbols-outlined">note</span> 기타 특기사항</h4>
+            <p class="preview-text">${data.remarks}</p>
+          </div>
+          ` : ''}
+
+          <div class="preview-section" style="text-align: center; border-bottom: none;">
+            <p style="margin-bottom: 24px;">${today}</p>
+            <p style="font-weight: 600;">${data.organization}</p>
+          </div>
+        </div>
+      `;
+
+      nextStep(5);
+      showToast('과업지시서가 생성되었습니다!');
+    }
+
+    // 다운로드 기능
+    async function downloadPDF() {
+      showToast('PDF 생성 중...');
+
+      const previewContent = document.getElementById('preview-content');
+
+      try {
+        const canvas = await html2canvas(previewContent, {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: '#ffffff'
+        });
+
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const imgWidth = 210;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+        let heightLeft = imgHeight;
+        let position = 0;
+        const pageHeight = 297;
+
+        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+
+        while (heightLeft > 0) {
+          position = heightLeft - imgHeight;
+          pdf.addPage();
+          pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
+          heightLeft -= pageHeight;
+        }
+
+        const projectName = document.getElementById('project_name').value || '과업지시서';
+        pdf.save(`과업지시서_${projectName}.pdf`);
+        showToast('PDF가 다운로드되었습니다!');
+      } catch (error) {
+        console.error('PDF 생성 오류:', error);
+        showToast('PDF 생성에 실패했습니다.');
+      }
+    }
+
+    async function downloadWord() {
+      showToast('Word 문서 생성 중...');
+
+      const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, Table, TableRow, TableCell, WidthType, BorderStyle } = docx;
+
+      const projectName = document.getElementById('project_name').value || '과업지시서';
+      const data = {
+        projectName: document.getElementById('project_name').value || '-',
+        organization: document.getElementById('organization').value || '-',
+        department: document.getElementById('department').value || '-',
+        budget: document.getElementById('budget').value ? formatNumber(document.getElementById('budget').value) + '원' : '-',
+        contractPeriod: document.getElementById('contract_period').value || '-',
+        purpose: document.getElementById('purpose').value || '-',
+        scope: document.getElementById('scope').value || '-',
+        tasks: Array.from(document.querySelectorAll('#tasks-list input')).map(i => i.value).filter(v => v.trim()),
+        deliverables: Array.from(document.querySelectorAll('#deliverables-list input')).map(i => i.value).filter(v => v.trim()),
+        startDate: document.getElementById('start_date').value || '-',
+        endDate: document.getElementById('end_date').value || '-',
+        personnel: document.getElementById('personnel').value || '-',
+        inspection: document.getElementById('inspection').value || '-',
+        payment: document.getElementById('payment').value || '-',
+        remarks: document.getElementById('remarks').value || ''
+      };
+
+      try {
+        const doc = new Document({
+          sections: [{
+            properties: {},
+            children: [
+              new Paragraph({
+                text: '과 업 지 시 서',
+                heading: HeadingLevel.HEADING_1,
+                alignment: AlignmentType.CENTER,
+                spacing: { after: 400 }
+              }),
+              new Paragraph({ text: '' }),
+              new Paragraph({ text: '1. 기본 정보', heading: HeadingLevel.HEADING_2, spacing: { before: 200, after: 100 } }),
+              new Paragraph({ children: [new TextRun({ text: `○ 과업명: ${data.projectName}` })] }),
+              new Paragraph({ children: [new TextRun({ text: `○ 발주기관: ${data.organization}` })] }),
+              new Paragraph({ children: [new TextRun({ text: `○ 담당부서: ${data.department}` })] }),
+              new Paragraph({ children: [new TextRun({ text: `○ 추정금액: ${data.budget}` })] }),
+              new Paragraph({ children: [new TextRun({ text: `○ 계약기간: ${data.contractPeriod}` })] }),
+              new Paragraph({ text: '' }),
+              new Paragraph({ text: '2. 과업 목적', heading: HeadingLevel.HEADING_2, spacing: { before: 200, after: 100 } }),
+              new Paragraph({ text: data.purpose }),
+              new Paragraph({ text: '' }),
+              new Paragraph({ text: '3. 과업 범위', heading: HeadingLevel.HEADING_2, spacing: { before: 200, after: 100 } }),
+              new Paragraph({ text: data.scope }),
+              new Paragraph({ text: '' }),
+              new Paragraph({ text: '4. 세부 과업 내용', heading: HeadingLevel.HEADING_2, spacing: { before: 200, after: 100 } }),
+              ...data.tasks.map(t => new Paragraph({ children: [new TextRun({ text: `  - ${t}` })] })),
+              new Paragraph({ text: '' }),
+              new Paragraph({ text: '5. 납품물 (산출물)', heading: HeadingLevel.HEADING_2, spacing: { before: 200, after: 100 } }),
+              ...data.deliverables.map(d => new Paragraph({ children: [new TextRun({ text: `  - ${d}` })] })),
+              new Paragraph({ text: '' }),
+              new Paragraph({ text: '6. 수행 일정', heading: HeadingLevel.HEADING_2, spacing: { before: 200, after: 100 } }),
+              new Paragraph({ children: [new TextRun({ text: `○ 착수일: ${data.startDate}` })] }),
+              new Paragraph({ children: [new TextRun({ text: `○ 완료일: ${data.endDate}` })] }),
+              new Paragraph({ text: '' }),
+              new Paragraph({ text: '7. 투입 인력 요건', heading: HeadingLevel.HEADING_2, spacing: { before: 200, after: 100 } }),
+              new Paragraph({ text: data.personnel }),
+              new Paragraph({ text: '' }),
+              new Paragraph({ text: '8. 검수 방법', heading: HeadingLevel.HEADING_2, spacing: { before: 200, after: 100 } }),
+              new Paragraph({ text: data.inspection }),
+              new Paragraph({ text: '' }),
+              new Paragraph({ text: '9. 대금 지급 조건', heading: HeadingLevel.HEADING_2, spacing: { before: 200, after: 100 } }),
+              new Paragraph({ text: data.payment }),
+              ...(data.remarks ? [
+                new Paragraph({ text: '' }),
+                new Paragraph({ text: '10. 기타 특기사항', heading: HeadingLevel.HEADING_2, spacing: { before: 200, after: 100 } }),
+                new Paragraph({ text: data.remarks })
+              ] : []),
+              new Paragraph({ text: '' }),
+              new Paragraph({ text: '' }),
+              new Paragraph({
+                text: new Date().toLocaleDateString('ko-KR'),
+                alignment: AlignmentType.CENTER
+              }),
+              new Paragraph({ text: '' }),
+              new Paragraph({
+                children: [new TextRun({ text: data.organization, bold: true })],
+                alignment: AlignmentType.CENTER
+              })
+            ]
+          }]
+        });
+
+        const blob = await Packer.toBlob(doc);
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `과업지시서_${projectName}.docx`;
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast('Word 문서가 다운로드되었습니다!');
+      } catch (error) {
+        console.error('Word 생성 오류:', error);
+        showToast('Word 문서 생성에 실패했습니다.');
+      }
+    }
+
+    function copyToClipboard() {
+      const previewBody = document.querySelector('.preview-body');
+      const text = previewBody.innerText;
+
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('텍스트가 클립보드에 복사되었습니다!');
+      }).catch(() => {
+        showToast('복사에 실패했습니다.');
+      });
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+  </script>
+</body>
+</html>
