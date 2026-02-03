@@ -1,0 +1,1482 @@
+<%# 소요예산 추정기 - 소규모 공사/용역 예산 추정 도구 %>
+
+<style>
+  .estimator-container {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  /* 스텝 인디케이터 */
+  .step-indicator {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .step {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 30px;
+    background: var(--surface-100, #f1f5f9);
+    color: #64748b;
+    font-weight: 500;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .step:hover:not(.disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  .step.active {
+    background: var(--forest-600, #2e7d32);
+    color: white;
+  }
+  .step.done {
+    background: var(--navy-900, #1e3a5f);
+    color: white;
+  }
+  .step.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .step-number {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  /* 카드 */
+  .estimator-card {
+    background: white;
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    border: 1px solid #e2e8f0;
+  }
+  .estimator-card h3 {
+    color: var(--navy-900, #1e3a5f);
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .estimator-card .desc {
+    color: #64748b;
+    margin-bottom: 24px;
+    font-size: 14px;
+  }
+  .estimator-card.highlight {
+    border: 2px solid var(--forest-500, #4caf50);
+    background: linear-gradient(to bottom right, #f0fdf4, #ffffff);
+  }
+
+  /* 종류 선택 */
+  .type-selector {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .type-btn {
+    padding: 28px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 16px;
+    background: white;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+  }
+  .type-btn:hover {
+    border-color: var(--forest-500, #4caf50);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  }
+  .type-btn.selected {
+    border-color: var(--forest-600, #2e7d32);
+    background: var(--forest-100, #e8f5e9);
+  }
+  .type-btn .material-symbols-outlined {
+    font-size: 48px;
+    color: var(--navy-600, #3d5a7f);
+    margin-bottom: 12px;
+  }
+  .type-btn.selected .material-symbols-outlined {
+    color: var(--forest-600, #2e7d32);
+  }
+  .type-btn span {
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--navy-900, #1e3a5f);
+  }
+  .type-btn small {
+    font-size: 13px;
+    color: #64748b;
+    margin-top: 6px;
+    display: block;
+  }
+
+  /* 폼 */
+  .form-section {
+    margin-bottom: 24px;
+    padding: 20px;
+    background: var(--surface-100, #f1f5f9);
+    border-radius: 12px;
+  }
+  .form-section h4 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--navy-900, #1e3a5f);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .form-group {
+    margin-bottom: 0;
+  }
+  .form-group.full {
+    grid-column: 1 / -1;
+  }
+  .form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--navy-900, #1e3a5f);
+    font-size: 14px;
+  }
+  .form-group input, .form-group select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 14px;
+    transition: border-color 0.2s;
+    background: white;
+  }
+  .form-group input:focus, .form-group select:focus {
+    outline: none;
+    border-color: var(--forest-500, #4caf50);
+  }
+  .form-group .hint {
+    font-size: 12px;
+    color: #64748b;
+    margin-top: 4px;
+  }
+
+  /* 항목 리스트 */
+  .item-list {
+    margin-top: 16px;
+  }
+  .item-row {
+    display: grid;
+    grid-template-columns: 1fr 120px 100px 60px;
+    gap: 12px;
+    align-items: end;
+    margin-bottom: 12px;
+    padding: 16px;
+    background: white;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+  }
+  .item-row select, .item-row input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+  .item-row select:focus, .item-row input:focus {
+    outline: none;
+    border-color: var(--forest-500, #4caf50);
+  }
+  .item-row .unit-label {
+    font-size: 13px;
+    color: #64748b;
+    text-align: center;
+    padding: 10px 0;
+  }
+  .btn-remove-row {
+    padding: 10px;
+    background: #fee2e2;
+    color: #ef4444;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-remove-row:hover {
+    background: #ef4444;
+    color: white;
+  }
+  .btn-add-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 20px;
+    background: var(--navy-100, #e8eef5);
+    color: var(--navy-700, #2d4a6f);
+    border: 2px dashed #cbd5e1;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+    width: 100%;
+    justify-content: center;
+    margin-top: 12px;
+  }
+  .btn-add-row:hover {
+    background: var(--forest-100, #e8f5e9);
+    border-color: var(--forest-500, #4caf50);
+    color: var(--forest-600, #2e7d32);
+  }
+
+  /* 등급 선택 */
+  .grade-selector {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 8px;
+  }
+  .grade-btn {
+    padding: 14px 12px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    background: white;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+  }
+  .grade-btn:hover {
+    border-color: var(--forest-500, #4caf50);
+  }
+  .grade-btn.selected {
+    border-color: var(--forest-600, #2e7d32);
+    background: var(--forest-100, #e8f5e9);
+  }
+  .grade-btn strong {
+    display: block;
+    font-size: 14px;
+    color: var(--navy-900, #1e3a5f);
+    margin-bottom: 2px;
+  }
+  .grade-btn span {
+    font-size: 11px;
+    color: #64748b;
+  }
+
+  /* 버튼 */
+  .btn-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+  }
+  .btn-primary {
+    flex: 2;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--forest-600, #2e7d32), var(--forest-500, #4caf50));
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(46, 125, 50, 0.3);
+  }
+  .btn-primary:disabled {
+    background: #cbd5e1;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+  .btn-secondary {
+    flex: 1;
+    padding: 16px;
+    background: var(--surface-100, #f1f5f9);
+    color: var(--navy-900, #1e3a5f);
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover {
+    background: #e2e8f0;
+  }
+
+  /* 결과 화면 */
+  .result-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    border: 1px solid #e2e8f0;
+  }
+  .result-header {
+    background: linear-gradient(135deg, var(--navy-900, #1e3a5f), var(--navy-700, #2d4a6f));
+    color: white;
+    padding: 28px;
+    text-align: center;
+  }
+  .result-header h2 {
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
+  .result-header p {
+    font-size: 14px;
+    opacity: 0.8;
+  }
+  .result-body {
+    padding: 28px;
+  }
+
+  /* 총액 박스 */
+  .total-box {
+    text-align: center;
+    padding: 32px;
+    background: linear-gradient(135deg, var(--forest-600, #2e7d32), var(--forest-500, #4caf50));
+    border-radius: 16px;
+    color: white;
+    margin-bottom: 24px;
+  }
+  .total-box .label {
+    font-size: 14px;
+    opacity: 0.9;
+    margin-bottom: 8px;
+  }
+  .total-box .amount {
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  .total-box .amount span {
+    font-size: 20px;
+    font-weight: 400;
+  }
+  .total-box .range {
+    margin-top: 12px;
+    font-size: 14px;
+    opacity: 0.9;
+    padding: 10px 20px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 8px;
+    display: inline-block;
+  }
+
+  /* 상세 내역 */
+  .detail-section {
+    margin-bottom: 24px;
+  }
+  .detail-section h4 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--navy-900, #1e3a5f);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #e2e8f0;
+  }
+  .detail-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .detail-table th, .detail-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 14px;
+  }
+  .detail-table th {
+    background: var(--surface-100, #f1f5f9);
+    font-weight: 600;
+    color: var(--navy-900, #1e3a5f);
+  }
+  .detail-table td.number {
+    text-align: right;
+    font-family: 'D2Coding', monospace;
+  }
+  .detail-table tr:last-child td {
+    border-bottom: none;
+  }
+  .detail-table tr.total {
+    background: var(--forest-100, #e8f5e9);
+    font-weight: 600;
+  }
+  .detail-table tr.total td {
+    border-top: 2px solid var(--forest-500, #4caf50);
+  }
+
+  /* 요약 박스 */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .summary-item {
+    text-align: center;
+    padding: 16px;
+    background: var(--surface-100, #f1f5f9);
+    border-radius: 12px;
+  }
+  .summary-item .label {
+    font-size: 12px;
+    color: #64748b;
+    margin-bottom: 4px;
+  }
+  .summary-item .value {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--navy-900, #1e3a5f);
+  }
+
+  /* 면책 조항 */
+  .disclaimer {
+    margin-top: 24px;
+    padding: 20px;
+    background: #fef3c7;
+    border-radius: 12px;
+    border-left: 4px solid #f59e0b;
+  }
+  .disclaimer h5 {
+    font-size: 14px;
+    color: #92400e;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .disclaimer p {
+    font-size: 13px;
+    color: #92400e;
+    line-height: 1.8;
+    margin: 0;
+    white-space: pre-line;
+  }
+
+  /* 다운로드/공유 */
+  .action-section {
+    margin-top: 24px;
+    padding: 24px;
+    background: linear-gradient(135deg, var(--forest-100, #e8f5e9), white);
+    border-radius: 12px;
+    text-align: center;
+  }
+  .action-section h4 {
+    font-size: 15px;
+    color: var(--navy-900, #1e3a5f);
+    margin-bottom: 16px;
+  }
+  .action-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn-action {
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+  .btn-action.pdf {
+    background: #dc2626;
+    color: white;
+    border: none;
+  }
+  .btn-action.pdf:hover { background: #b91c1c; }
+  .btn-action.print {
+    background: white;
+    color: var(--navy-900, #1e3a5f);
+    border: 2px solid #e2e8f0;
+  }
+  .btn-action.print:hover { background: var(--surface-100, #f1f5f9); }
+  .btn-action.share {
+    background: var(--forest-600, #2e7d32);
+    color: white;
+    border: none;
+  }
+  .btn-action.share:hover { background: var(--forest-500, #4caf50); }
+
+  /* 연결 링크 */
+  .link-section {
+    margin-top: 24px;
+    padding: 20px;
+    background: var(--navy-100, #e8eef5);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .link-section .material-symbols-outlined {
+    font-size: 36px;
+    color: var(--navy-600, #3d5a7f);
+  }
+  .link-section-content {
+    flex: 1;
+  }
+  .link-section-content strong {
+    display: block;
+    font-size: 14px;
+    color: var(--navy-900, #1e3a5f);
+    margin-bottom: 4px;
+  }
+  .link-section-content span {
+    font-size: 13px;
+    color: #64748b;
+  }
+  .link-section a {
+    padding: 10px 20px;
+    background: var(--navy-900, #1e3a5f);
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+  .link-section a:hover {
+    background: var(--navy-700, #2d4a6f);
+  }
+
+  /* 반응형 */
+  @media (max-width: 768px) {
+    .type-selector {
+      grid-template-columns: 1fr;
+    }
+    .form-grid {
+      grid-template-columns: 1fr;
+    }
+    .grade-selector {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .item-row {
+      grid-template-columns: 1fr;
+    }
+    .summary-grid {
+      grid-template-columns: 1fr;
+    }
+    .action-buttons {
+      flex-direction: column;
+    }
+    .btn-action {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  /* 인쇄 */
+  @media print {
+    .step-indicator, .btn-row, .action-section, .link-section {
+      display: none !important;
+    }
+    .estimator-card, .result-card {
+      box-shadow: none;
+      border: 1px solid #333;
+    }
+  }
+</style>
+
+<!-- 페이지 헤더 -->
+<section class="gradient-point text-white py-12 lg:py-16">
+  <div class="container-wide">
+    <div class="flex items-start gap-5">
+      <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 shadow-lg">
+        <span class="material-symbols-outlined text-4xl text-white">calculate</span>
+      </div>
+      <div>
+        <h1 class="text-3xl lg:text-4xl font-bold tracking-tight mb-2">소요예산 추정기</h1>
+        <p class="text-point-100 text-lg">소규모 공사/용역 시행 전 대략적인 예산을 미리 파악하세요</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section py-8">
+  <div class="container-wide estimator-container">
+    <!-- 스텝 인디케이터 -->
+    <div class="step-indicator">
+      <div class="step active" id="step1" onclick="goToStep(1)">
+        <span class="step-number">1</span>
+        <span>종류 선택</span>
+      </div>
+      <div class="step disabled" id="step2" onclick="goToStep(2)">
+        <span class="step-number">2</span>
+        <span>항목 입력</span>
+      </div>
+      <div class="step disabled" id="step3" onclick="goToStep(3)">
+        <span class="step-number">3</span>
+        <span>결과 확인</span>
+      </div>
+    </div>
+
+    <!-- Step 1: 종류 선택 -->
+    <div class="estimator-card" id="step1-card">
+      <h3>
+        <span class="material-symbols-outlined">category</span>
+        추정 종류 선택
+      </h3>
+      <p class="desc">예산을 추정할 항목의 종류를 선택해주세요</p>
+
+      <div class="type-selector">
+        <div class="type-btn" data-type="construction" onclick="selectType('construction')">
+          <span class="material-symbols-outlined">construction</span>
+          <span>공사</span>
+          <small>도배, 장판, 타일, 페인트 등<br>소규모 시설 공사</small>
+        </div>
+        <div class="type-btn" data-type="service" onclick="selectType('service')">
+          <span class="material-symbols-outlined">support_agent</span>
+          <span>용역</span>
+          <small>유지보수, 청소, 경비 등<br>서비스 용역</small>
+        </div>
+        <div class="type-btn" data-type="goods" onclick="selectType('goods')">
+          <span class="material-symbols-outlined">inventory_2</span>
+          <span>물품</span>
+          <small>가구, 전산장비, 비품 등<br>물품 구매</small>
+        </div>
+      </div>
+
+      <button class="btn-primary" onclick="nextStep(2)" id="btn-step1" disabled style="width: 100%;">
+        <span class="material-symbols-outlined">arrow_forward</span>
+        다음 단계로
+      </button>
+    </div>
+
+    <!-- Step 2: 항목 입력 -->
+    <div class="estimator-card highlight" id="step2-card" style="display: none;">
+      <h3>
+        <span class="material-symbols-outlined">edit_note</span>
+        <span id="step2-title">세부 항목 입력</span>
+      </h3>
+      <p class="desc" id="step2-desc">항목별 수량을 입력하고 자재 등급을 선택해주세요</p>
+
+      <!-- 공사 항목 입력 -->
+      <div id="construction-form" style="display: none;">
+        <div class="form-section">
+          <h4>
+            <span class="material-symbols-outlined">list</span>
+            공사 항목
+          </h4>
+          <div class="item-list" id="construction-items">
+            <div class="item-row">
+              <div>
+                <label style="font-size: 12px; color: #64748b; margin-bottom: 4px; display: block;">공종</label>
+                <select name="construction_type" onchange="updateUnit(this)">
+                  <option value="">-- 선택 --</option>
+                  <option value="wallpaper">도배</option>
+                  <option value="flooring">장판/바닥재</option>
+                  <option value="tile">타일</option>
+                  <option value="painting">페인트</option>
+                  <option value="ceiling">천장</option>
+                  <option value="electric">전기</option>
+                  <option value="plumbing">배관</option>
+                  <option value="aircon">에어컨 설치</option>
+                  <option value="boiler">보일러</option>
+                  <option value="window">창호</option>
+                  <option value="demolition">철거</option>
+                  <option value="waterproof">방수</option>
+                  <option value="partition">칸막이</option>
+                </select>
+              </div>
+              <div>
+                <label style="font-size: 12px; color: #64748b; margin-bottom: 4px; display: block;">수량</label>
+                <input type="number" name="quantity" placeholder="0" min="0" step="0.1">
+              </div>
+              <div class="unit-label">m²</div>
+              <button class="btn-remove-row" onclick="removeRow(this)" title="삭제">
+                <span class="material-symbols-outlined">close</span>
+              </button>
+            </div>
+          </div>
+          <button class="btn-add-row" onclick="addConstructionRow()">
+            <span class="material-symbols-outlined">add</span>
+            공사 항목 추가
+          </button>
+        </div>
+      </div>
+
+      <!-- 용역 항목 입력 -->
+      <div id="service-form" style="display: none;">
+        <div class="form-section">
+          <h4>
+            <span class="material-symbols-outlined">work</span>
+            용역 정보
+          </h4>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>용역 종류</label>
+              <select id="service_type">
+                <option value="">-- 선택 --</option>
+                <option value="maintenance">유지보수</option>
+                <option value="cleaning">청소용역</option>
+                <option value="security">경비용역</option>
+                <option value="consulting">컨설팅</option>
+                <option value="design">디자인</option>
+                <option value="research">연구용역</option>
+                <option value="education">교육훈련</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>기간</label>
+              <input type="number" id="service_duration" placeholder="0" min="0">
+              <div class="hint" id="service_unit_hint">월</div>
+            </div>
+            <div class="form-group">
+              <label>투입 인력 (명)</label>
+              <input type="number" id="personnel_count" placeholder="1" min="1" value="1">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 물품 항목 입력 -->
+      <div id="goods-form" style="display: none;">
+        <div class="form-section">
+          <h4>
+            <span class="material-symbols-outlined">shopping_cart</span>
+            물품 목록
+          </h4>
+          <div class="item-list" id="goods-items">
+            <div class="item-row">
+              <div>
+                <label style="font-size: 12px; color: #64748b; margin-bottom: 4px; display: block;">품목</label>
+                <select name="goods_type">
+                  <option value="">-- 선택 --</option>
+                  <option value="desk">책상</option>
+                  <option value="chair">의자</option>
+                  <option value="cabinet">캐비닛</option>
+                  <option value="computer">컴퓨터</option>
+                  <option value="laptop">노트북</option>
+                  <option value="monitor">모니터</option>
+                  <option value="printer">프린터</option>
+                  <option value="projector">프로젝터</option>
+                  <option value="aircon_unit">에어컨</option>
+                  <option value="refrigerator">냉장고</option>
+                </select>
+              </div>
+              <div>
+                <label style="font-size: 12px; color: #64748b; margin-bottom: 4px; display: block;">수량</label>
+                <input type="number" name="quantity" placeholder="0" min="0">
+              </div>
+              <div class="unit-label">개</div>
+              <button class="btn-remove-row" onclick="removeRow(this)" title="삭제">
+                <span class="material-symbols-outlined">close</span>
+              </button>
+            </div>
+          </div>
+          <button class="btn-add-row" onclick="addGoodsRow()">
+            <span class="material-symbols-outlined">add</span>
+            물품 추가
+          </button>
+        </div>
+      </div>
+
+      <!-- 등급 선택 (공통) -->
+      <div class="form-section" id="grade-section">
+        <h4>
+          <span class="material-symbols-outlined">stars</span>
+          자재/품질 등급
+        </h4>
+        <p style="font-size: 13px; color: #64748b; margin-bottom: 12px;">선택한 등급에 따라 추정 금액이 달라집니다</p>
+        <div class="grade-selector">
+          <div class="grade-btn" data-grade="basic" onclick="selectGrade('basic')">
+            <strong>기본형</strong>
+            <span>표준 사양</span>
+          </div>
+          <div class="grade-btn selected" data-grade="standard" onclick="selectGrade('standard')">
+            <strong>보통</strong>
+            <span>중급 사양 (권장)</span>
+          </div>
+          <div class="grade-btn" data-grade="premium" onclick="selectGrade('premium')">
+            <strong>고급</strong>
+            <span>고급 사양</span>
+          </div>
+          <div class="grade-btn" data-grade="luxury" onclick="selectGrade('luxury')">
+            <strong>프리미엄</strong>
+            <span>최고급 사양</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="goToStep(1)">
+          <span class="material-symbols-outlined">arrow_back</span>
+          이전
+        </button>
+        <button class="btn-primary" onclick="calculateEstimate()">
+          <span class="material-symbols-outlined">calculate</span>
+          예산 추정하기
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 3: 결과 -->
+    <div class="estimator-card" id="step3-card" style="display: none;">
+      <div class="result-card" id="result-container">
+        <div class="result-header">
+          <h2>소요예산 추정 결과</h2>
+          <p id="result-meta"></p>
+        </div>
+        <div class="result-body" id="result-body">
+          <!-- 결과가 동적으로 생성됨 -->
+        </div>
+      </div>
+
+      <div class="action-section">
+        <h4>결과 저장 및 공유</h4>
+        <div class="action-buttons">
+          <button class="btn-action pdf" onclick="downloadPDF()">
+            <span class="material-symbols-outlined">picture_as_pdf</span>
+            PDF 저장
+          </button>
+          <button class="btn-action print" onclick="window.print()">
+            <span class="material-symbols-outlined">print</span>
+            인쇄
+          </button>
+          <button class="btn-action share" onclick="shareResult()">
+            <span class="material-symbols-outlined">share</span>
+            공유하기
+          </button>
+        </div>
+      </div>
+
+      <div class="link-section">
+        <span class="material-symbols-outlined">fact_check</span>
+        <div class="link-section-content">
+          <strong>견적서를 받으셨나요?</strong>
+          <span>견적서의 적정성을 검토하고 필요 서류를 확인하세요</span>
+        </div>
+        <a href="/forms/견적서검토.html">견적서 검토하기</a>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="goToStep(2)">
+          <span class="material-symbols-outlined">arrow_back</span>
+          수정하기
+        </button>
+        <button class="btn-primary" onclick="resetForm()">
+          <span class="material-symbols-outlined">refresh</span>
+          새로 추정하기
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+  // 상태
+  let currentStep = 1;
+  let selectedType = null;
+  let selectedGrade = 'standard';
+  let lastResult = null;
+
+  // 단위 정보
+  const unitMap = {
+    wallpaper: 'm²', flooring: 'm²', tile: 'm²', painting: 'm²', ceiling: 'm²',
+    electric: '개소', plumbing: '개소', aircon: '대', boiler: '대',
+    window: 'm²', demolition: 'm²', waterproof: 'm²', partition: 'm²'
+  };
+
+  const serviceUnits = {
+    maintenance: '월', cleaning: '월', security: '월',
+    consulting: '일', design: '건', research: '건', education: '시간'
+  };
+
+  // 종류 선택
+  function selectType(type) {
+    selectedType = type;
+    document.querySelectorAll('.type-btn').forEach(btn => {
+      btn.classList.toggle('selected', btn.dataset.type === type);
+    });
+    document.getElementById('btn-step1').disabled = false;
+  }
+
+  // 등급 선택
+  function selectGrade(grade) {
+    selectedGrade = grade;
+    document.querySelectorAll('.grade-btn').forEach(btn => {
+      btn.classList.toggle('selected', btn.dataset.grade === grade);
+    });
+  }
+
+  // 스텝 이동
+  function updateStepIndicator() {
+    for (let i = 1; i <= 3; i++) {
+      const step = document.getElementById(`step${i}`);
+      step.classList.remove('active', 'done', 'disabled');
+      if (i < currentStep) step.classList.add('done');
+      else if (i === currentStep) step.classList.add('active');
+      else step.classList.add('disabled');
+    }
+  }
+
+  function goToStep(step) {
+    if (step > currentStep) return;
+    currentStep = step;
+    updateStepIndicator();
+    showCurrentStep();
+  }
+
+  function nextStep(step) {
+    if (step === 2 && !selectedType) {
+      showToast('추정 종류를 선택해주세요.');
+      return;
+    }
+    currentStep = step;
+    updateStepIndicator();
+
+    // 스텝 활성화
+    for (let i = 2; i <= step; i++) {
+      document.getElementById(`step${i}`).classList.remove('disabled');
+    }
+
+    showCurrentStep();
+    setupStep2();
+  }
+
+  function showCurrentStep() {
+    document.getElementById('step1-card').style.display = currentStep === 1 ? 'block' : 'none';
+    document.getElementById('step2-card').style.display = currentStep === 2 ? 'block' : 'none';
+    document.getElementById('step3-card').style.display = currentStep === 3 ? 'block' : 'none';
+  }
+
+  function setupStep2() {
+    if (currentStep !== 2) return;
+
+    const titles = {
+      construction: '공사 항목 입력',
+      service: '용역 정보 입력',
+      goods: '물품 목록 입력'
+    };
+    const descs = {
+      construction: '공사 항목별 면적/수량을 입력하고 자재 등급을 선택해주세요',
+      service: '용역 종류와 기간, 투입 인력을 입력해주세요',
+      goods: '구매할 물품과 수량을 입력하고 품질 등급을 선택해주세요'
+    };
+
+    document.getElementById('step2-title').textContent = titles[selectedType];
+    document.getElementById('step2-desc').textContent = descs[selectedType];
+
+    document.getElementById('construction-form').style.display = selectedType === 'construction' ? 'block' : 'none';
+    document.getElementById('service-form').style.display = selectedType === 'service' ? 'block' : 'none';
+    document.getElementById('goods-form').style.display = selectedType === 'goods' ? 'block' : 'none';
+  }
+
+  // 항목 추가/삭제
+  function addConstructionRow() {
+    const list = document.getElementById('construction-items');
+    const row = document.createElement('div');
+    row.className = 'item-row';
+    row.innerHTML = `
+      <div>
+        <label style="font-size: 12px; color: #64748b; margin-bottom: 4px; display: block;">공종</label>
+        <select name="construction_type" onchange="updateUnit(this)">
+          <option value="">-- 선택 --</option>
+          <option value="wallpaper">도배</option>
+          <option value="flooring">장판/바닥재</option>
+          <option value="tile">타일</option>
+          <option value="painting">페인트</option>
+          <option value="ceiling">천장</option>
+          <option value="electric">전기</option>
+          <option value="plumbing">배관</option>
+          <option value="aircon">에어컨 설치</option>
+          <option value="boiler">보일러</option>
+          <option value="window">창호</option>
+          <option value="demolition">철거</option>
+          <option value="waterproof">방수</option>
+          <option value="partition">칸막이</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size: 12px; color: #64748b; margin-bottom: 4px; display: block;">수량</label>
+        <input type="number" name="quantity" placeholder="0" min="0" step="0.1">
+      </div>
+      <div class="unit-label">m²</div>
+      <button class="btn-remove-row" onclick="removeRow(this)" title="삭제">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    `;
+    list.appendChild(row);
+  }
+
+  function addGoodsRow() {
+    const list = document.getElementById('goods-items');
+    const row = document.createElement('div');
+    row.className = 'item-row';
+    row.innerHTML = `
+      <div>
+        <label style="font-size: 12px; color: #64748b; margin-bottom: 4px; display: block;">품목</label>
+        <select name="goods_type">
+          <option value="">-- 선택 --</option>
+          <option value="desk">책상</option>
+          <option value="chair">의자</option>
+          <option value="cabinet">캐비닛</option>
+          <option value="computer">컴퓨터</option>
+          <option value="laptop">노트북</option>
+          <option value="monitor">모니터</option>
+          <option value="printer">프린터</option>
+          <option value="projector">프로젝터</option>
+          <option value="aircon_unit">에어컨</option>
+          <option value="refrigerator">냉장고</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size: 12px; color: #64748b; margin-bottom: 4px; display: block;">수량</label>
+        <input type="number" name="quantity" placeholder="0" min="0">
+      </div>
+      <div class="unit-label">개</div>
+      <button class="btn-remove-row" onclick="removeRow(this)" title="삭제">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    `;
+    list.appendChild(row);
+  }
+
+  function removeRow(btn) {
+    const list = btn.closest('.item-list');
+    if (list.querySelectorAll('.item-row').length > 1) {
+      btn.closest('.item-row').remove();
+    } else {
+      showToast('최소 1개 항목이 필요합니다.');
+    }
+  }
+
+  function updateUnit(select) {
+    const row = select.closest('.item-row');
+    const unitLabel = row.querySelector('.unit-label');
+    unitLabel.textContent = unitMap[select.value] || 'm²';
+  }
+
+  // 용역 종류 변경 시 단위 업데이트
+  document.getElementById('service_type')?.addEventListener('change', function() {
+    const hint = document.getElementById('service_unit_hint');
+    hint.textContent = serviceUnits[this.value] || '월';
+  });
+
+  // 금액 포맷
+  function formatNumber(num) {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  // 예산 추정
+  async function calculateEstimate() {
+    let requestData = {
+      type: selectedType,
+      grade: selectedGrade
+    };
+
+    if (selectedType === 'construction') {
+      const items = [];
+      document.querySelectorAll('#construction-items .item-row').forEach(row => {
+        const type = row.querySelector('[name="construction_type"]').value;
+        const quantity = row.querySelector('[name="quantity"]').value;
+        if (type && quantity > 0) {
+          items.push({ type, quantity });
+        }
+      });
+      if (items.length === 0) {
+        showToast('공사 항목을 입력해주세요.');
+        return;
+      }
+      requestData.items = items;
+    } else if (selectedType === 'service') {
+      const serviceType = document.getElementById('service_type').value;
+      const duration = document.getElementById('service_duration').value;
+      const personnelCount = document.getElementById('personnel_count').value;
+      if (!serviceType) {
+        showToast('용역 종류를 선택해주세요.');
+        return;
+      }
+      if (!duration || duration <= 0) {
+        showToast('기간을 입력해주세요.');
+        return;
+      }
+      requestData.service_type = serviceType;
+      requestData.duration = duration;
+      requestData.personnel_count = personnelCount;
+    } else if (selectedType === 'goods') {
+      const items = [];
+      document.querySelectorAll('#goods-items .item-row').forEach(row => {
+        const type = row.querySelector('[name="goods_type"]').value;
+        const quantity = row.querySelector('[name="quantity"]').value;
+        if (type && quantity > 0) {
+          items.push({ type, quantity });
+        }
+      });
+      if (items.length === 0) {
+        showToast('물품을 입력해주세요.');
+        return;
+      }
+      requestData.items = items;
+    }
+
+    try {
+      const response = await fetch('/estimations/calculate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': document.querySelector('[name="csrf-token"]')?.content || ''
+        },
+        body: JSON.stringify(requestData)
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        lastResult = result;
+        renderResult(result);
+        document.getElementById('step3').classList.remove('disabled');
+        currentStep = 3;
+        updateStepIndicator();
+        showCurrentStep();
+        showToast('추정이 완료되었습니다!');
+      } else {
+        showToast(result.error || '추정에 실패했습니다.');
+      }
+    } catch (error) {
+      console.error('Estimation error:', error);
+      showToast('서버 오류가 발생했습니다.');
+    }
+  }
+
+  // 결과 렌더링
+  function renderResult(result) {
+    const typeNames = { construction: '공사', service: '용역', goods: '물품' };
+    const gradeNames = { basic: '기본형', standard: '보통', premium: '고급', luxury: '프리미엄' };
+    const today = new Date().toLocaleDateString('ko-KR');
+
+    document.getElementById('result-meta').textContent =
+      `${typeNames[result.type]} | ${gradeNames[selectedGrade]} 등급 | ${today}`;
+
+    let html = `
+      <div class="total-box">
+        <div class="label">추정 총액 (VAT 포함)</div>
+        <div class="amount">${formatNumber(result.summary.total)}<span>원</span></div>
+        <div class="range">예상 범위: ${formatNumber(result.range.min)}원 ~ ${formatNumber(result.range.max)}원</div>
+      </div>
+    `;
+
+    // 상세 내역
+    html += `
+      <div class="detail-section">
+        <h4>
+          <span class="material-symbols-outlined">receipt_long</span>
+          상세 내역
+        </h4>
+        <table class="detail-table">
+          <thead>
+            <tr>
+              <th>항목</th>
+              <th style="text-align: center;">수량</th>
+              <th style="text-align: right;">단가</th>
+              <th style="text-align: right;">금액</th>
+            </tr>
+          </thead>
+          <tbody>
+    `;
+
+    result.details.forEach(item => {
+      const qty = item.duration ? `${item.duration} ${item.unit}` : `${item.quantity} ${item.unit}`;
+      if (item.personnel && item.personnel > 1) {
+        html += `
+          <tr>
+            <td>${item.name} (${item.personnel}명)</td>
+            <td style="text-align: center;">${qty}</td>
+            <td class="number">${formatNumber(item.unit_price)}원</td>
+            <td class="number">${formatNumber(item.subtotal)}원</td>
+          </tr>
+        `;
+      } else {
+        html += `
+          <tr>
+            <td>${item.name}</td>
+            <td style="text-align: center;">${qty}</td>
+            <td class="number">${formatNumber(item.unit_price)}원</td>
+            <td class="number">${formatNumber(item.subtotal)}원</td>
+          </tr>
+        `;
+      }
+    });
+
+    html += `</tbody></table></div>`;
+
+    // 비용 요약
+    html += `
+      <div class="detail-section">
+        <h4>
+          <span class="material-symbols-outlined">summarize</span>
+          비용 구성
+        </h4>
+        <table class="detail-table">
+          <tbody>
+    `;
+
+    if (result.summary.direct_cost) {
+      html += `<tr><td>직접비</td><td class="number">${formatNumber(result.summary.direct_cost)}원</td></tr>`;
+    }
+    if (result.summary.overhead) {
+      html += `<tr><td>일반관리비</td><td class="number">${formatNumber(result.summary.overhead)}원</td></tr>`;
+    }
+    if (result.summary.profit) {
+      html += `<tr><td>이윤</td><td class="number">${formatNumber(result.summary.profit)}원</td></tr>`;
+    }
+    if (result.summary.safety) {
+      html += `<tr><td>안전관리비</td><td class="number">${formatNumber(result.summary.safety)}원</td></tr>`;
+    }
+    if (result.summary.insurance) {
+      html += `<tr><td>산재보험료</td><td class="number">${formatNumber(result.summary.insurance)}원</td></tr>`;
+    }
+
+    html += `
+            <tr><td>공급가액 (소계)</td><td class="number">${formatNumber(result.summary.subtotal)}원</td></tr>
+            <tr><td>부가세 (10%)</td><td class="number">${formatNumber(result.summary.vat)}원</td></tr>
+            <tr class="total"><td><strong>총액</strong></td><td class="number"><strong>${formatNumber(result.summary.total)}원</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+    `;
+
+    // 면책 조항
+    html += `
+      <div class="disclaimer">
+        <h5>
+          <span class="material-symbols-outlined">warning</span>
+          반드시 확인해 주세요
+        </h5>
+        <p>${result.disclaimer}</p>
+      </div>
+    `;
+
+    document.getElementById('result-body').innerHTML = html;
+  }
+
+  // PDF 다운로드
+  async function downloadPDF() {
+    showToast('PDF 생성 중...');
+
+    const resultCard = document.getElementById('result-container');
+
+    try {
+      const canvas = await html2canvas(resultCard, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: '#ffffff'
+      });
+
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const imgWidth = 210;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      let heightLeft = imgHeight;
+      let position = 0;
+      const pageHeight = 297;
+
+      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      while (heightLeft > 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+
+      const date = new Date().toISOString().split('T')[0];
+      pdf.save(`소요예산추정_${date}.pdf`);
+      showToast('PDF가 다운로드되었습니다!');
+    } catch (error) {
+      console.error('PDF 생성 오류:', error);
+      showToast('PDF 생성에 실패했습니다.');
+    }
+  }
+
+  // 공유
+  function shareResult() {
+    if (!lastResult) return;
+
+    const text = `소요예산 추정 결과\n총액: ${formatNumber(lastResult.summary.total)}원\n(예상 범위: ${formatNumber(lastResult.range.min)}원 ~ ${formatNumber(lastResult.range.max)}원)\n\n실무(silmu.kr)에서 추정함`;
+
+    if (navigator.share) {
+      navigator.share({ title: '소요예산 추정 결과', text });
+    } else {
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('결과가 클립보드에 복사되었습니다!');
+      });
+    }
+  }
+
+  // 새로 시작
+  function resetForm() {
+    selectedType = null;
+    selectedGrade = 'standard';
+    lastResult = null;
+
+    document.querySelectorAll('.type-btn').forEach(btn => btn.classList.remove('selected'));
+    document.querySelectorAll('.grade-btn').forEach(btn => {
+      btn.classList.toggle('selected', btn.dataset.grade === 'standard');
+    });
+
+    document.getElementById('btn-step1').disabled = true;
+
+    // 공사 항목 초기화
+    const conList = document.getElementById('construction-items');
+    conList.innerHTML = `
+      <div class="item-row">
+        <div>
+          <label style="font-size: 12px; color: #64748b; margin-bottom: 4px; display: block;">공종</label>
+          <select name="construction_type" onchange="updateUnit(this)">
+            <option value="">-- 선택 --</option>
+            <option value="wallpaper">도배</option>
+            <option value="flooring">장판/바닥재</option>
+            <option value="tile">타일</option>
+            <option value="painting">페인트</option>
+            <option value="ceiling">천장</option>
+            <option value="electric">전기</option>
+            <option value="plumbing">배관</option>
+            <option value="aircon">에어컨 설치</option>
+            <option value="boiler">보일러</option>
+            <option value="window">창호</option>
+            <option value="demolition">철거</option>
+            <option value="waterproof">방수</option>
+            <option value="partition">칸막이</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size: 12px; color: #64748b; margin-bottom: 4px; display: block;">수량</label>
+          <input type="number" name="quantity" placeholder="0" min="0" step="0.1">
+        </div>
+        <div class="unit-label">m²</div>
+        <button class="btn-remove-row" onclick="removeRow(this)" title="삭제">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+    `;
+
+    // 물품 항목 초기화
+    const goodsList = document.getElementById('goods-items');
+    goodsList.innerHTML = `
+      <div class="item-row">
+        <div>
+          <label style="font-size: 12px; color: #64748b; margin-bottom: 4px; display: block;">품목</label>
+          <select name="goods_type">
+            <option value="">-- 선택 --</option>
+            <option value="desk">책상</option>
+            <option value="chair">의자</option>
+            <option value="cabinet">캐비닛</option>
+            <option value="computer">컴퓨터</option>
+            <option value="laptop">노트북</option>
+            <option value="monitor">모니터</option>
+            <option value="printer">프린터</option>
+            <option value="projector">프로젝터</option>
+            <option value="aircon_unit">에어컨</option>
+            <option value="refrigerator">냉장고</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size: 12px; color: #64748b; margin-bottom: 4px; display: block;">수량</label>
+          <input type="number" name="quantity" placeholder="0" min="0">
+        </div>
+        <div class="unit-label">개</div>
+        <button class="btn-remove-row" onclick="removeRow(this)" title="삭제">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+    `;
+
+    // 용역 폼 초기화
+    document.getElementById('service_type').value = '';
+    document.getElementById('service_duration').value = '';
+    document.getElementById('personnel_count').value = '1';
+
+    currentStep = 1;
+    updateStepIndicator();
+    showCurrentStep();
+  }
+
+  // 토스트
+  function showToast(message) {
+    // 기존 토스트 제거
+    const existingToast = document.querySelector('.estimator-toast');
+    if (existingToast) existingToast.remove();
+
+    const toast = document.createElement('div');
+    toast.className = 'estimator-toast';
+    toast.style.cssText = `
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      padding: 16px 24px;
+      border-radius: 12px;
+      color: white;
+      font-weight: 500;
+      background: #1e3a5f;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      z-index: 1000;
+      animation: slideIn 0.3s ease;
+    `;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+      toast.style.animation = 'slideOut 0.3s ease';
+      setTimeout(() => toast.remove(), 300);
+    }, 3000);
+  }
+
+  // 애니메이션 스타일 추가
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes slideIn {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    @keyframes slideOut {
+      from { transform: translateY(0); opacity: 1; }
+      to { transform: translateY(20px); opacity: 0; }
+    }
+  `;
+  document.head.appendChild(style);
+</script>

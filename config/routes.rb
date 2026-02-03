@@ -27,6 +27,10 @@ Rails.application.routes.draw do
   post "pdf_tools/add_page_numbers", to: "pdf_tools#add_page_numbers"
   post "pdf_tools/info", to: "pdf_tools#info"
 
+  # 소요예산 추정기
+  get "tools/budget-estimator", to: "estimations#index", as: :budget_estimator
+  post "estimations/calculate", to: "estimations#calculate"
+
   # 커뮤니티
   get "community", to: "community#index", as: :community
 

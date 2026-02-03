@@ -32,15 +32,16 @@
 <section class="section py-12">
   <div class="container-wide">
     <div class="flex items-center justify-between mb-6">
-      <p class="text-navy-600">총 <span class="font-bold text-navy-900" id="item-count">11</span>개의 도구</p>
+      <p class="text-navy-600">총 <span class="font-bold text-navy-900" id="item-count">12</span>개의 도구</p>
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="items-grid">
       <% [
+        { title: "견적서 검토 도구", desc: "견적서의 적정성을 자동으로 검토합니다.", icon: "fact_check", color: "point", category: "문서 도구", path: "/forms/견적서검토.html", badge: "인기" },
+        { title: "과업지시서 생성기", desc: "과업지시서를 단계별로 작성하고 다운로드합니다.", icon: "description", color: "forest", category: "문서 도구", path: "/forms/과업지시서.html", badge: "NEW" },
+        { title: "PDF 도구", desc: "PDF 분할, 합치기, 쪽번호 매기기를 간편하게 처리합니다.", icon: "picture_as_pdf", color: "warm", category: "문서 도구", path: pdf_tools_path },
         { title: "여비계산기", desc: "출장 여비(운임, 숙박비, 식비, 일비)를 자동으로 계산합니다.", icon: "directions_car", color: "point", category: "계산기", path: travel_calculator_path },
-        { title: "PDF 도구", desc: "PDF 분할, 합치기, 쪽번호 매기기를 간편하게 처리합니다.", icon: "picture_as_pdf", color: "warm", category: "문서 도구", path: pdf_tools_path, badge: "NEW" },
-        { title: "견적서 검토 도구", desc: "견적서의 적정성을 자동으로 검토합니다.", icon: "fact_check", color: "point", category: "AI 도구", path: "/forms/견적서검토.html", badge: "인기" },
-        { title: "과업지시서 생성기", desc: "과업지시서를 단계별로 작성하고 다운로드합니다.", icon: "description", color: "forest", category: "문서 도구", path: "/forms/과업지시서.html" },
+        { title: "소요예산 추정기", desc: "소규모 공사/용역 시행 전 대략적인 예산을 미리 추정합니다.", icon: "calculate", color: "forest", category: "계산기", path: budget_estimator_path, badge: "NEW" },
         { title: "초과근무수당 계산기", desc: "시간외근무, 야간근무, 휴일근무 수당을 계산합니다.", icon: "schedule", color: "forest", category: "계산기", path: "#" },
         { title: "연가일수 계산기", desc: "재직기간에 따른 연가일수를 자동 계산합니다.", icon: "event_available", color: "navy", category: "계산기", path: "#" },
         { title: "공문서 AI 작성 도우미", desc: "AI가 공문서 초안을 작성해 드립니다.", icon: "auto_awesome", color: "warm", category: "AI 도구", path: "#" },
