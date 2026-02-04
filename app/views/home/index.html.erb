@@ -227,16 +227,36 @@
         </div>
       <% end %>
 
-      <!-- Coming Soon Topics -->
-      <% [
-        { icon: "💼", title: "출장비", desc: "준비중" },
-        { icon: "📅", title: "이월", desc: "준비중" },
-        { icon: "🧾", title: "연말정산", desc: "준비중" }
-      ].each do |topic| %>
-        <div class="card p-6 md:p-8 opacity-60 cursor-not-allowed">
-          <div class="text-4xl mb-5"><%= topic[:icon] %></div>
-          <h3 class="font-bold text-lg text-navy-900 mb-2"><%= topic[:title] %></h3>
-          <p class="text-navy-400 text-sm"><%= topic[:desc] %></p>
+      <!-- 출장비 토픽 -->
+      <%= link_to "/topics/travel-expense", class: "group card card-interactive p-6 md:p-8 border-2 border-transparent hover:border-forest-300" do %>
+        <div class="text-4xl mb-5">💼</div>
+        <h3 class="font-bold text-lg text-navy-900 group-hover:text-forest-600 mb-2 transition-colors">출장비</h3>
+        <p class="text-navy-500 text-sm mb-4">여비 지급기준 · 청구절차</p>
+        <div class="flex flex-wrap gap-2">
+          <span class="badge badge-forest text-[10px]">여비규정</span>
+          <span class="badge badge-navy text-[10px]">FAQ</span>
+        </div>
+      <% end %>
+
+      <!-- 이월 토픽 -->
+      <%= link_to "/topics/budget-carryover", class: "group card card-interactive p-6 md:p-8 border-2 border-transparent hover:border-warm-300" do %>
+        <div class="text-4xl mb-5">📅</div>
+        <h3 class="font-bold text-lg text-navy-900 group-hover:text-warm-600 mb-2 transition-colors">예산이월</h3>
+        <p class="text-navy-500 text-sm mb-4">명시이월 · 사고이월 · 계속비</p>
+        <div class="flex flex-wrap gap-2">
+          <span class="badge badge-warm text-[10px]">이월요건</span>
+          <span class="badge badge-navy text-[10px]">FAQ</span>
+        </div>
+      <% end %>
+
+      <!-- 연말정산 토픽 -->
+      <%= link_to "/topics/year-end-settlement", class: "group card card-interactive p-6 md:p-8 border-2 border-transparent hover:border-rose-300" do %>
+        <div class="text-4xl mb-5">🧾</div>
+        <h3 class="font-bold text-lg text-navy-900 group-hover:text-rose-600 mb-2 transition-colors">연말정산</h3>
+        <p class="text-navy-500 text-sm mb-4">2025년 변경사항 · 공제항목</p>
+        <div class="flex flex-wrap gap-2">
+          <span class="badge badge-rose text-[10px]">세액공제</span>
+          <span class="badge badge-navy text-[10px]">FAQ</span>
         </div>
       <% end %>
     </div>
@@ -468,7 +488,7 @@
           { category: "계약", question: "하자보수보증금의 최소 비율은?", options: ["계약금액의 2%", "계약금액의 3%", "계약금액의 5%", "계약금액의 10%"], answer: 0, explanation: "하자보수보증금은 계약금액의 2% 이상 10% 이하로 납부합니다." },
           { category: "계약", question: "2회 유찰 시 수의계약 가능 시 예정가격의 몇 % 이상으로 계약해야 하는가?", options: ["85% 이상", "88% 이상", "90% 이상", "95% 이상"], answer: 1, explanation: "2회 유찰 후 수의계약 시 예정가격의 88% 이상으로 계약해야 합니다." },
           { category: "계약", question: "선금의 지급 한도는?", options: ["계약금액의 50%", "계약금액의 60%", "계약금액의 70%", "계약금액의 80%"], answer: 2, explanation: "선금은 계약금액의 70% 이내에서 지급할 수 있습니다." },
-          { category: "계약", question: "공사의 경우 1인 견적 수의계약이 가능한 추정가격(부가세 별도) 기준은?", options: ["2천만원 이하", "3천만원 이하", "5천만원 이하", "1억원 이하"], answer: 2, explanation: "공사의 경우 추정가격 5천만원 이하일 때 1인 견적 수의계약이 가능합니다." },
+          { category: "계약", question: "공사의 경우 1인 견적 수의계약이 가능한 추정가격(부가세 별도) 기준은?", options: ["1천만원 이하", "2천만원 이하", "3천만원 이하", "5천만원 이하"], answer: 1, explanation: "공사·물품·용역 모두 추정가격 2천만원 이하일 때 1인 견적 수의계약이 가능합니다. 청년창업·여성·장애인기업 등 특례 대상은 5천만원 이하까지 가능합니다." },
           { category: "계약", question: "지체상금률의 상한은?", options: ["계약금액의 10%", "계약금액의 15%", "계약금액의 20%", "계약금액의 30%"], answer: 0, explanation: "지체상금은 계약금액의 10%를 초과할 수 없습니다." },
           { category: "계약", question: "적격심사 시 물품의 가격점수 배점은?", options: ["80점", "85점", "90점", "95점"], answer: 2, explanation: "물품 적격심사 시 가격점수는 90점입니다." },
           { category: "계약", question: "입찰보증금의 비율은?", options: ["입찰금액의 3%", "입찰금액의 5%", "입찰금액의 7%", "입찰금액의 10%"], answer: 1, explanation: "입찰보증금은 입찰금액의 5% 이상입니다." },

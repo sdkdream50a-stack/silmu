@@ -47,7 +47,7 @@ class ChatbotController < ApplicationController
   def calculate_contract_method(category, price)
     case category
     when 'goods', 'service' # 물품, 용역
-      if price <= 22_000_000
+      if price <= 20_000_000  # 2천만원 이하 (지방계약법 시행령 제30조)
         {
           method: '1인 견적 수의계약',
           method_type: 'private_1',
@@ -102,7 +102,7 @@ class ChatbotController < ApplicationController
         }
       end
     when 'construction' # 공사
-      if price <= 50_000_000
+      if price <= 20_000_000  # 2천만원 이하 (시행령 제30조)
         {
           method: '1인 견적 수의계약',
           method_type: 'private_1',
@@ -116,11 +116,11 @@ class ChatbotController < ApplicationController
             '계약서 작성'
           ],
           tips: [
-            '건설업 등록 업체 확인',
+            '2천만원 이하는 건설업 등록 불필요',
             '설계변경 가능성 고려'
           ]
         }
-      elsif price <= 200_000_000
+      elsif price <= 400_000_000  # 4억원 이하 (종합공사 수의계약 한도)
         {
           method: '2인 이상 견적 수의계약',
           method_type: 'private_2',
