@@ -1,0 +1,161 @@
+#!/usr/bin/env ruby
+# 법령 검증 실행 스크립트
+#
+# 사용법:
+#   bin/legal_check           - 검증만 수행
+#   bin/legal_check --update  - 검증 및 자동 수정
+#   bin/legal_check --commit  - 검증, 수정, 커밋, 푸시까지 자동 수행
+#   bin/legal_check --help    - 도움말
+
+require 'optparse'
+require 'open3'
+
+APP_ROOT = File.expand_path('..', __dir__)
+Dir.chdir(APP_ROOT)
+
+options = {
+  update: false,
+  commit: false,
+  push: false,
+  verbose: false
+}
+
+OptionParser.new do |opts|
+  opts.banner = "사용법: bin/legal_check [옵션]"
+
+  opts.on("-u", "--update", "자동 수정 수행") do
+    options[:update] = true
+  end
+
+  opts.on("-c", "--commit", "수정 후 자동 커밋") do
+    options[:update] = true
+    options[:commit] = true
+  end
+
+  opts.on("-p", "--push", "커밋 후 자동 푸시") do
+    options[:update] = true
+    options[:commit] = true
+    options[:push] = true
+  end
+
+  opts.on("-v", "--verbose", "상세 출력") do
+    options[:verbose] = true
+  end
+
+  opts.on("-h", "--help", "도움말 표시") do
+    puts opts
+    puts <<~HELP
+
+      예시:
+        bin/legal_check                    # 검증만
+        bin/legal_check --update           # 검증 + 자동 수정
+        bin/legal_check --commit           # 검증 + 수정 + 커밋
+        bin/legal_check --push             # 검증 + 수정 + 커밋 + 푸시 (전체 자동화)
+
+      법령 기준 파일:
+        config/legal_standards.yml
+
+      관련 rake 명령:
+        rake legal:check    - 검증
+        rake legal:update   - 검증 및 수정
+        rake legal:report   - 보고서 생성
+        rake legal:sources  - 법령 출처 확인
+    HELP
+    exit
+  end
+end.parse!
+
+def run_command(cmd, description, verbose: false)
+  puts "▶ #{description}..." if verbose
+  stdout, stderr, status = Open3.capture3(cmd)
+
+  if verbose || !status.success?
+    puts stdout unless stdout.empty?
+    puts stderr unless stderr.empty?
+  end
+
+  [status.success?, stdout, stderr]
+end
+
+def colored(text, color)
+  colors = {
+    green: "\e[32m",
+    red: "\e[31m",
+    yellow: "\e[33m",
+    blue: "\e[34m",
+    reset: "\e[0m"
+  }
+  "#{colors[color]}#{text}#{colors[:reset]}"
+end
+
+puts colored("=" * 60, :blue)
+puts colored("  법령 자동 검증 시스템", :blue)
+puts colored("=" * 60, :blue)
+puts
+
+# 1. 검증 수행
+task = options[:update] ? "legal:update" : "legal:check"
+success, output, error = run_command(
+  "bundle exec rake #{task}",
+  "법령 기준 검증",
+  verbose: options[:verbose]
+)
+
+puts output
+
+unless success
+  if options[:update]
+    puts colored("\n⚠️  일부 항목 자동 수정 실패. 수동 확인 필요.", :yellow)
+  else
+    puts colored("\n❌ 검증 실패. --update 옵션으로 자동 수정을 시도하세요.", :red)
+    exit 1
+  end
+end
+
+# 2. 변경사항 확인
+if options[:commit]
+  _, diff_output, _ = run_command("git diff --name-only", "변경 파일 확인")
+
+  if diff_output.strip.empty?
+    puts colored("\n✅ 변경사항 없음. 모든 파일이 최신 상태입니다.", :green)
+    exit 0
+  end
+
+  puts "\n📝 변경된 파일:"
+  diff_output.each_line { |line| puts "  - #{line}" }
+
+  # 3. 커밋
+  run_command("git add -A", "스테이징")
+
+  commit_msg = "auto: 법령 기준 자동 업데이트 (#{Time.now.strftime('%Y-%m-%d')})\n\nCo-Authored-By: Legal Check Bot <noreply@example.com>"
+  success, _, _ = run_command(
+    "git commit -m '#{commit_msg}'",
+    "커밋 생성",
+    verbose: options[:verbose]
+  )
+
+  if success
+    puts colored("\n✅ 커밋 완료", :green)
+  else
+    puts colored("\n❌ 커밋 실패", :red)
+    exit 1
+  end
+
+  # 4. 푸시
+  if options[:push]
+    success, _, _ = run_command(
+      "git push origin HEAD",
+      "원격 저장소 푸시",
+      verbose: options[:verbose]
+    )
+
+    if success
+      puts colored("✅ 푸시 완료", :green)
+    else
+      puts colored("❌ 푸시 실패", :red)
+      exit 1
+    end
+  end
+end
+
+puts colored("\n🎉 법령 검증 완료!", :green)

@@ -1,0 +1,138 @@
+# 법령 기준 데이터 (자동 검증용)
+# 최종 업데이트: 2026-02-04
+#
+# 법령 변경 시 이 파일만 수정하면 자동으로 검증 및 알림이 발생합니다.
+# 정부 공식 사이트에서 최신 법령을 확인 후 업데이트하세요.
+#
+# 참조 법령:
+# - 지방계약법 시행령: https://www.law.go.kr/법령/지방자치단체를당사자로하는계약에관한법률시행령
+# - 공무원 여비 규정: https://www.law.go.kr/법령/공무원여비규정
+
+version: "2026-02-04"
+
+# 지방계약법 시행령 제25조, 제30조 (수의계약)
+contract:
+  # 1인 견적 수의계약 한도 (원)
+  single_estimate:
+    goods: 20_000_000      # 물품
+    service: 20_000_000    # 용역
+    construction: 20_000_000  # 공사 (공통)
+
+  # 2인 이상 견적 수의계약 한도 (원)
+  multiple_estimate:
+    goods: 50_000_000           # 물품
+    service: 50_000_000         # 용역
+    construction_general: 400_000_000   # 종합공사
+    construction_special: 200_000_000   # 전문공사
+    construction_etc: 160_000_000       # 전기/소방/정보통신
+
+  # 수의계약 총 한도 (원)
+  private_contract_limit:
+    goods: 100_000_000          # 물품 (소기업 특례)
+    service: 100_000_000        # 용역 (소기업 특례)
+    construction_general: 400_000_000
+    construction_special: 200_000_000
+    construction_etc: 160_000_000
+
+  # 특례기업 한도 (원)
+  special_enterprise:
+    women: 50_000_000           # 여성기업
+    disabled: 50_000_000        # 장애인기업
+    social: 50_000_000          # 사회적기업
+    youth: 50_000_000           # 청년창업기업
+    cooperative: 50_000_000     # 협동조합
+    village: 50_000_000         # 마을기업
+    self_support: 50_000_000    # 자활기업
+
+  # 경미한 공사 한도 (건설업 등록 불필요)
+  minor_construction:
+    general: 80_000_000         # 종합공사
+    special: 50_000_000         # 전문공사
+    etc: 50_000_000             # 전기/소방/정보통신
+
+  # 소액수의계약 한도
+  small_amount: 2_000_000       # 200만원 이하
+
+  # 법령 출처
+  sources:
+    - name: "지방계약법 시행령 제25조"
+      url: "https://www.law.go.kr/법령/지방자치단체를당사자로하는계약에관한법률시행령"
+      last_amended: "2025-07-08"
+    - name: "지방계약법 시행령 제30조"
+      url: "https://www.law.go.kr/법령/지방자치단체를당사자로하는계약에관한법률시행령"
+      last_amended: "2025-07-08"
+
+# 공무원 여비 규정 별표2
+travel_expense:
+  # 숙박비 (1박, 원) - 지역별
+  accommodation:
+    seoul: 100_000              # 서울
+    metro: 80_000               # 광역시 (부산, 대구, 인천, 광주, 대전, 울산)
+    other: 70_000               # 기타 지역
+
+  # 식비 (1일, 원) - 전 직급 동일
+  meal: 25_000
+
+  # 일비 (1일, 원) - 전 직급 동일
+  daily_allowance: 25_000
+
+  # 광역시 목록
+  metro_cities:
+    - 부산
+    - 대구
+    - 인천
+    - 광주
+    - 대전
+    - 울산
+
+  # 법령 출처
+  sources:
+    - name: "공무원 여비 규정 별표2"
+      url: "https://www.law.go.kr/법령/공무원여비규정"
+      last_amended: "2026-01-02"
+
+# 기타 주요 기준
+misc:
+  # 계약보증금 면제 한도
+  guarantee_exemption: 50_000_000
+
+  # 전자입찰 필수 금액
+  electronic_bid_required: 100_000_000
+
+  # 중소기업 경쟁제품 확인 금액
+  sme_check_required: 50_000_000
+
+# 검증 설정
+validation:
+  # 검증할 파일 목록
+  files:
+    - path: "app/services/contract_method_service.rb"
+      checks:
+        - type: "contract_threshold"
+          patterns:
+            - "max: 20_000_000"
+            - "max: 50_000_000"
+            - "max: 400_000_000"
+    - path: "app/controllers/chatbot_controller.rb"
+      checks:
+        - type: "contract_threshold"
+          patterns:
+            - "20_000_000"
+            - "50_000_000"
+            - "400_000_000"
+    - path: "app/views/tools/travel_calculator.html.erb"
+      checks:
+        - type: "travel_expense"
+          patterns:
+            - "'seoul': 100000"
+            - "'metro': 80000"
+            - "'other': 70000"
+            - "meal: 25000"
+            - "daily: 25000"
+    - path: "db/seeds/topics.rb"
+      checks:
+        - type: "content"
+          patterns:
+            - "4억원"
+            - "2억원"
+            - "2천만원"
