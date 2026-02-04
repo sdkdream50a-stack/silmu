@@ -132,11 +132,19 @@
 <!-- 메인 콘텐츠 -->
 <section class="section py-10">
   <div class="container-wide">
+    <!-- 테스트 박스 -->
+    <div style="background: yellow; padding: 20px; margin-bottom: 20px; border: 3px solid black;">
+      <h2 style="color: red; font-size: 24px;">이 노란 박스가 보이면 기본 렌더링은 정상입니다</h2>
+    </div>
     <div class="lg:flex lg:gap-10">
       <!-- 메인 콘텐츠 영역 -->
       <div class="flex-1 min-w-0">
+        <!-- 테스트 박스 2 -->
+        <div style="background: cyan; padding: 20px; margin-bottom: 20px; border: 3px solid blue;">
+          <h2 style="color: blue;">테스트 박스 2: 메인 콘텐츠 영역 안</h2>
+        </div>
         <!-- 법령 3단 비교 -->
-        <div class="tab-panel" data-tab="law">
+        <div class="tab-panel active" data-tab="law">
           <% if @topic.has_law_content? %>
             <!-- 캐스케이드 카드 레이아웃 -->
             <div class="law-cascade-container">
@@ -237,6 +245,11 @@
                 <span class="material-symbols-outlined text-lg">touch_app</span>
                 카드를 클릭하면 전체 내용을 볼 수 있습니다
               </div>
+
+              <!-- 테스트 박스 4: 캐스케이드 컨테이너 안 -->
+              <div style="background: orange; padding: 20px; margin: 20px 0; border: 3px solid red;">
+                <h2 style="color: red; font-size: 24px;">테스트 박스 4: cascade 컨테이너 내부 (하단 안내 후)</h2>
+              </div>
             </div>
           <% else %>
             <div class="card p-16 text-center">
@@ -246,8 +259,13 @@
           <% end %>
         </div>
 
+        <!-- 테스트 박스 3: 법령 탭 다음 -->
+        <div style="background: lime; padding: 20px; margin: 20px 0; border: 3px solid green;">
+          <h2 style="color: green; font-size: 24px;">테스트 박스 3: 법령 탭 패널 닫힌 직후</h2>
+        </div>
+
         <!-- 예규/지침 -->
-        <div class="tab-panel hidden" data-tab="regulation">
+        <div class="tab-panel" data-tab="regulation" id="panel-regulation">
           <% if @topic.regulation_content.present? %>
             <div class="card p-6 lg:p-8">
               <div class="legal-content">
@@ -263,7 +281,11 @@
         </div>
 
         <!-- 유권해석 -->
-        <div class="tab-panel hidden" data-tab="interpretation">
+        <div class="tab-panel" data-tab="interpretation" id="panel-interpretation">
+          <!-- 테스트 박스 5: 유권해석 탭 안 -->
+          <div style="background: magenta; padding: 20px; margin-bottom: 20px; border: 3px solid purple;">
+            <h2 style="color: white; font-size: 24px;">테스트 박스 5: 유권해석 탭 패널 내부</h2>
+          </div>
           <% if @topic.interpretation_content.present? %>
             <div class="card p-6 lg:p-8">
               <div class="legal-content">
@@ -279,7 +301,7 @@
         </div>
 
         <!-- 감사사례 -->
-        <div class="tab-panel hidden" data-tab="audit">
+        <div class="tab-panel" data-tab="audit" id="panel-audit">
           <% if @topic.audit_cases.present? %>
             <div class="card p-6 lg:p-8">
               <div class="legal-content">
@@ -295,7 +317,7 @@
         </div>
 
         <!-- 질의답변 -->
-        <div class="tab-panel hidden" data-tab="qa">
+        <div class="tab-panel" data-tab="qa" id="panel-qa">
           <% if @topic.qa_content.present? %>
             <div class="card p-6 lg:p-8">
               <div class="legal-content">
@@ -311,7 +333,7 @@
         </div>
 
         <!-- 실무주의 -->
-        <div class="tab-panel hidden" data-tab="tips">
+        <div class="tab-panel" data-tab="tips">
           <% if @topic.practical_tips.present? %>
             <div class="card p-6 lg:p-8">
               <div class="legal-content">
@@ -327,7 +349,7 @@
         </div>
 
         <!-- 서식/양식 -->
-        <div class="tab-panel hidden" data-tab="forms">
+        <div class="tab-panel" data-tab="forms">
           <!-- 필수 서식 -->
           <div class="mb-10">
             <div class="flex items-center justify-between mb-5">
@@ -493,7 +515,7 @@
         </div>
 
         <!-- 흐름도 -->
-        <div class="tab-panel hidden" data-tab="flowchart">
+        <div class="tab-panel" data-tab="flowchart">
           <div class="card p-6 lg:p-8">
             <h3 class="text-xl font-bold text-navy-900 text-center mb-8 flex items-center justify-center gap-2">
               <div class="icon-container icon-container-sm bg-navy-100">
@@ -891,6 +913,15 @@
 </section>
 
 <style>
+/* 탭 패널 기본: 숨김 */
+.tab-panel {
+  display: none !important;
+}
+/* 활성 탭 패널: 표시 */
+.tab-panel.active {
+  display: block !important;
+}
+
 /* 캐스케이드 컨테이너 */
 .law-cascade-container {
   position: relative;
@@ -1103,31 +1134,44 @@ function toggleFaq(index) {
 }
 
 function showTab(tabName) {
+  // 모든 탭 패널 찾기
+  var allPanels = document.querySelectorAll('.tab-panel');
+
+  // 모든 패널에서 active 클래스 제거, 선택된 탭에만 추가
+  for (var i = 0; i < allPanels.length; i++) {
+    var panel = allPanels[i];
+    if (panel.getAttribute('data-tab') === tabName) {
+      panel.classList.add('active');
+    } else {
+      panel.classList.remove('active');
+    }
+  }
+
   // 모든 탭 버튼 스타일 초기화
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.classList.remove('bg-navy-800', 'text-white', 'shadow-md');
-    btn.classList.add('bg-surface-100', 'text-navy-600', 'hover:bg-surface-200');
-  });
+  var allBtns = document.querySelectorAll('.tab-btn');
+  for (var j = 0; j < allBtns.length; j++) {
+    allBtns[j].classList.remove('bg-navy-800', 'text-white', 'shadow-md');
+    allBtns[j].classList.add('bg-surface-100', 'text-navy-600', 'hover:bg-surface-200');
+  }
 
   // 선택된 탭 버튼 스타일 적용
-  const activeBtn = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
+  var activeBtn = document.querySelector('.tab-btn[data-tab="' + tabName + '"]');
   if (activeBtn) {
     activeBtn.classList.remove('bg-surface-100', 'text-navy-600', 'hover:bg-surface-200');
     activeBtn.classList.add('bg-navy-800', 'text-white', 'shadow-md');
   }
-
-  // 모든 패널 숨기기
-  document.querySelectorAll('.tab-panel').forEach(panel => {
-    panel.classList.add('hidden');
-  });
-
-  // 선택된 패널 보이기
-  const activePanel = document.querySelector(`.tab-panel[data-tab="${tabName}"]`);
-  if (activePanel) {
-    activePanel.classList.remove('hidden');
-  }
-
-  // 스크롤 위치 조정 (모바일에서 탭 클릭 시)
-  window.scrollTo({ top: document.querySelector('#topic-tabs').offsetTop - 80, behavior: 'smooth' });
 }
+
+// 탭 초기화
+function initTabs() {
+  // 탭 버튼에 이미 onclick이 있으므로 추가 설정 불필요
+  // 초기 상태는 CSS와 HTML의 active 클래스로 처리됨
+}
+
+// 즉시 실행
+initTabs();
+
+// Turbo 지원
+document.addEventListener('turbo:load', initTabs);
+document.addEventListener('turbo:render', initTabs);
 </script>
