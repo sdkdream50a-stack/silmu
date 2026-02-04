@@ -50,16 +50,14 @@ module ApplicationHelper
       "<ul class=\"legal-list\">#{match}</ul>"
     end
 
-    # 9. 빈 줄을 문단 구분으로
-    html = html.gsub(/\n\n+/, "</p><p class=\"legal-text\">")
+    # 9. 빈 줄을 문단 구분으로 (div 사용 - p 안에 div 넣으면 안됨)
+    html = html.gsub(/\n\n+/, "</div><div class=\"legal-text\">")
 
     # 10. 단일 줄바꿈 유지
     html = html.gsub(/\n/, "<br>")
 
-    # 11. 전체를 p 태그로 감싸기 (이미 태그가 없는 경우)
-    unless html.start_with?('<')
-      html = "<p class=\"legal-text\">#{html}</p>"
-    end
+    # 11. 전체를 div 태그로 감싸기 (p 대신 div 사용)
+    html = "<div class=\"legal-text\">#{html}</div>"
 
     html.html_safe
   end
