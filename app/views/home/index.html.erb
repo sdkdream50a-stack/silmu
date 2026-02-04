@@ -278,10 +278,10 @@
             <span class="badge badge-<%= guide[:badge_color] %> mb-4"><%= guide[:badge] %></span>
             <h3 class="font-bold text-lg text-navy-900 mb-3 group-hover:text-<%= guide[:badge_color] %>-600 transition-colors"><%= guide[:title] %></h3>
             <p class="text-navy-600 text-sm mb-4 leading-relaxed"><%= guide[:desc] %></p>
-            <%= link_to "#", class: "inline-flex items-center gap-1 text-#{guide[:badge_color]}-600 hover:text-#{guide[:badge_color]}-700 font-semibold text-sm transition-colors" do %>
+            <a href="javascript:void(0)" onclick="alert('해당 가이드는 준비 중입니다.')" class="inline-flex items-center gap-1 text-<%= guide[:badge_color] %>-600 hover:text-<%= guide[:badge_color] %>-700 font-semibold text-sm transition-colors cursor-pointer">
               읽어보기
               <span class="material-symbols-outlined text-lg">arrow_forward</span>
-            <% end %>
+            </a>
           </div>
         </article>
       <% end %>
@@ -398,33 +398,32 @@
     <!-- Quiz Card -->
     <div class="card-glass bg-white/10 backdrop-blur-xl rounded-3xl p-8 md:p-10 border border-white/20">
       <div class="flex items-center gap-3 mb-8">
-        <span class="bg-forest-500 text-white px-4 py-1.5 rounded-full text-sm font-semibold">문제 1/5</span>
-        <span class="text-navy-300 text-sm">예산회계</span>
+        <span id="quiz-progress" class="bg-forest-500 text-white px-4 py-1.5 rounded-full text-sm font-semibold">문제 1/5</span>
+        <span id="quiz-category" class="text-navy-300 text-sm">예산회계</span>
       </div>
 
-      <h3 class="text-xl md:text-2xl font-bold mb-8 leading-relaxed">다음 중 예산의 이월에 해당하지 않는 것은?</h3>
+      <h3 id="quiz-question" class="text-xl md:text-2xl font-bold mb-8 leading-relaxed"></h3>
 
-      <div class="space-y-3 mb-10" id="quiz-options">
-        <% ["명시이월", "사고이월", "계속비이월", "예비비이월"].each_with_index do |option, idx| %>
-          <button data-correct="<%= idx == 3 %>" class="quiz-option w-full text-left bg-white/10 hover:bg-white/20 rounded-xl p-4 transition-all duration-200 border border-white/10 hover:border-white/30 group cursor-pointer">
-            <span class="flex items-center gap-3">
-              <span class="option-number w-8 h-8 rounded-full bg-white/10 group-hover:bg-white/20 flex items-center justify-center text-sm font-medium transition-colors"><%= idx + 1 %></span>
-              <span class="font-medium"><%= option %></span>
-              <span class="result-icon ml-auto hidden">
-                <span class="material-symbols-outlined text-xl"></span>
-              </span>
-            </span>
-          </button>
-        <% end %>
-      </div>
+      <div class="space-y-3 mb-10" id="quiz-options"></div>
 
       <!-- 결과 메시지 (초기에는 숨김) -->
       <div id="quiz-result" class="hidden mb-6 p-4 rounded-xl">
         <p class="font-semibold text-lg" id="result-message"></p>
-        <p class="text-sm mt-2 opacity-80" id="result-explanation"></p>
+        <p class="text-sm mt-2 text-navy-100" id="result-explanation"></p>
       </div>
 
-      <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+      <!-- 최종 결과 (초기에는 숨김) -->
+      <div id="quiz-final" class="hidden text-center py-8">
+        <div class="text-6xl mb-4">🎉</div>
+        <h3 class="text-2xl font-bold text-white mb-2">퀴즈 완료!</h3>
+        <p class="text-navy-200 mb-2">총 5문제 중 <span id="final-score" class="text-forest-400 font-bold">0</span>문제 정답</p>
+        <button id="quiz-restart" class="btn btn-lg btn-accent mt-4">
+          다시 도전하기
+          <span class="material-symbols-outlined">refresh</span>
+        </button>
+      </div>
+
+      <div id="quiz-footer" class="flex flex-col sm:flex-row justify-between items-center gap-4">
         <span class="text-navy-300 text-sm flex items-center gap-2">
           <span class="material-symbols-outlined text-warm-400">local_fire_department</span>
           오늘 28명이 도전했어요
@@ -436,80 +435,292 @@
       </div>
 
       <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const options = document.querySelectorAll('.quiz-option');
-        const submitBtn = document.getElementById('quiz-submit');
-        const resultDiv = document.getElementById('quiz-result');
-        const resultMessage = document.getElementById('result-message');
-        const resultExplanation = document.getElementById('result-explanation');
+      document.addEventListener('turbo:load', function() {
+        // 전체 퀴즈 문제 풀 (100개 이상)
+        const allQuizData = [
+          // ===== 예산회계 (20문제) =====
+          { category: "예산회계", question: "다음 중 예산의 이월에 해당하지 않는 것은?", options: ["명시이월", "사고이월", "계속비이월", "예비비이월"], answer: 3, explanation: "예비비이월은 존재하지 않는 개념입니다. 예산 이월에는 명시이월, 사고이월, 계속비이월이 있습니다." },
+          { category: "예산회계", question: "다음 중 세출예산의 이용에 해당하는 것은?", options: ["장 간의 상호융통", "관 간의 상호융통", "항 간의 상호융통", "세항 간의 상호융통"], answer: 2, explanation: "이용은 입법과목인 '항' 간의 상호융통을 말하며, 행정과목 간의 융통은 '전용'이라고 합니다." },
+          { category: "예산회계", question: "예비비 사용 후 국회 승인을 받아야 하는 기한은?", options: ["다음 연도 정기회 개회 전", "다음 연도 정기회 중", "사용 후 3개월 이내", "사용 후 6개월 이내"], answer: 1, explanation: "예비비 사용 후 다음 연도 정기회 중에 국회의 승인을 받아야 합니다." },
+          { category: "예산회계", question: "사고이월의 요건이 아닌 것은?", options: ["연도 내 지출원인행위", "불가피한 사유", "세입세출예산에 명시", "연도 내 지출하지 못한 경비"], answer: 2, explanation: "세입세출예산에 명시하는 것은 명시이월의 요건입니다." },
+          { category: "예산회계", question: "예산의 전용이란?", options: ["회계연도 간 이월", "항 간의 상호융통", "세항·목 간의 상호융통", "예비비 사용"], answer: 2, explanation: "전용은 행정과목인 세항·목 간의 상호융통을 말합니다." },
+          { category: "예산회계", question: "계속비의 연한은 최대 몇 년인가?", options: ["3년", "5년", "7년", "10년"], answer: 1, explanation: "계속비의 연한은 그 회계연도로부터 5년 이내로 합니다." },
+          { category: "예산회계", question: "지방자치단체의 예산안 제출 기한은?", options: ["회계연도 개시 40일 전", "회계연도 개시 50일 전", "회계연도 개시 90일 전", "회계연도 개시 120일 전"], answer: 1, explanation: "지방자치단체장은 회계연도 개시 50일 전까지 예산안을 제출해야 합니다." },
+          { category: "예산회계", question: "일상경비의 정산 기한은?", options: ["매월 말", "분기별", "반기별", "회계연도 종료 시"], answer: 0, explanation: "일상경비는 원칙적으로 매월 말까지 정산해야 합니다." },
+          { category: "예산회계", question: "다음 중 예산총계주의 원칙의 예외가 아닌 것은?", options: ["수입대체경비", "전대차관", "차관물자대", "예비비"], answer: 3, explanation: "예비비는 예산총계주의와 관련이 없습니다." },
+          { category: "예산회계", question: "추가경정예산을 편성할 수 있는 사유가 아닌 것은?", options: ["전쟁·대규모 재해", "경기침체로 인한 세입 감소", "법령에 따른 지출 증가", "단순 사업비 증액"], answer: 3, explanation: "단순 사업비 증액은 추경 편성 사유가 아닙니다." },
+          { category: "예산회계", question: "세출예산의 목(目)은 어떤 과목인가?", options: ["입법과목", "행정과목", "통계과목", "관리과목"], answer: 1, explanation: "목(目)은 행정과목으로 행정부가 설정합니다." },
+          { category: "예산회계", question: "예산의 배정이란?", options: ["예산을 편성하는 것", "예산을 심의하는 것", "예산 집행권한을 부여하는 것", "예산을 이월하는 것"], answer: 2, explanation: "배정은 중앙관서에 예산 집행권한을 부여하는 것입니다." },
+          { category: "예산회계", question: "지방자치단체 예비비의 한도는?", options: ["일반회계 예산총액의 1% 이내", "일반회계 예산총액의 3% 이내", "일반회계 예산총액의 5% 이내", "제한 없음"], answer: 0, explanation: "지방자치단체 예비비는 일반회계 예산총액의 1% 이내입니다." },
+          { category: "예산회계", question: "회계연도 독립의 원칙에 대한 설명으로 옳지 않은 것은?", options: ["매 회계연도 경비는 당해연도 세입으로 충당", "전년도 이월금 사용 금지", "명시이월 가능", "사고이월 가능"], answer: 1, explanation: "전년도 이월금은 법정 이월사유에 해당하면 사용 가능합니다." },
+          { category: "예산회계", question: "지출원인행위란?", options: ["현금 지출", "계약 체결", "예산 편성", "예산 배정"], answer: 1, explanation: "지출원인행위는 계약 체결 등 지출의 원인이 되는 행위입니다." },
+          { category: "예산회계", question: "세입세출외현금이 아닌 것은?", options: ["보증금", "보관금", "예비비", "잡종금"], answer: 2, explanation: "예비비는 세출예산에 계상되는 경비입니다." },
+          { category: "예산회계", question: "결산서 제출 기한(지방자치단체)은?", options: ["출납폐쇄 후 60일 이내", "출납폐쇄 후 80일 이내", "출납폐쇄 후 90일 이내", "출납폐쇄 후 120일 이내"], answer: 1, explanation: "지방자치단체장은 출납폐쇄 후 80일 이내에 결산서를 제출해야 합니다." },
+          { category: "예산회계", question: "지방자치단체의 출납폐쇄일은?", options: ["12월 31일", "다음 연도 1월 31일", "다음 연도 2월 말일", "다음 연도 3월 31일"], answer: 2, explanation: "지방자치단체의 출납폐쇄일은 다음 연도 2월 말일입니다." },
+          { category: "예산회계", question: "국고금관리법상 지출의 원칙은?", options: ["현금지출 원칙", "계좌이체 원칙", "수표지출 원칙", "어음지출 원칙"], answer: 1, explanation: "국고금의 지출은 계좌이체를 원칙으로 합니다." },
+          { category: "예산회계", question: "예정가격 작성 시 적용하는 가격 기준이 아닌 것은?", options: ["거래실례가격", "원가계산가격", "감정가격", "희망가격"], answer: 3, explanation: "희망가격은 예정가격 작성 기준이 아닙니다." },
+
+          // ===== 계약 (25문제) =====
+          { category: "계약", question: "물품 구매 시 1인 견적 수의계약이 가능한 추정가격(부가세 별도) 기준은?", options: ["1천만원 이하", "2천만원 이하", "2천2백만원 이하", "5천만원 이하"], answer: 1, explanation: "물품·용역의 경우 추정가격(부가세 별도) 2천만원 이하일 때 1인 견적 수의계약이 가능합니다." },
+          { category: "계약", question: "2인 이상 견적에 의한 수의계약 시 공사의 추정가격(부가세 별도) 기준은?", options: ["5천만원 초과 1억원 이하", "5천만원 초과 2억원 이하", "1억원 초과 2억원 이하", "2억원 초과 3억원 이하"], answer: 1, explanation: "공사의 경우 5천만원 초과 2억원 이하일 때 2인 이상 견적 수의계약이 가능합니다." },
+          { category: "계약", question: "나라장터 전자입찰 시 입찰공고 기간은 최소 며칠인가?", options: ["5일", "7일", "10일", "14일"], answer: 1, explanation: "전자입찰의 경우 입찰공고 기간은 최소 7일 이상입니다." },
+          { category: "계약", question: "계약보증금의 원칙적인 비율은?", options: ["계약금액의 5%", "계약금액의 10%", "계약금액의 15%", "계약금액의 20%"], answer: 1, explanation: "계약보증금은 계약금액의 10% 이상으로 납부해야 합니다." },
+          { category: "계약", question: "하자보수보증금의 최소 비율은?", options: ["계약금액의 2%", "계약금액의 3%", "계약금액의 5%", "계약금액의 10%"], answer: 0, explanation: "하자보수보증금은 계약금액의 2% 이상 10% 이하로 납부합니다." },
+          { category: "계약", question: "2회 유찰 시 수의계약 가능 시 예정가격의 몇 % 이상으로 계약해야 하는가?", options: ["85% 이상", "88% 이상", "90% 이상", "95% 이상"], answer: 1, explanation: "2회 유찰 후 수의계약 시 예정가격의 88% 이상으로 계약해야 합니다." },
+          { category: "계약", question: "선금의 지급 한도는?", options: ["계약금액의 50%", "계약금액의 60%", "계약금액의 70%", "계약금액의 80%"], answer: 2, explanation: "선금은 계약금액의 70% 이내에서 지급할 수 있습니다." },
+          { category: "계약", question: "공사의 경우 1인 견적 수의계약이 가능한 추정가격(부가세 별도) 기준은?", options: ["2천만원 이하", "3천만원 이하", "5천만원 이하", "1억원 이하"], answer: 2, explanation: "공사의 경우 추정가격 5천만원 이하일 때 1인 견적 수의계약이 가능합니다." },
+          { category: "계약", question: "지체상금률의 상한은?", options: ["계약금액의 10%", "계약금액의 15%", "계약금액의 20%", "계약금액의 30%"], answer: 0, explanation: "지체상금은 계약금액의 10%를 초과할 수 없습니다." },
+          { category: "계약", question: "적격심사 시 물품의 가격점수 배점은?", options: ["80점", "85점", "90점", "95점"], answer: 2, explanation: "물품 적격심사 시 가격점수는 90점입니다." },
+          { category: "계약", question: "입찰보증금의 비율은?", options: ["입찰금액의 3%", "입찰금액의 5%", "입찰금액의 7%", "입찰금액의 10%"], answer: 1, explanation: "입찰보증금은 입찰금액의 5% 이상입니다." },
+          { category: "계약", question: "계약의 해제·해지 시 계약보증금은?", options: ["전액 반환", "50% 몰수", "전액 국고귀속", "협의 결정"], answer: 2, explanation: "계약상대자 귀책사유로 해제·해지 시 계약보증금은 국고에 귀속됩니다." },
+          { category: "계약", question: "물품 계약의 하자담보책임 기간은?", options: ["검사 완료 후 6개월", "검사 완료 후 1년", "납품 후 1년", "납품 후 2년"], answer: 1, explanation: "물품의 하자담보책임 기간은 검사 완료 후 1년입니다." },
+          { category: "계약", question: "공사 지체상금률은?", options: ["1일 0.5/1000", "1일 1/1000", "1일 1.5/1000", "1일 2/1000"], answer: 1, explanation: "공사의 지체상금률은 1일 1/1000입니다." },
+          { category: "계약", question: "물품·용역 지체상금률은?", options: ["1일 0.5/1000", "1일 1/1000", "1일 1.5/1000", "1일 2.5/1000"], answer: 2, explanation: "물품·용역의 지체상금률은 1일 1.5/1000입니다." },
+          { category: "계약", question: "수의계약 사유 중 특정인의 기술이 필요한 경우는?", options: ["긴급계약", "특명계약", "지명계약", "일반계약"], answer: 1, explanation: "특정인의 기술·용역이 필요한 경우 특명수의계약이 가능합니다." },
+          { category: "계약", question: "대형공사의 기준 금액은?", options: ["추정가격 100억원 이상", "추정가격 200억원 이상", "추정가격 300억원 이상", "추정가격 500억원 이상"], answer: 2, explanation: "대형공사는 추정가격 300억원 이상인 공사입니다." },
+          { category: "계약", question: "장기계속계약의 총 계약기간 제한은?", options: ["3년", "5년", "7년", "제한 없음"], answer: 3, explanation: "장기계속계약은 총 계약기간 제한이 없습니다." },
+          { category: "계약", question: "계속비계약과 장기계속계약의 차이점은?", options: ["계약기간", "총가계약 여부", "예산편성 방법", "이상 모두"], answer: 3, explanation: "계속비계약은 총가계약, 장기계속계약은 연차별 계약입니다." },
+          { category: "계약", question: "긴급입찰 시 입찰공고 기간은?", options: ["3일", "5일", "7일", "10일"], answer: 1, explanation: "긴급입찰 시 5일까지 공고기간을 단축할 수 있습니다." },
+          { category: "계약", question: "검사조서 작성 시 검사 완료 후 며칠 이내에 작성해야 하는가?", options: ["3일", "5일", "7일", "14일"], answer: 2, explanation: "검사조서는 검사 완료 후 7일 이내에 작성해야 합니다." },
+          { category: "계약", question: "대가 지급 기한(검사조서 작성 후)은?", options: ["3일 이내", "5일 이내", "7일 이내", "14일 이내"], answer: 1, explanation: "대가는 검사조서 작성 후 5일 이내에 지급해야 합니다." },
+          { category: "계약", question: "설계변경으로 인한 계약금액 증감 한도는?", options: ["10% 이내", "20% 이내", "30% 이내", "제한 없음"], answer: 3, explanation: "설계변경으로 인한 계약금액 증감은 법정 제한이 없습니다." },
+          { category: "계약", question: "복수예비가격 작성 개수는?", options: ["10개", "15개", "20개", "25개"], answer: 1, explanation: "복수예비가격은 15개를 작성합니다." },
+          { category: "계약", question: "예정가격 결정 시 추첨하는 복수예비가격 개수는?", options: ["2개", "3개", "4개", "5개"], answer: 2, explanation: "15개 중 4개를 추첨하여 산술평균으로 예정가격을 결정합니다." },
+
+          // ===== 복무 (20문제) =====
+          { category: "복무", question: "공무원의 연가 일수 산정 시 재직기간에 포함되지 않는 것은?", options: ["육아휴직 기간", "병가 기간", "공무상 질병휴직", "직위해제 기간"], answer: 3, explanation: "직위해제 기간은 연가 일수 산정을 위한 재직기간에 포함되지 않습니다." },
+          { category: "복무", question: "공무원의 병가 일수는 연간 최대 며칠인가?", options: ["30일", "60일", "90일", "120일"], answer: 1, explanation: "공무원의 병가는 연 60일 이내입니다." },
+          { category: "복무", question: "공무원의 경조사 휴가 중 본인 결혼 시 휴가 일수는?", options: ["3일", "5일", "7일", "10일"], answer: 1, explanation: "본인 결혼 시 5일의 경조사 휴가가 부여됩니다." },
+          { category: "복무", question: "재직기간 1년 미만 공무원의 연가 일수는?", options: ["8일", "11일", "14일", "15일"], answer: 1, explanation: "재직기간 1년 미만 공무원의 연가 일수는 11일입니다." },
+          { category: "복무", question: "공무원의 출산휴가 일수는?", options: ["60일", "90일", "100일", "120일"], answer: 1, explanation: "공무원의 출산휴가는 출산 전후를 통하여 90일입니다." },
+          { category: "복무", question: "공무원의 육아휴직 기간은 최대 몇 년인가?", options: ["1년", "2년", "3년", "5년"], answer: 2, explanation: "공무원의 육아휴직은 자녀 1명에 대하여 3년 이내입니다." },
+          { category: "복무", question: "시간외근무수당 지급 단가 산정 시 사용하는 분모는?", options: ["174시간", "209시간", "226시간", "243시간"], answer: 1, explanation: "시간외근무수당은 월 봉급액을 209시간으로 나눈 금액을 기준으로 산정합니다." },
+          { category: "복무", question: "재직기간 6년 이상 공무원의 연가 일수는?", options: ["17일", "20일", "21일", "25일"], answer: 2, explanation: "재직기간 6년 이상 공무원의 연가 일수는 21일입니다." },
+          { category: "복무", question: "공무상 병가의 최대 일수는?", options: ["90일", "120일", "150일", "180일"], answer: 3, explanation: "공무상 질병 또는 부상으로 인한 병가는 연 180일 이내입니다." },
+          { category: "복무", question: "배우자 출산휴가 일수는?", options: ["5일", "10일", "15일", "20일"], answer: 1, explanation: "배우자 출산휴가는 10일입니다." },
+          { category: "복무", question: "자녀 돌봄 휴가 일수는?", options: ["연 2일", "연 3일", "연 5일", "연 10일"], answer: 0, explanation: "자녀 돌봄 휴가는 연 2일입니다." },
+          { category: "복무", question: "부모 사망 시 경조사 휴가 일수는?", options: ["3일", "5일", "7일", "10일"], answer: 1, explanation: "부모 사망 시 5일의 경조사 휴가가 부여됩니다." },
+          { category: "복무", question: "공무원의 연가보상비 지급 한도는?", options: ["10일", "15일", "20일", "제한 없음"], answer: 2, explanation: "연가보상비는 20일 범위 내에서 지급됩니다." },
+          { category: "복무", question: "특별휴가 중 포상휴가의 최대 일수는?", options: ["5일", "10일", "15일", "20일"], answer: 3, explanation: "포상휴가는 10일 이내, 특별한 공적이 있는 경우 20일 이내입니다." },
+          { category: "복무", question: "공무원의 겸직허가 신청 기한은?", options: ["겸직 시작 7일 전", "겸직 시작 14일 전", "겸직 시작 1개월 전", "수시"], answer: 0, explanation: "겸직허가는 겸직 시작 7일 전까지 신청해야 합니다." },
+          { category: "복무", question: "출장 시 야간근무 또는 휴일근무 명령 없이 귀청한 경우?", options: ["정상 출근", "공가 처리", "연가 처리", "조퇴 처리"], answer: 0, explanation: "출장 중 귀청 시 정상 출근으로 처리됩니다." },
+          { category: "복무", question: "탄력근무제 중 시차출퇴근제의 1일 근무시간은?", options: ["6시간", "7시간", "8시간", "유동적"], answer: 2, explanation: "시차출퇴근제는 1일 8시간 근무하되 출퇴근 시간만 조정합니다." },
+          { category: "복무", question: "원격근무의 유형이 아닌 것은?", options: ["재택근무", "스마트워크근무", "시차출퇴근", "원격지근무"], answer: 2, explanation: "시차출퇴근은 탄력근무제의 유형입니다." },
+          { category: "복무", question: "육아시간의 1일 최대 사용시간은?", options: ["1시간", "2시간", "3시간", "4시간"], answer: 1, explanation: "육아시간은 1일 최대 2시간까지 사용할 수 있습니다." },
+          { category: "복무", question: "가족돌봄휴직의 기간은?", options: ["연 최대 30일", "연 최대 60일", "연 최대 90일", "연 최대 180일"], answer: 2, explanation: "가족돌봄휴직은 연간 최대 90일까지 사용할 수 있습니다." },
+
+          // ===== 인사 (15문제) =====
+          { category: "인사", question: "5급 공무원의 정년은?", options: ["58세", "60세", "62세", "65세"], answer: 1, explanation: "일반직 공무원의 정년은 60세입니다." },
+          { category: "인사", question: "공무원 성과상여금 지급 등급 중 최상위 등급의 지급률은?", options: ["100%", "125%", "150%", "172.5%"], answer: 3, explanation: "성과상여금 S등급의 지급률은 172.5%입니다." },
+          { category: "인사", question: "다음 중 공무원 채용 결격사유에 해당하지 않는 것은?", options: ["금고 이상 형 집행유예 중인 자", "형 집행 종료 후 2년 경과자", "파산 후 미복권자", "파면 후 5년 미경과자"], answer: 1, explanation: "금고 이상의 형 집행 종료 후 2년이 경과하면 결격사유에 해당하지 않습니다." },
+          { category: "인사", question: "공무원 승진소요 최저연수(5급→4급)는?", options: ["2년", "3년", "4년", "5년"], answer: 1, explanation: "5급에서 4급으로 승진하려면 최저 3년이 필요합니다." },
+          { category: "인사", question: "수습임용 기간은?", options: ["3개월", "6개월", "1년", "2년"], answer: 1, explanation: "일반직 공무원의 수습임용 기간은 6개월입니다." },
+          { category: "인사", question: "공무원 징계의 종류가 아닌 것은?", options: ["파면", "해임", "강등", "경고"], answer: 3, explanation: "경고는 징계가 아니라 주의 조치입니다. 징계는 파면, 해임, 강등, 정직, 감봉, 견책입니다." },
+          { category: "인사", question: "강등 처분 시 하위 몇 직급으로 내려가는가?", options: ["1직급", "2직급", "3직급", "해당 직급 최하위"], answer: 0, explanation: "강등은 1계급 아래로 내려가는 처분입니다." },
+          { category: "인사", question: "정직의 최대 기간은?", options: ["1개월", "2개월", "3개월", "6개월"], answer: 2, explanation: "정직은 1개월 이상 3개월 이하입니다." },
+          { category: "인사", question: "감봉의 범위는?", options: ["보수의 1/5, 1개월", "보수의 1/3, 1~3개월", "보수의 1/2, 3개월", "보수의 2/3, 6개월"], answer: 1, explanation: "감봉은 보수의 1/3을 1개월 이상 3개월 이하 감하는 것입니다." },
+          { category: "인사", question: "공무원 특별승진의 사유가 아닌 것은?", options: ["순직", "공적 표창", "근속 승진", "퇴직 전 특별승진"], answer: 2, explanation: "근속승진은 일반승진입니다." },
+          { category: "인사", question: "공무원 교육훈련 중 신규채용자 기본교육 기간은?", options: ["1주", "2주", "3주 이상", "수시"], answer: 2, explanation: "신규채용자 기본교육은 3주 이상입니다." },
+          { category: "인사", question: "당연퇴직 사유가 아닌 것은?", options: ["사망", "국적 상실", "징역형 선고", "1년 이상 휴직"], answer: 3, explanation: "1년 이상 휴직은 당연퇴직 사유가 아닙니다." },
+          { category: "인사", question: "공무원 봉급표상 최고 호봉은?", options: ["20호봉", "25호봉", "30호봉", "31호봉"], answer: 3, explanation: "일반직 공무원 봉급표의 최고 호봉은 31호봉입니다." },
+          { category: "인사", question: "성과계약 체결 대상 직급은?", options: ["3급 이상", "4급 이상", "5급 이상", "6급 이상"], answer: 1, explanation: "성과계약은 4급 이상 공무원이 체결합니다." },
+          { category: "인사", question: "근무성적평정 대상이 아닌 공무원은?", options: ["6급 이하", "수습공무원", "휴직자", "정무직"], answer: 3, explanation: "정무직 공무원은 근무성적평정 대상이 아닙니다." },
+
+          // ===== 문서/민원 (15문제) =====
+          { category: "문서", question: "공문서의 보존기간 중 '영구'에 해당하는 것은?", options: ["일반 통계자료", "조례·규칙", "단순 민원서류", "일일업무보고"], answer: 1, explanation: "조례, 규칙 등 법규문서는 영구 보존 대상입니다." },
+          { category: "민원", question: "민원처리법상 단순민원의 처리기한은?", options: ["즉시", "3일 이내", "7일 이내", "14일 이내"], answer: 0, explanation: "단순민원은 즉시 처리해야 합니다." },
+          { category: "문서", question: "공문서 시행문의 수신자가 많을 경우 사용하는 표시는?", options: ["수신자 참조", "수신자 별첨", "수신자 다수", "수신자 일동"], answer: 0, explanation: "수신자가 많을 경우 '수신자 참조'로 표시합니다." },
+          { category: "민원", question: "정보공개 청구에 대한 결정 기한은?", options: ["5일 이내", "7일 이내", "10일 이내", "14일 이내"], answer: 2, explanation: "정보공개 청구를 받은 날부터 10일 이내에 공개 여부를 결정해야 합니다." },
+          { category: "문서", question: "결재권자가 출장 시 대결권자가 처리한 문서의 표시는?", options: ["전결", "대결", "후결", "협조"], answer: 1, explanation: "결재권자 부재 시 대결권자가 처리하면 '대결'로 표시합니다." },
+          { category: "문서", question: "전결이란?", options: ["결재권자 부재 시 처리", "결재권 위임에 따른 처리", "사후 결재", "공동 결재"], answer: 1, explanation: "전결은 결재권이 위임되어 하급자가 최종 결재하는 것입니다." },
+          { category: "문서", question: "공문서의 보존기간이 아닌 것은?", options: ["1년", "5년", "15년", "영구"], answer: 2, explanation: "보존기간은 1년, 3년, 5년, 10년, 30년, 영구입니다. 15년은 없습니다." },
+          { category: "민원", question: "민원처리 기간 연장 시 최대 연장 가능 기간은?", options: ["처리기간의 1/2", "처리기간과 동일", "처리기간의 2배", "제한 없음"], answer: 1, explanation: "민원처리 기간은 처리기간의 범위 내에서 한 번 연장할 수 있습니다." },
+          { category: "문서", question: "내부결재 문서란?", options: ["외부로 발송하는 문서", "기관 내부에서만 유통되는 문서", "대외비 문서", "비밀문서"], answer: 1, explanation: "내부결재 문서는 발신명의 없이 기관 내부에서만 유통됩니다." },
+          { category: "민원", question: "복합민원의 처리기간은?", options: ["가장 짧은 기간", "가장 긴 기간", "평균 기간", "합산 기간"], answer: 1, explanation: "복합민원은 처리기간이 가장 긴 민원의 기간을 적용합니다." },
+          { category: "문서", question: "관인 날인 생략이 가능한 경우가 아닌 것은?", options: ["전자문서", "인쇄물 대량발송", "계약서", "경미한 사항"], answer: 2, explanation: "계약서 등 중요 문서에는 관인 날인이 필요합니다." },
+          { category: "민원", question: "민원 1회 방문 처리제란?", options: ["모든 민원을 1일 처리", "민원인의 방문을 1회로 처리", "담당자 1인 처리", "1개 창구 처리"], answer: 1, explanation: "민원 1회 방문 처리제는 민원인이 1회 방문으로 민원을 처리받는 제도입니다." },
+          { category: "문서", question: "문서의 효력 발생 시기(시행문)는?", options: ["결재일", "시행일", "수신자 도달일", "작성일"], answer: 2, explanation: "문서의 효력은 수신자에게 도달한 때 발생합니다." },
+          { category: "민원", question: "정보공개 청구 시 공개 대상이 아닌 것은?", options: ["예산 집행 내역", "공무원 인사기록", "정책연구보고서", "회의록"], answer: 1, explanation: "개인정보인 공무원 인사기록은 비공개 대상입니다." },
+          { category: "문서", question: "기안문 작성 시 '붙임'의 위치는?", options: ["제목 아래", "본문 아래", "발신명의 아래", "시행일자 아래"], answer: 1, explanation: "붙임은 본문이 끝난 다음 줄에 표시합니다." },
+
+          // ===== 회계/감사 (10문제) =====
+          { category: "회계", question: "세입금의 반환 사유가 아닌 것은?", options: ["과오납금", "이중 수납", "법률에 따른 반환", "예산 부족"], answer: 3, explanation: "예산 부족은 세입금 반환 사유가 아닙니다." },
+          { category: "회계", question: "출납공무원의 변상책임이 면제되는 경우는?", options: ["과실", "착오", "불가항력", "부주의"], answer: 2, explanation: "불가항력에 의한 경우 출납공무원의 변상책임이 면제됩니다." },
+          { category: "회계", question: "세입징수관의 직무가 아닌 것은?", options: ["세입의 조사", "세입의 결정", "세입의 징수", "세입의 지출"], answer: 3, explanation: "세입의 지출은 지출관의 직무입니다." },
+          { category: "감사", question: "자체감사의 종류가 아닌 것은?", options: ["종합감사", "특정감사", "복무감사", "일상감사"], answer: 2, explanation: "복무감사는 별도의 감사 유형이 아닙니다." },
+          { category: "회계", question: "관서운영경비란?", options: ["사업비", "인건비", "청사 운영비", "예비비"], answer: 2, explanation: "관서운영경비는 청사 유지·관리 등에 사용하는 경비입니다." },
+          { category: "감사", question: "일상감사 대상이 아닌 것은?", options: ["계약", "예산 전용", "국고보조금 교부", "일반 민원처리"], answer: 3, explanation: "일반 민원처리는 일상감사 대상이 아닙니다." },
+          { category: "회계", question: "국고금의 이자율이 적용되지 않는 것은?", options: ["보증금", "보관금", "운용잔액", "예탁금"], answer: 1, explanation: "보관금은 이자 없이 보관만 합니다." },
+          { category: "감사", question: "감사원 감사의 종류가 아닌 것은?", options: ["회계검사", "직무감찰", "성과감사", "징계감사"], answer: 3, explanation: "징계감사는 감사원 감사의 종류가 아닙니다." },
+          { category: "회계", question: "채권관리의 원칙이 아닌 것은?", options: ["조기 확보", "시효 관리", "채무자 보호", "선의관리자 주의"], answer: 2, explanation: "채권관리에서 채무자 보호가 원칙은 아닙니다." },
+          { category: "감사", question: "감사 결과 처분 요구 중 가장 무거운 것은?", options: ["주의", "경고", "시정요구", "징계요구"], answer: 3, explanation: "징계요구가 가장 무거운 처분 요구입니다." }
+        ];
+
+        // 날짜 기반으로 5문제 선택 (매일 다른 문제)
+        function getDailyQuiz() {
+          const today = new Date();
+          const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+
+          // 시드 기반 셔플
+          const shuffled = [...allQuizData];
+          for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor((seed * (i + 1) * 9301 + 49297) % 233280 / 233280 * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+          }
+
+          return shuffled.slice(0, 5);
+        }
+
+        const quizData = getDailyQuiz();
+
+        let currentQuestion = 0;
+        let score = 0;
         let selectedOption = null;
         let answered = false;
 
-        options.forEach(option => {
-          option.addEventListener('click', function() {
-            if (answered) return;
+        const progressEl = document.getElementById('quiz-progress');
+        const categoryEl = document.getElementById('quiz-category');
+        const questionEl = document.getElementById('quiz-question');
+        const optionsEl = document.getElementById('quiz-options');
+        const resultDiv = document.getElementById('quiz-result');
+        const resultMessage = document.getElementById('result-message');
+        const resultExplanation = document.getElementById('result-explanation');
+        const submitBtn = document.getElementById('quiz-submit');
+        const finalDiv = document.getElementById('quiz-final');
+        const finalScore = document.getElementById('final-score');
+        const footerDiv = document.getElementById('quiz-footer');
+        const restartBtn = document.getElementById('quiz-restart');
 
-            // 이전 선택 해제
-            options.forEach(opt => {
-              opt.classList.remove('bg-forest-500/30', 'border-forest-400');
-              opt.classList.add('bg-white/10', 'border-white/10');
+        function renderQuestion() {
+          const quiz = quizData[currentQuestion];
+          progressEl.textContent = `문제 ${currentQuestion + 1}/5`;
+          categoryEl.textContent = quiz.category;
+          questionEl.textContent = quiz.question;
+
+          optionsEl.innerHTML = quiz.options.map((opt, idx) => `
+            <button data-index="${idx}" class="quiz-option w-full text-left bg-white/10 hover:bg-white/20 rounded-xl p-4 transition-all duration-200 border border-white/10 hover:border-white/30 group cursor-pointer">
+              <span class="flex items-center gap-3">
+                <span class="option-number w-8 h-8 rounded-full bg-white/10 group-hover:bg-white/20 flex items-center justify-center text-sm font-medium transition-colors">${idx + 1}</span>
+                <span class="font-medium">${opt}</span>
+                <span class="result-icon ml-auto hidden">
+                  <span class="material-symbols-outlined text-xl"></span>
+                </span>
+              </span>
+            </button>
+          `).join('');
+
+          // 옵션 클릭 이벤트 바인딩
+          document.querySelectorAll('.quiz-option').forEach(option => {
+            option.addEventListener('click', handleOptionClick);
+          });
+
+          // 상태 초기화
+          selectedOption = null;
+          answered = false;
+          resultDiv.classList.add('hidden');
+          resultDiv.classList.remove('bg-forest-500/20', 'bg-rose-500/20');
+          resultMessage.classList.remove('text-forest-300', 'text-rose-300');
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = '정답 확인 <span class="material-symbols-outlined">check</span>';
+        }
+
+        function handleOptionClick() {
+          if (answered) return;
+
+          document.querySelectorAll('.quiz-option').forEach(opt => {
+            opt.classList.remove('bg-forest-500/30', 'border-forest-400');
+            opt.classList.add('bg-white/10', 'border-white/10');
+          });
+
+          this.classList.remove('bg-white/10', 'border-white/10');
+          this.classList.add('bg-forest-500/30', 'border-forest-400');
+          selectedOption = this;
+
+          submitBtn.disabled = false;
+        }
+
+        function handleSubmit() {
+          if (!selectedOption) return;
+
+          if (!answered) {
+            // 정답 확인
+            answered = true;
+            const quiz = quizData[currentQuestion];
+            const selectedIdx = parseInt(selectedOption.dataset.index);
+            const isCorrect = selectedIdx === quiz.answer;
+
+            if (isCorrect) score++;
+
+            document.querySelectorAll('.quiz-option').forEach(opt => {
+              opt.classList.add('cursor-not-allowed');
+              const idx = parseInt(opt.dataset.index);
+              const icon = opt.querySelector('.result-icon');
+              const iconSpan = icon.querySelector('.material-symbols-outlined');
+
+              if (idx === quiz.answer) {
+                opt.classList.remove('bg-white/10', 'bg-forest-500/30');
+                opt.classList.add('bg-forest-500/40', 'border-forest-400');
+                icon.classList.remove('hidden');
+                iconSpan.textContent = 'check_circle';
+                iconSpan.classList.add('text-forest-300');
+              } else if (opt === selectedOption && !isCorrect) {
+                opt.classList.remove('bg-forest-500/30');
+                opt.classList.add('bg-rose-500/30', 'border-rose-400');
+                icon.classList.remove('hidden');
+                iconSpan.textContent = 'cancel';
+                iconSpan.classList.add('text-rose-300');
+              }
             });
 
-            // 현재 선택
-            this.classList.remove('bg-white/10', 'border-white/10');
-            this.classList.add('bg-forest-500/30', 'border-forest-400');
-            selectedOption = this;
-
-            // 제출 버튼 활성화
-            submitBtn.disabled = false;
-            submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-          });
-        });
-
-        submitBtn.addEventListener('click', function() {
-          if (!selectedOption || answered) return;
-          answered = true;
-
-          const isCorrect = selectedOption.dataset.correct === 'true';
-
-          // 모든 옵션 처리
-          options.forEach(opt => {
-            opt.classList.add('cursor-not-allowed');
-            const icon = opt.querySelector('.result-icon');
-            const iconSpan = icon.querySelector('.material-symbols-outlined');
-
-            if (opt.dataset.correct === 'true') {
-              opt.classList.remove('bg-white/10', 'bg-forest-500/30');
-              opt.classList.add('bg-forest-500/40', 'border-forest-400');
-              icon.classList.remove('hidden');
-              iconSpan.textContent = 'check_circle';
-              iconSpan.classList.add('text-forest-300');
-            } else if (opt === selectedOption && !isCorrect) {
-              opt.classList.remove('bg-forest-500/30');
-              opt.classList.add('bg-rose-500/30', 'border-rose-400');
-              icon.classList.remove('hidden');
-              iconSpan.textContent = 'cancel';
-              iconSpan.classList.add('text-rose-300');
+            resultDiv.classList.remove('hidden');
+            if (isCorrect) {
+              resultDiv.classList.add('bg-forest-500/20');
+              resultMessage.textContent = '정답입니다!';
+              resultMessage.classList.add('text-forest-300');
+            } else {
+              resultDiv.classList.add('bg-rose-500/20');
+              resultMessage.textContent = '오답입니다.';
+              resultMessage.classList.add('text-rose-300');
             }
-          });
+            resultExplanation.textContent = quiz.explanation;
 
-          // 결과 표시
-          resultDiv.classList.remove('hidden');
-          if (isCorrect) {
-            resultDiv.classList.add('bg-forest-500/20');
-            resultMessage.textContent = '정답입니다!';
-            resultMessage.classList.add('text-forest-300');
-            resultExplanation.textContent = '예비비이월은 존재하지 않는 개념입니다. 예산 이월에는 명시이월, 사고이월, 계속비이월이 있습니다.';
+            if (currentQuestion < quizData.length - 1) {
+              submitBtn.innerHTML = '다음 문제 <span class="material-symbols-outlined">arrow_forward</span>';
+            } else {
+              submitBtn.innerHTML = '결과 보기 <span class="material-symbols-outlined">emoji_events</span>';
+            }
           } else {
-            resultDiv.classList.add('bg-rose-500/20');
-            resultMessage.textContent = '오답입니다.';
-            resultMessage.classList.add('text-rose-300');
-            resultExplanation.textContent = '정답은 4번 "예비비이월"입니다. 예비비이월은 존재하지 않는 개념입니다.';
+            // 다음 문제 또는 결과
+            if (currentQuestion < quizData.length - 1) {
+              currentQuestion++;
+              renderQuestion();
+            } else {
+              // 최종 결과 표시
+              questionEl.classList.add('hidden');
+              optionsEl.classList.add('hidden');
+              resultDiv.classList.add('hidden');
+              footerDiv.classList.add('hidden');
+              finalDiv.classList.remove('hidden');
+              finalScore.textContent = score;
+            }
           }
+        }
 
-          // 버튼 변경
-          submitBtn.innerHTML = '<span>다음 문제</span><span class="material-symbols-outlined">arrow_forward</span>';
-        });
+        function handleRestart() {
+          currentQuestion = 0;
+          score = 0;
+          questionEl.classList.remove('hidden');
+          optionsEl.classList.remove('hidden');
+          footerDiv.classList.remove('hidden');
+          finalDiv.classList.add('hidden');
+          renderQuestion();
+        }
+
+        submitBtn.addEventListener('click', handleSubmit);
+        restartBtn.addEventListener('click', handleRestart);
+
+        // 초기 렌더링
+        renderQuestion();
       });
       </script>
     </div>
