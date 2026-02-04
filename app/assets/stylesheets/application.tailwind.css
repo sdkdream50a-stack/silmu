@@ -514,181 +514,116 @@
    법령 콘텐츠 가시성 향상
    =========================================== */
 
-/* 법령 콘텐츠 컨테이너 - 헤더 부제목 크기(text-sm)에 맞춤 */
+/* 법령 콘텐츠 컨테이너 */
 .legal-content {
-  @apply text-navy-600 leading-relaxed;
-  font-size: 0.875rem; /* 14px - text-sm과 동일 */
+  @apply text-navy-700 leading-relaxed;
+  font-size: 0.9375rem;
 }
 
 /* 제목 스타일 */
 .legal-content .legal-h3,
 .legal-content h3 {
-  @apply text-sm font-semibold text-navy-800 mt-3 mb-2 pb-1 border-b border-gray-200;
+  @apply text-lg font-bold text-navy-900 mt-6 mb-4 pb-2 border-b border-gray-200;
 }
 
 .legal-content .legal-h4,
 .legal-content h4 {
-  @apply text-sm font-medium text-navy-700 mt-2 mb-1;
+  @apply text-base font-semibold text-navy-800 mt-5 mb-3;
 }
 
-/* 조(條) 스타일 - 기본 (법률용 point 색상) */
+/* 조(條) 스타일 */
 .legal-content .legal-article {
-  @apply mt-3 mb-2 pb-1 border-b border-point-200;
+  @apply mt-6 mb-4 pb-2 border-b-2 border-point-200;
 }
 
 .legal-content .legal-article-num {
-  @apply text-sm font-semibold text-point-600;
+  @apply text-lg font-bold text-point-600;
 }
 
 .legal-content .legal-article-title {
-  @apply text-sm font-medium text-point-500;
-}
-
-/* 시행령 카드용 색상 (forest) */
-.border-forest-200 .legal-content .legal-article {
-  @apply border-b border-forest-200;
-}
-.border-forest-200 .legal-content .legal-article-num {
-  @apply text-forest-600;
-}
-.border-forest-200 .legal-content .legal-article-title {
-  @apply text-forest-500;
-}
-
-/* 시행규칙 카드용 색상 (warm/orange) */
-.border-warm-200 .legal-content .legal-article {
-  @apply border-b border-warm-200;
-}
-.border-warm-200 .legal-content .legal-article-num {
-  @apply text-warm-600;
-}
-.border-warm-200 .legal-content .legal-article-title {
-  @apply text-warm-500;
+  @apply text-base font-semibold text-navy-800;
 }
 
 /* 항(①②③) 스타일 */
 .legal-content .legal-paragraph {
-  @apply my-1.5 pl-0;
+  @apply my-4 pl-0;
 }
 
 .legal-content .legal-para-num {
-  @apply inline-flex items-center justify-center w-4 h-4
-         bg-gray-100 text-gray-600 rounded-full
-         text-xs font-semibold mr-1 flex-shrink-0;
-  font-size: 0.625rem; /* 10px */
-  vertical-align: middle;
+  @apply inline-flex items-center justify-center w-6 h-6
+         bg-navy-100 text-navy-700 rounded-full
+         text-sm font-bold mr-2 flex-shrink-0;
+  vertical-align: top;
 }
 
 .legal-content .legal-para-text {
-  @apply text-navy-600 leading-relaxed;
+  @apply text-navy-700 leading-relaxed;
   display: inline;
-}
-
-/* 시행령 카드 항 번호 색상 */
-.border-forest-200 .legal-content .legal-para-num {
-  @apply bg-forest-50 text-forest-600;
-}
-
-/* 시행규칙 카드 항 번호 색상 */
-.border-warm-200 .legal-content .legal-para-num {
-  @apply bg-warm-50 text-warm-600;
 }
 
 /* 호(1. 2. 3.) 스타일 */
 .legal-content .legal-item {
-  @apply my-1 pl-5 relative;
+  @apply my-2 pl-8 relative;
 }
 
 .legal-content .legal-item-num {
-  @apply absolute left-0 text-point-500 font-medium;
-  font-size: 0.8125rem; /* 13px */
-  width: 1rem;
+  @apply absolute left-0 text-forest-600 font-semibold;
+  width: 1.5rem;
 }
 
 .legal-content .legal-item-text {
-  @apply text-navy-600;
-}
-
-/* 시행령 카드 호 번호 색상 */
-.border-forest-200 .legal-content .legal-item-num {
-  @apply text-forest-500;
-}
-
-/* 시행규칙 카드 호 번호 색상 */
-.border-warm-200 .legal-content .legal-item-num {
-  @apply text-warm-500;
+  @apply text-navy-700;
 }
 
 /* 목록 스타일 */
 .legal-content .legal-list {
-  @apply my-1.5 pl-3 space-y-0.5;
+  @apply my-3 pl-4 space-y-2;
   list-style: none;
 }
 
 .legal-content .legal-list-item {
-  @apply relative pl-3 text-navy-600;
-  font-size: 0.8125rem; /* 13px */
+  @apply relative pl-5 text-navy-700;
 }
 
 .legal-content .legal-list-item::before {
   content: '•';
-  @apply absolute left-0 text-point-400 font-bold;
-}
-
-/* 시행령 카드 목록 */
-.border-forest-200 .legal-content .legal-list-item::before {
-  @apply text-forest-400;
-}
-
-/* 시행규칙 카드 목록 */
-.border-warm-200 .legal-content .legal-list-item::before {
-  @apply text-warm-400;
+  @apply absolute left-0 text-forest-500 font-bold;
 }
 
 /* 일반 텍스트 */
 .legal-content .legal-text {
-  @apply my-1.5 text-navy-600 leading-relaxed;
+  @apply my-3 text-navy-700 leading-relaxed;
 }
 
 .legal-content p {
-  @apply my-1.5;
+  @apply my-3;
 }
 
 /* 강조 */
 .legal-content strong {
-  @apply text-navy-800 font-semibold;
+  @apply text-navy-900 font-semibold;
 }
 
 .legal-content u {
-  @apply text-point-600 decoration-point-200 decoration-1 underline-offset-2;
-}
-
-/* 시행령 강조 */
-.border-forest-200 .legal-content u {
-  @apply text-forest-600 decoration-forest-200;
-}
-
-/* 시행규칙 강조 */
-.border-warm-200 .legal-content u {
-  @apply text-warm-600 decoration-warm-200;
+  @apply text-point-700 decoration-point-300 decoration-2 underline-offset-2;
 }
 
 /* 테이블 스타일 */
 .legal-content .legal-table-wrapper {
-  @apply my-3 overflow-x-auto rounded-lg border border-gray-200;
+  @apply my-5 overflow-x-auto rounded-xl border border-gray-200;
 }
 
 .legal-content .legal-table {
-  @apply w-full text-xs;
+  @apply w-full text-sm;
   border-collapse: collapse;
 }
 
 .legal-content .legal-table th {
-  @apply px-3 py-2 bg-navy-50 text-navy-800 font-semibold text-left border-b-2 border-navy-200;
+  @apply px-4 py-3 bg-navy-50 text-navy-800 font-semibold text-left border-b-2 border-navy-200;
 }
 
 .legal-content .legal-table td {
-  @apply px-3 py-2 border-b border-gray-100 text-navy-700;
+  @apply px-4 py-3 border-b border-gray-100 text-navy-700;
 }
 
 .legal-content .legal-table tr:last-child td {
