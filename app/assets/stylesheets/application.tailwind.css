@@ -531,17 +531,41 @@
   @apply text-base font-semibold text-navy-800 mt-5 mb-3;
 }
 
-/* 조(條) 스타일 */
+/* 조(條) 스타일 - 15pt(1.25rem) 진하게 색상 적용 */
 .legal-content .legal-article {
-  @apply mt-6 mb-4 pb-2 border-b-2 border-point-200;
+  @apply mt-5 mb-3 pb-2 border-b-2 border-point-200;
 }
 
 .legal-content .legal-article-num {
-  @apply text-lg font-bold text-point-600;
+  @apply font-bold text-point-600;
+  font-size: 0.9375rem; /* 15px = 약 11pt */
 }
 
 .legal-content .legal-article-title {
-  @apply text-base font-semibold text-navy-800;
+  @apply font-bold text-point-500;
+  font-size: 0.9375rem; /* 15px */
+}
+
+/* 시행령 카드 조문 제목 색상 (forest/초록) */
+.border-forest-200 .legal-content .legal-article {
+  @apply border-b-2 border-forest-200;
+}
+.border-forest-200 .legal-content .legal-article-num {
+  @apply text-forest-600;
+}
+.border-forest-200 .legal-content .legal-article-title {
+  @apply text-forest-500;
+}
+
+/* 시행규칙 카드 조문 제목 색상 (warm/주황) */
+.border-warm-200 .legal-content .legal-article {
+  @apply border-b-2 border-warm-200;
+}
+.border-warm-200 .legal-content .legal-article-num {
+  @apply text-warm-600;
+}
+.border-warm-200 .legal-content .legal-article-title {
+  @apply text-warm-500;
 }
 
 /* 항(①②③) 스타일 */
