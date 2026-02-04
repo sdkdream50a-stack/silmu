@@ -13,6 +13,11 @@ module ApplicationHelper
     html = html.gsub(/^### (.+)$/, '<h4 class="legal-h4">\1</h4>')
     html = html.gsub(/^## (.+)$/, '<h3 class="legal-h3">\1</h3>')
 
+    # 2-1. 법령명 표기 (지방계약법, 국가계약법, 시행령, 시행규칙 등)
+    html = html.gsub(/^((?:지방|국가)계약법(?:\s*시행(?:령|규칙))?)$/m) do |match|
+      "<div class=\"legal-law-name\">#{$1}</div>"
+    end
+
     # 3. 조(條) 표기 - 제X조 형식
     html = html.gsub(/(제\d+조(?:의\d+)?)\s*\(([^)]+)\)/) do |match|
       "<div class=\"legal-article\"><span class=\"legal-article-num\">#{$1}</span> <span class=\"legal-article-title\">(#{$2})</span></div>"
