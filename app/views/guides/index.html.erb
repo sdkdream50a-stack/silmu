@@ -206,11 +206,29 @@
 </section>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('turbo:load', function() {
   const tabs = document.querySelectorAll('#category-tabs .tab-btn');
   const items = document.querySelectorAll('.item-card');
   const itemCount = document.getElementById('item-count');
   const searchInput = document.getElementById('search-input');
+
+  // URL 파라미터에서 카테고리 읽기
+  const urlParams = new URLSearchParams(window.location.search);
+  const initialCategory = urlParams.get('category');
+
+  // 초기 카테고리가 있으면 해당 탭 활성화
+  if (initialCategory) {
+    tabs.forEach(tab => {
+      if (tab.dataset.category === initialCategory) {
+        tabs.forEach(t => {
+          t.classList.remove('active', 'bg-forest-600', 'text-white', 'shadow-md');
+          t.classList.add('bg-surface-100', 'text-navy-600');
+        });
+        tab.classList.add('active', 'bg-forest-600', 'text-white', 'shadow-md');
+        tab.classList.remove('bg-surface-100', 'text-navy-600');
+      }
+    });
+  }
 
   function filterItems() {
     const activeTab = document.querySelector('#category-tabs .tab-btn.active');
@@ -252,5 +270,8 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   searchInput.addEventListener('input', filterItems);
+
+  // 초기 필터링 실행
+  filterItems();
 });
 </script>

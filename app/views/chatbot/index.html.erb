@@ -36,7 +36,7 @@
         <% %w[수의계약 연말정산 출장비 이월 기간제 보조금정산 겸직 일상경비].each do |keyword| %>
           <%= link_to keyword, chatbot_search_path(q: keyword),
               class: "px-3 py-1.5 bg-surface-100 text-navy-700 rounded-full text-sm font-medium hover:bg-point-100 hover:text-point-700 transition-all",
-              data: { turbo_frame: "search-results" } %>
+              data: { turbo: false } %>
         <% end %>
       </div>
     </div>
@@ -135,10 +135,10 @@
           </h2>
           <div class="space-y-2">
             <% Topic::CATEGORIES.each do |key, name| %>
-              <a href="javascript:void(0)" onclick="alert('<%= name %> 가이드는 준비 중입니다.')" class="flex items-center justify-between py-3 border-b border-gray-100 last:border-0 hover:bg-surface-50 px-2 -mx-2 rounded-lg transition-colors cursor-pointer group">
+              <%= link_to guides_path(category: name), class: "flex items-center justify-between py-3 border-b border-gray-100 last:border-0 hover:bg-surface-50 px-2 -mx-2 rounded-lg transition-colors cursor-pointer group", data: { turbo_frame: "_top" } do %>
                 <span class="text-navy-700 font-medium group-hover:text-point-600"><%= name %></span>
                 <span class="material-symbols-outlined text-gray-400 group-hover:text-point-600 text-lg">chevron_right</span>
-              </a>
+              <% end %>
             <% end %>
           </div>
         </div>
