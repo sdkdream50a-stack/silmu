@@ -666,37 +666,12 @@
   @apply px-4 py-3 border-b border-gray-100 text-navy-700;
 }
 
-/* 테이블 행 색상 구분 (zebra striping) */
-.legal-content .legal-table tbody tr:nth-child(odd) td {
-  @apply bg-white;
-}
-
-.legal-content .legal-table tbody tr:nth-child(even) td {
-  @apply bg-surface-50;
-}
-
 .legal-content .legal-table tr:last-child td {
   @apply border-b-0;
 }
 
 .legal-content .legal-table tr:hover td {
-  @apply bg-point-50;
-}
-
-/* 시행령 카드 테이블 색상 */
-.border-forest-200 .legal-content .legal-table tbody tr:nth-child(even) td {
-  @apply bg-forest-50;
-}
-.border-forest-200 .legal-content .legal-table tr:hover td {
-  @apply bg-forest-100;
-}
-
-/* 시행규칙 카드 테이블 색상 */
-.border-warm-200 .legal-content .legal-table tbody tr:nth-child(even) td {
-  @apply bg-warm-50;
-}
-.border-warm-200 .legal-content .legal-table tr:hover td {
-  @apply bg-warm-100;
+  @apply bg-surface-50;
 }
 
 .legal-content .legal-table strong {
