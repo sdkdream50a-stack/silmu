@@ -1,0 +1,1583 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>예정가격 조서 자동생성 | 실무</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  <style>
+    @page { size: A4; margin: 15mm; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Pretendard', '맑은 고딕', sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+      background: #f8fafc;
+      color: #1e3a5f;
+    }
+
+    :root {
+      --navy-900: #1e3a5f;
+      --navy-700: #2d4a6f;
+      --navy-600: #3d5a7f;
+      --navy-100: #e8eef5;
+      --orange-600: #d97706;
+      --orange-500: #f59e0b;
+      --orange-100: #fef3c7;
+      --forest-600: #2e7d32;
+      --forest-500: #4caf50;
+      --forest-100: #e8f5e9;
+      --red-500: #ef4444;
+      --red-100: #fee2e2;
+      --surface-100: #f1f5f9;
+    }
+
+    .header {
+      background: linear-gradient(135deg, var(--orange-600) 0%, var(--orange-500) 100%);
+      color: white;
+      padding: 16px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 20px rgba(217, 119, 6, 0.15);
+    }
+    .header-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .logo {
+      font-size: 20px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: white;
+    }
+    .header-title {
+      font-size: 16px;
+      font-weight: 600;
+      padding-left: 16px;
+      border-left: 1px solid rgba(255,255,255,0.3);
+    }
+    .header-nav {
+      display: flex;
+      gap: 8px;
+    }
+    .header-nav a {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .header-nav a:hover {
+      background: rgba(255,255,255,0.1);
+      color: white;
+    }
+
+    .main-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .step-indicator {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 30px;
+      background: var(--surface-100);
+      color: #64748b;
+      font-weight: 500;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .step:hover:not(.disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .step.active {
+      background: var(--orange-600);
+      color: white;
+    }
+    .step.done {
+      background: var(--navy-900);
+      color: white;
+    }
+    .step.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .step-number {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      border: 1px solid #e2e8f0;
+    }
+    .card h3 {
+      color: var(--navy-900);
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card.highlight {
+      border: 2px solid var(--orange-500);
+      background: linear-gradient(to bottom right, #fffbeb, #ffffff);
+    }
+
+    .two-column {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .two-column {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .type-selector {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .type-btn {
+      padding: 20px 12px;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      background: white;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .type-btn:hover {
+      border-color: var(--orange-500);
+      transform: translateY(-2px);
+    }
+    .type-btn.selected {
+      border-color: var(--orange-600);
+      background: var(--orange-100);
+    }
+    .type-btn .material-symbols-outlined {
+      font-size: 32px;
+      color: var(--navy-600);
+      margin-bottom: 6px;
+    }
+    .type-btn.selected .material-symbols-outlined {
+      color: var(--orange-600);
+    }
+    .type-btn span {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--navy-900);
+    }
+    .type-btn small {
+      font-size: 11px;
+      color: #64748b;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--navy-900);
+      font-size: 14px;
+    }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      font-size: 14px;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      outline: none;
+      border-color: var(--orange-500);
+    }
+    .form-group .hint {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 4px;
+    }
+    .form-group .hint.warning {
+      color: var(--red-500);
+      font-weight: 500;
+    }
+    .form-group .hint.success {
+      color: var(--forest-600);
+      font-weight: 500;
+    }
+
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .checkbox-item:hover {
+      border-color: var(--orange-500);
+    }
+    .checkbox-item.selected {
+      border-color: var(--orange-600);
+      background: var(--orange-100);
+    }
+    .checkbox-item input { display: none; }
+
+    .price-survey-list {
+      margin-top: 16px;
+    }
+    .price-survey-item {
+      display: grid;
+      grid-template-columns: 1fr 120px 100px 40px;
+      gap: 8px;
+      margin-bottom: 8px;
+      align-items: center;
+    }
+    .price-survey-item input {
+      padding: 10px 12px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 13px;
+    }
+    .price-survey-item input:focus {
+      outline: none;
+      border-color: var(--orange-500);
+    }
+    .btn-remove-item {
+      width: 36px;
+      height: 36px;
+      border: none;
+      background: var(--red-100);
+      color: var(--red-500);
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-add-item {
+      width: 100%;
+      padding: 12px;
+      border: 2px dashed #e2e8f0;
+      background: transparent;
+      color: #64748b;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-add-item:hover {
+      border-color: var(--orange-500);
+      color: var(--orange-600);
+    }
+
+    .upload-zone {
+      border: 3px dashed #e2e8f0;
+      border-radius: 12px;
+      padding: 40px 24px;
+      text-align: center;
+      background: var(--surface-100);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .upload-zone:hover, .upload-zone.dragover {
+      border-color: var(--orange-500);
+      background: var(--orange-100);
+    }
+    .upload-zone .material-symbols-outlined {
+      font-size: 48px;
+      color: #94a3b8;
+      margin-bottom: 12px;
+    }
+    .upload-zone h4 {
+      color: var(--navy-900);
+      margin-bottom: 4px;
+    }
+    .upload-zone p {
+      font-size: 13px;
+      color: #64748b;
+    }
+    .upload-zone input { display: none; }
+
+    .uploaded-files {
+      margin-top: 16px;
+    }
+    .uploaded-file {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: var(--forest-100);
+      border-radius: 10px;
+      margin-bottom: 8px;
+    }
+    .uploaded-file .material-symbols-outlined {
+      color: var(--forest-600);
+    }
+    .uploaded-file span {
+      flex: 1;
+      font-size: 13px;
+      color: var(--navy-900);
+    }
+    .uploaded-file .extracted-price {
+      font-weight: 600;
+      color: var(--orange-600);
+    }
+    .uploaded-file button {
+      background: none;
+      border: none;
+      color: var(--red-500);
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .calculation-box {
+      background: linear-gradient(135deg, var(--orange-100), white);
+      border: 2px solid var(--orange-500);
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+    .calculation-box h4 {
+      color: var(--orange-600);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .calc-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(217, 119, 6, 0.2);
+    }
+    .calc-row:last-child {
+      border-bottom: none;
+    }
+    .calc-row.total {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--orange-600);
+      padding-top: 12px;
+      margin-top: 8px;
+      border-top: 2px solid var(--orange-500);
+    }
+
+    .threshold-check {
+      margin-top: 20px;
+      padding: 16px;
+      border-radius: 12px;
+    }
+    .threshold-check.pass {
+      background: var(--forest-100);
+      border: 2px solid var(--forest-500);
+    }
+    .threshold-check.fail {
+      background: var(--red-100);
+      border: 2px solid var(--red-500);
+    }
+    .threshold-check h5 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .threshold-check.pass h5 { color: var(--forest-600); }
+    .threshold-check.fail h5 { color: var(--red-500); }
+    .threshold-check p {
+      font-size: 13px;
+      color: var(--navy-700);
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--orange-600), var(--orange-500));
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+      margin-top: 20px;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(217, 119, 6, 0.3);
+    }
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .btn-secondary {
+      padding: 16px;
+      background: var(--surface-100);
+      color: var(--navy-900);
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .preview-section {
+      display: none;
+    }
+    .preview-section.show {
+      display: block;
+    }
+
+    .document-preview {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 40px;
+      max-width: 800px;
+      margin: 0 auto;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    .document-preview h1 {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 30px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--navy-900);
+    }
+    .document-preview table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    .document-preview th, .document-preview td {
+      border: 1px solid #000;
+      padding: 10px 12px;
+      font-size: 13px;
+    }
+    .document-preview th {
+      background: var(--orange-100);
+      text-align: center;
+      font-weight: 600;
+      width: 120px;
+    }
+    .document-preview .section-title {
+      color: var(--orange-600);
+      font-weight: 700;
+      margin: 25px 0 10px;
+    }
+    .document-preview .total-row {
+      background: var(--orange-100);
+      font-weight: 700;
+    }
+    .document-preview .signature-area {
+      margin-top: 40px;
+      text-align: center;
+    }
+
+    .download-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 24px;
+    }
+    .btn-download {
+      padding: 14px 28px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+      border: none;
+    }
+    .btn-word {
+      background: #2563eb;
+      color: white;
+    }
+    .btn-pdf {
+      background: #dc2626;
+      color: white;
+    }
+    .btn-print {
+      background: white;
+      color: var(--navy-900);
+      border: 2px solid #e2e8f0;
+    }
+    .btn-download:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      padding: 16px 24px;
+      border-radius: 12px;
+      color: white;
+      font-weight: 500;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s;
+      z-index: 1000;
+      background: var(--navy-900);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .info-box {
+      background: var(--navy-100);
+      border-left: 4px solid var(--navy-900);
+      padding: 16px;
+      border-radius: 0 10px 10px 0;
+      margin-top: 20px;
+    }
+    .info-box h5 {
+      color: var(--navy-900);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .info-box ul {
+      margin: 0;
+      padding-left: 20px;
+      font-size: 13px;
+      color: var(--navy-700);
+    }
+    .info-box li {
+      margin-bottom: 4px;
+    }
+
+    @media print {
+      .header, .step-indicator, .toast, .download-buttons, .info-box { display: none !important; }
+      body { background: white; }
+      .main-container { padding: 0; }
+      .card { box-shadow: none; border: none; }
+      .document-preview { box-shadow: none; border: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-left">
+        <a href="/" class="logo">
+          <span class="material-symbols-outlined">verified</span>
+          실무
+        </a>
+        <span class="header-title">예정가격 조서 자동생성</span>
+      </div>
+      <nav class="header-nav">
+        <a href="/">
+          <span class="material-symbols-outlined">home</span>
+          홈
+        </a>
+        <a href="/topics/private-contract">
+          <span class="material-symbols-outlined">description</span>
+          수의계약 가이드
+        </a>
+        <a href="/forms/견적서검토.html">
+          <span class="material-symbols-outlined">fact_check</span>
+          견적서 검토
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="main-container">
+    <div class="step-indicator">
+      <div class="step active" id="step1" onclick="goToStep(1)">
+        <span class="step-number">1</span>
+        <span>계약정보</span>
+      </div>
+      <div class="step disabled" id="step2" onclick="goToStep(2)">
+        <span class="step-number">2</span>
+        <span>가격조사</span>
+      </div>
+      <div class="step disabled" id="step3" onclick="goToStep(3)">
+        <span class="step-number">3</span>
+        <span>문서생성</span>
+      </div>
+    </div>
+
+    <!-- Step 1: 계약정보 -->
+    <div class="card" id="step1-card">
+      <h3>
+        <span class="material-symbols-outlined">edit_note</span>
+        계약 기본정보 입력
+      </h3>
+
+      <div class="form-group">
+        <label>계약건명 *</label>
+        <input type="text" id="contract_name" placeholder="예: 2026년도 사무용품 구매">
+      </div>
+
+      <div class="form-group">
+        <label>계약구분 *</label>
+        <div class="type-selector">
+          <div class="type-btn" data-type="goods" onclick="selectContractType('goods')">
+            <span class="material-symbols-outlined">inventory_2</span>
+            <span>물품구매</span>
+            <small>비품, 소모품 등</small>
+          </div>
+          <div class="type-btn" data-type="service" onclick="selectContractType('service')">
+            <span class="material-symbols-outlined">support_agent</span>
+            <span>용역</span>
+            <small>연구, 시스템 등</small>
+          </div>
+          <div class="type-btn" data-type="construction" onclick="selectContractType('construction')">
+            <span class="material-symbols-outlined">construction</span>
+            <span>공사</span>
+            <small>시설공사 등</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>계약방법 *</label>
+        <div class="checkbox-group">
+          <div class="checkbox-item" onclick="selectContractMethod('private')">
+            <input type="radio" name="contract_method" value="private">
+            <span>수의계약</span>
+          </div>
+          <div class="checkbox-item" onclick="selectContractMethod('bidding')">
+            <input type="radio" name="contract_method" value="bidding">
+            <span>경쟁입찰</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>예정가격 작성방법 *</label>
+        <div class="checkbox-group" id="price-method-group">
+          <div class="checkbox-item" onclick="togglePriceMethod(this, 'market')">
+            <input type="checkbox" value="market">
+            <span>거래실례가격</span>
+          </div>
+          <div class="checkbox-item" onclick="togglePriceMethod(this, 'estimate')">
+            <input type="checkbox" value="estimate">
+            <span>견적가격</span>
+          </div>
+          <div class="checkbox-item" onclick="togglePriceMethod(this, 'cost')">
+            <input type="checkbox" value="cost">
+            <span>원가계산</span>
+          </div>
+          <div class="checkbox-item" onclick="togglePriceMethod(this, 'similar')">
+            <input type="checkbox" value="similar">
+            <span>유사거래실례</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <h5>
+          <span class="material-symbols-outlined">info</span>
+          예정가격 작성방법 안내
+        </h5>
+        <ul>
+          <li><strong>거래실례가격:</strong> 나라장터 쇼핑몰, 시중 판매가격 조사 (가장 일반적)</li>
+          <li><strong>견적가격:</strong> 2개 이상 업체로부터 받은 견적서 평균</li>
+          <li><strong>원가계산:</strong> 재료비+노무비+경비 산출 (5천만원 초과 시 권장)</li>
+          <li><strong>유사거래실례:</strong> 과거 유사 계약 사례 참조</li>
+        </ul>
+      </div>
+
+      <button class="btn-primary" onclick="nextStep(2)" id="btn-step1">
+        <span class="material-symbols-outlined">arrow_forward</span>
+        다음: 가격조사 입력
+      </button>
+    </div>
+
+    <!-- Step 2: 가격조사 -->
+    <div class="card highlight" id="step2-card" style="display: none;">
+      <h3>
+        <span class="material-symbols-outlined">search</span>
+        가격조사 내역
+      </h3>
+
+      <div class="two-column">
+        <div>
+          <div class="form-group">
+            <label>가격조사 내역 직접 입력</label>
+            <div class="price-survey-list" id="price-survey-list">
+              <div class="price-survey-item">
+                <input type="text" placeholder="조사처 (예: 나라장터)" class="survey-source">
+                <input type="number" placeholder="조사가격" class="survey-price" onchange="calculatePrices()">
+                <input type="date" class="survey-date">
+                <button class="btn-remove-item" onclick="removeSurveyItem(this)" style="visibility: hidden;">
+                  <span class="material-symbols-outlined">close</span>
+                </button>
+              </div>
+            </div>
+            <button class="btn-add-item" onclick="addSurveyItem()">
+              <span class="material-symbols-outlined">add</span>
+              조사 내역 추가
+            </button>
+          </div>
+
+          <div class="form-group" style="margin-top: 24px;">
+            <label>견적서/가격자료 업로드 (선택)</label>
+            <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()">
+              <span class="material-symbols-outlined">cloud_upload</span>
+              <h4>파일 업로드</h4>
+              <p>견적서, 나라장터 캡쳐 등</p>
+              <input type="file" id="file-input" accept="image/*,.pdf,.xlsx,.xls" multiple onchange="handleFileUpload(event)">
+            </div>
+            <div class="uploaded-files" id="uploaded-files"></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="calculation-box">
+            <h4>
+              <span class="material-symbols-outlined">calculate</span>
+              예정가격 자동계산
+            </h4>
+            <div id="calc-details">
+              <div class="calc-row">
+                <span>조사가격 평균</span>
+                <span id="calc-avg">0원</span>
+              </div>
+              <div class="calc-row">
+                <span>최저 조사가격</span>
+                <span id="calc-min">0원</span>
+              </div>
+              <div class="calc-row">
+                <span>최고 조사가격</span>
+                <span id="calc-max">0원</span>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 16px;">
+              <label>공급가액 (VAT 별도)</label>
+              <input type="number" id="supply_price" placeholder="자동계산 또는 직접입력" onchange="calculateTotal()">
+            </div>
+            <div class="form-group">
+              <label>부가가치세 (10%)</label>
+              <input type="number" id="vat_price" placeholder="자동계산" onchange="calculateTotal()">
+            </div>
+
+            <div class="calc-row total">
+              <span>예정가격 (VAT 포함)</span>
+              <span id="total-price">0원</span>
+            </div>
+          </div>
+
+          <div class="threshold-check" id="threshold-check" style="display: none;">
+            <h5>
+              <span class="material-symbols-outlined">check_circle</span>
+              <span id="threshold-title">적정성 검토</span>
+            </h5>
+            <p id="threshold-msg"></p>
+          </div>
+
+          <div class="form-group" style="margin-top: 20px;">
+            <label>산출근거 (자동생성됨)</label>
+            <textarea id="calculation_basis" rows="4" placeholder="자동으로 생성됩니다..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 12px; margin-top: 20px;">
+        <button class="btn-secondary" style="flex: 1;" onclick="goToStep(1)">
+          <span class="material-symbols-outlined">arrow_back</span>
+          이전
+        </button>
+        <button class="btn-primary" style="flex: 2;" onclick="generateDocument()">
+          <span class="material-symbols-outlined">description</span>
+          예정가격 조서 생성
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 3: 문서 미리보기 및 다운로드 -->
+    <div class="preview-section" id="step3-card">
+      <div class="card">
+        <h3>
+          <span class="material-symbols-outlined">preview</span>
+          예정가격 조서 미리보기
+        </h3>
+
+        <div class="document-preview" id="document-preview">
+          <!-- 동적으로 생성됨 -->
+        </div>
+
+        <div class="download-buttons">
+          <button class="btn-download btn-word" onclick="downloadWord()">
+            <span class="material-symbols-outlined">description</span>
+            Word 다운로드
+          </button>
+          <button class="btn-download btn-pdf" onclick="downloadPDF()">
+            <span class="material-symbols-outlined">picture_as_pdf</span>
+            PDF 저장
+          </button>
+          <button class="btn-download btn-print" onclick="window.print()">
+            <span class="material-symbols-outlined">print</span>
+            인쇄
+          </button>
+        </div>
+
+        <div style="display: flex; gap: 12px; margin-top: 24px;">
+          <button class="btn-secondary" style="flex: 1;" onclick="goToStep(2)">
+            <span class="material-symbols-outlined">arrow_back</span>
+            수정하기
+          </button>
+          <a href="/forms/수의계약사유서.html" class="btn-primary" style="flex: 2; text-decoration: none;">
+            <span class="material-symbols-outlined">arrow_forward</span>
+            다음: 수의계약사유서 작성
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+  <script src="https://unpkg.com/docx@8.5.0/build/index.umd.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    // 상태 관리
+    let currentStep = 1;
+    let contractType = null;
+    let contractMethod = null;
+    let priceMethods = [];
+    let uploadedFiles = [];
+    let surveyPrices = [];
+
+    // 수의계약 기준금액
+    const THRESHOLDS = {
+      goods: { single: 20000000, double: 50000000 },
+      service: { single: 20000000, double: 50000000 },
+      construction: { single: 50000000, double: 200000000 }
+    };
+
+    const TYPE_NAMES = {
+      goods: '물품구매',
+      service: '용역',
+      construction: '공사'
+    };
+
+    const METHOD_NAMES = {
+      market: '거래실례가격',
+      estimate: '견적가격',
+      cost: '원가계산',
+      similar: '유사거래실례가격'
+    };
+
+    // 계약구분 선택
+    function selectContractType(type) {
+      contractType = type;
+      document.querySelectorAll('.type-btn').forEach(btn => {
+        btn.classList.toggle('selected', btn.dataset.type === type);
+      });
+      checkThreshold();
+    }
+
+    // 계약방법 선택
+    function selectContractMethod(method) {
+      contractMethod = method;
+      document.querySelectorAll('.checkbox-item').forEach(item => {
+        const input = item.querySelector('input[name="contract_method"]');
+        if (input) {
+          item.classList.toggle('selected', input.value === method);
+        }
+      });
+      checkThreshold();
+    }
+
+    // 예정가격 작성방법 토글
+    function togglePriceMethod(item, method) {
+      item.classList.toggle('selected');
+      if (item.classList.contains('selected')) {
+        if (!priceMethods.includes(method)) priceMethods.push(method);
+      } else {
+        priceMethods = priceMethods.filter(m => m !== method);
+      }
+    }
+
+    // 스텝 이동
+    function goToStep(step) {
+      if (step > currentStep + 1) return;
+      currentStep = step;
+      updateStepIndicator();
+
+      document.getElementById('step1-card').style.display = step === 1 ? 'block' : 'none';
+      document.getElementById('step2-card').style.display = step === 2 ? 'block' : 'none';
+      document.getElementById('step3-card').classList.toggle('show', step === 3);
+    }
+
+    function nextStep(step) {
+      if (step === 2) {
+        if (!document.getElementById('contract_name').value) {
+          showToast('계약건명을 입력해주세요.');
+          return;
+        }
+        if (!contractType) {
+          showToast('계약구분을 선택해주세요.');
+          return;
+        }
+        if (!contractMethod) {
+          showToast('계약방법을 선택해주세요.');
+          return;
+        }
+        if (priceMethods.length === 0) {
+          showToast('예정가격 작성방법을 선택해주세요.');
+          return;
+        }
+      }
+
+      document.getElementById(`step${step}`).classList.remove('disabled');
+      goToStep(step);
+    }
+
+    function updateStepIndicator() {
+      for (let i = 1; i <= 3; i++) {
+        const step = document.getElementById(`step${i}`);
+        step.classList.remove('active', 'done', 'disabled');
+        if (i < currentStep) step.classList.add('done');
+        else if (i === currentStep) step.classList.add('active');
+        else step.classList.add('disabled');
+      }
+    }
+
+    // 가격조사 항목 추가/제거
+    function addSurveyItem() {
+      const list = document.getElementById('price-survey-list');
+      const items = list.querySelectorAll('.price-survey-item');
+
+      // 첫 번째 항목 삭제 버튼 표시
+      if (items.length === 1) {
+        items[0].querySelector('.btn-remove-item').style.visibility = 'visible';
+      }
+
+      const newItem = document.createElement('div');
+      newItem.className = 'price-survey-item';
+      newItem.innerHTML = `
+        <input type="text" placeholder="조사처" class="survey-source">
+        <input type="number" placeholder="조사가격" class="survey-price" onchange="calculatePrices()">
+        <input type="date" class="survey-date">
+        <button class="btn-remove-item" onclick="removeSurveyItem(this)">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      `;
+      list.appendChild(newItem);
+    }
+
+    function removeSurveyItem(btn) {
+      const list = document.getElementById('price-survey-list');
+      const items = list.querySelectorAll('.price-survey-item');
+
+      if (items.length > 1) {
+        btn.closest('.price-survey-item').remove();
+        calculatePrices();
+      }
+
+      // 항목이 1개만 남으면 삭제 버튼 숨김
+      const remainingItems = list.querySelectorAll('.price-survey-item');
+      if (remainingItems.length === 1) {
+        remainingItems[0].querySelector('.btn-remove-item').style.visibility = 'hidden';
+      }
+    }
+
+    // 파일 업로드
+    function handleFileUpload(event) {
+      const files = event.target.files;
+      for (let file of files) {
+        if (file.type.includes('spreadsheet') || file.name.match(/\.xlsx?$/i)) {
+          // 엑셀 파일 처리
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            try {
+              const data = new Uint8Array(e.target.result);
+              const workbook = XLSX.read(data, { type: 'array' });
+              const extractedPrice = extractPriceFromExcel(workbook);
+              addUploadedFile(file.name, extractedPrice);
+            } catch (err) {
+              addUploadedFile(file.name, null);
+            }
+          };
+          reader.readAsArrayBuffer(file);
+        } else {
+          addUploadedFile(file.name, null);
+        }
+      }
+      event.target.value = '';
+    }
+
+    function extractPriceFromExcel(workbook) {
+      const sheet = workbook.Sheets[workbook.SheetNames[0]];
+      const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
+      const priceKeywords = ['합계', '총액', '총계', '견적금액', '공급가액', '금액'];
+      let maxPrice = 0;
+
+      jsonData.forEach(row => {
+        row.forEach((cell, idx) => {
+          const cellStr = String(cell).toLowerCase();
+          priceKeywords.forEach(kw => {
+            if (cellStr.includes(kw)) {
+              // 같은 행에서 숫자 찾기
+              row.forEach(val => {
+                if (typeof val === 'number' && val > 10000 && val > maxPrice) {
+                  maxPrice = val;
+                }
+              });
+            }
+          });
+          // 큰 숫자도 체크
+          if (typeof cell === 'number' && cell > 1000000 && cell > maxPrice) {
+            maxPrice = cell;
+          }
+        });
+      });
+
+      return maxPrice > 0 ? Math.round(maxPrice) : null;
+    }
+
+    function addUploadedFile(name, price) {
+      uploadedFiles.push({ name, price });
+      renderUploadedFiles();
+      if (price) {
+        // 자동으로 가격 조사 항목에 추가
+        const list = document.getElementById('price-survey-list');
+        const emptyItem = list.querySelector('.survey-price:placeholder-shown');
+        if (emptyItem && !emptyItem.value) {
+          emptyItem.closest('.price-survey-item').querySelector('.survey-source').value = name;
+          emptyItem.value = price;
+        } else {
+          addSurveyItem();
+          const items = list.querySelectorAll('.price-survey-item');
+          const lastItem = items[items.length - 1];
+          lastItem.querySelector('.survey-source').value = name;
+          lastItem.querySelector('.survey-price').value = price;
+        }
+        calculatePrices();
+      }
+    }
+
+    function renderUploadedFiles() {
+      const container = document.getElementById('uploaded-files');
+      container.innerHTML = uploadedFiles.map((file, idx) => `
+        <div class="uploaded-file">
+          <span class="material-symbols-outlined">description</span>
+          <span>${file.name}</span>
+          ${file.price ? `<span class="extracted-price">${formatNumber(file.price)}원 추출됨</span>` : ''}
+          <button onclick="removeUploadedFile(${idx})">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function removeUploadedFile(idx) {
+      uploadedFiles.splice(idx, 1);
+      renderUploadedFiles();
+    }
+
+    // 가격 계산
+    function calculatePrices() {
+      const priceInputs = document.querySelectorAll('.survey-price');
+      const prices = [];
+
+      priceInputs.forEach(input => {
+        const val = parseInt(input.value);
+        if (val > 0) prices.push(val);
+      });
+
+      surveyPrices = prices;
+
+      if (prices.length > 0) {
+        const avg = Math.round(prices.reduce((a, b) => a + b, 0) / prices.length);
+        const min = Math.min(...prices);
+        const max = Math.max(...prices);
+
+        document.getElementById('calc-avg').textContent = formatNumber(avg) + '원';
+        document.getElementById('calc-min').textContent = formatNumber(min) + '원';
+        document.getElementById('calc-max').textContent = formatNumber(max) + '원';
+
+        // 공급가액 자동 설정 (평균가 기준)
+        if (!document.getElementById('supply_price').value) {
+          document.getElementById('supply_price').value = avg;
+          document.getElementById('vat_price').value = Math.round(avg * 0.1);
+          calculateTotal();
+        }
+      } else {
+        document.getElementById('calc-avg').textContent = '0원';
+        document.getElementById('calc-min').textContent = '0원';
+        document.getElementById('calc-max').textContent = '0원';
+      }
+
+      generateBasis();
+    }
+
+    function calculateTotal() {
+      const supply = parseInt(document.getElementById('supply_price').value) || 0;
+      let vat = parseInt(document.getElementById('vat_price').value);
+
+      if (!vat && supply > 0) {
+        vat = Math.round(supply * 0.1);
+        document.getElementById('vat_price').value = vat;
+      }
+
+      const total = supply + (vat || 0);
+      document.getElementById('total-price').textContent = formatNumber(total) + '원';
+
+      checkThreshold();
+      generateBasis();
+    }
+
+    function checkThreshold() {
+      const supply = parseInt(document.getElementById('supply_price').value) || 0;
+      const checkDiv = document.getElementById('threshold-check');
+
+      if (!supply || !contractType || !contractMethod) {
+        checkDiv.style.display = 'none';
+        return;
+      }
+
+      checkDiv.style.display = 'block';
+      const threshold = THRESHOLDS[contractType];
+      const titleEl = document.getElementById('threshold-title');
+      const msgEl = document.getElementById('threshold-msg');
+
+      if (contractMethod === 'private') {
+        if (supply <= threshold.single) {
+          checkDiv.className = 'threshold-check pass';
+          titleEl.innerHTML = '<span class="material-symbols-outlined">check_circle</span> 1인 수의계약 가능';
+          msgEl.textContent = `${TYPE_NAMES[contractType]} 기준 ${formatNumber(threshold.single)}원 이하로 1인 수의계약이 가능합니다.`;
+        } else if (supply <= threshold.double) {
+          checkDiv.className = 'threshold-check pass';
+          titleEl.innerHTML = '<span class="material-symbols-outlined">check_circle</span> 2인 이상 수의계약 가능';
+          msgEl.textContent = `${TYPE_NAMES[contractType]} 기준 ${formatNumber(threshold.double)}원 이하로 2인 이상 견적 수의계약이 가능합니다.`;
+        } else {
+          checkDiv.className = 'threshold-check fail';
+          titleEl.innerHTML = '<span class="material-symbols-outlined">warning</span> 수의계약 기준 초과';
+          msgEl.textContent = `${TYPE_NAMES[contractType]} 수의계약 기준 ${formatNumber(threshold.double)}원을 초과합니다. 경쟁입찰을 검토하세요.`;
+        }
+      } else {
+        checkDiv.className = 'threshold-check pass';
+        titleEl.innerHTML = '<span class="material-symbols-outlined">check_circle</span> 경쟁입찰';
+        msgEl.textContent = '경쟁입찰로 진행됩니다.';
+      }
+    }
+
+    function generateBasis() {
+      const sources = [];
+      document.querySelectorAll('.price-survey-item').forEach(item => {
+        const source = item.querySelector('.survey-source').value;
+        const price = item.querySelector('.survey-price').value;
+        if (source && price) {
+          sources.push(`${source}(${formatNumber(price)}원)`);
+        }
+      });
+
+      let basis = '';
+      if (sources.length > 0) {
+        const methodNames = priceMethods.map(m => METHOD_NAMES[m]).join(', ');
+        basis = `${methodNames || '가격조사'} 방법으로 ${sources.join(', ')} 등을 조사하여 `;
+
+        if (sources.length >= 2) {
+          basis += '평균가격을 산출하였음.';
+        } else {
+          basis += '예정가격을 산출하였음.';
+        }
+      }
+
+      document.getElementById('calculation_basis').value = basis;
+    }
+
+    // 문서 생성
+    function generateDocument() {
+      const supply = parseInt(document.getElementById('supply_price').value) || 0;
+      if (!supply) {
+        showToast('예정가격을 입력해주세요.');
+        return;
+      }
+
+      const vat = parseInt(document.getElementById('vat_price').value) || 0;
+      const total = supply + vat;
+      const today = new Date();
+      const contractName = document.getElementById('contract_name').value;
+      const basis = document.getElementById('calculation_basis').value;
+
+      // 가격조사 내역 수집
+      const surveys = [];
+      document.querySelectorAll('.price-survey-item').forEach((item, idx) => {
+        const source = item.querySelector('.survey-source').value;
+        const price = item.querySelector('.survey-price').value;
+        const date = item.querySelector('.survey-date').value;
+        if (source && price) {
+          surveys.push({ no: idx + 1, source, price: parseInt(price), date });
+        }
+      });
+
+      // 문서 미리보기 생성
+      const preview = document.getElementById('document-preview');
+      preview.innerHTML = `
+        <h1>예정가격 조서</h1>
+
+        <table>
+          <tr>
+            <th>계약건명</th>
+            <td colspan="3">${contractName}</td>
+          </tr>
+          <tr>
+            <th>계약구분</th>
+            <td>${TYPE_NAMES[contractType]}</td>
+            <th>계약방법</th>
+            <td>${contractMethod === 'private' ? '수의계약' : '경쟁입찰'}</td>
+          </tr>
+        </table>
+
+        <h3 class="section-title">1. 예정가격 작성방법</h3>
+        <table>
+          <tr>
+            <td>${priceMethods.map(m => '☑ ' + METHOD_NAMES[m]).join('&nbsp;&nbsp;&nbsp;') || '-'}</td>
+          </tr>
+        </table>
+
+        <h3 class="section-title">2. 가격조사 내역</h3>
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 40px;">번호</th>
+              <th>조사처/출처</th>
+              <th style="width: 120px;">조사가격</th>
+              <th style="width: 100px;">조사일자</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${surveys.map(s => `
+              <tr>
+                <td style="text-align: center;">${s.no}</td>
+                <td>${s.source}</td>
+                <td style="text-align: right;">${formatNumber(s.price)}원</td>
+                <td style="text-align: center;">${s.date || '-'}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+
+        <h3 class="section-title">3. 예정가격 산출</h3>
+        <table>
+          <tr>
+            <th>산출근거</th>
+            <td>${basis}</td>
+          </tr>
+        </table>
+
+        <table>
+          <tr>
+            <th>공급가액</th>
+            <td style="text-align: right;">${formatNumber(supply)}원</td>
+            <th>부가가치세</th>
+            <td style="text-align: right;">${formatNumber(vat)}원</td>
+          </tr>
+          <tr class="total-row">
+            <th>예정가격</th>
+            <td colspan="3" style="text-align: right; font-size: 16px;">
+              일금 ${numberToKorean(total)}원정 (₩${formatNumber(total)})
+            </td>
+          </tr>
+        </table>
+
+        <div class="signature-area">
+          <p>위와 같이 예정가격을 작성합니다.</p>
+          <p style="margin-top: 20px;">${today.getFullYear()}년 ${today.getMonth() + 1}월 ${today.getDate()}일</p>
+          <table style="width: 50%; margin: 30px auto 0;">
+            <tr>
+              <th>작성</th>
+              <th>검토</th>
+              <th>결재</th>
+            </tr>
+            <tr>
+              <td style="height: 50px;">(인)</td>
+              <td>(인)</td>
+              <td>(인)</td>
+            </tr>
+          </table>
+        </div>
+      `;
+
+      document.getElementById('step3').classList.remove('disabled');
+      goToStep(3);
+      showToast('예정가격 조서가 생성되었습니다!');
+    }
+
+    // Word 다운로드
+    async function downloadWord() {
+      const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, AlignmentType, BorderStyle } = docx;
+
+      const contractName = document.getElementById('contract_name').value;
+      const supply = parseInt(document.getElementById('supply_price').value) || 0;
+      const vat = parseInt(document.getElementById('vat_price').value) || 0;
+      const total = supply + vat;
+      const basis = document.getElementById('calculation_basis').value;
+      const today = new Date();
+
+      // 가격조사 내역
+      const surveys = [];
+      document.querySelectorAll('.price-survey-item').forEach((item, idx) => {
+        const source = item.querySelector('.survey-source').value;
+        const price = item.querySelector('.survey-price').value;
+        const date = item.querySelector('.survey-date').value;
+        if (source && price) {
+          surveys.push({ no: idx + 1, source, price: parseInt(price), date });
+        }
+      });
+
+      const doc = new Document({
+        sections: [{
+          properties: {},
+          children: [
+            new Paragraph({
+              children: [new TextRun({ text: '예정가격 조서', bold: true, size: 40 })],
+              alignment: AlignmentType.CENTER,
+              spacing: { after: 400 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `계약건명: ${contractName}`, size: 24 })],
+              spacing: { after: 200 }
+            }),
+            new Paragraph({
+              children: [
+                new TextRun({ text: `계약구분: ${TYPE_NAMES[contractType]}`, size: 22 }),
+                new TextRun({ text: `    계약방법: ${contractMethod === 'private' ? '수의계약' : '경쟁입찰'}`, size: 22 })
+              ],
+              spacing: { after: 300 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: '1. 예정가격 작성방법', bold: true, size: 24 })],
+              spacing: { after: 200 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: priceMethods.map(m => METHOD_NAMES[m]).join(', '), size: 22 })],
+              spacing: { after: 300 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: '2. 가격조사 내역', bold: true, size: 24 })],
+              spacing: { after: 200 }
+            }),
+            ...surveys.map(s => new Paragraph({
+              children: [new TextRun({ text: `${s.no}. ${s.source} - ${formatNumber(s.price)}원 (${s.date || '-'})`, size: 22 })],
+              spacing: { after: 100 }
+            })),
+            new Paragraph({ spacing: { after: 200 } }),
+            new Paragraph({
+              children: [new TextRun({ text: '3. 산출근거', bold: true, size: 24 })],
+              spacing: { after: 200 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: basis, size: 22 })],
+              spacing: { after: 300 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: '4. 예정가격', bold: true, size: 24 })],
+              spacing: { after: 200 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `공급가액: ${formatNumber(supply)}원`, size: 22 })],
+              spacing: { after: 100 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `부가가치세: ${formatNumber(vat)}원`, size: 22 })],
+              spacing: { after: 100 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `예정가격: 일금 ${numberToKorean(total)}원정 (₩${formatNumber(total)})`, bold: true, size: 26 })],
+              spacing: { after: 400 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: '위와 같이 예정가격을 작성합니다.', size: 22 })],
+              alignment: AlignmentType.CENTER,
+              spacing: { after: 200 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `${today.getFullYear()}년 ${today.getMonth() + 1}월 ${today.getDate()}일`, size: 22 })],
+              alignment: AlignmentType.CENTER
+            })
+          ]
+        }]
+      });
+
+      const blob = await Packer.toBlob(doc);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `예정가격조서_${contractName || '작성중'}.docx`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('Word 파일이 다운로드되었습니다!');
+    }
+
+    // PDF 다운로드
+    async function downloadPDF() {
+      showToast('PDF 생성 중...');
+
+      try {
+        const preview = document.getElementById('document-preview');
+        const canvas = await html2canvas(preview, {
+          scale: 2,
+          backgroundColor: '#ffffff'
+        });
+
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const imgWidth = 190;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 10, 10, imgWidth, imgHeight);
+
+        const contractName = document.getElementById('contract_name').value;
+        pdf.save(`예정가격조서_${contractName || '작성중'}.pdf`);
+        showToast('PDF가 다운로드되었습니다!');
+      } catch (err) {
+        console.error(err);
+        showToast('PDF 생성 중 오류가 발생했습니다.');
+      }
+    }
+
+    // 유틸리티 함수
+    function formatNumber(num) {
+      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    function numberToKorean(num) {
+      const units = ['', '만', '억', '조'];
+      const smallUnits = ['', '십', '백', '천'];
+      const digits = ['', '일', '이', '삼', '사', '오', '육', '칠', '팔', '구'];
+
+      if (num === 0) return '영';
+
+      let result = '';
+      let unitIndex = 0;
+
+      while (num > 0) {
+        const chunk = num % 10000;
+        if (chunk > 0) {
+          let chunkStr = '';
+          let tempChunk = chunk;
+          let smallIndex = 0;
+
+          while (tempChunk > 0) {
+            const digit = tempChunk % 10;
+            if (digit > 0) {
+              const digitStr = (digit === 1 && smallIndex > 0) ? '' : digits[digit];
+              chunkStr = digitStr + smallUnits[smallIndex] + chunkStr;
+            }
+            tempChunk = Math.floor(tempChunk / 10);
+            smallIndex++;
+          }
+          result = chunkStr + units[unitIndex] + result;
+        }
+        num = Math.floor(num / 10000);
+        unitIndex++;
+      }
+
+      return result;
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    // 드래그 앤 드롭
+    const uploadZone = document.getElementById('upload-zone');
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+      uploadZone.addEventListener(eventName, e => { e.preventDefault(); e.stopPropagation(); }, false);
+    });
+    ['dragenter', 'dragover'].forEach(eventName => {
+      uploadZone.addEventListener(eventName, () => uploadZone.classList.add('dragover'), false);
+    });
+    ['dragleave', 'drop'].forEach(eventName => {
+      uploadZone.addEventListener(eventName, () => uploadZone.classList.remove('dragover'), false);
+    });
+    uploadZone.addEventListener('drop', e => {
+      const files = e.dataTransfer.files;
+      for (let file of files) {
+        handleFileUpload({ target: { files: [file] } });
+      }
+    }, false);
+  </script>
+</body>
+</html>
