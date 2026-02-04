@@ -153,8 +153,8 @@
                   </div>
                 </div>
                 <div class="p-5">
-                  <div class="prose-premium">
-                    <%= sanitize @topic.law_content, tags: %w[p br strong em u ul ol li a table thead tbody tr th td div span h1 h2 h3 h4 h5 h6 blockquote pre code], attributes: %w[href title class id target] %>
+                  <div class="legal-content">
+                    <%= render_legal_content(@topic.law_content) %>
                   </div>
                 </div>
               </div>
@@ -173,8 +173,8 @@
                   </div>
                 </div>
                 <div class="p-5">
-                  <div class="prose-premium">
-                    <%= sanitize @topic.decree_content, tags: %w[p br strong em u ul ol li a table thead tbody tr th td div span h1 h2 h3 h4 h5 h6 blockquote pre code], attributes: %w[href title class id target] %>
+                  <div class="legal-content">
+                    <%= render_legal_content(@topic.decree_content) %>
                   </div>
                 </div>
               </div>
@@ -193,8 +193,8 @@
                   </div>
                 </div>
                 <div class="p-5">
-                  <div class="prose-premium">
-                    <%= sanitize @topic.rule_content, tags: %w[p br strong em u ul ol li a table thead tbody tr th td div span h1 h2 h3 h4 h5 h6 blockquote pre code], attributes: %w[href title class id target] %>
+                  <div class="legal-content">
+                    <%= render_legal_content(@topic.rule_content) %>
                   </div>
                 </div>
               </div>
@@ -211,8 +211,8 @@
         <div class="tab-panel hidden" data-tab="regulation">
           <% if @topic.regulation_content.present? %>
             <div class="card p-6 lg:p-8">
-              <div class="prose-premium">
-                <%= sanitize @topic.regulation_content, tags: %w[p br strong em u ul ol li a table thead tbody tr th td div span h1 h2 h3 h4 h5 h6 blockquote pre code], attributes: %w[href title class id target] %>
+              <div class="legal-content">
+                <%= render_legal_content(@topic.regulation_content) %>
               </div>
             </div>
           <% else %>
@@ -227,8 +227,8 @@
         <div class="tab-panel hidden" data-tab="interpretation">
           <% if @topic.interpretation_content.present? %>
             <div class="card p-6 lg:p-8">
-              <div class="prose-premium">
-                <%= sanitize @topic.interpretation_content, tags: %w[p br strong em u ul ol li a table thead tbody tr th td div span h1 h2 h3 h4 h5 h6 blockquote pre code], attributes: %w[href title class id target] %>
+              <div class="legal-content">
+                <%= render_legal_content(@topic.interpretation_content) %>
               </div>
             </div>
           <% else %>
@@ -243,8 +243,8 @@
         <div class="tab-panel hidden" data-tab="audit">
           <% if @topic.audit_cases.present? %>
             <div class="card p-6 lg:p-8">
-              <div class="prose-premium">
-                <%= sanitize @topic.audit_cases, tags: %w[p br strong em u ul ol li a table thead tbody tr th td div span h1 h2 h3 h4 h5 h6 blockquote pre code], attributes: %w[href title class id target] %>
+              <div class="legal-content">
+                <%= render_legal_content(@topic.audit_cases) %>
               </div>
             </div>
           <% else %>
@@ -259,8 +259,8 @@
         <div class="tab-panel hidden" data-tab="qa">
           <% if @topic.qa_content.present? %>
             <div class="card p-6 lg:p-8">
-              <div class="prose-premium">
-                <%= sanitize @topic.qa_content, tags: %w[p br strong em u ul ol li a table thead tbody tr th td div span h1 h2 h3 h4 h5 h6 blockquote pre code], attributes: %w[href title class id target] %>
+              <div class="legal-content">
+                <%= render_legal_content(@topic.qa_content) %>
               </div>
             </div>
           <% else %>
@@ -275,8 +275,8 @@
         <div class="tab-panel hidden" data-tab="tips">
           <% if @topic.practical_tips.present? %>
             <div class="card p-6 lg:p-8">
-              <div class="prose-premium">
-                <%= sanitize @topic.practical_tips, tags: %w[p br strong em u ul ol li a table thead tbody tr th td div span h1 h2 h3 h4 h5 h6 blockquote pre code], attributes: %w[href title class id target] %>
+              <div class="legal-content">
+                <%= render_legal_content(@topic.practical_tips) %>
               </div>
             </div>
           <% else %>
