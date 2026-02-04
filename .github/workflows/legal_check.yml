@@ -1,0 +1,212 @@
+# 법령 자동 검증 워크플로우
+#
+# 실행 조건:
+# 1. 매주 월요일 오전 9시 (KST) 자동 실행
+# 2. config/legal_standards.yml 변경 시 자동 실행
+# 3. 수동 실행 (Actions 탭에서 "Run workflow")
+#
+# 기능:
+# - 법령 기준 검증
+# - 불일치 시 Issue 생성
+# - Slack/Email 알림 (선택적)
+
+name: 법령 자동 검증
+
+on:
+  # 매주 월요일 오전 9시 (KST = UTC+9, 즉 UTC 00:00)
+  schedule:
+    - cron: '0 0 * * 1'
+
+  # legal_standards.yml 변경 시
+  push:
+    paths:
+      - 'config/legal_standards.yml'
+      - 'lib/tasks/legal_update.rake'
+
+  # 수동 실행
+  workflow_dispatch:
+    inputs:
+      auto_fix:
+        description: '자동 수정 및 커밋 여부'
+        required: false
+        default: 'false'
+        type: boolean
+      create_issue:
+        description: '오류 시 Issue 생성'
+        required: false
+        default: 'true'
+        type: boolean
+
+env:
+  RUBY_VERSION: '3.2'
+  RAILS_ENV: test
+
+jobs:
+  legal-check:
+    name: 법령 기준 검증
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Ruby 설정
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.RUBY_VERSION }}
+          bundler-cache: true
+
+      - name: 의존성 설치
+        run: |
+          bundle install --jobs 4 --retry 3
+
+      - name: 법령 기준 검증
+        id: legal_check
+        continue-on-error: true
+        run: |
+          bundle exec rake legal:ci_check > legal_result.json 2>&1 || true
+          cat legal_result.json
+
+          # 결과 파싱
+          if [ -f legal_result.json ]; then
+            SUCCESS=$(cat legal_result.json | jq -r '.success // false')
+            ERRORS=$(cat legal_result.json | jq -r '.errors | length // 0')
+            echo "success=$SUCCESS" >> $GITHUB_OUTPUT
+            echo "error_count=$ERRORS" >> $GITHUB_OUTPUT
+          else
+            echo "success=false" >> $GITHUB_OUTPUT
+            echo "error_count=1" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 검증 보고서 생성
+        if: always()
+        run: |
+          bundle exec rake legal:report || true
+
+      - name: 보고서 아티팩트 업로드
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: legal-check-report
+          path: tmp/legal_check_report.md
+          retention-days: 30
+
+      - name: 자동 수정 및 커밋
+        if: |
+          steps.legal_check.outputs.success == 'false' &&
+          github.event.inputs.auto_fix == 'true'
+        run: |
+          bundle exec rake legal:update
+
+          # 변경사항 확인
+          if git diff --quiet; then
+            echo "변경사항 없음"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add -A
+            git commit -m "auto: 법령 기준 자동 업데이트
+
+          - GitHub Actions 자동 검증에 의한 수정
+          - 기준일: $(date +%Y-%m-%d)
+
+          Co-Authored-By: github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
+            git push
+          fi
+
+      - name: Issue 생성 (오류 발생 시)
+        if: |
+          steps.legal_check.outputs.success == 'false' &&
+          (github.event.inputs.create_issue == 'true' || github.event_name == 'schedule')
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            // 기존 열린 Issue 확인
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'legal-update'
+            });
+
+            // 이미 열린 Issue가 있으면 스킵
+            if (issues.data.length > 0) {
+              console.log('이미 열린 법령 업데이트 Issue가 있습니다.');
+              return;
+            }
+
+            // 보고서 읽기
+            let reportContent = '';
+            try {
+              reportContent = fs.readFileSync('tmp/legal_check_report.md', 'utf8');
+            } catch (e) {
+              reportContent = '보고서 생성 실패';
+            }
+
+            // Issue 생성
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '⚠️ 법령 기준 검증 실패 - 업데이트 필요',
+              body: `## 법령 자동 검증 결과
+
+            자동 검증 결과 일부 항목이 최신 법령 기준과 일치하지 않습니다.
+
+            ### 검증 일시
+            ${new Date().toISOString()}
+
+            ### 조치 필요 사항
+            1. \`config/legal_standards.yml\`에서 최신 법령 기준 확인
+            2. 정부 공식 사이트에서 법령 변경 여부 확인
+            3. 필요 시 코드 수정 후 커밋
+
+            ### 검증 보고서
+            <details>
+            <summary>상세 보고서 보기</summary>
+
+            ${reportContent}
+
+            </details>
+
+            ### 참고 링크
+            - [법제처 국가법령정보센터](https://www.law.go.kr)
+            - [행정안전부](https://www.mois.go.kr)
+
+            ---
+            *이 Issue는 GitHub Actions에 의해 자동 생성되었습니다.*`,
+              labels: ['legal-update', 'automated']
+            });
+
+      - name: 검증 결과 요약
+        if: always()
+        run: |
+          echo "## 법령 검증 결과" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ steps.legal_check.outputs.success }}" == "true" ]; then
+            echo "✅ **검증 통과** - 모든 항목이 최신 법령 기준과 일치합니다." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **검증 실패** - ${{ steps.legal_check.outputs.error_count }}개 항목이 불일치합니다." >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "자세한 내용은 아티팩트의 보고서를 확인하세요." >> $GITHUB_STEP_SUMMARY
+          fi
+
+  # 선택적: Slack 알림
+  # notify:
+  #   name: Slack 알림
+  #   needs: legal-check
+  #   if: failure()
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Slack 알림 전송
+  #       uses: 8398a7/action-slack@v3
+  #       with:
+  #         status: ${{ job.status }}
+  #         text: '법령 검증 실패 - 업데이트가 필요합니다'
+  #       env:
+  #         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
