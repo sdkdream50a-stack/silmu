@@ -1,5 +1,9 @@
 class PdfToolsController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [:split, :merge, :add_page_numbers]
+  before_action :validate_pdf_file, only: [:split, :merge, :add_page_numbers]
+
+  MAX_FILE_SIZE = 50.megabytes
+  ALLOWED_CONTENT_TYPES = %w[application/pdf].freeze
 
   def index
     # PDF 도구 메인 페이지
@@ -85,6 +89,24 @@ class PdfToolsController < ApplicationController
       render json: info
     rescue => e
       render json: { error: e.message }, status: :unprocessable_entity
+    end
+  end
+
+  private
+
+  def validate_pdf_file
+    files = [params[:file], params[:files]].flatten.compact
+
+    files.each do |file|
+      next unless file.respond_to?(:content_type)
+
+      unless ALLOWED_CONTENT_TYPES.include?(file.content_type)
+        return render json: { error: "PDF 파일만 업로드 가능합니다." }, status: :unprocessable_entity
+      end
+
+      if file.size > MAX_FILE_SIZE
+        return render json: { error: "파일 크기는 50MB 이하여야 합니다." }, status: :unprocessable_entity
+      end
     end
   end
 end
