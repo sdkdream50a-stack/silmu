@@ -607,13 +607,13 @@ subtopics_data = [
             <span class="material-symbols-outlined">warning</span>
             주의
           </h4>
-          <p class="text-amber-700">"부가세 포함 5,500만원" 기준이 아닙니다!<br><strong>"부가세 별도 5,000만원"</strong> 기준입니다.</p>
+          <p class="text-amber-700">"부가세 포함 5천만원" 기준이 아닙니다!<br><strong>"부가세 별도 5,000만원"</strong> 기준입니다.</p>
         </div>
       </div>
     TIPS
     faqs: [
       { question: '수의계약 금액은 부가세 포함인가요, 별도인가요?', answer: '수의계약 금액 기준은 부가세 별도(추정가격) 기준입니다. 부가세 포함 금액으로 판단하면 안 됩니다.' },
-      { question: '부가세 포함 5,500만원이면 수의계약이 가능한가요?', answer: '네, 가능합니다. 부가세 포함 5,500만원 ÷ 1.1 = 약 5,000만원(추정가격)이므로 물품·용역 수의계약 한도 이내입니다.' }
+      { question: '부가세 포함 5천만원이면 수의계약이 가능한가요?', answer: '네, 가능합니다. 부가세 포함 5천만원 ÷ 1.1 = 약 5,000만원(추정가격)이므로 물품·용역 수의계약 한도 이내입니다.' }
     ].to_json,
     published: true
   },
