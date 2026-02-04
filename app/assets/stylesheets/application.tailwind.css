@@ -531,6 +531,22 @@
   @apply text-base font-semibold text-navy-800 mt-5 mb-3;
 }
 
+/* 법령명 스타일 - 17pt 진하게 색상 적용 */
+.legal-content .legal-law-name {
+  @apply font-bold text-point-600 mt-2 mb-1;
+  font-size: 1.0625rem; /* 17px */
+}
+
+/* 시행령 카드 법령명 색상 */
+.border-forest-200 .legal-content .legal-law-name {
+  @apply text-forest-600;
+}
+
+/* 시행규칙 카드 법령명 색상 */
+.border-warm-200 .legal-content .legal-law-name {
+  @apply text-warm-600;
+}
+
 /* 조(條) 스타일 - 15pt(1.25rem) 진하게 색상 적용 */
 .legal-content .legal-article {
   @apply mt-5 mb-3 pb-2 border-b-2 border-point-200;
