@@ -154,7 +154,7 @@
                 </div>
                 <div class="p-5">
                   <div class="prose-premium">
-                    <%= raw @topic.law_content %>
+                    <%= sanitize @topic.law_content, tags: %w[p br strong em u ul ol li a table thead tbody tr th td div span h1 h2 h3 h4 h5 h6 blockquote pre code], attributes: %w[href title class id target] %>
                   </div>
                 </div>
               </div>
@@ -174,7 +174,7 @@
                 </div>
                 <div class="p-5">
                   <div class="prose-premium">
-                    <%= raw @topic.decree_content %>
+                    <%= sanitize @topic.decree_content, tags: %w[p br strong em u ul ol li a table thead tbody tr th td div span h1 h2 h3 h4 h5 h6 blockquote pre code], attributes: %w[href title class id target] %>
                   </div>
                 </div>
               </div>
@@ -194,7 +194,7 @@
                 </div>
                 <div class="p-5">
                   <div class="prose-premium">
-                    <%= raw @topic.rule_content %>
+                    <%= sanitize @topic.rule_content, tags: %w[p br strong em u ul ol li a table thead tbody tr th td div span h1 h2 h3 h4 h5 h6 blockquote pre code], attributes: %w[href title class id target] %>
                   </div>
                 </div>
               </div>
@@ -212,7 +212,7 @@
           <% if @topic.regulation_content.present? %>
             <div class="card p-6 lg:p-8">
               <div class="prose-premium">
-                <%= raw @topic.regulation_content %>
+                <%= sanitize @topic.regulation_content, tags: %w[p br strong em u ul ol li a table thead tbody tr th td div span h1 h2 h3 h4 h5 h6 blockquote pre code], attributes: %w[href title class id target] %>
               </div>
             </div>
           <% else %>
@@ -228,7 +228,7 @@
           <% if @topic.interpretation_content.present? %>
             <div class="card p-6 lg:p-8">
               <div class="prose-premium">
-                <%= raw @topic.interpretation_content %>
+                <%= sanitize @topic.interpretation_content, tags: %w[p br strong em u ul ol li a table thead tbody tr th td div span h1 h2 h3 h4 h5 h6 blockquote pre code], attributes: %w[href title class id target] %>
               </div>
             </div>
           <% else %>
@@ -244,7 +244,7 @@
           <% if @topic.audit_cases.present? %>
             <div class="card p-6 lg:p-8">
               <div class="prose-premium">
-                <%= raw @topic.audit_cases %>
+                <%= sanitize @topic.audit_cases, tags: %w[p br strong em u ul ol li a table thead tbody tr th td div span h1 h2 h3 h4 h5 h6 blockquote pre code], attributes: %w[href title class id target] %>
               </div>
             </div>
           <% else %>
@@ -260,7 +260,7 @@
           <% if @topic.qa_content.present? %>
             <div class="card p-6 lg:p-8">
               <div class="prose-premium">
-                <%= raw @topic.qa_content %>
+                <%= sanitize @topic.qa_content, tags: %w[p br strong em u ul ol li a table thead tbody tr th td div span h1 h2 h3 h4 h5 h6 blockquote pre code], attributes: %w[href title class id target] %>
               </div>
             </div>
           <% else %>
@@ -276,7 +276,7 @@
           <% if @topic.practical_tips.present? %>
             <div class="card p-6 lg:p-8">
               <div class="prose-premium">
-                <%= raw @topic.practical_tips %>
+                <%= sanitize @topic.practical_tips, tags: %w[p br strong em u ul ol li a table thead tbody tr th td div span h1 h2 h3 h4 h5 h6 blockquote pre code], attributes: %w[href title class id target] %>
               </div>
             </div>
           <% else %>

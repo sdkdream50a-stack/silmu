@@ -37,6 +37,6 @@ class CafeArticle < ApplicationRecord
 
   # 게시판 목록
   def self.board_list
-    group(:board).order("count_id DESC").count(:id)
+    group(:board).count(:id).sort_by { |_, count| -count }.to_h
   end
 end
