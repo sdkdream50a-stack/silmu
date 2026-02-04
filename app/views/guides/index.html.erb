@@ -44,7 +44,7 @@
       <!-- 메인 콘텐츠 -->
       <div class="lg:w-[70%]">
         <div class="flex items-center justify-between mb-6">
-          <p class="text-navy-600">총 <span class="font-bold text-navy-900" id="item-count">6</span>개의 가이드</p>
+          <p class="text-navy-600">총 <span class="font-bold text-navy-900" id="item-count">15</span>개의 가이드</p>
           <select class="border-gray-200 rounded-xl text-sm focus:ring-forest-500 focus:border-forest-500 px-4 py-2">
             <option>최신순</option>
             <option>인기순</option>
@@ -53,14 +53,31 @@
 
         <div class="space-y-4" id="items-list">
           <% [
-            { id: 1, title: "물품 구매 및 검수 절차 가이드", summary: "물품 구매부터 검수, 대금 지급까지 전체 절차를 단계별로 설명합니다.", category: "계약", date: "2026.02.01", views: 42, tag: "신규" },
-            { id: 4, title: "수의계약 체결 실무 가이드", summary: "수의계약의 요건, 절차, 주의사항을 상세히 안내합니다.", category: "계약", date: "2026.01.28", views: 38, tag: "신규" },
-            { id: 5, title: "출장 여비 청구 가이드", summary: "국내/국외 출장 시 여비 청구 방법과 증빙 서류 안내", category: "예산", date: "2026.01.25", views: 27, tag: nil },
-            { id: 6, title: "연가 사용 및 관리 가이드", summary: "연가일수 계산, 사용 절차, 미사용 연가 처리 방법", category: "복무", date: "2026.01.22", views: 19, tag: nil },
-            { id: 7, title: "민원 응대 매뉴얼", summary: "민원인 응대 시 주의사항 및 처리 절차 안내", category: "민원", date: "2026.01.20", views: 15, tag: nil },
-            { id: 8, title: "예산 이월 실무 가이드", summary: "명시이월, 사고이월, 계속비이월의 요건과 절차", category: "예산", date: "2026.01.18", views: 12, tag: nil },
+            # 계약 카테고리
+            { id: 1, title: "물품 구매 및 검수 절차 가이드", summary: "물품 구매부터 검수, 대금 지급까지 전체 절차를 단계별로 설명합니다.", category: "계약", date: "2026.02.01", views: 42, tag: "신규", link: guide_path(1) },
+            { id: 4, title: "수의계약 체결 실무 가이드", summary: "수의계약의 요건, 절차, 주의사항을 상세히 안내합니다.", category: "계약", date: "2026.01.28", views: 38, tag: "신규", link: "/topics/private-contract" },
+            { id: 9, title: "계약보증금 및 하자보증금 가이드", summary: "계약보증금 면제 요건, 하자보증금 산정 및 반환 절차 안내", category: "계약", date: "2026.01.15", views: 25, tag: nil, link: guide_path(9) },
+
+            # 예산 카테고리
+            { id: 5, title: "출장 여비 청구 가이드", summary: "국내/국외 출장 시 일비·숙박비·식비 지급 기준과 청구 방법", category: "예산", date: "2026.01.25", views: 35, tag: "업데이트", link: "/topics/travel-expense" },
+            { id: 8, title: "예산 이월 실무 가이드", summary: "명시이월, 사고이월, 계속비이월의 요건과 절차 비교", category: "예산", date: "2026.01.18", views: 28, tag: nil, link: "/topics/budget-carryover" },
+            { id: 10, title: "예산 편성 및 배정 가이드", summary: "예산 요구서 작성부터 배정까지의 절차와 주의사항", category: "예산", date: "2026.01.10", views: 18, tag: nil, link: guide_path(10) },
+
+            # 인사 카테고리
+            { id: 11, title: "호봉 획정 및 승급 가이드", summary: "호봉 획정 기준, 정기승급, 특별승급 요건과 절차", category: "인사", date: "2026.01.20", views: 32, tag: "신규", link: guide_path(11) },
+            { id: 12, title: "연말정산 완벽 가이드", summary: "2025년 변경사항, 소득공제·세액공제 항목별 정리", category: "인사", date: "2026.01.15", views: 45, tag: "업데이트", link: "/topics/year-end-settlement" },
+            { id: 13, title: "기간제 근로자 채용 가이드", summary: "기간제 근로자 채용 절차, 계약서 작성, 주의사항", category: "인사", date: "2026.01.08", views: 22, tag: nil, link: guide_path(13) },
+
+            # 복무 카테고리
+            { id: 6, title: "연가 사용 및 관리 가이드", summary: "연가일수 계산, 사용 절차, 미사용 연가 보상 처리 방법", category: "복무", date: "2026.01.22", views: 38, tag: nil, link: guide_path(6) },
+            { id: 14, title: "병가·공가·특별휴가 가이드", summary: "휴가 종류별 요건, 신청 절차, 증빙서류 안내", category: "복무", date: "2026.01.12", views: 29, tag: nil, link: guide_path(14) },
+            { id: 15, title: "장기재직휴가 신설 안내", summary: "2025년 신설된 장기재직휴가 요건과 신청 방법", category: "복무", date: "2026.02.01", views: 41, tag: "신규", link: guide_path(15) },
+
+            # 민원 카테고리
+            { id: 7, title: "민원 응대 매뉴얼", summary: "민원인 응대 시 주의사항 및 처리 절차 안내", category: "민원", date: "2026.01.20", views: 15, tag: nil, link: guide_path(7) },
+            { id: 16, title: "정보공개 청구 처리 가이드", summary: "정보공개 청구 접수부터 결정통지까지 처리 절차", category: "민원", date: "2026.01.05", views: 12, tag: nil, link: guide_path(16) },
           ].each do |guide| %>
-            <%= link_to guide_path(guide[:id]), class: "block card card-hover p-6 group item-card", data: { category: guide[:category], title: guide[:title] } do %>
+            <%= link_to (guide[:link] || guide_path(guide[:id])), class: "block card card-hover p-6 group item-card", data: { category: guide[:category], title: guide[:title] } do %>
               <div class="flex items-start justify-between mb-3">
                 <span class="badge badge-forest"><%= guide[:category] %></span>
                 <% if guide[:tag] %>
@@ -155,15 +172,15 @@
             </h3>
             <ol class="space-y-3">
               <% [
-                { id: 1, title: "물품 구매 및 검수 절차" },
-                { id: 4, title: "수의계약 체결 실무" },
-                { id: 5, title: "출장 여비 청구" },
-                { id: 6, title: "연가 사용 및 관리" },
-                { id: 7, title: "민원 응대 매뉴얼" }
+                { title: "연말정산 완벽 가이드", link: "/topics/year-end-settlement" },
+                { title: "물품 구매 및 검수 절차", link: guide_path(1) },
+                { title: "장기재직휴가 신설 안내", link: guide_path(15) },
+                { title: "수의계약 체결 실무", link: "/topics/private-contract" },
+                { title: "출장 여비 청구", link: "/topics/travel-expense" }
               ].each_with_index do |guide, i| %>
                 <li class="flex items-center gap-3 group">
                   <span class="w-7 h-7 flex items-center justify-center bg-<%= i < 3 ? 'forest' : 'surface' %>-100 rounded-full text-xs font-bold text-<%= i < 3 ? 'forest-600' : 'navy-500' %>"><%= i + 1 %></span>
-                  <%= link_to guide[:title], guide_path(guide[:id]), class: "text-sm text-navy-700 group-hover:text-forest-600 transition-colors truncate" %>
+                  <%= link_to guide[:title], guide[:link], class: "text-sm text-navy-700 group-hover:text-forest-600 transition-colors truncate" %>
                 </li>
               <% end %>
             </ol>
@@ -176,9 +193,13 @@
               최근 본 가이드
             </h3>
             <ul class="space-y-3">
-              <% [{ id: 4, title: "수의계약 체결 실무" }, { id: 5, title: "출장 여비 청구" }].each do |guide| %>
+              <% [
+                { title: "수의계약 체결 실무", link: "/topics/private-contract" },
+                { title: "출장 여비 청구", link: "/topics/travel-expense" },
+                { title: "예산 이월 실무", link: "/topics/budget-carryover" }
+              ].each do |guide| %>
                 <li>
-                  <%= link_to guide[:title], guide_path(guide[:id]), class: "text-sm text-navy-700 hover:text-forest-600 transition-colors" %>
+                  <%= link_to guide[:title], guide[:link], class: "text-sm text-navy-700 hover:text-forest-600 transition-colors" %>
                 </li>
               <% end %>
             </ul>
