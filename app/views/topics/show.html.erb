@@ -138,65 +138,104 @@
         <!-- 법령 3단 비교 -->
         <div class="tab-panel" data-tab="law">
           <% if @topic.has_law_content? %>
-            <div class="grid lg:grid-cols-3 gap-6">
-              <!-- 법률 -->
-              <div class="card card-hover overflow-hidden border-point-200">
-                <div class="bg-gradient-to-r from-point-500 to-point-600 px-5 py-4">
-                  <div class="flex items-center gap-3">
-                    <div class="w-11 h-11 bg-white/20 backdrop-blur rounded-xl flex items-center justify-center">
-                      <span class="text-white font-bold text-xl">법</span>
+            <!-- 캐스케이드 카드 레이아웃 -->
+            <div class="law-cascade-container">
+              <div class="flex items-start relative">
+                <!-- 법률 (제일 왼쪽) -->
+                <div class="law-card-stack w-[36%] min-w-[300px]" data-card="law">
+                  <div class="law-card group overflow-hidden rounded-2xl border-2 border-point-200 bg-white shadow-xl cursor-pointer transition-all duration-500 hover:shadow-2xl" onclick="expandLawCard('law')">
+                    <!-- 헤더 -->
+                    <div class="relative px-6 py-5 overflow-hidden" style="background-color: #6366f1;">
+                      <div class="relative flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                          <div class="w-14 h-14 rounded-2xl flex items-center justify-center border shadow-lg group-hover:scale-110 transition-transform duration-300" style="background-color: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.3);">
+                            <span class="text-white font-black text-2xl">법</span>
+                          </div>
+                          <div>
+                            <h3 class="font-bold text-white text-xl tracking-tight">법률</h3>
+                            <p class="text-sm font-medium" style="color: rgba(255,255,255,0.8);">국가계약법 / 지방계약법</p>
+                          </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                          <span class="px-3 py-1 rounded-full text-white text-xs font-semibold" style="background-color: rgba(255,255,255,0.2);">최상위</span>
+                          <span class="material-symbols-outlined card-expand-icon transition-transform duration-300" style="color: rgba(255,255,255,0.8);">keyboard_arrow_down</span>
+                        </div>
+                      </div>
                     </div>
-                    <div>
-                      <h3 class="font-bold text-white text-lg">법률</h3>
-                      <p class="text-point-100 text-sm">국가계약법/지방계약법</p>
+                    <!-- 콘텐츠 -->
+                    <div class="p-6 law-card-content bg-white">
+                      <div class="legal-content">
+                        <%= render_legal_content(@topic.law_content) %>
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div class="p-5">
-                  <div class="legal-content">
-                    <%= render_legal_content(@topic.law_content) %>
+
+                <!-- 시행령 (중간) -->
+                <div class="law-card-stack w-[36%] min-w-[300px] -ml-10 mt-4" data-card="decree">
+                  <div class="law-card group overflow-hidden rounded-2xl border-2 border-forest-200 bg-white shadow-xl cursor-pointer transition-all duration-500 hover:shadow-2xl" onclick="expandLawCard('decree')">
+                    <!-- 헤더 -->
+                    <div class="relative px-6 py-5 overflow-hidden" style="background-color: #3f9142;">
+                      <div class="relative flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                          <div class="w-14 h-14 rounded-2xl flex items-center justify-center border shadow-lg group-hover:scale-110 transition-transform duration-300" style="background-color: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.3);">
+                            <span class="text-white font-black text-2xl">령</span>
+                          </div>
+                          <div>
+                            <h3 class="font-bold text-white text-xl tracking-tight">시행령</h3>
+                            <p class="text-sm font-medium" style="color: rgba(255,255,255,0.8);">대통령령</p>
+                          </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                          <span class="px-3 py-1 rounded-full text-white text-xs font-semibold" style="background-color: rgba(255,255,255,0.2);">세부사항</span>
+                          <span class="material-symbols-outlined card-expand-icon transition-transform duration-300" style="color: rgba(255,255,255,0.8);">keyboard_arrow_down</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- 콘텐츠 -->
+                    <div class="p-6 law-card-content bg-white">
+                      <div class="legal-content">
+                        <%= render_legal_content(@topic.decree_content) %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 시행규칙 (제일 오른쪽) -->
+                <div class="law-card-stack w-[36%] min-w-[300px] -ml-10 mt-8" data-card="rule">
+                  <div class="law-card group overflow-hidden rounded-2xl border-2 border-warm-200 bg-white shadow-xl cursor-pointer transition-all duration-500 hover:shadow-2xl" onclick="expandLawCard('rule')">
+                    <!-- 헤더 -->
+                    <div class="relative px-6 py-5 overflow-hidden" style="background-color: #f59e0b;">
+                      <div class="relative flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                          <div class="w-14 h-14 rounded-2xl flex items-center justify-center border shadow-lg group-hover:scale-110 transition-transform duration-300" style="background-color: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.3);">
+                            <span class="text-white font-black text-2xl">칙</span>
+                          </div>
+                          <div>
+                            <h3 class="font-bold text-white text-xl tracking-tight">시행규칙</h3>
+                            <p class="text-sm font-medium" style="color: rgba(255,255,255,0.8);">부령 / 예규</p>
+                          </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                          <span class="px-3 py-1 rounded-full text-white text-xs font-semibold" style="background-color: rgba(255,255,255,0.2);">실무기준</span>
+                          <span class="material-symbols-outlined card-expand-icon transition-transform duration-300" style="color: rgba(255,255,255,0.8);">keyboard_arrow_down</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- 콘텐츠 -->
+                    <div class="p-6 law-card-content bg-white">
+                      <div class="legal-content">
+                        <%= render_legal_content(@topic.rule_content) %>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <!-- 시행령 -->
-              <div class="card card-hover overflow-hidden border-forest-200">
-                <div class="bg-gradient-to-r from-forest-500 to-forest-600 px-5 py-4">
-                  <div class="flex items-center gap-3">
-                    <div class="w-11 h-11 bg-white/20 backdrop-blur rounded-xl flex items-center justify-center">
-                      <span class="text-white font-bold text-xl">령</span>
-                    </div>
-                    <div>
-                      <h3 class="font-bold text-white text-lg">시행령</h3>
-                      <p class="text-forest-100 text-sm">대통령령</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="p-5">
-                  <div class="legal-content">
-                    <%= render_legal_content(@topic.decree_content) %>
-                  </div>
-                </div>
-              </div>
-
-              <!-- 시행규칙 -->
-              <div class="card card-hover overflow-hidden border-warm-200">
-                <div class="bg-gradient-to-r from-warm-500 to-warm-600 px-5 py-4">
-                  <div class="flex items-center gap-3">
-                    <div class="w-11 h-11 bg-white/20 backdrop-blur rounded-xl flex items-center justify-center">
-                      <span class="text-white font-bold text-xl">칙</span>
-                    </div>
-                    <div>
-                      <h3 class="font-bold text-white text-lg">시행규칙</h3>
-                      <p class="text-warm-100 text-sm">부령</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="p-5">
-                  <div class="legal-content">
-                    <%= render_legal_content(@topic.rule_content) %>
-                  </div>
-                </div>
+              <!-- 하단 안내 -->
+              <div class="mt-6 flex items-center justify-center gap-2 text-sm text-navy-500">
+                <span class="material-symbols-outlined text-lg">touch_app</span>
+                카드를 클릭하면 전체 내용을 볼 수 있습니다
               </div>
             </div>
           <% else %>
@@ -851,7 +890,203 @@
   </div>
 </section>
 
+<style>
+/* 캐스케이드 컨테이너 */
+.law-cascade-container {
+  position: relative;
+  padding: 1rem;
+  min-height: 500px;
+}
+
+/* 법령 카드 좌우 캐스케이드 스타일 */
+.law-card-stack {
+  position: relative;
+  z-index: 30;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.law-card-stack[data-card="decree"] {
+  z-index: 20;
+}
+.law-card-stack[data-card="rule"] {
+  z-index: 10;
+}
+
+/* 카드 기본 스타일 */
+.law-card {
+  transform-origin: top left;
+}
+
+/* 카드가 펼쳐진 상태 */
+.law-card-stack.expanded {
+  z-index: 100 !important;
+  width: 100% !important;
+  margin-left: 0 !important;
+  margin-top: 0 !important;
+  position: relative;
+}
+.law-card-stack.expanded .law-card {
+  transform: scale(1);
+}
+.law-card-stack.expanded .law-card-content {
+  max-height: 2000px;
+}
+.law-card-stack.expanded .card-expand-icon {
+  transform: rotate(180deg);
+}
+
+/* 카드가 접힌 상태 (다른 카드 펼쳐졌을 때) */
+.law-card-stack.collapsed {
+  width: 90px !important;
+  min-width: 90px !important;
+  margin-left: -20px !important;
+  margin-top: 0 !important;
+}
+.law-card-stack.collapsed .law-card {
+  transform: scale(0.95);
+}
+.law-card-stack.collapsed .law-card-content {
+  display: none;
+}
+.law-card-stack.collapsed .law-card > div:first-child {
+  padding: 1rem;
+}
+.law-card-stack.collapsed .law-card > div:first-child > div:last-child > div:first-child > div:last-child,
+.law-card-stack.collapsed .law-card > div:first-child > div:last-child > div:last-child {
+  display: none;
+}
+.law-card-stack.collapsed .law-card > div:first-child > div:last-child > div:first-child {
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+.law-card-stack.collapsed .law-card > div:first-child > div:last-child > div:first-child > div:first-child {
+  width: 3rem;
+  height: 3rem;
+}
+.law-card-stack.collapsed .law-card > div:first-child > div:last-child > div:first-child > div:first-child span {
+  font-size: 1.25rem;
+}
+
+/* 기본 상태 - 모든 카드가 보이는 캐스케이드 뷰 */
+.law-card-content {
+  max-height: 300px;
+  overflow-y: auto;
+  transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 초기 상태에서 카드 크기 조정 */
+.law-card-stack:not(.expanded):not(.collapsed) {
+  /* 기본 캐스케이드 상태 유지 */
+}
+
+/* 스크롤바 스타일 */
+.law-card-content::-webkit-scrollbar {
+  width: 6px;
+}
+.law-card-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+.law-card-content::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.1);
+  border-radius: 3px;
+}
+.law-card-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(0,0,0,0.2);
+}
+
+/* 카드 호버 효과 */
+.law-card-stack:hover {
+  z-index: 50;
+}
+.law-card-stack:hover .law-card {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+.law-card-stack.expanded:hover .law-card,
+.law-card-stack.collapsed:hover .law-card {
+  transform: scale(1);
+}
+
+/* 모바일 반응형 */
+@media (max-width: 1024px) {
+  .law-cascade-container .flex {
+    flex-direction: column;
+  }
+  .law-card-stack {
+    width: 100% !important;
+    min-width: 100% !important;
+    margin-left: 0 !important;
+  }
+  .law-card-stack[data-card="decree"],
+  .law-card-stack[data-card="rule"] {
+    margin-top: -2rem !important;
+  }
+  .law-card-stack.collapsed {
+    width: 100% !important;
+    min-width: 100% !important;
+    margin-left: 0 !important;
+    margin-top: -3rem !important;
+  }
+  .law-card-stack.collapsed .law-card > div:first-child {
+    padding: 0.75rem 1.5rem;
+  }
+  .law-card-stack.collapsed .law-card > div:first-child > div:last-child > div:first-child {
+    flex-direction: row;
+  }
+}
+</style>
+
 <script>
+let expandedCard = null;
+
+// 법률 카드를 펼친 상태로 초기화하는 함수
+function initLawCards() {
+  const allCards = document.querySelectorAll('.law-card-stack');
+  if (allCards.length === 0) return;
+
+  allCards.forEach(card => {
+    if (card.dataset.card === 'law') {
+      card.classList.add('expanded');
+      card.classList.remove('collapsed');
+    } else {
+      card.classList.add('collapsed');
+      card.classList.remove('expanded');
+    }
+  });
+  expandedCard = 'law';
+}
+
+// 페이지 로드 시 초기화
+document.addEventListener('DOMContentLoaded', initLawCards);
+
+// Turbo 페이지 전환 시에도 초기화
+document.addEventListener('turbo:load', initLawCards);
+document.addEventListener('turbo:render', initLawCards);
+
+function expandLawCard(cardType) {
+  const allCards = document.querySelectorAll('.law-card-stack');
+
+  if (expandedCard === cardType) {
+    // 이미 펼쳐진 카드 클릭 시 모두 기본 캐스케이드 상태로 복귀
+    allCards.forEach(card => {
+      card.classList.remove('expanded', 'collapsed');
+    });
+    expandedCard = null;
+  } else {
+    // 새 카드 펼치기
+    allCards.forEach(card => {
+      if (card.dataset.card === cardType) {
+        card.classList.add('expanded');
+        card.classList.remove('collapsed');
+      } else {
+        card.classList.add('collapsed');
+        card.classList.remove('expanded');
+      }
+    });
+    expandedCard = cardType;
+  }
+}
+
 function toggleFaq(index) {
   const answer = document.getElementById(`faq-answer-${index}`);
   const icon = document.getElementById(`faq-icon-${index}`);
