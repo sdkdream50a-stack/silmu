@@ -27,8 +27,8 @@ module ApplicationHelper
     html = html.gsub(/([①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮])/) do |match|
       "<div class=\"legal-paragraph\"><span class=\"legal-para-num\">#{$1}</span>"
     end
-    # 항 닫기 (다음 항이나 제목 전에)
-    html = html.gsub(/(<div class="legal-paragraph"><span class="legal-para-num">[①②③④⑤⑥⑦⑧⑨⑩]+<\/span>)([^<]*?)(?=<div class="legal-|<h[34]|$)/m) do
+    # 항 닫기 (다음 항이나 제목 전에) - 인라인 HTML 태그 허용
+    html = html.gsub(/(<div class="legal-paragraph"><span class="legal-para-num">[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮]+<\/span>)(.*?)(?=<div class="legal-|<\/div>|<h[34]|\z)/m) do
       "#{$1}<span class=\"legal-para-text\">#{$2.strip}</span></div>"
     end
 

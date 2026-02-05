@@ -1,0 +1,273 @@
+<div class="card p-6 lg:p-8">
+  <h3 class="text-xl font-bold text-navy-900 text-center mb-8 flex items-center justify-center gap-2">
+    <div class="icon-container icon-container-sm bg-navy-100">
+      <span class="material-symbols-outlined text-navy-600">account_tree</span>
+    </div>
+    수의시담 업무 흐름도
+  </h3>
+
+  <!-- 프로세스 개요 -->
+  <div class="flex flex-wrap justify-center items-center gap-3 mb-10">
+    <% [
+      { step: "1", title: "견적가격 확인", color: "point" },
+      { step: "2", title: "시담 요청", color: "forest" },
+      { step: "3", title: "시담 진행", color: "navy" },
+      { step: "4", title: "재견적 징구", color: "warm" },
+      { step: "5", title: "계약상대자 결정", color: "rose" }
+    ].each_with_index do |item, index| %>
+      <div class="flex items-center gap-2 px-4 py-2.5 bg-<%= item[:color] %>-100 text-<%= item[:color] %>-700 rounded-xl font-semibold text-sm shadow-soft">
+        <span class="w-6 h-6 bg-<%= item[:color] %>-600 text-white rounded-full flex items-center justify-center text-xs font-bold"><%= item[:step] %></span>
+        <%= item[:title] %>
+      </div>
+      <% unless index == 4 %>
+        <span class="material-symbols-outlined text-navy-300">arrow_forward</span>
+      <% end %>
+    <% end %>
+  </div>
+
+  <!-- 수의시담 발생 조건 -->
+  <div class="flex justify-center mb-8">
+    <div class="bg-warm-50 border-2 border-warm-300 rounded-2xl p-6 inline-block shadow-soft">
+      <div class="text-center mb-4">
+        <span class="material-symbols-outlined text-4xl text-warm-500">warning</span>
+        <h4 class="text-lg font-bold text-navy-800 mt-2">수의시담 발생 조건</h4>
+      </div>
+      <div class="text-center text-navy-700">
+        <p class="text-lg font-semibold text-warm-700">견적가격 > 예정가격</p>
+        <p class="text-sm text-navy-600 mt-2">견적가격이 예정가격을 초과하는 경우<br>가격협상(수의시담)을 진행할 수 있습니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 상세 흐름도 -->
+  <div class="space-y-8">
+    <!-- STEP 1 -->
+    <div class="bg-point-50 rounded-2xl p-6 border-l-4 border-point-500">
+      <div class="flex items-center gap-4 mb-6">
+        <div class="w-14 h-14 gradient-point text-white rounded-2xl flex items-center justify-center font-bold text-2xl shadow-lg">1</div>
+        <div>
+          <h4 class="text-xl font-bold text-navy-900">견적가격 확인</h4>
+          <p class="text-point-600 font-medium">계약담당자</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <% [
+          { icon: "inbox", title: "견적서 접수", desc: "업체 견적서 확인" },
+          { icon: "calculate", title: "예정가격 비교", desc: "견적가격 vs 예정가격" },
+          { icon: "trending_up", title: "초과 여부 판단", desc: "예정가격 초과 시 시담" }
+        ].each do |item| %>
+          <div class="bg-white rounded-xl p-4 text-center shadow-soft hover-lift">
+            <span class="material-symbols-outlined text-3xl text-point-500 mb-2"><%= item[:icon] %></span>
+            <div class="text-sm font-semibold text-navy-800"><%= item[:title] %></div>
+            <div class="text-xs text-navy-500 mt-1"><%= item[:desc] %></div>
+          </div>
+        <% end %>
+      </div>
+      <div class="mt-5 p-4 bg-point-100 rounded-xl text-sm text-point-800 flex items-center gap-2">
+        <span class="material-symbols-outlined">lightbulb</span>
+        <strong>판단기준:</strong> 견적가격이 예정가격 이하이면 바로 계약 체결, 초과하면 수의시담 진행
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="bg-forest-50 rounded-2xl p-6 border-l-4 border-forest-500">
+      <div class="flex items-center gap-4 mb-6">
+        <div class="w-14 h-14 gradient-forest text-white rounded-2xl flex items-center justify-center font-bold text-2xl shadow-lg">2</div>
+        <div>
+          <h4 class="text-xl font-bold text-navy-900">수의시담 요청</h4>
+          <p class="text-forest-600 font-medium">계약담당자 → 계약상대자</p>
+        </div>
+      </div>
+      <div class="grid md:grid-cols-3 gap-5">
+        <% [
+          { icon: "outgoing_mail", title: "시담 요청 통보", items: ["시담 일시 지정", "시담 장소 안내", "필요서류 안내"] },
+          { icon: "description", title: "시담 요청서 작성", items: ["견적가격 명시", "예정가격 초과 사유", "시담 참석 요청"] },
+          { icon: "schedule", title: "시담 일정 확정", items: ["상대방 일정 확인", "시담일시 통보", "참석 여부 확인"] }
+        ].each do |item| %>
+          <div class="bg-white rounded-xl p-5 shadow-soft hover-lift">
+            <div class="flex items-center justify-center mb-4">
+              <span class="material-symbols-outlined text-3xl text-forest-500"><%= item[:icon] %></span>
+            </div>
+            <div class="text-sm font-semibold text-navy-800 text-center mb-3"><%= item[:title] %></div>
+            <ul class="text-xs text-navy-600 space-y-1.5">
+              <% item[:items].each do |i| %>
+                <li class="flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-xs text-forest-500">check</span>
+                  <%= i %>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+      </div>
+      <div class="mt-5 p-4 bg-forest-100 rounded-xl text-sm text-forest-800 flex items-center gap-2">
+        <span class="material-symbols-outlined">info</span>
+        <strong>참고:</strong> 예정가격은 비밀로 유지하며, 단순히 "견적가격이 예정가격을 초과한다"고만 안내
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="bg-navy-50 rounded-2xl p-6 border-l-4 border-navy-500">
+      <div class="flex items-center gap-4 mb-6">
+        <div class="w-14 h-14 gradient-navy text-white rounded-2xl flex items-center justify-center font-bold text-2xl shadow-lg">3</div>
+        <div>
+          <h4 class="text-xl font-bold text-navy-900">수의시담 진행</h4>
+          <p class="text-navy-600 font-medium">계약담당자 + 계약상대자</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <% [
+          { icon: "groups", title: "시담 실시", desc: "대면/서면 협상" },
+          { icon: "handshake", title: "가격 협의", desc: "인하 가능 여부 확인" },
+          { icon: "edit_note", title: "시담조서 작성", desc: "협상 내용 기록" },
+          { icon: "signature", title: "서명/날인", desc: "쌍방 확인" }
+        ].each do |item| %>
+          <div class="bg-white rounded-xl p-4 text-center shadow-soft hover-lift">
+            <span class="material-symbols-outlined text-3xl text-navy-500 mb-2"><%= item[:icon] %></span>
+            <div class="text-sm font-semibold text-navy-800"><%= item[:title] %></div>
+            <div class="text-xs text-navy-500 mt-1"><%= item[:desc] %></div>
+          </div>
+        <% end %>
+      </div>
+      <div class="mt-5 p-4 bg-warm-100 rounded-xl text-sm text-warm-800 flex items-center gap-2">
+        <span class="material-symbols-outlined">warning</span>
+        <strong>주의:</strong> 수의시담은 <u>1회에 한하여</u> 실시 가능 (집행기준 제74조 제4항)
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="bg-warm-50 rounded-2xl p-6 border-l-4 border-warm-500">
+      <div class="flex items-center gap-4 mb-6">
+        <div class="w-14 h-14 gradient-warm text-white rounded-2xl flex items-center justify-center font-bold text-2xl shadow-lg">4</div>
+        <div>
+          <h4 class="text-xl font-bold text-navy-900">재견적서 징구</h4>
+          <p class="text-warm-600 font-medium">계약상대자 → 계약담당자</p>
+        </div>
+      </div>
+      <div class="grid md:grid-cols-3 gap-5">
+        <% [
+          { icon: "request_quote", title: "재견적서 요청", items: ["시담 결과 반영", "인하된 가격 제시 요청", "제출 기한 명시"] },
+          { icon: "inbox", title: "재견적서 접수", items: ["최초 견적가 이하 확인", "예정가격 이하 확인", "서류 적정성 검토"] },
+          { icon: "fact_check", title: "적격 여부 판단", items: ["가격 적정성 확인", "규격 동일성 확인", "계약 가능 여부 결정"] }
+        ].each do |item| %>
+          <div class="bg-white rounded-xl p-5 shadow-soft hover-lift">
+            <div class="flex items-center justify-center mb-4">
+              <span class="material-symbols-outlined text-3xl text-warm-500"><%= item[:icon] %></span>
+            </div>
+            <div class="text-sm font-semibold text-navy-800 text-center mb-3"><%= item[:title] %></div>
+            <ul class="text-xs text-navy-600 space-y-1.5">
+              <% item[:items].each do |i| %>
+                <li class="flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-xs text-warm-500">check</span>
+                  <%= i %>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+      </div>
+      <div class="mt-5 p-4 bg-rose-100 rounded-xl text-sm text-rose-800 flex items-center gap-2">
+        <span class="material-symbols-outlined">error</span>
+        <strong>중요:</strong> 재견적가격은 반드시 <u>최초 견적가격 이하</u>여야 함 (인상 불가)
+      </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="bg-rose-50 rounded-2xl p-6 border-l-4 border-rose-500">
+      <div class="flex items-center gap-4 mb-6">
+        <div class="w-14 h-14 bg-gradient-to-br from-rose-500 to-rose-600 text-white rounded-2xl flex items-center justify-center font-bold text-2xl shadow-lg">5</div>
+        <div>
+          <h4 class="text-xl font-bold text-navy-900">계약상대자 결정</h4>
+          <p class="text-rose-600 font-medium">계약담당자</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <% [
+          { icon: "check_circle", title: "예정가격 이하 확인", desc: "재견적가 ≤ 예정가" },
+          { icon: "emoji_events", title: "최저가 선정", desc: "2인 견적 시 최저가자" },
+          { icon: "article", title: "계약 체결", desc: "계약서 작성 및 날인" }
+        ].each do |item| %>
+          <div class="bg-white rounded-xl p-4 text-center shadow-soft hover-lift">
+            <span class="material-symbols-outlined text-3xl text-rose-500 mb-2"><%= item[:icon] %></span>
+            <div class="text-sm font-semibold text-navy-800"><%= item[:title] %></div>
+            <div class="text-xs text-navy-500 mt-1"><%= item[:desc] %></div>
+          </div>
+        <% end %>
+      </div>
+      <div class="mt-5 p-4 bg-rose-100 rounded-xl text-sm text-rose-800 flex items-center gap-2">
+        <span class="material-symbols-outlined">gavel</span>
+        <strong>법적근거:</strong> 지방자치단체 입찰 및 계약집행기준 제74조 (수의시담)
+      </div>
+    </div>
+  </div>
+
+  <!-- 핵심 체크포인트 -->
+  <div class="mt-10 gradient-premium text-white rounded-2xl p-8">
+    <h4 class="font-bold text-xl mb-6 text-center flex items-center justify-center gap-2">
+      <span class="material-symbols-outlined">push_pin</span>
+      수의시담 핵심 체크포인트
+    </h4>
+    <div class="grid md:grid-cols-3 gap-5">
+      <div class="bg-white/10 backdrop-blur rounded-xl p-5">
+        <div class="text-rose-300 font-bold mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined">block</span>
+          절대 금지
+        </div>
+        <ul class="space-y-2.5 text-navy-100 text-sm">
+          <li class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-sm text-rose-400">close</span>
+            수의시담 2회 이상 실시
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-sm text-rose-400">close</span>
+            예정가격 사전 공개
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-sm text-rose-400">close</span>
+            재견적가 인상 허용
+          </li>
+        </ul>
+      </div>
+      <div class="bg-white/10 backdrop-blur rounded-xl p-5">
+        <div class="text-forest-300 font-bold mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined">check_circle</span>
+          필수 서류
+        </div>
+        <ul class="space-y-2.5 text-navy-100 text-sm">
+          <li class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-sm text-forest-400">check</span>
+            시담조서 (협상 내용 기록)
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-sm text-forest-400">check</span>
+            재견적서 (인하된 가격)
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-sm text-forest-400">check</span>
+            시담 참석 확인서
+          </li>
+        </ul>
+      </div>
+      <div class="bg-white/10 backdrop-blur rounded-xl p-5">
+        <div class="text-point-300 font-bold mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined">tips_and_updates</span>
+          실무 팁
+        </div>
+        <ul class="space-y-2.5 text-navy-100 text-sm">
+          <li class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-sm text-point-400">star</span>
+            시담 전 협상 여지 파악
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-sm text-point-400">star</span>
+            시담조서 상세 기록
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-sm text-point-400">star</span>
+            서면 시담도 가능
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
