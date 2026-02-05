@@ -6,6 +6,51 @@
     margin: 0 auto;
   }
 
+  /* 기관 유형 필터 */
+  .org-filter {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: white;
+    border-radius: 14px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+    border: 1px solid #e2e8f0;
+  }
+  .org-filter-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--navy-700);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .org-filter-options {
+    display: flex;
+    gap: 8px;
+  }
+  .org-filter-btn {
+    padding: 8px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 20px;
+    background: white;
+    font-size: 13px;
+    font-weight: 600;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .org-filter-btn:hover {
+    border-color: var(--forest-300);
+    color: var(--forest-600);
+  }
+  .org-filter-btn.active {
+    border-color: var(--forest-500);
+    background: var(--forest-50);
+    color: var(--forest-700);
+  }
+
   /* 카테고리 탭 */
   .category-tabs {
     display: flex;
@@ -57,13 +102,19 @@
     justify-content: space-between;
     margin-bottom: 12px;
   }
+  .resource-badges {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
   .resource-badge {
     padding: 4px 10px;
     border-radius: 6px;
     font-size: 12px;
     font-weight: 600;
   }
-  .resource-badge.판례해설 {
+  .resource-badge.판례해설, .resource-badge.유권해석 {
     background: var(--point-100);
     color: var(--point-700);
   }
@@ -75,9 +126,28 @@
     background: var(--warm-100);
     color: var(--warm-700);
   }
-  .resource-badge.유권해석 {
-    background: var(--navy-100);
-    color: var(--navy-700);
+  .resource-badge.편람 {
+    background: #fef3c7;
+    color: #92400e;
+  }
+  /* 기관 태그 */
+  .org-tag {
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .org-tag.공통 {
+    background: #e0e7ff;
+    color: #3730a3;
+  }
+  .org-tag.자치단체 {
+    background: #dbeafe;
+    color: #1e40af;
+  }
+  .org-tag.교육청 {
+    background: #fce7f3;
+    color: #9d174d;
   }
   .resource-title {
     font-size: 17px;
@@ -177,7 +247,7 @@
     background: white;
     border-radius: 14px;
     padding: 16px 20px;
-    margin-bottom: 24px;
+    margin-bottom: 16px;
     box-shadow: 0 4px 16px rgba(0,0,0,0.04);
     border: 1px solid #e2e8f0;
     display: flex;
@@ -252,6 +322,15 @@
     .category-tab {
       flex-shrink: 0;
     }
+    .org-filter {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .org-filter-options {
+      width: 100%;
+      justify-content: space-between;
+    }
   }
 </style>
 
@@ -264,7 +343,7 @@
       </div>
       <div>
         <h1 class="text-3xl lg:text-4xl font-bold tracking-tight mb-2">자료실</h1>
-        <p class="text-forest-100 text-lg">판례해설, FAQ, 유권해석 등 계약 실무 자료</p>
+        <p class="text-forest-100 text-lg">업무별 편람, FAQ, 판례해설 등 실무 자료</p>
       </div>
     </div>
   </div>
@@ -278,36 +357,84 @@
         <!-- 검색 -->
         <div class="search-box">
           <span class="material-symbols-outlined">search</span>
-          <input type="text" id="search-input" placeholder="자료 검색 (예: 수의계약, 부정당업자)">
+          <input type="text" id="search-input" placeholder="자료 검색 (예: 수의계약, 여비, 연말정산)">
         </div>
 
-        <!-- 카테고리 탭 -->
+        <!-- 기관 유형 필터 -->
+        <div class="org-filter">
+          <span class="org-filter-label">
+            <span class="material-symbols-outlined" style="font-size: 18px;">apartment</span>
+            기관 유형
+          </span>
+          <div class="org-filter-options">
+            <button class="org-filter-btn active" data-org="전체" onclick="filterByOrg('전체')">전체</button>
+            <button class="org-filter-btn" data-org="자치단체" onclick="filterByOrg('자치단체')">자치단체</button>
+            <button class="org-filter-btn" data-org="교육청" onclick="filterByOrg('교육청')">교육청</button>
+          </div>
+        </div>
+
+        <!-- 업무 분야 카테고리 탭 -->
         <div class="category-tabs">
-          <button class="category-tab active" data-category="전체" onclick="filterResources('전체')">전체</button>
-          <button class="category-tab" data-category="FAQ" onclick="filterResources('FAQ')">FAQ</button>
-          <button class="category-tab" data-category="판례" onclick="filterResources('판례')">판례해설</button>
-          <button class="category-tab" data-category="공지" onclick="filterResources('공지')">공지사항</button>
+          <button class="category-tab active" data-category="전체" onclick="filterByCategory('전체')">전체</button>
+          <button class="category-tab" data-category="계약" onclick="filterByCategory('계약')">계약</button>
+          <button class="category-tab" data-category="예산" onclick="filterByCategory('예산')">예산</button>
+          <button class="category-tab" data-category="인사" onclick="filterByCategory('인사')">인사</button>
+          <button class="category-tab" data-category="복무" onclick="filterByCategory('복무')">복무</button>
+          <button class="category-tab" data-category="편람" onclick="filterByCategory('편람')">편람</button>
         </div>
 
         <!-- 자료 목록 -->
         <div id="resources-list">
           <% [
-            { title: "입찰자격제한 처분 관련 대법원 판례 해설", category: "판례", type: "판례해설", date: "2026.01.28", summary: "입찰자격제한 처분의 적법성 판단 기준과 취소 사유에 대한 대법원 판례를 해설합니다.", content: "입찰자격제한 처분은 행정처분의 일종으로, 부정당업자에 대해 일정 기간 입찰참가자격을 제한하는 제재입니다.\n\n**대법원 판례 요지:**\n- 입찰자격제한 처분은 재량행위이나, 비례원칙을 준수해야 함\n- 제재 사유가 경미한 경우 과도한 처분은 위법\n- 절차적 하자(청문 미실시 등)도 취소 사유\n\n**실무 시사점:**\n- 제재 처분 전 충분한 소명 기회 부여 필요\n- 처분 기준의 일관성 유지 중요" },
-            { title: "수의계약 체결 시 주의사항 FAQ", category: "FAQ", type: "FAQ", date: "2026.01.25", summary: "수의계약 한도액, 2인 이상 견적, 분할계약 금지 등 자주 묻는 질문에 답변합니다.", content: "**Q1. 수의계약 한도액은?**\n물품·용역: 5천만원 이하, 공사: 2억원 이하\n\n**Q2. 2인 이상 견적은 언제 필요?**\n추정가격 2천만원 초과 시 나라장터를 통해 2인 이상 견적 필수\n\n**Q3. 분할계약 금지란?**\n동일 목적의 계약을 나누어 수의계약하는 것은 위법" },
-            { title: "2026년 계약집행 특례 안내", category: "공지", type: "공지사항", date: "2026.01.20", summary: "2026년 적용되는 계약집행 특례 사항을 안내합니다.", content: "**2026년 계약집행 특례 주요 내용:**\n\n1. 수의계약 한도액 한시적 상향\n   - 물품·용역: 5천만원 → 6천만원\n   - 공사: 2억원 → 2.5억원\n\n2. 긴급 계약 절차 간소화\n   - 긴급 시 계약서 사후 작성 허용\n\n3. 지역업체 우대 확대\n   - 지역제한 입찰 기준 완화\n\n※ 적용기간: 2026.1.1 ~ 2026.12.31" },
-            { title: "부정당업자 제재 절차 FAQ", category: "FAQ", type: "FAQ", date: "2026.01.18", summary: "부정당업자 제재 사유, 절차, 입찰참가자격 제한 기간 등에 대한 FAQ입니다.", content: "**제재 사유:**\n- 계약 불이행, 허위서류 제출, 담합, 뇌물 공여 등\n\n**제재 절차:**\n1. 제재 사유 발생 → 2. 사실관계 조사 → 3. 청문 실시 → 4. 입찰참가자격 제한 처분 → 5. 나라장터 등록\n\n**제한 기간:**\n- 경미: 1~6개월\n- 중대: 6개월~1년\n- 담합/뇌물: 1~2년" },
-            { title: "분할계약 금지 관련 유권해석", category: "판례", type: "유권해석", date: "2026.01.15", summary: "동일 목적 계약의 분할 수의계약 판단 기준에 대한 유권해석을 안내합니다.", content: "**유권해석 요지:**\n\n동일 목적물을 인위적으로 분할하여 수의계약 기준금액 이하로 만드는 것은 분할계약에 해당하여 위법합니다.\n\n**분할계약 판단 기준:**\n- 사업의 동일성 (같은 목적인지)\n- 시기적 연속성 (짧은 기간 내 반복인지)\n- 분리 발주의 합리성 (불가피한 사유가 있는지)\n\n**예외 인정 사례:**\n- 예산 편성의 제약\n- 긴급한 추가 수요 발생\n- 기술적 특성에 따른 분리 발주" },
-            { title: "중소기업 경쟁제품 직접생산 확인 FAQ", category: "FAQ", type: "FAQ", date: "2026.01.12", summary: "중소기업자간 경쟁제품 해당 여부와 직접생산 확인 방법을 안내합니다.", content: "**중소기업자간 경쟁제품이란?**\n중소기업이 직접 생산하는 제품으로, 해당 제품의 입찰 시 중소기업만 참여 가능\n\n**직접생산 확인 방법:**\n1. 중소기업유통센터에서 직접생산확인증명서 발급\n2. 입찰 시 증명서 제출\n\n**확인 기준:**\n- 해당 물품을 직접 생산할 수 있는 시설 보유\n- 품질관리 능력 보유\n- 최근 납품실적 또는 생산능력 입증" },
+            # 계약 분야
+            { title: "지방자치단체 계약실무편람 (2025)", category: "계약", type: "편람", org: "자치단체", date: "2025.12.30", summary: "행정안전부 발간 지방계약 실무 종합 편람입니다. 계약 전 과정의 업무처리 기준을 수록합니다.", content: "**지방자치단체 계약실무편람**\n\n행정안전부에서 발간하는 지방계약 업무의 기본 지침서입니다.\n\n**주요 내용:**\n- 계약의 원칙 및 방법\n- 입찰 및 낙찰자 결정\n- 계약 체결 및 이행\n- 대가 지급 및 검사\n- 계약의 해제·해지", link: "https://www.mois.go.kr/frt/bbs/type001/commonSelectBoardList.do?bbsId=BBSMSTR_000000000016", link_text: "행정안전부 정책자료실 바로가기" },
+            { title: "학교회계 계약실무편람 (2025)", category: "계약", type: "편람", org: "교육청", date: "2025.11.20", summary: "교육부 발간 학교회계 계약업무 매뉴얼입니다. 학교장터 이용, 수의계약 등을 안내합니다.", content: "**학교회계 계약실무편람**\n\n교육부에서 발간하는 학교회계 계약 업무 지침서입니다.\n\n**주요 내용:**\n- 학교회계 계약의 원칙\n- 학교장터(S2B) 이용 방법\n- 수의계약 및 소액수의\n- 계약서 작성 및 검수\n- 대금 지급 절차", link: "https://www.moe.go.kr/boardCnts/listRenew.do?boardID=316", link_text: "교육부 훈령/예규/고시 바로가기" },
+            { title: "원가계산 실무편람 (조달청)", category: "계약", type: "편람", org: "공통", date: "2025.11.15", summary: "조달청 발간 원가계산 실무편람입니다. 예정가격 작성, 원가계산서 검토 방법을 안내합니다.", content: "**원가계산 실무편람**\n\n조달청에서 발간하는 예정가격 작성 및 원가계산 지침서입니다.\n\n**주요 내용:**\n1. 원가계산의 기본원칙\n2. 재료비·노무비·경비 산정 기준\n3. 일반관리비율 및 이윤율 적용\n4. 물가변동 조정 방법\n5. 원가계산서 검토 체크리스트", link: "https://www.pps.go.kr/kor/bbs/list.do?bbsId=BBSMSTR_000000000209", link_text: "조달청 원가정보 바로가기" },
+            { title: "공사계약 일반조건 해설서", category: "계약", type: "편람", org: "공통", date: "2025.10.20", summary: "기획재정부 공사계약 일반조건에 대한 축조 해설서입니다.", content: "**공사계약 일반조건 해설서**\n\n기획재정부 계약예규인 공사계약 일반조건의 조문별 해설서입니다.\n\n**주요 내용:**\n- 제1장 총칙 (정의, 계약문서)\n- 제2장 계약보증금\n- 제3장 공사의 착공·완성\n- 제4장 설계변경\n- 제5장 물가변동\n- 제6장 하자보수", link: "https://www.moef.go.kr/nw/nes/detailNesBu498.do?menuNo=4010100&searchBbsId1=MOSFBBS_000000000028", link_text: "기획재정부 계약예규 바로가기" },
+            { title: "나라장터 이용 가이드 (2026)", category: "계약", type: "편람", org: "공통", date: "2026.01.05", summary: "조달청 나라장터 종합쇼핑몰 및 입찰시스템 이용 매뉴얼입니다.", content: "**나라장터 이용 가이드**\n\n조달청 나라장터(G2B) 이용을 위한 실무 매뉴얼입니다.\n\n**주요 내용:**\n1. 나라장터 회원가입 및 인증\n2. 입찰공고 조회 및 참가\n3. 종합쇼핑몰 구매 절차\n4. 계약·대금청구·정산\n5. 수요기관 발주 방법", link: "https://www.g2b.go.kr/pt/menu/selectSubFrame.do?framesrc=/pt/menu/frameTgong.do?url=https://www.g2b.go.kr:8101/ep/cs/help/g2bManualList.do", link_text: "나라장터 이용매뉴얼 바로가기" },
+            { title: "수의계약 체결 시 주의사항 FAQ", category: "계약", type: "FAQ", org: "공통", date: "2026.01.25", summary: "수의계약 한도액, 2인 이상 견적, 분할계약 금지 등 자주 묻는 질문에 답변합니다.", content: "**Q1. 수의계약 한도액은?**\n물품·용역: 5천만원 이하, 공사: 2억원 이하\n\n**Q2. 2인 이상 견적은 언제 필요?**\n추정가격 2천만원 초과 시 나라장터를 통해 2인 이상 견적 필수\n\n**Q3. 분할계약 금지란?**\n동일 목적의 계약을 나누어 수의계약하는 것은 위법" },
+            { title: "입찰자격제한 처분 관련 대법원 판례 해설", category: "계약", type: "판례해설", org: "공통", date: "2026.01.28", summary: "입찰자격제한 처분의 적법성 판단 기준과 취소 사유에 대한 대법원 판례를 해설합니다.", content: "입찰자격제한 처분은 행정처분의 일종으로, 부정당업자에 대해 일정 기간 입찰참가자격을 제한하는 제재입니다.\n\n**대법원 판례 요지:**\n- 입찰자격제한 처분은 재량행위이나, 비례원칙을 준수해야 함\n- 제재 사유가 경미한 경우 과도한 처분은 위법\n- 절차적 하자(청문 미실시 등)도 취소 사유\n\n**실무 시사점:**\n- 제재 처분 전 충분한 소명 기회 부여 필요\n- 처분 기준의 일관성 유지 중요" },
+            { title: "분할계약 금지 관련 유권해석", category: "계약", type: "유권해석", org: "공통", date: "2026.01.15", summary: "동일 목적 계약의 분할 수의계약 판단 기준에 대한 유권해석을 안내합니다.", content: "**유권해석 요지:**\n\n동일 목적물을 인위적으로 분할하여 수의계약 기준금액 이하로 만드는 것은 분할계약에 해당하여 위법합니다.\n\n**분할계약 판단 기준:**\n- 사업의 동일성 (같은 목적인지)\n- 시기적 연속성 (짧은 기간 내 반복인지)\n- 분리 발주의 합리성 (불가피한 사유가 있는지)\n\n**예외 인정 사례:**\n- 예산 편성의 제약\n- 긴급한 추가 수요 발생\n- 기술적 특성에 따른 분리 발주" },
+            { title: "부정당업자 제재 절차 FAQ", category: "계약", type: "FAQ", org: "공통", date: "2026.01.18", summary: "부정당업자 제재 사유, 절차, 입찰참가자격 제한 기간 등에 대한 FAQ입니다.", content: "**제재 사유:**\n- 계약 불이행, 허위서류 제출, 담합, 뇌물 공여 등\n\n**제재 절차:**\n1. 제재 사유 발생 → 2. 사실관계 조사 → 3. 청문 실시 → 4. 입찰참가자격 제한 처분 → 5. 나라장터 등록\n\n**제한 기간:**\n- 경미: 1~6개월\n- 중대: 6개월~1년\n- 담합/뇌물: 1~2년" },
+            { title: "중소기업 경쟁제품 직접생산 확인 FAQ", category: "계약", type: "FAQ", org: "공통", date: "2026.01.12", summary: "중소기업자간 경쟁제품 해당 여부와 직접생산 확인 방법을 안내합니다.", content: "**중소기업자간 경쟁제품이란?**\n중소기업이 직접 생산하는 제품으로, 해당 제품의 입찰 시 중소기업만 참여 가능\n\n**직접생산 확인 방법:**\n1. 중소기업유통센터에서 직접생산확인증명서 발급\n2. 입찰 시 증명서 제출\n\n**확인 기준:**\n- 해당 물품을 직접 생산할 수 있는 시설 보유\n- 품질관리 능력 보유\n- 최근 납품실적 또는 생산능력 입증" },
+
+            # 예산 분야
+            { title: "지방자치단체 예산편성 운영기준 (2026)", category: "예산", type: "편람", org: "자치단체", date: "2025.12.15", summary: "행정안전부 발간 2026년도 지방자치단체 예산편성 운영기준입니다.", content: "**2026년도 예산편성 운영기준**\n\n행정안전부에서 매년 발간하는 지방자치단체 예산편성 지침입니다.\n\n**주요 내용:**\n- 예산편성 일반지침\n- 세입예산 편성기준\n- 세출예산 편성기준\n- 예산의 이용·전용·이체\n- 예비비 및 추경", link: "https://www.mois.go.kr/frt/bbs/type001/commonSelectBoardList.do?bbsId=BBSMSTR_000000000016", link_text: "행정안전부 정책자료실 바로가기" },
+            { title: "학교회계 예산편성 기본지침 (2026)", category: "예산", type: "편람", org: "교육청", date: "2025.12.10", summary: "교육부 발간 2026학년도 학교회계 예산편성 기본지침입니다.", content: "**2026학년도 학교회계 예산편성 기본지침**\n\n교육부에서 발간하는 학교회계 예산편성 지침입니다.\n\n**주요 내용:**\n- 학교회계 예산편성 원칙\n- 세입·세출예산 편성기준\n- 예산의 전용 및 이월\n- 학교운영위원회 심의\n- 학교발전기금 운용", link: "https://www.moe.go.kr/boardCnts/listRenew.do?boardID=316", link_text: "교육부 훈령/예규/고시 바로가기" },
+            { title: "예산이월 업무 FAQ", category: "예산", type: "FAQ", org: "공통", date: "2026.01.10", summary: "명시이월, 사고이월, 계속비이월 등 예산이월 유형별 처리 방법 안내입니다.", content: "**Q1. 명시이월과 사고이월의 차이는?**\n- 명시이월: 예산 편성 시 미리 이월 승인\n- 사고이월: 불가피한 사유로 연도 내 집행 불가\n\n**Q2. 이월 신청 기한은?**\n- 회계연도 종료 전 이월 사유 발생 시 즉시 신청\n\n**Q3. 이월 불인정 사례는?**\n- 단순 집행 지연\n- 계획 변경으로 인한 미집행" },
+
+            # 인사 분야
+            { title: "지방공무원 임용령 해설 (2025)", category: "인사", type: "편람", org: "자치단체", date: "2025.10.30", summary: "지방공무원 임용에 관한 법령 해설서입니다. 신규임용, 승진, 전보 등을 안내합니다.", content: "**지방공무원 임용령 해설**\n\n지방공무원 인사업무의 기본 지침서입니다.\n\n**주요 내용:**\n- 신규임용 절차\n- 승진임용 기준\n- 전직·전보 요건\n- 휴직·복직 절차\n- 면직·해임 사유", link: "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=259879", link_text: "지방공무원 임용령 (국가법령정보센터)" },
+            { title: "교육공무원 인사실무편람 (2025)", category: "인사", type: "편람", org: "교육청", date: "2025.11.05", summary: "교육공무원 인사업무 실무 매뉴얼입니다. 교원 임용, 전보, 승진 등을 안내합니다.", content: "**교육공무원 인사실무편람**\n\n교육청 인사업무 담당자를 위한 실무 지침서입니다.\n\n**주요 내용:**\n- 교원 신규채용 절차\n- 전보·전직 기준\n- 승진후보자명부 작성\n- 휴직·복직 처리\n- 징계 절차", link: "https://www.moe.go.kr/boardCnts/listRenew.do?boardID=316", link_text: "교육부 훈령/예규/고시 바로가기" },
+            { title: "연말정산 실무 가이드 (2026)", category: "인사", type: "편람", org: "공통", date: "2026.01.02", summary: "2025년 귀속 연말정산 업무처리 가이드입니다. 개정세법, 공제항목 등을 안내합니다.", content: "**2025년 귀속 연말정산 가이드**\n\n국세청에서 발간하는 연말정산 업무 안내서입니다.\n\n**주요 내용:**\n1. 연말정산 일정 및 절차\n2. 2025년 귀속 개정사항\n3. 소득공제·세액공제 항목\n4. 간소화 자료 이용 방법\n5. 자주 묻는 질문", link: "https://www.nts.go.kr/nts/cm/cntnts/cntntsView.do?mi=2304&cntntsId=238938", link_text: "국세청 연말정산 안내 바로가기" },
+
+            # 복무 분야
+            { title: "공무원 여비 업무처리 지침 (2025)", category: "복무", type: "편람", org: "공통", date: "2025.09.01", summary: "공무원 국내·외 출장 여비 지급 기준 및 정산 절차 안내입니다.", content: "**공무원 여비 업무처리 지침**\n\n공무원 여비규정에 따른 출장여비 지급 기준입니다.\n\n**주요 내용:**\n- 출장 구분 (관내/관외/국외)\n- 여비 종류별 지급 기준\n- 일비·숙박비·식비 상한액\n- 여비 정산 절차\n- 여비 감액 사유", link: "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=259652", link_text: "공무원 여비 규정 (국가법령정보센터)" },
+            { title: "지방공무원 복무규정 해설", category: "복무", type: "편람", org: "자치단체", date: "2025.08.15", summary: "지방공무원의 근무시간, 휴가, 당직 등 복무 관련 규정 해설서입니다.", content: "**지방공무원 복무규정 해설**\n\n지방공무원의 복무에 관한 규정 해설서입니다.\n\n**주요 내용:**\n- 근무시간 및 점심시간\n- 연가·병가·공가·특별휴가\n- 육아휴직·육아기 근로시간 단축\n- 시간외근무·당직근무\n- 출장 및 외근", link: "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=259878", link_text: "지방공무원 복무규정 (국가법령정보센터)" },
+            { title: "교직원 복무 관리 지침 (2026)", category: "복무", type: "편람", org: "교육청", date: "2026.01.08", summary: "교원 및 교육공무직원의 복무 관리에 관한 지침입니다.", content: "**교직원 복무 관리 지침**\n\n교육청 소속 교직원의 복무에 관한 지침입니다.\n\n**주요 내용:**\n- 교원 근무시간 및 출퇴근\n- 교원 휴가 종류 및 승인\n- 수업일수 및 휴업일\n- 연수 및 출장\n- 교육공무직원 복무", link: "https://www.moe.go.kr/boardCnts/listRenew.do?boardID=316", link_text: "교육부 훈령/예규/고시 바로가기" },
+            { title: "공무원 휴가 FAQ", category: "복무", type: "FAQ", org: "공통", date: "2026.01.20", summary: "연가, 병가, 공가, 특별휴가 등 휴가 관련 자주 묻는 질문입니다.", content: "**Q1. 연가 일수는?**\n- 재직기간에 따라 연 11일~21일\n\n**Q2. 병가 신청 시 진단서 필요 시점은?**\n- 병가일수 7일 초과 시\n\n**Q3. 공가 인정 사유는?**\n- 투표, 건강검진, 예비군 훈련 등\n\n**Q4. 경조사 휴가 일수는?**\n- 결혼 5일, 부모사망 5일 등 (규정별 상이)" },
+
+            # 공지사항
+            { title: "2026년 계약집행 특례 안내", category: "계약", type: "공지사항", org: "자치단체", date: "2026.01.20", summary: "2026년 적용되는 계약집행 특례 사항을 안내합니다.", content: "**2026년 계약집행 특례 주요 내용:**\n\n1. 수의계약 한도액 한시적 상향\n   - 물품·용역: 5천만원 → 6천만원\n   - 공사: 2억원 → 2.5억원\n\n2. 긴급 계약 절차 간소화\n   - 긴급 시 계약서 사후 작성 허용\n\n3. 지역업체 우대 확대\n   - 지역제한 입찰 기준 완화\n\n※ 적용기간: 2026.1.1 ~ 2026.12.31" },
           ].each do |resource| %>
-            <div class="resource-card" data-category="<%= resource[:category] %>" data-title="<%= resource[:title] %>" onclick="toggleResource(this)">
+            <div class="resource-card" data-category="<%= resource[:category] %>" data-org="<%= resource[:org] %>" data-title="<%= resource[:title] %>" onclick="toggleResource(this)">
               <div class="resource-header">
-                <span class="resource-badge <%= resource[:type] %>"><%= resource[:type] %></span>
+                <div class="resource-badges">
+                  <span class="resource-badge <%= resource[:type] %>"><%= resource[:type] %></span>
+                  <span class="org-tag <%= resource[:org] %>"><%= resource[:org] %></span>
+                </div>
                 <span class="material-symbols-outlined resource-expand-icon" style="color: #94a3b8; transition: transform 0.2s;">expand_more</span>
               </div>
               <h3 class="resource-title"><%= resource[:title] %></h3>
               <p class="resource-summary" style="font-size: 14px; color: #64748b; margin-bottom: 12px; line-height: 1.6;"><%= resource[:summary] %></p>
               <div class="resource-content" style="display: none; padding-top: 16px; border-top: 1px solid #e2e8f0; margin-top: 12px;">
                 <div style="font-size: 14px; color: #334155; line-height: 1.8; white-space: pre-line;"><%= resource[:content] %></div>
+                <% if resource[:link].present? %>
+                  <a href="<%= resource[:link] %>" target="_blank" onclick="event.stopPropagation();" style="display: inline-flex; align-items: center; gap: 6px; margin-top: 16px; padding: 12px 20px; background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%); color: white; border-radius: 10px; font-size: 14px; font-weight: 600; text-decoration: none; transition: all 0.2s; box-shadow: 0 2px 8px rgba(30, 58, 95, 0.3);">
+                    <span class="material-symbols-outlined" style="font-size: 18px;">open_in_new</span>
+                    <%= resource[:link_text] || '바로가기' %>
+                  </a>
+                <% end %>
               </div>
               <div class="resource-meta">
                 <span>
@@ -515,16 +642,56 @@
 </section>
 
 <script>
-  // 카테고리 필터
-  function filterResources(category) {
+  // 현재 필터 상태
+  let currentOrg = '전체';
+  let currentCategory = '전체';
+
+  // 기관 유형 필터
+  function filterByOrg(org) {
+    currentOrg = org;
+
+    // 버튼 활성화
+    document.querySelectorAll('.org-filter-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.org === org);
+    });
+
+    applyFilters();
+  }
+
+  // 업무 분야 카테고리 필터
+  function filterByCategory(category) {
+    currentCategory = category;
+
     // 탭 활성화
     document.querySelectorAll('.category-tab').forEach(tab => {
       tab.classList.toggle('active', tab.dataset.category === category);
     });
 
-    // 자료 필터링
+    applyFilters();
+  }
+
+  // 필터 적용
+  function applyFilters() {
     document.querySelectorAll('.resource-card').forEach(card => {
-      if (category === '전체' || card.dataset.category === category) {
+      const cardOrg = card.dataset.org;
+      const cardCategory = card.dataset.category;
+
+      // 기관 유형 필터 (공통은 항상 표시)
+      const orgMatch = currentOrg === '전체' || cardOrg === '공통' || cardOrg === currentOrg;
+
+      // 카테고리 필터 (편람 탭은 type이 편람인 것만)
+      let categoryMatch = false;
+      if (currentCategory === '전체') {
+        categoryMatch = true;
+      } else if (currentCategory === '편람') {
+        // 편람 탭: 모든 분야의 편람 자료 표시
+        const badge = card.querySelector('.resource-badge');
+        categoryMatch = badge && badge.textContent === '편람';
+      } else {
+        categoryMatch = cardCategory === currentCategory;
+      }
+
+      if (orgMatch && categoryMatch) {
         card.style.display = '';
       } else {
         card.style.display = 'none';
@@ -572,9 +739,18 @@
   // 검색
   document.getElementById('search-input').addEventListener('input', function(e) {
     const term = e.target.value.toLowerCase();
+
+    if (term === '') {
+      // 검색어가 비면 필터 다시 적용
+      applyFilters();
+      return;
+    }
+
     document.querySelectorAll('.resource-card').forEach(card => {
       const title = card.dataset.title.toLowerCase();
-      if (title.includes(term)) {
+      const summary = card.querySelector('.resource-summary')?.textContent.toLowerCase() || '';
+
+      if (title.includes(term) || summary.includes(term)) {
         card.style.display = '';
       } else {
         card.style.display = 'none';

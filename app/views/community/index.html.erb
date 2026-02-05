@@ -153,18 +153,10 @@
         </div>
 
         <!-- 페이지네이션 -->
-        <div class="flex items-center justify-center gap-2 mt-10">
-          <button onclick="alert('이전 페이지가 없습니다.')" class="w-10 h-10 flex items-center justify-center rounded-xl text-navy-400 hover:bg-surface-100 transition-colors">
-            <span class="material-symbols-outlined">chevron_left</span>
-          </button>
-          <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-navy-800 text-white font-semibold cursor-default">1</button>
-          <button onclick="alert('페이지네이션 기능은 준비 중입니다.')" class="w-10 h-10 flex items-center justify-center rounded-xl text-navy-600 hover:bg-surface-100 transition-colors font-medium">2</button>
-          <button onclick="alert('페이지네이션 기능은 준비 중입니다.')" class="w-10 h-10 flex items-center justify-center rounded-xl text-navy-600 hover:bg-surface-100 transition-colors font-medium">3</button>
-          <button onclick="alert('페이지네이션 기능은 준비 중입니다.')" class="w-10 h-10 flex items-center justify-center rounded-xl text-navy-600 hover:bg-surface-100 transition-colors font-medium">4</button>
-          <button onclick="alert('페이지네이션 기능은 준비 중입니다.')" class="w-10 h-10 flex items-center justify-center rounded-xl text-navy-600 hover:bg-surface-100 transition-colors font-medium">5</button>
-          <button onclick="alert('페이지네이션 기능은 준비 중입니다.')" class="w-10 h-10 flex items-center justify-center rounded-xl text-navy-400 hover:bg-surface-100 transition-colors">
-            <span class="material-symbols-outlined">chevron_right</span>
-          </button>
+        <div class="flex items-center justify-center gap-2 mt-10" id="pagination-container">
+          <nav class="flex items-center gap-2" id="pagination-nav">
+            <!-- JavaScript로 동적 생성 -->
+          </nav>
         </div>
       </div>
 
@@ -281,21 +273,95 @@ document.addEventListener('turbo:load', function() {
   const tabs = document.querySelectorAll('#category-tabs .tab-btn');
   const postsList = document.getElementById('posts-list');
   const searchInput = document.getElementById('search-input');
+  const paginationNav = document.getElementById('pagination-nav');
 
-  function filterItems() {
+  // 페이지네이션 설정
+  const ITEMS_PER_PAGE = 5;
+  let currentPage = 1;
+  let filteredItems = [];
+
+  function getFilteredItems() {
     const activeTab = document.querySelector('#category-tabs .tab-btn.active');
     const category = activeTab ? activeTab.dataset.category : '전체';
     const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
     const items = postsList.querySelectorAll('.item-card');
 
-    items.forEach(item => {
+    return Array.from(items).filter(item => {
       const itemCategory = item.dataset.category;
       const itemText = item.textContent.toLowerCase();
       const matchesCategory = category === '전체' || itemCategory === category || itemCategory === '공지';
       const matchesSearch = !searchTerm || itemText.includes(searchTerm);
-
-      item.style.display = (matchesCategory && matchesSearch) ? '' : 'none';
+      return matchesCategory && matchesSearch;
     });
+  }
+
+  function displayPage(page) {
+    currentPage = page;
+    const items = postsList.querySelectorAll('.item-card');
+    const startIndex = (page - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+
+    // 모든 아이템 숨기기
+    items.forEach(item => item.style.display = 'none');
+
+    // 현재 페이지 아이템만 표시
+    filteredItems.slice(startIndex, endIndex).forEach(item => {
+      item.style.display = '';
+    });
+
+    renderPagination();
+  }
+
+  function renderPagination() {
+    const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE);
+
+    if (totalPages <= 1) {
+      paginationNav.innerHTML = '';
+      return;
+    }
+
+    let html = '';
+
+    // 이전 버튼
+    html += `
+      <button onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}
+        class="w-10 h-10 flex items-center justify-center rounded-xl ${currentPage === 1 ? 'text-navy-300 cursor-not-allowed' : 'text-navy-500 hover:bg-surface-100'} transition-colors">
+        <span class="material-symbols-outlined">chevron_left</span>
+      </button>
+    `;
+
+    // 페이지 번호들
+    for (let i = 1; i <= totalPages; i++) {
+      if (i === currentPage) {
+        html += `<button class="w-10 h-10 flex items-center justify-center rounded-xl bg-navy-800 text-white font-semibold shadow-md cursor-default">${i}</button>`;
+      } else {
+        html += `<button onclick="goToPage(${i})" class="w-10 h-10 flex items-center justify-center rounded-xl text-navy-600 hover:bg-surface-100 font-medium transition-colors">${i}</button>`;
+      }
+    }
+
+    // 다음 버튼
+    html += `
+      <button onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}
+        class="w-10 h-10 flex items-center justify-center rounded-xl ${currentPage === totalPages ? 'text-navy-300 cursor-not-allowed' : 'text-navy-500 hover:bg-surface-100'} transition-colors">
+        <span class="material-symbols-outlined">chevron_right</span>
+      </button>
+    `;
+
+    paginationNav.innerHTML = html;
+  }
+
+  // 전역 함수로 노출
+  window.goToPage = function(page) {
+    const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE);
+    if (page < 1 || page > totalPages) return;
+    displayPage(page);
+    document.getElementById('posts-list').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  function filterAndPaginate() {
+    filteredItems = getFilteredItems();
+    currentPage = 1;
+    displayPage(1);
   }
 
   tabs.forEach(tab => {
@@ -312,12 +378,15 @@ document.addEventListener('turbo:load', function() {
       this.classList.remove('bg-surface-100', 'text-navy-600', 'font-medium');
       this.classList.add('active', 'bg-navy-800', 'text-white', 'shadow-md', 'font-semibold');
 
-      filterItems();
+      filterAndPaginate();
     });
   });
 
   if (searchInput) {
-    searchInput.addEventListener('input', filterItems);
+    searchInput.addEventListener('input', filterAndPaginate);
   }
+
+  // 초기 필터링 및 페이지네이션 실행
+  filterAndPaginate();
 });
 </script>
