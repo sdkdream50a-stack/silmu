@@ -43,11 +43,13 @@ rails verify:topic[year-end-settlement]
 rails verify:reports
 ```
 
-### 자동 실행
+### GitHub Actions (수동 트리거)
 
-- **스케줄**: 매주 월요일 오전 9시 (KST) 자동 실행
-- **GitHub Actions**: `.github/workflows/verify_regulations.yml`
-- **수동 트리거**: GitHub Actions 탭에서 "Run workflow" 버튼 클릭
+- **스케줄 자동 실행**: 비활성화 (비용 절감)
+- **수동 트리거**: GitHub Actions 탭 → "Run workflow" 버튼 클릭
+- **설정 파일**: `.github/workflows/verify_regulations.yml`
+
+> 💡 자동 실행을 원하면 workflow 파일에서 `schedule` 주석을 해제하세요.
 
 ## 검증 대상
 

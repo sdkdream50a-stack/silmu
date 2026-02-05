@@ -1,11 +1,11 @@
 name: 법규정 자동 검증
 
 on:
-  # 매주 월요일 오전 9시 (KST) 실행
-  schedule:
-    - cron: '0 0 * * 1'  # UTC 00:00 = KST 09:00
+  # 자동 실행 비활성화 (비용 절감)
+  # schedule:
+  #   - cron: '0 0 * * 1'  # UTC 00:00 = KST 09:00
 
-  # 수동 실행 가능
+  # 수동 실행만 가능
   workflow_dispatch:
     inputs:
       topic_slug:
