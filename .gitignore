@@ -30,6 +30,10 @@
 
 /public/assets
 
+# Ignore database backups.
+/db/backups/*
+!/db/backups/.keep
+
 # Ignore key files for decrypting credentials and more.
 /config/*.key
 
