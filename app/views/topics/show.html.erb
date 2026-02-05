@@ -347,175 +347,435 @@
 
         <!-- 서식/양식 -->
         <div class="tab-panel" data-tab="forms">
-          <!-- 필수 서식 -->
-          <div class="mb-10">
-            <div class="flex items-center justify-between mb-5">
-              <h3 class="text-xl font-bold text-navy-900 flex items-center gap-2">
+          <% if @topic.slug == 'travel-expense' %>
+            <!-- 여비 관련 서식 -->
+            <div class="mb-10">
+              <div class="flex items-center justify-between mb-5">
+                <h3 class="text-xl font-bold text-navy-900 flex items-center gap-2">
+                  <div class="icon-container icon-container-sm bg-point-100">
+                    <span class="material-symbols-outlined text-point-600">folder_open</span>
+                  </div>
+                  여비 관련 서식
+                </h3>
+              </div>
+
+              <div class="grid sm:grid-cols-2 gap-4">
+                <% [
+                  { title: "출장명령서", desc: "출장 전 결재용 필수 서류", badge: "출장 전 필수", color: "point" },
+                  { title: "출장 복명서", desc: "출장 결과 보고 서류", badge: "출장 후 7일 이내", color: "forest" },
+                  { title: "여비 정산서", desc: "여비 청구 및 정산 서류", badge: "증빙 첨부", color: "warm" },
+                  { title: "여비 개산급 신청서", desc: "여비 선지급 신청 서류", badge: "선택사항", color: "navy" }
+                ].each do |form| %>
+                  <div class="group card card-interactive p-5">
+                    <div class="flex items-start gap-4">
+                      <div class="icon-container icon-container-md bg-<%= form[:color] %>-100">
+                        <span class="material-symbols-outlined text-2xl text-<%= form[:color] %>-600">description</span>
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <h4 class="font-semibold text-navy-900"><%= form[:title] %></h4>
+                        <p class="text-sm text-navy-500 mt-1"><%= form[:desc] %></p>
+                        <span class="badge badge-<%= form[:color] %> mt-2"><%= form[:badge] %></span>
+                      </div>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+
+            <!-- 실무 도구 -->
+            <div class="mb-10">
+              <h3 class="text-xl font-bold text-navy-900 flex items-center gap-2 mb-5">
                 <div class="icon-container icon-container-sm bg-point-100">
-                  <span class="material-symbols-outlined text-point-600">folder_open</span>
+                  <span class="material-symbols-outlined text-point-600">construction</span>
                 </div>
-                필수 서식
+                실무 도구
               </h3>
-              <%= link_to templates_path, class: "text-sm text-point-600 hover:text-point-700 font-medium flex items-center gap-1 transition-colors" do %>
-                전체보기
-                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+
+              <%= link_to travel_calculator_path,
+                   class: "group block bg-gradient-to-br from-point-50 to-navy-50 rounded-2xl border-2 border-point-200 p-6 hover:border-point-400 hover:shadow-strong transition-all duration-300" do %>
+                <div class="flex items-start gap-5">
+                  <div class="w-16 h-16 gradient-point rounded-2xl flex items-center justify-center shadow-lg shrink-0">
+                    <span class="material-symbols-outlined text-3xl text-white">calculate</span>
+                  </div>
+                  <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-1">
+                      <h4 class="text-xl font-bold text-navy-900">여비 계산기</h4>
+                      <span class="badge badge-point">자동계산</span>
+                    </div>
+                    <p class="text-navy-600">출장 일정과 경로를 입력하면 일비, 숙박비, 식비를 자동으로 계산해 드립니다</p>
+                    <div class="mt-3 flex flex-wrap gap-2">
+                      <span class="badge badge-point">국내출장</span>
+                      <span class="badge badge-navy">해외출장</span>
+                      <span class="badge badge-forest">2025년 기준</span>
+                    </div>
+                  </div>
+                  <span class="material-symbols-outlined text-2xl text-point-400 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </div>
               <% end %>
             </div>
 
-            <div class="grid sm:grid-cols-2 gap-4">
-              <% [
-                { title: "수의계약 사유서", desc: "수의계약 체결 사유를 명시하는 필수 서류", badge: "별지 제5호 서식", color: "point", path: "/forms/수의계약사유서.html" },
-                { title: "견적서", desc: "업체로부터 징구하는 가격 견적서", badge: "1인/2인 견적용", color: "forest", path: "/forms/견적서.html" },
-                { title: "예정가격 조서", desc: "예정가격 산출 근거 문서", badge: "거래실례가격/원가계산", color: "warm", path: "/forms/예정가격조서.html" },
-                { title: "검수조서", desc: "납품/용역 완료 검수 확인서", badge: "대금지급 전 필수", color: "navy", path: "/forms/검수조서.html" }
-              ].each do |form| %>
-                <a href="<%= form[:path] %>" target="_blank"
-                   class="group card card-interactive p-5">
-                  <div class="flex items-start gap-4">
-                    <div class="icon-container icon-container-md bg-<%= form[:color] %>-100 group-hover:bg-<%= form[:color] %>-600 transition-colors">
-                      <span class="material-symbols-outlined text-2xl text-<%= form[:color] %>-600 group-hover:text-white transition-colors">description</span>
+            <!-- 공식 자료 -->
+            <div class="mb-10">
+              <h3 class="text-xl font-bold text-navy-900 flex items-center gap-2 mb-5">
+                <div class="icon-container icon-container-sm bg-navy-100">
+                  <span class="material-symbols-outlined text-navy-600">link</span>
+                </div>
+                공식 자료
+              </h3>
+
+              <div class="bg-surface-100 rounded-2xl p-4 space-y-3">
+                <% [
+                  { title: "국가법령정보센터", desc: "지방공무원 여비 규정 전문", icon: "balance", color: "point", url: "https://www.law.go.kr/법령/지방공무원여비규정" },
+                  { title: "행정안전부", desc: "공무원 여비 업무 처리 지침", icon: "apartment", color: "forest", url: "https://www.mois.go.kr" },
+                  { title: "기획재정부", desc: "공무원 국외여비 지급 규정", icon: "public", color: "navy", url: "https://www.moef.go.kr" }
+                ].each do |link| %>
+                  <a href="<%= link[:url] %>" target="_blank" rel="noopener"
+                     class="flex items-center gap-4 p-4 bg-white rounded-xl border border-gray-100 hover:border-<%= link[:color] %>-300 hover:shadow-medium transition-all duration-200">
+                    <div class="icon-container icon-container-sm bg-<%= link[:color] %>-600">
+                      <span class="material-symbols-outlined text-white"><%= link[:icon] %></span>
                     </div>
                     <div class="flex-1 min-w-0">
-                      <h4 class="font-semibold text-navy-900 group-hover:text-<%= form[:color] %>-600 transition-colors"><%= form[:title] %></h4>
-                      <p class="text-sm text-navy-500 mt-1"><%= form[:desc] %></p>
-                      <span class="badge badge-<%= form[:color] %> mt-2"><%= form[:badge] %></span>
+                      <div class="font-semibold text-navy-900"><%= link[:title] %></div>
+                      <div class="text-sm text-navy-500 truncate"><%= link[:desc] %></div>
                     </div>
-                    <span class="material-symbols-outlined text-navy-300 group-hover:text-<%= form[:color] %>-600 transition-colors">open_in_new</span>
-                  </div>
-                </a>
-              <% end %>
+                    <span class="material-symbols-outlined text-navy-300">open_in_new</span>
+                  </a>
+                <% end %>
+              </div>
             </div>
-          </div>
 
-          <!-- 실무 도구 -->
-          <div class="mb-10">
-            <h3 class="text-xl font-bold text-navy-900 flex items-center gap-2 mb-5">
-              <div class="icon-container icon-container-sm bg-point-100">
-                <span class="material-symbols-outlined text-point-600">construction</span>
-              </div>
-              실무 도구
-            </h3>
-
-            <a href="/forms/견적서검토.html" target="_blank"
-               class="group block bg-gradient-to-br from-point-50 to-navy-50 rounded-2xl border-2 border-point-200 p-6 hover:border-point-400 hover:shadow-strong transition-all duration-300">
-              <div class="flex items-start gap-5">
-                <div class="w-16 h-16 gradient-point rounded-2xl flex items-center justify-center shadow-lg shrink-0">
-                  <span class="material-symbols-outlined text-3xl text-white">fact_check</span>
+            <!-- 여비 지급 기준 요약 -->
+            <div>
+              <h3 class="text-xl font-bold text-navy-900 flex items-center gap-2 mb-5">
+                <div class="icon-container icon-container-sm bg-point-100">
+                  <span class="material-symbols-outlined text-point-600">payments</span>
                 </div>
-                <div class="flex-1">
-                  <div class="flex items-center gap-2 mb-1">
-                    <h4 class="text-xl font-bold text-navy-900">견적서 검토 시스템</h4>
-                    <span class="badge badge-point">AI</span>
+                2025년 여비 지급 기준 요약
+              </h3>
+
+              <div class="bg-point-50 border border-point-200 rounded-2xl p-6">
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div class="bg-white rounded-xl p-4 text-center">
+                    <div class="text-2xl font-bold text-point-600">25,000원</div>
+                    <div class="text-sm text-navy-600 mt-1">일비 (1일)</div>
                   </div>
-                  <p class="text-navy-600">업체에서 받은 견적서를 분석하여 법규 적합성, 가격 적정성, 주의사항을 리포트로 제공</p>
-                  <div class="mt-3 flex flex-wrap gap-2">
-                    <span class="badge badge-point">자동 분석</span>
-                    <span class="badge badge-navy">리포트 생성</span>
-                    <span class="badge badge-forest">법규 검토</span>
+                  <div class="bg-white rounded-xl p-4 text-center">
+                    <div class="text-2xl font-bold text-forest-600">25,000원</div>
+                    <div class="text-sm text-navy-600 mt-1">식비 (1일)</div>
+                  </div>
+                  <div class="bg-white rounded-xl p-4 text-center">
+                    <div class="text-2xl font-bold text-warm-600">80,000원</div>
+                    <div class="text-sm text-navy-600 mt-1">숙박비 상한 (서울)</div>
+                  </div>
+                  <div class="bg-white rounded-xl p-4 text-center">
+                    <div class="text-2xl font-bold text-navy-600">실비</div>
+                    <div class="text-sm text-navy-600 mt-1">교통비 (영수증)</div>
                   </div>
                 </div>
-                <span class="material-symbols-outlined text-2xl text-point-400 group-hover:translate-x-1 transition-transform">arrow_forward</span>
               </div>
-            </a>
-          </div>
-
-          <!-- 공식 서식 다운로드 -->
-          <div class="mb-10">
-            <h3 class="text-xl font-bold text-navy-900 flex items-center gap-2 mb-5">
-              <div class="icon-container icon-container-sm bg-navy-100">
-                <span class="material-symbols-outlined text-navy-600">link</span>
-              </div>
-              공식 서식 다운로드
-            </h3>
-
-            <div class="bg-surface-100 rounded-2xl p-4 space-y-3">
-              <% [
-                { title: "국가법령정보센터", desc: "지방자치단체 입찰 및 계약집행기준 (별지 서식 포함)", icon: "balance", color: "point", url: "https://www.law.go.kr/행정규칙/지방자치단체입찰및계약집행기준" },
-                { title: "행정안전부 지방계약 예규", desc: "계약일반조건, 입찰집행기준 등 HWP 다운로드", icon: "apartment", color: "forest", url: "https://www.mois.go.kr/frt/bbs/type001/commonSelectBoardList.do?bbsId=BBSMSTR_000000000061" },
-                { title: "나라장터 (G2B)", desc: "조달청 수의계약 매뉴얼 및 서식", icon: "public", color: "navy", url: "https://www.g2b.go.kr" }
-              ].each do |link| %>
-                <a href="<%= link[:url] %>" target="_blank" rel="noopener"
-                   class="flex items-center gap-4 p-4 bg-white rounded-xl border border-gray-100 hover:border-<%= link[:color] %>-300 hover:shadow-medium transition-all duration-200">
-                  <div class="icon-container icon-container-sm bg-<%= link[:color] %>-600">
-                    <span class="material-symbols-outlined text-white"><%= link[:icon] %></span>
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <div class="font-semibold text-navy-900"><%= link[:title] %></div>
-                    <div class="text-sm text-navy-500 truncate"><%= link[:desc] %></div>
-                  </div>
-                  <span class="material-symbols-outlined text-navy-300">open_in_new</span>
-                </a>
-              <% end %>
             </div>
-          </div>
 
-          <!-- 작성 가이드 -->
-          <div>
-            <h3 class="text-xl font-bold text-navy-900 flex items-center gap-2 mb-5">
-              <div class="icon-container icon-container-sm bg-point-100">
-                <span class="material-symbols-outlined text-point-600">edit_note</span>
+          <% elsif @topic.slug == 'year-end-settlement' %>
+            <!-- 연말정산 관련 서식 -->
+            <div class="mb-10">
+              <div class="flex items-center justify-between mb-5">
+                <h3 class="text-xl font-bold text-navy-900 flex items-center gap-2">
+                  <div class="icon-container icon-container-sm bg-point-100">
+                    <span class="material-symbols-outlined text-point-600">folder_open</span>
+                  </div>
+                  연말정산 관련 서식
+                </h3>
               </div>
-              수의계약 사유서 작성 가이드
-            </h3>
 
-            <div class="bg-point-50 border border-point-200 rounded-2xl p-6">
-              <div class="space-y-6">
-                <div>
-                  <h4 class="font-semibold text-navy-800 mb-4 flex items-center gap-2">
-                    <span class="material-symbols-outlined text-point-600">checklist</span>
-                    필수 기재 항목
-                  </h4>
-                  <div class="grid sm:grid-cols-2 gap-3">
-                    <% [
-                      { num: "1", title: "계약 건명", desc: "사업/물품/용역명 명확히 기재" },
-                      { num: "2", title: "추정가격", desc: "예정가격 산출 근거 포함" },
-                      { num: "3", title: "수의계약 사유", desc: "법적 근거 조항 명시" },
-                      { num: "4", title: "계약상대자 선정 사유", desc: "특정 업체 선정 이유" }
-                    ].each do |item| %>
-                      <div class="flex items-start gap-3 bg-white rounded-xl p-4 shadow-soft">
-                        <span class="w-7 h-7 gradient-point text-white rounded-full flex items-center justify-center text-sm font-bold shrink-0"><%= item[:num] %></span>
-                        <div>
-                          <div class="font-semibold text-navy-900"><%= item[:title] %></div>
-                          <div class="text-sm text-navy-500"><%= item[:desc] %></div>
-                        </div>
+              <div class="grid sm:grid-cols-2 gap-4">
+                <% [
+                  { title: "소득·세액공제 신고서", desc: "근로자가 작성하는 기본 신고서", badge: "필수", color: "point" },
+                  { title: "부양가족 변동신고서", desc: "부양가족 추가/변경 시 제출", badge: "변동 시", color: "forest" },
+                  { title: "주택자금 공제신청서", desc: "주택청약, 주택임차 공제 신청", badge: "해당자", color: "warm" },
+                  { title: "원천징수영수증", desc: "연말정산 결과 확인서", badge: "결과", color: "navy" }
+                ].each do |form| %>
+                  <div class="group card card-interactive p-5">
+                    <div class="flex items-start gap-4">
+                      <div class="icon-container icon-container-md bg-<%= form[:color] %>-100">
+                        <span class="material-symbols-outlined text-2xl text-<%= form[:color] %>-600">description</span>
                       </div>
-                    <% end %>
+                      <div class="flex-1 min-w-0">
+                        <h4 class="font-semibold text-navy-900"><%= form[:title] %></h4>
+                        <p class="text-sm text-navy-500 mt-1"><%= form[:desc] %></p>
+                        <span class="badge badge-<%= form[:color] %> mt-2"><%= form[:badge] %></span>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                <% end %>
+              </div>
+            </div>
 
-                <div class="border-t border-point-200 pt-6">
-                  <h4 class="font-semibold text-navy-800 mb-4 flex items-center gap-2">
-                    <span class="material-symbols-outlined text-point-600">code</span>
-                    작성 예시
-                  </h4>
-                  <div class="bg-white rounded-xl p-5 text-sm text-navy-700 font-mono space-y-2 shadow-soft">
-                    <p><span class="text-point-600 font-semibold">1. 계약건명:</span> 2026년도 사무용품 구매</p>
-                    <p><span class="text-point-600 font-semibold">2. 추정가격:</span> 15,000,000원 (부가세 포함)</p>
-                    <p><span class="text-point-600 font-semibold">3. 수의계약 사유:</span></p>
-                    <p class="pl-4 text-navy-600">지방계약법 시행령 제25조 제1항 제1호에 따라 추정가격이 물품구매 수의계약 기준금액(2천만원) 이하이므로 수의계약 체결</p>
-                    <p><span class="text-point-600 font-semibold">4. 계약상대자:</span> (주)OO상사</p>
-                    <p class="pl-4 text-navy-600">- 선정사유: 최저가 견적 제출업체</p>
+            <!-- 공식 자료 -->
+            <div class="mb-10">
+              <h3 class="text-xl font-bold text-navy-900 flex items-center gap-2 mb-5">
+                <div class="icon-container icon-container-sm bg-navy-100">
+                  <span class="material-symbols-outlined text-navy-600">link</span>
+                </div>
+                공식 자료
+              </h3>
+
+              <div class="bg-surface-100 rounded-2xl p-4 space-y-3">
+                <% [
+                  { title: "국세청 홈택스", desc: "연말정산 간소화 서비스", icon: "balance", color: "point", url: "https://www.hometax.go.kr" },
+                  { title: "국세청 연말정산 안내", desc: "연말정산 종합 안내 페이지", icon: "info", color: "forest", url: "https://www.nts.go.kr/nts/cm/cntnts/cntntsView.do?mi=2304&cntntsId=238938" },
+                  { title: "국가법령정보센터", desc: "소득세법 및 시행령", icon: "gavel", color: "navy", url: "https://www.law.go.kr/법령/소득세법" }
+                ].each do |link| %>
+                  <a href="<%= link[:url] %>" target="_blank" rel="noopener"
+                     class="flex items-center gap-4 p-4 bg-white rounded-xl border border-gray-100 hover:border-<%= link[:color] %>-300 hover:shadow-medium transition-all duration-200">
+                    <div class="icon-container icon-container-sm bg-<%= link[:color] %>-600">
+                      <span class="material-symbols-outlined text-white"><%= link[:icon] %></span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <div class="font-semibold text-navy-900"><%= link[:title] %></div>
+                      <div class="text-sm text-navy-500 truncate"><%= link[:desc] %></div>
+                    </div>
+                    <span class="material-symbols-outlined text-navy-300">open_in_new</span>
+                  </a>
+                <% end %>
+              </div>
+            </div>
+
+          <% elsif @topic.slug == 'budget-carryover' %>
+            <!-- 예산이월 관련 서식 -->
+            <div class="mb-10">
+              <div class="flex items-center justify-between mb-5">
+                <h3 class="text-xl font-bold text-navy-900 flex items-center gap-2">
+                  <div class="icon-container icon-container-sm bg-point-100">
+                    <span class="material-symbols-outlined text-point-600">folder_open</span>
                   </div>
-                </div>
+                  예산이월 관련 서식
+                </h3>
+              </div>
 
-                <div class="bg-warm-50 border border-warm-200 rounded-xl p-4">
-                  <div class="flex items-start gap-3">
-                    <span class="material-symbols-outlined text-warm-600">warning</span>
-                    <div class="text-sm text-warm-800">
-                      <strong>주의:</strong> 수의계약 사유서는 반드시 <u>계약 체결 전</u>에 작성하여 결재를 받아야 합니다. 사후 작성은 감사 지적 대상입니다.
+              <div class="grid sm:grid-cols-2 gap-4">
+                <% [
+                  { title: "이월 사유서", desc: "사고이월 사유 및 증빙 자료", badge: "사고이월 필수", color: "point" },
+                  { title: "이월예산 조서", desc: "이월 금액 내역 및 산출 근거", badge: "금액 산출", color: "forest" },
+                  { title: "이월예산 집행계획서", desc: "다음연도 집행 계획", badge: "계획", color: "warm" },
+                  { title: "예산집행 현황표", desc: "당해연도 예산 집행 현황", badge: "현황", color: "navy" }
+                ].each do |form| %>
+                  <div class="group card card-interactive p-5">
+                    <div class="flex items-start gap-4">
+                      <div class="icon-container icon-container-md bg-<%= form[:color] %>-100">
+                        <span class="material-symbols-outlined text-2xl text-<%= form[:color] %>-600">description</span>
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <h4 class="font-semibold text-navy-900"><%= form[:title] %></h4>
+                        <p class="text-sm text-navy-500 mt-1"><%= form[:desc] %></p>
+                        <span class="badge badge-<%= form[:color] %> mt-2"><%= form[:badge] %></span>
+                      </div>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+
+            <!-- 공식 자료 -->
+            <div class="mb-10">
+              <h3 class="text-xl font-bold text-navy-900 flex items-center gap-2 mb-5">
+                <div class="icon-container icon-container-sm bg-navy-100">
+                  <span class="material-symbols-outlined text-navy-600">link</span>
+                </div>
+                공식 자료
+              </h3>
+
+              <div class="bg-surface-100 rounded-2xl p-4 space-y-3">
+                <% [
+                  { title: "국가법령정보센터", desc: "지방재정법 및 시행령", icon: "balance", color: "point", url: "https://www.law.go.kr/법령/지방재정법" },
+                  { title: "행정안전부", desc: "지방재정 운영 매뉴얼", icon: "apartment", color: "forest", url: "https://www.mois.go.kr" },
+                  { title: "지방재정365", desc: "지방재정 통합공개시스템", icon: "public", color: "navy", url: "https://lofin.mois.go.kr" }
+                ].each do |link| %>
+                  <a href="<%= link[:url] %>" target="_blank" rel="noopener"
+                     class="flex items-center gap-4 p-4 bg-white rounded-xl border border-gray-100 hover:border-<%= link[:color] %>-300 hover:shadow-medium transition-all duration-200">
+                    <div class="icon-container icon-container-sm bg-<%= link[:color] %>-600">
+                      <span class="material-symbols-outlined text-white"><%= link[:icon] %></span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <div class="font-semibold text-navy-900"><%= link[:title] %></div>
+                      <div class="text-sm text-navy-500 truncate"><%= link[:desc] %></div>
+                    </div>
+                    <span class="material-symbols-outlined text-navy-300">open_in_new</span>
+                  </a>
+                <% end %>
+              </div>
+            </div>
+
+          <% else %>
+            <!-- 수의계약 관련 서식 (기본) -->
+            <div class="mb-10">
+              <div class="flex items-center justify-between mb-5">
+                <h3 class="text-xl font-bold text-navy-900 flex items-center gap-2">
+                  <div class="icon-container icon-container-sm bg-point-100">
+                    <span class="material-symbols-outlined text-point-600">folder_open</span>
+                  </div>
+                  필수 서식
+                </h3>
+                <%= link_to templates_path, class: "text-sm text-point-600 hover:text-point-700 font-medium flex items-center gap-1 transition-colors" do %>
+                  전체보기
+                  <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                <% end %>
+              </div>
+
+              <div class="grid sm:grid-cols-2 gap-4">
+                <% [
+                  { title: "수의계약 사유서", desc: "수의계약 체결 사유를 명시하는 필수 서류", badge: "별지 제5호 서식", color: "point", path: "/forms/수의계약사유서.html" },
+                  { title: "견적서", desc: "업체로부터 징구하는 가격 견적서", badge: "1인/2인 견적용", color: "forest", path: "/forms/견적서.html" },
+                  { title: "예정가격 조서", desc: "예정가격 산출 근거 문서", badge: "거래실례가격/원가계산", color: "warm", path: "/forms/예정가격조서.html" },
+                  { title: "검수조서", desc: "납품/용역 완료 검수 확인서", badge: "대금지급 전 필수", color: "navy", path: "/forms/검수조서.html" }
+                ].each do |form| %>
+                  <a href="<%= form[:path] %>" target="_blank"
+                     class="group card card-interactive p-5">
+                    <div class="flex items-start gap-4">
+                      <div class="icon-container icon-container-md bg-<%= form[:color] %>-100 group-hover:bg-<%= form[:color] %>-600 transition-colors">
+                        <span class="material-symbols-outlined text-2xl text-<%= form[:color] %>-600 group-hover:text-white transition-colors">description</span>
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <h4 class="font-semibold text-navy-900 group-hover:text-<%= form[:color] %>-600 transition-colors"><%= form[:title] %></h4>
+                        <p class="text-sm text-navy-500 mt-1"><%= form[:desc] %></p>
+                        <span class="badge badge-<%= form[:color] %> mt-2"><%= form[:badge] %></span>
+                      </div>
+                      <span class="material-symbols-outlined text-navy-300 group-hover:text-<%= form[:color] %>-600 transition-colors">open_in_new</span>
+                    </div>
+                  </a>
+                <% end %>
+              </div>
+            </div>
+
+            <!-- 실무 도구 -->
+            <div class="mb-10">
+              <h3 class="text-xl font-bold text-navy-900 flex items-center gap-2 mb-5">
+                <div class="icon-container icon-container-sm bg-point-100">
+                  <span class="material-symbols-outlined text-point-600">construction</span>
+                </div>
+                실무 도구
+              </h3>
+
+              <a href="/forms/견적서검토.html" target="_blank"
+                 class="group block bg-gradient-to-br from-point-50 to-navy-50 rounded-2xl border-2 border-point-200 p-6 hover:border-point-400 hover:shadow-strong transition-all duration-300">
+                <div class="flex items-start gap-5">
+                  <div class="w-16 h-16 gradient-point rounded-2xl flex items-center justify-center shadow-lg shrink-0">
+                    <span class="material-symbols-outlined text-3xl text-white">fact_check</span>
+                  </div>
+                  <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-1">
+                      <h4 class="text-xl font-bold text-navy-900">견적서 검토 시스템</h4>
+                      <span class="badge badge-point">AI</span>
+                    </div>
+                    <p class="text-navy-600">업체에서 받은 견적서를 분석하여 법규 적합성, 가격 적정성, 주의사항을 리포트로 제공</p>
+                    <div class="mt-3 flex flex-wrap gap-2">
+                      <span class="badge badge-point">자동 분석</span>
+                      <span class="badge badge-navy">리포트 생성</span>
+                      <span class="badge badge-forest">법규 검토</span>
+                    </div>
+                  </div>
+                  <span class="material-symbols-outlined text-2xl text-point-400 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </div>
+              </a>
+            </div>
+
+            <!-- 공식 서식 다운로드 -->
+            <div class="mb-10">
+              <h3 class="text-xl font-bold text-navy-900 flex items-center gap-2 mb-5">
+                <div class="icon-container icon-container-sm bg-navy-100">
+                  <span class="material-symbols-outlined text-navy-600">link</span>
+                </div>
+                공식 서식 다운로드
+              </h3>
+
+              <div class="bg-surface-100 rounded-2xl p-4 space-y-3">
+                <% [
+                  { title: "국가법령정보센터", desc: "지방자치단체 입찰 및 계약집행기준 (별지 서식 포함)", icon: "balance", color: "point", url: "https://www.law.go.kr/행정규칙/지방자치단체입찰및계약집행기준" },
+                  { title: "행정안전부 지방계약 예규", desc: "계약일반조건, 입찰집행기준 등 HWP 다운로드", icon: "apartment", color: "forest", url: "https://www.mois.go.kr/frt/bbs/type001/commonSelectBoardList.do?bbsId=BBSMSTR_000000000061" },
+                  { title: "나라장터 (G2B)", desc: "조달청 수의계약 매뉴얼 및 서식", icon: "public", color: "navy", url: "https://www.g2b.go.kr" }
+                ].each do |link| %>
+                  <a href="<%= link[:url] %>" target="_blank" rel="noopener"
+                     class="flex items-center gap-4 p-4 bg-white rounded-xl border border-gray-100 hover:border-<%= link[:color] %>-300 hover:shadow-medium transition-all duration-200">
+                    <div class="icon-container icon-container-sm bg-<%= link[:color] %>-600">
+                      <span class="material-symbols-outlined text-white"><%= link[:icon] %></span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <div class="font-semibold text-navy-900"><%= link[:title] %></div>
+                      <div class="text-sm text-navy-500 truncate"><%= link[:desc] %></div>
+                    </div>
+                    <span class="material-symbols-outlined text-navy-300">open_in_new</span>
+                  </a>
+                <% end %>
+              </div>
+            </div>
+
+            <!-- 작성 가이드 -->
+            <div>
+              <h3 class="text-xl font-bold text-navy-900 flex items-center gap-2 mb-5">
+                <div class="icon-container icon-container-sm bg-point-100">
+                  <span class="material-symbols-outlined text-point-600">edit_note</span>
+                </div>
+                수의계약 사유서 작성 가이드
+              </h3>
+
+              <div class="bg-point-50 border border-point-200 rounded-2xl p-6">
+                <div class="space-y-6">
+                  <div>
+                    <h4 class="font-semibold text-navy-800 mb-4 flex items-center gap-2">
+                      <span class="material-symbols-outlined text-point-600">checklist</span>
+                      필수 기재 항목
+                    </h4>
+                    <div class="grid sm:grid-cols-2 gap-3">
+                      <% [
+                        { num: "1", title: "계약 건명", desc: "사업/물품/용역명 명확히 기재" },
+                        { num: "2", title: "추정가격", desc: "예정가격 산출 근거 포함" },
+                        { num: "3", title: "수의계약 사유", desc: "법적 근거 조항 명시" },
+                        { num: "4", title: "계약상대자 선정 사유", desc: "특정 업체 선정 이유" }
+                      ].each do |item| %>
+                        <div class="flex items-start gap-3 bg-white rounded-xl p-4 shadow-soft">
+                          <span class="w-7 h-7 gradient-point text-white rounded-full flex items-center justify-center text-sm font-bold shrink-0"><%= item[:num] %></span>
+                          <div>
+                            <div class="font-semibold text-navy-900"><%= item[:title] %></div>
+                            <div class="text-sm text-navy-500"><%= item[:desc] %></div>
+                          </div>
+                        </div>
+                      <% end %>
+                    </div>
+                  </div>
+
+                  <div class="border-t border-point-200 pt-6">
+                    <h4 class="font-semibold text-navy-800 mb-4 flex items-center gap-2">
+                      <span class="material-symbols-outlined text-point-600">code</span>
+                      작성 예시
+                    </h4>
+                    <div class="bg-white rounded-xl p-5 text-sm text-navy-700 font-mono space-y-2 shadow-soft">
+                      <p><span class="text-point-600 font-semibold">1. 계약건명:</span> 2026년도 사무용품 구매</p>
+                      <p><span class="text-point-600 font-semibold">2. 추정가격:</span> 15,000,000원 (부가세 포함)</p>
+                      <p><span class="text-point-600 font-semibold">3. 수의계약 사유:</span></p>
+                      <p class="pl-4 text-navy-600">지방계약법 시행령 제25조 제1항 제1호에 따라 추정가격이 물품구매 수의계약 기준금액(2천만원) 이하이므로 수의계약 체결</p>
+                      <p><span class="text-point-600 font-semibold">4. 계약상대자:</span> (주)OO상사</p>
+                      <p class="pl-4 text-navy-600">- 선정사유: 최저가 견적 제출업체</p>
+                    </div>
+                  </div>
+
+                  <div class="bg-warm-50 border border-warm-200 rounded-xl p-4">
+                    <div class="flex items-start gap-3">
+                      <span class="material-symbols-outlined text-warm-600">warning</span>
+                      <div class="text-sm text-warm-800">
+                        <strong>주의:</strong> 수의계약 사유서는 반드시 <u>계약 체결 전</u>에 작성하여 결재를 받아야 합니다. 사후 작성은 감사 지적 대상입니다.
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          <% end %>
         </div>
 
         <!-- 흐름도 -->
         <div class="tab-panel" data-tab="flowchart">
           <% if @topic.slug == 'price-negotiation' %>
             <%= render 'topics/flowcharts/price_negotiation', topic: @topic %>
-          <% elsif @topic.slug == 'private-contract-limit' || @topic.slug == 'private-contract' %>
+          <% elsif @topic.slug == 'private-contract-limit' || @topic.slug == 'private-contract' || @topic.slug == 'private-contract-amount' %>
             <%= render 'topics/flowcharts/private_contract', topic: @topic %>
           <% elsif @topic.slug == 'small-amount-contract' %>
             <%= render 'topics/flowcharts/small_amount_contract', topic: @topic %>
@@ -525,6 +785,12 @@
             <%= render 'topics/flowcharts/dual_quote', topic: @topic %>
           <% elsif @topic.slug == 'single-quote' %>
             <%= render 'topics/flowcharts/single_quote', topic: @topic %>
+          <% elsif @topic.slug == 'travel-expense' %>
+            <%= render 'topics/flowcharts/travel_expense', topic: @topic %>
+          <% elsif @topic.slug == 'year-end-settlement' %>
+            <%= render 'topics/flowcharts/year_end_settlement', topic: @topic %>
+          <% elsif @topic.slug == 'budget-carryover' %>
+            <%= render 'topics/flowcharts/budget_carryover', topic: @topic %>
           <% else %>
             <!-- 기본 준비중 메시지 -->
             <div class="card p-16 text-center">
