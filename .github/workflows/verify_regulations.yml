@@ -1,0 +1,142 @@
+name: 법규정 자동 검증
+
+on:
+  # 매주 월요일 오전 9시 (KST) 실행
+  schedule:
+    - cron: '0 0 * * 1'  # UTC 00:00 = KST 09:00
+
+  # 수동 실행 가능
+  workflow_dispatch:
+    inputs:
+      topic_slug:
+        description: '특정 토픽만 검증 (비워두면 전체)'
+        required: false
+        default: ''
+
+env:
+  RAILS_ENV: production
+  RUBY_VERSION: '3.3.6'
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: silmu_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: 소스코드 체크아웃
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Ruby 설정
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.RUBY_VERSION }}
+          bundler-cache: true
+
+      - name: PostgreSQL 클라이언트 설치
+        run: sudo apt-get install -y postgresql-client
+
+      - name: 데이터베이스 설정
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/silmu_test
+        run: |
+          bundle exec rails db:create db:schema:load
+
+      - name: 프로덕션 DB 복원 (최신 백업)
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/silmu_test
+        run: |
+          LATEST_BACKUP=$(ls -t db/backups/*.sql 2>/dev/null | head -1)
+          if [ -n "$LATEST_BACKUP" ]; then
+            echo "백업 파일 복원: $LATEST_BACKUP"
+            psql $DATABASE_URL < $LATEST_BACKUP
+          else
+            echo "백업 파일 없음, 시드 데이터 사용"
+            bundle exec rails db:seed
+          fi
+
+      - name: 법규정 검증 실행
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/silmu_test
+        run: |
+          if [ -n "${{ github.event.inputs.topic_slug }}" ]; then
+            bundle exec rails "verify:topic[${{ github.event.inputs.topic_slug }}]"
+          else
+            bundle exec rails verify:regulations
+          fi
+
+      - name: 변경사항 확인
+        id: check_changes
+        run: |
+          if git diff --quiet; then
+            echo "changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "changes=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 데이터베이스 백업 생성
+        if: steps.check_changes.outputs.changes == 'true'
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/silmu_test
+        run: |
+          mkdir -p db/backups
+          BACKUP_FILE="db/backups/backup_$(date +%Y%m%d_%H%M%S).sql"
+          pg_dump $DATABASE_URL > $BACKUP_FILE
+          echo "백업 생성: $BACKUP_FILE"
+
+      - name: Git 설정
+        if: steps.check_changes.outputs.changes == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
+      - name: 변경사항 커밋 및 푸시
+        if: steps.check_changes.outputs.changes == 'true'
+        run: |
+          git add -A
+          git commit -m "fix: 법규정 자동 검증 및 수정 ($(date +%Y-%m-%d))
+
+          🤖 GitHub Actions 자동 검증에 의해 수정됨
+          Co-Authored-By: Claude <noreply@anthropic.com>"
+          git push
+
+      - name: 검증 리포트 업로드
+        uses: actions/upload-artifact@v4
+        with:
+          name: regulation-reports
+          path: log/regulation_reports/
+          retention-days: 30
+
+      - name: 슬랙 알림 (변경사항 있음)
+        if: steps.check_changes.outputs.changes == 'true' && env.SLACK_WEBHOOK_URL != ''
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+            --data '{"text":"🔄 법규정 자동 검증 완료: 수정사항이 반영되었습니다."}' \
+            $SLACK_WEBHOOK_URL
+
+      - name: 완료 메시지
+        run: |
+          if [ "${{ steps.check_changes.outputs.changes }}" == "true" ]; then
+            echo "✅ 검증 완료: 수정사항이 커밋되었습니다."
+          else
+            echo "✅ 검증 완료: 모든 내용이 현행 규정과 일치합니다."
+          fi
