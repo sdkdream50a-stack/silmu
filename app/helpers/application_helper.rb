@@ -18,13 +18,13 @@ module ApplicationHelper
       "<div class=\"legal-law-name\">#{$1}</div>"
     end
 
-    # 3. 조(條) 표기 - 제X조 형식
+    # 3. 조(條) 표기 - 제X조 형식 (span 사용 - inline 요소 내부에서도 안전)
     html = html.gsub(/(제\d+조(?:의\d+)?)\s*\(([^)]+)\)/) do |match|
-      "<div class=\"legal-article\"><span class=\"legal-article-num\">#{$1}</span> <span class=\"legal-article-title\">(#{$2})</span></div>"
+      "<span class=\"legal-article\"><span class=\"legal-article-num\">#{$1}</span> <span class=\"legal-article-title\">(#{$2})</span></span>"
     end
 
-    # 4. 항(①②③...) - 줄바꿈 후 들여쓰기
-    html = html.gsub(/([①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮])/) do |match|
+    # 4. 항(①②③...) - 줄 시작에서만 매칭 (인라인 §25① 등은 제외)
+    html = html.gsub(/(?:^|(?<=\n))([①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮])/) do |match|
       "<div class=\"legal-paragraph\"><span class=\"legal-para-num\">#{$1}</span>"
     end
     # 항 닫기 (다음 항이나 제목 전에) - 인라인 HTML 태그 허용
