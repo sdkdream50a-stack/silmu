@@ -859,37 +859,61 @@
             </nav>
           </div>
 
-          <!-- 관련 도구 -->
-          <div class="card-glass bg-gradient-to-br from-point-50 to-navy-50 border-point-200 p-5">
+          <!-- 관련 도구 — 콘텐츠→행동 연결 CTA -->
+          <div class="card-glass bg-gradient-to-br from-forest-50 to-point-50 border-forest-200 p-5">
             <h3 class="font-bold text-navy-900 mb-4 flex items-center gap-2">
-              <span class="material-symbols-outlined text-point-600">build</span>
-              관련 도구
+              <span class="material-symbols-outlined text-forest-600">build</span>
+              바로 사용하기
             </h3>
             <div class="space-y-3">
-              <a href="/forms/견적서검토.html" target="_blank"
-                 class="block p-4 bg-white rounded-xl border border-point-100 hover:border-point-300 hover:shadow-medium transition-all duration-200">
+              <%= link_to contract_method_path,
+                  class: "block p-4 bg-white rounded-xl border border-forest-100 hover:border-forest-300 hover:shadow-medium transition-all duration-200 group" do %>
                 <div class="flex items-center gap-3">
-                  <div class="icon-container icon-container-sm bg-point-100">
-                    <span class="material-symbols-outlined text-point-600">fact_check</span>
+                  <div class="icon-container icon-container-sm bg-forest-100 group-hover:bg-forest-600 transition-colors">
+                    <span class="material-symbols-outlined text-forest-600 group-hover:text-white transition-colors">gavel</span>
                   </div>
                   <div>
-                    <div class="font-semibold text-navy-900 text-sm">견적서 검토</div>
-                    <div class="text-xs text-navy-500">AI 자동 분석</div>
-                  </div>
-                </div>
-              </a>
-              <%= link_to travel_calculator_path,
-                  class: "block p-4 bg-white rounded-xl border border-point-100 hover:border-point-300 hover:shadow-medium transition-all duration-200" do %>
-                <div class="flex items-center gap-3">
-                  <div class="icon-container icon-container-sm bg-navy-100">
-                    <span class="material-symbols-outlined text-navy-600">calculate</span>
-                  </div>
-                  <div>
-                    <div class="font-semibold text-navy-900 text-sm">여비계산기</div>
-                    <div class="text-xs text-navy-500">출장 여비 계산</div>
+                    <div class="font-semibold text-navy-900 text-sm">계약방식 결정</div>
+                    <div class="text-xs text-navy-500">금액 입력 → 방식 바로 확인</div>
                   </div>
                 </div>
               <% end %>
+              <%= link_to contract_documents_path,
+                  class: "block p-4 bg-white rounded-xl border border-point-100 hover:border-point-300 hover:shadow-medium transition-all duration-200 group" do %>
+                <div class="flex items-center gap-3">
+                  <div class="icon-container icon-container-sm bg-point-100 group-hover:bg-point-600 transition-colors">
+                    <span class="material-symbols-outlined text-point-600 group-hover:text-white transition-colors">fact_check</span>
+                  </div>
+                  <div>
+                    <div class="font-semibold text-navy-900 text-sm">서류 체크리스트</div>
+                    <div class="text-xs text-navy-500">필요 서류 원클릭 생성</div>
+                  </div>
+                </div>
+              <% end %>
+              <%= link_to budget_estimator_path,
+                  class: "block p-4 bg-white rounded-xl border border-navy-100 hover:border-navy-300 hover:shadow-medium transition-all duration-200 group" do %>
+                <div class="flex items-center gap-3">
+                  <div class="icon-container icon-container-sm bg-navy-100 group-hover:bg-navy-600 transition-colors">
+                    <span class="material-symbols-outlined text-navy-600 group-hover:text-white transition-colors">calculate</span>
+                  </div>
+                  <div>
+                    <div class="font-semibold text-navy-900 text-sm">소요예산 추정</div>
+                    <div class="text-xs text-navy-500">대략적인 예산 미리 산출</div>
+                  </div>
+                </div>
+              <% end %>
+              <a href="/forms/견적서검토.html" target="_blank"
+                 class="block p-4 bg-white rounded-xl border border-warm-100 hover:border-warm-300 hover:shadow-medium transition-all duration-200 group">
+                <div class="flex items-center gap-3">
+                  <div class="icon-container icon-container-sm bg-warm-100 group-hover:bg-warm-500 transition-colors">
+                    <span class="material-symbols-outlined text-warm-600 group-hover:text-white transition-colors">receipt_long</span>
+                  </div>
+                  <div>
+                    <div class="font-semibold text-navy-900 text-sm">견적서 검토</div>
+                    <div class="text-xs text-navy-500">견적서 적정성 자동 분석</div>
+                  </div>
+                </div>
+              </a>
             </div>
           </div>
 

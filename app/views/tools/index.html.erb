@@ -15,87 +15,82 @@
   </div>
 </section>
 
-<!-- 카테고리 탭 -->
-<section class="bg-white/80 backdrop-blur-xl border-b border-gray-100 sticky top-16 z-40 shadow-soft">
-  <div class="container-wide">
-    <div class="flex gap-2 overflow-x-auto py-4 scrollbar-hide" id="category-tabs">
-      <button data-category="전체" class="tab-btn active px-6 py-2.5 bg-point-600 text-white rounded-xl text-sm font-semibold whitespace-nowrap shadow-md transition-all">전체</button>
-      <button data-category="문서 도구" class="tab-btn px-6 py-2.5 bg-surface-100 text-navy-600 hover:bg-surface-200 rounded-xl text-sm font-medium transition-all whitespace-nowrap">문서 도구</button>
-      <button data-category="계산기" class="tab-btn px-6 py-2.5 bg-surface-100 text-navy-600 hover:bg-surface-200 rounded-xl text-sm font-medium transition-all whitespace-nowrap">계산기</button>
-      <button data-category="AI 도구" class="tab-btn px-6 py-2.5 bg-surface-100 text-navy-600 hover:bg-surface-200 rounded-xl text-sm font-medium transition-all whitespace-nowrap">AI 도구</button>
-      <button data-category="체크리스트" class="tab-btn px-6 py-2.5 bg-surface-100 text-navy-600 hover:bg-surface-200 rounded-xl text-sm font-medium transition-all whitespace-nowrap">체크리스트</button>
-    </div>
-  </div>
-</section>
-
-<!-- 도구 그리드 -->
+<!-- 활성 도구 그리드 -->
 <section class="section py-12">
   <div class="container-wide">
-    <div class="flex items-center justify-between mb-6">
-      <p class="text-navy-600">총 <span class="font-bold text-navy-900" id="item-count">13</span>개의 도구</p>
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h2 class="text-xl font-bold text-navy-900">바로 사용 가능한 도구</h2>
+        <p class="text-navy-500 text-sm mt-1">클릭하면 바로 사용할 수 있습니다</p>
+      </div>
+      <span class="badge badge-point"><span class="font-bold">7</span>개 도구</span>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="items-grid">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       <% [
+        { title: "계약방식 결정 도우미", desc: "추정가격과 계약유형으로 적정 계약방식과 필요서류를 확인합니다.", icon: "gavel", color: "forest", category: "AI 도구", path: contract_method_path, badge: "인기" },
+        { title: "계약서류 원클릭 생성기", desc: "물품/용역/공사별 필수 계약서류 체크리스트를 자동 생성합니다.", icon: "fact_check", color: "navy", category: "문서 도구", path: contract_documents_path, badge: "NEW" },
+        { title: "소요예산 추정기", desc: "소규모 공사/용역 시행 전 대략적인 예산을 미리 추정합니다.", icon: "calculate", color: "point", category: "계산기", path: budget_estimator_path, badge: "NEW" },
         { title: "견적서 검토 도구", desc: "견적서의 적정성을 자동으로 검토합니다.", icon: "fact_check", color: "point", category: "문서 도구", path: "/forms/견적서검토.html", badge: "인기" },
         { title: "과업지시서 생성기", desc: "과업지시서를 단계별로 작성하고 다운로드합니다.", icon: "description", color: "forest", category: "문서 도구", path: "/forms/과업지시서.html", badge: "NEW" },
-        { title: "소요예산 추정기", desc: "소규모 공사/용역 시행 전 대략적인 예산을 미리 추정합니다.", icon: "calculate", color: "point", category: "계산기", path: budget_estimator_path, badge: "NEW" },
-        { title: "계약서류 원클릭 생성기", desc: "물품/용역/공사별 필수 계약서류 체크리스트를 자동 생성합니다.", icon: "fact_check", color: "navy", category: "문서 도구", path: contract_documents_path, badge: "NEW" },
-        { title: "계약방식 결정 도우미", desc: "추정가격과 계약유형으로 적정 계약방식과 필요서류를 확인합니다.", icon: "gavel", color: "forest", category: "AI 도구", path: contract_method_path, badge: "NEW" },
         { title: "PDF 도구", desc: "PDF 분할, 합치기, 쪽번호 매기기를 간편하게 처리합니다.", icon: "picture_as_pdf", color: "warm", category: "문서 도구", path: pdf_tools_path },
         { title: "여비계산기", desc: "출장 여비(운임, 숙박비, 식비, 일비)를 자동으로 계산합니다.", icon: "directions_car", color: "point", category: "계산기", path: travel_calculator_path },
-        { title: "초과근무수당 계산기", desc: "시간외근무, 야간근무, 휴일근무 수당을 계산합니다.", icon: "schedule", color: "forest", category: "계산기", path: nil, coming_soon: true },
-        { title: "연가일수 계산기", desc: "재직기간에 따른 연가일수를 자동 계산합니다.", icon: "event_available", color: "navy", category: "계산기", path: nil, coming_soon: true },
-        { title: "공문서 AI 작성 도우미", desc: "AI가 공문서 초안을 작성해 드립니다.", icon: "auto_awesome", color: "warm", category: "AI 도구", path: nil, coming_soon: true },
-        { title: "예정가격 계산기", desc: "복수예비가격 및 예정가격을 산출합니다.", icon: "calculate", color: "forest", category: "계산기", path: nil, coming_soon: true },
-        { title: "계약 체크리스트", desc: "계약 단계별 필수 확인사항을 점검합니다.", icon: "checklist", color: "warm", category: "체크리스트", path: nil, coming_soon: true },
-        { title: "수의계약 판단기", desc: "수의계약 가능 여부를 자동으로 판단합니다.", icon: "gavel", color: "point", category: "AI 도구", path: nil, coming_soon: true },
-        { title: "법정기간 계산기", desc: "행정처분, 소송 등의 법정기간을 계산합니다.", icon: "calendar_month", color: "navy", category: "계산기", path: nil, coming_soon: true },
       ].each do |tool| %>
-        <% if tool[:coming_soon] %>
-          <div class="group card card-interactive p-6 relative overflow-hidden item-card cursor-pointer opacity-75" data-category="<%= tool[:category] %>" data-title="<%= tool[:title] %>" onclick="alert('이 도구는 준비 중입니다.')">
-            <span class="absolute top-4 right-4 badge bg-gray-200 text-gray-600">준비중</span>
-
-            <div class="icon-container icon-container-lg bg-gray-100 mb-4">
-              <span class="material-symbols-outlined text-3xl text-gray-400"><%= tool[:icon] %></span>
-            </div>
-
-            <span class="text-xs font-semibold text-navy-400 mb-2 block"><%= tool[:category] %></span>
-            <h3 class="text-lg font-bold text-navy-900 mb-2"><%= tool[:title] %></h3>
-            <p class="text-navy-600 text-sm leading-relaxed"><%= tool[:desc] %></p>
-
-            <div class="mt-4 flex items-center text-gray-400 text-sm font-semibold">
-              준비중
-              <span class="material-symbols-outlined text-lg ml-1">hourglass_empty</span>
-            </div>
-          </div>
-        <% else %>
-          <%= link_to tool[:path], class: "group card card-interactive p-6 relative overflow-hidden item-card", data: { category: tool[:category], title: tool[:title] } do %>
-            <% if tool[:badge] %>
-              <span class="absolute top-4 right-4 badge <%= tool[:badge] == 'NEW' ? 'badge-warm' : 'badge-point' %>"><%= tool[:badge] %></span>
-            <% end %>
-
-            <div class="icon-container icon-container-lg bg-<%= tool[:color] %>-100 group-hover:bg-<%= tool[:color] %>-600 transition-colors mb-4">
-              <span class="material-symbols-outlined text-3xl text-<%= tool[:color] %>-600 group-hover:text-white transition-colors"><%= tool[:icon] %></span>
-            </div>
-
-            <span class="text-xs font-semibold text-navy-400 mb-2 block"><%= tool[:category] %></span>
-            <h3 class="text-lg font-bold text-navy-900 mb-2 group-hover:text-<%= tool[:color] %>-600 transition-colors"><%= tool[:title] %></h3>
-            <p class="text-navy-600 text-sm leading-relaxed"><%= tool[:desc] %></p>
-
-            <div class="mt-4 flex items-center text-<%= tool[:color] %>-600 text-sm font-semibold">
-              바로가기
-              <span class="material-symbols-outlined text-lg ml-1 group-hover:translate-x-1 transition-transform">arrow_forward</span>
-            </div>
+        <%= link_to tool[:path], class: "group card card-interactive p-6 relative overflow-hidden", data: { category: tool[:category], title: tool[:title] } do %>
+          <% if tool[:badge] %>
+            <span class="absolute top-4 right-4 badge <%= tool[:badge] == 'NEW' ? 'badge-warm' : 'badge-point' %>"><%= tool[:badge] %></span>
           <% end %>
+
+          <div class="icon-container icon-container-lg bg-<%= tool[:color] %>-100 group-hover:bg-<%= tool[:color] %>-600 transition-colors mb-4">
+            <span class="material-symbols-outlined text-3xl text-<%= tool[:color] %>-600 group-hover:text-white transition-colors"><%= tool[:icon] %></span>
+          </div>
+
+          <span class="text-xs font-semibold text-navy-400 mb-2 block"><%= tool[:category] %></span>
+          <h3 class="text-lg font-bold text-navy-900 mb-2 group-hover:text-<%= tool[:color] %>-600 transition-colors"><%= tool[:title] %></h3>
+          <p class="text-navy-600 text-sm leading-relaxed"><%= tool[:desc] %></p>
+
+          <div class="mt-4 flex items-center text-<%= tool[:color] %>-600 text-sm font-semibold">
+            바로 사용
+            <span class="material-symbols-outlined text-lg ml-1 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+          </div>
         <% end %>
       <% end %>
     </div>
   </div>
 </section>
 
+<!-- 곧 추가될 도구 -->
+<section class="py-12 bg-surface-50">
+  <div class="container-wide">
+    <div class="flex items-center gap-3 mb-6">
+      <span class="material-symbols-outlined text-navy-400">hourglass_empty</span>
+      <h2 class="text-lg font-bold text-navy-600">곧 추가될 도구</h2>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+      <% [
+        { title: "초과근무수당 계산기", icon: "schedule", category: "계산기" },
+        { title: "연가일수 계산기", icon: "event_available", category: "계산기" },
+        { title: "예정가격 계산기", icon: "calculate", category: "계산기" },
+        { title: "법정기간 계산기", icon: "calendar_month", category: "계산기" },
+        { title: "공문서 AI 작성 도우미", icon: "auto_awesome", category: "AI 도구" },
+        { title: "수의계약 판단기", icon: "gavel", category: "AI 도구" },
+        { title: "계약 체크리스트", icon: "checklist", category: "체크리스트" },
+      ].each do |tool| %>
+        <div class="flex items-center gap-3 px-4 py-3 bg-white rounded-xl border border-gray-100">
+          <span class="material-symbols-outlined text-xl text-navy-300"><%= tool[:icon] %></span>
+          <div>
+            <h4 class="text-sm font-semibold text-navy-700"><%= tool[:title] %></h4>
+            <span class="text-xs text-navy-400"><%= tool[:category] %></span>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+
 <!-- CTA -->
-<section class="py-16 bg-surface-100">
+<section class="py-16 bg-white">
   <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
     <div class="icon-container icon-container-lg bg-point-100 mx-auto mb-6">
       <span class="material-symbols-outlined text-3xl text-point-600">lightbulb</span>
@@ -108,47 +103,3 @@
     </button>
   </div>
 </section>
-
-<script>
-document.addEventListener('turbo:load', function() {
-  const tabs = document.querySelectorAll('#category-tabs .tab-btn');
-  const items = document.querySelectorAll('.item-card');
-  const itemCount = document.getElementById('item-count');
-
-  function filterItems() {
-    const activeTab = document.querySelector('#category-tabs .tab-btn.active');
-    const category = activeTab ? activeTab.dataset.category : '전체';
-    let visibleCount = 0;
-
-    items.forEach(item => {
-      const itemCategory = item.dataset.category;
-      const matchesCategory = category === '전체' || itemCategory === category;
-
-      if (matchesCategory) {
-        item.style.display = '';
-        visibleCount++;
-      } else {
-        item.style.display = 'none';
-      }
-    });
-
-    itemCount.textContent = visibleCount;
-  }
-
-  tabs.forEach(tab => {
-    tab.addEventListener('click', function() {
-      // 모든 탭 비활성화
-      tabs.forEach(t => {
-        t.classList.remove('active', 'bg-point-600', 'text-white', 'shadow-md');
-        t.classList.add('bg-surface-100', 'text-navy-600');
-      });
-
-      // 클릭된 탭 활성화
-      this.classList.add('active', 'bg-point-600', 'text-white', 'shadow-md');
-      this.classList.remove('bg-surface-100', 'text-navy-600');
-
-      filterItems();
-    });
-  });
-});
-</script>

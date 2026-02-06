@@ -1,4 +1,4 @@
-<!-- Hero Section -->
+<!-- Hero Section — 검색 + 금액 입력 위젯 통합 -->
 <section class="relative overflow-hidden gradient-premium text-white">
   <!-- Background Pattern -->
   <div class="absolute inset-0 opacity-30">
@@ -22,25 +22,35 @@
       </h1>
 
       <!-- Subheadline -->
-      <p class="text-xl md:text-2xl text-navy-200 mb-12 max-w-2xl mx-auto leading-relaxed animate-fade-in">
-        업무 효율을 높이고 워라밸을 지키는<br class="hidden sm:block">
-        공무원 실무 가이드 플랫폼
+      <p class="text-xl md:text-2xl text-navy-200 mb-10 max-w-2xl mx-auto leading-relaxed animate-fade-in">
+        복잡하고 귀찮은 업무, 도구가 대신 해결합니다
       </p>
 
-      <!-- CTA Buttons -->
-      <div class="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up">
-        <%= link_to new_user_registration_path, class: "btn btn-lg btn-accent hover-glow-forest" do %>
-          <span class="material-symbols-outlined">rocket_launch</span>
-          바로 시작하기
-        <% end %>
-        <%= link_to "#features", class: "btn btn-lg btn-glass" do %>
-          <span class="material-symbols-outlined">explore</span>
-          둘러보기
-        <% end %>
+      <!-- 검색 위젯 (챗봇 통합) -->
+      <div class="max-w-2xl mx-auto animate-slide-up">
+        <form action="<%= chatbot_search_path %>" method="get" data-turbo="false" class="relative">
+          <div class="flex items-center bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 hover:border-white/40 transition-all focus-within:border-forest-400 focus-within:bg-white/15">
+            <span class="material-symbols-outlined text-navy-300 ml-5">search</span>
+            <input type="text" name="query" placeholder="궁금한 업무를 검색하세요 (예: 수의계약, 예산이월, 출장비)" class="flex-1 bg-transparent text-white placeholder-navy-300 px-4 py-4 md:py-5 text-lg outline-none">
+            <button type="submit" class="btn btn-accent mr-2 px-6">검색</button>
+          </div>
+        </form>
+        <!-- 인기 검색어 -->
+        <div class="flex flex-wrap justify-center gap-2 mt-4">
+          <% %w[수의계약 예산이월 출장비 연말정산 긴급계약 소액수의].each do |keyword| %>
+            <%= link_to chatbot_search_path(query: keyword), class: "px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-full text-sm text-white/80 hover:text-white transition-all", data: { turbo: false } do %>
+              <%= keyword %>
+            <% end %>
+          <% end %>
+        </div>
       </div>
 
       <!-- Stats -->
-      <div class="grid grid-cols-3 gap-8 mt-16 pt-16 border-t border-white/10">
+      <div class="grid grid-cols-3 gap-8 mt-14 pt-14 border-t border-white/10">
+        <div class="text-center">
+          <div class="text-3xl md:text-4xl font-bold text-white mb-2">7+</div>
+          <div class="text-navy-300 text-sm">자동화 도구</div>
+        </div>
         <div class="text-center">
           <div class="text-3xl md:text-4xl font-bold text-white mb-2">10+</div>
           <div class="text-navy-300 text-sm">업무 가이드</div>
@@ -48,10 +58,6 @@
         <div class="text-center">
           <div class="text-3xl md:text-4xl font-bold text-white mb-2">50+</div>
           <div class="text-navy-300 text-sm">서식/양식</div>
-        </div>
-        <div class="text-center">
-          <div class="text-3xl md:text-4xl font-bold text-white mb-2">5+</div>
-          <div class="text-navy-300 text-sm">실무 도구</div>
         </div>
       </div>
     </div>
@@ -65,134 +71,112 @@
   </div>
 </section>
 
-<!-- Features Section -->
-<section id="features" class="section bg-surface-50">
+<!-- 핵심 도구 Section — 바로 사용 가능한 형태 (최상단) -->
+<section id="tools" class="section bg-surface-50">
   <div class="container-wide">
     <!-- Section Header -->
-    <div class="text-center mb-16 md:mb-20">
-      <span class="badge badge-navy mb-4">핵심 가치</span>
-      <h2 class="text-navy-900 mb-6">실무가 제공하는 가치</h2>
-      <p class="text-xl text-navy-600 max-w-2xl mx-auto">
-        복잡한 공직 생활, 실무와 함께라면 쉬워집니다
+    <div class="text-center mb-12 md:mb-16">
+      <span class="badge badge-point mb-4">자동화 도구</span>
+      <h2 class="text-navy-900 mb-4">바로 사용하는 실무 도구</h2>
+      <p class="text-lg text-navy-600 max-w-2xl mx-auto">
+        복잡하고 시간 걸리는 업무, 클릭 한 번으로 해결하세요
       </p>
     </div>
 
-    <!-- Feature Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <!-- Feature 1: 감사 걱정 없는 → 가이드/챗봇 -->
-      <%= link_to chatbot_path, class: "card card-interactive p-8 group" do %>
-        <div class="icon-container icon-container-lg bg-navy-100 group-hover:bg-navy-600 mb-6 transition-colors duration-300">
-          <span class="material-symbols-outlined text-3xl text-navy-600 group-hover:text-white transition-colors">verified_user</span>
-        </div>
-        <h3 class="text-xl font-bold text-navy-900 mb-4 group-hover:text-navy-700 transition-colors">감사 걱정 없는</h3>
-        <p class="text-navy-600 leading-relaxed">
-          법령과 규정에 맞는 업무 처리 가이드로 감사 지적 걱정 없이 자신있게 일하세요.
-        </p>
-        <div class="mt-4 flex items-center text-navy-500 group-hover:text-navy-700 text-sm font-medium transition-colors">
-          AI 업무 도우미 바로가기
-          <span class="material-symbols-outlined text-lg ml-1 group-hover:translate-x-1 transition-transform">arrow_forward</span>
-        </div>
-      <% end %>
-
-      <!-- Feature 2: 퇴근 있는 → 도구 -->
-      <%= link_to tools_path, class: "card card-interactive p-8 group" do %>
-        <div class="icon-container icon-container-lg bg-forest-100 group-hover:bg-forest-600 mb-6 transition-colors duration-300">
-          <span class="material-symbols-outlined text-3xl text-forest-600 group-hover:text-white transition-colors">home</span>
-        </div>
-        <h3 class="text-xl font-bold text-navy-900 mb-4 group-hover:text-forest-700 transition-colors">퇴근 있는</h3>
-        <p class="text-navy-600 leading-relaxed">
-          효율적인 업무 도구와 템플릿으로 야근을 줄이고 정시 퇴근하는 일상을 되찾으세요.
-        </p>
-        <div class="mt-4 flex items-center text-forest-600 group-hover:text-forest-700 text-sm font-medium transition-colors">
-          실무 도구 바로가기
-          <span class="material-symbols-outlined text-lg ml-1 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+    <!-- 주요 도구 3개 — 큰 카드 -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <!-- 계약방식 결정 -->
+      <%= link_to contract_method_path, class: "group card card-interactive p-8 border-2 border-transparent hover:border-forest-400 relative overflow-hidden" do %>
+        <div class="absolute top-0 right-0 w-32 h-32 bg-forest-500/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+        <div class="relative">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="icon-container icon-container-lg bg-forest-100 group-hover:bg-forest-600 transition-colors">
+              <span class="material-symbols-outlined text-2xl text-forest-600 group-hover:text-white transition-colors">gavel</span>
+            </div>
+            <span class="badge badge-forest">인기</span>
+          </div>
+          <h3 class="text-xl font-bold text-navy-900 group-hover:text-forest-700 mb-2 transition-colors">계약방식 결정</h3>
+          <p class="text-navy-500 text-sm mb-4 leading-relaxed">금액과 유형을 입력하면 입찰/수의계약 방식을 바로 판단합니다</p>
+          <span class="inline-flex items-center gap-1 text-forest-600 text-sm font-semibold group-hover:gap-2 transition-all">
+            바로 사용 <span class="material-symbols-outlined text-lg">arrow_forward</span>
+          </span>
         </div>
       <% end %>
 
-      <!-- Feature 3: 은퇴 준비되는 → 준비중 -->
-      <div class="card p-8 group relative overflow-hidden">
-        <div class="absolute top-4 right-4">
-          <span class="badge badge-warm">준비중</span>
+      <!-- 계약서류 원클릭 생성 -->
+      <%= link_to contract_documents_path, class: "group card card-interactive p-8 border-2 border-transparent hover:border-point-400 relative overflow-hidden" do %>
+        <div class="absolute top-0 right-0 w-32 h-32 bg-point-500/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+        <div class="relative">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="icon-container icon-container-lg bg-point-100 group-hover:bg-point-600 transition-colors">
+              <span class="material-symbols-outlined text-2xl text-point-600 group-hover:text-white transition-colors">fact_check</span>
+            </div>
+            <span class="badge badge-point">NEW</span>
+          </div>
+          <h3 class="text-xl font-bold text-navy-900 group-hover:text-point-700 mb-2 transition-colors">계약서류 원클릭 생성</h3>
+          <p class="text-navy-500 text-sm mb-4 leading-relaxed">물품/용역/공사별 필수 서류 체크리스트를 자동으로 만들어줍니다</p>
+          <span class="inline-flex items-center gap-1 text-point-600 text-sm font-semibold group-hover:gap-2 transition-all">
+            바로 사용 <span class="material-symbols-outlined text-lg">arrow_forward</span>
+          </span>
         </div>
-        <div class="icon-container icon-container-lg bg-warm-100 mb-6">
-          <span class="material-symbols-outlined text-3xl text-warm-600">savings</span>
-        </div>
-        <h3 class="text-xl font-bold text-navy-900 mb-4">은퇴 준비되는</h3>
-        <p class="text-navy-600 leading-relaxed">
-          연금, 재테크, 전직 준비까지 안정적인 미래를 위한 정보를 제공합니다.
-        </p>
-        <div class="mt-4 flex items-center text-navy-400 text-sm font-medium">
-          곧 서비스 예정
-          <span class="material-symbols-outlined text-lg ml-1">schedule</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+      <% end %>
 
-<!-- Tools Section -->
-<section id="tools" class="section bg-white">
-  <div class="container-wide">
-    <!-- Section Header -->
-    <div class="text-center mb-16 md:mb-20">
-      <span class="badge badge-point mb-4">실무 도구</span>
-      <h2 class="text-navy-900 mb-6">업무 효율을 높이는 도구</h2>
-      <p class="text-xl text-navy-600 max-w-2xl mx-auto">
-        복잡하고 번거로운 업무, 도구가 대신 해결해드립니다
-      </p>
+      <!-- 소요예산 추정기 -->
+      <%= link_to budget_estimator_path, class: "group card card-interactive p-8 border-2 border-transparent hover:border-navy-400 relative overflow-hidden" do %>
+        <div class="absolute top-0 right-0 w-32 h-32 bg-navy-500/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+        <div class="relative">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="icon-container icon-container-lg bg-navy-100 group-hover:bg-navy-600 transition-colors">
+              <span class="material-symbols-outlined text-2xl text-navy-600 group-hover:text-white transition-colors">calculate</span>
+            </div>
+            <span class="badge badge-navy">NEW</span>
+          </div>
+          <h3 class="text-xl font-bold text-navy-900 group-hover:text-navy-700 mb-2 transition-colors">소요예산 추정기</h3>
+          <p class="text-navy-500 text-sm mb-4 leading-relaxed">공사/용역/물품의 대략적인 소요예산을 미리 추정합니다</p>
+          <span class="inline-flex items-center gap-1 text-navy-600 text-sm font-semibold group-hover:gap-2 transition-all">
+            바로 사용 <span class="material-symbols-outlined text-lg">arrow_forward</span>
+          </span>
+        </div>
+      <% end %>
     </div>
 
-    <!-- Tools Grid -->
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
-      <!-- Tool 1 - 사전 체크리스트 -->
-      <%= link_to pre_contract_checklist_path, class: "group card card-interactive p-6 md:p-8 bg-gradient-to-br from-forest-50 to-emerald-50 border-2 border-forest-200 hover:border-forest-400" do %>
-        <div class="icon-container icon-container-lg bg-forest-100 group-hover:bg-forest-600 mb-5 transition-colors">
-          <span class="material-symbols-outlined text-2xl text-forest-600 group-hover:text-white transition-colors">checklist_rtl</span>
+    <!-- 보조 도구 4개 — 작은 카드 -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <%= link_to pdf_tools_path, class: "group card card-interactive p-5 text-center" do %>
+        <div class="icon-container bg-warm-100 group-hover:bg-warm-500 mx-auto mb-3 transition-colors">
+          <span class="material-symbols-outlined text-xl text-warm-600 group-hover:text-white transition-colors">picture_as_pdf</span>
         </div>
-        <h3 class="font-bold text-navy-900 group-hover:text-forest-700 mb-2 transition-colors">사전 체크리스트</h3>
-        <p class="text-navy-500 text-sm mb-3">계약 전 필수 점검</p>
-        <span class="badge badge-forest text-[10px]">NEW</span>
+        <h4 class="font-bold text-navy-900 text-sm group-hover:text-warm-700 transition-colors">PDF 도구</h4>
+        <p class="text-navy-500 text-xs mt-1">분할·합치기·쪽번호</p>
       <% end %>
 
-      <!-- Tool 2 - 계약방식 결정 -->
-      <%= link_to contract_method_path, class: "group card card-interactive p-6 md:p-8" do %>
-        <div class="icon-container icon-container-lg bg-navy-100 group-hover:bg-navy-600 mb-5 transition-colors">
-          <span class="material-symbols-outlined text-2xl text-navy-600 group-hover:text-white transition-colors">gavel</span>
+      <%= link_to travel_calculator_path, class: "group card card-interactive p-5 text-center" do %>
+        <div class="icon-container bg-point-100 group-hover:bg-point-600 mx-auto mb-3 transition-colors">
+          <span class="material-symbols-outlined text-xl text-point-600 group-hover:text-white transition-colors">directions_car</span>
         </div>
-        <h3 class="font-bold text-navy-900 group-hover:text-navy-700 mb-2 transition-colors">계약방식 결정</h3>
-        <p class="text-navy-500 text-sm">입찰/수의계약 판단</p>
+        <h4 class="font-bold text-navy-900 text-sm group-hover:text-point-700 transition-colors">여비계산기</h4>
+        <p class="text-navy-500 text-xs mt-1">출장비 자동 계산</p>
       <% end %>
 
-      <!-- Tool 3 - 서류 체크리스트 -->
-      <%= link_to contract_documents_path, class: "group card card-interactive p-6 md:p-8" do %>
-        <div class="icon-container icon-container-lg bg-point-100 group-hover:bg-point-600 mb-5 transition-colors">
-          <span class="material-symbols-outlined text-2xl text-point-600 group-hover:text-white transition-colors">fact_check</span>
+      <%= link_to pre_contract_checklist_path, class: "group card card-interactive p-5 text-center" do %>
+        <div class="icon-container bg-forest-100 group-hover:bg-forest-600 mx-auto mb-3 transition-colors">
+          <span class="material-symbols-outlined text-xl text-forest-600 group-hover:text-white transition-colors">checklist_rtl</span>
         </div>
-        <h3 class="font-bold text-navy-900 group-hover:text-point-700 mb-2 transition-colors">서류 체크리스트</h3>
-        <p class="text-navy-500 text-sm">계약서류 원클릭 생성</p>
+        <h4 class="font-bold text-navy-900 text-sm group-hover:text-forest-700 transition-colors">사전 체크리스트</h4>
+        <p class="text-navy-500 text-xs mt-1">계약 전 필수 점검</p>
       <% end %>
 
-      <!-- Tool 4 - 계약 흐름도 -->
-      <%= link_to contract_flow_path, class: "group card card-interactive p-6 md:p-8" do %>
-        <div class="icon-container icon-container-lg bg-warm-100 group-hover:bg-warm-500 mb-5 transition-colors">
-          <span class="material-symbols-outlined text-2xl text-warm-600 group-hover:text-white transition-colors">account_tree</span>
+      <%= link_to contract_flow_path, class: "group card card-interactive p-5 text-center" do %>
+        <div class="icon-container bg-navy-100 group-hover:bg-navy-600 mx-auto mb-3 transition-colors">
+          <span class="material-symbols-outlined text-xl text-navy-600 group-hover:text-white transition-colors">account_tree</span>
         </div>
-        <h3 class="font-bold text-navy-900 group-hover:text-warm-700 mb-2 transition-colors">계약 흐름도</h3>
-        <p class="text-navy-500 text-sm">전체 프로세스 확인</p>
-      <% end %>
-
-      <!-- Tool 5 - 자료실 -->
-      <%= link_to guide_resources_path, class: "group card card-interactive p-6 md:p-8" do %>
-        <div class="icon-container icon-container-lg bg-purple-100 group-hover:bg-purple-600 mb-5 transition-colors">
-          <span class="material-symbols-outlined text-2xl text-purple-600 group-hover:text-white transition-colors">library_books</span>
-        </div>
-        <h3 class="font-bold text-navy-900 group-hover:text-purple-700 mb-2 transition-colors">자료실 / FAQ</h3>
-        <p class="text-navy-500 text-sm">판례해설, 유권해석</p>
+        <h4 class="font-bold text-navy-900 text-sm group-hover:text-navy-700 transition-colors">계약 흐름도</h4>
+        <p class="text-navy-500 text-xs mt-1">전체 프로세스 확인</p>
       <% end %>
     </div>
 
     <!-- CTA -->
-    <div class="text-center mt-12">
+    <div class="text-center mt-10">
       <%= link_to tools_path, class: "inline-flex items-center gap-2 text-point-600 hover:text-point-700 font-semibold transition-colors" do %>
         모든 도구 보기
         <span class="material-symbols-outlined text-xl">arrow_forward</span>
@@ -201,12 +185,53 @@
   </div>
 </section>
 
+<!-- 금액으로 계약방법 바로 찾기 — 인라인 위젯 -->
+<section id="price-finder" class="section bg-white">
+  <div class="container-tight">
+    <div class="card p-8 md:p-10 border-2 border-forest-100 bg-gradient-to-br from-forest-50/50 to-white">
+      <div class="text-center mb-8">
+        <div class="icon-container icon-container-lg bg-forest-100 mx-auto mb-4">
+          <span class="material-symbols-outlined text-3xl text-forest-600">paid</span>
+        </div>
+        <h2 class="text-2xl font-bold text-navy-900 mb-2">금액으로 계약방법 바로 찾기</h2>
+        <p class="text-navy-600">금액과 유형을 선택하면 적정 계약방식을 바로 알려드립니다</p>
+      </div>
+
+      <div class="max-w-lg mx-auto">
+        <div class="flex gap-3 mb-4">
+          <select id="price-category" class="flex-1 px-4 py-3 border border-gray-200 rounded-xl text-navy-700 font-medium focus:border-forest-400 focus:ring-2 focus:ring-forest-100 outline-none transition-all">
+            <option value="goods">물품</option>
+            <option value="service">용역</option>
+            <option value="construction">공사</option>
+          </select>
+          <div class="flex-[2] relative">
+            <input type="text" id="price-input" placeholder="추정가격(부가세 별도)" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-navy-700 font-medium focus:border-forest-400 focus:ring-2 focus:ring-forest-100 outline-none transition-all pr-10">
+            <span class="absolute right-4 top-1/2 -translate-y-1/2 text-navy-400 text-sm">원</span>
+          </div>
+        </div>
+
+        <!-- 빠른 금액 버튼 -->
+        <div class="flex flex-wrap gap-2 mb-6">
+          <% [["1천만원", 10_000_000], ["2천만원", 20_000_000], ["5천만원", 50_000_000], ["1억원", 100_000_000], ["2억원", 200_000_000]].each do |label, val| %>
+            <button type="button" class="price-quick-btn px-3 py-1.5 bg-surface-100 hover:bg-forest-100 text-navy-600 hover:text-forest-700 rounded-lg text-sm font-medium transition-all" data-value="<%= val %>"><%= label %></button>
+          <% end %>
+        </div>
+
+        <!-- 결과 영역 -->
+        <div id="price-result" class="hidden">
+          <div id="price-result-content" class="p-5 rounded-xl border-2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- 업무 도우미 Section -->
-<section id="assistant" class="section bg-surface-50 gradient-mesh">
+<section id="assistant" class="section bg-surface-50">
   <div class="container-wide">
     <!-- Section Header -->
     <div class="text-center mb-16 md:mb-20">
-      <span class="badge badge-point mb-4">업무 도우미</span>
+      <span class="badge badge-navy mb-4">법령 가이드</span>
       <h2 class="text-navy-900 mb-6">주제별 업무 가이드</h2>
       <p class="text-xl text-navy-600 max-w-2xl mx-auto">
         법령 · 서식 · 흐름도를 한눈에
@@ -262,7 +287,7 @@
     </div>
 
     <!-- 기타 가이드 -->
-    <div class="flex flex-wrap justify-center gap-3 mb-12">
+    <div class="flex flex-wrap justify-center gap-3 mb-10">
       <%= link_to "/topics/travel-expense", class: "inline-flex items-center gap-2 px-4 py-2.5 bg-white hover:bg-surface-100 rounded-xl text-sm text-navy-600 hover:text-navy-900 border border-gray-200 hover:border-gray-300 transition-all" do %>
         <span class="text-lg">💼</span>
         출장비
@@ -277,55 +302,9 @@
       <% end %>
     </div>
 
-    <!-- Search CTA -->
-    <div class="text-center">
-      <%= link_to chatbot_path, class: "btn btn-lg btn-point hover-glow-point" do %>
-        <span class="material-symbols-outlined">search</span>
-        업무 검색하기
-      <% end %>
-    </div>
-  </div>
-</section>
-
-<!-- Guides Section -->
-<section id="guides" class="section bg-white">
-  <div class="container-wide">
-    <!-- Section Header -->
-    <div class="text-center mb-16 md:mb-20">
-      <span class="badge badge-forest mb-4">가이드</span>
-      <h2 class="text-navy-900 mb-6">실무 가이드</h2>
-      <p class="text-xl text-navy-600 max-w-2xl mx-auto">
-        선배 공무원의 노하우를 담은 실전 가이드
-      </p>
-    </div>
-
-    <!-- Guide Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      <% [
-        { gradient: "from-navy-600 to-navy-800", icon: "menu_book", badge: "신규 공무원", badge_color: "navy", title: "공무원 첫 출근 완벽 가이드", desc: "첫 출근부터 수습 기간까지 알아야 할 모든 것" },
-        { gradient: "from-forest-500 to-forest-700", icon: "shield", badge: "업무", badge_color: "forest", title: "감사 대비 문서 작성법", desc: "감사원 지적 사례로 배우는 안전한 문서 작성" },
-        { gradient: "from-warm-500 to-orange-600", icon: "account_balance", badge: "재테크", badge_color: "warm", title: "공무원 연금 완벽 정리", desc: "연금 제도부터 최적화 전략까지" }
-      ].each do |guide| %>
-        <article class="group card card-hover overflow-hidden">
-          <div class="h-48 bg-gradient-to-br <%= guide[:gradient] %> flex items-center justify-center group-hover:scale-[1.02] transition-transform duration-500">
-            <span class="material-symbols-outlined text-6xl text-white/90"><%= guide[:icon] %></span>
-          </div>
-          <div class="p-6 md:p-8">
-            <span class="badge badge-<%= guide[:badge_color] %> mb-4"><%= guide[:badge] %></span>
-            <h3 class="font-bold text-lg text-navy-900 mb-3 group-hover:text-<%= guide[:badge_color] %>-600 transition-colors"><%= guide[:title] %></h3>
-            <p class="text-navy-600 text-sm mb-4 leading-relaxed"><%= guide[:desc] %></p>
-            <a href="javascript:void(0)" onclick="alert('해당 가이드는 준비 중입니다.')" class="inline-flex items-center gap-1 text-<%= guide[:badge_color] %>-600 hover:text-<%= guide[:badge_color] %>-700 font-semibold text-sm transition-colors cursor-pointer">
-              읽어보기
-              <span class="material-symbols-outlined text-lg">arrow_forward</span>
-            </a>
-          </div>
-        </article>
-      <% end %>
-    </div>
-
     <!-- CTA -->
-    <div class="text-center mt-12">
-      <%= link_to guides_path, class: "inline-flex items-center gap-2 text-forest-600 hover:text-forest-700 font-semibold transition-colors" do %>
+    <div class="text-center">
+      <%= link_to guides_path, class: "inline-flex items-center gap-2 text-navy-600 hover:text-navy-700 font-semibold transition-colors" do %>
         모든 가이드 보기
         <span class="material-symbols-outlined text-xl">arrow_forward</span>
       <% end %>
@@ -333,87 +312,43 @@
   </div>
 </section>
 
-<!-- Community Section -->
-<section id="community" class="section bg-surface-50">
+<!-- 양식 다운로드 — 인기 양식 빠른 접근 -->
+<section id="templates" class="section bg-white">
   <div class="container-wide">
-    <div class="lg:flex lg:items-center lg:gap-16">
-      <!-- Left Content -->
-      <div class="lg:w-1/2 mb-12 lg:mb-0">
-        <span class="badge badge-point mb-4">커뮤니티</span>
-        <h2 class="text-navy-900 mb-6">함께하면 더 쉬워지는<br>공직 생활</h2>
-        <p class="text-xl text-navy-600 mb-8 leading-relaxed">
-          같은 고민을 나누고, 서로의 경험을 공유하며 함께 성장하세요.
-          익명으로 자유롭게 질문하고 답변할 수 있습니다.
-        </p>
+    <div class="text-center mb-12">
+      <span class="badge badge-forest mb-4">서식/양식</span>
+      <h2 class="text-navy-900 mb-4">자주 쓰는 양식 다운로드</h2>
+      <p class="text-lg text-navy-600">필요할 때 바로 다운받아 사용하세요</p>
+    </div>
 
-        <!-- Features -->
-        <div class="flex flex-wrap gap-3">
-          <% [
-            { icon: "groups", text: "직렬별 게시판" },
-            { icon: "help", text: "익명 Q&A" },
-            { icon: "forum", text: "실무 상담" }
-          ].each do |feature| %>
-            <button onclick="alert('<%= feature[:text] %> 기능은 준비 중입니다.')" class="flex items-center gap-2 bg-white px-4 py-2.5 rounded-xl shadow-soft border border-gray-100 hover:border-point-300 hover:shadow-md transition-all cursor-pointer">
-              <span class="material-symbols-outlined text-point-600"><%= feature[:icon] %></span>
-              <span class="text-navy-700 font-medium text-sm"><%= feature[:text] %></span>
-            </button>
-          <% end %>
-        </div>
-      </div>
-
-      <!-- Right Content - Sample Posts -->
-      <div class="lg:w-1/2">
-        <div class="space-y-4">
-          <!-- Post 1 -->
-          <div class="card p-5">
-            <div class="flex items-center gap-3 mb-3">
-              <div class="w-10 h-10 bg-navy-100 rounded-full flex items-center justify-center">
-                <span class="text-navy-600 font-bold text-sm">익</span>
-              </div>
-              <div class="flex-1">
-                <span class="font-medium text-navy-900">익명의 공무원</span>
-                <span class="text-navy-400 text-sm ml-2">행정직</span>
-              </div>
-            </div>
-            <p class="text-navy-700 leading-relaxed">예산 집행 관련 질문인데요, 12월에 급하게 예산을 사용해야 하는 상황입니다...</p>
-            <div class="flex gap-4 mt-4 text-sm text-navy-500">
-              <span class="flex items-center gap-1">
-                <span class="material-symbols-outlined text-base">chat_bubble</span> 답변 3
-              </span>
-              <span class="flex items-center gap-1">
-                <span class="material-symbols-outlined text-base">favorite</span> 좋아요 12
-              </span>
-            </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+      <% [
+        { icon: "description", title: "물품 구매계약서", color: "navy" },
+        { icon: "fact_check", title: "검수조서", color: "forest" },
+        { icon: "receipt", title: "대금청구서", color: "point" },
+        { icon: "assignment", title: "용역 계약서", color: "warm" },
+        { icon: "checklist", title: "착수신고서", color: "navy" },
+        { icon: "shield", title: "청렴서약서", color: "forest" }
+      ].each do |tmpl| %>
+        <div class="group card card-interactive p-5 text-center cursor-pointer" onclick="alert('양식 다운로드는 양식 페이지에서 이용하실 수 있습니다.')">
+          <div class="icon-container bg-<%= tmpl[:color] %>-100 group-hover:bg-<%= tmpl[:color] %>-600 mx-auto mb-3 transition-colors">
+            <span class="material-symbols-outlined text-xl text-<%= tmpl[:color] %>-600 group-hover:text-white transition-colors"><%= tmpl[:icon] %></span>
           </div>
-
-          <!-- Post 2 -->
-          <div class="card p-5">
-            <div class="flex items-center gap-3 mb-3">
-              <div class="w-10 h-10 bg-forest-100 rounded-full flex items-center justify-center">
-                <span class="text-forest-600 font-bold text-sm">익</span>
-              </div>
-              <div class="flex-1">
-                <span class="font-medium text-navy-900">익명의 공무원</span>
-                <span class="text-navy-400 text-sm ml-2">기술직</span>
-              </div>
-            </div>
-            <p class="text-navy-700 leading-relaxed">7급 승진 준비 중인데, 업무 성과 정리하는 좋은 방법 있을까요?</p>
-            <div class="flex gap-4 mt-4 text-sm text-navy-500">
-              <span class="flex items-center gap-1">
-                <span class="material-symbols-outlined text-base">chat_bubble</span> 답변 8
-              </span>
-              <span class="flex items-center gap-1">
-                <span class="material-symbols-outlined text-base">favorite</span> 좋아요 24
-              </span>
-            </div>
-          </div>
+          <h4 class="font-semibold text-navy-900 text-sm"><%= tmpl[:title] %></h4>
         </div>
-      </div>
+      <% end %>
+    </div>
+
+    <div class="text-center mt-8">
+      <%= link_to templates_path, class: "inline-flex items-center gap-2 text-forest-600 hover:text-forest-700 font-semibold transition-colors" do %>
+        전체 양식 보기
+        <span class="material-symbols-outlined text-xl">arrow_forward</span>
+      <% end %>
     </div>
   </div>
 </section>
 
-<!-- Quiz Section -->
+<!-- Quiz Section (축소, 깔끔하게) -->
 <section id="quiz" class="section gradient-premium text-white relative overflow-hidden">
   <!-- Background -->
   <div class="absolute inset-0">
@@ -442,13 +377,13 @@
 
       <div class="space-y-3 mb-10" id="quiz-options"></div>
 
-      <!-- 결과 메시지 (초기에는 숨김) -->
+      <!-- 결과 메시지 -->
       <div id="quiz-result" class="hidden mb-6 p-4 rounded-xl">
         <p class="font-semibold text-lg" id="result-message"></p>
         <p class="text-sm mt-2 text-navy-100" id="result-explanation"></p>
       </div>
 
-      <!-- 최종 결과 (초기에는 숨김) -->
+      <!-- 최종 결과 -->
       <div id="quiz-final" class="hidden text-center py-8">
         <div class="text-6xl mb-4">🎉</div>
         <h3 class="text-2xl font-bold text-white mb-2">퀴즈 완료!</h3>
@@ -472,143 +407,41 @@
 
       <script>
       document.addEventListener('turbo:load', function() {
-        // 전체 퀴즈 문제 풀 (100개 이상)
         const allQuizData = [
-          // ===== 예산회계 (20문제) =====
-          { category: "예산회계", question: "다음 중 예산의 이월에 해당하지 않는 것은?", options: ["명시이월", "사고이월", "계속비이월", "예비비이월"], answer: 3, explanation: "예비비이월은 존재하지 않는 개념입니다. 예산 이월에는 명시이월, 사고이월, 계속비이월이 있습니다." },
-          { category: "예산회계", question: "다음 중 세출예산의 이용에 해당하는 것은?", options: ["장 간의 상호융통", "관 간의 상호융통", "항 간의 상호융통", "세항 간의 상호융통"], answer: 2, explanation: "이용은 입법과목인 '항' 간의 상호융통을 말하며, 행정과목 간의 융통은 '전용'이라고 합니다." },
+          { category: "예산회계", question: "다음 중 예산의 이월에 해당하지 않는 것은?", options: ["명시이월", "사고이월", "계속비이월", "예비비이월"], answer: 3, explanation: "예비비이월은 존재하지 않는 개념입니다." },
+          { category: "예산회계", question: "다음 중 세출예산의 이용에 해당하는 것은?", options: ["장 간의 상호융통", "관 간의 상호융통", "항 간의 상호융통", "세항 간의 상호융통"], answer: 2, explanation: "이용은 입법과목인 '항' 간의 상호융통을 말합니다." },
           { category: "예산회계", question: "예비비 사용 후 국회 승인을 받아야 하는 기한은?", options: ["다음 연도 정기회 개회 전", "다음 연도 정기회 중", "사용 후 3개월 이내", "사용 후 6개월 이내"], answer: 1, explanation: "예비비 사용 후 다음 연도 정기회 중에 국회의 승인을 받아야 합니다." },
           { category: "예산회계", question: "사고이월의 요건이 아닌 것은?", options: ["연도 내 지출원인행위", "불가피한 사유", "세입세출예산에 명시", "연도 내 지출하지 못한 경비"], answer: 2, explanation: "세입세출예산에 명시하는 것은 명시이월의 요건입니다." },
           { category: "예산회계", question: "예산의 전용이란?", options: ["회계연도 간 이월", "항 간의 상호융통", "세항·목 간의 상호융통", "예비비 사용"], answer: 2, explanation: "전용은 행정과목인 세항·목 간의 상호융통을 말합니다." },
-          { category: "예산회계", question: "계속비의 연한은 최대 몇 년인가?", options: ["3년", "5년", "7년", "10년"], answer: 1, explanation: "계속비의 연한은 그 회계연도로부터 5년 이내로 합니다." },
-          { category: "예산회계", question: "지방자치단체의 예산안 제출 기한은?", options: ["회계연도 개시 40일 전", "회계연도 개시 50일 전", "회계연도 개시 90일 전", "회계연도 개시 120일 전"], answer: 1, explanation: "지방자치단체장은 회계연도 개시 50일 전까지 예산안을 제출해야 합니다." },
-          { category: "예산회계", question: "일상경비의 정산 기한은?", options: ["매월 말", "분기별", "반기별", "회계연도 종료 시"], answer: 0, explanation: "일상경비는 원칙적으로 매월 말까지 정산해야 합니다." },
-          { category: "예산회계", question: "다음 중 예산총계주의 원칙의 예외가 아닌 것은?", options: ["수입대체경비", "전대차관", "차관물자대", "예비비"], answer: 3, explanation: "예비비는 예산총계주의와 관련이 없습니다." },
-          { category: "예산회계", question: "추가경정예산을 편성할 수 있는 사유가 아닌 것은?", options: ["전쟁·대규모 재해", "경기침체로 인한 세입 감소", "법령에 따른 지출 증가", "단순 사업비 증액"], answer: 3, explanation: "단순 사업비 증액은 추경 편성 사유가 아닙니다." },
-          { category: "예산회계", question: "세출예산의 목(目)은 어떤 과목인가?", options: ["입법과목", "행정과목", "통계과목", "관리과목"], answer: 1, explanation: "목(目)은 행정과목으로 행정부가 설정합니다." },
-          { category: "예산회계", question: "예산의 배정이란?", options: ["예산을 편성하는 것", "예산을 심의하는 것", "예산 집행권한을 부여하는 것", "예산을 이월하는 것"], answer: 2, explanation: "배정은 중앙관서에 예산 집행권한을 부여하는 것입니다." },
-          { category: "예산회계", question: "지방자치단체 예비비의 한도는?", options: ["일반회계 예산총액의 1% 이내", "일반회계 예산총액의 3% 이내", "일반회계 예산총액의 5% 이내", "제한 없음"], answer: 0, explanation: "지방자치단체 예비비는 일반회계 예산총액의 1% 이내입니다." },
-          { category: "예산회계", question: "회계연도 독립의 원칙에 대한 설명으로 옳지 않은 것은?", options: ["매 회계연도 경비는 당해연도 세입으로 충당", "전년도 이월금 사용 금지", "명시이월 가능", "사고이월 가능"], answer: 1, explanation: "전년도 이월금은 법정 이월사유에 해당하면 사용 가능합니다." },
-          { category: "예산회계", question: "지출원인행위란?", options: ["현금 지출", "계약 체결", "예산 편성", "예산 배정"], answer: 1, explanation: "지출원인행위는 계약 체결 등 지출의 원인이 되는 행위입니다." },
-          { category: "예산회계", question: "세입세출외현금이 아닌 것은?", options: ["보증금", "보관금", "예비비", "잡종금"], answer: 2, explanation: "예비비는 세출예산에 계상되는 경비입니다." },
-          { category: "예산회계", question: "결산서 제출 기한(지방자치단체)은?", options: ["출납폐쇄 후 60일 이내", "출납폐쇄 후 80일 이내", "출납폐쇄 후 90일 이내", "출납폐쇄 후 120일 이내"], answer: 1, explanation: "지방자치단체장은 출납폐쇄 후 80일 이내에 결산서를 제출해야 합니다." },
-          { category: "예산회계", question: "지방자치단체의 출납폐쇄일은?", options: ["12월 31일", "다음 연도 1월 31일", "다음 연도 2월 말일", "다음 연도 3월 31일"], answer: 2, explanation: "지방자치단체의 출납폐쇄일은 다음 연도 2월 말일입니다." },
-          { category: "예산회계", question: "국고금관리법상 지출의 원칙은?", options: ["현금지출 원칙", "계좌이체 원칙", "수표지출 원칙", "어음지출 원칙"], answer: 1, explanation: "국고금의 지출은 계좌이체를 원칙으로 합니다." },
-          { category: "예산회계", question: "예정가격 작성 시 적용하는 가격 기준이 아닌 것은?", options: ["거래실례가격", "원가계산가격", "감정가격", "희망가격"], answer: 3, explanation: "희망가격은 예정가격 작성 기준이 아닙니다." },
-
-          // ===== 계약 (25문제) =====
-          { category: "계약", question: "물품 구매 시 1인 견적 수의계약이 가능한 추정가격(부가세 별도) 기준은?", options: ["1천만원 이하", "2천만원 이하", "2천만원 이하", "5천만원 이하"], answer: 1, explanation: "물품·용역의 경우 추정가격(부가세 별도) 2천만원 이하일 때 1인 견적 수의계약이 가능합니다." },
-          { category: "계약", question: "2인 이상 견적에 의한 수의계약 시 공사의 추정가격(부가세 별도) 기준은?", options: ["5천만원 초과 1억원 이하", "5천만원 초과 2억원 이하", "1억원 초과 2억원 이하", "2억원 초과 3억원 이하"], answer: 1, explanation: "공사의 경우 5천만원 초과 2억원 이하일 때 2인 이상 견적 수의계약이 가능합니다." },
+          { category: "계약", question: "물품 구매 시 1인 견적 수의계약이 가능한 추정가격(부가세 별도) 기준은?", options: ["1천만원 이하", "2천만원 이하", "3천만원 이하", "5천만원 이하"], answer: 1, explanation: "물품·용역의 경우 추정가격 2천만원 이하일 때 1인 견적 수의계약이 가능합니다." },
           { category: "계약", question: "나라장터 전자입찰 시 입찰공고 기간은 최소 며칠인가?", options: ["5일", "7일", "10일", "14일"], answer: 1, explanation: "전자입찰의 경우 입찰공고 기간은 최소 7일 이상입니다." },
           { category: "계약", question: "계약보증금의 원칙적인 비율은?", options: ["계약금액의 5%", "계약금액의 10%", "계약금액의 15%", "계약금액의 20%"], answer: 1, explanation: "계약보증금은 계약금액의 10% 이상으로 납부해야 합니다." },
-          { category: "계약", question: "하자보수보증금의 최소 비율은?", options: ["계약금액의 2%", "계약금액의 3%", "계약금액의 5%", "계약금액의 10%"], answer: 0, explanation: "하자보수보증금은 계약금액의 2% 이상 10% 이하로 납부합니다." },
-          { category: "계약", question: "2회 유찰 시 수의계약 가능 시 예정가격의 몇 % 이상으로 계약해야 하는가?", options: ["85% 이상", "88% 이상", "90% 이상", "95% 이상"], answer: 1, explanation: "2회 유찰 후 수의계약 시 예정가격의 88% 이상으로 계약해야 합니다." },
           { category: "계약", question: "선금의 지급 한도는?", options: ["계약금액의 50%", "계약금액의 60%", "계약금액의 70%", "계약금액의 80%"], answer: 2, explanation: "선금은 계약금액의 70% 이내에서 지급할 수 있습니다." },
-          { category: "계약", question: "공사의 경우 1인 견적 수의계약이 가능한 추정가격(부가세 별도) 기준은?", options: ["1천만원 이하", "2천만원 이하", "3천만원 이하", "5천만원 이하"], answer: 1, explanation: "공사·물품·용역 모두 추정가격 2천만원 이하일 때 1인 견적 수의계약이 가능합니다. 청년창업·여성·장애인기업 등 특례 대상은 5천만원 이하까지 가능합니다." },
-          { category: "계약", question: "지체상금률의 상한은?", options: ["계약금액의 10%", "계약금액의 15%", "계약금액의 20%", "계약금액의 30%"], answer: 0, explanation: "지체상금은 계약금액의 10%를 초과할 수 없습니다." },
-          { category: "계약", question: "적격심사 시 물품의 가격점수 배점은?", options: ["80점", "85점", "90점", "95점"], answer: 2, explanation: "물품 적격심사 시 가격점수는 90점입니다." },
-          { category: "계약", question: "입찰보증금의 비율은?", options: ["입찰금액의 3%", "입찰금액의 5%", "입찰금액의 7%", "입찰금액의 10%"], answer: 1, explanation: "입찰보증금은 입찰금액의 5% 이상입니다." },
-          { category: "계약", question: "계약의 해제·해지 시 계약보증금은?", options: ["전액 반환", "50% 몰수", "전액 국고귀속", "협의 결정"], answer: 2, explanation: "계약상대자 귀책사유로 해제·해지 시 계약보증금은 국고에 귀속됩니다." },
-          { category: "계약", question: "물품 계약의 하자담보책임 기간은?", options: ["검사 완료 후 6개월", "검사 완료 후 1년", "납품 후 1년", "납품 후 2년"], answer: 1, explanation: "물품의 하자담보책임 기간은 검사 완료 후 1년입니다." },
-          { category: "계약", question: "공사 지체상금률은?", options: ["1일 0.5/1000", "1일 1/1000", "1일 1.5/1000", "1일 2/1000"], answer: 1, explanation: "공사의 지체상금률은 1일 1/1000입니다." },
-          { category: "계약", question: "물품·용역 지체상금률은?", options: ["1일 0.5/1000", "1일 1/1000", "1일 1.5/1000", "1일 2.5/1000"], answer: 2, explanation: "물품·용역의 지체상금률은 1일 1.5/1000입니다." },
-          { category: "계약", question: "수의계약 사유 중 특정인의 기술이 필요한 경우는?", options: ["긴급계약", "특명계약", "지명계약", "일반계약"], answer: 1, explanation: "특정인의 기술·용역이 필요한 경우 특명수의계약이 가능합니다." },
-          { category: "계약", question: "대형공사의 기준 금액은?", options: ["추정가격 100억원 이상", "추정가격 200억원 이상", "추정가격 300억원 이상", "추정가격 500억원 이상"], answer: 2, explanation: "대형공사는 추정가격 300억원 이상인 공사입니다." },
-          { category: "계약", question: "장기계속계약의 총 계약기간 제한은?", options: ["3년", "5년", "7년", "제한 없음"], answer: 3, explanation: "장기계속계약은 총 계약기간 제한이 없습니다." },
-          { category: "계약", question: "계속비계약과 장기계속계약의 차이점은?", options: ["계약기간", "총가계약 여부", "예산편성 방법", "이상 모두"], answer: 3, explanation: "계속비계약은 총가계약, 장기계속계약은 연차별 계약입니다." },
-          { category: "계약", question: "긴급입찰 시 입찰공고 기간은?", options: ["3일", "5일", "7일", "10일"], answer: 1, explanation: "긴급입찰 시 5일까지 공고기간을 단축할 수 있습니다." },
-          { category: "계약", question: "검사조서 작성 시 검사 완료 후 며칠 이내에 작성해야 하는가?", options: ["3일", "5일", "7일", "14일"], answer: 2, explanation: "검사조서는 검사 완료 후 7일 이내에 작성해야 합니다." },
-          { category: "계약", question: "대가 지급 기한(검사조서 작성 후)은?", options: ["3일 이내", "5일 이내", "7일 이내", "14일 이내"], answer: 1, explanation: "대가는 검사조서 작성 후 5일 이내에 지급해야 합니다." },
-          { category: "계약", question: "설계변경으로 인한 계약금액 증감 한도는?", options: ["10% 이내", "20% 이내", "30% 이내", "제한 없음"], answer: 3, explanation: "설계변경으로 인한 계약금액 증감은 법정 제한이 없습니다." },
           { category: "계약", question: "복수예비가격 작성 개수는?", options: ["10개", "15개", "20개", "25개"], answer: 1, explanation: "복수예비가격은 15개를 작성합니다." },
-          { category: "계약", question: "예정가격 결정 시 추첨하는 복수예비가격 개수는?", options: ["2개", "3개", "4개", "5개"], answer: 2, explanation: "15개 중 4개를 추첨하여 산술평균으로 예정가격을 결정합니다." },
-
-          // ===== 복무 (20문제) =====
-          { category: "복무", question: "공무원의 연가 일수 산정 시 재직기간에 포함되지 않는 것은?", options: ["육아휴직 기간", "병가 기간", "공무상 질병휴직", "직위해제 기간"], answer: 3, explanation: "직위해제 기간은 연가 일수 산정을 위한 재직기간에 포함되지 않습니다." },
           { category: "복무", question: "공무원의 병가 일수는 연간 최대 며칠인가?", options: ["30일", "60일", "90일", "120일"], answer: 1, explanation: "공무원의 병가는 연 60일 이내입니다." },
-          { category: "복무", question: "공무원의 경조사 휴가 중 본인 결혼 시 휴가 일수는?", options: ["3일", "5일", "7일", "10일"], answer: 1, explanation: "본인 결혼 시 5일의 경조사 휴가가 부여됩니다." },
           { category: "복무", question: "재직기간 1년 미만 공무원의 연가 일수는?", options: ["8일", "11일", "14일", "15일"], answer: 1, explanation: "재직기간 1년 미만 공무원의 연가 일수는 11일입니다." },
-          { category: "복무", question: "공무원의 출산휴가 일수는?", options: ["60일", "90일", "100일", "120일"], answer: 1, explanation: "공무원의 출산휴가는 출산 전후를 통하여 90일입니다." },
-          { category: "복무", question: "공무원의 육아휴직 기간은 최대 몇 년인가?", options: ["1년", "2년", "3년", "5년"], answer: 2, explanation: "공무원의 육아휴직은 자녀 1명에 대하여 3년 이내입니다." },
-          { category: "복무", question: "시간외근무수당 지급 단가 산정 시 사용하는 분모는?", options: ["174시간", "209시간", "226시간", "243시간"], answer: 1, explanation: "시간외근무수당은 월 봉급액을 209시간으로 나눈 금액을 기준으로 산정합니다." },
-          { category: "복무", question: "재직기간 6년 이상 공무원의 연가 일수는?", options: ["17일", "20일", "21일", "25일"], answer: 2, explanation: "재직기간 6년 이상 공무원의 연가 일수는 21일입니다." },
-          { category: "복무", question: "공무상 병가의 최대 일수는?", options: ["90일", "120일", "150일", "180일"], answer: 3, explanation: "공무상 질병 또는 부상으로 인한 병가는 연 180일 이내입니다." },
           { category: "복무", question: "배우자 출산휴가 일수는?", options: ["5일", "10일", "15일", "20일"], answer: 1, explanation: "배우자 출산휴가는 10일입니다." },
-          { category: "복무", question: "자녀 돌봄 휴가 일수는?", options: ["연 2일", "연 3일", "연 5일", "연 10일"], answer: 0, explanation: "자녀 돌봄 휴가는 연 2일입니다." },
-          { category: "복무", question: "부모 사망 시 경조사 휴가 일수는?", options: ["3일", "5일", "7일", "10일"], answer: 1, explanation: "부모 사망 시 5일의 경조사 휴가가 부여됩니다." },
-          { category: "복무", question: "공무원의 연가보상비 지급 한도는?", options: ["10일", "15일", "20일", "제한 없음"], answer: 2, explanation: "연가보상비는 20일 범위 내에서 지급됩니다." },
-          { category: "복무", question: "특별휴가 중 포상휴가의 최대 일수는?", options: ["5일", "10일", "15일", "20일"], answer: 3, explanation: "포상휴가는 10일 이내, 특별한 공적이 있는 경우 20일 이내입니다." },
-          { category: "복무", question: "공무원의 겸직허가 신청 기한은?", options: ["겸직 시작 7일 전", "겸직 시작 14일 전", "겸직 시작 1개월 전", "수시"], answer: 0, explanation: "겸직허가는 겸직 시작 7일 전까지 신청해야 합니다." },
-          { category: "복무", question: "출장 시 야간근무 또는 휴일근무 명령 없이 귀청한 경우?", options: ["정상 출근", "공가 처리", "연가 처리", "조퇴 처리"], answer: 0, explanation: "출장 중 귀청 시 정상 출근으로 처리됩니다." },
-          { category: "복무", question: "탄력근무제 중 시차출퇴근제의 1일 근무시간은?", options: ["6시간", "7시간", "8시간", "유동적"], answer: 2, explanation: "시차출퇴근제는 1일 8시간 근무하되 출퇴근 시간만 조정합니다." },
-          { category: "복무", question: "원격근무의 유형이 아닌 것은?", options: ["재택근무", "스마트워크근무", "시차출퇴근", "원격지근무"], answer: 2, explanation: "시차출퇴근은 탄력근무제의 유형입니다." },
-          { category: "복무", question: "육아시간의 1일 최대 사용시간은?", options: ["1시간", "2시간", "3시간", "4시간"], answer: 1, explanation: "육아시간은 1일 최대 2시간까지 사용할 수 있습니다." },
-          { category: "복무", question: "가족돌봄휴직의 기간은?", options: ["연 최대 30일", "연 최대 60일", "연 최대 90일", "연 최대 180일"], answer: 2, explanation: "가족돌봄휴직은 연간 최대 90일까지 사용할 수 있습니다." },
-
-          // ===== 인사 (15문제) =====
-          { category: "인사", question: "5급 공무원의 정년은?", options: ["58세", "60세", "62세", "65세"], answer: 1, explanation: "일반직 공무원의 정년은 60세입니다." },
-          { category: "인사", question: "공무원 성과상여금 지급 등급 중 최상위 등급의 지급률은?", options: ["100%", "125%", "150%", "172.5%"], answer: 3, explanation: "성과상여금 S등급의 지급률은 172.5%입니다." },
-          { category: "인사", question: "다음 중 공무원 채용 결격사유에 해당하지 않는 것은?", options: ["금고 이상 형 집행유예 중인 자", "형 집행 종료 후 2년 경과자", "파산 후 미복권자", "파면 후 5년 미경과자"], answer: 1, explanation: "금고 이상의 형 집행 종료 후 2년이 경과하면 결격사유에 해당하지 않습니다." },
-          { category: "인사", question: "공무원 승진소요 최저연수(5급→4급)는?", options: ["2년", "3년", "4년", "5년"], answer: 1, explanation: "5급에서 4급으로 승진하려면 최저 3년이 필요합니다." },
-          { category: "인사", question: "수습임용 기간은?", options: ["3개월", "6개월", "1년", "2년"], answer: 1, explanation: "일반직 공무원의 수습임용 기간은 6개월입니다." },
-          { category: "인사", question: "공무원 징계의 종류가 아닌 것은?", options: ["파면", "해임", "강등", "경고"], answer: 3, explanation: "경고는 징계가 아니라 주의 조치입니다. 징계는 파면, 해임, 강등, 정직, 감봉, 견책입니다." },
-          { category: "인사", question: "강등 처분 시 하위 몇 직급으로 내려가는가?", options: ["1직급", "2직급", "3직급", "해당 직급 최하위"], answer: 0, explanation: "강등은 1계급 아래로 내려가는 처분입니다." },
-          { category: "인사", question: "정직의 최대 기간은?", options: ["1개월", "2개월", "3개월", "6개월"], answer: 2, explanation: "정직은 1개월 이상 3개월 이하입니다." },
-          { category: "인사", question: "감봉의 범위는?", options: ["보수의 1/5, 1개월", "보수의 1/3, 1~3개월", "보수의 1/2, 3개월", "보수의 2/3, 6개월"], answer: 1, explanation: "감봉은 보수의 1/3을 1개월 이상 3개월 이하 감하는 것입니다." },
-          { category: "인사", question: "공무원 특별승진의 사유가 아닌 것은?", options: ["순직", "공적 표창", "근속 승진", "퇴직 전 특별승진"], answer: 2, explanation: "근속승진은 일반승진입니다." },
-          { category: "인사", question: "공무원 교육훈련 중 신규채용자 기본교육 기간은?", options: ["1주", "2주", "3주 이상", "수시"], answer: 2, explanation: "신규채용자 기본교육은 3주 이상입니다." },
-          { category: "인사", question: "당연퇴직 사유가 아닌 것은?", options: ["사망", "국적 상실", "징역형 선고", "1년 이상 휴직"], answer: 3, explanation: "1년 이상 휴직은 당연퇴직 사유가 아닙니다." },
-          { category: "인사", question: "공무원 봉급표상 최고 호봉은?", options: ["20호봉", "25호봉", "30호봉", "31호봉"], answer: 3, explanation: "일반직 공무원 봉급표의 최고 호봉은 31호봉입니다." },
-          { category: "인사", question: "성과계약 체결 대상 직급은?", options: ["3급 이상", "4급 이상", "5급 이상", "6급 이상"], answer: 1, explanation: "성과계약은 4급 이상 공무원이 체결합니다." },
-          { category: "인사", question: "근무성적평정 대상이 아닌 공무원은?", options: ["6급 이하", "수습공무원", "휴직자", "정무직"], answer: 3, explanation: "정무직 공무원은 근무성적평정 대상이 아닙니다." },
-
-          // ===== 문서/민원 (15문제) =====
           { category: "문서", question: "공문서의 보존기간 중 '영구'에 해당하는 것은?", options: ["일반 통계자료", "조례·규칙", "단순 민원서류", "일일업무보고"], answer: 1, explanation: "조례, 규칙 등 법규문서는 영구 보존 대상입니다." },
-          { category: "민원", question: "민원처리법상 단순민원의 처리기한은?", options: ["즉시", "3일 이내", "7일 이내", "14일 이내"], answer: 0, explanation: "단순민원은 즉시 처리해야 합니다." },
-          { category: "문서", question: "공문서 시행문의 수신자가 많을 경우 사용하는 표시는?", options: ["수신자 참조", "수신자 별첨", "수신자 다수", "수신자 일동"], answer: 0, explanation: "수신자가 많을 경우 '수신자 참조'로 표시합니다." },
           { category: "민원", question: "정보공개 청구에 대한 결정 기한은?", options: ["5일 이내", "7일 이내", "10일 이내", "14일 이내"], answer: 2, explanation: "정보공개 청구를 받은 날부터 10일 이내에 공개 여부를 결정해야 합니다." },
-          { category: "문서", question: "결재권자가 출장 시 대결권자가 처리한 문서의 표시는?", options: ["전결", "대결", "후결", "협조"], answer: 1, explanation: "결재권자 부재 시 대결권자가 처리하면 '대결'로 표시합니다." },
-          { category: "문서", question: "전결이란?", options: ["결재권자 부재 시 처리", "결재권 위임에 따른 처리", "사후 결재", "공동 결재"], answer: 1, explanation: "전결은 결재권이 위임되어 하급자가 최종 결재하는 것입니다." },
-          { category: "문서", question: "공문서의 보존기간이 아닌 것은?", options: ["1년", "5년", "15년", "영구"], answer: 2, explanation: "보존기간은 1년, 3년, 5년, 10년, 30년, 영구입니다. 15년은 없습니다." },
-          { category: "민원", question: "민원처리 기간 연장 시 최대 연장 가능 기간은?", options: ["처리기간의 1/2", "처리기간과 동일", "처리기간의 2배", "제한 없음"], answer: 1, explanation: "민원처리 기간은 처리기간의 범위 내에서 한 번 연장할 수 있습니다." },
-          { category: "문서", question: "내부결재 문서란?", options: ["외부로 발송하는 문서", "기관 내부에서만 유통되는 문서", "대외비 문서", "비밀문서"], answer: 1, explanation: "내부결재 문서는 발신명의 없이 기관 내부에서만 유통됩니다." },
-          { category: "민원", question: "복합민원의 처리기간은?", options: ["가장 짧은 기간", "가장 긴 기간", "평균 기간", "합산 기간"], answer: 1, explanation: "복합민원은 처리기간이 가장 긴 민원의 기간을 적용합니다." },
-          { category: "문서", question: "관인 날인 생략이 가능한 경우가 아닌 것은?", options: ["전자문서", "인쇄물 대량발송", "계약서", "경미한 사항"], answer: 2, explanation: "계약서 등 중요 문서에는 관인 날인이 필요합니다." },
-          { category: "민원", question: "민원 1회 방문 처리제란?", options: ["모든 민원을 1일 처리", "민원인의 방문을 1회로 처리", "담당자 1인 처리", "1개 창구 처리"], answer: 1, explanation: "민원 1회 방문 처리제는 민원인이 1회 방문으로 민원을 처리받는 제도입니다." },
-          { category: "문서", question: "문서의 효력 발생 시기(시행문)는?", options: ["결재일", "시행일", "수신자 도달일", "작성일"], answer: 2, explanation: "문서의 효력은 수신자에게 도달한 때 발생합니다." },
-          { category: "민원", question: "정보공개 청구 시 공개 대상이 아닌 것은?", options: ["예산 집행 내역", "공무원 인사기록", "정책연구보고서", "회의록"], answer: 1, explanation: "개인정보인 공무원 인사기록은 비공개 대상입니다." },
-          { category: "문서", question: "기안문 작성 시 '붙임'의 위치는?", options: ["제목 아래", "본문 아래", "발신명의 아래", "시행일자 아래"], answer: 1, explanation: "붙임은 본문이 끝난 다음 줄에 표시합니다." },
-
-          // ===== 회계/감사 (10문제) =====
-          { category: "회계", question: "세입금의 반환 사유가 아닌 것은?", options: ["과오납금", "이중 수납", "법률에 따른 반환", "예산 부족"], answer: 3, explanation: "예산 부족은 세입금 반환 사유가 아닙니다." },
-          { category: "회계", question: "출납공무원의 변상책임이 면제되는 경우는?", options: ["과실", "착오", "불가항력", "부주의"], answer: 2, explanation: "불가항력에 의한 경우 출납공무원의 변상책임이 면제됩니다." },
-          { category: "회계", question: "세입징수관의 직무가 아닌 것은?", options: ["세입의 조사", "세입의 결정", "세입의 징수", "세입의 지출"], answer: 3, explanation: "세입의 지출은 지출관의 직무입니다." },
-          { category: "감사", question: "자체감사의 종류가 아닌 것은?", options: ["종합감사", "특정감사", "복무감사", "일상감사"], answer: 2, explanation: "복무감사는 별도의 감사 유형이 아닙니다." },
-          { category: "회계", question: "관서운영경비란?", options: ["사업비", "인건비", "청사 운영비", "예비비"], answer: 2, explanation: "관서운영경비는 청사 유지·관리 등에 사용하는 경비입니다." },
           { category: "감사", question: "일상감사 대상이 아닌 것은?", options: ["계약", "예산 전용", "국고보조금 교부", "일반 민원처리"], answer: 3, explanation: "일반 민원처리는 일상감사 대상이 아닙니다." },
-          { category: "회계", question: "국고금의 이자율이 적용되지 않는 것은?", options: ["보증금", "보관금", "운용잔액", "예탁금"], answer: 1, explanation: "보관금은 이자 없이 보관만 합니다." },
-          { category: "감사", question: "감사원 감사의 종류가 아닌 것은?", options: ["회계검사", "직무감찰", "성과감사", "징계감사"], answer: 3, explanation: "징계감사는 감사원 감사의 종류가 아닙니다." },
-          { category: "회계", question: "채권관리의 원칙이 아닌 것은?", options: ["조기 확보", "시효 관리", "채무자 보호", "선의관리자 주의"], answer: 2, explanation: "채권관리에서 채무자 보호가 원칙은 아닙니다." },
-          { category: "감사", question: "감사 결과 처분 요구 중 가장 무거운 것은?", options: ["주의", "경고", "시정요구", "징계요구"], answer: 3, explanation: "징계요구가 가장 무거운 처분 요구입니다." }
+          { category: "인사", question: "5급 공무원의 정년은?", options: ["58세", "60세", "62세", "65세"], answer: 1, explanation: "일반직 공무원의 정년은 60세입니다." },
+          { category: "계약", question: "지체상금률의 상한은?", options: ["계약금액의 10%", "계약금액의 15%", "계약금액의 20%", "계약금액의 30%"], answer: 0, explanation: "지체상금은 계약금액의 10%를 초과할 수 없습니다." },
+          { category: "예산회계", question: "지방자치단체의 출납폐쇄일은?", options: ["12월 31일", "다음 연도 1월 31일", "다음 연도 2월 말일", "다음 연도 3월 31일"], answer: 2, explanation: "지방자치단체의 출납폐쇄일은 다음 연도 2월 말일입니다." },
+          { category: "복무", question: "시간외근무수당 지급 단가 산정 시 사용하는 분모는?", options: ["174시간", "209시간", "226시간", "243시간"], answer: 1, explanation: "시간외근무수당은 월 봉급액을 209시간으로 나눈 금액을 기준으로 산정합니다." }
         ];
 
-        // 날짜 기반으로 5문제 선택 (매일 다른 문제)
         function getDailyQuiz() {
           const today = new Date();
           const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
-
-          // 시드 기반 셔플
           const shuffled = [...allQuizData];
           for (let i = shuffled.length - 1; i > 0; i--) {
             const j = Math.floor((seed * (i + 1) * 9301 + 49297) % 233280 / 233280 * (i + 1));
             [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
           }
-
           return shuffled.slice(0, 5);
         }
 
         const quizData = getDailyQuiz();
-
         let currentQuestion = 0;
         let score = 0;
         let selectedOption = null;
@@ -645,12 +478,10 @@
             </button>
           `).join('');
 
-          // 옵션 클릭 이벤트 바인딩
           document.querySelectorAll('.quiz-option').forEach(option => {
             option.addEventListener('click', handleOptionClick);
           });
 
-          // 상태 초기화
           selectedOption = null;
           answered = false;
           resultDiv.classList.add('hidden');
@@ -662,29 +493,23 @@
 
         function handleOptionClick() {
           if (answered) return;
-
           document.querySelectorAll('.quiz-option').forEach(opt => {
             opt.classList.remove('bg-forest-500/30', 'border-forest-400');
             opt.classList.add('bg-white/10', 'border-white/10');
           });
-
           this.classList.remove('bg-white/10', 'border-white/10');
           this.classList.add('bg-forest-500/30', 'border-forest-400');
           selectedOption = this;
-
           submitBtn.disabled = false;
         }
 
         function handleSubmit() {
           if (!selectedOption) return;
-
           if (!answered) {
-            // 정답 확인
             answered = true;
             const quiz = quizData[currentQuestion];
             const selectedIdx = parseInt(selectedOption.dataset.index);
             const isCorrect = selectedIdx === quiz.answer;
-
             if (isCorrect) score++;
 
             document.querySelectorAll('.quiz-option').forEach(opt => {
@@ -692,7 +517,6 @@
               const idx = parseInt(opt.dataset.index);
               const icon = opt.querySelector('.result-icon');
               const iconSpan = icon.querySelector('.material-symbols-outlined');
-
               if (idx === quiz.answer) {
                 opt.classList.remove('bg-white/10', 'bg-forest-500/30');
                 opt.classList.add('bg-forest-500/40', 'border-forest-400');
@@ -726,12 +550,10 @@
               submitBtn.innerHTML = '결과 보기 <span class="material-symbols-outlined">emoji_events</span>';
             }
           } else {
-            // 다음 문제 또는 결과
             if (currentQuestion < quizData.length - 1) {
               currentQuestion++;
               renderQuestion();
             } else {
-              // 최종 결과 표시
               questionEl.classList.add('hidden');
               optionsEl.classList.add('hidden');
               resultDiv.classList.add('hidden');
@@ -754,8 +576,6 @@
 
         submitBtn.addEventListener('click', handleSubmit);
         restartBtn.addEventListener('click', handleRestart);
-
-        // 초기 렌더링
         renderQuestion();
       });
       </script>
@@ -766,16 +586,11 @@
 <!-- 외부 시스템 바로가기 Section -->
 <section id="external-links" class="section bg-white">
   <div class="container-wide">
-    <!-- Section Header -->
     <div class="text-center mb-12">
       <span class="badge badge-navy mb-4">바로가기</span>
       <h2 class="text-navy-900 mb-6">자주 사용하는 외부 시스템</h2>
-      <p class="text-xl text-navy-600 max-w-2xl mx-auto">
-        계약·조달·행정 업무에 필요한 시스템을 빠르게 이동하세요
-      </p>
     </div>
 
-    <!-- External Links Grid -->
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
       <a href="https://www.g2b.go.kr" target="_blank" rel="noopener" class="group card card-hover p-5 text-center">
         <div class="w-14 h-14 mx-auto mb-4 bg-blue-100 rounded-2xl flex items-center justify-center group-hover:bg-blue-600 transition-colors">
@@ -826,7 +641,6 @@
       </a>
     </div>
 
-    <!-- Secondary Links -->
     <div class="mt-8 flex flex-wrap justify-center gap-3">
       <a href="https://www.moef.go.kr" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 bg-surface-100 hover:bg-surface-200 rounded-full text-sm text-navy-600 transition-colors">
         <span class="material-symbols-outlined text-lg">open_in_new</span>
@@ -843,10 +657,6 @@
       <a href="https://www.openfiscaldata.go.kr" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 bg-surface-100 hover:bg-surface-200 rounded-full text-sm text-navy-600 transition-colors">
         <span class="material-symbols-outlined text-lg">open_in_new</span>
         열린재정
-      </a>
-      <a href="https://www.mss.go.kr" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 bg-surface-100 hover:bg-surface-200 rounded-full text-sm text-navy-600 transition-colors">
-        <span class="material-symbols-outlined text-lg">open_in_new</span>
-        중소벤처기업부
       </a>
     </div>
   </div>
@@ -877,3 +687,117 @@
     </div>
   </div>
 </section>
+
+<!-- 금액 계산기 스크립트 -->
+<script>
+document.addEventListener('turbo:load', function() {
+  const priceInput = document.getElementById('price-input');
+  const priceCategory = document.getElementById('price-category');
+  const priceResult = document.getElementById('price-result');
+  const priceResultContent = document.getElementById('price-result-content');
+
+  if (!priceInput) return;
+
+  // 금액 포맷팅
+  priceInput.addEventListener('input', function() {
+    let val = this.value.replace(/[^0-9]/g, '');
+    if (val) {
+      this.value = Number(val).toLocaleString();
+      calculateMethod();
+    } else {
+      this.value = '';
+      priceResult.classList.add('hidden');
+    }
+  });
+
+  // 빠른 금액 버튼
+  document.querySelectorAll('.price-quick-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const val = this.dataset.value;
+      priceInput.value = Number(val).toLocaleString();
+      calculateMethod();
+    });
+  });
+
+  function calculateMethod() {
+    const amount = parseInt(priceInput.value.replace(/,/g, ''));
+    const category = priceCategory.value;
+    if (!amount || amount <= 0) {
+      priceResult.classList.add('hidden');
+      return;
+    }
+
+    let method, color, icon, desc, checklist;
+
+    if (category === 'construction') {
+      if (amount <= 20000000) {
+        method = '1인 견적 수의계약';
+        color = 'forest';
+        icon = 'person';
+        desc = '추정가격 2천만원 이하 공사';
+        checklist = ['견적서 1부 징구', '계약서 작성 (간이계약서 가능)', '착공신고서', '준공검사 및 대가 지급'];
+      } else if (amount <= 200000000) {
+        method = '2인 이상 견적 수의계약';
+        color = 'point';
+        icon = 'group';
+        desc = '추정가격 2천만원 초과 ~ 2억원 이하 공사';
+        checklist = ['2인 이상 견적서 징구', '예정가격 작성', '계약서 작성', '착공신고서 → 준공검사 → 대가 지급'];
+      } else {
+        method = '경쟁입찰';
+        color = 'navy';
+        icon = 'groups';
+        desc = '추정가격 2억원 초과 공사';
+        checklist = ['입찰공고 (7일 이상)', '예정가격 작성 (복수예비가격)', '적격심사', '계약 체결 → 착공 → 준공검사'];
+      }
+    } else {
+      // 물품, 용역
+      if (amount <= 20000000) {
+        method = '1인 견적 수의계약';
+        color = 'forest';
+        icon = 'person';
+        desc = `추정가격 2천만원 이하 ${category === 'goods' ? '물품' : '용역'}`;
+        checklist = ['견적서 1부 징구', '계약서 작성 (간이계약서 가능)', '검수 및 대가 지급'];
+      } else if (amount <= 50000000) {
+        method = '2인 이상 견적 수의계약';
+        color = 'point';
+        icon = 'group';
+        desc = `추정가격 2천만원 초과 ~ 5천만원 이하 ${category === 'goods' ? '물품' : '용역'}`;
+        checklist = ['2인 이상 견적서 징구', '예정가격 작성', '계약서 작성', '검수 및 대가 지급'];
+      } else {
+        method = '경쟁입찰';
+        color = 'navy';
+        icon = 'groups';
+        desc = `추정가격 5천만원 초과 ${category === 'goods' ? '물품' : '용역'}`;
+        checklist = ['입찰공고 (7일 이상)', '예정가격 작성 (복수예비가격)', '적격심사 또는 최저가낙찰', '계약 체결 → 검수 → 대가 지급'];
+      }
+    }
+
+    priceResult.classList.remove('hidden');
+    priceResultContent.className = `p-5 rounded-xl border-2 border-${color}-200 bg-${color}-50`;
+    priceResultContent.innerHTML = `
+      <div class="flex items-center gap-3 mb-3">
+        <span class="material-symbols-outlined text-2xl text-${color}-600">${icon}</span>
+        <h3 class="text-lg font-bold text-${color}-700">${method}</h3>
+      </div>
+      <p class="text-navy-600 text-sm mb-4">${desc} (추정가격: ${Number(amount).toLocaleString()}원)</p>
+      <div class="space-y-2">
+        ${checklist.map(item => `
+          <div class="flex items-start gap-2">
+            <span class="material-symbols-outlined text-${color}-500 text-lg mt-0.5">check_circle</span>
+            <span class="text-navy-700 text-sm">${item}</span>
+          </div>
+        `).join('')}
+      </div>
+      <div class="mt-4 pt-4 border-t border-${color}-200">
+        <a href="${'<%= contract_method_path %>'}" class="inline-flex items-center gap-1 text-${color}-600 hover:text-${color}-700 text-sm font-semibold">
+          상세 분석 바로가기 <span class="material-symbols-outlined text-lg">arrow_forward</span>
+        </a>
+      </div>
+    `;
+  }
+
+  priceCategory.addEventListener('change', function() {
+    if (priceInput.value) calculateMethod();
+  });
+});
+</script>
