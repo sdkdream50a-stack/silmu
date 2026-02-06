@@ -1,0 +1,363 @@
+<%# 계약보증금·하자보증금·인지세 계산기 %>
+
+<style>
+.cg-card { background:#fff; border-radius:16px; border:1px solid #e5e7eb; padding:32px; margin-bottom:24px; }
+.cg-section-title { font-size:22px; font-weight:700; color:#1e293b; margin-bottom:6px; }
+.cg-section-desc { font-size:14px; color:#64748b; margin-bottom:24px; }
+
+.cg-form-group { margin-bottom:20px; }
+.cg-form-group label { display:block; font-weight:600; font-size:14px; color:#334155; margin-bottom:6px; }
+.cg-form-group .cg-sublabel { font-size:12px; color:#94a3b8; font-weight:400; margin-left:4px; }
+
+.cg-amount-wrap { position:relative; max-width:400px; }
+.cg-amount-wrap input { width:100%; padding:14px 60px 14px 18px; border:2px solid #e5e7eb; border-radius:12px; font-size:22px; font-weight:700; text-align:right; color:#1e293b; }
+.cg-amount-wrap input:focus { outline:none; border-color:#6366f1; box-shadow:0 0 0 3px rgba(99,102,241,.12); }
+.cg-amount-wrap .cg-unit { position:absolute; right:18px; top:50%; transform:translateY(-50%); font-size:16px; color:#64748b; }
+.cg-amount-hint { font-size:13px; color:#6366f1; font-weight:600; margin-top:8px; min-height:20px; }
+
+.cg-quick-btns { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+.cg-quick-btn { padding:7px 14px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:20px; font-size:13px; color:#334155; cursor:pointer; transition:all .15s; }
+.cg-quick-btn:hover { background:#eef2ff; border-color:#a5b4fc; color:#4338ca; }
+
+.cg-type-grid { display:flex; flex-wrap:wrap; gap:10px; }
+.cg-type-btn { padding:12px 18px; border:2px solid #e5e7eb; border-radius:12px; font-size:14px; font-weight:600; cursor:pointer; transition:all .15s; background:#fff; }
+.cg-type-btn:hover { border-color:#6366f1; background:#eef2ff; }
+.cg-type-btn.selected { border-color:#6366f1; background:#eef2ff; box-shadow:0 0 0 3px rgba(99,102,241,.12); color:#4338ca; }
+
+.cg-checkbox-grid { display:grid; grid-template-columns:repeat(2, 1fr); gap:8px; max-width:560px; }
+.cg-checkbox-item { display:flex; align-items:center; gap:8px; padding:10px 14px; background:#f8fafc; border:1px solid #e5e7eb; border-radius:10px; cursor:pointer; transition:all .15s; }
+.cg-checkbox-item:hover { border-color:#6366f1; background:#eef2ff; }
+.cg-checkbox-item.checked { border-color:#6366f1; background:#eef2ff; }
+.cg-checkbox-item input { accent-color:#6366f1; }
+.cg-checkbox-item .cg-cb-name { font-weight:600; font-size:13px; color:#334155; }
+.cg-checkbox-item .cg-cb-meta { font-size:11px; color:#94a3b8; }
+
+.cg-btn { display:inline-flex; align-items:center; gap:6px; padding:14px 32px; border-radius:12px; font-weight:600; font-size:16px; border:none; cursor:pointer; transition:all .2s; }
+.cg-btn-primary { background:#6366f1; color:#fff; }
+.cg-btn-primary:hover { background:#4f46e5; transform:translateY(-1px); box-shadow:0 4px 16px rgba(99,102,241,.3); }
+.cg-btn:disabled { opacity:.5; cursor:not-allowed; transform:none; box-shadow:none; }
+
+/* 결과 */
+.cg-result { display:none; }
+.cg-result.show { display:block; animation:cgSlideUp .4s ease; }
+@keyframes cgSlideUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+
+.cg-result-hero { text-align:center; padding:32px 20px; background:linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%); border-radius:16px; margin-bottom:24px; }
+.cg-result-hero .cg-hero-label { font-size:14px; color:#4338ca; font-weight:600; margin-bottom:6px; }
+.cg-result-hero .cg-hero-value { font-size:36px; font-weight:800; color:#4338ca; }
+.cg-result-hero .cg-hero-sub { font-size:14px; color:#64748b; margin-top:8px; }
+
+.cg-result-section { background:#fff; border:1px solid #e5e7eb; border-radius:14px; padding:24px; margin-bottom:20px; }
+.cg-result-title { font-size:17px; font-weight:700; color:#1e293b; margin-bottom:14px; padding-bottom:10px; border-bottom:2px solid #e0e7ff; display:flex; align-items:center; gap:8px; }
+
+.cg-detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px; }
+.cg-detail-item { background:#f8fafc; border-radius:10px; padding:14px; }
+.cg-detail-item .cg-detail-label { font-size:12px; color:#94a3b8; margin-bottom:3px; }
+.cg-detail-item .cg-detail-value { font-size:18px; font-weight:700; color:#1e293b; }
+.cg-detail-item .cg-detail-note { font-size:12px; color:#6366f1; margin-top:2px; }
+
+.cg-defect-table { width:100%; border-collapse:collapse; font-size:14px; }
+.cg-defect-table th { background:#eef2ff; padding:10px 14px; text-align:left; border-bottom:2px solid #c7d2fe; color:#4338ca; font-weight:600; font-size:13px; }
+.cg-defect-table td { padding:10px 14px; border-bottom:1px solid #f1f5f9; }
+.cg-defect-table .amount-cell { font-weight:700; color:#4338ca; text-align:right; }
+
+.cg-stamp-box { display:flex; align-items:center; gap:16px; padding:20px; background:#fefce8; border:1px solid #fde68a; border-radius:14px; }
+.cg-stamp-box .cg-stamp-icon { width:48px; height:48px; background:#fbbf24; border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.cg-stamp-box .cg-stamp-amount { font-size:24px; font-weight:800; color:#92400e; }
+.cg-stamp-box .cg-stamp-note { font-size:13px; color:#78716c; margin-top:4px; }
+.cg-stamp-exempt { background:#f0fdf4; border:1px solid #bbf7d0; color:#166534; padding:16px 20px; border-radius:14px; font-weight:600; display:flex; align-items:center; gap:10px; }
+
+.cg-ref-box { background:#eef2ff; border:1px solid #c7d2fe; border-radius:12px; padding:16px 20px; font-size:14px; color:#4338ca; line-height:1.8; }
+
+.cg-summary-table { width:100%; border-collapse:collapse; font-size:15px; }
+.cg-summary-table td { padding:12px 16px; border-bottom:1px solid #f1f5f9; }
+.cg-summary-table .label { color:#64748b; }
+.cg-summary-table .value { text-align:right; font-weight:700; color:#1e293b; }
+.cg-summary-table .total td { border-top:2px solid #e0e7ff; font-size:17px; font-weight:800; }
+.cg-summary-table .total .value { color:#4338ca; }
+
+@media print {
+  body * { visibility:hidden; }
+  .cg-result, .cg-result * { visibility:visible; }
+  .cg-result { position:absolute; left:0; top:0; width:100%; padding:20px; }
+  .no-print { display:none !important; }
+}
+
+@media (max-width:640px) {
+  .cg-checkbox-grid { grid-template-columns:1fr; }
+  .cg-detail-grid { grid-template-columns:1fr; }
+  .cg-result-hero .cg-hero-value { font-size:28px; }
+  .cg-type-grid { flex-direction:column; }
+}
+</style>
+
+<!-- 헤더 -->
+<section class="gradient-premium text-white py-12 lg:py-16">
+  <div class="container-wide">
+    <div class="flex items-start gap-5">
+      <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 shadow-lg">
+        <span class="material-symbols-outlined text-4xl text-white">shield</span>
+      </div>
+      <div>
+        <h1 class="text-3xl lg:text-4xl font-bold tracking-tight mb-2">계약보증금 계산기</h1>
+        <p class="text-indigo-100 text-lg">계약보증금·하자보증금·인지세를 한번에 계산</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-10">
+  <div class="container-wide max-w-4xl">
+
+    <!-- 입력 영역 -->
+    <div class="cg-card" id="cg-input-section">
+      <h2 class="cg-section-title">계약 정보 입력</h2>
+      <p class="cg-section-desc">계약금액과 유형을 입력하면 보증금·인지세를 자동 계산합니다.</p>
+
+      <!-- 계약금액 -->
+      <div class="cg-form-group">
+        <label>계약금액 (부가세 포함)</label>
+        <div class="cg-amount-wrap">
+          <input type="text" id="cg-amount" placeholder="0" inputmode="numeric" oninput="cgFormatAmount(this)">
+          <span class="cg-unit">원</span>
+        </div>
+        <div class="cg-amount-hint" id="cg-amount-hint"></div>
+        <div class="cg-quick-btns">
+          <span class="cg-quick-btn" onclick="cgAddAmount(100000)">+10만</span>
+          <span class="cg-quick-btn" onclick="cgAddAmount(1000000)">+100만</span>
+          <span class="cg-quick-btn" onclick="cgAddAmount(10000000)">+1천만</span>
+          <span class="cg-quick-btn" onclick="cgAddAmount(50000000)">+5천만</span>
+          <span class="cg-quick-btn" onclick="cgAddAmount(100000000)">+1억</span>
+          <span class="cg-quick-btn" onclick="cgResetAmount()" style="background:#fef3c7;border-color:#fcd34d;color:#b45309;">초기화</span>
+        </div>
+      </div>
+
+      <!-- 계약보증금 유형 -->
+      <div class="cg-form-group">
+        <label>계약 유형 <span class="cg-sublabel">(계약보증금률 결정)</span></label>
+        <div class="cg-type-grid" id="cg-type-grid">
+          <% @guarantee_types.each do |type| %>
+            <div class="cg-type-btn" data-type="<%= type[:id] %>" onclick="cgSelectType(this)">
+              <%= type[:name] %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- 하자보증 공종 선택 -->
+      <div class="cg-form-group">
+        <label>하자보증 공종 <span class="cg-sublabel">(공사인 경우, 복수 선택 가능)</span></label>
+        <div class="cg-checkbox-grid" id="cg-defect-types">
+          <% @defect_work_types.each do |wt| %>
+            <label class="cg-checkbox-item" onclick="this.classList.toggle('checked')">
+              <input type="checkbox" value="<%= wt[:id] %>">
+              <div>
+                <div class="cg-cb-name"><%= wt[:name] %> (<%= wt[:rate] %>%)</div>
+                <div class="cg-cb-meta"><%= wt[:years] %>년 · <%= wt[:note] %></div>
+              </div>
+            </label>
+          <% end %>
+        </div>
+      </div>
+
+      <div style="text-align:center; margin-top:28px;">
+        <button class="cg-btn cg-btn-primary" id="cg-calc-btn" onclick="cgCalculate()">
+          <span class="material-symbols-outlined text-lg">calculate</span> 계산하기
+        </button>
+      </div>
+    </div>
+
+    <!-- 결과 영역 -->
+    <div class="cg-result" id="cg-result-area">
+      <div id="cg-result-content"></div>
+
+      <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-top:24px;" class="no-print">
+        <button class="cg-btn" style="background:#f1f5f9; color:#475569;" onclick="document.getElementById('cg-input-section').scrollIntoView({behavior:'smooth'})">
+          <span class="material-symbols-outlined text-lg">arrow_upward</span> 조건 수정
+        </button>
+        <button class="cg-btn" style="background:#6366f1; color:#fff;" onclick="window.print()">
+          <span class="material-symbols-outlined text-lg">print</span> 인쇄
+        </button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+document.addEventListener('turbo:load', function() {
+  var cgInput = document.getElementById('cg-input-section');
+  if (!cgInput) return;
+
+  var cgAmount = 0;
+  var cgSelectedType = 'general';
+
+  // 초기 선택
+  var firstBtn = document.querySelector('.cg-type-btn[data-type="general"]');
+  if (firstBtn) firstBtn.classList.add('selected');
+
+  window.cgFormatAmount = function(input) {
+    var value = input.value.replace(/[^0-9]/g, '');
+    if (value) {
+      cgAmount = parseInt(value);
+      input.value = cgAmount.toLocaleString('ko-KR');
+    } else {
+      cgAmount = 0;
+      input.value = '';
+    }
+    cgUpdateHint();
+  };
+
+  window.cgAddAmount = function(n) {
+    cgAmount += n;
+    document.getElementById('cg-amount').value = cgAmount.toLocaleString('ko-KR');
+    cgUpdateHint();
+  };
+
+  window.cgResetAmount = function() {
+    cgAmount = 0;
+    document.getElementById('cg-amount').value = '';
+    cgUpdateHint();
+  };
+
+  function cgUpdateHint() {
+    var el = document.getElementById('cg-amount-hint');
+    if (cgAmount > 0) {
+      el.textContent = cgKoreanUnit(cgAmount);
+    } else {
+      el.textContent = '';
+    }
+  }
+
+  window.cgSelectType = function(el) {
+    document.querySelectorAll('.cg-type-btn').forEach(function(b) { b.classList.remove('selected'); });
+    el.classList.add('selected');
+    cgSelectedType = el.dataset.type;
+  };
+
+  window.cgCalculate = function() {
+    if (cgAmount <= 0) {
+      alert('계약금액을 입력해주세요.');
+      return;
+    }
+    var checks = document.querySelectorAll('#cg-defect-types input:checked');
+    var defectTypes = [];
+    for (var i = 0; i < checks.length; i++) defectTypes.push(checks[i].value);
+
+    fetch('/contract-guarantees/calculate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'X-CSRF-Token': document.querySelector('meta[name=csrf-token]').content
+      },
+      body: JSON.stringify({
+        contract_amount: cgAmount,
+        guarantee_type: cgSelectedType,
+        defect_work_types: defectTypes
+      })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.success) {
+        cgRenderResult(data.result);
+      } else {
+        alert(data.error);
+      }
+    });
+  };
+
+  function cgRenderResult(r) {
+    var html = '';
+    var cg = r.contract_guarantee;
+    var st = r.stamp_tax;
+    var sm = r.summary;
+
+    // 히어로
+    html += '<div class="cg-result-hero"><div class="cg-hero-label">계약금액</div><div class="cg-hero-value">' + cgComma(sm.contract_amount) + '원</div><div class="cg-hero-sub">아래 보증금·인지세가 자동 계산되었습니다</div></div>';
+
+    // 계약보증금
+    html += '<div class="cg-result-section"><div class="cg-result-title"><span class="material-symbols-outlined" style="color:#6366f1;">verified_user</span> 계약보증금</div>';
+    if (cg.exempt) {
+      html += '<div class="cg-stamp-exempt"><span class="material-symbols-outlined">check_circle</span> ' + cgEsc(cg.note) + '</div>';
+    } else {
+      html += '<div class="cg-detail-grid">';
+      html += '<div class="cg-detail-item"><div class="cg-detail-label">계약 유형</div><div class="cg-detail-value">' + cgEsc(cg.type_name) + '</div></div>';
+      html += '<div class="cg-detail-item"><div class="cg-detail-label">보증금률</div><div class="cg-detail-value">' + cg.rate + '%</div></div>';
+      html += '<div class="cg-detail-item"><div class="cg-detail-label">계약보증금</div><div class="cg-detail-value" style="color:#4338ca;">' + cgComma(cg.amount) + '원</div></div>';
+      html += '<div class="cg-detail-item"><div class="cg-detail-label">비고</div><div class="cg-detail-value" style="font-size:14px;">' + cgEsc(cg.note) + '</div></div>';
+      html += '</div>';
+    }
+    html += '</div>';
+
+    // 하자보증금
+    if (r.defect_guarantee && r.defect_guarantee.length > 0) {
+      html += '<div class="cg-result-section"><div class="cg-result-title"><span class="material-symbols-outlined" style="color:#6366f1;">shield</span> 하자보수보증금</div>';
+      html += '<table class="cg-defect-table"><thead><tr><th>공종</th><th>보증금률</th><th>보증기간</th><th style="text-align:right;">보증금액</th></tr></thead><tbody>';
+      var defTotal = 0;
+      for (var i = 0; i < r.defect_guarantee.length; i++) {
+        var d = r.defect_guarantee[i];
+        defTotal += d.amount;
+        html += '<tr><td style="font-weight:600;">' + cgEsc(d.name) + '</td><td>' + d.rate + '%</td><td>' + d.years + '년</td><td class="amount-cell">' + cgComma(d.amount) + '원</td></tr>';
+      }
+      html += '<tr style="border-top:2px solid #c7d2fe;font-weight:700;"><td colspan="3">합계</td><td class="amount-cell" style="font-size:16px;">' + cgComma(defTotal) + '원</td></tr>';
+      html += '</tbody></table></div>';
+    }
+
+    // 인지세
+    html += '<div class="cg-result-section"><div class="cg-result-title"><span class="material-symbols-outlined" style="color:#d97706;">receipt</span> 인지세</div>';
+    if (st.exempt) {
+      html += '<div class="cg-stamp-exempt"><span class="material-symbols-outlined">check_circle</span> 계약금액 1천만원 이하 — 인지세 면제</div>';
+    } else {
+      html += '<div class="cg-stamp-box"><div class="cg-stamp-icon"><span class="material-symbols-outlined text-2xl text-white">receipt</span></div><div><div class="cg-stamp-amount">' + cgComma(st.amount) + '원</div><div class="cg-stamp-note">' + cgEsc(st.label) + ' · ' + cgEsc(st.note) + '</div></div></div>';
+    }
+    html += '</div>';
+
+    // 요약
+    html += '<div class="cg-result-section"><div class="cg-result-title"><span class="material-symbols-outlined" style="color:#6366f1;">summarize</span> 요약</div>';
+    html += '<table class="cg-summary-table">';
+    html += '<tr><td class="label">계약금액</td><td class="value">' + cgComma(sm.contract_amount) + '원</td></tr>';
+    html += '<tr><td class="label">계약보증금</td><td class="value">' + cgComma(sm.contract_guarantee) + '원</td></tr>';
+    if (sm.defect_guarantee_total > 0) {
+      html += '<tr><td class="label">하자보수보증금 합계</td><td class="value">' + cgComma(sm.defect_guarantee_total) + '원</td></tr>';
+    }
+    html += '<tr><td class="label">인지세 (계약자 부담분)</td><td class="value">' + cgComma(st.each_party) + '원</td></tr>';
+    html += '<tr class="total"><td>계약자 부담 합계</td><td class="value">' + cgComma(sm.contract_guarantee + st.each_party) + '원</td></tr>';
+    html += '</table></div>';
+
+    // 법령
+    html += '<div class="cg-result-section"><div class="cg-result-title"><span class="material-symbols-outlined" style="color:#f59e0b;">info</span> 관련 법령</div>';
+    html += '<div class="cg-ref-box">';
+    html += '• 계약보증금: 지방계약법 시행령 제37조 (계약금액의 10% 이상)<br>';
+    html += '• 소액수의계약 면제: 지방계약법 시행규칙 제39조 (3천만원 이하 면제 가능)<br>';
+    html += '• 하자보수보증금: 지방계약법 시행령 제78조 (공종별 차등 적용)<br>';
+    html += '• 인지세: 인지세법 제3조, 시행령 별표 (발주자·계약자 각 50%)<br>';
+    html += '• 본 계산 결과는 참고용이며, 기관별 내부 지침에 따라 다를 수 있습니다.';
+    html += '</div></div>';
+
+    document.getElementById('cg-result-content').innerHTML = html;
+    var area = document.getElementById('cg-result-area');
+    area.classList.add('show');
+    area.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function cgKoreanUnit(num) {
+    if (num === 0) return '0원';
+    var result = '';
+    var remaining = num;
+    var units = [{ v: 100000000, l: '억' }, { v: 10000, l: '만' }];
+    for (var i = 0; i < units.length; i++) {
+      if (remaining >= units[i].v) {
+        var cnt = Math.floor(remaining / units[i].v);
+        result += cnt.toLocaleString('ko-KR') + units[i].l + ' ';
+        remaining %= units[i].v;
+      }
+    }
+    if (remaining > 0) result += remaining.toLocaleString('ko-KR');
+    return result.trim() + '원';
+  }
+
+  function cgComma(n) { return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+  function cgEsc(s) { if (!s) return ''; var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+});
+</script>

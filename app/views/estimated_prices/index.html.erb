@@ -1,0 +1,476 @@
+<%# 예정가격 계산기 %>
+
+<style>
+.ep-step-card { background:#fff; border-radius:16px; border:1px solid #e5e7eb; padding:32px; margin-bottom:24px; display:none; }
+.ep-step-card.active { display:block; }
+.ep-type-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:14px; }
+.ep-type-btn { background:#fff; border:2px solid #e5e7eb; border-radius:14px; padding:22px 16px; text-align:center; cursor:pointer; transition:all .2s; }
+.ep-type-btn:hover { border-color:#059669; background:#ecfdf5; }
+.ep-type-btn.selected { border-color:#059669; background:#ecfdf5; box-shadow:0 0 0 3px rgba(5,150,105,.15); }
+.ep-type-btn .ep-icon { width:48px; height:48px; border-radius:12px; display:flex; align-items:center; justify-content:center; margin:0 auto 10px; background:#f1f5f9; }
+.ep-type-btn.selected .ep-icon { background:#059669; }
+.ep-type-btn.selected .ep-icon .material-symbols-outlined { color:#fff; }
+.ep-type-btn .ep-type-name { font-weight:700; color:#1e293b; font-size:14px; }
+.ep-type-btn .ep-type-desc { font-size:12px; color:#64748b; margin-top:3px; }
+
+.ep-cost-table { width:100%; border-collapse:collapse; margin:16px 0; }
+.ep-cost-table th { background:#f0fdf4; padding:10px 14px; text-align:left; border-bottom:2px solid #d1fae5; font-size:13px; color:#065f46; font-weight:600; }
+.ep-cost-table td { padding:10px 14px; border-bottom:1px solid #f1f5f9; font-size:14px; }
+.ep-cost-table td input { width:100%; border:1px solid #e5e7eb; border-radius:8px; padding:8px 12px; font-size:14px; text-align:right; }
+.ep-cost-table td input:focus { outline:none; border-color:#059669; box-shadow:0 0 0 3px rgba(5,150,105,.1); }
+.ep-cost-table .label-cell { font-weight:600; color:#334155; }
+.ep-cost-table .note-cell { font-size:12px; color:#94a3b8; }
+.ep-cost-table .total-row td { border-top:2px solid #d1fae5; font-weight:700; font-size:15px; background:#f0fdf4; }
+
+.ep-btn { display:inline-flex; align-items:center; gap:6px; padding:12px 28px; border-radius:12px; font-weight:600; font-size:15px; border:none; cursor:pointer; transition:all .2s; }
+.ep-btn-primary { background:#059669; color:#fff; }
+.ep-btn-primary:hover { background:#047857; }
+.ep-btn-secondary { background:#f1f5f9; color:#475569; }
+.ep-btn-secondary:hover { background:#e2e8f0; }
+.ep-btn-success { background:#059669; color:#fff; }
+.ep-btn-success:hover { background:#047857; }
+.ep-btn:disabled { opacity:.5; cursor:not-allowed; }
+
+.ep-step-indicator { display:flex; gap:8px; margin-bottom:28px; }
+.ep-step-dot { width:10px; height:10px; border-radius:50%; background:#e2e8f0; transition:all .2s; }
+.ep-step-dot.active { background:#059669; width:28px; border-radius:5px; }
+.ep-step-dot.done { background:#059669; }
+
+.ep-quick-bar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:10px; padding:10px 0; }
+.ep-quick-btn { display:inline-flex; align-items:center; padding:6px 14px; border-radius:20px; border:1px solid #d1d5db; background:#fff; font-size:13px; font-weight:600; color:#475569; cursor:pointer; transition:all .15s; white-space:nowrap; }
+.ep-quick-btn:hover { background:#ecfdf5; border-color:#6ee7b7; color:#047857; }
+.ep-quick-btn.ep-reset { background:#fef3c7; border-color:#fcd34d; color:#b45309; margin-left:auto; }
+.ep-quick-btn.ep-reset:hover { background:#fde68a; border-color:#f59e0b; }
+.ep-quick-focus-hint { font-size:12px; color:#94a3b8; width:100%; margin-bottom:2px; }
+
+.ep-section-title { font-size:22px; font-weight:700; color:#1e293b; margin-bottom:6px; }
+.ep-section-desc { font-size:14px; color:#64748b; margin-bottom:24px; }
+
+/* 결과 */
+.ep-result-section { background:#fff; border:1px solid #e5e7eb; border-radius:14px; padding:24px; margin-bottom:20px; }
+.ep-result-title { font-size:17px; font-weight:700; color:#1e293b; margin-bottom:14px; padding-bottom:10px; border-bottom:2px solid #d1fae5; display:flex; align-items:center; gap:8px; }
+
+.ep-price-hero { text-align:center; padding:32px 20px; background:linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); border-radius:16px; margin-bottom:24px; }
+.ep-price-hero .ep-price-label { font-size:14px; color:#065f46; font-weight:600; margin-bottom:8px; }
+.ep-price-hero .ep-price-value { font-size:36px; font-weight:800; color:#059669; }
+.ep-price-hero .ep-price-sub { font-size:14px; color:#64748b; margin-top:8px; }
+
+.ep-badge { display:inline-flex; align-items:center; gap:4px; padding:6px 14px; border-radius:20px; font-size:13px; font-weight:700; }
+.ep-badge-green { background:#dcfce7; color:#166534; }
+.ep-badge-red { background:#fee2e2; color:#991b1b; }
+
+.ep-warning-box { background:#fffbeb; border:1px solid #fde68a; border-radius:12px; padding:14px 18px; margin-bottom:12px; display:flex; align-items:flex-start; gap:10px; }
+.ep-warning-box .material-symbols-outlined { color:#d97706; flex-shrink:0; margin-top:1px; }
+
+.ep-multi-table { width:100%; border-collapse:collapse; font-size:13px; }
+.ep-multi-table th { background:#f0fdf4; padding:8px 12px; text-align:center; border-bottom:2px solid #d1fae5; color:#065f46; font-weight:600; }
+.ep-multi-table td { padding:8px 12px; border-bottom:1px solid #f1f5f9; text-align:center; }
+.ep-multi-table tr:hover td { background:#f0fdf4; }
+
+.ep-ref-box { background:#ecfdf5; border:1px solid #a7f3d0; border-radius:12px; padding:16px 20px; font-size:14px; color:#065f46; }
+
+.ep-detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px; }
+.ep-detail-item { background:#f8fafc; border-radius:10px; padding:14px; }
+.ep-detail-item .ep-detail-label { font-size:12px; color:#94a3b8; margin-bottom:4px; }
+.ep-detail-item .ep-detail-value { font-size:18px; font-weight:700; color:#1e293b; }
+
+@media print {
+  body * { visibility:hidden; }
+  #ep-result-area, #ep-result-area * { visibility:visible; }
+  #ep-result-area { position:absolute; left:0; top:0; width:100%; padding:20px; }
+  .no-print { display:none !important; }
+}
+
+@media (max-width:640px) {
+  .ep-type-grid { grid-template-columns:1fr; gap:10px; }
+  .ep-type-btn { padding:16px 10px; }
+  .ep-price-hero .ep-price-value { font-size:28px; }
+  .ep-detail-grid { grid-template-columns:1fr; }
+}
+</style>
+
+<!-- 헤더 -->
+<section class="gradient-forest text-white py-12 lg:py-16">
+  <div class="container-wide">
+    <div class="flex items-start gap-5">
+      <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 shadow-lg">
+        <span class="material-symbols-outlined text-4xl text-white">calculate</span>
+      </div>
+      <div>
+        <h1 class="text-3xl lg:text-4xl font-bold tracking-tight mb-2">예정가격 계산기</h1>
+        <p class="text-emerald-100 text-lg">계약유형별 원가항목을 입력하여 예정가격을 산출</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-10">
+  <div class="container-wide max-w-4xl">
+
+    <div class="ep-step-indicator" id="ep-steps">
+      <div class="ep-step-dot active"></div>
+      <div class="ep-step-dot"></div>
+      <div class="ep-step-dot"></div>
+    </div>
+
+    <!-- Step 1: 계약유형 선택 -->
+    <div class="ep-step-card active" id="ep-step1">
+      <h2 class="ep-section-title">계약 유형 선택</h2>
+      <p class="ep-section-desc">예정가격을 산출할 계약의 유형을 선택하세요. 유형별로 원가항목이 달라집니다.</p>
+
+      <div class="ep-type-grid" id="ep-type-grid">
+        <% @contract_types.each do |type| %>
+          <div class="ep-type-btn" data-type="<%= type[:id] %>" onclick="epSelectType(this)">
+            <div class="ep-icon">
+              <span class="material-symbols-outlined text-2xl text-emerald-500"><%= type[:icon] %></span>
+            </div>
+            <div class="ep-type-name"><%= type[:name] %></div>
+            <div class="ep-type-desc"><%= type[:desc] %></div>
+          </div>
+        <% end %>
+      </div>
+
+      <div style="margin-top:24px; text-align:right;">
+        <button class="ep-btn ep-btn-primary" id="ep-btn-step1" disabled onclick="epGoStep(2)">
+          다음 <span class="material-symbols-outlined text-lg">arrow_forward</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 2: 원가항목 입력 -->
+    <div class="ep-step-card" id="ep-step2">
+      <h2 class="ep-section-title">원가항목 입력</h2>
+      <p class="ep-section-desc">각 항목의 금액을 입력하세요. 소계와 부가세가 자동으로 계산됩니다.</p>
+
+      <!-- 물품구매 -->
+      <div class="ep-input-panel" id="ep-panel-goods" style="display:none;">
+        <table class="ep-cost-table">
+          <thead><tr><th style="width:180px;">항목</th><th style="width:200px;">금액 (원)</th><th>비고</th></tr></thead>
+          <tbody>
+            <tr><td class="label-cell">단가</td><td><input type="number" id="ep-unit_price" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">물품 1개당 가격</td></tr>
+            <tr><td class="label-cell">수량</td><td><input type="number" id="ep-quantity" placeholder="1" min="1" value="1" oninput="epCalcSubtotal()"></td><td class="note-cell">구매 수량</td></tr>
+            <tr><td class="label-cell">운반비</td><td><input type="number" id="ep-delivery_fee" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">운송·하역 비용 (해당시)</td></tr>
+            <tr><td class="label-cell">설치비</td><td><input type="number" id="ep-install_fee" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">설치·시운전 비용 (해당시)</td></tr>
+            <tr class="total-row"><td>기초금액</td><td id="ep-subtotal-goods" style="text-align:right; padding-right:14px;">0 원</td><td></td></tr>
+          </tbody>
+        </table>
+        <div class="ep-quick-bar">
+          <span class="ep-quick-focus-hint">입력칸을 선택 후 금액 버튼을 눌러주세요</span>
+          <span class="ep-quick-btn" onclick="epAddQuick(1000)">+1천원</span>
+          <span class="ep-quick-btn" onclick="epAddQuick(10000)">+1만원</span>
+          <span class="ep-quick-btn" onclick="epAddQuick(100000)">+10만</span>
+          <span class="ep-quick-btn" onclick="epAddQuick(1000000)">+100만</span>
+          <span class="ep-quick-btn" onclick="epAddQuick(10000000)">+1천만</span>
+          <span class="ep-quick-btn" onclick="epAddQuick(50000000)">+5천만</span>
+          <span class="ep-quick-btn" onclick="epAddQuick(100000000)">+1억</span>
+          <span class="ep-quick-btn ep-reset" onclick="epResetQuick()">초기화</span>
+        </div>
+      </div>
+
+      <!-- 용역 -->
+      <div class="ep-input-panel" id="ep-panel-service" style="display:none;">
+        <table class="ep-cost-table">
+          <thead><tr><th style="width:180px;">항목</th><th style="width:200px;">금액 (원)</th><th>비고</th></tr></thead>
+          <tbody>
+            <tr><td class="label-cell">직접인건비</td><td><input type="number" id="ep-direct_labor" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">노임단가 × 투입 M/M</td></tr>
+            <tr><td class="label-cell">제경비</td><td><input type="number" id="ep-overhead" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">직접인건비의 110~120%</td></tr>
+            <tr><td class="label-cell">직접경비</td><td><input type="number" id="ep-direct_expense" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">여비·인쇄비 등 실비</td></tr>
+            <tr><td class="label-cell">일반관리비</td><td><input type="number" id="ep-general_admin" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">노무비+경비의 5~6%</td></tr>
+            <tr><td class="label-cell">이윤</td><td><input type="number" id="ep-profit" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">노무비+경비+관리비의 10% 이내</td></tr>
+            <tr class="total-row"><td>기초금액</td><td id="ep-subtotal-service" style="text-align:right; padding-right:14px;">0 원</td><td></td></tr>
+          </tbody>
+        </table>
+        <div class="ep-quick-bar">
+          <span class="ep-quick-focus-hint">입력칸을 선택 후 금액 버튼을 눌러주세요</span>
+          <span class="ep-quick-btn" onclick="epAddQuick(1000)">+1천원</span>
+          <span class="ep-quick-btn" onclick="epAddQuick(10000)">+1만원</span>
+          <span class="ep-quick-btn" onclick="epAddQuick(100000)">+10만</span>
+          <span class="ep-quick-btn" onclick="epAddQuick(1000000)">+100만</span>
+          <span class="ep-quick-btn" onclick="epAddQuick(10000000)">+1천만</span>
+          <span class="ep-quick-btn" onclick="epAddQuick(50000000)">+5천만</span>
+          <span class="ep-quick-btn" onclick="epAddQuick(100000000)">+1억</span>
+          <span class="ep-quick-btn ep-reset" onclick="epResetQuick()">초기화</span>
+        </div>
+      </div>
+
+      <!-- 공사 -->
+      <div class="ep-input-panel" id="ep-panel-construction" style="display:none;">
+        <table class="ep-cost-table">
+          <thead><tr><th style="width:180px;">항목</th><th style="width:200px;">금액 (원)</th><th>비고</th></tr></thead>
+          <tbody>
+            <tr><td class="label-cell">재료비</td><td><input type="number" id="ep-material" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">자재·부재료비</td></tr>
+            <tr><td class="label-cell">직접노무비</td><td><input type="number" id="ep-c-direct_labor" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">직접 시공 인건비</td></tr>
+            <tr><td class="label-cell">간접노무비</td><td><input type="number" id="ep-indirect_labor" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">직접노무비의 일정비율</td></tr>
+            <tr><td class="label-cell">산재보험료</td><td><input type="number" id="ep-industrial_insurance" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">노무비의 일정비율</td></tr>
+            <tr><td class="label-cell">경비</td><td><input type="number" id="ep-expense" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">기계경비·가설비·운반비 등</td></tr>
+            <tr><td class="label-cell">일반관리비</td><td><input type="number" id="ep-c-general_admin" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">재+노+경의 6% 이내</td></tr>
+            <tr><td class="label-cell">이윤</td><td><input type="number" id="ep-c-profit" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">노+경+관의 15% 이내</td></tr>
+            <tr class="total-row"><td>기초금액</td><td id="ep-subtotal-construction" style="text-align:right; padding-right:14px;">0 원</td><td></td></tr>
+          </tbody>
+        </table>
+        <div class="ep-quick-bar">
+          <span class="ep-quick-focus-hint">입력칸을 선택 후 금액 버튼을 눌러주세요</span>
+          <span class="ep-quick-btn" onclick="epAddQuick(1000)">+1천원</span>
+          <span class="ep-quick-btn" onclick="epAddQuick(10000)">+1만원</span>
+          <span class="ep-quick-btn" onclick="epAddQuick(100000)">+10만</span>
+          <span class="ep-quick-btn" onclick="epAddQuick(1000000)">+100만</span>
+          <span class="ep-quick-btn" onclick="epAddQuick(10000000)">+1천만</span>
+          <span class="ep-quick-btn" onclick="epAddQuick(50000000)">+5천만</span>
+          <span class="ep-quick-btn" onclick="epAddQuick(100000000)">+1억</span>
+          <span class="ep-quick-btn ep-reset" onclick="epResetQuick()">초기화</span>
+        </div>
+      </div>
+
+      <!-- 부가세·예정가격 -->
+      <div style="background:#f8fafc; border-radius:12px; padding:16px 20px; margin-top:8px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-size:14px; color:#64748b;">부가가치세 (10%)</span>
+          <span style="font-size:16px; font-weight:700; color:#334155;" id="ep-vat-display">0 원</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; padding-top:10px; border-top:2px solid #e2e8f0;">
+          <span style="font-size:16px; font-weight:700; color:#059669;">예정가격 (예상)</span>
+          <span style="font-size:20px; font-weight:800; color:#059669;" id="ep-total-display">0 원</span>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; margin-top:24px;">
+        <button class="ep-btn ep-btn-secondary" onclick="epGoStep(1)">
+          <span class="material-symbols-outlined text-lg">arrow_back</span> 이전
+        </button>
+        <button class="ep-btn ep-btn-primary" onclick="epGoStep(3)">
+          계산하기 <span class="material-symbols-outlined text-lg">auto_awesome</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 3: 결과 -->
+    <div class="ep-step-card" id="ep-step3">
+      <h2 class="ep-section-title">예정가격 산출 결과</h2>
+      <p class="ep-section-desc">입력하신 원가항목을 기반으로 산출된 예정가격입니다.</p>
+
+      <div id="ep-result-area"></div>
+
+      <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-top:24px;" class="no-print">
+        <button class="ep-btn ep-btn-secondary" onclick="epGoStep(2)">
+          <span class="material-symbols-outlined text-lg">arrow_back</span> 수정
+        </button>
+        <button class="ep-btn ep-btn-success" onclick="window.print()">
+          <span class="material-symbols-outlined text-lg">print</span> 인쇄
+        </button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+document.addEventListener('turbo:load', function() {
+  var epStep1 = document.getElementById('ep-step1');
+  if (!epStep1) return;
+
+  var epSelectedType = null;
+  var epLastFocusedInput = null;
+
+  // 테이블 내 number input 포커스 추적
+  document.getElementById('ep-step2').addEventListener('focusin', function(e) {
+    if (e.target.tagName === 'INPUT' && e.target.type === 'number') {
+      epLastFocusedInput = e.target;
+    }
+  });
+
+  window.epAddQuick = function(amount) {
+    if (!epLastFocusedInput) {
+      // 포커스 안 된 경우 현재 패널의 첫 input에 추가
+      var panel = document.getElementById('ep-panel-' + epSelectedType);
+      if (panel) epLastFocusedInput = panel.querySelector('input[type="number"]');
+    }
+    if (!epLastFocusedInput) return;
+    var cur = parseInt(epLastFocusedInput.value) || 0;
+    epLastFocusedInput.value = cur + amount;
+    epLastFocusedInput.focus();
+    epCalcSubtotal();
+  };
+
+  window.epResetQuick = function() {
+    if (epLastFocusedInput) {
+      epLastFocusedInput.value = '';
+      epLastFocusedInput.focus();
+      epCalcSubtotal();
+    }
+  };
+
+  window.epSelectType = function(el) {
+    var btns = document.querySelectorAll('.ep-type-btn');
+    for (var i = 0; i < btns.length; i++) { btns[i].classList.remove('selected'); }
+    el.classList.add('selected');
+    epSelectedType = el.dataset.type;
+    document.getElementById('ep-btn-step1').disabled = false;
+  };
+
+  window.epGoStep = function(step) {
+    // Step 2 진입 시 패널 전환
+    if (step === 2) {
+      var panels = document.querySelectorAll('.ep-input-panel');
+      for (var i = 0; i < panels.length; i++) panels[i].style.display = 'none';
+      var target = document.getElementById('ep-panel-' + epSelectedType);
+      if (target) target.style.display = '';
+      epCalcSubtotal();
+    }
+    // Step 3 진입 시 서버 계산
+    if (step === 3) {
+      epCalculate();
+    }
+
+    for (var i = 1; i <= 3; i++) {
+      var card = document.getElementById('ep-step' + i);
+      if (card) card.classList.remove('active');
+    }
+    document.getElementById('ep-step' + step).classList.add('active');
+
+    var dots = document.querySelectorAll('.ep-step-dot');
+    for (var d = 0; d < dots.length; d++) {
+      dots[d].classList.remove('active', 'done');
+      if (d < step - 1) dots[d].classList.add('done');
+      if (d === step - 1) dots[d].classList.add('active');
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  window.epCalcSubtotal = function() {
+    var sub = 0;
+    if (epSelectedType === 'goods') {
+      var up = parseInt(document.getElementById('ep-unit_price').value) || 0;
+      var qty = parseInt(document.getElementById('ep-quantity').value) || 1;
+      var df = parseInt(document.getElementById('ep-delivery_fee').value) || 0;
+      var inf = parseInt(document.getElementById('ep-install_fee').value) || 0;
+      sub = up * qty + df + inf;
+      document.getElementById('ep-subtotal-goods').textContent = epComma(sub) + ' 원';
+    } else if (epSelectedType === 'service') {
+      var ids = ['ep-direct_labor','ep-overhead','ep-direct_expense','ep-general_admin','ep-profit'];
+      for (var i = 0; i < ids.length; i++) sub += parseInt(document.getElementById(ids[i]).value) || 0;
+      document.getElementById('ep-subtotal-service').textContent = epComma(sub) + ' 원';
+    } else if (epSelectedType === 'construction') {
+      var ids = ['ep-material','ep-c-direct_labor','ep-indirect_labor','ep-industrial_insurance','ep-expense','ep-c-general_admin','ep-c-profit'];
+      for (var i = 0; i < ids.length; i++) sub += parseInt(document.getElementById(ids[i]).value) || 0;
+      document.getElementById('ep-subtotal-construction').textContent = epComma(sub) + ' 원';
+    }
+    var vat = Math.round(sub * 0.1);
+    document.getElementById('ep-vat-display').textContent = epComma(vat) + ' 원';
+    document.getElementById('ep-total-display').textContent = epComma(sub + vat) + ' 원';
+  };
+
+  function epCalculate() {
+    var body = { contract_type: epSelectedType };
+
+    if (epSelectedType === 'goods') {
+      body.unit_price = document.getElementById('ep-unit_price').value || '0';
+      body.quantity = document.getElementById('ep-quantity').value || '1';
+      body.delivery_fee = document.getElementById('ep-delivery_fee').value || '0';
+      body.install_fee = document.getElementById('ep-install_fee').value || '0';
+    } else if (epSelectedType === 'service') {
+      body.direct_labor = document.getElementById('ep-direct_labor').value || '0';
+      body.overhead = document.getElementById('ep-overhead').value || '0';
+      body.direct_expense = document.getElementById('ep-direct_expense').value || '0';
+      body.general_admin = document.getElementById('ep-general_admin').value || '0';
+      body.profit = document.getElementById('ep-profit').value || '0';
+    } else if (epSelectedType === 'construction') {
+      body.material = document.getElementById('ep-material').value || '0';
+      body.direct_labor = document.getElementById('ep-c-direct_labor').value || '0';
+      body.indirect_labor = document.getElementById('ep-indirect_labor').value || '0';
+      body.industrial_insurance = document.getElementById('ep-industrial_insurance').value || '0';
+      body.expense = document.getElementById('ep-expense').value || '0';
+      body.general_admin = document.getElementById('ep-c-general_admin').value || '0';
+      body.profit = document.getElementById('ep-c-profit').value || '0';
+    }
+
+    fetch('/estimated-prices/calculate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'X-CSRF-Token': document.querySelector('meta[name=csrf-token]').content
+      },
+      body: JSON.stringify(body)
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.success) {
+        epRenderResult(data.result);
+      }
+    });
+  }
+
+  function epRenderResult(r) {
+    var html = '';
+
+    // 예정가격 히어로
+    html += '<div class="ep-price-hero">';
+    html += '<div class="ep-price-label">' + epEsc(r.type_name) + ' 예정가격</div>';
+    html += '<div class="ep-price-value">' + epComma(r.estimated_price) + '원</div>';
+    html += '<div class="ep-price-sub">기초금액 ' + epComma(r.base_amount) + '원 + 부가세 ' + epComma(r.vat) + '원</div>';
+    html += '</div>';
+
+    // 상세 내역
+    html += '<div class="ep-detail-grid">';
+    html += '<div class="ep-detail-item"><div class="ep-detail-label">기초금액</div><div class="ep-detail-value">' + epComma(r.base_amount) + '원</div></div>';
+    html += '<div class="ep-detail-item"><div class="ep-detail-label">부가가치세 (10%)</div><div class="ep-detail-value">' + epComma(r.vat) + '원</div></div>';
+    html += '</div>';
+
+    // 수의계약 가능 여부
+    html += '<div class="ep-result-section"><div class="ep-result-title"><span class="material-symbols-outlined" style="color:#059669;">gavel</span> 수의계약 가능 여부</div>';
+    if (r.private_contract.available) {
+      html += '<div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;"><span class="ep-badge ep-badge-green"><span class="material-symbols-outlined text-lg">check_circle</span> 수의계약 가능</span>';
+      html += '<span style="font-size:14px;color:#64748b;">기준금액 ' + epComma(r.private_contract.threshold) + '원 이하</span></div>';
+    } else {
+      html += '<div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;"><span class="ep-badge ep-badge-red"><span class="material-symbols-outlined text-lg">block</span> 수의계약 불가</span>';
+      html += '<span style="font-size:14px;color:#64748b;">기준금액 ' + epComma(r.private_contract.threshold) + '원 초과 → 경쟁입찰 필요</span></div>';
+    }
+    // 견적 요건 안내
+    if (r.private_contract.estimate_requirement) {
+      var er = r.private_contract.estimate_requirement;
+      var erColor = er.type === '입찰' ? '#dc2626' : (er.type === '2인견적' ? '#d97706' : '#059669');
+      html += '<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:14px 18px;display:flex;align-items:flex-start;gap:10px;">';
+      html += '<span class="material-symbols-outlined" style="color:' + erColor + ';flex-shrink:0;margin-top:1px;">description</span>';
+      html += '<div><strong style="color:' + erColor + ';">[' + epEsc(er.type) + ']</strong> ' + epEsc(er.desc);
+      html += '<div style="font-size:12px;color:#94a3b8;margin-top:4px;">' + epEsc(er.basis) + '</div></div></div>';
+    }
+    html += '</div>';
+
+    // 요율 경고
+    if (r.warnings && r.warnings.length > 0) {
+      html += '<div class="ep-result-section"><div class="ep-result-title"><span class="material-symbols-outlined" style="color:#d97706;">warning</span> 요율 검증</div>';
+      for (var i = 0; i < r.warnings.length; i++) {
+        var w = r.warnings[i];
+        html += '<div class="ep-warning-box"><span class="material-symbols-outlined">warning</span><div><strong>' + epEsc(w.item) + '</strong> — ' + epEsc(w.message) + '</div></div>';
+      }
+      html += '</div>';
+    }
+
+    // 복수예비가격 시뮬레이션
+    html += '<div class="ep-result-section"><div class="ep-result-title"><span class="material-symbols-outlined" style="color:#059669;">grid_view</span> 복수예비가격 시뮬레이션 (±3%)</div>';
+    html += '<p style="font-size:13px;color:#64748b;margin-bottom:14px;">기초금액을 기준으로 ±3% 범위 내 15개의 예비가격을 무작위 생성한 결과입니다.</p>';
+    html += '<table class="ep-multi-table"><thead><tr><th>번호</th><th>예비가격</th><th>변동률</th></tr></thead><tbody>';
+    for (var i = 0; i < r.multiple_prices.length; i++) {
+      var mp = r.multiple_prices[i];
+      var rateColor = mp.rate >= 0 ? '#059669' : '#dc2626';
+      var rateSign = mp.rate >= 0 ? '+' : '';
+      html += '<tr><td>' + (i + 1) + '</td><td style="font-weight:600;">' + epComma(mp.price) + '원</td><td style="color:' + rateColor + ';">' + rateSign + mp.rate + '%</td></tr>';
+    }
+    html += '</tbody></table></div>';
+
+    // 법령 안내
+    html += '<div class="ep-result-section"><div class="ep-result-title"><span class="material-symbols-outlined" style="color:#f59e0b;">info</span> 관련 법령</div>';
+    html += '<div class="ep-ref-box" style="line-height:1.8;">';
+    html += '• 예정가격 작성기준: 「국가를 당사자로 하는 계약에 관한 법률 시행령」 제9조<br>';
+    html += '• 복수예비가격: 동 시행령 제9조의2 (기초금액의 ±3% 범위 내 15개 작성)<br>';
+    html += '• 수의계약 기준: 동 시행령 제26조 (추정가격 기준)<br>';
+    html += '• 본 계산 결과는 참고용이며, 실제 예정가격은 원가계산 기준에 따라 별도 산정해야 합니다.';
+    html += '</div></div>';
+
+    document.getElementById('ep-result-area').innerHTML = html;
+  }
+
+  function epComma(n) { return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+  function epEsc(s) { if (!s) return ''; var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+});
+</script>

@@ -704,11 +704,11 @@
         </div>
         <p class="amount-hint" id="amount-hint">설계금액 또는 예정가격 작성 전 대략적인 예상 금액을 입력하세요</p>
         <div class="quick-amounts">
+          <span class="quick-amount" onclick="addAmount(100000)">+10만</span>
           <span class="quick-amount" onclick="addAmount(1000000)">+100만</span>
           <span class="quick-amount" onclick="addAmount(10000000)">+1천만</span>
           <span class="quick-amount" onclick="addAmount(50000000)">+5천만</span>
           <span class="quick-amount" onclick="addAmount(100000000)">+1억</span>
-          <span class="quick-amount" onclick="addAmount(1000000000)">+10억</span>
           <span class="quick-amount amount-reset" onclick="resetAmount()">초기화</span>
         </div>
       </div>
@@ -831,9 +831,9 @@
 </section>
 
 <script>
-  let selectedType = null;
-  let selectedSpecial = null;
-  let estimatedPrice = 0;
+  var selectedType = null;
+  var selectedSpecial = null;
+  var estimatedPrice = 0;
 
   function selectMainType(type) {
     const subGrid = document.getElementById('construction-sub');

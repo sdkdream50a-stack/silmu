@@ -35,14 +35,14 @@
   </head>
 
   <body class="min-h-screen flex flex-col">
-    <!-- Navigation -->
-    <nav class="bg-white/80 backdrop-blur-xl border-b border-gray-100 sticky top-0 z-50 transition-all duration-300">
+    <!-- Navigation — enhanced glass effect -->
+    <nav class="bg-white/85 backdrop-blur-2xl border-b border-gray-100/60 sticky top-0 z-50 transition-all duration-300" id="main-nav">
       <div class="container-wide">
-        <div class="flex justify-between h-16 lg:h-18">
+        <div class="flex justify-between h-16 lg:h-[4.5rem]">
           <!-- Logo -->
           <div class="flex items-center">
-            <%= link_to root_path, class: "group flex items-center gap-3 transition-transform duration-200 hover:scale-[1.02]" do %>
-              <div class="w-9 h-9 bg-gradient-to-br from-navy-700 to-navy-900 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
+            <%= link_to root_path, class: "group flex items-center gap-3 transition-all duration-200 hover:scale-[1.02]" do %>
+              <div class="w-9 h-9 bg-gradient-to-br from-navy-700 to-navy-900 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:shadow-navy-500/20 transition-all">
                 <span class="text-white font-bold text-lg">실</span>
               </div>
               <span class="text-xl font-bold text-navy-900 tracking-tight">실무</span>
@@ -131,35 +131,35 @@
 
     <!-- 퀵메뉴 (플로팅 버튼) — 강화 버전 -->
     <div class="fixed bottom-6 right-6 z-50" id="quick-menu">
-      <!-- 펼쳐진 메뉴 -->
-      <div class="hidden mb-3 space-y-2" id="quick-menu-items">
-        <%= link_to contract_method_path, class: "flex items-center gap-3 px-4 py-3 bg-white rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-all group", title: "계약방식 결정" do %>
-          <span class="w-10 h-10 bg-forest-100 rounded-lg flex items-center justify-center group-hover:bg-forest-200 transition-colors">
-            <span class="material-symbols-outlined text-forest-600">gavel</span>
+      <!-- 펼쳐진 메뉴 — glass panel style -->
+      <div class="hidden mb-3 space-y-1.5" id="quick-menu-items">
+        <%= link_to contract_method_path, class: "flex items-center gap-3 px-4 py-3 bg-white/95 backdrop-blur-lg rounded-xl shadow-medium border border-gray-100/50 hover:shadow-strong hover:-translate-x-1 transition-all group", title: "계약방식 결정" do %>
+          <span class="w-10 h-10 bg-forest-100 rounded-lg flex items-center justify-center group-hover:bg-forest-500 transition-all duration-200">
+            <span class="material-symbols-outlined text-forest-600 group-hover:text-white transition-colors">gavel</span>
           </span>
           <span class="text-sm font-semibold text-navy-800">계약방식 결정</span>
         <% end %>
-        <%= link_to contract_documents_path, class: "flex items-center gap-3 px-4 py-3 bg-white rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-all group", title: "서류 체크리스트" do %>
-          <span class="w-10 h-10 bg-point-100 rounded-lg flex items-center justify-center group-hover:bg-point-200 transition-colors">
-            <span class="material-symbols-outlined text-point-600">checklist</span>
+        <%= link_to contract_documents_path, class: "flex items-center gap-3 px-4 py-3 bg-white/95 backdrop-blur-lg rounded-xl shadow-medium border border-gray-100/50 hover:shadow-strong hover:-translate-x-1 transition-all group", title: "서류 체크리스트" do %>
+          <span class="w-10 h-10 bg-point-100 rounded-lg flex items-center justify-center group-hover:bg-point-500 transition-all duration-200">
+            <span class="material-symbols-outlined text-point-600 group-hover:text-white transition-colors">checklist</span>
           </span>
           <span class="text-sm font-semibold text-navy-800">서류 체크리스트</span>
         <% end %>
-        <%= link_to pre_contract_checklist_path, class: "flex items-center gap-3 px-4 py-3 bg-white rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-all group", title: "사전 체크리스트" do %>
-          <span class="w-10 h-10 bg-navy-100 rounded-lg flex items-center justify-center group-hover:bg-navy-200 transition-colors">
-            <span class="material-symbols-outlined text-navy-600">checklist_rtl</span>
+        <%= link_to pre_contract_checklist_path, class: "flex items-center gap-3 px-4 py-3 bg-white/95 backdrop-blur-lg rounded-xl shadow-medium border border-gray-100/50 hover:shadow-strong hover:-translate-x-1 transition-all group", title: "사전 체크리스트" do %>
+          <span class="w-10 h-10 bg-navy-100 rounded-lg flex items-center justify-center group-hover:bg-navy-600 transition-all duration-200">
+            <span class="material-symbols-outlined text-navy-600 group-hover:text-white transition-colors">checklist_rtl</span>
           </span>
           <span class="text-sm font-semibold text-navy-800">사전 체크리스트</span>
         <% end %>
-        <%= link_to contract_flow_path, class: "flex items-center gap-3 px-4 py-3 bg-white rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-all group", title: "계약 흐름도" do %>
-          <span class="w-10 h-10 bg-warm-100 rounded-lg flex items-center justify-center group-hover:bg-warm-200 transition-colors">
-            <span class="material-symbols-outlined text-warm-600">account_tree</span>
+        <%= link_to contract_flow_path, class: "flex items-center gap-3 px-4 py-3 bg-white/95 backdrop-blur-lg rounded-xl shadow-medium border border-gray-100/50 hover:shadow-strong hover:-translate-x-1 transition-all group", title: "계약 흐름도" do %>
+          <span class="w-10 h-10 bg-warm-100 rounded-lg flex items-center justify-center group-hover:bg-warm-500 transition-all duration-200">
+            <span class="material-symbols-outlined text-warm-600 group-hover:text-white transition-colors">account_tree</span>
           </span>
           <span class="text-sm font-semibold text-navy-800">계약 흐름도</span>
         <% end %>
-        <a href="https://www.g2b.go.kr" target="_blank" class="flex items-center gap-3 px-4 py-3 bg-white rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-all group" title="나라장터">
-          <span class="w-10 h-10 bg-surface-100 rounded-lg flex items-center justify-center group-hover:bg-surface-200 transition-colors">
-            <span class="material-symbols-outlined text-navy-500">open_in_new</span>
+        <a href="https://www.g2b.go.kr" target="_blank" class="flex items-center gap-3 px-4 py-3 bg-white/95 backdrop-blur-lg rounded-xl shadow-medium border border-gray-100/50 hover:shadow-strong hover:-translate-x-1 transition-all group" title="나라장터">
+          <span class="w-10 h-10 bg-surface-100 rounded-lg flex items-center justify-center group-hover:bg-navy-500 transition-all duration-200">
+            <span class="material-symbols-outlined text-navy-500 group-hover:text-white transition-colors">open_in_new</span>
           </span>
           <span class="text-sm font-semibold text-navy-800">나라장터</span>
         </a>
@@ -167,15 +167,15 @@
 
       <!-- 메인 버튼 + 라벨 -->
       <div class="flex items-center gap-3 justify-end">
-        <div id="quick-menu-label" class="hidden px-4 py-2 bg-navy-800 text-white text-sm font-medium rounded-xl shadow-lg whitespace-nowrap animate-fade-in">
+        <div id="quick-menu-label" class="hidden px-4 py-2.5 bg-navy-800 text-white text-sm font-medium rounded-xl shadow-lg shadow-navy-900/30 whitespace-nowrap animate-fade-in relative">
           도구 모음
           <div class="absolute -right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 bg-navy-800 rotate-45"></div>
         </div>
-        <button id="quick-menu-btn" class="w-16 h-16 bg-gradient-to-br from-navy-700 to-navy-900 text-white rounded-2xl shadow-lg hover:shadow-xl transition-all flex flex-col items-center justify-center group relative">
-          <span class="material-symbols-outlined text-2xl transition-transform" id="quick-menu-icon">widgets</span>
+        <button id="quick-menu-btn" class="w-16 h-16 bg-gradient-to-br from-navy-700 to-navy-900 text-white rounded-2xl shadow-lg shadow-navy-900/30 hover:shadow-xl hover:shadow-navy-900/40 hover:scale-105 active:scale-95 transition-all duration-200 flex flex-col items-center justify-center group relative">
+          <span class="material-symbols-outlined text-2xl transition-transform group-hover:rotate-12" id="quick-menu-icon">widgets</span>
           <span class="text-[9px] font-semibold mt-0.5 opacity-80" id="quick-menu-text">도구</span>
           <!-- 알림 배지 -->
-          <span class="absolute -top-1 -right-1 w-5 h-5 bg-forest-500 rounded-full flex items-center justify-center text-[10px] font-bold text-white" id="quick-menu-badge">7</span>
+          <span class="absolute -top-1 -right-1 w-5 h-5 bg-forest-500 rounded-full flex items-center justify-center text-[10px] font-bold text-white shadow-sm" id="quick-menu-badge">7</span>
         </button>
       </div>
     </div>
@@ -200,20 +200,22 @@
       }
     </style>
 
-    <!-- Footer -->
-    <footer class="bg-navy-900 text-white mt-auto">
+    <!-- Footer — enhanced with gradient border -->
+    <footer class="bg-navy-900 text-white mt-auto relative">
+      <!-- Top gradient line -->
+      <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-point-500/40 to-transparent"></div>
       <div class="container-wide py-16 lg:py-20">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
           <!-- Brand -->
           <div class="lg:col-span-2">
             <div class="flex items-center gap-3 mb-6">
-              <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center">
+              <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-md">
                 <span class="text-navy-900 font-bold text-xl">실</span>
               </div>
               <span class="text-2xl font-bold">실무</span>
             </div>
             <p class="text-navy-200 text-lg mb-2">감사 걱정 없는, 퇴근 있는, 은퇴 준비되는 공무원</p>
-            <p class="text-navy-400">공무원의 업무 효율과 삶의 질 향상을 위한 플랫폼</p>
+            <p class="text-navy-400 text-sm">공무원의 업무 효율과 삶의 질 향상을 위한 플랫폼</p>
 
             <!-- Social Links -->
             <div class="flex gap-3 mt-6">
@@ -234,6 +236,7 @@
               <li><%= link_to "법령가이드", guides_path, class: "text-navy-300 hover:text-white transition-colors" %></li>
               <li><%= link_to "양식", templates_path, class: "text-navy-300 hover:text-white transition-colors" %></li>
               <li><%= link_to "자료실", guide_resources_path, class: "text-navy-300 hover:text-white transition-colors" %></li>
+              <li><%= link_to "자주 묻는 질문", faq_path, class: "text-navy-300 hover:text-white transition-colors" %></li>
             </ul>
           </div>
 
@@ -267,75 +270,79 @@
     </footer>
 
     <script>
-      // Mobile Menu Toggle
-      const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-      const mobileMenu = document.getElementById('mobile-menu');
+      (function() {
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
 
-      if (mobileMenuBtn && mobileMenu) {
-        mobileMenuBtn.addEventListener('click', () => {
-          mobileMenu.classList.toggle('hidden');
-          const icon = mobileMenuBtn.querySelector('.material-symbols-outlined');
-          icon.textContent = mobileMenu.classList.contains('hidden') ? 'menu' : 'close';
-        });
-      }
-
-      // Navbar scroll effect
-      window.addEventListener('scroll', () => {
-        const nav = document.querySelector('nav');
-        if (window.scrollY > 10) {
-          nav.classList.add('shadow-soft');
-        } else {
-          nav.classList.remove('shadow-soft');
+        if (mobileMenuBtn && mobileMenu) {
+          mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            const icon = mobileMenuBtn.querySelector('.material-symbols-outlined');
+            icon.textContent = mobileMenu.classList.contains('hidden') ? 'menu' : 'close';
+          });
         }
-      });
 
-      // Quick Menu Toggle (강화 버전)
-      const quickMenuBtn = document.getElementById('quick-menu-btn');
-      const quickMenuItems = document.getElementById('quick-menu-items');
-      const quickMenuIcon = document.getElementById('quick-menu-icon');
-      const quickMenuText = document.getElementById('quick-menu-text');
-      const quickMenuLabel = document.getElementById('quick-menu-label');
-      const quickMenuBadge = document.getElementById('quick-menu-badge');
-
-      if (quickMenuBtn && quickMenuItems) {
-        quickMenuBtn.addEventListener('click', () => {
-          quickMenuItems.classList.toggle('hidden');
-          if (quickMenuLabel) quickMenuLabel.classList.add('hidden');
-          if (quickMenuItems.classList.contains('hidden')) {
-            quickMenuIcon.textContent = 'widgets';
-            if (quickMenuText) quickMenuText.textContent = '도구';
-            if (quickMenuBadge) quickMenuBadge.classList.remove('hidden');
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+          const nav = document.getElementById('main-nav');
+          if (!nav) return;
+          if (window.scrollY > 10) {
+            nav.classList.add('shadow-soft');
+            nav.style.borderBottomColor = 'rgba(0,0,0,0.06)';
           } else {
-            quickMenuIcon.textContent = 'close';
-            if (quickMenuText) quickMenuText.textContent = '닫기';
-            if (quickMenuBadge) quickMenuBadge.classList.add('hidden');
-            localStorage.setItem('silmu_quick_menu_seen', 'true');
+            nav.classList.remove('shadow-soft');
+            nav.style.borderBottomColor = '';
           }
         });
 
-        // 외부 클릭 시 닫기
-        document.addEventListener('click', (e) => {
-          if (!quickMenuBtn.contains(e.target) && !quickMenuItems.contains(e.target)) {
-            quickMenuItems.classList.add('hidden');
-            quickMenuIcon.textContent = 'widgets';
-            if (quickMenuText) quickMenuText.textContent = '도구';
-            if (quickMenuBadge) quickMenuBadge.classList.remove('hidden');
-          }
-        });
+        // Quick Menu Toggle
+        const quickMenuBtn = document.getElementById('quick-menu-btn');
+        const quickMenuItems = document.getElementById('quick-menu-items');
+        const quickMenuIcon = document.getElementById('quick-menu-icon');
+        const quickMenuText = document.getElementById('quick-menu-text');
+        const quickMenuLabel = document.getElementById('quick-menu-label');
+        const quickMenuBadge = document.getElementById('quick-menu-badge');
 
-        // 첫 방문 시 라벨 표시 + 버튼 펄스 효과
-        if (!localStorage.getItem('silmu_quick_menu_seen')) {
-          setTimeout(() => {
-            if (quickMenuLabel) quickMenuLabel.classList.remove('hidden');
-            quickMenuBtn.classList.add('quick-menu-pulse');
-            // 5초 후 라벨 자동 숨김
+        if (quickMenuBtn && quickMenuItems) {
+          quickMenuBtn.addEventListener('click', () => {
+            quickMenuItems.classList.toggle('hidden');
+            if (quickMenuLabel) quickMenuLabel.classList.add('hidden');
+            if (quickMenuItems.classList.contains('hidden')) {
+              quickMenuIcon.textContent = 'widgets';
+              if (quickMenuText) quickMenuText.textContent = '도구';
+              if (quickMenuBadge) quickMenuBadge.classList.remove('hidden');
+            } else {
+              quickMenuIcon.textContent = 'close';
+              if (quickMenuText) quickMenuText.textContent = '닫기';
+              if (quickMenuBadge) quickMenuBadge.classList.add('hidden');
+              localStorage.setItem('silmu_quick_menu_seen', 'true');
+            }
+          });
+
+          // 외부 클릭 시 닫기
+          document.addEventListener('click', (e) => {
+            if (!quickMenuBtn.contains(e.target) && !quickMenuItems.contains(e.target)) {
+              quickMenuItems.classList.add('hidden');
+              quickMenuIcon.textContent = 'widgets';
+              if (quickMenuText) quickMenuText.textContent = '도구';
+              if (quickMenuBadge) quickMenuBadge.classList.remove('hidden');
+            }
+          });
+
+          // 첫 방문 시 라벨 표시 + 버튼 펄스 효과
+          if (!localStorage.getItem('silmu_quick_menu_seen')) {
             setTimeout(() => {
-              if (quickMenuLabel) quickMenuLabel.classList.add('hidden');
-              quickMenuBtn.classList.remove('quick-menu-pulse');
-            }, 5000);
-          }, 2000);
+              if (quickMenuLabel) quickMenuLabel.classList.remove('hidden');
+              quickMenuBtn.classList.add('quick-menu-pulse');
+              setTimeout(() => {
+                if (quickMenuLabel) quickMenuLabel.classList.add('hidden');
+                quickMenuBtn.classList.remove('quick-menu-pulse');
+              }, 5000);
+            }, 2000);
+          }
         }
-      }
+      })();
     </script>
   </body>
 </html>

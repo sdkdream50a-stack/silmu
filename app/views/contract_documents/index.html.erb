@@ -181,6 +181,11 @@
     color: #64748b;
     margin-top: 6px;
   }
+  .cd-quick-bar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:8px; }
+  .cd-quick-btn { display:inline-flex; align-items:center; padding:6px 14px; border-radius:20px; border:1px solid #d1d5db; background:#fff; font-size:13px; font-weight:600; color:#475569; cursor:pointer; transition:all .15s; white-space:nowrap; }
+  .cd-quick-btn:hover { background:#f1f5f9; border-color:#94a3b8; color:#334155; }
+  .cd-quick-btn.cd-reset { background:#fef3c7; border-color:#fcd34d; color:#b45309; margin-left:auto; }
+  .cd-quick-btn.cd-reset:hover { background:#fde68a; border-color:#f59e0b; }
 
   /* 서류 단계별 섹션 */
   .stage-section {
@@ -536,6 +541,20 @@
     }
   }
 
+  /* 애니메이션 */
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  @keyframes slideIn {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  @keyframes slideOut {
+    from { transform: translateY(0); opacity: 1; }
+    to { transform: translateY(20px); opacity: 0; }
+  }
+
   /* 인쇄 스타일 */
   @media print {
     .step-indicator, .btn-row, .action-section {
@@ -645,6 +664,14 @@
           <div class="form-group">
             <label>계약금액 (원)</label>
             <input type="text" id="contract_amount" placeholder="예: 50,000,000" oninput="formatCurrency(this)">
+            <div class="cd-quick-bar">
+              <span class="cd-quick-btn" onclick="cdAddQuick(100000)">+10만</span>
+              <span class="cd-quick-btn" onclick="cdAddQuick(1000000)">+100만</span>
+              <span class="cd-quick-btn" onclick="cdAddQuick(10000000)">+1천만</span>
+              <span class="cd-quick-btn" onclick="cdAddQuick(50000000)">+5천만</span>
+              <span class="cd-quick-btn" onclick="cdAddQuick(100000000)">+1억</span>
+              <span class="cd-quick-btn cd-reset" onclick="cdResetQuick()">초기화</span>
+            </div>
           </div>
           <div class="form-group">
             <label>계약일</label>
@@ -759,12 +786,12 @@
     return div.innerHTML;
   }
 
-  // 상태
-  let currentStep = 1;
-  let selectedType = null;
-  let documentsData = null;
-  let selectedDocuments = new Set();
-  let checklistResult = null;
+  // 상태 (var: Turbo 재평가 시 재선언 허용)
+  var currentStep = 1;
+  var selectedType = null;
+  var documentsData = null;
+  var selectedDocuments = new Set();
+  var checklistResult = null;
 
   // 계약 유형 선택
   function selectType(type) {
@@ -1158,6 +1185,20 @@
     }
   }
 
+  window.cdAddQuick = function(amount) {
+    var el = document.getElementById('contract_amount');
+    if (!el) return;
+    var cur = parseInt(el.value.replace(/[^0-9]/g, '')) || 0;
+    el.value = (cur + amount).toLocaleString('ko-KR');
+  };
+
+  window.cdResetQuick = function() {
+    var el = document.getElementById('contract_amount');
+    if (!el) return;
+    el.value = '';
+    el.focus();
+  };
+
   // 토스트
   function showToast(message) {
     const existingToast = document.querySelector('.doc-toast');
@@ -1187,21 +1228,4 @@
     }, 3000);
   }
 
-  // 애니메이션 스타일 추가
-  const style = document.createElement('style');
-  style.textContent = `
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-    @keyframes slideIn {
-      from { transform: translateY(20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-    @keyframes slideOut {
-      from { transform: translateY(0); opacity: 1; }
-      to { transform: translateY(20px); opacity: 0; }
-    }
-  `;
-  document.head.appendChild(style);
 </script>

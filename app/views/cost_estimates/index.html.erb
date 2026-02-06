@@ -1,0 +1,786 @@
+<%# 내역서 + 시공지시서 생성기 %>
+
+<style>
+.ce-step-card { background:#fff; border-radius:16px; border:1px solid #e5e7eb; padding:32px; margin-bottom:24px; display:none; }
+.ce-step-card.active { display:block; }
+.ce-type-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:16px; }
+.ce-type-btn { background:#fff; border:2px solid #e5e7eb; border-radius:14px; padding:24px 16px; text-align:center; cursor:pointer; transition:all .2s; }
+.ce-type-btn:hover { border-color:#6366f1; background:#eef2ff; }
+.ce-type-btn.selected { border-color:#4f46e5; background:#eef2ff; box-shadow:0 0 0 3px rgba(79,70,229,.15); }
+.ce-type-btn .ce-icon { width:48px; height:48px; border-radius:12px; display:flex; align-items:center; justify-content:center; margin:0 auto 12px; background:#f1f5f9; }
+.ce-type-btn.selected .ce-icon { background:#4f46e5; color:#fff; }
+.ce-type-btn.selected .ce-icon .material-symbols-outlined { color:#fff; }
+.ce-type-btn .ce-type-name { font-weight:700; color:#1e293b; font-size:15px; }
+.ce-type-btn .ce-type-desc { font-size:13px; color:#64748b; margin-top:4px; }
+
+.ce-form-group { margin-bottom:18px; }
+.ce-form-group label { display:block; font-weight:600; font-size:14px; color:#334155; margin-bottom:6px; }
+.ce-form-group input, .ce-form-group textarea { width:100%; border:1px solid #d1d5db; border-radius:10px; padding:10px 14px; font-size:14px; }
+.ce-form-group input:focus, .ce-form-group textarea:focus { outline:none; border-color:#4f46e5; box-shadow:0 0 0 3px rgba(79,70,229,.1); }
+.ce-form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+
+.ce-table-wrap { overflow-x:auto; margin:16px 0; }
+.ce-table { width:100%; border-collapse:collapse; font-size:14px; }
+.ce-table th { background:#f8fafc; padding:10px 12px; text-align:center; border-bottom:2px solid #e2e8f0; color:#475569; font-weight:600; font-size:13px; white-space:nowrap; }
+.ce-table td { padding:8px 10px; border-bottom:1px solid #f1f5f9; vertical-align:middle; }
+.ce-table td input { width:100%; border:1px solid #e5e7eb; border-radius:8px; padding:7px 10px; font-size:13px; text-align:right; }
+.ce-table td input.text-left { text-align:left; }
+.ce-table td input:focus { outline:none; border-color:#4f46e5; }
+.ce-table .row-num { text-align:center; color:#94a3b8; font-weight:600; width:40px; }
+.ce-table .row-del { text-align:center; width:40px; }
+.ce-table .row-del button { background:none; border:none; color:#ef4444; cursor:pointer; font-size:18px; padding:4px; border-radius:6px; }
+.ce-table .row-del button:hover { background:#fef2f2; }
+.ce-table .amount-cell { text-align:right; font-weight:600; color:#1e293b; padding-right:14px; min-width:100px; }
+.ce-add-row { display:flex; align-items:center; gap:6px; color:#4f46e5; font-weight:600; font-size:14px; cursor:pointer; padding:8px 12px; border-radius:8px; border:1px dashed #c7d2fe; background:#fafafe; margin-top:8px; }
+.ce-add-row:hover { background:#eef2ff; }
+
+.ce-summary { background:#f8fafc; border-radius:12px; padding:20px 24px; margin-top:20px; }
+.ce-summary-row { display:flex; justify-content:space-between; padding:6px 0; font-size:14px; }
+.ce-summary-row.total { border-top:2px solid #cbd5e1; margin-top:8px; padding-top:12px; font-size:16px; font-weight:700; color:#1e293b; }
+.ce-summary-label { color:#64748b; }
+.ce-summary-value { font-weight:600; color:#334155; }
+
+.ce-btn { display:inline-flex; align-items:center; gap:6px; padding:12px 28px; border-radius:12px; font-weight:600; font-size:15px; border:none; cursor:pointer; transition:all .2s; }
+.ce-btn-primary { background:#4f46e5; color:#fff; }
+.ce-btn-primary:hover { background:#4338ca; }
+.ce-btn-secondary { background:#f1f5f9; color:#475569; }
+.ce-btn-secondary:hover { background:#e2e8f0; }
+.ce-btn-success { background:#059669; color:#fff; }
+.ce-btn-success:hover { background:#047857; }
+.ce-btn:disabled { opacity:.5; cursor:not-allowed; }
+
+.ce-step-indicator { display:flex; gap:8px; margin-bottom:28px; }
+.ce-step-dot { width:10px; height:10px; border-radius:50%; background:#e2e8f0; transition:all .2s; }
+.ce-step-dot.active { background:#4f46e5; width:28px; border-radius:5px; }
+.ce-step-dot.done { background:#059669; }
+
+.ce-section-title { font-size:22px; font-weight:700; color:#1e293b; margin-bottom:6px; }
+.ce-section-desc { font-size:14px; color:#64748b; margin-bottom:24px; }
+
+.ce-instruction-box { background:#fffbeb; border:1px solid #fde68a; border-radius:12px; padding:20px; margin:16px 0; }
+.ce-instruction-box h4 { font-weight:700; color:#92400e; margin-bottom:8px; }
+.ce-instruction-box pre { white-space:pre-wrap; font-family:inherit; font-size:14px; color:#78350f; line-height:1.7; }
+
+/* 인쇄용 출력 */
+.ce-print-area { display:none; }
+
+.ce-result-section { background:#fff; border:1px solid #e5e7eb; border-radius:14px; padding:28px; margin-bottom:20px; }
+.ce-result-title { font-size:18px; font-weight:700; color:#1e293b; margin-bottom:16px; padding-bottom:12px; border-bottom:2px solid #e2e8f0; display:flex; align-items:center; gap:8px; }
+
+@media print {
+  body * { visibility:hidden; }
+  .ce-print-area, .ce-print-area * { visibility:visible; }
+  .ce-print-area { display:block !important; position:absolute; left:0; top:0; width:100%; padding:20px; }
+  .ce-print-table { width:100%; border-collapse:collapse; font-size:12px; }
+  .ce-print-table th, .ce-print-table td { border:1px solid #333; padding:6px 8px; }
+  .ce-print-table th { background:#f0f0f0; font-weight:bold; }
+  .print-header { text-align:center; margin-bottom:20px; }
+  .print-header h2 { font-size:20px; margin-bottom:4px; }
+  .print-info { margin:12px 0; font-size:13px; }
+  .print-info td { padding:4px 12px; }
+  .print-sign { margin-top:30px; text-align:right; }
+  .print-sign table { margin-left:auto; border-collapse:collapse; }
+  .print-sign td { border:1px solid #333; padding:8px 20px; text-align:center; min-width:70px; }
+  .no-print { display:none !important; }
+}
+
+@keyframes ceSpin { to { transform:rotate(360deg); } }
+.ce-ai-filled { background:#f0fdf4 !important; border-color:#86efac !important; }
+
+@media (max-width:640px) {
+  .ce-type-grid { grid-template-columns:repeat(2, 1fr); gap:10px; }
+  .ce-type-btn { padding:16px 10px; }
+  .ce-form-row { grid-template-columns:1fr; }
+  .ce-table td input { padding:5px 6px; font-size:12px; }
+}
+</style>
+
+<!-- 헤더 -->
+<section class="gradient-premium text-white py-12 lg:py-16">
+  <div class="container-wide">
+    <div class="flex items-start gap-5">
+      <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 shadow-lg">
+        <span class="material-symbols-outlined text-4xl text-white">receipt_long</span>
+      </div>
+      <div>
+        <h1 class="text-3xl lg:text-4xl font-bold tracking-tight mb-2">내역서 + 시공지시서 생성기</h1>
+        <p class="text-navy-200 text-lg">소액공사 간이 내역서와 시공지시서를 간편하게 작성</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-10">
+  <div class="container-wide max-w-4xl">
+
+    <!-- Step Indicator -->
+    <div class="ce-step-indicator" id="ce-steps">
+      <div class="ce-step-dot active"></div>
+      <div class="ce-step-dot"></div>
+      <div class="ce-step-dot"></div>
+      <div class="ce-step-dot"></div>
+    </div>
+
+    <!-- Step 1: 공사유형 선택 -->
+    <div class="ce-step-card active" id="ce-step1">
+      <h2 class="ce-section-title">공사유형 선택</h2>
+      <p class="ce-section-desc">내역서를 작성할 공사 유형을 선택하세요. 유형별 기본 항목이 자동으로 채워집니다.</p>
+
+      <div class="ce-type-grid" id="ce-type-grid">
+        <% @construction_types.each do |type| %>
+          <div class="ce-type-btn" data-type="<%= type[:id] %>" onclick="ceSelectType(this)">
+            <div class="ce-icon">
+              <span class="material-symbols-outlined text-2xl text-indigo-500"><%= type[:icon] %></span>
+            </div>
+            <div class="ce-type-name"><%= type[:name] %></div>
+            <div class="ce-type-desc"><%= type[:desc] %></div>
+          </div>
+        <% end %>
+      </div>
+
+      <!-- AI 문서 분석 (선택사항) -->
+      <div id="ce-ai-upload" style="display:none; margin-top:24px; padding-top:20px; border-top:1px solid #e5e7eb;">
+        <h3 style="font-size:16px; font-weight:700; color:#1e293b; margin-bottom:4px; display:flex; align-items:center; gap:8px;">
+          <span class="material-symbols-outlined" style="color:#6366f1;">auto_awesome</span>
+          AI 견적서 분석
+          <span style="font-size:12px; font-weight:400; color:#94a3b8;">(선택사항)</span>
+        </h3>
+        <p style="font-size:13px; color:#64748b; margin-bottom:16px;">견적서나 내역서를 업로드하면 AI가 분석하여 항목을 자동으로 채워줍니다.</p>
+
+        <div id="ce-upload-zone" style="border:2px dashed #c7d2fe; border-radius:12px; padding:28px 20px; text-align:center; cursor:pointer; background:#fafafe; transition:all .2s;"
+             onclick="document.getElementById('ce-file-input').click()"
+             ondragover="ceHandleDragOver(event)" ondragleave="ceHandleDragLeave(event)" ondrop="ceHandleDrop(event)">
+          <span class="material-symbols-outlined" style="font-size:36px; color:#a5b4fc; margin-bottom:6px;">cloud_upload</span>
+          <p style="font-size:14px; color:#64748b; margin-bottom:2px;">파일을 드래그하거나 클릭하여 선택</p>
+          <small style="font-size:12px; color:#94a3b8;">PDF, JPG, PNG (최대 20MB)</small>
+        </div>
+        <input type="file" id="ce-file-input" accept=".pdf,.jpg,.jpeg,.png" style="display:none" onchange="ceFileSelect(event)">
+
+        <div id="ce-file-info" style="display:none; margin-top:12px; padding:12px 16px; background:#fff; border:1px solid #e5e7eb; border-radius:10px; align-items:center; gap:12px;">
+          <span class="material-symbols-outlined" style="font-size:22px; color:#6366f1;">description</span>
+          <div style="flex:1;">
+            <div id="ce-file-name" style="font-size:14px; font-weight:600; color:#1e293b;"></div>
+            <div id="ce-file-size" style="font-size:12px; color:#64748b;"></div>
+          </div>
+          <button onclick="ceClearFile()" style="padding:5px 12px; background:#fef2f2; color:#ef4444; border:none; border-radius:8px; cursor:pointer; font-size:13px;">삭제</button>
+        </div>
+
+        <button id="ce-btn-analyze" style="display:none; margin-top:12px; width:100%; padding:13px; background:linear-gradient(135deg,#6366f1,#8b5cf6); color:#fff; border:none; border-radius:12px; font-size:15px; font-weight:600; cursor:pointer; align-items:center; justify-content:center; gap:8px;" onclick="ceAnalyzeDocument()">
+          <span class="material-symbols-outlined" style="vertical-align:middle; font-size:20px;">auto_awesome</span>
+          AI 분석 시작
+        </button>
+
+        <div id="ce-analysis-status" style="display:none; margin-top:12px; padding:12px 16px; border-radius:10px; font-size:14px; align-items:center; gap:10px;">
+          <div id="ce-analysis-spinner" style="width:18px; height:18px; border:2px solid #bfdbfe; border-top-color:#4f46e5; border-radius:50%; animation:ceSpin .8s linear infinite;"></div>
+          <span id="ce-analysis-msg"></span>
+        </div>
+      </div>
+
+      <div style="margin-top:24px; text-align:right;">
+        <button class="ce-btn ce-btn-primary" id="ce-btn-step1" disabled onclick="ceGoStep(2)">
+          다음 <span class="material-symbols-outlined text-lg">arrow_forward</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 2: 기본정보 입력 -->
+    <div class="ce-step-card" id="ce-step2">
+      <h2 class="ce-section-title">기본정보 입력</h2>
+      <p class="ce-section-desc">공사 기본 정보를 입력하세요.</p>
+
+      <div class="ce-form-group">
+        <label>공사명 *</label>
+        <input type="text" id="ce-project-name" placeholder="예: 본관 2층 화장실 방수공사">
+      </div>
+      <div class="ce-form-row">
+        <div class="ce-form-group">
+          <label>공사 장소</label>
+          <input type="text" id="ce-location" placeholder="예: 본관 2층">
+        </div>
+        <div class="ce-form-group">
+          <label>공사 기간</label>
+          <input type="text" id="ce-duration" placeholder="예: 2026.3.1 ~ 2026.3.15">
+        </div>
+      </div>
+      <div class="ce-form-row">
+        <div class="ce-form-group">
+          <label>담당 부서</label>
+          <input type="text" id="ce-department" placeholder="예: 총무과">
+        </div>
+        <div class="ce-form-group">
+          <label>담당자</label>
+          <input type="text" id="ce-manager" placeholder="예: 홍길동">
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; margin-top:24px;">
+        <button class="ce-btn ce-btn-secondary" onclick="ceGoStep(1)">
+          <span class="material-symbols-outlined text-lg">arrow_back</span> 이전
+        </button>
+        <button class="ce-btn ce-btn-primary" id="ce-btn-step2" onclick="ceGoStep(3)">
+          다음: 내역 입력 <span class="material-symbols-outlined text-lg">arrow_forward</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 3: 내역 입력 -->
+    <div class="ce-step-card" id="ce-step3">
+      <h2 class="ce-section-title">내역 입력</h2>
+      <p class="ce-section-desc">공종별 항목, 수량, 단가를 입력하세요. 합계가 자동 계산됩니다.</p>
+
+      <div class="ce-table-wrap">
+        <table class="ce-table" id="ce-item-table">
+          <thead>
+            <tr>
+              <th style="width:40px">No</th>
+              <th style="min-width:140px">공종/품명</th>
+              <th style="min-width:120px">규격</th>
+              <th style="width:70px">단위</th>
+              <th style="width:80px">수량</th>
+              <th style="width:100px">단가(원)</th>
+              <th style="width:110px">금액(원)</th>
+              <th style="width:40px"></th>
+            </tr>
+          </thead>
+          <tbody id="ce-item-tbody">
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ce-add-row" onclick="ceAddRow()">
+        <span class="material-symbols-outlined">add_circle</span> 항목 추가
+      </div>
+
+      <!-- 합계 -->
+      <div class="ce-summary" id="ce-summary">
+        <div class="ce-summary-row">
+          <span class="ce-summary-label">직접공사비 (재료비+노무비)</span>
+          <span class="ce-summary-value" id="ce-direct-cost">0 원</span>
+        </div>
+        <div id="ce-indirect-rows"></div>
+        <div class="ce-summary-row">
+          <span class="ce-summary-label">소계 (공급가액)</span>
+          <span class="ce-summary-value" id="ce-subtotal">0 원</span>
+        </div>
+        <div class="ce-summary-row">
+          <span class="ce-summary-label">부가가치세 (10%)</span>
+          <span class="ce-summary-value" id="ce-vat">0 원</span>
+        </div>
+        <div class="ce-summary-row total">
+          <span>합계</span>
+          <span id="ce-total">0 원</span>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; margin-top:24px;">
+        <button class="ce-btn ce-btn-secondary" onclick="ceGoStep(2)">
+          <span class="material-symbols-outlined text-lg">arrow_back</span> 이전
+        </button>
+        <button class="ce-btn ce-btn-primary" onclick="ceGoStep(4)">
+          다음: 시공지시서 <span class="material-symbols-outlined text-lg">arrow_forward</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 4: 시공지시서 + 출력 -->
+    <div class="ce-step-card" id="ce-step4">
+      <h2 class="ce-section-title">시공지시서 및 출력</h2>
+      <p class="ce-section-desc">시공지시사항을 확인·수정하고 문서를 출력하세요.</p>
+
+      <div class="ce-instruction-box">
+        <h4><span class="material-symbols-outlined" style="vertical-align:middle;font-size:18px;">engineering</span> 시공 지시사항 (기본 템플릿)</h4>
+        <pre id="ce-instruction-template"></pre>
+      </div>
+
+      <div class="ce-form-group">
+        <label>추가 지시사항 (선택)</label>
+        <textarea id="ce-custom-instructions" rows="3" placeholder="추가적인 시공 지시사항을 입력하세요"></textarea>
+      </div>
+
+      <!-- 결과 미리보기 -->
+      <div id="ce-result-area" style="display:none;">
+        <div class="ce-result-section">
+          <div class="ce-result-title">
+            <span class="material-symbols-outlined text-indigo-500">description</span> 내역서 미리보기
+          </div>
+          <div id="ce-result-estimate"></div>
+        </div>
+
+        <div class="ce-result-section">
+          <div class="ce-result-title">
+            <span class="material-symbols-outlined text-amber-600">engineering</span> 시공지시서 미리보기
+          </div>
+          <div id="ce-result-instruction"></div>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-top:24px;">
+        <button class="ce-btn ce-btn-secondary" onclick="ceGoStep(3)">
+          <span class="material-symbols-outlined text-lg">arrow_back</span> 이전
+        </button>
+        <div style="display:flex; gap:12px;">
+          <button class="ce-btn ce-btn-primary" onclick="ceGenerate()">
+            <span class="material-symbols-outlined text-lg">auto_awesome</span> 문서 생성
+          </button>
+          <button class="ce-btn ce-btn-success" id="ce-btn-print" style="display:none;" onclick="cePrint('estimate')">
+            <span class="material-symbols-outlined text-lg">print</span> 내역서 인쇄
+          </button>
+          <button class="ce-btn ce-btn-success" id="ce-btn-print2" style="display:none;" onclick="cePrint('instruction')">
+            <span class="material-symbols-outlined text-lg">print</span> 시공지시서 인쇄
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- 인쇄용 영역 -->
+<div class="ce-print-area" id="ce-print-area"></div>
+
+<script>
+document.addEventListener('turbo:load', function() {
+  var ceStepCard = document.getElementById('ce-step1');
+  if (!ceStepCard) return;
+
+  var ceSelectedType = null;
+  var ceItems = [];
+  var ceRowId = 0;
+  var ceResult = null;
+
+  var ceUploadedFile = null;
+  var ceAnalyzedData = null;
+
+  // 공사유형 선택
+  window.ceSelectType = function(el) {
+    var btns = document.querySelectorAll('.ce-type-btn');
+    for (var i = 0; i < btns.length; i++) { btns[i].classList.remove('selected'); }
+    el.classList.add('selected');
+    ceSelectedType = el.dataset.type;
+    document.getElementById('ce-btn-step1').disabled = false;
+
+    // AI 업로드 섹션 표시
+    document.getElementById('ce-ai-upload').style.display = 'block';
+
+    // 기본 항목 로드
+    fetch('/cost-estimates/default-items/' + ceSelectedType, {
+      headers: { 'Accept': 'application/json', 'X-CSRF-Token': document.querySelector('meta[name=csrf-token]').content }
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.success) {
+        ceItems = data.items;
+        ceRenderTable();
+      }
+    });
+  };
+
+  // 스텝 이동
+  window.ceGoStep = function(step) {
+    // Step 2 진입 시 AI 분석 데이터 적용
+    if (step === 2 && ceAnalyzedData) {
+      ceApplyAnalyzedData();
+    }
+    if (step === 3 && !document.getElementById('ce-project-name').value.trim()) {
+      document.getElementById('ce-project-name').focus();
+      document.getElementById('ce-project-name').style.borderColor = '#ef4444';
+      return;
+    }
+    // Step 3 진입 시 AI 분석된 항목 적용
+    if (step === 3 && ceAnalyzedData && ceAnalyzedData.items) {
+      ceApplyAnalyzedItems();
+    }
+    if (step === 4) {
+      // 시공지시서 템플릿 세팅
+      var templates = <%= raw CostEstimateGeneratorService::INSTRUCTION_TEMPLATES.to_json %>;
+      var tmpl = templates[ceSelectedType] || '';
+      document.getElementById('ce-instruction-template').textContent = tmpl;
+    }
+
+    for (var i = 1; i <= 4; i++) {
+      var card = document.getElementById('ce-step' + i);
+      if (card) card.classList.remove('active');
+    }
+    document.getElementById('ce-step' + step).classList.add('active');
+
+    var dots = document.querySelectorAll('.ce-step-dot');
+    for (var d = 0; d < dots.length; d++) {
+      dots[d].classList.remove('active', 'done');
+      if (d < step - 1) dots[d].classList.add('done');
+      if (d === step - 1) dots[d].classList.add('active');
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // 테이블 렌더링
+  function ceRenderTable() {
+    var tbody = document.getElementById('ce-item-tbody');
+    tbody.innerHTML = '';
+    for (var i = 0; i < ceItems.length; i++) {
+      var item = ceItems[i];
+      item.id = item.id || (++ceRowId);
+      var tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td class="row-num">' + (i + 1) + '</td>' +
+        '<td><input class="text-left" data-field="name" data-idx="' + i + '" value="' + ceEsc(item.name) + '" oninput="ceUpdateField(this)"></td>' +
+        '<td><input class="text-left" data-field="spec" data-idx="' + i + '" value="' + ceEsc(item.spec) + '" oninput="ceUpdateField(this)"></td>' +
+        '<td><input class="text-left" style="text-align:center" data-field="unit" data-idx="' + i + '" value="' + ceEsc(item.unit) + '" oninput="ceUpdateField(this)"></td>' +
+        '<td><input type="number" data-field="qty" data-idx="' + i + '" value="' + (item.qty || 0) + '" oninput="ceUpdateField(this)" min="0" step="0.1"></td>' +
+        '<td><input type="number" data-field="unit_price" data-idx="' + i + '" value="' + (item.unit_price || 0) + '" oninput="ceUpdateField(this)" min="0"></td>' +
+        '<td class="amount-cell" id="ce-amt-' + i + '">' + ceComma(item.amount || 0) + '</td>' +
+        '<td class="row-del"><button onclick="ceDeleteRow(' + i + ')"><span class="material-symbols-outlined">close</span></button></td>';
+      tbody.appendChild(tr);
+    }
+    ceCalcTotal();
+  }
+
+  window.ceUpdateField = function(el) {
+    var idx = parseInt(el.dataset.idx);
+    var field = el.dataset.field;
+    if (field === 'qty' || field === 'unit_price') {
+      ceItems[idx][field] = parseFloat(el.value) || 0;
+      ceItems[idx].amount = Math.round(ceItems[idx].qty * ceItems[idx].unit_price);
+      var amtCell = document.getElementById('ce-amt-' + idx);
+      if (amtCell) amtCell.textContent = ceComma(ceItems[idx].amount);
+      ceCalcTotal();
+    } else {
+      ceItems[idx][field] = el.value;
+    }
+  };
+
+  window.ceAddRow = function() {
+    ceItems.push({ id: ++ceRowId, name: '', spec: '', unit: '식', qty: 1, unit_price: 0, amount: 0 });
+    ceRenderTable();
+  };
+
+  window.ceDeleteRow = function(idx) {
+    if (ceItems.length <= 1) return;
+    ceItems.splice(idx, 1);
+    ceRenderTable();
+  };
+
+  function ceCalcTotal() {
+    var directCost = 0;
+    for (var i = 0; i < ceItems.length; i++) { directCost += (ceItems[i].amount || 0); }
+
+    var laborRatio = 0.4;
+    var laborCost = Math.round(directCost * laborRatio);
+    var materialOnly = directCost - laborCost;
+
+    // 일반관리비
+    var general = Math.round((materialOnly + laborCost) * 0.06);
+    // 이윤
+    var profit = Math.round((laborCost + general) * 0.15);
+    // 보험료
+    var insurance = Math.round(laborCost * (0.036 + 0.009 + 0.089));
+    // 산업안전보건관리비
+    var safety = directCost >= 4000000 ? Math.round((materialOnly + laborCost) * 0.018) : 0;
+
+    var subtotal = directCost + general + profit + insurance + safety;
+    var vat = Math.round(subtotal * 0.10);
+    var total = subtotal + vat;
+
+    document.getElementById('ce-direct-cost').textContent = ceComma(directCost) + ' 원';
+
+    var indirectHtml = '';
+    indirectHtml += '<div class="ce-summary-row"><span class="ce-summary-label">일반관리비 (6%)</span><span class="ce-summary-value">' + ceComma(general) + ' 원</span></div>';
+    indirectHtml += '<div class="ce-summary-row"><span class="ce-summary-label">이윤 (15%)</span><span class="ce-summary-value">' + ceComma(profit) + ' 원</span></div>';
+    indirectHtml += '<div class="ce-summary-row"><span class="ce-summary-label">보험료 (산재·고용·건강·연금)</span><span class="ce-summary-value">' + ceComma(insurance) + ' 원</span></div>';
+    if (safety > 0) {
+      indirectHtml += '<div class="ce-summary-row"><span class="ce-summary-label">산업안전보건관리비 (1.8%)</span><span class="ce-summary-value">' + ceComma(safety) + ' 원</span></div>';
+    }
+    document.getElementById('ce-indirect-rows').innerHTML = indirectHtml;
+    document.getElementById('ce-subtotal').textContent = ceComma(subtotal) + ' 원';
+    document.getElementById('ce-vat').textContent = ceComma(vat) + ' 원';
+    document.getElementById('ce-total').textContent = ceComma(total) + ' 원';
+  }
+
+  // 문서 생성
+  window.ceGenerate = function() {
+    var info = {
+      project_name: document.getElementById('ce-project-name').value,
+      location: document.getElementById('ce-location').value,
+      duration: document.getElementById('ce-duration').value,
+      department: document.getElementById('ce-department').value,
+      manager: document.getElementById('ce-manager').value
+    };
+
+    var body = {
+      construction_type: ceSelectedType,
+      items: ceItems,
+      project_name: info.project_name,
+      location: info.location,
+      duration: info.duration,
+      department: info.department,
+      manager: info.manager,
+      custom_instructions: document.getElementById('ce-custom-instructions').value
+    };
+
+    fetch('/cost-estimates/generate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'X-CSRF-Token': document.querySelector('meta[name=csrf-token]').content
+      },
+      body: JSON.stringify(body)
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.success) {
+        ceResult = data;
+        ceRenderResult(data);
+        document.getElementById('ce-result-area').style.display = 'block';
+        document.getElementById('ce-btn-print').style.display = '';
+        document.getElementById('ce-btn-print2').style.display = '';
+      }
+    });
+  };
+
+  function ceRenderResult(data) {
+    var est = data.estimate;
+    var ins = data.instruction;
+
+    // 내역서 미리보기
+    var html = '<div style="text-align:center;margin-bottom:16px;"><strong style="font-size:17px;">' + ceEsc(est.type_name) + ' 내역서</strong></div>';
+    html += '<table style="width:100%;font-size:13px;margin-bottom:12px;"><tr><td><strong>공사명:</strong> ' + ceEsc(est.info.project_name) + '</td><td><strong>장소:</strong> ' + ceEsc(est.info.location || '-') + '</td></tr>';
+    html += '<tr><td><strong>기간:</strong> ' + ceEsc(est.info.duration || '-') + '</td><td><strong>담당:</strong> ' + ceEsc(est.info.department || '') + ' ' + ceEsc(est.info.manager || '') + '</td></tr></table>';
+
+    html += '<table class="ce-table"><thead><tr><th>No</th><th>공종/품명</th><th>규격</th><th>단위</th><th>수량</th><th>단가</th><th>금액</th></tr></thead><tbody>';
+    for (var i = 0; i < est.items.length; i++) {
+      var item = est.items[i];
+      html += '<tr><td style="text-align:center">' + (i + 1) + '</td><td>' + ceEsc(item.name) + '</td><td>' + ceEsc(item.spec) + '</td><td style="text-align:center">' + ceEsc(item.unit) + '</td><td style="text-align:right">' + item.qty + '</td><td style="text-align:right">' + ceComma(item.unit_price) + '</td><td style="text-align:right">' + ceComma(item.amount) + '</td></tr>';
+    }
+    html += '</tbody></table>';
+
+    html += '<div class="ce-summary" style="margin-top:12px;">';
+    html += '<div class="ce-summary-row"><span class="ce-summary-label">직접공사비</span><span class="ce-summary-value">' + ceComma(est.material_cost) + ' 원</span></div>';
+    for (var j = 0; j < est.indirect_costs.length; j++) {
+      var ic = est.indirect_costs[j];
+      html += '<div class="ce-summary-row"><span class="ce-summary-label">' + ceEsc(ic.name) + ' (' + ceEsc(ic.note) + ')</span><span class="ce-summary-value">' + ceComma(ic.amount) + ' 원</span></div>';
+    }
+    html += '<div class="ce-summary-row"><span class="ce-summary-label">소계</span><span class="ce-summary-value">' + ceComma(est.subtotal) + ' 원</span></div>';
+    html += '<div class="ce-summary-row"><span class="ce-summary-label">부가가치세</span><span class="ce-summary-value">' + ceComma(est.vat) + ' 원</span></div>';
+    html += '<div class="ce-summary-row total"><span>합계</span><span>' + ceComma(est.total) + ' 원</span></div>';
+    html += '</div>';
+    document.getElementById('ce-result-estimate').innerHTML = html;
+
+    // 시공지시서 미리보기
+    var iHtml = '<div style="text-align:center;margin-bottom:16px;"><strong style="font-size:17px;">' + ceEsc(ins.type_name) + ' 시공지시서</strong></div>';
+    iHtml += '<table style="width:100%;font-size:13px;margin-bottom:16px;border-collapse:collapse;">';
+    iHtml += '<tr><td style="padding:6px;border-bottom:1px solid #e5e7eb;"><strong>공사명</strong></td><td style="padding:6px;border-bottom:1px solid #e5e7eb;">' + ceEsc(ins.info.project_name) + '</td></tr>';
+    iHtml += '<tr><td style="padding:6px;border-bottom:1px solid #e5e7eb;"><strong>공사금액</strong></td><td style="padding:6px;border-bottom:1px solid #e5e7eb;">' + ceComma(ins.total) + ' 원 (VAT 포함)</td></tr>';
+    iHtml += '<tr><td style="padding:6px;border-bottom:1px solid #e5e7eb;"><strong>공사기간</strong></td><td style="padding:6px;border-bottom:1px solid #e5e7eb;">' + ceEsc(ins.info.duration || '-') + '</td></tr>';
+    iHtml += '<tr><td style="padding:6px;border-bottom:1px solid #e5e7eb;"><strong>공사장소</strong></td><td style="padding:6px;border-bottom:1px solid #e5e7eb;">' + ceEsc(ins.info.location || '-') + '</td></tr>';
+    iHtml += '</table>';
+
+    iHtml += '<div style="margin-bottom:16px;"><strong style="color:#92400e;">시공 지시사항</strong><pre style="white-space:pre-wrap;font-family:inherit;font-size:14px;line-height:1.8;background:#fffbeb;padding:16px;border-radius:10px;margin-top:8px;">' + ceEsc(ins.template) + '</pre></div>';
+
+    if (ins.custom) {
+      iHtml += '<div style="margin-bottom:16px;"><strong style="color:#1e40af;">추가 지시사항</strong><pre style="white-space:pre-wrap;font-family:inherit;font-size:14px;line-height:1.8;background:#eff6ff;padding:16px;border-radius:10px;margin-top:8px;">' + ceEsc(ins.custom) + '</pre></div>';
+    }
+
+    iHtml += '<div style="margin-top:24px;text-align:right;font-size:14px;"><p>위와 같이 시공을 지시합니다.</p><br><table style="margin-left:auto;border-collapse:collapse;"><tr><td style="border:1px solid #d1d5db;padding:8px 24px;background:#f8fafc;">담당</td><td style="border:1px solid #d1d5db;padding:8px 24px;background:#f8fafc;">팀장</td><td style="border:1px solid #d1d5db;padding:8px 24px;background:#f8fafc;">과장</td></tr><tr><td style="border:1px solid #d1d5db;padding:20px 24px;"></td><td style="border:1px solid #d1d5db;padding:20px 24px;"></td><td style="border:1px solid #d1d5db;padding:20px 24px;"></td></tr></table></div>';
+
+    document.getElementById('ce-result-instruction').innerHTML = iHtml;
+  }
+
+  // 인쇄
+  window.cePrint = function(docType) {
+    if (!ceResult) return;
+    var printArea = document.getElementById('ce-print-area');
+    if (docType === 'estimate') {
+      printArea.innerHTML = buildEstimatePrint(ceResult.estimate);
+    } else {
+      printArea.innerHTML = buildInstructionPrint(ceResult.instruction);
+    }
+    window.print();
+  };
+
+  function buildEstimatePrint(est) {
+    var h = '<div class="print-header"><h2>' + ceEsc(est.type_name) + ' 내역서</h2></div>';
+    h += '<table class="print-info"><tr><td><strong>공사명:</strong></td><td>' + ceEsc(est.info.project_name) + '</td><td><strong>장소:</strong></td><td>' + ceEsc(est.info.location || '-') + '</td></tr>';
+    h += '<tr><td><strong>기간:</strong></td><td>' + ceEsc(est.info.duration || '-') + '</td><td><strong>담당:</strong></td><td>' + ceEsc(est.info.department || '') + ' ' + ceEsc(est.info.manager || '') + '</td></tr></table>';
+    h += '<table class="ce-print-table"><thead><tr><th>No</th><th>공종/품명</th><th>규격</th><th>단위</th><th>수량</th><th>단가(원)</th><th>금액(원)</th></tr></thead><tbody>';
+    for (var i = 0; i < est.items.length; i++) {
+      var item = est.items[i];
+      h += '<tr><td style="text-align:center">' + (i+1) + '</td><td>' + ceEsc(item.name) + '</td><td>' + ceEsc(item.spec) + '</td><td style="text-align:center">' + ceEsc(item.unit) + '</td><td style="text-align:right">' + item.qty + '</td><td style="text-align:right">' + ceComma(item.unit_price) + '</td><td style="text-align:right">' + ceComma(item.amount) + '</td></tr>';
+    }
+    h += '<tr style="font-weight:bold;background:#f0f0f0;"><td colspan="6" style="text-align:center">직접공사비 소계</td><td style="text-align:right">' + ceComma(est.material_cost) + '</td></tr>';
+    for (var j = 0; j < est.indirect_costs.length; j++) {
+      var ic = est.indirect_costs[j];
+      h += '<tr><td colspan="6" style="text-align:center">' + ceEsc(ic.name) + '</td><td style="text-align:right">' + ceComma(ic.amount) + '</td></tr>';
+    }
+    h += '<tr><td colspan="6" style="text-align:center">소계 (공급가액)</td><td style="text-align:right">' + ceComma(est.subtotal) + '</td></tr>';
+    h += '<tr><td colspan="6" style="text-align:center">부가가치세</td><td style="text-align:right">' + ceComma(est.vat) + '</td></tr>';
+    h += '<tr style="font-weight:bold;background:#f0f0f0;"><td colspan="6" style="text-align:center">합계</td><td style="text-align:right">' + ceComma(est.total) + '</td></tr>';
+    h += '</tbody></table>';
+    h += '<div class="print-sign"><table><tr><td>담당</td><td>팀장</td><td>과장</td></tr><tr><td style="height:50px;"></td><td></td><td></td></tr></table></div>';
+    return h;
+  }
+
+  function buildInstructionPrint(ins) {
+    var h = '<div class="print-header"><h2>' + ceEsc(ins.type_name) + ' 시공지시서</h2></div>';
+    h += '<table class="ce-print-table" style="margin-bottom:20px;"><tbody>';
+    h += '<tr><td style="width:100px;background:#f0f0f0;font-weight:bold;">공사명</td><td>' + ceEsc(ins.info.project_name) + '</td></tr>';
+    h += '<tr><td style="background:#f0f0f0;font-weight:bold;">공사금액</td><td>' + ceComma(ins.total) + ' 원 (VAT 포함)</td></tr>';
+    h += '<tr><td style="background:#f0f0f0;font-weight:bold;">공사기간</td><td>' + ceEsc(ins.info.duration || '-') + '</td></tr>';
+    h += '<tr><td style="background:#f0f0f0;font-weight:bold;">공사장소</td><td>' + ceEsc(ins.info.location || '-') + '</td></tr>';
+    h += '</tbody></table>';
+    h += '<div style="margin-bottom:16px;"><strong>시공 지시사항</strong><pre style="white-space:pre-wrap;font-family:serif;line-height:1.8;margin-top:8px;">' + ceEsc(ins.template) + '</pre></div>';
+    if (ins.custom) {
+      h += '<div style="margin-bottom:16px;"><strong>추가 지시사항</strong><pre style="white-space:pre-wrap;font-family:serif;line-height:1.8;margin-top:8px;">' + ceEsc(ins.custom) + '</pre></div>';
+    }
+    h += '<div style="margin-top:30px;text-align:center;"><p>위와 같이 시공을 지시합니다.</p><br><p>20    년    월    일</p></div>';
+    h += '<div class="print-sign"><table><tr><td>담당</td><td>팀장</td><td>과장</td></tr><tr><td style="height:50px;"></td><td></td><td></td></tr></table></div>';
+    return h;
+  }
+
+  // 유틸
+  function ceComma(n) { return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+  window.ceComma = ceComma;
+
+  function ceEsc(s) { if (!s) return ''; var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+  window.ceEsc = ceEsc;
+
+  // === AI 문서 분석 기능 ===
+
+  window.ceHandleDragOver = function(e) {
+    e.preventDefault(); e.stopPropagation();
+    e.currentTarget.style.borderColor = '#6366f1';
+    e.currentTarget.style.background = '#eef2ff';
+  };
+  window.ceHandleDragLeave = function(e) {
+    e.preventDefault(); e.stopPropagation();
+    e.currentTarget.style.borderColor = '#c7d2fe';
+    e.currentTarget.style.background = '#fafafe';
+  };
+  window.ceHandleDrop = function(e) {
+    e.preventDefault(); e.stopPropagation();
+    e.currentTarget.style.borderColor = '#c7d2fe';
+    e.currentTarget.style.background = '#fafafe';
+    if (e.dataTransfer.files.length > 0) ceProcessFile(e.dataTransfer.files[0]);
+  };
+  window.ceFileSelect = function(e) {
+    if (e.target.files.length > 0) ceProcessFile(e.target.files[0]);
+  };
+
+  function ceProcessFile(file) {
+    var allowed = ['application/pdf', 'image/jpeg', 'image/png'];
+    if (allowed.indexOf(file.type) === -1) { alert('PDF, JPG, PNG 파일만 업로드 가능합니다.'); return; }
+    if (file.size > 20 * 1024 * 1024) { alert('파일 크기는 20MB 이하여야 합니다.'); return; }
+
+    ceUploadedFile = file;
+    document.getElementById('ce-file-name').textContent = file.name;
+    document.getElementById('ce-file-size').textContent = (file.size / (1024 * 1024)).toFixed(1) + 'MB';
+    document.getElementById('ce-file-info').style.display = 'flex';
+    document.getElementById('ce-upload-zone').style.display = 'none';
+    document.getElementById('ce-btn-analyze').style.display = 'flex';
+    ceHideAnalysisStatus();
+    ceAnalyzedData = null;
+  }
+
+  window.ceClearFile = function() {
+    ceUploadedFile = null;
+    ceAnalyzedData = null;
+    document.getElementById('ce-file-input').value = '';
+    document.getElementById('ce-file-info').style.display = 'none';
+    document.getElementById('ce-upload-zone').style.display = '';
+    document.getElementById('ce-btn-analyze').style.display = 'none';
+    ceHideAnalysisStatus();
+  };
+
+  function ceShowAnalysisStatus(type, msg) {
+    var el = document.getElementById('ce-analysis-status');
+    var spinner = document.getElementById('ce-analysis-spinner');
+    var msgEl = document.getElementById('ce-analysis-msg');
+    el.style.display = 'flex';
+    spinner.style.display = type === 'loading' ? 'block' : 'none';
+    msgEl.textContent = msg;
+    if (type === 'loading') { el.style.background = '#eff6ff'; el.style.color = '#1d4ed8'; el.style.border = '1px solid #bfdbfe'; }
+    else if (type === 'success') { el.style.background = '#f0fdf4'; el.style.color = '#059669'; el.style.border = '1px solid #bbf7d0'; }
+    else { el.style.background = '#fef2f2'; el.style.color = '#dc2626'; el.style.border = '1px solid #fecaca'; }
+  }
+
+  function ceHideAnalysisStatus() {
+    document.getElementById('ce-analysis-status').style.display = 'none';
+  }
+
+  window.ceAnalyzeDocument = function() {
+    if (!ceUploadedFile) return;
+    var btn = document.getElementById('ce-btn-analyze');
+    btn.disabled = true;
+    ceShowAnalysisStatus('loading', 'AI가 견적서를 분석하고 있습니다... (5~15초 소요)');
+
+    var formData = new FormData();
+    formData.append('file', ceUploadedFile);
+    formData.append('document_type', 'cost_estimate');
+
+    fetch('/document-analysis/analyze', {
+      method: 'POST',
+      body: formData
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(result) {
+      if (result.success && result.fields) {
+        ceAnalyzedData = result.fields;
+        var itemCount = (result.fields.items || []).length;
+        var infoFields = ['project_name','location','duration','department','manager'].filter(function(k) { return result.fields[k]; }).length;
+        ceShowAnalysisStatus('success', '분석 완료! 기본정보 ' + infoFields + '개, 내역 항목 ' + itemCount + '개를 추출했습니다.');
+      } else {
+        ceShowAnalysisStatus('error', result.error || '문서 분석에 실패했습니다.');
+      }
+    })
+    .catch(function(err) {
+      console.error('분석 오류:', err);
+      ceShowAnalysisStatus('error', '서버 연결에 실패했습니다. 다시 시도해주세요.');
+    })
+    .finally(function() {
+      btn.disabled = false;
+    });
+  };
+
+  function ceApplyAnalyzedData() {
+    if (!ceAnalyzedData) return;
+    var fieldMap = {
+      project_name: 'ce-project-name',
+      location: 'ce-location',
+      duration: 'ce-duration',
+      department: 'ce-department',
+      manager: 'ce-manager'
+    };
+
+    Object.keys(fieldMap).forEach(function(key) {
+      if (ceAnalyzedData[key]) {
+        var el = document.getElementById(fieldMap[key]);
+        if (el) {
+          el.value = ceAnalyzedData[key];
+          el.classList.add('ce-ai-filled');
+        }
+      }
+    });
+  }
+
+  function ceApplyAnalyzedItems() {
+    if (!ceAnalyzedData || !ceAnalyzedData.items || ceAnalyzedData.items.length === 0) return;
+
+    ceItems = ceAnalyzedData.items.map(function(item, i) {
+      var qty = parseFloat(item.qty) || 0;
+      var unitPrice = parseFloat(item.unit_price) || 0;
+      return {
+        id: i + 1,
+        name: item.name || '',
+        spec: item.spec || '',
+        unit: item.unit || '식',
+        qty: qty,
+        unit_price: unitPrice,
+        amount: Math.round(qty * unitPrice)
+      };
+    });
+
+    ceRenderTable();
+    ceAnalyzedData = null; // 중복 적용 방지
+  }
+});
+</script>

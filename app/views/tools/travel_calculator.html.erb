@@ -234,9 +234,12 @@
 
 <script>
 document.addEventListener('turbo:load', function() {
+  const startDate = document.getElementById('start_date');
+  if (!startDate) return;
+
   // 오늘 날짜 설정
   const today = new Date().toISOString().split('T')[0];
-  document.getElementById('start_date').value = today;
+  startDate.value = today;
 
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);

@@ -392,6 +392,16 @@ class ContractMethodService
         }
       end
 
+      # 유찰→수의 전환 안내 (입찰 대상인 경우)
+      threshold = CONTRACT_THRESHOLDS[type][:thresholds].find { |t| price <= t[:max] }
+      if threshold && threshold[:method] == "입찰"
+        warnings << {
+          level: "info",
+          title: "유찰 시 수의계약 전환 가능",
+          message: "2회 유찰(재공고 포함) 시 수의계약으로 전환할 수 있습니다. 이 경우 최초 입찰에 부친 내용과 동일한 조건이어야 하며, 예정가격 이내로 계약해야 합니다. (지방계약법 시행령 제25조제1항제2호)"
+        }
+      end
+
       warnings
     end
 
@@ -406,6 +416,7 @@ class ContractMethodService
       if method.include?("입찰")
         tips << "입찰공고 기간은 최소 7일 이상 확보해야 합니다. (긴급 시 5일)"
         tips << "낙찰하한율(예정가격의 87.745%)을 미리 확인하세요."
+        tips << "2회 유찰 시 수의계약 전환이 가능합니다. (지방계약법 시행령 제25조제1항제2호)"
       end
 
       if [ :goods, :service ].include?(type)

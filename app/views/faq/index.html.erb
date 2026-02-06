@@ -1,0 +1,179 @@
+<%# 자주 묻는 질문(FAQ) %>
+
+<style>
+.faq-category { margin-bottom:32px; }
+.faq-category-header { display:flex; align-items:center; gap:12px; margin-bottom:16px; padding-bottom:12px; border-bottom:2px solid #e2e8f0; }
+.faq-category-icon { width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; }
+.faq-category-title { font-size:20px; font-weight:700; color:#1e293b; }
+.faq-category-count { font-size:13px; color:#94a3b8; margin-left:auto; }
+
+.faq-item { border:1px solid #e5e7eb; border-radius:12px; margin-bottom:10px; overflow:hidden; background:#fff; transition:all .15s; }
+.faq-item:hover { border-color:#cbd5e1; }
+.faq-question { display:flex; align-items:center; gap:12px; padding:16px 20px; cursor:pointer; font-weight:600; font-size:15px; color:#1e293b; }
+.faq-question .faq-q-icon { color:#94a3b8; font-size:20px; flex-shrink:0; transition:transform .2s; }
+.faq-question .faq-q-text { flex:1; }
+.faq-question .faq-toggle { color:#94a3b8; font-size:22px; flex-shrink:0; transition:transform .2s; }
+.faq-item.open .faq-toggle { transform:rotate(180deg); }
+.faq-answer { display:none; padding:0 20px 18px 52px; font-size:14px; color:#475569; line-height:1.8; white-space:pre-line; }
+.faq-item.open .faq-answer { display:block; }
+
+.faq-nav { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:32px; }
+.faq-nav-btn { padding:8px 18px; border:1px solid #e2e8f0; border-radius:20px; font-size:14px; font-weight:600; color:#475569; cursor:pointer; transition:all .15s; background:#fff; text-decoration:none; }
+.faq-nav-btn:hover { border-color:#6366f1; color:#4338ca; background:#eef2ff; }
+.faq-nav-btn.active { border-color:#6366f1; color:#fff; background:#6366f1; }
+
+.faq-search-wrap { position:relative; max-width:500px; margin-bottom:28px; }
+.faq-search-wrap input { width:100%; padding:12px 18px 12px 44px; border:2px solid #e5e7eb; border-radius:12px; font-size:15px; }
+.faq-search-wrap input:focus { outline:none; border-color:#6366f1; box-shadow:0 0 0 3px rgba(99,102,241,.1); }
+.faq-search-wrap .material-symbols-outlined { position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#94a3b8; }
+
+.faq-empty { text-align:center; padding:40px 20px; color:#94a3b8; font-size:15px; }
+
+@media (max-width:640px) {
+  .faq-answer { padding-left:20px; }
+  .faq-question { padding:14px 16px; font-size:14px; }
+}
+</style>
+
+<!-- 헤더 -->
+<section class="gradient-point text-white py-12 lg:py-16">
+  <div class="container-wide">
+    <div class="flex items-start gap-5">
+      <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 shadow-lg">
+        <span class="material-symbols-outlined text-4xl text-white">help</span>
+      </div>
+      <div>
+        <h1 class="text-3xl lg:text-4xl font-bold tracking-tight mb-2">자주 묻는 질문</h1>
+        <p class="text-indigo-100 text-lg">계약 실무에서 자주 나오는 질문과 답변</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-10">
+  <div class="container-wide max-w-4xl">
+
+    <!-- 검색 -->
+    <div class="faq-search-wrap">
+      <span class="material-symbols-outlined">search</span>
+      <input type="text" id="faq-search" placeholder="질문 검색..." oninput="faqFilter()">
+    </div>
+
+    <!-- 카테고리 탭 -->
+    <div class="faq-nav" id="faq-nav">
+      <span class="faq-nav-btn active" data-cat="all" onclick="faqNavClick(this)">전체</span>
+      <% @categories.each do |cat| %>
+        <span class="faq-nav-btn" data-cat="<%= cat[:id] %>" onclick="faqNavClick(this)"><%= cat[:title] %></span>
+      <% end %>
+    </div>
+
+    <!-- FAQ 목록 -->
+    <div id="faq-list">
+      <% @categories.each do |cat| %>
+        <div class="faq-category" data-category="<%= cat[:id] %>">
+          <div class="faq-category-header">
+            <div class="faq-category-icon bg-<%= cat[:color] %>-100">
+              <span class="material-symbols-outlined text-<%= cat[:color] %>-600"><%= cat[:icon] %></span>
+            </div>
+            <div class="faq-category-title"><%= cat[:title] %></div>
+            <div class="faq-category-count"><%= cat[:faqs].size %>개 질문</div>
+          </div>
+
+          <% cat[:faqs].each_with_index do |faq, idx| %>
+            <div class="faq-item" data-q="<%= faq[:q] %>" data-a="<%= faq[:a] %>">
+              <div class="faq-question" onclick="faqToggle(this)">
+                <span class="material-symbols-outlined faq-q-icon">help_outline</span>
+                <span class="faq-q-text"><%= faq[:q] %></span>
+                <span class="material-symbols-outlined faq-toggle">expand_more</span>
+              </div>
+              <div class="faq-answer"><%= faq[:a] %></div>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="faq-empty" id="faq-empty" style="display:none;">
+      <span class="material-symbols-outlined text-4xl" style="color:#cbd5e1;">search_off</span>
+      <p style="margin-top:8px;">검색 결과가 없습니다.</p>
+    </div>
+
+    <!-- CTA -->
+    <div style="text-align:center; margin-top:40px; padding:32px; background:#f8fafc; border-radius:16px; border:1px solid #e2e8f0;">
+      <span class="material-symbols-outlined text-3xl" style="color:#6366f1;">lightbulb</span>
+      <h3 style="font-size:18px; font-weight:700; color:#1e293b; margin:12px 0 8px;">더 자세한 내용이 필요하신가요?</h3>
+      <p style="font-size:14px; color:#64748b; margin-bottom:16px;">토픽 페이지에서 법령 원문, 감사사례, 유권해석까지 확인하세요.</p>
+      <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+        <a href="<%= topic_path('private-contract') %>" style="padding:10px 20px; background:#059669; color:#fff; border-radius:10px; font-weight:600; font-size:14px; text-decoration:none;">수의계약 법령</a>
+        <a href="<%= topic_path('e-procurement-guide') %>" style="padding:10px 20px; background:#6366f1; color:#fff; border-radius:10px; font-weight:600; font-size:14px; text-decoration:none;">나라장터 가이드</a>
+        <a href="<%= topic_path('goods-selection-committee') %>" style="padding:10px 20px; background:#d97706; color:#fff; border-radius:10px; font-weight:600; font-size:14px; text-decoration:none;">물품선정위원회</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+document.addEventListener('turbo:load', function() {
+  var faqList = document.getElementById('faq-list');
+  if (!faqList) return;
+
+  window.faqToggle = function(el) {
+    var item = el.parentElement;
+    item.classList.toggle('open');
+  };
+
+  window.faqNavClick = function(el) {
+    document.querySelectorAll('.faq-nav-btn').forEach(function(b) { b.classList.remove('active'); });
+    el.classList.add('active');
+    var cat = el.dataset.cat;
+
+    document.querySelectorAll('.faq-category').forEach(function(c) {
+      if (cat === 'all' || c.dataset.category === cat) {
+        c.style.display = '';
+      } else {
+        c.style.display = 'none';
+      }
+    });
+
+    document.getElementById('faq-search').value = '';
+    faqShowAll();
+    document.getElementById('faq-empty').style.display = 'none';
+  };
+
+  window.faqFilter = function() {
+    var query = document.getElementById('faq-search').value.toLowerCase().trim();
+    if (!query) {
+      faqShowAll();
+      document.getElementById('faq-empty').style.display = 'none';
+      return;
+    }
+
+    // 전체 보기 모드로
+    document.querySelectorAll('.faq-nav-btn').forEach(function(b) { b.classList.remove('active'); });
+    document.querySelector('.faq-nav-btn[data-cat="all"]').classList.add('active');
+    document.querySelectorAll('.faq-category').forEach(function(c) { c.style.display = ''; });
+
+    var visible = 0;
+    document.querySelectorAll('.faq-item').forEach(function(item) {
+      var q = (item.dataset.q || '').toLowerCase();
+      var a = (item.dataset.a || '').toLowerCase();
+      if (q.indexOf(query) !== -1 || a.indexOf(query) !== -1) {
+        item.style.display = '';
+        visible++;
+      } else {
+        item.style.display = 'none';
+      }
+    });
+
+    document.getElementById('faq-empty').style.display = visible === 0 ? '' : 'none';
+  };
+
+  function faqShowAll() {
+    document.querySelectorAll('.faq-item').forEach(function(item) {
+      item.style.display = '';
+      item.classList.remove('open');
+    });
+  }
+});
+</script>

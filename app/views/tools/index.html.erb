@@ -29,7 +29,7 @@
         <h2 class="text-xl font-bold text-navy-900">바로 사용 가능한 도구</h2>
         <p class="text-navy-400 text-sm mt-1">클릭하면 바로 사용할 수 있습니다</p>
       </div>
-      <span class="badge badge-point"><span class="font-bold">7</span>개 도구</span>
+      <span class="badge badge-point"><span class="font-bold">14</span>개 도구</span>
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -38,9 +38,16 @@
         { title: "계약서류 원클릭 생성기", desc: "물품/용역/공사별 필수 계약서류 체크리스트를 자동 생성합니다.", icon: "fact_check", color: "navy", category: "문서 도구", path: contract_documents_path, badge: "NEW" },
         { title: "소요예산 추정기", desc: "소규모 공사/용역 시행 전 대략적인 예산을 미리 추정합니다.", icon: "calculate", color: "point", category: "계산기", path: budget_estimator_path, badge: "NEW" },
         { title: "견적서 검토 도구", desc: "견적서의 적정성을 자동으로 검토합니다.", icon: "fact_check", color: "point", category: "문서 도구", path: "/forms/견적서검토.html", badge: "인기" },
-        { title: "과업지시서 생성기", desc: "과업지시서를 단계별로 작성하고 다운로드합니다.", icon: "description", color: "forest", category: "문서 도구", path: "/forms/과업지시서.html", badge: "NEW" },
+        { title: "계약문서 생성기", desc: "시공지시서·구매규격서·과업지시서를 단계별로 작성합니다.", icon: "description", color: "forest", category: "문서 도구", path: "/forms/과업지시서.html", badge: "NEW" },
         { title: "PDF 도구", desc: "PDF 분할, 합치기, 쪽번호 매기기를 간편하게 처리합니다.", icon: "picture_as_pdf", color: "warm", category: "문서 도구", path: pdf_tools_path },
         { title: "여비계산기", desc: "출장 여비(운임, 숙박비, 식비, 일비)를 자동으로 계산합니다.", icon: "directions_car", color: "point", category: "계산기", path: travel_calculator_path },
+        { title: "내역서+시공지시서 생성기", desc: "소액공사 간이 내역서와 시공지시서를 간편하게 작성합니다.", icon: "receipt_long", color: "navy", category: "문서 도구", path: cost_estimate_path, badge: "NEW" },
+        { title: "설계변경 검토서 도우미", desc: "설계변경 사유별 검토서와 절차 체크리스트를 자동 생성합니다.", icon: "swap_horiz", color: "forest", category: "문서 도구", path: design_change_path, badge: "NEW" },
+        { title: "기성검사 체크리스트", desc: "공사 유형별 기성검사 항목을 자동으로 생성합니다.", icon: "checklist", color: "warm", category: "체크리스트", path: progress_inspection_path, badge: "NEW" },
+        { title: "원가계산서 검토 가이드", desc: "용역 원가계산서 항목별 적정성을 자동으로 검토합니다.", icon: "price_check", color: "point", category: "AI 도구", path: cost_calculation_path, badge: "NEW" },
+        { title: "예정가격 계산기", desc: "계약유형별 원가항목을 입력하여 예정가격과 복수예비가격을 산출합니다.", icon: "calculate", color: "forest", category: "계산기", path: estimated_price_path, badge: "NEW" },
+        { title: "법정기간 계산기", desc: "입찰공고·계약체결·대금지급·하자보증·지체상금 기한을 자동 계산합니다.", icon: "calendar_month", color: "warm", category: "계산기", path: legal_period_path, badge: "NEW" },
+        { title: "계약보증금 계산기", desc: "계약보증금·하자보증금·인지세를 계약금액에 따라 자동으로 계산합니다.", icon: "shield", color: "point", category: "계산기", path: contract_guarantee_path, badge: "NEW" },
       ].each do |tool| %>
         <%= link_to tool[:path], class: "group card card-interactive card-glow-#{tool[:color]} card-shine p-6 relative overflow-hidden border border-transparent hover:border-#{tool[:color]}-200", data: { category: tool[:category], title: tool[:title] } do %>
           <% if tool[:badge] %>
@@ -77,11 +84,7 @@
       <% [
         { title: "초과근무수당 계산기", icon: "schedule", category: "계산기" },
         { title: "연가일수 계산기", icon: "event_available", category: "계산기" },
-        { title: "예정가격 계산기", icon: "calculate", category: "계산기" },
-        { title: "법정기간 계산기", icon: "calendar_month", category: "계산기" },
         { title: "공문서 AI 작성 도우미", icon: "auto_awesome", category: "AI 도구" },
-        { title: "수의계약 판단기", icon: "gavel", category: "AI 도구" },
-        { title: "계약 체크리스트", icon: "checklist", category: "체크리스트" },
       ].each do |tool| %>
         <div class="flex items-center gap-3 px-4 py-3.5 bg-white rounded-xl border border-gray-100/80 hover:border-gray-200 hover:shadow-soft transition-all">
           <span class="w-9 h-9 bg-surface-100 rounded-lg flex items-center justify-center">

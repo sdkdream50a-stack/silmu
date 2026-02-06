@@ -990,16 +990,16 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
-  // 상태
-  let currentStep = 1;
-  let selectedType = null;
-  let selectedGrade = 'standard';
-  let selectedDesignType = 'architecture';
-  let selectedSupervisionType = 'periodic';
-  let lastResult = null;
+  // 상태 (var: Turbo 재평가 시 재선언 허용)
+  var currentStep = 1;
+  var selectedType = null;
+  var selectedGrade = 'standard';
+  var selectedDesignType = 'architecture';
+  var selectedSupervisionType = 'periodic';
+  var lastResult = null;
 
   // 단위 정보
-  const unitMap = {
+  var unitMap = {
     wallpaper: 'm²', flooring: 'm²', tile: 'm²', painting: 'm²', ceiling: 'm²',
     electric: '개소', plumbing: '개소', aircon: '대', boiler: '대',
     window: 'm²', demolition: 'm²', waterproof: 'm²', partition: 'm²'
