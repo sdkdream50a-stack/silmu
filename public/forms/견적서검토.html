@@ -1033,9 +1033,9 @@
         <div class="quick-input">
           <button onclick="setPrice(5000000)">500만원</button>
           <button onclick="setPrice(10000000)">1,000만원</button>
-          <button onclick="setPrice(22000000)">2,200만원</button>
+          <button onclick="setPrice(20000000)">2,000만원</button>
           <button onclick="setPrice(50000000)">5,000만원</button>
-          <button onclick="setPrice(80000000)">8,000만원</button>
+          <button onclick="setPrice(200000000)">2억원</button>
           <button onclick="setPrice(100000000)">1억원</button>
         </div>
 
@@ -1664,18 +1664,18 @@
       // 필요 서류 결정
       const docs = [];
       const typeThresholds = {
-        construction: 80000000,
-        goods: 22000000,
-        service: 22000000
+        construction: 200000000,
+        goods: 50000000,
+        service: 50000000
       };
-      const threshold = typeThresholds[selectedType] || 22000000;
+      const threshold = typeThresholds[selectedType] || 50000000;
 
       docs.push({ name: '견적서 원본', required: true });
       docs.push({ name: '사업자등록증 사본', required: true });
 
       if (selectedContractMethod === 'private') {
         docs.push({ name: '수의계약사유서', required: true });
-        if (estimatedPrice > 5000000) {
+        if (estimatedPrice > 20000000) {
           docs.push({ name: '2개 업체 이상 견적서', required: true });
         }
       }
@@ -1693,7 +1693,8 @@
       // 관련 규정
       const regulations = [
         { name: '지방계약법 시행령 제25조 (수의계약)', url: 'https://www.law.go.kr' },
-        { name: '지방계약법 시행규칙 제42조 (예정가격)', url: 'https://www.law.go.kr' }
+        { name: '지방계약법 시행령 제7조 (예정가격의 결정)', url: 'https://www.law.go.kr' },
+        { name: '지방계약법 시행령 제30조 (수의계약대상자 선정)', url: 'https://www.law.go.kr' }
       ];
 
       if (selectedType === 'construction') {
