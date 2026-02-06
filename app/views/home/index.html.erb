@@ -213,9 +213,9 @@
       </p>
     </div>
 
-    <!-- Topic Cards -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-12">
-      <!-- Active Topic -->
+    <!-- 주요 가이드 (계약 중심) -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
+      <!-- 수의계약 -->
       <%= link_to "/topics/private-contract", class: "group card card-interactive p-6 md:p-8 border-2 border-transparent hover:border-point-300" do %>
         <div class="text-4xl mb-5">📝</div>
         <h3 class="font-bold text-lg text-navy-900 group-hover:text-point-600 mb-2 transition-colors">수의계약</h3>
@@ -227,37 +227,53 @@
         </div>
       <% end %>
 
-      <!-- 출장비 토픽 -->
-      <%= link_to "/topics/travel-expense", class: "group card card-interactive p-6 md:p-8 border-2 border-transparent hover:border-forest-300" do %>
-        <div class="text-4xl mb-5">💼</div>
-        <h3 class="font-bold text-lg text-navy-900 group-hover:text-forest-600 mb-2 transition-colors">출장비</h3>
-        <p class="text-navy-500 text-sm mb-4">여비 지급기준 · 청구절차</p>
+      <!-- 소액수의계약 -->
+      <%= link_to "/topics/small-amount-contract", class: "group card card-interactive p-6 md:p-8 border-2 border-transparent hover:border-forest-300" do %>
+        <div class="text-4xl mb-5">💰</div>
+        <h3 class="font-bold text-lg text-navy-900 group-hover:text-forest-600 mb-2 transition-colors">소액수의</h3>
+        <p class="text-navy-500 text-sm mb-4">금액기준 · 1인견적 · 2인견적</p>
         <div class="flex flex-wrap gap-2">
-          <span class="badge badge-forest text-[10px]">여비규정</span>
-          <span class="badge badge-navy text-[10px]">FAQ</span>
+          <span class="badge badge-forest text-[10px]">금액기준</span>
+          <span class="badge badge-navy text-[10px]">흐름도</span>
         </div>
       <% end %>
 
-      <!-- 이월 토픽 -->
-      <%= link_to "/topics/budget-carryover", class: "group card card-interactive p-6 md:p-8 border-2 border-transparent hover:border-warm-300" do %>
+      <!-- 긴급계약 -->
+      <%= link_to "/topics/emergency-contract", class: "group card card-interactive p-6 md:p-8 border-2 border-transparent hover:border-warm-300" do %>
+        <div class="text-4xl mb-5">🚨</div>
+        <h3 class="font-bold text-lg text-navy-900 group-hover:text-warm-600 mb-2 transition-colors">긴급계약</h3>
+        <p class="text-navy-500 text-sm mb-4">긴급사유 · 수의근거 · 절차</p>
+        <div class="flex flex-wrap gap-2">
+          <span class="badge badge-warm text-[10px]">긴급사유</span>
+          <span class="badge badge-navy text-[10px]">흐름도</span>
+        </div>
+      <% end %>
+
+      <!-- 예산이월 -->
+      <%= link_to "/topics/budget-carryover", class: "group card card-interactive p-6 md:p-8 border-2 border-transparent hover:border-navy-300" do %>
         <div class="text-4xl mb-5">📅</div>
-        <h3 class="font-bold text-lg text-navy-900 group-hover:text-warm-600 mb-2 transition-colors">예산이월</h3>
+        <h3 class="font-bold text-lg text-navy-900 group-hover:text-navy-600 mb-2 transition-colors">예산이월</h3>
         <p class="text-navy-500 text-sm mb-4">명시이월 · 사고이월 · 계속비</p>
         <div class="flex flex-wrap gap-2">
-          <span class="badge badge-warm text-[10px]">이월요건</span>
-          <span class="badge badge-navy text-[10px]">FAQ</span>
+          <span class="badge badge-navy text-[10px]">이월요건</span>
+          <span class="badge badge-point text-[10px]">FAQ</span>
         </div>
       <% end %>
+    </div>
 
-      <!-- 연말정산 토픽 -->
-      <%= link_to "/topics/year-end-settlement", class: "group card card-interactive p-6 md:p-8 border-2 border-transparent hover:border-rose-300" do %>
-        <div class="text-4xl mb-5">🧾</div>
-        <h3 class="font-bold text-lg text-navy-900 group-hover:text-rose-600 mb-2 transition-colors">연말정산</h3>
-        <p class="text-navy-500 text-sm mb-4">2025년 변경사항 · 공제항목</p>
-        <div class="flex flex-wrap gap-2">
-          <span class="badge badge-rose text-[10px]">세액공제</span>
-          <span class="badge badge-navy text-[10px]">FAQ</span>
-        </div>
+    <!-- 기타 가이드 -->
+    <div class="flex flex-wrap justify-center gap-3 mb-12">
+      <%= link_to "/topics/travel-expense", class: "inline-flex items-center gap-2 px-4 py-2.5 bg-white hover:bg-surface-100 rounded-xl text-sm text-navy-600 hover:text-navy-900 border border-gray-200 hover:border-gray-300 transition-all" do %>
+        <span class="text-lg">💼</span>
+        출장비
+      <% end %>
+      <%= link_to "/topics/year-end-settlement", class: "inline-flex items-center gap-2 px-4 py-2.5 bg-white hover:bg-surface-100 rounded-xl text-sm text-navy-600 hover:text-navy-900 border border-gray-200 hover:border-gray-300 transition-all" do %>
+        <span class="text-lg">🧾</span>
+        연말정산
+      <% end %>
+      <%= link_to "/topics/price-negotiation", class: "inline-flex items-center gap-2 px-4 py-2.5 bg-white hover:bg-surface-100 rounded-xl text-sm text-navy-600 hover:text-navy-900 border border-gray-200 hover:border-gray-300 transition-all" do %>
+        <span class="text-lg">🤝</span>
+        가격협상
       <% end %>
     </div>
 

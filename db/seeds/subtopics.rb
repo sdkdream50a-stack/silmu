@@ -1097,49 +1097,66 @@ A. 2인 이상 견적 대상에서 1인만 수의시담에 응한 경우, 해당
     keywords: '소액수의,소액수의계약,추정가격,금액기준,소액',
     category: 'contract',
     law_content: <<~LAW,
-      <strong>지방계약법 시행령 제25조 제1항 제1호</strong>
+      <strong>지방계약법 제9조 (수의계약)</strong>
 
       <div style="background:#dbeafe; padding:16px; border-radius:8px; margin-top:12px;">
-        <strong>【소액 수의계약 (추정가격 기준)】</strong>
-
-        추정가격이 다음 금액 이하인 계약은 수의계약으로 할 수 있다:
-
-        <ul style="margin-top:12px; line-height:2;">
-          <li>가. 공사: <strong style="font-size:1.1em;">2억원</strong></li>
-          <li>나. 물품의 제조·구매: <strong style="font-size:1.1em;">5천만원</strong></li>
-          <li>다. 용역: <strong style="font-size:1.1em;">5천만원</strong></li>
-        </ul>
+        지방자치단체의 장 또는 계약담당자는 계약의 목적·성질·규모 등을 고려하여 필요하다고 인정되면 <strong>대통령령으로 정하는 바에 따라</strong> 수의계약을 할 수 있다.
       </div>
 
       <div style="background:#f3f4f6; padding:12px; border-radius:8px; margin-top:16px;">
-        <strong>📌 참고:</strong> 소액수의 = 금액 기준에 따른 수의계약 (특명수의와 구분됨)
+        <strong>📌 위임 사항:</strong> 구체적인 수의계약 금액 기준은 <strong>시행령 제25조</strong>에서 규정
       </div>
     LAW
     decree_content: <<~DECREE,
-      <strong>소액수의 vs 특명수의 비교</strong>
+      <strong>지방계약법 시행령 제25조 (수의계약의 범위)</strong>
 
-      <table style="width:100%; border-collapse:collapse; margin-top:12px;">
-        <tr style="background:#1e3a5f; color:white;">
-          <th style="border:1px solid #374151; padding:12px;">구분</th>
-          <th style="border:1px solid #374151; padding:12px;">소액수의</th>
-          <th style="border:1px solid #374151; padding:12px;">특명수의</th>
-        </tr>
-        <tr>
-          <td style="border:1px solid #d1d5db; padding:12px; font-weight:bold;">근거</td>
-          <td style="border:1px solid #d1d5db; padding:12px;">시행령 §25①<strong>1</strong>호</td>
-          <td style="border:1px solid #d1d5db; padding:12px;">시행령 §25①<strong>2~6</strong>호</td>
-        </tr>
-        <tr style="background:#f9fafb;">
-          <td style="border:1px solid #d1d5db; padding:12px; font-weight:bold;">조건</td>
-          <td style="border:1px solid #d1d5db; padding:12px;">추정가격이 일정 금액 이하</td>
-          <td style="border:1px solid #d1d5db; padding:12px;">특수 사유 (긴급, 특허 등)</td>
-        </tr>
-        <tr>
-          <td style="border:1px solid #d1d5db; padding:12px; font-weight:bold;">견적</td>
-          <td style="border:1px solid #d1d5db; padding:12px;">금액에 따라 1인/2인</td>
-          <td style="border:1px solid #d1d5db; padding:12px;">사유에 따라 1인 가능</td>
-        </tr>
-      </table>
+      <div style="background:#dbeafe; padding:16px; border-radius:8px; margin-top:12px;">
+        <strong>제1항 제1호 【소액 수의계약 기본 한도】</strong>
+
+        <p style="margin-top:8px;">추정가격이 다음 금액 이하인 계약:</p>
+
+        <table style="width:100%; border-collapse:collapse; margin-top:12px;">
+          <tr style="background:#1e3a5f; color:white;">
+            <th style="border:1px solid #374151; padding:12px;">구분</th>
+            <th style="border:1px solid #374151; padding:12px;">금액</th>
+          </tr>
+          <tr>
+            <td style="border:1px solid #d1d5db; padding:12px;">공사</td>
+            <td style="border:1px solid #d1d5db; padding:12px;"><strong style="color:#2563eb;">2억원 이하</strong></td>
+          </tr>
+          <tr style="background:#f9fafb;">
+            <td style="border:1px solid #d1d5db; padding:12px;">물품·용역</td>
+            <td style="border:1px solid #d1d5db; padding:12px;"><strong style="color:#2563eb;">5천만원 이하</strong></td>
+          </tr>
+        </table>
+      </div>
+
+      <div style="background:#fef3c7; padding:16px; border-radius:8px; margin-top:16px;">
+        <strong>2025~2026년 한시적 특례</strong>
+
+        <table style="width:100%; border-collapse:collapse; margin-top:12px;">
+          <tr style="background:#92400e; color:white;">
+            <th style="border:1px solid #d97706; padding:12px;">구분</th>
+            <th style="border:1px solid #d97706; padding:12px;">특례 금액</th>
+          </tr>
+          <tr>
+            <td style="border:1px solid #fcd34d; padding:12px;">공사</td>
+            <td style="border:1px solid #fcd34d; padding:12px;"><strong style="color:#b45309;">4억원 이하</strong></td>
+          </tr>
+          <tr style="background:#fef9c3;">
+            <td style="border:1px solid #fcd34d; padding:12px;">물품·용역</td>
+            <td style="border:1px solid #fcd34d; padding:12px;"><strong style="color:#b45309;">1억원 이하</strong></td>
+          </tr>
+        </table>
+      </div>
+
+      <div style="background:#f3f4f6; padding:12px; border-radius:8px; margin-top:16px;">
+        <strong>📌 소액수의 vs 특명수의</strong>
+        <ul style="margin-top:8px; line-height:1.8;">
+          <li><strong>소액수의:</strong> 금액 기준 → 시행령 §25①<strong>1</strong>호</li>
+          <li><strong>특명수의:</strong> 특수 사유 (긴급, 특허 등) → 시행령 §25①<strong>2~6</strong>호</li>
+        </ul>
+      </div>
     DECREE
     rule_content: '',
     practical_tips: <<~TIPS,
