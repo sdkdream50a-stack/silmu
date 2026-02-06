@@ -1,6 +1,5 @@
 # 계약방식 결정 도구 컨트롤러
 class ContractMethodsController < ApplicationController
-  skip_before_action :verify_authenticity_token, only: [:determine]
 
   # GET /tools/contract-method
   def index

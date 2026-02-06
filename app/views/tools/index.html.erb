@@ -1,27 +1,33 @@
 <%# 실무 도구 목록 페이지 - 프리미엄 디자인 시스템 %>
 
-<!-- 페이지 헤더 -->
-<section class="gradient-point text-white py-12 lg:py-16">
-  <div class="container-wide">
+<!-- 페이지 헤더 — enhanced gradient -->
+<section class="gradient-point text-white py-12 lg:py-16 relative overflow-hidden">
+  <!-- Background decorations -->
+  <div class="absolute inset-0">
+    <div class="absolute top-0 right-0 w-[300px] h-[300px] bg-white/5 rounded-full blur-[80px]"></div>
+    <div class="absolute bottom-0 left-1/4 w-[200px] h-[200px] bg-white/5 rounded-full blur-[60px]"></div>
+    <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px); background-size: 40px 40px;"></div>
+  </div>
+  <div class="container-wide relative">
     <div class="flex items-start gap-5">
-      <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 shadow-lg">
+      <div class="w-16 h-16 glass-panel rounded-2xl flex items-center justify-center shadow-lg">
         <span class="material-symbols-outlined text-4xl text-white">construction</span>
       </div>
       <div>
         <h1 class="text-3xl lg:text-4xl font-bold tracking-tight mb-2">실무 도구</h1>
-        <p class="text-point-100 text-lg">복잡한 계산과 검토를 간편하게</p>
+        <p class="text-white/70 text-lg">복잡한 계산과 검토를 간편하게</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- 활성 도구 그리드 -->
-<section class="section py-12">
+<section class="py-12 lg:py-16">
   <div class="container-wide">
     <div class="flex items-center justify-between mb-8">
       <div>
         <h2 class="text-xl font-bold text-navy-900">바로 사용 가능한 도구</h2>
-        <p class="text-navy-500 text-sm mt-1">클릭하면 바로 사용할 수 있습니다</p>
+        <p class="text-navy-400 text-sm mt-1">클릭하면 바로 사용할 수 있습니다</p>
       </div>
       <span class="badge badge-point"><span class="font-bold">7</span>개 도구</span>
     </div>
@@ -36,22 +42,22 @@
         { title: "PDF 도구", desc: "PDF 분할, 합치기, 쪽번호 매기기를 간편하게 처리합니다.", icon: "picture_as_pdf", color: "warm", category: "문서 도구", path: pdf_tools_path },
         { title: "여비계산기", desc: "출장 여비(운임, 숙박비, 식비, 일비)를 자동으로 계산합니다.", icon: "directions_car", color: "point", category: "계산기", path: travel_calculator_path },
       ].each do |tool| %>
-        <%= link_to tool[:path], class: "group card card-interactive p-6 relative overflow-hidden", data: { category: tool[:category], title: tool[:title] } do %>
+        <%= link_to tool[:path], class: "group card card-interactive card-glow-#{tool[:color]} card-shine p-6 relative overflow-hidden border border-transparent hover:border-#{tool[:color]}-200", data: { category: tool[:category], title: tool[:title] } do %>
           <% if tool[:badge] %>
             <span class="absolute top-4 right-4 badge <%= tool[:badge] == 'NEW' ? 'badge-warm' : 'badge-point' %>"><%= tool[:badge] %></span>
           <% end %>
 
-          <div class="icon-container icon-container-lg bg-<%= tool[:color] %>-100 group-hover:bg-<%= tool[:color] %>-600 transition-colors mb-4">
+          <div class="icon-container icon-container-lg bg-<%= tool[:color] %>-100 group-hover:bg-<%= tool[:color] %>-600 transition-all duration-300 mb-4 group-hover:shadow-lg group-hover:shadow-<%= tool[:color] %>-500/20">
             <span class="material-symbols-outlined text-3xl text-<%= tool[:color] %>-600 group-hover:text-white transition-colors"><%= tool[:icon] %></span>
           </div>
 
           <span class="text-xs font-semibold text-navy-400 mb-2 block"><%= tool[:category] %></span>
           <h3 class="text-lg font-bold text-navy-900 mb-2 group-hover:text-<%= tool[:color] %>-600 transition-colors"><%= tool[:title] %></h3>
-          <p class="text-navy-600 text-sm leading-relaxed"><%= tool[:desc] %></p>
+          <p class="text-navy-500 text-sm leading-relaxed"><%= tool[:desc] %></p>
 
           <div class="mt-4 flex items-center text-<%= tool[:color] %>-600 text-sm font-semibold">
             바로 사용
-            <span class="material-symbols-outlined text-lg ml-1 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+            <span class="material-symbols-outlined text-lg ml-1 group-hover:translate-x-1.5 transition-transform">arrow_forward</span>
           </div>
         <% end %>
       <% end %>
@@ -63,11 +69,11 @@
 <section class="py-12 bg-surface-50">
   <div class="container-wide">
     <div class="flex items-center gap-3 mb-6">
-      <span class="material-symbols-outlined text-navy-400">hourglass_empty</span>
+      <span class="material-symbols-outlined text-navy-300">hourglass_empty</span>
       <h2 class="text-lg font-bold text-navy-600">곧 추가될 도구</h2>
     </div>
 
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
       <% [
         { title: "초과근무수당 계산기", icon: "schedule", category: "계산기" },
         { title: "연가일수 계산기", icon: "event_available", category: "계산기" },
@@ -77,8 +83,10 @@
         { title: "수의계약 판단기", icon: "gavel", category: "AI 도구" },
         { title: "계약 체크리스트", icon: "checklist", category: "체크리스트" },
       ].each do |tool| %>
-        <div class="flex items-center gap-3 px-4 py-3 bg-white rounded-xl border border-gray-100">
-          <span class="material-symbols-outlined text-xl text-navy-300"><%= tool[:icon] %></span>
+        <div class="flex items-center gap-3 px-4 py-3.5 bg-white rounded-xl border border-gray-100/80 hover:border-gray-200 hover:shadow-soft transition-all">
+          <span class="w-9 h-9 bg-surface-100 rounded-lg flex items-center justify-center">
+            <span class="material-symbols-outlined text-lg text-navy-300"><%= tool[:icon] %></span>
+          </span>
           <div>
             <h4 class="text-sm font-semibold text-navy-700"><%= tool[:title] %></h4>
             <span class="text-xs text-navy-400"><%= tool[:category] %></span>
@@ -89,15 +97,16 @@
   </div>
 </section>
 
-<!-- CTA -->
-<section class="py-16 bg-white">
-  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-    <div class="icon-container icon-container-lg bg-point-100 mx-auto mb-6">
+<!-- CTA — enhanced -->
+<section class="py-16 bg-white relative overflow-hidden">
+  <div class="absolute top-0 left-1/3 w-[200px] h-[200px] bg-point-500/[0.03] rounded-full blur-[60px]"></div>
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
+    <div class="icon-container icon-container-lg bg-gradient-to-br from-point-100 to-point-200 mx-auto mb-6 shadow-sm">
       <span class="material-symbols-outlined text-3xl text-point-600">lightbulb</span>
     </div>
     <h2 class="text-2xl font-bold text-navy-900 mb-4">필요한 도구가 없으신가요?</h2>
-    <p class="text-navy-600 mb-8">원하시는 도구를 요청해주시면 검토 후 개발을 진행합니다.</p>
-    <button class="btn btn-point btn-md" onclick="alert('도구 요청 기능은 준비 중입니다.')">
+    <p class="text-navy-500 mb-8">원하시는 도구를 요청해주시면 검토 후 개발을 진행합니다.</p>
+    <button class="btn btn-point btn-md shadow-md hover:shadow-lg" onclick="this.textContent='준비 중입니다'; this.disabled=true; setTimeout(() => { this.innerHTML='<span class=\'material-symbols-outlined\'>add</span> 도구 요청하기'; this.disabled=false; }, 2000)">
       <span class="material-symbols-outlined">add</span>
       도구 요청하기
     </button>

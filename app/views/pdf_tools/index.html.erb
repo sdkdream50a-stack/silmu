@@ -376,7 +376,7 @@ async function handleSplitFile(files) {
   const file = files[0];
 
   if (!file.type.includes('pdf')) {
-    alert('PDF 파일만 업로드 가능합니다.');
+    showToast('PDF 파일만 업로드 가능합니다.', true);
     return;
   }
 
@@ -389,6 +389,7 @@ async function handleSplitFile(files) {
   try {
     const response = await fetch('/pdf_tools/info', {
       method: 'POST',
+      headers: { 'X-CSRF-Token': document.querySelector('[name="csrf-token"]')?.content || '' },
       body: formData
     });
     const info = await response.json();
@@ -410,7 +411,7 @@ function handleMergeFiles(files) {
   const pdfFiles = Array.from(files).filter(f => f.type.includes('pdf'));
 
   if (pdfFiles.length === 0) {
-    alert('PDF 파일만 업로드 가능합니다.');
+    showToast('PDF 파일만 업로드 가능합니다.', true);
     return;
   }
 
@@ -501,7 +502,7 @@ async function handleNumberingFile(files) {
   const file = files[0];
 
   if (!file.type.includes('pdf')) {
-    alert('PDF 파일만 업로드 가능합니다.');
+    showToast('PDF 파일만 업로드 가능합니다.', true);
     return;
   }
 
@@ -513,6 +514,7 @@ async function handleNumberingFile(files) {
   try {
     const response = await fetch('/pdf_tools/info', {
       method: 'POST',
+      headers: { 'X-CSRF-Token': document.querySelector('[name="csrf-token"]')?.content || '' },
       body: formData
     });
     const info = await response.json();
@@ -555,7 +557,7 @@ function hideProcessing() {
 
 async function processSplit() {
   if (!splitFile) {
-    alert('PDF 파일을 먼저 업로드해주세요.');
+    showToast('PDF 파일을 먼저 업로드해주세요.', true);
     return;
   }
 
@@ -568,6 +570,7 @@ async function processSplit() {
   try {
     const response = await fetch('/pdf_tools/split', {
       method: 'POST',
+      headers: { 'X-CSRF-Token': document.querySelector('[name="csrf-token"]')?.content || '' },
       body: formData
     });
 
@@ -584,13 +587,13 @@ async function processSplit() {
     hideProcessing();
   } catch (error) {
     hideProcessing();
-    alert('오류: ' + error.message);
+    showToast('오류: ' + error.message, true);
   }
 }
 
 async function processMerge() {
   if (mergeFiles.length < 2) {
-    alert('2개 이상의 PDF 파일을 업로드해주세요.');
+    showToast('2개 이상의 PDF 파일을 업로드해주세요.', true);
     return;
   }
 
@@ -604,6 +607,7 @@ async function processMerge() {
   try {
     const response = await fetch('/pdf_tools/merge', {
       method: 'POST',
+      headers: { 'X-CSRF-Token': document.querySelector('[name="csrf-token"]')?.content || '' },
       body: formData
     });
 
@@ -617,13 +621,13 @@ async function processMerge() {
     hideProcessing();
   } catch (error) {
     hideProcessing();
-    alert('오류: ' + error.message);
+    showToast('오류: ' + error.message, true);
   }
 }
 
 async function processNumbering() {
   if (!numberingFile) {
-    alert('PDF 파일을 먼저 업로드해주세요.');
+    showToast('PDF 파일을 먼저 업로드해주세요.', true);
     return;
   }
 
@@ -640,6 +644,7 @@ async function processNumbering() {
   try {
     const response = await fetch('/pdf_tools/add_page_numbers', {
       method: 'POST',
+      headers: { 'X-CSRF-Token': document.querySelector('[name="csrf-token"]')?.content || '' },
       body: formData
     });
 
@@ -653,7 +658,7 @@ async function processNumbering() {
     hideProcessing();
   } catch (error) {
     hideProcessing();
-    alert('오류: ' + error.message);
+    showToast('오류: ' + error.message, true);
   }
 }
 
@@ -666,5 +671,16 @@ function downloadBlob(blob, filename) {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
+}
+
+function showToast(message, isError = false) {
+  const existing = document.querySelector('.pdf-toast');
+  if (existing) existing.remove();
+  const toast = document.createElement('div');
+  toast.className = 'pdf-toast';
+  toast.style.cssText = `position:fixed;bottom:24px;right:24px;padding:16px 24px;border-radius:12px;color:white;font-weight:500;background:${isError ? '#dc2626' : '#1e3a5f'};box-shadow:0 8px 24px rgba(0,0,0,0.2);z-index:1000;animation:fadeIn 0.3s ease;`;
+  toast.textContent = message;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
 }
 </script>

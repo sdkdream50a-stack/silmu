@@ -1372,12 +1372,12 @@
             showPreview();
             tryExtractFromExcel(workbook);
           } catch (err) {
-            alert('엑셀 파일을 읽는 중 오류가 발생했습니다.');
+            showToast('엑셀 파일을 읽는 중 오류가 발생했습니다.');
           }
         };
         reader.readAsArrayBuffer(file);
       } else {
-        alert('이미지(JPG, PNG), PDF 또는 Excel 파일만 업로드 가능합니다.');
+        showToast('이미지(JPG, PNG), PDF 또는 Excel 파일만 업로드 가능합니다.');
         return;
       }
 
