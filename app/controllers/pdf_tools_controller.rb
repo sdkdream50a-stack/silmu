@@ -1,5 +1,4 @@
 class PdfToolsController < ApplicationController
-  skip_before_action :verify_authenticity_token, only: [:split, :merge, :add_page_numbers]
   before_action :validate_pdf_file, only: [:split, :merge, :add_page_numbers]
 
   MAX_FILE_SIZE = 50.megabytes
@@ -32,8 +31,11 @@ class PdfToolsController < ApplicationController
                   type: "application/zip",
                   disposition: "attachment"
       end
-    rescue => e
+    rescue RuntimeError => e
       render json: { error: e.message }, status: :unprocessable_entity
+    rescue => e
+      Rails.logger.error("PDF split error: #{e.message}")
+      render json: { error: "PDF 분할 중 오류가 발생했습니다." }, status: :unprocessable_entity
     end
   end
 
@@ -49,8 +51,11 @@ class PdfToolsController < ApplicationController
                 filename: result[:name],
                 type: "application/pdf",
                 disposition: "attachment"
-    rescue => e
+    rescue RuntimeError => e
       render json: { error: e.message }, status: :unprocessable_entity
+    rescue => e
+      Rails.logger.error("PDF merge error: #{e.message}")
+      render json: { error: "PDF 합치기 중 오류가 발생했습니다." }, status: :unprocessable_entity
     end
   end
 
@@ -74,8 +79,11 @@ class PdfToolsController < ApplicationController
                 filename: result[:name],
                 type: "application/pdf",
                 disposition: "attachment"
-    rescue => e
+    rescue RuntimeError => e
       render json: { error: e.message }, status: :unprocessable_entity
+    rescue => e
+      Rails.logger.error("PDF page numbers error: #{e.message}")
+      render json: { error: "쪽번호 추가 중 오류가 발생했습니다." }, status: :unprocessable_entity
     end
   end
 
@@ -88,7 +96,8 @@ class PdfToolsController < ApplicationController
       info = PdfProcessorService.get_info(params[:file])
       render json: info
     rescue => e
-      render json: { error: e.message }, status: :unprocessable_entity
+      Rails.logger.error("PDF info error: #{e.message}")
+      render json: { error: "PDF 정보 읽기 중 오류가 발생했습니다." }, status: :unprocessable_entity
     end
   end
 

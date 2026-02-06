@@ -38,7 +38,7 @@
     margin-bottom: 28px;
   }
   .type-option {
-    padding: 12px 14px;
+    padding: 16px 14px;
     border: 2px solid #e2e8f0;
     border-radius: 12px;
     cursor: pointer;
@@ -120,6 +120,7 @@
   }
   .quick-amounts {
     display: flex;
+    flex-wrap: wrap;
     gap: 8px;
     margin-top: 12px;
     align-items: center;
@@ -143,13 +144,13 @@
     border-color: var(--forest-300);
     color: var(--forest-700);
   }
-  .quick-amount.reset-btn {
+  .quick-amount.amount-reset {
     background: #fef3c7;
     border-color: #fcd34d;
     color: #b45309;
-    margin-left: 150px;
+    margin-left: auto;
   }
-  .quick-amount.reset-btn:hover {
+  .quick-amount.amount-reset:hover {
     background: #fde68a;
     border-color: #f59e0b;
     color: #92400e;
@@ -277,6 +278,30 @@
   .result-method-detail {
     font-size: 16px;
     opacity: 0.9;
+  }
+
+  /* 결론 요약 박스 */
+  .result-summary {
+    padding: 24px;
+    margin: -1px 0 0 0;
+    background: #f0fdf4;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .result-header.입찰 + .result-summary {
+    background: #eff6ff;
+  }
+  .result-summary-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--navy-900);
+    line-height: 1.6;
+    text-align: center;
+  }
+  .result-summary-note {
+    font-size: 14px;
+    color: var(--navy-600);
+    text-align: center;
+    margin-top: 8px;
   }
 
   .result-body {
@@ -500,10 +525,91 @@
     background: var(--surface-200);
   }
 
+  /* 로딩 애니메이션 */
+  .animate-spin {
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* 공사 하위 선택 그리드 */
+  .type-sub-grid {
+    display: none;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: -16px;
+    margin-bottom: 28px;
+    padding: 16px;
+    background: var(--surface-50);
+    border-radius: 14px;
+    border: 1px solid #e2e8f0;
+  }
+  .type-sub-grid.show {
+    display: grid;
+    animation: slideDown 0.25s ease;
+  }
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .type-sub-option {
+    padding: 14px 12px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    cursor: pointer;
+    background: white;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .type-sub-option:hover {
+    border-color: #4ade80;
+    background: #f0fdf4;
+  }
+  .type-sub-option.selected {
+    border-color: #16a34a;
+    background: #f0fdf4;
+    box-shadow: 0 0 0 3px rgba(47, 129, 50, 0.15);
+  }
+  .type-sub-option .material-symbols-outlined {
+    font-size: 22px;
+    color: #64748b;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .type-sub-option.selected .material-symbols-outlined {
+    color: #16a34a;
+  }
+  .type-sub-option .name {
+    font-weight: 600;
+    color: #1e293b;
+    font-size: 13px;
+    display: block;
+  }
+  .type-sub-option .desc {
+    font-size: 11px;
+    color: #94a3b8;
+    display: block;
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+  .type-sub-hint {
+    grid-column: 1 / -1;
+    font-size: 12px;
+    color: #64748b;
+    text-align: center;
+    padding: 4px 0 0;
+    margin: 0;
+  }
+
   /* 반응형 */
   @media (max-width: 768px) {
     .type-grid {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .type-sub-grid {
+      grid-template-columns: 1fr;
     }
     .doc-list {
       grid-template-columns: 1fr;
@@ -553,43 +659,62 @@
       </h2>
       <p class="subtitle">계약 유형과 추정가격을 입력하면 적정 계약방식과 필요 서류를 안내해드립니다</p>
 
-      <!-- 계약 유형 선택 -->
-      <div class="type-grid">
-        <% [
-          { key: "goods", name: "물품", icon: "inventory_2" },
-          { key: "service", name: "용역", icon: "support_agent" },
-          { key: "construction_general", name: "종합공사", icon: "domain" },
-          { key: "construction_special", name: "전문공사", icon: "engineering" },
-          { key: "construction_etc", name: "전기/소방/정보통신", icon: "electrical_services" }
-        ].each do |type| %>
-          <div class="type-option" data-type="<%= type[:key] %>" onclick="selectType('<%= type[:key] %>')">
-            <span class="material-symbols-outlined"><%= type[:icon] %></span>
-            <span class="name"><%= type[:name] %></span>
-          </div>
-        <% end %>
+      <!-- 계약 유형 선택 (1단계) -->
+      <div class="type-grid" id="type-grid-main">
+        <div class="type-option" data-type="goods" onclick="selectMainType('goods')">
+          <span class="material-symbols-outlined">inventory_2</span>
+          <span class="name">물품</span>
+        </div>
+        <div class="type-option" data-type="service" onclick="selectMainType('service')">
+          <span class="material-symbols-outlined">support_agent</span>
+          <span class="name">용역</span>
+        </div>
+        <div class="type-option" data-type="construction" onclick="selectMainType('construction')">
+          <span class="material-symbols-outlined">construction</span>
+          <span class="name">공사</span>
+        </div>
+      </div>
+
+      <!-- 공사 세부 유형 선택 (2단계) -->
+      <div class="type-sub-grid" id="construction-sub">
+        <div class="type-sub-option" data-type="construction_general" onclick="selectConstructionType('construction_general')">
+          <span class="material-symbols-outlined">domain</span>
+          <span class="name">종합공사</span>
+          <span class="desc">건축·토목·조경 등 종합 시공<br>5천만원 미만 면허 불필요 · 수의 4억 이하</span>
+        </div>
+        <div class="type-sub-option" data-type="construction_special" onclick="selectConstructionType('construction_special')">
+          <span class="material-symbols-outlined">engineering</span>
+          <span class="name">전문공사</span>
+          <span class="desc">실내건축·토공·미장·방수·도장·비계해체·철근콘크리트·기계설비·상하수도·포장·조경 등<br>1,500만원 이상 전문면허 필요 · 수의 2억 이하</span>
+        </div>
+        <div class="type-sub-option" data-type="construction_etc" onclick="selectConstructionType('construction_etc')">
+          <span class="material-symbols-outlined">electrical_services</span>
+          <span class="name">전기/소방/정보통신</span>
+          <span class="desc">전기·소방·통신설비 공사<br>각 개별법 면허 필요 · 수의 1.6억 이하</span>
+        </div>
+        <p class="type-sub-hint">※ 소규모 시설물 수선·보수는 <strong>종합공사</strong> 선택 (공사예정금액 5천만원 미만 시 건설업 등록 불필요)<br>※ 전문공사는 공사예정금액 1,500만원 이상 시 해당 전문면허 필요</p>
       </div>
 
       <!-- 추정가격 입력 -->
       <div class="amount-section">
         <label>추정가격 (부가세 제외)</label>
         <div class="amount-input-wrap">
-          <input type="text" id="estimated-price" placeholder="0" oninput="formatPrice(this)">
+          <input type="text" id="estimated-price" placeholder="0" inputmode="numeric" oninput="formatPrice(this)" onkeydown="if(event.key==='Enter'){event.preventDefault();determineMethod();}">
           <span class="unit">원</span>
         </div>
-        <p class="amount-hint">설계금액 또는 예정가격 작성 전 대략적인 예상 금액을 입력하세요</p>
+        <p class="amount-hint" id="amount-hint">설계금액 또는 예정가격 작성 전 대략적인 예상 금액을 입력하세요</p>
         <div class="quick-amounts">
-          <span class="quick-amount" onclick="setQuickAmount(10000000)">1천만원</span>
-          <span class="quick-amount" onclick="setQuickAmount(30000000)">3천만원</span>
-          <span class="quick-amount" onclick="setQuickAmount(50000000)">5천만원</span>
-          <span class="quick-amount" onclick="setQuickAmount(100000000)">1억원</span>
-          <span class="quick-amount" onclick="setQuickAmount(200000000)">2억원</span>
-          <span class="quick-amount" onclick="setQuickAmount(500000000)">5억원</span>
-          <span class="quick-amount reset-btn" onclick="resetAmount()">초기화</span>
+          <span class="quick-amount" onclick="addAmount(1000000)">+100만</span>
+          <span class="quick-amount" onclick="addAmount(10000000)">+1천만</span>
+          <span class="quick-amount" onclick="addAmount(50000000)">+5천만</span>
+          <span class="quick-amount" onclick="addAmount(100000000)">+1억</span>
+          <span class="quick-amount" onclick="addAmount(1000000000)">+10억</span>
+          <span class="quick-amount amount-reset" onclick="resetAmount()">초기화</span>
         </div>
       </div>
 
       <!-- 특례기업 선택 -->
-      <details class="special-section">
+      <details class="special-section" open>
         <summary>
           <span class="material-symbols-outlined">star</span>
           특례기업 여부 (여성기업, 사회적기업 등)
@@ -605,18 +730,27 @@
         </div>
       </details>
 
+      <div id="error-message" style="display:none; padding:14px 20px; background:#fef2f2; border:1px solid #fecaca; border-radius:12px; color:#dc2626; font-size:14px; margin-bottom:16px;">
+      </div>
+
       <button class="determine-btn" onclick="determineMethod()" id="determine-btn" disabled>
-        <span class="material-symbols-outlined">search</span>
-        계약방식 확인하기
+        <span class="material-symbols-outlined" id="btn-icon">search</span>
+        <span id="btn-text">계약방식 확인하기</span>
       </button>
     </div>
 
     <!-- 결과 카드 -->
     <div class="result-card" id="result-section">
       <div class="result-header" id="result-header">
-        <div class="result-method">추천 계약방식</div>
+        <div class="result-method">계약방식 결정 결과</div>
         <div class="result-method-main" id="result-method"></div>
         <div class="result-method-detail" id="result-detail"></div>
+      </div>
+
+      <!-- 결론 요약 -->
+      <div class="result-summary" id="result-summary">
+        <div class="result-summary-text" id="result-summary-text"></div>
+        <div class="result-summary-note" id="result-summary-note"></div>
       </div>
 
       <div class="result-body">
@@ -688,8 +822,8 @@
         </div>
 
         <button class="reset-btn" onclick="resetForm()">
-          <span class="material-symbols-outlined">refresh</span>
-          다시 확인하기
+          <span class="material-symbols-outlined">arrow_upward</span>
+          조건 변경하여 다시 확인
         </button>
       </div>
     </div>
@@ -701,10 +835,44 @@
   let selectedSpecial = null;
   let estimatedPrice = 0;
 
-  function selectType(type) {
+  function selectMainType(type) {
+    const subGrid = document.getElementById('construction-sub');
+    const specialSection = document.querySelector('.special-section');
+
+    if (type === 'construction') {
+      // 공사 선택 → 하위 옵션 펼치기, 특례기업 숨기기 (물품/용역만 해당)
+      document.querySelectorAll('.type-option').forEach(el => {
+        el.classList.toggle('selected', el.dataset.type === 'construction');
+      });
+      subGrid.classList.add('show');
+      specialSection.style.display = 'none';
+      selectedSpecial = null;
+      // 이전 하위 선택 초기화
+      document.querySelectorAll('.type-sub-option').forEach(el => el.classList.remove('selected'));
+      selectedType = null;
+      checkFormValid();
+    } else {
+      // 물품/용역 선택 → 하위 옵션 닫기, 특례기업 보이기
+      subGrid.classList.remove('show');
+      specialSection.style.display = '';
+      document.querySelectorAll('.type-option').forEach(el => {
+        el.classList.toggle('selected', el.dataset.type === type);
+      });
+      document.querySelectorAll('.type-sub-option').forEach(el => el.classList.remove('selected'));
+      selectedType = type;
+      checkFormValid();
+    }
+  }
+
+  function selectConstructionType(type) {
     selectedType = type;
-    document.querySelectorAll('.type-option').forEach(el => {
+    // 하위 옵션 하이라이트
+    document.querySelectorAll('.type-sub-option').forEach(el => {
       el.classList.toggle('selected', el.dataset.type === type);
+    });
+    // 메인 '공사' 계속 하이라이트
+    document.querySelectorAll('.type-option').forEach(el => {
+      el.classList.toggle('selected', el.dataset.type === 'construction');
     });
     checkFormValid();
   }
@@ -724,19 +892,56 @@
     } else {
       estimatedPrice = 0;
     }
+    updateAmountHint();
     checkFormValid();
   }
 
-  function setQuickAmount(amount) {
-    estimatedPrice = amount;
-    document.getElementById('estimated-price').value = amount.toLocaleString('ko-KR');
+  function addAmount(amount) {
+    estimatedPrice += amount;
+    document.getElementById('estimated-price').value = estimatedPrice.toLocaleString('ko-KR');
+    updateAmountHint();
     checkFormValid();
   }
 
   function resetAmount() {
     estimatedPrice = 0;
     document.getElementById('estimated-price').value = '';
+    updateAmountHint();
     checkFormValid();
+  }
+
+  function updateAmountHint() {
+    const hint = document.getElementById('amount-hint');
+    if (estimatedPrice > 0) {
+      hint.textContent = toKoreanUnit(estimatedPrice);
+      hint.style.color = 'var(--forest-600)';
+      hint.style.fontWeight = '600';
+    } else {
+      hint.textContent = '설계금액 또는 예정가격 작성 전 대략적인 예상 금액을 입력하세요';
+      hint.style.color = '#64748b';
+      hint.style.fontWeight = '400';
+    }
+  }
+
+  function toKoreanUnit(num) {
+    if (num === 0) return '0원';
+    const units = [
+      { value: 100000000, label: '억' },
+      { value: 10000, label: '만' }
+    ];
+    let result = '';
+    let remaining = num;
+    for (const unit of units) {
+      if (remaining >= unit.value) {
+        const count = Math.floor(remaining / unit.value);
+        result += count.toLocaleString('ko-KR') + unit.label + ' ';
+        remaining %= unit.value;
+      }
+    }
+    if (remaining > 0) {
+      result += remaining.toLocaleString('ko-KR');
+    }
+    return result.trim() + '원';
   }
 
   function checkFormValid() {
@@ -744,8 +949,39 @@
     btn.disabled = !(selectedType && estimatedPrice > 0);
   }
 
+  function showError(message) {
+    const el = document.getElementById('error-message');
+    el.textContent = message;
+    el.style.display = 'block';
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  function hideError() {
+    document.getElementById('error-message').style.display = 'none';
+  }
+
+  function setLoading(loading) {
+    const btn = document.getElementById('determine-btn');
+    const icon = document.getElementById('btn-icon');
+    const text = document.getElementById('btn-text');
+    if (loading) {
+      btn.disabled = true;
+      icon.textContent = 'hourglass_empty';
+      icon.classList.add('animate-spin');
+      text.textContent = '확인 중...';
+    } else {
+      btn.disabled = !(selectedType && estimatedPrice > 0);
+      icon.textContent = 'search';
+      icon.classList.remove('animate-spin');
+      text.textContent = '계약방식 확인하기';
+    }
+  }
+
   async function determineMethod() {
     if (!selectedType || estimatedPrice <= 0) return;
+
+    hideError();
+    setLoading(true);
 
     try {
       const response = await fetch('/contract-methods/determine', {
@@ -766,11 +1002,13 @@
       if (result.success) {
         renderResult(result);
       } else {
-        alert(result.error || '오류가 발생했습니다.');
+        showError(result.error || '오류가 발생했습니다.');
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('서버 오류가 발생했습니다.');
+      showError('서버와 통신할 수 없습니다. 잠시 후 다시 시도해주세요.');
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -782,6 +1020,30 @@
     // 계약방식 표시
     document.getElementById('result-method').textContent = result.result.method;
     document.getElementById('result-detail').textContent = result.result.method_detail;
+
+    // 결론 요약 생성
+    const typeName = result.contract_type.name;
+    const price = result.formatted_price;
+    const method = result.result.method;
+    const detail = result.result.method_detail;
+    let summaryText = '';
+
+    if (method === '입찰') {
+      summaryText = `${typeName} ${price}원은 경쟁입찰로 진행해야 합니다.`;
+    } else {
+      summaryText = `${typeName} ${price}원은 "${detail}"로 진행할 수 있습니다.`;
+    }
+
+    document.getElementById('result-summary-text').textContent = summaryText;
+
+    // note 표시 (핵심 실무 정보)
+    const noteEl = document.getElementById('result-summary-note');
+    if (result.result.note) {
+      noteEl.textContent = result.result.note;
+      noteEl.style.display = 'block';
+    } else {
+      noteEl.style.display = 'none';
+    }
 
     // 기본 정보
     document.getElementById('info-type').textContent = result.contract_type.name;
@@ -799,47 +1061,71 @@
     // 법령 근거
     document.getElementById('basis-content').textContent = result.result.basis;
 
-    // 경고/안내
-    const warningsHtml = result.warnings.map(w => `
-      <div class="alert-box ${w.level}">
-        <span class="material-symbols-outlined">${w.level === 'warning' ? 'warning' : 'info'}</span>
-        <div class="content">
-          <h5>${w.title}</h5>
-          <p>${w.message}</p>
-          ${w.link ? `<a href="${w.link}" target="_blank">자세히 보기 →</a>` : ''}
-        </div>
-      </div>
-    `).join('');
+    // 경고/안내 (안전한 DOM 조작)
+    const warningsContainer = document.getElementById('warnings-container');
+    warningsContainer.innerHTML = '';
 
-    // 특별 조건 추가
-    if (result.result.special_condition) {
-      document.getElementById('warnings-container').innerHTML = `
-        <div class="alert-box info">
-          <span class="material-symbols-outlined">lightbulb</span>
-          <div class="content">
-            <h5>참고사항</h5>
-            <p>${result.result.special_condition}</p>
-          </div>
-        </div>
-      ` + warningsHtml;
-    } else {
-      document.getElementById('warnings-container').innerHTML = warningsHtml;
+    function createAlertBox(level, iconName, title, message, link) {
+      const box = document.createElement('div');
+      box.className = 'alert-box ' + level;
+      const icon = document.createElement('span');
+      icon.className = 'material-symbols-outlined';
+      icon.textContent = iconName;
+      const content = document.createElement('div');
+      content.className = 'content';
+      const h5 = document.createElement('h5');
+      h5.textContent = title;
+      const p = document.createElement('p');
+      p.textContent = message;
+      content.appendChild(h5);
+      content.appendChild(p);
+      if (link) {
+        const a = document.createElement('a');
+        a.href = link;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.textContent = '자세히 보기 →';
+        content.appendChild(a);
+      }
+      box.appendChild(icon);
+      box.appendChild(content);
+      return box;
     }
 
-    // 필요 서류
-    const docsHtml = result.result.documents.map(doc => `
-      <div class="doc-item">
-        <span class="material-symbols-outlined">description</span>
-        ${doc}
-      </div>
-    `).join('');
-    document.getElementById('doc-list').innerHTML = docsHtml;
+    if (result.result.special_condition) {
+      warningsContainer.appendChild(
+        createAlertBox('info', 'lightbulb', '참고사항', result.result.special_condition)
+      );
+    }
+    result.warnings.forEach(w => {
+      warningsContainer.appendChild(
+        createAlertBox(w.level, w.level === 'warning' ? 'warning' : 'info', w.title, w.message, w.link)
+      );
+    });
 
-    // 팁
-    const tipsHtml = result.tips.map(tip => `
-      <div class="tip-item">${tip}</div>
-    `).join('');
-    document.getElementById('tips-container').innerHTML = tipsHtml;
+    // 필요 서류 (안전한 DOM 조작)
+    const docList = document.getElementById('doc-list');
+    docList.innerHTML = '';
+    result.result.documents.forEach(doc => {
+      const item = document.createElement('div');
+      item.className = 'doc-item';
+      const icon = document.createElement('span');
+      icon.className = 'material-symbols-outlined';
+      icon.textContent = 'description';
+      item.appendChild(icon);
+      item.appendChild(document.createTextNode(doc));
+      docList.appendChild(item);
+    });
+
+    // 팁 (안전한 DOM 조작)
+    const tipsContainer = document.getElementById('tips-container');
+    tipsContainer.innerHTML = '';
+    result.tips.forEach(tip => {
+      const item = document.createElement('div');
+      item.className = 'tip-item';
+      item.textContent = tip;
+      tipsContainer.appendChild(item);
+    });
 
     // 결과 표시
     document.getElementById('result-section').classList.add('show');
@@ -847,6 +1133,7 @@
   }
 
   function resetForm() {
+    // 결과만 닫고 입력값은 유지 → 조건 바꿔 재조회 가능
     document.getElementById('result-section').classList.remove('show');
     document.getElementById('input-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }

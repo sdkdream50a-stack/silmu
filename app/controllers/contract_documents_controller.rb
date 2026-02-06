@@ -1,6 +1,5 @@
 # 계약서류 원클릭 생성기 컨트롤러
 class ContractDocumentsController < ApplicationController
-  skip_before_action :verify_authenticity_token, only: [:generate]
 
   # GET /tools/contract-documents
   def index

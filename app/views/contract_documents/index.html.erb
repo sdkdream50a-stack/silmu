@@ -751,6 +751,14 @@
 </section>
 
 <script>
+  // HTML 이스케이프 헬퍼
+  function escapeHtml(str) {
+    if (!str) return '';
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
   // 상태
   let currentStep = 1;
   let selectedType = null;
@@ -925,6 +933,11 @@
 
   // 체크리스트 생성
   async function generateChecklist() {
+    const generateBtn = document.querySelector('#step3-card .btn-primary');
+    const originalText = generateBtn.innerHTML;
+    generateBtn.disabled = true;
+    generateBtn.innerHTML = '<span class="material-symbols-outlined" style="animation:spin 1s linear infinite">hourglass_empty</span> 생성 중...';
+
     const contractInfo = {
       contract_name: document.getElementById('contract_name').value,
       contractor: document.getElementById('contractor').value,
@@ -964,7 +977,10 @@
       }
     } catch (error) {
       console.error('Error generating checklist:', error);
-      showToast('서버 오류가 발생했습니다.');
+      showToast('서버와 통신할 수 없습니다. 잠시 후 다시 시도해주세요.');
+    } finally {
+      generateBtn.disabled = false;
+      generateBtn.innerHTML = originalText;
     }
   }
 
@@ -982,29 +998,30 @@
     // 본문
     let html = '';
 
-    // 계약 정보 요약
-    if (checklist.contract_info.contractor || checklist.contract_info.contract_amount) {
+    // 계약 정보 요약 (사용자 입력 이스케이프 처리)
+    const ci = checklist.contract_info;
+    if (ci.contractor || ci.contract_amount) {
       html += `<div style="padding: 20px; background: var(--surface-50); border-radius: 12px; margin-bottom: 24px;">`;
       html += `<h4 style="font-size: 14px; font-weight: 600; color: var(--navy-800); margin-bottom: 12px;">계약 정보</h4>`;
       html += `<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; font-size: 14px;">`;
 
-      if (checklist.contract_info.contractor) {
-        html += `<div><span style="color: #64748b;">계약 상대방:</span> <strong>${checklist.contract_info.contractor}</strong></div>`;
+      if (ci.contractor) {
+        html += `<div><span style="color: #64748b;">계약 상대방:</span> <strong>${escapeHtml(ci.contractor)}</strong></div>`;
       }
-      if (checklist.contract_info.contract_amount) {
-        html += `<div><span style="color: #64748b;">계약금액:</span> <strong>${checklist.contract_info.contract_amount}원</strong></div>`;
+      if (ci.contract_amount) {
+        html += `<div><span style="color: #64748b;">계약금액:</span> <strong>${escapeHtml(ci.contract_amount)}원</strong></div>`;
       }
-      if (checklist.contract_info.contract_date) {
-        html += `<div><span style="color: #64748b;">계약일:</span> <strong>${checklist.contract_info.contract_date}</strong></div>`;
+      if (ci.contract_date) {
+        html += `<div><span style="color: #64748b;">계약일:</span> <strong>${escapeHtml(ci.contract_date)}</strong></div>`;
       }
-      if (checklist.contract_info.delivery_date) {
-        html += `<div><span style="color: #64748b;">납품/준공일:</span> <strong>${checklist.contract_info.delivery_date}</strong></div>`;
+      if (ci.delivery_date) {
+        html += `<div><span style="color: #64748b;">납품/준공일:</span> <strong>${escapeHtml(ci.delivery_date)}</strong></div>`;
       }
-      if (checklist.contract_info.department) {
-        html += `<div><span style="color: #64748b;">담당부서:</span> <strong>${checklist.contract_info.department}</strong></div>`;
+      if (ci.department) {
+        html += `<div><span style="color: #64748b;">담당부서:</span> <strong>${escapeHtml(ci.department)}</strong></div>`;
       }
-      if (checklist.contract_info.manager) {
-        html += `<div><span style="color: #64748b;">담당자:</span> <strong>${checklist.contract_info.manager}</strong></div>`;
+      if (ci.manager) {
+        html += `<div><span style="color: #64748b;">담당자:</span> <strong>${escapeHtml(ci.manager)}</strong></div>`;
       }
 
       html += `</div></div>`;
@@ -1173,6 +1190,10 @@
   // 애니메이션 스타일 추가
   const style = document.createElement('style');
   style.textContent = `
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
     @keyframes slideIn {
       from { transform: translateY(20px); opacity: 0; }
       to { transform: translateY(0); opacity: 1; }

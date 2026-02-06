@@ -1,6 +1,5 @@
 # 소요예산 추정 컨트롤러
 class EstimationsController < ApplicationController
-  skip_before_action :verify_authenticity_token, only: [:calculate]
 
   # GET /tools/budget-estimator
   def index

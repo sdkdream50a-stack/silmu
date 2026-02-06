@@ -79,7 +79,6 @@ class PdfProcessorService
         next if skip_first && index == 0
 
         page_num = start_number + (skip_first ? index - 1 : index)
-        page_num = start_number + index unless skip_first
 
         # 페이지 번호 포맷
         number_text = format_page_number(page_num, total_pages, format)
@@ -133,7 +132,7 @@ class PdfProcessorService
 
     # 페이지 범위 파싱 (예: "1-3,5,7-10")
     def parse_ranges(ranges_str, total_pages)
-      return [[1, total_pages]] if ranges_str.blank?
+      return [(1..total_pages).to_a] if ranges_str.blank?
 
       result = []
 
