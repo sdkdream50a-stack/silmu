@@ -1,15 +1,18 @@
 <!-- Hero Section — 검색 + 금액 입력 위젯 통합 -->
 <section class="relative overflow-hidden gradient-premium text-white">
-  <!-- Background Pattern -->
-  <div class="absolute inset-0 opacity-30">
-    <div class="absolute top-0 right-0 w-96 h-96 bg-point-500/20 rounded-full blur-3xl"></div>
-    <div class="absolute bottom-0 left-0 w-96 h-96 bg-forest-500/20 rounded-full blur-3xl"></div>
+  <!-- Background Pattern — enhanced with multiple layers -->
+  <div class="absolute inset-0">
+    <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-point-500/15 rounded-full blur-[100px] animate-float"></div>
+    <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-forest-500/15 rounded-full blur-[100px]" style="animation: subtle-float 8s ease-in-out infinite reverse;"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-point-400/5 rounded-full blur-[120px]"></div>
+    <!-- Grid pattern overlay -->
+    <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px); background-size: 40px 40px;"></div>
   </div>
 
-  <div class="relative container-wide section-lg">
+  <div class="relative container-wide py-16 md:py-20 lg:py-24">
     <div class="max-w-4xl mx-auto text-center">
       <!-- Badge -->
-      <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20 mb-8 animate-fade-in">
+      <div class="inline-flex items-center gap-2 glass-panel px-5 py-2.5 rounded-full mb-8 animate-fade-in">
         <span class="w-2 h-2 bg-forest-400 rounded-full animate-pulse"></span>
         <span class="text-sm font-medium text-white/90">공무원을 위한 실무 플랫폼</span>
       </div>
@@ -17,7 +20,7 @@
       <!-- Headline -->
       <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-8 leading-[1.15] tracking-tight animate-slide-up">
         감사 걱정 없는,<br>
-        <span class="text-forest-400">퇴근 있는,</span><br>
+        <span class="text-gradient-hero">퇴근 있는,</span><br>
         은퇴 준비되는 공무원
       </h1>
 
@@ -26,38 +29,38 @@
         복잡하고 귀찮은 업무, 도구가 대신 해결합니다
       </p>
 
-      <!-- 검색 위젯 (챗봇 통합) -->
+      <!-- 검색 위젯 (챗봇 통합) — enhanced glass -->
       <div class="max-w-2xl mx-auto animate-slide-up">
         <form action="<%= chatbot_search_path %>" method="get" data-turbo="false" class="relative">
-          <div class="flex items-center bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 hover:border-white/40 transition-all focus-within:border-forest-400 focus-within:bg-white/15">
-            <span class="material-symbols-outlined text-navy-300 ml-5">search</span>
-            <input type="text" name="query" placeholder="궁금한 업무를 검색하세요 (예: 수의계약, 예산이월, 출장비)" class="flex-1 bg-transparent text-white placeholder-navy-300 px-4 py-4 md:py-5 text-lg outline-none">
-            <button type="submit" class="btn btn-accent mr-2 px-6">검색</button>
+          <div class="flex items-center glass-panel rounded-2xl hover:border-white/30 transition-all focus-within:border-forest-400/50 focus-within:shadow-[0_0_30px_rgba(110,231,183,0.15)]">
+            <span class="material-symbols-outlined text-white/50 ml-5 text-xl">search</span>
+            <input type="text" name="query" placeholder="궁금한 업무를 검색하세요 (예: 수의계약, 예산이월, 출장비)" class="flex-1 bg-transparent text-white placeholder-white/40 px-4 py-4 md:py-5 text-lg outline-none">
+            <button type="submit" class="btn btn-accent mr-2 px-6 shadow-md hover:shadow-lg">검색</button>
           </div>
         </form>
         <!-- 인기 검색어 -->
-        <div class="flex flex-wrap justify-center gap-2 mt-4">
+        <div class="flex flex-wrap justify-center gap-2 mt-5">
           <% %w[수의계약 예산이월 출장비 연말정산 긴급계약 소액수의].each do |keyword| %>
-            <%= link_to chatbot_search_path(query: keyword), class: "px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-full text-sm text-white/80 hover:text-white transition-all", data: { turbo: false } do %>
+            <%= link_to chatbot_search_path(query: keyword), class: "px-3 py-1.5 bg-white/[0.06] hover:bg-white/15 rounded-full text-sm text-white/70 hover:text-white border border-white/[0.08] hover:border-white/20 transition-all", data: { turbo: false } do %>
               <%= keyword %>
             <% end %>
           <% end %>
         </div>
       </div>
 
-      <!-- Stats -->
-      <div class="grid grid-cols-3 gap-8 mt-14 pt-14 border-t border-white/10">
-        <div class="text-center">
-          <div class="text-3xl md:text-4xl font-bold text-white mb-2">7+</div>
-          <div class="text-navy-300 text-sm">자동화 도구</div>
+      <!-- Stats — glass cards -->
+      <div class="grid grid-cols-3 gap-4 md:gap-8 mt-16 pt-10 border-t border-white/[0.08]">
+        <div class="text-center glass-panel rounded-2xl py-5 px-3">
+          <div class="text-3xl md:text-4xl font-bold text-white mb-1">7+</div>
+          <div class="text-white/50 text-sm">자동화 도구</div>
         </div>
-        <div class="text-center">
-          <div class="text-3xl md:text-4xl font-bold text-white mb-2">10+</div>
-          <div class="text-navy-300 text-sm">업무 가이드</div>
+        <div class="text-center glass-panel rounded-2xl py-5 px-3">
+          <div class="text-3xl md:text-4xl font-bold text-white mb-1">10+</div>
+          <div class="text-white/50 text-sm">업무 가이드</div>
         </div>
-        <div class="text-center">
-          <div class="text-3xl md:text-4xl font-bold text-white mb-2">50+</div>
-          <div class="text-navy-300 text-sm">서식/양식</div>
+        <div class="text-center glass-panel rounded-2xl py-5 px-3">
+          <div class="text-3xl md:text-4xl font-bold text-white mb-1">50+</div>
+          <div class="text-white/50 text-sm">서식/양식</div>
         </div>
       </div>
     </div>
@@ -72,25 +75,25 @@
 </section>
 
 <!-- 핵심 도구 Section — 바로 사용 가능한 형태 (최상단) -->
-<section id="tools" class="section bg-surface-50">
+<section id="tools" class="section bg-surface-50 relative">
   <div class="container-wide">
     <!-- Section Header -->
-    <div class="text-center mb-12 md:mb-16">
+    <div class="text-center mb-12 md:mb-16 reveal">
       <span class="badge badge-point mb-4">자동화 도구</span>
-      <h2 class="text-navy-900 mb-4">바로 사용하는 실무 도구</h2>
-      <p class="text-lg text-navy-600 max-w-2xl mx-auto">
+      <h2 class="text-navy-900 mb-4">바로 사용하는 <span class="text-gradient-accent">실무 도구</span></h2>
+      <p class="text-lg text-navy-500 max-w-2xl mx-auto">
         복잡하고 시간 걸리는 업무, 클릭 한 번으로 해결하세요
       </p>
     </div>
 
-    <!-- 주요 도구 3개 — 큰 카드 -->
+    <!-- 주요 도구 3개 — 큰 카드 with glow -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
       <!-- 계약방식 결정 -->
-      <%= link_to contract_method_path, class: "group card card-interactive p-8 border-2 border-transparent hover:border-forest-400 relative overflow-hidden" do %>
-        <div class="absolute top-0 right-0 w-32 h-32 bg-forest-500/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+      <%= link_to contract_method_path, class: "group card card-interactive card-glow-forest card-shine p-8 border-2 border-transparent hover:border-forest-300 relative overflow-hidden reveal reveal-delay-1" do %>
+        <div class="absolute top-0 right-0 w-40 h-40 bg-forest-500/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:bg-forest-500/10 transition-colors"></div>
         <div class="relative">
           <div class="flex items-center gap-3 mb-4">
-            <div class="icon-container icon-container-lg bg-forest-100 group-hover:bg-forest-600 transition-colors">
+            <div class="icon-container icon-container-lg bg-forest-100 group-hover:bg-forest-600 transition-all duration-300 group-hover:shadow-lg group-hover:shadow-forest-500/20">
               <span class="material-symbols-outlined text-2xl text-forest-600 group-hover:text-white transition-colors">gavel</span>
             </div>
             <span class="badge badge-forest">인기</span>
@@ -104,11 +107,11 @@
       <% end %>
 
       <!-- 계약서류 원클릭 생성 -->
-      <%= link_to contract_documents_path, class: "group card card-interactive p-8 border-2 border-transparent hover:border-point-400 relative overflow-hidden" do %>
-        <div class="absolute top-0 right-0 w-32 h-32 bg-point-500/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+      <%= link_to contract_documents_path, class: "group card card-interactive card-glow-point card-shine p-8 border-2 border-transparent hover:border-point-300 relative overflow-hidden reveal reveal-delay-2" do %>
+        <div class="absolute top-0 right-0 w-40 h-40 bg-point-500/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:bg-point-500/10 transition-colors"></div>
         <div class="relative">
           <div class="flex items-center gap-3 mb-4">
-            <div class="icon-container icon-container-lg bg-point-100 group-hover:bg-point-600 transition-colors">
+            <div class="icon-container icon-container-lg bg-point-100 group-hover:bg-point-600 transition-all duration-300 group-hover:shadow-lg group-hover:shadow-point-500/20">
               <span class="material-symbols-outlined text-2xl text-point-600 group-hover:text-white transition-colors">fact_check</span>
             </div>
             <span class="badge badge-point">NEW</span>
@@ -122,11 +125,11 @@
       <% end %>
 
       <!-- 소요예산 추정기 -->
-      <%= link_to budget_estimator_path, class: "group card card-interactive p-8 border-2 border-transparent hover:border-navy-400 relative overflow-hidden" do %>
-        <div class="absolute top-0 right-0 w-32 h-32 bg-navy-500/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+      <%= link_to budget_estimator_path, class: "group card card-interactive card-glow-navy card-shine p-8 border-2 border-transparent hover:border-navy-300 relative overflow-hidden reveal reveal-delay-3" do %>
+        <div class="absolute top-0 right-0 w-40 h-40 bg-navy-500/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:bg-navy-500/10 transition-colors"></div>
         <div class="relative">
           <div class="flex items-center gap-3 mb-4">
-            <div class="icon-container icon-container-lg bg-navy-100 group-hover:bg-navy-600 transition-colors">
+            <div class="icon-container icon-container-lg bg-navy-100 group-hover:bg-navy-700 transition-all duration-300 group-hover:shadow-lg group-hover:shadow-navy-500/20">
               <span class="material-symbols-outlined text-2xl text-navy-600 group-hover:text-white transition-colors">calculate</span>
             </div>
             <span class="badge badge-navy">NEW</span>
@@ -140,38 +143,38 @@
       <% end %>
     </div>
 
-    <!-- 보조 도구 4개 — 작은 카드 -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <%= link_to pdf_tools_path, class: "group card card-interactive p-5 text-center" do %>
-        <div class="icon-container bg-warm-100 group-hover:bg-warm-500 mx-auto mb-3 transition-colors">
+    <!-- 보조 도구 4개 — 작은 카드 with hover glow -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 reveal reveal-delay-4">
+      <%= link_to pdf_tools_path, class: "group card card-interactive p-5 text-center hover:border-warm-200" do %>
+        <div class="icon-container icon-container-md bg-warm-100 group-hover:bg-warm-500 mx-auto mb-3 transition-all duration-300 group-hover:shadow-md group-hover:shadow-warm-500/20">
           <span class="material-symbols-outlined text-xl text-warm-600 group-hover:text-white transition-colors">picture_as_pdf</span>
         </div>
         <h4 class="font-bold text-navy-900 text-sm group-hover:text-warm-700 transition-colors">PDF 도구</h4>
-        <p class="text-navy-500 text-xs mt-1">분할·합치기·쪽번호</p>
+        <p class="text-navy-400 text-xs mt-1">분할·합치기·쪽번호</p>
       <% end %>
 
-      <%= link_to travel_calculator_path, class: "group card card-interactive p-5 text-center" do %>
-        <div class="icon-container bg-point-100 group-hover:bg-point-600 mx-auto mb-3 transition-colors">
+      <%= link_to travel_calculator_path, class: "group card card-interactive p-5 text-center hover:border-point-200" do %>
+        <div class="icon-container icon-container-md bg-point-100 group-hover:bg-point-600 mx-auto mb-3 transition-all duration-300 group-hover:shadow-md group-hover:shadow-point-500/20">
           <span class="material-symbols-outlined text-xl text-point-600 group-hover:text-white transition-colors">directions_car</span>
         </div>
         <h4 class="font-bold text-navy-900 text-sm group-hover:text-point-700 transition-colors">여비계산기</h4>
-        <p class="text-navy-500 text-xs mt-1">출장비 자동 계산</p>
+        <p class="text-navy-400 text-xs mt-1">출장비 자동 계산</p>
       <% end %>
 
-      <%= link_to pre_contract_checklist_path, class: "group card card-interactive p-5 text-center" do %>
-        <div class="icon-container bg-forest-100 group-hover:bg-forest-600 mx-auto mb-3 transition-colors">
+      <%= link_to pre_contract_checklist_path, class: "group card card-interactive p-5 text-center hover:border-forest-200" do %>
+        <div class="icon-container icon-container-md bg-forest-100 group-hover:bg-forest-600 mx-auto mb-3 transition-all duration-300 group-hover:shadow-md group-hover:shadow-forest-500/20">
           <span class="material-symbols-outlined text-xl text-forest-600 group-hover:text-white transition-colors">checklist_rtl</span>
         </div>
         <h4 class="font-bold text-navy-900 text-sm group-hover:text-forest-700 transition-colors">사전 체크리스트</h4>
-        <p class="text-navy-500 text-xs mt-1">계약 전 필수 점검</p>
+        <p class="text-navy-400 text-xs mt-1">계약 전 필수 점검</p>
       <% end %>
 
-      <%= link_to contract_flow_path, class: "group card card-interactive p-5 text-center" do %>
-        <div class="icon-container bg-navy-100 group-hover:bg-navy-600 mx-auto mb-3 transition-colors">
+      <%= link_to contract_flow_path, class: "group card card-interactive p-5 text-center hover:border-navy-200" do %>
+        <div class="icon-container icon-container-md bg-navy-100 group-hover:bg-navy-700 mx-auto mb-3 transition-all duration-300 group-hover:shadow-md group-hover:shadow-navy-500/20">
           <span class="material-symbols-outlined text-xl text-navy-600 group-hover:text-white transition-colors">account_tree</span>
         </div>
         <h4 class="font-bold text-navy-900 text-sm group-hover:text-navy-700 transition-colors">계약 흐름도</h4>
-        <p class="text-navy-500 text-xs mt-1">전체 프로세스 확인</p>
+        <p class="text-navy-400 text-xs mt-1">전체 프로세스 확인</p>
       <% end %>
     </div>
 
@@ -187,14 +190,14 @@
 
 <!-- 금액으로 계약방법 바로 찾기 — 인라인 위젯 -->
 <section id="price-finder" class="section bg-white">
-  <div class="container-tight">
-    <div class="card p-8 md:p-10 border-2 border-forest-100 bg-gradient-to-br from-forest-50/50 to-white">
+  <div class="container-tight reveal">
+    <div class="card p-8 md:p-12 border border-forest-100 bg-gradient-to-br from-forest-50/30 via-white to-point-50/20 shadow-medium hover:shadow-strong transition-shadow duration-500">
       <div class="text-center mb-8">
-        <div class="icon-container icon-container-lg bg-forest-100 mx-auto mb-4">
+        <div class="icon-container icon-container-lg bg-gradient-to-br from-forest-100 to-forest-200 mx-auto mb-4 shadow-sm">
           <span class="material-symbols-outlined text-3xl text-forest-600">paid</span>
         </div>
-        <h2 class="text-2xl font-bold text-navy-900 mb-2">금액으로 계약방법 바로 찾기</h2>
-        <p class="text-navy-600">금액과 유형을 선택하면 적정 계약방식을 바로 알려드립니다</p>
+        <h2 class="text-2xl font-bold text-navy-900 mb-2">금액으로 계약방법 <span class="text-gradient-forest">바로 찾기</span></h2>
+        <p class="text-navy-500">금액과 유형을 선택하면 적정 계약방식을 바로 알려드립니다</p>
       </div>
 
       <div class="max-w-lg mx-auto">
@@ -227,13 +230,17 @@
 </section>
 
 <!-- 업무 도우미 Section -->
-<section id="assistant" class="section bg-surface-50">
-  <div class="container-wide">
+<section id="assistant" class="section bg-surface-50 relative overflow-hidden">
+  <!-- Subtle background decoration -->
+  <div class="absolute top-0 right-0 w-[400px] h-[400px] bg-point-500/[0.03] rounded-full blur-[100px]"></div>
+  <div class="absolute bottom-0 left-0 w-[300px] h-[300px] bg-forest-500/[0.03] rounded-full blur-[100px]"></div>
+
+  <div class="container-wide relative">
     <!-- Section Header -->
-    <div class="text-center mb-16 md:mb-20">
+    <div class="text-center mb-16 md:mb-20 reveal">
       <span class="badge badge-navy mb-4">법령 가이드</span>
-      <h2 class="text-navy-900 mb-6">주제별 업무 가이드</h2>
-      <p class="text-xl text-navy-600 max-w-2xl mx-auto">
+      <h2 class="text-navy-900 mb-6">주제별 <span class="text-gradient-navy">업무 가이드</span></h2>
+      <p class="text-xl text-navy-500 max-w-2xl mx-auto">
         법령 · 서식 · 흐름도를 한눈에
       </p>
     </div>
@@ -241,11 +248,11 @@
     <!-- 주요 가이드 (계약 중심) -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
       <!-- 수의계약 -->
-      <%= link_to "/topics/private-contract", class: "group card card-interactive p-6 md:p-8 border-2 border-transparent hover:border-point-300" do %>
-        <div class="text-4xl mb-5">📝</div>
+      <%= link_to "/topics/private-contract", class: "group card card-interactive card-shine p-6 md:p-8 border border-transparent hover:border-point-200 reveal reveal-delay-1" do %>
+        <div class="text-4xl mb-5 group-hover:scale-110 transition-transform duration-300">📝</div>
         <h3 class="font-bold text-lg text-navy-900 group-hover:text-point-600 mb-2 transition-colors">수의계약</h3>
-        <p class="text-navy-500 text-sm mb-4">법령 3단비교 · 서식 · 흐름도</p>
-        <div class="flex flex-wrap gap-2">
+        <p class="text-navy-400 text-sm mb-4">법령 3단비교 · 서식 · 흐름도</p>
+        <div class="flex flex-wrap gap-1.5">
           <span class="badge badge-point text-[10px]">법령</span>
           <span class="badge badge-forest text-[10px]">서식</span>
           <span class="badge badge-navy text-[10px]">검토도구</span>
@@ -253,33 +260,33 @@
       <% end %>
 
       <!-- 소액수의계약 -->
-      <%= link_to "/topics/small-amount-contract", class: "group card card-interactive p-6 md:p-8 border-2 border-transparent hover:border-forest-300" do %>
-        <div class="text-4xl mb-5">💰</div>
+      <%= link_to "/topics/small-amount-contract", class: "group card card-interactive card-shine p-6 md:p-8 border border-transparent hover:border-forest-200 reveal reveal-delay-2" do %>
+        <div class="text-4xl mb-5 group-hover:scale-110 transition-transform duration-300">💰</div>
         <h3 class="font-bold text-lg text-navy-900 group-hover:text-forest-600 mb-2 transition-colors">소액수의</h3>
-        <p class="text-navy-500 text-sm mb-4">금액기준 · 1인견적 · 2인견적</p>
-        <div class="flex flex-wrap gap-2">
+        <p class="text-navy-400 text-sm mb-4">금액기준 · 1인견적 · 2인견적</p>
+        <div class="flex flex-wrap gap-1.5">
           <span class="badge badge-forest text-[10px]">금액기준</span>
           <span class="badge badge-navy text-[10px]">흐름도</span>
         </div>
       <% end %>
 
       <!-- 긴급계약 -->
-      <%= link_to "/topics/emergency-contract", class: "group card card-interactive p-6 md:p-8 border-2 border-transparent hover:border-warm-300" do %>
-        <div class="text-4xl mb-5">🚨</div>
+      <%= link_to "/topics/emergency-contract", class: "group card card-interactive card-shine p-6 md:p-8 border border-transparent hover:border-warm-200 reveal reveal-delay-3" do %>
+        <div class="text-4xl mb-5 group-hover:scale-110 transition-transform duration-300">🚨</div>
         <h3 class="font-bold text-lg text-navy-900 group-hover:text-warm-600 mb-2 transition-colors">긴급계약</h3>
-        <p class="text-navy-500 text-sm mb-4">긴급사유 · 수의근거 · 절차</p>
-        <div class="flex flex-wrap gap-2">
+        <p class="text-navy-400 text-sm mb-4">긴급사유 · 수의근거 · 절차</p>
+        <div class="flex flex-wrap gap-1.5">
           <span class="badge badge-warm text-[10px]">긴급사유</span>
           <span class="badge badge-navy text-[10px]">흐름도</span>
         </div>
       <% end %>
 
       <!-- 예산이월 -->
-      <%= link_to "/topics/budget-carryover", class: "group card card-interactive p-6 md:p-8 border-2 border-transparent hover:border-navy-300" do %>
-        <div class="text-4xl mb-5">📅</div>
+      <%= link_to "/topics/budget-carryover", class: "group card card-interactive card-shine p-6 md:p-8 border border-transparent hover:border-navy-200 reveal reveal-delay-4" do %>
+        <div class="text-4xl mb-5 group-hover:scale-110 transition-transform duration-300">📅</div>
         <h3 class="font-bold text-lg text-navy-900 group-hover:text-navy-600 mb-2 transition-colors">예산이월</h3>
-        <p class="text-navy-500 text-sm mb-4">명시이월 · 사고이월 · 계속비</p>
-        <div class="flex flex-wrap gap-2">
+        <p class="text-navy-400 text-sm mb-4">명시이월 · 사고이월 · 계속비</p>
+        <div class="flex flex-wrap gap-1.5">
           <span class="badge badge-navy text-[10px]">이월요건</span>
           <span class="badge badge-point text-[10px]">FAQ</span>
         </div>
@@ -315,10 +322,10 @@
 <!-- 양식 다운로드 — 인기 양식 빠른 접근 -->
 <section id="templates" class="section bg-white">
   <div class="container-wide">
-    <div class="text-center mb-12">
+    <div class="text-center mb-12 reveal">
       <span class="badge badge-forest mb-4">서식/양식</span>
-      <h2 class="text-navy-900 mb-4">자주 쓰는 양식 다운로드</h2>
-      <p class="text-lg text-navy-600">필요할 때 바로 다운받아 사용하세요</p>
+      <h2 class="text-navy-900 mb-4">자주 쓰는 양식 <span class="text-gradient-forest">다운로드</span></h2>
+      <p class="text-lg text-navy-500">필요할 때 바로 다운받아 사용하세요</p>
     </div>
 
     <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
@@ -350,24 +357,25 @@
 
 <!-- Quiz Section (축소, 깔끔하게) -->
 <section id="quiz" class="section gradient-premium text-white relative overflow-hidden">
-  <!-- Background -->
+  <!-- Background — enhanced -->
   <div class="absolute inset-0">
-    <div class="absolute top-1/4 right-1/4 w-64 h-64 bg-point-500/20 rounded-full blur-3xl"></div>
-    <div class="absolute bottom-1/4 left-1/4 w-64 h-64 bg-forest-500/20 rounded-full blur-3xl"></div>
+    <div class="absolute top-1/4 right-1/4 w-80 h-80 bg-point-500/15 rounded-full blur-[100px] animate-float"></div>
+    <div class="absolute bottom-1/4 left-1/4 w-80 h-80 bg-forest-500/15 rounded-full blur-[100px]" style="animation: subtle-float 8s ease-in-out infinite;"></div>
+    <div class="absolute inset-0 opacity-[0.02]" style="background-image: radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px); background-size: 40px 40px;"></div>
   </div>
 
   <div class="relative container-tight">
     <!-- Section Header -->
-    <div class="text-center mb-12">
-      <span class="badge bg-white/20 text-white mb-4">퀴즈</span>
-      <h2 class="text-white mb-6">오늘의 실무 퀴즈</h2>
-      <p class="text-xl text-navy-200 max-w-xl mx-auto">
+    <div class="text-center mb-12 reveal">
+      <span class="badge glass-panel text-white mb-4">퀴즈</span>
+      <h2 class="text-white mb-6">오늘의 <span class="text-gradient-hero">실무 퀴즈</span></h2>
+      <p class="text-xl text-white/60 max-w-xl mx-auto">
         매일 새로운 퀴즈로 실무 지식을 점검하세요
       </p>
     </div>
 
-    <!-- Quiz Card -->
-    <div class="card-glass bg-white/10 backdrop-blur-xl rounded-3xl p-8 md:p-10 border border-white/20">
+    <!-- Quiz Card — enhanced glass -->
+    <div class="glass-panel rounded-3xl p-8 md:p-10 shadow-elevated reveal">
       <div class="flex items-center gap-3 mb-8">
         <span id="quiz-progress" class="bg-forest-500 text-white px-4 py-1.5 rounded-full text-sm font-semibold">문제 1/5</span>
         <span id="quiz-category" class="text-navy-300 text-sm">예산회계</span>
@@ -448,6 +456,7 @@
         let answered = false;
 
         const progressEl = document.getElementById('quiz-progress');
+        if (!progressEl) return;
         const categoryEl = document.getElementById('quiz-category');
         const questionEl = document.getElementById('quiz-question');
         const optionsEl = document.getElementById('quiz-options');
@@ -586,9 +595,9 @@
 <!-- 외부 시스템 바로가기 Section -->
 <section id="external-links" class="section bg-white">
   <div class="container-wide">
-    <div class="text-center mb-12">
+    <div class="text-center mb-12 reveal">
       <span class="badge badge-navy mb-4">바로가기</span>
-      <h2 class="text-navy-900 mb-6">자주 사용하는 외부 시스템</h2>
+      <h2 class="text-navy-900 mb-6">자주 사용하는 <span class="text-gradient-navy">외부 시스템</span></h2>
     </div>
 
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
@@ -662,23 +671,25 @@
   </div>
 </section>
 
-<!-- CTA Section -->
-<section class="section bg-surface-50">
-  <div class="container-tight text-center">
+<!-- CTA Section — gradient background -->
+<section class="section relative overflow-hidden bg-gradient-to-br from-navy-50 via-surface-50 to-point-50/30">
+  <div class="absolute top-0 left-1/4 w-[300px] h-[300px] bg-point-500/[0.05] rounded-full blur-[80px]"></div>
+  <div class="absolute bottom-0 right-1/4 w-[300px] h-[300px] bg-forest-500/[0.05] rounded-full blur-[80px]"></div>
+  <div class="container-tight text-center relative reveal">
     <h2 class="text-navy-900 mb-6">
       지금 바로 실무와 함께<br>
-      더 나은 공직 생활을 시작하세요
+      더 나은 공직 생활을 <span class="text-gradient-accent">시작하세요</span>
     </h2>
-    <p class="text-xl text-navy-600 mb-10 max-w-xl mx-auto">
+    <p class="text-xl text-navy-500 mb-10 max-w-xl mx-auto">
       회원가입 후 모든 도구와 가이드를 무료로 이용할 수 있습니다.
     </p>
 
     <div class="flex flex-col sm:flex-row gap-4 justify-center">
-      <%= link_to new_user_registration_path, class: "btn btn-lg btn-primary hover-glow-navy" do %>
+      <%= link_to new_user_registration_path, class: "btn btn-lg btn-primary hover-glow-navy shadow-lg" do %>
         <span class="material-symbols-outlined">person_add</span>
         바로 시작하기
       <% end %>
-      <a href="javascript:void(0)" onclick="alert('카카오 로그인은 준비 중입니다.')" class="btn btn-lg bg-[#FEE500] hover:bg-[#FAE100] text-[#3C1E1E] hover:shadow-lg transition-all">
+      <a href="javascript:void(0)" onclick="alert('카카오 로그인은 준비 중입니다.')" class="btn btn-lg bg-[#FEE500] hover:bg-[#FAE100] text-[#3C1E1E] shadow-md hover:shadow-lg transition-all">
         <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
           <path d="M12 3C6.48 3 2 6.48 2 10.8c0 2.76 1.84 5.16 4.6 6.52-.2.72-.76 2.6-.88 3-.14.48.18.48.38.36.16-.08 2.52-1.72 3.56-2.4.76.12 1.56.12 2.34.12 5.52 0 10-3.48 10-7.6S17.52 3 12 3z"/>
         </svg>
@@ -687,6 +698,25 @@
     </div>
   </div>
 </section>
+
+<!-- Scroll Reveal 스크립트 -->
+<script>
+document.addEventListener('turbo:load', function() {
+  const revealEls = document.querySelectorAll('.reveal');
+  if (!revealEls.length) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('revealed');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  revealEls.forEach(el => observer.observe(el));
+});
+</script>
 
 <!-- 금액 계산기 스크립트 -->
 <script>

@@ -1,0 +1,616 @@
+<%# 설계변경 검토서 도우미 %>
+
+<style>
+.dc-step-card { background:#fff; border-radius:16px; border:1px solid #e5e7eb; padding:32px; margin-bottom:24px; display:none; }
+.dc-step-card.active { display:block; }
+.dc-type-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:16px; }
+.dc-type-btn { background:#fff; border:2px solid #e5e7eb; border-radius:14px; padding:24px 16px; text-align:center; cursor:pointer; transition:all .2s; }
+.dc-type-btn:hover { border-color:#0d9488; background:#f0fdfa; }
+.dc-type-btn.selected { border-color:#0d9488; background:#f0fdfa; box-shadow:0 0 0 3px rgba(13,148,136,.15); }
+.dc-type-btn .dc-icon { width:48px; height:48px; border-radius:12px; display:flex; align-items:center; justify-content:center; margin:0 auto 12px; background:#f1f5f9; }
+.dc-type-btn.selected .dc-icon { background:#0d9488; }
+.dc-type-btn.selected .dc-icon .material-symbols-outlined { color:#fff; }
+.dc-type-btn .dc-type-name { font-weight:700; color:#1e293b; font-size:15px; }
+.dc-type-btn .dc-type-desc { font-size:13px; color:#64748b; margin-top:4px; }
+
+.dc-form-group { margin-bottom:18px; }
+.dc-form-group label { display:block; font-weight:600; font-size:14px; color:#334155; margin-bottom:6px; }
+.dc-form-group input, .dc-form-group textarea, .dc-form-group select { width:100%; border:1px solid #d1d5db; border-radius:10px; padding:10px 14px; font-size:14px; }
+.dc-form-group input:focus, .dc-form-group textarea:focus, .dc-form-group select:focus { outline:none; border-color:#0d9488; box-shadow:0 0 0 3px rgba(13,148,136,.1); }
+.dc-form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+
+.dc-impact-btns { display:flex; gap:12px; flex-wrap:wrap; }
+.dc-impact-btn { padding:12px 20px; border:2px solid #e5e7eb; border-radius:12px; cursor:pointer; transition:all .2s; font-weight:600; font-size:14px; display:flex; align-items:center; gap:6px; }
+.dc-impact-btn:hover { border-color:#94a3b8; }
+.dc-impact-btn.selected { border-color:#0d9488; background:#f0fdfa; }
+
+.dc-btn { display:inline-flex; align-items:center; gap:6px; padding:12px 28px; border-radius:12px; font-weight:600; font-size:15px; border:none; cursor:pointer; transition:all .2s; }
+.dc-btn-primary { background:#0d9488; color:#fff; }
+.dc-btn-primary:hover { background:#0f766e; }
+.dc-btn-secondary { background:#f1f5f9; color:#475569; }
+
+.dc-quick-bar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:8px; }
+.dc-quick-btn { display:inline-flex; align-items:center; padding:6px 14px; border-radius:20px; border:1px solid #d1d5db; background:#fff; font-size:13px; font-weight:600; color:#475569; cursor:pointer; transition:all .15s; white-space:nowrap; }
+.dc-quick-btn:hover { background:#f0fdfa; border-color:#5eead4; color:#0f766e; }
+.dc-quick-btn.dc-reset { background:#fef3c7; border-color:#fcd34d; color:#b45309; margin-left:auto; }
+.dc-quick-btn.dc-reset:hover { background:#fde68a; border-color:#f59e0b; }
+.dc-btn-secondary:hover { background:#e2e8f0; }
+.dc-btn-success { background:#059669; color:#fff; }
+.dc-btn-success:hover { background:#047857; }
+.dc-btn:disabled { opacity:.5; cursor:not-allowed; }
+
+.dc-step-indicator { display:flex; gap:8px; margin-bottom:28px; }
+.dc-step-dot { width:10px; height:10px; border-radius:50%; background:#e2e8f0; transition:all .2s; }
+.dc-step-dot.active { background:#0d9488; width:28px; border-radius:5px; }
+.dc-step-dot.done { background:#059669; }
+
+.dc-section-title { font-size:22px; font-weight:700; color:#1e293b; margin-bottom:6px; }
+.dc-section-desc { font-size:14px; color:#64748b; margin-bottom:24px; }
+
+/* 결과 영역 */
+.dc-result-section { background:#fff; border:1px solid #e5e7eb; border-radius:14px; padding:24px; margin-bottom:20px; }
+.dc-result-title { font-size:17px; font-weight:700; color:#1e293b; margin-bottom:14px; padding-bottom:10px; border-bottom:2px solid #e2e8f0; display:flex; align-items:center; gap:8px; }
+
+.dc-compare-table { width:100%; border-collapse:collapse; font-size:14px; }
+.dc-compare-table th { background:#f8fafc; padding:10px 14px; text-align:center; border:1px solid #e2e8f0; font-weight:600; color:#475569; }
+.dc-compare-table td { padding:10px 14px; border:1px solid #e2e8f0; vertical-align:top; }
+.dc-compare-table .label-cell { background:#f8fafc; font-weight:600; color:#334155; width:120px; text-align:center; }
+
+.dc-checklist { list-style:none; padding:0; margin:0; }
+.dc-checklist li { display:flex; align-items:flex-start; gap:10px; padding:10px 0; border-bottom:1px solid #f1f5f9; font-size:14px; }
+.dc-checklist li:last-child { border-bottom:none; }
+.dc-check-num { width:28px; height:28px; border-radius:8px; background:#f0fdfa; color:#0d9488; font-weight:700; font-size:13px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+
+.dc-doc-list { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.dc-doc-item { display:flex; align-items:center; gap:8px; padding:10px 14px; background:#f8fafc; border-radius:10px; font-size:14px; }
+.dc-doc-item .material-symbols-outlined { color:#0d9488; font-size:18px; }
+
+.dc-caution-list { background:#fffbeb; border:1px solid #fde68a; border-radius:12px; padding:16px 20px; }
+.dc-caution-item { display:flex; align-items:flex-start; gap:8px; padding:6px 0; font-size:14px; color:#78350f; }
+
+.dc-legal-box { background:#eff6ff; border:1px solid #bfdbfe; border-radius:12px; padding:16px 20px; }
+.dc-legal-box strong { color:#1e40af; }
+
+.dc-procedure-step { display:flex; align-items:flex-start; gap:14px; padding:14px 0; border-bottom:1px solid #f1f5f9; }
+.dc-procedure-step:last-child { border-bottom:none; }
+.dc-procedure-num { width:32px; height:32px; border-radius:50%; background:#0d9488; color:#fff; font-weight:700; font-size:14px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.dc-procedure-info { flex:1; }
+.dc-procedure-name { font-weight:700; color:#1e293b; font-size:15px; }
+.dc-procedure-desc { font-size:13px; color:#64748b; margin-top:2px; }
+.dc-procedure-who { font-size:12px; color:#0d9488; font-weight:600; margin-top:4px; }
+
+@keyframes dcSpin { to { transform:rotate(360deg); } }
+.dc-ai-filled { background:#f0fdfa !important; border-color:#5eead4 !important; }
+
+@media print {
+  body * { visibility:hidden; }
+  #dc-result-area, #dc-result-area * { visibility:visible; }
+  #dc-result-area { position:absolute; left:0; top:0; width:100%; padding:20px; }
+  .no-print { display:none !important; }
+}
+
+@media (max-width:640px) {
+  .dc-type-grid { grid-template-columns:repeat(2, 1fr); gap:10px; }
+  .dc-type-btn { padding:16px 10px; }
+  .dc-form-row { grid-template-columns:1fr; }
+  .dc-doc-list { grid-template-columns:1fr; }
+  .dc-impact-btns { flex-direction:column; }
+}
+</style>
+
+<!-- 헤더 -->
+<section class="gradient-premium text-white py-12 lg:py-16">
+  <div class="container-wide">
+    <div class="flex items-start gap-5">
+      <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 shadow-lg">
+        <span class="material-symbols-outlined text-4xl text-white">swap_horiz</span>
+      </div>
+      <div>
+        <h1 class="text-3xl lg:text-4xl font-bold tracking-tight mb-2">설계변경 검토서 도우미</h1>
+        <p class="text-navy-200 text-lg">설계변경 사유별 검토서와 절차 체크리스트를 자동 생성</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-10">
+  <div class="container-wide max-w-4xl">
+
+    <!-- Step Indicator -->
+    <div class="dc-step-indicator" id="dc-steps">
+      <div class="dc-step-dot active"></div>
+      <div class="dc-step-dot"></div>
+      <div class="dc-step-dot"></div>
+      <div class="dc-step-dot"></div>
+    </div>
+
+    <!-- Step 1: 변경사유 선택 -->
+    <div class="dc-step-card active" id="dc-step1">
+      <h2 class="dc-section-title">설계변경 사유 선택</h2>
+      <p class="dc-section-desc">설계변경의 주요 사유를 선택하세요. 사유별 법적 근거와 필요서류가 자동 안내됩니다.</p>
+
+      <div class="dc-type-grid" id="dc-type-grid">
+        <% @change_reasons.each do |reason| %>
+          <div class="dc-type-btn" data-reason="<%= reason[:id] %>" onclick="dcSelectReason(this)">
+            <div class="dc-icon">
+              <span class="material-symbols-outlined text-2xl text-teal-600"><%= reason[:icon] %></span>
+            </div>
+            <div class="dc-type-name"><%= reason[:name] %></div>
+            <div class="dc-type-desc"><%= reason[:desc] %></div>
+          </div>
+        <% end %>
+      </div>
+
+      <div style="margin-top:24px; text-align:right;">
+        <button class="dc-btn dc-btn-primary" id="dc-btn-step1" disabled onclick="dcGoStep(2)">
+          다음 <span class="material-symbols-outlined text-lg">arrow_forward</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 2: 변경내용 입력 -->
+    <div class="dc-step-card" id="dc-step2">
+      <h2 class="dc-section-title">변경 내용 입력</h2>
+      <p class="dc-section-desc">당초 설계와 변경 설계 내용을 입력하세요.</p>
+
+      <!-- AI 서류 분석 -->
+      <div id="dc-ai-upload" style="margin-bottom:24px; padding:20px; background:#f0fdfa; border:1px solid #99f6e4; border-radius:14px;">
+        <h3 style="font-size:15px; font-weight:700; color:#0d9488; margin-bottom:4px; display:flex; align-items:center; gap:8px;">
+          <span class="material-symbols-outlined" style="font-size:20px;">auto_awesome</span>
+          AI 서류 분석
+          <span style="font-size:12px; font-weight:400; color:#94a3b8;">(선택사항)</span>
+        </h3>
+        <p style="font-size:13px; color:#64748b; margin-bottom:14px;">설계변경 사유서, 내역 대비표, 현장 확인서 등을 업로드하면 AI가 분석하여 아래 항목을 자동으로 채워줍니다.</p>
+
+        <div id="dc-upload-zone" style="border:2px dashed #99f6e4; border-radius:10px; padding:24px 16px; text-align:center; cursor:pointer; background:#fff; transition:all .2s;"
+             onclick="document.getElementById('dc-file-input').click()"
+             ondragover="dcHandleDragOver(event)" ondragleave="dcHandleDragLeave(event)" ondrop="dcHandleDrop(event)">
+          <span class="material-symbols-outlined" style="font-size:32px; color:#5eead4; margin-bottom:4px;">cloud_upload</span>
+          <p style="font-size:14px; color:#64748b; margin-bottom:2px;">파일을 드래그하거나 클릭하여 선택</p>
+          <small style="font-size:12px; color:#94a3b8;">PDF, JPG, PNG (최대 20MB)</small>
+        </div>
+        <input type="file" id="dc-file-input" accept=".pdf,.jpg,.jpeg,.png" style="display:none" onchange="dcFileSelect(event)">
+
+        <div id="dc-file-info" style="display:none; margin-top:10px; padding:10px 14px; background:#fff; border:1px solid #e5e7eb; border-radius:10px; align-items:center; gap:12px;">
+          <span class="material-symbols-outlined" style="font-size:20px; color:#0d9488;">description</span>
+          <div style="flex:1;">
+            <div id="dc-file-name" style="font-size:13px; font-weight:600; color:#1e293b;"></div>
+            <div id="dc-file-size" style="font-size:12px; color:#64748b;"></div>
+          </div>
+          <button onclick="dcClearFile()" style="padding:4px 10px; background:#fef2f2; color:#ef4444; border:none; border-radius:6px; cursor:pointer; font-size:12px;">삭제</button>
+        </div>
+
+        <button id="dc-btn-analyze" style="display:none; margin-top:10px; width:100%; padding:12px; background:linear-gradient(135deg,#0d9488,#14b8a6); color:#fff; border:none; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer; align-items:center; justify-content:center; gap:8px;" onclick="dcAnalyzeDocument()">
+          <span class="material-symbols-outlined" style="vertical-align:middle; font-size:18px;">auto_awesome</span>
+          AI 분석 시작
+        </button>
+
+        <div id="dc-analysis-status" style="display:none; margin-top:10px; padding:10px 14px; border-radius:10px; font-size:13px; align-items:center; gap:10px;">
+          <div id="dc-analysis-spinner" style="width:16px; height:16px; border:2px solid #99f6e4; border-top-color:#0d9488; border-radius:50%; animation:dcSpin .8s linear infinite;"></div>
+          <span id="dc-analysis-msg"></span>
+        </div>
+      </div>
+
+      <div class="dc-form-group">
+        <label>당초 설계 내용 *</label>
+        <textarea id="dc-original" rows="3" placeholder="예: 옥상 우레탄 도막방수 (2mm)"></textarea>
+      </div>
+      <div class="dc-form-group">
+        <label>변경 설계 내용 *</label>
+        <textarea id="dc-changed" rows="3" placeholder="예: 옥상 시트방수 + 우레탄 도막방수 (이중방수)"></textarea>
+      </div>
+      <div class="dc-form-group">
+        <label>상세 변경 사유</label>
+        <textarea id="dc-detail-reason" rows="3" placeholder="예: 기존 방수층 철거 시 하부 콘크리트 균열이 심하여 단일 도막방수로는 방수 성능 확보가 어렵다고 판단됨"></textarea>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; margin-top:24px;">
+        <button class="dc-btn dc-btn-secondary" onclick="dcGoStep(1)">
+          <span class="material-symbols-outlined text-lg">arrow_back</span> 이전
+        </button>
+        <button class="dc-btn dc-btn-primary" onclick="dcGoStep(3)">
+          다음: 영향 분석 <span class="material-symbols-outlined text-lg">arrow_forward</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 3: 영향분석 -->
+    <div class="dc-step-card" id="dc-step3">
+      <h2 class="dc-section-title">영향 분석</h2>
+      <p class="dc-section-desc">설계변경으로 인한 비용 및 공기 영향을 입력하세요.</p>
+
+      <div class="dc-form-group">
+        <label>비용 영향</label>
+        <div class="dc-impact-btns" id="dc-cost-impact">
+          <div class="dc-impact-btn" data-impact="increase" onclick="dcSelectImpact(this)">
+            <span class="material-symbols-outlined" style="color:#ef4444">trending_up</span> 증액
+          </div>
+          <div class="dc-impact-btn" data-impact="decrease" onclick="dcSelectImpact(this)">
+            <span class="material-symbols-outlined" style="color:#22c55e">trending_down</span> 감액
+          </div>
+          <div class="dc-impact-btn" data-impact="same" onclick="dcSelectImpact(this)">
+            <span class="material-symbols-outlined" style="color:#6b7280">trending_flat</span> 동일
+          </div>
+        </div>
+      </div>
+
+      <div class="dc-form-group" id="dc-amount-group" style="display:none;">
+        <label>변경 금액 (원)</label>
+        <input type="number" id="dc-change-amount" placeholder="예: 5000000" min="0">
+        <div class="dc-quick-bar">
+          <span class="dc-quick-btn" onclick="dcAddQuick(100000)">+10만</span>
+          <span class="dc-quick-btn" onclick="dcAddQuick(1000000)">+100만</span>
+          <span class="dc-quick-btn" onclick="dcAddQuick(10000000)">+1천만</span>
+          <span class="dc-quick-btn" onclick="dcAddQuick(50000000)">+5천만</span>
+          <span class="dc-quick-btn" onclick="dcAddQuick(100000000)">+1억</span>
+          <span class="dc-quick-btn dc-reset" onclick="dcResetQuick()">초기화</span>
+        </div>
+      </div>
+
+      <div class="dc-form-group">
+        <label>공기 변경 여부</label>
+        <div class="dc-impact-btns" id="dc-schedule-impact">
+          <div class="dc-impact-btn" data-schedule="true" onclick="dcSelectSchedule(this)">
+            <span class="material-symbols-outlined" style="color:#f59e0b">schedule</span> 공기 변경 있음
+          </div>
+          <div class="dc-impact-btn" data-schedule="false" onclick="dcSelectSchedule(this)">
+            <span class="material-symbols-outlined" style="color:#6b7280">event_available</span> 공기 변경 없음
+          </div>
+        </div>
+      </div>
+
+      <div class="dc-form-group" id="dc-days-group" style="display:none;">
+        <label>변경 일수 (일)</label>
+        <input type="number" id="dc-schedule-days" placeholder="예: 7" min="0">
+      </div>
+
+      <div style="display:flex; justify-content:space-between; margin-top:24px;">
+        <button class="dc-btn dc-btn-secondary" onclick="dcGoStep(2)">
+          <span class="material-symbols-outlined text-lg">arrow_back</span> 이전
+        </button>
+        <button class="dc-btn dc-btn-primary" onclick="dcGoStep(4)">
+          검토서 생성 <span class="material-symbols-outlined text-lg">auto_awesome</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 4: 검토서 결과 -->
+    <div class="dc-step-card" id="dc-step4">
+      <h2 class="dc-section-title">설계변경 검토서</h2>
+      <p class="dc-section-desc">검토 결과를 확인하고 인쇄하세요.</p>
+
+      <div id="dc-result-area"></div>
+
+      <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-top:24px;" class="no-print">
+        <button class="dc-btn dc-btn-secondary" onclick="dcGoStep(3)">
+          <span class="material-symbols-outlined text-lg">arrow_back</span> 이전
+        </button>
+        <button class="dc-btn dc-btn-success" onclick="window.print()">
+          <span class="material-symbols-outlined text-lg">print</span> 인쇄
+        </button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+document.addEventListener('turbo:load', function() {
+  var dcStep1 = document.getElementById('dc-step1');
+  if (!dcStep1) return;
+
+  var dcSelectedReason = null;
+  var dcCostImpact = 'same';
+  var dcScheduleChange = false;
+
+  window.dcAddQuick = function(amount) {
+    var el = document.getElementById('dc-change-amount');
+    if (!el) return;
+    var cur = parseInt(el.value) || 0;
+    el.value = cur + amount;
+    el.focus();
+  };
+
+  window.dcResetQuick = function() {
+    var el = document.getElementById('dc-change-amount');
+    if (!el) return;
+    el.value = '';
+    el.focus();
+  };
+  var dcUploadedFile = null;
+  var dcAnalyzedData = null;
+
+  window.dcSelectReason = function(el) {
+    var btns = document.querySelectorAll('.dc-type-btn');
+    for (var i = 0; i < btns.length; i++) { btns[i].classList.remove('selected'); }
+    el.classList.add('selected');
+    dcSelectedReason = el.dataset.reason;
+    document.getElementById('dc-btn-step1').disabled = false;
+  };
+
+  window.dcSelectImpact = function(el) {
+    var btns = document.querySelectorAll('#dc-cost-impact .dc-impact-btn');
+    for (var i = 0; i < btns.length; i++) { btns[i].classList.remove('selected'); }
+    el.classList.add('selected');
+    dcCostImpact = el.dataset.impact;
+    document.getElementById('dc-amount-group').style.display = dcCostImpact === 'same' ? 'none' : 'block';
+  };
+
+  window.dcSelectSchedule = function(el) {
+    var btns = document.querySelectorAll('#dc-schedule-impact .dc-impact-btn');
+    for (var i = 0; i < btns.length; i++) { btns[i].classList.remove('selected'); }
+    el.classList.add('selected');
+    dcScheduleChange = el.dataset.schedule === 'true';
+    document.getElementById('dc-days-group').style.display = dcScheduleChange ? 'block' : 'none';
+  };
+
+  window.dcGoStep = function(step) {
+    // Step 3 진입 시 AI 분석 데이터의 영향 분석 적용
+    if (step === 3 && dcAnalyzedData) {
+      dcApplyImpactData();
+    }
+    if (step === 3) {
+      if (!document.getElementById('dc-original').value.trim() || !document.getElementById('dc-changed').value.trim()) {
+        if (!document.getElementById('dc-original').value.trim()) {
+          document.getElementById('dc-original').focus();
+          document.getElementById('dc-original').style.borderColor = '#ef4444';
+        }
+        return;
+      }
+    }
+    if (step === 4) {
+      dcGenerate();
+    }
+
+    for (var i = 1; i <= 4; i++) {
+      var card = document.getElementById('dc-step' + i);
+      if (card) card.classList.remove('active');
+    }
+    document.getElementById('dc-step' + step).classList.add('active');
+
+    var dots = document.querySelectorAll('.dc-step-dot');
+    for (var d = 0; d < dots.length; d++) {
+      dots[d].classList.remove('active', 'done');
+      if (d < step - 1) dots[d].classList.add('done');
+      if (d === step - 1) dots[d].classList.add('active');
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  function dcGenerate() {
+    var body = {
+      reason: dcSelectedReason,
+      original_design: document.getElementById('dc-original').value,
+      changed_design: document.getElementById('dc-changed').value,
+      detail_reason: document.getElementById('dc-detail-reason').value,
+      cost_impact: dcCostImpact,
+      change_amount: document.getElementById('dc-change-amount').value || '0',
+      schedule_change: dcScheduleChange.toString(),
+      schedule_days: document.getElementById('dc-schedule-days').value || '0'
+    };
+
+    fetch('/design-changes/generate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'X-CSRF-Token': document.querySelector('meta[name=csrf-token]').content
+      },
+      body: JSON.stringify(body)
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.success) {
+        dcRenderResult(data.review);
+      }
+    });
+  }
+
+  function dcRenderResult(r) {
+    var html = '';
+
+    // 법적 근거
+    html += '<div class="dc-result-section"><div class="dc-result-title"><span class="material-symbols-outlined" style="color:#1e40af;">gavel</span> 법적 근거</div>';
+    html += '<div class="dc-legal-box"><strong>' + dcEsc(r.legal_basis) + '</strong><p style="margin-top:6px;color:#1e40af;font-size:14px;">"' + dcEsc(r.legal_text) + '"</p></div></div>';
+
+    // 비교표
+    html += '<div class="dc-result-section"><div class="dc-result-title"><span class="material-symbols-outlined" style="color:#0d9488;">compare_arrows</span> 설계 비교</div>';
+    html += '<table class="dc-compare-table"><thead><tr><th></th><th>당초 설계</th><th>변경 설계</th></tr></thead><tbody>';
+    html += '<tr><td class="label-cell">설계 내용</td><td>' + dcNl2br(dcEsc(r.original_design)) + '</td><td>' + dcNl2br(dcEsc(r.changed_design)) + '</td></tr>';
+    html += '<tr><td class="label-cell">변경 사유</td><td colspan="2">' + dcNl2br(dcEsc(r.detail_reason || r.reason.name)) + '</td></tr>';
+
+    var costLabel = r.cost_impact.name;
+    var costAmount = r.change_amount > 0 ? dcComma(r.change_amount) + ' 원' : '-';
+    html += '<tr><td class="label-cell">비용 영향</td><td colspan="2"><span style="font-weight:700;">' + dcEsc(costLabel) + '</span> ' + costAmount + '</td></tr>';
+
+    var scheduleText = r.schedule_change ? '변경 (+' + r.schedule_days + '일)' : '변경 없음';
+    html += '<tr><td class="label-cell">공기 영향</td><td colspan="2">' + scheduleText + '</td></tr>';
+    html += '</tbody></table></div>';
+
+    // 절차 체크리스트
+    html += '<div class="dc-result-section"><div class="dc-result-title"><span class="material-symbols-outlined" style="color:#0d9488;">checklist</span> 설계변경 절차</div>';
+    for (var i = 0; i < r.procedure.length; i++) {
+      var p = r.procedure[i];
+      html += '<div class="dc-procedure-step"><div class="dc-procedure-num">' + p.step + '</div><div class="dc-procedure-info"><div class="dc-procedure-name">' + dcEsc(p.name) + '</div><div class="dc-procedure-desc">' + dcEsc(p.desc) + '</div><div class="dc-procedure-who">' + dcEsc(p.responsible) + '</div></div></div>';
+    }
+    html += '</div>';
+
+    // 필요서류
+    html += '<div class="dc-result-section"><div class="dc-result-title"><span class="material-symbols-outlined" style="color:#0d9488;">folder</span> 필요 서류</div><div class="dc-doc-list">';
+    for (var j = 0; j < r.documents.length; j++) {
+      html += '<div class="dc-doc-item"><span class="material-symbols-outlined">description</span> ' + dcEsc(r.documents[j]) + '</div>';
+    }
+    html += '</div></div>';
+
+    // 주의사항
+    html += '<div class="dc-result-section"><div class="dc-result-title"><span class="material-symbols-outlined" style="color:#f59e0b;">warning</span> 주의사항</div><div class="dc-caution-list">';
+    for (var k = 0; k < r.cautions.length; k++) {
+      html += '<div class="dc-caution-item"><span class="material-symbols-outlined" style="color:#f59e0b;font-size:18px;flex-shrink:0;">priority_high</span> ' + dcEsc(r.cautions[k]) + '</div>';
+    }
+    html += '</div></div>';
+
+    document.getElementById('dc-result-area').innerHTML = html;
+  }
+
+  function dcComma(n) { return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+  function dcEsc(s) { if (!s) return ''; var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+  function dcNl2br(s) { return s ? s.replace(/\n/g, '<br>') : ''; }
+
+  // === AI 서류 분석 기능 ===
+
+  window.dcHandleDragOver = function(e) {
+    e.preventDefault(); e.stopPropagation();
+    e.currentTarget.style.borderColor = '#0d9488';
+    e.currentTarget.style.background = '#f0fdfa';
+  };
+  window.dcHandleDragLeave = function(e) {
+    e.preventDefault(); e.stopPropagation();
+    e.currentTarget.style.borderColor = '#99f6e4';
+    e.currentTarget.style.background = '#fff';
+  };
+  window.dcHandleDrop = function(e) {
+    e.preventDefault(); e.stopPropagation();
+    e.currentTarget.style.borderColor = '#99f6e4';
+    e.currentTarget.style.background = '#fff';
+    if (e.dataTransfer.files.length > 0) dcProcessFile(e.dataTransfer.files[0]);
+  };
+  window.dcFileSelect = function(e) {
+    if (e.target.files.length > 0) dcProcessFile(e.target.files[0]);
+  };
+
+  function dcProcessFile(file) {
+    var allowed = ['application/pdf', 'image/jpeg', 'image/png'];
+    if (allowed.indexOf(file.type) === -1) { alert('PDF, JPG, PNG 파일만 업로드 가능합니다.'); return; }
+    if (file.size > 20 * 1024 * 1024) { alert('파일 크기는 20MB 이하여야 합니다.'); return; }
+
+    dcUploadedFile = file;
+    document.getElementById('dc-file-name').textContent = file.name;
+    document.getElementById('dc-file-size').textContent = (file.size / (1024 * 1024)).toFixed(1) + 'MB';
+    document.getElementById('dc-file-info').style.display = 'flex';
+    document.getElementById('dc-upload-zone').style.display = 'none';
+    document.getElementById('dc-btn-analyze').style.display = 'flex';
+    dcHideAnalysisStatus();
+    dcAnalyzedData = null;
+  }
+
+  window.dcClearFile = function() {
+    dcUploadedFile = null;
+    dcAnalyzedData = null;
+    document.getElementById('dc-file-input').value = '';
+    document.getElementById('dc-file-info').style.display = 'none';
+    document.getElementById('dc-upload-zone').style.display = '';
+    document.getElementById('dc-btn-analyze').style.display = 'none';
+    dcHideAnalysisStatus();
+  };
+
+  function dcShowAnalysisStatus(type, msg) {
+    var el = document.getElementById('dc-analysis-status');
+    var spinner = document.getElementById('dc-analysis-spinner');
+    var msgEl = document.getElementById('dc-analysis-msg');
+    el.style.display = 'flex';
+    spinner.style.display = type === 'loading' ? 'block' : 'none';
+    msgEl.textContent = msg;
+    if (type === 'loading') { el.style.background = '#f0fdfa'; el.style.color = '#0f766e'; el.style.border = '1px solid #99f6e4'; }
+    else if (type === 'success') { el.style.background = '#f0fdf4'; el.style.color = '#059669'; el.style.border = '1px solid #bbf7d0'; }
+    else { el.style.background = '#fef2f2'; el.style.color = '#dc2626'; el.style.border = '1px solid #fecaca'; }
+  }
+
+  function dcHideAnalysisStatus() {
+    document.getElementById('dc-analysis-status').style.display = 'none';
+  }
+
+  window.dcAnalyzeDocument = function() {
+    if (!dcUploadedFile) return;
+    var btn = document.getElementById('dc-btn-analyze');
+    btn.disabled = true;
+    dcShowAnalysisStatus('loading', 'AI가 서류를 분석하고 있습니다... (5~15초 소요)');
+
+    var formData = new FormData();
+    formData.append('file', dcUploadedFile);
+    formData.append('document_type', 'design_change');
+
+    fetch('/document-analysis/analyze', {
+      method: 'POST',
+      body: formData
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(result) {
+      if (result.success && result.fields) {
+        dcAnalyzedData = result.fields;
+        var count = Object.keys(result.fields).filter(function(k) { return result.fields[k] != null; }).length;
+        dcShowAnalysisStatus('success', '분석 완료! ' + count + '개 항목을 추출했습니다.');
+
+        // Step 1: 변경사유 유형 자동 선택
+        if (result.fields.change_reason) {
+          var reasonBtn = document.querySelector('.dc-type-btn[data-reason="' + result.fields.change_reason + '"]');
+          if (reasonBtn) {
+            dcSelectReason(reasonBtn);
+          }
+        }
+
+        // Step 2: 변경 내용 즉시 적용
+        dcApplyContentData();
+      } else {
+        dcShowAnalysisStatus('error', result.error || '서류 분석에 실패했습니다.');
+      }
+    })
+    .catch(function(err) {
+      console.error('분석 오류:', err);
+      dcShowAnalysisStatus('error', '서버 연결에 실패했습니다. 다시 시도해주세요.');
+    })
+    .finally(function() {
+      btn.disabled = false;
+    });
+  };
+
+  function dcApplyContentData() {
+    if (!dcAnalyzedData) return;
+    var fieldMap = {
+      original_design: 'dc-original',
+      changed_design: 'dc-changed',
+      detail_reason: 'dc-detail-reason'
+    };
+
+    Object.keys(fieldMap).forEach(function(key) {
+      if (dcAnalyzedData[key]) {
+        var el = document.getElementById(fieldMap[key]);
+        if (el) {
+          el.value = dcAnalyzedData[key];
+          el.classList.add('dc-ai-filled');
+        }
+      }
+    });
+  }
+
+  function dcApplyImpactData() {
+    if (!dcAnalyzedData) return;
+
+    // 비용 영향
+    if (dcAnalyzedData.cost_impact) {
+      var impactBtn = document.querySelector('#dc-cost-impact .dc-impact-btn[data-impact="' + dcAnalyzedData.cost_impact + '"]');
+      if (impactBtn) dcSelectImpact(impactBtn);
+    }
+
+    // 변경 금액
+    if (dcAnalyzedData.change_amount && dcAnalyzedData.change_amount > 0) {
+      document.getElementById('dc-change-amount').value = dcAnalyzedData.change_amount;
+      document.getElementById('dc-change-amount').classList.add('dc-ai-filled');
+    }
+
+    // 공기 변경
+    if (dcAnalyzedData.schedule_change != null) {
+      var schedVal = dcAnalyzedData.schedule_change ? 'true' : 'false';
+      var schedBtn = document.querySelector('#dc-schedule-impact .dc-impact-btn[data-schedule="' + schedVal + '"]');
+      if (schedBtn) dcSelectSchedule(schedBtn);
+    }
+
+    // 변경 일수
+    if (dcAnalyzedData.schedule_days && dcAnalyzedData.schedule_days > 0) {
+      document.getElementById('dc-schedule-days').value = dcAnalyzedData.schedule_days;
+      document.getElementById('dc-schedule-days').classList.add('dc-ai-filled');
+    }
+
+    dcAnalyzedData = null; // 중복 적용 방지
+  }
+});
+</script>

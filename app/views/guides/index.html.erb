@@ -215,9 +215,10 @@
 
 <script>
 document.addEventListener('turbo:load', function() {
+  const itemCount = document.getElementById('item-count');
+  if (!itemCount) return;
   const tabs = document.querySelectorAll('#category-tabs .tab-btn');
   const items = document.querySelectorAll('.item-card');
-  const itemCount = document.getElementById('item-count');
   const searchInput = document.getElementById('search-input');
   const paginationNav = document.getElementById('pagination-nav');
 

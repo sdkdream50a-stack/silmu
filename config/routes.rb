@@ -44,6 +44,42 @@ Rails.application.routes.draw do
   post "contract-methods/determine", to: "contract_methods#determine"
   get "contract-methods/table/:type", to: "contract_methods#table", as: :contract_method_table
 
+  # 내역서+시공지시서 생성기
+  get "tools/cost-estimate", to: "cost_estimates#index", as: :cost_estimate
+  get "cost-estimates/default-items/:type", to: "cost_estimates#default_items", as: :cost_estimate_default_items
+  post "cost-estimates/generate", to: "cost_estimates#generate"
+
+  # 설계변경 검토서 도우미
+  get "tools/design-change", to: "design_changes#index", as: :design_change
+  get "design-changes/detail/:reason", to: "design_changes#detail", as: :design_change_detail
+  post "design-changes/generate", to: "design_changes#generate"
+
+  # 기성검사 체크리스트
+  get "tools/progress-inspection", to: "progress_inspections#index", as: :progress_inspection
+  post "progress-inspections/generate", to: "progress_inspections#generate"
+
+  # 원가계산서 검토 가이드
+  get "tools/cost-calculation", to: "cost_calculations#index", as: :cost_calculation
+  post "cost-calculations/review", to: "cost_calculations#review"
+
+  # 예정가격 계산기
+  get "tools/estimated-price", to: "estimated_prices#index", as: :estimated_price
+  post "estimated-prices/calculate", to: "estimated_prices#calculate"
+
+  # 법정기간 계산기
+  get "tools/legal-period", to: "legal_periods#index", as: :legal_period
+  post "legal-periods/calculate", to: "legal_periods#calculate"
+
+  # 계약보증금 계산기
+  get "tools/contract-guarantee", to: "contract_guarantees#index", as: :contract_guarantee
+  post "contract-guarantees/calculate", to: "contract_guarantees#calculate"
+
+  # FAQ
+  get "faq", to: "faq#index", as: :faq
+
+  # 문서 분석 (AI)
+  post "document-analysis/analyze", to: "document_analysis#analyze"
+
   # 커뮤니티
   get "community", to: "community#index", as: :community
 

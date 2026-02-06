@@ -1,0 +1,477 @@
+<%# 법정기간 계산기 %>
+
+<style>
+.lp-step-card { background:#fff; border-radius:16px; border:1px solid #e5e7eb; padding:32px; margin-bottom:24px; display:none; }
+.lp-step-card.active { display:block; }
+.lp-type-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(160px, 1fr)); gap:14px; }
+.lp-type-btn { background:#fff; border:2px solid #e5e7eb; border-radius:14px; padding:22px 16px; text-align:center; cursor:pointer; transition:all .2s; }
+.lp-type-btn:hover { border-color:#d97706; background:#fffbeb; }
+.lp-type-btn.selected { border-color:#d97706; background:#fffbeb; box-shadow:0 0 0 3px rgba(217,119,6,.15); }
+.lp-type-btn .lp-icon { width:48px; height:48px; border-radius:12px; display:flex; align-items:center; justify-content:center; margin:0 auto 10px; background:#f1f5f9; }
+.lp-type-btn.selected .lp-icon { background:#d97706; }
+.lp-type-btn.selected .lp-icon .material-symbols-outlined { color:#fff; }
+.lp-type-btn .lp-type-name { font-weight:700; color:#1e293b; font-size:14px; }
+.lp-type-btn .lp-type-desc { font-size:11px; color:#64748b; margin-top:3px; }
+
+.lp-btn { display:inline-flex; align-items:center; gap:6px; padding:12px 28px; border-radius:12px; font-weight:600; font-size:15px; border:none; cursor:pointer; transition:all .2s; }
+.lp-btn-primary { background:#d97706; color:#fff; }
+.lp-btn-primary:hover { background:#b45309; }
+.lp-btn-secondary { background:#f1f5f9; color:#475569; }
+.lp-btn-secondary:hover { background:#e2e8f0; }
+.lp-btn:disabled { opacity:.5; cursor:not-allowed; }
+
+.lp-step-indicator { display:flex; gap:8px; margin-bottom:28px; }
+.lp-step-dot { width:10px; height:10px; border-radius:50%; background:#e2e8f0; transition:all .2s; }
+.lp-step-dot.active { background:#d97706; width:28px; border-radius:5px; }
+.lp-step-dot.done { background:#d97706; }
+
+.lp-section-title { font-size:22px; font-weight:700; color:#1e293b; margin-bottom:6px; }
+.lp-section-desc { font-size:14px; color:#64748b; margin-bottom:24px; }
+
+/* 입력 폼 */
+.lp-input-panel { display:none; }
+.lp-input-panel.active { display:block; }
+.lp-form-group { margin-bottom:18px; }
+.lp-form-group label { display:block; font-weight:600; font-size:14px; color:#334155; margin-bottom:6px; }
+.lp-form-group .lp-sublabel { font-size:12px; color:#94a3b8; font-weight:400; margin-left:4px; }
+.lp-form-group input[type="date"],
+.lp-form-group input[type="number"],
+.lp-form-group select { width:100%; max-width:320px; border:1px solid #d1d5db; border-radius:10px; padding:10px 14px; font-size:14px; }
+.lp-form-group input:focus, .lp-form-group select:focus { outline:none; border-color:#d97706; box-shadow:0 0 0 3px rgba(217,119,6,.1); }
+
+.lp-checkbox-grid { display:grid; grid-template-columns:repeat(2, 1fr); gap:8px; max-width:500px; }
+.lp-checkbox-item { display:flex; align-items:center; gap:8px; padding:10px 14px; background:#f8fafc; border:1px solid #e5e7eb; border-radius:10px; cursor:pointer; transition:all .15s; }
+.lp-checkbox-item:hover { border-color:#d97706; background:#fffbeb; }
+.lp-checkbox-item.checked { border-color:#d97706; background:#fffbeb; }
+.lp-checkbox-item input { accent-color:#d97706; }
+.lp-checkbox-item .lp-cb-name { font-weight:600; font-size:13px; color:#334155; }
+.lp-checkbox-item .lp-cb-note { font-size:11px; color:#94a3b8; }
+
+.lp-toggle { display:flex; align-items:center; gap:10px; }
+.lp-toggle input[type="checkbox"] { width:20px; height:20px; accent-color:#d97706; }
+
+.lp-quick-bar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:8px; }
+.lp-quick-btn { display:inline-flex; align-items:center; padding:6px 14px; border-radius:20px; border:1px solid #d1d5db; background:#fff; font-size:13px; font-weight:600; color:#475569; cursor:pointer; transition:all .15s; white-space:nowrap; }
+.lp-quick-btn:hover { background:#fffbeb; border-color:#fcd34d; color:#b45309; }
+.lp-quick-btn.lp-reset { background:#fef3c7; border-color:#fcd34d; color:#b45309; margin-left:auto; }
+.lp-quick-btn.lp-reset:hover { background:#fde68a; border-color:#f59e0b; }
+
+/* 결과 */
+.lp-result-box { background:#fff; border:1px solid #e5e7eb; border-radius:14px; padding:24px; margin-top:24px; }
+.lp-result-title { font-size:17px; font-weight:700; color:#1e293b; margin-bottom:14px; padding-bottom:10px; border-bottom:2px solid #fde68a; display:flex; align-items:center; gap:8px; }
+
+.lp-date-hero { text-align:center; padding:28px 20px; background:linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border-radius:16px; margin-bottom:20px; }
+.lp-date-hero .lp-date-label { font-size:14px; color:#92400e; font-weight:600; margin-bottom:6px; }
+.lp-date-hero .lp-date-value { font-size:32px; font-weight:800; color:#d97706; }
+.lp-date-hero .lp-date-sub { font-size:14px; color:#64748b; margin-top:6px; }
+
+.lp-penalty-hero { text-align:center; padding:28px 20px; background:linear-gradient(135deg, #fef2f2 0%, #fecaca 100%); border-radius:16px; margin-bottom:20px; }
+.lp-penalty-hero .lp-penalty-label { font-size:14px; color:#991b1b; font-weight:600; margin-bottom:6px; }
+.lp-penalty-hero .lp-penalty-value { font-size:36px; font-weight:800; color:#dc2626; }
+.lp-penalty-hero .lp-penalty-sub { font-size:14px; color:#64748b; margin-top:6px; }
+
+.lp-no-penalty { text-align:center; padding:28px 20px; background:linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border-radius:16px; margin-bottom:20px; }
+
+.lp-info-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px; }
+.lp-info-item { background:#f8fafc; border-radius:10px; padding:12px 14px; }
+.lp-info-item .lp-info-label { font-size:12px; color:#94a3b8; margin-bottom:3px; }
+.lp-info-item .lp-info-value { font-size:16px; font-weight:700; color:#1e293b; }
+
+.lp-warranty-table { width:100%; border-collapse:collapse; font-size:14px; }
+.lp-warranty-table th { background:#fffbeb; padding:10px 14px; text-align:left; border-bottom:2px solid #fde68a; color:#92400e; font-weight:600; font-size:13px; }
+.lp-warranty-table td { padding:10px 14px; border-bottom:1px solid #f1f5f9; }
+
+.lp-ref-box { background:#fffbeb; border:1px solid #fde68a; border-radius:12px; padding:16px 20px; font-size:14px; color:#92400e; line-height:1.8; }
+
+.lp-note-box { background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:12px 16px; font-size:13px; color:#64748b; margin-top:16px; display:flex; align-items:flex-start; gap:8px; }
+.lp-note-box .material-symbols-outlined { color:#94a3b8; flex-shrink:0; font-size:18px; margin-top:1px; }
+
+@media print {
+  body * { visibility:hidden; }
+  .lp-result-box, .lp-result-box * { visibility:visible; }
+  .lp-result-box { position:absolute; left:0; top:0; width:100%; padding:20px; }
+  .no-print { display:none !important; }
+}
+
+@media (max-width:640px) {
+  .lp-type-grid { grid-template-columns:repeat(2, 1fr); gap:10px; }
+  .lp-type-btn { padding:16px 10px; }
+  .lp-checkbox-grid { grid-template-columns:1fr; }
+  .lp-info-grid { grid-template-columns:1fr; }
+  .lp-date-hero .lp-date-value { font-size:24px; }
+  .lp-penalty-hero .lp-penalty-value { font-size:28px; }
+}
+</style>
+
+<!-- 헤더 -->
+<section class="gradient-warm text-white py-12 lg:py-16">
+  <div class="container-wide">
+    <div class="flex items-start gap-5">
+      <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 shadow-lg">
+        <span class="material-symbols-outlined text-4xl text-white">calendar_month</span>
+      </div>
+      <div>
+        <h1 class="text-3xl lg:text-4xl font-bold tracking-tight mb-2">법정기간 계산기</h1>
+        <p class="text-amber-100 text-lg">계약 관련 법정 기간과 기한을 자동으로 계산</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-10">
+  <div class="container-wide max-w-4xl">
+
+    <div class="lp-step-indicator" id="lp-steps">
+      <div class="lp-step-dot active"></div>
+      <div class="lp-step-dot"></div>
+    </div>
+
+    <!-- Step 1: 기간유형 선택 -->
+    <div class="lp-step-card active" id="lp-step1">
+      <h2 class="lp-section-title">기간 유형 선택</h2>
+      <p class="lp-section-desc">계산하려는 법정기간의 유형을 선택하세요.</p>
+
+      <div class="lp-type-grid" id="lp-type-grid">
+        <% @period_types.each do |type| %>
+          <div class="lp-type-btn" data-type="<%= type[:id] %>" onclick="lpSelectType(this)">
+            <div class="lp-icon">
+              <span class="material-symbols-outlined text-2xl text-amber-500"><%= type[:icon] %></span>
+            </div>
+            <div class="lp-type-name"><%= type[:name] %></div>
+            <div class="lp-type-desc"><%= type[:desc] %></div>
+          </div>
+        <% end %>
+      </div>
+
+      <div style="margin-top:24px; text-align:right;">
+        <button class="lp-btn lp-btn-primary" id="lp-btn-step1" disabled onclick="lpGoStep(2)">
+          다음 <span class="material-symbols-outlined text-lg">arrow_forward</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 2: 입력 + 결과 -->
+    <div class="lp-step-card" id="lp-step2">
+      <h2 class="lp-section-title" id="lp-step2-title">기간 계산</h2>
+      <p class="lp-section-desc">필요한 정보를 입력하고 계산 버튼을 눌러주세요.</p>
+
+      <!-- 입찰공고기간 -->
+      <div class="lp-input-panel" id="lp-panel-announcement">
+        <div class="lp-form-group">
+          <label>추정가격 (원) <span class="lp-sublabel">부가세 제외</span></label>
+          <input type="number" id="lp-est-amount" placeholder="0" min="0">
+          <div class="lp-quick-bar">
+            <span class="lp-quick-btn" onclick="lpAddQuick('lp-est-amount',100000)">+10만</span>
+            <span class="lp-quick-btn" onclick="lpAddQuick('lp-est-amount',1000000)">+100만</span>
+            <span class="lp-quick-btn" onclick="lpAddQuick('lp-est-amount',10000000)">+1천만</span>
+            <span class="lp-quick-btn" onclick="lpAddQuick('lp-est-amount',50000000)">+5천만</span>
+            <span class="lp-quick-btn" onclick="lpAddQuick('lp-est-amount',100000000)">+1억</span>
+            <span class="lp-quick-btn lp-reset" onclick="lpResetQuick('lp-est-amount')">초기화</span>
+          </div>
+        </div>
+        <div class="lp-form-group">
+          <label>공고일</label>
+          <input type="date" id="lp-ann-date">
+        </div>
+        <div class="lp-form-group">
+          <div class="lp-toggle">
+            <input type="checkbox" id="lp-urgent">
+            <label for="lp-urgent" style="margin-bottom:0; cursor:pointer;">긴급입찰 여부</label>
+            <span class="lp-sublabel">(천재지변·비상재해 등)</span>
+          </div>
+        </div>
+        <button class="lp-btn lp-btn-primary" onclick="lpCalc('announcement')">
+          <span class="material-symbols-outlined text-lg">calculate</span> 공고기간 계산
+        </button>
+      </div>
+
+      <!-- 계약체결기간 -->
+      <div class="lp-input-panel" id="lp-panel-contract_signing">
+        <div class="lp-form-group">
+          <label>낙찰통지일</label>
+          <input type="date" id="lp-notif-date">
+        </div>
+        <button class="lp-btn lp-btn-primary" onclick="lpCalc('contract_signing')">
+          <span class="material-symbols-outlined text-lg">calculate</span> 체결기한 계산
+        </button>
+      </div>
+
+      <!-- 대금지급기간 -->
+      <div class="lp-input-panel" id="lp-panel-payment">
+        <div class="lp-form-group">
+          <label>지급 유형</label>
+          <select id="lp-pay-type">
+            <option value="national">국가기관 (5일)</option>
+            <option value="local">지방자치단체 (14일)</option>
+            <option value="advance">선금 지급 (14일)</option>
+            <option value="subcontract">하도급 대금 (15일)</option>
+          </select>
+        </div>
+        <div class="lp-form-group">
+          <label>검사완료일 <span class="lp-sublabel">(또는 청구일)</span></label>
+          <input type="date" id="lp-insp-date">
+        </div>
+        <button class="lp-btn lp-btn-primary" onclick="lpCalc('payment')">
+          <span class="material-symbols-outlined text-lg">calculate</span> 지급기한 계산
+        </button>
+      </div>
+
+      <!-- 하자보증기간 -->
+      <div class="lp-input-panel" id="lp-panel-defect_warranty">
+        <div class="lp-form-group">
+          <label>준공일 (인수일)</label>
+          <input type="date" id="lp-comp-date">
+        </div>
+        <div class="lp-form-group">
+          <label>공종 선택 <span class="lp-sublabel">(복수 선택 가능)</span></label>
+          <div class="lp-checkbox-grid" id="lp-work-types">
+            <% LegalPeriodService::DEFECT_WARRANTY_PERIODS.each do |p| %>
+              <label class="lp-checkbox-item" onclick="this.classList.toggle('checked')">
+                <input type="checkbox" value="<%= p[:id] %>">
+                <div>
+                  <div class="lp-cb-name"><%= p[:name] %> (<%= p[:years] %>년)</div>
+                  <div class="lp-cb-note"><%= p[:note] %></div>
+                </div>
+              </label>
+            <% end %>
+          </div>
+        </div>
+        <button class="lp-btn lp-btn-primary" onclick="lpCalc('defect_warranty')">
+          <span class="material-symbols-outlined text-lg">calculate</span> 보증기간 계산
+        </button>
+      </div>
+
+      <!-- 지체상금 -->
+      <div class="lp-input-panel" id="lp-panel-late_penalty">
+        <div class="lp-form-group">
+          <label>계약 유형</label>
+          <select id="lp-pen-type">
+            <option value="construction">공사 (1/2,000)</option>
+            <option value="goods">물품 (3/4,000)</option>
+            <option value="service">용역 (3/4,000)</option>
+            <option value="lease">임대차 (1/1,000)</option>
+          </select>
+        </div>
+        <div class="lp-form-group">
+          <label>계약금액 (원)</label>
+          <input type="number" id="lp-contract-amount" placeholder="0" min="0">
+          <div class="lp-quick-bar">
+            <span class="lp-quick-btn" onclick="lpAddQuick('lp-contract-amount',100000)">+10만</span>
+            <span class="lp-quick-btn" onclick="lpAddQuick('lp-contract-amount',1000000)">+100만</span>
+            <span class="lp-quick-btn" onclick="lpAddQuick('lp-contract-amount',10000000)">+1천만</span>
+            <span class="lp-quick-btn" onclick="lpAddQuick('lp-contract-amount',50000000)">+5천만</span>
+            <span class="lp-quick-btn" onclick="lpAddQuick('lp-contract-amount',100000000)">+1억</span>
+            <span class="lp-quick-btn lp-reset" onclick="lpResetQuick('lp-contract-amount')">초기화</span>
+          </div>
+        </div>
+        <div class="lp-form-group">
+          <label>계약 종료일 (납품기한)</label>
+          <input type="date" id="lp-due-date">
+        </div>
+        <div class="lp-form-group">
+          <label>실제 완료일 (납품일)</label>
+          <input type="date" id="lp-actual-date">
+        </div>
+        <button class="lp-btn lp-btn-primary" onclick="lpCalc('late_penalty')">
+          <span class="material-symbols-outlined text-lg">calculate</span> 지체상금 계산
+        </button>
+      </div>
+
+      <!-- 결과 영역 -->
+      <div id="lp-result-area"></div>
+
+      <div class="lp-note-box">
+        <span class="material-symbols-outlined">info</span>
+        <span>공휴일은 반영되지 않습니다. 실제 기한은 관련 법령과 공휴일을 종합적으로 확인하세요.</span>
+      </div>
+
+      <div style="margin-top:24px;" class="no-print">
+        <button class="lp-btn lp-btn-secondary" onclick="lpGoStep(1)">
+          <span class="material-symbols-outlined text-lg">arrow_back</span> 유형 다시 선택
+        </button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+document.addEventListener('turbo:load', function() {
+  var lpStep1 = document.getElementById('lp-step1');
+  if (!lpStep1) return;
+
+  var lpSelectedType = null;
+
+  window.lpAddQuick = function(inputId, amount) {
+    var el = document.getElementById(inputId);
+    if (!el) return;
+    var cur = parseInt(el.value) || 0;
+    el.value = cur + amount;
+    el.focus();
+  };
+
+  window.lpResetQuick = function(inputId) {
+    var el = document.getElementById(inputId);
+    if (!el) return;
+    el.value = '';
+    el.focus();
+  };
+
+  window.lpSelectType = function(el) {
+    var btns = document.querySelectorAll('.lp-type-btn');
+    for (var i = 0; i < btns.length; i++) { btns[i].classList.remove('selected'); }
+    el.classList.add('selected');
+    lpSelectedType = el.dataset.type;
+    document.getElementById('lp-btn-step1').disabled = false;
+  };
+
+  window.lpGoStep = function(step) {
+    if (step === 2) {
+      // 패널 전환
+      var panels = document.querySelectorAll('.lp-input-panel');
+      for (var i = 0; i < panels.length; i++) panels[i].classList.remove('active');
+      var target = document.getElementById('lp-panel-' + lpSelectedType);
+      if (target) target.classList.add('active');
+      // 결과 초기화
+      document.getElementById('lp-result-area').innerHTML = '';
+    }
+
+    for (var i = 1; i <= 2; i++) {
+      var card = document.getElementById('lp-step' + i);
+      if (card) card.classList.remove('active');
+    }
+    document.getElementById('lp-step' + step).classList.add('active');
+
+    var dots = document.querySelectorAll('.lp-step-dot');
+    for (var d = 0; d < dots.length; d++) {
+      dots[d].classList.remove('active', 'done');
+      if (d < step - 1) dots[d].classList.add('done');
+      if (d === step - 1) dots[d].classList.add('active');
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  window.lpCalc = function(type) {
+    var body = { period_type: type };
+
+    if (type === 'announcement') {
+      body.estimated_amount = document.getElementById('lp-est-amount').value || '0';
+      body.announcement_date = document.getElementById('lp-ann-date').value;
+      body.urgent = document.getElementById('lp-urgent').checked;
+    } else if (type === 'contract_signing') {
+      body.notification_date = document.getElementById('lp-notif-date').value;
+    } else if (type === 'payment') {
+      body.payment_type = document.getElementById('lp-pay-type').value;
+      body.inspection_date = document.getElementById('lp-insp-date').value;
+    } else if (type === 'defect_warranty') {
+      body.completion_date = document.getElementById('lp-comp-date').value;
+      var checks = document.querySelectorAll('#lp-work-types input:checked');
+      var wt = [];
+      for (var i = 0; i < checks.length; i++) wt.push(checks[i].value);
+      body.work_types = wt;
+    } else if (type === 'late_penalty') {
+      body.penalty_type = document.getElementById('lp-pen-type').value;
+      body.contract_amount = document.getElementById('lp-contract-amount').value || '0';
+      body.due_date = document.getElementById('lp-due-date').value;
+      body.actual_date = document.getElementById('lp-actual-date').value;
+    }
+
+    fetch('/legal-periods/calculate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'X-CSRF-Token': document.querySelector('meta[name=csrf-token]').content
+      },
+      body: JSON.stringify(body)
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.success) {
+        lpRenderResult(data.result);
+      } else {
+        document.getElementById('lp-result-area').innerHTML = '<div style="background:#fef2f2;border:1px solid #fecaca;border-radius:12px;padding:16px;color:#991b1b;margin-top:20px;"><strong>오류:</strong> ' + lpEsc(data.error) + '</div>';
+      }
+    });
+  };
+
+  function lpRenderResult(r) {
+    var html = '<div class="lp-result-box">';
+
+    if (r.type === 'announcement') {
+      html += '<div class="lp-result-title"><span class="material-symbols-outlined" style="color:#d97706;">campaign</span> 입찰공고기간 계산 결과</div>';
+      html += '<div class="lp-date-hero"><div class="lp-date-label">최소 공고기간</div><div class="lp-date-value">' + r.days + '일</div><div class="lp-date-sub">' + lpEsc(r.period_label) + '</div></div>';
+      html += '<div class="lp-info-grid">';
+      html += '<div class="lp-info-item"><div class="lp-info-label">공고일</div><div class="lp-info-value">' + r.start_date + ' (' + r.start_weekday + ')</div></div>';
+      html += '<div class="lp-info-item"><div class="lp-info-label">개찰 가능일</div><div class="lp-info-value" style="color:#d97706;">' + r.end_date + ' (' + r.end_weekday + ')</div></div>';
+      html += '</div>';
+      if (r.urgent) {
+        html += '<div style="background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:12px 16px;font-size:13px;color:#92400e;"><strong>긴급입찰 적용:</strong> ' + lpEsc(r.note) + '</div>';
+      } else {
+        html += '<div class="lp-ref-box">' + lpEsc(r.note) + '</div>';
+      }
+
+    } else if (r.type === 'contract_signing') {
+      html += '<div class="lp-result-title"><span class="material-symbols-outlined" style="color:#d97706;">draw</span> 계약체결기한 계산 결과</div>';
+      html += '<div class="lp-date-hero"><div class="lp-date-label">계약체결 기한</div><div class="lp-date-value">' + r.deadline + '</div><div class="lp-date-sub">' + r.deadline_weekday + ' · 낙찰통지일로부터 ' + r.days + '일 이내</div></div>';
+      html += '<div class="lp-info-grid">';
+      html += '<div class="lp-info-item"><div class="lp-info-label">낙찰통지일</div><div class="lp-info-value">' + r.notification_date + ' (' + r.notification_weekday + ')</div></div>';
+      html += '<div class="lp-info-item"><div class="lp-info-label">체결기한</div><div class="lp-info-value" style="color:#d97706;">' + r.deadline + ' (' + r.deadline_weekday + ')</div></div>';
+      html += '</div>';
+      html += '<div class="lp-ref-box">' + lpEsc(r.note) + '</div>';
+
+    } else if (r.type === 'payment') {
+      html += '<div class="lp-result-title"><span class="material-symbols-outlined" style="color:#d97706;">payments</span> 대금지급기한 계산 결과</div>';
+      html += '<div class="lp-date-hero"><div class="lp-date-label">' + lpEsc(r.payment_type_name) + ' 지급기한</div><div class="lp-date-value">' + r.deadline + '</div><div class="lp-date-sub">' + r.deadline_weekday + ' · 검사완료 후 ' + r.days + '일 이내</div></div>';
+      html += '<div class="lp-info-grid">';
+      html += '<div class="lp-info-item"><div class="lp-info-label">검사완료일</div><div class="lp-info-value">' + r.inspection_date + ' (' + r.inspection_weekday + ')</div></div>';
+      html += '<div class="lp-info-item"><div class="lp-info-label">지급기한</div><div class="lp-info-value" style="color:#d97706;">' + r.deadline + ' (' + r.deadline_weekday + ')</div></div>';
+      html += '</div>';
+      html += '<div class="lp-ref-box">' + lpEsc(r.note) + '</div>';
+
+    } else if (r.type === 'defect_warranty') {
+      html += '<div class="lp-result-title"><span class="material-symbols-outlined" style="color:#d97706;">shield</span> 하자보증기간 계산 결과</div>';
+      html += '<div style="font-size:14px;color:#64748b;margin-bottom:14px;">준공일: <strong>' + r.completion_date + ' (' + r.completion_weekday + ')</strong></div>';
+      html += '<table class="lp-warranty-table"><thead><tr><th>공종</th><th>보증기간</th><th>만료일</th><th>비고</th></tr></thead><tbody>';
+      for (var i = 0; i < r.warranties.length; i++) {
+        var w = r.warranties[i];
+        html += '<tr><td style="font-weight:600;">' + lpEsc(w.name) + '</td><td>' + w.years + '년</td><td style="color:#d97706;font-weight:600;">' + w.end_date + ' (' + w.end_weekday + ')</td><td style="font-size:12px;color:#94a3b8;">' + lpEsc(w.note) + '</td></tr>';
+      }
+      html += '</tbody></table>';
+      html += '<div class="lp-ref-box" style="margin-top:16px;">' + lpEsc(r.note) + '</div>';
+
+    } else if (r.type === 'late_penalty') {
+      html += '<div class="lp-result-title"><span class="material-symbols-outlined" style="color:#d97706;">hourglass_bottom</span> 지체상금 계산 결과</div>';
+
+      if (r.delay_days === 0) {
+        html += '<div class="lp-no-penalty"><span class="material-symbols-outlined text-3xl" style="color:#059669;">check_circle</span><div style="font-size:18px;font-weight:700;color:#059669;margin-top:8px;">' + lpEsc(r.message) + '</div></div>';
+      } else {
+        html += '<div class="lp-penalty-hero"><div class="lp-penalty-label">지체상금</div><div class="lp-penalty-value">' + lpComma(r.penalty_amount) + '원</div><div class="lp-penalty-sub">지체일수 ' + r.delay_days + '일 × 요율 ' + r.rate_display + '</div></div>';
+
+        if (r.capped) {
+          html += '<div style="background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:12px 16px;font-size:13px;color:#991b1b;margin-bottom:16px;"><strong>주의:</strong> 지체상금이 계약금액을 초과하여 계약금액으로 상한 적용되었습니다.</div>';
+        }
+
+        html += '<div class="lp-info-grid">';
+        html += '<div class="lp-info-item"><div class="lp-info-label">계약유형</div><div class="lp-info-value">' + lpEsc(r.penalty_type_name) + ' (요율 ' + r.rate_display + ')</div></div>';
+        html += '<div class="lp-info-item"><div class="lp-info-label">계약금액</div><div class="lp-info-value">' + lpComma(r.contract_amount) + '원</div></div>';
+        html += '<div class="lp-info-item"><div class="lp-info-label">계약종료일</div><div class="lp-info-value">' + r.due_date + ' (' + r.due_weekday + ')</div></div>';
+        html += '<div class="lp-info-item"><div class="lp-info-label">실제완료일</div><div class="lp-info-value" style="color:#dc2626;">' + r.actual_date + ' (' + r.actual_weekday + ')</div></div>';
+        html += '</div>';
+        html += '<div style="background:#f8fafc;border-radius:10px;padding:14px;font-size:14px;color:#334155;line-height:1.8;">산식: ' + lpComma(r.contract_amount) + '원 × ' + r.rate_display + ' × ' + r.delay_days + '일 = <strong style="color:#dc2626;">' + lpComma(r.penalty_amount) + '원</strong></div>';
+      }
+      html += '<div class="lp-ref-box" style="margin-top:16px;">' + lpEsc(r.note) + '</div>';
+    }
+
+    html += '</div>';
+    document.getElementById('lp-result-area').innerHTML = html;
+
+    // 결과로 스크롤
+    var resultEl = document.getElementById('lp-result-area');
+    if (resultEl) resultEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function lpComma(n) { return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+  function lpEsc(s) { if (!s) return ''; var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+});
+</script>

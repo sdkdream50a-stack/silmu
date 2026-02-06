@@ -95,14 +95,155 @@
     box-shadow: 0 4px 16px rgba(0,0,0,0.06);
     transition: all 0.3s ease;
     position: relative;
+    cursor: pointer;
   }
   .flow-step:hover {
     transform: translateY(-4px);
     box-shadow: 0 8px 24px rgba(0,0,0,0.1);
   }
-  .flow-step.highlight {
-    border-color: var(--forest-400);
-    background: linear-gradient(to bottom, var(--forest-50), white);
+  .flow-step.selected {
+    border-color: var(--navy-700);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  }
+  .flow-step.selected .step-number {
+    background: var(--point-600);
+    transform: translateX(-50%) scale(1.15);
+  }
+
+  /* 단계별 상세 패널 */
+  .step-detail-panel {
+    margin-top: 24px;
+    background: white;
+    border-radius: 16px;
+    border: 2px solid var(--navy-200);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    overflow: hidden;
+    animation: slideDown 0.3s ease;
+  }
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .step-detail-top {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+    background: linear-gradient(135deg, var(--navy-50), var(--surface-50));
+    border-bottom: 1px solid var(--navy-100);
+  }
+  .step-detail-top .step-detail-num {
+    width: 36px;
+    height: 36px;
+    background: var(--navy-700);
+    color: white;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .step-detail-top h4 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--navy-900);
+    margin: 0;
+  }
+  .step-detail-top p {
+    font-size: 13px;
+    color: var(--navy-500);
+    margin: 2px 0 0;
+  }
+  .step-detail-close {
+    margin-left: auto;
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: var(--navy-100);
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--navy-500);
+    transition: all 0.2s;
+  }
+  .step-detail-close:hover {
+    background: var(--navy-200);
+    color: var(--navy-700);
+  }
+  .step-detail-content {
+    padding: 20px 24px;
+  }
+  .step-detail-content ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .step-detail-content li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--surface-100);
+    font-size: 14px;
+    color: var(--navy-800);
+    line-height: 1.5;
+  }
+  .step-detail-content li:last-child {
+    border-bottom: none;
+  }
+  .step-detail-content li .material-symbols-outlined {
+    font-size: 18px;
+    color: var(--forest-600);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .step-detail-content .tip-box {
+    margin-top: 12px;
+    padding: 14px 16px;
+    background: var(--forest-50);
+    border-radius: 10px;
+    font-size: 13px;
+    color: var(--forest-800);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .step-detail-content .tip-box .material-symbols-outlined {
+    font-size: 18px;
+    color: var(--forest-600);
+    flex-shrink: 0;
+  }
+  .step-detail-content .small-box {
+    margin-top: 12px;
+    padding: 14px 16px;
+    background: var(--warm-50);
+    border-radius: 10px;
+    border-left: 3px solid var(--warm-400);
+    font-size: 13px;
+    color: var(--navy-800);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.6;
+  }
+  .step-detail-content .small-box .material-symbols-outlined {
+    font-size: 18px;
+    color: var(--warm-600);
+    flex-shrink: 0;
+  }
+  .step-detail-content .small-label {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--warm-700);
+    background: var(--warm-100);
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-bottom: 4px;
   }
 
   .step-number {
@@ -121,9 +262,6 @@
     align-items: center;
     justify-content: center;
     box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  }
-  .flow-step.highlight .step-number {
-    background: var(--forest-600);
   }
 
   .step-icon {
@@ -171,159 +309,6 @@
     color: var(--forest-400);
   }
 
-  /* 상세 정보 패널 */
-  .detail-panel {
-    margin-top: 40px;
-    background: white;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-    border: 1px solid #e2e8f0;
-  }
-  .detail-header {
-    padding: 24px 28px;
-    background: linear-gradient(135deg, var(--navy-800), var(--navy-700));
-    color: white;
-  }
-  .detail-header h3 {
-    font-size: 18px;
-    font-weight: 700;
-    margin-bottom: 4px;
-  }
-  .detail-header p {
-    font-size: 14px;
-    opacity: 0.8;
-  }
-  .detail-body {
-    padding: 28px;
-  }
-
-  /* 체크리스트 스타일 */
-  .checklist-section {
-    margin-bottom: 28px;
-  }
-  .checklist-section:last-child {
-    margin-bottom: 0;
-  }
-  .checklist-section h4 {
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--navy-800);
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding-bottom: 12px;
-    border-bottom: 2px solid var(--surface-100);
-  }
-  .checklist-section h4 .material-symbols-outlined {
-    font-size: 22px;
-    color: var(--forest-600);
-  }
-
-  .checklist-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-  }
-  .check-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 14px 16px;
-    background: var(--surface-50);
-    border-radius: 12px;
-    border: 1px solid #e2e8f0;
-    transition: all 0.2s;
-  }
-  .check-item:hover {
-    background: var(--forest-50);
-    border-color: var(--forest-200);
-  }
-  .check-item .icon {
-    width: 24px;
-    height: 24px;
-    background: var(--forest-100);
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-  .check-item .icon .material-symbols-outlined {
-    font-size: 16px;
-    color: var(--forest-600);
-  }
-  .check-item .text {
-    font-size: 14px;
-    color: var(--navy-800);
-    line-height: 1.4;
-  }
-  .check-item .text .sub {
-    font-size: 12px;
-    color: #64748b;
-    margin-top: 4px;
-    display: block;
-  }
-
-  /* 주의사항 박스 */
-  .caution-box {
-    margin-top: 24px;
-    padding: 20px;
-    background: var(--warm-50);
-    border-radius: 14px;
-    border-left: 4px solid var(--warm-500);
-  }
-  .caution-box h5 {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--warm-700);
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .caution-box ul {
-    margin: 0;
-    padding-left: 20px;
-  }
-  .caution-box li {
-    font-size: 13px;
-    color: var(--navy-700);
-    margin-bottom: 6px;
-    line-height: 1.5;
-  }
-  .caution-box li:last-child {
-    margin-bottom: 0;
-  }
-
-  /* 관련 링크 */
-  .related-links {
-    margin-top: 32px;
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-  .related-link {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 20px;
-    background: var(--surface-100);
-    border-radius: 12px;
-    color: var(--navy-700);
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 500;
-    transition: all 0.2s;
-  }
-  .related-link:hover {
-    background: var(--navy-100);
-    color: var(--navy-900);
-  }
-  .related-link .material-symbols-outlined {
-    font-size: 20px;
-  }
 
   /* 반응형 */
   @media (max-width: 768px) {
@@ -348,12 +333,6 @@
     }
     .flow-arrow {
       display: flex;
-    }
-    .checklist-grid {
-      grid-template-columns: 1fr;
-    }
-    .related-links {
-      flex-direction: column;
     }
   }
 
@@ -407,7 +386,7 @@
       <div class="flow-diagram">
         <div class="flow-line"></div>
         <div class="flow-steps">
-          <div class="flow-step highlight">
+          <div class="flow-step" data-step="goods-1" onclick="toggleStep(this)">
             <span class="step-number">1</span>
             <div class="step-icon">
               <span class="material-symbols-outlined">edit_document</span>
@@ -417,7 +396,7 @@
           </div>
           <div class="flow-arrow"><span class="material-symbols-outlined">arrow_downward</span></div>
 
-          <div class="flow-step">
+          <div class="flow-step" data-step="goods-2" onclick="toggleStep(this)">
             <span class="step-number">2</span>
             <div class="step-icon">
               <span class="material-symbols-outlined">calculate</span>
@@ -427,7 +406,7 @@
           </div>
           <div class="flow-arrow"><span class="material-symbols-outlined">arrow_downward</span></div>
 
-          <div class="flow-step">
+          <div class="flow-step" data-step="goods-3" onclick="toggleStep(this)">
             <span class="step-number">3</span>
             <div class="step-icon">
               <span class="material-symbols-outlined">gavel</span>
@@ -437,7 +416,7 @@
           </div>
           <div class="flow-arrow"><span class="material-symbols-outlined">arrow_downward</span></div>
 
-          <div class="flow-step">
+          <div class="flow-step" data-step="goods-4" onclick="toggleStep(this)">
             <span class="step-number">4</span>
             <div class="step-icon">
               <span class="material-symbols-outlined">request_quote</span>
@@ -447,7 +426,7 @@
           </div>
           <div class="flow-arrow"><span class="material-symbols-outlined">arrow_downward</span></div>
 
-          <div class="flow-step">
+          <div class="flow-step" data-step="goods-5" onclick="toggleStep(this)">
             <span class="step-number">5</span>
             <div class="step-icon">
               <span class="material-symbols-outlined">handshake</span>
@@ -457,7 +436,7 @@
           </div>
           <div class="flow-arrow"><span class="material-symbols-outlined">arrow_downward</span></div>
 
-          <div class="flow-step">
+          <div class="flow-step" data-step="goods-6" onclick="toggleStep(this)">
             <span class="step-number">6</span>
             <div class="step-icon">
               <span class="material-symbols-outlined">local_shipping</span>
@@ -467,7 +446,7 @@
           </div>
           <div class="flow-arrow"><span class="material-symbols-outlined">arrow_downward</span></div>
 
-          <div class="flow-step">
+          <div class="flow-step" data-step="goods-7" onclick="toggleStep(this)">
             <span class="step-number">7</span>
             <div class="step-icon">
               <span class="material-symbols-outlined">fact_check</span>
@@ -477,7 +456,7 @@
           </div>
           <div class="flow-arrow"><span class="material-symbols-outlined">arrow_downward</span></div>
 
-          <div class="flow-step highlight">
+          <div class="flow-step" data-step="goods-8" onclick="toggleStep(this)">
             <span class="step-number">8</span>
             <div class="step-icon">
               <span class="material-symbols-outlined">payments</span>
@@ -487,89 +466,7 @@
           </div>
         </div>
       </div>
-
-      <!-- 상세 정보 -->
-      <div class="detail-panel">
-        <div class="detail-header">
-          <h3>물품 구매 단계별 체크포인트</h3>
-          <p>각 단계에서 확인해야 할 주요 사항</p>
-        </div>
-        <div class="detail-body">
-          <div class="checklist-section">
-            <h4>
-              <span class="material-symbols-outlined">edit_document</span>
-              계약 전 단계
-            </h4>
-            <div class="checklist-grid">
-              <div class="check-item">
-                <div class="icon"><span class="material-symbols-outlined">check</span></div>
-                <div class="text">예산 배정 여부 확인<span class="sub">예산과목, 배정액 확인</span></div>
-              </div>
-              <div class="check-item">
-                <div class="icon"><span class="material-symbols-outlined">check</span></div>
-                <div class="text">중소기업 경쟁제품 확인<span class="sub">5천만원 초과 시 필수</span></div>
-              </div>
-              <div class="check-item">
-                <div class="icon"><span class="material-symbols-outlined">check</span></div>
-                <div class="text">조달청 가격 비교<span class="sub">나라장터 종합쇼핑몰</span></div>
-              </div>
-              <div class="check-item">
-                <div class="icon"><span class="material-symbols-outlined">check</span></div>
-                <div class="text">규격서 작성<span class="sub">특정 업체 유리 조건 배제</span></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="checklist-section">
-            <h4>
-              <span class="material-symbols-outlined">handshake</span>
-              계약 체결 단계
-            </h4>
-            <div class="checklist-grid">
-              <div class="check-item">
-                <div class="icon"><span class="material-symbols-outlined">check</span></div>
-                <div class="text">사업자등록증 유효 확인<span class="sub">휴·폐업 여부</span></div>
-              </div>
-              <div class="check-item">
-                <div class="icon"><span class="material-symbols-outlined">check</span></div>
-                <div class="text">계약보증금 징수<span class="sub">계약금액의 10% 이상</span></div>
-              </div>
-              <div class="check-item">
-                <div class="icon"><span class="material-symbols-outlined">check</span></div>
-                <div class="text">청렴서약서 징구<span class="sub">수의계약 시 필수</span></div>
-              </div>
-              <div class="check-item">
-                <div class="icon"><span class="material-symbols-outlined">check</span></div>
-                <div class="text">부정당업자 조회<span class="sub">G2B 제재현황 확인</span></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="caution-box">
-            <h5><span class="material-symbols-outlined">warning</span>주의사항</h5>
-            <ul>
-              <li>동일 업체와 연속 3회 이상 수의계약 시 청렴성 문제 발생 가능</li>
-              <li>분할계약 금지 - 동일 목적의 계약을 나누어 수의계약하면 안됨</li>
-              <li>납품 전 선금 지급은 원칙적으로 불가 (계약이행보증 필요)</li>
-            </ul>
-          </div>
-
-          <div class="related-links">
-            <%= link_to contract_method_path, class: "related-link" do %>
-              <span class="material-symbols-outlined">gavel</span>
-              계약방식 결정 도우미
-            <% end %>
-            <%= link_to contract_documents_path, class: "related-link" do %>
-              <span class="material-symbols-outlined">checklist</span>
-              서류 체크리스트
-            <% end %>
-            <a href="https://www.g2b.go.kr" target="_blank" class="related-link">
-              <span class="material-symbols-outlined">open_in_new</span>
-              나라장터
-            </a>
-          </div>
-        </div>
-      </div>
+      <div id="step-detail-goods"></div>
     </div>
 
     <!-- 용역 흐름도 -->
@@ -577,7 +474,7 @@
       <div class="flow-diagram">
         <div class="flow-line"></div>
         <div class="flow-steps">
-          <div class="flow-step highlight">
+          <div class="flow-step" data-step="service-1" onclick="toggleStep(this)">
             <span class="step-number">1</span>
             <div class="step-icon">
               <span class="material-symbols-outlined">edit_document</span>
@@ -587,7 +484,7 @@
           </div>
           <div class="flow-arrow"><span class="material-symbols-outlined">arrow_downward</span></div>
 
-          <div class="flow-step">
+          <div class="flow-step" data-step="service-2" onclick="toggleStep(this)">
             <span class="step-number">2</span>
             <div class="step-icon">
               <span class="material-symbols-outlined">description</span>
@@ -597,7 +494,7 @@
           </div>
           <div class="flow-arrow"><span class="material-symbols-outlined">arrow_downward</span></div>
 
-          <div class="flow-step">
+          <div class="flow-step" data-step="service-3" onclick="toggleStep(this)">
             <span class="step-number">3</span>
             <div class="step-icon">
               <span class="material-symbols-outlined">calculate</span>
@@ -607,7 +504,7 @@
           </div>
           <div class="flow-arrow"><span class="material-symbols-outlined">arrow_downward</span></div>
 
-          <div class="flow-step">
+          <div class="flow-step" data-step="service-4" onclick="toggleStep(this)">
             <span class="step-number">4</span>
             <div class="step-icon">
               <span class="material-symbols-outlined">handshake</span>
@@ -617,7 +514,7 @@
           </div>
           <div class="flow-arrow"><span class="material-symbols-outlined">arrow_downward</span></div>
 
-          <div class="flow-step">
+          <div class="flow-step" data-step="service-5" onclick="toggleStep(this)">
             <span class="step-number">5</span>
             <div class="step-icon">
               <span class="material-symbols-outlined">play_circle</span>
@@ -627,7 +524,7 @@
           </div>
           <div class="flow-arrow"><span class="material-symbols-outlined">arrow_downward</span></div>
 
-          <div class="flow-step">
+          <div class="flow-step" data-step="service-6" onclick="toggleStep(this)">
             <span class="step-number">6</span>
             <div class="step-icon">
               <span class="material-symbols-outlined">engineering</span>
@@ -637,7 +534,7 @@
           </div>
           <div class="flow-arrow"><span class="material-symbols-outlined">arrow_downward</span></div>
 
-          <div class="flow-step">
+          <div class="flow-step" data-step="service-7" onclick="toggleStep(this)">
             <span class="step-number">7</span>
             <div class="step-icon">
               <span class="material-symbols-outlined">task_alt</span>
@@ -647,7 +544,7 @@
           </div>
           <div class="flow-arrow"><span class="material-symbols-outlined">arrow_downward</span></div>
 
-          <div class="flow-step highlight">
+          <div class="flow-step" data-step="service-8" onclick="toggleStep(this)">
             <span class="step-number">8</span>
             <div class="step-icon">
               <span class="material-symbols-outlined">payments</span>
@@ -657,84 +554,7 @@
           </div>
         </div>
       </div>
-
-      <div class="detail-panel">
-        <div class="detail-header">
-          <h3>용역 계약 단계별 체크포인트</h3>
-          <p>각 단계에서 확인해야 할 주요 사항</p>
-        </div>
-        <div class="detail-body">
-          <div class="checklist-section">
-            <h4>
-              <span class="material-symbols-outlined">description</span>
-              과업지시서 작성 시
-            </h4>
-            <div class="checklist-grid">
-              <div class="check-item">
-                <div class="icon"><span class="material-symbols-outlined">check</span></div>
-                <div class="text">용역 목적 및 범위 명확화<span class="sub">구체적이고 측정 가능하게</span></div>
-              </div>
-              <div class="check-item">
-                <div class="icon"><span class="material-symbols-outlined">check</span></div>
-                <div class="text">투입인력 자격요건<span class="sub">필요 시 자격증, 경력 명시</span></div>
-              </div>
-              <div class="check-item">
-                <div class="icon"><span class="material-symbols-outlined">check</span></div>
-                <div class="text">산출물(성과품) 목록<span class="sub">제출 형태, 수량 명시</span></div>
-              </div>
-              <div class="check-item">
-                <div class="icon"><span class="material-symbols-outlined">check</span></div>
-                <div class="text">용역 기간 및 일정<span class="sub">착수일, 완료일 명시</span></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="checklist-section">
-            <h4>
-              <span class="material-symbols-outlined">engineering</span>
-              이행 단계
-            </h4>
-            <div class="checklist-grid">
-              <div class="check-item">
-                <div class="icon"><span class="material-symbols-outlined">check</span></div>
-                <div class="text">착수계 및 투입인력 확인<span class="sub">계약서 명시 인력 투입 여부</span></div>
-              </div>
-              <div class="check-item">
-                <div class="icon"><span class="material-symbols-outlined">check</span></div>
-                <div class="text">중간 진행상황 점검<span class="sub">일정 준수 여부 확인</span></div>
-              </div>
-              <div class="check-item">
-                <div class="icon"><span class="material-symbols-outlined">check</span></div>
-                <div class="text">노무비 지급 확인<span class="sub">건설근로자 해당 시</span></div>
-              </div>
-              <div class="check-item">
-                <div class="icon"><span class="material-symbols-outlined">check</span></div>
-                <div class="text">하도급 관리<span class="sub">무단 하도급 여부 점검</span></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="caution-box">
-            <h5><span class="material-symbols-outlined">warning</span>주의사항</h5>
-            <ul>
-              <li>기술용역은 협상에의한계약 검토 필요 (기술평가 중요 시)</li>
-              <li>용역 완료 전 성과품 사전 검토로 보완 기회 부여</li>
-              <li>계약 기간 연장 필요 시 반드시 변경계약 체결</li>
-            </ul>
-          </div>
-
-          <div class="related-links">
-            <%= link_to contract_method_path, class: "related-link" do %>
-              <span class="material-symbols-outlined">gavel</span>
-              계약방식 결정 도우미
-            <% end %>
-            <%= link_to contract_documents_path, class: "related-link" do %>
-              <span class="material-symbols-outlined">checklist</span>
-              서류 체크리스트
-            <% end %>
-          </div>
-        </div>
-      </div>
+      <div id="step-detail-service"></div>
     </div>
 
     <!-- 공사 흐름도 -->
@@ -742,7 +562,7 @@
       <div class="flow-diagram">
         <div class="flow-line"></div>
         <div class="flow-steps">
-          <div class="flow-step highlight">
+          <div class="flow-step" data-step="construction-1" onclick="toggleStep(this)">
             <span class="step-number">1</span>
             <div class="step-icon">
               <span class="material-symbols-outlined">edit_document</span>
@@ -752,7 +572,7 @@
           </div>
           <div class="flow-arrow"><span class="material-symbols-outlined">arrow_downward</span></div>
 
-          <div class="flow-step">
+          <div class="flow-step" data-step="construction-2" onclick="toggleStep(this)">
             <span class="step-number">2</span>
             <div class="step-icon">
               <span class="material-symbols-outlined">architecture</span>
@@ -762,7 +582,7 @@
           </div>
           <div class="flow-arrow"><span class="material-symbols-outlined">arrow_downward</span></div>
 
-          <div class="flow-step">
+          <div class="flow-step" data-step="construction-3" onclick="toggleStep(this)">
             <span class="step-number">3</span>
             <div class="step-icon">
               <span class="material-symbols-outlined">handshake</span>
@@ -772,7 +592,7 @@
           </div>
           <div class="flow-arrow"><span class="material-symbols-outlined">arrow_downward</span></div>
 
-          <div class="flow-step">
+          <div class="flow-step" data-step="construction-4" onclick="toggleStep(this)">
             <span class="step-number">4</span>
             <div class="step-icon">
               <span class="material-symbols-outlined">play_circle</span>
@@ -782,7 +602,7 @@
           </div>
           <div class="flow-arrow"><span class="material-symbols-outlined">arrow_downward</span></div>
 
-          <div class="flow-step">
+          <div class="flow-step" data-step="construction-5" onclick="toggleStep(this)">
             <span class="step-number">5</span>
             <div class="step-icon">
               <span class="material-symbols-outlined">construction</span>
@@ -792,7 +612,7 @@
           </div>
           <div class="flow-arrow"><span class="material-symbols-outlined">arrow_downward</span></div>
 
-          <div class="flow-step">
+          <div class="flow-step" data-step="construction-6" onclick="toggleStep(this)">
             <span class="step-number">6</span>
             <div class="step-icon">
               <span class="material-symbols-outlined">paid</span>
@@ -802,7 +622,7 @@
           </div>
           <div class="flow-arrow"><span class="material-symbols-outlined">arrow_downward</span></div>
 
-          <div class="flow-step">
+          <div class="flow-step" data-step="construction-7" onclick="toggleStep(this)">
             <span class="step-number">7</span>
             <div class="step-icon">
               <span class="material-symbols-outlined">task_alt</span>
@@ -812,7 +632,7 @@
           </div>
           <div class="flow-arrow"><span class="material-symbols-outlined">arrow_downward</span></div>
 
-          <div class="flow-step highlight">
+          <div class="flow-step" data-step="construction-8" onclick="toggleStep(this)">
             <span class="step-number">8</span>
             <div class="step-icon">
               <span class="material-symbols-outlined">shield</span>
@@ -822,105 +642,353 @@
           </div>
         </div>
       </div>
-
-      <div class="detail-panel">
-        <div class="detail-header">
-          <h3>공사 계약 단계별 체크포인트</h3>
-          <p>각 단계에서 확인해야 할 주요 사항</p>
-        </div>
-        <div class="detail-body">
-          <div class="checklist-section">
-            <h4>
-              <span class="material-symbols-outlined">construction</span>
-              시공 단계
-            </h4>
-            <div class="checklist-grid">
-              <div class="check-item">
-                <div class="icon"><span class="material-symbols-outlined">check</span></div>
-                <div class="text">안전관리계획서 확인<span class="sub">3천만원 이상 공사</span></div>
-              </div>
-              <div class="check-item">
-                <div class="icon"><span class="material-symbols-outlined">check</span></div>
-                <div class="text">건설근로자 전자카드<span class="sub">1억원 이상 공사 필수</span></div>
-              </div>
-              <div class="check-item">
-                <div class="icon"><span class="material-symbols-outlined">check</span></div>
-                <div class="text">공사감독일지 작성<span class="sub">매일 공사 진행사항 기록</span></div>
-              </div>
-              <div class="check-item">
-                <div class="icon"><span class="material-symbols-outlined">check</span></div>
-                <div class="text">설계변경 관리<span class="sub">현장여건 변경 시 변경계약</span></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="checklist-section">
-            <h4>
-              <span class="material-symbols-outlined">task_alt</span>
-              준공 단계
-            </h4>
-            <div class="checklist-grid">
-              <div class="check-item">
-                <div class="icon"><span class="material-symbols-outlined">check</span></div>
-                <div class="text">준공도면 제출<span class="sub">준공 후 실제 시공 도면</span></div>
-              </div>
-              <div class="check-item">
-                <div class="icon"><span class="material-symbols-outlined">check</span></div>
-                <div class="text">품질시험성과표<span class="sub">주요 자재 시험성적서</span></div>
-              </div>
-              <div class="check-item">
-                <div class="icon"><span class="material-symbols-outlined">check</span></div>
-                <div class="text">노무비 지급확인서<span class="sub">건설근로자 임금 지급 확인</span></div>
-              </div>
-              <div class="check-item">
-                <div class="icon"><span class="material-symbols-outlined">check</span></div>
-                <div class="text">하자보증서 징구<span class="sub">공종별 하자보증기간 확인</span></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="caution-box">
-            <h5><span class="material-symbols-outlined">warning</span>주의사항</h5>
-            <ul>
-              <li>8천만원 이하 경미한 공사도 건설업 등록업체 시공 권장</li>
-              <li>안전사고 발생 시 발주자 책임 문제 - 안전점검 철저</li>
-              <li>하자보증기간: 구조물 10년, 마감 2년, 설비 3년 등 공종별 상이</li>
-              <li>하도급대금 직접지급 요청 시 30일 이내 지급 의무</li>
-            </ul>
-          </div>
-
-          <div class="related-links">
-            <%= link_to contract_method_path, class: "related-link" do %>
-              <span class="material-symbols-outlined">gavel</span>
-              계약방식 결정 도우미
-            <% end %>
-            <%= link_to contract_documents_path, class: "related-link" do %>
-              <span class="material-symbols-outlined">checklist</span>
-              서류 체크리스트
-            <% end %>
-            <a href="https://www.kiscon.net" target="_blank" class="related-link">
-              <span class="material-symbols-outlined">open_in_new</span>
-              건설산업종합정보망
-            </a>
-          </div>
-        </div>
-      </div>
+      <div id="step-detail-construction"></div>
     </div>
 
   </div>
 </section>
 
 <script>
+  var stepData = {
+    'goods-1': {
+      title: '기본계획 수립', num: 1,
+      items: [
+        '구매 목적과 필요성을 명확히 정리 (품의서 작성 근거)',
+        '구매 수량, 규격, 사양을 구체적으로 확정',
+        '예산 배정 여부 확인 (미배정 시 예산배정 요청)',
+        '중소기업 경쟁제품 해당 여부 조회 (5천만원 초과 시 의무)'
+      ],
+      tip: '사전 시장조사를 통해 적정 가격대와 주요 업체를 파악하면 이후 절차가 수월합니다.',
+      small: '소액 구매(수백만원 이하)도 품의서 작성은 필수. 다만 중소기업 경쟁제품 확인은 5천만원 초과 시에만 의무이므로 소액은 생략 가능합니다.'
+    },
+    'goods-2': {
+      title: '예정가격 작성', num: 2,
+      items: [
+        '거래실례가격 조사 (나라장터 종합쇼핑몰, 시중 판매가)',
+        '2개 이상 업체 시세 확인으로 적정가격 산정',
+        '예정가격조서 작성 및 결재',
+        '부가가치세 포함 여부 확인'
+      ],
+      tip: '조달청 나라장터 종합쇼핑몰에서 동종 물품 가격을 먼저 확인하면 예정가격 산정이 용이합니다.',
+      small: '소액 구매도 예정가격 산정은 필요. 인터넷 최저가 캡처 등 간이 방식으로 가격 적정성을 소명할 수 있습니다.'
+    },
+    'goods-3': {
+      title: '계약방법 결정', num: 3,
+      items: [
+        '추정가격에 따른 계약방식 결정 (입찰 vs 수의계약)',
+        '물품: 2,100만원 이하 수의계약 가능 (시행령 제25조)',
+        '긴급, 특수 등 수의계약 사유 해당 여부 검토',
+        '분할계약 금지 원칙 확인'
+      ],
+      tip: '계약방식 결정이 어려우면 "계약방식 결정 도우미" 도구를 활용하세요.',
+      small: '2,100만원 이하는 수의계약 가능. 다만 동일 물품을 나눠서 수의계약하는 분할계약은 금액과 무관하게 금지됩니다.'
+    },
+    'goods-4': {
+      title: '견적/입찰', num: 4,
+      items: [
+        '수의계약 시: 2인 이상 견적서 징구 (2천만원 초과)',
+        '입찰 시: 나라장터 입찰공고 등록',
+        '견적요청서에 규격, 수량, 납품기한 명확 기재',
+        '견적서 유효기간 및 부가세 포함 여부 확인'
+      ],
+      tip: '견적서에 업체 직인(서명)이 있는지 반드시 확인하세요. 누락 시 효력 문제가 생깁니다.',
+      small: '2천만원 이하 소액은 1인 견적으로 가능. 다만 감사 대비를 위해 가격 비교 근거(인터넷 가격 등)를 함께 첨부하는 것이 좋습니다.'
+    },
+    'goods-5': {
+      title: '계약 체결', num: 5,
+      items: [
+        '계약금액 5,000만원 초과 시 계약서 작성 의무 (시행령 제50조)',
+        '사업자등록증, 인감증명서 등 계약서류 징구',
+        '계약보증금 납부 확인 (면제 가능 여부 검토)',
+        '부정당업자 제재 여부 G2B 조회'
+      ],
+      tip: '계약 체결 전 반드시 국세청 사업자상태 조회로 휴·폐업 여부를 확인하세요.',
+      small: '5,000만원 이하는 계약서 작성 생략 가능 (시행령 제50조). 이 경우 청구서, 견적서 등으로 계약 갈음. 계약보증금도 면제 가능합니다.'
+    },
+    'goods-6': {
+      title: '납품', num: 6,
+      items: [
+        '납품서 수령 및 물품명, 규격, 수량 대조',
+        '납품기한 준수 여부 확인 (지연 시 지체상금)',
+        '담당자 입회 하에 물품 인수',
+        '하자 또는 파손 물품 즉시 반품 처리'
+      ],
+      tip: '납품 시 사진 촬영을 해두면 이후 하자 분쟁 시 증거자료로 활용할 수 있습니다.',
+      small: '소액 구매도 납품서 수령과 물품 확인 절차는 동일. 금액과 관계없이 규격·수량 대조는 반드시 해야 합니다.'
+    },
+    'goods-7': {
+      title: '검수', num: 7,
+      items: [
+        '검사검수조서 작성 (납품일로부터 14일 이내)',
+        '계약서 규격·수량과 실제 납품 물품 대조',
+        '불량 또는 규격 불일치 시 보완 요구',
+        '검수 완료 후 물품대장 등재'
+      ],
+      tip: '검수조서에 검수자 서명을 빠뜨리지 마세요. 감사 시 주요 확인 사항입니다.',
+      small: '소액이라도 검수조서 작성은 필수. 다만 전문검수가 아닌 담당자 자체검수로 충분하며, 간이 검수조서 서식을 활용할 수 있습니다.'
+    },
+    'goods-8': {
+      title: '대금 지급', num: 8,
+      items: [
+        '세금계산서 발행 확인 (전자세금계산서 권장)',
+        '지출결의서 작성 및 결재',
+        '청구일로부터 5일 이내 대금 지급 (시행령 제67조)',
+        '지급 지연 시 지연이자 발생 주의'
+      ],
+      tip: '세금계산서 발행일과 검수완료일이 일치하는지 확인하세요. 불일치 시 회계감사 지적 대상입니다.',
+      small: '소액도 대금 지급 절차는 동일. 업무추진비나 소모품비 등 세출과목에 따라 지출결의 방식이 다를 수 있으니 회계 부서에 확인하세요.'
+    },
+    'service-1': {
+      title: '기본계획 수립', num: 1,
+      items: [
+        '용역 목적과 필요성 정리',
+        '용역 범위, 기간, 예산 확인',
+        '자체 수행 가능 여부 검토 (외부 위탁 당위성)',
+        '유사 용역 선례 및 단가 조사'
+      ],
+      tip: '과거 유사 용역 계약 사례를 참고하면 적정 예산과 기간 산정에 도움이 됩니다.',
+      small: '소액 용역도 외부 위탁 당위성 정리는 필수. "자체 수행이 어려운 사유"를 간략히라도 기안에 명시하세요.'
+    },
+    'service-2': {
+      title: '과업지시서 작성', num: 2,
+      items: [
+        '용역 목적, 범위, 내용을 구체적이고 측정 가능하게 작성',
+        '투입인력 자격요건 명시 (필요 시 자격증, 경력)',
+        '산출물(성과품) 목록, 제출 형태, 수량 명시',
+        '용역 기간, 중간보고, 최종보고 일정 명시'
+      ],
+      tip: '과업지시서가 구체적일수록 계약 분쟁을 예방할 수 있습니다. 모호한 표현은 피하세요.',
+      small: '소액 단순용역(청소, 소독 등)은 간이 과업내용서로 대체 가능. 용역 내용, 기간, 성과물만 간략히 기재하면 됩니다.'
+    },
+    'service-3': {
+      title: '예정가격 작성', num: 3,
+      items: [
+        '원가계산 방식: 인건비, 경비, 이윤 등 항목별 산출',
+        '시장조사 방식: 유사 용역 계약 사례 참고',
+        '노임단가는 한국엔지니어링협회 등 공표 단가 적용',
+        '예정가격조서 작성 및 결재'
+      ],
+      tip: '기술용역 원가계산 시 엔지니어링사업대가기준을 참고하세요.',
+      small: '소액 단순용역은 원가계산 대신 시장조사(견적서 비교)로 예정가격 산정이 가능합니다. 복잡한 원가계산은 기술용역에만 적용하세요.'
+    },
+    'service-4': {
+      title: '계약 체결', num: 4,
+      items: [
+        '입찰 또는 수의계약 방식 결정 (용역: 2,100만원 이하 수의계약)',
+        '과업지시서를 계약서 별첨으로 반드시 포함',
+        '지식재산권 귀속 조항 확인',
+        '계약이행보증서, 인감증명서 등 서류 징구'
+      ],
+      tip: '기술용역은 가격만이 아닌 기술력 평가가 중요합니다. 협상에 의한 계약 검토도 고려하세요.',
+      small: '2,100만원 이하 수의계약 가능. 5,000만원 이하 계약서 생략 가능 (시행령 제50조). 계약이행보증서도 면제 가능합니다.'
+    },
+    'service-5': {
+      title: '착수', num: 5,
+      items: [
+        '착수계 제출 접수 (착수일로부터 용역기간 기산)',
+        '투입인력 명단 확인 (계약서 명시 인력과 일치 여부)',
+        '세부 추진계획서 검토',
+        '킥오프 미팅 개최 (과업 내용 상호 확인)'
+      ],
+      tip: '착수 시 과업 범위를 양측이 명확히 합의해두면 이후 분쟁을 줄일 수 있습니다.',
+      small: '소액 단기용역은 착수계·추진계획서를 간소화할 수 있습니다. 이메일이나 유선으로 착수일 확인 후 기록을 남겨두면 됩니다.'
+    },
+    'service-6': {
+      title: '이행/감독', num: 6,
+      items: [
+        '계약서에 명시된 보고 주기 준수 여부 점검',
+        '투입인력 실제 근무 여부 확인',
+        '중간 진행상황 점검 회의 개최',
+        '무단 하도급 여부 점검'
+      ],
+      tip: '정기적인 중간점검을 통해 문제를 조기에 발견하면 준공 시 보완 부담을 줄일 수 있습니다.',
+      small: '단기 소액용역은 별도 중간보고 없이 수시 확인으로 갈음 가능. 다만 진행 경과를 메모나 이메일로 남겨두는 것이 좋습니다.'
+    },
+    'service-7': {
+      title: '준공/검수', num: 7,
+      items: [
+        '준공계 제출 접수 (준공기한 내 제출 확인)',
+        '과업지시서 기준 성과품 검수 (항목별 대조)',
+        '필요시 전문가 검수 의뢰',
+        '성과품 인수 및 보관'
+      ],
+      tip: '준공 전 사전검토를 통해 보완 기회를 부여하면 최종 성과품 품질이 높아집니다.',
+      small: '소액도 검수조서 작성은 필수. 전문가 검수 의뢰는 기술용역에 한하며, 단순용역은 담당자 자체검수로 충분합니다.'
+    },
+    'service-8': {
+      title: '대금 지급', num: 8,
+      items: [
+        '세금계산서 발행 확인',
+        '지출결의서 작성 및 결재',
+        '청구일로부터 5일 이내 대금 지급 (시행령 제67조)',
+        '선금 지급 시 선금급 지급비율 확인 (70% 이내)'
+      ],
+      tip: '기성금 청구 시에는 기성검사가 선행되어야 합니다. 검사 없이 지급하면 감사 지적 대상입니다.',
+      small: '소액 단기용역은 기성금 분할 없이 완료 후 일시불 지급이 일반적. 선금 지급도 소액에서는 거의 없습니다.'
+    },
+    'construction-1': {
+      title: '기본계획', num: 1,
+      items: [
+        '공사 목적, 범위, 공법 결정',
+        '사업비(예산) 확보 확인',
+        '인허가 사항 사전 검토 (건축허가, 도로점용 등)',
+        '부지 확보 및 지장물 조사'
+      ],
+      tip: '인허가와 부지 확보가 지연되면 전체 일정에 영향을 미칩니다. 가장 먼저 확인하세요.',
+      small: '소규모 시설물 보수·수선은 별도 인허가 불요. 기존 시설 현황 사진 촬영만으로 충분합니다.'
+    },
+    'construction-2': {
+      title: '설계', num: 2,
+      items: [
+        '설계도면, 시방서, 내역서, 현장설명서 작성',
+        '설계VE(가치공학) 및 기술자문 검토',
+        '구조·안전 검토 확인',
+        '내역서 단가 적정성 검증 (표준품셈, 실적공사비)'
+      ],
+      tip: '설계 단계에서 충분한 검토를 거치면 시공 중 설계변경을 줄일 수 있습니다.',
+      small: '2천만원 이하 소규모 수선공사는 간이 내역서(품명·수량·단가)로 대체 가능. 별도 설계도면 없이 현장 사진+작업내용 기술로 갈음할 수 있습니다.'
+    },
+    'construction-3': {
+      title: '계약 체결', num: 3,
+      items: [
+        '입찰 또는 수의계약 방식 결정 (공사: 8천만원 이하 수의계약)',
+        '건설업 등록증, 시공능력 확인',
+        '계약보증금, 계약이행보증서 징구',
+        '안전관리비, 환경관리비 계약서에 명시'
+      ],
+      tip: '8천만원 이하 경미한 공사도 건설업 등록업체 시공을 권장합니다.',
+      small: '2천만원 이하: 1인 견적 가능. 5천만원 이하: 계약서 작성 생략 가능 (시행령 제50조). 8천만원 이하: 건설업 미등록 업체도 시공 가능하나 등록업체 권장.'
+    },
+    'construction-4': {
+      title: '착공', num: 4,
+      items: [
+        '착공계 제출 접수 (현장대리인 지정 신고서 포함)',
+        '안전관리계획서 검토 및 승인',
+        '산재·고용보험 현장적용 신고 확인',
+        '공정표 제출 및 검토'
+      ],
+      tip: '착공 전 안전관리계획서 승인이 반드시 선행되어야 합니다.',
+      small: '소액공사는 착공계를 간이 서식으로 갈음 가능. 안전관리계획서는 건설기술진흥법령 기준 미해당 시 불요하나, 간단한 안전수칙 안내는 권장합니다.'
+    },
+    'construction-5': {
+      title: '시공/감독', num: 5,
+      items: [
+        '공사감독일지 매일 작성 (기상, 인력, 장비, 작업내용)',
+        '안전점검 정기 실시 (일일, 주간, 월간)',
+        '품질시험 계획 대비 실시 확인',
+        '설계변경 필요 시 사전 승인 후 시공'
+      ],
+      tip: '감독일지는 분쟁 시 핵심 증거자료입니다. 빠짐없이 상세하게 기록하세요.',
+      small: '소액공사도 감독일지 작성은 필수. 다만 주간 단위 약식 기록으로 갈음 가능. 품질시험은 대부분 불요하나, 공사 전·중·후 사진은 반드시 촬영하세요.'
+    },
+    'construction-6': {
+      title: '기성', num: 6,
+      items: [
+        '기성검사 실시 (공정률 또는 월별 기준)',
+        '기성검사원 작성 및 결재',
+        '기성금 청구서 및 세금계산서 접수',
+        '노무비 지급 확인 후 기성금 지급'
+      ],
+      tip: '기성금 지급 전 건설근로자 노무비 지급 확인이 필요합니다.',
+      small: '단기 소액공사는 기성 단계 없이 준공 후 일시불 지급이 일반적. 기성금 분할지급은 공기가 긴 경우에만 적용합니다.'
+    },
+    'construction-7': {
+      title: '준공', num: 7,
+      items: [
+        '준공계 제출 접수 (준공기한 내 제출 확인)',
+        '준공검사 실시 (준공계 제출 후 14일 이내)',
+        '준공도면, 품질시험성과표, 공사사진첩 제출',
+        '하자보증서 징구 (공종별 2~10년)'
+      ],
+      tip: '하자보증기간은 공종별로 상이합니다: 구조물 10년, 마감 2년, 설비 3년 등.',
+      small: '소액공사도 준공검사는 필수. 다만 준공도면은 생략 가능하고, 공사사진(전·후 비교)과 검사조서만으로 처리합니다. 하자보증서도 소액이라도 징구해야 합니다.'
+    },
+    'construction-8': {
+      title: '하자관리', num: 8,
+      items: [
+        '하자담보책임기간 중 정기 점검 실시',
+        '하자 발견 시 하자보수 요구 (서면 통보)',
+        '하자보수 미이행 시 하자보증금으로 보수',
+        '하자담보책임기간 만료 후 하자보증금 반환'
+      ],
+      tip: '하자담보책임기간 만료 전 반드시 최종 점검을 실시하여 미발견 하자를 확인하세요.',
+      small: '소액공사도 하자담보책임 적용. 다만 5천만원 이하로 계약서 생략 시에도 하자보증금 관련 사항을 서면으로 약정해두면 분쟁을 예방할 수 있습니다.'
+    }
+  };
+
   function showFlow(tab) {
     // 탭 활성화
-    document.querySelectorAll('.flow-tab').forEach(t => {
+    document.querySelectorAll('.flow-tab').forEach(function(t) {
       t.classList.toggle('active', t.dataset.tab === tab);
     });
 
     // 컨테이너 표시
-    document.querySelectorAll('.flow-container').forEach(c => {
+    document.querySelectorAll('.flow-container').forEach(function(c) {
       c.classList.remove('active');
     });
     document.getElementById('flow-' + tab).classList.add('active');
+
+    // 이전 선택 상태 초기화
+    closeStepDetail();
+  }
+
+  function toggleStep(el) {
+    var stepKey = el.dataset.step;
+    var data = stepData[stepKey];
+    if (!data) return;
+
+    var type = stepKey.split('-')[0];
+    var container = document.getElementById('step-detail-' + type);
+    var wasSelected = el.classList.contains('selected');
+
+    // 같은 흐름도 내 모든 카드 선택 해제
+    el.closest('.flow-steps').querySelectorAll('.flow-step').forEach(function(s) {
+      s.classList.remove('selected');
+    });
+
+    // 이미 선택된 카드를 다시 클릭하면 닫기
+    if (wasSelected) {
+      container.innerHTML = '';
+      return;
+    }
+
+    // 클릭된 카드 선택
+    el.classList.add('selected');
+
+    // 상세 패널 생성
+    var itemsHtml = data.items.map(function(item) {
+      return '<li><span class="material-symbols-outlined">check_circle</span>' + item + '</li>';
+    }).join('');
+
+    var smallHtml = '';
+    if (data.small) {
+      smallHtml = '<div class="small-box"><span class="material-symbols-outlined">info</span><div><span class="small-label">소액공사</span><br>' + data.small + '</div></div>';
+    }
+
+    container.innerHTML =
+      '<div class="step-detail-panel">' +
+        '<div class="step-detail-top">' +
+          '<div class="step-detail-num">' + data.num + '</div>' +
+          '<div><h4>' + data.title + '</h4></div>' +
+          '<button class="step-detail-close" onclick="closeStepDetail()"><span class="material-symbols-outlined">close</span></button>' +
+        '</div>' +
+        '<div class="step-detail-content">' +
+          '<ul>' + itemsHtml + '</ul>' +
+          '<div class="tip-box"><span class="material-symbols-outlined">lightbulb</span>' + data.tip + '</div>' +
+          smallHtml +
+        '</div>' +
+      '</div>';
+
+    // 상세 패널로 스크롤
+    container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function closeStepDetail() {
+    document.querySelectorAll('.flow-step.selected').forEach(function(s) {
+      s.classList.remove('selected');
+    });
+    document.querySelectorAll('[id^="step-detail-"]').forEach(function(c) {
+      c.innerHTML = '';
+    });
   }
 </script>

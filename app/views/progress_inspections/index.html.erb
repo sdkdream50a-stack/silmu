@@ -1,0 +1,629 @@
+<%# 기성검사 체크리스트 %>
+
+<style>
+.pi-step-card { background:#fff; border-radius:16px; border:1px solid #e5e7eb; padding:32px; margin-bottom:24px; display:none; }
+.pi-step-card.active { display:block; }
+.pi-type-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(160px, 1fr)); gap:14px; }
+.pi-type-btn { background:#fff; border:2px solid #e5e7eb; border-radius:14px; padding:20px 14px; text-align:center; cursor:pointer; transition:all .2s; }
+.pi-type-btn:hover { border-color:#ea580c; background:#fff7ed; }
+.pi-type-btn.selected { border-color:#ea580c; background:#fff7ed; box-shadow:0 0 0 3px rgba(234,88,12,.15); }
+.pi-type-btn .pi-icon { width:44px; height:44px; border-radius:10px; display:flex; align-items:center; justify-content:center; margin:0 auto 10px; background:#f1f5f9; }
+.pi-type-btn.selected .pi-icon { background:#ea580c; }
+.pi-type-btn.selected .pi-icon .material-symbols-outlined { color:#fff; }
+.pi-type-btn .pi-type-name { font-weight:700; color:#1e293b; font-size:14px; }
+.pi-type-btn .pi-type-desc { font-size:12px; color:#64748b; margin-top:2px; }
+
+.pi-form-group { margin-bottom:16px; }
+.pi-form-group label { display:block; font-weight:600; font-size:14px; color:#334155; margin-bottom:6px; }
+.pi-form-group input { width:100%; border:1px solid #d1d5db; border-radius:10px; padding:10px 14px; font-size:14px; }
+.pi-form-group input:focus { outline:none; border-color:#ea580c; box-shadow:0 0 0 3px rgba(234,88,12,.1); }
+.pi-form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+
+.pi-btn { display:inline-flex; align-items:center; gap:6px; padding:12px 28px; border-radius:12px; font-weight:600; font-size:15px; border:none; cursor:pointer; transition:all .2s; }
+.pi-btn-primary { background:#ea580c; color:#fff; }
+.pi-btn-primary:hover { background:#c2410c; }
+.pi-btn-secondary { background:#f1f5f9; color:#475569; }
+.pi-btn-secondary:hover { background:#e2e8f0; }
+.pi-btn-success { background:#059669; color:#fff; }
+.pi-btn-success:hover { background:#047857; }
+.pi-btn:disabled { opacity:.5; cursor:not-allowed; }
+
+.pi-quick-bar { display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-top:8px; }
+.pi-quick-btn { display:inline-flex; align-items:center; padding:5px 12px; border-radius:20px; border:1px solid #d1d5db; background:#fff; font-size:12px; font-weight:600; color:#475569; cursor:pointer; transition:all .15s; white-space:nowrap; }
+.pi-quick-btn:hover { background:#fff7ed; border-color:#fdba74; color:#c2410c; }
+.pi-quick-btn.pi-reset { background:#fef3c7; border-color:#fcd34d; color:#b45309; margin-left:auto; }
+.pi-quick-btn.pi-reset:hover { background:#fde68a; border-color:#f59e0b; }
+
+.pi-step-indicator { display:flex; gap:8px; margin-bottom:28px; }
+.pi-step-dot { width:10px; height:10px; border-radius:50%; background:#e2e8f0; transition:all .2s; }
+.pi-step-dot.active { background:#ea580c; width:28px; border-radius:5px; }
+.pi-step-dot.done { background:#059669; }
+
+.pi-section-title { font-size:22px; font-weight:700; color:#1e293b; margin-bottom:6px; }
+.pi-section-desc { font-size:14px; color:#64748b; margin-bottom:24px; }
+
+/* 체크리스트 결과 */
+.pi-result-section { background:#fff; border:1px solid #e5e7eb; border-radius:14px; padding:24px; margin-bottom:20px; }
+.pi-result-title { font-size:17px; font-weight:700; color:#1e293b; margin-bottom:14px; padding-bottom:10px; border-bottom:2px solid #e2e8f0; display:flex; align-items:center; gap:8px; }
+
+.pi-cat-header { display:flex; align-items:center; gap:10px; padding:12px 16px; background:#f8fafc; border-radius:10px; margin-bottom:10px; }
+.pi-cat-icon { width:36px; height:36px; border-radius:8px; background:#ea580c; color:#fff; display:flex; align-items:center; justify-content:center; }
+.pi-cat-name { font-weight:700; color:#1e293b; font-size:15px; }
+.pi-cat-count { font-size:13px; color:#64748b; }
+
+.pi-check-item { display:flex; align-items:flex-start; gap:12px; padding:10px 0; border-bottom:1px solid #f1f5f9; font-size:14px; }
+.pi-check-item:last-child { border-bottom:none; }
+.pi-checkbox { width:22px; height:22px; border:2px solid #d1d5db; border-radius:6px; flex-shrink:0; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .2s; margin-top:1px; }
+.pi-checkbox.checked { background:#059669; border-color:#059669; }
+.pi-checkbox.checked::after { content:'✓'; color:#fff; font-size:14px; font-weight:700; }
+.pi-check-text { flex:1; color:#334155; line-height:1.5; }
+.pi-critical { display:inline-block; background:#fef2f2; color:#dc2626; font-size:11px; font-weight:700; padding:2px 6px; border-radius:4px; margin-left:6px; }
+
+.pi-info-table { width:100%; border-collapse:collapse; font-size:14px; }
+.pi-info-table td { padding:8px 12px; border-bottom:1px solid #f1f5f9; }
+.pi-info-table .label { background:#f8fafc; font-weight:600; color:#475569; width:130px; }
+
+.pi-legal-box { background:#eff6ff; border:1px solid #bfdbfe; border-radius:10px; padding:14px 18px; margin-top:8px; }
+.pi-legal-item { display:flex; gap:8px; padding:4px 0; font-size:13px; }
+.pi-legal-item strong { color:#1e40af; white-space:nowrap; }
+
+.pi-sign-area { margin-top:24px; text-align:right; }
+.pi-sign-table { margin-left:auto; border-collapse:collapse; }
+.pi-sign-table td { border:1px solid #d1d5db; padding:8px 24px; text-align:center; background:#fff; }
+.pi-sign-table .header { background:#f8fafc; font-weight:600; font-size:13px; }
+
+.pi-progress-bar { height:8px; background:#e5e7eb; border-radius:4px; overflow:hidden; margin-top:12px; }
+.pi-progress-fill { height:100%; background:#059669; border-radius:4px; transition:width .3s; }
+.pi-progress-text { font-size:13px; color:#059669; font-weight:600; margin-top:4px; text-align:right; }
+
+@media print {
+  body * { visibility:hidden; }
+  #pi-result-area, #pi-result-area * { visibility:visible; }
+  #pi-result-area { position:absolute; left:0; top:0; width:100%; padding:20px; }
+  .pi-checkbox { border:2px solid #333 !important; }
+  .pi-checkbox.checked { background:#333 !important; }
+  .no-print { display:none !important; }
+}
+
+@keyframes piSpin { to { transform:rotate(360deg); } }
+.pi-ai-filled { background:#fff7ed !important; border-color:#fb923c !important; }
+.pi-ai-badge { display:inline-flex; align-items:center; gap:3px; padding:1px 7px; background:linear-gradient(135deg,#ea580c,#f97316); color:#fff; border-radius:20px; font-size:11px; font-weight:600; margin-left:6px; vertical-align:middle; }
+
+@media (max-width:640px) {
+  .pi-type-grid { grid-template-columns:repeat(2, 1fr); gap:10px; }
+  .pi-form-row { grid-template-columns:1fr; }
+}
+</style>
+
+<!-- 헤더 -->
+<section class="gradient-premium text-white py-12 lg:py-16">
+  <div class="container-wide">
+    <div class="flex items-start gap-5">
+      <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 shadow-lg">
+        <span class="material-symbols-outlined text-4xl text-white">checklist</span>
+      </div>
+      <div>
+        <h1 class="text-3xl lg:text-4xl font-bold tracking-tight mb-2">기성검사 체크리스트</h1>
+        <p class="text-navy-200 text-lg">공사 유형별 기성검사 항목을 자동으로 생성</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-10">
+  <div class="container-wide max-w-4xl">
+
+    <div class="pi-step-indicator" id="pi-steps">
+      <div class="pi-step-dot active"></div>
+      <div class="pi-step-dot"></div>
+      <div class="pi-step-dot"></div>
+    </div>
+
+    <!-- Step 1: 공사유형 + 계약정보 -->
+    <div class="pi-step-card active" id="pi-step1">
+      <h2 class="pi-section-title">공사유형 및 계약정보</h2>
+      <p class="pi-section-desc">공사 유형을 선택하고 계약 기본정보를 입력하세요.</p>
+
+      <div class="pi-type-grid" id="pi-type-grid">
+        <% @inspection_types.each do |type| %>
+          <div class="pi-type-btn" data-type="<%= type[:id] %>" onclick="piSelectType(this)">
+            <div class="pi-icon">
+              <span class="material-symbols-outlined text-xl text-orange-500"><%= type[:icon] %></span>
+            </div>
+            <div class="pi-type-name"><%= type[:name] %></div>
+            <div class="pi-type-desc"><%= type[:desc] %></div>
+          </div>
+        <% end %>
+      </div>
+
+      <div style="margin-top:24px;">
+        <div class="pi-form-group">
+          <label>계약명 *</label>
+          <input type="text" id="pi-contract-name" placeholder="예: 본관 2층 화장실 방수공사">
+        </div>
+        <div class="pi-form-row">
+          <div class="pi-form-group">
+            <label>계약금액 (원)</label>
+            <input type="text" id="pi-contract-amount" placeholder="예: 50,000,000" oninput="piFormatCurrency(this)">
+            <div class="pi-quick-bar">
+              <span class="pi-quick-btn" onclick="piAddQuick('pi-contract-amount',100000)">+10만</span>
+              <span class="pi-quick-btn" onclick="piAddQuick('pi-contract-amount',1000000)">+100만</span>
+              <span class="pi-quick-btn" onclick="piAddQuick('pi-contract-amount',10000000)">+1천만</span>
+              <span class="pi-quick-btn" onclick="piAddQuick('pi-contract-amount',50000000)">+5천만</span>
+              <span class="pi-quick-btn" onclick="piAddQuick('pi-contract-amount',100000000)">+1억</span>
+              <span class="pi-quick-btn pi-reset" onclick="piResetQuick('pi-contract-amount')">초기화</span>
+            </div>
+          </div>
+          <div class="pi-form-group">
+            <label>시공자 (업체명)</label>
+            <input type="text" id="pi-contractor" placeholder="예: (주)OO건설">
+          </div>
+        </div>
+        <div class="pi-form-row">
+          <div class="pi-form-group">
+            <label>계약일</label>
+            <input type="date" id="pi-contract-date">
+          </div>
+          <div class="pi-form-group">
+            <label>준공예정일</label>
+            <input type="date" id="pi-completion-date">
+          </div>
+        </div>
+      </div>
+
+      <!-- AI 문서 분석 -->
+      <div id="pi-ai-upload" style="margin-top:24px; padding-top:20px; border-top:1px solid #e5e7eb;">
+        <h3 style="font-size:16px; font-weight:700; color:#1e293b; margin-bottom:4px; display:flex; align-items:center; gap:8px;">
+          <span class="material-symbols-outlined" style="color:#ea580c;">auto_awesome</span>
+          AI 서류 분석
+          <span style="font-size:12px; font-weight:400; color:#94a3b8;">(선택사항)</span>
+        </h3>
+        <p style="font-size:13px; color:#64748b; margin-bottom:16px;">계약서, 내역서, 기성신청서 등을 업로드하면 AI가 계약정보를 자동으로 채워줍니다.</p>
+
+        <div id="pi-upload-zone" style="border:2px dashed #fed7aa; border-radius:12px; padding:28px 20px; text-align:center; cursor:pointer; background:#fffbf5; transition:all .2s;"
+             onclick="document.getElementById('pi-file-input').click()"
+             ondragover="piHandleDragOver(event)" ondragleave="piHandleDragLeave(event)" ondrop="piHandleDrop(event)">
+          <span class="material-symbols-outlined" style="font-size:36px; color:#fdba74; margin-bottom:6px;">cloud_upload</span>
+          <p style="font-size:14px; color:#64748b; margin-bottom:2px;">파일을 드래그하거나 클릭하여 선택</p>
+          <small style="font-size:12px; color:#94a3b8;">PDF, JPG, PNG (최대 20MB)</small>
+        </div>
+        <input type="file" id="pi-file-input" accept=".pdf,.jpg,.jpeg,.png" style="display:none" onchange="piFileSelect(event)">
+
+        <div id="pi-file-info" style="display:none; margin-top:12px; padding:12px 16px; background:#fff; border:1px solid #e5e7eb; border-radius:10px; align-items:center; gap:12px;">
+          <span class="material-symbols-outlined" style="font-size:22px; color:#ea580c;">description</span>
+          <div style="flex:1;">
+            <div id="pi-file-name" style="font-size:14px; font-weight:600; color:#1e293b;"></div>
+            <div id="pi-file-size" style="font-size:12px; color:#64748b;"></div>
+          </div>
+          <button onclick="piClearFile()" style="padding:5px 12px; background:#fef2f2; color:#ef4444; border:none; border-radius:8px; cursor:pointer; font-size:13px;">삭제</button>
+        </div>
+
+        <button id="pi-btn-analyze" style="display:none; margin-top:12px; width:100%; padding:13px; background:linear-gradient(135deg,#ea580c,#f97316); color:#fff; border:none; border-radius:12px; font-size:15px; font-weight:600; cursor:pointer; align-items:center; justify-content:center; gap:8px;" onclick="piAnalyzeDocument()">
+          <span class="material-symbols-outlined" style="vertical-align:middle; font-size:20px;">auto_awesome</span>
+          AI 분석 시작
+        </button>
+
+        <div id="pi-analysis-status" style="display:none; margin-top:12px; padding:12px 16px; border-radius:10px; font-size:14px; align-items:center; gap:10px;">
+          <div id="pi-analysis-spinner" style="width:18px; height:18px; border:2px solid #fed7aa; border-top-color:#ea580c; border-radius:50%; animation:piSpin .8s linear infinite;"></div>
+          <span id="pi-analysis-msg"></span>
+        </div>
+      </div>
+
+      <div style="margin-top:24px; text-align:right;">
+        <button class="pi-btn pi-btn-primary" id="pi-btn-step1" disabled onclick="piGoStep(2)">
+          다음 <span class="material-symbols-outlined text-lg">arrow_forward</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 2: 검사정보 -->
+    <div class="pi-step-card" id="pi-step2">
+      <h2 class="pi-section-title">기성검사 정보</h2>
+      <p class="pi-section-desc">이번 기성검사의 세부 정보를 입력하세요.</p>
+
+      <div class="pi-form-row">
+        <div class="pi-form-group">
+          <label>검사 차수</label>
+          <input type="text" id="pi-round" placeholder="예: 1차 (또는 준공)">
+        </div>
+        <div class="pi-form-group">
+          <label>검사 기간</label>
+          <input type="text" id="pi-inspection-period" placeholder="예: 2026.3.1 ~ 2026.3.15">
+        </div>
+      </div>
+      <div class="pi-form-row">
+        <div class="pi-form-group">
+          <label>금회 기성금액 (원)</label>
+          <input type="text" id="pi-inspection-amount" placeholder="예: 20,000,000" oninput="piFormatCurrency(this)">
+          <div class="pi-quick-bar">
+            <span class="pi-quick-btn" onclick="piAddQuick('pi-inspection-amount',100000)">+10만</span>
+            <span class="pi-quick-btn" onclick="piAddQuick('pi-inspection-amount',1000000)">+100만</span>
+            <span class="pi-quick-btn" onclick="piAddQuick('pi-inspection-amount',10000000)">+1천만</span>
+            <span class="pi-quick-btn" onclick="piAddQuick('pi-inspection-amount',50000000)">+5천만</span>
+            <span class="pi-quick-btn" onclick="piAddQuick('pi-inspection-amount',100000000)">+1억</span>
+            <span class="pi-quick-btn pi-reset" onclick="piResetQuick('pi-inspection-amount')">초기화</span>
+          </div>
+        </div>
+        <div class="pi-form-group">
+          <label>기지급액 (원)</label>
+          <input type="text" id="pi-paid-amount" placeholder="예: 0" oninput="piFormatCurrency(this)">
+          <div class="pi-quick-bar">
+            <span class="pi-quick-btn" onclick="piAddQuick('pi-paid-amount',100000)">+10만</span>
+            <span class="pi-quick-btn" onclick="piAddQuick('pi-paid-amount',1000000)">+100만</span>
+            <span class="pi-quick-btn" onclick="piAddQuick('pi-paid-amount',10000000)">+1천만</span>
+            <span class="pi-quick-btn" onclick="piAddQuick('pi-paid-amount',50000000)">+5천만</span>
+            <span class="pi-quick-btn" onclick="piAddQuick('pi-paid-amount',100000000)">+1억</span>
+            <span class="pi-quick-btn pi-reset" onclick="piResetQuick('pi-paid-amount')">초기화</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; margin-top:24px;">
+        <button class="pi-btn pi-btn-secondary" onclick="piGoStep(1)">
+          <span class="material-symbols-outlined text-lg">arrow_back</span> 이전
+        </button>
+        <button class="pi-btn pi-btn-primary" onclick="piGoStep(3)">
+          체크리스트 생성 <span class="material-symbols-outlined text-lg">auto_awesome</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 3: 체크리스트 결과 -->
+    <div class="pi-step-card" id="pi-step3">
+      <h2 class="pi-section-title">기성검사 체크리스트</h2>
+      <p class="pi-section-desc">항목을 하나씩 확인하며 체크하세요.</p>
+
+      <div id="pi-result-area"></div>
+
+      <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-top:24px;" class="no-print">
+        <button class="pi-btn pi-btn-secondary" onclick="piGoStep(2)">
+          <span class="material-symbols-outlined text-lg">arrow_back</span> 이전
+        </button>
+        <button class="pi-btn pi-btn-success" onclick="window.print()">
+          <span class="material-symbols-outlined text-lg">print</span> 인쇄
+        </button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+document.addEventListener('turbo:load', function() {
+  var piStep1 = document.getElementById('pi-step1');
+  if (!piStep1) return;
+
+  var piSelectedType = null;
+  var piTotalItems = 0;
+
+  window.piFormatCurrency = function(input) {
+    var value = input.value.replace(/[^0-9]/g, '');
+    if (value) input.value = parseInt(value).toLocaleString('ko-KR');
+  };
+
+  window.piAddQuick = function(inputId, amount) {
+    var el = document.getElementById(inputId);
+    if (!el) return;
+    var cur = parseInt(el.value.replace(/[^0-9]/g, '')) || 0;
+    el.value = (cur + amount).toLocaleString('ko-KR');
+  };
+
+  window.piResetQuick = function(inputId) {
+    var el = document.getElementById(inputId);
+    if (!el) return;
+    el.value = '';
+    el.focus();
+  };
+  var piCheckedItems = 0;
+  var piUploadedFile = null;
+  var piAnalyzedData = null;
+
+  window.piSelectType = function(el) {
+    var btns = document.querySelectorAll('.pi-type-btn');
+    for (var i = 0; i < btns.length; i++) { btns[i].classList.remove('selected'); }
+    el.classList.add('selected');
+    piSelectedType = el.dataset.type;
+    document.getElementById('pi-btn-step1').disabled = false;
+  };
+
+  window.piGoStep = function(step) {
+    // Step 2 진입 시 AI 분석 데이터 적용
+    if (step === 2 && piAnalyzedData) {
+      piApplyAnalyzedData();
+    }
+    if (step === 2 && !piSelectedType) return;
+    if (step === 2 && !document.getElementById('pi-contract-name').value.trim()) {
+      document.getElementById('pi-contract-name').focus();
+      document.getElementById('pi-contract-name').style.borderColor = '#ef4444';
+      return;
+    }
+    if (step === 3) {
+      piGenerate();
+    }
+
+    for (var i = 1; i <= 3; i++) {
+      var card = document.getElementById('pi-step' + i);
+      if (card) card.classList.remove('active');
+    }
+    document.getElementById('pi-step' + step).classList.add('active');
+
+    var dots = document.querySelectorAll('.pi-step-dot');
+    for (var d = 0; d < dots.length; d++) {
+      dots[d].classList.remove('active', 'done');
+      if (d < step - 1) dots[d].classList.add('done');
+      if (d === step - 1) dots[d].classList.add('active');
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  function piGenerate() {
+    var body = {
+      inspection_type: piSelectedType,
+      contract_name: document.getElementById('pi-contract-name').value,
+      contract_amount: document.getElementById('pi-contract-amount').value,
+      contractor: document.getElementById('pi-contractor').value,
+      contract_date: document.getElementById('pi-contract-date').value,
+      completion_date: document.getElementById('pi-completion-date').value,
+      round: document.getElementById('pi-round').value,
+      inspection_period: document.getElementById('pi-inspection-period').value,
+      inspection_amount: document.getElementById('pi-inspection-amount').value,
+      paid_amount: document.getElementById('pi-paid-amount').value
+    };
+
+    fetch('/progress-inspections/generate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'X-CSRF-Token': document.querySelector('meta[name=csrf-token]').content
+      },
+      body: JSON.stringify(body)
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.success) {
+        piRenderResult(data.checklist);
+      }
+    });
+  }
+
+  function piRenderResult(c) {
+    var html = '';
+
+    // 계약정보
+    html += '<div class="pi-result-section"><div class="pi-result-title"><span class="material-symbols-outlined" style="color:#ea580c;">info</span> 계약 및 검사 정보</div>';
+    html += '<table class="pi-info-table">';
+    html += '<tr><td class="label">계약명</td><td>' + piEsc(c.contract_info.name) + '</td></tr>';
+    html += '<tr><td class="label">계약금액</td><td>' + piEsc(c.contract_info.amount) + ' 원</td></tr>';
+    html += '<tr><td class="label">시공자</td><td>' + piEsc(c.contract_info.contractor) + '</td></tr>';
+    html += '<tr><td class="label">계약기간</td><td>' + piEsc(c.contract_info.contract_date) + ' ~ ' + piEsc(c.contract_info.completion_date) + '</td></tr>';
+    html += '<tr><td class="label">검사차수</td><td>' + piEsc(c.inspection_info.round) + '</td></tr>';
+    html += '<tr><td class="label">검사기간</td><td>' + piEsc(c.inspection_info.period) + '</td></tr>';
+    html += '<tr><td class="label">금회 기성금액</td><td>' + piEsc(c.inspection_info.amount) + ' 원</td></tr>';
+    html += '<tr><td class="label">기지급액</td><td>' + piEsc(c.inspection_info.paid) + ' 원</td></tr>';
+    html += '</table></div>';
+
+    // 진행률
+    html += '<div class="pi-result-section no-print"><div class="pi-result-title"><span class="material-symbols-outlined" style="color:#059669;">task_alt</span> 검사 진행률</div>';
+    html += '<div class="pi-progress-bar"><div class="pi-progress-fill" id="pi-progress-fill" style="width:0%"></div></div>';
+    html += '<div class="pi-progress-text" id="pi-progress-text">0 / 0 (0%)</div></div>';
+
+    // 카테고리별 체크리스트
+    piTotalItems = 0;
+    piCheckedItems = 0;
+
+    for (var ci = 0; ci < c.categories.length; ci++) {
+      var cat = c.categories[ci];
+      html += '<div class="pi-result-section">';
+      html += '<div class="pi-cat-header"><div class="pi-cat-icon"><span class="material-symbols-outlined">' + piEsc(cat.icon) + '</span></div><div><div class="pi-cat-name">' + piEsc(cat.name) + '</div><div class="pi-cat-count">' + cat.items.length + '개 항목</div></div></div>';
+
+      for (var ii = 0; ii < cat.items.length; ii++) {
+        var item = cat.items[ii];
+        var itemId = 'pi-chk-' + ci + '-' + ii;
+        html += '<div class="pi-check-item"><div class="pi-checkbox" id="' + itemId + '" onclick="piToggleCheck(this)"></div><div class="pi-check-text">' + piEsc(item.item);
+        if (item.critical) {
+          html += '<span class="pi-critical">필수</span>';
+        }
+        html += '</div></div>';
+        piTotalItems++;
+      }
+      html += '</div>';
+    }
+
+    // 법적 근거
+    html += '<div class="pi-result-section"><div class="pi-result-title"><span class="material-symbols-outlined" style="color:#1e40af;">gavel</span> 관련 법령</div><div class="pi-legal-box">';
+    for (var li = 0; li < c.legal_references.length; li++) {
+      var ref = c.legal_references[li];
+      html += '<div class="pi-legal-item"><strong>' + piEsc(ref.law) + '</strong><span style="color:#1e40af;">' + piEsc(ref.content) + '</span></div>';
+    }
+    html += '</div></div>';
+
+    // 서명란
+    html += '<div class="pi-result-section"><div class="pi-result-title"><span class="material-symbols-outlined" style="color:#ea580c;">draw</span> 검사 확인</div>';
+    html += '<div class="pi-sign-area"><table class="pi-sign-table"><tr><td class="header">검사관</td><td class="header">감독관</td><td class="header">담당</td></tr><tr><td style="height:60px;min-width:80px;"></td><td style="min-width:80px;"></td><td style="min-width:80px;"></td></tr></table></div></div>';
+
+    document.getElementById('pi-result-area').innerHTML = html;
+    piUpdateProgress();
+  }
+
+  window.piToggleCheck = function(el) {
+    if (el.classList.contains('checked')) {
+      el.classList.remove('checked');
+      piCheckedItems--;
+    } else {
+      el.classList.add('checked');
+      piCheckedItems++;
+    }
+    piUpdateProgress();
+  };
+
+  function piUpdateProgress() {
+    var pct = piTotalItems > 0 ? Math.round(piCheckedItems / piTotalItems * 100) : 0;
+    var fill = document.getElementById('pi-progress-fill');
+    var text = document.getElementById('pi-progress-text');
+    if (fill) fill.style.width = pct + '%';
+    if (text) text.textContent = piCheckedItems + ' / ' + piTotalItems + ' (' + pct + '%)';
+  }
+
+  function piEsc(s) { if (!s) return ''; var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+  // === AI 서류 분석 기능 ===
+
+  window.piHandleDragOver = function(e) {
+    e.preventDefault(); e.stopPropagation();
+    e.currentTarget.style.borderColor = '#ea580c';
+    e.currentTarget.style.background = '#fff7ed';
+  };
+  window.piHandleDragLeave = function(e) {
+    e.preventDefault(); e.stopPropagation();
+    e.currentTarget.style.borderColor = '#fed7aa';
+    e.currentTarget.style.background = '#fffbf5';
+  };
+  window.piHandleDrop = function(e) {
+    e.preventDefault(); e.stopPropagation();
+    e.currentTarget.style.borderColor = '#fed7aa';
+    e.currentTarget.style.background = '#fffbf5';
+    if (e.dataTransfer.files.length > 0) piProcessFile(e.dataTransfer.files[0]);
+  };
+  window.piFileSelect = function(e) {
+    if (e.target.files.length > 0) piProcessFile(e.target.files[0]);
+  };
+
+  function piProcessFile(file) {
+    var allowed = ['application/pdf', 'image/jpeg', 'image/png'];
+    if (allowed.indexOf(file.type) === -1) { alert('PDF, JPG, PNG 파일만 업로드 가능합니다.'); return; }
+    if (file.size > 20 * 1024 * 1024) { alert('파일 크기는 20MB 이하여야 합니다.'); return; }
+
+    piUploadedFile = file;
+    document.getElementById('pi-file-name').textContent = file.name;
+    document.getElementById('pi-file-size').textContent = (file.size / (1024 * 1024)).toFixed(1) + 'MB';
+    document.getElementById('pi-file-info').style.display = 'flex';
+    document.getElementById('pi-upload-zone').style.display = 'none';
+    document.getElementById('pi-btn-analyze').style.display = 'flex';
+    piHideAnalysisStatus();
+    piAnalyzedData = null;
+  }
+
+  window.piClearFile = function() {
+    piUploadedFile = null;
+    piAnalyzedData = null;
+    document.getElementById('pi-file-input').value = '';
+    document.getElementById('pi-file-info').style.display = 'none';
+    document.getElementById('pi-upload-zone').style.display = '';
+    document.getElementById('pi-btn-analyze').style.display = 'none';
+    piHideAnalysisStatus();
+  };
+
+  function piShowAnalysisStatus(type, msg) {
+    var el = document.getElementById('pi-analysis-status');
+    var spinner = document.getElementById('pi-analysis-spinner');
+    var msgEl = document.getElementById('pi-analysis-msg');
+    el.style.display = 'flex';
+    spinner.style.display = type === 'loading' ? 'block' : 'none';
+    msgEl.textContent = msg;
+    if (type === 'loading') { el.style.background = '#fff7ed'; el.style.color = '#c2410c'; el.style.border = '1px solid #fed7aa'; }
+    else if (type === 'success') { el.style.background = '#f0fdf4'; el.style.color = '#059669'; el.style.border = '1px solid #bbf7d0'; }
+    else { el.style.background = '#fef2f2'; el.style.color = '#dc2626'; el.style.border = '1px solid #fecaca'; }
+  }
+
+  function piHideAnalysisStatus() {
+    document.getElementById('pi-analysis-status').style.display = 'none';
+  }
+
+  window.piAnalyzeDocument = function() {
+    if (!piUploadedFile) return;
+    var btn = document.getElementById('pi-btn-analyze');
+    btn.disabled = true;
+    piShowAnalysisStatus('loading', 'AI가 서류를 분석하고 있습니다... (5~15초 소요)');
+
+    var formData = new FormData();
+    formData.append('file', piUploadedFile);
+    formData.append('document_type', 'progress_inspection');
+
+    fetch('/document-analysis/analyze', {
+      method: 'POST',
+      body: formData
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(result) {
+      if (result.success && result.fields) {
+        piAnalyzedData = result.fields;
+        var count = Object.keys(result.fields).filter(function(k) { return result.fields[k] != null; }).length;
+        piShowAnalysisStatus('success', '분석 완료! ' + count + '개 항목을 추출했습니다. 자동으로 입력됩니다.');
+
+        // 공사유형 자동 선택
+        if (result.fields.inspection_type) {
+          var typeBtn = document.querySelector('.pi-type-btn[data-type="' + result.fields.inspection_type + '"]');
+          if (typeBtn) {
+            piSelectType(typeBtn);
+          }
+        }
+
+        // Step 1의 계약정보 즉시 적용
+        piApplyStep1Data();
+      } else {
+        piShowAnalysisStatus('error', result.error || '서류 분석에 실패했습니다.');
+      }
+    })
+    .catch(function(err) {
+      console.error('분석 오류:', err);
+      piShowAnalysisStatus('error', '서버 연결에 실패했습니다. 다시 시도해주세요.');
+    })
+    .finally(function() {
+      btn.disabled = false;
+    });
+  };
+
+  function piApplyStep1Data() {
+    if (!piAnalyzedData) return;
+    var step1Map = {
+      contract_name: 'pi-contract-name',
+      contract_amount: 'pi-contract-amount',
+      contractor: 'pi-contractor',
+      contract_date: 'pi-contract-date',
+      completion_date: 'pi-completion-date'
+    };
+
+    Object.keys(step1Map).forEach(function(key) {
+      if (piAnalyzedData[key] != null) {
+        var el = document.getElementById(step1Map[key]);
+        if (el) {
+          var val = piAnalyzedData[key];
+          // 금액은 콤마 포맷
+          if (key === 'contract_amount' && typeof val === 'number') {
+            val = val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+          }
+          el.value = val;
+          el.classList.add('pi-ai-filled');
+        }
+      }
+    });
+  }
+
+  function piApplyAnalyzedData() {
+    if (!piAnalyzedData) return;
+    var step2Map = {
+      round: 'pi-round',
+      inspection_period: 'pi-inspection-period',
+      inspection_amount: 'pi-inspection-amount',
+      paid_amount: 'pi-paid-amount'
+    };
+
+    Object.keys(step2Map).forEach(function(key) {
+      if (piAnalyzedData[key] != null) {
+        var el = document.getElementById(step2Map[key]);
+        if (el) {
+          var val = piAnalyzedData[key];
+          if ((key === 'inspection_amount' || key === 'paid_amount') && typeof val === 'number') {
+            val = val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+          }
+          el.value = val;
+          el.classList.add('pi-ai-filled');
+        }
+      }
+    });
+
+    piAnalyzedData = null; // 중복 적용 방지
+  }
+});
+</script>
