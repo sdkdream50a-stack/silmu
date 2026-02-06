@@ -249,7 +249,9 @@
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
       <!-- 수의계약 -->
       <%= link_to "/topics/private-contract", class: "group card card-interactive card-shine p-6 md:p-8 border border-transparent hover:border-point-200 reveal reveal-delay-1" do %>
-        <div class="text-4xl mb-5 group-hover:scale-110 transition-transform duration-300">📝</div>
+        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-point-100 to-point-200 flex items-center justify-center mb-5 group-hover:scale-110 group-hover:shadow-lg transition-all duration-300">
+          <span class="material-symbols-outlined text-3xl text-point-600">edit_document</span>
+        </div>
         <h3 class="font-bold text-lg text-navy-900 group-hover:text-point-600 mb-2 transition-colors">수의계약</h3>
         <p class="text-navy-400 text-sm mb-4">법령 3단비교 · 서식 · 흐름도</p>
         <div class="flex flex-wrap gap-1.5">
@@ -261,7 +263,9 @@
 
       <!-- 소액수의계약 -->
       <%= link_to "/topics/small-amount-contract", class: "group card card-interactive card-shine p-6 md:p-8 border border-transparent hover:border-forest-200 reveal reveal-delay-2" do %>
-        <div class="text-4xl mb-5 group-hover:scale-110 transition-transform duration-300">💰</div>
+        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-forest-100 to-forest-200 flex items-center justify-center mb-5 group-hover:scale-110 group-hover:shadow-lg transition-all duration-300">
+          <span class="material-symbols-outlined text-3xl text-forest-600">paid</span>
+        </div>
         <h3 class="font-bold text-lg text-navy-900 group-hover:text-forest-600 mb-2 transition-colors">소액수의</h3>
         <p class="text-navy-400 text-sm mb-4">금액기준 · 1인견적 · 2인견적</p>
         <div class="flex flex-wrap gap-1.5">
@@ -272,7 +276,9 @@
 
       <!-- 긴급계약 -->
       <%= link_to "/topics/emergency-contract", class: "group card card-interactive card-shine p-6 md:p-8 border border-transparent hover:border-warm-200 reveal reveal-delay-3" do %>
-        <div class="text-4xl mb-5 group-hover:scale-110 transition-transform duration-300">🚨</div>
+        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-warm-100 to-warm-200 flex items-center justify-center mb-5 group-hover:scale-110 group-hover:shadow-lg transition-all duration-300">
+          <span class="material-symbols-outlined text-3xl text-warm-600">emergency</span>
+        </div>
         <h3 class="font-bold text-lg text-navy-900 group-hover:text-warm-600 mb-2 transition-colors">긴급계약</h3>
         <p class="text-navy-400 text-sm mb-4">긴급사유 · 수의근거 · 절차</p>
         <div class="flex flex-wrap gap-1.5">
@@ -283,7 +289,9 @@
 
       <!-- 예산이월 -->
       <%= link_to "/topics/budget-carryover", class: "group card card-interactive card-shine p-6 md:p-8 border border-transparent hover:border-navy-200 reveal reveal-delay-4" do %>
-        <div class="text-4xl mb-5 group-hover:scale-110 transition-transform duration-300">📅</div>
+        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-navy-100 to-navy-200 flex items-center justify-center mb-5 group-hover:scale-110 group-hover:shadow-lg transition-all duration-300">
+          <span class="material-symbols-outlined text-3xl text-navy-600">event_repeat</span>
+        </div>
         <h3 class="font-bold text-lg text-navy-900 group-hover:text-navy-600 mb-2 transition-colors">예산이월</h3>
         <p class="text-navy-400 text-sm mb-4">명시이월 · 사고이월 · 계속비</p>
         <div class="flex flex-wrap gap-1.5">
@@ -295,16 +303,22 @@
 
     <!-- 기타 가이드 -->
     <div class="flex flex-wrap justify-center gap-3 mb-10">
-      <%= link_to "/topics/travel-expense", class: "inline-flex items-center gap-2 px-4 py-2.5 bg-white hover:bg-surface-100 rounded-xl text-sm text-navy-600 hover:text-navy-900 border border-gray-200 hover:border-gray-300 transition-all" do %>
-        <span class="text-lg">💼</span>
+      <%= link_to "/topics/travel-expense", class: "inline-flex items-center gap-2.5 px-5 py-3 bg-white hover:bg-surface-50 rounded-xl text-sm font-medium text-navy-600 hover:text-navy-900 border border-gray-200 hover:border-gray-300 hover:shadow-soft transition-all" do %>
+        <span class="w-7 h-7 rounded-lg bg-gradient-to-br from-sky-100 to-sky-200 flex items-center justify-center">
+          <span class="material-symbols-outlined text-base text-sky-600">flight_takeoff</span>
+        </span>
         출장비
       <% end %>
-      <%= link_to "/topics/year-end-settlement", class: "inline-flex items-center gap-2 px-4 py-2.5 bg-white hover:bg-surface-100 rounded-xl text-sm text-navy-600 hover:text-navy-900 border border-gray-200 hover:border-gray-300 transition-all" do %>
-        <span class="text-lg">🧾</span>
+      <%= link_to "/topics/year-end-settlement", class: "inline-flex items-center gap-2.5 px-5 py-3 bg-white hover:bg-surface-50 rounded-xl text-sm font-medium text-navy-600 hover:text-navy-900 border border-gray-200 hover:border-gray-300 hover:shadow-soft transition-all" do %>
+        <span class="w-7 h-7 rounded-lg bg-gradient-to-br from-amber-100 to-amber-200 flex items-center justify-center">
+          <span class="material-symbols-outlined text-base text-amber-600">receipt_long</span>
+        </span>
         연말정산
       <% end %>
-      <%= link_to "/topics/price-negotiation", class: "inline-flex items-center gap-2 px-4 py-2.5 bg-white hover:bg-surface-100 rounded-xl text-sm text-navy-600 hover:text-navy-900 border border-gray-200 hover:border-gray-300 transition-all" do %>
-        <span class="text-lg">🤝</span>
+      <%= link_to "/topics/price-negotiation", class: "inline-flex items-center gap-2.5 px-5 py-3 bg-white hover:bg-surface-50 rounded-xl text-sm font-medium text-navy-600 hover:text-navy-900 border border-gray-200 hover:border-gray-300 hover:shadow-soft transition-all" do %>
+        <span class="w-7 h-7 rounded-lg bg-gradient-to-br from-rose-100 to-rose-200 flex items-center justify-center">
+          <span class="material-symbols-outlined text-base text-rose-600">handshake</span>
+        </span>
         가격협상
       <% end %>
     </div>

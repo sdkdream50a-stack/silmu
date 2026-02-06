@@ -73,16 +73,10 @@
               <p class="text-navy-500 text-sm mb-3"><%= template[:desc] %></p>
             <% end %>
 
-            <div class="flex items-center justify-between">
-              <div class="flex gap-1.5">
-                <% template[:formats].each do |format| %>
-                  <span class="text-xs px-2 py-0.5 bg-surface-100 text-navy-600 rounded-md font-medium"><%= format %></span>
-                <% end %>
-              </div>
-              <span class="text-xs text-navy-400 flex items-center gap-1">
-                <span class="material-symbols-outlined text-sm">download</span>
-                <%= number_with_delimiter(template[:downloads]) %>
-              </span>
+            <div class="flex gap-1.5">
+              <% template[:formats].each do |format| %>
+                <span class="text-xs px-2 py-0.5 bg-surface-100 text-navy-600 rounded-md font-medium"><%= format %></span>
+              <% end %>
             </div>
 
             <div class="flex gap-2 mt-4">
