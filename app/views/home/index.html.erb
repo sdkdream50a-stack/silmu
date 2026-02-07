@@ -34,13 +34,13 @@
         <form action="<%= chatbot_search_path %>" method="get" data-turbo="false" class="relative">
           <div class="flex items-center glass-panel rounded-2xl hover:border-white/30 transition-all focus-within:border-forest-400/50 focus-within:shadow-[0_0_30px_rgba(110,231,183,0.15)]">
             <span class="material-symbols-outlined text-white/50 ml-5 text-xl">search</span>
-            <input type="text" name="query" placeholder="궁금한 업무를 검색하세요 (예: 수의계약, 예산이월, 출장비)" class="flex-1 bg-transparent text-white placeholder-white/40 px-4 py-4 md:py-5 text-lg outline-none">
+            <input type="text" name="query" placeholder="궁금한 업무를 검색하세요 (예: 수의계약, 계약방식, 입찰공고)" class="flex-1 bg-transparent text-white placeholder-white/40 px-4 py-4 md:py-5 text-lg outline-none">
             <button type="submit" class="btn btn-accent mr-2 px-6 shadow-md hover:shadow-lg">검색</button>
           </div>
         </form>
         <!-- 인기 검색어 -->
         <div class="flex flex-wrap justify-center gap-2 mt-5">
-          <% %w[수의계약 예산이월 출장비 연말정산 긴급계약 소액수의].each do |keyword| %>
+          <% %w[수의계약 긴급계약 소액수의 계약방식 입찰공고 계약보증금].each do |keyword| %>
             <%= link_to chatbot_search_path(query: keyword), class: "px-3 py-1.5 bg-white/[0.06] hover:bg-white/15 rounded-full text-sm text-white/70 hover:text-white border border-white/[0.08] hover:border-white/20 transition-all", data: { turbo: false } do %>
               <%= keyword %>
             <% end %>
@@ -51,15 +51,15 @@
       <!-- Stats — glass cards -->
       <div class="grid grid-cols-3 gap-4 md:gap-8 mt-16 pt-10 border-t border-white/[0.08]">
         <div class="text-center glass-panel rounded-2xl py-5 px-3">
-          <div class="text-3xl md:text-4xl font-bold text-white mb-1">7+</div>
+          <div class="text-3xl md:text-4xl font-bold text-white mb-1">14+</div>
           <div class="text-white/50 text-sm">자동화 도구</div>
         </div>
         <div class="text-center glass-panel rounded-2xl py-5 px-3">
-          <div class="text-3xl md:text-4xl font-bold text-white mb-1">10+</div>
+          <div class="text-3xl md:text-4xl font-bold text-white mb-1">20+</div>
           <div class="text-white/50 text-sm">업무 가이드</div>
         </div>
         <div class="text-center glass-panel rounded-2xl py-5 px-3">
-          <div class="text-3xl md:text-4xl font-bold text-white mb-1">50+</div>
+          <div class="text-3xl md:text-4xl font-bold text-white mb-1">23+</div>
           <div class="text-white/50 text-sm">서식/양식</div>
         </div>
       </div>
