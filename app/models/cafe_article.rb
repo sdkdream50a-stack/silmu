@@ -29,7 +29,7 @@ class CafeArticle < ApplicationRecord
     # 키워드로 검색
     results = where(
       keywords.map { "title ILIKE ?" }.join(" OR "),
-      *keywords.map { |k| "%#{k}%" }
+      *keywords.map { |k| "%#{sanitize_sql_like(k)}%" }
     ).order(view_count: :desc).limit(limit)
 
     results.presence || search_by_title(query).limit(limit)

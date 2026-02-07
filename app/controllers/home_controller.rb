@@ -15,4 +15,20 @@ class HomeController < ApplicationController
       og: { title: "실무 서비스 소개", url: request.original_url }
     )
   end
+
+  def privacy
+    set_meta_tags(
+      title: "개인정보처리방침",
+      description: "실무(silmu.kr) 개인정보처리방침입니다.",
+      og: { title: "실무 개인정보처리방침", url: request.original_url }
+    )
+  end
+
+  def terms
+    set_meta_tags(
+      title: "이용약관",
+      description: "실무(silmu.kr) 서비스 이용약관입니다.",
+      og: { title: "실무 이용약관", url: request.original_url }
+    )
+  end
 end

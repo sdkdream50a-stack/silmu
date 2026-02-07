@@ -22,7 +22,7 @@
 
         <div>
           <%= f.label :email, "이메일", class: "block text-sm font-semibold text-navy-700 mb-2" %>
-          <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "name@example.com", class: "input" %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "이메일 주소", class: "input" %>
         </div>
 
         <div>
@@ -45,8 +45,8 @@
           <label class="flex items-start cursor-pointer group">
             <input type="checkbox" required class="text-point-600 focus:ring-point-500 rounded w-4 h-4 mt-0.5">
             <span class="ml-2 text-sm text-navy-600">
-              <a href="javascript:void(0)" onclick="alert('이용약관 페이지는 준비 중입니다.')" class="text-point-600 hover:underline cursor-pointer">이용약관</a> 및
-              <a href="javascript:void(0)" onclick="alert('개인정보처리방침 페이지는 준비 중입니다.')" class="text-point-600 hover:underline cursor-pointer">개인정보처리방침</a>에 동의합니다 (필수)
+              <%= link_to "이용약관", terms_path, target: "_blank", class: "text-point-600 hover:underline" %> 및
+              <%= link_to "개인정보처리방침", privacy_path, target: "_blank", class: "text-point-600 hover:underline" %>에 동의합니다 (필수)
             </span>
           </label>
           <label class="flex items-start cursor-pointer group">
@@ -59,27 +59,6 @@
           <%= f.submit "회원가입", class: "w-full btn btn-primary btn-lg cursor-pointer" %>
         </div>
       <% end %>
-
-      <!-- 소셜 로그인 -->
-      <div class="mt-8">
-        <div class="relative">
-          <div class="absolute inset-0 flex items-center">
-            <div class="w-full border-t border-gray-200"></div>
-          </div>
-          <div class="relative flex justify-center text-sm">
-            <span class="px-4 bg-white text-navy-500">또는</span>
-          </div>
-        </div>
-
-        <div class="mt-6">
-          <button class="w-full flex items-center justify-center gap-3 py-3 px-4 bg-[#FEE500] hover:bg-[#FDD800] text-[#3C1E1E] rounded-xl font-semibold transition-colors">
-            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 3C6.5 3 2 6.58 2 11c0 2.87 1.91 5.4 4.78 6.85-.15.54-.97 3.47-1 3.64 0 .09.03.18.1.24.06.05.15.08.23.06.31-.04 3.63-2.38 4.2-2.79.55.08 1.12.12 1.69.12 5.5 0 10-3.58 10-8 0-4.42-4.5-8-10-8z"/>
-            </svg>
-            카카오로 시작하기
-          </button>
-        </div>
-      </div>
 
       <!-- 로그인 링크 -->
       <p class="mt-8 text-center text-sm text-navy-600">

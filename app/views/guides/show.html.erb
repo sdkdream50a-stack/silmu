@@ -75,13 +75,9 @@
             </div>
 
             <div class="flex gap-2 mt-6">
-              <button onclick="alert('저장 기능은 준비 중입니다.')" class="flex items-center gap-1 px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50 transition-colors">
-                <span class="material-symbols-outlined text-lg">bookmark_border</span>
-                저장
-              </button>
-              <button onclick="alert('공유 기능은 준비 중입니다.')" class="flex items-center gap-1 px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50 transition-colors">
+              <button onclick="if(navigator.share){navigator.share({title:document.title,url:location.href})}else{navigator.clipboard.writeText(location.href);this.querySelector('.label').textContent='복사됨!';setTimeout(()=>{this.querySelector('.label').textContent='공유'},1500)}" class="flex items-center gap-1 px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50 transition-colors">
                 <span class="material-symbols-outlined text-lg">share</span>
-                공유
+                <span class="label">공유</span>
               </button>
               <button onclick="window.print()" class="flex items-center gap-1 px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50 transition-colors">
                 <span class="material-symbols-outlined text-lg">print</span>

@@ -349,13 +349,13 @@ A. 2인 이상 견적 대상에서 1인만 수의시담에 응한 경우, 해당
     keywords: '1인견적,단일견적,소액수의,견적서,1인수의',
     category: 'contract',
     law_content: <<~LAW,
-      <strong>지방계약법 시행령 제25조 제1항 제1호</strong>
+      <strong>지방계약법 제9조 (수의계약)</strong>
 
-      추정가격이 다음 각 목의 금액 이하인 경우 수의계약 가능:
-      <ul style="margin-top:8px;">
-        <li>가. 공사: <strong>5천만원</strong></li>
-        <li>나. 물품의 제조·구매, 용역: <strong>5천만원</strong></li>
-      </ul>
+      추정가격이 대통령령으로 정하는 금액 이하인 경우 수의계약 가능.
+
+      <div style="background:#eff6ff; padding:12px; border-radius:8px; margin-top:8px;">
+        📌 구체적 금액 기준은 시행령 제25조에서 규정 (물품·용역: 2천만원 이하, 공사: 종합 4억·전문 2억 등)
+      </div>
 
       <hr style="margin:16px 0;">
 
@@ -388,7 +388,7 @@ A. 2인 이상 견적 대상에서 1인만 수의시담에 응한 경우, 해당
           </tr>
           <tr>
             <td style="border:1px solid #86efac; padding:8px;">공사</td>
-            <td style="border:1px solid #86efac; padding:8px; font-weight:bold;">5,000만원 이하</td>
+            <td style="border:1px solid #86efac; padding:8px; font-weight:bold;">2천만원 이하</td>
           </tr>
         </table>
       </div>
@@ -583,7 +583,7 @@ A. 2인 이상 견적 대상에서 1인만 수의시담에 응한 경우, 해당
         </tr>
         <tr>
           <td style="border:1px solid #a5b4fc; padding:10px;">공사</td>
-          <td style="border:1px solid #a5b4fc; padding:10px; font-weight:bold;">5천만원 초과 ~ 2억원</td>
+          <td style="border:1px solid #a5b4fc; padding:10px; font-weight:bold;">2천만원 초과 ~ 수의계약 한도</td>
         </tr>
       </table>
 
@@ -611,7 +611,7 @@ A. 2인 이상 견적 대상에서 1인만 수의시담에 응한 경우, 해당
         </tr>
         <tr>
           <td style="border:1px solid #fcd34d; padding:12px;">공사</td>
-          <td style="border:1px solid #fcd34d; padding:12px; font-weight:bold;">5천만원 초과 ~ 2억원</td>
+          <td style="border:1px solid #fcd34d; padding:12px; font-weight:bold;">2천만원 초과 ~ 수의계약 한도</td>
         </tr>
       </table>
 
@@ -823,8 +823,8 @@ A. 2인 이상 견적 대상에서 1인만 수의시담에 응한 경우, 해당
             </div>
             <div class="bg-white rounded-lg p-3 border">
               <div class="text-sm text-gray-500">공사</div>
-              <div class="text-lg font-bold text-blue-600">수의한도: 2억원</div>
-              <div class="text-xs text-gray-400 mt-1">1인: 5천만원 / 2인: ~2억원</div>
+              <div class="text-lg font-bold text-blue-600">수의한도: 종합 4억/전문 2억</div>
+              <div class="text-xs text-gray-400 mt-1">1인: 2천만원 / 2인: 그 이상</div>
             </div>
           </div>
         </div>
@@ -1086,7 +1086,7 @@ A. 2인 이상 견적 대상에서 1인만 수의시담에 응한 경우, 해당
     QA
     faqs: [
       { question: '수의계약 금액은 부가세 포함인가요, 별도인가요?', answer: '수의계약 금액 기준은 부가세 별도(추정가격) 기준입니다. 부가세 포함 금액으로 판단하면 안 됩니다.' },
-      { question: '부가세 포함 5천만원이면 수의계약이 가능한가요?', answer: '네, 가능합니다. 부가세 포함 5천만원 ÷ 1.1 = 약 5,000만원(추정가격)이므로 물품·용역 수의계약 한도 이내입니다.' }
+      { question: '부가세 포함 2,200만원이면 수의계약이 가능한가요?', answer: '아니요. 부가세 포함 2,200만원 ÷ 1.1 = 2,000만원(추정가격)입니다. 추정가격 2천만원 이하이므로 물품·용역 수의계약이 가능합니다. 다만 추정가격이 정확히 한도와 같을 때는 부가세 제외 여부를 신중히 확인하세요.' }
     ].to_json,
     published: true
   },
@@ -1126,7 +1126,7 @@ A. 2인 이상 견적 대상에서 1인만 수의시담에 응한 경우, 해당
           </tr>
           <tr style="background:#f9fafb;">
             <td style="border:1px solid #d1d5db; padding:12px;">물품·용역</td>
-            <td style="border:1px solid #d1d5db; padding:12px;"><strong style="color:#2563eb;">5천만원 이하</strong></td>
+            <td style="border:1px solid #d1d5db; padding:12px;"><strong style="color:#2563eb;">2천만원 이하</strong> <span style="color:#6b7280;">(특례기업 5천만원)</span></td>
           </tr>
         </table>
       </div>
@@ -1180,7 +1180,7 @@ A. 2인 이상 견적 대상에서 1인만 수의시담에 응한 경우, 해당
             <div>
               <strong class="text-blue-700">2. 견적 방법 결정</strong>
               <ul class="text-blue-600 text-sm mt-1">
-                <li>☐ 1인 견적 대상인가? (물품·용역 2천만원, 공사 5천만원)</li>
+                <li>☐ 1인 견적 대상인가? (물품·용역·공사 모두 2천만원 이하)</li>
                 <li>☐ 2인 견적 대상인가? (그 이상)</li>
               </ul>
             </div>
@@ -1272,20 +1272,12 @@ A. 2인 이상 견적 대상에서 1인만 수의시담에 응한 경우, 해당
     keywords: '긴급수의,긴급계약,특명수의,재해복구,긴급',
     category: 'contract',
     law_content: <<~LAW,
-      <strong>지방계약법 시행령 제25조 제1항 제4호</strong>
+      <strong>지방계약법 제9조 제1항 (수의계약)</strong>
 
-      다음 각 목의 경우에는 수의계약을 할 수 있다:
+      지방자치단체의 장 또는 계약담당자는 계약의 목적·성질·규모 등을 고려하여 필요하다고 인정되면 <strong>대통령령으로 정하는 바에 따라 수의계약</strong>을 할 수 있다.
 
-      <div style="background:#fef2f2; padding:16px; border-radius:8px; margin-top:12px;">
-        <strong>가.</strong> <mark>천재지변</mark>, 작전상의 병력이동, <mark>긴급한 행사</mark>, 원자재의 가격급등 그 밖에 이에 준하는 경우로서 <strong>경쟁에 부칠 여유가 없는 경우</strong>
-
-        <br><br>
-
-        <strong>나.</strong> 국가기관, 다른 지방자치단체와 계약을 하는 경우
-
-        <br><br>
-
-        <strong>다.</strong> 특정인의 기술, 용역 또는 특정위치에 있는 물건 등이 계약의 목적 달성에 필수적인 경우
+      <div style="background:#eff6ff; padding:12px; border-radius:8px; margin-top:12px;">
+        📌 긴급수의계약의 구체적 사유는 <strong>시행령 제25조 제1항 제4호</strong>에서 규정합니다: 천재지변, 긴급한 행사, 원자재 가격급등 등 경쟁에 부칠 여유가 없는 경우
       </div>
     LAW
     decree_content: <<~DECREE,

@@ -1,7 +1,9 @@
-<p>Hello <%= @email %>!</p>
+<p><%= @email %>님, 안녕하세요!</p>
 
 <% if @resource.try(:unconfirmed_email?) %>
-  <p>We're contacting you to notify you that your email is being changed to <%= @resource.unconfirmed_email %>.</p>
+  <p>회원님의 이메일이 <%= @resource.unconfirmed_email %>으로 변경 요청되었습니다.</p>
 <% else %>
-  <p>We're contacting you to notify you that your email has been changed to <%= @resource.email %>.</p>
+  <p>회원님의 이메일이 <%= @resource.email %>으로 변경되었습니다.</p>
 <% end %>
+
+<p>— 실무 (silmu.kr)</p>

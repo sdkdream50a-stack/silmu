@@ -95,13 +95,9 @@
 
       <!-- 액션 버튼 -->
       <div class="mt-6 lg:mt-0 flex gap-3">
-        <button class="btn btn-glass btn-sm">
-          <span class="material-symbols-outlined text-lg">bookmark_border</span>
-          저장
-        </button>
-        <button class="btn btn-glass btn-sm">
+        <button class="btn btn-glass btn-sm" onclick="if(navigator.share){navigator.share({title:document.title,url:location.href})}else{navigator.clipboard.writeText(location.href);this.querySelector('span:last-child').textContent='복사됨!';setTimeout(()=>{this.querySelector('span:last-child').textContent='공유'},1500)}">
           <span class="material-symbols-outlined text-lg">share</span>
-          공유
+          <span>공유</span>
         </button>
       </div>
     </div>

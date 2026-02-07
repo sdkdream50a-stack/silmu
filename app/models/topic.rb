@@ -31,11 +31,11 @@ class Topic < ApplicationRecord
     return none if query.blank?
 
     # 1. 정확한 이름 매칭
-    exact = published.where("name ILIKE ?", "%#{query}%").first
+    exact = published.where("name ILIKE ?", "%#{sanitize_sql_like(query)}%").first
     return exact if exact
 
     # 2. 키워드 매칭
-    keyword_match = published.where("keywords ILIKE ?", "%#{query}%").first
+    keyword_match = published.where("keywords ILIKE ?", "%#{sanitize_sql_like(query)}%").first
     return keyword_match if keyword_match
 
     # 3. 전문 검색

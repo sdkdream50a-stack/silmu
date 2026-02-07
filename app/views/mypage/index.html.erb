@@ -1,154 +1,83 @@
-<%# 마이페이지 - 프리미엄 디자인 시스템 %>
+<%# 마이페이지 %>
 
 <section class="section py-10">
   <div class="container-wide">
-    <div class="lg:flex lg:gap-10">
-      <!-- 사이드바 -->
-      <div class="lg:w-[300px] shrink-0 mb-8 lg:mb-0">
-        <div class="card p-6 sticky top-24">
-          <!-- 프로필 -->
-          <div class="text-center mb-6">
-            <div class="w-20 h-20 gradient-navy rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-              <span class="text-3xl font-bold text-white">김</span>
-            </div>
-            <h2 class="font-bold text-navy-900 text-lg">김철수 주무관</h2>
-            <p class="text-navy-500 text-sm">서울특별시청 행정지원과</p>
-          </div>
-
-          <button class="w-full py-2.5 border-2 border-gray-200 text-navy-600 rounded-xl text-sm font-medium hover:bg-surface-50 hover:border-navy-300 transition-all mb-6" onclick="alert('프로필 수정 기능은 준비 중입니다.')">
-            프로필 수정
-          </button>
-
-          <!-- 메뉴 -->
-          <nav class="space-y-1">
-            <a href="javascript:void(0)" class="flex items-center gap-3 px-4 py-3 bg-point-50 text-point-700 rounded-xl font-semibold">
-              <span class="material-symbols-outlined">dashboard</span>
-              대시보드
-            </a>
-            <a href="javascript:void(0)" onclick="alert('저장한 양식 기능은 준비 중입니다.')" class="flex items-center gap-3 px-4 py-3 text-navy-600 hover:bg-surface-100 rounded-xl transition-colors">
-              <span class="material-symbols-outlined">description</span>
-              저장한 양식
-            </a>
-            <a href="javascript:void(0)" onclick="alert('저장한 가이드 기능은 준비 중입니다.')" class="flex items-center gap-3 px-4 py-3 text-navy-600 hover:bg-surface-100 rounded-xl transition-colors">
-              <span class="material-symbols-outlined">menu_book</span>
-              저장한 가이드
-            </a>
-            <a href="javascript:void(0)" onclick="alert('최근 본 항목 기능은 준비 중입니다.')" class="flex items-center gap-3 px-4 py-3 text-navy-600 hover:bg-surface-100 rounded-xl transition-colors">
-              <span class="material-symbols-outlined">history</span>
-              최근 본 항목
-            </a>
-            <a href="javascript:void(0)" onclick="alert('설정 기능은 준비 중입니다.')" class="flex items-center gap-3 px-4 py-3 text-navy-600 hover:bg-surface-100 rounded-xl transition-colors">
-              <span class="material-symbols-outlined">settings</span>
-              설정
-            </a>
-          </nav>
-        </div>
+    <div class="max-w-2xl mx-auto">
+      <!-- 환영 메시지 -->
+      <div class="gradient-premium rounded-2xl p-8 text-white mb-8 shadow-strong">
+        <h1 class="text-2xl font-bold mb-2">마이페이지</h1>
+        <% if current_user %>
+          <p class="text-navy-200"><%= current_user.email %>으로 로그인 중</p>
+        <% end %>
       </div>
 
-      <!-- 메인 콘텐츠 -->
-      <div class="flex-1 min-w-0">
-        <!-- 환영 메시지 -->
-        <div class="gradient-premium rounded-2xl p-8 text-white mb-8 shadow-strong">
-          <h1 class="text-2xl font-bold mb-2">안녕하세요, 김철수 주무관님!</h1>
-          <p class="text-navy-200">오늘도 힘내세요. 실무가 함께합니다.</p>
-        </div>
+      <!-- 바로가기 -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+        <%= link_to tools_path, class: "card p-5 text-center hover-lift group" do %>
+          <div class="icon-container icon-container-md bg-point-100 group-hover:bg-point-600 mx-auto mb-3 transition-colors">
+            <span class="material-symbols-outlined text-2xl text-point-600 group-hover:text-white transition-colors">build</span>
+          </div>
+          <p class="text-navy-900 text-sm font-semibold">실무 도구</p>
+        <% end %>
+        <%= link_to guides_path, class: "card p-5 text-center hover-lift group" do %>
+          <div class="icon-container icon-container-md bg-forest-100 group-hover:bg-forest-600 mx-auto mb-3 transition-colors">
+            <span class="material-symbols-outlined text-2xl text-forest-600 group-hover:text-white transition-colors">menu_book</span>
+          </div>
+          <p class="text-navy-900 text-sm font-semibold">업무 가이드</p>
+        <% end %>
+        <%= link_to templates_path, class: "card p-5 text-center hover-lift group" do %>
+          <div class="icon-container icon-container-md bg-navy-100 group-hover:bg-navy-600 mx-auto mb-3 transition-colors">
+            <span class="material-symbols-outlined text-2xl text-navy-600 group-hover:text-white transition-colors">description</span>
+          </div>
+          <p class="text-navy-900 text-sm font-semibold">문서 양식</p>
+        <% end %>
+        <%= link_to chatbot_path, class: "card p-5 text-center hover-lift group" do %>
+          <div class="icon-container icon-container-md bg-warm-100 group-hover:bg-warm-600 mx-auto mb-3 transition-colors">
+            <span class="material-symbols-outlined text-2xl text-warm-600 group-hover:text-white transition-colors">smart_toy</span>
+          </div>
+          <p class="text-navy-900 text-sm font-semibold">AI 상담</p>
+        <% end %>
+      </div>
 
-        <!-- 활동 통계 -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-          <div class="card p-5 text-center hover-lift">
-            <div class="icon-container icon-container-md bg-point-100 mx-auto mb-3">
-              <span class="material-symbols-outlined text-2xl text-point-600">download</span>
-            </div>
-            <p class="text-2xl font-bold text-navy-900">12</p>
-            <p class="text-navy-500 text-sm">다운로드</p>
-          </div>
-          <div class="card p-5 text-center hover-lift">
-            <div class="icon-container icon-container-md bg-forest-100 mx-auto mb-3">
-              <span class="material-symbols-outlined text-2xl text-forest-600">bookmark</span>
-            </div>
-            <p class="text-2xl font-bold text-navy-900">5</p>
-            <p class="text-navy-500 text-sm">저장한 가이드</p>
-          </div>
-          <div class="card p-5 text-center hover-lift">
-            <div class="icon-container icon-container-md bg-navy-100 mx-auto mb-3">
-              <span class="material-symbols-outlined text-2xl text-navy-600">description</span>
-            </div>
-            <p class="text-2xl font-bold text-navy-900">8</p>
-            <p class="text-navy-500 text-sm">저장한 양식</p>
-          </div>
-          <div class="card p-5 text-center hover-lift">
-            <div class="icon-container icon-container-md bg-warm-100 mx-auto mb-3">
-              <span class="material-symbols-outlined text-2xl text-warm-600">build</span>
-            </div>
-            <p class="text-2xl font-bold text-navy-900">24</p>
-            <p class="text-navy-500 text-sm">도구 사용</p>
-          </div>
-        </div>
+      <!-- 계정 관리 -->
+      <div class="card p-6">
+        <h2 class="text-xl font-bold text-navy-900 mb-6 flex items-center gap-2">
+          <span class="material-symbols-outlined text-navy-400">manage_accounts</span>
+          계정 관리
+        </h2>
 
-        <!-- 저장한 양식 -->
-        <section class="mb-10">
-          <div class="flex items-center justify-between mb-5">
-            <h2 class="text-xl font-bold text-navy-900 flex items-center gap-2">
-              <span class="material-symbols-outlined text-navy-400">description</span>
-              저장한 양식
-            </h2>
-            <a href="javascript:void(0)" onclick="alert('전체보기 기능은 준비 중입니다.')" class="text-sm text-point-600 hover:text-point-700 font-medium flex items-center gap-1 transition-colors">
-              전체보기
-              <span class="material-symbols-outlined text-sm">arrow_forward</span>
-            </a>
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <% ["물품 구매 기안문", "수의계약 사유서", "검수조서", "견적서"].each do |title| %>
-              <div class="card card-hover p-4 group">
-                <div class="w-full aspect-[4/3] bg-surface-100 rounded-xl flex items-center justify-center mb-3">
-                  <span class="material-symbols-outlined text-4xl text-navy-200 group-hover:text-point-400 transition-colors">description</span>
-                </div>
-                <h3 class="font-semibold text-navy-900 text-sm truncate"><%= title %></h3>
-                <div class="flex items-center justify-between mt-2">
-                  <span class="text-xs text-navy-400">HWP</span>
-                  <button class="text-navy-400 hover:text-rose-500 transition-colors">
-                    <span class="material-symbols-outlined text-lg">delete</span>
-                  </button>
-                </div>
-              </div>
+        <div class="space-y-3">
+          <% if current_user %>
+            <%= link_to edit_user_registration_path, class: "flex items-center gap-3 px-4 py-3 text-navy-600 hover:bg-surface-100 rounded-xl transition-colors" do %>
+              <span class="material-symbols-outlined">lock</span>
+              비밀번호 변경
             <% end %>
-          </div>
-        </section>
+          <% end %>
 
-        <!-- 저장한 가이드 -->
-        <section>
-          <div class="flex items-center justify-between mb-5">
-            <h2 class="text-xl font-bold text-navy-900 flex items-center gap-2">
-              <span class="material-symbols-outlined text-forest-500">menu_book</span>
-              저장한 가이드
-            </h2>
-            <a href="javascript:void(0)" onclick="alert('전체보기 기능은 준비 중입니다.')" class="text-sm text-point-600 hover:text-point-700 font-medium flex items-center gap-1 transition-colors">
-              전체보기
-              <span class="material-symbols-outlined text-sm">arrow_forward</span>
-            </a>
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <% [
-              { title: "물품 구매 및 검수 절차 가이드", category: "계약" },
-              { title: "수의계약 체결 실무 가이드", category: "계약" },
-              { title: "출장 여비 청구 가이드", category: "예산" },
-              { title: "연가 사용 및 관리 가이드", category: "복무" },
-            ].each do |guide| %>
-              <%= link_to guide_path(1), class: "card card-hover p-5 flex gap-4 group" do %>
-                <div class="icon-container icon-container-md bg-forest-100 group-hover:bg-forest-600 transition-colors shrink-0">
-                  <span class="material-symbols-outlined text-xl text-forest-600 group-hover:text-white transition-colors">menu_book</span>
-                </div>
-                <div class="flex-1 min-w-0">
-                  <span class="badge badge-forest text-xs mb-1"><%= guide[:category] %></span>
-                  <h3 class="font-semibold text-navy-900 mt-1 truncate group-hover:text-forest-600 transition-colors"><%= guide[:title] %></h3>
-                </div>
-                <button class="text-navy-400 hover:text-rose-500 shrink-0 transition-colors">
-                  <span class="material-symbols-outlined">bookmark_remove</span>
-                </button>
+          <%= link_to about_path, class: "flex items-center gap-3 px-4 py-3 text-navy-600 hover:bg-surface-100 rounded-xl transition-colors" do %>
+            <span class="material-symbols-outlined">info</span>
+            서비스 소개
+          <% end %>
+
+          <%= link_to terms_path, class: "flex items-center gap-3 px-4 py-3 text-navy-600 hover:bg-surface-100 rounded-xl transition-colors" do %>
+            <span class="material-symbols-outlined">gavel</span>
+            이용약관
+          <% end %>
+
+          <%= link_to privacy_path, class: "flex items-center gap-3 px-4 py-3 text-navy-600 hover:bg-surface-100 rounded-xl transition-colors" do %>
+            <span class="material-symbols-outlined">shield</span>
+            개인정보처리방침
+          <% end %>
+
+          <% if current_user %>
+            <div class="border-t border-gray-200 mt-4 pt-4">
+              <%= link_to destroy_user_session_path, data: { turbo_method: :delete }, class: "flex items-center gap-3 px-4 py-3 text-rose-600 hover:bg-rose-50 rounded-xl transition-colors" do %>
+                <span class="material-symbols-outlined">logout</span>
+                로그아웃
               <% end %>
-            <% end %>
-          </div>
-        </section>
+            </div>
+          <% end %>
+        </div>
       </div>
     </div>
   </div>

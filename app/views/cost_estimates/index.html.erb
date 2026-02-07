@@ -719,6 +719,7 @@ document.addEventListener('turbo:load', function() {
 
     fetch('/document-analysis/analyze', {
       method: 'POST',
+      headers: { 'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content },
       body: formData
     })
     .then(function(r) { return r.json(); })

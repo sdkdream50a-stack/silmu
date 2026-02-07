@@ -491,7 +491,11 @@ document.addEventListener('turbo:load', function() {
     formData.append('file', ccSelectedFile);
     formData.append('document_type', 'cost_calculation');
 
-    fetch('/document-analysis/analyze', { method: 'POST', body: formData })
+    fetch('/document-analysis/analyze', {
+      method: 'POST',
+      headers: { 'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content },
+      body: formData
+    })
       .then(function(r) { return r.json(); })
       .then(function(data) {
         btn.disabled = false;
