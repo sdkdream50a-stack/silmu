@@ -74,6 +74,10 @@ Rails.application.routes.draw do
   get "tools/contract-guarantee", to: "contract_guarantees#index", as: :contract_guarantee
   post "contract-guarantees/calculate", to: "contract_guarantees#calculate"
 
+  # 감사사례
+  get "audit-cases", to: "audit_cases#index", as: :audit_cases
+  get "audit-cases/:slug", to: "audit_cases#show", as: :audit_case
+
   # FAQ
   get "faq", to: "faq#index", as: :faq
 
@@ -88,4 +92,7 @@ Rails.application.routes.draw do
 
   # 서비스 소개
   get "about", to: "home#about", as: :about
+
+  # 사이트맵
+  get "sitemap.xml", to: "sitemap#index", as: :sitemap, defaults: { format: :xml }
 end

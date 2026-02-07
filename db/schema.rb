@@ -10,10 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_03_013943) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_07_154821) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
+
+  create_table "audit_cases", force: :cascade do |t|
+    t.text "action_taken"
+    t.string "category"
+    t.datetime "created_at", null: false
+    t.text "detail"
+    t.text "issue"
+    t.string "legal_basis"
+    t.text "lesson"
+    t.boolean "published", default: true
+    t.string "severity"
+    t.string "slug"
+    t.string "title"
+    t.string "topic_slug"
+    t.datetime "updated_at", null: false
+    t.integer "view_count", default: 0
+    t.index ["slug"], name: "index_audit_cases_on_slug", unique: true
+  end
 
   create_table "cafe_articles", force: :cascade do |t|
     t.integer "article_id"

@@ -4,6 +4,12 @@ class DesignChangesController < ApplicationController
   # GET /tools/design-change
   def index
     @change_reasons = DesignChangeReviewService.get_change_reasons
+    set_meta_tags(
+      title: "설계변경 검토서 도우미",
+      description: "설계변경 사유별 검토서를 자동으로 작성합니다. 설계변경 요건과 절차를 안내합니다.",
+      keywords: "설계변경, 설계변경 검토서, 설계변경 사유, 공사 설계변경",
+      og: { title: "설계변경 검토서 도우미 — 실무", url: request.original_url }
+    )
   end
 
   # GET /design-changes/detail/:reason

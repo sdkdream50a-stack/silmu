@@ -1,5 +1,17 @@
 <%# 자주 묻는 질문(FAQ) %>
 
+<% content_for :head do %>
+  <%= json_ld({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": @categories.flat_map { |cat|
+      cat[:faqs].map { |faq|
+        { "@type": "Question", "name": faq[:q], "acceptedAnswer": { "@type": "Answer", "text": faq[:a] } }
+      }
+    }
+  }) %>
+<% end %>
+
 <style>
 .faq-category { margin-bottom:32px; }
 .faq-category-header { display:flex; align-items:center; gap:12px; margin-bottom:16px; padding-bottom:12px; border-bottom:2px solid #e2e8f0; }

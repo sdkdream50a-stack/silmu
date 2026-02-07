@@ -34,6 +34,12 @@ class TemplatesController < ApplicationController
 
   def index
     @templates = TEMPLATES
+    set_meta_tags(
+      title: "문서 양식",
+      description: "계약서, 검수조서, 기안문, 사유서 등 공무원 업무에 필요한 23종 문서 양식을 무료로 다운로드하세요.",
+      keywords: "문서 양식, 계약서, 검수조서, 기안문, 수의계약 사유서, 견적서, 예정가격조서",
+      og: { title: "문서 양식 — 실무", url: request.original_url }
+    )
   end
 
   def show
@@ -43,6 +49,13 @@ class TemplatesController < ApplicationController
       redirect_to templates_path, alert: "양식을 찾을 수 없습니다."
       return
     end
+
+    set_meta_tags(
+      title: @template[:title],
+      description: "#{@template[:desc]} — #{@template[:formats].join(', ')} 형식 무료 다운로드",
+      keywords: "#{@template[:title]}, #{@template[:category]}, 양식 다운로드",
+      og: { title: "#{@template[:title]} — 실무", description: @template[:desc], url: request.original_url }
+    )
 
     # 관련 양식 (같은 카테고리에서 현재 양식 제외하고 4개)
     @related_templates = TEMPLATES

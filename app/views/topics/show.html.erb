@@ -1,5 +1,29 @@
 <%# 주제 상세 페이지 - 프리미엄 디자인 시스템 %>
 
+<%# JSON-LD 구조화 데이터 %>
+<% content_for :head do %>
+  <%= json_ld({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "#{@topic.name} — 법령·절차·실무 가이드",
+    "description": @topic.summary,
+    "author": { "@type": "Organization", "name": "실무" },
+    "publisher": { "@type": "Organization", "name": "실무", "logo": { "@type": "ImageObject", "url": "https://silmu.kr/icon.png" } },
+    "url": request.original_url,
+    "inLanguage": "ko",
+    "mainEntityOfPage": request.original_url
+  }) %>
+  <% if @topic.faq_list.present? %>
+    <%= json_ld({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": @topic.faq_list.map { |faq|
+        { "@type": "Question", "name": faq["question"], "acceptedAnswer": { "@type": "Answer", "text": faq["answer"] } }
+      }
+    }) %>
+  <% end %>
+<% end %>
+
 <!-- 페이지 헤더 -->
 <section class="gradient-premium text-white py-12 lg:py-16">
   <div class="container-wide">

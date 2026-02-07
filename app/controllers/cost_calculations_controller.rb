@@ -4,6 +4,12 @@ class CostCalculationsController < ApplicationController
   # GET /tools/cost-calculation
   def index
     @service_types = CostCalculationReviewService.get_service_types
+    set_meta_tags(
+      title: "원가계산서 검토 가이드",
+      description: "용역·공사 원가계산서의 적정성을 검토합니다. 인건비, 경비, 일반관리비, 이윤 항목별 검토.",
+      keywords: "원가계산서, 원가계산 검토, 인건비, 경비, 일반관리비, 이윤",
+      og: { title: "원가계산서 검토 가이드 — 실무", url: request.original_url }
+    )
   end
 
   # POST /cost-calculations/review

@@ -5,6 +5,12 @@ class ContractMethodsController < ApplicationController
   def index
     @contract_types = ContractMethodService.contract_types
     @special_enterprises = ContractMethodService.special_enterprises
+    set_meta_tags(
+      title: "계약방식 결정 도우미",
+      description: "금액·유형별 계약방식을 자동으로 판단합니다. 수의계약, 소액수의, 경쟁입찰 여부를 한 번에 확인하세요.",
+      keywords: "계약방식, 수의계약 기준, 소액수의, 경쟁입찰, 계약방식 결정",
+      og: { title: "계약방식 결정 도우미 — 실무", url: request.original_url }
+    )
   end
 
   # POST /contract-methods/determine
