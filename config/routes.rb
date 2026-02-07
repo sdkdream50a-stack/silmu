@@ -93,6 +93,10 @@ Rails.application.routes.draw do
   # 서비스 소개
   get "about", to: "home#about", as: :about
 
+  # 법적 페이지
+  get "privacy", to: "home#privacy", as: :privacy
+  get "terms", to: "home#terms", as: :terms
+
   # 사이트맵
   get "sitemap.xml", to: "sitemap#index", as: :sitemap, defaults: { format: :xml }
 end

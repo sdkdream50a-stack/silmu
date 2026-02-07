@@ -1,7 +1,9 @@
-<p>Hello <%= @resource.email %>!</p>
+<p><%= @resource.email %>님, 안녕하세요!</p>
 
-<p>Your account has been locked due to an excessive number of unsuccessful sign in attempts.</p>
+<p>로그인 시도가 여러 번 실패하여 계정이 잠겼습니다.</p>
 
-<p>Click the link below to unlock your account:</p>
+<p>아래 링크를 클릭하시면 계정 잠금이 해제됩니다.</p>
 
-<p><%= link_to 'Unlock my account', unlock_url(@resource, unlock_token: @token) %></p>
+<p><%= link_to '계정 잠금 해제하기', unlock_url(@resource, unlock_token: @token) %></p>
+
+<p>— 실무 (silmu.kr)</p>

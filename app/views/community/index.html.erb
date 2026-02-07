@@ -1,9 +1,9 @@
-<%# 커뮤니티 페이지 - 프리미엄 디자인 시스템 %>
+<%# 커뮤니티 페이지 - 오픈 예정 %>
 
 <!-- 페이지 헤더 -->
 <section class="gradient-premium text-white py-12 lg:py-16">
   <div class="container-wide">
-    <div class="flex items-start gap-5 mb-6">
+    <div class="flex items-start gap-5">
       <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 shadow-lg">
         <span class="material-symbols-outlined text-4xl text-white">forum</span>
       </div>
@@ -12,382 +12,53 @@
         <p class="text-navy-200 mt-2 text-lg">공무원들의 실무 경험과 노하우를 나누는 공간</p>
       </div>
     </div>
-
-    <!-- 통계 -->
-    <div class="flex flex-wrap gap-6 mt-8">
-      <div class="flex items-center gap-2">
-        <span class="material-symbols-outlined text-point-300">groups</span>
-        <span class="text-white font-semibold">회원 <span class="text-point-300">28</span>명</span>
-      </div>
-      <div class="flex items-center gap-2">
-        <span class="material-symbols-outlined text-forest-300">article</span>
-        <span class="text-white font-semibold">게시글 <span class="text-forest-300">9</span>개</span>
-      </div>
-      <div class="flex items-center gap-2">
-        <span class="material-symbols-outlined text-warm-300">chat</span>
-        <span class="text-white font-semibold">댓글 <span class="text-warm-300">23</span>개</span>
-      </div>
-    </div>
   </div>
 </section>
 
-<!-- 메인 콘텐츠 -->
-<section class="section py-10">
+<!-- 오픈 예정 안내 -->
+<section class="section py-16">
   <div class="container-wide">
-    <div class="lg:flex lg:gap-10">
-      <!-- 메인 영역 -->
-      <div class="flex-1 min-w-0">
-        <!-- 카테고리 탭 -->
-        <div class="flex gap-2 overflow-x-auto pb-4 mb-6 scrollbar-hide" id="category-tabs">
-          <button data-category="전체" class="tab-btn active px-5 py-2.5 bg-navy-800 text-white rounded-xl text-sm font-semibold whitespace-nowrap flex items-center gap-2 shadow-md transition-all">
-            <span class="material-symbols-outlined text-lg">dashboard</span>
-            전체
-          </button>
-          <button data-category="질문" class="tab-btn px-5 py-2.5 bg-surface-100 text-navy-600 hover:bg-surface-200 rounded-xl text-sm font-medium whitespace-nowrap flex items-center gap-2 transition-all">
-            <span class="material-symbols-outlined text-lg">help</span>
-            질문/답변
-          </button>
-          <button data-category="팁" class="tab-btn px-5 py-2.5 bg-surface-100 text-navy-600 hover:bg-surface-200 rounded-xl text-sm font-medium whitespace-nowrap flex items-center gap-2 transition-all">
-            <span class="material-symbols-outlined text-lg">lightbulb</span>
-            실무 팁
-          </button>
-          <button data-category="서식" class="tab-btn px-5 py-2.5 bg-surface-100 text-navy-600 hover:bg-surface-200 rounded-xl text-sm font-medium whitespace-nowrap flex items-center gap-2 transition-all">
-            <span class="material-symbols-outlined text-lg">description</span>
-            서식 공유
-          </button>
-          <button data-category="자유" class="tab-btn px-5 py-2.5 bg-surface-100 text-navy-600 hover:bg-surface-200 rounded-xl text-sm font-medium whitespace-nowrap flex items-center gap-2 transition-all">
-            <span class="material-symbols-outlined text-lg">chat_bubble</span>
-            자유게시판
-          </button>
+    <div class="max-w-2xl mx-auto text-center">
+      <div class="card p-10 shadow-strong">
+        <div class="w-20 h-20 bg-point-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+          <span class="material-symbols-outlined text-5xl text-point-600">construction</span>
         </div>
+        <h2 class="text-2xl font-bold text-navy-900 mb-4">커뮤니티 준비 중입니다</h2>
+        <p class="text-navy-600 leading-relaxed mb-8">
+          계약·예산 실무 담당자들이 경험과 노하우를 나눌 수 있는 커뮤니티를 준비하고 있습니다.<br>
+          오픈 시 안내드리겠습니다.
+        </p>
 
-        <!-- 글쓰기 버튼 (모바일) -->
-        <div class="lg:hidden mb-6">
-          <button class="w-full btn btn-point btn-lg" onclick="alert('글쓰기 기능은 준비 중입니다.')">
-            <span class="material-symbols-outlined">edit</span>
-            새 글 작성하기
-          </button>
-        </div>
-
-        <!-- 게시글 목록 -->
-        <div class="space-y-3" id="posts-list">
-          <!-- 공지사항 -->
-          <div class="card p-4 border-l-4 border-point-500 bg-point-50/50 item-card cursor-pointer" data-category="공지" onclick="alert('게시글 상세보기는 준비 중입니다.')">
-            <div class="flex items-start gap-3">
-              <div class="w-9 h-9 bg-point-100 rounded-lg flex items-center justify-center shrink-0">
-                <span class="material-symbols-outlined text-point-600 text-xl">campaign</span>
-              </div>
-              <div class="flex-1 min-w-0">
-                <div class="flex items-center gap-2 mb-1">
-                  <span class="badge badge-point text-xs">공지</span>
-                  <span class="badge bg-rose-100 text-rose-700 text-xs">필독</span>
-                </div>
-                <h3 class="font-semibold text-sm text-navy-900 hover:text-point-600 transition-colors">
-                  커뮤니티 이용 가이드 및 주의사항 안내
-                </h3>
-                <div class="flex items-center gap-3 mt-1.5 text-xs text-navy-500">
-                  <span>운영자</span>
-                  <span>2026.01.20</span>
-                  <span class="flex items-center gap-1">
-                    <span class="material-symbols-outlined text-xs">visibility</span>
-                    24
-                  </span>
-                </div>
-              </div>
-            </div>
+        <div class="grid sm:grid-cols-3 gap-4 mb-8">
+          <div class="bg-surface-50 rounded-xl p-4">
+            <span class="material-symbols-outlined text-2xl text-forest-600 mb-2">help</span>
+            <h4 class="font-semibold text-navy-900 text-sm">질문/답변</h4>
+            <p class="text-xs text-navy-500 mt-1">실무 궁금증 해결</p>
           </div>
+          <div class="bg-surface-50 rounded-xl p-4">
+            <span class="material-symbols-outlined text-2xl text-warm-600 mb-2">lightbulb</span>
+            <h4 class="font-semibold text-navy-900 text-sm">실무 팁</h4>
+            <p class="text-xs text-navy-500 mt-1">경험에서 나온 노하우</p>
+          </div>
+          <div class="bg-surface-50 rounded-xl p-4">
+            <span class="material-symbols-outlined text-2xl text-point-600 mb-2">description</span>
+            <h4 class="font-semibold text-navy-900 text-sm">서식 공유</h4>
+            <p class="text-xs text-navy-500 mt-1">실무 양식 공유</p>
+          </div>
+        </div>
 
-          <!-- 일반 게시글 -->
-          <% [
-            { category: "질문", category_color: "forest", title: "수의계약 2천만원 이하 1인 견적 시 주의사항이 뭔가요?", author: "계약초보", date: "10분 전", views: 5, comments: 2, solved: true },
-            { category: "팁", category_color: "warm", title: "예정가격 작성 시 실수하기 쉬운 5가지 포인트", author: "베테랑공무원", date: "1시간 전", views: 12, comments: 3, hot: false },
-            { category: "서식", category_color: "point", title: "수의계약 사유서 양식 공유합니다 (2026년 최신)", author: "서식마스터", date: "2시간 전", views: 8, comments: 1, hot: false },
-            { category: "질문", category_color: "forest", title: "긴급수의계약 시 견적서 사후 징구가 가능한가요?", author: "신규발령", date: "3시간 전", views: 6, comments: 2, solved: false },
-            { category: "자유", category_color: "navy", title: "계약 담당자로서 가장 힘들었던 순간", author: "10년차공무원", date: "5시간 전", views: 15, comments: 4, hot: false },
-            { category: "팁", category_color: "warm", title: "감사 지적 피하는 서류 정리 노하우", author: "감사경험자", date: "어제", views: 9, comments: 2, hot: false },
-            { category: "질문", category_color: "forest", title: "물품 검수 시 하자 발견하면 어떻게 처리하나요?", author: "물품담당", date: "어제", views: 7, comments: 3, solved: true },
-            { category: "서식", category_color: "point", title: "검수조서 작성 예시 및 체크리스트", author: "실무달인", date: "2일 전", views: 11, comments: 2, hot: false }
-          ].each do |post| %>
-            <div class="card card-hover p-4 cursor-pointer item-card" data-category="<%= post[:category] %>" onclick="alert('게시글 상세보기는 준비 중입니다.')">
-              <div class="flex items-start gap-3">
-                <div class="hidden sm:block">
-                  <div class="w-9 h-9 bg-<%= post[:category_color] %>-100 rounded-lg flex items-center justify-center">
-                    <span class="text-<%= post[:category_color] %>-600 font-bold text-xs"><%= post[:category] %></span>
-                  </div>
-                </div>
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-center gap-2 mb-1 flex-wrap">
-                    <span class="sm:hidden badge badge-<%= post[:category_color] %> text-xs"><%= post[:category] %></span>
-                    <% if post[:solved] %>
-                      <span class="badge bg-forest-100 text-forest-700 text-xs">
-                        <span class="material-symbols-outlined text-xs mr-0.5">check_circle</span>
-                        해결됨
-                      </span>
-                    <% end %>
-                    <% if post[:hot] %>
-                      <span class="badge bg-rose-100 text-rose-700 text-xs">
-                        <span class="material-symbols-outlined text-xs mr-0.5">local_fire_department</span>
-                        인기
-                      </span>
-                    <% end %>
-                  </div>
-                  <h3 class="font-semibold text-sm text-navy-900 hover:text-point-600 transition-colors line-clamp-1">
-                    <%= post[:title] %>
-                  </h3>
-                  <div class="flex items-center gap-3 mt-1.5 text-xs text-navy-500">
-                    <span class="font-medium"><%= post[:author] %></span>
-                    <span><%= post[:date] %></span>
-                    <span class="flex items-center gap-1">
-                      <span class="material-symbols-outlined text-xs">visibility</span>
-                      <%= post[:views] %>
-                    </span>
-                    <span class="flex items-center gap-1 text-point-600">
-                      <span class="material-symbols-outlined text-xs">chat</span>
-                      <%= post[:comments] %>
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
+        <p class="text-navy-500 text-sm mb-4">지금 바로 활용할 수 있는 기능을 이용해보세요.</p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <%= link_to chatbot_path, class: "btn btn-primary" do %>
+            <span class="material-symbols-outlined">smart_toy</span>
+            AI 상담
+          <% end %>
+          <%= link_to faq_path, class: "btn btn-glass" do %>
+            <span class="material-symbols-outlined">quiz</span>
+            자주 묻는 질문
           <% end %>
         </div>
-
-        <!-- 페이지네이션 -->
-        <div class="flex items-center justify-center gap-2 mt-10" id="pagination-container">
-          <nav class="flex items-center gap-2" id="pagination-nav">
-            <!-- JavaScript로 동적 생성 -->
-          </nav>
-        </div>
-      </div>
-
-      <!-- 사이드바 -->
-      <div class="lg:w-[340px] shrink-0 mt-10 lg:mt-0">
-        <div class="sticky top-24 space-y-6">
-          <!-- 글쓰기 버튼 (데스크톱) -->
-          <div class="hidden lg:block">
-            <button class="w-full btn btn-point btn-lg" onclick="alert('글쓰기 기능은 준비 중입니다.')">
-              <span class="material-symbols-outlined">edit</span>
-              새 글 작성하기
-            </button>
-          </div>
-
-          <!-- 검색 -->
-          <div class="card p-5">
-            <h3 class="font-bold text-navy-900 mb-4 flex items-center gap-2">
-              <span class="material-symbols-outlined text-navy-400">search</span>
-              검색
-            </h3>
-            <div class="relative">
-              <input type="text" id="search-input" placeholder="검색어를 입력하세요" class="input pr-12">
-              <button class="absolute right-3 top-1/2 -translate-y-1/2 text-navy-400 hover:text-point-600 transition-colors">
-                <span class="material-symbols-outlined">search</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- 인기 게시글 -->
-          <div class="card p-5">
-            <h3 class="font-bold text-navy-900 mb-4 flex items-center gap-2">
-              <span class="material-symbols-outlined text-warm-500">local_fire_department</span>
-              인기 게시글
-            </h3>
-            <div class="space-y-3">
-              <% [
-                { rank: 1, title: "계약 담당자로서 가장 힘들었던 순간", comments: 4 },
-                { rank: 2, title: "예정가격 작성 시 실수하기 쉬운 5가지", comments: 3 },
-                { rank: 3, title: "물품 검수 시 하자 발견하면 어떻게 처리?", comments: 3 },
-                { rank: 4, title: "수의계약 2천만원 이하 1인 견적 주의사항", comments: 2 },
-                { rank: 5, title: "감사 지적 피하는 서류 정리 노하우", comments: 2 }
-              ].each do |post| %>
-                <a href="javascript:void(0)" onclick="alert('게시글 상세보기는 준비 중입니다.')" class="flex items-center gap-3 group cursor-pointer">
-                  <span class="w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold
-                    <%= post[:rank] <= 3 ? 'bg-warm-500 text-white' : 'bg-surface-100 text-navy-500' %>">
-                    <%= post[:rank] %>
-                  </span>
-                  <span class="flex-1 text-sm text-navy-700 group-hover:text-point-600 transition-colors line-clamp-1">
-                    <%= post[:title] %>
-                  </span>
-                  <span class="text-xs text-navy-400">
-                    <span class="material-symbols-outlined text-xs">chat</span>
-                    <%= post[:comments] %>
-                  </span>
-                </a>
-              <% end %>
-            </div>
-          </div>
-
-          <!-- 활발한 회원 -->
-          <div class="card p-5">
-            <h3 class="font-bold text-navy-900 mb-4 flex items-center gap-2">
-              <span class="material-symbols-outlined text-forest-500">emoji_events</span>
-              활발한 회원
-            </h3>
-            <div class="space-y-3">
-              <% [
-                { name: "베테랑공무원", posts: 3, badge: "gold" },
-                { name: "서식마스터", posts: 2, badge: "silver" },
-                { name: "실무달인", posts: 2, badge: "bronze" }
-              ].each_with_index do |user, index| %>
-                <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-white
-                    <%= case user[:badge]
-                        when 'gold' then 'bg-gradient-to-br from-amber-400 to-amber-600'
-                        when 'silver' then 'bg-gradient-to-br from-gray-300 to-gray-500'
-                        else 'bg-gradient-to-br from-orange-400 to-orange-600'
-                        end %>">
-                    <%= index + 1 %>
-                  </div>
-                  <div class="flex-1">
-                    <p class="font-medium text-navy-900 text-sm"><%= user[:name] %></p>
-                    <p class="text-xs text-navy-500">게시글 <%= user[:posts] %>개</p>
-                  </div>
-                </div>
-              <% end %>
-            </div>
-          </div>
-
-          <!-- AI 상담 연결 -->
-          <div class="gradient-navy rounded-2xl p-6 text-white shadow-strong">
-            <div class="flex items-center gap-4 mb-4">
-              <div class="w-12 h-12 bg-white/10 backdrop-blur rounded-xl flex items-center justify-center">
-                <span class="material-symbols-outlined text-2xl">smart_toy</span>
-              </div>
-              <div>
-                <h3 class="font-bold text-lg">빠른 답변이 필요하세요?</h3>
-                <p class="text-navy-200 text-sm">AI에게 바로 물어보세요</p>
-              </div>
-            </div>
-            <%= link_to chatbot_path,
-                class: "block w-full py-3 bg-white text-navy-800 rounded-xl font-semibold text-center hover:bg-navy-50 transition-colors shadow-soft" do %>
-              AI 상담 시작하기
-            <% end %>
-          </div>
-        </div>
       </div>
     </div>
   </div>
 </section>
-
-<script>
-document.addEventListener('turbo:load', function() {
-  const postsList = document.getElementById('posts-list');
-  if (!postsList) return;
-  const tabs = document.querySelectorAll('#category-tabs .tab-btn');
-  const searchInput = document.getElementById('search-input');
-  const paginationNav = document.getElementById('pagination-nav');
-
-  // 페이지네이션 설정
-  const ITEMS_PER_PAGE = 5;
-  let currentPage = 1;
-  let filteredItems = [];
-
-  function getFilteredItems() {
-    const activeTab = document.querySelector('#category-tabs .tab-btn.active');
-    const category = activeTab ? activeTab.dataset.category : '전체';
-    const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
-    const items = postsList.querySelectorAll('.item-card');
-
-    return Array.from(items).filter(item => {
-      const itemCategory = item.dataset.category;
-      const itemText = item.textContent.toLowerCase();
-      const matchesCategory = category === '전체' || itemCategory === category || itemCategory === '공지';
-      const matchesSearch = !searchTerm || itemText.includes(searchTerm);
-      return matchesCategory && matchesSearch;
-    });
-  }
-
-  function displayPage(page) {
-    currentPage = page;
-    const items = postsList.querySelectorAll('.item-card');
-    const startIndex = (page - 1) * ITEMS_PER_PAGE;
-    const endIndex = startIndex + ITEMS_PER_PAGE;
-
-    // 모든 아이템 숨기기
-    items.forEach(item => item.style.display = 'none');
-
-    // 현재 페이지 아이템만 표시
-    filteredItems.slice(startIndex, endIndex).forEach(item => {
-      item.style.display = '';
-    });
-
-    renderPagination();
-  }
-
-  function renderPagination() {
-    const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE);
-
-    if (totalPages <= 1) {
-      paginationNav.innerHTML = '';
-      return;
-    }
-
-    let html = '';
-
-    // 이전 버튼
-    html += `
-      <button onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}
-        class="w-10 h-10 flex items-center justify-center rounded-xl ${currentPage === 1 ? 'text-navy-300 cursor-not-allowed' : 'text-navy-500 hover:bg-surface-100'} transition-colors">
-        <span class="material-symbols-outlined">chevron_left</span>
-      </button>
-    `;
-
-    // 페이지 번호들
-    for (let i = 1; i <= totalPages; i++) {
-      if (i === currentPage) {
-        html += `<button class="w-10 h-10 flex items-center justify-center rounded-xl bg-navy-800 text-white font-semibold shadow-md cursor-default">${i}</button>`;
-      } else {
-        html += `<button onclick="goToPage(${i})" class="w-10 h-10 flex items-center justify-center rounded-xl text-navy-600 hover:bg-surface-100 font-medium transition-colors">${i}</button>`;
-      }
-    }
-
-    // 다음 버튼
-    html += `
-      <button onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}
-        class="w-10 h-10 flex items-center justify-center rounded-xl ${currentPage === totalPages ? 'text-navy-300 cursor-not-allowed' : 'text-navy-500 hover:bg-surface-100'} transition-colors">
-        <span class="material-symbols-outlined">chevron_right</span>
-      </button>
-    `;
-
-    paginationNav.innerHTML = html;
-  }
-
-  // 전역 함수로 노출
-  window.goToPage = function(page) {
-    const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE);
-    if (page < 1 || page > totalPages) return;
-    displayPage(page);
-    document.getElementById('posts-list').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
-
-  function filterAndPaginate() {
-    filteredItems = getFilteredItems();
-    currentPage = 1;
-    displayPage(1);
-  }
-
-  tabs.forEach(tab => {
-    tab.addEventListener('click', function(e) {
-      e.preventDefault();
-
-      // 모든 탭 비활성화
-      tabs.forEach(t => {
-        t.classList.remove('active', 'bg-navy-800', 'text-white', 'shadow-md', 'font-semibold');
-        t.classList.add('bg-surface-100', 'text-navy-600', 'font-medium');
-      });
-
-      // 클릭된 탭 활성화
-      this.classList.remove('bg-surface-100', 'text-navy-600', 'font-medium');
-      this.classList.add('active', 'bg-navy-800', 'text-white', 'shadow-md', 'font-semibold');
-
-      filterAndPaginate();
-    });
-  });
-
-  if (searchInput) {
-    searchInput.addEventListener('input', filterAndPaginate);
-  }
-
-  // 초기 필터링 및 페이지네이션 실행
-  filterAndPaginate();
-});
-</script>

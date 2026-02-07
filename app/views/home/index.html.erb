@@ -351,12 +351,12 @@
         { icon: "checklist", title: "착수신고서", color: "navy" },
         { icon: "shield", title: "청렴서약서", color: "forest" }
       ].each do |tmpl| %>
-        <div class="group card card-interactive p-5 text-center cursor-pointer" onclick="alert('양식 다운로드는 양식 페이지에서 이용하실 수 있습니다.')">
+        <%= link_to templates_path, class: "group card card-interactive p-5 text-center" do %>
           <div class="icon-container bg-<%= tmpl[:color] %>-100 group-hover:bg-<%= tmpl[:color] %>-600 mx-auto mb-3 transition-colors">
             <span class="material-symbols-outlined text-xl text-<%= tmpl[:color] %>-600 group-hover:text-white transition-colors"><%= tmpl[:icon] %></span>
           </div>
           <h4 class="font-semibold text-navy-900 text-sm"><%= tmpl[:title] %></h4>
-        </div>
+        <% end %>
       <% end %>
     </div>
 
@@ -418,8 +418,8 @@
 
       <div id="quiz-footer" class="flex flex-col sm:flex-row justify-between items-center gap-4">
         <span class="text-navy-300 text-sm flex items-center gap-2">
-          <span class="material-symbols-outlined text-warm-400">local_fire_department</span>
-          오늘 28명이 도전했어요
+          <span class="material-symbols-outlined text-warm-400">quiz</span>
+          매일 새로운 5문제 출제
         </span>
         <button id="quiz-submit" class="btn btn-lg btn-accent" disabled>
           정답 확인
@@ -442,7 +442,7 @@
           { category: "계약", question: "복수예비가격 작성 개수는?", options: ["10개", "15개", "20개", "25개"], answer: 1, explanation: "복수예비가격은 15개를 작성합니다." },
           { category: "복무", question: "공무원의 병가 일수는 연간 최대 며칠인가?", options: ["30일", "60일", "90일", "120일"], answer: 1, explanation: "공무원의 병가는 연 60일 이내입니다." },
           { category: "복무", question: "재직기간 1년 미만 공무원의 연가 일수는?", options: ["8일", "11일", "14일", "15일"], answer: 1, explanation: "재직기간 1년 미만 공무원의 연가 일수는 11일입니다." },
-          { category: "복무", question: "배우자 출산휴가 일수는?", options: ["5일", "10일", "15일", "20일"], answer: 1, explanation: "배우자 출산휴가는 10일입니다." },
+          { category: "복무", question: "배우자 출산휴가 일수는?", options: ["5일", "10일", "15일", "20일"], answer: 3, explanation: "배우자 출산휴가는 20일입니다. (2025년 공무원복무규정 개정)" },
           { category: "문서", question: "공문서의 보존기간 중 '영구'에 해당하는 것은?", options: ["일반 통계자료", "조례·규칙", "단순 민원서류", "일일업무보고"], answer: 1, explanation: "조례, 규칙 등 법규문서는 영구 보존 대상입니다." },
           { category: "민원", question: "정보공개 청구에 대한 결정 기한은?", options: ["5일 이내", "7일 이내", "10일 이내", "14일 이내"], answer: 2, explanation: "정보공개 청구를 받은 날부터 10일 이내에 공개 여부를 결정해야 합니다." },
           { category: "감사", question: "일상감사 대상이 아닌 것은?", options: ["계약", "예산 전용", "국고보조금 교부", "일반 민원처리"], answer: 3, explanation: "일반 민원처리는 일상감사 대상이 아닙니다." },
@@ -703,12 +703,10 @@
         <span class="material-symbols-outlined">person_add</span>
         바로 시작하기
       <% end %>
-      <a href="javascript:void(0)" onclick="alert('카카오 로그인은 준비 중입니다.')" class="btn btn-lg bg-[#FEE500] hover:bg-[#FAE100] text-[#3C1E1E] shadow-md hover:shadow-lg transition-all">
-        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 3C6.48 3 2 6.48 2 10.8c0 2.76 1.84 5.16 4.6 6.52-.2.72-.76 2.6-.88 3-.14.48.18.48.38.36.16-.08 2.52-1.72 3.56-2.4.76.12 1.56.12 2.34.12 5.52 0 10-3.48 10-7.6S17.52 3 12 3z"/>
-        </svg>
-        카카오로 시작하기
-      </a>
+      <%= link_to tools_path, class: "btn btn-lg btn-glass shadow-md hover:shadow-lg transition-all" do %>
+        <span class="material-symbols-outlined">build</span>
+        실무 도구 둘러보기
+      <% end %>
     </div>
   </div>
 </section>

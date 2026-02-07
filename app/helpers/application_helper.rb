@@ -4,7 +4,7 @@ module ApplicationHelper
   def render_legal_content(content)
     return '' if content.blank?
 
-    html = content.dup
+    html = sanitize(content, tags: [], attributes: []).dup
 
     # 1. Markdown 테이블을 HTML 테이블로 변환
     html = convert_markdown_tables(html)
@@ -122,7 +122,7 @@ module ApplicationHelper
   def simple_markdown(content)
     return '' if content.blank?
 
-    html = content.dup
+    html = sanitize(content, tags: [], attributes: []).dup
 
     # 제목
     html = html.gsub(/^### (.+)$/, '<h4>\1</h4>')
