@@ -96,6 +96,48 @@
     border-color: var(--forest-300);
     box-shadow: 0 8px 24px rgba(0,0,0,0.08);
   }
+
+  /* 카드 콘텐츠 본문 스타일 */
+  .resource-content-body {
+    font-size: 14px;
+    color: #334155;
+    line-height: 1.8;
+    white-space: pre-line;
+  }
+  .resource-content-body strong {
+    display: inline-block;
+    color: #1e3a5f;
+    font-weight: 700;
+    font-size: 15px;
+    margin-top: 8px;
+    margin-bottom: 2px;
+  }
+  .resource-content-body strong:first-child {
+    font-size: 16px;
+    margin-top: 0;
+    margin-bottom: 6px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #e2e8f0;
+    width: 100%;
+  }
+  .rc-list-item {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    padding: 3px 0 3px 8px;
+    white-space: normal;
+  }
+  .rc-num {
+    color: #2d5a87;
+    font-weight: 600;
+    min-width: 20px;
+  }
+  .rc-bullet::before {
+    content: "•";
+    color: #2d5a87;
+    font-weight: 700;
+  }
+
   .resource-header {
     display: flex;
     align-items: flex-start;
@@ -343,15 +385,36 @@
 </style>
 
 <!-- 페이지 헤더 -->
-<section class="gradient-forest text-white py-12 lg:py-16">
-  <div class="container-wide">
-    <div class="flex items-start gap-5">
-      <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 shadow-lg">
-        <span class="material-symbols-outlined text-4xl text-white">library_books</span>
+<section class="gradient-forest text-white py-12 lg:py-16 relative overflow-hidden">
+  <!-- 장식 요소 -->
+  <div class="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/3"></div>
+  <div class="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/4"></div>
+  <div class="container-wide relative z-10">
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+      <!-- 좌측: 제목 영역 -->
+      <div class="flex items-start gap-5">
+        <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 shadow-lg">
+          <span class="material-symbols-outlined text-4xl text-white">library_books</span>
+        </div>
+        <div>
+          <h1 class="text-3xl lg:text-4xl font-bold tracking-tight mb-2">자료실</h1>
+          <p class="text-forest-100 text-lg">업무별 편람, FAQ, 판례해설 등 실무 자료를 한 곳에서</p>
+        </div>
       </div>
-      <div>
-        <h1 class="text-3xl lg:text-4xl font-bold tracking-tight mb-2">자료실</h1>
-        <p class="text-forest-100 text-lg">업무별 편람, FAQ, 판례해설 등 실무 자료</p>
+      <!-- 우측: 자료 통계 -->
+      <div class="flex gap-4 lg:gap-6">
+        <div class="text-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/15">
+          <div class="text-2xl font-bold">41</div>
+          <div class="text-xs text-forest-100 mt-0.5">전체 자료</div>
+        </div>
+        <div class="text-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/15">
+          <div class="text-2xl font-bold">14</div>
+          <div class="text-xs text-forest-100 mt-0.5">편람·가이드</div>
+        </div>
+        <div class="text-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/15">
+          <div class="text-2xl font-bold">11</div>
+          <div class="text-xs text-forest-100 mt-0.5">FAQ</div>
+        </div>
       </div>
     </div>
   </div>
@@ -464,7 +527,7 @@
               <h3 class="resource-title"><%= resource[:title] %></h3>
               <p class="resource-summary" style="font-size: 14px; color: #64748b; margin-bottom: 12px; line-height: 1.6;"><%= resource[:summary] %></p>
               <div class="resource-content" style="display: none; padding-top: 16px; border-top: 1px solid #e2e8f0; margin-top: 12px;">
-                <div style="font-size: 14px; color: #334155; line-height: 1.8; white-space: pre-line;"><%= resource[:content] %></div>
+                <div class="resource-content-body"><%= resource[:content].gsub(/\*\*(.+?)\*\*/, '<strong>\1</strong>').gsub(/^(\d+)\. (.+)$/, '<div class="rc-list-item"><span class="rc-num">\1.</span> \2</div>').gsub(/^- (.+)$/, '<div class="rc-list-item"><span class="rc-bullet"></span> \1</div>').html_safe %></div>
                 <% if resource[:link].present? %>
                   <a href="<%= resource[:link] %>" target="_blank" onclick="event.stopPropagation();" style="display: inline-flex; align-items: center; gap: 6px; margin-top: 16px; padding: 12px 20px; background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%); color: white; border-radius: 10px; font-size: 14px; font-weight: 600; text-decoration: none; transition: all 0.2s; box-shadow: 0 2px 8px rgba(30, 58, 95, 0.3);">
                     <span class="material-symbols-outlined" style="font-size: 18px;">open_in_new</span>

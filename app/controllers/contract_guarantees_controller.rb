@@ -5,6 +5,12 @@ class ContractGuaranteesController < ApplicationController
   def index
     @guarantee_types = ContractGuaranteeService.get_contract_guarantee_types
     @defect_work_types = ContractGuaranteeService.get_defect_work_types
+    set_meta_tags(
+      title: "계약보증금 계산기",
+      description: "계약보증금, 하자보증금, 인지세를 자동으로 계산합니다. 계약 유형별 보증금률 자동 적용.",
+      keywords: "계약보증금, 하자보증금, 인지세, 보증금 계산기, 계약보증금률",
+      og: { title: "계약보증금 계산기 — 실무", url: request.original_url }
+    )
   end
 
   # POST /contract-guarantees/calculate

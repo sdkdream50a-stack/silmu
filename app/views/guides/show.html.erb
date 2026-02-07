@@ -1,5 +1,24 @@
 <%# 가이드 상세 페이지 - 동적 렌더링 %>
 
+<% content_for :head do %>
+  <%= json_ld({
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": @guide[:title],
+    "description": @guide[:description],
+    "inLanguage": "ko",
+    "author": { "@type": "Organization", "name": "실무" },
+    "step": [
+      @guide[:sections][:step1],
+      @guide[:sections][:step2],
+      @guide[:sections][:step3],
+      @guide[:sections][:step4]
+    ].compact.each_with_index.map { |step, i|
+      { "@type": "HowToStep", "position": i + 1, "name": step[:title], "text": step[:items].join(". ") }
+    }
+  }) %>
+<% end %>
+
 <section class="py-8">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- 뒤로가기 -->

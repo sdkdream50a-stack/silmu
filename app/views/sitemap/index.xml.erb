@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <%# 메인 페이지 %>
+  <url>
+    <loc>https://silmu.kr/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <%# 토픽 (법령 가이드) %>
+  <% @topics.each do |topic| %>
+  <url>
+    <loc>https://silmu.kr/topics/<%= topic.slug %></loc>
+    <lastmod><%= topic.updated_at.strftime('%Y-%m-%d') %></lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <% end %>
+
+  <%# 업무 가이드 %>
+  <url>
+    <loc>https://silmu.kr/guides</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <% @guides.each do |id, guide| %>
+  <url>
+    <loc>https://silmu.kr/guides/<%= id %></loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <% end %>
+  <url>
+    <loc>https://silmu.kr/guides/contract-flow</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://silmu.kr/guides/pre-contract-checklist</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://silmu.kr/guides/resources</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <%# 실무 도구 %>
+  <url>
+    <loc>https://silmu.kr/tools</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://silmu.kr/tools/contract-method</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://silmu.kr/tools/contract-documents</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://silmu.kr/tools/estimated-price</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://silmu.kr/tools/contract-guarantee</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://silmu.kr/tools/budget-estimator</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://silmu.kr/tools/legal-period</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://silmu.kr/tools/travel-calculator</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://silmu.kr/tools/cost-estimate</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://silmu.kr/tools/design-change</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://silmu.kr/tools/progress-inspection</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://silmu.kr/tools/cost-calculation</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://silmu.kr/tools/pdf</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <%# 문서 양식 %>
+  <url>
+    <loc>https://silmu.kr/templates</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <% @templates.each do |template| %>
+  <url>
+    <loc>https://silmu.kr/templates/<%= template[:id] %></loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <% end %>
+
+  <%# 감사사례 %>
+  <url>
+    <loc>https://silmu.kr/audit-cases</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <% @audit_cases.each do |audit_case| %>
+  <url>
+    <loc>https://silmu.kr/audit-cases/<%= audit_case.slug %></loc>
+    <lastmod><%= audit_case.updated_at.strftime('%Y-%m-%d') %></lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <% end %>
+
+  <%# FAQ %>
+  <url>
+    <loc>https://silmu.kr/faq</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <%# 기타 %>
+  <url>
+    <loc>https://silmu.kr/about</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://silmu.kr/chatbot</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+</urlset>
