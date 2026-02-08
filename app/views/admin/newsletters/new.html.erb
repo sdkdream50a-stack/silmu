@@ -1,0 +1,33 @@
+<div class="max-w-2xl mx-auto py-12 px-4">
+  <h1 class="text-2xl font-bold text-gray-900 mb-2">뉴스레터 발송</h1>
+  <p class="text-gray-500 mb-8">수신 동의자 <strong><%= @subscriber_count %>명</strong>에게 이메일을 발송합니다.</p>
+
+  <% if flash[:alert] %>
+    <div class="bg-red-50 text-red-700 p-4 rounded-lg mb-6"><%= flash[:alert] %></div>
+  <% end %>
+  <% if flash[:notice] %>
+    <div class="bg-green-50 text-green-700 p-4 rounded-lg mb-6"><%= flash[:notice] %></div>
+  <% end %>
+
+  <%= form_with url: admin_newsletters_path, method: :post, class: "space-y-6" do |f| %>
+    <div>
+      <label for="subject" class="block text-sm font-medium text-gray-700 mb-1">제목</label>
+      <input type="text" name="subject" id="subject" value="<%= params[:subject] %>"
+             class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+             placeholder="뉴스레터 제목을 입력하세요">
+    </div>
+
+    <div>
+      <label for="body" class="block text-sm font-medium text-gray-700 mb-1">본문 (HTML 가능)</label>
+      <textarea name="body" id="body" rows="12"
+                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="뉴스레터 본문을 작성하세요"><%= params[:body] %></textarea>
+    </div>
+
+    <button type="submit"
+            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition"
+            data-confirm="정말 발송하시겠습니까?">
+      뉴스레터 발송
+    </button>
+  <% end %>
+</div>
