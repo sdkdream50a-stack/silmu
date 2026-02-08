@@ -3,8 +3,14 @@ class ApplicationController < ActionController::Base
   allow_browser versions: :modern
 
   before_action :set_default_meta_tags
+  before_action :configure_permitted_parameters, if: :devise_controller?
 
   private
+
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:newsletter_agreed])
+    devise_parameter_sanitizer.permit(:account_update, keys: [:newsletter_agreed])
+  end
 
   def set_default_meta_tags
     set_meta_tags(

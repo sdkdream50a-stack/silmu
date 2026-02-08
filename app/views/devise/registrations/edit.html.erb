@@ -59,6 +59,14 @@
           <%= f.password_field :current_password, autocomplete: "current-password", placeholder: "••••••••", class: "input" %>
         </div>
 
+        <!-- 뉴스레터 수신 -->
+        <div class="border-t border-gray-200 pt-5">
+          <label class="flex items-start cursor-pointer group">
+            <%= f.check_box :newsletter_agreed, class: "text-indigo-600 focus:ring-indigo-500 rounded w-4 h-4 mt-0.5" %>
+            <span class="ml-2 text-sm text-slate-600">유용한 업무 팁과 새로운 기능 소식 받기 (선택)</span>
+          </label>
+        </div>
+
         <div>
           <%= f.submit "저장", class: "w-full btn btn-primary btn-lg cursor-pointer" %>
         </div>
