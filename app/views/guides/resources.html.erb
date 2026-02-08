@@ -398,7 +398,7 @@
         </div>
         <div>
           <h1 class="text-3xl lg:text-4xl font-bold tracking-tight mb-2">자료실</h1>
-          <p class="text-emerald-100 text-lg">업무별 편람, FAQ, 판례해설 등 실무 자료를 한 곳에서</p>
+          <p class="text-emerald-100 text-lg">편람, FAQ, 판례해설, 문서 양식 등 실무 자료를 한 곳에서</p>
         </div>
       </div>
       <!-- 우측: 자료 통계 -->
@@ -452,6 +452,7 @@
           <button class="category-tab" data-category="인사" onclick="filterByCategory('인사')">인사</button>
           <button class="category-tab" data-category="복무" onclick="filterByCategory('복무')">복무</button>
           <button class="category-tab" data-category="편람" onclick="filterByCategory('편람')">편람</button>
+          <%= link_to "양식", templates_path, class: "category-tab", style: "text-decoration: none;" %>
         </div>
 
         <!-- 자료 목록 -->
