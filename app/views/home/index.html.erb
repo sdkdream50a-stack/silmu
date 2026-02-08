@@ -1,762 +1,364 @@
-<!-- Hero Section — 검색 + 금액 입력 위젯 통합 -->
-<section class="relative overflow-hidden gradient-premium text-white">
-  <!-- Background Pattern — enhanced with multiple layers -->
-  <div class="absolute inset-0">
-    <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-point-500/15 rounded-full blur-[100px] animate-float"></div>
-    <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-forest-500/15 rounded-full blur-[100px]" style="animation: subtle-float 8s ease-in-out infinite reverse;"></div>
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-point-400/5 rounded-full blur-[120px]"></div>
-    <!-- Grid pattern overlay -->
-    <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px); background-size: 40px 40px;"></div>
-  </div>
+<%# Stitch 디자인 v2 — Indigo/Violet 프리미엄 테마 (컴파일 CSS 사용) %>
 
-  <div class="relative container-wide py-16 md:py-20 lg:py-24">
-    <div class="max-w-4xl mx-auto text-center">
-      <!-- Badge -->
-      <div class="inline-flex items-center gap-2 glass-panel px-5 py-2.5 rounded-full mb-8 animate-fade-in">
-        <span class="w-2 h-2 bg-forest-400 rounded-full animate-pulse"></span>
-        <span class="text-sm font-medium text-white/90">공무원을 위한 실무 플랫폼</span>
+<div class="font-sans text-slate-800 antialiased selection:bg-indigo-500/30 selection:text-indigo-600">
+
+<!-- Hero Section -->
+<div class="relative w-full hero-gradient overflow-hidden pb-24 pt-20 lg:pt-32">
+  <div class="absolute top-0 left-1/4 h-96 w-96 rounded-full bg-indigo-500/20 blur-3xl filter"></div>
+  <div class="absolute bottom-0 right-1/4 h-96 w-96 rounded-full bg-violet-500/10 blur-3xl filter"></div>
+  <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col items-center text-center">
+      <div class="mb-8 inline-flex items-center rounded-full border border-indigo-400/30 bg-indigo-900/30 px-4 py-1.5 backdrop-blur-md shadow-glow">
+        <span class="mr-2 flex h-2 w-2 relative">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+        </span>
+        <span class="text-xs font-semibold text-indigo-100 tracking-wide uppercase">Premium Government Solution</span>
       </div>
-
-      <!-- Headline -->
-      <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-8 leading-[1.15] tracking-tight animate-slide-up">
-        감사 걱정 없는,<br>
-        <span class="text-gradient-hero">퇴근 있는,</span><br>
-        은퇴 준비되는 공무원
+      <h1 class="mb-8 max-w-5xl text-5xl font-bold tracking-tight text-white sm:text-6xl lg:text-7xl leading-[1.1]">
+        감사 걱정 없는,<br class="hidden sm:block"/>
+        <span class="text-gradient">완벽한 실무의 시작</span>
       </h1>
-
-      <!-- Subheadline -->
-      <p class="text-xl md:text-2xl text-navy-200 mb-10 max-w-2xl mx-auto leading-relaxed animate-fade-in">
-        복잡하고 귀찮은 업무, 도구가 대신 해결합니다
+      <p class="mb-12 max-w-2xl text-lg text-slate-300 leading-relaxed font-light">
+        복잡한 계약 법령과 헷갈리는 절차, 이제 전문가 수준의 AI 어시스턴트와 함께<br class="hidden sm:block"/>
+        가장 쉽고 정확하게 처리하세요.
       </p>
 
-      <!-- 검색 위젯 (챗봇 통합) — enhanced glass -->
-      <div class="max-w-2xl mx-auto animate-slide-up">
-        <form action="<%= chatbot_search_path %>" method="get" data-turbo="false" class="relative">
-          <div class="flex items-center glass-panel rounded-2xl hover:border-white/30 transition-all focus-within:border-forest-400/50 focus-within:shadow-[0_0_30px_rgba(110,231,183,0.15)]">
-            <span class="material-symbols-outlined text-white/50 ml-5 text-xl">search</span>
-            <input type="text" name="query" placeholder="궁금한 업무를 검색하세요 (예: 수의계약, 계약방식, 입찰공고)" class="flex-1 bg-transparent text-white placeholder-white/40 px-4 py-4 md:py-5 text-lg outline-none">
-            <button type="submit" class="btn btn-accent mr-2 px-6 shadow-md hover:shadow-lg">검색</button>
+      <!-- Search -->
+      <div class="w-full max-w-3xl mb-16 relative z-10">
+        <form action="<%= chatbot_search_path %>" method="get" data-turbo="false">
+          <div class="search-glass relative flex items-center rounded-2xl overflow-hidden p-2 transition-all duration-300">
+            <div class="flex h-14 w-14 items-center justify-center text-indigo-300 pl-2">
+              <span class="material-symbols-outlined text-3xl">search</span>
+            </div>
+            <input name="query" class="h-14 w-full border-0 bg-transparent px-4 text-white placeholder:text-slate-400 focus:ring-0 text-lg" placeholder="무엇을 도와드릴까요? (예: 수의계약 한도, 물품구매 절차)" type="text"/>
+            <button type="submit" class="hidden sm:flex h-12 items-center justify-center rounded-xl bg-indigo-600 px-8 text-base font-bold text-white transition-all hover:bg-indigo-500 shadow-lg shadow-indigo-600/30">
+              검색
+            </button>
           </div>
         </form>
-        <!-- 인기 검색어 -->
-        <div class="flex flex-wrap justify-center gap-2 mt-5">
-          <% %w[수의계약 긴급계약 소액수의 계약방식 입찰공고 계약보증금].each do |keyword| %>
-            <%= link_to chatbot_search_path(query: keyword), class: "px-3 py-1.5 bg-white/[0.06] hover:bg-white/15 rounded-full text-sm text-white/70 hover:text-white border border-white/[0.08] hover:border-white/20 transition-all", data: { turbo: false } do %>
-              <%= keyword %>
+        <div class="mt-8 flex flex-wrap justify-center gap-3">
+          <% [
+            ["gavel", "수의계약", "indigo"],
+            ["shopping_bag", "물품구매", "emerald"],
+            ["engineering", "공사계약", "amber"],
+            ["design_services", "용역계약", "pink"]
+          ].each do |icon, keyword, color| %>
+            <%= link_to chatbot_search_path(query: keyword), class: "group inline-flex items-center gap-2 rounded-full bg-slate-800/50 px-4 py-2 text-sm font-medium text-slate-300 hover:bg-indigo-600/20 hover:text-white hover:border-indigo-500/50 transition-all backdrop-blur-sm border border-slate-700/50", data: { turbo: false } do %>
+              <span class="material-symbols-outlined text-[16px] text-<%= color %>-400 group-hover:text-<%= color %>-300"><%= icon %></span> <%= keyword %>
             <% end %>
           <% end %>
         </div>
       </div>
 
-      <!-- Stats — glass cards -->
-      <div class="grid grid-cols-3 gap-4 md:gap-8 mt-16 pt-10 border-t border-white/[0.08]">
-        <div class="text-center glass-panel rounded-2xl py-5 px-3">
-          <div class="text-3xl md:text-4xl font-bold text-white mb-1">14+</div>
-          <div class="text-white/50 text-sm">자동화 도구</div>
+      <!-- Stats -->
+      <div class="grid w-full max-w-4xl grid-cols-1 gap-6 sm:grid-cols-3">
+        <div class="group flex flex-col rounded-2xl bg-white/5 p-6 text-center backdrop-blur-md border border-white/5 hover:bg-white/10 hover:border-white/10 transition-all duration-300 cursor-default">
+          <span class="text-4xl font-bold text-white mb-1 group-hover:scale-110 transition-transform duration-300">14+</span>
+          <span class="text-sm font-medium text-indigo-200/70 uppercase tracking-wider">업무 자동화 도구</span>
         </div>
-        <div class="text-center glass-panel rounded-2xl py-5 px-3">
-          <div class="text-3xl md:text-4xl font-bold text-white mb-1">20+</div>
-          <div class="text-white/50 text-sm">업무 가이드</div>
+        <div class="group flex flex-col rounded-2xl bg-white/5 p-6 text-center backdrop-blur-md border border-white/5 hover:bg-white/10 hover:border-white/10 transition-all duration-300 cursor-default">
+          <span class="text-4xl font-bold text-white mb-1 group-hover:scale-110 transition-transform duration-300">20+</span>
+          <span class="text-sm font-medium text-indigo-200/70 uppercase tracking-wider">법령 가이드</span>
         </div>
-        <div class="text-center glass-panel rounded-2xl py-5 px-3">
-          <div class="text-3xl md:text-4xl font-bold text-white mb-1">23+</div>
-          <div class="text-white/50 text-sm">서식/양식</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Wave Divider -->
-  <div class="relative h-20 md:h-28">
-    <svg class="absolute bottom-0 w-full h-full" preserveAspectRatio="none" viewBox="0 0 1440 74">
-      <path fill="#fafbfc" d="M0,0 C360,74 720,74 1080,37 C1260,18 1350,0 1440,0 L1440,74 L0,74 Z"></path>
-    </svg>
-  </div>
-</section>
-
-<!-- 핵심 도구 Section — 바로 사용 가능한 형태 (최상단) -->
-<section id="tools" class="section bg-surface-50 relative">
-  <div class="container-wide">
-    <!-- Section Header -->
-    <div class="text-center mb-12 md:mb-16 reveal">
-      <span class="badge badge-point mb-4">자동화 도구</span>
-      <h2 class="text-navy-900 mb-4">바로 사용하는 <span class="text-gradient-accent">실무 도구</span></h2>
-      <p class="text-lg text-navy-500 max-w-2xl mx-auto">
-        복잡하고 시간 걸리는 업무, 클릭 한 번으로 해결하세요
-      </p>
-    </div>
-
-    <!-- 주요 도구 3개 — 큰 카드 with glow -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-      <!-- 계약방식 결정 -->
-      <%= link_to contract_method_path, class: "group card card-interactive card-glow-forest card-shine p-8 border-2 border-transparent hover:border-forest-300 relative overflow-hidden reveal reveal-delay-1" do %>
-        <div class="absolute top-0 right-0 w-40 h-40 bg-forest-500/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:bg-forest-500/10 transition-colors"></div>
-        <div class="relative">
-          <div class="flex items-center gap-3 mb-4">
-            <div class="icon-container icon-container-lg bg-forest-100 group-hover:bg-forest-600 transition-all duration-300 group-hover:shadow-lg group-hover:shadow-forest-500/20">
-              <span class="material-symbols-outlined text-2xl text-forest-600 group-hover:text-white transition-colors">gavel</span>
-            </div>
-            <span class="badge badge-forest">인기</span>
-          </div>
-          <h3 class="text-xl font-bold text-navy-900 group-hover:text-forest-700 mb-2 transition-colors">계약방식 결정</h3>
-          <p class="text-navy-500 text-sm mb-4 leading-relaxed">금액과 유형을 입력하면 입찰/수의계약 방식을 바로 판단합니다</p>
-          <span class="inline-flex items-center gap-1 text-forest-600 text-sm font-semibold group-hover:gap-2 transition-all">
-            바로 사용 <span class="material-symbols-outlined text-lg">arrow_forward</span>
-          </span>
-        </div>
-      <% end %>
-
-      <!-- 계약서류 원클릭 생성 -->
-      <%= link_to contract_documents_path, class: "group card card-interactive card-glow-point card-shine p-8 border-2 border-transparent hover:border-point-300 relative overflow-hidden reveal reveal-delay-2" do %>
-        <div class="absolute top-0 right-0 w-40 h-40 bg-point-500/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:bg-point-500/10 transition-colors"></div>
-        <div class="relative">
-          <div class="flex items-center gap-3 mb-4">
-            <div class="icon-container icon-container-lg bg-point-100 group-hover:bg-point-600 transition-all duration-300 group-hover:shadow-lg group-hover:shadow-point-500/20">
-              <span class="material-symbols-outlined text-2xl text-point-600 group-hover:text-white transition-colors">fact_check</span>
-            </div>
-            <span class="badge badge-point">NEW</span>
-          </div>
-          <h3 class="text-xl font-bold text-navy-900 group-hover:text-point-700 mb-2 transition-colors">계약서류 원클릭 생성</h3>
-          <p class="text-navy-500 text-sm mb-4 leading-relaxed">물품/용역/공사별 필수 서류 체크리스트를 자동으로 만들어줍니다</p>
-          <span class="inline-flex items-center gap-1 text-point-600 text-sm font-semibold group-hover:gap-2 transition-all">
-            바로 사용 <span class="material-symbols-outlined text-lg">arrow_forward</span>
-          </span>
-        </div>
-      <% end %>
-
-      <!-- 소요예산 추정기 -->
-      <%= link_to budget_estimator_path, class: "group card card-interactive card-glow-navy card-shine p-8 border-2 border-transparent hover:border-navy-300 relative overflow-hidden reveal reveal-delay-3" do %>
-        <div class="absolute top-0 right-0 w-40 h-40 bg-navy-500/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:bg-navy-500/10 transition-colors"></div>
-        <div class="relative">
-          <div class="flex items-center gap-3 mb-4">
-            <div class="icon-container icon-container-lg bg-navy-100 group-hover:bg-navy-700 transition-all duration-300 group-hover:shadow-lg group-hover:shadow-navy-500/20">
-              <span class="material-symbols-outlined text-2xl text-navy-600 group-hover:text-white transition-colors">calculate</span>
-            </div>
-            <span class="badge badge-navy">NEW</span>
-          </div>
-          <h3 class="text-xl font-bold text-navy-900 group-hover:text-navy-700 mb-2 transition-colors">소요예산 추정기</h3>
-          <p class="text-navy-500 text-sm mb-4 leading-relaxed">공사/용역/물품의 대략적인 소요예산을 미리 추정합니다</p>
-          <span class="inline-flex items-center gap-1 text-navy-600 text-sm font-semibold group-hover:gap-2 transition-all">
-            바로 사용 <span class="material-symbols-outlined text-lg">arrow_forward</span>
-          </span>
-        </div>
-      <% end %>
-    </div>
-
-    <!-- 보조 도구 4개 — 작은 카드 with hover glow -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 reveal reveal-delay-4">
-      <%= link_to pdf_tools_path, class: "group card card-interactive p-5 text-center hover:border-warm-200" do %>
-        <div class="icon-container icon-container-md bg-warm-100 group-hover:bg-warm-500 mx-auto mb-3 transition-all duration-300 group-hover:shadow-md group-hover:shadow-warm-500/20">
-          <span class="material-symbols-outlined text-xl text-warm-600 group-hover:text-white transition-colors">picture_as_pdf</span>
-        </div>
-        <h4 class="font-bold text-navy-900 text-sm group-hover:text-warm-700 transition-colors">PDF 도구</h4>
-        <p class="text-navy-400 text-xs mt-1">분할·합치기·쪽번호</p>
-      <% end %>
-
-      <%= link_to travel_calculator_path, class: "group card card-interactive p-5 text-center hover:border-point-200" do %>
-        <div class="icon-container icon-container-md bg-point-100 group-hover:bg-point-600 mx-auto mb-3 transition-all duration-300 group-hover:shadow-md group-hover:shadow-point-500/20">
-          <span class="material-symbols-outlined text-xl text-point-600 group-hover:text-white transition-colors">directions_car</span>
-        </div>
-        <h4 class="font-bold text-navy-900 text-sm group-hover:text-point-700 transition-colors">여비계산기</h4>
-        <p class="text-navy-400 text-xs mt-1">출장비 자동 계산</p>
-      <% end %>
-
-      <%= link_to pre_contract_checklist_path, class: "group card card-interactive p-5 text-center hover:border-forest-200" do %>
-        <div class="icon-container icon-container-md bg-forest-100 group-hover:bg-forest-600 mx-auto mb-3 transition-all duration-300 group-hover:shadow-md group-hover:shadow-forest-500/20">
-          <span class="material-symbols-outlined text-xl text-forest-600 group-hover:text-white transition-colors">checklist_rtl</span>
-        </div>
-        <h4 class="font-bold text-navy-900 text-sm group-hover:text-forest-700 transition-colors">사전 체크리스트</h4>
-        <p class="text-navy-400 text-xs mt-1">계약 전 필수 점검</p>
-      <% end %>
-
-      <%= link_to contract_flow_path, class: "group card card-interactive p-5 text-center hover:border-navy-200" do %>
-        <div class="icon-container icon-container-md bg-navy-100 group-hover:bg-navy-700 mx-auto mb-3 transition-all duration-300 group-hover:shadow-md group-hover:shadow-navy-500/20">
-          <span class="material-symbols-outlined text-xl text-navy-600 group-hover:text-white transition-colors">account_tree</span>
-        </div>
-        <h4 class="font-bold text-navy-900 text-sm group-hover:text-navy-700 transition-colors">계약 흐름도</h4>
-        <p class="text-navy-400 text-xs mt-1">전체 프로세스 확인</p>
-      <% end %>
-    </div>
-
-    <!-- CTA -->
-    <div class="text-center mt-10">
-      <%= link_to tools_path, class: "inline-flex items-center gap-2 text-point-600 hover:text-point-700 font-semibold transition-colors" do %>
-        모든 도구 보기
-        <span class="material-symbols-outlined text-xl">arrow_forward</span>
-      <% end %>
-    </div>
-  </div>
-</section>
-
-<!-- 금액으로 계약방법 바로 찾기 — 인라인 위젯 -->
-<section id="price-finder" class="section bg-white">
-  <div class="container-tight reveal">
-    <div class="card p-8 md:p-12 border border-forest-100 bg-gradient-to-br from-forest-50/30 via-white to-point-50/20 shadow-medium hover:shadow-strong transition-shadow duration-500">
-      <div class="text-center mb-8">
-        <div class="icon-container icon-container-lg bg-gradient-to-br from-forest-100 to-forest-200 mx-auto mb-4 shadow-sm">
-          <span class="material-symbols-outlined text-3xl text-forest-600">paid</span>
-        </div>
-        <h2 class="text-2xl font-bold text-navy-900 mb-2">금액으로 계약방법 <span class="text-gradient-forest">바로 찾기</span></h2>
-        <p class="text-navy-500">금액과 유형을 선택하면 적정 계약방식을 바로 알려드립니다</p>
-      </div>
-
-      <div class="max-w-lg mx-auto">
-        <div class="flex gap-3 mb-4">
-          <select id="price-category" class="flex-1 px-4 py-3 border border-gray-200 rounded-xl text-navy-700 font-medium focus:border-forest-400 focus:ring-2 focus:ring-forest-100 outline-none transition-all">
-            <option value="goods">물품</option>
-            <option value="service">용역</option>
-            <option value="construction">공사</option>
-          </select>
-          <div class="flex-[2] relative">
-            <input type="text" id="price-input" placeholder="추정가격(부가세 별도)" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-navy-700 font-medium focus:border-forest-400 focus:ring-2 focus:ring-forest-100 outline-none transition-all pr-10">
-            <span class="absolute right-4 top-1/2 -translate-y-1/2 text-navy-400 text-sm">원</span>
-          </div>
-        </div>
-
-        <!-- 빠른 금액 버튼 -->
-        <div class="flex flex-wrap gap-2 mb-6">
-          <% [["1천만원", 10_000_000], ["2천만원", 20_000_000], ["5천만원", 50_000_000], ["1억원", 100_000_000], ["2억원", 200_000_000]].each do |label, val| %>
-            <button type="button" class="price-quick-btn px-3 py-1.5 bg-surface-100 hover:bg-forest-100 text-navy-600 hover:text-forest-700 rounded-lg text-sm font-medium transition-all" data-value="<%= val %>"><%= label %></button>
-          <% end %>
-        </div>
-
-        <!-- 결과 영역 -->
-        <div id="price-result" class="hidden">
-          <div id="price-result-content" class="p-5 rounded-xl border-2"></div>
+        <div class="group flex flex-col rounded-2xl bg-white/5 p-6 text-center backdrop-blur-md border border-white/5 hover:bg-white/10 hover:border-white/10 transition-all duration-300 cursor-default">
+          <span class="text-4xl font-bold text-white mb-1 group-hover:scale-110 transition-transform duration-300">23+</span>
+          <span class="text-sm font-medium text-indigo-200/70 uppercase tracking-wider">실무 서식 템플릿</span>
         </div>
       </div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- 업무 도우미 Section -->
-<section id="assistant" class="section bg-surface-50 relative overflow-hidden">
-  <!-- Subtle background decoration -->
-  <div class="absolute top-0 right-0 w-[400px] h-[400px] bg-point-500/[0.03] rounded-full blur-[100px]"></div>
-  <div class="absolute bottom-0 left-0 w-[300px] h-[300px] bg-forest-500/[0.03] rounded-full blur-[100px]"></div>
-
-  <div class="container-wide relative">
-    <!-- Section Header -->
-    <div class="text-center mb-16 md:mb-20 reveal">
-      <span class="badge badge-navy mb-4">법령 가이드</span>
-      <h2 class="text-navy-900 mb-6">주제별 <span class="text-gradient-navy">업무 가이드</span></h2>
-      <p class="text-xl text-navy-500 max-w-2xl mx-auto">
-        법령 · 서식 · 흐름도를 한눈에
-      </p>
+<!-- Core Tools Section -->
+<section class="bg-background-light py-24 relative">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="mb-12 flex items-end justify-between">
+      <div>
+        <h2 class="text-3xl font-bold text-slate-900 sm:text-4xl tracking-tight">핵심 실무 도구</h2>
+        <p class="mt-3 text-lg text-slate-500">복잡한 업무를 클릭 몇 번으로 해결하는 프리미엄 툴킷</p>
+      </div>
+      <%= link_to tools_path, class: "hidden group items-center gap-1 text-sm font-bold text-indigo-600 hover:text-indigo-700 sm:flex transition-colors" do %>
+        전체 도구 보기
+        <span class="material-symbols-outlined text-lg group-hover:translate-x-1 transition-transform">arrow_forward</span>
+      <% end %>
     </div>
 
-    <!-- 주요 가이드 (계약 중심) -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
-      <!-- 수의계약 -->
-      <%= link_to "/topics/private-contract", class: "group card card-interactive card-shine p-6 md:p-8 border border-transparent hover:border-point-200 reveal reveal-delay-1" do %>
-        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-point-100 to-point-200 flex items-center justify-center mb-5 group-hover:scale-110 group-hover:shadow-lg transition-all duration-300">
-          <span class="material-symbols-outlined text-3xl text-point-600">edit_document</span>
+    <!-- Main 3 Tools -->
+    <div class="grid grid-cols-1 gap-8 lg:grid-cols-3 mb-12">
+      <%= link_to contract_method_path, class: "group relative overflow-hidden rounded-3xl bg-white p-8 shadow-glass hover:shadow-glass-hover hover:-translate-y-2 transition-all duration-500 border border-slate-100" do %>
+        <div class="absolute inset-0 bg-gradient-to-br from-indigo-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div class="relative z-10 mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600 shadow-sm group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-300">
+          <span class="material-symbols-outlined text-3xl">account_tree</span>
         </div>
-        <h3 class="font-bold text-lg text-navy-900 group-hover:text-point-600 mb-2 transition-colors">수의계약</h3>
-        <p class="text-navy-400 text-sm mb-4">법령 3단비교 · 서식 · 흐름도</p>
-        <div class="flex flex-wrap gap-1.5">
-          <span class="badge badge-point text-[10px]">법령</span>
-          <span class="badge badge-forest text-[10px]">서식</span>
-          <span class="badge badge-navy text-[10px]">검토도구</span>
-        </div>
-      <% end %>
-
-      <!-- 소액수의계약 -->
-      <%= link_to "/topics/small-amount-contract", class: "group card card-interactive card-shine p-6 md:p-8 border border-transparent hover:border-forest-200 reveal reveal-delay-2" do %>
-        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-forest-100 to-forest-200 flex items-center justify-center mb-5 group-hover:scale-110 group-hover:shadow-lg transition-all duration-300">
-          <span class="material-symbols-outlined text-3xl text-forest-600">paid</span>
-        </div>
-        <h3 class="font-bold text-lg text-navy-900 group-hover:text-forest-600 mb-2 transition-colors">소액수의</h3>
-        <p class="text-navy-400 text-sm mb-4">금액기준 · 1인견적 · 2인견적</p>
-        <div class="flex flex-wrap gap-1.5">
-          <span class="badge badge-forest text-[10px]">금액기준</span>
-          <span class="badge badge-navy text-[10px]">흐름도</span>
+        <h3 class="relative z-10 text-2xl font-bold text-slate-900 mb-3">계약방식 결정</h3>
+        <p class="relative z-10 text-slate-500 leading-relaxed mb-8">예산과 품목만 입력하면 법령에 맞는 최적의 계약 방식을 인공지능이 추천해 드립니다.</p>
+        <div class="relative z-10 flex items-center text-indigo-600 font-bold group-hover:translate-x-2 transition-transform duration-300">
+          <span>지금 확인하기</span>
+          <span class="material-symbols-outlined ml-2 text-lg">arrow_forward</span>
         </div>
       <% end %>
 
-      <!-- 긴급계약 -->
-      <%= link_to "/topics/emergency-contract", class: "group card card-interactive card-shine p-6 md:p-8 border border-transparent hover:border-warm-200 reveal reveal-delay-3" do %>
-        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-warm-100 to-warm-200 flex items-center justify-center mb-5 group-hover:scale-110 group-hover:shadow-lg transition-all duration-300">
-          <span class="material-symbols-outlined text-3xl text-warm-600">emergency</span>
+      <%= link_to contract_documents_path, class: "group relative overflow-hidden rounded-3xl bg-white p-8 shadow-glass hover:shadow-glass-hover hover:-translate-y-2 transition-all duration-500 border border-slate-100" do %>
+        <div class="absolute inset-0 bg-gradient-to-br from-violet-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div class="relative z-10 mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-50 text-violet-600 shadow-sm group-hover:bg-violet-600 group-hover:text-white transition-colors duration-300">
+          <span class="material-symbols-outlined text-3xl">post_add</span>
         </div>
-        <h3 class="font-bold text-lg text-navy-900 group-hover:text-warm-600 mb-2 transition-colors">긴급계약</h3>
-        <p class="text-navy-400 text-sm mb-4">긴급사유 · 수의근거 · 절차</p>
-        <div class="flex flex-wrap gap-1.5">
-          <span class="badge badge-warm text-[10px]">긴급사유</span>
-          <span class="badge badge-navy text-[10px]">흐름도</span>
+        <h3 class="relative z-10 text-2xl font-bold text-slate-900 mb-3">서류 원클릭 생성</h3>
+        <p class="relative z-10 text-slate-500 leading-relaxed mb-8">계약 정보 입력 한 번으로 내부결재부터 계약서까지 모든 필수 서류를 자동 생성합니다.</p>
+        <div class="relative z-10 flex items-center text-violet-600 font-bold group-hover:translate-x-2 transition-transform duration-300">
+          <span>지금 확인하기</span>
+          <span class="material-symbols-outlined ml-2 text-lg">arrow_forward</span>
         </div>
       <% end %>
 
-      <!-- 예산이월 -->
-      <%= link_to "/topics/budget-carryover", class: "group card card-interactive card-shine p-6 md:p-8 border border-transparent hover:border-navy-200 reveal reveal-delay-4" do %>
-        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-navy-100 to-navy-200 flex items-center justify-center mb-5 group-hover:scale-110 group-hover:shadow-lg transition-all duration-300">
-          <span class="material-symbols-outlined text-3xl text-navy-600">event_repeat</span>
+      <%= link_to budget_estimator_path, class: "group relative overflow-hidden rounded-3xl bg-white p-8 shadow-glass hover:shadow-glass-hover hover:-translate-y-2 transition-all duration-500 border border-slate-100" do %>
+        <div class="absolute inset-0 bg-gradient-to-br from-emerald-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div class="relative z-10 mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600 shadow-sm group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-300">
+          <span class="material-symbols-outlined text-3xl">calculate</span>
         </div>
-        <h3 class="font-bold text-lg text-navy-900 group-hover:text-navy-600 mb-2 transition-colors">예산이월</h3>
-        <p class="text-navy-400 text-sm mb-4">명시이월 · 사고이월 · 계속비</p>
-        <div class="flex flex-wrap gap-1.5">
-          <span class="badge badge-navy text-[10px]">이월요건</span>
-          <span class="badge badge-point text-[10px]">FAQ</span>
+        <h3 class="relative z-10 text-2xl font-bold text-slate-900 mb-3">소요예산 추정기</h3>
+        <p class="relative z-10 text-slate-500 leading-relaxed mb-8">복잡한 원가계산 없이 빅데이터 기반으로 적정 예산을 빠르고 정확하게 추정하세요.</p>
+        <div class="relative z-10 flex items-center text-emerald-600 font-bold group-hover:translate-x-2 transition-transform duration-300">
+          <span>지금 확인하기</span>
+          <span class="material-symbols-outlined ml-2 text-lg">arrow_forward</span>
         </div>
       <% end %>
     </div>
 
-    <!-- 기타 가이드 -->
-    <div class="flex flex-wrap justify-center gap-3 mb-10">
-      <%= link_to "/topics/travel-expense", class: "inline-flex items-center gap-2.5 px-5 py-3 bg-white hover:bg-surface-50 rounded-xl text-sm font-medium text-navy-600 hover:text-navy-900 border border-gray-200 hover:border-gray-300 hover:shadow-soft transition-all" do %>
-        <span class="w-7 h-7 rounded-lg bg-gradient-to-br from-sky-100 to-sky-200 flex items-center justify-center">
-          <span class="material-symbols-outlined text-base text-sky-600">flight_takeoff</span>
-        </span>
-        출장비
-      <% end %>
-      <%= link_to "/topics/year-end-settlement", class: "inline-flex items-center gap-2.5 px-5 py-3 bg-white hover:bg-surface-50 rounded-xl text-sm font-medium text-navy-600 hover:text-navy-900 border border-gray-200 hover:border-gray-300 hover:shadow-soft transition-all" do %>
-        <span class="w-7 h-7 rounded-lg bg-gradient-to-br from-amber-100 to-amber-200 flex items-center justify-center">
-          <span class="material-symbols-outlined text-base text-amber-600">receipt_long</span>
-        </span>
-        연말정산
-      <% end %>
-      <%= link_to "/topics/price-negotiation", class: "inline-flex items-center gap-2.5 px-5 py-3 bg-white hover:bg-surface-50 rounded-xl text-sm font-medium text-navy-600 hover:text-navy-900 border border-gray-200 hover:border-gray-300 hover:shadow-soft transition-all" do %>
-        <span class="w-7 h-7 rounded-lg bg-gradient-to-br from-rose-100 to-rose-200 flex items-center justify-center">
-          <span class="material-symbols-outlined text-base text-rose-600">handshake</span>
-        </span>
-        가격협상
-      <% end %>
-    </div>
-
-    <!-- CTA -->
-    <div class="text-center">
-      <%= link_to guides_path, class: "inline-flex items-center gap-2 text-navy-600 hover:text-navy-700 font-semibold transition-colors" do %>
-        모든 가이드 보기
-        <span class="material-symbols-outlined text-xl">arrow_forward</span>
-      <% end %>
-    </div>
-  </div>
-</section>
-
-<!-- 양식 다운로드 — 인기 양식 빠른 접근 -->
-<section id="templates" class="section bg-white">
-  <div class="container-wide">
-    <div class="text-center mb-12 reveal">
-      <span class="badge badge-forest mb-4">서식/양식</span>
-      <h2 class="text-navy-900 mb-4">자주 쓰는 양식 <span class="text-gradient-forest">다운로드</span></h2>
-      <p class="text-lg text-navy-500">필요할 때 바로 다운받아 사용하세요</p>
-    </div>
-
-    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+    <!-- Minor Tools -->
+    <div class="grid grid-cols-2 gap-6 md:grid-cols-4">
       <% [
-        { icon: "description", title: "물품 구매계약서", color: "navy" },
-        { icon: "fact_check", title: "검수조서", color: "forest" },
-        { icon: "receipt", title: "대금청구서", color: "point" },
-        { icon: "assignment", title: "용역 계약서", color: "warm" },
-        { icon: "checklist", title: "착수신고서", color: "navy" },
-        { icon: "shield", title: "청렴서약서", color: "forest" }
-      ].each do |tmpl| %>
-        <%= link_to templates_path, class: "group card card-interactive p-5 text-center" do %>
-          <div class="icon-container bg-<%= tmpl[:color] %>-100 group-hover:bg-<%= tmpl[:color] %>-600 mx-auto mb-3 transition-colors">
-            <span class="material-symbols-outlined text-xl text-<%= tmpl[:color] %>-600 group-hover:text-white transition-colors"><%= tmpl[:icon] %></span>
+        [pdf_tools_path, "calendar_month", "계약기간 산정"],
+        [travel_calculator_path, "percent", "지연배상금 계산"],
+        [pre_contract_checklist_path, "checklist_rtl", "사전 체크리스트"],
+        [contract_flow_path, "account_tree", "계약 흐름도"]
+      ].each do |path, icon, label| %>
+        <%= link_to path, class: "flex flex-col items-center justify-center gap-3 rounded-2xl bg-white p-6 shadow-sm border border-slate-100 hover:border-indigo-100 hover:shadow-md hover:-translate-y-1 transition-all duration-300" do %>
+          <div class="flex h-10 w-10 items-center justify-center rounded-full bg-slate-50 text-slate-600">
+            <span class="material-symbols-outlined text-[20px]"><%= icon %></span>
           </div>
-          <h4 class="font-semibold text-navy-900 text-sm"><%= tmpl[:title] %></h4>
+          <span class="text-sm font-semibold text-slate-900"><%= label %></span>
         <% end %>
       <% end %>
     </div>
+  </div>
+</section>
 
-    <div class="text-center mt-8">
-      <%= link_to templates_path, class: "inline-flex items-center gap-2 text-forest-600 hover:text-forest-700 font-semibold transition-colors" do %>
-        전체 양식 보기
-        <span class="material-symbols-outlined text-xl">arrow_forward</span>
+<!-- Quick Price Finder -->
+<div class="bg-white py-20 border-y border-slate-100">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+    <div class="relative rounded-3xl overflow-hidden bg-slate-900 shadow-2xl">
+      <div class="absolute top-0 right-0 -mt-20 -mr-20 h-64 w-64 rounded-full bg-indigo-500 opacity-20 blur-3xl"></div>
+      <div class="absolute bottom-0 left-0 -mb-20 -ml-20 h-64 w-64 rounded-full bg-emerald-500 opacity-20 blur-3xl"></div>
+      <div class="relative z-10 p-8 md:p-12 flex flex-col lg:flex-row items-center justify-between gap-10">
+        <div class="flex-1 text-center lg:text-left">
+          <div class="inline-flex items-center gap-2 mb-4 px-3 py-1 rounded-full bg-white/10 border border-white/10 backdrop-blur-sm">
+            <span class="material-symbols-outlined text-emerald-400 text-sm">payments</span>
+            <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Smart Price Guide</span>
+          </div>
+          <h3 class="text-3xl font-bold text-white mb-3">예산을 입력해보세요</h3>
+          <p class="text-slate-300 text-lg">금액에 따라 법령상 가능한 모든 계약 방법(1인 견적, 2인 견적, 입찰 등)을<br class="hidden lg:block"/> 즉시 분석하여 가이드해드립니다.</p>
+        </div>
+        <div class="w-full lg:w-auto flex-1 max-w-lg">
+          <div class="flex gap-3 mb-3">
+            <select id="price-category" class="flex-shrink-0 w-24 rounded-xl border-0 bg-white/10 backdrop-blur-md text-white px-3 py-4 text-sm font-medium focus:ring-indigo-500">
+              <option value="goods" class="text-slate-900">물품</option>
+              <option value="service" class="text-slate-900">용역</option>
+              <option value="construction" class="text-slate-900">공사</option>
+            </select>
+            <div class="flex-1 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-2 flex items-center shadow-lg">
+              <input id="price-input" class="w-full bg-transparent border-0 px-4 py-2 text-2xl font-bold text-white placeholder:text-slate-500 focus:ring-0" placeholder="예: 22,000,000" type="text"/>
+              <span class="text-slate-400 text-lg font-medium mr-4">원</span>
+              <button type="button" onclick="document.getElementById('price-input').dispatchEvent(new Event('input'))" class="shrink-0 rounded-xl bg-indigo-600 px-8 py-4 text-base font-bold text-white shadow-lg shadow-indigo-600/30 hover:bg-indigo-500 transition-all">
+                조회하기
+              </button>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-2 mb-4 justify-center lg:justify-start">
+            <% [["1천만원", 10_000_000], ["2천만원", 20_000_000], ["5천만원", 50_000_000], ["1억원", 100_000_000], ["2억원", 200_000_000]].each do |label, val| %>
+              <button type="button" class="price-quick-btn px-3 py-1.5 text-xs font-medium bg-white/5 text-slate-400 rounded-lg border border-white/10 hover:bg-indigo-600/20 hover:text-white hover:border-indigo-500/50 transition-all" data-value="<%= val %>"><%= label %></button>
+            <% end %>
+          </div>
+          <p class="text-center lg:text-right text-xs text-slate-500">* 부가세 포함 금액 기준</p>
+          <div id="price-result" class="hidden mt-4">
+            <div id="price-result-content" class="p-4 rounded-xl border-2"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Topic Guides & Templates -->
+<section class="py-24 bg-background-light">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+      <!-- Topic Guides -->
+      <div class="lg:col-span-7">
+        <h2 class="mb-8 text-2xl font-bold text-slate-900 flex items-center gap-2">
+          <span class="material-symbols-outlined text-indigo-600">library_books</span> 주요 법령 가이드
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <% [
+            ["/topics/private-contract", "handshake", "수의계약", "1인 견적 가능 금액 및 요건, 예외 사항 완벽 정리", "indigo"],
+            ["/topics/small-amount-contract", "shopping_cart", "소액수의", "여성/장애인 기업 우선구매 목표 및 절차 가이드", "sky"],
+            ["/topics/emergency-contract", "warning", "긴급계약", "재해/재난 시 신속 대응을 위한 긴급 입찰 절차", "rose"],
+            ["/topics/budget-carryover", "history", "예산이월", "사고이월 및 명시이월 처리를 위한 연말 필수 체크리스트", "emerald"]
+          ].each do |path, icon, title, desc, color| %>
+            <%= link_to path, class: "group flex items-start gap-4 rounded-2xl bg-white p-6 shadow-sm border border-slate-100 transition-all hover:shadow-lg hover:-translate-y-1 hover:border-indigo-100 cursor-pointer" do %>
+              <div class="shrink-0 flex h-12 w-12 items-center justify-center rounded-xl bg-<%= color %>-50 text-<%= color %>-600 group-hover:bg-<%= color %>-600 group-hover:text-white transition-colors">
+                <span class="material-symbols-outlined"><%= icon %></span>
+              </div>
+              <div>
+                <h3 class="font-bold text-lg text-slate-900 group-hover:text-<%= color %>-600 transition-colors"><%= title %></h3>
+                <p class="mt-1 text-sm text-slate-500 leading-snug"><%= desc %></p>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+        <div class="mt-6">
+          <%= link_to guides_path, class: "inline-flex items-center gap-1 text-sm font-bold text-indigo-600 hover:text-indigo-700 transition-colors" do %>
+            모든 가이드 보기 <span class="material-symbols-outlined text-lg">arrow_forward</span>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Templates -->
+      <div class="lg:col-span-5">
+        <div class="flex items-center justify-between mb-8">
+          <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+            <span class="material-symbols-outlined text-indigo-600">folder_open</span> 인기 서식
+          </h2>
+          <%= link_to templates_path, class: "text-sm font-semibold text-slate-500 hover:text-indigo-600 transition-colors" do %>
+            더보기 →
+          <% end %>
+        </div>
+        <div class="space-y-4">
+          <% [
+            { title: "물품 표준 구매계약서", format: "HWP", color: "indigo" },
+            { title: "수의계약 배제사유 각서", format: "HWP", color: "indigo" },
+            { title: "착수계 및 완료계 세트", format: "XLSX", color: "emerald" }
+          ].each do |tmpl| %>
+            <%= link_to templates_path, class: "flex items-center p-4 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-md hover:border-indigo-100 transition-all group" do %>
+              <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-<%= tmpl[:color] %>-50 text-<%= tmpl[:color] %>-600 font-bold text-xs"><%= tmpl[:format] %></div>
+              <div class="ml-4 flex-1">
+                <h4 class="font-bold text-slate-900 group-hover:text-<%= tmpl[:color] %>-600 transition-colors"><%= tmpl[:title] %></h4>
+                <span class="text-xs text-slate-500">최신 개정판</span>
+              </div>
+              <span class="material-symbols-outlined text-slate-300 group-hover:text-<%= tmpl[:color] %>-600 transition-colors">download</span>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Daily Quiz Section -->
+<section class="relative overflow-hidden py-24 bg-[#0B1120]">
+  <div class="absolute inset-0 bg-gradient-to-r from-slate-900 to-indigo-950/40"></div>
+  <div class="absolute right-0 top-0 h-[500px] w-[500px] bg-indigo-600/10 blur-[100px] rounded-full pointer-events-none"></div>
+  <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-16">
+      <div class="max-w-xl text-white">
+        <div class="mb-6 inline-flex items-center rounded-full bg-indigo-500/20 px-4 py-1.5 text-sm font-semibold text-indigo-300 ring-1 ring-inset ring-indigo-500/30">
+          <span class="mr-2 h-1.5 w-1.5 rounded-full bg-indigo-400 animate-pulse"></span>
+          오늘의 실무 퀴즈
+        </div>
+        <h2 class="text-4xl font-bold tracking-tight sm:text-5xl leading-tight">매일 하나씩,<br/><span class="text-indigo-400">계약 전문가</span>로 성장하세요.</h2>
+        <p class="mt-6 text-xl text-slate-400 font-light leading-relaxed">하루 1분 투자로 헷갈리는 법령과 지침을 마스터할 수 있습니다.<br/>틀려도 괜찮아요, 명쾌한 해설이 있으니까요.</p>
+      </div>
+      <div class="w-full max-w-md">
+        <div class="glass-dark rounded-3xl p-8 shadow-2xl relative border-t border-white/10">
+          <div class="absolute -top-3 -right-3 h-20 w-20 bg-emerald-500/20 blur-2xl rounded-full"></div>
+          <div class="mb-8 flex items-center justify-between">
+            <span id="quiz-progress" class="text-xs font-bold tracking-widest text-slate-400 uppercase">문제 1/5</span>
+            <span id="quiz-category" class="inline-flex items-center rounded-md bg-emerald-400/10 px-2 py-1 text-xs font-bold text-emerald-400 ring-1 ring-inset ring-emerald-400/20">예산회계</span>
+          </div>
+          <h3 id="quiz-question" class="mb-10 text-xl font-bold text-white leading-relaxed"></h3>
+          <div class="space-y-3" id="quiz-options"></div>
+          <div id="quiz-result" class="hidden mt-4 p-4 rounded-xl">
+            <p class="font-semibold text-lg" id="result-message"></p>
+            <p class="text-sm mt-2 text-gray-300" id="result-explanation"></p>
+          </div>
+          <div id="quiz-final" class="hidden text-center py-6">
+            <div class="text-5xl mb-3">&#127881;</div>
+            <h3 class="text-xl font-bold text-white mb-2">퀴즈 완료!</h3>
+            <p class="text-gray-300 mb-2">총 5문제 중 <span id="final-score" class="text-emerald-400 font-bold">0</span>문제 정답</p>
+            <button id="quiz-restart" class="mt-3 px-6 py-2.5 rounded-lg bg-indigo-600 text-white font-bold hover:bg-indigo-500 transition-colors">다시 도전하기</button>
+          </div>
+          <div id="quiz-footer" class="mt-6 flex justify-end">
+            <button id="quiz-submit" class="px-6 py-2.5 rounded-xl bg-indigo-600 text-white font-bold hover:bg-indigo-500 shadow-lg shadow-indigo-600/30 transition-all disabled:opacity-40 disabled:cursor-not-allowed" disabled>정답 확인</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- External Links / Partner Networks -->
+<section class="bg-slate-50 py-20 border-t border-slate-200">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <h2 class="mb-10 text-center text-lg font-bold text-slate-400 uppercase tracking-widest">Partner Networks</h2>
+    <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+      <% [
+        ["https://www.g2b.go.kr", "G2B", "나라장터", "text-blue-900"],
+        ["https://www.s2b.kr", "S2B", "학교장터", "text-orange-500"],
+        ["https://www.onbid.co.kr", "On-Bid", "온비드", "text-green-600"],
+        ["https://lofin.mois.go.kr", "e-Hozo", "지방재정", "text-slate-800"],
+        ["https://www.edufin.go.kr", "NEAT", "지방교육재정", "text-indigo-600"],
+        ["https://www.law.go.kr", "Law", "국가법령센터", "text-violet-600"]
+      ].each do |url, abbr, name, color_class| %>
+        <a href="<%= url %>" target="_blank" rel="noopener" class="group flex flex-col items-center justify-center rounded-2xl bg-white p-6 shadow-sm border border-slate-100 transition-all hover:-translate-y-1 hover:shadow-md hover:border-indigo-100">
+          <span class="mb-2 text-xl font-black <%= color_class %> group-hover:scale-105 transition-transform"><%= abbr %></span>
+          <span class="text-xs font-medium text-slate-500"><%= name %></span>
+        </a>
       <% end %>
     </div>
   </div>
 </section>
 
-<!-- Quiz Section (축소, 깔끔하게) -->
-<section id="quiz" class="section gradient-premium text-white relative overflow-hidden">
-  <!-- Background — enhanced -->
-  <div class="absolute inset-0">
-    <div class="absolute top-1/4 right-1/4 w-80 h-80 bg-point-500/15 rounded-full blur-[100px] animate-float"></div>
-    <div class="absolute bottom-1/4 left-1/4 w-80 h-80 bg-forest-500/15 rounded-full blur-[100px]" style="animation: subtle-float 8s ease-in-out infinite;"></div>
-    <div class="absolute inset-0 opacity-[0.02]" style="background-image: radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px); background-size: 40px 40px;"></div>
-  </div>
-
-  <div class="relative container-tight">
-    <!-- Section Header -->
-    <div class="text-center mb-12 reveal">
-      <span class="badge glass-panel text-white mb-4">퀴즈</span>
-      <h2 class="text-white mb-6">오늘의 <span class="text-gradient-hero">실무 퀴즈</span></h2>
-      <p class="text-xl text-white/60 max-w-xl mx-auto">
-        매일 새로운 퀴즈로 실무 지식을 점검하세요
-      </p>
-    </div>
-
-    <!-- Quiz Card — enhanced glass -->
-    <div class="glass-panel rounded-3xl p-8 md:p-10 shadow-elevated reveal">
-      <div class="flex items-center gap-3 mb-8">
-        <span id="quiz-progress" class="bg-forest-500 text-white px-4 py-1.5 rounded-full text-sm font-semibold">문제 1/5</span>
-        <span id="quiz-category" class="text-navy-300 text-sm">예산회계</span>
-      </div>
-
-      <h3 id="quiz-question" class="text-xl md:text-2xl font-bold mb-8 leading-relaxed"></h3>
-
-      <div class="space-y-3 mb-10" id="quiz-options"></div>
-
-      <!-- 결과 메시지 -->
-      <div id="quiz-result" class="hidden mb-6 p-4 rounded-xl">
-        <p class="font-semibold text-lg" id="result-message"></p>
-        <p class="text-sm mt-2 text-navy-100" id="result-explanation"></p>
-      </div>
-
-      <!-- 최종 결과 -->
-      <div id="quiz-final" class="hidden text-center py-8">
-        <div class="text-6xl mb-4">🎉</div>
-        <h3 class="text-2xl font-bold text-white mb-2">퀴즈 완료!</h3>
-        <p class="text-navy-200 mb-2">총 5문제 중 <span id="final-score" class="text-forest-400 font-bold">0</span>문제 정답</p>
-        <button id="quiz-restart" class="btn btn-lg btn-accent mt-4">
-          다시 도전하기
-          <span class="material-symbols-outlined">refresh</span>
-        </button>
-      </div>
-
-      <div id="quiz-footer" class="flex flex-col sm:flex-row justify-between items-center gap-4">
-        <span class="text-navy-300 text-sm flex items-center gap-2">
-          <span class="material-symbols-outlined text-warm-400">quiz</span>
-          매일 새로운 5문제 출제
-        </span>
-        <button id="quiz-submit" class="btn btn-lg btn-accent" disabled>
-          정답 확인
-          <span class="material-symbols-outlined">check</span>
-        </button>
-      </div>
-
-      <script>
-      document.addEventListener('turbo:load', function() {
-        const allQuizData = [
-          { category: "예산회계", question: "다음 중 예산의 이월에 해당하지 않는 것은?", options: ["명시이월", "사고이월", "계속비이월", "예비비이월"], answer: 3, explanation: "예비비이월은 존재하지 않는 개념입니다." },
-          { category: "예산회계", question: "다음 중 세출예산의 이용에 해당하는 것은?", options: ["장 간의 상호융통", "관 간의 상호융통", "항 간의 상호융통", "세항 간의 상호융통"], answer: 2, explanation: "이용은 입법과목인 '항' 간의 상호융통을 말합니다." },
-          { category: "예산회계", question: "예비비 사용 후 국회 승인을 받아야 하는 기한은?", options: ["다음 연도 정기회 개회 전", "다음 연도 정기회 중", "사용 후 3개월 이내", "사용 후 6개월 이내"], answer: 1, explanation: "예비비 사용 후 다음 연도 정기회 중에 국회의 승인을 받아야 합니다." },
-          { category: "예산회계", question: "사고이월의 요건이 아닌 것은?", options: ["연도 내 지출원인행위", "불가피한 사유", "세입세출예산에 명시", "연도 내 지출하지 못한 경비"], answer: 2, explanation: "세입세출예산에 명시하는 것은 명시이월의 요건입니다." },
-          { category: "예산회계", question: "예산의 전용이란?", options: ["회계연도 간 이월", "항 간의 상호융통", "세항·목 간의 상호융통", "예비비 사용"], answer: 2, explanation: "전용은 행정과목인 세항·목 간의 상호융통을 말합니다." },
-          { category: "계약", question: "물품 구매 시 1인 견적 수의계약이 가능한 추정가격(부가세 별도) 기준은?", options: ["1천만원 이하", "2천만원 이하", "3천만원 이하", "5천만원 이하"], answer: 1, explanation: "물품·용역의 경우 추정가격 2천만원 이하일 때 1인 견적 수의계약이 가능합니다." },
-          { category: "계약", question: "나라장터 전자입찰 시 입찰공고 기간은 최소 며칠인가?", options: ["5일", "7일", "10일", "14일"], answer: 1, explanation: "전자입찰의 경우 입찰공고 기간은 최소 7일 이상입니다." },
-          { category: "계약", question: "계약보증금의 원칙적인 비율은?", options: ["계약금액의 5%", "계약금액의 10%", "계약금액의 15%", "계약금액의 20%"], answer: 1, explanation: "계약보증금은 계약금액의 10% 이상으로 납부해야 합니다." },
-          { category: "계약", question: "선금의 지급 한도는?", options: ["계약금액의 50%", "계약금액의 60%", "계약금액의 70%", "계약금액의 80%"], answer: 2, explanation: "선금은 계약금액의 70% 이내에서 지급할 수 있습니다." },
-          { category: "계약", question: "복수예비가격 작성 개수는?", options: ["10개", "15개", "20개", "25개"], answer: 1, explanation: "복수예비가격은 15개를 작성합니다." },
-          { category: "복무", question: "공무원의 병가 일수는 연간 최대 며칠인가?", options: ["30일", "60일", "90일", "120일"], answer: 1, explanation: "공무원의 병가는 연 60일 이내입니다." },
-          { category: "복무", question: "재직기간 1년 미만 공무원의 연가 일수는?", options: ["8일", "11일", "14일", "15일"], answer: 1, explanation: "재직기간 1년 미만 공무원의 연가 일수는 11일입니다." },
-          { category: "복무", question: "배우자 출산휴가 일수는?", options: ["5일", "10일", "15일", "20일"], answer: 3, explanation: "배우자 출산휴가는 20일입니다. (2025년 공무원복무규정 개정)" },
-          { category: "문서", question: "공문서의 보존기간 중 '영구'에 해당하는 것은?", options: ["일반 통계자료", "조례·규칙", "단순 민원서류", "일일업무보고"], answer: 1, explanation: "조례, 규칙 등 법규문서는 영구 보존 대상입니다." },
-          { category: "민원", question: "정보공개 청구에 대한 결정 기한은?", options: ["5일 이내", "7일 이내", "10일 이내", "14일 이내"], answer: 2, explanation: "정보공개 청구를 받은 날부터 10일 이내에 공개 여부를 결정해야 합니다." },
-          { category: "감사", question: "일상감사 대상이 아닌 것은?", options: ["계약", "예산 전용", "국고보조금 교부", "일반 민원처리"], answer: 3, explanation: "일반 민원처리는 일상감사 대상이 아닙니다." },
-          { category: "인사", question: "5급 공무원의 정년은?", options: ["58세", "60세", "62세", "65세"], answer: 1, explanation: "일반직 공무원의 정년은 60세입니다." },
-          { category: "계약", question: "지체상금률의 상한은?", options: ["계약금액의 10%", "계약금액의 15%", "계약금액의 20%", "계약금액의 30%"], answer: 0, explanation: "지체상금은 계약금액의 10%를 초과할 수 없습니다." },
-          { category: "예산회계", question: "지방자치단체의 출납폐쇄일은?", options: ["12월 31일", "다음 연도 1월 31일", "다음 연도 2월 말일", "다음 연도 3월 31일"], answer: 2, explanation: "지방자치단체의 출납폐쇄일은 다음 연도 2월 말일입니다." },
-          { category: "복무", question: "시간외근무수당 지급 단가 산정 시 사용하는 분모는?", options: ["174시간", "209시간", "226시간", "243시간"], answer: 1, explanation: "시간외근무수당은 월 봉급액을 209시간으로 나눈 금액을 기준으로 산정합니다." }
-        ];
-
-        function getDailyQuiz() {
-          const today = new Date();
-          const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
-          const shuffled = [...allQuizData];
-          for (let i = shuffled.length - 1; i > 0; i--) {
-            const j = Math.floor((seed * (i + 1) * 9301 + 49297) % 233280 / 233280 * (i + 1));
-            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-          }
-          return shuffled.slice(0, 5);
-        }
-
-        const quizData = getDailyQuiz();
-        let currentQuestion = 0;
-        let score = 0;
-        let selectedOption = null;
-        let answered = false;
-
-        const progressEl = document.getElementById('quiz-progress');
-        if (!progressEl) return;
-        const categoryEl = document.getElementById('quiz-category');
-        const questionEl = document.getElementById('quiz-question');
-        const optionsEl = document.getElementById('quiz-options');
-        const resultDiv = document.getElementById('quiz-result');
-        const resultMessage = document.getElementById('result-message');
-        const resultExplanation = document.getElementById('result-explanation');
-        const submitBtn = document.getElementById('quiz-submit');
-        const finalDiv = document.getElementById('quiz-final');
-        const finalScore = document.getElementById('final-score');
-        const footerDiv = document.getElementById('quiz-footer');
-        const restartBtn = document.getElementById('quiz-restart');
-
-        function renderQuestion() {
-          const quiz = quizData[currentQuestion];
-          progressEl.textContent = `문제 ${currentQuestion + 1}/5`;
-          categoryEl.textContent = quiz.category;
-          questionEl.textContent = quiz.question;
-
-          optionsEl.innerHTML = quiz.options.map((opt, idx) => `
-            <button data-index="${idx}" class="quiz-option w-full text-left bg-white/10 hover:bg-white/20 rounded-xl p-4 transition-all duration-200 border border-white/10 hover:border-white/30 group cursor-pointer">
-              <span class="flex items-center gap-3">
-                <span class="option-number w-8 h-8 rounded-full bg-white/10 group-hover:bg-white/20 flex items-center justify-center text-sm font-medium transition-colors">${idx + 1}</span>
-                <span class="font-medium">${opt}</span>
-                <span class="result-icon ml-auto hidden">
-                  <span class="material-symbols-outlined text-xl"></span>
-                </span>
-              </span>
-            </button>
-          `).join('');
-
-          document.querySelectorAll('.quiz-option').forEach(option => {
-            option.addEventListener('click', handleOptionClick);
-          });
-
-          selectedOption = null;
-          answered = false;
-          resultDiv.classList.add('hidden');
-          resultDiv.classList.remove('bg-forest-500/20', 'bg-rose-500/20');
-          resultMessage.classList.remove('text-forest-300', 'text-rose-300');
-          submitBtn.disabled = true;
-          submitBtn.innerHTML = '정답 확인 <span class="material-symbols-outlined">check</span>';
-        }
-
-        function handleOptionClick() {
-          if (answered) return;
-          document.querySelectorAll('.quiz-option').forEach(opt => {
-            opt.classList.remove('bg-forest-500/30', 'border-forest-400');
-            opt.classList.add('bg-white/10', 'border-white/10');
-          });
-          this.classList.remove('bg-white/10', 'border-white/10');
-          this.classList.add('bg-forest-500/30', 'border-forest-400');
-          selectedOption = this;
-          submitBtn.disabled = false;
-        }
-
-        function handleSubmit() {
-          if (!selectedOption) return;
-          if (!answered) {
-            answered = true;
-            const quiz = quizData[currentQuestion];
-            const selectedIdx = parseInt(selectedOption.dataset.index);
-            const isCorrect = selectedIdx === quiz.answer;
-            if (isCorrect) score++;
-
-            document.querySelectorAll('.quiz-option').forEach(opt => {
-              opt.classList.add('cursor-not-allowed');
-              const idx = parseInt(opt.dataset.index);
-              const icon = opt.querySelector('.result-icon');
-              const iconSpan = icon.querySelector('.material-symbols-outlined');
-              if (idx === quiz.answer) {
-                opt.classList.remove('bg-white/10', 'bg-forest-500/30');
-                opt.classList.add('bg-forest-500/40', 'border-forest-400');
-                icon.classList.remove('hidden');
-                iconSpan.textContent = 'check_circle';
-                iconSpan.classList.add('text-forest-300');
-              } else if (opt === selectedOption && !isCorrect) {
-                opt.classList.remove('bg-forest-500/30');
-                opt.classList.add('bg-rose-500/30', 'border-rose-400');
-                icon.classList.remove('hidden');
-                iconSpan.textContent = 'cancel';
-                iconSpan.classList.add('text-rose-300');
-              }
-            });
-
-            resultDiv.classList.remove('hidden');
-            if (isCorrect) {
-              resultDiv.classList.add('bg-forest-500/20');
-              resultMessage.textContent = '정답입니다!';
-              resultMessage.classList.add('text-forest-300');
-            } else {
-              resultDiv.classList.add('bg-rose-500/20');
-              resultMessage.textContent = '오답입니다.';
-              resultMessage.classList.add('text-rose-300');
-            }
-            resultExplanation.textContent = quiz.explanation;
-
-            if (currentQuestion < quizData.length - 1) {
-              submitBtn.innerHTML = '다음 문제 <span class="material-symbols-outlined">arrow_forward</span>';
-            } else {
-              submitBtn.innerHTML = '결과 보기 <span class="material-symbols-outlined">emoji_events</span>';
-            }
-          } else {
-            if (currentQuestion < quizData.length - 1) {
-              currentQuestion++;
-              renderQuestion();
-            } else {
-              questionEl.classList.add('hidden');
-              optionsEl.classList.add('hidden');
-              resultDiv.classList.add('hidden');
-              footerDiv.classList.add('hidden');
-              finalDiv.classList.remove('hidden');
-              finalScore.textContent = score;
-            }
-          }
-        }
-
-        function handleRestart() {
-          currentQuestion = 0;
-          score = 0;
-          questionEl.classList.remove('hidden');
-          optionsEl.classList.remove('hidden');
-          footerDiv.classList.remove('hidden');
-          finalDiv.classList.add('hidden');
-          renderQuestion();
-        }
-
-        submitBtn.addEventListener('click', handleSubmit);
-        restartBtn.addEventListener('click', handleRestart);
-        renderQuestion();
-      });
-      </script>
-    </div>
-  </div>
-</section>
-
-<!-- 외부 시스템 바로가기 Section -->
-<section id="external-links" class="section bg-white">
-  <div class="container-wide">
-    <div class="text-center mb-12 reveal">
-      <span class="badge badge-navy mb-4">바로가기</span>
-      <h2 class="text-navy-900 mb-6">자주 사용하는 <span class="text-gradient-navy">외부 시스템</span></h2>
-    </div>
-
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-      <a href="https://www.g2b.go.kr" target="_blank" rel="noopener" class="group card card-hover p-5 text-center">
-        <div class="w-14 h-14 mx-auto mb-4 bg-blue-100 rounded-2xl flex items-center justify-center group-hover:bg-blue-600 transition-colors">
-          <span class="material-symbols-outlined text-2xl text-blue-600 group-hover:text-white transition-colors">storefront</span>
-        </div>
-        <h4 class="font-bold text-navy-900 text-sm mb-1">나라장터</h4>
-        <p class="text-navy-500 text-xs">G2B 조달시스템</p>
-      </a>
-
-      <a href="https://www.s2b.kr" target="_blank" rel="noopener" class="group card card-hover p-5 text-center">
-        <div class="w-14 h-14 mx-auto mb-4 bg-green-100 rounded-2xl flex items-center justify-center group-hover:bg-green-600 transition-colors">
-          <span class="material-symbols-outlined text-2xl text-green-600 group-hover:text-white transition-colors">school</span>
-        </div>
-        <h4 class="font-bold text-navy-900 text-sm mb-1">학교장터</h4>
-        <p class="text-navy-500 text-xs">S2B 전자조달</p>
-      </a>
-
-      <a href="https://www.smpp.go.kr" target="_blank" rel="noopener" class="group card card-hover p-5 text-center">
-        <div class="w-14 h-14 mx-auto mb-4 bg-orange-100 rounded-2xl flex items-center justify-center group-hover:bg-orange-500 transition-colors">
-          <span class="material-symbols-outlined text-2xl text-orange-500 group-hover:text-white transition-colors">business</span>
-        </div>
-        <h4 class="font-bold text-navy-900 text-sm mb-1">중소기업제품</h4>
-        <p class="text-navy-500 text-xs">공공구매종합정보</p>
-      </a>
-
-      <a href="https://www.kiscon.net" target="_blank" rel="noopener" class="group card card-hover p-5 text-center">
-        <div class="w-14 h-14 mx-auto mb-4 bg-amber-100 rounded-2xl flex items-center justify-center group-hover:bg-amber-500 transition-colors">
-          <span class="material-symbols-outlined text-2xl text-amber-600 group-hover:text-white transition-colors">construction</span>
-        </div>
-        <h4 class="font-bold text-navy-900 text-sm mb-1">건설산업정보</h4>
-        <p class="text-navy-500 text-xs">KISCON</p>
-      </a>
-
-      <a href="https://www.law.go.kr" target="_blank" rel="noopener" class="group card card-hover p-5 text-center">
-        <div class="w-14 h-14 mx-auto mb-4 bg-purple-100 rounded-2xl flex items-center justify-center group-hover:bg-purple-600 transition-colors">
-          <span class="material-symbols-outlined text-2xl text-purple-600 group-hover:text-white transition-colors">gavel</span>
-        </div>
-        <h4 class="font-bold text-navy-900 text-sm mb-1">국가법령정보</h4>
-        <p class="text-navy-500 text-xs">법령 검색</p>
-      </a>
-
-      <a href="https://www.pps.go.kr" target="_blank" rel="noopener" class="group card card-hover p-5 text-center">
-        <div class="w-14 h-14 mx-auto mb-4 bg-teal-100 rounded-2xl flex items-center justify-center group-hover:bg-teal-600 transition-colors">
-          <span class="material-symbols-outlined text-2xl text-teal-600 group-hover:text-white transition-colors">account_balance</span>
-        </div>
-        <h4 class="font-bold text-navy-900 text-sm mb-1">조달청</h4>
-        <p class="text-navy-500 text-xs">PPS</p>
-      </a>
-    </div>
-
-    <div class="mt-8 flex flex-wrap justify-center gap-3">
-      <a href="https://www.moef.go.kr" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 bg-surface-100 hover:bg-surface-200 rounded-full text-sm text-navy-600 transition-colors">
-        <span class="material-symbols-outlined text-lg">open_in_new</span>
-        기획재정부
-      </a>
-      <a href="https://www.mois.go.kr" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 bg-surface-100 hover:bg-surface-200 rounded-full text-sm text-navy-600 transition-colors">
-        <span class="material-symbols-outlined text-lg">open_in_new</span>
-        행정안전부
-      </a>
-      <a href="https://www.alio.go.kr" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 bg-surface-100 hover:bg-surface-200 rounded-full text-sm text-navy-600 transition-colors">
-        <span class="material-symbols-outlined text-lg">open_in_new</span>
-        공공기관 경영정보
-      </a>
-      <a href="https://www.openfiscaldata.go.kr" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 bg-surface-100 hover:bg-surface-200 rounded-full text-sm text-navy-600 transition-colors">
-        <span class="material-symbols-outlined text-lg">open_in_new</span>
-        열린재정
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- CTA Section — gradient background -->
-<section class="section relative overflow-hidden bg-gradient-to-br from-navy-50 via-surface-50 to-point-50/30">
-  <div class="absolute top-0 left-1/4 w-[300px] h-[300px] bg-point-500/[0.05] rounded-full blur-[80px]"></div>
-  <div class="absolute bottom-0 right-1/4 w-[300px] h-[300px] bg-forest-500/[0.05] rounded-full blur-[80px]"></div>
-  <div class="container-tight text-center relative reveal">
-    <h2 class="text-navy-900 mb-6">
-      지금 바로 실무와 함께<br>
-      더 나은 공직 생활을 <span class="text-gradient-accent">시작하세요</span>
+<!-- Final CTA -->
+<section class="bg-white py-24">
+  <div class="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
+    <h2 class="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
+      실무, 이제 더 쉽고 완벽하게.
     </h2>
-    <p class="text-xl text-navy-500 mb-10 max-w-xl mx-auto">
-      회원가입 후 모든 도구와 가이드를 무료로 이용할 수 있습니다.
+    <p class="mx-auto mt-6 max-w-2xl text-xl text-slate-500 font-light">
+      공무원이 선택한 프리미엄 실무 플랫폼, 지금 바로 시작해보세요.
     </p>
-
-    <div class="flex flex-col sm:flex-row gap-4 justify-center">
-      <%= link_to new_user_registration_path, class: "btn btn-lg btn-primary hover-glow-navy shadow-lg" do %>
-        <span class="material-symbols-outlined">person_add</span>
-        바로 시작하기
+    <div class="mt-10 flex flex-col sm:flex-row justify-center gap-4">
+      <%= link_to new_user_registration_path, class: "rounded-xl bg-slate-900 px-8 py-4 text-base font-bold text-white shadow-xl shadow-slate-900/10 hover:bg-slate-800 hover:scale-105 transition-all" do %>
+        무료로 시작하기
       <% end %>
-      <%= link_to tools_path, class: "btn btn-lg btn-glass shadow-md hover:shadow-lg transition-all" do %>
-        <span class="material-symbols-outlined">build</span>
+      <%= link_to tools_path, class: "rounded-xl bg-slate-100 px-8 py-4 text-base font-bold text-slate-700 hover:bg-slate-200 transition-all" do %>
         실무 도구 둘러보기
       <% end %>
     </div>
   </div>
 </section>
 
-<!-- Scroll Reveal 스크립트 -->
-<script>
-document.addEventListener('turbo:load', function() {
-  const revealEls = document.querySelectorAll('.reveal');
-  if (!revealEls.length) return;
+</div>
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('revealed');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-
-  revealEls.forEach(el => observer.observe(el));
-});
-</script>
-
-<!-- 금액 계산기 스크립트 -->
+<!-- 금액 계산기 -->
 <script>
 document.addEventListener('turbo:load', function() {
   const priceInput = document.getElementById('price-input');
   const priceCategory = document.getElementById('price-category');
   const priceResult = document.getElementById('price-result');
   const priceResultContent = document.getElementById('price-result-content');
-
   if (!priceInput) return;
 
-  // 금액 포맷팅
   priceInput.addEventListener('input', function() {
     let val = this.value.replace(/[^0-9]/g, '');
-    if (val) {
-      this.value = Number(val).toLocaleString();
-      calculateMethod();
-    } else {
-      this.value = '';
-      priceResult.classList.add('hidden');
-    }
+    if (val) { this.value = Number(val).toLocaleString(); calculateMethod(); }
+    else { this.value = ''; priceResult.classList.add('hidden'); }
   });
 
-  // 빠른 금액 버튼
   document.querySelectorAll('.price-quick-btn').forEach(btn => {
     btn.addEventListener('click', function() {
-      const val = this.dataset.value;
-      priceInput.value = Number(val).toLocaleString();
+      priceInput.value = Number(this.dataset.value).toLocaleString();
       calculateMethod();
     });
   });
@@ -764,82 +366,150 @@ document.addEventListener('turbo:load', function() {
   function calculateMethod() {
     const amount = parseInt(priceInput.value.replace(/,/g, ''));
     const category = priceCategory.value;
-    if (!amount || amount <= 0) {
-      priceResult.classList.add('hidden');
-      return;
-    }
-
+    if (!amount || amount <= 0) { priceResult.classList.add('hidden'); return; }
     let method, color, icon, desc, checklist;
-
     if (category === 'construction') {
-      if (amount <= 20000000) {
-        method = '1인 견적 수의계약';
-        color = 'forest';
-        icon = 'person';
-        desc = '추정가격 2천만원 이하 공사';
-        checklist = ['견적서 1부 징구', '계약서 작성 (간이계약서 가능)', '착공신고서', '준공검사 및 대가 지급'];
-      } else if (amount <= 200000000) {
-        method = '2인 이상 견적 수의계약';
-        color = 'point';
-        icon = 'group';
-        desc = '추정가격 2천만원 초과 ~ 2억원 이하 공사';
-        checklist = ['2인 이상 견적서 징구', '예정가격 작성', '계약서 작성', '착공신고서 → 준공검사 → 대가 지급'];
-      } else {
-        method = '경쟁입찰';
-        color = 'navy';
-        icon = 'groups';
-        desc = '추정가격 2억원 초과 공사';
-        checklist = ['입찰공고 (7일 이상)', '예정가격 작성 (복수예비가격)', '적격심사', '계약 체결 → 착공 → 준공검사'];
-      }
+      if (amount <= 20000000) { method='1인 견적 수의계약'; color='emerald'; icon='person'; desc='추정가격 2천만원 이하 공사'; checklist=['견적서 1부 징구','계약서 작성 (간이계약서 가능)','착공신고서','준공검사 및 대가 지급']; }
+      else if (amount <= 200000000) { method='2인 이상 견적 수의계약'; color='indigo'; icon='group'; desc='추정가격 2천만원 초과 ~ 2억원 이하 공사'; checklist=['2인 이상 견적서 징구','예정가격 작성','계약서 작성','착공신고서 → 준공검사 → 대가 지급']; }
+      else { method='경쟁입찰'; color='slate'; icon='groups'; desc='추정가격 2억원 초과 공사'; checklist=['입찰공고 (7일 이상)','예정가격 작성 (복수예비가격)','적격심사','계약 체결 → 착공 → 준공검사']; }
     } else {
-      // 물품, 용역
-      if (amount <= 20000000) {
-        method = '1인 견적 수의계약';
-        color = 'forest';
-        icon = 'person';
-        desc = `추정가격 2천만원 이하 ${category === 'goods' ? '물품' : '용역'}`;
-        checklist = ['견적서 1부 징구', '계약서 작성 (간이계약서 가능)', '검수 및 대가 지급'];
-      } else if (amount <= 50000000) {
-        method = '2인 이상 견적 수의계약';
-        color = 'point';
-        icon = 'group';
-        desc = `추정가격 2천만원 초과 ~ 5천만원 이하 ${category === 'goods' ? '물품' : '용역'}`;
-        checklist = ['2인 이상 견적서 징구', '예정가격 작성', '계약서 작성', '검수 및 대가 지급'];
-      } else {
-        method = '경쟁입찰';
-        color = 'navy';
-        icon = 'groups';
-        desc = `추정가격 5천만원 초과 ${category === 'goods' ? '물품' : '용역'}`;
-        checklist = ['입찰공고 (7일 이상)', '예정가격 작성 (복수예비가격)', '적격심사 또는 최저가낙찰', '계약 체결 → 검수 → 대가 지급'];
-      }
+      if (amount <= 20000000) { method='1인 견적 수의계약'; color='emerald'; icon='person'; desc=`추정가격 2천만원 이하 ${category==='goods'?'물품':'용역'}`; checklist=['견적서 1부 징구','계약서 작성 (간이계약서 가능)','검수 및 대가 지급']; }
+      else if (amount <= 50000000) { method='2인 이상 견적 수의계약'; color='indigo'; icon='group'; desc=`추정가격 2천만원 초과 ~ 5천만원 이하 ${category==='goods'?'물품':'용역'}`; checklist=['2인 이상 견적서 징구','예정가격 작성','계약서 작성','검수 및 대가 지급']; }
+      else { method='경쟁입찰'; color='slate'; icon='groups'; desc=`추정가격 5천만원 초과 ${category==='goods'?'물품':'용역'}`; checklist=['입찰공고 (7일 이상)','예정가격 작성 (복수예비가격)','적격심사 또는 최저가낙찰','계약 체결 → 검수 → 대가 지급']; }
     }
-
     priceResult.classList.remove('hidden');
-    priceResultContent.className = `p-5 rounded-xl border-2 border-${color}-200 bg-${color}-50`;
+    priceResultContent.className = `p-4 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm`;
     priceResultContent.innerHTML = `
       <div class="flex items-center gap-3 mb-3">
-        <span class="material-symbols-outlined text-2xl text-${color}-600">${icon}</span>
-        <h3 class="text-lg font-bold text-${color}-700">${method}</h3>
+        <span class="material-symbols-outlined text-2xl text-${color}-400">${icon}</span>
+        <h3 class="text-lg font-bold text-white">${method}</h3>
       </div>
-      <p class="text-navy-600 text-sm mb-4">${desc} (추정가격: ${Number(amount).toLocaleString()}원)</p>
+      <p class="text-slate-400 text-sm mb-3">${desc} (추정가격: ${Number(amount).toLocaleString()}원)</p>
       <div class="space-y-2">
-        ${checklist.map(item => `
-          <div class="flex items-start gap-2">
-            <span class="material-symbols-outlined text-${color}-500 text-lg mt-0.5">check_circle</span>
-            <span class="text-navy-700 text-sm">${item}</span>
-          </div>
-        `).join('')}
+        ${checklist.map(item => `<div class="flex items-start gap-2"><span class="material-symbols-outlined text-${color}-400 text-lg mt-0.5">check_circle</span><span class="text-slate-300 text-sm">${item}</span></div>`).join('')}
       </div>
-      <div class="mt-4 pt-4 border-t border-${color}-200">
-        <a href="${'<%= contract_method_path %>'}" class="inline-flex items-center gap-1 text-${color}-600 hover:text-${color}-700 text-sm font-semibold">
-          상세 분석 바로가기 <span class="material-symbols-outlined text-lg">arrow_forward</span>
-        </a>
-      </div>
-    `;
+      <div class="mt-4 pt-3 border-t border-white/10">
+        <a href="${'<%= contract_method_path %>'}" class="inline-flex items-center gap-1 text-indigo-400 hover:text-indigo-300 text-sm font-semibold">상세 분석 바로가기 <span class="material-symbols-outlined text-lg">arrow_forward</span></a>
+      </div>`;
+  }
+  priceCategory.addEventListener('change', function() { if (priceInput.value) calculateMethod(); });
+});
+</script>
+
+<!-- 퀴즈 -->
+<script>
+document.addEventListener('turbo:load', function() {
+  const allQuizData = [
+    { category: "예산회계", question: "다음 중 예산의 이월에 해당하지 않는 것은?", options: ["명시이월", "사고이월", "계속비이월", "예비비이월"], answer: 3, explanation: "예비비이월은 존재하지 않는 개념입니다." },
+    { category: "예산회계", question: "다음 중 세출예산의 이용에 해당하는 것은?", options: ["장 간의 상호융통", "관 간의 상호융통", "항 간의 상호융통", "세항 간의 상호융통"], answer: 2, explanation: "이용은 입법과목인 '항' 간의 상호융통을 말합니다." },
+    { category: "예산회계", question: "예비비 사용 후 국회 승인을 받아야 하는 기한은?", options: ["다음 연도 정기회 개회 전", "다음 연도 정기회 중", "사용 후 3개월 이내", "사용 후 6개월 이내"], answer: 1, explanation: "예비비 사용 후 다음 연도 정기회 중에 국회의 승인을 받아야 합니다." },
+    { category: "예산회계", question: "사고이월의 요건이 아닌 것은?", options: ["연도 내 지출원인행위", "불가피한 사유", "세입세출예산에 명시", "연도 내 지출하지 못한 경비"], answer: 2, explanation: "세입세출예산에 명시하는 것은 명시이월의 요건입니다." },
+    { category: "예산회계", question: "예산의 전용이란?", options: ["회계연도 간 이월", "항 간의 상호융통", "세항·목 간의 상호융통", "예비비 사용"], answer: 2, explanation: "전용은 행정과목인 세항·목 간의 상호융통을 말합니다." },
+    { category: "계약", question: "물품 구매 시 1인 견적 수의계약이 가능한 추정가격(부가세 별도) 기준은?", options: ["1천만원 이하", "2천만원 이하", "3천만원 이하", "5천만원 이하"], answer: 1, explanation: "물품·용역의 경우 추정가격 2천만원 이하일 때 1인 견적 수의계약이 가능합니다." },
+    { category: "계약", question: "나라장터 전자입찰 시 입찰공고 기간은 최소 며칠인가?", options: ["5일", "7일", "10일", "14일"], answer: 1, explanation: "전자입찰의 경우 입찰공고 기간은 최소 7일 이상입니다." },
+    { category: "계약", question: "계약보증금의 원칙적인 비율은?", options: ["계약금액의 5%", "계약금액의 10%", "계약금액의 15%", "계약금액의 20%"], answer: 1, explanation: "계약보증금은 계약금액의 10% 이상으로 납부해야 합니다." },
+    { category: "계약", question: "선금의 지급 한도는?", options: ["계약금액의 50%", "계약금액의 60%", "계약금액의 70%", "계약금액의 80%"], answer: 2, explanation: "선금은 계약금액의 70% 이내에서 지급할 수 있습니다." },
+    { category: "계약", question: "복수예비가격 작성 개수는?", options: ["10개", "15개", "20개", "25개"], answer: 1, explanation: "복수예비가격은 15개를 작성합니다." },
+    { category: "복무", question: "공무원의 병가 일수는 연간 최대 며칠인가?", options: ["30일", "60일", "90일", "120일"], answer: 1, explanation: "공무원의 병가는 연 60일 이내입니다." },
+    { category: "복무", question: "재직기간 1년 미만 공무원의 연가 일수는?", options: ["8일", "11일", "14일", "15일"], answer: 1, explanation: "재직기간 1년 미만 공무원의 연가 일수는 11일입니다." },
+    { category: "복무", question: "배우자 출산휴가 일수는?", options: ["5일", "10일", "15일", "20일"], answer: 3, explanation: "배우자 출산휴가는 20일입니다. (2025년 공무원복무규정 개정)" },
+    { category: "문서", question: "공문서의 보존기간 중 '영구'에 해당하는 것은?", options: ["일반 통계자료", "조례·규칙", "단순 민원서류", "일일업무보고"], answer: 1, explanation: "조례, 규칙 등 법규문서는 영구 보존 대상입니다." },
+    { category: "민원", question: "정보공개 청구에 대한 결정 기한은?", options: ["5일 이내", "7일 이내", "10일 이내", "14일 이내"], answer: 2, explanation: "정보공개 청구를 받은 날부터 10일 이내에 공개 여부를 결정해야 합니다." },
+    { category: "감사", question: "일상감사 대상이 아닌 것은?", options: ["계약", "예산 전용", "국고보조금 교부", "일반 민원처리"], answer: 3, explanation: "일반 민원처리는 일상감사 대상이 아닙니다." },
+    { category: "인사", question: "5급 공무원의 정년은?", options: ["58세", "60세", "62세", "65세"], answer: 1, explanation: "일반직 공무원의 정년은 60세입니다." },
+    { category: "계약", question: "지체상금률의 상한은?", options: ["계약금액의 10%", "계약금액의 15%", "계약금액의 20%", "계약금액의 30%"], answer: 0, explanation: "지체상금은 계약금액의 10%를 초과할 수 없습니다." },
+    { category: "예산회계", question: "지방자치단체의 출납폐쇄일은?", options: ["12월 31일", "다음 연도 1월 31일", "다음 연도 2월 말일", "다음 연도 3월 31일"], answer: 2, explanation: "지방자치단체의 출납폐쇄일은 다음 연도 2월 말일입니다." },
+    { category: "복무", question: "시간외근무수당 지급 단가 산정 시 사용하는 분모는?", options: ["174시간", "209시간", "226시간", "243시간"], answer: 1, explanation: "시간외근무수당은 월 봉급액을 209시간으로 나눈 금액을 기준으로 산정합니다." }
+  ];
+
+  function getDailyQuiz() {
+    const today = new Date();
+    const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+    const shuffled = [...allQuizData];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor((seed * (i + 1) * 9301 + 49297) % 233280 / 233280 * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled.slice(0, 5);
   }
 
-  priceCategory.addEventListener('change', function() {
-    if (priceInput.value) calculateMethod();
+  const quizData = getDailyQuiz();
+  let currentQuestion = 0, score = 0, selectedOption = null, answered = false;
+  const progressEl = document.getElementById('quiz-progress');
+  if (!progressEl) return;
+  const categoryEl = document.getElementById('quiz-category');
+  const questionEl = document.getElementById('quiz-question');
+  const optionsEl = document.getElementById('quiz-options');
+  const resultDiv = document.getElementById('quiz-result');
+  const resultMessage = document.getElementById('result-message');
+  const resultExplanation = document.getElementById('result-explanation');
+  const submitBtn = document.getElementById('quiz-submit');
+  const finalDiv = document.getElementById('quiz-final');
+  const finalScore = document.getElementById('final-score');
+  const footerDiv = document.getElementById('quiz-footer');
+  const restartBtn = document.getElementById('quiz-restart');
+
+  function renderQuestion() {
+    const q = quizData[currentQuestion];
+    progressEl.textContent = `문제 ${currentQuestion + 1}/5`;
+    categoryEl.textContent = q.category;
+    questionEl.textContent = q.question;
+    optionsEl.innerHTML = q.options.map((opt, i) => `
+      <button data-index="${i}" class="quiz-option w-full text-left p-4 rounded-xl bg-slate-800/50 hover:bg-slate-700/50 border border-white/5 text-slate-200 text-sm transition-all cursor-pointer flex items-center gap-3">
+        <span class="w-7 h-7 rounded-full border border-white/20 flex items-center justify-center text-xs font-medium shrink-0">${String.fromCharCode(65+i)}</span>
+        <span>${opt}</span>
+      </button>
+    `).join('');
+    document.querySelectorAll('.quiz-option').forEach(o => o.addEventListener('click', handleOptionClick));
+    selectedOption = null; answered = false;
+    resultDiv.classList.add('hidden');
+    resultDiv.classList.remove('bg-emerald-500/20','bg-red-500/20');
+    resultMessage.classList.remove('text-emerald-300','text-red-300');
+    submitBtn.disabled = true;
+    submitBtn.textContent = '정답 확인';
+  }
+
+  function handleOptionClick() {
+    if (answered) return;
+    document.querySelectorAll('.quiz-option').forEach(o => { o.classList.remove('bg-indigo-600/30','border-indigo-400'); o.classList.add('bg-slate-800/50','border-white/5'); });
+    this.classList.remove('bg-slate-800/50','border-white/5');
+    this.classList.add('bg-indigo-600/30','border-indigo-400');
+    selectedOption = this;
+    submitBtn.disabled = false;
+  }
+
+  function handleSubmit() {
+    if (!selectedOption) return;
+    if (!answered) {
+      answered = true;
+      const q = quizData[currentQuestion];
+      const si = parseInt(selectedOption.dataset.index);
+      const correct = si === q.answer;
+      if (correct) score++;
+      document.querySelectorAll('.quiz-option').forEach(o => {
+        o.classList.add('cursor-not-allowed');
+        const idx = parseInt(o.dataset.index);
+        if (idx === q.answer) { o.classList.remove('bg-slate-800/50','bg-indigo-600/30'); o.classList.add('bg-emerald-600/30','border-emerald-400'); }
+        else if (o === selectedOption && !correct) { o.classList.remove('bg-indigo-600/30'); o.classList.add('bg-red-500/30','border-red-400'); }
+      });
+      resultDiv.classList.remove('hidden');
+      if (correct) { resultDiv.classList.add('bg-emerald-500/20'); resultMessage.textContent = '정답입니다!'; resultMessage.classList.add('text-emerald-300'); }
+      else { resultDiv.classList.add('bg-red-500/20'); resultMessage.textContent = '오답입니다.'; resultMessage.classList.add('text-red-300'); }
+      resultExplanation.textContent = q.explanation;
+      submitBtn.textContent = currentQuestion < quizData.length - 1 ? '다음 문제 →' : '결과 보기';
+    } else {
+      if (currentQuestion < quizData.length - 1) { currentQuestion++; renderQuestion(); }
+      else { questionEl.classList.add('hidden'); optionsEl.classList.add('hidden'); resultDiv.classList.add('hidden'); footerDiv.classList.add('hidden'); finalDiv.classList.remove('hidden'); finalScore.textContent = score; }
+    }
+  }
+
+  submitBtn.addEventListener('click', handleSubmit);
+  restartBtn.addEventListener('click', function() {
+    currentQuestion = 0; score = 0;
+    questionEl.classList.remove('hidden'); optionsEl.classList.remove('hidden');
+    footerDiv.classList.remove('hidden'); finalDiv.classList.add('hidden');
+    renderQuestion();
   });
+  renderQuestion();
 });
 </script>

@@ -17,12 +17,12 @@
 <!-- 브레드크럼 -->
 <div class="bg-surface-50 border-b border-gray-100">
   <div class="container-wide py-3">
-    <nav class="flex items-center gap-2 text-sm text-navy-500">
-      <%= link_to "홈", root_path, class: "hover:text-navy-800 transition-colors" %>
+    <nav class="flex items-center gap-2 text-sm text-slate-500">
+      <%= link_to "홈", root_path, class: "hover:text-slate-800 transition-colors" %>
       <span class="material-symbols-outlined text-sm">chevron_right</span>
-      <%= link_to "감사사례", audit_cases_path, class: "hover:text-navy-800 transition-colors" %>
+      <%= link_to "감사사례", audit_cases_path, class: "hover:text-slate-800 transition-colors" %>
       <span class="material-symbols-outlined text-sm">chevron_right</span>
-      <span class="text-navy-800 font-medium truncate"><%= @audit_case.title %></span>
+      <span class="text-slate-800 font-medium truncate"><%= @audit_case.title %></span>
     </nav>
   </div>
 </div>
@@ -46,7 +46,7 @@
               <%= @audit_case.severity %>
             </span>
           </div>
-          <h1 class="text-2xl lg:text-3xl font-bold text-navy-900 mb-2"><%= @audit_case.title %></h1>
+          <h1 class="text-2xl lg:text-3xl font-bold text-slate-900 mb-2"><%= @audit_case.title %></h1>
         </div>
 
         <!-- 핵심 정보 카드 -->
@@ -57,7 +57,7 @@
               <span class="material-symbols-outlined">report</span>
               지적사항
             </h2>
-            <p class="text-navy-700 leading-relaxed"><%= simple_format(@audit_case.issue) %></p>
+            <p class="text-slate-700 leading-relaxed"><%= simple_format(@audit_case.issue) %></p>
           </div>
 
           <!-- 관련근거 -->
@@ -66,7 +66,7 @@
               <span class="material-symbols-outlined">menu_book</span>
               관련근거
             </h2>
-            <p class="text-navy-700 font-medium"><%= @audit_case.legal_basis %></p>
+            <p class="text-slate-700 font-medium"><%= @audit_case.legal_basis %></p>
           </div>
 
           <!-- 조치내용 -->
@@ -75,7 +75,7 @@
               <span class="material-symbols-outlined">assignment_turned_in</span>
               조치내용
             </h2>
-            <p class="text-navy-700 leading-relaxed"><%= simple_format(@audit_case.action_taken) %></p>
+            <p class="text-slate-700 leading-relaxed"><%= simple_format(@audit_case.action_taken) %></p>
           </div>
 
           <!-- 교훈/시사점 -->
@@ -84,17 +84,17 @@
               <span class="material-symbols-outlined">lightbulb</span>
               교훈 및 시사점
             </h2>
-            <p class="text-navy-700 leading-relaxed"><%= simple_format(@audit_case.lesson) %></p>
+            <p class="text-slate-700 leading-relaxed"><%= simple_format(@audit_case.lesson) %></p>
           </div>
 
           <!-- 상세 내용 (있을 경우) -->
           <% if @audit_case.detail.present? %>
             <div class="card p-6">
-              <h2 class="font-bold text-navy-900 flex items-center gap-2 mb-4">
+              <h2 class="font-bold text-slate-900 flex items-center gap-2 mb-4">
                 <span class="material-symbols-outlined">description</span>
                 상세 분석
               </h2>
-              <div class="prose prose-navy max-w-none text-navy-700 leading-relaxed">
+              <div class="prose prose-navy max-w-none text-slate-700 leading-relaxed">
                 <%= simple_format(@audit_case.detail) %>
               </div>
             </div>
@@ -104,7 +104,7 @@
         <!-- 관련 토픽 -->
         <% if @related_topic %>
           <div class="card p-6 bg-blue-50/50 border-blue-100 mb-8">
-            <h3 class="font-bold text-navy-900 flex items-center gap-2 mb-3">
+            <h3 class="font-bold text-slate-900 flex items-center gap-2 mb-3">
               <span class="material-symbols-outlined text-blue-600">link</span>
               관련 법령 가이드
             </h3>
@@ -113,10 +113,10 @@
                 <span class="material-symbols-outlined text-blue-600">article</span>
               </div>
               <div>
-                <span class="font-semibold text-navy-900 group-hover:text-blue-600 transition-colors"><%= @related_topic.name %></span>
-                <p class="text-sm text-navy-500"><%= @related_topic.summary.truncate(80) %></p>
+                <span class="font-semibold text-slate-900 group-hover:text-blue-600 transition-colors"><%= @related_topic.name %></span>
+                <p class="text-sm text-slate-500"><%= @related_topic.summary.truncate(80) %></p>
               </div>
-              <span class="material-symbols-outlined text-navy-300 ml-auto group-hover:translate-x-1 transition-transform">arrow_forward</span>
+              <span class="material-symbols-outlined text-slate-300 ml-auto group-hover:translate-x-1 transition-transform">arrow_forward</span>
             <% end %>
           </div>
         <% end %>
@@ -124,7 +124,7 @@
         <!-- 같은 카테고리 사례 -->
         <% if @related_cases.any? %>
           <div>
-            <h3 class="font-bold text-navy-900 text-lg mb-4 flex items-center gap-2">
+            <h3 class="font-bold text-slate-900 text-lg mb-4 flex items-center gap-2">
               <span class="material-symbols-outlined text-red-500">folder_open</span>
               같은 분야 감사사례
             </h3>
@@ -142,8 +142,8 @@
                       <%= related.severity %>
                     </span>
                   </div>
-                  <h4 class="font-semibold text-navy-900 text-sm group-hover:text-red-600 transition-colors"><%= related.title %></h4>
-                  <p class="text-xs text-navy-500 mt-1"><%= related.legal_basis %></p>
+                  <h4 class="font-semibold text-slate-900 text-sm group-hover:text-red-600 transition-colors"><%= related.title %></h4>
+                  <p class="text-xs text-slate-500 mt-1"><%= related.legal_basis %></p>
                 <% end %>
               <% end %>
             </div>
@@ -155,26 +155,26 @@
       <div class="lg:w-[30%] mt-10 lg:mt-0">
         <div class="sticky top-20 space-y-6">
           <!-- 돌아가기 -->
-          <%= link_to audit_cases_path, class: "flex items-center gap-2 text-navy-600 hover:text-navy-900 font-medium transition-colors mb-4" do %>
+          <%= link_to audit_cases_path, class: "flex items-center gap-2 text-slate-600 hover:text-slate-900 font-medium transition-colors mb-4" do %>
             <span class="material-symbols-outlined text-lg">arrow_back</span>
             감사사례 목록으로
           <% end %>
 
           <!-- 이 사례 요약 -->
           <div class="card p-6">
-            <h3 class="font-bold text-navy-900 mb-4">사례 요약</h3>
+            <h3 class="font-bold text-slate-900 mb-4">사례 요약</h3>
             <dl class="space-y-3 text-sm">
               <div class="flex justify-between">
-                <dt class="text-navy-500">분야</dt>
-                <dd class="font-semibold text-navy-800"><%= @audit_case.category %></dd>
+                <dt class="text-slate-500">분야</dt>
+                <dd class="font-semibold text-slate-800"><%= @audit_case.category %></dd>
               </div>
               <div class="flex justify-between">
-                <dt class="text-navy-500">심각도</dt>
+                <dt class="text-slate-500">심각도</dt>
                 <dd class="font-semibold text-<%= @audit_case.severity_color %>-700"><%= @audit_case.severity %></dd>
               </div>
               <div class="flex justify-between">
-                <dt class="text-navy-500">관련근거</dt>
-                <dd class="font-semibold text-navy-800 text-right max-w-[60%]"><%= @audit_case.legal_basis %></dd>
+                <dt class="text-slate-500">관련근거</dt>
+                <dd class="font-semibold text-slate-800 text-right max-w-[60%]"><%= @audit_case.legal_basis %></dd>
               </div>
             </dl>
           </div>

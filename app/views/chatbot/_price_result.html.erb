@@ -14,21 +14,21 @@
         </span>
       </div>
       <div>
-        <h3 class="text-xl font-bold text-navy-900"><%= @result[:method] %></h3>
-        <p class="text-navy-600"><%= @result[:description] %></p>
+        <h3 class="text-xl font-bold text-slate-900"><%= @result[:method] %></h3>
+        <p class="text-slate-600"><%= @result[:description] %></p>
       </div>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div class="bg-surface-50 rounded-xl p-5">
-        <h4 class="font-bold text-navy-900 mb-3 flex items-center gap-2">
-          <span class="material-symbols-outlined text-forest-600">checklist</span>
+        <h4 class="font-bold text-slate-900 mb-3 flex items-center gap-2">
+          <span class="material-symbols-outlined text-emerald-600">checklist</span>
           필수 절차
         </h4>
         <ol class="space-y-2">
           <% @result[:checklist].each_with_index do |item, i| %>
-            <li class="flex items-start gap-2 text-navy-700">
-              <span class="w-5 h-5 bg-forest-100 text-forest-600 rounded-full text-xs font-bold flex items-center justify-center shrink-0 mt-0.5"><%= i + 1 %></span>
+            <li class="flex items-start gap-2 text-slate-700">
+              <span class="w-5 h-5 bg-emerald-100 text-emerald-600 rounded-full text-xs font-bold flex items-center justify-center shrink-0 mt-0.5"><%= i + 1 %></span>
               <%= item %>
             </li>
           <% end %>
@@ -36,13 +36,13 @@
       </div>
 
       <div class="bg-amber-50 rounded-xl p-5">
-        <h4 class="font-bold text-navy-900 mb-3 flex items-center gap-2">
+        <h4 class="font-bold text-slate-900 mb-3 flex items-center gap-2">
           <span class="material-symbols-outlined text-amber-600">lightbulb</span>
           참고사항
         </h4>
         <ul class="space-y-2">
           <% @result[:tips].each do |tip| %>
-            <li class="flex items-start gap-2 text-navy-700">
+            <li class="flex items-start gap-2 text-slate-700">
               <span class="material-symbols-outlined text-amber-500 text-sm mt-0.5">arrow_right</span>
               <%= tip %>
             </li>
@@ -53,11 +53,11 @@
 
     <div class="mt-6 pt-6 border-t border-gray-200">
       <div class="flex flex-wrap gap-3">
-        <%= link_to contract_method_path, class: "inline-flex items-center gap-2 px-4 py-2 bg-forest-600 text-white rounded-lg hover:bg-forest-700 transition-colors" do %>
+        <%= link_to contract_method_path, class: "inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors" do %>
           <span class="material-symbols-outlined text-lg">gavel</span>
           계약방식 결정 도우미
         <% end %>
-        <%= link_to contract_documents_path, class: "inline-flex items-center gap-2 px-4 py-2 border border-gray-300 text-navy-700 rounded-lg hover:bg-gray-50 transition-colors" do %>
+        <%= link_to contract_documents_path, class: "inline-flex items-center gap-2 px-4 py-2 border border-gray-300 text-slate-700 rounded-lg hover:bg-gray-50 transition-colors" do %>
           <span class="material-symbols-outlined text-lg">description</span>
           서류 체크리스트
         <% end %>
@@ -65,7 +65,7 @@
     </div>
   </div>
 <% else %>
-  <div class="card p-8 text-center text-navy-500">
+  <div class="card p-8 text-center text-slate-500">
     <span class="material-symbols-outlined text-4xl mb-2">info</span>
     <p>계약 유형과 가격을 입력해주세요.</p>
   </div>

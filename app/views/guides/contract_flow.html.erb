@@ -12,7 +12,7 @@
     gap: 8px;
     margin-bottom: 32px;
     padding: 6px;
-    background: var(--surface-100);
+    background: var(--color-surface-100);
     border-radius: 16px;
     overflow-x: auto;
   }
@@ -25,7 +25,7 @@
     background: transparent;
     font-size: 15px;
     font-weight: 600;
-    color: var(--navy-600);
+    color: var(--color-slate-600);
     cursor: pointer;
     transition: all 0.2s;
     display: flex;
@@ -38,7 +38,7 @@
   }
   .flow-tab.active {
     background: white;
-    color: var(--navy-900);
+    color: var(--color-slate-900);
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   }
   .flow-tab .material-symbols-outlined {
@@ -71,7 +71,7 @@
     left: 60px;
     right: 60px;
     height: 4px;
-    background: linear-gradient(90deg, var(--forest-200), var(--forest-400), var(--point-400), var(--navy-400));
+    background: linear-gradient(90deg, var(--color-emerald-200), var(--color-emerald-400), var(--color-indigo-400), var(--color-slate-400));
     border-radius: 2px;
     z-index: 0;
   }
@@ -102,11 +102,11 @@
     box-shadow: 0 8px 24px rgba(0,0,0,0.1);
   }
   .flow-step.selected {
-    border-color: var(--navy-700);
+    border-color: var(--color-slate-700);
     box-shadow: 0 8px 24px rgba(0,0,0,0.15);
   }
   .flow-step.selected .step-number {
-    background: var(--point-600);
+    background: var(--color-indigo-600);
     transform: translateX(-50%) scale(1.15);
   }
 
@@ -115,7 +115,7 @@
     margin-top: 24px;
     background: white;
     border-radius: 16px;
-    border: 2px solid var(--navy-200);
+    border: 2px solid var(--color-slate-200);
     box-shadow: 0 4px 16px rgba(0,0,0,0.08);
     overflow: hidden;
     animation: slideDown 0.3s ease;
@@ -129,13 +129,13 @@
     align-items: center;
     gap: 16px;
     padding: 20px 24px;
-    background: linear-gradient(135deg, var(--navy-50), var(--surface-50));
-    border-bottom: 1px solid var(--navy-100);
+    background: linear-gradient(135deg, var(--color-slate-50), var(--color-surface-50));
+    border-bottom: 1px solid var(--color-slate-100);
   }
   .step-detail-top .step-detail-num {
     width: 36px;
     height: 36px;
-    background: var(--navy-700);
+    background: var(--color-slate-700);
     color: white;
     border-radius: 10px;
     font-size: 16px;
@@ -148,12 +148,12 @@
   .step-detail-top h4 {
     font-size: 17px;
     font-weight: 700;
-    color: var(--navy-900);
+    color: var(--color-slate-900);
     margin: 0;
   }
   .step-detail-top p {
     font-size: 13px;
-    color: var(--navy-500);
+    color: var(--color-slate-500);
     margin: 2px 0 0;
   }
   .step-detail-close {
@@ -161,18 +161,18 @@
     width: 32px;
     height: 32px;
     border: none;
-    background: var(--navy-100);
+    background: var(--color-slate-100);
     border-radius: 8px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--navy-500);
+    color: var(--color-slate-500);
     transition: all 0.2s;
   }
   .step-detail-close:hover {
-    background: var(--navy-200);
-    color: var(--navy-700);
+    background: var(--color-slate-200);
+    color: var(--color-slate-700);
   }
   .step-detail-content {
     padding: 20px 24px;
@@ -187,9 +187,9 @@
     align-items: flex-start;
     gap: 10px;
     padding: 10px 0;
-    border-bottom: 1px solid var(--surface-100);
+    border-bottom: 1px solid var(--color-surface-100);
     font-size: 14px;
-    color: var(--navy-800);
+    color: var(--color-slate-800);
     line-height: 1.5;
   }
   .step-detail-content li:last-child {
@@ -197,34 +197,34 @@
   }
   .step-detail-content li .material-symbols-outlined {
     font-size: 18px;
-    color: var(--forest-600);
+    color: var(--color-emerald-600);
     flex-shrink: 0;
     margin-top: 1px;
   }
   .step-detail-content .tip-box {
     margin-top: 12px;
     padding: 14px 16px;
-    background: var(--forest-50);
+    background: var(--color-emerald-50);
     border-radius: 10px;
     font-size: 13px;
-    color: var(--forest-800);
+    color: var(--color-emerald-800);
     display: flex;
     align-items: flex-start;
     gap: 8px;
   }
   .step-detail-content .tip-box .material-symbols-outlined {
     font-size: 18px;
-    color: var(--forest-600);
+    color: var(--color-emerald-600);
     flex-shrink: 0;
   }
   .step-detail-content .small-box {
     margin-top: 12px;
     padding: 14px 16px;
-    background: var(--warm-50);
+    background: var(--color-amber-50);
     border-radius: 10px;
-    border-left: 3px solid var(--warm-400);
+    border-left: 3px solid var(--color-amber-400);
     font-size: 13px;
-    color: var(--navy-800);
+    color: var(--color-slate-800);
     display: flex;
     align-items: flex-start;
     gap: 8px;
@@ -232,15 +232,15 @@
   }
   .step-detail-content .small-box .material-symbols-outlined {
     font-size: 18px;
-    color: var(--warm-600);
+    color: var(--color-amber-600);
     flex-shrink: 0;
   }
   .step-detail-content .small-label {
     display: inline-block;
     font-size: 11px;
     font-weight: 700;
-    color: var(--warm-700);
-    background: var(--warm-100);
+    color: var(--color-amber-700);
+    background: var(--color-amber-100);
     padding: 2px 8px;
     border-radius: 4px;
     margin-bottom: 4px;
@@ -253,7 +253,7 @@
     transform: translateX(-50%);
     width: 28px;
     height: 28px;
-    background: var(--navy-700);
+    background: var(--color-slate-700);
     color: white;
     border-radius: 50%;
     font-size: 13px;
@@ -268,7 +268,7 @@
     width: 56px;
     height: 56px;
     margin: 0 auto 16px;
-    background: var(--surface-100);
+    background: var(--color-surface-100);
     border-radius: 14px;
     display: flex;
     align-items: center;
@@ -276,20 +276,20 @@
     transition: all 0.3s;
   }
   .flow-step:hover .step-icon {
-    background: var(--forest-100);
+    background: var(--color-emerald-100);
   }
   .step-icon .material-symbols-outlined {
     font-size: 28px;
-    color: var(--navy-600);
+    color: var(--color-slate-600);
   }
   .flow-step:hover .step-icon .material-symbols-outlined {
-    color: var(--forest-600);
+    color: var(--color-emerald-600);
   }
 
   .step-title {
     font-size: 15px;
     font-weight: 700;
-    color: var(--navy-900);
+    color: var(--color-slate-900);
     margin-bottom: 8px;
   }
   .step-desc {
@@ -306,7 +306,7 @@
   }
   .flow-arrow .material-symbols-outlined {
     font-size: 24px;
-    color: var(--forest-400);
+    color: var(--color-emerald-400);
   }
 
 
@@ -349,7 +349,7 @@
 </style>
 
 <!-- 페이지 헤더 -->
-<section class="gradient-navy text-white py-12 lg:py-16">
+<section class="gradient-slate text-white py-12 lg:py-16">
   <div class="container-wide">
     <div class="flex items-start gap-5">
       <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 shadow-lg">
@@ -357,7 +357,7 @@
       </div>
       <div>
         <h1 class="text-3xl lg:text-4xl font-bold tracking-tight mb-2">계약 흐름도</h1>
-        <p class="text-navy-200 text-lg">계약 유형별 전체 프로세스를 한눈에 확인하세요</p>
+        <p class="text-slate-200 text-lg">계약 유형별 전체 프로세스를 한눈에 확인하세요</p>
       </div>
     </div>
   </div>

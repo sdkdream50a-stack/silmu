@@ -1,7 +1,7 @@
 <%# 업무 가이드 목록 페이지 - 프리미엄 디자인 시스템 %>
 
 <!-- 페이지 헤더 -->
-<section class="gradient-forest text-white py-12 lg:py-16 relative overflow-hidden">
+<section class="gradient-emerald text-white py-12 lg:py-16 relative overflow-hidden">
   <div class="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/3"></div>
   <div class="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/4"></div>
   <div class="container-wide relative z-10">
@@ -12,21 +12,21 @@
         </div>
         <div>
           <h1 class="text-3xl lg:text-4xl font-bold tracking-tight mb-2">업무 가이드</h1>
-          <p class="text-forest-100 text-lg">공무원 업무 처리에 필요한 단계별 가이드</p>
+          <p class="text-emerald-100 text-lg">공무원 업무 처리에 필요한 단계별 가이드</p>
         </div>
       </div>
       <div class="flex gap-4 lg:gap-6">
         <div class="text-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/15">
           <div class="text-2xl font-bold">20</div>
-          <div class="text-xs text-forest-100 mt-0.5">전체 가이드</div>
+          <div class="text-xs text-emerald-100 mt-0.5">전체 가이드</div>
         </div>
         <div class="text-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/15">
           <div class="text-2xl font-bold">12</div>
-          <div class="text-xs text-forest-100 mt-0.5">계약 분야</div>
+          <div class="text-xs text-emerald-100 mt-0.5">계약 분야</div>
         </div>
         <div class="text-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/15">
           <div class="text-2xl font-bold">5</div>
-          <div class="text-xs text-forest-100 mt-0.5">분야</div>
+          <div class="text-xs text-emerald-100 mt-0.5">분야</div>
         </div>
       </div>
     </div>
@@ -38,20 +38,20 @@
   <div class="container-wide py-4">
     <!-- 검색바 -->
     <div class="flex items-center bg-surface-100 rounded-xl overflow-hidden mb-4">
-      <div class="flex items-center justify-center pl-4 text-navy-400">
+      <div class="flex items-center justify-center pl-4 text-slate-400">
         <span class="material-symbols-outlined">search</span>
       </div>
-      <input type="text" id="search-input" placeholder="가이드 검색" class="w-full border-none focus:ring-0 bg-transparent py-3 px-3 text-navy-800 placeholder:text-navy-400">
+      <input type="text" id="search-input" placeholder="가이드 검색" class="w-full border-none focus:ring-0 bg-transparent py-3 px-3 text-slate-800 placeholder:text-slate-400">
     </div>
 
     <!-- 카테고리 필터 -->
     <div class="flex flex-wrap gap-2" id="category-tabs">
-      <button data-category="전체" class="tab-btn active px-5 py-2.5 bg-forest-600 text-white rounded-xl text-sm font-semibold shadow-md transition-all">전체</button>
-      <button data-category="계약" class="tab-btn px-5 py-2.5 bg-surface-100 text-navy-600 hover:bg-surface-200 rounded-xl text-sm font-medium transition-all">계약</button>
-      <button data-category="예산" class="tab-btn px-5 py-2.5 bg-surface-100 text-navy-600 hover:bg-surface-200 rounded-xl text-sm font-medium transition-all">예산</button>
-      <button data-category="인사" class="tab-btn px-5 py-2.5 bg-surface-100 text-navy-600 hover:bg-surface-200 rounded-xl text-sm font-medium transition-all">인사</button>
-      <button data-category="복무" class="tab-btn px-5 py-2.5 bg-surface-100 text-navy-600 hover:bg-surface-200 rounded-xl text-sm font-medium transition-all">복무</button>
-      <button data-category="민원" class="tab-btn px-5 py-2.5 bg-surface-100 text-navy-600 hover:bg-surface-200 rounded-xl text-sm font-medium transition-all">민원</button>
+      <button data-category="전체" class="tab-btn active px-5 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-semibold shadow-md transition-all">전체</button>
+      <button data-category="계약" class="tab-btn px-5 py-2.5 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-xl text-sm font-medium transition-all">계약</button>
+      <button data-category="예산" class="tab-btn px-5 py-2.5 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-xl text-sm font-medium transition-all">예산</button>
+      <button data-category="인사" class="tab-btn px-5 py-2.5 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-xl text-sm font-medium transition-all">인사</button>
+      <button data-category="복무" class="tab-btn px-5 py-2.5 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-xl text-sm font-medium transition-all">복무</button>
+      <button data-category="민원" class="tab-btn px-5 py-2.5 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-xl text-sm font-medium transition-all">민원</button>
     </div>
   </div>
 </section>
@@ -62,8 +62,8 @@
       <!-- 메인 콘텐츠 -->
       <div class="lg:w-[70%]">
         <div class="flex items-center justify-between mb-6">
-          <p class="text-navy-600">총 <span class="font-bold text-navy-900" id="item-count">18</span>개의 가이드</p>
-          <select class="border-gray-200 rounded-xl text-sm focus:ring-forest-500 focus:border-forest-500 px-4 py-2">
+          <p class="text-slate-600">총 <span class="font-bold text-slate-900" id="item-count">18</span>개의 가이드</p>
+          <select class="border-gray-200 rounded-xl text-sm focus:ring-emerald-500 focus:border-emerald-500 px-4 py-2">
             <option>최신순</option>
             <option>인기순</option>
           </select>
@@ -101,14 +101,14 @@
           ].each do |guide| %>
             <%= link_to (guide[:link] || guide_path(guide[:id])), class: "block card card-hover p-6 group item-card", data: { category: guide[:category], title: guide[:title] } do %>
               <div class="flex items-start justify-between mb-3">
-                <span class="badge badge-forest"><%= guide[:category] %></span>
+                <span class="badge badge-emerald"><%= guide[:category] %></span>
                 <% if guide[:tag] %>
-                  <span class="badge <%= guide[:tag] == '인기' ? 'badge-warm' : guide[:tag] == '업데이트' ? 'badge-point' : 'badge-navy' %>"><%= guide[:tag] %></span>
+                  <span class="badge <%= guide[:tag] == '인기' ? 'badge-amber' : guide[:tag] == '업데이트' ? 'badge-indigo' : 'badge-slate' %>"><%= guide[:tag] %></span>
                 <% end %>
               </div>
-              <h3 class="text-lg font-bold text-navy-900 mb-2 group-hover:text-forest-600 transition-colors"><%= guide[:title] %></h3>
-              <p class="text-navy-600 text-sm mb-4 leading-relaxed"><%= guide[:summary] %></p>
-              <div class="flex items-center gap-4 text-xs text-navy-400">
+              <h3 class="text-lg font-bold text-slate-900 mb-2 group-hover:text-emerald-600 transition-colors"><%= guide[:title] %></h3>
+              <p class="text-slate-600 text-sm mb-4 leading-relaxed"><%= guide[:summary] %></p>
+              <div class="flex items-center gap-4 text-xs text-slate-400">
                 <span class="flex items-center gap-1">
                   <span class="material-symbols-outlined text-sm">category</span>
                   <%= guide[:category] %>
@@ -131,7 +131,7 @@
         <div class="sticky top-36 space-y-6">
           <!-- 사전 체크리스트 배너 -->
           <%= link_to pre_contract_checklist_path, class: "block card card-interactive overflow-hidden group" do %>
-            <div class="gradient-forest p-5 text-white">
+            <div class="gradient-emerald p-5 text-white">
               <div class="flex items-center gap-3 mb-2">
                 <span class="material-symbols-outlined text-2xl">checklist_rtl</span>
                 <span class="font-bold">사전 체크리스트</span>
@@ -146,7 +146,7 @@
 
           <!-- 계약 흐름도 배너 -->
           <%= link_to contract_flow_path, class: "block card card-interactive overflow-hidden group" do %>
-            <div class="gradient-navy p-5 text-white">
+            <div class="gradient-slate p-5 text-white">
               <div class="flex items-center gap-3 mb-2">
                 <span class="material-symbols-outlined text-2xl">account_tree</span>
                 <span class="font-bold">계약 흐름도</span>
@@ -161,7 +161,7 @@
 
           <!-- 자료실 배너 -->
           <%= link_to guide_resources_path, class: "block card card-interactive overflow-hidden group" do %>
-            <div class="gradient-point p-5 text-white">
+            <div class="gradient-indigo p-5 text-white">
               <div class="flex items-center gap-3 mb-2">
                 <span class="material-symbols-outlined text-2xl">library_books</span>
                 <span class="font-bold">자료실 / FAQ</span>
@@ -176,8 +176,8 @@
 
           <!-- 인기 가이드 -->
           <div class="card p-6">
-            <h3 class="font-bold text-navy-900 mb-4 flex items-center gap-2">
-              <span class="material-symbols-outlined text-warm-500">local_fire_department</span>
+            <h3 class="font-bold text-slate-900 mb-4 flex items-center gap-2">
+              <span class="material-symbols-outlined text-amber-500">local_fire_department</span>
               인기 가이드 TOP 5
             </h3>
             <ol class="space-y-3">
@@ -189,8 +189,8 @@
                 { title: "예산 이월 실무", link: "/topics/budget-carryover" }
               ].each_with_index do |guide, i| %>
                 <li class="flex items-center gap-3 group">
-                  <span class="w-7 h-7 flex items-center justify-center bg-<%= i < 3 ? 'forest' : 'surface' %>-100 rounded-full text-xs font-bold text-<%= i < 3 ? 'forest-600' : 'navy-500' %>"><%= i + 1 %></span>
-                  <%= link_to guide[:title], guide[:link], class: "text-sm text-navy-700 group-hover:text-forest-600 transition-colors truncate" %>
+                  <span class="w-7 h-7 flex items-center justify-center bg-<%= i < 3 ? 'forest' : 'surface' %>-100 rounded-full text-xs font-bold text-<%= i < 3 ? 'emerald-600' : 'slate-500' %>"><%= i + 1 %></span>
+                  <%= link_to guide[:title], guide[:link], class: "text-sm text-slate-700 group-hover:text-emerald-600 transition-colors truncate" %>
                 </li>
               <% end %>
             </ol>
@@ -198,8 +198,8 @@
 
           <!-- 최근 본 가이드 -->
           <div class="card p-6">
-            <h3 class="font-bold text-navy-900 mb-4 flex items-center gap-2">
-              <span class="material-symbols-outlined text-navy-400">history</span>
+            <h3 class="font-bold text-slate-900 mb-4 flex items-center gap-2">
+              <span class="material-symbols-outlined text-slate-400">history</span>
               최근 본 가이드
             </h3>
             <ul class="space-y-3">
@@ -209,24 +209,24 @@
                 { title: "예산 이월 실무", link: "/topics/budget-carryover" }
               ].each do |guide| %>
                 <li>
-                  <%= link_to guide[:title], guide[:link], class: "text-sm text-navy-700 hover:text-forest-600 transition-colors" %>
+                  <%= link_to guide[:title], guide[:link], class: "text-sm text-slate-700 hover:text-emerald-600 transition-colors" %>
                 </li>
               <% end %>
             </ul>
           </div>
 
           <!-- AI 상담 CTA -->
-          <div class="gradient-forest rounded-2xl p-6 text-white shadow-strong">
+          <div class="gradient-emerald rounded-2xl p-6 text-white shadow-strong">
             <div class="flex items-center gap-4 mb-4">
               <div class="w-12 h-12 bg-white/10 backdrop-blur rounded-xl flex items-center justify-center">
                 <span class="material-symbols-outlined text-2xl">support_agent</span>
               </div>
               <div>
                 <h3 class="font-bold text-lg">가이드가 어려우신가요?</h3>
-                <p class="text-forest-100 text-sm">AI에게 물어보세요</p>
+                <p class="text-emerald-100 text-sm">AI에게 물어보세요</p>
               </div>
             </div>
-            <%= link_to chatbot_path, class: "block w-full py-3 bg-white text-forest-700 rounded-xl font-semibold text-center hover:bg-forest-50 transition-colors shadow-soft" do %>
+            <%= link_to chatbot_path, class: "block w-full py-3 bg-white text-emerald-700 rounded-xl font-semibold text-center hover:bg-emerald-50 transition-colors shadow-soft" do %>
               AI 상담 시작하기
             <% end %>
           </div>
@@ -259,11 +259,11 @@ document.addEventListener('turbo:load', function() {
     tabs.forEach(tab => {
       if (tab.dataset.category === initialCategory) {
         tabs.forEach(t => {
-          t.classList.remove('active', 'bg-forest-600', 'text-white', 'shadow-md');
-          t.classList.add('bg-surface-100', 'text-navy-600');
+          t.classList.remove('active', 'bg-emerald-600', 'text-white', 'shadow-md');
+          t.classList.add('bg-surface-100', 'text-slate-600');
         });
-        tab.classList.add('active', 'bg-forest-600', 'text-white', 'shadow-md');
-        tab.classList.remove('bg-surface-100', 'text-navy-600');
+        tab.classList.add('active', 'bg-emerald-600', 'text-white', 'shadow-md');
+        tab.classList.remove('bg-surface-100', 'text-slate-600');
       }
     });
   }
@@ -311,7 +311,7 @@ document.addEventListener('turbo:load', function() {
     // 이전 버튼
     html += `
       <button onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}
-        class="w-10 h-10 flex items-center justify-center rounded-xl ${currentPage === 1 ? 'text-navy-300 cursor-not-allowed' : 'text-navy-500 hover:bg-surface-100'} transition-colors">
+        class="w-10 h-10 flex items-center justify-center rounded-xl ${currentPage === 1 ? 'text-slate-300 cursor-not-allowed' : 'text-slate-500 hover:bg-surface-100'} transition-colors">
         <span class="material-symbols-outlined">chevron_left</span>
       </button>
     `;
@@ -329,10 +329,10 @@ document.addEventListener('turbo:load', function() {
     // 첫 페이지와 ... 표시
     if (startPage > 1) {
       html += `
-        <button onclick="goToPage(1)" class="w-10 h-10 flex items-center justify-center rounded-xl text-navy-600 hover:bg-surface-100 font-medium transition-colors">1</button>
+        <button onclick="goToPage(1)" class="w-10 h-10 flex items-center justify-center rounded-xl text-slate-600 hover:bg-surface-100 font-medium transition-colors">1</button>
       `;
       if (startPage > 2) {
-        html += `<span class="w-10 h-10 flex items-center justify-center text-navy-400">...</span>`;
+        html += `<span class="w-10 h-10 flex items-center justify-center text-slate-400">...</span>`;
       }
     }
 
@@ -340,11 +340,11 @@ document.addEventListener('turbo:load', function() {
     for (let i = startPage; i <= endPage; i++) {
       if (i === currentPage) {
         html += `
-          <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-forest-600 text-white font-semibold shadow-md cursor-default">${i}</button>
+          <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-emerald-600 text-white font-semibold shadow-md cursor-default">${i}</button>
         `;
       } else {
         html += `
-          <button onclick="goToPage(${i})" class="w-10 h-10 flex items-center justify-center rounded-xl text-navy-600 hover:bg-surface-100 font-medium transition-colors">${i}</button>
+          <button onclick="goToPage(${i})" class="w-10 h-10 flex items-center justify-center rounded-xl text-slate-600 hover:bg-surface-100 font-medium transition-colors">${i}</button>
         `;
       }
     }
@@ -352,17 +352,17 @@ document.addEventListener('turbo:load', function() {
     // 마지막 페이지와 ... 표시
     if (endPage < totalPages) {
       if (endPage < totalPages - 1) {
-        html += `<span class="w-10 h-10 flex items-center justify-center text-navy-400">...</span>`;
+        html += `<span class="w-10 h-10 flex items-center justify-center text-slate-400">...</span>`;
       }
       html += `
-        <button onclick="goToPage(${totalPages})" class="w-10 h-10 flex items-center justify-center rounded-xl text-navy-600 hover:bg-surface-100 font-medium transition-colors">${totalPages}</button>
+        <button onclick="goToPage(${totalPages})" class="w-10 h-10 flex items-center justify-center rounded-xl text-slate-600 hover:bg-surface-100 font-medium transition-colors">${totalPages}</button>
       `;
     }
 
     // 다음 버튼
     html += `
       <button onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}
-        class="w-10 h-10 flex items-center justify-center rounded-xl ${currentPage === totalPages ? 'text-navy-300 cursor-not-allowed' : 'text-navy-500 hover:bg-surface-100'} transition-colors">
+        class="w-10 h-10 flex items-center justify-center rounded-xl ${currentPage === totalPages ? 'text-slate-300 cursor-not-allowed' : 'text-slate-500 hover:bg-surface-100'} transition-colors">
         <span class="material-symbols-outlined">chevron_right</span>
       </button>
     `;
@@ -390,13 +390,13 @@ document.addEventListener('turbo:load', function() {
     tab.addEventListener('click', function() {
       // 모든 탭 비활성화
       tabs.forEach(t => {
-        t.classList.remove('active', 'bg-forest-600', 'text-white', 'shadow-md');
-        t.classList.add('bg-surface-100', 'text-navy-600');
+        t.classList.remove('active', 'bg-emerald-600', 'text-white', 'shadow-md');
+        t.classList.add('bg-surface-100', 'text-slate-600');
       });
 
       // 클릭된 탭 활성화
-      this.classList.add('active', 'bg-forest-600', 'text-white', 'shadow-md');
-      this.classList.remove('bg-surface-100', 'text-navy-600');
+      this.classList.add('active', 'bg-emerald-600', 'text-white', 'shadow-md');
+      this.classList.remove('bg-surface-100', 'text-slate-600');
 
       filterAndPaginate();
     });

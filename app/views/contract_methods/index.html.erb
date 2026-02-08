@@ -18,7 +18,7 @@
   .input-card h2 {
     font-size: 20px;
     font-weight: 700;
-    color: var(--navy-900);
+    color: var(--color-slate-900);
     margin-bottom: 8px;
     display: flex;
     align-items: center;
@@ -77,7 +77,7 @@
   .amount-section label {
     display: block;
     font-weight: 600;
-    color: var(--navy-800);
+    color: var(--color-slate-800);
     margin-bottom: 10px;
     font-size: 15px;
   }
@@ -101,7 +101,7 @@
   }
   .amount-input-wrap input:focus {
     outline: none;
-    border-color: var(--forest-500);
+    border-color: var(--color-emerald-500);
     box-shadow: 0 0 0 3px rgba(47, 129, 50, 0.15);
   }
   .amount-input-wrap .unit {
@@ -140,9 +140,9 @@
     white-space: nowrap;
   }
   .quick-amount:hover {
-    background: var(--forest-50);
-    border-color: var(--forest-300);
-    color: var(--forest-700);
+    background: var(--color-emerald-50);
+    border-color: var(--color-emerald-300);
+    color: var(--color-emerald-700);
   }
   .quick-amount.amount-reset {
     background: #fef3c7;
@@ -159,7 +159,7 @@
   /* 특례기업 선택 */
   .special-section {
     padding: 20px;
-    background: var(--surface-50);
+    background: var(--color-surface-50);
     border-radius: 14px;
     border: 1px solid #e2e8f0;
     margin-bottom: 24px;
@@ -167,7 +167,7 @@
   .special-section summary {
     cursor: pointer;
     font-weight: 600;
-    color: var(--navy-800);
+    color: var(--color-slate-800);
     font-size: 14px;
     display: flex;
     align-items: center;
@@ -175,7 +175,7 @@
   }
   .special-section summary .material-symbols-outlined {
     font-size: 20px;
-    color: var(--warm-600);
+    color: var(--color-amber-600);
   }
   .special-options {
     display: flex;
@@ -193,12 +193,12 @@
     background: white;
   }
   .special-option:hover {
-    border-color: var(--warm-400);
+    border-color: var(--color-amber-400);
   }
   .special-option.selected {
-    border-color: var(--warm-500);
-    background: var(--warm-50);
-    color: var(--warm-700);
+    border-color: var(--color-amber-500);
+    background: var(--color-amber-50);
+    color: var(--color-amber-700);
     font-weight: 600;
   }
 
@@ -254,15 +254,15 @@
     text-align: center;
   }
   .result-header.입찰 {
-    background: linear-gradient(135deg, var(--point-600), var(--point-500));
+    background: linear-gradient(135deg, var(--color-indigo-600), var(--color-indigo-500));
     color: white;
   }
   .result-header.수의계약 {
-    background: linear-gradient(135deg, var(--forest-600), var(--forest-500));
+    background: linear-gradient(135deg, var(--color-emerald-600), var(--color-emerald-500));
     color: white;
   }
   .result-header.소액수의계약 {
-    background: linear-gradient(135deg, var(--navy-700), var(--navy-600));
+    background: linear-gradient(135deg, var(--color-slate-700), var(--color-slate-600));
     color: white;
   }
   .result-method {
@@ -293,13 +293,13 @@
   .result-summary-text {
     font-size: 16px;
     font-weight: 600;
-    color: var(--navy-900);
+    color: var(--color-slate-900);
     line-height: 1.6;
     text-align: center;
   }
   .result-summary-note {
     font-size: 14px;
-    color: var(--navy-600);
+    color: var(--color-slate-600);
     text-align: center;
     margin-top: 8px;
   }
@@ -311,14 +311,14 @@
   /* 정보 박스 */
   .info-box {
     padding: 20px;
-    background: var(--surface-50);
+    background: var(--color-surface-50);
     border-radius: 14px;
     margin-bottom: 20px;
   }
   .info-box h4 {
     font-size: 14px;
     font-weight: 600;
-    color: var(--navy-800);
+    color: var(--color-slate-800);
     margin-bottom: 12px;
     display: flex;
     align-items: center;
@@ -326,7 +326,7 @@
   }
   .info-box h4 .material-symbols-outlined {
     font-size: 20px;
-    color: var(--navy-500);
+    color: var(--color-slate-500);
   }
   .info-row {
     display: flex;
@@ -343,26 +343,26 @@
   }
   .info-row .value {
     font-weight: 600;
-    color: var(--navy-900);
+    color: var(--color-slate-900);
   }
 
   /* 법령 근거 */
   .basis-box {
     padding: 16px 20px;
-    background: var(--point-50);
-    border-left: 4px solid var(--point-500);
+    background: var(--color-indigo-50);
+    border-left: 4px solid var(--color-indigo-500);
     border-radius: 0 12px 12px 0;
     margin-bottom: 20px;
   }
   .basis-box .title {
     font-size: 12px;
-    color: var(--point-700);
+    color: var(--color-indigo-700);
     font-weight: 600;
     margin-bottom: 6px;
   }
   .basis-box .content {
     font-size: 14px;
-    color: var(--navy-800);
+    color: var(--color-slate-800);
   }
 
   /* 경고/안내 박스 */
@@ -375,32 +375,32 @@
     gap: 12px;
   }
   .alert-box.warning {
-    background: var(--warm-50);
-    border: 1px solid var(--warm-200);
+    background: var(--color-amber-50);
+    border: 1px solid var(--color-amber-200);
   }
   .alert-box.warning .material-symbols-outlined {
-    color: var(--warm-600);
+    color: var(--color-amber-600);
   }
   .alert-box.info {
-    background: var(--point-50);
-    border: 1px solid var(--point-200);
+    background: var(--color-indigo-50);
+    border: 1px solid var(--color-indigo-200);
   }
   .alert-box.info .material-symbols-outlined {
-    color: var(--point-600);
+    color: var(--color-indigo-600);
   }
   .alert-box .content h5 {
     font-size: 14px;
     font-weight: 600;
-    color: var(--navy-900);
+    color: var(--color-slate-900);
     margin-bottom: 4px;
   }
   .alert-box .content p {
     font-size: 13px;
-    color: var(--navy-700);
+    color: var(--color-slate-700);
     margin: 0;
   }
   .alert-box .content a {
-    color: var(--point-600);
+    color: var(--color-indigo-600);
     text-decoration: underline;
     font-size: 12px;
   }
@@ -412,7 +412,7 @@
   .documents-section h4 {
     font-size: 15px;
     font-weight: 600;
-    color: var(--navy-800);
+    color: var(--color-slate-800);
     margin-bottom: 16px;
     display: flex;
     align-items: center;
@@ -432,32 +432,32 @@
     border: 1px solid #e2e8f0;
     border-radius: 10px;
     font-size: 14px;
-    color: var(--navy-800);
+    color: var(--color-slate-800);
   }
   .doc-item .material-symbols-outlined {
     font-size: 20px;
-    color: var(--forest-500);
+    color: var(--color-emerald-500);
   }
 
   /* 팁 섹션 */
   .tips-section {
     margin-top: 24px;
     padding: 20px;
-    background: linear-gradient(135deg, var(--navy-50), white);
+    background: linear-gradient(135deg, var(--color-slate-50), white);
     border-radius: 14px;
-    border: 1px solid var(--navy-100);
+    border: 1px solid var(--color-slate-100);
   }
   .tips-section h4 {
     font-size: 14px;
     font-weight: 600;
-    color: var(--navy-800);
+    color: var(--color-slate-800);
     margin-bottom: 12px;
     display: flex;
     align-items: center;
     gap: 8px;
   }
   .tips-section h4 .material-symbols-outlined {
-    color: var(--warm-500);
+    color: var(--color-amber-500);
   }
   .tip-item {
     display: flex;
@@ -465,7 +465,7 @@
     gap: 10px;
     padding: 8px 0;
     font-size: 13px;
-    color: var(--navy-700);
+    color: var(--color-slate-700);
     line-height: 1.5;
   }
   .tip-item::before {
@@ -489,15 +489,15 @@
     background: white;
     border: 2px solid #e2e8f0;
     border-radius: 12px;
-    color: var(--navy-700);
+    color: var(--color-slate-700);
     text-decoration: none;
     font-size: 14px;
     font-weight: 500;
     transition: all 0.2s;
   }
   .link-btn:hover {
-    border-color: var(--navy-400);
-    background: var(--surface-50);
+    border-color: var(--color-slate-400);
+    background: var(--color-surface-50);
   }
   .link-btn .material-symbols-outlined {
     font-size: 20px;
@@ -508,8 +508,8 @@
     width: 100%;
     margin-top: 20px;
     padding: 16px;
-    background: var(--surface-100);
-    color: var(--navy-700);
+    background: var(--color-surface-100);
+    color: var(--color-slate-700);
     border: none;
     border-radius: 12px;
     font-size: 15px;
@@ -522,7 +522,7 @@
     transition: all 0.2s;
   }
   .reset-btn:hover {
-    background: var(--surface-200);
+    background: var(--color-surface-200);
   }
 
   /* 로딩 애니메이션 */
@@ -542,7 +542,7 @@
     margin-top: -16px;
     margin-bottom: 28px;
     padding: 16px;
-    background: var(--surface-50);
+    background: var(--color-surface-50);
     border-radius: 14px;
     border: 1px solid #e2e8f0;
   }
@@ -635,7 +635,7 @@
 </style>
 
 <!-- 페이지 헤더 -->
-<section class="gradient-forest text-white py-12 lg:py-16">
+<section class="gradient-emerald text-white py-12 lg:py-16">
   <div class="container-wide">
     <div class="flex items-start gap-5">
       <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 shadow-lg">
@@ -643,7 +643,7 @@
       </div>
       <div>
         <h1 class="text-3xl lg:text-4xl font-bold tracking-tight mb-2">계약방식 결정 도우미</h1>
-        <p class="text-forest-100 text-lg">추정가격과 계약유형으로 적정 계약방식을 확인하세요</p>
+        <p class="text-emerald-100 text-lg">추정가격과 계약유형으로 적정 계약방식을 확인하세요</p>
       </div>
     </div>
   </div>
@@ -914,7 +914,7 @@
     const hint = document.getElementById('amount-hint');
     if (estimatedPrice > 0) {
       hint.textContent = toKoreanUnit(estimatedPrice);
-      hint.style.color = 'var(--forest-600)';
+      hint.style.color = 'var(--color-emerald-600)';
       hint.style.fontWeight = '600';
     } else {
       hint.textContent = '설계금액 또는 예정가격 작성 전 대략적인 예상 금액을 입력하세요';

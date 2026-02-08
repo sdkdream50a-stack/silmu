@@ -12,7 +12,7 @@
     gap: 8px;
     margin-bottom: 32px;
     padding: 6px;
-    background: var(--surface-100);
+    background: var(--color-surface-100);
     border-radius: 16px;
     overflow-x: auto;
   }
@@ -25,7 +25,7 @@
     background: transparent;
     font-size: 15px;
     font-weight: 600;
-    color: var(--navy-600);
+    color: var(--color-slate-600);
     cursor: pointer;
     transition: all 0.2s;
     display: flex;
@@ -38,7 +38,7 @@
   }
   .checklist-tab.active {
     background: white;
-    color: var(--navy-900);
+    color: var(--color-slate-900);
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   }
   .checklist-tab .material-symbols-outlined {
@@ -72,13 +72,13 @@
     align-items: center;
     justify-content: space-between;
     padding: 20px 24px;
-    background: linear-gradient(135deg, var(--surface-50), white);
+    background: linear-gradient(135deg, var(--color-surface-50), white);
     border-bottom: 1px solid #e2e8f0;
     cursor: pointer;
     transition: background 0.2s;
   }
   .stage-header:hover {
-    background: var(--surface-100);
+    background: var(--color-surface-100);
   }
   .stage-header .left {
     display: flex;
@@ -89,7 +89,7 @@
     width: 36px;
     height: 36px;
     border-radius: 10px;
-    background: var(--navy-700);
+    background: var(--color-slate-700);
     color: white;
     display: flex;
     align-items: center;
@@ -100,7 +100,7 @@
   .stage-info h3 {
     font-size: 17px;
     font-weight: 700;
-    color: var(--navy-900);
+    color: var(--color-slate-900);
     margin-bottom: 4px;
   }
   .stage-info .sub {
@@ -115,23 +115,23 @@
   .progress-bar {
     width: 100px;
     height: 6px;
-    background: var(--surface-200);
+    background: var(--color-surface-200);
     border-radius: 3px;
     overflow: hidden;
   }
   .progress-fill {
     height: 100%;
-    background: var(--forest-500);
+    background: var(--color-emerald-500);
     border-radius: 3px;
     transition: width 0.3s ease;
   }
   .progress-text {
     font-size: 13px;
     font-weight: 600;
-    color: var(--forest-600);
+    color: var(--color-emerald-600);
   }
   .toggle-icon {
-    color: var(--navy-400);
+    color: var(--color-slate-400);
     transition: transform 0.2s;
   }
   .stage-header.open .toggle-icon {
@@ -155,7 +155,7 @@
     align-items: flex-start;
     gap: 16px;
     padding: 20px;
-    background: var(--surface-50);
+    background: var(--color-surface-50);
     border-radius: 14px;
     margin-bottom: 12px;
     border: 2px solid transparent;
@@ -164,12 +164,12 @@
   }
   .check-item:hover {
     background: white;
-    border-color: var(--forest-200);
+    border-color: var(--color-emerald-200);
     box-shadow: 0 4px 12px rgba(0,0,0,0.06);
   }
   .check-item.checked {
-    background: var(--forest-50);
-    border-color: var(--forest-400);
+    background: var(--color-emerald-50);
+    border-color: var(--color-emerald-400);
   }
   .check-item:last-child {
     margin-bottom: 0;
@@ -188,8 +188,8 @@
     margin-top: 2px;
   }
   .check-item.checked .check-box {
-    background: var(--forest-500);
-    border-color: var(--forest-500);
+    background: var(--color-emerald-500);
+    border-color: var(--color-emerald-500);
   }
   .check-box .material-symbols-outlined {
     font-size: 18px;
@@ -207,7 +207,7 @@
   .check-title {
     font-size: 15px;
     font-weight: 600;
-    color: var(--navy-900);
+    color: var(--color-slate-900);
     margin-bottom: 6px;
     display: flex;
     align-items: center;
@@ -216,8 +216,8 @@
   .check-title .required {
     font-size: 10px;
     padding: 2px 6px;
-    background: var(--warm-100);
-    color: var(--warm-700);
+    background: var(--color-amber-100);
+    color: var(--color-amber-700);
     border-radius: 4px;
     font-weight: 600;
   }
@@ -234,10 +234,10 @@
     align-items: center;
     gap: 6px;
     padding: 6px 12px;
-    background: var(--point-50);
+    background: var(--color-indigo-50);
     border-radius: 6px;
     font-size: 12px;
-    color: var(--point-700);
+    color: var(--color-indigo-700);
     margin-right: 8px;
     margin-bottom: 6px;
   }
@@ -256,14 +256,14 @@
     align-items: flex-start;
     gap: 8px;
     font-size: 12px;
-    color: var(--navy-600);
+    color: var(--color-slate-600);
     margin-bottom: 6px;
   }
   .tip-item:last-child {
     margin-bottom: 0;
   }
   .tip-item.warning {
-    color: var(--warm-700);
+    color: var(--color-amber-700);
   }
   .tip-item .material-symbols-outlined {
     font-size: 16px;
@@ -282,7 +282,7 @@
   .summary-card h2 {
     font-size: 18px;
     font-weight: 700;
-    color: var(--navy-900);
+    color: var(--color-slate-900);
     margin-bottom: 16px;
     display: flex;
     align-items: center;
@@ -296,13 +296,13 @@
   .stat-item {
     text-align: center;
     padding: 16px;
-    background: var(--surface-50);
+    background: var(--color-surface-50);
     border-radius: 12px;
   }
   .stat-item .value {
     font-size: 28px;
     font-weight: 700;
-    color: var(--navy-900);
+    color: var(--color-slate-900);
     margin-bottom: 4px;
   }
   .stat-item .label {
@@ -310,10 +310,10 @@
     color: #64748b;
   }
   .stat-item.completed .value {
-    color: var(--forest-600);
+    color: var(--color-emerald-600);
   }
   .stat-item.pending .value {
-    color: var(--warm-600);
+    color: var(--color-amber-600);
   }
 
   /* 빠른 링크 */
@@ -330,17 +330,17 @@
     align-items: center;
     gap: 8px;
     padding: 10px 16px;
-    background: var(--surface-100);
+    background: var(--color-surface-100);
     border-radius: 10px;
-    color: var(--navy-700);
+    color: var(--color-slate-700);
     text-decoration: none;
     font-size: 13px;
     font-weight: 500;
     transition: all 0.2s;
   }
   .quick-link:hover {
-    background: var(--navy-100);
-    color: var(--navy-900);
+    background: var(--color-slate-100);
+    color: var(--color-slate-900);
   }
   .quick-link .material-symbols-outlined {
     font-size: 18px;
@@ -365,7 +365,7 @@
     border: none;
   }
   .btn-action.primary {
-    background: linear-gradient(135deg, var(--forest-600), var(--forest-500));
+    background: linear-gradient(135deg, var(--color-emerald-600), var(--color-emerald-500));
     color: white;
   }
   .btn-action.primary:hover {
@@ -373,11 +373,11 @@
     box-shadow: 0 8px 20px rgba(47, 129, 50, 0.3);
   }
   .btn-action.secondary {
-    background: var(--surface-100);
-    color: var(--navy-700);
+    background: var(--color-surface-100);
+    color: var(--color-slate-700);
   }
   .btn-action.secondary:hover {
-    background: var(--surface-200);
+    background: var(--color-surface-200);
   }
 
   /* 반응형 */
@@ -412,7 +412,7 @@
 </style>
 
 <!-- 페이지 헤더 -->
-<section class="gradient-navy text-white py-12 lg:py-16">
+<section class="gradient-slate text-white py-12 lg:py-16">
   <div class="container-wide">
     <div class="flex items-start gap-5">
       <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 shadow-lg">
@@ -420,7 +420,7 @@
       </div>
       <div>
         <h1 class="text-3xl lg:text-4xl font-bold tracking-tight mb-2">계약업무 사전 체크리스트</h1>
-        <p class="text-navy-200 text-lg">계약 전 필수 확인사항을 단계별로 점검하세요</p>
+        <p class="text-slate-200 text-lg">계약 전 필수 확인사항을 단계별로 점검하세요</p>
       </div>
     </div>
   </div>
@@ -449,7 +449,7 @@
       <!-- 요약 -->
       <div class="summary-card">
         <h2>
-          <span class="material-symbols-outlined" style="color: var(--forest-500);">inventory_2</span>
+          <span class="material-symbols-outlined" style="color: var(--color-emerald-500);">inventory_2</span>
           물품 계약 체크리스트
         </h2>
         <div class="summary-stats">
@@ -835,7 +835,7 @@
     <div class="checklist-container" id="checklist-service">
       <div class="summary-card">
         <h2>
-          <span class="material-symbols-outlined" style="color: var(--point-500);">support_agent</span>
+          <span class="material-symbols-outlined" style="color: var(--color-indigo-500);">support_agent</span>
           용역 계약 체크리스트
         </h2>
         <div class="summary-stats">
@@ -1179,7 +1179,7 @@
     <div class="checklist-container" id="checklist-construction">
       <div class="summary-card">
         <h2>
-          <span class="material-symbols-outlined" style="color: var(--warm-500);">construction</span>
+          <span class="material-symbols-outlined" style="color: var(--color-amber-500);">construction</span>
           공사 계약 체크리스트
         </h2>
         <div class="summary-stats">

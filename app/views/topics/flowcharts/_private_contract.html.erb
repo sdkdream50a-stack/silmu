@@ -1,7 +1,7 @@
 <div class="card p-6 lg:p-8">
-  <h3 class="text-xl font-bold text-navy-900 text-center mb-8 flex items-center justify-center gap-2">
-    <div class="icon-container icon-container-sm bg-navy-100">
-      <span class="material-symbols-outlined text-navy-600">account_tree</span>
+  <h3 class="text-xl font-bold text-slate-900 text-center mb-8 flex items-center justify-center gap-2">
+    <div class="icon-container icon-container-sm bg-slate-100">
+      <span class="material-symbols-outlined text-slate-600">account_tree</span>
     </div>
     수의계약 업무 흐름도
   </h3>
@@ -20,7 +20,7 @@
         <%= item[:title] %>
       </div>
       <% unless index == 4 %>
-        <span class="material-symbols-outlined text-navy-300">arrow_forward</span>
+        <span class="material-symbols-outlined text-slate-300">arrow_forward</span>
       <% end %>
     <% end %>
   </div>
@@ -28,12 +28,12 @@
   <!-- 상세 흐름도 -->
   <div class="space-y-8">
     <!-- STEP 1 -->
-    <div class="bg-point-50 rounded-2xl p-6 border-l-4 border-point-500">
+    <div class="bg-indigo-50 rounded-2xl p-6 border-l-4 border-indigo-500">
       <div class="flex items-center gap-4 mb-6">
-        <div class="w-14 h-14 gradient-point text-white rounded-2xl flex items-center justify-center font-bold text-2xl shadow-lg">1</div>
+        <div class="w-14 h-14 gradient-indigo text-white rounded-2xl flex items-center justify-center font-bold text-2xl shadow-lg">1</div>
         <div>
-          <h4 class="text-xl font-bold text-navy-900">사전준비</h4>
-          <p class="text-point-600 font-medium">사업부서</p>
+          <h4 class="text-xl font-bold text-slate-900">사전준비</h4>
+          <p class="text-indigo-600 font-medium">사업부서</p>
         </div>
       </div>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -44,13 +44,13 @@
           { icon: "edit_document", title: "수의계약 사유서", desc: "법적 근거 명시" }
         ].each do |item| %>
           <div class="bg-white rounded-xl p-4 text-center shadow-soft hover-lift">
-            <span class="material-symbols-outlined text-3xl text-point-500 mb-2"><%= item[:icon] %></span>
-            <div class="text-sm font-semibold text-navy-800"><%= item[:title] %></div>
-            <div class="text-xs text-navy-500 mt-1"><%= item[:desc] %></div>
+            <span class="material-symbols-outlined text-3xl text-indigo-500 mb-2"><%= item[:icon] %></span>
+            <div class="text-sm font-semibold text-slate-800"><%= item[:title] %></div>
+            <div class="text-xs text-slate-500 mt-1"><%= item[:desc] %></div>
           </div>
         <% end %>
       </div>
-      <div class="mt-5 p-4 bg-point-100 rounded-xl text-sm text-point-800 flex items-center gap-2">
+      <div class="mt-5 p-4 bg-indigo-100 rounded-xl text-sm text-indigo-800 flex items-center gap-2">
         <span class="material-symbols-outlined">lightbulb</span>
         <strong>체크포인트:</strong> 추정가격이 수의계약 기준금액 이내인지 확인 (물품/용역 1인: 2천만원, 2인: 5천만원 / 공사 1인: 5천만원, 2인: 2억원)
       </div>
@@ -60,8 +60,8 @@
     <div class="flex justify-center">
       <div class="bg-surface-100 rounded-2xl p-6 inline-block shadow-soft">
         <div class="text-center mb-5">
-          <span class="text-sm font-bold text-navy-700">금액에 따른 견적 방법 결정</span>
-          <span class="text-xs font-normal text-navy-500 bg-navy-200 px-2 py-0.5 rounded-full ml-2">현행 기준</span>
+          <span class="text-sm font-bold text-slate-700">금액에 따른 견적 방법 결정</span>
+          <span class="text-xs font-normal text-slate-500 bg-slate-200 px-2 py-0.5 rounded-full ml-2">현행 기준</span>
         </div>
         <div class="flex flex-wrap justify-center gap-5">
           <% [
@@ -93,12 +93,12 @@
     </div>
 
     <!-- STEP 2 -->
-    <div class="bg-forest-50 rounded-2xl p-6 border-l-4 border-forest-500">
+    <div class="bg-emerald-50 rounded-2xl p-6 border-l-4 border-emerald-500">
       <div class="flex items-center gap-4 mb-6">
-        <div class="w-14 h-14 gradient-forest text-white rounded-2xl flex items-center justify-center font-bold text-2xl shadow-lg">2</div>
+        <div class="w-14 h-14 gradient-emerald text-white rounded-2xl flex items-center justify-center font-bold text-2xl shadow-lg">2</div>
         <div>
-          <h4 class="text-xl font-bold text-navy-900">견적징구</h4>
-          <p class="text-forest-600 font-medium">사업부서/계약부서</p>
+          <h4 class="text-xl font-bold text-slate-900">견적징구</h4>
+          <p class="text-emerald-600 font-medium">사업부서/계약부서</p>
         </div>
       </div>
       <div class="grid md:grid-cols-3 gap-5">
@@ -109,13 +109,13 @@
         ].each do |item| %>
           <div class="bg-white rounded-xl p-5 shadow-soft hover-lift">
             <div class="flex items-center justify-center mb-4">
-              <span class="material-symbols-outlined text-3xl text-forest-500"><%= item[:icon] %></span>
+              <span class="material-symbols-outlined text-3xl text-emerald-500"><%= item[:icon] %></span>
             </div>
-            <div class="text-sm font-semibold text-navy-800 text-center mb-3"><%= item[:title] %></div>
-            <ul class="text-xs text-navy-600 space-y-1.5">
+            <div class="text-sm font-semibold text-slate-800 text-center mb-3"><%= item[:title] %></div>
+            <ul class="text-xs text-slate-600 space-y-1.5">
               <% item[:items].each do |i| %>
                 <li class="flex items-center gap-1.5">
-                  <span class="material-symbols-outlined text-xs text-forest-500">check</span>
+                  <span class="material-symbols-outlined text-xs text-emerald-500">check</span>
                   <%= i %>
                 </li>
               <% end %>
@@ -123,19 +123,19 @@
           </div>
         <% end %>
       </div>
-      <div class="mt-5 p-4 bg-warm-100 rounded-xl text-sm text-warm-800 flex items-center gap-2">
+      <div class="mt-5 p-4 bg-amber-100 rounded-xl text-sm text-amber-800 flex items-center gap-2">
         <span class="material-symbols-outlined">warning</span>
         <strong>주의:</strong> 견적서는 반드시 계약 체결 <u>전</u>에 징구해야 합니다. 사후 징구는 감사 지적!
       </div>
     </div>
 
     <!-- STEP 3 -->
-    <div class="bg-navy-50 rounded-2xl p-6 border-l-4 border-navy-500">
+    <div class="bg-slate-50 rounded-2xl p-6 border-l-4 border-slate-500">
       <div class="flex items-center gap-4 mb-6">
-        <div class="w-14 h-14 gradient-navy text-white rounded-2xl flex items-center justify-center font-bold text-2xl shadow-lg">3</div>
+        <div class="w-14 h-14 gradient-slate text-white rounded-2xl flex items-center justify-center font-bold text-2xl shadow-lg">3</div>
         <div>
-          <h4 class="text-xl font-bold text-navy-900">계약체결</h4>
-          <p class="text-navy-600 font-medium">계약부서</p>
+          <h4 class="text-xl font-bold text-slate-900">계약체결</h4>
+          <p class="text-slate-600 font-medium">계약부서</p>
         </div>
       </div>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -146,21 +146,21 @@
           { icon: "send", title: "계약통지", desc: "계약상대자 통보" }
         ].each do |item| %>
           <div class="bg-white rounded-xl p-4 text-center shadow-soft hover-lift">
-            <span class="material-symbols-outlined text-3xl text-navy-500 mb-2"><%= item[:icon] %></span>
-            <div class="text-sm font-semibold text-navy-800"><%= item[:title] %></div>
-            <div class="text-xs text-navy-500 mt-1"><%= item[:desc] %></div>
+            <span class="material-symbols-outlined text-3xl text-slate-500 mb-2"><%= item[:icon] %></span>
+            <div class="text-sm font-semibold text-slate-800"><%= item[:title] %></div>
+            <div class="text-xs text-slate-500 mt-1"><%= item[:desc] %></div>
           </div>
         <% end %>
       </div>
     </div>
 
     <!-- STEP 4 -->
-    <div class="bg-warm-50 rounded-2xl p-6 border-l-4 border-warm-500">
+    <div class="bg-amber-50 rounded-2xl p-6 border-l-4 border-amber-500">
       <div class="flex items-center gap-4 mb-6">
-        <div class="w-14 h-14 gradient-warm text-white rounded-2xl flex items-center justify-center font-bold text-2xl shadow-lg">4</div>
+        <div class="w-14 h-14 gradient-amber text-white rounded-2xl flex items-center justify-center font-bold text-2xl shadow-lg">4</div>
         <div>
-          <h4 class="text-xl font-bold text-navy-900">이행 및 검수</h4>
-          <p class="text-warm-600 font-medium">사업부서</p>
+          <h4 class="text-xl font-bold text-slate-900">이행 및 검수</h4>
+          <p class="text-amber-600 font-medium">사업부서</p>
         </div>
       </div>
       <div class="grid md:grid-cols-3 gap-5">
@@ -171,13 +171,13 @@
         ].each do |item| %>
           <div class="bg-white rounded-xl p-5 shadow-soft hover-lift">
             <div class="flex items-center justify-center mb-4">
-              <span class="material-symbols-outlined text-3xl text-warm-500"><%= item[:icon] %></span>
+              <span class="material-symbols-outlined text-3xl text-amber-500"><%= item[:icon] %></span>
             </div>
-            <div class="text-sm font-semibold text-navy-800 text-center mb-3"><%= item[:title] %></div>
-            <ul class="text-xs text-navy-600 space-y-1.5">
+            <div class="text-sm font-semibold text-slate-800 text-center mb-3"><%= item[:title] %></div>
+            <ul class="text-xs text-slate-600 space-y-1.5">
               <% item[:items].each do |i| %>
                 <li class="flex items-center gap-1.5">
-                  <span class="material-symbols-outlined text-xs text-warm-500">check</span>
+                  <span class="material-symbols-outlined text-xs text-amber-500">check</span>
                   <%= i %>
                 </li>
               <% end %>
@@ -192,7 +192,7 @@
       <div class="flex items-center gap-4 mb-6">
         <div class="w-14 h-14 bg-gradient-to-br from-rose-500 to-rose-600 text-white rounded-2xl flex items-center justify-center font-bold text-2xl shadow-lg">5</div>
         <div>
-          <h4 class="text-xl font-bold text-navy-900">대금지급</h4>
+          <h4 class="text-xl font-bold text-slate-900">대금지급</h4>
           <p class="text-rose-600 font-medium">회계부서</p>
         </div>
       </div>
@@ -205,8 +205,8 @@
         ].each do |item| %>
           <div class="bg-white rounded-xl p-4 text-center shadow-soft hover-lift">
             <span class="material-symbols-outlined text-3xl text-rose-500 mb-2"><%= item[:icon] %></span>
-            <div class="text-sm font-semibold text-navy-800"><%= item[:title] %></div>
-            <div class="text-xs text-navy-500 mt-1"><%= item[:desc] %></div>
+            <div class="text-sm font-semibold text-slate-800"><%= item[:title] %></div>
+            <div class="text-xs text-slate-500 mt-1"><%= item[:desc] %></div>
           </div>
         <% end %>
       </div>
@@ -229,7 +229,7 @@
           <span class="material-symbols-outlined">block</span>
           절대 금지
         </div>
-        <ul class="space-y-2.5 text-navy-100 text-sm">
+        <ul class="space-y-2.5 text-slate-100 text-sm">
           <li class="flex items-center gap-2">
             <span class="material-symbols-outlined text-sm text-rose-400">close</span>
             분할계약 (감사 1순위)
@@ -245,41 +245,41 @@
         </ul>
       </div>
       <div class="bg-white/10 backdrop-blur rounded-xl p-5">
-        <div class="text-forest-300 font-bold mb-4 flex items-center gap-2">
+        <div class="text-emerald-300 font-bold mb-4 flex items-center gap-2">
           <span class="material-symbols-outlined">check_circle</span>
           필수 서류
         </div>
-        <ul class="space-y-2.5 text-navy-100 text-sm">
+        <ul class="space-y-2.5 text-slate-100 text-sm">
           <li class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-sm text-forest-400">check</span>
+            <span class="material-symbols-outlined text-sm text-emerald-400">check</span>
             수의계약 사유서
           </li>
           <li class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-sm text-forest-400">check</span>
+            <span class="material-symbols-outlined text-sm text-emerald-400">check</span>
             견적서 (1인/2인)
           </li>
           <li class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-sm text-forest-400">check</span>
+            <span class="material-symbols-outlined text-sm text-emerald-400">check</span>
             예정가격 조서
           </li>
         </ul>
       </div>
       <div class="bg-white/10 backdrop-blur rounded-xl p-5">
-        <div class="text-point-300 font-bold mb-4 flex items-center gap-2">
+        <div class="text-indigo-300 font-bold mb-4 flex items-center gap-2">
           <span class="material-symbols-outlined">tips_and_updates</span>
           실무 팁
         </div>
-        <ul class="space-y-2.5 text-navy-100 text-sm">
+        <ul class="space-y-2.5 text-slate-100 text-sm">
           <li class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-sm text-point-400">star</span>
+            <span class="material-symbols-outlined text-sm text-indigo-400">star</span>
             견적 마감일시 명확히
           </li>
           <li class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-sm text-point-400">star</span>
+            <span class="material-symbols-outlined text-sm text-indigo-400">star</span>
             동일 조건으로 요청
           </li>
           <li class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-sm text-point-400">star</span>
+            <span class="material-symbols-outlined text-sm text-indigo-400">star</span>
             서류는 시간순 정리
           </li>
         </ul>

@@ -20,7 +20,7 @@
     gap: 8px;
     padding: 10px 16px;
     border-radius: 30px;
-    background: var(--surface-100, #f1f5f9);
+    background: var(--color-surface-100, #f1f5f9);
     color: #64748b;
     font-weight: 500;
     font-size: 13px;
@@ -32,11 +32,11 @@
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   }
   .step.active {
-    background: var(--forest-600, #2e7d32);
+    background: var(--color-emerald-600, #2e7d32);
     color: white;
   }
   .step.done {
-    background: var(--navy-900, #1e3a5f);
+    background: var(--color-slate-900, #1e3a5f);
     color: white;
   }
   .step.disabled {
@@ -65,7 +65,7 @@
     border: 1px solid #e2e8f0;
   }
   .estimator-card h3 {
-    color: var(--navy-900, #1e3a5f);
+    color: var(--color-slate-900, #1e3a5f);
     font-size: 18px;
     font-weight: 700;
     margin-bottom: 8px;
@@ -79,7 +79,7 @@
     font-size: 14px;
   }
   .estimator-card.highlight {
-    border: 2px solid var(--forest-500, #4caf50);
+    border: 2px solid var(--color-emerald-500, #4caf50);
     background: linear-gradient(to bottom right, #f0fdf4, #ffffff);
   }
 
@@ -100,27 +100,27 @@
     transition: all 0.2s;
   }
   .type-btn:hover {
-    border-color: var(--forest-500, #4caf50);
+    border-color: var(--color-emerald-500, #4caf50);
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(0,0,0,0.08);
   }
   .type-btn.selected {
-    border-color: var(--forest-600, #2e7d32);
-    background: var(--forest-100, #e8f5e9);
+    border-color: var(--color-emerald-600, #2e7d32);
+    background: var(--color-emerald-100, #e8f5e9);
   }
   .type-btn .material-symbols-outlined {
     font-size: 48px;
-    color: var(--navy-600, #3d5a7f);
+    color: var(--color-slate-600, #3d5a7f);
     margin-bottom: 12px;
   }
   .type-btn.selected .material-symbols-outlined {
-    color: var(--forest-600, #2e7d32);
+    color: var(--color-emerald-600, #2e7d32);
   }
   .type-btn span {
     display: block;
     font-size: 16px;
     font-weight: 600;
-    color: var(--navy-900, #1e3a5f);
+    color: var(--color-slate-900, #1e3a5f);
   }
   .type-btn small {
     font-size: 13px;
@@ -133,13 +133,13 @@
   .form-section {
     margin-bottom: 24px;
     padding: 20px;
-    background: var(--surface-100, #f1f5f9);
+    background: var(--color-surface-100, #f1f5f9);
     border-radius: 12px;
   }
   .form-section h4 {
     font-size: 15px;
     font-weight: 600;
-    color: var(--navy-900, #1e3a5f);
+    color: var(--color-slate-900, #1e3a5f);
     margin-bottom: 16px;
     display: flex;
     align-items: center;
@@ -160,7 +160,7 @@
     display: block;
     font-weight: 600;
     margin-bottom: 6px;
-    color: var(--navy-900, #1e3a5f);
+    color: var(--color-slate-900, #1e3a5f);
     font-size: 14px;
   }
   .form-group input, .form-group select {
@@ -174,7 +174,7 @@
   }
   .form-group input:focus, .form-group select:focus {
     outline: none;
-    border-color: var(--forest-500, #4caf50);
+    border-color: var(--color-emerald-500, #4caf50);
   }
   .form-group .hint {
     font-size: 12px;
@@ -206,7 +206,7 @@
   }
   .item-row select:focus, .item-row input:focus {
     outline: none;
-    border-color: var(--forest-500, #4caf50);
+    border-color: var(--color-emerald-500, #4caf50);
   }
   .item-row .unit-label {
     font-size: 13px;
@@ -232,8 +232,8 @@
     align-items: center;
     gap: 6px;
     padding: 12px 20px;
-    background: var(--navy-100, #e8eef5);
-    color: var(--navy-700, #2d4a6f);
+    background: var(--color-slate-100, #e8eef5);
+    color: var(--color-slate-700, #2d4a6f);
     border: 2px dashed #cbd5e1;
     border-radius: 10px;
     cursor: pointer;
@@ -245,9 +245,9 @@
     margin-top: 12px;
   }
   .btn-add-row:hover {
-    background: var(--forest-100, #e8f5e9);
-    border-color: var(--forest-500, #4caf50);
-    color: var(--forest-600, #2e7d32);
+    background: var(--color-emerald-100, #e8f5e9);
+    border-color: var(--color-emerald-500, #4caf50);
+    color: var(--color-emerald-600, #2e7d32);
   }
 
   /* 등급 선택 */
@@ -267,16 +267,16 @@
     transition: all 0.2s;
   }
   .grade-btn:hover {
-    border-color: var(--forest-500, #4caf50);
+    border-color: var(--color-emerald-500, #4caf50);
   }
   .grade-btn.selected {
-    border-color: var(--forest-600, #2e7d32);
-    background: var(--forest-100, #e8f5e9);
+    border-color: var(--color-emerald-600, #2e7d32);
+    background: var(--color-emerald-100, #e8f5e9);
   }
   .grade-btn strong {
     display: block;
     font-size: 14px;
-    color: var(--navy-900, #1e3a5f);
+    color: var(--color-slate-900, #1e3a5f);
     margin-bottom: 2px;
   }
   .grade-btn span {
@@ -293,7 +293,7 @@
   .btn-primary {
     flex: 2;
     padding: 16px;
-    background: linear-gradient(135deg, var(--forest-600, #2e7d32), var(--forest-500, #4caf50));
+    background: linear-gradient(135deg, var(--color-emerald-600, #2e7d32), var(--color-emerald-500, #4caf50));
     color: white;
     border: none;
     border-radius: 12px;
@@ -319,8 +319,8 @@
   .btn-secondary {
     flex: 1;
     padding: 16px;
-    background: var(--surface-100, #f1f5f9);
-    color: var(--navy-900, #1e3a5f);
+    background: var(--color-surface-100, #f1f5f9);
+    color: var(--color-slate-900, #1e3a5f);
     border: none;
     border-radius: 12px;
     font-size: 16px;
@@ -345,7 +345,7 @@
     border: 1px solid #e2e8f0;
   }
   .result-header {
-    background: linear-gradient(135deg, var(--navy-900, #1e3a5f), var(--navy-700, #2d4a6f));
+    background: linear-gradient(135deg, var(--color-slate-900, #1e3a5f), var(--color-slate-700, #2d4a6f));
     color: white;
     padding: 28px;
     text-align: center;
@@ -366,7 +366,7 @@
   .total-box {
     text-align: center;
     padding: 32px;
-    background: linear-gradient(135deg, var(--forest-600, #2e7d32), var(--forest-500, #4caf50));
+    background: linear-gradient(135deg, var(--color-emerald-600, #2e7d32), var(--color-emerald-500, #4caf50));
     border-radius: 16px;
     color: white;
     margin-bottom: 24px;
@@ -402,7 +402,7 @@
   .detail-section h4 {
     font-size: 15px;
     font-weight: 600;
-    color: var(--navy-900, #1e3a5f);
+    color: var(--color-slate-900, #1e3a5f);
     margin-bottom: 12px;
     display: flex;
     align-items: center;
@@ -421,9 +421,9 @@
     font-size: 14px;
   }
   .detail-table th {
-    background: var(--surface-100, #f1f5f9);
+    background: var(--color-surface-100, #f1f5f9);
     font-weight: 600;
-    color: var(--navy-900, #1e3a5f);
+    color: var(--color-slate-900, #1e3a5f);
   }
   .detail-table td.number {
     text-align: right;
@@ -433,11 +433,11 @@
     border-bottom: none;
   }
   .detail-table tr.total {
-    background: var(--forest-100, #e8f5e9);
+    background: var(--color-emerald-100, #e8f5e9);
     font-weight: 600;
   }
   .detail-table tr.total td {
-    border-top: 2px solid var(--forest-500, #4caf50);
+    border-top: 2px solid var(--color-emerald-500, #4caf50);
   }
 
   /* 요약 박스 */
@@ -450,7 +450,7 @@
   .summary-item {
     text-align: center;
     padding: 16px;
-    background: var(--surface-100, #f1f5f9);
+    background: var(--color-surface-100, #f1f5f9);
     border-radius: 12px;
   }
   .summary-item .label {
@@ -461,7 +461,7 @@
   .summary-item .value {
     font-size: 18px;
     font-weight: 700;
-    color: var(--navy-900, #1e3a5f);
+    color: var(--color-slate-900, #1e3a5f);
   }
 
   /* 면책 조항 */
@@ -492,13 +492,13 @@
   .action-section {
     margin-top: 24px;
     padding: 24px;
-    background: linear-gradient(135deg, var(--forest-100, #e8f5e9), white);
+    background: linear-gradient(135deg, var(--color-emerald-100, #e8f5e9), white);
     border-radius: 12px;
     text-align: center;
   }
   .action-section h4 {
     font-size: 15px;
-    color: var(--navy-900, #1e3a5f);
+    color: var(--color-slate-900, #1e3a5f);
     margin-bottom: 16px;
   }
   .action-buttons {
@@ -527,22 +527,22 @@
   .btn-action.pdf:hover { background: #b91c1c; }
   .btn-action.print {
     background: white;
-    color: var(--navy-900, #1e3a5f);
+    color: var(--color-slate-900, #1e3a5f);
     border: 2px solid #e2e8f0;
   }
-  .btn-action.print:hover { background: var(--surface-100, #f1f5f9); }
+  .btn-action.print:hover { background: var(--color-surface-100, #f1f5f9); }
   .btn-action.share {
-    background: var(--forest-600, #2e7d32);
+    background: var(--color-emerald-600, #2e7d32);
     color: white;
     border: none;
   }
-  .btn-action.share:hover { background: var(--forest-500, #4caf50); }
+  .btn-action.share:hover { background: var(--color-emerald-500, #4caf50); }
 
   /* 연결 링크 */
   .link-section {
     margin-top: 24px;
     padding: 20px;
-    background: var(--navy-100, #e8eef5);
+    background: var(--color-slate-100, #e8eef5);
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -550,7 +550,7 @@
   }
   .link-section .material-symbols-outlined {
     font-size: 36px;
-    color: var(--navy-600, #3d5a7f);
+    color: var(--color-slate-600, #3d5a7f);
   }
   .link-section-content {
     flex: 1;
@@ -558,7 +558,7 @@
   .link-section-content strong {
     display: block;
     font-size: 14px;
-    color: var(--navy-900, #1e3a5f);
+    color: var(--color-slate-900, #1e3a5f);
     margin-bottom: 4px;
   }
   .link-section-content span {
@@ -567,7 +567,7 @@
   }
   .link-section a {
     padding: 10px 20px;
-    background: var(--navy-900, #1e3a5f);
+    background: var(--color-slate-900, #1e3a5f);
     color: white;
     border-radius: 8px;
     text-decoration: none;
@@ -576,7 +576,7 @@
     transition: all 0.2s;
   }
   .link-section a:hover {
-    background: var(--navy-700, #2d4a6f);
+    background: var(--color-slate-700, #2d4a6f);
   }
 
   /* 반응형 */
@@ -618,7 +618,7 @@
 </style>
 
 <!-- 페이지 헤더 -->
-<section class="gradient-point text-white py-12 lg:py-16">
+<section class="gradient-indigo text-white py-12 lg:py-16">
   <div class="container-wide">
     <div class="flex items-start gap-5">
       <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 shadow-lg">
@@ -626,7 +626,7 @@
       </div>
       <div>
         <h1 class="text-3xl lg:text-4xl font-bold tracking-tight mb-2">소요예산 추정기</h1>
-        <p class="text-point-100 text-lg">소규모 공사/용역 시행 전 대략적인 예산을 미리 파악하세요</p>
+        <p class="text-indigo-100 text-lg">소규모 공사/용역 시행 전 대략적인 예산을 미리 파악하세요</p>
       </div>
     </div>
   </div>
@@ -873,7 +873,7 @@
           <div style="display: flex; gap: 12px; margin-bottom: 16px;">
             <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
               <input type="checkbox" id="include_supervision" onchange="toggleSupervisionOptions()" style="width: 18px; height: 18px;">
-              <span style="font-size: 14px; color: var(--navy-900);">감리비 포함</span>
+              <span style="font-size: 14px; color: var(--color-slate-900);">감리비 포함</span>
             </label>
           </div>
           <div id="supervision-options" style="display: none;">
@@ -1363,8 +1363,8 @@
             <span class="material-symbols-outlined">receipt_long</span>
             산출 내역
           </h4>
-          <div style="background: var(--surface-100); padding: 16px; border-radius: 10px; margin-bottom: 16px;">
-            <p style="margin: 0; font-size: 14px; color: var(--navy-700);">
+          <div style="background: var(--color-surface-100); padding: 16px; border-radius: 10px; margin-bottom: 16px;">
+            <p style="margin: 0; font-size: 14px; color: var(--color-slate-700);">
               <strong>기준 공사비:</strong> ${formatNumber(result.construction_cost)}원
             </p>
           </div>

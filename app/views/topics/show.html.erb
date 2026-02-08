@@ -28,7 +28,7 @@
 <section class="gradient-premium text-white py-12 lg:py-16">
   <div class="container-wide">
     <!-- 브레드크럼 -->
-    <div class="flex items-center gap-2 text-navy-300 text-sm mb-6">
+    <div class="flex items-center gap-2 text-slate-300 text-sm mb-6">
       <%= link_to root_path, class: "hover:text-white transition-colors flex items-center gap-1" do %>
         <span class="material-symbols-outlined text-sm">home</span>
         홈
@@ -47,7 +47,7 @@
           </div>
           <div>
             <h1 class="text-3xl lg:text-4xl font-bold tracking-tight"><%= @topic.name %></h1>
-            <p class="text-navy-200 mt-2 text-lg"><%= @topic.summary %></p>
+            <p class="text-slate-200 mt-2 text-lg"><%= @topic.summary %></p>
           </div>
         </div>
 
@@ -109,42 +109,42 @@
   <div class="container-wide">
     <nav class="flex gap-2 overflow-x-auto py-3 -mx-4 px-4 scrollbar-hide" id="topic-tabs">
       <button onclick="showTab('law')" data-tab="law"
-              class="tab-btn px-5 py-2.5 bg-navy-800 text-white rounded-xl text-sm font-semibold whitespace-nowrap flex items-center gap-2 transition-all duration-200 shadow-md">
+              class="tab-btn px-5 py-2.5 bg-slate-800 text-white rounded-xl text-sm font-semibold whitespace-nowrap flex items-center gap-2 transition-all duration-200 shadow-md">
         <span class="material-symbols-outlined text-lg">balance</span>
         법령 3단 비교
       </button>
       <button onclick="showTab('regulation')" data-tab="regulation"
-              class="tab-btn px-5 py-2.5 bg-surface-100 text-navy-600 hover:bg-surface-200 rounded-xl text-sm font-medium whitespace-nowrap flex items-center gap-2 transition-all duration-200">
+              class="tab-btn px-5 py-2.5 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-xl text-sm font-medium whitespace-nowrap flex items-center gap-2 transition-all duration-200">
         <span class="material-symbols-outlined text-lg">description</span>
         예규/지침
       </button>
       <button onclick="showTab('interpretation')" data-tab="interpretation"
-              class="tab-btn px-5 py-2.5 bg-surface-100 text-navy-600 hover:bg-surface-200 rounded-xl text-sm font-medium whitespace-nowrap flex items-center gap-2 transition-all duration-200">
+              class="tab-btn px-5 py-2.5 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-xl text-sm font-medium whitespace-nowrap flex items-center gap-2 transition-all duration-200">
         <span class="material-symbols-outlined text-lg">policy</span>
         유권해석
       </button>
       <button onclick="showTab('audit')" data-tab="audit"
-              class="tab-btn px-5 py-2.5 bg-surface-100 text-navy-600 hover:bg-surface-200 rounded-xl text-sm font-medium whitespace-nowrap flex items-center gap-2 transition-all duration-200">
+              class="tab-btn px-5 py-2.5 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-xl text-sm font-medium whitespace-nowrap flex items-center gap-2 transition-all duration-200">
         <span class="material-symbols-outlined text-lg">search</span>
         감사사례
       </button>
       <button onclick="showTab('qa')" data-tab="qa"
-              class="tab-btn px-5 py-2.5 bg-surface-100 text-navy-600 hover:bg-surface-200 rounded-xl text-sm font-medium whitespace-nowrap flex items-center gap-2 transition-all duration-200">
+              class="tab-btn px-5 py-2.5 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-xl text-sm font-medium whitespace-nowrap flex items-center gap-2 transition-all duration-200">
         <span class="material-symbols-outlined text-lg">forum</span>
         질의답변
       </button>
       <button onclick="showTab('tips')" data-tab="tips"
-              class="tab-btn px-5 py-2.5 bg-surface-100 text-navy-600 hover:bg-surface-200 rounded-xl text-sm font-medium whitespace-nowrap flex items-center gap-2 transition-all duration-200">
+              class="tab-btn px-5 py-2.5 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-xl text-sm font-medium whitespace-nowrap flex items-center gap-2 transition-all duration-200">
         <span class="material-symbols-outlined text-lg">lightbulb</span>
         실무주의
       </button>
       <button onclick="showTab('forms')" data-tab="forms"
-              class="tab-btn px-5 py-2.5 bg-surface-100 text-navy-600 hover:bg-surface-200 rounded-xl text-sm font-medium whitespace-nowrap flex items-center gap-2 transition-all duration-200">
+              class="tab-btn px-5 py-2.5 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-xl text-sm font-medium whitespace-nowrap flex items-center gap-2 transition-all duration-200">
         <span class="material-symbols-outlined text-lg">draft</span>
         서식/양식
       </button>
       <button onclick="showTab('flowchart')" data-tab="flowchart"
-              class="tab-btn px-5 py-2.5 bg-surface-100 text-navy-600 hover:bg-surface-200 rounded-xl text-sm font-medium whitespace-nowrap flex items-center gap-2 transition-all duration-200">
+              class="tab-btn px-5 py-2.5 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-xl text-sm font-medium whitespace-nowrap flex items-center gap-2 transition-all duration-200">
         <span class="material-symbols-outlined text-lg">account_tree</span>
         흐름도
       </button>
@@ -166,7 +166,7 @@
               <div class="flex items-start relative flex-nowrap" style="min-width: 600px; gap: 4px;">
                 <!-- 법률 (제일 왼쪽) -->
                 <div class="law-card-stack" style="flex: 1; min-width: 0;" data-card="law">
-                  <div class="law-card group overflow-hidden rounded-2xl border-2 border-point-200 bg-white shadow-xl cursor-pointer transition-all duration-500 hover:shadow-2xl" onclick="expandLawCard('law')">
+                  <div class="law-card group overflow-hidden rounded-2xl border-2 border-indigo-200 bg-white shadow-xl cursor-pointer transition-all duration-500 hover:shadow-2xl" onclick="expandLawCard('law')">
                     <!-- 헤더 -->
                     <div class="relative px-6 py-5 overflow-hidden" style="background-color: #6366f1;">
                       <div class="relative flex items-center justify-between">
@@ -201,7 +201,7 @@
 
                 <!-- 시행령 (중간) -->
                 <div class="law-card-stack" style="flex-shrink: 0;" data-card="decree">
-                  <div class="law-card group overflow-hidden rounded-2xl border-2 border-forest-200 bg-white shadow-xl cursor-pointer transition-all duration-500 hover:shadow-2xl" onclick="expandLawCard('decree')">
+                  <div class="law-card group overflow-hidden rounded-2xl border-2 border-emerald-200 bg-white shadow-xl cursor-pointer transition-all duration-500 hover:shadow-2xl" onclick="expandLawCard('decree')">
                     <!-- 헤더 -->
                     <div class="relative px-6 py-5 overflow-hidden" style="background-color: #3f9142;">
                       <div class="relative flex items-center justify-between">
@@ -236,7 +236,7 @@
 
                 <!-- 시행규칙 (제일 오른쪽) -->
                 <div class="law-card-stack" style="flex-shrink: 0;" data-card="rule">
-                  <div class="law-card group overflow-hidden rounded-2xl border-2 border-warm-200 bg-white shadow-xl cursor-pointer transition-all duration-500 hover:shadow-2xl" onclick="expandLawCard('rule')">
+                  <div class="law-card group overflow-hidden rounded-2xl border-2 border-amber-200 bg-white shadow-xl cursor-pointer transition-all duration-500 hover:shadow-2xl" onclick="expandLawCard('rule')">
                     <!-- 헤더 -->
                     <div class="relative px-6 py-5 overflow-hidden" style="background-color: #f59e0b;">
                       <div class="relative flex items-center justify-between">
@@ -271,7 +271,7 @@
               </div>
 
               <!-- 하단 안내 -->
-              <div class="mt-6 flex items-center justify-center gap-2 text-sm text-navy-500">
+              <div class="mt-6 flex items-center justify-center gap-2 text-sm text-slate-500">
                 <span class="material-symbols-outlined text-lg">touch_app</span>
                 카드를 클릭하면 전체 내용을 볼 수 있습니다
               </div>
@@ -279,8 +279,8 @@
             </div>
           <% else %>
             <div class="card p-16 text-center">
-              <span class="material-symbols-outlined text-6xl text-navy-200 mb-4">description</span>
-              <p class="text-navy-500 text-lg">법령 정보가 준비 중입니다.</p>
+              <span class="material-symbols-outlined text-6xl text-slate-200 mb-4">description</span>
+              <p class="text-slate-500 text-lg">법령 정보가 준비 중입니다.</p>
             </div>
           <% end %>
         </div>
@@ -295,8 +295,8 @@
             </div>
           <% else %>
             <div class="card p-16 text-center">
-              <span class="material-symbols-outlined text-6xl text-navy-200 mb-4">description</span>
-              <p class="text-navy-500 text-lg">예규/지침 정보가 준비 중입니다.</p>
+              <span class="material-symbols-outlined text-6xl text-slate-200 mb-4">description</span>
+              <p class="text-slate-500 text-lg">예규/지침 정보가 준비 중입니다.</p>
             </div>
           <% end %>
         </div>
@@ -311,8 +311,8 @@
             </div>
           <% else %>
             <div class="card p-16 text-center">
-              <span class="material-symbols-outlined text-6xl text-navy-200 mb-4">policy</span>
-              <p class="text-navy-500 text-lg">유권해석 정보가 준비 중입니다.</p>
+              <span class="material-symbols-outlined text-6xl text-slate-200 mb-4">policy</span>
+              <p class="text-slate-500 text-lg">유권해석 정보가 준비 중입니다.</p>
             </div>
           <% end %>
         </div>
@@ -327,8 +327,8 @@
             </div>
           <% else %>
             <div class="card p-16 text-center">
-              <span class="material-symbols-outlined text-6xl text-navy-200 mb-4">search</span>
-              <p class="text-navy-500 text-lg">감사사례 정보가 준비 중입니다.</p>
+              <span class="material-symbols-outlined text-6xl text-slate-200 mb-4">search</span>
+              <p class="text-slate-500 text-lg">감사사례 정보가 준비 중입니다.</p>
             </div>
           <% end %>
         </div>
@@ -343,8 +343,8 @@
             </div>
           <% else %>
             <div class="card p-16 text-center">
-              <span class="material-symbols-outlined text-6xl text-navy-200 mb-4">forum</span>
-              <p class="text-navy-500 text-lg">질의답변 정보가 준비 중입니다.</p>
+              <span class="material-symbols-outlined text-6xl text-slate-200 mb-4">forum</span>
+              <p class="text-slate-500 text-lg">질의답변 정보가 준비 중입니다.</p>
             </div>
           <% end %>
         </div>
@@ -359,8 +359,8 @@
             </div>
           <% else %>
             <div class="card p-16 text-center">
-              <span class="material-symbols-outlined text-6xl text-navy-200 mb-4">lightbulb</span>
-              <p class="text-navy-500 text-lg">실무주의사항이 준비 중입니다.</p>
+              <span class="material-symbols-outlined text-6xl text-slate-200 mb-4">lightbulb</span>
+              <p class="text-slate-500 text-lg">실무주의사항이 준비 중입니다.</p>
             </div>
           <% end %>
         </div>
@@ -371,9 +371,9 @@
             <!-- 여비 관련 서식 -->
             <div class="mb-10">
               <div class="flex items-center justify-between mb-5">
-                <h3 class="text-xl font-bold text-navy-900 flex items-center gap-2">
-                  <div class="icon-container icon-container-sm bg-point-100">
-                    <span class="material-symbols-outlined text-point-600">folder_open</span>
+                <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                  <div class="icon-container icon-container-sm bg-indigo-100">
+                    <span class="material-symbols-outlined text-indigo-600">folder_open</span>
                   </div>
                   여비 관련 서식
                 </h3>
@@ -392,8 +392,8 @@
                         <span class="material-symbols-outlined text-2xl text-<%= form[:color] %>-600">description</span>
                       </div>
                       <div class="flex-1 min-w-0">
-                        <h4 class="font-semibold text-navy-900"><%= form[:title] %></h4>
-                        <p class="text-sm text-navy-500 mt-1"><%= form[:desc] %></p>
+                        <h4 class="font-semibold text-slate-900"><%= form[:title] %></h4>
+                        <p class="text-sm text-slate-500 mt-1"><%= form[:desc] %></p>
                         <span class="badge badge-<%= form[:color] %> mt-2"><%= form[:badge] %></span>
                       </div>
                     </div>
@@ -404,41 +404,41 @@
 
             <!-- 실무 도구 -->
             <div class="mb-10">
-              <h3 class="text-xl font-bold text-navy-900 flex items-center gap-2 mb-5">
-                <div class="icon-container icon-container-sm bg-point-100">
-                  <span class="material-symbols-outlined text-point-600">construction</span>
+              <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2 mb-5">
+                <div class="icon-container icon-container-sm bg-indigo-100">
+                  <span class="material-symbols-outlined text-indigo-600">construction</span>
                 </div>
                 실무 도구
               </h3>
 
               <%= link_to travel_calculator_path,
-                   class: "group block bg-gradient-to-br from-point-50 to-navy-50 rounded-2xl border-2 border-point-200 p-6 hover:border-point-400 hover:shadow-strong transition-all duration-300" do %>
+                   class: "group block bg-gradient-to-br from-indigo-50 to-slate-50 rounded-2xl border-2 border-indigo-200 p-6 hover:border-indigo-400 hover:shadow-strong transition-all duration-300" do %>
                 <div class="flex items-start gap-5">
-                  <div class="w-16 h-16 gradient-point rounded-2xl flex items-center justify-center shadow-lg shrink-0">
+                  <div class="w-16 h-16 gradient-indigo rounded-2xl flex items-center justify-center shadow-lg shrink-0">
                     <span class="material-symbols-outlined text-3xl text-white">calculate</span>
                   </div>
                   <div class="flex-1">
                     <div class="flex items-center gap-2 mb-1">
-                      <h4 class="text-xl font-bold text-navy-900">여비 계산기</h4>
-                      <span class="badge badge-point">자동계산</span>
+                      <h4 class="text-xl font-bold text-slate-900">여비 계산기</h4>
+                      <span class="badge badge-indigo">자동계산</span>
                     </div>
-                    <p class="text-navy-600">출장 일정과 경로를 입력하면 일비, 숙박비, 식비를 자동으로 계산해 드립니다</p>
+                    <p class="text-slate-600">출장 일정과 경로를 입력하면 일비, 숙박비, 식비를 자동으로 계산해 드립니다</p>
                     <div class="mt-3 flex flex-wrap gap-2">
-                      <span class="badge badge-point">국내출장</span>
-                      <span class="badge badge-navy">해외출장</span>
-                      <span class="badge badge-forest">2025년 기준 (현행)</span>
+                      <span class="badge badge-indigo">국내출장</span>
+                      <span class="badge badge-slate">해외출장</span>
+                      <span class="badge badge-emerald">2025년 기준 (현행)</span>
                     </div>
                   </div>
-                  <span class="material-symbols-outlined text-2xl text-point-400 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                  <span class="material-symbols-outlined text-2xl text-indigo-400 group-hover:translate-x-1 transition-transform">arrow_forward</span>
                 </div>
               <% end %>
             </div>
 
             <!-- 공식 자료 -->
             <div class="mb-10">
-              <h3 class="text-xl font-bold text-navy-900 flex items-center gap-2 mb-5">
-                <div class="icon-container icon-container-sm bg-navy-100">
-                  <span class="material-symbols-outlined text-navy-600">link</span>
+              <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2 mb-5">
+                <div class="icon-container icon-container-sm bg-slate-100">
+                  <span class="material-symbols-outlined text-slate-600">link</span>
                 </div>
                 공식 자료
               </h3>
@@ -455,10 +455,10 @@
                       <span class="material-symbols-outlined text-white"><%= link[:icon] %></span>
                     </div>
                     <div class="flex-1 min-w-0">
-                      <div class="font-semibold text-navy-900"><%= link[:title] %></div>
-                      <div class="text-sm text-navy-500 truncate"><%= link[:desc] %></div>
+                      <div class="font-semibold text-slate-900"><%= link[:title] %></div>
+                      <div class="text-sm text-slate-500 truncate"><%= link[:desc] %></div>
                     </div>
-                    <span class="material-symbols-outlined text-navy-300">open_in_new</span>
+                    <span class="material-symbols-outlined text-slate-300">open_in_new</span>
                   </a>
                 <% end %>
               </div>
@@ -466,30 +466,30 @@
 
             <!-- 여비 지급 기준 요약 -->
             <div>
-              <h3 class="text-xl font-bold text-navy-900 flex items-center gap-2 mb-5">
-                <div class="icon-container icon-container-sm bg-point-100">
-                  <span class="material-symbols-outlined text-point-600">payments</span>
+              <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2 mb-5">
+                <div class="icon-container icon-container-sm bg-indigo-100">
+                  <span class="material-symbols-outlined text-indigo-600">payments</span>
                 </div>
-                여비 지급 기준 요약 <span class="text-sm font-normal text-navy-500">(2025년 개정, 현행)</span>
+                여비 지급 기준 요약 <span class="text-sm font-normal text-slate-500">(2025년 개정, 현행)</span>
               </h3>
 
-              <div class="bg-point-50 border border-point-200 rounded-2xl p-6">
+              <div class="bg-indigo-50 border border-indigo-200 rounded-2xl p-6">
                 <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   <div class="bg-white rounded-xl p-4 text-center">
-                    <div class="text-2xl font-bold text-point-600">25,000원</div>
-                    <div class="text-sm text-navy-600 mt-1">일비 (1일)</div>
+                    <div class="text-2xl font-bold text-indigo-600">25,000원</div>
+                    <div class="text-sm text-slate-600 mt-1">일비 (1일)</div>
                   </div>
                   <div class="bg-white rounded-xl p-4 text-center">
-                    <div class="text-2xl font-bold text-forest-600">25,000원</div>
-                    <div class="text-sm text-navy-600 mt-1">식비 (1일)</div>
+                    <div class="text-2xl font-bold text-emerald-600">25,000원</div>
+                    <div class="text-sm text-slate-600 mt-1">식비 (1일)</div>
                   </div>
                   <div class="bg-white rounded-xl p-4 text-center">
-                    <div class="text-2xl font-bold text-warm-600">100,000원</div>
-                    <div class="text-sm text-navy-600 mt-1">숙박비 상한 (서울)</div>
+                    <div class="text-2xl font-bold text-amber-600">100,000원</div>
+                    <div class="text-sm text-slate-600 mt-1">숙박비 상한 (서울)</div>
                   </div>
                   <div class="bg-white rounded-xl p-4 text-center">
-                    <div class="text-2xl font-bold text-navy-600">실비</div>
-                    <div class="text-sm text-navy-600 mt-1">교통비 (영수증)</div>
+                    <div class="text-2xl font-bold text-slate-600">실비</div>
+                    <div class="text-sm text-slate-600 mt-1">교통비 (영수증)</div>
                   </div>
                 </div>
               </div>
@@ -499,9 +499,9 @@
             <!-- 연말정산 관련 서식 -->
             <div class="mb-10">
               <div class="flex items-center justify-between mb-5">
-                <h3 class="text-xl font-bold text-navy-900 flex items-center gap-2">
-                  <div class="icon-container icon-container-sm bg-point-100">
-                    <span class="material-symbols-outlined text-point-600">folder_open</span>
+                <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                  <div class="icon-container icon-container-sm bg-indigo-100">
+                    <span class="material-symbols-outlined text-indigo-600">folder_open</span>
                   </div>
                   연말정산 관련 서식
                 </h3>
@@ -520,8 +520,8 @@
                         <span class="material-symbols-outlined text-2xl text-<%= form[:color] %>-600">description</span>
                       </div>
                       <div class="flex-1 min-w-0">
-                        <h4 class="font-semibold text-navy-900"><%= form[:title] %></h4>
-                        <p class="text-sm text-navy-500 mt-1"><%= form[:desc] %></p>
+                        <h4 class="font-semibold text-slate-900"><%= form[:title] %></h4>
+                        <p class="text-sm text-slate-500 mt-1"><%= form[:desc] %></p>
                         <span class="badge badge-<%= form[:color] %> mt-2"><%= form[:badge] %></span>
                       </div>
                     </div>
@@ -532,9 +532,9 @@
 
             <!-- 공식 자료 -->
             <div class="mb-10">
-              <h3 class="text-xl font-bold text-navy-900 flex items-center gap-2 mb-5">
-                <div class="icon-container icon-container-sm bg-navy-100">
-                  <span class="material-symbols-outlined text-navy-600">link</span>
+              <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2 mb-5">
+                <div class="icon-container icon-container-sm bg-slate-100">
+                  <span class="material-symbols-outlined text-slate-600">link</span>
                 </div>
                 공식 자료
               </h3>
@@ -551,10 +551,10 @@
                       <span class="material-symbols-outlined text-white"><%= link[:icon] %></span>
                     </div>
                     <div class="flex-1 min-w-0">
-                      <div class="font-semibold text-navy-900"><%= link[:title] %></div>
-                      <div class="text-sm text-navy-500 truncate"><%= link[:desc] %></div>
+                      <div class="font-semibold text-slate-900"><%= link[:title] %></div>
+                      <div class="text-sm text-slate-500 truncate"><%= link[:desc] %></div>
                     </div>
-                    <span class="material-symbols-outlined text-navy-300">open_in_new</span>
+                    <span class="material-symbols-outlined text-slate-300">open_in_new</span>
                   </a>
                 <% end %>
               </div>
@@ -564,9 +564,9 @@
             <!-- 예산이월 관련 서식 -->
             <div class="mb-10">
               <div class="flex items-center justify-between mb-5">
-                <h3 class="text-xl font-bold text-navy-900 flex items-center gap-2">
-                  <div class="icon-container icon-container-sm bg-point-100">
-                    <span class="material-symbols-outlined text-point-600">folder_open</span>
+                <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                  <div class="icon-container icon-container-sm bg-indigo-100">
+                    <span class="material-symbols-outlined text-indigo-600">folder_open</span>
                   </div>
                   예산이월 관련 서식
                 </h3>
@@ -585,8 +585,8 @@
                         <span class="material-symbols-outlined text-2xl text-<%= form[:color] %>-600">description</span>
                       </div>
                       <div class="flex-1 min-w-0">
-                        <h4 class="font-semibold text-navy-900"><%= form[:title] %></h4>
-                        <p class="text-sm text-navy-500 mt-1"><%= form[:desc] %></p>
+                        <h4 class="font-semibold text-slate-900"><%= form[:title] %></h4>
+                        <p class="text-sm text-slate-500 mt-1"><%= form[:desc] %></p>
                         <span class="badge badge-<%= form[:color] %> mt-2"><%= form[:badge] %></span>
                       </div>
                     </div>
@@ -597,9 +597,9 @@
 
             <!-- 공식 자료 -->
             <div class="mb-10">
-              <h3 class="text-xl font-bold text-navy-900 flex items-center gap-2 mb-5">
-                <div class="icon-container icon-container-sm bg-navy-100">
-                  <span class="material-symbols-outlined text-navy-600">link</span>
+              <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2 mb-5">
+                <div class="icon-container icon-container-sm bg-slate-100">
+                  <span class="material-symbols-outlined text-slate-600">link</span>
                 </div>
                 공식 자료
               </h3>
@@ -616,10 +616,10 @@
                       <span class="material-symbols-outlined text-white"><%= link[:icon] %></span>
                     </div>
                     <div class="flex-1 min-w-0">
-                      <div class="font-semibold text-navy-900"><%= link[:title] %></div>
-                      <div class="text-sm text-navy-500 truncate"><%= link[:desc] %></div>
+                      <div class="font-semibold text-slate-900"><%= link[:title] %></div>
+                      <div class="text-sm text-slate-500 truncate"><%= link[:desc] %></div>
                     </div>
-                    <span class="material-symbols-outlined text-navy-300">open_in_new</span>
+                    <span class="material-symbols-outlined text-slate-300">open_in_new</span>
                   </a>
                 <% end %>
               </div>
@@ -629,13 +629,13 @@
             <!-- 수의계약 관련 서식 (기본) -->
             <div class="mb-10">
               <div class="flex items-center justify-between mb-5">
-                <h3 class="text-xl font-bold text-navy-900 flex items-center gap-2">
-                  <div class="icon-container icon-container-sm bg-point-100">
-                    <span class="material-symbols-outlined text-point-600">folder_open</span>
+                <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                  <div class="icon-container icon-container-sm bg-indigo-100">
+                    <span class="material-symbols-outlined text-indigo-600">folder_open</span>
                   </div>
                   필수 서식
                 </h3>
-                <%= link_to templates_path, class: "text-sm text-point-600 hover:text-point-700 font-medium flex items-center gap-1 transition-colors" do %>
+                <%= link_to templates_path, class: "text-sm text-indigo-600 hover:text-indigo-700 font-medium flex items-center gap-1 transition-colors" do %>
                   전체보기
                   <span class="material-symbols-outlined text-sm">arrow_forward</span>
                 <% end %>
@@ -655,11 +655,11 @@
                         <span class="material-symbols-outlined text-2xl text-<%= form[:color] %>-600 group-hover:text-white transition-colors">description</span>
                       </div>
                       <div class="flex-1 min-w-0">
-                        <h4 class="font-semibold text-navy-900 group-hover:text-<%= form[:color] %>-600 transition-colors"><%= form[:title] %></h4>
-                        <p class="text-sm text-navy-500 mt-1"><%= form[:desc] %></p>
+                        <h4 class="font-semibold text-slate-900 group-hover:text-<%= form[:color] %>-600 transition-colors"><%= form[:title] %></h4>
+                        <p class="text-sm text-slate-500 mt-1"><%= form[:desc] %></p>
                         <span class="badge badge-<%= form[:color] %> mt-2"><%= form[:badge] %></span>
                       </div>
-                      <span class="material-symbols-outlined text-navy-300 group-hover:text-<%= form[:color] %>-600 transition-colors">open_in_new</span>
+                      <span class="material-symbols-outlined text-slate-300 group-hover:text-<%= form[:color] %>-600 transition-colors">open_in_new</span>
                     </div>
                   </a>
                 <% end %>
@@ -668,41 +668,41 @@
 
             <!-- 실무 도구 -->
             <div class="mb-10">
-              <h3 class="text-xl font-bold text-navy-900 flex items-center gap-2 mb-5">
-                <div class="icon-container icon-container-sm bg-point-100">
-                  <span class="material-symbols-outlined text-point-600">construction</span>
+              <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2 mb-5">
+                <div class="icon-container icon-container-sm bg-indigo-100">
+                  <span class="material-symbols-outlined text-indigo-600">construction</span>
                 </div>
                 실무 도구
               </h3>
 
               <a href="/forms/견적서검토.html" target="_blank"
-                 class="group block bg-gradient-to-br from-point-50 to-navy-50 rounded-2xl border-2 border-point-200 p-6 hover:border-point-400 hover:shadow-strong transition-all duration-300">
+                 class="group block bg-gradient-to-br from-indigo-50 to-slate-50 rounded-2xl border-2 border-indigo-200 p-6 hover:border-indigo-400 hover:shadow-strong transition-all duration-300">
                 <div class="flex items-start gap-5">
-                  <div class="w-16 h-16 gradient-point rounded-2xl flex items-center justify-center shadow-lg shrink-0">
+                  <div class="w-16 h-16 gradient-indigo rounded-2xl flex items-center justify-center shadow-lg shrink-0">
                     <span class="material-symbols-outlined text-3xl text-white">fact_check</span>
                   </div>
                   <div class="flex-1">
                     <div class="flex items-center gap-2 mb-1">
-                      <h4 class="text-xl font-bold text-navy-900">견적서 검토 시스템</h4>
-                      <span class="badge badge-point">AI</span>
+                      <h4 class="text-xl font-bold text-slate-900">견적서 검토 시스템</h4>
+                      <span class="badge badge-indigo">AI</span>
                     </div>
-                    <p class="text-navy-600">업체에서 받은 견적서를 분석하여 법규 적합성, 가격 적정성, 주의사항을 리포트로 제공</p>
+                    <p class="text-slate-600">업체에서 받은 견적서를 분석하여 법규 적합성, 가격 적정성, 주의사항을 리포트로 제공</p>
                     <div class="mt-3 flex flex-wrap gap-2">
-                      <span class="badge badge-point">자동 분석</span>
-                      <span class="badge badge-navy">리포트 생성</span>
-                      <span class="badge badge-forest">법규 검토</span>
+                      <span class="badge badge-indigo">자동 분석</span>
+                      <span class="badge badge-slate">리포트 생성</span>
+                      <span class="badge badge-emerald">법규 검토</span>
                     </div>
                   </div>
-                  <span class="material-symbols-outlined text-2xl text-point-400 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                  <span class="material-symbols-outlined text-2xl text-indigo-400 group-hover:translate-x-1 transition-transform">arrow_forward</span>
                 </div>
               </a>
             </div>
 
             <!-- 공식 서식 다운로드 -->
             <div class="mb-10">
-              <h3 class="text-xl font-bold text-navy-900 flex items-center gap-2 mb-5">
-                <div class="icon-container icon-container-sm bg-navy-100">
-                  <span class="material-symbols-outlined text-navy-600">link</span>
+              <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2 mb-5">
+                <div class="icon-container icon-container-sm bg-slate-100">
+                  <span class="material-symbols-outlined text-slate-600">link</span>
                 </div>
                 공식 서식 다운로드
               </h3>
@@ -719,10 +719,10 @@
                       <span class="material-symbols-outlined text-white"><%= link[:icon] %></span>
                     </div>
                     <div class="flex-1 min-w-0">
-                      <div class="font-semibold text-navy-900"><%= link[:title] %></div>
-                      <div class="text-sm text-navy-500 truncate"><%= link[:desc] %></div>
+                      <div class="font-semibold text-slate-900"><%= link[:title] %></div>
+                      <div class="text-sm text-slate-500 truncate"><%= link[:desc] %></div>
                     </div>
-                    <span class="material-symbols-outlined text-navy-300">open_in_new</span>
+                    <span class="material-symbols-outlined text-slate-300">open_in_new</span>
                   </a>
                 <% end %>
               </div>
@@ -730,18 +730,18 @@
 
             <!-- 작성 가이드 -->
             <div>
-              <h3 class="text-xl font-bold text-navy-900 flex items-center gap-2 mb-5">
-                <div class="icon-container icon-container-sm bg-point-100">
-                  <span class="material-symbols-outlined text-point-600">edit_note</span>
+              <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2 mb-5">
+                <div class="icon-container icon-container-sm bg-indigo-100">
+                  <span class="material-symbols-outlined text-indigo-600">edit_note</span>
                 </div>
                 수의계약 사유서 작성 가이드
               </h3>
 
-              <div class="bg-point-50 border border-point-200 rounded-2xl p-6">
+              <div class="bg-indigo-50 border border-indigo-200 rounded-2xl p-6">
                 <div class="space-y-6">
                   <div>
-                    <h4 class="font-semibold text-navy-800 mb-4 flex items-center gap-2">
-                      <span class="material-symbols-outlined text-point-600">checklist</span>
+                    <h4 class="font-semibold text-slate-800 mb-4 flex items-center gap-2">
+                      <span class="material-symbols-outlined text-indigo-600">checklist</span>
                       필수 기재 항목
                     </h4>
                     <div class="grid sm:grid-cols-2 gap-3">
@@ -752,35 +752,35 @@
                         { num: "4", title: "계약상대자 선정 사유", desc: "특정 업체 선정 이유" }
                       ].each do |item| %>
                         <div class="flex items-start gap-3 bg-white rounded-xl p-4 shadow-soft">
-                          <span class="w-7 h-7 gradient-point text-white rounded-full flex items-center justify-center text-sm font-bold shrink-0"><%= item[:num] %></span>
+                          <span class="w-7 h-7 gradient-indigo text-white rounded-full flex items-center justify-center text-sm font-bold shrink-0"><%= item[:num] %></span>
                           <div>
-                            <div class="font-semibold text-navy-900"><%= item[:title] %></div>
-                            <div class="text-sm text-navy-500"><%= item[:desc] %></div>
+                            <div class="font-semibold text-slate-900"><%= item[:title] %></div>
+                            <div class="text-sm text-slate-500"><%= item[:desc] %></div>
                           </div>
                         </div>
                       <% end %>
                     </div>
                   </div>
 
-                  <div class="border-t border-point-200 pt-6">
-                    <h4 class="font-semibold text-navy-800 mb-4 flex items-center gap-2">
-                      <span class="material-symbols-outlined text-point-600">code</span>
+                  <div class="border-t border-indigo-200 pt-6">
+                    <h4 class="font-semibold text-slate-800 mb-4 flex items-center gap-2">
+                      <span class="material-symbols-outlined text-indigo-600">code</span>
                       작성 예시
                     </h4>
-                    <div class="bg-white rounded-xl p-5 text-sm text-navy-700 font-mono space-y-2 shadow-soft">
-                      <p><span class="text-point-600 font-semibold">1. 계약건명:</span> 2026년도 사무용품 구매</p>
-                      <p><span class="text-point-600 font-semibold">2. 추정가격:</span> 15,000,000원 (부가세 포함)</p>
-                      <p><span class="text-point-600 font-semibold">3. 수의계약 사유:</span></p>
-                      <p class="pl-4 text-navy-600">지방계약법 시행령 제25조 제1항 제1호에 따라 추정가격이 물품구매 수의계약 기준금액(2천만원) 이하이므로 수의계약 체결</p>
-                      <p><span class="text-point-600 font-semibold">4. 계약상대자:</span> (주)OO상사</p>
-                      <p class="pl-4 text-navy-600">- 선정사유: 최저가 견적 제출업체</p>
+                    <div class="bg-white rounded-xl p-5 text-sm text-slate-700 font-mono space-y-2 shadow-soft">
+                      <p><span class="text-indigo-600 font-semibold">1. 계약건명:</span> 2026년도 사무용품 구매</p>
+                      <p><span class="text-indigo-600 font-semibold">2. 추정가격:</span> 15,000,000원 (부가세 포함)</p>
+                      <p><span class="text-indigo-600 font-semibold">3. 수의계약 사유:</span></p>
+                      <p class="pl-4 text-slate-600">지방계약법 시행령 제25조 제1항 제1호에 따라 추정가격이 물품구매 수의계약 기준금액(2천만원) 이하이므로 수의계약 체결</p>
+                      <p><span class="text-indigo-600 font-semibold">4. 계약상대자:</span> (주)OO상사</p>
+                      <p class="pl-4 text-slate-600">- 선정사유: 최저가 견적 제출업체</p>
                     </div>
                   </div>
 
-                  <div class="bg-warm-50 border border-warm-200 rounded-xl p-4">
+                  <div class="bg-amber-50 border border-amber-200 rounded-xl p-4">
                     <div class="flex items-start gap-3">
-                      <span class="material-symbols-outlined text-warm-600">warning</span>
-                      <div class="text-sm text-warm-800">
+                      <span class="material-symbols-outlined text-amber-600">warning</span>
+                      <div class="text-sm text-amber-800">
                         <strong>주의:</strong> 수의계약 사유서는 반드시 <u>계약 체결 전</u>에 작성하여 결재를 받아야 합니다. 사후 작성은 감사 지적 대상입니다.
                       </div>
                     </div>
@@ -814,8 +814,8 @@
           <% else %>
             <!-- 기본 준비중 메시지 -->
             <div class="card p-16 text-center">
-              <span class="material-symbols-outlined text-6xl text-navy-200 mb-4">account_tree</span>
-              <p class="text-navy-500 text-lg">흐름도가 준비 중입니다.</p>
+              <span class="material-symbols-outlined text-6xl text-slate-200 mb-4">account_tree</span>
+              <p class="text-slate-500 text-lg">흐름도가 준비 중입니다.</p>
             </div>
           <% end %>
         </div>
@@ -824,27 +824,27 @@
         <!-- 자주 묻는 질문 -->
         <% if @topic.faq_list.any? %>
           <div class="card p-6 lg:p-8 mt-10">
-            <h2 class="text-xl font-bold text-navy-900 mb-6 flex items-center gap-3">
-              <div class="icon-container icon-container-sm bg-warm-100">
-                <span class="material-symbols-outlined text-warm-600">help</span>
+            <h2 class="text-xl font-bold text-slate-900 mb-6 flex items-center gap-3">
+              <div class="icon-container icon-container-sm bg-amber-100">
+                <span class="material-symbols-outlined text-amber-600">help</span>
               </div>
               자주 묻는 질문
             </h2>
             <div class="space-y-3" id="faq-accordion">
               <% @topic.faq_list.each_with_index do |faq, index| %>
-                <div class="border border-gray-100 rounded-xl overflow-hidden hover:border-point-200 transition-colors">
+                <div class="border border-gray-100 rounded-xl overflow-hidden hover:border-indigo-200 transition-colors">
                   <button onclick="toggleFaq(<%= index %>)"
                           class="w-full px-5 py-4 text-left bg-surface-50 hover:bg-surface-100 flex items-center justify-between transition-colors">
-                    <span class="font-medium text-navy-800 flex items-center gap-3">
-                      <span class="w-7 h-7 bg-warm-100 text-warm-600 rounded-full flex items-center justify-center text-sm font-bold">Q</span>
+                    <span class="font-medium text-slate-800 flex items-center gap-3">
+                      <span class="w-7 h-7 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center text-sm font-bold">Q</span>
                       <%= faq['question'] %>
                     </span>
-                    <span id="faq-icon-<%= index %>" class="material-symbols-outlined text-navy-400 transition-transform duration-200">expand_more</span>
+                    <span id="faq-icon-<%= index %>" class="material-symbols-outlined text-slate-400 transition-transform duration-200">expand_more</span>
                   </button>
                   <div id="faq-answer-<%= index %>" class="hidden px-5 py-4 bg-white border-t border-gray-100">
                     <div class="flex gap-3">
-                      <span class="w-7 h-7 bg-navy-100 text-navy-600 rounded-full flex items-center justify-center text-sm font-bold shrink-0">A</span>
-                      <p class="text-navy-700 whitespace-pre-line leading-relaxed"><%= faq['answer'] %></p>
+                      <span class="w-7 h-7 bg-slate-100 text-slate-600 rounded-full flex items-center justify-center text-sm font-bold shrink-0">A</span>
+                      <p class="text-slate-700 whitespace-pre-line leading-relaxed"><%= faq['answer'] %></p>
                     </div>
                   </div>
                 </div>
@@ -859,8 +859,8 @@
         <div class="sticky top-36 space-y-6">
           <!-- 퀵 링크 -->
           <div class="card p-5">
-            <h3 class="font-bold text-navy-900 mb-4 flex items-center gap-2">
-              <span class="material-symbols-outlined text-point-600">bolt</span>
+            <h3 class="font-bold text-slate-900 mb-4 flex items-center gap-2">
+              <span class="material-symbols-outlined text-indigo-600">bolt</span>
               빠른 이동
             </h3>
             <nav class="space-y-1">
@@ -871,66 +871,66 @@
                 { tab: "tips", icon: "lightbulb", title: "실무주의" }
               ].each do |item| %>
                 <button onclick="showTab('<%= item[:tab] %>')"
-                        class="w-full flex items-center gap-3 px-4 py-3 text-navy-600 hover:bg-surface-100 rounded-xl transition-all duration-200 text-left group">
-                  <span class="material-symbols-outlined text-navy-400 group-hover:text-point-500 transition-colors"><%= item[:icon] %></span>
-                  <span class="text-sm font-medium group-hover:text-navy-900 transition-colors"><%= item[:title] %></span>
+                        class="w-full flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-surface-100 rounded-xl transition-all duration-200 text-left group">
+                  <span class="material-symbols-outlined text-slate-400 group-hover:text-indigo-500 transition-colors"><%= item[:icon] %></span>
+                  <span class="text-sm font-medium group-hover:text-slate-900 transition-colors"><%= item[:title] %></span>
                 </button>
               <% end %>
             </nav>
           </div>
 
           <!-- 관련 도구 — 콘텐츠→행동 연결 CTA -->
-          <div class="card-glass bg-gradient-to-br from-forest-50 to-point-50 border-forest-200 p-5">
-            <h3 class="font-bold text-navy-900 mb-4 flex items-center gap-2">
-              <span class="material-symbols-outlined text-forest-600">build</span>
+          <div class="card-glass bg-gradient-to-br from-emerald-50 to-indigo-50 border-emerald-200 p-5">
+            <h3 class="font-bold text-slate-900 mb-4 flex items-center gap-2">
+              <span class="material-symbols-outlined text-emerald-600">build</span>
               바로 사용하기
             </h3>
             <div class="space-y-3">
               <%= link_to contract_method_path,
-                  class: "block p-4 bg-white rounded-xl border border-forest-100 hover:border-forest-300 hover:shadow-medium transition-all duration-200 group" do %>
+                  class: "block p-4 bg-white rounded-xl border border-emerald-100 hover:border-emerald-300 hover:shadow-medium transition-all duration-200 group" do %>
                 <div class="flex items-center gap-3">
-                  <div class="icon-container icon-container-sm bg-forest-100 group-hover:bg-forest-600 transition-colors">
-                    <span class="material-symbols-outlined text-forest-600 group-hover:text-white transition-colors">gavel</span>
+                  <div class="icon-container icon-container-sm bg-emerald-100 group-hover:bg-emerald-600 transition-colors">
+                    <span class="material-symbols-outlined text-emerald-600 group-hover:text-white transition-colors">gavel</span>
                   </div>
                   <div>
-                    <div class="font-semibold text-navy-900 text-sm">계약방식 결정</div>
-                    <div class="text-xs text-navy-500">금액 입력 → 방식 바로 확인</div>
+                    <div class="font-semibold text-slate-900 text-sm">계약방식 결정</div>
+                    <div class="text-xs text-slate-500">금액 입력 → 방식 바로 확인</div>
                   </div>
                 </div>
               <% end %>
               <%= link_to contract_documents_path,
-                  class: "block p-4 bg-white rounded-xl border border-point-100 hover:border-point-300 hover:shadow-medium transition-all duration-200 group" do %>
+                  class: "block p-4 bg-white rounded-xl border border-indigo-100 hover:border-indigo-300 hover:shadow-medium transition-all duration-200 group" do %>
                 <div class="flex items-center gap-3">
-                  <div class="icon-container icon-container-sm bg-point-100 group-hover:bg-point-600 transition-colors">
-                    <span class="material-symbols-outlined text-point-600 group-hover:text-white transition-colors">fact_check</span>
+                  <div class="icon-container icon-container-sm bg-indigo-100 group-hover:bg-indigo-600 transition-colors">
+                    <span class="material-symbols-outlined text-indigo-600 group-hover:text-white transition-colors">fact_check</span>
                   </div>
                   <div>
-                    <div class="font-semibold text-navy-900 text-sm">서류 체크리스트</div>
-                    <div class="text-xs text-navy-500">필요 서류 원클릭 생성</div>
+                    <div class="font-semibold text-slate-900 text-sm">서류 체크리스트</div>
+                    <div class="text-xs text-slate-500">필요 서류 원클릭 생성</div>
                   </div>
                 </div>
               <% end %>
               <%= link_to budget_estimator_path,
-                  class: "block p-4 bg-white rounded-xl border border-navy-100 hover:border-navy-300 hover:shadow-medium transition-all duration-200 group" do %>
+                  class: "block p-4 bg-white rounded-xl border border-slate-100 hover:border-slate-300 hover:shadow-medium transition-all duration-200 group" do %>
                 <div class="flex items-center gap-3">
-                  <div class="icon-container icon-container-sm bg-navy-100 group-hover:bg-navy-600 transition-colors">
-                    <span class="material-symbols-outlined text-navy-600 group-hover:text-white transition-colors">calculate</span>
+                  <div class="icon-container icon-container-sm bg-slate-100 group-hover:bg-slate-600 transition-colors">
+                    <span class="material-symbols-outlined text-slate-600 group-hover:text-white transition-colors">calculate</span>
                   </div>
                   <div>
-                    <div class="font-semibold text-navy-900 text-sm">소요예산 추정</div>
-                    <div class="text-xs text-navy-500">대략적인 예산 미리 산출</div>
+                    <div class="font-semibold text-slate-900 text-sm">소요예산 추정</div>
+                    <div class="text-xs text-slate-500">대략적인 예산 미리 산출</div>
                   </div>
                 </div>
               <% end %>
               <a href="/forms/견적서검토.html" target="_blank"
-                 class="block p-4 bg-white rounded-xl border border-warm-100 hover:border-warm-300 hover:shadow-medium transition-all duration-200 group">
+                 class="block p-4 bg-white rounded-xl border border-amber-100 hover:border-amber-300 hover:shadow-medium transition-all duration-200 group">
                 <div class="flex items-center gap-3">
-                  <div class="icon-container icon-container-sm bg-warm-100 group-hover:bg-warm-500 transition-colors">
-                    <span class="material-symbols-outlined text-warm-600 group-hover:text-white transition-colors">receipt_long</span>
+                  <div class="icon-container icon-container-sm bg-amber-100 group-hover:bg-amber-500 transition-colors">
+                    <span class="material-symbols-outlined text-amber-600 group-hover:text-white transition-colors">receipt_long</span>
                   </div>
                   <div>
-                    <div class="font-semibold text-navy-900 text-sm">견적서 검토</div>
-                    <div class="text-xs text-navy-500">견적서 적정성 자동 분석</div>
+                    <div class="font-semibold text-slate-900 text-sm">견적서 검토</div>
+                    <div class="text-xs text-slate-500">견적서 적정성 자동 분석</div>
                   </div>
                 </div>
               </a>
@@ -938,18 +938,18 @@
           </div>
 
           <!-- 문의하기 -->
-          <div class="gradient-navy rounded-2xl p-6 text-white shadow-strong">
+          <div class="gradient-slate rounded-2xl p-6 text-white shadow-strong">
             <div class="flex items-center gap-4 mb-4">
               <div class="w-12 h-12 bg-white/10 backdrop-blur rounded-xl flex items-center justify-center">
                 <span class="material-symbols-outlined text-2xl">support_agent</span>
               </div>
               <div>
                 <h3 class="font-bold text-lg">도움이 필요하신가요?</h3>
-                <p class="text-navy-200 text-sm">궁금한 점을 물어보세요</p>
+                <p class="text-slate-200 text-sm">궁금한 점을 물어보세요</p>
               </div>
             </div>
             <%= link_to chatbot_path,
-                class: "block w-full py-3 bg-white text-navy-800 rounded-xl font-semibold text-center hover:bg-navy-50 transition-colors shadow-soft" do %>
+                class: "block w-full py-3 bg-white text-slate-800 rounded-xl font-semibold text-center hover:bg-slate-50 transition-colors shadow-soft" do %>
               AI 상담 시작하기
             <% end %>
           </div>
@@ -1216,15 +1216,15 @@ function showTab(tabName) {
   // 모든 탭 버튼 스타일 초기화
   var allBtns = document.querySelectorAll('.tab-btn');
   for (var j = 0; j < allBtns.length; j++) {
-    allBtns[j].classList.remove('bg-navy-800', 'text-white', 'shadow-md');
-    allBtns[j].classList.add('bg-surface-100', 'text-navy-600', 'hover:bg-surface-200');
+    allBtns[j].classList.remove('bg-slate-800', 'text-white', 'shadow-md');
+    allBtns[j].classList.add('bg-surface-100', 'text-slate-600', 'hover:bg-surface-200');
   }
 
   // 선택된 탭 버튼 스타일 적용
   var activeBtn = document.querySelector('.tab-btn[data-tab="' + tabName + '"]');
   if (activeBtn) {
-    activeBtn.classList.remove('bg-surface-100', 'text-navy-600', 'hover:bg-surface-200');
-    activeBtn.classList.add('bg-navy-800', 'text-white', 'shadow-md');
+    activeBtn.classList.remove('bg-surface-100', 'text-slate-600', 'hover:bg-surface-200');
+    activeBtn.classList.add('bg-slate-800', 'text-white', 'shadow-md');
   }
 }
 

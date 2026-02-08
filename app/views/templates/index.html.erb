@@ -12,21 +12,21 @@
         </div>
         <div>
           <h1 class="text-3xl lg:text-4xl font-bold tracking-tight mb-2">문서 양식 보관함</h1>
-          <p class="text-navy-200 text-lg">공무원 업무에 필요한 모든 양식을 한 곳에서</p>
+          <p class="text-slate-200 text-lg">공무원 업무에 필요한 모든 양식을 한 곳에서</p>
         </div>
       </div>
       <div class="flex gap-4 lg:gap-6">
         <div class="text-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/15">
           <div class="text-2xl font-bold">23</div>
-          <div class="text-xs text-navy-200 mt-0.5">전체 양식</div>
+          <div class="text-xs text-slate-200 mt-0.5">전체 양식</div>
         </div>
         <div class="text-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/15">
           <div class="text-2xl font-bold">5</div>
-          <div class="text-xs text-navy-200 mt-0.5">카테고리</div>
+          <div class="text-xs text-slate-200 mt-0.5">카테고리</div>
         </div>
         <div class="text-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/15">
           <div class="text-2xl font-bold">3</div>
-          <div class="text-xs text-navy-200 mt-0.5">파일 형식</div>
+          <div class="text-xs text-slate-200 mt-0.5">파일 형식</div>
         </div>
       </div>
     </div>
@@ -38,20 +38,20 @@
   <div class="container-wide py-4">
     <!-- 검색바 -->
     <div class="flex items-center bg-surface-100 rounded-xl overflow-hidden mb-4">
-      <div class="flex items-center justify-center pl-4 text-navy-400">
+      <div class="flex items-center justify-center pl-4 text-slate-400">
         <span class="material-symbols-outlined">search</span>
       </div>
-      <input type="text" id="search-input" placeholder="양식명 또는 키워드 검색" class="w-full border-none focus:ring-0 bg-transparent py-3 px-3 text-navy-800 placeholder:text-navy-400">
+      <input type="text" id="search-input" placeholder="양식명 또는 키워드 검색" class="w-full border-none focus:ring-0 bg-transparent py-3 px-3 text-slate-800 placeholder:text-slate-400">
     </div>
 
     <!-- 카테고리 필터 -->
     <div class="flex flex-wrap gap-2" id="category-tabs">
-      <button data-category="전체" class="tab-btn active px-5 py-2.5 bg-navy-800 text-white rounded-xl text-sm font-semibold shadow-md transition-all">전체</button>
-      <button data-category="계약서" class="tab-btn px-5 py-2.5 bg-surface-100 text-navy-600 hover:bg-surface-200 rounded-xl text-sm font-medium transition-all">계약서</button>
-      <button data-category="기안문" class="tab-btn px-5 py-2.5 bg-surface-100 text-navy-600 hover:bg-surface-200 rounded-xl text-sm font-medium transition-all">기안문</button>
-      <button data-category="품의서" class="tab-btn px-5 py-2.5 bg-surface-100 text-navy-600 hover:bg-surface-200 rounded-xl text-sm font-medium transition-all">품의서</button>
-      <button data-category="검수조서" class="tab-btn px-5 py-2.5 bg-surface-100 text-navy-600 hover:bg-surface-200 rounded-xl text-sm font-medium transition-all">검수조서</button>
-      <button data-category="기타" class="tab-btn px-5 py-2.5 bg-surface-100 text-navy-600 hover:bg-surface-200 rounded-xl text-sm font-medium transition-all">기타</button>
+      <button data-category="전체" class="tab-btn active px-5 py-2.5 bg-slate-800 text-white rounded-xl text-sm font-semibold shadow-md transition-all">전체</button>
+      <button data-category="계약서" class="tab-btn px-5 py-2.5 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-xl text-sm font-medium transition-all">계약서</button>
+      <button data-category="기안문" class="tab-btn px-5 py-2.5 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-xl text-sm font-medium transition-all">기안문</button>
+      <button data-category="품의서" class="tab-btn px-5 py-2.5 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-xl text-sm font-medium transition-all">품의서</button>
+      <button data-category="검수조서" class="tab-btn px-5 py-2.5 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-xl text-sm font-medium transition-all">검수조서</button>
+      <button data-category="기타" class="tab-btn px-5 py-2.5 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-xl text-sm font-medium transition-all">기타</button>
     </div>
   </div>
 </section>
@@ -60,8 +60,8 @@
 <section class="section py-10">
   <div class="container-wide">
     <div class="flex items-center justify-between mb-6">
-      <p class="text-navy-600">총 <span class="font-bold text-navy-900" id="item-count">23</span>개의 양식</p>
-      <select class="border-gray-200 rounded-xl text-sm focus:ring-point-500 focus:border-point-500 px-4 py-2">
+      <p class="text-slate-600">총 <span class="font-bold text-slate-900" id="item-count">23</span>개의 양식</p>
+      <select class="border-gray-200 rounded-xl text-sm focus:ring-indigo-500 focus:border-indigo-500 px-4 py-2">
         <option>최신순</option>
         <option>인기순</option>
         <option>이름순</option>
@@ -73,13 +73,13 @@
         <div class="card card-interactive overflow-hidden group item-card" data-category="<%= template[:category] %>" data-title="<%= template[:title] %>">
           <!-- 미리보기 영역 (클릭 가능) -->
           <%= link_to template_path(template[:id]), class: "block aspect-[4/3] bg-gradient-to-br from-surface-50 to-surface-100 flex items-center justify-center relative" do %>
-            <span class="material-symbols-outlined text-6xl text-navy-200 group-hover:text-<%= template[:color] %>-400 transition-colors">description</span>
+            <span class="material-symbols-outlined text-6xl text-slate-200 group-hover:text-<%= template[:color] %>-400 transition-colors">description</span>
             <div class="absolute top-3 left-3">
               <span class="badge badge-<%= template[:color] %>"><%= template[:category] %></span>
             </div>
             <% if template[:badge] %>
               <div class="absolute top-3 right-3">
-                <span class="badge <%= template[:badge] == 'NEW' ? 'badge-warm' : 'badge-point' %>"><%= template[:badge] %></span>
+                <span class="badge <%= template[:badge] == 'NEW' ? 'badge-amber' : 'badge-indigo' %>"><%= template[:badge] %></span>
               </div>
             <% end %>
           <% end %>
@@ -87,18 +87,18 @@
           <!-- 정보 영역 -->
           <div class="p-5">
             <%= link_to template_path(template[:id]), class: "block" do %>
-              <h3 class="font-bold text-navy-900 mb-1 group-hover:text-<%= template[:color] %>-600 transition-colors"><%= template[:title] %></h3>
-              <p class="text-navy-500 text-sm mb-3"><%= template[:desc] %></p>
+              <h3 class="font-bold text-slate-900 mb-1 group-hover:text-<%= template[:color] %>-600 transition-colors"><%= template[:title] %></h3>
+              <p class="text-slate-500 text-sm mb-3"><%= template[:desc] %></p>
             <% end %>
 
             <div class="flex gap-1.5">
               <% template[:formats].each do |format| %>
-                <span class="text-xs px-2 py-0.5 bg-surface-100 text-navy-600 rounded-md font-medium"><%= format %></span>
+                <span class="text-xs px-2 py-0.5 bg-surface-100 text-slate-600 rounded-md font-medium"><%= format %></span>
               <% end %>
             </div>
 
             <div class="flex gap-2 mt-4">
-              <%= link_to template_path(template[:id]), class: "flex-1 text-center py-2.5 border-2 border-gray-200 rounded-xl text-sm font-medium text-navy-700 hover:bg-surface-50 hover:border-navy-300 transition-all" do %>
+              <%= link_to template_path(template[:id]), class: "flex-1 text-center py-2.5 border-2 border-gray-200 rounded-xl text-sm font-medium text-slate-700 hover:bg-surface-50 hover:border-slate-300 transition-all" do %>
                 미리보기
               <% end %>
               <%= link_to template_path(template[:id]), class: "flex-1 py-2.5 btn btn-primary btn-sm text-center" do %>
@@ -176,7 +176,7 @@ document.addEventListener('turbo:load', function() {
     // 이전 버튼
     html += `
       <button onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}
-        class="w-10 h-10 flex items-center justify-center rounded-xl ${currentPage === 1 ? 'text-navy-300 cursor-not-allowed' : 'text-navy-500 hover:bg-surface-100'} transition-colors">
+        class="w-10 h-10 flex items-center justify-center rounded-xl ${currentPage === 1 ? 'text-slate-300 cursor-not-allowed' : 'text-slate-500 hover:bg-surface-100'} transition-colors">
         <span class="material-symbols-outlined">chevron_left</span>
       </button>
     `;
@@ -191,31 +191,31 @@ document.addEventListener('turbo:load', function() {
     }
 
     if (startPage > 1) {
-      html += `<button onclick="goToPage(1)" class="w-10 h-10 flex items-center justify-center rounded-xl text-navy-600 hover:bg-surface-100 font-medium transition-colors">1</button>`;
+      html += `<button onclick="goToPage(1)" class="w-10 h-10 flex items-center justify-center rounded-xl text-slate-600 hover:bg-surface-100 font-medium transition-colors">1</button>`;
       if (startPage > 2) {
-        html += `<span class="w-10 h-10 flex items-center justify-center text-navy-400">...</span>`;
+        html += `<span class="w-10 h-10 flex items-center justify-center text-slate-400">...</span>`;
       }
     }
 
     for (let i = startPage; i <= endPage; i++) {
       if (i === currentPage) {
-        html += `<button class="w-10 h-10 flex items-center justify-center rounded-xl bg-navy-800 text-white font-semibold shadow-md cursor-default">${i}</button>`;
+        html += `<button class="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-800 text-white font-semibold shadow-md cursor-default">${i}</button>`;
       } else {
-        html += `<button onclick="goToPage(${i})" class="w-10 h-10 flex items-center justify-center rounded-xl text-navy-600 hover:bg-surface-100 font-medium transition-colors">${i}</button>`;
+        html += `<button onclick="goToPage(${i})" class="w-10 h-10 flex items-center justify-center rounded-xl text-slate-600 hover:bg-surface-100 font-medium transition-colors">${i}</button>`;
       }
     }
 
     if (endPage < totalPages) {
       if (endPage < totalPages - 1) {
-        html += `<span class="w-10 h-10 flex items-center justify-center text-navy-400">...</span>`;
+        html += `<span class="w-10 h-10 flex items-center justify-center text-slate-400">...</span>`;
       }
-      html += `<button onclick="goToPage(${totalPages})" class="w-10 h-10 flex items-center justify-center rounded-xl text-navy-600 hover:bg-surface-100 font-medium transition-colors">${totalPages}</button>`;
+      html += `<button onclick="goToPage(${totalPages})" class="w-10 h-10 flex items-center justify-center rounded-xl text-slate-600 hover:bg-surface-100 font-medium transition-colors">${totalPages}</button>`;
     }
 
     // 다음 버튼
     html += `
       <button onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}
-        class="w-10 h-10 flex items-center justify-center rounded-xl ${currentPage === totalPages ? 'text-navy-300 cursor-not-allowed' : 'text-navy-500 hover:bg-surface-100'} transition-colors">
+        class="w-10 h-10 flex items-center justify-center rounded-xl ${currentPage === totalPages ? 'text-slate-300 cursor-not-allowed' : 'text-slate-500 hover:bg-surface-100'} transition-colors">
         <span class="material-symbols-outlined">chevron_right</span>
       </button>
     `;
@@ -242,13 +242,13 @@ document.addEventListener('turbo:load', function() {
     tab.addEventListener('click', function() {
       // 모든 탭 비활성화
       tabs.forEach(t => {
-        t.classList.remove('active', 'bg-navy-800', 'text-white', 'shadow-md');
-        t.classList.add('bg-surface-100', 'text-navy-600');
+        t.classList.remove('active', 'bg-slate-800', 'text-white', 'shadow-md');
+        t.classList.add('bg-surface-100', 'text-slate-600');
       });
 
       // 클릭된 탭 활성화
-      this.classList.add('active', 'bg-navy-800', 'text-white', 'shadow-md');
-      this.classList.remove('bg-surface-100', 'text-navy-600');
+      this.classList.add('active', 'bg-slate-800', 'text-white', 'shadow-md');
+      this.classList.remove('bg-surface-100', 'text-slate-600');
 
       filterAndPaginate();
     });

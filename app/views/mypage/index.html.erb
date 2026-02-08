@@ -7,64 +7,64 @@
       <div class="gradient-premium rounded-2xl p-8 text-white mb-8 shadow-strong">
         <h1 class="text-2xl font-bold mb-2">마이페이지</h1>
         <% if current_user %>
-          <p class="text-navy-200"><%= current_user.email %>으로 로그인 중</p>
+          <p class="text-slate-200"><%= current_user.email %>으로 로그인 중</p>
         <% end %>
       </div>
 
       <!-- 바로가기 -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
         <%= link_to tools_path, class: "card p-5 text-center hover-lift group" do %>
-          <div class="icon-container icon-container-md bg-point-100 group-hover:bg-point-600 mx-auto mb-3 transition-colors">
-            <span class="material-symbols-outlined text-2xl text-point-600 group-hover:text-white transition-colors">build</span>
+          <div class="icon-container icon-container-md bg-indigo-100 group-hover:bg-indigo-600 mx-auto mb-3 transition-colors">
+            <span class="material-symbols-outlined text-2xl text-indigo-600 group-hover:text-white transition-colors">build</span>
           </div>
-          <p class="text-navy-900 text-sm font-semibold">실무 도구</p>
+          <p class="text-slate-900 text-sm font-semibold">실무 도구</p>
         <% end %>
         <%= link_to guides_path, class: "card p-5 text-center hover-lift group" do %>
-          <div class="icon-container icon-container-md bg-forest-100 group-hover:bg-forest-600 mx-auto mb-3 transition-colors">
-            <span class="material-symbols-outlined text-2xl text-forest-600 group-hover:text-white transition-colors">menu_book</span>
+          <div class="icon-container icon-container-md bg-emerald-100 group-hover:bg-emerald-600 mx-auto mb-3 transition-colors">
+            <span class="material-symbols-outlined text-2xl text-emerald-600 group-hover:text-white transition-colors">menu_book</span>
           </div>
-          <p class="text-navy-900 text-sm font-semibold">업무 가이드</p>
+          <p class="text-slate-900 text-sm font-semibold">업무 가이드</p>
         <% end %>
         <%= link_to templates_path, class: "card p-5 text-center hover-lift group" do %>
-          <div class="icon-container icon-container-md bg-navy-100 group-hover:bg-navy-600 mx-auto mb-3 transition-colors">
-            <span class="material-symbols-outlined text-2xl text-navy-600 group-hover:text-white transition-colors">description</span>
+          <div class="icon-container icon-container-md bg-slate-100 group-hover:bg-slate-600 mx-auto mb-3 transition-colors">
+            <span class="material-symbols-outlined text-2xl text-slate-600 group-hover:text-white transition-colors">description</span>
           </div>
-          <p class="text-navy-900 text-sm font-semibold">문서 양식</p>
+          <p class="text-slate-900 text-sm font-semibold">문서 양식</p>
         <% end %>
         <%= link_to chatbot_path, class: "card p-5 text-center hover-lift group" do %>
-          <div class="icon-container icon-container-md bg-warm-100 group-hover:bg-warm-600 mx-auto mb-3 transition-colors">
-            <span class="material-symbols-outlined text-2xl text-warm-600 group-hover:text-white transition-colors">smart_toy</span>
+          <div class="icon-container icon-container-md bg-amber-100 group-hover:bg-amber-600 mx-auto mb-3 transition-colors">
+            <span class="material-symbols-outlined text-2xl text-amber-600 group-hover:text-white transition-colors">smart_toy</span>
           </div>
-          <p class="text-navy-900 text-sm font-semibold">AI 상담</p>
+          <p class="text-slate-900 text-sm font-semibold">AI 상담</p>
         <% end %>
       </div>
 
       <!-- 계정 관리 -->
       <div class="card p-6">
-        <h2 class="text-xl font-bold text-navy-900 mb-6 flex items-center gap-2">
-          <span class="material-symbols-outlined text-navy-400">manage_accounts</span>
+        <h2 class="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+          <span class="material-symbols-outlined text-slate-400">manage_accounts</span>
           계정 관리
         </h2>
 
         <div class="space-y-3">
           <% if current_user %>
-            <%= link_to edit_user_registration_path, class: "flex items-center gap-3 px-4 py-3 text-navy-600 hover:bg-surface-100 rounded-xl transition-colors" do %>
+            <%= link_to edit_user_registration_path, class: "flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-surface-100 rounded-xl transition-colors" do %>
               <span class="material-symbols-outlined">lock</span>
               비밀번호 변경
             <% end %>
           <% end %>
 
-          <%= link_to about_path, class: "flex items-center gap-3 px-4 py-3 text-navy-600 hover:bg-surface-100 rounded-xl transition-colors" do %>
+          <%= link_to about_path, class: "flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-surface-100 rounded-xl transition-colors" do %>
             <span class="material-symbols-outlined">info</span>
             서비스 소개
           <% end %>
 
-          <%= link_to terms_path, class: "flex items-center gap-3 px-4 py-3 text-navy-600 hover:bg-surface-100 rounded-xl transition-colors" do %>
+          <%= link_to terms_path, class: "flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-surface-100 rounded-xl transition-colors" do %>
             <span class="material-symbols-outlined">gavel</span>
             이용약관
           <% end %>
 
-          <%= link_to privacy_path, class: "flex items-center gap-3 px-4 py-3 text-navy-600 hover:bg-surface-100 rounded-xl transition-colors" do %>
+          <%= link_to privacy_path, class: "flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-surface-100 rounded-xl transition-colors" do %>
             <span class="material-symbols-outlined">shield</span>
             개인정보처리방침
           <% end %>

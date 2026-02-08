@@ -8,7 +8,7 @@
         <span class="material-symbols-outlined text-4xl text-white">support_agent</span>
       </div>
       <h1 class="text-3xl font-bold mb-2 text-white">공무원 업무 도우미</h1>
-      <p class="text-navy-200">법령 · 예규 · 유권해석 · 실무 가이드</p>
+      <p class="text-slate-200">법령 · 예규 · 유권해석 · 실무 가이드</p>
     </div>
   </div>
 
@@ -32,10 +32,10 @@
 
       <!-- 인기 키워드 -->
       <div class="mt-4 flex flex-wrap gap-2 items-center">
-        <span class="text-sm text-navy-500 font-medium">인기 검색어:</span>
+        <span class="text-sm text-slate-500 font-medium">인기 검색어:</span>
         <% %w[수의계약 연말정산 출장비 이월 기간제 보조금정산 겸직 일상경비].each do |keyword| %>
           <%= link_to keyword, chatbot_search_path(q: keyword),
-              class: "px-3 py-1.5 bg-surface-100 text-navy-700 rounded-full text-sm font-medium hover:bg-point-100 hover:text-point-700 transition-all",
+              class: "px-3 py-1.5 bg-surface-100 text-slate-700 rounded-full text-sm font-medium hover:bg-indigo-100 hover:text-indigo-700 transition-all",
               data: { turbo: false } %>
         <% end %>
       </div>
@@ -43,13 +43,13 @@
 
     <!-- 금액 기반 검색 -->
     <div class="card p-6 mt-4 shadow-soft">
-      <h3 class="text-lg font-bold mb-4 text-navy-900 flex items-center gap-2">
-        <span class="material-symbols-outlined text-warm-500">payments</span>
+      <h3 class="text-lg font-bold mb-4 text-slate-900 flex items-center gap-2">
+        <span class="material-symbols-outlined text-amber-500">payments</span>
         금액으로 계약방법 찾기
       </h3>
       <div class="flex flex-wrap gap-4 items-end">
         <div class="flex-1 min-w-[200px]">
-          <label class="block text-sm font-semibold text-navy-700 mb-2">계약 분야</label>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">계약 분야</label>
           <select id="price-category" class="input">
             <option value="goods">물품</option>
             <option value="service">용역</option>
@@ -57,7 +57,7 @@
           </select>
         </div>
         <div class="flex-1 min-w-[200px]">
-          <label class="block text-sm font-semibold text-navy-700 mb-2">추정가격 (원)</label>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">추정가격 (원)</label>
           <input type="text" id="price-input"
                  placeholder="예: 30,000,000"
                  class="input"
@@ -71,12 +71,12 @@
 
       <!-- 빠른 금액 버튼 -->
       <div class="mt-4 flex flex-wrap gap-2 items-center">
-        <span class="text-sm text-navy-500 font-medium">빠른 선택:</span>
-        <button onclick="setPrice(10000000)" class="px-3 py-1.5 bg-surface-100 text-navy-700 rounded-full text-sm font-medium hover:bg-forest-100 hover:text-forest-700 transition-all">1천만원</button>
-        <button onclick="setPrice(20000000)" class="px-3 py-1.5 bg-surface-100 text-navy-700 rounded-full text-sm font-medium hover:bg-forest-100 hover:text-forest-700 transition-all">2천만원</button>
-        <button onclick="setPrice(50000000)" class="px-3 py-1.5 bg-surface-100 text-navy-700 rounded-full text-sm font-medium hover:bg-forest-100 hover:text-forest-700 transition-all">5천만원</button>
-        <button onclick="setPrice(100000000)" class="px-3 py-1.5 bg-surface-100 text-navy-700 rounded-full text-sm font-medium hover:bg-forest-100 hover:text-forest-700 transition-all">1억원</button>
-        <button onclick="setPrice(200000000)" class="px-3 py-1.5 bg-surface-100 text-navy-700 rounded-full text-sm font-medium hover:bg-forest-100 hover:text-forest-700 transition-all">2억원</button>
+        <span class="text-sm text-slate-500 font-medium">빠른 선택:</span>
+        <button onclick="setPrice(10000000)" class="px-3 py-1.5 bg-surface-100 text-slate-700 rounded-full text-sm font-medium hover:bg-emerald-100 hover:text-emerald-700 transition-all">1천만원</button>
+        <button onclick="setPrice(20000000)" class="px-3 py-1.5 bg-surface-100 text-slate-700 rounded-full text-sm font-medium hover:bg-emerald-100 hover:text-emerald-700 transition-all">2천만원</button>
+        <button onclick="setPrice(50000000)" class="px-3 py-1.5 bg-surface-100 text-slate-700 rounded-full text-sm font-medium hover:bg-emerald-100 hover:text-emerald-700 transition-all">5천만원</button>
+        <button onclick="setPrice(100000000)" class="px-3 py-1.5 bg-surface-100 text-slate-700 rounded-full text-sm font-medium hover:bg-emerald-100 hover:text-emerald-700 transition-all">1억원</button>
+        <button onclick="setPrice(200000000)" class="px-3 py-1.5 bg-surface-100 text-slate-700 rounded-full text-sm font-medium hover:bg-emerald-100 hover:text-emerald-700 transition-all">2억원</button>
       </div>
 
       <!-- 금액 검색 결과 -->
@@ -85,38 +85,38 @@
 
     <!-- 주제별 가이드 -->
     <div class="card p-6 mt-4 shadow-soft">
-      <h3 class="text-lg font-bold mb-4 text-navy-900 flex items-center gap-2">
-        <span class="material-symbols-outlined text-point-600">menu_book</span>
+      <h3 class="text-lg font-bold mb-4 text-slate-900 flex items-center gap-2">
+        <span class="material-symbols-outlined text-indigo-600">menu_book</span>
         주제별 상세 가이드
       </h3>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <a href="/topics/private-contract" class="group block p-4 bg-gradient-to-br from-point-50 to-navy-50 rounded-xl border-2 border-transparent hover:border-point-300 hover:shadow-medium transition-all">
-          <div class="icon-container icon-container-md bg-point-100 group-hover:bg-point-600 transition-colors mb-3">
-            <span class="material-symbols-outlined text-xl text-point-600 group-hover:text-white transition-colors">edit_note</span>
+        <a href="/topics/private-contract" class="group block p-4 bg-gradient-to-br from-indigo-50 to-slate-50 rounded-xl border-2 border-transparent hover:border-indigo-300 hover:shadow-medium transition-all">
+          <div class="icon-container icon-container-md bg-indigo-100 group-hover:bg-indigo-600 transition-colors mb-3">
+            <span class="material-symbols-outlined text-xl text-indigo-600 group-hover:text-white transition-colors">edit_note</span>
           </div>
-          <div class="font-semibold text-navy-800 group-hover:text-point-700">수의계약</div>
-          <div class="text-xs text-navy-500 mt-1">법령·서식·흐름도</div>
+          <div class="font-semibold text-slate-800 group-hover:text-indigo-700">수의계약</div>
+          <div class="text-xs text-slate-500 mt-1">법령·서식·흐름도</div>
         </a>
-        <a href="/topics/travel-expense" class="group block p-4 bg-gradient-to-br from-forest-50 to-teal-50 rounded-xl border-2 border-transparent hover:border-forest-300 hover:shadow-medium transition-all">
-          <div class="icon-container icon-container-md bg-forest-100 group-hover:bg-forest-600 transition-colors mb-3">
-            <span class="material-symbols-outlined text-xl text-forest-600 group-hover:text-white transition-colors">work</span>
+        <a href="/topics/travel-expense" class="group block p-4 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl border-2 border-transparent hover:border-emerald-300 hover:shadow-medium transition-all">
+          <div class="icon-container icon-container-md bg-emerald-100 group-hover:bg-emerald-600 transition-colors mb-3">
+            <span class="material-symbols-outlined text-xl text-emerald-600 group-hover:text-white transition-colors">work</span>
           </div>
-          <div class="font-semibold text-navy-800 group-hover:text-forest-700">출장비</div>
-          <div class="text-xs text-navy-500 mt-1">여비규정·청구절차</div>
+          <div class="font-semibold text-slate-800 group-hover:text-emerald-700">출장비</div>
+          <div class="text-xs text-slate-500 mt-1">여비규정·청구절차</div>
         </a>
-        <a href="/topics/budget-carryover" class="group block p-4 bg-gradient-to-br from-warm-50 to-orange-50 rounded-xl border-2 border-transparent hover:border-warm-300 hover:shadow-medium transition-all">
-          <div class="icon-container icon-container-md bg-warm-100 group-hover:bg-warm-600 transition-colors mb-3">
-            <span class="material-symbols-outlined text-xl text-warm-600 group-hover:text-white transition-colors">event</span>
+        <a href="/topics/budget-carryover" class="group block p-4 bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl border-2 border-transparent hover:border-amber-300 hover:shadow-medium transition-all">
+          <div class="icon-container icon-container-md bg-amber-100 group-hover:bg-amber-600 transition-colors mb-3">
+            <span class="material-symbols-outlined text-xl text-amber-600 group-hover:text-white transition-colors">event</span>
           </div>
-          <div class="font-semibold text-navy-800 group-hover:text-warm-700">예산이월</div>
-          <div class="text-xs text-navy-500 mt-1">명시·사고·계속비</div>
+          <div class="font-semibold text-slate-800 group-hover:text-amber-700">예산이월</div>
+          <div class="text-xs text-slate-500 mt-1">명시·사고·계속비</div>
         </a>
         <a href="/topics/year-end-settlement" class="group block p-4 bg-gradient-to-br from-rose-50 to-pink-50 rounded-xl border-2 border-transparent hover:border-rose-300 hover:shadow-medium transition-all">
           <div class="icon-container icon-container-md bg-rose-100 group-hover:bg-rose-600 transition-colors mb-3">
             <span class="material-symbols-outlined text-xl text-rose-600 group-hover:text-white transition-colors">receipt</span>
           </div>
-          <div class="font-semibold text-navy-800 group-hover:text-rose-700">연말정산</div>
-          <div class="text-xs text-navy-500 mt-1">2025 변경사항</div>
+          <div class="font-semibold text-slate-800 group-hover:text-rose-700">연말정산</div>
+          <div class="text-xs text-slate-500 mt-1">2025 변경사항</div>
         </a>
       </div>
     </div>
@@ -129,15 +129,15 @@
       <div class="grid md:grid-cols-2 gap-6">
         <!-- 카테고리별 가이드 -->
         <div class="card p-6">
-          <h2 class="text-lg font-bold mb-4 text-navy-900 flex items-center gap-2">
-            <span class="material-symbols-outlined text-point-600">folder</span>
+          <h2 class="text-lg font-bold mb-4 text-slate-900 flex items-center gap-2">
+            <span class="material-symbols-outlined text-indigo-600">folder</span>
             업무 가이드
           </h2>
           <div class="space-y-2">
             <% Topic::CATEGORIES.each do |key, name| %>
               <%= link_to guides_path(category: name), class: "flex items-center justify-between py-3 border-b border-gray-100 last:border-0 hover:bg-surface-50 px-2 -mx-2 rounded-lg transition-colors cursor-pointer group", data: { turbo_frame: "_top" } do %>
-                <span class="text-navy-700 font-medium group-hover:text-point-600"><%= name %></span>
-                <span class="material-symbols-outlined text-gray-400 group-hover:text-point-600 text-lg">chevron_right</span>
+                <span class="text-slate-700 font-medium group-hover:text-indigo-600"><%= name %></span>
+                <span class="material-symbols-outlined text-gray-400 group-hover:text-indigo-600 text-lg">chevron_right</span>
               <% end %>
             <% end %>
           </div>
@@ -145,16 +145,16 @@
 
         <!-- 자주 묻는 질문 -->
         <div class="card p-6">
-          <h2 class="text-lg font-bold mb-4 text-navy-900 flex items-center gap-2">
-            <span class="material-symbols-outlined text-warm-500">help</span>
+          <h2 class="text-lg font-bold mb-4 text-slate-900 flex items-center gap-2">
+            <span class="material-symbols-outlined text-amber-500">help</span>
             자주 묻는 질문
           </h2>
           <div class="space-y-3">
             <% @recent_popular.each_with_index do |article, i| %>
               <div class="block p-3 bg-surface-50 rounded-xl">
                 <div class="flex items-start gap-3">
-                  <span class="w-6 h-6 flex items-center justify-center bg-point-100 text-point-600 rounded-full text-xs font-bold shrink-0"><%= i + 1 %></span>
-                  <p class="text-sm text-navy-800 font-medium"><%= article.title.gsub(/\(.*?\)/, '').strip %></p>
+                  <span class="w-6 h-6 flex items-center justify-center bg-indigo-100 text-indigo-600 rounded-full text-xs font-bold shrink-0"><%= i + 1 %></span>
+                  <p class="text-sm text-slate-800 font-medium"><%= article.title.gsub(/\(.*?\)/, '').strip %></p>
                 </div>
               </div>
             <% end %>
@@ -162,7 +162,7 @@
         </div>
       </div>
 
-      <div class="text-center mt-10 text-sm text-navy-500">
+      <div class="text-center mt-10 text-sm text-slate-500">
         공무원 업무에 필요한 법령과 실무 가이드를 제공합니다
       </div>
     </div>
@@ -258,9 +258,9 @@ function searchByPrice() {
   }
 
   const colorMap = {
-    forest: { bg: 'bg-forest-50', border: 'border-forest-500', text: 'text-forest-700', badge: 'bg-forest-100 text-forest-800' },
-    point: { bg: 'bg-point-50', border: 'border-point-500', text: 'text-point-700', badge: 'bg-point-100 text-point-800' },
-    navy: { bg: 'bg-navy-50', border: 'border-navy-500', text: 'text-navy-700', badge: 'bg-navy-100 text-navy-800' }
+    forest: { bg: 'bg-emerald-50', border: 'border-emerald-500', text: 'text-emerald-700', badge: 'bg-emerald-100 text-emerald-800' },
+    point: { bg: 'bg-indigo-50', border: 'border-indigo-500', text: 'text-indigo-700', badge: 'bg-indigo-100 text-indigo-800' },
+    navy: { bg: 'bg-slate-50', border: 'border-slate-500', text: 'text-slate-700', badge: 'bg-slate-100 text-slate-800' }
   };
   const colors = colorMap[result.color];
 
@@ -268,37 +268,37 @@ function searchByPrice() {
     <div class="${colors.bg} ${colors.border} border-2 rounded-2xl p-6 shadow-soft">
       <div class="flex items-center justify-between mb-4">
         <div>
-          <span class="text-sm text-navy-500">${categoryName} · ${price.toLocaleString('ko-KR')}원</span>
+          <span class="text-sm text-slate-500">${categoryName} · ${price.toLocaleString('ko-KR')}원</span>
           <h4 class="text-xl font-bold ${colors.text}">${result.method}</h4>
         </div>
         <span class="px-4 py-1.5 ${colors.badge} rounded-full text-sm font-semibold">${result.method}</span>
       </div>
 
-      <p class="text-navy-700 mb-4">${result.description}</p>
+      <p class="text-slate-700 mb-4">${result.description}</p>
 
       <div class="grid md:grid-cols-2 gap-4">
         <div>
-          <h5 class="font-semibold text-navy-800 mb-3 flex items-center gap-2">
+          <h5 class="font-semibold text-slate-800 mb-3 flex items-center gap-2">
             <span class="material-symbols-outlined text-lg">checklist</span>
             체크리스트
           </h5>
           <ul class="space-y-2">
-            ${result.checklist.map(item => `<li class="flex items-center gap-2 text-sm text-navy-600"><span class="w-4 h-4 border-2 border-gray-300 rounded"></span>${item}</li>`).join('')}
+            ${result.checklist.map(item => `<li class="flex items-center gap-2 text-sm text-slate-600"><span class="w-4 h-4 border-2 border-gray-300 rounded"></span>${item}</li>`).join('')}
           </ul>
         </div>
         <div>
-          <h5 class="font-semibold text-navy-800 mb-3 flex items-center gap-2">
+          <h5 class="font-semibold text-slate-800 mb-3 flex items-center gap-2">
             <span class="material-symbols-outlined text-lg">lightbulb</span>
             실무 팁
           </h5>
           <ul class="space-y-2">
-            ${result.tips.map(tip => `<li class="text-sm text-navy-600 flex items-start gap-2"><span class="text-warm-500 font-bold">•</span>${tip}</li>`).join('')}
+            ${result.tips.map(tip => `<li class="text-sm text-slate-600 flex items-start gap-2"><span class="text-amber-500 font-bold">•</span>${tip}</li>`).join('')}
           </ul>
         </div>
       </div>
 
       <div class="mt-5 pt-5 border-t border-gray-200">
-        <a href="/topics/private-contract" class="text-point-600 hover:text-point-700 font-semibold text-sm flex items-center gap-1 transition-colors">
+        <a href="/topics/private-contract" class="text-indigo-600 hover:text-indigo-700 font-semibold text-sm flex items-center gap-1 transition-colors">
           <span class="material-symbols-outlined">menu_book</span>
           수의계약 상세 가이드 보기
           <span class="material-symbols-outlined text-lg">arrow_forward</span>
