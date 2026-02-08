@@ -98,6 +98,11 @@ Rails.application.routes.draw do
   get "privacy", to: "home#privacy", as: :privacy
   get "terms", to: "home#terms", as: :terms
 
+  # 관리자
+  namespace :admin do
+    resources :newsletters, only: [:new, :create]
+  end
+
   # 사이트맵
   get "sitemap.xml", to: "sitemap#index", as: :sitemap, defaults: { format: :xml }
 end
