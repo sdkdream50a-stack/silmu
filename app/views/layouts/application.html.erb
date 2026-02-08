@@ -87,11 +87,10 @@
 
           <!-- Desktop Menu -->
           <div class="hidden lg:flex items-center gap-8">
-            <%= link_to "도구", tools_path, class: "nav-link py-2" %>
-            <%= link_to "업무달력", task_calendar_path, class: "nav-link py-2" %>
             <%= link_to "법령가이드", guides_path, class: "nav-link py-2" %>
             <%= link_to "감사사례", audit_cases_path, class: "nav-link py-2" %>
-            <%= link_to "양식", templates_path, class: "nav-link py-2" %>
+            <%= link_to "도구", tools_path, class: "nav-link py-2" %>
+            <%= link_to "업무달력", task_calendar_path, class: "nav-link py-2" %>
             <%= link_to "자료실", guide_resources_path, class: "nav-link py-2" %>
           </div>
 
@@ -121,11 +120,10 @@
       <!-- Mobile Menu -->
       <div class="lg:hidden hidden" id="mobile-menu">
         <div class="px-4 py-4 space-y-1 bg-white border-t border-gray-100">
-          <%= link_to "도구", tools_path, class: "block px-4 py-3 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
-          <%= link_to "업무달력", task_calendar_path, class: "block px-4 py-3 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
           <%= link_to "법령가이드", guides_path, class: "block px-4 py-3 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
           <%= link_to "감사사례", audit_cases_path, class: "block px-4 py-3 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
-          <%= link_to "양식", templates_path, class: "block px-4 py-3 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
+          <%= link_to "도구", tools_path, class: "block px-4 py-3 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
+          <%= link_to "업무달력", task_calendar_path, class: "block px-4 py-3 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
           <%= link_to "자료실", guide_resources_path, class: "block px-4 py-3 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
 
           <div class="h-px bg-gray-200 my-3"></div>
@@ -290,10 +288,9 @@
           <div>
             <h3 class="font-semibold text-lg mb-5">서비스</h3>
             <ul class="space-y-3">
-              <li><%= link_to "도구", tools_path, class: "text-slate-300 hover:text-white transition-colors" %></li>
               <li><%= link_to "법령가이드", guides_path, class: "text-slate-300 hover:text-white transition-colors" %></li>
               <li><%= link_to "감사사례", audit_cases_path, class: "text-slate-300 hover:text-white transition-colors" %></li>
-              <li><%= link_to "양식", templates_path, class: "text-slate-300 hover:text-white transition-colors" %></li>
+              <li><%= link_to "도구", tools_path, class: "text-slate-300 hover:text-white transition-colors" %></li>
               <li><%= link_to "자료실", guide_resources_path, class: "text-slate-300 hover:text-white transition-colors" %></li>
               <li><%= link_to "자주 묻는 질문", faq_path, class: "text-slate-300 hover:text-white transition-colors" %></li>
             </ul>
