@@ -5,37 +5,37 @@
     <!-- 로고 -->
     <div class="text-center mb-8">
       <%= link_to root_path, class: "inline-flex items-center gap-3" do %>
-        <div class="w-12 h-12 gradient-navy rounded-xl flex items-center justify-center shadow-lg">
+        <div class="w-12 h-12 gradient-slate rounded-xl flex items-center justify-center shadow-lg">
           <span class="text-white font-bold text-2xl">실</span>
         </div>
-        <span class="text-2xl font-bold text-navy-900">실무</span>
+        <span class="text-2xl font-bold text-slate-900">실무</span>
       <% end %>
     </div>
 
     <!-- 로그인 카드 -->
     <div class="card p-8 shadow-strong">
-      <h2 class="text-2xl font-bold text-navy-900 text-center mb-2">로그인</h2>
-      <p class="text-navy-500 text-center mb-8">실무에 오신 것을 환영합니다</p>
+      <h2 class="text-2xl font-bold text-slate-900 text-center mb-2">로그인</h2>
+      <p class="text-slate-500 text-center mb-8">실무에 오신 것을 환영합니다</p>
 
       <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "space-y-6" }) do |f| %>
         <div>
-          <%= f.label :email, "이메일", class: "block text-sm font-semibold text-navy-700 mb-2" %>
+          <%= f.label :email, "이메일", class: "block text-sm font-semibold text-slate-700 mb-2" %>
           <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "이메일 주소", class: "input" %>
         </div>
 
         <div>
-          <%= f.label :password, "비밀번호", class: "block text-sm font-semibold text-navy-700 mb-2" %>
+          <%= f.label :password, "비밀번호", class: "block text-sm font-semibold text-slate-700 mb-2" %>
           <%= f.password_field :password, autocomplete: "current-password", placeholder: "••••••••", class: "input" %>
         </div>
 
         <% if devise_mapping.rememberable? %>
           <div class="flex items-center justify-between">
             <label class="flex items-center cursor-pointer group">
-              <%= f.check_box :remember_me, class: "text-point-600 focus:ring-point-500 rounded w-4 h-4" %>
-              <span class="ml-2 text-sm text-navy-600 group-hover:text-navy-900 transition-colors">로그인 유지</span>
+              <%= f.check_box :remember_me, class: "text-indigo-600 focus:ring-indigo-500 rounded w-4 h-4" %>
+              <span class="ml-2 text-sm text-slate-600 group-hover:text-slate-900 transition-colors">로그인 유지</span>
             </label>
             <% if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
-              <%= link_to "비밀번호 찾기", new_password_path(resource_name), class: "text-sm text-point-600 hover:text-point-700 font-medium transition-colors" %>
+              <%= link_to "비밀번호 찾기", new_password_path(resource_name), class: "text-sm text-indigo-600 hover:text-indigo-700 font-medium transition-colors" %>
             <% end %>
           </div>
         <% end %>
@@ -46,9 +46,9 @@
       <% end %>
 
       <!-- 회원가입 링크 -->
-      <p class="mt-8 text-center text-sm text-navy-600">
+      <p class="mt-8 text-center text-sm text-slate-600">
         아직 계정이 없으신가요?
-        <%= link_to "회원가입", new_registration_path(resource_name), class: "text-point-600 hover:text-point-700 font-semibold ml-1 transition-colors" %>
+        <%= link_to "회원가입", new_registration_path(resource_name), class: "text-indigo-600 hover:text-indigo-700 font-semibold ml-1 transition-colors" %>
       </p>
     </div>
   </div>

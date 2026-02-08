@@ -117,6 +117,9 @@ class DocumentAnalyzerService
     if document_type == "cost_calculation"
       return build_cost_calculation_prompt(extracted_text)
     end
+    if document_type == "task_extraction"
+      return build_task_extraction_prompt(extracted_text)
+    end
 
     type_label = case document_type
     when "goods" then "구매규격서 (물품 구매)"
@@ -478,5 +481,46 @@ class DocumentAnalyzerService
     { success: true, fields: fields }
   rescue JSON::ParserError
     { success: false, error: "AI 응답 형식이 올바르지 않습니다." }
+  end
+
+  def build_task_extraction_prompt(extracted_text = nil)
+    text_section = if extracted_text
+      "## 추출된 문서 텍스트\n#{extracted_text}"
+    else
+      "## 첨부 이미지\n위 이미지는 공문(관공서 공식 문서)입니다."
+    end
+
+    <<~PROMPT
+      당신은 한국 공공기관 공문서에서 업무 일정을 추출하는 전문가입니다.
+
+      아래 공문에서 수행해야 할 업무(할 일)와 그 기한(날짜)을 추출해주세요.
+
+      #{text_section}
+
+      ## 추출 규칙
+      1. 문서에 명시적으로 언급된 업무와 날짜만 추출하세요.
+      2. 추측하지 마세요.
+      3. 날짜는 반드시 YYYY-MM-DD 형식으로 변환하세요.
+      4. 시간이 명시되어 있으면 HH:MM (24시간) 형식으로 포함하세요. 없으면 null.
+      5. 각 업무에 적합한 분류를 다음 중에서 선택하세요:
+         급여, 세무, 보험, 회계, 보고, 서무, 복지
+         적합한 것이 없으면 "서무"로 지정하세요.
+      6. 반드시 JSON 형식으로만 응답하세요.
+
+      ## 응답 형식
+      ```json
+      {
+        "document_title": "공문 제목 또는 요약",
+        "tasks": [
+          {
+            "title": "구체적인 업무 내용",
+            "date": "2026-03-15",
+            "time": "14:00",
+            "cat": "보고"
+          }
+        ]
+      }
+      ```
+    PROMPT
   end
 end

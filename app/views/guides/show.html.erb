@@ -23,7 +23,7 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- 뒤로가기 -->
     <div class="mb-6">
-      <%= link_to guides_path, class: "inline-flex items-center text-gray-600 hover:text-forest-600 transition-colors" do %>
+      <%= link_to guides_path, class: "inline-flex items-center text-gray-600 hover:text-emerald-600 transition-colors" do %>
         <span class="material-symbols-outlined mr-1">arrow_back</span>
         가이드 목록으로
       <% end %>
@@ -35,7 +35,7 @@
         <div class="sticky top-24 bg-white rounded-xl border border-gray-200 p-6">
           <h3 class="font-bold text-gray-900 mb-4">목차</h3>
           <nav class="space-y-2 text-sm">
-            <a href="#overview" class="block py-2 px-3 bg-forest-50 text-forest-600 rounded-lg font-medium">1. 개요</a>
+            <a href="#overview" class="block py-2 px-3 bg-emerald-50 text-emerald-600 rounded-lg font-medium">1. 개요</a>
             <a href="#requirements" class="block py-2 px-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">2. 사전 준비 사항</a>
             <a href="#step1" class="block py-2 px-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">3. Step 1: <%= @guide[:sections][:step1][:title] %></a>
             <a href="#step2" class="block py-2 px-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">4. Step 2: <%= @guide[:sections][:step2][:title] %></a>
@@ -90,7 +90,7 @@
           <div class="p-6 md:p-8 prose-premium">
             <section id="overview" class="mb-12">
               <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <span class="w-8 h-8 flex items-center justify-center bg-forest-100 text-forest-600 rounded-lg text-sm font-bold">1</span>
+                <span class="w-8 h-8 flex items-center justify-center bg-emerald-100 text-emerald-600 rounded-lg text-sm font-bold">1</span>
                 개요
               </h2>
               <p class="text-gray-700 leading-relaxed">
@@ -101,13 +101,13 @@
 
             <section id="requirements" class="mb-12">
               <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <span class="w-8 h-8 flex items-center justify-center bg-forest-100 text-forest-600 rounded-lg text-sm font-bold">2</span>
+                <span class="w-8 h-8 flex items-center justify-center bg-emerald-100 text-emerald-600 rounded-lg text-sm font-bold">2</span>
                 사전 준비 사항
               </h2>
               <ul class="space-y-3 text-gray-700">
                 <% @guide[:sections][:requirements].each do |req| %>
                   <li class="flex gap-3">
-                    <span class="material-symbols-outlined text-forest-600 shrink-0">check_circle</span>
+                    <span class="material-symbols-outlined text-emerald-600 shrink-0">check_circle</span>
                     <p><strong><%= req[:title] %>:</strong> <%= req[:desc] %></p>
                   </li>
                 <% end %>
@@ -118,7 +118,7 @@
               <% step = @guide[:sections][step_key] %>
               <section id="<%= step_key %>" class="mb-12">
                 <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                  <span class="w-8 h-8 flex items-center justify-center bg-forest-100 text-forest-600 rounded-lg text-sm font-bold"><%= index + 3 %></span>
+                  <span class="w-8 h-8 flex items-center justify-center bg-emerald-100 text-emerald-600 rounded-lg text-sm font-bold"><%= index + 3 %></span>
                   Step <%= index + 1 %>: <%= step[:title] %>
                 </h2>
                 <ol class="space-y-4 text-gray-700">
@@ -135,18 +135,18 @@
             <!-- 관련 양식 -->
             <div class="bg-gray-50 rounded-xl p-6 mb-8">
               <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <span class="material-symbols-outlined text-navy-600">description</span>
+                <span class="material-symbols-outlined text-slate-600">description</span>
                 관련 양식
               </h4>
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <%= link_to template_path(1), class: "flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200 hover:border-navy-300 transition-colors" do %>
+                <%= link_to template_path(1), class: "flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200 hover:border-slate-300 transition-colors" do %>
                   <span class="material-symbols-outlined text-gray-400">download</span>
                   <div>
                     <p class="font-medium text-gray-900 text-sm">관련 양식 1</p>
                     <p class="text-gray-500 text-xs">HWP, PDF</p>
                   </div>
                 <% end %>
-                <%= link_to template_path(1), class: "flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200 hover:border-navy-300 transition-colors" do %>
+                <%= link_to template_path(1), class: "flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200 hover:border-slate-300 transition-colors" do %>
                   <span class="material-symbols-outlined text-gray-400">download</span>
                   <div>
                     <p class="font-medium text-gray-900 text-sm">관련 양식 2</p>
