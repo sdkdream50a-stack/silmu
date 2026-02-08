@@ -9,3 +9,6 @@ application.register("hello", HelloController)
 
 import MobileMenuController from "./mobile_menu_controller"
 application.register("mobile-menu", MobileMenuController)
+
+import UtmBannerController from "./utm_banner_controller"
+application.register("utm-banner", UtmBannerController)
