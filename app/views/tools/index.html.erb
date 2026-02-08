@@ -1,7 +1,7 @@
 <%# 실무 도구 목록 페이지 - 프리미엄 디자인 시스템 %>
 
 <!-- 페이지 헤더 — enhanced gradient -->
-<section class="gradient-point text-white py-12 lg:py-16 relative overflow-hidden">
+<section class="gradient-indigo text-white py-12 lg:py-16 relative overflow-hidden">
   <!-- Background decorations -->
   <div class="absolute inset-0">
     <div class="absolute top-0 right-0 w-[300px] h-[300px] bg-white/5 rounded-full blur-[80px]"></div>
@@ -21,7 +21,7 @@
       </div>
       <div class="flex gap-4 lg:gap-6">
         <div class="text-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/15">
-          <div class="text-2xl font-bold">14</div>
+          <div class="text-2xl font-bold">15</div>
           <div class="text-xs text-white/70 mt-0.5">활성 도구</div>
         </div>
         <div class="text-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/15">
@@ -42,10 +42,10 @@
   <div class="container-wide">
     <div class="flex items-center justify-between mb-8">
       <div>
-        <h2 class="text-xl font-bold text-navy-900">바로 사용 가능한 도구</h2>
-        <p class="text-navy-400 text-sm mt-1">클릭하면 바로 사용할 수 있습니다</p>
+        <h2 class="text-xl font-bold text-slate-900">바로 사용 가능한 도구</h2>
+        <p class="text-slate-400 text-sm mt-1">클릭하면 바로 사용할 수 있습니다</p>
       </div>
-      <span class="badge badge-point"><span class="font-bold">14</span>개 도구</span>
+      <span class="badge badge-indigo"><span class="font-bold">15</span>개 도구</span>
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -64,19 +64,20 @@
         { title: "예정가격 계산기", desc: "계약유형별 원가항목을 입력하여 예정가격과 복수예비가격을 산출합니다.", icon: "calculate", color: "forest", category: "계산기", path: estimated_price_path, badge: "NEW" },
         { title: "법정기간 계산기", desc: "입찰공고·계약체결·대금지급·하자보증·지체상금 기한을 자동 계산합니다.", icon: "calendar_month", color: "warm", category: "계산기", path: legal_period_path, badge: "NEW" },
         { title: "계약보증금 계산기", desc: "계약보증금·하자보증금·인지세를 계약금액에 따라 자동으로 계산합니다.", icon: "shield", color: "point", category: "계산기", path: contract_guarantee_path, badge: "NEW" },
+        { title: "업무 할일 달력", desc: "급여·세무·보험·회계 등 월별 반복 업무를 한눈에 확인하고 체크합니다.", icon: "calendar_month", color: "navy", category: "체크리스트", path: task_calendar_path, badge: "NEW" },
       ].each do |tool| %>
         <%= link_to tool[:path], class: "group card card-interactive card-glow-#{tool[:color]} card-shine p-6 relative overflow-hidden border border-transparent hover:border-#{tool[:color]}-200", data: { category: tool[:category], title: tool[:title] } do %>
           <% if tool[:badge] %>
-            <span class="absolute top-4 right-4 badge <%= tool[:badge] == 'NEW' ? 'badge-warm' : 'badge-point' %>"><%= tool[:badge] %></span>
+            <span class="absolute top-4 right-4 badge <%= tool[:badge] == 'NEW' ? 'badge-amber' : 'badge-indigo' %>"><%= tool[:badge] %></span>
           <% end %>
 
           <div class="icon-container icon-container-lg bg-<%= tool[:color] %>-100 group-hover:bg-<%= tool[:color] %>-600 transition-all duration-300 mb-4 group-hover:shadow-lg group-hover:shadow-<%= tool[:color] %>-500/20">
             <span class="material-symbols-outlined text-3xl text-<%= tool[:color] %>-600 group-hover:text-white transition-colors"><%= tool[:icon] %></span>
           </div>
 
-          <span class="text-xs font-semibold text-navy-400 mb-2 block"><%= tool[:category] %></span>
-          <h3 class="text-lg font-bold text-navy-900 mb-2 group-hover:text-<%= tool[:color] %>-600 transition-colors"><%= tool[:title] %></h3>
-          <p class="text-navy-500 text-sm leading-relaxed"><%= tool[:desc] %></p>
+          <span class="text-xs font-semibold text-slate-400 mb-2 block"><%= tool[:category] %></span>
+          <h3 class="text-lg font-bold text-slate-900 mb-2 group-hover:text-<%= tool[:color] %>-600 transition-colors"><%= tool[:title] %></h3>
+          <p class="text-slate-500 text-sm leading-relaxed"><%= tool[:desc] %></p>
 
           <div class="mt-4 flex items-center text-<%= tool[:color] %>-600 text-sm font-semibold">
             바로 사용
@@ -92,8 +93,8 @@
 <section class="py-12 bg-surface-50">
   <div class="container-wide">
     <div class="flex items-center gap-3 mb-6">
-      <span class="material-symbols-outlined text-navy-300">hourglass_empty</span>
-      <h2 class="text-lg font-bold text-navy-600">곧 추가될 도구</h2>
+      <span class="material-symbols-outlined text-slate-300">hourglass_empty</span>
+      <h2 class="text-lg font-bold text-slate-600">곧 추가될 도구</h2>
     </div>
 
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
@@ -104,11 +105,11 @@
       ].each do |tool| %>
         <div class="flex items-center gap-3 px-4 py-3.5 bg-white rounded-xl border border-gray-100/80 hover:border-gray-200 hover:shadow-soft transition-all">
           <span class="w-9 h-9 bg-surface-100 rounded-lg flex items-center justify-center">
-            <span class="material-symbols-outlined text-lg text-navy-300"><%= tool[:icon] %></span>
+            <span class="material-symbols-outlined text-lg text-slate-300"><%= tool[:icon] %></span>
           </span>
           <div>
-            <h4 class="text-sm font-semibold text-navy-700"><%= tool[:title] %></h4>
-            <span class="text-xs text-navy-400"><%= tool[:category] %></span>
+            <h4 class="text-sm font-semibold text-slate-700"><%= tool[:title] %></h4>
+            <span class="text-xs text-slate-400"><%= tool[:category] %></span>
           </div>
         </div>
       <% end %>
@@ -118,13 +119,13 @@
 
 <!-- CTA — enhanced -->
 <section class="py-16 bg-white relative overflow-hidden">
-  <div class="absolute top-0 left-1/3 w-[200px] h-[200px] bg-point-500/[0.03] rounded-full blur-[60px]"></div>
+  <div class="absolute top-0 left-1/3 w-[200px] h-[200px] bg-indigo-500/[0.03] rounded-full blur-[60px]"></div>
   <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
-    <div class="icon-container icon-container-lg bg-gradient-to-br from-point-100 to-point-200 mx-auto mb-6 shadow-sm">
-      <span class="material-symbols-outlined text-3xl text-point-600">lightbulb</span>
+    <div class="icon-container icon-container-lg bg-gradient-to-br from-indigo-100 to-indigo-200 mx-auto mb-6 shadow-sm">
+      <span class="material-symbols-outlined text-3xl text-indigo-600">lightbulb</span>
     </div>
-    <h2 class="text-2xl font-bold text-navy-900 mb-4">필요한 도구가 없으신가요?</h2>
-    <p class="text-navy-500 mb-8">원하시는 도구를 요청해주시면 검토 후 개발을 진행합니다.</p>
+    <h2 class="text-2xl font-bold text-slate-900 mb-4">필요한 도구가 없으신가요?</h2>
+    <p class="text-slate-500 mb-8">원하시는 도구를 요청해주시면 검토 후 개발을 진행합니다.</p>
     <a href="mailto:hello@silmu.kr?subject=도구 요청" class="btn btn-point btn-md shadow-md hover:shadow-lg">
       <span class="material-symbols-outlined">mail</span>
       이메일로 요청하기

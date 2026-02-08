@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   # 실무 도구
   get "tools", to: "tools#index", as: :tools
   get "tools/travel-calculator", to: "tools#travel_calculator", as: :travel_calculator
+  get "tools/task-calendar", to: "tools#task_calendar", as: :task_calendar
 
   # PDF 도구
   get "tools/pdf", to: "pdf_tools#index", as: :pdf_tools
