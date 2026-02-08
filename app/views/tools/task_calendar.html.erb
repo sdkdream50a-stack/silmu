@@ -1,5 +1,8 @@
 <%# 업무 할일 달력 — 사이드바 + 뷰 전환 %>
 <% content_for :hide_footer, true %>
+<% content_for :head do %>
+  <meta name="turbo-cache-control" content="no-cache">
+<% end %>
 
 <%
   cat_colors = {
@@ -193,27 +196,38 @@
 
     <!-- 네비게이션 -->
     <nav class="px-3 flex-1">
-      <button class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all" data-view="inbox">
+      <button class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all border-l-[3px] border-transparent" data-view="inbox">
         <span class="material-symbols-outlined text-lg">inventory_2</span>
         <span class="flex-1 text-left">관리함</span>
         <span class="nav-count text-xs font-semibold text-slate-400" data-count="inbox"></span>
       </button>
-      <button class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all" data-view="today">
+      <button class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all border-l-[3px] border-transparent" data-view="today">
         <span class="material-symbols-outlined text-lg">calendar_today</span>
         <span class="flex-1 text-left">오늘</span>
         <span class="nav-count text-xs font-semibold" data-count="today" id="today-count"></span>
       </button>
-      <button class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all" data-view="upcoming">
+      <button class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all border-l-[3px] border-transparent" data-view="upcoming">
         <span class="material-symbols-outlined text-lg">date_range</span>
         <span class="flex-1 text-left">주간</span>
         <span class="nav-count text-xs font-semibold" id="week-count"></span>
       </button>
-      <button class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all" data-view="monthly">
+      <button class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all border-l-[3px] border-transparent" data-view="monthly">
         <span class="material-symbols-outlined text-lg">calendar_month</span>
         <span class="flex-1 text-left">월간</span>
         <span class="nav-count text-xs font-semibold" id="month-count"></span>
       </button>
     </nav>
+
+    <!-- 이번 달 진행률 -->
+    <div class="px-4 py-3 border-t border-slate-100">
+      <div class="flex items-center justify-between mb-1.5">
+        <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">이번 달 진행률</p>
+        <span id="progress-label" class="text-[11px] font-bold text-indigo-600">0%</span>
+      </div>
+      <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+        <div id="progress-bar" class="h-full bg-gradient-to-r from-indigo-500 to-emerald-400 rounded-full transition-all duration-500" style="width: 0%"></div>
+      </div>
+    </div>
 
     <!-- 범례 -->
     <div class="p-4 border-t border-slate-100">
@@ -234,7 +248,7 @@
   </aside>
 
   <!-- 메인 콘텐츠 -->
-  <main class="flex-1 overflow-y-auto" id="main-content">
+  <main class="flex-1 overflow-y-auto pb-16 lg:pb-0" id="main-content">
 
     <!-- 모바일 헤더 -->
     <div class="lg:hidden flex items-center gap-3 px-4 py-3 bg-white border-b border-slate-200 sticky top-0 z-20">
@@ -276,7 +290,7 @@
           </div>
         </div>
 
-        <p class="text-[11px] text-slate-400 -mt-4 mb-5">업무를 서로 공유하여 팀원 모두 같은 일정으로 관리하세요. <span class="text-indigo-400 font-medium">내보내기</span>로 복사한 코드를 동료에게 전달하면,<br>동료가 <span class="text-emerald-500 font-medium">가져오기</span>로 바로 반영할 수 있습니다.</p>
+        <p class="text-[11px] text-slate-400 -mt-4 mb-5"><span class="text-indigo-400 font-medium">내보내기</span> 코드를 동료에게 전달하면 <span class="text-emerald-500 font-medium">가져오기</span>로 바로 반영됩니다.</p>
 
         <%# 관리함: 12개월 전체 업무 (월별 페이지) %>
         <% day_labels = %w[일 월 화 수 목 금 토] %>
@@ -292,7 +306,7 @@
                 h_name = holidays[[m, t[:day]]]
                 date_color = (is_sun || h_name) ? 'text-red-500' : is_sat ? 'text-blue-500' : 'text-slate-400'
               %>
-              <div class="task-item group flex items-center gap-3 px-3 py-3.5 hover:bg-white hover:shadow-sm transition-all" data-task-key="<%= m %>_<%= t[:title] %>">
+              <div class="task-item group flex items-center gap-3 px-3 py-3 hover:bg-white hover:shadow-sm transition-all rounded-lg" data-task-key="<%= m %>_<%= t[:title] %>">
                 <label class="flex-shrink-0 cursor-pointer">
                   <input type="checkbox" class="task-cb sr-only" data-key="<%= m %>_<%= t[:title] %>">
                   <span class="check-box w-[22px] h-[22px] rounded-full border-2 border-slate-300 flex items-center justify-center hover:border-indigo-400 transition-colors">
@@ -364,16 +378,22 @@
             <div class="divide-y divide-dashed divide-slate-200">
               <% today_exact.each do |t| %>
                 <% tc = cat_colors[t[:cat]] %>
-                <div class="task-item flex items-center gap-3 px-3 py-3.5 hover:bg-white hover:shadow-sm transition-all">
+                <div class="task-item flex items-center gap-3 px-3 py-3 hover:bg-white hover:shadow-sm transition-all rounded-lg">
                   <label class="flex-shrink-0 cursor-pointer">
                     <input type="checkbox" class="task-cb sr-only" data-key="<%= current_month %>_<%= t[:title] %>">
                     <span class="check-box w-[22px] h-[22px] rounded-full border-2 border-slate-300 flex items-center justify-center hover:border-indigo-400 transition-colors">
                       <svg class="w-3 h-3 text-white opacity-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                     </span>
                   </label>
-                  <div class="flex-1">
+                  <div class="flex-1 min-w-0">
                     <p class="task-text text-sm text-slate-800"><%= t[:title] %></p>
-                    <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-semibold mt-1 <%= tc[:badge] %> <%= tc[:text] %>"><%= t[:cat] %></span>
+                    <div class="flex items-center gap-2 mt-1">
+                      <span class="text-[11px] text-slate-400 font-medium flex items-center gap-0.5">
+                        <span class="material-symbols-outlined" style="font-size:13px">schedule</span>
+                        오늘 마감
+                      </span>
+                      <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-semibold <%= tc[:badge] %> <%= tc[:text] %>"><%= t[:cat] %></span>
+                    </div>
                   </div>
                 </div>
               <% end %>
@@ -498,6 +518,32 @@
       </div>
     </div>
   </main>
+</div>
+
+<!-- 모바일 하단 탭 바 -->
+<div class="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-slate-200 safe-area-bottom">
+  <div class="flex items-center justify-around px-2 py-1.5">
+    <button class="mobile-tab-item flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-lg transition-colors text-slate-400" data-view="inbox">
+      <span class="material-symbols-outlined" style="font-size:22px">inventory_2</span>
+      <span class="text-[10px] font-semibold">관리함</span>
+      <span class="tab-dot hidden w-1 h-1 rounded-full bg-indigo-600"></span>
+    </button>
+    <button class="mobile-tab-item flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-lg transition-colors text-slate-400" data-view="today">
+      <span class="material-symbols-outlined" style="font-size:22px">calendar_today</span>
+      <span class="text-[10px] font-semibold">오늘</span>
+      <span class="tab-dot hidden w-1 h-1 rounded-full bg-indigo-600"></span>
+    </button>
+    <button class="mobile-tab-item flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-lg transition-colors text-slate-400" data-view="upcoming">
+      <span class="material-symbols-outlined" style="font-size:22px">date_range</span>
+      <span class="text-[10px] font-semibold">주간</span>
+      <span class="tab-dot hidden w-1 h-1 rounded-full bg-indigo-600"></span>
+    </button>
+    <button class="mobile-tab-item flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-lg transition-colors text-slate-400" data-view="monthly">
+      <span class="material-symbols-outlined" style="font-size:22px">calendar_month</span>
+      <span class="text-[10px] font-semibold">월간</span>
+      <span class="tab-dot hidden w-1 h-1 rounded-full bg-indigo-600"></span>
+    </button>
+  </div>
 </div>
 
 <!-- 업무 추가 모달 -->
@@ -630,7 +676,7 @@
 </div>
 
 <!-- 토스트 알림 -->
-<div id="toast" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 hidden">
+<div id="toast" class="fixed bottom-24 lg:bottom-8 left-1/2 -translate-x-1/2 z-50 hidden">
   <div class="flex items-center gap-2 px-5 py-3 bg-slate-800 text-white text-sm font-medium rounded-xl shadow-2xl border border-white/10">
     <span id="toast-icon" class="material-symbols-outlined" style="font-size:18px">check_circle</span>
     <span id="toast-msg"></span>
@@ -652,8 +698,18 @@
       n.classList.toggle("bg-indigo-50", isActive);
       n.classList.toggle("text-indigo-700", isActive);
       n.classList.toggle("font-semibold", isActive);
+      n.classList.toggle("border-indigo-600", isActive);
       n.classList.toggle("text-slate-600", !isActive);
       n.classList.toggle("hover:bg-slate-100", !isActive);
+      n.classList.toggle("border-transparent", !isActive);
+    });
+    // 모바일 하단 탭 바 동기화
+    document.querySelectorAll(".mobile-tab-item").forEach(t => {
+      const isActive = t.dataset.view === view;
+      t.classList.toggle("text-indigo-600", isActive);
+      t.classList.toggle("text-slate-400", !isActive);
+      const dot = t.querySelector(".tab-dot");
+      if (dot) dot.classList.toggle("hidden", !isActive);
     });
     document.getElementById("mobile-title").textContent = views[view];
     // 뷰 진입 시 타임라인 갱신
@@ -665,6 +721,9 @@
 
   document.querySelectorAll(".nav-item").forEach(n => {
     n.addEventListener("click", () => switchView(n.dataset.view));
+  });
+  document.querySelectorAll(".mobile-tab-item").forEach(t => {
+    t.addEventListener("click", () => switchView(t.dataset.view));
   });
 
   switchView("today");
@@ -705,6 +764,23 @@
     }
   }
 
+  function updateProgress() {
+    if (typeof allTasks === "undefined" || !allTasks.length) return;
+    const curMonth = <%= current_month %>;
+    const monthTasks = allTasks.filter(t => t.month === curMonth);
+    const total = monthTasks.length;
+    if (total === 0) return;
+    const done = monthTasks.filter(t => state[t.month + "_" + t.title]).length;
+    const pct = Math.round((done / total) * 100);
+    const bar = document.getElementById("progress-bar");
+    const label = document.getElementById("progress-label");
+    if (bar) bar.style.width = pct + "%";
+    if (label) {
+      label.textContent = done + "/" + total + " (" + pct + "%)";
+      label.className = "text-[11px] font-bold " + (pct === 100 ? "text-emerald-500" : "text-indigo-600");
+    }
+  }
+
   document.querySelectorAll(".task-cb").forEach(cb => {
     const key = cb.dataset.key;
     if (state[key]) { cb.checked = true; applyCheck(cb, true); }
@@ -713,6 +789,7 @@
       saveState(state);
       applyCheck(cb, cb.checked);
       updateTodayCount();
+      updateProgress();
     });
   });
   updateTodayCount();
@@ -723,17 +800,17 @@
     const text = item.querySelector(".task-text");
     const svg = box.querySelector("svg");
     if (checked) {
-      box.classList.add("bg-red-500", "border-red-500");
+      box.classList.add("bg-emerald-500", "border-emerald-500");
       box.classList.remove("border-slate-300");
       svg.style.opacity = "1";
       text.style.textDecoration = "line-through";
-      text.style.textDecorationColor = "#ef4444";
+      text.style.textDecorationColor = "#94a3b8";
       text.style.textDecorationThickness = "1px";
       text.classList.add("text-slate-400");
       text.classList.remove("text-slate-800");
-      setTimeout(() => { item.style.opacity = "0.5"; }, 200);
+      setTimeout(() => { item.style.opacity = "0.6"; }, 200);
     } else {
-      box.classList.remove("bg-red-500", "border-red-500");
+      box.classList.remove("bg-emerald-500", "border-emerald-500");
       box.classList.add("border-slate-300");
       svg.style.opacity = "0";
       text.style.textDecoration = "";
@@ -1085,6 +1162,7 @@
       allTasks.push({ month: <%= m %>, day: <%= t[:day] %>, cat: "<%= t[:cat] %>", title: "<%= j(t[:title]) %>" });
     <% end %>
   <% end %>
+  updateProgress();
 
   searchInput.addEventListener("input", () => {
     const q = searchInput.value.trim().toLowerCase();
@@ -1190,8 +1268,13 @@
       const isSelected = selectedWeekDate === dateStr;
       cell.className = "text-center py-2.5 cursor-pointer rounded-lg transition-colors hover:bg-slate-100 " + (isSelected ? "border-b-2 border-indigo-600" : "");
       cell.dataset.date = dateStr;
-      let html = '<span class="text-xs font-medium ' + dayColor + '">' + dayNamesShort[i] + '</span>' +
-        ' <span class="text-sm font-bold ' + numColor + '">' + d.getDate() + '</span>';
+      let numHtml;
+      if (isToday) {
+        numHtml = '<span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-indigo-600 text-white text-sm font-bold">' + d.getDate() + '</span>';
+      } else {
+        numHtml = '<span class="text-sm font-bold ' + numColor + '">' + d.getDate() + '</span>';
+      }
+      let html = '<span class="text-xs font-medium ' + dayColor + '">' + dayNamesShort[i] + '</span> ' + numHtml;
       if (hName) {
         html += '<div class="text-[8px] text-red-400 font-medium leading-none mt-0.5">' + hName + '</div>';
       }
@@ -1296,6 +1379,7 @@
         saveState(state);
         applyCheck(cb, cb.checked);
         updateTodayCount();
+        updateProgress();
         updateWeekCount();
       });
     });
@@ -1434,6 +1518,7 @@
         saveState(state);
         applyCheck(cb, cb.checked);
         updateTodayCount();
+        updateProgress();
         updateWeekCount();
         updateMonthCount();
       });
