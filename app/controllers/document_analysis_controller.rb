@@ -1,6 +1,7 @@
 class DocumentAnalysisController < ApplicationController
-  # 정적 HTML(public/forms/)에서 호출하므로 CSRF 예외 처리
+  # 정적 HTML(public/forms/)에서 호출하므로 CSRF 예외 처리 + Origin 검증으로 보완
   skip_before_action :verify_authenticity_token, only: [:analyze]
+  before_action :verify_request_origin, only: [:analyze]
 
   MAX_FILE_SIZE = 20.megabytes
   ALLOWED_CONTENT_TYPES = %w[application/pdf image/jpeg image/png].freeze
@@ -54,6 +55,15 @@ class DocumentAnalysisController < ApplicationController
     else
       Rails.cache.write(key, count + 1, expires_in: RATE_PERIOD)
       false
+    end
+  end
+
+  def verify_request_origin
+    allowed_origins = [request.base_url, "https://silmu.kr", "https://www.silmu.kr"]
+    origin = request.headers["Origin"] || request.headers["Referer"]&.then { |r| URI.parse(r).then { |u| "#{u.scheme}://#{u.host}#{":#{u.port}" unless [80, 443].include?(u.port)}" } rescue nil }
+
+    unless origin.present? && allowed_origins.any? { |allowed| origin.start_with?(allowed) }
+      render json: { success: false, error: "허용되지 않은 요청입니다." }, status: :forbidden
     end
   end
 end
