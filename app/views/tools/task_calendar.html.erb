@@ -764,14 +764,14 @@
 </div>
 <% end %>
 
-<!-- AI 프로세스 가이드 슬라이드 패널 -->
+<!-- AI 프로세스 가이드 팝업 모달 -->
 <style>
   @keyframes guide-shimmer { 0%{transform:translateX(-100%)} 100%{transform:translateX(300%)} }
 </style>
-<div id="guide-overlay" class="hidden fixed inset-0 z-50 bg-black/20 backdrop-blur-sm" style="transition:opacity 0.3s">
-  <div id="guide-panel" class="absolute right-0 top-0 h-full w-full max-w-[448px] bg-white shadow-2xl border-l border-slate-200 flex flex-col" style="transform:translateX(100%);transition:transform 0.3s ease-out">
+<div id="guide-overlay" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" style="transition:opacity 0.3s">
+  <div id="guide-panel" class="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl mx-4 flex flex-col max-h-[85vh] overflow-hidden" style="opacity:0;transform:scale(0.95);transition:opacity 0.2s ease-out,transform 0.2s ease-out" onclick="event.stopPropagation()">
     <!-- 헤더 -->
-    <header class="flex-none px-6 py-5 border-b border-slate-100 bg-white z-10">
+    <header class="flex-none px-6 py-5 border-b border-slate-100 bg-white z-10 rounded-t-2xl">
       <div class="flex items-start justify-between mb-3">
         <span id="guide-category" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold tracking-wide">
           <span class="material-symbols-outlined text-[16px]">work</span>
@@ -839,7 +839,7 @@
       <!-- AI 가이드 콘텐츠 (성공) -->
       <div id="guide-content" class="hidden p-6 space-y-8"></div>
       <!-- 에러 상태 -->
-      <div id="guide-error" class="hidden flex-1 flex flex-col items-center justify-center p-8">
+      <div id="guide-error" class="hidden flex-1 flex flex-col items-center justify-center p-8 min-h-[300px]">
         <div class="flex flex-col items-center gap-6 w-full max-w-sm text-center">
           <div class="relative flex items-center justify-center">
             <div class="absolute w-24 h-24 bg-slate-100 rounded-full animate-pulse"></div>
@@ -857,7 +857,7 @@
       </div>
     </div>
     <!-- 기본 푸터 (로딩/성공) -->
-    <footer id="guide-footer-default" class="flex-none p-4 bg-slate-50 border-t border-slate-100">
+    <footer id="guide-footer-default" class="flex-none p-4 bg-slate-50 border-t border-slate-100 rounded-b-2xl">
       <div class="flex items-start gap-3">
         <div class="mt-0.5 p-1 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 text-white shadow-sm">
           <span class="material-symbols-outlined text-[14px] block">auto_awesome</span>
@@ -869,7 +869,7 @@
       </div>
     </footer>
     <!-- 에러 푸터 -->
-    <footer id="guide-footer-error" class="hidden flex-none p-4 border-t border-slate-100 bg-gray-50">
+    <footer id="guide-footer-error" class="hidden flex-none p-4 border-t border-slate-100 bg-gray-50 rounded-b-2xl">
       <button id="guide-footer-close" class="w-full flex items-center justify-center h-12 rounded-xl bg-white border border-slate-200 text-slate-700 text-sm font-bold hover:bg-slate-50 transition-colors shadow-sm">닫기</button>
     </footer>
   </div>
@@ -2352,7 +2352,8 @@
 
     guideOverlay.classList.remove("hidden");
     requestAnimationFrame(() => {
-      guidePanel.style.transform = "translateX(0)";
+      guidePanel.style.opacity = "1";
+      guidePanel.style.transform = "scale(1)";
     });
 
     const params = new URLSearchParams({ title: title });
@@ -2382,8 +2383,9 @@
   }
 
   function closeGuide() {
-    guidePanel.style.transform = "translateX(100%)";
-    setTimeout(() => guideOverlay.classList.add("hidden"), 300);
+    guidePanel.style.opacity = "0";
+    guidePanel.style.transform = "scale(0.95)";
+    setTimeout(() => guideOverlay.classList.add("hidden"), 200);
   }
 
   document.getElementById("guide-close").addEventListener("click", closeGuide);
