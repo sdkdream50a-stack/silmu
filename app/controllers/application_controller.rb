@@ -3,9 +3,20 @@ class ApplicationController < ActionController::Base
   allow_browser versions: :modern
 
   before_action :set_default_meta_tags
+  before_action :capture_utm_params
   before_action :configure_permitted_parameters, if: :devise_controller?
 
   private
+
+  def capture_utm_params
+    utm_keys = %i[utm_source utm_medium utm_campaign utm_term utm_content]
+    utm_data = params.slice(*utm_keys).permit(*utm_keys).to_h.symbolize_keys
+
+    if utm_data.any?
+      session[:utm_params] = utm_data
+      session[:utm_landed_at] = Time.current.iso8601
+    end
+  end
 
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up, keys: [:newsletter_agreed])

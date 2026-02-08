@@ -175,73 +175,87 @@
   week_dates = (0..6).map { |i| week_start + i }
 %>
 
-<div class="flex min-h-[calc(100vh-4rem)] lg:min-h-[calc(100vh-4.5rem)] overflow-hidden bg-slate-50">
+<div class="flex min-h-[calc(100vh-4rem)] lg:min-h-[calc(100vh-4.5rem)] overflow-hidden bg-slate-50"
+     data-user-signed-in="<%= user_signed_in? %>"
+     id="calendar-root">
   <!-- 사이드바 -->
-  <aside id="sidebar" class="w-64 lg:w-72 bg-white border-r border-slate-200/80 flex-shrink-0 flex flex-col overflow-y-auto hidden lg:flex">
-    <!-- 작업 추가 버튼 -->
-    <div class="p-4 pb-2">
-      <button id="btn-add-task" class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-indigo-600 text-white font-semibold text-sm shadow-md shadow-indigo-500/20 hover:bg-indigo-700 active:scale-[0.98] transition-all">
-        <span class="material-symbols-outlined text-lg">add_circle</span>
+  <aside id="sidebar" class="w-72 bg-white border-r border-gray-200 flex-shrink-0 flex flex-col overflow-y-auto hidden lg:flex">
+    <!-- 작업 추가 버튼 + 검색 -->
+    <div class="p-6 pb-2 flex flex-col gap-4">
+      <button id="btn-add-task" class="w-full flex items-center justify-center gap-2 h-12 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-bold text-base shadow-md shadow-indigo-500/20 active:scale-[0.98] transition-all">
+        <span class="material-symbols-outlined" style="font-size:24px">add_circle</span>
         업무 추가
       </button>
-    </div>
-
-    <!-- 검색 -->
-    <div class="px-4 pb-3">
-      <button id="btn-search" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-500 hover:bg-slate-100 text-sm transition-colors">
-        <span class="material-symbols-outlined text-lg">search</span>
-        검색
-      </button>
+      <div class="relative group">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 group-focus-within:text-indigo-600 transition-colors">
+          <span class="material-symbols-outlined" style="font-size:20px">search</span>
+        </div>
+        <input id="btn-search" type="text" readonly class="block w-full h-10 pl-10 pr-3 py-2 border-none bg-gray-50 rounded-lg text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:bg-white transition-all cursor-pointer" placeholder="업무 검색...">
+      </div>
     </div>
 
     <!-- 네비게이션 -->
-    <nav class="px-3 flex-1">
-      <button class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all border-l-[3px] border-transparent" data-view="inbox">
-        <span class="material-symbols-outlined text-lg">inventory_2</span>
-        <span class="flex-1 text-left">관리함</span>
-        <span class="nav-count text-xs font-semibold text-slate-400" data-count="inbox"></span>
+    <nav class="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
+      <button class="nav-item relative w-full flex items-center justify-between px-3 py-3 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors" data-view="inbox">
+        <div class="nav-indicator hidden absolute left-0 top-1/2 -translate-y-1/2 h-8 w-[3px] bg-indigo-600 rounded-r-full"></div>
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined" style="font-size:22px">inventory_2</span>
+          <span>관리함</span>
+        </div>
+        <span class="nav-count text-xs font-semibold text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full" data-count="inbox"></span>
       </button>
-      <button class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all border-l-[3px] border-transparent" data-view="today">
-        <span class="material-symbols-outlined text-lg">calendar_today</span>
-        <span class="flex-1 text-left">오늘</span>
-        <span class="nav-count text-xs font-semibold" data-count="today" id="today-count"></span>
+      <button class="nav-item relative w-full flex items-center justify-between px-3 py-3 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors" data-view="today">
+        <div class="nav-indicator hidden absolute left-0 top-1/2 -translate-y-1/2 h-8 w-[3px] bg-indigo-600 rounded-r-full"></div>
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined" style="font-size:22px">calendar_today</span>
+          <span>오늘</span>
+        </div>
+        <span class="nav-count text-xs font-semibold text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full" data-count="today" id="today-count"></span>
       </button>
-      <button class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all border-l-[3px] border-transparent" data-view="upcoming">
-        <span class="material-symbols-outlined text-lg">date_range</span>
-        <span class="flex-1 text-left">주간</span>
-        <span class="nav-count text-xs font-semibold" id="week-count"></span>
+      <button class="nav-item relative w-full flex items-center justify-between px-3 py-3 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors" data-view="upcoming">
+        <div class="nav-indicator hidden absolute left-0 top-1/2 -translate-y-1/2 h-8 w-[3px] bg-indigo-600 rounded-r-full"></div>
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined" style="font-size:22px">date_range</span>
+          <span>주간</span>
+        </div>
+        <span class="nav-count text-xs font-semibold text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full" id="week-count"></span>
       </button>
-      <button class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all border-l-[3px] border-transparent" data-view="monthly">
-        <span class="material-symbols-outlined text-lg">calendar_month</span>
-        <span class="flex-1 text-left">월간</span>
-        <span class="nav-count text-xs font-semibold" id="month-count"></span>
+      <button class="nav-item relative w-full flex items-center justify-between px-3 py-3 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors" data-view="monthly">
+        <div class="nav-indicator hidden absolute left-0 top-1/2 -translate-y-1/2 h-8 w-[3px] bg-indigo-600 rounded-r-full"></div>
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined" style="font-size:22px">calendar_month</span>
+          <span>월간</span>
+        </div>
+        <span class="nav-count text-xs font-semibold text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full" id="month-count"></span>
       </button>
     </nav>
 
     <!-- 이번 달 진행률 -->
-    <div class="px-4 py-3 border-t border-slate-100">
-      <div class="flex items-center justify-between mb-1.5">
-        <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">이번 달 진행률</p>
-        <span id="progress-label" class="text-[11px] font-bold text-indigo-600">0%</span>
+    <div class="px-6 py-4 border-t border-gray-100">
+      <div class="flex items-end justify-between mb-2">
+        <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">이번 달 진행률</p>
+        <span id="progress-label" class="text-sm font-bold text-gray-800">0%</span>
       </div>
-      <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
-        <div id="progress-bar" class="h-full bg-gradient-to-r from-indigo-500 to-emerald-400 rounded-full transition-all duration-500" style="width: 0%"></div>
+      <div class="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
+        <div id="progress-bar" class="h-1.5 bg-gradient-to-r from-indigo-600 to-emerald-400 rounded-full transition-all duration-500" style="width: 0%"></div>
       </div>
     </div>
 
     <!-- 범례 -->
-    <div class="p-4 border-t border-slate-100">
-      <div class="flex items-center justify-between mb-2">
-        <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">분류</p>
-        <button id="btn-edit-cats" class="text-[10px] text-slate-400 hover:text-indigo-500 transition-colors font-medium">편집</button>
+    <div class="p-6 pt-4 border-t border-gray-100">
+      <div class="flex items-center justify-between mb-3">
+        <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">분류</p>
+        <button id="btn-edit-cats" class="text-gray-400 hover:text-indigo-600 transition-colors">
+          <span class="material-symbols-outlined" style="font-size:18px">add</span>
+        </button>
       </div>
-      <div id="cat-list" class="flex flex-wrap gap-1.5"></div>
+      <div id="cat-list" class="flex flex-wrap gap-2"></div>
       <!-- 분류 추가 인라인 -->
-      <div id="cat-add-row" class="hidden mt-2 flex items-center gap-1.5">
-        <input type="text" id="cat-add-input" class="flex-1 min-w-0 px-2 py-1 text-[11px] rounded-lg border border-slate-200 outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-200" placeholder="새 분류명" maxlength="8">
-        <input type="color" id="cat-add-color" value="#6366f1" class="w-6 h-6 rounded cursor-pointer border-0 p-0">
-        <button id="cat-add-submit" class="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center hover:bg-indigo-700 transition-colors flex-shrink-0">
-          <span class="material-symbols-outlined" style="font-size:14px">check</span>
+      <div id="cat-add-row" class="hidden mt-3 flex items-center gap-1.5">
+        <input type="text" id="cat-add-input" class="flex-1 min-w-0 px-2.5 py-1.5 text-xs rounded-lg border border-slate-200 outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/20" placeholder="새 분류명" maxlength="8">
+        <input type="color" id="cat-add-color" value="#6366f1" class="w-7 h-7 rounded cursor-pointer border-0 p-0">
+        <button id="cat-add-submit" class="w-7 h-7 rounded-lg bg-indigo-600 text-white flex items-center justify-center hover:bg-indigo-700 transition-colors flex-shrink-0">
+          <span class="material-symbols-outlined" style="font-size:16px">check</span>
         </button>
       </div>
     </div>
@@ -353,68 +367,74 @@
 
     <!-- ===== 오늘 뷰 ===== -->
     <div class="view-panel hidden" id="view-today">
-      <div class="max-w-3xl mx-auto px-4 lg:px-8 py-8">
+      <div class="max-w-3xl mx-auto px-6 sm:px-10 pt-12 pb-8 flex flex-col">
         <%
           today_sun = today.wday == 0
           today_sat = today.wday == 6
           today_h = holidays[[today.month, today.day]]
-          today_date_color = (today_sun || today_h) ? 'text-red-500' : today_sat ? 'text-blue-500' : 'text-slate-400'
+          today_date_color = (today_sun || today_h) ? 'text-red-500' : today_sat ? 'text-blue-500' : 'text-slate-500'
         %>
-        <h1 class="text-2xl font-black text-slate-900 mb-1">오늘</h1>
-        <p class="text-sm <%= today_date_color %> mb-6 flex items-center gap-1.5">
-          <span class="material-symbols-outlined text-sm">event</span>
-          <%= today.strftime("%Y년 %-m월 %-d일") %> · <%= %w[일요일 월요일 화요일 수요일 목요일 금요일 토요일][today.wday] %>
+        <h1 class="text-4xl font-black text-slate-900 tracking-tight mb-2">오늘</h1>
+        <p class="text-lg font-medium tracking-tight <%= today_date_color %>">
+          <%= today.strftime("%Y년 %-m월 %-d일") %> · <span class="<%= (today_sun || today_h) ? 'text-red-500 font-semibold' : today_sat ? 'text-blue-500 font-semibold' : '' %>"><%= %w[일요일 월요일 화요일 수요일 목요일 금요일 토요일][today.wday] %></span>
           <% if today_h %>
-            <span class="font-medium"><%= today_h %></span>
+            <span class="font-semibold text-red-500 ml-1"><%= today_h %></span>
           <% end %>
         </p>
 
         <% if today_exact.any? %>
-          <div class="mb-6">
-            <h2 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-              <span class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
-              오늘 마감
-            </h2>
-            <div class="divide-y divide-dashed divide-slate-200">
+          <!-- 마감 인디케이터 -->
+          <div class="mt-8 mb-4 flex items-center gap-2">
+            <div class="relative flex h-3 w-3">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-3 w-3 bg-indigo-500"></span>
+            </div>
+            <h2 class="text-indigo-600 text-xs font-bold tracking-widest uppercase">오늘 마감</h2>
+          </div>
+
+          <!-- 업무 목록 -->
+          <div>
               <% today_exact.each do |t| %>
                 <% tc = cat_colors[t[:cat]] %>
-                <div class="task-item flex items-center gap-3 px-3 py-3 hover:bg-white hover:shadow-sm transition-all rounded-lg">
-                  <label class="flex-shrink-0 cursor-pointer">
+                <div class="task-item group flex items-start gap-4 py-5 border-b-2 border-dotted border-slate-100 hover:bg-slate-50 transition-colors rounded-lg px-2 -mx-2">
+                  <label class="flex-shrink-0 pt-0.5 cursor-pointer">
                     <input type="checkbox" class="task-cb sr-only" data-key="<%= current_month %>_<%= t[:title] %>">
                     <span class="check-box w-[22px] h-[22px] rounded-full border-2 border-slate-300 flex items-center justify-center hover:border-indigo-400 transition-colors">
                       <svg class="w-3 h-3 text-white opacity-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                     </span>
                   </label>
-                  <div class="flex-1 min-w-0">
-                    <p class="task-text text-sm text-slate-800"><%= t[:title] %></p>
-                    <div class="flex items-center gap-2 mt-1">
-                      <span class="text-[11px] text-slate-400 font-medium flex items-center gap-0.5">
-                        <span class="material-symbols-outlined" style="font-size:13px">schedule</span>
-                        오늘 마감
-                      </span>
-                      <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-semibold <%= tc[:badge] %> <%= tc[:text] %>"><%= t[:cat] %></span>
+                  <div class="flex flex-col flex-1 gap-1.5 min-w-0">
+                    <p class="task-text text-sm font-semibold text-slate-800 leading-tight group-hover:text-slate-900 transition-colors"><%= t[:title] %></p>
+                    <div class="flex items-center gap-2 flex-wrap">
+                      <span class="material-symbols-outlined text-red-500" style="font-size:16px">schedule</span>
+                      <span class="text-red-500 text-xs font-medium">오늘 마감</span>
+                      <span class="inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium ring-1 ring-inset ring-slate-500/10 <%= tc[:badge] %> <%= tc[:text] %>"><%= t[:cat] %></span>
                     </div>
                   </div>
                 </div>
               <% end %>
               <!-- 업무 추가 -->
-              <div class="py-2">
-                <button class="btn-inline-add flex items-center gap-2 px-3 py-2 text-sm text-slate-400 hover:text-indigo-600 transition-colors w-full rounded-lg hover:bg-indigo-50/50" data-date="<%= today.strftime('%Y-%m-%d') %>">
+              <div class="py-3">
+                <button class="btn-inline-add flex items-center gap-2 px-2 py-2.5 text-sm text-slate-400 hover:text-indigo-600 transition-colors w-full rounded-lg hover:bg-indigo-50/50" data-date="<%= today.strftime('%Y-%m-%d') %>">
                   <span class="material-symbols-outlined" style="font-size:18px">add</span>
                   업무 추가
                 </button>
               </div>
-            </div>
           </div>
         <% end %>
 
         <% if today_exact.empty? %>
-          <div class="py-16 text-center">
-            <div class="w-20 h-20 mx-auto mb-4 bg-emerald-50 rounded-2xl flex items-center justify-center">
-              <span class="material-symbols-outlined text-4xl text-emerald-400">celebration</span>
+          <!-- 빈 상태 -->
+          <div class="mt-12">
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="text-slate-400 text-xs font-bold uppercase tracking-widest">완료</h3>
+              <div class="h-px bg-slate-100 flex-grow ml-4"></div>
             </div>
-            <h3 class="text-lg font-bold text-slate-700 mb-2">오늘은 여유롭습니다</h3>
-            <p class="text-sm text-slate-400">마감 업무가 없습니다. 좋은 하루 보내세요!</p>
+            <div class="flex flex-col items-center justify-center py-12 px-4 text-center bg-slate-50 rounded-xl border border-dashed border-slate-200">
+              <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-sm mb-4 text-3xl">🎉</div>
+              <h3 class="text-slate-900 font-bold text-lg mb-1">오늘은 여유롭습니다</h3>
+              <p class="text-slate-500 text-sm">마감 업무가 없습니다. 좋은 하루 보내세요!</p>
+            </div>
           </div>
         <% end %>
       </div>
@@ -422,71 +442,77 @@
 
     <!-- ===== 주간 뷰 ===== -->
     <div class="view-panel hidden" id="view-upcoming">
-      <div class="max-w-3xl mx-auto px-4 lg:px-8 py-8">
-        <h1 class="text-2xl font-black text-slate-900 mb-4">주간</h1>
+      <div class="max-w-3xl mx-auto px-6 sm:px-10 pt-12 pb-8">
+        <h1 class="text-4xl font-black text-slate-900 tracking-tight mb-6">주간</h1>
 
-        <div class="flex items-center justify-between mb-4">
-          <!-- 년월 클릭 → 달력 드롭다운 -->
-          <div class="relative">
-            <button id="upcoming-month-toggle" class="flex items-center gap-1 text-sm font-bold text-slate-700 hover:text-indigo-600 transition-colors">
-              <span id="upcoming-month-label"></span>
-              <span class="material-symbols-outlined" style="font-size:16px">expand_more</span>
-            </button>
-            <!-- 미니 달력 드롭다운 -->
-            <div id="upcoming-cal-dropdown" class="hidden absolute top-full left-0 mt-2 bg-white rounded-2xl shadow-xl border border-slate-200 p-4 z-30 w-[280px]">
-              <div class="flex items-center justify-between mb-3">
-                <span id="cal-drop-title" class="text-sm font-bold text-slate-800"></span>
-                <div class="flex items-center gap-1">
-                  <button id="cal-drop-prev" class="w-7 h-7 rounded-lg hover:bg-slate-100 flex items-center justify-center">
-                    <span class="material-symbols-outlined text-slate-400" style="font-size:16px">chevron_left</span>
-                  </button>
-                  <button id="cal-drop-today" class="w-7 h-7 rounded-full hover:bg-slate-100 flex items-center justify-center" title="오늘">
-                    <span class="material-symbols-outlined text-slate-400" style="font-size:16px">circle</span>
-                  </button>
-                  <button id="cal-drop-next" class="w-7 h-7 rounded-lg hover:bg-slate-100 flex items-center justify-center">
-                    <span class="material-symbols-outlined text-slate-400" style="font-size:16px">chevron_right</span>
-                  </button>
+        <!-- 카드 컨테이너 -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+          <!-- 카드 헤더 -->
+          <div class="p-5 border-b border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-slate-50/50">
+            <!-- 년월 클릭 → 달력 드롭다운 -->
+            <div class="relative">
+              <button id="upcoming-month-toggle" class="flex items-center gap-1.5 text-base font-bold text-slate-800 hover:text-indigo-600 transition-colors">
+                <div class="bg-indigo-500/10 p-1.5 rounded-lg text-indigo-600">
+                  <span class="material-symbols-outlined" style="font-size:20px">date_range</span>
                 </div>
+                <span id="upcoming-month-label"></span>
+                <span class="material-symbols-outlined text-slate-400" style="font-size:16px">expand_more</span>
+              </button>
+              <!-- 미니 달력 드롭다운 -->
+              <div id="upcoming-cal-dropdown" class="hidden absolute top-full left-0 mt-2 bg-white rounded-2xl shadow-xl border border-slate-200 p-4 z-30 w-[280px]">
+                <div class="flex items-center justify-between mb-3">
+                  <span id="cal-drop-title" class="text-sm font-bold text-slate-800"></span>
+                  <div class="flex items-center gap-1">
+                    <button id="cal-drop-prev" class="w-7 h-7 rounded-lg hover:bg-slate-100 flex items-center justify-center">
+                      <span class="material-symbols-outlined text-slate-400" style="font-size:16px">chevron_left</span>
+                    </button>
+                    <button id="cal-drop-today" class="w-7 h-7 rounded-full hover:bg-slate-100 flex items-center justify-center" title="오늘">
+                      <span class="material-symbols-outlined text-slate-400" style="font-size:16px">circle</span>
+                    </button>
+                    <button id="cal-drop-next" class="w-7 h-7 rounded-lg hover:bg-slate-100 flex items-center justify-center">
+                      <span class="material-symbols-outlined text-slate-400" style="font-size:16px">chevron_right</span>
+                    </button>
+                  </div>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(7,1fr)" class="mb-1">
+                  <% %w[월 화 수 목 금 토 일].each_with_index do |dn, i| %>
+                    <div class="text-center text-[10px] font-semibold py-1 <%= i == 5 ? 'text-blue-500' : i == 6 ? 'text-red-500' : 'text-slate-400' %>"><%= dn %></div>
+                  <% end %>
+                </div>
+                <div id="cal-drop-grid" style="display:grid;grid-template-columns:repeat(7,1fr)"></div>
               </div>
-              <div style="display:grid;grid-template-columns:repeat(7,1fr)" class="mb-1">
-                <% %w[월 화 수 목 금 토 일].each_with_index do |dn, i| %>
-                  <div class="text-center text-[10px] font-semibold py-1 <%= i == 5 ? 'text-blue-500' : i == 6 ? 'text-red-500' : 'text-slate-400' %>"><%= dn %></div>
-                <% end %>
-              </div>
-              <div id="cal-drop-grid" style="display:grid;grid-template-columns:repeat(7,1fr)"></div>
+            </div>
+
+            <!-- 주간 이동 -->
+            <div class="flex items-center gap-1.5 bg-white rounded-xl border border-slate-200 p-1.5 shadow-sm">
+              <button id="upcoming-prev" class="h-9 w-9 rounded-lg hover:bg-slate-100 flex items-center justify-center transition-colors">
+                <span class="material-symbols-outlined text-slate-500" style="font-size:18px">chevron_left</span>
+              </button>
+              <button id="upcoming-today-btn" class="px-4 py-1.5 text-xs font-bold text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors">오늘</button>
+              <button id="upcoming-next" class="h-9 w-9 rounded-lg hover:bg-slate-100 flex items-center justify-center transition-colors">
+                <span class="material-symbols-outlined text-slate-500" style="font-size:18px">chevron_right</span>
+              </button>
             </div>
           </div>
 
-          <!-- 주간 이동 -->
-          <div class="flex items-center gap-1 bg-white rounded-xl border border-slate-200 p-1 shadow-sm">
-            <button id="upcoming-prev" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center transition-colors">
-              <span class="material-symbols-outlined text-slate-500" style="font-size:18px">chevron_left</span>
-            </button>
-            <button id="upcoming-today-btn" class="px-3 py-1 text-xs font-semibold text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors">오늘</button>
-            <button id="upcoming-next" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center transition-colors">
-              <span class="material-symbols-outlined text-slate-500" style="font-size:18px">chevron_right</span>
-            </button>
-          </div>
+          <!-- 주간 바 (가로 한 줄) -->
+          <div id="week-bar" class="border-b border-slate-200 bg-white" style="display:grid;grid-template-columns:repeat(7,1fr)"></div>
+
+          <!-- 주간 업무 타임라인 (JS 동적 렌더링) -->
+          <div id="upcoming-timeline" class="divide-y divide-slate-100"></div>
         </div>
-
-        <!-- 주간 바 (가로 한 줄) -->
-        <div id="week-bar" class="mb-6 border-b border-slate-200" style="display:grid;grid-template-columns:repeat(7,1fr)"></div>
-
-        <!-- 주간 업무 타임라인 (JS 동적 렌더링) -->
-        <div id="upcoming-timeline"></div>
       </div>
     </div>
 
     <!-- ===== 월간 뷰 ===== -->
     <div class="view-panel hidden" id="view-monthly">
-      <div class="max-w-3xl mx-auto px-4 lg:px-8 py-8">
-        <h1 class="text-2xl font-black text-slate-900 mb-4">월간</h1>
-
-        <div class="flex items-center justify-between mb-6">
+      <div class="max-w-[800px] mx-auto w-full py-8 px-4 sm:px-6">
+        <!-- 헤더: 월/연도 + 네비게이션 -->
+        <div class="flex items-center justify-between mb-8">
           <div class="relative">
-            <button id="monthly-month-toggle" class="flex items-center gap-1 text-sm font-bold text-slate-700 hover:text-indigo-600 transition-colors">
-              <span id="monthly-month-label"></span>
-              <span class="material-symbols-outlined" style="font-size:16px">expand_more</span>
+            <button id="monthly-month-toggle" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
+              <span id="monthly-month-label" class="text-xl font-bold text-slate-900"></span>
+              <span class="material-symbols-outlined text-slate-400" style="font-size:20px">arrow_drop_down</span>
             </button>
             <!-- 월 선택 드롭다운 -->
             <div id="monthly-cal-dropdown" class="hidden absolute top-full left-0 mt-2 bg-white rounded-2xl shadow-xl border border-slate-200 p-4 z-30 w-[280px]">
@@ -502,13 +528,13 @@
               <div id="monthly-cal-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px"></div>
             </div>
           </div>
-          <div class="flex items-center gap-1 bg-white rounded-xl border border-slate-200 p-1 shadow-sm">
-            <button id="monthly-prev" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center transition-colors">
-              <span class="material-symbols-outlined text-slate-500" style="font-size:18px">chevron_left</span>
+          <div class="flex items-center gap-2">
+            <button id="monthly-prev" class="p-1.5 hover:bg-gray-100 rounded-full transition-colors text-slate-400">
+              <span class="material-symbols-outlined" style="font-size:20px">chevron_left</span>
             </button>
-            <button id="monthly-today-btn" class="px-3 py-1 text-xs font-semibold text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors">이번 달</button>
-            <button id="monthly-next" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center transition-colors">
-              <span class="material-symbols-outlined text-slate-500" style="font-size:18px">chevron_right</span>
+            <button id="monthly-today-btn" class="px-4 py-1.5 bg-slate-100 text-sm font-medium rounded-lg hover:bg-slate-200 transition-colors">이번 달</button>
+            <button id="monthly-next" class="p-1.5 hover:bg-gray-100 rounded-full transition-colors text-slate-400">
+              <span class="material-symbols-outlined" style="font-size:20px">chevron_right</span>
             </button>
           </div>
         </div>
@@ -521,122 +547,172 @@
 </div>
 
 <!-- 모바일 하단 탭 바 -->
-<div class="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-slate-200 safe-area-bottom">
-  <div class="flex items-center justify-around px-2 py-1.5">
-    <button class="mobile-tab-item flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-lg transition-colors text-slate-400" data-view="inbox">
-      <span class="material-symbols-outlined" style="font-size:22px">inventory_2</span>
-      <span class="text-[10px] font-semibold">관리함</span>
-      <span class="tab-dot hidden w-1 h-1 rounded-full bg-indigo-600"></span>
-    </button>
-    <button class="mobile-tab-item flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-lg transition-colors text-slate-400" data-view="today">
-      <span class="material-symbols-outlined" style="font-size:22px">calendar_today</span>
-      <span class="text-[10px] font-semibold">오늘</span>
-      <span class="tab-dot hidden w-1 h-1 rounded-full bg-indigo-600"></span>
-    </button>
-    <button class="mobile-tab-item flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-lg transition-colors text-slate-400" data-view="upcoming">
-      <span class="material-symbols-outlined" style="font-size:22px">date_range</span>
-      <span class="text-[10px] font-semibold">주간</span>
-      <span class="tab-dot hidden w-1 h-1 rounded-full bg-indigo-600"></span>
-    </button>
-    <button class="mobile-tab-item flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-lg transition-colors text-slate-400" data-view="monthly">
-      <span class="material-symbols-outlined" style="font-size:22px">calendar_month</span>
-      <span class="text-[10px] font-semibold">월간</span>
-      <span class="tab-dot hidden w-1 h-1 rounded-full bg-indigo-600"></span>
-    </button>
-  </div>
-</div>
+<nav class="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-slate-200 safe-area-bottom px-6 pb-6 pt-2">
+  <ul class="flex justify-between items-center">
+    <li class="flex-1">
+      <button class="mobile-tab-item w-full flex flex-col items-center justify-center gap-1 py-2 text-slate-400 hover:text-slate-600 transition-colors group" data-view="inbox">
+        <span class="material-symbols-outlined group-hover:scale-110 transition-transform text-[26px]">inbox</span>
+        <span class="tab-label text-[10px] font-medium tracking-tight">관리함</span>
+        <span class="tab-dot hidden w-1 h-1 rounded-full bg-indigo-600"></span>
+      </button>
+    </li>
+    <li class="flex-1">
+      <button class="mobile-tab-item w-full flex flex-col items-center justify-center gap-1 py-2 text-slate-400 hover:text-slate-600 transition-colors group" data-view="today">
+        <span class="material-symbols-outlined group-hover:scale-110 transition-transform text-[26px]">today</span>
+        <span class="tab-label text-[10px] font-medium tracking-tight">오늘</span>
+        <span class="tab-dot hidden w-1 h-1 rounded-full bg-indigo-600"></span>
+      </button>
+    </li>
+    <li class="flex-1">
+      <button class="mobile-tab-item w-full flex flex-col items-center justify-center gap-1 py-2 text-slate-400 hover:text-slate-600 transition-colors group" data-view="upcoming">
+        <span class="material-symbols-outlined group-hover:scale-110 transition-transform text-[26px]">date_range</span>
+        <span class="tab-label text-[10px] font-medium tracking-tight">주간</span>
+        <span class="tab-dot hidden w-1 h-1 rounded-full bg-indigo-600"></span>
+      </button>
+    </li>
+    <li class="flex-1">
+      <button class="mobile-tab-item w-full flex flex-col items-center justify-center gap-1 py-2 text-slate-400 hover:text-slate-600 transition-colors group" data-view="monthly">
+        <span class="material-symbols-outlined group-hover:scale-110 transition-transform text-[26px]">calendar_month</span>
+        <span class="tab-label text-[10px] font-medium tracking-tight">월간</span>
+        <span class="tab-dot hidden w-1 h-1 rounded-full bg-indigo-600"></span>
+      </button>
+    </li>
+  </ul>
+</nav>
 
 <!-- 업무 추가 모달 -->
-<div id="modal-add" class="hidden fixed inset-0 z-50 flex items-start justify-center pt-[8vh] bg-black/20 backdrop-blur-sm">
-  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 overflow-hidden border border-slate-200" onclick="event.stopPropagation()">
-    <!-- 탭 바 -->
-    <div class="flex border-b border-slate-200">
-      <button type="button" class="modal-tab flex-1 px-3 py-2.5 text-xs font-semibold text-center transition-colors border-b-2 border-indigo-600 text-indigo-700" data-modal-tab="regular">
-        <span class="material-symbols-outlined align-middle mr-0.5" style="font-size:14px">repeat</span>정기업무
+<div id="modal-add" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+  <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-[448px] mx-4 overflow-hidden flex flex-col max-h-[90vh]" onclick="event.stopPropagation()">
+    <!-- 헤더 + 닫기 -->
+    <div class="flex-none px-6 pt-5 pb-0">
+      <button id="modal-close-x" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 transition-colors">
+        <span class="material-symbols-outlined" style="font-size:24px">close</span>
       </button>
-      <button type="button" class="modal-tab flex-1 px-3 py-2.5 text-xs font-semibold text-center transition-colors text-slate-400 border-b-2 border-transparent" data-modal-tab="onetime">
-        <span class="material-symbols-outlined align-middle mr-0.5" style="font-size:14px">event</span>비정기업무
-      </button>
-      <button type="button" class="modal-tab flex-1 px-3 py-2.5 text-xs font-semibold text-center transition-colors text-slate-400 border-b-2 border-transparent" data-modal-tab="document">
-        <span class="material-symbols-outlined align-middle mr-0.5" style="font-size:14px">upload_file</span>공문 업로드
-      </button>
+      <h2 class="text-xl font-bold text-gray-900 mb-1">새 업무 추가</h2>
+      <p class="text-sm text-gray-400 mb-4">새로운 업무를 등록하고 관리하세요.</p>
+      <!-- 탭 바 -->
+      <div class="flex border-b border-gray-200">
+        <button type="button" class="modal-tab flex-1 pb-3 pt-2 text-sm font-bold text-center transition-colors border-b-[3px] border-indigo-600 text-gray-900" data-modal-tab="regular">정기업무</button>
+        <button type="button" class="modal-tab flex-1 pb-3 pt-2 text-sm font-bold text-center transition-colors text-gray-400 border-b-[3px] border-transparent hover:text-gray-600" data-modal-tab="onetime">비정기업무</button>
+        <button type="button" class="modal-tab flex-1 pb-3 pt-2 text-sm font-bold text-center transition-colors text-gray-400 border-b-[3px] border-transparent hover:text-gray-600" data-modal-tab="document">공문 업로드</button>
+      </div>
     </div>
 
     <!-- 탭 1: 정기업무 -->
-    <div id="tab-panel-regular" class="tab-panel p-4 pb-3">
-      <input type="text" id="new-task-input" class="w-full text-base font-medium text-slate-800 placeholder-slate-400 outline-none" placeholder="업무 내용을 입력하세요">
-      <div class="mt-3 flex items-center gap-2 flex-wrap">
-        <select id="new-task-repeat" class="px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-medium text-slate-600 outline-none focus:border-indigo-400">
-          <option value="monthly">매월</option>
-          <option value="weekly">매주</option>
+    <div id="tab-panel-regular" class="tab-panel flex-1 overflow-y-auto px-6 py-5 space-y-5">
+      <div class="space-y-2">
+        <label class="block text-sm font-bold text-gray-900">업무 내용</label>
+        <textarea id="new-task-input" class="w-full resize-none rounded-xl border border-gray-200 bg-white text-sm text-gray-800 placeholder-gray-400 p-4 min-h-[100px] outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" placeholder="할 일을 입력해주세요. (예: 월간 급여 대장 작성)"></textarea>
+      </div>
+      <div class="space-y-2">
+        <label class="block text-sm font-bold text-gray-900">반복 설정</label>
+        <select id="new-task-repeat" class="w-full h-11 rounded-xl border border-gray-200 bg-white text-sm font-medium text-gray-600 px-4 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
+          <option value="monthly">매월 반복</option>
+          <option value="weekly">매주 반복</option>
         </select>
-        <div id="repeat-monthly-opts" class="flex items-center gap-1">
-          <select id="new-task-day" class="px-2 py-1.5 rounded-lg border border-slate-200 text-xs font-medium text-slate-600 outline-none focus:border-indigo-400">
-            <% (1..31).each do |d| %><option value="<%= d %>"><%= d %>일</option><% end %>
-          </select>
-        </div>
-        <div id="repeat-weekly-opts" class="hidden flex items-center gap-1">
+      </div>
+      <div id="repeat-monthly-opts" class="space-y-2">
+        <label class="block text-sm font-bold text-gray-900">날짜 선택 <span class="text-xs font-normal text-gray-400 ml-1">(매월)</span></label>
+        <select id="new-task-day" class="w-full h-11 rounded-xl border border-gray-200 bg-white text-sm font-medium text-gray-600 px-4 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
+          <% (1..31).each do |d| %><option value="<%= d %>"><%= d %>일</option><% end %>
+        </select>
+      </div>
+      <div id="repeat-weekly-opts" class="hidden space-y-2">
+        <label class="block text-sm font-bold text-gray-900">요일 선택</label>
+        <div class="flex gap-2">
           <% %w[월 화 수 목 금].each_with_index do |dn, i| %>
-            <button type="button" class="weekday-btn w-7 h-7 rounded-full text-[11px] font-semibold border border-slate-200 text-slate-500 hover:border-indigo-400 hover:text-indigo-600 transition-colors" data-weekday="<%= i + 1 %>"><%= dn %></button>
+            <button type="button" class="weekday-btn flex-1 h-10 rounded-xl text-sm font-semibold border border-gray-200 text-gray-500 hover:border-indigo-400 hover:text-indigo-600 transition-colors" data-weekday="<%= i + 1 %>"><%= dn %></button>
           <% end %>
         </div>
       </div>
-      <div class="mt-3 flex items-center gap-1.5 flex-wrap">
-        <span class="text-[10px] text-slate-400 font-semibold mr-1">분류</span>
-        <% cat_colors.each do |name, c| %>
-          <button type="button" class="cat-select-btn px-2 py-1 rounded-lg text-[11px] font-semibold border border-transparent transition-all <%= c[:badge] %> <%= c[:text] %>" data-cat="<%= name %>"><%= name %></button>
-        <% end %>
+      <div class="space-y-2">
+        <label class="block text-sm font-bold text-gray-900">카테고리</label>
+        <div class="flex flex-wrap gap-2">
+          <% cat_colors.each do |name, c| %>
+            <button type="button" class="cat-select-btn px-3 py-1.5 rounded-full text-xs font-semibold border border-transparent transition-all <%= c[:badge] %> <%= c[:text] %>" data-cat="<%= name %>"><%= name %></button>
+          <% end %>
+        </div>
       </div>
     </div>
 
     <!-- 탭 2: 비정기업무 -->
-    <div id="tab-panel-onetime" class="tab-panel hidden p-4 pb-3">
-      <input type="text" id="onetime-task-input" class="w-full text-base font-medium text-slate-800 placeholder-slate-400 outline-none" placeholder="업무 내용을 입력하세요">
-      <div class="mt-3 flex items-center gap-3 flex-wrap">
-        <div class="flex items-center gap-1.5">
-          <span class="material-symbols-outlined text-slate-400" style="font-size:16px">calendar_today</span>
-          <input type="date" id="onetime-date" class="px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs font-medium text-slate-600 outline-none focus:border-indigo-400">
+    <div id="tab-panel-onetime" class="tab-panel hidden flex-1 overflow-y-auto px-6 py-5 space-y-5">
+      <div class="space-y-2">
+        <label class="block text-sm font-bold text-gray-900">업무명</label>
+        <input type="text" id="onetime-task-input" class="w-full h-12 rounded-xl border border-gray-200 bg-white text-sm text-gray-800 placeholder-gray-400 px-4 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" placeholder="업무명을 입력해 주세요">
+      </div>
+      <div class="flex gap-4">
+        <div class="flex-1 space-y-2">
+          <label class="block text-sm font-bold text-gray-900">날짜</label>
+          <div class="relative">
+            <input type="date" id="onetime-date" class="w-full h-12 rounded-xl border border-gray-200 bg-white text-sm text-gray-800 px-4 pr-10 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
+            <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" style="font-size:20px">calendar_today</span>
+          </div>
         </div>
-        <div class="flex items-center gap-1.5">
-          <span class="material-symbols-outlined text-slate-400" style="font-size:16px">schedule</span>
-          <input type="time" id="onetime-time" class="px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs font-medium text-slate-600 outline-none focus:border-indigo-400">
+        <div class="flex-1 space-y-2">
+          <label class="block text-sm font-bold text-gray-900">시간</label>
+          <div class="relative">
+            <input type="time" id="onetime-time" class="w-full h-12 rounded-xl border border-gray-200 bg-white text-sm text-gray-800 px-4 pr-10 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
+            <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" style="font-size:20px">schedule</span>
+          </div>
         </div>
       </div>
-      <div class="mt-3 flex items-center gap-1.5 flex-wrap">
-        <span class="text-[10px] text-slate-400 font-semibold mr-1">분류</span>
-        <% cat_colors.each do |name, c| %>
-          <button type="button" class="onetime-cat-btn px-2 py-1 rounded-lg text-[11px] font-semibold border border-transparent transition-all <%= c[:badge] %> <%= c[:text] %>" data-cat="<%= name %>"><%= name %></button>
-        <% end %>
+      <div class="space-y-2">
+        <label class="block text-sm font-bold text-gray-900">카테고리</label>
+        <div class="flex flex-wrap gap-2">
+          <% cat_colors.each do |name, c| %>
+            <button type="button" class="onetime-cat-btn flex h-8 items-center justify-center gap-1.5 rounded-full px-3 ring-1 ring-inset ring-gray-200 text-xs font-medium text-gray-500 transition-all hover:ring-indigo-300" data-cat="<%= name %>">
+              <div class="w-1.5 h-1.5 rounded-full <%= c[:dot] %>"></div>
+              <%= name %>
+            </button>
+          <% end %>
+        </div>
       </div>
     </div>
 
     <!-- 탭 3: 공문 업로드 -->
-    <div id="tab-panel-document" class="tab-panel hidden p-4 pb-3">
-      <p class="text-xs text-slate-500 mb-3">공문 이미지나 PDF를 업로드하면 AI가 업무와 기한을 자동 추출합니다.</p>
-      <div id="doc-upload-zone" class="border-2 border-dashed border-indigo-200 rounded-xl p-5 text-center cursor-pointer bg-indigo-50/30 hover:border-indigo-400 transition-all">
-        <span class="material-symbols-outlined text-3xl text-indigo-300 mb-1">cloud_upload</span>
-        <p class="text-sm text-slate-500 mb-0.5">파일을 드래그하거나 클릭</p>
-        <small class="text-[10px] text-slate-400">PDF, JPG, PNG (최대 20MB)</small>
+    <div id="tab-panel-document" class="tab-panel hidden flex-1 overflow-y-auto px-6 py-5 space-y-5">
+      <div class="flex items-start gap-3 p-3 bg-indigo-50/50 rounded-lg border border-indigo-100">
+        <span class="material-symbols-outlined text-indigo-500 text-xl shrink-0 mt-0.5">info</span>
+        <p class="text-sm text-gray-500 leading-relaxed">공문 파일을 업로드하면 <span class="text-indigo-600 font-bold">AI가 자동으로 내용을 분석</span>하여 업무 정보를 입력해줍니다.</p>
       </div>
-      <input type="file" id="doc-file-input" accept=".pdf,.jpg,.jpeg,.png" class="hidden">
-      <div id="doc-file-info" class="hidden mt-3 flex items-center gap-2 px-3 py-2 bg-slate-50 rounded-lg">
-        <span class="material-symbols-outlined text-indigo-500" style="font-size:18px">description</span>
-        <span id="doc-file-name" class="text-xs text-slate-700 flex-1 truncate"></span>
-        <span id="doc-file-size" class="text-xs text-slate-400"></span>
-        <button id="doc-file-remove" class="text-xs text-red-400 hover:text-red-600 font-medium">삭제</button>
+      <div id="doc-upload-zone" class="group relative flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-200 rounded-xl hover:border-indigo-400 hover:bg-indigo-50/30 transition-all cursor-pointer bg-gray-50/50">
+        <div class="flex flex-col items-center text-center gap-2">
+          <div class="size-10 rounded-full bg-white shadow-sm flex items-center justify-center text-indigo-400 mb-1">
+            <span class="material-symbols-outlined text-2xl">cloud_upload</span>
+          </div>
+          <p class="text-sm font-semibold text-gray-700">클릭 또는 파일을 이곳에 드래그하세요</p>
+          <p class="text-xs text-gray-400">PDF, HWP, HWPX 지원 (최대 10MB)</p>
+        </div>
       </div>
-      <div id="doc-analysis-status" class="hidden mt-3"></div>
-      <button id="doc-btn-analyze" class="hidden mt-3 w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-indigo-600 text-white text-sm font-semibold rounded-xl hover:bg-indigo-700 transition-colors">
+      <input type="file" id="doc-file-input" accept=".pdf,.jpg,.jpeg,.png,.hwp,.hwpx" class="hidden">
+      <div id="doc-file-info" class="hidden flex items-center gap-3 p-3 rounded-lg border border-gray-200 bg-white">
+        <div class="size-10 flex items-center justify-center rounded-lg bg-red-50 text-red-500 shrink-0">
+          <span class="material-symbols-outlined">picture_as_pdf</span>
+        </div>
+        <div class="flex flex-col flex-1 min-w-0">
+          <span id="doc-file-name" class="text-sm font-medium text-gray-800 truncate"></span>
+          <span id="doc-file-size" class="text-xs text-gray-400"></span>
+        </div>
+        <button id="doc-file-remove" class="size-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-400 hover:text-red-500 transition-colors">
+          <span class="material-symbols-outlined" style="font-size:18px">close</span>
+        </button>
+      </div>
+      <div id="doc-analysis-status" class="hidden"></div>
+      <button id="doc-btn-analyze" class="hidden w-full flex items-center justify-center gap-2 h-12 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-sm shadow-md shadow-indigo-500/20 transition-all">
         <span class="material-symbols-outlined" style="font-size:18px">auto_awesome</span>
         AI 분석 시작
       </button>
-      <div id="doc-extracted-tasks" class="hidden mt-3 max-h-48 overflow-y-auto"></div>
+      <div id="doc-extracted-tasks" class="hidden max-h-48 overflow-y-auto"></div>
     </div>
 
     <!-- 하단 버튼 -->
-    <div class="flex items-center justify-end gap-2 px-4 py-3 border-t border-slate-100 bg-slate-50/50">
-      <button id="modal-cancel" class="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 rounded-lg transition-colors">취소</button>
-      <button id="modal-submit" class="px-4 py-2 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm transition-colors">업무 추가</button>
+    <div class="flex-none p-4 bg-gray-50/50 border-t border-gray-100 flex justify-end gap-3">
+      <button id="modal-cancel" class="px-5 py-2.5 rounded-xl border border-gray-200 bg-white text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors">취소</button>
+      <button id="modal-submit" class="px-5 py-2.5 rounded-xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 shadow-lg shadow-indigo-500/25 transition-colors flex items-center gap-2">
+        <span class="material-symbols-outlined" style="font-size:18px">add</span>
+        업무 추가
+      </button>
     </div>
   </div>
 </div>
@@ -675,6 +751,138 @@
   </div>
 </div>
 
+<!-- 로그인 유도 배너 (비로그인 사용자만) -->
+<% unless user_signed_in? %>
+<div id="sync-banner" class="fixed bottom-20 lg:bottom-6 left-1/2 -translate-x-1/2 z-40 hidden w-[calc(100%-2rem)] max-w-md">
+  <div class="flex items-start gap-3 px-4 py-3 bg-white border border-indigo-200 rounded-xl shadow-lg">
+    <span class="material-symbols-outlined text-indigo-500 flex-shrink-0 mt-0.5" style="font-size:20px">cloud_upload</span>
+    <div class="flex-1 min-w-0">
+      <p class="text-sm font-semibold text-slate-800">데이터를 안전하게 보관하세요</p>
+      <p class="text-xs text-slate-500 mt-0.5">로그인하면 다른 기기에서도, 초기화해도 안전하게 보관됩니다.</p>
+      <div class="flex items-center gap-2 mt-2">
+        <%= link_to "로그인", new_user_session_path, class: "text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition-colors" %>
+        <span class="text-slate-300">|</span>
+        <%= link_to "시작하기", new_user_registration_path, class: "text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition-colors" %>
+      </div>
+    </div>
+    <button id="sync-banner-close" class="flex-shrink-0 w-6 h-6 rounded-full hover:bg-slate-100 flex items-center justify-center transition-colors">
+      <span class="material-symbols-outlined text-slate-400" style="font-size:16px">close</span>
+    </button>
+  </div>
+</div>
+<% end %>
+
+<!-- AI 프로세스 가이드 슬라이드 패널 -->
+<style>
+  @keyframes guide-shimmer { 0%{transform:translateX(-100%)} 100%{transform:translateX(300%)} }
+</style>
+<div id="guide-overlay" class="hidden fixed inset-0 z-50 bg-black/20 backdrop-blur-sm" style="transition:opacity 0.3s">
+  <div id="guide-panel" class="absolute right-0 top-0 h-full w-full max-w-[448px] bg-white shadow-2xl border-l border-slate-200 flex flex-col" style="transform:translateX(100%);transition:transform 0.3s ease-out">
+    <!-- 헤더 -->
+    <header class="flex-none px-6 py-5 border-b border-slate-100 bg-white z-10">
+      <div class="flex items-start justify-between mb-3">
+        <span id="guide-category" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold tracking-wide">
+          <span class="material-symbols-outlined text-[16px]">work</span>
+          <span id="guide-category-text"></span>
+        </span>
+        <button id="guide-close" class="text-slate-400 hover:text-slate-600 transition-colors p-1 rounded-full hover:bg-slate-100">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <h1 id="guide-title" class="text-xl font-bold text-slate-900 leading-tight"></h1>
+      <p class="text-slate-500 text-sm mt-1">AI가 분석한 업무 처리 가이드입니다.</p>
+    </header>
+    <!-- 콘텐츠 영역 -->
+    <div id="guide-body" class="flex-1 overflow-y-auto flex flex-col">
+      <!-- 로딩 스켈레톤 -->
+      <div id="guide-skeleton" class="p-6 space-y-8">
+        <div class="space-y-2">
+          <p class="text-indigo-600 text-sm font-medium animate-pulse">AI 가이드를 생성 중입니다...</p>
+          <div class="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
+            <div class="h-full w-1/3 rounded-full" style="background-image:linear-gradient(90deg,transparent,rgba(99,102,241,0.4),transparent);animation:guide-shimmer 1.5s infinite linear"></div>
+          </div>
+        </div>
+        <div class="space-y-6">
+          <div class="flex gap-4">
+            <div class="shrink-0 pt-1"><div class="size-8 rounded-full bg-gray-200 animate-pulse"></div></div>
+            <div class="flex-1 space-y-2 pt-1.5">
+              <div class="h-5 w-3/4 bg-gray-200 rounded animate-pulse"></div>
+              <div class="h-3 w-1/2 bg-gray-100 rounded animate-pulse"></div>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <div class="shrink-0 pt-1"><div class="size-8 rounded-full bg-gray-200 animate-pulse"></div></div>
+            <div class="flex-1 space-y-2 pt-1.5">
+              <div class="h-5 w-2/3 bg-gray-200 rounded animate-pulse"></div>
+              <div class="h-3 w-5/6 bg-gray-100 rounded animate-pulse"></div>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <div class="shrink-0 pt-1"><div class="size-8 rounded-full bg-gray-200 animate-pulse"></div></div>
+            <div class="flex-1 space-y-2 pt-1.5">
+              <div class="h-5 w-4/5 bg-gray-200 rounded animate-pulse"></div>
+            </div>
+          </div>
+        </div>
+        <div class="space-y-6 pt-4 border-t border-gray-100">
+          <div class="h-6 w-32 bg-gray-200 rounded animate-pulse mb-4"></div>
+          <div class="space-y-3">
+            <div class="h-3 w-full bg-gray-100 rounded animate-pulse"></div>
+            <div class="h-3 w-full bg-gray-100 rounded animate-pulse"></div>
+            <div class="h-3 w-5/6 bg-gray-100 rounded animate-pulse"></div>
+            <div class="h-3 w-4/5 bg-gray-100 rounded animate-pulse"></div>
+          </div>
+          <div class="p-4 rounded-lg bg-gray-50 border border-gray-100 mt-6">
+            <div class="flex gap-3 mb-3">
+              <div class="size-5 rounded bg-gray-200 animate-pulse"></div>
+              <div class="h-5 w-40 bg-gray-200 rounded animate-pulse"></div>
+            </div>
+            <div class="space-y-2 pl-8">
+              <div class="h-3 w-full bg-gray-200 rounded animate-pulse"></div>
+              <div class="h-3 w-3/4 bg-gray-200 rounded animate-pulse"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- AI 가이드 콘텐츠 (성공) -->
+      <div id="guide-content" class="hidden p-6 space-y-8"></div>
+      <!-- 에러 상태 -->
+      <div id="guide-error" class="hidden flex-1 flex flex-col items-center justify-center p-8">
+        <div class="flex flex-col items-center gap-6 w-full max-w-sm text-center">
+          <div class="relative flex items-center justify-center">
+            <div class="absolute w-24 h-24 bg-slate-100 rounded-full animate-pulse"></div>
+            <span class="material-symbols-outlined text-slate-400 relative z-10" style="font-size:80px;font-variation-settings:'FILL' 0,'wght' 200,'GRAD' 0,'opsz' 48">error_outline</span>
+          </div>
+          <div class="flex flex-col gap-2">
+            <h3 class="text-slate-900 text-lg font-bold leading-tight">가이드를 생성하는 중 오류가 발생했습니다</h3>
+            <p id="guide-error-msg" class="text-slate-500 text-sm leading-relaxed">일시적인 시스템 문제일 수 있습니다.<br>잠시 후 다시 시도해 주세요.</p>
+          </div>
+          <button id="guide-retry" class="mt-4 flex items-center justify-center gap-2 h-10 px-6 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold tracking-wide transition-all shadow-md hover:shadow-lg min-w-[120px]">
+            <span class="material-symbols-outlined text-[20px]">refresh</span>
+            <span>다시 시도</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- 기본 푸터 (로딩/성공) -->
+    <footer id="guide-footer-default" class="flex-none p-4 bg-slate-50 border-t border-slate-100">
+      <div class="flex items-start gap-3">
+        <div class="mt-0.5 p-1 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 text-white shadow-sm">
+          <span class="material-symbols-outlined text-[14px] block">auto_awesome</span>
+        </div>
+        <div class="flex flex-col gap-1">
+          <p class="text-xs font-semibold text-slate-700">AI 생성 콘텐츠</p>
+          <p class="text-[10px] text-slate-400 leading-tight">AI가 분석한 결과입니다. 실제 업무 처리 시 관련 규정을 반드시 재확인하시기 바랍니다.</p>
+        </div>
+      </div>
+    </footer>
+    <!-- 에러 푸터 -->
+    <footer id="guide-footer-error" class="hidden flex-none p-4 border-t border-slate-100 bg-gray-50">
+      <button id="guide-footer-close" class="w-full flex items-center justify-center h-12 rounded-xl bg-white border border-slate-200 text-slate-700 text-sm font-bold hover:bg-slate-50 transition-colors shadow-sm">닫기</button>
+    </footer>
+  </div>
+</div>
+
 <!-- 토스트 알림 -->
 <div id="toast" class="fixed bottom-24 lg:bottom-8 left-1/2 -translate-x-1/2 z-50 hidden">
   <div class="flex items-center gap-2 px-5 py-3 bg-slate-800 text-white text-sm font-medium rounded-xl shadow-2xl border border-white/10">
@@ -685,6 +893,52 @@
 
 <script>
 (function() {
+  // --- 서버 동기화 ---
+  const isSignedIn = document.getElementById("calendar-root").dataset.userSignedIn === "true";
+  const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || "";
+
+  let syncTimer = null;
+  let syncPending = {};
+  function syncToServer(fields) {
+    if (!isSignedIn) return;
+    Object.assign(syncPending, fields);
+    clearTimeout(syncTimer);
+    syncTimer = setTimeout(() => {
+      const payload = syncPending;
+      syncPending = {};
+      fetch("/calendar_data", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", "X-CSRF-Token": csrfToken },
+        body: JSON.stringify(payload)
+      }).catch(() => {});
+    }, 300);
+  }
+
+  async function loadFromServer() {
+    if (!isSignedIn) return;
+    try {
+      const res = await fetch("/calendar_data", { headers: { "Accept": "application/json" } });
+      if (!res.ok) return;
+      const data = await res.json();
+      const serverEmpty = Object.keys(data.task_states || {}).length === 0
+                       && (data.custom_tasks || []).length === 0
+                       && Object.keys(data.categories || {}).length === 0;
+      if (serverEmpty) {
+        // 서버 비어있으면 localStorage → 서버 업로드
+        syncToServer({
+          task_states: JSON.parse(localStorage.getItem("silmu_task_calendar_2026") || "{}"),
+          custom_tasks: JSON.parse(localStorage.getItem("silmu_custom_tasks") || "[]"),
+          categories: JSON.parse(localStorage.getItem("silmu_task_cats") || "{}")
+        });
+      } else {
+        // 서버 데이터 우선 → localStorage 덮어쓰기
+        if (Object.keys(data.task_states).length > 0) localStorage.setItem("silmu_task_calendar_2026", JSON.stringify(data.task_states));
+        if (data.custom_tasks.length > 0) localStorage.setItem("silmu_custom_tasks", JSON.stringify(data.custom_tasks));
+        if (Object.keys(data.categories).length > 0) localStorage.setItem("silmu_task_cats", JSON.stringify(data.categories));
+      }
+    } catch(e) {}
+  }
+
   // --- 뷰 전환 ---
   const views = { inbox: "관리함", today: "오늘", upcoming: "주간", monthly: "월간" };
   let currentView = "today";
@@ -695,21 +949,39 @@
     document.getElementById("view-" + view).classList.remove("hidden");
     document.querySelectorAll(".nav-item").forEach(n => {
       const isActive = n.dataset.view === view;
+      const indicator = n.querySelector(".nav-indicator");
+      // 활성 상태: Stitch 디자인 — 인디고 배경 + 좌측 인디케이터
       n.classList.toggle("bg-indigo-50", isActive);
       n.classList.toggle("text-indigo-700", isActive);
-      n.classList.toggle("font-semibold", isActive);
-      n.classList.toggle("border-indigo-600", isActive);
-      n.classList.toggle("text-slate-600", !isActive);
-      n.classList.toggle("hover:bg-slate-100", !isActive);
-      n.classList.toggle("border-transparent", !isActive);
+      n.classList.toggle("font-bold", isActive);
+      n.classList.toggle("text-gray-600", !isActive);
+      n.classList.toggle("hover:bg-gray-50", !isActive);
+      if (indicator) indicator.classList.toggle("hidden", !isActive);
+      // 활성 카운트 배지 스타일
+      const count = n.querySelector(".nav-count");
+      if (count) {
+        count.classList.toggle("text-indigo-600", isActive);
+        count.classList.toggle("bg-white", isActive);
+        count.classList.toggle("shadow-sm", isActive);
+        count.classList.toggle("font-bold", isActive);
+        count.classList.toggle("text-gray-400", !isActive);
+        count.classList.toggle("bg-gray-100", !isActive);
+        count.classList.toggle("font-semibold", !isActive);
+      }
     });
     // 모바일 하단 탭 바 동기화
     document.querySelectorAll(".mobile-tab-item").forEach(t => {
       const isActive = t.dataset.view === view;
       t.classList.toggle("text-indigo-600", isActive);
       t.classList.toggle("text-slate-400", !isActive);
+      t.classList.toggle("hover:text-slate-600", !isActive);
       const dot = t.querySelector(".tab-dot");
       if (dot) dot.classList.toggle("hidden", !isActive);
+      const label = t.querySelector(".tab-label");
+      if (label) {
+        label.classList.toggle("font-bold", isActive);
+        label.classList.toggle("font-medium", !isActive);
+      }
     });
     document.getElementById("mobile-title").textContent = views[view];
     // 뷰 진입 시 타임라인 갱신
@@ -743,7 +1015,7 @@
   // --- 체크박스 ---
   const STORAGE_KEY = "silmu_task_calendar_2026";
   function loadState() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); } catch { return {}; } }
-  function saveState(s) { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); }
+  function saveState(s) { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); syncToServer({ task_states: s }); }
   const state = loadState();
 
   // 오늘 업무 키 목록 (미완료 카운트 계산용)
@@ -825,7 +1097,7 @@
   // --- 사용자 추가 업무 관리 ---
   const CUSTOM_KEY = "silmu_custom_tasks";
   function loadCustom() { try { return JSON.parse(localStorage.getItem(CUSTOM_KEY) || "[]"); } catch { return []; } }
-  function saveCustom(arr) { localStorage.setItem(CUSTOM_KEY, JSON.stringify(arr)); }
+  function saveCustom(arr) { localStorage.setItem(CUSTOM_KEY, JSON.stringify(arr)); syncToServer({ custom_tasks: arr }); checkSyncBanner(); }
 
   const catColorMap = {
     "급여":{bg:"#d1fae5",text:"#047857"},"세무":{bg:"#fef3c7",text:"#b45309"},
@@ -918,14 +1190,16 @@
       document.querySelectorAll(".modal-tab").forEach(t => {
         const isActive = t.dataset.modalTab === activeModalTab;
         t.classList.toggle("border-indigo-600", isActive);
-        t.classList.toggle("text-indigo-700", isActive);
-        t.classList.toggle("text-slate-400", !isActive);
+        t.classList.toggle("text-gray-900", isActive);
+        t.classList.toggle("text-gray-400", !isActive);
         t.classList.toggle("border-transparent", !isActive);
       });
       document.querySelectorAll(".tab-panel").forEach(p => p.classList.add("hidden"));
       document.getElementById("tab-panel-" + activeModalTab).classList.remove("hidden");
       const submitBtn = document.getElementById("modal-submit");
-      submitBtn.textContent = activeModalTab === "document" ? "선택한 업무 추가" : "업무 추가";
+      submitBtn.innerHTML = activeModalTab === "document"
+        ? "선택한 업무 추가"
+        : '<span class="material-symbols-outlined" style="font-size:18px">add</span> 업무 추가';
       submitBtn.classList.toggle("hidden", false);
     });
   });
@@ -996,6 +1270,7 @@
   });
 
   document.getElementById("modal-cancel").addEventListener("click", () => modalAdd.classList.add("hidden"));
+  document.getElementById("modal-close-x").addEventListener("click", () => modalAdd.classList.add("hidden"));
   modalAdd.addEventListener("click", () => modalAdd.classList.add("hidden"));
 
   // 제출 (3탭 분기)
@@ -1300,7 +1575,6 @@
   function renderWeekTimeline() {
     const timeline = document.getElementById("upcoming-timeline");
     let html = "";
-    let renderedCount = 0;
     for (let i = 0; i < 7; i++) {
       const d = new Date(weekStart);
       d.setDate(d.getDate() + i);
@@ -1317,55 +1591,81 @@
       const isSun = dow === 0;
       const isSat = dow === 6;
 
-      // 날짜 색상 (일요일·공휴일 우선)
-      let dColor;
-      if (isSun || hName) dColor = "text-red-500";
-      else if (isSat) dColor = "text-blue-500";
-      else if (isToday) dColor = "text-indigo-600";
-      else dColor = "text-slate-700";
+      // 날짜/요일 색상
+      let dateColor, dayColor;
+      if (isSun || hName) { dateColor = "text-red-600 font-bold"; dayColor = "text-red-600 font-medium"; }
+      else if (isSat) { dateColor = "text-blue-600 font-bold"; dayColor = "text-blue-600 font-medium"; }
+      else if (isToday) { dateColor = "text-indigo-600 font-bold"; dayColor = "text-indigo-600 font-medium"; }
+      else { dateColor = "text-slate-900 font-medium"; dayColor = "text-slate-500"; }
+
+      // 행 배경 (주말 틴트)
+      let rowBg = "hover:bg-slate-50";
+      if (isSun || hName) rowBg = "bg-red-50/30 hover:bg-red-50/50";
+      else if (isSat) rowBg = "bg-blue-50/30 hover:bg-blue-50/50";
 
       // 해당 날짜 업무 필터
       const tasks = allTasks.filter(t => t.month === m && t.day === dd);
 
       // 날짜 라벨
-      let label = m + "월 " + dd + "일";
-      if (isToday) label += " · 오늘";
+      let dayLabel = dayNamesKo[dow];
+      let extraLabel = "";
+      if (isToday) extraLabel = " · 오늘";
       else {
         const tmr = new Date(todayDate);
         tmr.setDate(tmr.getDate() + 1);
-        if (d.toDateString() === tmr.toDateString()) label += " · 내일";
+        if (d.toDateString() === tmr.toDateString()) extraLabel = " · 내일";
       }
-      label += " · " + dayNamesKo[dow] + "요일";
 
-      if (renderedCount > 0) html += '<div class="my-1 h-px" style="background:linear-gradient(90deg,transparent,#cbd5e1 30%,#cbd5e1 70%,transparent)"></div>';
-      renderedCount++;
-      html += '<div class="py-3 upcoming-date-group" data-upcoming-date="' + dateStr + '">';
-      html += '<div class="flex items-center gap-3 mb-2"><h3 class="text-sm font-bold ' + dColor + '">' + label;
-      if (hName) html += ' <span class="text-red-400 font-medium ml-1">' + hName + '</span>';
-      html += '</h3></div>';
+      // 날짜 그룹 컨테이너
+      html += '<div class="upcoming-date-group ' + rowBg + ' transition-colors" data-upcoming-date="' + dateStr + '">';
 
       if (tasks.length === 0) {
-        html += '<p class="px-3 py-2 text-sm text-slate-300">업무 없음</p>';
+        // 빈 날짜 — 한 줄 그리드
+        html += '<div class="grid grid-cols-12 gap-4 px-6 py-4 items-center group">' +
+          '<div class="col-span-2 sm:col-span-1 font-mono ' + dateColor + '">' + String(dd).padStart(2,"0") + '</div>' +
+          '<div class="col-span-2 sm:col-span-1 text-sm ' + dayColor + '">' + dayLabel + '</div>' +
+          '<div class="col-span-6 sm:col-span-8"><span class="text-slate-400 italic text-sm">업무 없음' +
+            (hName ? ' · <span class="text-red-400 not-italic font-medium">' + hName + '</span>' : '') + '</span></div>' +
+          '<div class="col-span-2 flex justify-end opacity-0 group-hover:opacity-100 transition-opacity">' +
+            '<button class="btn-inline-add text-slate-400 hover:text-indigo-600" data-date="' + dateStr + '">' +
+              '<span class="material-symbols-outlined" style="font-size:20px">add</span></button></div>' +
+          '</div>';
       } else {
         tasks.forEach((t, idx) => {
           const cc = catColorMap[t.cat] || {bg:"#f1f5f9",text:"#475569"};
           const key = m + "_" + t.title;
-          if (idx > 0) html += '<div class="mx-3 h-px border-t border-dashed border-slate-200"></div>';
-          html += '<div class="task-item flex items-center gap-3 px-3 py-3 hover:bg-white hover:shadow-sm transition-all rounded-lg">' +
-            '<label class="flex-shrink-0 cursor-pointer">' +
-              '<input type="checkbox" class="task-cb sr-only" data-key="' + key + '">' +
-              '<span class="check-box w-[22px] h-[22px] rounded-full border-2 border-slate-300 flex items-center justify-center hover:border-indigo-400 transition-colors">' +
-                '<svg class="w-3 h-3 text-white opacity-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>' +
-              '</span>' +
-            '</label>' +
-            '<div class="flex-1">' +
-              '<p class="task-text text-sm text-slate-800">' + t.title + '</p>' +
-              '<span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-semibold mt-1" style="background:' + cc.bg + ';color:' + cc.text + '">' + t.cat + '</span>' +
-            '</div></div>';
+          const isFirst = idx === 0;
+          const border = idx > 0 ? ' border-t border-dashed border-slate-200' : '';
+
+          html += '<div class="task-item grid grid-cols-12 gap-4 px-6 py-4 items-center group' + border + '">' +
+            // 날짜 (첫 번째 행만 표시)
+            '<div class="col-span-2 sm:col-span-1 font-mono ' + dateColor + '">' + (isFirst ? String(dd).padStart(2,"0") : '') + '</div>' +
+            // 요일 (첫 번째 행만)
+            '<div class="col-span-2 sm:col-span-1 text-sm ' + dayColor + '">' + (isFirst ? dayLabel + (hName ? '<div class="text-[10px] text-red-400">' + hName + '</div>' : '') + extraLabel : '') + '</div>' +
+            // 업무 내용
+            '<div class="col-span-6 sm:col-span-8">' +
+              '<div class="flex items-start gap-4">' +
+                '<label class="flex-shrink-0 pt-0.5 cursor-pointer">' +
+                  '<input type="checkbox" class="task-cb sr-only" data-key="' + key + '">' +
+                  '<span class="check-box w-[22px] h-[22px] rounded-full border-2 border-slate-300 flex items-center justify-center hover:border-indigo-400 transition-colors">' +
+                    '<svg class="w-3 h-3 text-white opacity-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>' +
+                  '</span>' +
+                '</label>' +
+                '<div class="flex flex-col flex-1 gap-1">' +
+                  '<p class="task-text text-sm font-semibold text-slate-800 leading-tight">' + t.title + '</p>' +
+                  '<span class="inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium ring-1 ring-inset ring-slate-500/10 w-fit" style="background:' + cc.bg + ';color:' + cc.text + '">' + t.cat + '</span>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+            // 액션
+            '<div class="col-span-2 flex justify-end opacity-0 group-hover:opacity-100 transition-opacity"></div>' +
+            '</div>';
         });
+        // 인라인 추가 버튼
+        html += '<div class="px-6 py-2">' +
+          '<button class="btn-inline-add flex items-center justify-center gap-2 w-full py-2.5 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-slate-50 transition-all text-sm font-medium" data-date="' + dateStr + '">' +
+            '<span class="material-symbols-outlined" style="font-size:18px">add_circle</span> 업무 추가</button></div>';
       }
-      html += '<button class="btn-inline-add flex items-center gap-2 px-3 py-2 mt-1 text-sm text-slate-400 hover:text-indigo-600 transition-colors w-full rounded-lg hover:bg-indigo-50/50" data-date="' + dateStr + '">' +
-        '<span class="material-symbols-outlined" style="font-size:18px">add</span> 업무 추가</button>';
       html += '</div>';
     }
     timeline.innerHTML = html;
@@ -1452,21 +1752,14 @@
     }
     if (currentWeek.length > 0) weeks.push(currentWeek);
 
-    let html = "";
+    let html = '<div class="flex flex-col gap-8">';
+
     weeks.forEach((week, wIdx) => {
       const wStart = week[0];
       const wEnd = week[week.length - 1];
       const wLabel = m + "/" + wStart.getDate() + " ~ " + (wEnd.getMonth() + 1) + "/" + wEnd.getDate();
 
-      // 주 헤더 (그라데이션 바)
-      html += '<div class="mt-' + (wIdx === 0 ? '0' : '6') + ' mb-3">' +
-        '<div class="flex items-center gap-3">' +
-          '<div class="h-px flex-1" style="background:linear-gradient(90deg,#6366f1,#a5b4fc)"></div>' +
-          '<span class="text-xs font-bold text-indigo-500 whitespace-nowrap">' + (wIdx + 1) + '주차 · ' + wLabel + '</span>' +
-          '<div class="h-px flex-1" style="background:linear-gradient(90deg,#a5b4fc,#6366f1)"></div>' +
-        '</div></div>';
-
-      // 해당 주의 업무
+      // 해당 주의 업무 수집
       let weekTasks = [];
       week.forEach(date => {
         const dd = date.getDate();
@@ -1474,9 +1767,25 @@
         tasks.forEach(t => weekTasks.push({ ...t, date: date }));
       });
 
+      html += '<section class="flex flex-col gap-3">';
+
+      // 주차 헤더 + 그라데이션 라인
+      html += '<div class="flex items-center gap-4">';
+      html += '<h3 class="text-lg font-bold text-slate-900 whitespace-nowrap">' + (wIdx + 1) + '주차 · ' + wLabel + '</h3>';
+      html += '<div class="h-px flex-1 bg-gradient-to-r from-indigo-400/40 to-transparent"></div>';
+      html += '</div>';
+
       if (weekTasks.length === 0) {
-        html += '<p class="px-3 py-2 text-sm text-slate-300">업무 없음</p>';
+        // 빈 주차 — dashed 카드 + 빈 상태
+        html += '<div class="bg-white rounded-xl border-2 border-dashed border-gray-200 p-8 flex flex-col items-center justify-center text-center gap-2">';
+        html += '<div class="size-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 mb-1">';
+        html += '<span class="material-symbols-outlined">event_busy</span></div>';
+        html += '<p class="text-sm font-medium text-gray-400">이 주에 등록된 업무가 없습니다</p>';
+        html += '<button class="text-xs font-bold text-indigo-500 hover:underline" onclick="openAddModal(null, null)">업무 추가</button>';
+        html += '</div>';
       } else {
+        // 태스크 카드 컨테이너
+        html += '<div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">';
         weekTasks.forEach((t, idx) => {
           const cc = catColorMap[t.cat] || {bg:"#f1f5f9",text:"#475569"};
           const key = m + "_" + t.title;
@@ -1484,29 +1793,40 @@
           const dow = t.date.getDay();
           const hKey2 = t.date.getMonth() + "-" + t.date.getDate();
           const hName2 = holidayMap[hKey2] || null;
-          let dateCol;
-          if (dow === 0 || hName2) dateCol = "text-red-400";
-          else if (dow === 6) dateCol = "text-blue-400";
-          else dateCol = "text-slate-400";
-          if (idx > 0) html += '<div class="mx-3 h-px border-t border-dashed border-slate-200"></div>';
-          html += '<div class="task-item flex items-center gap-3 px-3 py-3 hover:bg-white hover:shadow-sm transition-all rounded-lg">' +
-            '<label class="flex-shrink-0 cursor-pointer">' +
-              '<input type="checkbox" class="task-cb monthly-task-cb sr-only" data-key="' + key + '">' +
-              '<span class="check-box w-[22px] h-[22px] rounded-full border-2 border-slate-300 flex items-center justify-center hover:border-indigo-400 transition-colors">' +
-                '<svg class="w-3 h-3 text-white opacity-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>' +
-              '</span>' +
-            '</label>' +
-            '<div class="flex-1 min-w-0">' +
-              '<p class="task-text text-sm text-slate-800">' + t.title + '</p>' +
-              '<div class="flex items-center gap-2 mt-1">' +
-                '<span class="text-[11px] font-medium ' + dateCol + '">' + dateLabel + '</span>' +
-                '<span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-semibold" style="background:' + cc.bg + ';color:' + cc.text + '">' + t.cat + '</span>' +
-              '</div>' +
-            '</div></div>';
+          const isDeadlineSoon = (new Date(monthlyYear, monthlyMonth, t.date.getDate()) <= new Date(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate() + 3));
+          const isCurrentMonth = (monthlyYear === todayDate.getFullYear() && monthlyMonth === todayDate.getMonth());
+          const dateColor = (isCurrentMonth && isDeadlineSoon && t.date.getDate() >= todayDate.getDate()) ? 'text-red-500 font-bold' : 'text-gray-400';
+
+          html += '<div class="task-item group flex items-center gap-4 p-4 hover:bg-gray-50 transition-colors' + (idx < weekTasks.length - 1 ? ' border-b border-gray-100' : '') + ' cursor-pointer">';
+
+          // 체크박스
+          html += '<label class="flex-shrink-0 cursor-pointer">' +
+            '<input type="checkbox" class="task-cb monthly-task-cb sr-only" data-key="' + key + '">' +
+            '<span class="check-box w-[22px] h-[22px] rounded-full border-2 border-gray-300 flex items-center justify-center hover:border-indigo-400 transition-colors">' +
+              '<svg class="w-3 h-3 text-white opacity-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>' +
+            '</span>' +
+          '</label>';
+
+          // 제목
+          html += '<div class="flex-1 min-w-0">';
+          html += '<p class="task-text text-sm font-medium text-slate-800 truncate group-hover:text-indigo-600 transition-colors">' + t.title + '</p>';
+          html += '</div>';
+
+          // 카테고리 배지 + 날짜
+          html += '<div class="flex items-center gap-3 shrink-0">';
+          html += '<span class="inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium ring-1 ring-inset" style="background:' + cc.bg + ';color:' + cc.text + ';--tw-ring-color:' + cc.text + '20">' + t.cat + '</span>';
+          html += '<span class="text-xs font-medium ' + dateColor + ' w-12 text-right">' + m + '/' + t.date.getDate() + '</span>';
+          html += '</div>';
+
+          html += '</div>';
         });
+        html += '</div>';
       }
+
+      html += '</section>';
     });
 
+    html += '</div>';
     timeline.innerHTML = html;
 
     // 체크박스 복원 + 이벤트
@@ -1734,7 +2054,7 @@
     try { const s = localStorage.getItem(CAT_STORAGE); return s ? JSON.parse(s) : { ...defaultCats }; }
     catch { return { ...defaultCats }; }
   }
-  function saveCats(c) { localStorage.setItem(CAT_STORAGE, JSON.stringify(c)); }
+  function saveCats(c) { localStorage.setItem(CAT_STORAGE, JSON.stringify(c)); syncToServer({ categories: c }); }
 
   let cats = loadCats();
   let editMode = false;
@@ -1746,17 +2066,16 @@
     catList.innerHTML = "";
     Object.entries(cats).forEach(([name, c]) => {
       const span = document.createElement("span");
-      span.className = "inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[8px] font-semibold transition-all";
+      span.className = "group inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium cursor-pointer hover:opacity-80 transition-all";
       span.style.background = c.bg;
       span.style.color = c.text;
-      span.innerHTML = '<span class="w-1 h-1 rounded-full" style="background:' + c.dot + '"></span>' + name;
+      span.innerHTML = '<span class="w-1.5 h-1.5 rounded-full mr-2" style="background:' + c.dot + '"></span>' + name;
 
       if (editMode) {
         const del = document.createElement("button");
-        del.className = "ml-0.5 w-3.5 h-3.5 rounded-full flex items-center justify-center hover:opacity-70 transition-opacity";
-        del.style.background = c.text;
-        del.style.color = c.bg;
-        del.innerHTML = '<span class="material-symbols-outlined" style="font-size:10px">close</span>';
+        del.className = "ml-1.5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity";
+        del.style.color = c.text;
+        del.innerHTML = '<span class="material-symbols-outlined" style="font-size:12px">close</span>';
         del.addEventListener("click", (e) => {
           e.stopPropagation();
           delete cats[name];
@@ -1764,15 +2083,14 @@
           renderCats();
         });
         span.appendChild(del);
-        span.classList.add("pr-1");
       }
       catList.appendChild(span);
     });
 
     if (editMode) {
       const addBtn = document.createElement("button");
-      addBtn.className = "inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[8px] font-semibold border border-dashed border-slate-300 text-slate-400 hover:border-indigo-400 hover:text-indigo-500 transition-colors";
-      addBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:13px">add</span>추가';
+      addBtn.className = "inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium border border-dashed border-gray-300 text-gray-400 hover:border-indigo-400 hover:text-indigo-500 transition-colors";
+      addBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:14px">add</span>추가';
       addBtn.addEventListener("click", () => {
         catAddRow.classList.toggle("hidden");
         if (!catAddRow.classList.contains("hidden")) document.getElementById("cat-add-input").focus();
@@ -1783,7 +2101,9 @@
 
   editBtn.addEventListener("click", () => {
     editMode = !editMode;
-    editBtn.textContent = editMode ? "완료" : "편집";
+    editBtn.innerHTML = editMode
+      ? '<span class="material-symbols-outlined" style="font-size:18px">check</span>'
+      : '<span class="material-symbols-outlined" style="font-size:18px">add</span>';
     editBtn.classList.toggle("text-indigo-600", editMode);
     if (!editMode) catAddRow.classList.add("hidden");
     renderCats();
@@ -2000,5 +2320,205 @@
   });
 
   renderCats();
+
+  // --- AI 프로세스 가이드 슬라이드 패널 ---
+  const guideOverlay = document.getElementById("guide-overlay");
+  const guidePanel = document.getElementById("guide-panel");
+  const guideTitleEl = document.getElementById("guide-title");
+  const guideCatEl = document.getElementById("guide-category");
+  const guideCatTextEl = document.getElementById("guide-category-text");
+  const guideSkeleton = document.getElementById("guide-skeleton");
+  const guideContent = document.getElementById("guide-content");
+  const guideError = document.getElementById("guide-error");
+  const guideErrorMsg = document.getElementById("guide-error-msg");
+  const guideFooterDefault = document.getElementById("guide-footer-default");
+  const guideFooterError = document.getElementById("guide-footer-error");
+  let lastGuideTitle = "";
+  let lastGuideCat = "";
+
+  function guideShowFooter(isError) {
+    guideFooterDefault.classList.toggle("hidden", isError);
+    guideFooterError.classList.toggle("hidden", !isError);
+  }
+
+  function openGuide(title, category) {
+    lastGuideTitle = title;
+    lastGuideCat = category;
+
+    guideTitleEl.textContent = title;
+    const cc = catColorMap[category] || {bg:"#f1f5f9",text:"#475569"};
+    guideCatTextEl.textContent = category || "";
+    guideCatEl.style.background = cc.bg;
+    guideCatEl.style.color = cc.text;
+    guideCatEl.classList.toggle("hidden", !category);
+
+    guideSkeleton.classList.remove("hidden");
+    guideContent.classList.add("hidden");
+    guideContent.innerHTML = "";
+    guideError.classList.add("hidden");
+    guideShowFooter(false);
+
+    guideOverlay.classList.remove("hidden");
+    requestAnimationFrame(() => {
+      guidePanel.style.transform = "translateX(0)";
+    });
+
+    const params = new URLSearchParams({ title: title });
+    if (category) params.append("category", category);
+
+    fetch("/task_guides?" + params.toString(), {
+      headers: { "Accept": "application/json" }
+    })
+    .then(r => r.json())
+    .then(data => {
+      guideSkeleton.classList.add("hidden");
+      if (data.success && data.content) {
+        guideContent.innerHTML = data.content;
+        guideContent.classList.remove("hidden");
+      } else {
+        guideErrorMsg.textContent = data.error || "가이드를 불러올 수 없습니다.";
+        guideError.classList.remove("hidden");
+        guideShowFooter(true);
+      }
+    })
+    .catch(() => {
+      guideSkeleton.classList.add("hidden");
+      guideErrorMsg.textContent = "서버 연결에 실패했습니다.";
+      guideError.classList.remove("hidden");
+      guideShowFooter(true);
+    });
+  }
+
+  function closeGuide() {
+    guidePanel.style.transform = "translateX(100%)";
+    setTimeout(() => guideOverlay.classList.add("hidden"), 300);
+  }
+
+  document.getElementById("guide-close").addEventListener("click", closeGuide);
+  document.getElementById("guide-retry").addEventListener("click", () => {
+    if (lastGuideTitle) openGuide(lastGuideTitle, lastGuideCat);
+  });
+  document.getElementById("guide-footer-close").addEventListener("click", closeGuide);
+  guideOverlay.addEventListener("click", (e) => {
+    if (e.target === guideOverlay) closeGuide();
+  });
+  // ESC도 가이드 패널 닫기
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !guideOverlay.classList.contains("hidden")) {
+      closeGuide();
+    }
+  });
+
+  // 기본 업무 .task-item 클릭 → 가이드 열기 (체크박스 영역 제외)
+  function attachGuideClick(container) {
+    container.querySelectorAll(".task-item").forEach(item => {
+      item.style.cursor = "pointer";
+      item.addEventListener("click", (e) => {
+        // 체크박스 라벨 클릭은 무시
+        if (e.target.closest("label")) return;
+        if (e.target.closest(".del-custom-btn")) return;
+        const textEl = item.querySelector(".task-text");
+        const catEl = item.querySelector("[style*='background']");
+        const title = textEl ? textEl.textContent.trim() : "";
+        let category = "";
+        if (catEl) category = catEl.textContent.trim();
+        if (title) openGuide(title, category);
+      });
+    });
+  }
+
+  // 초기 바인딩: 관리함, 오늘 뷰의 서버 렌더 업무
+  attachGuideClick(document.getElementById("view-inbox"));
+  attachGuideClick(document.getElementById("view-today"));
+
+  // 동적 렌더링 뷰 (주간/월간)는 렌더 후 바인딩
+  const origRenderWeekTimeline = renderWeekTimeline;
+  renderWeekTimeline = function() {
+    origRenderWeekTimeline();
+    attachGuideClick(document.getElementById("upcoming-timeline"));
+  };
+  const origRenderMonthlyTimeline = renderMonthlyTimeline;
+  renderMonthlyTimeline = function() {
+    origRenderMonthlyTimeline();
+    attachGuideClick(document.getElementById("monthly-timeline"));
+  };
+
+  // 커스텀 업무도 바인딩
+  const origRenderCustomTasks = renderCustomTasks;
+  renderCustomTasks = function() {
+    origRenderCustomTasks();
+    document.querySelectorAll(".custom-tasks-area").forEach(area => {
+      area.querySelectorAll("[class*='group flex']").forEach(row => {
+        row.style.cursor = "pointer";
+        row.addEventListener("click", (e) => {
+          if (e.target.closest(".del-custom-btn")) return;
+          const textEl = row.querySelector("p");
+          const catEl = row.querySelector("[style*='background'][style*='color']");
+          const title = textEl ? textEl.textContent.trim() : "";
+          let category = "";
+          if (catEl) category = catEl.textContent.trim();
+          if (title) openGuide(title, category);
+        });
+      });
+    });
+  };
+
+  // saveCustom 후 백그라운드에서 가이드 사전 생성
+  const origSaveCustom = saveCustom;
+  saveCustom = function(arr) {
+    origSaveCustom(arr);
+    // 마지막으로 추가된 업무의 가이드 사전 생성
+    if (arr.length > 0) {
+      const last = arr[arr.length - 1];
+      const params = new URLSearchParams({ title: last.title });
+      if (last.cat) params.append("category", last.cat);
+      fetch("/task_guides?" + params.toString(), {
+        headers: { "Accept": "application/json" }
+      }).catch(() => {});
+    }
+  };
+
+  // 주간/월간 다시 렌더 (가이드 클릭 바인딩 적용)
+  renderWeekTimeline();
+  renderMonthlyTimeline();
+  renderCustomTasks();
+
+  // --- 로그인 유도 배너 (비로그인 전용) ---
+  const BANNER_DISMISSED_KEY = "silmu_sync_banner_dismissed";
+  function checkSyncBanner() {
+    if (isSignedIn) return;
+    const banner = document.getElementById("sync-banner");
+    if (!banner) return;
+    const dismissed = localStorage.getItem(BANNER_DISMISSED_KEY);
+    const customs = loadCustom();
+    if (!dismissed && customs.length >= 1) {
+      banner.classList.remove("hidden");
+    }
+  }
+  const bannerCloseBtn = document.getElementById("sync-banner-close");
+  if (bannerCloseBtn) {
+    bannerCloseBtn.addEventListener("click", () => {
+      document.getElementById("sync-banner").classList.add("hidden");
+      localStorage.setItem(BANNER_DISMISSED_KEY, "1");
+    });
+  }
+  checkSyncBanner();
+
+  // --- 서버에서 데이터 로드 (로그인 시) ---
+  loadFromServer().then(() => {
+    if (!isSignedIn) return;
+    // 서버 데이터 반영 후 UI 재렌더링
+    Object.assign(state, loadState());
+    document.querySelectorAll(".task-cb").forEach(cb => {
+      const key = cb.dataset.key;
+      cb.checked = !!state[key];
+      applyCheck(cb, cb.checked);
+    });
+    cats = loadCats();
+    renderCats();
+    renderCustomTasks();
+    updateTodayCount();
+    updateProgress();
+  });
 })();
 </script>

@@ -19,6 +19,12 @@ Rails.application.routes.draw do
   get "guides/resources", to: "guides#resources", as: :guide_resources
   resources :guides, only: [:index, :show]
 
+  # 업무달력 데이터 동기화
+  resource :calendar_data, only: [:show, :update]
+
+  # 업무 AI 가이드
+  get "task_guides", to: "task_guides#show"
+
   # 실무 도구
   get "tools", to: "tools#index", as: :tools
   get "tools/travel-calculator", to: "tools#travel_calculator", as: :travel_calculator

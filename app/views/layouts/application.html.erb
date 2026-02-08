@@ -162,6 +162,32 @@
       </div>
     <% end %>
 
+    <!-- UTM 유입 환영 배너 (네이버 블로그) -->
+    <% if from_naver_blog? %>
+      <div data-controller="utm-banner" data-utm-banner-target="banner"
+           class="bg-gradient-to-r from-emerald-50 to-sky-50 border-b border-emerald-200/60 overflow-hidden">
+        <div class="container-wide flex items-center justify-between py-3 px-4">
+          <div class="flex items-center gap-3">
+            <span class="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
+              <span class="material-symbols-outlined text-emerald-600 text-lg">waving_hand</span>
+            </span>
+            <p class="text-sm text-slate-700">
+              <span class="font-semibold text-slate-900">블로그에서 오셨군요!</span>
+              계약·예산 <strong>무료 자동화 도구 14개</strong>를 바로 사용해 보세요.
+              <% unless current_page?(tools_path) %>
+                <%= link_to "전체 도구 보기 →", tools_path, class: "text-emerald-600 font-semibold hover:text-emerald-700 ml-1 whitespace-nowrap" %>
+              <% end %>
+            </p>
+          </div>
+          <button data-action="utm-banner#dismiss"
+                  class="text-slate-400 hover:text-slate-600 transition-colors p-1 flex-shrink-0 ml-2"
+                  aria-label="닫기">
+            <span class="material-symbols-outlined text-lg">close</span>
+          </button>
+        </div>
+      </div>
+    <% end %>
+
     <!-- Main Content -->
     <main class="flex-1">
       <%= yield %>

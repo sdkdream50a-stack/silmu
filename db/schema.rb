@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_08_080056) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_08_140451) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -51,6 +51,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_08_080056) do
     t.index ["view_count"], name: "index_cafe_articles_on_view_count"
   end
 
+  create_table "calendar_data", force: :cascade do |t|
+    t.jsonb "categories", default: {}, null: false
+    t.datetime "created_at", null: false
+    t.jsonb "custom_tasks", default: [], null: false
+    t.jsonb "task_states", default: {}, null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_calendar_data_on_user_id", unique: true
+  end
+
   create_table "laws", force: :cascade do |t|
     t.text "content"
     t.datetime "created_at", null: false
@@ -62,6 +72,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_08_080056) do
     t.datetime "updated_at", null: false
     t.index ["law_id"], name: "index_laws_on_law_id"
     t.index ["law_type"], name: "index_laws_on_law_type"
+  end
+
+  create_table "task_guides", force: :cascade do |t|
+    t.string "category"
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.integer "status", default: 0
+    t.string "task_title", null: false
+    t.datetime "updated_at", null: false
+    t.index ["task_title"], name: "index_task_guides_on_task_title", unique: true
   end
 
   create_table "topics", force: :cascade do |t|
@@ -106,4 +126,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_08_080056) do
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
+
+  add_foreign_key "calendar_data", "users"
 end

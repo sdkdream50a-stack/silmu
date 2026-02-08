@@ -1,4 +1,16 @@
 module ApplicationHelper
+  def utm_params
+    session[:utm_params] || {}
+  end
+
+  def utm_source
+    utm_params[:utm_source] || utm_params["utm_source"]
+  end
+
+  def from_naver_blog?
+    utm_source == "naver_blog"
+  end
+
   # 법령 콘텐츠를 HTML로 변환 (간단한 Markdown 변환)
   # 조, 항, 호 기준으로 줄바꿈하고 가시성 향상
   def render_legal_content(content)
