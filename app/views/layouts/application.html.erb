@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="application-name" content="실무">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#102a43">
+    <meta name="theme-color" content="#0F172A">
     <link rel="canonical" href="<%= request.original_url.split('?').first %>">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -44,8 +44,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
 
     <%# Icons %>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
     <style>
@@ -66,22 +66,29 @@
           <!-- Logo -->
           <div class="flex items-center">
             <%= link_to root_path, class: "group flex items-center gap-3 transition-all duration-200 hover:scale-[1.02]" do %>
-              <div class="w-9 h-9 bg-gradient-to-br from-navy-700 to-navy-900 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:shadow-navy-500/20 transition-all">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M4 4h10l4 4v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" fill="white" opacity="0.9"/>
-                  <path d="M14 4l4 4h-3a1 1 0 01-1-1V4z" fill="white" opacity="0.5"/>
-                  <path d="M7 12h8M7 15h5" stroke="#1e3a5f" stroke-width="1.5" stroke-linecap="round"/>
-                  <circle cx="18" cy="17" r="4.5" fill="#3b82f6" stroke="white" stroke-width="1.5"/>
-                  <path d="M16.5 17l1 1 2-2" stroke="white" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+              <div class="w-9 h-9 flex items-center justify-center drop-shadow-md group-hover:drop-shadow-lg transition-all">
+                <svg width="36" height="36" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <linearGradient id="logo_grad_header" gradientUnits="userSpaceOnUse" x1="20" y1="20" x2="180" y2="180">
+                      <stop stop-color="#137fec"/>
+                      <stop offset="1" stop-color="#0ea5e9"/>
+                    </linearGradient>
+                  </defs>
+                  <path d="M100 20C60 20 40 45 40 45V140C40 165 70 180 100 180C130 180 160 165 160 140V45C160 45 140 20 100 20Z" fill="url(#logo_grad_header)"/>
+                  <path d="M85 70H115" stroke="white" stroke-linecap="round" stroke-opacity="0.9" stroke-width="8"/>
+                  <path d="M70 100H130" stroke="white" stroke-linecap="round" stroke-opacity="0.9" stroke-width="8"/>
+                  <path d="M85 130H115" stroke="white" stroke-linecap="round" stroke-opacity="0.9" stroke-width="8"/>
+                  <circle cx="100" cy="50" fill="white" fill-opacity="0.9" r="6"/>
                 </svg>
               </div>
-              <span class="text-xl font-bold text-navy-900 tracking-tight">실무</span>
+              <span class="text-xl font-bold text-slate-900 tracking-tight">실무</span>
             <% end %>
           </div>
 
           <!-- Desktop Menu -->
           <div class="hidden lg:flex items-center gap-8">
             <%= link_to "도구", tools_path, class: "nav-link py-2" %>
+            <%= link_to "업무달력", task_calendar_path, class: "nav-link py-2" %>
             <%= link_to "법령가이드", guides_path, class: "nav-link py-2" %>
             <%= link_to "감사사례", audit_cases_path, class: "nav-link py-2" %>
             <%= link_to "양식", templates_path, class: "nav-link py-2" %>
@@ -91,20 +98,20 @@
           <!-- Auth Buttons -->
           <div class="hidden lg:flex items-center gap-4">
             <% if user_signed_in? %>
-              <%= link_to mypage_path, class: "flex items-center gap-2 text-navy-600 hover:text-navy-900 font-medium transition-colors" do %>
+              <%= link_to mypage_path, class: "flex items-center gap-2 text-slate-600 hover:text-slate-900 font-medium transition-colors" do %>
                 <span class="material-symbols-outlined text-xl">account_circle</span>
                 마이페이지
               <% end %>
               <%= button_to "로그아웃", destroy_user_session_path, method: :delete, class: "btn btn-ghost btn-sm" %>
             <% else %>
-              <%= link_to "로그인", new_user_session_path, class: "text-navy-600 hover:text-navy-900 font-medium transition-colors" %>
+              <%= link_to "로그인", new_user_session_path, class: "text-slate-600 hover:text-slate-900 font-medium transition-colors" %>
               <%= link_to "시작하기", new_user_registration_path, class: "btn btn-primary btn-sm" %>
             <% end %>
           </div>
 
           <!-- Mobile menu button -->
           <div class="lg:hidden flex items-center">
-            <button type="button" id="mobile-menu-btn" class="p-2 text-navy-600 hover:text-navy-900 hover:bg-gray-100 rounded-xl transition-colors">
+            <button type="button" id="mobile-menu-btn" class="p-2 text-slate-600 hover:text-slate-900 hover:bg-gray-100 rounded-xl transition-colors">
               <span class="material-symbols-outlined text-2xl">menu</span>
             </button>
           </div>
@@ -114,25 +121,26 @@
       <!-- Mobile Menu -->
       <div class="lg:hidden hidden" id="mobile-menu">
         <div class="px-4 py-4 space-y-1 bg-white border-t border-gray-100">
-          <%= link_to "도구", tools_path, class: "block px-4 py-3 text-navy-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
-          <%= link_to "법령가이드", guides_path, class: "block px-4 py-3 text-navy-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
-          <%= link_to "감사사례", audit_cases_path, class: "block px-4 py-3 text-navy-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
-          <%= link_to "양식", templates_path, class: "block px-4 py-3 text-navy-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
-          <%= link_to "자료실", guide_resources_path, class: "block px-4 py-3 text-navy-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
+          <%= link_to "도구", tools_path, class: "block px-4 py-3 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
+          <%= link_to "업무달력", task_calendar_path, class: "block px-4 py-3 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
+          <%= link_to "법령가이드", guides_path, class: "block px-4 py-3 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
+          <%= link_to "감사사례", audit_cases_path, class: "block px-4 py-3 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
+          <%= link_to "양식", templates_path, class: "block px-4 py-3 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
+          <%= link_to "자료실", guide_resources_path, class: "block px-4 py-3 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
 
           <div class="h-px bg-gray-200 my-3"></div>
 
           <% if user_signed_in? %>
-            <%= link_to mypage_path, class: "block px-4 py-3 text-navy-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" do %>
+            <%= link_to mypage_path, class: "block px-4 py-3 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" do %>
               <span class="flex items-center gap-2">
                 <span class="material-symbols-outlined">account_circle</span>
                 마이페이지
               </span>
             <% end %>
-            <%= button_to "로그아웃", destroy_user_session_path, method: :delete, class: "w-full text-left px-4 py-3 text-navy-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
+            <%= button_to "로그아웃", destroy_user_session_path, method: :delete, class: "w-full text-left px-4 py-3 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
           <% else %>
-            <%= link_to "로그인", new_user_session_path, class: "block px-4 py-3 text-navy-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
-            <%= link_to "시작하기", new_user_registration_path, class: "block px-4 py-3 bg-navy-800 text-white text-center rounded-xl font-semibold hover:bg-navy-900 transition-colors" %>
+            <%= link_to "로그인", new_user_session_path, class: "block px-4 py-3 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
+            <%= link_to "시작하기", new_user_registration_path, class: "block px-4 py-3 bg-slate-800 text-white text-center rounded-xl font-semibold hover:bg-slate-900 transition-colors" %>
           <% end %>
         </div>
       </div>
@@ -140,10 +148,10 @@
 
     <!-- Flash Messages -->
     <% if notice %>
-      <div class="bg-forest-50 border-l-4 border-forest-500 px-4 py-4 animate-slide-up">
+      <div class="bg-emerald-50 border-l-4 border-emerald-500 px-4 py-4 animate-slide-up">
         <div class="container-wide flex items-center gap-3">
-          <span class="material-symbols-outlined text-forest-600">check_circle</span>
-          <p class="text-forest-800 font-medium"><%= notice %></p>
+          <span class="material-symbols-outlined text-emerald-600">check_circle</span>
+          <p class="text-emerald-800 font-medium"><%= notice %></p>
         </div>
       </div>
     <% end %>
@@ -166,54 +174,54 @@
       <!-- 펼쳐진 메뉴 — glass panel style -->
       <div class="hidden mb-3 space-y-1.5" id="quick-menu-items">
         <%= link_to contract_method_path, class: "flex items-center gap-3 px-4 py-3 bg-white/95 backdrop-blur-lg rounded-xl shadow-medium border border-gray-100/50 hover:shadow-strong hover:-translate-x-1 transition-all group", title: "계약방식 결정" do %>
-          <span class="w-10 h-10 bg-forest-100 rounded-lg flex items-center justify-center group-hover:bg-forest-500 transition-all duration-200">
-            <span class="material-symbols-outlined text-forest-600 group-hover:text-white transition-colors">gavel</span>
+          <span class="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center group-hover:bg-emerald-500 transition-all duration-200">
+            <span class="material-symbols-outlined text-emerald-600 group-hover:text-white transition-colors">gavel</span>
           </span>
-          <span class="text-sm font-semibold text-navy-800">계약방식 결정</span>
+          <span class="text-sm font-semibold text-slate-800">계약방식 결정</span>
         <% end %>
         <%= link_to contract_documents_path, class: "flex items-center gap-3 px-4 py-3 bg-white/95 backdrop-blur-lg rounded-xl shadow-medium border border-gray-100/50 hover:shadow-strong hover:-translate-x-1 transition-all group", title: "서류 생성기" do %>
-          <span class="w-10 h-10 bg-navy-100 rounded-lg flex items-center justify-center group-hover:bg-navy-600 transition-all duration-200">
-            <span class="material-symbols-outlined text-navy-600 group-hover:text-white transition-colors">fact_check</span>
+          <span class="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center group-hover:bg-slate-600 transition-all duration-200">
+            <span class="material-symbols-outlined text-slate-600 group-hover:text-white transition-colors">fact_check</span>
           </span>
-          <span class="text-sm font-semibold text-navy-800">서류 생성기</span>
+          <span class="text-sm font-semibold text-slate-800">서류 생성기</span>
         <% end %>
         <a href="/forms/견적서검토.html" class="flex items-center gap-3 px-4 py-3 bg-white/95 backdrop-blur-lg rounded-xl shadow-medium border border-gray-100/50 hover:shadow-strong hover:-translate-x-1 transition-all group" title="견적서 검토">
-          <span class="w-10 h-10 bg-point-100 rounded-lg flex items-center justify-center group-hover:bg-point-500 transition-all duration-200">
-            <span class="material-symbols-outlined text-point-600 group-hover:text-white transition-colors">fact_check</span>
+          <span class="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center group-hover:bg-indigo-500 transition-all duration-200">
+            <span class="material-symbols-outlined text-indigo-600 group-hover:text-white transition-colors">fact_check</span>
           </span>
-          <span class="text-sm font-semibold text-navy-800">견적서 검토</span>
+          <span class="text-sm font-semibold text-slate-800">견적서 검토</span>
         </a>
         <%= link_to estimated_price_path, class: "flex items-center gap-3 px-4 py-3 bg-white/95 backdrop-blur-lg rounded-xl shadow-medium border border-gray-100/50 hover:shadow-strong hover:-translate-x-1 transition-all group", title: "예정가격 계산기" do %>
-          <span class="w-10 h-10 bg-forest-100 rounded-lg flex items-center justify-center group-hover:bg-forest-500 transition-all duration-200">
-            <span class="material-symbols-outlined text-forest-600 group-hover:text-white transition-colors">calculate</span>
+          <span class="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center group-hover:bg-emerald-500 transition-all duration-200">
+            <span class="material-symbols-outlined text-emerald-600 group-hover:text-white transition-colors">calculate</span>
           </span>
-          <span class="text-sm font-semibold text-navy-800">예정가격 계산기</span>
+          <span class="text-sm font-semibold text-slate-800">예정가격 계산기</span>
         <% end %>
         <%= link_to travel_calculator_path, class: "flex items-center gap-3 px-4 py-3 bg-white/95 backdrop-blur-lg rounded-xl shadow-medium border border-gray-100/50 hover:shadow-strong hover:-translate-x-1 transition-all group", title: "여비계산기" do %>
-          <span class="w-10 h-10 bg-warm-100 rounded-lg flex items-center justify-center group-hover:bg-warm-500 transition-all duration-200">
-            <span class="material-symbols-outlined text-warm-600 group-hover:text-white transition-colors">directions_car</span>
+          <span class="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center group-hover:bg-amber-500 transition-all duration-200">
+            <span class="material-symbols-outlined text-amber-600 group-hover:text-white transition-colors">directions_car</span>
           </span>
-          <span class="text-sm font-semibold text-navy-800">여비계산기</span>
+          <span class="text-sm font-semibold text-slate-800">여비계산기</span>
         <% end %>
-        <%= link_to tools_path, class: "flex items-center gap-3 px-4 py-3 bg-forest-50 backdrop-blur-lg rounded-xl shadow-medium border border-forest-200/50 hover:shadow-strong hover:-translate-x-1 transition-all group", title: "전체 도구" do %>
-          <span class="w-10 h-10 bg-forest-500 rounded-lg flex items-center justify-center">
+        <%= link_to tools_path, class: "flex items-center gap-3 px-4 py-3 bg-emerald-50 backdrop-blur-lg rounded-xl shadow-medium border border-emerald-200/50 hover:shadow-strong hover:-translate-x-1 transition-all group", title: "전체 도구" do %>
+          <span class="w-10 h-10 bg-emerald-500 rounded-lg flex items-center justify-center">
             <span class="material-symbols-outlined text-white">apps</span>
           </span>
-          <span class="text-sm font-bold text-forest-700">전체 14개 도구 보기</span>
+          <span class="text-sm font-bold text-emerald-700">전체 14개 도구 보기</span>
         <% end %>
       </div>
 
       <!-- 메인 버튼 + 라벨 -->
       <div class="flex items-center gap-3 justify-end">
-        <div id="quick-menu-label" class="hidden px-4 py-2.5 bg-navy-800 text-white text-sm font-medium rounded-xl shadow-lg shadow-navy-900/30 whitespace-nowrap animate-fade-in relative">
+        <div id="quick-menu-label" class="hidden px-4 py-2.5 bg-slate-800 text-white text-sm font-medium rounded-xl shadow-lg shadow-slate-900/30 whitespace-nowrap animate-fade-in relative">
           실무 도구 모음
-          <div class="absolute -right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 bg-navy-800 rotate-45"></div>
+          <div class="absolute -right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 bg-slate-800 rotate-45"></div>
         </div>
-        <button id="quick-menu-btn" class="w-16 h-16 bg-gradient-to-br from-navy-700 to-navy-900 text-white rounded-2xl shadow-lg shadow-navy-900/30 hover:shadow-xl hover:shadow-navy-900/40 hover:scale-105 active:scale-95 transition-all duration-200 flex flex-col items-center justify-center group relative">
+        <button id="quick-menu-btn" class="w-16 h-16 bg-gradient-to-br from-slate-700 to-slate-900 text-white rounded-2xl shadow-lg shadow-slate-900/30 hover:shadow-xl hover:shadow-slate-900/40 hover:scale-105 active:scale-95 transition-all duration-200 flex flex-col items-center justify-center group relative">
           <span class="material-symbols-outlined text-2xl transition-transform group-hover:rotate-12" id="quick-menu-icon">widgets</span>
           <span class="text-[9px] font-semibold mt-0.5 opacity-80" id="quick-menu-text">도구</span>
           <!-- 알림 배지 -->
-          <span class="absolute -top-1 -right-1 w-5 h-5 bg-forest-500 rounded-full flex items-center justify-center text-[10px] font-bold text-white shadow-sm" id="quick-menu-badge">14</span>
+          <span class="absolute -top-1 -right-1 w-5 h-5 bg-emerald-500 rounded-full flex items-center justify-center text-[10px] font-bold text-white shadow-sm" id="quick-menu-badge">14</span>
         </button>
       </div>
     </div>
@@ -239,35 +247,41 @@
     </style>
 
     <!-- Footer — enhanced with gradient border -->
-    <footer class="bg-navy-900 text-white mt-auto relative">
+    <footer class="bg-slate-900 text-white mt-auto relative<%= ' hidden' if content_for?(:hide_footer) %>">
       <!-- Top gradient line -->
-      <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-point-500/40 to-transparent"></div>
+      <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent"></div>
       <div class="container-wide py-16 lg:py-20">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
           <!-- Brand -->
           <div class="lg:col-span-2">
             <div class="flex items-center gap-3 mb-6">
-              <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-md">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M4 4h10l4 4v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" fill="#1e3a5f" opacity="0.9"/>
-                  <path d="M14 4l4 4h-3a1 1 0 01-1-1V4z" fill="#1e3a5f" opacity="0.5"/>
-                  <path d="M7 12h8M7 15h5" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
-                  <circle cx="18" cy="17" r="4.5" fill="#3b82f6" stroke="white" stroke-width="1.5"/>
-                  <path d="M16.5 17l1 1 2-2" stroke="white" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+              <div class="w-10 h-10 flex items-center justify-center">
+                <svg width="40" height="40" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <linearGradient id="logo_grad_footer" gradientUnits="userSpaceOnUse" x1="20" y1="20" x2="180" y2="180">
+                      <stop stop-color="#137fec"/>
+                      <stop offset="1" stop-color="#0ea5e9"/>
+                    </linearGradient>
+                  </defs>
+                  <path d="M100 20C60 20 40 45 40 45V140C40 165 70 180 100 180C130 180 160 165 160 140V45C160 45 140 20 100 20Z" fill="url(#logo_grad_footer)"/>
+                  <path d="M85 70H115" stroke="white" stroke-linecap="round" stroke-opacity="0.9" stroke-width="8"/>
+                  <path d="M70 100H130" stroke="white" stroke-linecap="round" stroke-opacity="0.9" stroke-width="8"/>
+                  <path d="M85 130H115" stroke="white" stroke-linecap="round" stroke-opacity="0.9" stroke-width="8"/>
+                  <circle cx="100" cy="50" fill="white" fill-opacity="0.9" r="6"/>
                 </svg>
               </div>
               <span class="text-2xl font-bold">실무</span>
             </div>
-            <p class="text-navy-200 text-lg mb-2">감사 걱정 없는, 퇴근 있는, 은퇴 준비되는 공무원</p>
-            <p class="text-navy-400 text-sm">공무원의 업무 효율과 삶의 질 향상을 위한 플랫폼</p>
+            <p class="text-slate-200 text-lg mb-2">감사 걱정 없는, 퇴근 있는, 은퇴 준비되는 공무원</p>
+            <p class="text-slate-400 text-sm">공무원의 업무 효율과 삶의 질 향상을 위한 플랫폼</p>
 
             <!-- Social Links -->
             <div class="flex gap-3 mt-6">
-              <a href="mailto:hello@silmu.kr" class="w-10 h-10 bg-navy-800 hover:bg-navy-700 rounded-xl flex items-center justify-center transition-colors" title="이메일 문의">
-                <span class="material-symbols-outlined text-navy-300">mail</span>
+              <a href="mailto:hello@silmu.kr" class="w-10 h-10 bg-slate-800 hover:bg-slate-700 rounded-xl flex items-center justify-center transition-colors" title="이메일 문의">
+                <span class="material-symbols-outlined text-slate-300">mail</span>
               </a>
-              <%= link_to guide_resources_path, class: "w-10 h-10 bg-navy-800 hover:bg-navy-700 rounded-xl flex items-center justify-center transition-colors", title: "자료실" do %>
-                <span class="material-symbols-outlined text-navy-300">library_books</span>
+              <%= link_to guide_resources_path, class: "w-10 h-10 bg-slate-800 hover:bg-slate-700 rounded-xl flex items-center justify-center transition-colors", title: "자료실" do %>
+                <span class="material-symbols-outlined text-slate-300">library_books</span>
               <% end %>
             </div>
           </div>
@@ -276,12 +290,12 @@
           <div>
             <h3 class="font-semibold text-lg mb-5">서비스</h3>
             <ul class="space-y-3">
-              <li><%= link_to "도구", tools_path, class: "text-navy-300 hover:text-white transition-colors" %></li>
-              <li><%= link_to "법령가이드", guides_path, class: "text-navy-300 hover:text-white transition-colors" %></li>
-              <li><%= link_to "감사사례", audit_cases_path, class: "text-navy-300 hover:text-white transition-colors" %></li>
-              <li><%= link_to "양식", templates_path, class: "text-navy-300 hover:text-white transition-colors" %></li>
-              <li><%= link_to "자료실", guide_resources_path, class: "text-navy-300 hover:text-white transition-colors" %></li>
-              <li><%= link_to "자주 묻는 질문", faq_path, class: "text-navy-300 hover:text-white transition-colors" %></li>
+              <li><%= link_to "도구", tools_path, class: "text-slate-300 hover:text-white transition-colors" %></li>
+              <li><%= link_to "법령가이드", guides_path, class: "text-slate-300 hover:text-white transition-colors" %></li>
+              <li><%= link_to "감사사례", audit_cases_path, class: "text-slate-300 hover:text-white transition-colors" %></li>
+              <li><%= link_to "양식", templates_path, class: "text-slate-300 hover:text-white transition-colors" %></li>
+              <li><%= link_to "자료실", guide_resources_path, class: "text-slate-300 hover:text-white transition-colors" %></li>
+              <li><%= link_to "자주 묻는 질문", faq_path, class: "text-slate-300 hover:text-white transition-colors" %></li>
             </ul>
           </div>
 
@@ -290,12 +304,12 @@
             <h3 class="font-semibold text-lg mb-5">문의</h3>
             <ul class="space-y-3">
               <li>
-                <a href="mailto:hello@silmu.kr" class="text-navy-300 hover:text-white transition-colors flex items-center gap-2">
+                <a href="mailto:hello@silmu.kr" class="text-slate-300 hover:text-white transition-colors flex items-center gap-2">
                   <span class="material-symbols-outlined text-lg">mail</span>
                   hello@silmu.kr
                 </a>
               </li>
-              <li class="text-navy-400 text-sm pt-2">
+              <li class="text-slate-400 text-sm pt-2">
                 평일 09:00 - 18:00<br>
                 (주말/공휴일 휴무)
               </li>
@@ -304,11 +318,11 @@
         </div>
 
         <!-- Bottom -->
-        <div class="border-t border-navy-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p class="text-navy-400 text-sm">&copy; <%= Time.current.year %> 실무 (silmu.kr). All rights reserved.</p>
+        <div class="border-t border-slate-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p class="text-slate-400 text-sm">&copy; <%= Time.current.year %> 실무 (silmu.kr). All rights reserved.</p>
           <div class="flex gap-6 text-sm">
-            <%= link_to "이용약관", terms_path, class: "text-navy-400 hover:text-white transition-colors" %>
-            <%= link_to "개인정보처리방침", privacy_path, class: "text-navy-400 hover:text-white transition-colors" %>
+            <%= link_to "이용약관", terms_path, class: "text-slate-400 hover:text-white transition-colors" %>
+            <%= link_to "개인정보처리방침", privacy_path, class: "text-slate-400 hover:text-white transition-colors" %>
           </div>
         </div>
       </div>
