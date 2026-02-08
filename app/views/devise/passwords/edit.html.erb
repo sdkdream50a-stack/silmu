@@ -5,9 +5,14 @@
     <!-- 로고 -->
     <div class="text-center mb-8">
       <%= link_to root_path, class: "inline-flex items-center gap-3" do %>
-        <div class="w-12 h-12 gradient-slate rounded-xl flex items-center justify-center shadow-lg">
-          <span class="text-white font-bold text-2xl">실</span>
-        </div>
+        <svg width="48" height="48" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="drop-shadow-md">
+          <defs><linearGradient id="logo_grad_dev" gradientUnits="userSpaceOnUse" x1="20" y1="20" x2="180" y2="180"><stop stop-color="#137fec"/><stop offset="1" stop-color="#0ea5e9"/></linearGradient></defs>
+          <path d="M100 20C60 20 40 45 40 45V140C40 165 70 180 100 180C130 180 160 165 160 140V45C160 45 140 20 100 20Z" fill="url(#logo_grad_dev)"/>
+          <path d="M85 70H115" stroke="white" stroke-linecap="round" stroke-opacity="0.9" stroke-width="8"/>
+          <path d="M70 100H130" stroke="white" stroke-linecap="round" stroke-opacity="0.9" stroke-width="8"/>
+          <path d="M85 130H115" stroke="white" stroke-linecap="round" stroke-opacity="0.9" stroke-width="8"/>
+          <circle cx="100" cy="50" fill="white" fill-opacity="0.9" r="6"/>
+        </svg>
         <span class="text-2xl font-bold text-slate-900">실무</span>
       <% end %>
     </div>
