@@ -8,7 +8,7 @@ class ProgressInspectionsController < ApplicationController
       title: "기성검사 체크리스트",
       description: "기성검사·준공검사 시 확인해야 할 항목을 체크리스트로 자동 생성합니다.",
       keywords: "기성검사, 준공검사, 체크리스트, 기성금, 검사 항목",
-      og: { title: "기성검사 체크리스트 — 실무", url: request.original_url }
+      og: { title: "기성검사 체크리스트 — 실무.kr", url: request.original_url }
     )
   end
 

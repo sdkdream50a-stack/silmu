@@ -104,8 +104,9 @@ Rails.application.routes.draw do
   # 문서 분석 (AI)
   post "document-analysis/analyze", to: "document_analysis#analyze"
 
-  # 커뮤니티
-  get "community", to: "community#index", as: :community
+  # 의견보내기
+  get "feedback", to: "feedback#index", as: :feedback
+  post "feedback", to: "feedback#create"
 
   # 마이페이지
   get "mypage", to: "mypage#index", as: :mypage

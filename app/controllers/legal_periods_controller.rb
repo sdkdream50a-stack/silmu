@@ -8,7 +8,7 @@ class LegalPeriodsController < ApplicationController
       title: "법정기간 계산기",
       description: "입찰공고 기간, 계약체결 기한, 대금지급 기한 등 계약 관련 법정기간을 자동으로 계산합니다.",
       keywords: "법정기간, 입찰공고 기간, 계약체결 기한, 대금지급 기한, 기간 계산",
-      og: { title: "법정기간 계산기 — 실무", url: request.original_url }
+      og: { title: "법정기간 계산기 — 실무.kr", url: request.original_url }
     )
   end
 

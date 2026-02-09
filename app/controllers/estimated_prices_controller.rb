@@ -8,7 +8,7 @@ class EstimatedPricesController < ApplicationController
       title: "예정가격 계산기",
       description: "물품·용역·공사의 예정가격을 자동으로 산정합니다. 부가세, 일반관리비, 이윤 등을 자동 반영.",
       keywords: "예정가격, 예정가격 계산기, 예정가격 산정, 부가세, 일반관리비",
-      og: { title: "예정가격 계산기 — 실무", url: request.original_url }
+      og: { title: "예정가격 계산기 — 실무.kr", url: request.original_url }
     )
   end
 

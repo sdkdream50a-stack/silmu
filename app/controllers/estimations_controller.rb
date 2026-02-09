@@ -8,7 +8,7 @@ class EstimationsController < ApplicationController
       title: "소요예산 추정기",
       description: "사업 유형별 소요예산을 간편하게 추정합니다. 공사, 물품, 용역별 예산 산출.",
       keywords: "소요예산, 예산 추정, 예산 계산기, 공사 예산, 물품 예산",
-      og: { title: "소요예산 추정기 — 실무", url: request.original_url }
+      og: { title: "소요예산 추정기 — 실무.kr", url: request.original_url }
     )
   end
 

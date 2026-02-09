@@ -3,7 +3,7 @@ class ChatbotController < ApplicationController
     set_meta_tags(
       title: "AI 상담",
       description: "공무원 계약·예산 실무 질문을 AI에게 바로 물어보세요. 수의계약, 입찰, 검수 등 실무 궁금증을 해결합니다.",
-      og: { title: "실무 AI 상담", url: request.original_url }
+      og: { title: "실무.kr AI 상담", url: request.original_url }
     )
     @boards = CafeArticle.board_list.first(20)
     @total_count = CafeArticle.count
