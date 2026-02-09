@@ -13,7 +13,7 @@ class QuoteDocumentsController < ApplicationController
       title: "견적서 일괄 문서생성",
       description: "견적서 1장을 업로드하면 사업계획서·소요예산·예정가격 조서를 한 번에 자동 생성합니다.",
       keywords: "견적서, 사업계획서, 소요예산, 예정가격, 수의계약, 일괄생성",
-      og: { title: "견적서 일괄 문서생성 — 실무", url: request.original_url }
+      og: { title: "견적서 일괄 문서생성 — 실무.kr", url: request.original_url }
     )
   end
 

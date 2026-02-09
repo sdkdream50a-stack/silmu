@@ -1,0 +1,95 @@
+<%# 의견보내기 페이지 %>
+
+<!-- 페이지 헤더 -->
+<section class="gradient-premium text-white py-12 lg:py-16">
+  <div class="container-wide">
+    <div class="flex items-start gap-5">
+      <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 shadow-lg">
+        <span class="material-symbols-outlined text-4xl text-white">mail</span>
+      </div>
+      <div>
+        <h1 class="text-3xl lg:text-4xl font-bold tracking-tight">의견보내기</h1>
+        <p class="text-slate-200 mt-2 text-lg">내용 수정 요청, 자료 추가 요청, 기타 의견을 보내주세요</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 폼 -->
+<section class="section py-12">
+  <div class="container-wide">
+    <div class="max-w-2xl mx-auto">
+      <div class="card p-8 shadow-strong">
+
+        <%= form_with url: feedback_path, method: :post, data: { turbo: true } do |f| %>
+
+          <!-- 유형 선택 -->
+          <div class="mb-6">
+            <label class="block text-sm font-semibold text-slate-700 mb-3">유형</label>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <label class="feedback-type-card">
+                <input type="radio" name="category" value="내용 수정 요청" class="hidden peer" checked>
+                <div class="peer-checked:border-indigo-500 peer-checked:bg-indigo-50 border-2 border-slate-200 rounded-xl p-4 text-center cursor-pointer transition-all hover:border-slate-300">
+                  <span class="material-symbols-outlined text-2xl text-amber-600 mb-1">edit_note</span>
+                  <div class="text-sm font-semibold text-slate-800">내용 수정 요청</div>
+                  <div class="text-xs text-slate-500 mt-1">잘못된 법령, 오타 등</div>
+                </div>
+              </label>
+              <label class="feedback-type-card">
+                <input type="radio" name="category" value="자료 추가 요청" class="hidden peer">
+                <div class="peer-checked:border-indigo-500 peer-checked:bg-indigo-50 border-2 border-slate-200 rounded-xl p-4 text-center cursor-pointer transition-all hover:border-slate-300">
+                  <span class="material-symbols-outlined text-2xl text-emerald-600 mb-1">library_add</span>
+                  <div class="text-sm font-semibold text-slate-800">자료 추가 요청</div>
+                  <div class="text-xs text-slate-500 mt-1">새 가이드, 양식 등</div>
+                </div>
+              </label>
+              <label class="feedback-type-card">
+                <input type="radio" name="category" value="기타 의견" class="hidden peer">
+                <div class="peer-checked:border-indigo-500 peer-checked:bg-indigo-50 border-2 border-slate-200 rounded-xl p-4 text-center cursor-pointer transition-all hover:border-slate-300">
+                  <span class="material-symbols-outlined text-2xl text-indigo-600 mb-1">chat</span>
+                  <div class="text-sm font-semibold text-slate-800">기타 의견</div>
+                  <div class="text-xs text-slate-500 mt-1">개선 제안, 문의 등</div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- 관련 페이지 URL -->
+          <div class="mb-5">
+            <label for="page_url" class="block text-sm font-semibold text-slate-700 mb-2">관련 페이지 주소 <span class="text-slate-400 font-normal">(선택)</span></label>
+            <input type="url" name="page_url" id="page_url" placeholder="https://silmu.kr/topics/..." class="w-full border border-slate-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors">
+          </div>
+
+          <!-- 내용 -->
+          <div class="mb-5">
+            <label for="content" class="block text-sm font-semibold text-slate-700 mb-2">내용 <span class="text-red-500">*</span></label>
+            <textarea name="content" id="content" rows="6" required placeholder="수정이 필요한 부분이나 추가해주셨으면 하는 자료를 알려주세요." class="w-full border border-slate-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors resize-y"></textarea>
+          </div>
+
+          <!-- 이메일 -->
+          <div class="mb-8">
+            <label for="email" class="block text-sm font-semibold text-slate-700 mb-2">회신 이메일 <span class="text-slate-400 font-normal">(선택)</span></label>
+            <input type="email" name="email" id="email" placeholder="답변을 받으실 이메일" class="w-full border border-slate-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors">
+            <p class="text-xs text-slate-400 mt-1.5">입력하시면 처리 결과를 안내해 드립니다.</p>
+          </div>
+
+          <!-- 제출 -->
+          <button type="submit" class="w-full btn btn-primary py-3.5 text-base font-semibold">
+            <span class="material-symbols-outlined">send</span>
+            의견 보내기
+          </button>
+
+        <% end %>
+
+        <div id="feedback-result"></div>
+
+      </div>
+
+      <!-- 안내 -->
+      <div class="mt-6 p-4 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-600 flex items-start gap-3">
+        <span class="material-symbols-outlined text-slate-400 mt-0.5" style="font-size:18px">info</span>
+        <span>보내주신 의견은 콘텐츠 개선에 적극 반영하겠습니다. 법령 오류 제보는 확인 후 빠르게 수정됩니다.</span>
+      </div>
+    </div>
+  </div>
+</section>

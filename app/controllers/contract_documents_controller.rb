@@ -8,7 +8,7 @@ class ContractDocumentsController < ApplicationController
       title: "계약서류 원클릭 생성기",
       description: "계약 유형에 맞는 필수 서류를 자동으로 생성합니다. 계약서, 청렴서약서, 인감증명서 등.",
       keywords: "계약서류, 서류 생성기, 계약서, 청렴서약서, 계약 서류 목록",
-      og: { title: "계약서류 원클릭 생성기 — 실무", url: request.original_url }
+      og: { title: "계약서류 원클릭 생성기 — 실무.kr", url: request.original_url }
     )
   end
 

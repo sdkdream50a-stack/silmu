@@ -1,0 +1,11 @@
+<% if success %>
+  <div class="mt-6 p-4 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-3">
+    <span class="material-symbols-outlined text-emerald-600">check_circle</span>
+    <span class="text-emerald-800 font-medium"><%= message %></span>
+  </div>
+<% else %>
+  <div class="mt-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-center gap-3">
+    <span class="material-symbols-outlined text-red-600">error</span>
+    <span class="text-red-800 font-medium"><%= message %></span>
+  </div>
+<% end %>

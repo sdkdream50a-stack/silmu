@@ -1,0 +1,11 @@
+[실무.kr 의견보내기]
+
+유형: <%= @category %>
+<% if @page_url.present? %>관련 페이지: <%= @page_url %><% end %>
+<% if @email.present? %>회신 이메일: <%= @email %><% end %>
+
+내용:
+<%= @content %>
+
+---
+발송 시각: <%= Time.current.strftime("%Y-%m-%d %H:%M") %>

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light only">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="실무">
+    <meta name="application-name" content="실무.kr">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#0F172A">
     <link rel="canonical" href="<%= request.original_url.split('?').first %>">
@@ -18,7 +18,7 @@
     <%= json_ld({
       "@context": "https://schema.org",
       "@type": "WebSite",
-      "name": "실무",
+      "name": "실무.kr",
       "url": "https://silmu.kr",
       "description": "공무원을 위한 계약 실무 가이드",
       "inLanguage": "ko",
@@ -31,7 +31,7 @@
     <%= json_ld({
       "@context": "https://schema.org",
       "@type": "Organization",
-      "name": "실무",
+      "name": "실무.kr",
       "url": "https://silmu.kr",
       "logo": "https://silmu.kr/icon.png",
       "email": "hello@silmu.kr",
@@ -82,7 +82,7 @@
                   <circle cx="100" cy="50" fill="white" fill-opacity="0.9" r="6"/>
                 </svg>
               </div>
-              <span class="text-xl font-bold text-slate-900 tracking-tight">실무</span>
+              <span class="text-xl font-bold text-slate-900 tracking-tight">실무.kr</span>
             <% end %>
           </div>
 
@@ -295,7 +295,7 @@
                   <circle cx="100" cy="50" fill="white" fill-opacity="0.9" r="6"/>
                 </svg>
               </div>
-              <span class="text-2xl font-bold">실무</span>
+              <span class="text-2xl font-bold">실무.kr</span>
             </div>
             <p class="text-slate-200 text-lg mb-2">계약 실무, 이제 혼자 고민하지 마세요</p>
             <p class="text-slate-400 text-sm">공무원의 업무 효율과 삶의 질 향상을 위한 플랫폼</p>
@@ -320,6 +320,7 @@
               <li><%= link_to "도구", tools_path, class: "text-slate-300 hover:text-white transition-colors" %></li>
               <li><%= link_to "자료실", guide_resources_path, class: "text-slate-300 hover:text-white transition-colors" %></li>
               <li><%= link_to "자주 묻는 질문", faq_path, class: "text-slate-300 hover:text-white transition-colors" %></li>
+              <li><%= link_to "의견보내기", feedback_path, class: "text-slate-300 hover:text-white transition-colors" %></li>
             </ul>
           </div>
 
@@ -343,7 +344,7 @@
 
         <!-- Bottom -->
         <div class="border-t border-slate-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p class="text-slate-400 text-sm">&copy; <%= Time.current.year %> 실무 (silmu.kr). All rights reserved.</p>
+          <p class="text-slate-400 text-sm">&copy; <%= Time.current.year %> 실무.kr All rights reserved.</p>
           <div class="flex gap-6 text-sm">
             <%= link_to "이용약관", terms_path, class: "text-slate-400 hover:text-white transition-colors" %>
             <%= link_to "개인정보처리방침", privacy_path, class: "text-slate-400 hover:text-white transition-colors" %>
