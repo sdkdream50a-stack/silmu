@@ -68,7 +68,7 @@
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     font-feature-settings: 'kern' 1;
-    color-scheme: light only;
+    color-scheme: light;
   }
 
   body {
@@ -846,5 +846,57 @@
 
   .legal-content .legal-table {
     font-size: 9pt;
+  }
+}
+
+/* ===========================================
+   FORCED LIGHT MODE
+   모바일 브라우저 강제 다크모드 방지
+   =========================================== */
+@media (prefers-color-scheme: dark) {
+  html {
+    background-color: #fafbfc !important;
+    color: #0f172a !important;
+    color-scheme: light !important;
+  }
+
+  body {
+    background-color: #fafbfc !important;
+    color: #0f172a !important;
+  }
+
+  /* 네비게이션 */
+  nav, nav * {
+    background-color: inherit;
+    color: inherit;
+  }
+
+  /* 카드, 입력필드, 테이블 */
+  .card, .qd-card, .qd-doc, .qd-input,
+  input, select, textarea, table, th, td {
+    background-color: inherit !important;
+    color: inherit !important;
+    border-color: #e5e7eb !important;
+  }
+
+  /* 흰색 배경 요소 */
+  [style*="background:#fff"],
+  [style*="background: #fff"],
+  [style*="background:white"],
+  [style*="background:#ffffff"] {
+    background-color: #ffffff !important;
+  }
+
+  /* 어두운 텍스트 보장 */
+  [style*="color:#1e293b"],
+  [style*="color:#334155"],
+  [style*="color:#475569"],
+  [style*="color:#0f172a"] {
+    color: #1e293b !important;
+  }
+
+  /* 이미지, SVG 반전 방지 */
+  img, svg, video, canvas {
+    filter: none !important;
   }
 }
