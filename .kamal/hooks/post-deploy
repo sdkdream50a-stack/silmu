@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# 배포 후 www.silmu.kr 호스트를 kamal-proxy에 추가
+# (kamal deploy.yml의 host는 단일 문자열만 지원하므로 훅에서 처리)
+
+CONTAINER=$(ssh root@141.164.53.97 "docker ps --filter label=service=silmu --filter label=role=web --filter status=running --format '{{.Names}}' | head -1")
+
+if [ -n "$CONTAINER" ]; then
+  TARGET_IP=$(ssh root@141.164.53.97 "docker inspect $CONTAINER --format '{{.NetworkSettings.Networks.kamal.IPAddress}}'")
+  ssh root@141.164.53.97 "docker exec kamal-proxy kamal-proxy deploy silmu-web --target=${TARGET_IP}:80 --host=silmu.kr --host=www.silmu.kr --tls --deploy-timeout=30s --drain-timeout=30s --buffer-requests --buffer-responses"
+  echo "www.silmu.kr added to kamal-proxy (target: ${TARGET_IP})"
+fi
