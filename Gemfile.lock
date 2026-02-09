@@ -271,7 +271,9 @@ GEM
       omniauth (~> 2.0)
     orm_adapter (0.5.0)
     ostruct (0.6.3)
-    pagy (6.5.0)
+    pagy (43.2.9)
+      json
+      yaml
     parallel (1.27.0)
     parser (3.3.10.1)
       ast (~> 2.4.1)
@@ -471,6 +473,7 @@ GEM
     websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
+    yaml (0.4.0)
     zeitwerk (2.7.4)
 
 PLATFORMS
@@ -504,7 +507,7 @@ DEPENDENCIES
   omniauth-kakao
   omniauth-naver
   omniauth-rails_csrf_protection
-  pagy (~> 6.0)
+  pagy (~> 43.2)
   pdf-reader
   pg (~> 1.1)
   pg_search
