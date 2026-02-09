@@ -451,7 +451,7 @@ document.addEventListener('turbo:load', function() {
     // 견적 요건 안내
     if (r.private_contract.estimate_requirement) {
       var er = r.private_contract.estimate_requirement;
-      var erColor = er.type === '입찰' ? '#dc2626' : (er.type === '2인견적' ? '#d97706' : '#059669');
+      var erColor = er.type === '입찰' ? '#dc2626' : (er.type === '2인 이상 견적' ? '#d97706' : '#059669');
       html += '<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:14px 18px;display:flex;align-items:flex-start;gap:10px;">';
       html += '<span class="material-symbols-outlined" style="color:' + erColor + ';flex-shrink:0;margin-top:1px;">description</span>';
       html += '<div><strong style="color:' + erColor + ';">[' + epEsc(er.type) + ']</strong> ' + epEsc(er.desc);

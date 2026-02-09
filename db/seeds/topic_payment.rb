@@ -379,6 +379,17 @@ Topic.find_or_create_by!(slug: "payment") do |t|
     </ul>
   </div>
 
+  <div class="bg-purple-50 border border-purple-200 rounded-xl p-4">
+    <h4 class="font-bold text-purple-800 flex items-center gap-2 mb-2">
+      <span class="material-symbols-outlined">campaign</span>
+      한시적 특례 적용 중 (~2026.6.30)
+    </h4>
+    <ul class="text-purple-700 text-sm space-y-2 mt-2">
+      <li><strong>대금지급 기한:</strong> 5일 → <strong>3일</strong> 이내로 단축</li>
+      <li class="text-xs text-purple-500">※ 행안부 고시 제2025-72호 (2026.1.1~6.30)</li>
+    </ul>
+  </div>
+
   <div class="bg-amber-50 border border-amber-200 rounded-xl p-4">
     <h4 class="font-bold text-amber-800 flex items-center gap-2 mb-2">
       <span class="material-symbols-outlined">warning</span>
@@ -386,7 +397,7 @@ Topic.find_or_create_by!(slug: "payment") do |t|
     </h4>
     <ul class="text-amber-700 text-sm space-y-2 mt-2">
       <li><strong>검사 없이 대금 지급:</strong> 검사 완료가 대금 지급의 법적 전제 조건 — 반드시 선행</li>
-      <li><strong>지급 기한 초과:</strong> 5일 이내 미지급 시 지연이자 발생 — 기한 관리 철저</li>
+      <li><strong>지급 기한 초과:</strong> 5일 이내(한시적 특례 시 3일) 미지급 시 지연이자 발생 — 기한 관리 철저</li>
       <li><strong>선금 미정산:</strong> 기성·준공대가에서 선금을 공제하지 않으면 초과 지급 — 감사 지적</li>
       <li><strong>하도급대금 직접지급 미이행:</strong> 직접지급 요청 시 이행 의무 — 미이행 시 위법</li>
       <li><strong>지연이자 미지급:</strong> 대금 지급 지연 시 이자 지급은 의무 — 별도 청구 없어도 지급</li>

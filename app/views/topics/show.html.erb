@@ -164,8 +164,6 @@
             <%= render 'topics/flowcharts/price_negotiation', topic: @topic %>
           <% elsif @topic.slug == 'private-contract-limit' || @topic.slug == 'private-contract' || @topic.slug == 'private-contract-amount' %>
             <%= render 'topics/flowcharts/private_contract', topic: @topic %>
-          <% elsif @topic.slug == 'small-amount-contract' %>
-            <%= render 'topics/flowcharts/small_amount_contract', topic: @topic %>
           <% elsif @topic.slug == 'emergency-contract' %>
             <%= render 'topics/flowcharts/emergency_contract', topic: @topic %>
           <% elsif @topic.slug == 'dual-quote' %>
@@ -672,7 +670,7 @@
               <div class="grid sm:grid-cols-2 gap-4">
                 <% [
                   { title: "수의계약 사유서", desc: "수의계약 체결 사유를 명시하는 필수 서류", badge: "별지 제5호 서식", color: "point", path: "/forms/수의계약사유서.html" },
-                  { title: "견적서", desc: "업체로부터 징구하는 가격 견적서", badge: "1인/2인 견적용", color: "forest", path: "/forms/견적서.html" },
+                  { title: "견적서", desc: "업체로부터 징구하는 가격 견적서", badge: "1인/2인 이상 견적용", color: "forest", path: "/forms/견적서.html" },
                   { title: "예정가격 조서", desc: "예정가격 산출 근거 문서", badge: "거래실례가격/원가계산", color: "warm", path: "/forms/예정가격조서.html" },
                   { title: "검수조서", desc: "납품/용역 완료 검수 확인서", badge: "대금지급 전 필수", color: "navy", path: "/forms/검수조서.html" }
                 ].each do |form| %>
