@@ -312,6 +312,19 @@ Topic.find_or_create_by!(slug: "contract-guarantee-deposit") do |t|
     </div>
   </div>
 
+  <div class="bg-purple-50 border border-purple-200 rounded-xl p-4">
+    <h4 class="font-bold text-purple-800 flex items-center gap-2 mb-2">
+      <span class="material-symbols-outlined">campaign</span>
+      한시적 특례 적용 중 (~2026.6.30)
+    </h4>
+    <ul class="text-purple-700 text-sm space-y-2 mt-2">
+      <li><strong>입찰보증금:</strong> 5% → <strong>2.5%</strong> 이상 (50% 인하)</li>
+      <li><strong>계약보증금:</strong> 10% → <strong>5%</strong> 이상 (50% 인하)</li>
+      <li><strong>공사이행보증서:</strong> 40% → <strong>20%</strong> 이상 (50% 인하)</li>
+      <li class="text-xs text-purple-500">※ 행안부 고시 제2025-72호 (2026.1.1~6.30)</li>
+    </ul>
+  </div>
+
   <div class="bg-amber-50 border border-amber-200 rounded-xl p-4">
     <h4 class="font-bold text-amber-800 flex items-center gap-2 mb-2">
       <span class="material-symbols-outlined">warning</span>

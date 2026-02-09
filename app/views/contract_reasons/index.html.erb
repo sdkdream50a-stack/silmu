@@ -107,7 +107,7 @@
       if (f.delivery_period) quSetField('cr-delivery', f.delivery_period);
       // 소액수의 자동 선택
       var amt = Number(f.total_amount) || 0;
-      if (amt > 0 && amt <= 50000000) {
+      if (amt > 0 && amt <= 100000000) {
         var smallBtn = document.querySelector('[data-reason="small_amount"]');
         if (smallBtn && typeof crSelectReason === 'function') crSelectReason(smallBtn);
       }

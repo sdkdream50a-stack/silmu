@@ -158,7 +158,7 @@
             <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Smart Price Guide</span>
           </div>
           <h3 class="text-3xl font-bold text-white mb-3">예산을 입력해보세요</h3>
-          <p class="text-slate-300 text-lg">금액에 따라 법령상 가능한 모든 계약 방법(1인 견적, 2인 견적, 입찰 등)을<br class="hidden lg:block"/> 즉시 분석하여 가이드해드립니다.</p>
+          <p class="text-slate-300 text-lg">금액에 따라 법령상 가능한 모든 계약 방법(1인 견적, 2인 이상 견적, 입찰 등)을<br class="hidden lg:block"/> 즉시 분석하여 가이드해드립니다.</p>
         </div>
         <div class="w-full lg:w-auto flex-1 max-w-lg">
           <div class="flex gap-3 mb-3">
@@ -202,7 +202,6 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <% [
             ["/topics/private-contract", "handshake", "수의계약", "1인 견적 가능 금액 및 요건, 예외 사항 완벽 정리", "indigo"],
-            ["/topics/small-amount-contract", "shopping_cart", "소액수의", "여성/장애인 기업 우선구매 목표 및 실무 가이드", "sky"],
             ["/topics/emergency-contract", "warning", "긴급계약", "재해/재난 시 신속 대응을 위한 긴급 입찰 절차", "rose"],
             ["/topics/budget-carryover", "history", "예산이월", "사고이월 및 명시이월 처리를 위한 연말 필수 체크리스트", "emerald"]
           ].each do |path, icon, title, desc, color| %>
@@ -374,8 +373,8 @@ document.addEventListener('turbo:load', function() {
       else { method='경쟁입찰'; color='slate'; icon='groups'; desc='추정가격 2억원 초과 공사'; checklist=['입찰공고 (7일 이상)','예정가격 작성 (복수예비가격)','적격심사','계약 체결 → 착공 → 준공검사']; }
     } else {
       if (amount <= 20000000) { method='1인 견적 수의계약'; color='emerald'; icon='person'; desc=`추정가격 2천만원 이하 ${category==='goods'?'물품':'용역'}`; checklist=['견적서 1부 징구','계약서 작성 (간이계약서 가능)','검수 및 대가 지급']; }
-      else if (amount <= 50000000) { method='2인 이상 견적 수의계약'; color='indigo'; icon='group'; desc=`추정가격 2천만원 초과 ~ 5천만원 이하 ${category==='goods'?'물품':'용역'}`; checklist=['2인 이상 견적서 징구','예정가격 작성','계약서 작성','검수 및 대가 지급']; }
-      else { method='경쟁입찰'; color='slate'; icon='groups'; desc=`추정가격 5천만원 초과 ${category==='goods'?'물품':'용역'}`; checklist=['입찰공고 (7일 이상)','예정가격 작성 (복수예비가격)','적격심사 또는 최저가낙찰','계약 체결 → 검수 → 대가 지급']; }
+      else if (amount <= 100000000) { method='2인 이상 견적 수의계약'; color='indigo'; icon='group'; desc=`추정가격 2천만원 초과 ~ 1억원 이하 ${category==='goods'?'물품':'용역'}`; checklist=['2인 이상 견적서 징구','예정가격 작성','계약서 작성','검수 및 대가 지급']; }
+      else { method='경쟁입찰'; color='slate'; icon='groups'; desc=`추정가격 1억원 초과 ${category==='goods'?'물품':'용역'}`; checklist=['입찰공고 (7일 이상)','예정가격 작성 (복수예비가격)','적격심사 또는 최저가낙찰','계약 체결 → 검수 → 대가 지급']; }
     }
     priceResult.classList.remove('hidden');
     priceResultContent.className = `p-4 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm`;

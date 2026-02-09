@@ -11,18 +11,32 @@ class ContractDocumentService
         # 계약 전
         pre_contract: [
           {
+            id: "restriction_check", name: "수의계약 체결 제한 여부 확인서", required: true,
+            description: "배제사유 확인",
+            legal_basis: "지방계약법 시행령 제25조, 제31조",
+            caution: "계약상대자가 부정당업자 제재, 영업정지 등 배제사유에 해당하는지 반드시 확인",
+            tip: "나라장터(G2B) 부정당업자 제재현황 조회 후 확인서 징구"
+          },
+          {
+            id: "specification", name: "물품 규격서(Specification)", required: true,
+            description: "물품 규격 명시",
+            legal_basis: "지방계약법 시행령 제14조",
+            caution: "특정 업체에 유리한 규격 설정 금지. 용도에 맞는 최소 규격 설정",
+            tip: "규격서에 필수 사양과 선택 사양을 구분하여 기재"
+          },
+          {
             id: "estimate_request", name: "견적요청서", required: true,
             description: "2인 이상 견적 요청",
             legal_basis: "지방계약법 시행령 제30조",
-            caution: "2,000만원 초과 시 2인 이상 견적 필수",
-            tip: "견적 요청 시 규격, 수량, 납품기한을 명확히 기재"
+            caution: "2,000만원 초과 시 2인 이상 견적 필수. 2천만원 초과 시 G2B 전자견적 의무",
+            tip: "견적 요청 시 규격서, 수량, 납품기한을 명확히 기재"
           },
           {
             id: "estimate", name: "견적서", required: true,
             description: "업체별 견적서",
             legal_basis: "지방계약법 시행령 제30조",
             caution: "견적서 유효기간 및 부가세 포함 여부 확인",
-            tip: "견적서에 업체 직인 또는 서명 확인 필수"
+            tip: "견적서에 업체 인감(직인) 날인 여부와 유효기간을 반드시 확인"
           },
           {
             id: "price_comparison", name: "가격비교표", required: true,
@@ -30,6 +44,13 @@ class ContractDocumentService
             legal_basis: "지방계약법 시행령 제30조",
             caution: "최저가 선정 사유 명시 필요",
             tip: "동일 규격 기준으로 비교, 배송비 등 부대비용 포함"
+          },
+          {
+            id: "predicted_price", name: "예정가격조서", required: false,
+            description: "예정가격 산정 (2천만원 이하 생략 가능)",
+            legal_basis: "지방계약법 시행령 제7조~제9조",
+            caution: "추정가격 2천만원 이하 수의계약 시 예정가격 작성 생략 가능 (시행령 제9조)",
+            tip: "거래실례가격, 원가계산가격 등 적정 방법으로 산정"
           },
           {
             id: "budget_request", name: "예산배정요청서", required: false,
@@ -125,10 +146,17 @@ class ContractDocumentService
       documents: {
         pre_contract: [
           {
+            id: "restriction_check", name: "수의계약 체결 제한 여부 확인서", required: true,
+            description: "배제사유 확인",
+            legal_basis: "지방계약법 시행령 제25조, 제31조",
+            caution: "계약상대자가 부정당업자 제재, 영업정지 등 배제사유에 해당하는지 반드시 확인",
+            tip: "나라장터(G2B) 부정당업자 제재현황 조회 후 확인서 징구"
+          },
+          {
             id: "estimate_request", name: "견적요청서", required: true,
             description: "2인 이상 견적 요청",
             legal_basis: "지방계약법 시행령 제30조",
-            caution: "용역 범위와 기간을 명확히 제시",
+            caution: "용역 범위와 기간을 명확히 제시. 2천만원 초과 시 G2B 전자견적 의무",
             tip: "과업지시서 초안과 함께 견적 요청"
           },
           {
@@ -136,7 +164,7 @@ class ContractDocumentService
             description: "업체별 견적서",
             legal_basis: "지방계약법 시행령 제30조",
             caution: "인건비, 경비 등 항목별 금액 확인",
-            tip: "용역 투입인력 단가 적정성 검토"
+            tip: "견적서에 업체 인감(직인) 날인 여부와 유효기간을 반드시 확인"
           },
           {
             id: "task_specification", name: "과업지시서", required: true,
@@ -151,6 +179,13 @@ class ContractDocumentService
             legal_basis: "지방계약법 시행령 제30조",
             caution: "용역 특성상 가격 외 기술력도 검토",
             tip: "필요시 기술능력평가 병행 검토"
+          },
+          {
+            id: "predicted_price", name: "예정가격조서", required: false,
+            description: "예정가격 산정 (2천만원 이하 생략 가능)",
+            legal_basis: "지방계약법 시행령 제7조~제9조",
+            caution: "추정가격 2천만원 이하 수의계약 시 예정가격 작성 생략 가능 (시행령 제9조)",
+            tip: "원가계산 시 노임단가, 제경비 등 적정성 검토"
           }
         ],
         contract: [
@@ -273,6 +308,13 @@ class ContractDocumentService
       documents: {
         pre_contract: [
           {
+            id: "restriction_check", name: "수의계약 체결 제한 여부 확인서", required: true,
+            description: "배제사유 확인",
+            legal_basis: "지방계약법 시행령 제25조, 제31조",
+            caution: "계약상대자가 부정당업자 제재, 영업정지 등 배제사유에 해당하는지 반드시 확인",
+            tip: "나라장터(G2B) 부정당업자 제재현황 조회 후 확인서 징구"
+          },
+          {
             id: "design_document", name: "설계서", required: true,
             description: "설계도면, 내역서 등",
             legal_basis: "지방계약법 시행령 제8조, 제15조, 건설기술진흥법 제48조",
@@ -283,7 +325,7 @@ class ContractDocumentService
             id: "estimate_request", name: "견적요청서", required: true,
             description: "2인 이상 견적 요청",
             legal_basis: "지방계약법 시행령 제30조",
-            caution: "공사 규모에 맞는 업체 자격요건 확인",
+            caution: "공사 규모에 맞는 업체 자격요건 확인. 2천만원 초과 시 G2B 전자견적 의무",
             tip: "설계서 및 현장설명 자료 함께 제공"
           },
           {
@@ -291,7 +333,7 @@ class ContractDocumentService
             description: "업체별 견적서",
             legal_basis: "지방계약법 시행령 제30조",
             caution: "내역서 기준 견적 산출 여부 확인",
-            tip: "단가와 수량 모두 검토 필요"
+            tip: "견적서에 업체 인감(직인) 날인 여부와 유효기간을 반드시 확인"
           },
           {
             id: "price_comparison", name: "가격비교표", required: true,
@@ -302,9 +344,9 @@ class ContractDocumentService
           },
           {
             id: "predicted_price", name: "예정가격조서", required: true,
-            description: "예정가격 산정",
+            description: "예정가격 산정 (2천만원 이하 생략 가능)",
             legal_basis: "지방계약법 시행령 제8조, 제9조",
-            caution: "거래실례가격, 원가계산가격 등 적정 방법 적용",
+            caution: "추정가격 2천만원 이하 수의계약 시 예정가격 작성 생략 가능 (시행령 제9조)",
             tip: "표준품셈, 실적공사비 활용"
           }
         ],

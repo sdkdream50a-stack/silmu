@@ -13,7 +13,7 @@ subtopics_data = [
     name: '수의계약',
     slug: 'private-contract-overview',
     summary: '경쟁입찰 없이 특정인을 선정하여 체결하는 계약',
-    keywords: '수의계약,수의,특명수의,소액수의,계약',
+    keywords: '수의계약,수의,특명수의,계약',
     category: 'contract',
     law_content: <<~LAW,
       <strong>지방계약법 제9조 (수의계약)</strong>
@@ -27,8 +27,8 @@ subtopics_data = [
 
       <strong>1. 추정가격이 다음 금액 이하인 경우</strong>
       • 공사: 종합공사 4억원, 전문공사 2억원, 기타공사 1.6억원
-      • 물품 제조·구매: 2천만원 (소기업·소상공인 1억원, 특례 기업 5천만원)
-      • 용역: 2천만원 (소기업·소상공인 1억원, 특례 기업 5천만원)
+      • 물품 제조·구매: 2천만원 (청년창업 5천만원, 소기업·여성·장애인·사회적기업 등 1억원)
+      • 용역: 2천만원 (청년창업 5천만원, 소기업·여성·장애인·사회적기업 등 1억원)
 
       <strong>2. 특정인의 기술이 필요한 경우</strong>
 
@@ -72,9 +72,14 @@ subtopics_data = [
             주의해야 할 점
           </h4>
           <ul class="space-y-2 text-red-700">
-            <li>• <strong>분할계약 금지</strong> - 하나의 사업을 쪼개서 수의계약 금액 이하로 만드는 것은 위법</li>
-            <li>• <strong>견적서 사전 징구</strong> - 반드시 계약 전에 견적서를 받아야 함</li>
-            <li>• <strong>예정가격 작성</strong> - 수의계약도 예정가격 작성 필수</li>
+            <li>• <strong>수의계약 배제사유 확인</strong> - 계약 전 <u>수의계약 체결 제한 여부 확인서</u>를 징구하여 배제 대상이 아닌지 반드시 확인</li>
+            <li>• <strong>분할계약 금지</strong> - 하나의 사업을 쪼개서 수의계약 금액 이하로 만드는 것은 위법 (감사 1순위 지적사항, <u>사전준비 단계에서 반드시 검토</u>)</li>
+            <li>• <strong>안내공고 필수</strong> - 수의계약 시 3일 이상 인터넷 공고 (시행령 제25조제5항)</li>
+            <li>• <strong>견적서 사전 징구</strong> - 반드시 계약 전에 견적서를 받아야 함. <u>견적서 유효기간</u>과 <u>인감(직인) 날인</u> 반드시 확인</li>
+            <li>• <strong>예정가격 작성</strong> - 수의계약도 예정가격 작성 필수 (단, 추정가격 2천만원 이하 수의계약 시 <u>예정가격 작성 생략 가능</u> — 시행령 제9조)</li>
+            <li>• <strong>물품 규격서 작성</strong> - 물품 구매 시 규격서(Specification) 작성 필수. 특정 브랜드 지정 금지</li>
+            <li>• <strong>추정가격 ≠ 예정가격</strong> - 추정가격(부가세 제외, 계약방법 결정 기준)과 예정가격(낙찰 상한, 거래실례·원가계산으로 산정)은 다른 개념</li>
+            <li>• <strong>G2B 전자견적</strong> - 추정가격 2천만원 초과 수의계약은 나라장터(G2B) 또는 학교장터(S2B) 전자견적 의무</li>
           </ul>
         </div>
 
@@ -84,10 +89,15 @@ subtopics_data = [
             체크리스트
           </h4>
           <ul class="space-y-1 text-green-700">
-            <li>☐ 수의계약 대상 금액 확인</li>
-            <li>☐ 견적서 징구 (1인/2인)</li>
-            <li>☐ 예정가격 작성</li>
+            <li>☐ <strong>수의계약 체결 제한 여부 확인서</strong> 징구</li>
+            <li>☐ <strong>분할계약 해당 여부</strong> 사전 검토</li>
+            <li>☐ 수의계약 대상 금액(추정가격) 확인</li>
+            <li>☐ <strong>안내공고 3일 이상</strong> 게시 (나라장터/학교장터)</li>
+            <li>☐ 물품 규격서(Specification) 작성 (물품 구매 시)</li>
+            <li>☐ 견적서 징구 (1인/2인) — <strong>유효기간·인감 날인</strong> 확인</li>
+            <li>☐ 예정가격 작성 (추정가격 2천만원 이하 시 생략 가능)</li>
             <li>☐ 수의계약 사유서 작성</li>
+            <li>☐ 추정가격 2천만원 초과 시 G2B 전자견적 진행</li>
             <li>☐ 계약서 작성 및 날인</li>
           </ul>
         </div>
@@ -139,6 +149,15 @@ subtopics_data = [
 **조치내용:** 관련자 중징계
 
 > 견적서는 반드시 계약 체결 전에 징구해야 함
+
+---
+
+### 사례 4: 수의계약 체결 제한 업체와 계약
+**지적사항:** 수의계약 배제사유에 해당하는 업체와 수의계약 체결
+**관련근거:** 지방계약법 시행령 제25조
+**조치내용:** 관련자 경고, 계약 취소
+
+> 수의계약 체결 전 배제사유(체결 제한 여부) 확인서를 징구하지 않아 부적격 업체와 계약한 사례
     AUDIT
     qa_content: <<~QA,
 ## 수의계약 질의답변
@@ -167,15 +186,17 @@ subtopics_data = [
 ### Q3. 수의계약 시 필수 서류는?
 
 **A:** 다음 서류를 반드시 작성해야 합니다:
-1. 수의계약 사유서
-2. 예정가격 조서
-3. 견적서 (1인 또는 2인 이상)
-4. 계약서 (5천만원 초과 시)
-5. 사업자등록증 사본
+1. **수의계약 체결 제한 여부 확인서** (배제사유 확인)
+2. 수의계약 사유서 (금액 기준 수의계약 시: "시행령 제25조 제1항 제5호 해당" 명시로 간소화 가능)
+3. 예정가격 조서 (추정가격 2천만원 이하 시 생략 가능)
+4. 물품 규격서 (물품 구매 시 필수)
+5. 견적서 (1인 또는 2인 이상) — 유효기간·인감 확인
+6. 계약서 (계약금액 5천만원 초과 시)
+7. 사업자등록증 사본
     QA
     faqs: [
       { question: '수의계약과 일반경쟁입찰의 차이는?', answer: '일반경쟁입찰은 불특정 다수가 참여하여 최저가 낙찰자와 계약하는 방식이고, 수의계약은 특정인을 선정하여 계약하는 방식입니다.' },
-      { question: '수의계약 시에도 계약서를 작성해야 하나요?', answer: '네, 수의계약도 원칙적으로 계약서를 작성해야 합니다. 다만, 추정가격 5천만원(공사 1억원) 이하인 경우 계약서 작성을 생략할 수 있습니다.' }
+      { question: '수의계약 시에도 계약서를 작성해야 하나요?', answer: '네, 수의계약도 원칙적으로 계약서를 작성해야 합니다. 다만, 계약금액 5천만원(공사 1억원) 이하인 경우 계약서 작성을 생략할 수 있습니다. (지방계약법 시행령 제50조)' }
     ].to_json,
     published: true
   },
@@ -429,7 +450,7 @@ A. 2인 이상 견적 대상에서 1인만 수의시담에 응한 경우, 해당
       </table>
 
       <div style="background:#e0f2fe; padding:12px; border-radius:8px; margin-top:16px;">
-        <strong>📌 특례기업:</strong> 청년창업·여성·장애인기업 등은 5천만원 이하까지 1인 견적 가능
+        <strong>📌 특례기업:</strong> 청년창업·여성·장애인·사회적기업·사회적협동조합·마을기업·자활기업 등은 5천만원 이하까지 1인 견적 가능
       </div>
     RULE
     practical_tips: <<~TIPS,
@@ -440,11 +461,13 @@ A. 2인 이상 견적 대상에서 1인만 수의시담에 응한 경우, 해당
             1인 견적 체크리스트
           </h4>
           <ul class="space-y-1 text-green-700">
+            <li>☐ <strong>수의계약 체결 제한 여부 확인서</strong> 징구</li>
             <li>☐ 추정가격이 기준금액 이하인가?</li>
-            <li>☐ 견적서에 사업자등록번호 기재되었는가?</li>
-            <li>☐ 견적서에 대표자 직인이 날인되었는가?</li>
-            <li>☐ 예정가격 이하 금액인가?</li>
             <li>☐ 분할계약에 해당하지 않는가?</li>
+            <li>☐ 견적서에 사업자등록번호 기재되었는가?</li>
+            <li>☐ 견적서에 대표자 <strong>직인(인감) 날인</strong>되었는가?</li>
+            <li>☐ 견적서 <strong>유효기간</strong>이 유효한가?</li>
+            <li>☐ 예정가격 이하 금액인가? (2천만원 이하 시 예정가격 생략 가능)</li>
           </ul>
         </div>
 
@@ -477,6 +500,10 @@ A. 2인 이상 견적 대상에서 1인만 수의시담에 응한 경우, 해당
 - 여성기업: 여성기업확인서
 - 장애인기업: 장애인기업확인서
 - 사회적기업: 사회적기업 인증서
+- 사회적협동조합: 사회적협동조합 설립인가증
+- 자활기업·마을기업: 해당 지정확인서
+
+※ 사회적기업·사회적협동조합은 **취약계층 고용비율 30% 이상** 조건이 적용될 수 있습니다.
 
 ---
 
@@ -517,13 +544,13 @@ A. 2인 이상 견적 대상에서 1인만 수의시담에 응한 경우, 해당
 
 ### Q1. 1인 견적 수의계약도 계약서를 작성해야 하나요?
 
-**A:** 추정가격 **5천만원 이하**(공사 1억원 이하)인 경우 계약서 작성을 생략할 수 있습니다. 다만, 청구서, 납품서 등으로 계약 내용을 확인할 수 있어야 합니다.
+**A:** 계약금액 **5천만원 이하**(공사 1억원 이하)인 경우 계약서 작성을 생략할 수 있습니다(지방계약법 시행령 제50조). 다만, 청구서, 납품서 등으로 계약 내용을 확인할 수 있어야 합니다.
 
 ---
 
 ### Q2. 1인 견적도 예정가격을 작성해야 하나요?
 
-**A:** **네, 반드시 작성해야 합니다.** 1인 견적이라도 예정가격 조서 작성은 필수입니다. 예정가격 미작성은 감사 지적 대상입니다.
+**A:** 원칙적으로 예정가격 조서 작성은 필수입니다. 다만, **추정가격 2천만원 이하**인 수의계약의 경우 예정가격 작성을 **생략할 수 있습니다** (지방계약법 시행령 제9조). 1인 견적 대상(2천만원 이하)은 대부분 이에 해당하나, 거래 적정성 확보를 위해 가급적 작성을 권장합니다.
 
 ---
 
@@ -542,15 +569,15 @@ A. 2인 이상 견적 대상에서 1인만 수의시담에 응한 경우, 해당
     QA
     faqs: [
       { question: '1인 견적 한도는 얼마인가요?', answer: '물품·용역·공사 모두 2천만원 이하입니다. 단, 청년창업·여성·장애인기업 등 특례 대상은 5천만원 이하까지 1인 견적이 가능합니다.' },
-      { question: '1인 견적 시에도 예정가격 작성이 필요한가요?', answer: '네, 1인 견적이라도 예정가격 조서 작성은 필수입니다. 예정가격 미작성은 감사 지적 사유입니다.' }
+      { question: '1인 견적 시에도 예정가격 작성이 필요한가요?', answer: '원칙적으로 필수이나, 추정가격 2천만원 이하 수의계약은 예정가격 작성을 생략할 수 있습니다(시행령 제9조). 1인 견적 대상(2천만원 이하)은 대부분 이에 해당하나, 거래 적정성 확보를 위해 가급적 작성을 권장합니다.' }
     ].to_json,
     published: true
   },
   {
-    name: '2인견적',
+    name: '2인 이상 견적',
     slug: 'dual-quote',
     summary: '2인 이상 견적에 의한 수의계약',
-    keywords: '2인견적,복수견적,견적비교,2인이상,비교견적',
+    keywords: '2인 이상 견적,2인견적,복수견적,견적비교,2인이상,비교견적',
     category: 'contract',
     law_content: <<~LAW,
       <strong>지방계약법 시행령 제30조 제1항</strong>
@@ -563,7 +590,7 @@ A. 2인 이상 견적 대상에서 1인만 수의시담에 응한 경우, 해당
 
       <strong>2인 이상 견적 필수 대상:</strong>
       <ul style="margin-top:8px;">
-        <li>• 물품·용역: <strong>2천만원 초과 ~ 수의계약 한도</strong> (소기업 1억원, 특례 5천만원)</li>
+        <li>• 물품·용역: <strong>2천만원 초과 ~ 수의계약 한도</strong> (소기업·여성·장애인·사회적기업 등 1억원)</li>
         <li>• 공사: <strong>2천만원 초과 ~ 수의계약 한도</strong> (종합 4억, 전문 2억)</li>
       </ul>
     LAW
@@ -579,7 +606,7 @@ A. 2인 이상 견적 대상에서 1인만 수의시담에 응한 경우, 해당
         </tr>
         <tr>
           <td style="border:1px solid #a5b4fc; padding:10px;">물품 구매·용역</td>
-          <td style="border:1px solid #a5b4fc; padding:10px; font-weight:bold;">2천만원 초과 ~ 5천만원</td>
+          <td style="border:1px solid #a5b4fc; padding:10px; font-weight:bold;">2천만원 초과 ~ 1억원 이하</td>
         </tr>
         <tr>
           <td style="border:1px solid #a5b4fc; padding:10px;">공사</td>
@@ -592,6 +619,15 @@ A. 2인 이상 견적 대상에서 1인만 수의시담에 응한 경우, 해당
       <div style="background:#dbeafe; padding:12px; border-radius:8px; margin-top:12px;">
         ③ <strong>중요:</strong> 2인 이상에게 견적서 제출을 요청하였으나 <u>1인만 제출</u>한 경우에도 그 견적가격이 적정하다고 인정되면 <mark>계약 체결 가능</mark>
       </div>
+
+      <div style="background:#fef3c7; padding:12px; border-radius:8px; margin-top:12px;">
+        ④ <strong>안내공고:</strong> 수의계약 체결 시 계약의 목적, 금액 등을 <mark>3일 이상</mark> 인터넷(나라장터·학교장터)에 공고하여야 함 (시행령 제25조제5항)
+      </div>
+
+      <div style="background:#e0f2fe; padding:12px; border-radius:8px; margin-top:12px;">
+        ⑤ <strong>G2B 전자견적 필수 범위:</strong> 추정가격 <mark>2천만원 초과 ~ 수의계약 한도 이하</mark>는 나라장터(G2B) 또는 학교장터(S2B)를 통한 <strong>전자견적</strong>으로 진행해야 함 (시행령 제39조)
+        <br><small style="color:#6b7280;">※ 2천만원 이하는 오프라인(전화·이메일 등) 견적 가능</small>
+      </div>
     DECREE
     rule_content: <<~RULE,
       <strong>2인 이상 견적 수의계약 금액 기준</strong>
@@ -603,11 +639,11 @@ A. 2인 이상 견적 대상에서 1인만 수의시담에 응한 경우, 해당
         </tr>
         <tr>
           <td style="border:1px solid #fcd34d; padding:12px;">물품 구매</td>
-          <td style="border:1px solid #fcd34d; padding:12px; font-weight:bold;">2천만원 초과 ~ 5천만원</td>
+          <td style="border:1px solid #fcd34d; padding:12px; font-weight:bold;">2천만원 초과 ~ 1억원 이하</td>
         </tr>
         <tr>
           <td style="border:1px solid #fcd34d; padding:12px;">용역</td>
-          <td style="border:1px solid #fcd34d; padding:12px; font-weight:bold;">2천만원 초과 ~ 5천만원</td>
+          <td style="border:1px solid #fcd34d; padding:12px; font-weight:bold;">2천만원 초과 ~ 1억원 이하</td>
         </tr>
         <tr>
           <td style="border:1px solid #fcd34d; padding:12px;">공사</td>
@@ -627,10 +663,13 @@ A. 2인 이상 견적 대상에서 1인만 수의시담에 응한 경우, 해당
             2인 견적 체크리스트
           </h4>
           <ul class="space-y-1 text-indigo-700">
+            <li>☐ <strong>수의계약 체결 제한 여부 확인서</strong> 징구</li>
+            <li>☐ <strong>안내공고 3일 이상</strong> 게시했는가? (나라장터/학교장터)</li>
+            <li>☐ 추정가격 2천만원 초과 시 <strong>G2B 전자견적</strong> 진행</li>
             <li>☐ 2개 업체 이상에 견적 요청했는가?</li>
             <li>☐ 견적 요청 시 동일한 조건을 제시했는가?</li>
             <li>☐ 견적 마감일시를 명확히 통보했는가?</li>
-            <li>☐ 모든 견적서를 마감일 전에 받았는가?</li>
+            <li>☐ 모든 견적서를 마감일 전에 받았는가? (<strong>유효기간·인감</strong> 확인)</li>
             <li>☐ 예정가격 이하 최저가 업체를 선정했는가?</li>
           </ul>
         </div>
@@ -744,8 +783,8 @@ A. 2인 이상 견적 대상에서 1인만 수의시담에 응한 경우, 해당
       <div style="background:#eff6ff; padding:16px; border-radius:8px; margin-top:12px;">
         <ul style="margin:0; line-height:2;">
           <li>가. 공사: <strong style="color:#1d4ed8; font-size:1.2em;">종합 4억원, 전문 2억원, 기타 1.6억원 이하</strong></li>
-          <li>나. 물품의 제조·구매: <strong style="color:#1d4ed8; font-size:1.2em;">2천만원 이하</strong> (특례: 소기업 1억, 기타 5천만)</li>
-          <li>다. 용역: <strong style="color:#1d4ed8; font-size:1.2em;">2천만원 이하</strong> (특례: 소기업 1억, 기타 5천만)</li>
+          <li>나. 물품의 제조·구매: <strong style="color:#1d4ed8; font-size:1.2em;">2천만원 이하</strong> (청년창업 5천만원, 소기업·여성·장애인·사회적기업 등 1억원)</li>
+          <li>다. 용역: <strong style="color:#1d4ed8; font-size:1.2em;">2천만원 이하</strong> (청년창업 5천만원, 소기업·여성·장애인·사회적기업 등 1억원)</li>
         </ul>
       </div>
 
@@ -819,7 +858,7 @@ A. 2인 이상 견적 대상에서 1인만 수의시담에 응한 경우, 해당
             <div class="bg-white rounded-lg p-3 border">
               <div class="text-sm text-gray-500">물품/용역</div>
               <div class="text-lg font-bold text-blue-600">수의한도: 2천만원</div>
-              <div class="text-xs text-gray-400 mt-1">특례: 소기업 1억, 기타 5천만</div>
+              <div class="text-xs text-gray-400 mt-1">특례: 소기업·여성·장애인·사회적기업 등 1억</div>
             </div>
             <div class="bg-white rounded-lg p-3 border">
               <div class="text-sm text-gray-500">공사</div>
@@ -869,7 +908,7 @@ A. 2인 이상 견적 대상에서 1인만 수의시담에 응한 경우, 해당
 **관련근거:** 지방계약법 시행령 제25조
 **조치내용:** 계약 취소, 관련자 중징계
 
-> 일반 물품(소기업 아님)의 수의계약 한도는 2천만원(특례 5천만원)인데, 5,500만원 물품을 수의계약으로 체결
+> 일반 물품(소기업·특례기업 아님)의 수의계약 한도는 2천만원인데, 5,500만원 물품을 수의계약으로 체결
 
 ---
 
@@ -938,7 +977,7 @@ A. 2인 이상 견적 대상에서 1인만 수의시담에 응한 경우, 해당
       <div style="background:#eff6ff; padding:16px; border-radius:8px; margin-top:12px;">
         <strong>【수의계약 가능 금액】</strong> (추정가격 기준, 부가세 별도)
         <ul style="margin-top:8px;">
-          <li>1. 물품 구매·용역: <strong style="color:#1d4ed8;">2천만원 이하</strong> (특례: 소기업 1억, 기타 5천만)</li>
+          <li>1. 물품 구매·용역: <strong style="color:#1d4ed8;">2천만원 이하</strong> (청년창업 5천만원, 소기업·여성·장애인·사회적기업 등 1억원)</li>
           <li>2. 공사 (종합): <strong style="color:#1d4ed8;">4억원 이하</strong></li>
           <li>3. 공사 (전문): <strong style="color:#1d4ed8;">2억원 이하</strong></li>
           <li>4. 공사 (기타): <strong style="color:#1d4ed8;">1.6억원 이하</strong></li>
@@ -972,9 +1011,9 @@ A. 2인 이상 견적 대상에서 1인만 수의시담에 응한 경우, 해당
         <div style="background:#eef2ff; padding:16px; border-radius:8px; margin-top:8px; font-family:monospace;">
           ├─ 200만원 미만 → <strong>카드결제</strong> (계약서 생략 가능)<br>
           ├─ 200만원 ~ 2천만원 → <strong>1인 견적</strong> 수의계약<br>
-          ├─ 2천만원 초과 ~ 한도 → <strong>2인 이상 견적</strong> 수의계약<br>
+          ├─ 2천만원 초과 ~ 한도 → <strong>2인 이상 견적</strong> 수의계약 <span style="color:#dc2626; font-weight:bold;">← G2B 전자견적 필수</span><br>
           └─ 한도 초과 → <strong>경쟁입찰</strong><br>
-          (한도: 일반 2천만원, 특례 5천만원~1억원)
+          (한도: 일반 2천만원, 청년창업 5천만원, 소기업·여성·장애인 등 1억원)
         </div>
       </div>
 
@@ -983,8 +1022,25 @@ A. 2인 이상 견적 대상에서 1인만 수의시담에 응한 경우, 해당
         <div style="background:#ecfdf5; padding:16px; border-radius:8px; margin-top:8px; font-family:monospace;">
           ├─ 200만원 미만 → <strong>카드결제</strong> (계약서 생략 가능)<br>
           ├─ 200만원 ~ 2천만원 → <strong>1인 견적</strong> 수의계약<br>
-          ├─ 2천만원 ~ 4억원 → <strong>2인 이상 견적</strong> 수의계약<br>
+          ├─ 2천만원 ~ 4억원 → <strong>2인 이상 견적</strong> 수의계약 <span style="color:#dc2626; font-weight:bold;">← G2B 전자견적 필수</span><br>
           └─ 4억원 초과 → <strong>경쟁입찰</strong>
+        </div>
+      </div>
+
+      <div style="margin-top:16px;">
+        <strong style="color:#dc2626;">📢 [G2B 전자견적 의무 범위]</strong>
+        <div style="background:#fef2f2; padding:16px; border-radius:8px; margin-top:8px;">
+          추정가격 <strong>2천만원 초과</strong>인 수의계약은 나라장터(G2B) 또는 학교장터(S2B) <strong>전자견적</strong> 의무 (시행령 제39조)<br>
+          <small style="color:#6b7280;">※ 2천만원 이하는 오프라인(전화·이메일 등) 견적 가능</small>
+        </div>
+      </div>
+
+      <div style="margin-top:16px;">
+        <strong style="color:#7c3aed;">💡 [추정가격 vs 예정가격 구분]</strong>
+        <div style="background:#f5f3ff; padding:16px; border-radius:8px; margin-top:8px;">
+          <strong>추정가격</strong> = 부가세 제외 금액 → <u>계약방법</u>(수의/입찰) 결정 기준<br>
+          <strong>예정가격</strong> = 거래실례·원가계산 등으로 산정 → <u>낙찰 상한</u>(견적가격 비교 기준)<br>
+          <small style="color:#6b7280;">※ 추정가격 2천만원 이하 수의계약 시 예정가격 작성 생략 가능 (시행령 제9조)</small>
         </div>
       </div>
     DECREE
@@ -1016,6 +1072,18 @@ A. 2인 이상 견적 대상에서 1인만 수의시담에 응한 경우, 해당
             주의
           </h4>
           <p class="text-amber-700">"부가세 포함 5천만원" 기준이 아닙니다!<br><strong>"부가세 별도 5,000만원"</strong> 기준입니다.</p>
+        </div>
+
+        <div class="bg-purple-50 border border-purple-200 rounded-xl p-4">
+          <h4 class="font-bold text-purple-800 flex items-center gap-2 mb-2">
+            <span class="material-symbols-outlined">campaign</span>
+            한시적 특례 적용 중 (~2026.6.30)
+          </h4>
+          <ul class="text-purple-700 text-sm space-y-1">
+            <li>• 한시적 특례 적용 여부는 <strong>공고일(견적요청일) 기준</strong>으로 판단</li>
+            <li>• 특례 기간 내 공고했다면, 계약 체결이 기간 이후라도 특례 적용</li>
+            <li class="text-xs text-purple-500">※ 행안부 고시 제2025-72호 (2026.1.1~6.30)</li>
+          </ul>
         </div>
       </div>
     TIPS
@@ -1091,181 +1159,6 @@ A. 2인 이상 견적 대상에서 1인만 수의시담에 응한 경우, 해당
     published: true
   },
   {
-    name: '소액수의',
-    slug: 'small-amount-contract',
-    summary: '소액 수의계약 (추정가격 기준 수의계약)',
-    keywords: '소액수의,소액수의계약,추정가격,금액기준,소액',
-    category: 'contract',
-    law_content: <<~LAW,
-      <strong>지방계약법 제9조 (수의계약)</strong>
-
-      <div style="background:#dbeafe; padding:16px; border-radius:8px; margin-top:12px;">
-        지방자치단체의 장 또는 계약담당자는 계약의 목적·성질·규모 등을 고려하여 필요하다고 인정되면 <strong>대통령령으로 정하는 바에 따라</strong> 수의계약을 할 수 있다.
-      </div>
-
-      <div style="background:#f3f4f6; padding:12px; border-radius:8px; margin-top:16px;">
-        <strong>📌 위임 사항:</strong> 구체적인 수의계약 금액 기준은 <strong>시행령 제25조</strong>에서 규정
-      </div>
-    LAW
-    decree_content: <<~DECREE,
-      <strong>지방계약법 시행령 제25조 (수의계약의 범위)</strong>
-
-      <div style="background:#dbeafe; padding:16px; border-radius:8px; margin-top:12px;">
-        <strong>제1항 제1호 【소액 수의계약 기본 한도】</strong>
-
-        <p style="margin-top:8px;">추정가격이 다음 금액 이하인 계약:</p>
-
-        <table style="width:100%; border-collapse:collapse; margin-top:12px;">
-          <tr style="background:#1e3a5f; color:white;">
-            <th style="border:1px solid #374151; padding:12px;">구분</th>
-            <th style="border:1px solid #374151; padding:12px;">금액</th>
-          </tr>
-          <tr>
-            <td style="border:1px solid #d1d5db; padding:12px;">공사</td>
-            <td style="border:1px solid #d1d5db; padding:12px;"><strong style="color:#2563eb;">2억원 이하</strong></td>
-          </tr>
-          <tr style="background:#f9fafb;">
-            <td style="border:1px solid #d1d5db; padding:12px;">물품·용역</td>
-            <td style="border:1px solid #d1d5db; padding:12px;"><strong style="color:#2563eb;">2천만원 이하</strong> <span style="color:#6b7280;">(특례기업 5천만원)</span></td>
-          </tr>
-        </table>
-      </div>
-
-      <div style="background:#fef3c7; padding:16px; border-radius:8px; margin-top:16px;">
-        <strong>2025~2026년 한시적 특례</strong>
-
-        <table style="width:100%; border-collapse:collapse; margin-top:12px;">
-          <tr style="background:#92400e; color:white;">
-            <th style="border:1px solid #d97706; padding:12px;">구분</th>
-            <th style="border:1px solid #d97706; padding:12px;">특례 금액</th>
-          </tr>
-          <tr>
-            <td style="border:1px solid #fcd34d; padding:12px;">공사</td>
-            <td style="border:1px solid #fcd34d; padding:12px;"><strong style="color:#b45309;">4억원 이하</strong></td>
-          </tr>
-          <tr style="background:#fef9c3;">
-            <td style="border:1px solid #fcd34d; padding:12px;">물품·용역</td>
-            <td style="border:1px solid #fcd34d; padding:12px;"><strong style="color:#b45309;">1억원 이하</strong></td>
-          </tr>
-        </table>
-      </div>
-
-      <div style="background:#f3f4f6; padding:12px; border-radius:8px; margin-top:16px;">
-        <strong>📌 소액수의 vs 특명수의</strong>
-        <ul style="margin-top:8px; line-height:1.8;">
-          <li><strong>소액수의:</strong> 금액 기준 → 시행령 §25①<strong>1</strong>호</li>
-          <li><strong>특명수의:</strong> 특수 사유 (긴급, 특허 등) → 시행령 §25①<strong>2~6</strong>호</li>
-        </ul>
-      </div>
-    DECREE
-    rule_content: '',
-    practical_tips: <<~TIPS,
-      <div class="space-y-4">
-        <div class="bg-blue-50 border border-blue-200 rounded-xl p-4">
-          <h4 class="font-bold text-blue-800 flex items-center gap-2 mb-2">
-            <span class="material-symbols-outlined">checklist</span>
-            소액수의 체크리스트
-          </h4>
-
-          <div class="space-y-3 mt-3">
-            <div>
-              <strong class="text-blue-700">1. 추정가격 산정</strong>
-              <ul class="text-blue-600 text-sm mt-1">
-                <li>☐ 부가세 별도 금액으로 산정했는가?</li>
-                <li>☐ 관급자재비 제외했는가?</li>
-                <li>☐ 분할계약에 해당하지 않는가?</li>
-              </ul>
-            </div>
-
-            <div>
-              <strong class="text-blue-700">2. 견적 방법 결정</strong>
-              <ul class="text-blue-600 text-sm mt-1">
-                <li>☐ 1인 견적 대상인가? (물품·용역·공사 모두 2천만원 이하)</li>
-                <li>☐ 2인 견적 대상인가? (그 이상)</li>
-              </ul>
-            </div>
-
-            <div>
-              <strong class="text-blue-700">3. 서류 구비</strong>
-              <ul class="text-blue-600 text-sm mt-1">
-                <li>☐ 수의계약 사유서 작성</li>
-                <li>☐ 예정가격 조서 작성</li>
-                <li>☐ 견적서 징구</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    TIPS
-    interpretation_content: <<~INTERP,
-## 소액수의 관련 유권해석
-
-### Q. 소액수의와 특명수의의 차이
-
-**A:**
-- **소액수의:** 추정가격이 일정 금액 이하 → 시행령 제25조 제1항 **제1호**
-- **특명수의:** 특수 사유(긴급, 특허 등) → 시행령 제25조 제1항 **제2~6호**
-
----
-
-### Q. 소액수의 시 사유서에 기재할 내용
-
-**A:** 다음과 같이 기재합니다:
-> "지방계약법 시행령 제25조 제1항 제1호에 따라 추정가격 ○○만원으로 소액수의계약 체결"
-
----
-
-### Q. 소액수의도 계약보증금이 필요한가요?
-
-**A:** 추정가격 **5천만원 이하**(공사 1억원 이하)인 경우 계약보증금 납부를 면제할 수 있습니다.
-    INTERP
-    audit_cases: <<~AUDIT,
-## 소액수의 관련 감사사례
-
-### 사례 1: 소액수의 사유서 미작성
-**지적사항:** 소액수의계약 시 수의계약 사유서를 작성하지 않음
-**관련근거:** 지방계약법 시행규칙 제26조
-**조치내용:** 관련자 주의
-
-> 2천만원 이하 물품 구매 시에도 수의계약 사유서는 반드시 작성해야 함
-
----
-
-### 사례 2: 소액 분할계약
-**지적사항:** 8천만원 물품을 4건(각 2천만원)으로 분할하여 소액수의 적용
-**관련근거:** 지방계약법 시행령 제25조
-**조치내용:** 변상판정, 관련자 중징계
-
-> 동일 품목을 의도적으로 분할하여 소액수의 한도 이하로 만든 사례
-    AUDIT
-    qa_content: <<~QA,
-## 소액수의 질의답변
-
-### Q1. 소액수의 범위는 어떻게 되나요?
-
-**A:** 추정가격(부가세 별도) 기준:
-- **물품/용역:** 2천만원 이하 (1인 견적), 5천만원 이하 (2인 견적, 특례)
-- **공사:** 2천만원 이하 (1인 견적), 2억원 이하 (2인 견적)
-
----
-
-### Q2. 소액수의도 예정가격 조서를 작성해야 하나요?
-
-**A:** **네, 반드시 작성해야 합니다.** 금액과 관계없이 예정가격 조서 작성은 필수입니다.
-
----
-
-### Q3. 소액수의 시 계약서 생략이 가능한가요?
-
-**A:** 추정가격 **5천만원 이하**(공사 1억원 이하)인 경우 계약서 작성을 생략할 수 있습니다. 다만, 청구서/납품서 등 증빙 보관은 필수입니다.
-    QA
-    faqs: [
-      { question: '소액수의와 특명수의의 차이점은 무엇인가요?', answer: '소액수의는 추정가격이 일정 금액 이하일 때 가능한 수의계약이고, 특명수의는 긴급, 특허, 국가유공자 등 특수한 사유가 있을 때 가능한 수의계약입니다.' },
-      { question: '소액수의도 수의계약 사유서를 작성해야 하나요?', answer: '네, 소액수의도 수의계약 사유서를 작성해야 합니다. 사유서에는 "지방계약법 시행령 제25조 제1항 제1호에 따른 소액수의"라고 기재합니다.' }
-    ].to_json,
-    published: true
-  },
-  {
     name: '긴급수의',
     slug: 'emergency-contract',
     summary: '긴급한 사유로 인한 수의계약 (특명수의)',
@@ -1316,8 +1209,9 @@ A. 2인 이상 견적 대상에서 1인만 수의시담에 응한 경우, 해당
           </li>
           <li><strong>2단계:</strong> 수의계약 사유서 작성
             <ul style="color:#92400e; font-size:0.9em;">
-              <li>- 긴급 사유 상세 기재</li>
+              <li>- 긴급 사유 <strong>구체적·상세</strong> 기재 (단순히 "긴급" 기재는 불충분)</li>
               <li>- 경쟁입찰 불가 사유 명시</li>
+              <li>- 증빙자료(공문, 보도자료 등) 첨부</li>
             </ul>
           </li>
           <li><strong>3단계:</strong> 견적서 징구

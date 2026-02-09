@@ -454,7 +454,7 @@
         </h2>
         <div class="summary-stats">
           <div class="stat-item">
-            <div class="value" id="goods-total">9</div>
+            <div class="value" id="goods-total">12</div>
             <div class="label">전체 항목</div>
           </div>
           <div class="stat-item completed">
@@ -462,7 +462,7 @@
             <div class="label">완료</div>
           </div>
           <div class="stat-item pending">
-            <div class="value" id="goods-pending">9</div>
+            <div class="value" id="goods-pending">12</div>
             <div class="label">미완료</div>
           </div>
           <div class="stat-item">
@@ -497,12 +497,12 @@
             <div class="stage-number">1</div>
             <div class="stage-info">
               <h3>기본계획 수립</h3>
-              <div class="sub">구매 목적, 수량, 예산 확인</div>
+              <div class="sub">구매 목적, 수량, 규격서, 예산 확인</div>
             </div>
           </div>
           <div class="stage-progress">
             <div class="progress-bar"><div class="progress-fill" style="width: 0%"></div></div>
-            <span class="progress-text">0/1</span>
+            <span class="progress-text">0/2</span>
             <span class="material-symbols-outlined toggle-icon">expand_more</span>
           </div>
         </div>
@@ -531,6 +531,34 @@
                 <div class="tip-item">
                   <span class="material-symbols-outlined">lightbulb</span>
                   구매 목적에 맞는 최소한의 규격 설정
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box">
+              <span class="material-symbols-outlined">check</span>
+            </div>
+            <div class="check-content">
+              <div class="check-title">
+                물품 규격서(Specification) 작성
+                <span class="required">필수</span>
+              </div>
+              <div class="check-desc">
+                구매할 물품의 필수 사양, 선택 사양, 수량 등을 구체적으로 명시한 규격서를 작성했는지 확인합니다.
+              </div>
+              <div class="legal-basis">
+                <span class="material-symbols-outlined">gavel</span>
+                지방계약법 시행령 제14조
+              </div>
+              <div class="check-tips">
+                <div class="tip-item warning">
+                  <span class="material-symbols-outlined">warning</span>
+                  규격서 없이 견적 요청 시 업체 간 비교 불가 및 감사 지적 위험
+                </div>
+                <div class="tip-item">
+                  <span class="material-symbols-outlined">lightbulb</span>
+                  필수 사양과 선택 사양을 구분하여 기재
                 </div>
               </div>
             </div>
@@ -575,6 +603,10 @@
                 <div class="tip-item">
                   <span class="material-symbols-outlined">lightbulb</span>
                   조달청 가격(나라장터 종합쇼핑몰) 우선 확인
+                </div>
+                <div class="tip-item">
+                  <span class="material-symbols-outlined">lightbulb</span>
+                  추정가격 2천만원 이하 수의계약 시 예정가격 작성 생략 가능 (시행령 제9조)
                 </div>
               </div>
             </div>
@@ -659,12 +691,12 @@
             <div class="stage-number">4</div>
             <div class="stage-info">
               <h3>계약방법 결정</h3>
-              <div class="sub">입찰 또는 수의계약 방식 결정</div>
+              <div class="sub">입찰 또는 수의계약 방식 결정, 분할계약 검토</div>
             </div>
           </div>
           <div class="stage-progress">
             <div class="progress-bar"><div class="progress-fill" style="width: 0%"></div></div>
-            <span class="progress-text">0/1</span>
+            <span class="progress-text">0/2</span>
             <span class="material-symbols-outlined toggle-icon">expand_more</span>
           </div>
         </div>
@@ -690,9 +722,37 @@
                   <span class="material-symbols-outlined">lightbulb</span>
                   물품: 2,000만원 이하 소액수의계약 가능
                 </div>
+                <div class="tip-item">
+                  <span class="material-symbols-outlined">lightbulb</span>
+                  2천만원 초과 수의계약 시 G2B 전자견적 필수 (시행령 제39조)
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box">
+              <span class="material-symbols-outlined">check</span>
+            </div>
+            <div class="check-content">
+              <div class="check-title">
+                분할계약(쪼개기) 사전 검토
+                <span class="required">필수</span>
+              </div>
+              <div class="check-desc">
+                동일 목적의 계약을 여러 건으로 분할하여 수의계약 범위에 맞추는 것은 아닌지 사전 검토합니다.
+              </div>
+              <div class="legal-basis">
+                <span class="material-symbols-outlined">gavel</span>
+                지방계약법 시행령 제25조제6항
+              </div>
+              <div class="check-tips">
                 <div class="tip-item warning">
                   <span class="material-symbols-outlined">warning</span>
-                  분할계약 금지 - 동일 목적의 계약을 나누어 수의계약 불가
+                  분할계약은 감사 지적의 가장 대표적인 사례 - 사전준비 단계에서 검토 필수
+                </div>
+                <div class="tip-item">
+                  <span class="material-symbols-outlined">lightbulb</span>
+                  동일 시기, 동일 목적, 동일 장소의 계약은 합산하여 계약방법 결정
                 </div>
               </div>
             </div>
@@ -707,16 +767,44 @@
             <div class="stage-number">5</div>
             <div class="stage-info">
               <h3>청렴성 검증</h3>
-              <div class="sub">부정당업자 조회, 청렴서약서</div>
+              <div class="sub">체결제한 확인, 부정당업자 조회, 청렴서약서</div>
             </div>
           </div>
           <div class="stage-progress">
             <div class="progress-bar"><div class="progress-fill" style="width: 0%"></div></div>
-            <span class="progress-text">0/2</span>
+            <span class="progress-text">0/3</span>
             <span class="material-symbols-outlined toggle-icon">expand_more</span>
           </div>
         </div>
         <div class="stage-body">
+          <div class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box">
+              <span class="material-symbols-outlined">check</span>
+            </div>
+            <div class="check-content">
+              <div class="check-title">
+                수의계약 체결 제한 여부 확인서 징구
+                <span class="required">필수</span>
+              </div>
+              <div class="check-desc">
+                계약상대자가 수의계약 배제사유(부정당업자 제재, 영업정지, 과징금 등)에 해당하는지 확인하고 확인서를 징구합니다.
+              </div>
+              <div class="legal-basis">
+                <span class="material-symbols-outlined">gavel</span>
+                지방계약법 시행령 제25조, 제31조
+              </div>
+              <div class="check-tips">
+                <div class="tip-item warning">
+                  <span class="material-symbols-outlined">warning</span>
+                  배제사유 미확인 시 계약 무효 및 감사 지적 대상
+                </div>
+                <div class="tip-item">
+                  <span class="material-symbols-outlined">lightbulb</span>
+                  나라장터(G2B) 부정당업자 제재현황 조회 후 확인서 징구
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="check-item" onclick="toggleCheck(this)">
             <div class="check-box">
               <span class="material-symbols-outlined">check</span>
@@ -840,7 +928,7 @@
         </h2>
         <div class="summary-stats">
           <div class="stat-item">
-            <div class="value" id="service-total">10</div>
+            <div class="value" id="service-total">12</div>
             <div class="label">전체 항목</div>
           </div>
           <div class="stat-item completed">
@@ -848,7 +936,7 @@
             <div class="label">완료</div>
           </div>
           <div class="stat-item pending">
-            <div class="value" id="service-pending">10</div>
+            <div class="value" id="service-pending">12</div>
             <div class="label">미완료</div>
           </div>
           <div class="stat-item">
@@ -985,6 +1073,12 @@
                 <span class="material-symbols-outlined">gavel</span>
                 지방계약법 시행규칙 제8조
               </div>
+              <div class="check-tips">
+                <div class="tip-item">
+                  <span class="material-symbols-outlined">lightbulb</span>
+                  추정가격 2천만원 이하 수의계약 시 예정가격 작성 생략 가능 (시행령 제9조)
+                </div>
+              </div>
             </div>
           </div>
           <div class="check-item" onclick="toggleCheck(this)">
@@ -1055,12 +1149,12 @@
             <div class="stage-number">5</div>
             <div class="stage-info">
               <h3>계약방법 결정</h3>
-              <div class="sub">입찰/수의계약, 협상에 의한 계약</div>
+              <div class="sub">입찰/수의계약, 분할계약 검토, 협상에 의한 계약</div>
             </div>
           </div>
           <div class="stage-progress">
             <div class="progress-bar"><div class="progress-fill" style="width: 0%"></div></div>
-            <span class="progress-text">0/2</span>
+            <span class="progress-text">0/3</span>
             <span class="material-symbols-outlined toggle-icon">expand_more</span>
           </div>
         </div>
@@ -1085,6 +1179,34 @@
                 <div class="tip-item">
                   <span class="material-symbols-outlined">lightbulb</span>
                   용역: 2,000만원 이하 소액수의계약 가능
+                </div>
+                <div class="tip-item">
+                  <span class="material-symbols-outlined">lightbulb</span>
+                  2천만원 초과 수의계약 시 G2B 전자견적 필수 (시행령 제39조)
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box">
+              <span class="material-symbols-outlined">check</span>
+            </div>
+            <div class="check-content">
+              <div class="check-title">
+                분할계약(쪼개기) 사전 검토
+                <span class="required">필수</span>
+              </div>
+              <div class="check-desc">
+                동일 목적의 계약을 여러 건으로 분할하여 수의계약 범위에 맞추는 것은 아닌지 사전 검토합니다.
+              </div>
+              <div class="legal-basis">
+                <span class="material-symbols-outlined">gavel</span>
+                지방계약법 시행령 제25조제6항
+              </div>
+              <div class="check-tips">
+                <div class="tip-item warning">
+                  <span class="material-symbols-outlined">warning</span>
+                  분할계약은 감사 지적의 가장 대표적인 사례 - 사전준비 단계에서 검토 필수
                 </div>
               </div>
             </div>
@@ -1115,16 +1237,40 @@
             <div class="stage-number">6</div>
             <div class="stage-info">
               <h3>청렴성 검증</h3>
-              <div class="sub">부정당업자 조회, 청렴서약서</div>
+              <div class="sub">체결제한 확인, 부정당업자 조회, 청렴서약서</div>
             </div>
           </div>
           <div class="stage-progress">
             <div class="progress-bar"><div class="progress-fill" style="width: 0%"></div></div>
-            <span class="progress-text">0/2</span>
+            <span class="progress-text">0/3</span>
             <span class="material-symbols-outlined toggle-icon">expand_more</span>
           </div>
         </div>
         <div class="stage-body">
+          <div class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box">
+              <span class="material-symbols-outlined">check</span>
+            </div>
+            <div class="check-content">
+              <div class="check-title">
+                수의계약 체결 제한 여부 확인서 징구
+                <span class="required">필수</span>
+              </div>
+              <div class="check-desc">
+                계약상대자가 수의계약 배제사유(부정당업자 제재, 영업정지, 과징금 등)에 해당하는지 확인하고 확인서를 징구합니다.
+              </div>
+              <div class="legal-basis">
+                <span class="material-symbols-outlined">gavel</span>
+                지방계약법 시행령 제25조, 제31조
+              </div>
+              <div class="check-tips">
+                <div class="tip-item warning">
+                  <span class="material-symbols-outlined">warning</span>
+                  배제사유 미확인 시 계약 무효 및 감사 지적 대상
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="check-item" onclick="toggleCheck(this)">
             <div class="check-box">
               <span class="material-symbols-outlined">check</span>
@@ -1184,7 +1330,7 @@
         </h2>
         <div class="summary-stats">
           <div class="stat-item">
-            <div class="value" id="construction-total">12</div>
+            <div class="value" id="construction-total">14</div>
             <div class="label">전체 항목</div>
           </div>
           <div class="stat-item completed">
@@ -1192,7 +1338,7 @@
             <div class="label">완료</div>
           </div>
           <div class="stat-item pending">
-            <div class="value" id="construction-pending">12</div>
+            <div class="value" id="construction-pending">14</div>
             <div class="label">미완료</div>
           </div>
           <div class="stat-item">
@@ -1314,12 +1460,12 @@
             <div class="stage-number">3</div>
             <div class="stage-info">
               <h3>계약방법 결정</h3>
-              <div class="sub">입찰/수의계약 방식 결정</div>
+              <div class="sub">입찰/수의계약 방식 결정, 분할계약 검토</div>
             </div>
           </div>
           <div class="stage-progress">
             <div class="progress-bar"><div class="progress-fill" style="width: 0%"></div></div>
-            <span class="progress-text">0/2</span>
+            <span class="progress-text">0/3</span>
             <span class="material-symbols-outlined toggle-icon">expand_more</span>
           </div>
         </div>
@@ -1344,6 +1490,38 @@
                 <div class="tip-item">
                   <span class="material-symbols-outlined">lightbulb</span>
                   종합공사: 4억원 이하, 전문공사: 2억원 이하, 기타공사: 1.6억원 이하 수의계약 가능
+                </div>
+                <div class="tip-item">
+                  <span class="material-symbols-outlined">lightbulb</span>
+                  2천만원 초과 수의계약 시 G2B 전자견적 필수 (시행령 제39조)
+                </div>
+                <div class="tip-item">
+                  <span class="material-symbols-outlined">lightbulb</span>
+                  추정가격 2천만원 이하 수의계약 시 예정가격 작성 생략 가능 (시행령 제9조)
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box">
+              <span class="material-symbols-outlined">check</span>
+            </div>
+            <div class="check-content">
+              <div class="check-title">
+                분할계약(쪼개기) 사전 검토
+                <span class="required">필수</span>
+              </div>
+              <div class="check-desc">
+                동일 목적의 공사를 여러 건으로 분할하여 수의계약 범위에 맞추는 것은 아닌지 사전 검토합니다.
+              </div>
+              <div class="legal-basis">
+                <span class="material-symbols-outlined">gavel</span>
+                지방계약법 시행령 제25조제6항
+              </div>
+              <div class="check-tips">
+                <div class="tip-item warning">
+                  <span class="material-symbols-outlined">warning</span>
+                  분할계약은 감사 지적의 가장 대표적인 사례 - 사전준비 단계에서 검토 필수
                 </div>
               </div>
             </div>
@@ -1380,16 +1558,40 @@
             <div class="stage-number">4</div>
             <div class="stage-info">
               <h3>청렴성 검증</h3>
-              <div class="sub">부정당업자 조회, 시공능력 확인</div>
+              <div class="sub">체결제한 확인, 부정당업자 조회, 시공능력 확인</div>
             </div>
           </div>
           <div class="stage-progress">
             <div class="progress-bar"><div class="progress-fill" style="width: 0%"></div></div>
-            <span class="progress-text">0/2</span>
+            <span class="progress-text">0/3</span>
             <span class="material-symbols-outlined toggle-icon">expand_more</span>
           </div>
         </div>
         <div class="stage-body">
+          <div class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box">
+              <span class="material-symbols-outlined">check</span>
+            </div>
+            <div class="check-content">
+              <div class="check-title">
+                수의계약 체결 제한 여부 확인서 징구
+                <span class="required">필수</span>
+              </div>
+              <div class="check-desc">
+                계약상대자가 수의계약 배제사유(부정당업자 제재, 영업정지, 과징금 등)에 해당하는지 확인하고 확인서를 징구합니다.
+              </div>
+              <div class="legal-basis">
+                <span class="material-symbols-outlined">gavel</span>
+                지방계약법 시행령 제25조, 제31조
+              </div>
+              <div class="check-tips">
+                <div class="tip-item warning">
+                  <span class="material-symbols-outlined">warning</span>
+                  배제사유 미확인 시 계약 무효 및 감사 지적 대상
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="check-item" onclick="toggleCheck(this)">
             <div class="check-box">
               <span class="material-symbols-outlined">check</span>

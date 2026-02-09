@@ -21,9 +21,8 @@ class RegulationVerifier
     'budget-carryover' => ['예산이월', '지방재정법', '사고이월', '명시이월'],
     'private-contract' => ['수의계약', '지방계약법', '추정가격'],
     'private-contract-limit' => ['수의계약 한도', '지방계약법 시행령'],
-    'small-amount-contract' => ['소액수의', '견적', '나라장터'],
     'single-quote' => ['1인견적', '수의계약'],
-    'dual-quote' => ['2인견적', '나라장터', '지정정보처리장치'],
+    'dual-quote' => ['2인 이상 견적', '2인견적', '나라장터', '지정정보처리장치'],
     'emergency-contract' => ['긴급수의', '긴급계약'],
     'price-negotiation' => ['수의시담', '가격협상']
   }.freeze

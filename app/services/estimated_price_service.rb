@@ -32,7 +32,7 @@ class EstimatedPriceService
       { id: "direct_labor", name: "직접인건비", note: "노임단가 × 투입 M/M" },
       { id: "overhead", name: "제경비", note: "직접인건비의 110~120%" },
       { id: "direct_expense", name: "직접경비", note: "여비·인쇄비 등 실비" },
-      { id: "general_admin", name: "일반관리비", note: "노무비+경비의 5~6%" },
+      { id: "general_admin", name: "일반관리비", note: "노무비+경비의 5~8%" },
       { id: "profit", name: "이윤", note: "노무비+경비+일반관리비의 10% 이내" }
     ],
     construction: [
@@ -41,7 +41,7 @@ class EstimatedPriceService
       { id: "indirect_labor", name: "간접노무비", note: "직접노무비의 일정비율" },
       { id: "industrial_insurance", name: "산재보험료", note: "노무비의 일정비율" },
       { id: "expense", name: "경비", note: "기계경비·가설비·운반비 등" },
-      { id: "general_admin", name: "일반관리비", note: "재+노+경의 6% 이내" },
+      { id: "general_admin", name: "일반관리비", note: "재+노+경의 8% 이내" },
       { id: "profit", name: "이윤", note: "노+경+관의 15% 이내" }
     ]
   }.freeze
@@ -50,16 +50,16 @@ class EstimatedPriceService
   RATE_LIMITS = {
     goods: { profit: { max: 0.25, basis: "원가", name: "이윤" } },
     service: { profit: { max: 0.10, basis: "노무비+경비+일반관리비", name: "이윤" },
-               general_admin: { max: 0.06, basis: "노무비+경비", name: "일반관리비" } },
+               general_admin: { max: 0.08, basis: "노무비+경비", name: "일반관리비" } },
     construction: { profit: { max: 0.15, basis: "노무비+경비+일반관리비", name: "이윤" },
-                    general_admin: { max: 0.06, basis: "재료비+노무비+경비", name: "일반관리비" } }
+                    general_admin: { max: 0.08, basis: "재료비+노무비+경비", name: "일반관리비" } }
   }.freeze
 
   # 수의계약 기준금액
   PRIVATE_CONTRACT_THRESHOLDS = {
     goods: 50_000_000,
     service: 50_000_000,
-    construction: 80_000_000
+    construction: 160_000_000
   }.freeze
 
   VAT_RATE = 0.10
@@ -191,7 +191,9 @@ class EstimatedPriceService
       elsif price <= 22_000_000
         { type: "1인견적", desc: "2천만원 이하(부가세 포함 2,200만원): 1인 견적 수의계약", basis: "지방계약법 시행령 제25조제1항제5호" }
       elsif price <= 50_000_000
-        { type: "2인견적", desc: "5천만원 이하: 2인 이상 견적 비교 (특례기업은 1인 가능)", basis: "지방계약법 시행령 제25조제1항제5호, 제30조제1항" }
+        { type: "2인 이상 견적", desc: "5천만원 이하: 2인 이상 견적 비교 (특례기업은 1인 가능)", basis: "지방계약법 시행령 제25조제1항제5호, 제30조제1항" }
+      elsif price <= 110_000_000
+        { type: "특례기업 수의계약", desc: "1억원 이하: 소기업·여성·장애인·사회적기업 등은 2인 이상 견적 수의계약 가능", basis: "지방계약법 시행령 제25조제1항제5호 다목~마목" }
       else
         { type: "입찰", desc: "수의계약 기준 초과: 경쟁입찰 진행 필요", basis: "지방계약법 제9조" }
       end
