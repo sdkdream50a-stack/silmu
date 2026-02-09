@@ -109,6 +109,15 @@
 
     <!-- 견적서 업로드 자동입력 -->
     <%= render 'shared/quote_upload_zone', tool_id: 'ep' %>
+    <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:10px; padding:12px 16px; margin-top:-12px; margin-bottom:16px; display:flex; align-items:flex-start; gap:8px;">
+      <span class="material-symbols-outlined" style="color:#3b82f6; font-size:18px; flex-shrink:0; margin-top:1px;">info</span>
+      <div style="font-size:13px; color:#475569; line-height:1.6;">
+        <strong style="color:#1e40af;">견적서 = 시장조사 자료</strong><br>
+        추정가격 산정 시 업체 견적서는 시장조사(견적가격)의 기초 자료로 활용됩니다.
+        견적서의 공급가액(VAT 제외)을 기준으로 추정가격을 산정합니다.
+        <span style="color:#64748b; font-size:12px;">(지방계약법 시행령 제7조~제9조)</span>
+      </div>
+    </div>
     <script>
     function quMapFields_ep(f) {
       // 물품 기본 선택 (가장 흔한 1인 수의)
