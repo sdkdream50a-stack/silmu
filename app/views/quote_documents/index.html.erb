@@ -1,0 +1,1238 @@
+<%# 견적서 일괄 문서생성 %>
+
+<style>
+.qd-card { background:#fff; border-radius:16px; border:1px solid #e5e7eb; padding:28px; margin-bottom:24px; }
+.qd-label { display:block; font-size:13px; font-weight:700; color:#334155; margin-bottom:6px; }
+.qd-label .qd-required { color:#ef4444; margin-left:2px; }
+.qd-input { width:100%; border:1px solid #e5e7eb; border-radius:10px; padding:10px 14px; font-size:14px; color:#1e293b; transition:border-color .2s, box-shadow .2s; box-sizing:border-box; }
+.qd-input:focus { outline:none; border-color:#4f46e5; box-shadow:0 0 0 3px rgba(79,70,229,.1); }
+.qd-textarea { min-height:80px; resize:vertical; font-family:inherit; }
+.qd-select { appearance:auto; }
+.qd-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.qd-grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+.qd-btn { display:inline-flex; align-items:center; gap:6px; padding:12px 28px; border-radius:12px; font-weight:600; font-size:15px; border:none; cursor:pointer; transition:all .2s; }
+.qd-btn-primary { background:#4f46e5; color:#fff; }
+.qd-btn-primary:hover { background:#4338ca; }
+.qd-btn-secondary { background:#f1f5f9; color:#475569; border:1px solid #e2e8f0; }
+.qd-btn-secondary:hover { background:#e2e8f0; }
+.qd-btn-success { background:#059669; color:#fff; }
+.qd-btn-success:hover { background:#047857; }
+.qd-btn:disabled { opacity:.5; cursor:not-allowed; }
+.qd-btn-sm { padding:8px 16px; font-size:13px; border-radius:8px; }
+
+/* Steps indicator */
+.qd-steps { display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:32px; }
+.qd-step { display:flex; align-items:center; gap:8px; padding:8px 16px; border-radius:10px; font-size:13px; font-weight:600; color:#94a3b8; background:#f8fafc; transition:all .3s; }
+.qd-step.active { color:#4f46e5; background:#eef2ff; }
+.qd-step.done { color:#059669; background:#ecfdf5; }
+.qd-step-num { width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; background:#e2e8f0; color:#64748b; }
+.qd-step.active .qd-step-num { background:#4f46e5; color:#fff; }
+.qd-step.done .qd-step-num { background:#059669; color:#fff; }
+.qd-step-arrow { color:#cbd5e1; font-size:18px; }
+
+/* Upload zone */
+.qd-upload-zone { border:2px dashed #cbd5e1; border-radius:16px; padding:48px 24px; text-align:center; cursor:pointer; transition:all .3s; background:#fafbfc; }
+.qd-upload-zone:hover, .qd-upload-zone.dragover { border-color:#4f46e5; background:#eef2ff; }
+.qd-upload-zone.has-file { border-color:#059669; background:#ecfdf5; }
+
+/* Items table */
+.qd-items-table { width:100%; border-collapse:collapse; margin:12px 0; font-size:13px; }
+.qd-items-table th { background:#f8fafc; padding:8px 10px; text-align:center; border:1px solid #e2e8f0; font-weight:600; color:#475569; font-size:12px; }
+.qd-items-table td { padding:4px 6px; border:1px solid #e2e8f0; }
+.qd-items-table input { width:100%; border:1px solid transparent; background:transparent; padding:6px 8px; font-size:13px; border-radius:6px; }
+.qd-items-table input:focus { outline:none; border-color:#4f46e5; background:#fff; }
+.qd-items-table .qd-num { text-align:right; }
+.qd-item-amount { text-align:right; padding:6px 10px !important; font-weight:600; color:#1e293b; }
+.qd-item-remove { cursor:pointer; color:#ef4444; font-size:18px; text-align:center; }
+.qd-item-remove:hover { color:#dc2626; }
+
+/* Tabs */
+.qd-tabs { display:flex; border-bottom:2px solid #e5e7eb; margin-bottom:0; }
+.qd-tab { padding:12px 20px; font-size:14px; font-weight:600; color:#64748b; cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-2px; transition:all .2s; }
+.qd-tab:hover { color:#4f46e5; }
+.qd-tab.active { color:#4f46e5; border-bottom-color:#4f46e5; }
+.qd-tab-content { display:none; }
+.qd-tab-content.active { display:block; }
+
+/* Document styles */
+.qd-doc { background:#fff; border:2px solid #c7d2fe; border-radius:0 0 16px 16px; padding:32px; }
+.qd-doc-header { text-align:center; margin-bottom:28px; padding-bottom:20px; border-bottom:2px solid #1e293b; }
+.qd-doc-title { font-size:22px; font-weight:800; color:#1e293b; letter-spacing:2px; }
+.qd-doc-section { margin-bottom:20px; }
+.qd-doc-section-title { font-size:14px; font-weight:700; color:#4f46e5; margin-bottom:8px; padding:6px 12px; background:#eef2ff; border-radius:8px; display:inline-block; }
+.qd-doc-content { font-size:14px; color:#334155; line-height:1.8; padding:8px 0 8px 12px; border-left:3px solid #e0e7ff; white-space:pre-wrap; }
+.qd-doc-table { width:100%; border-collapse:collapse; margin:8px 0; }
+.qd-doc-table th { background:#f8fafc; padding:8px 12px; text-align:left; border:1px solid #e2e8f0; font-size:13px; font-weight:600; color:#475569; }
+.qd-doc-table td { padding:8px 12px; border:1px solid #e2e8f0; font-size:14px; color:#1e293b; }
+.qd-doc-table .qd-right { text-align:right; }
+.qd-doc-footer { text-align:center; margin-top:32px; padding-top:20px; border-top:1px solid #e2e8f0; color:#64748b; font-size:13px; }
+
+.qd-actions { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:20px; }
+
+/* Summary cards */
+.qd-summary { display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; margin:16px 0; }
+.qd-summary-item { background:#f8fafc; border-radius:12px; padding:14px 16px; text-align:center; border:1px solid #e5e7eb; }
+.qd-summary-item .label { font-size:12px; color:#64748b; margin-bottom:4px; }
+.qd-summary-item .value { font-size:18px; font-weight:700; color:#1e293b; }
+
+/* Toast */
+.qd-toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(100px); background:#1e293b; color:#fff; padding:12px 24px; border-radius:12px; font-size:14px; font-weight:600; z-index:9999; transition:transform .3s ease; display:flex; align-items:center; gap:8px; }
+.qd-toast.show { transform:translateX(-50%) translateY(0); }
+
+/* Loading spinner */
+.qd-spinner { display:inline-block; width:20px; height:20px; border:3px solid rgba(255,255,255,.3); border-radius:50%; border-top-color:#fff; animation:qd-spin 1s ease-in-out infinite; }
+@keyframes qd-spin { to { transform:rotate(360deg); } }
+
+/* Hidden */
+.qd-hidden { display:none !important; }
+
+@media print {
+  body * { visibility:hidden; }
+  .qd-doc-print-target, .qd-doc-print-target * { visibility:visible; }
+  .qd-doc-print-target { position:absolute; left:0; top:0; width:100%; padding:20px; border:none; }
+  .no-print { display:none !important; }
+}
+@media (max-width:640px) {
+  .qd-grid { grid-template-columns:1fr; }
+  .qd-grid-3 { grid-template-columns:1fr; }
+  .qd-summary { grid-template-columns:1fr; }
+  .qd-steps { flex-wrap:wrap; }
+  .qd-doc-title { font-size:18px; }
+  .qd-tabs { overflow-x:auto; }
+}
+</style>
+
+<!-- 헤더 -->
+<section class="gradient-indigo text-white py-12 lg:py-16">
+  <div class="container-wide">
+    <div class="flex items-start gap-5">
+      <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 shadow-lg">
+        <span class="material-symbols-outlined text-4xl text-white">receipt_long</span>
+      </div>
+      <div>
+        <h1 class="text-3xl lg:text-4xl font-bold tracking-tight mb-2">견적서 일괄 문서생성</h1>
+        <p class="text-indigo-100 text-lg">견적서 1장으로 수의계약 서류를 한 번에 자동 생성</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-10">
+  <div class="container-wide max-w-5xl">
+
+    <!-- Steps Indicator -->
+    <div class="qd-steps" id="qd-steps">
+      <div class="qd-step active" data-step="1">
+        <span class="qd-step-num">1</span> 견적서 업로드
+      </div>
+      <span class="material-symbols-outlined qd-step-arrow">chevron_right</span>
+      <div class="qd-step" data-step="2">
+        <span class="qd-step-num">2</span> 데이터 확인
+      </div>
+      <span class="material-symbols-outlined qd-step-arrow">chevron_right</span>
+      <div class="qd-step" data-step="3">
+        <span class="qd-step-num">3</span> 문서 생성
+      </div>
+    </div>
+
+    <!-- ===== STEP 1: 업로드 ===== -->
+    <div id="qd-step1">
+      <!-- 견적서 검토 안내 -->
+      <a href="/forms/견적서검토.html" class="qd-card" style="display:flex; align-items:center; gap:16px; background:#fffbeb; border-color:#fde68a; text-decoration:none; cursor:pointer; transition:all .2s;" onmouseenter="this.style.borderColor='#f59e0b'" onmouseleave="this.style.borderColor='#fde68a'">
+        <div style="width:44px; height:44px; background:#fef3c7; border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+          <span class="material-symbols-outlined" style="color:#d97706; font-size:24px;">fact_check</span>
+        </div>
+        <div style="flex:1;">
+          <div style="font-size:14px; font-weight:700; color:#92400e;">견적서 검토를 먼저 해보세요</div>
+          <div style="font-size:13px; color:#a16207; margin-top:2px;">견적 금액이 적정한지 확인한 후 서류를 생성하면 더 안전합니다</div>
+        </div>
+        <span class="material-symbols-outlined" style="color:#d97706;">arrow_forward</span>
+      </a>
+
+      <div class="qd-card">
+        <h2 style="font-size:20px; font-weight:700; color:#1e293b; margin-bottom:6px; display:flex; align-items:center; gap:8px;">
+          <span class="material-symbols-outlined text-indigo-500">upload_file</span>
+          견적서 업로드
+        </h2>
+        <p style="font-size:14px; color:#64748b; margin-bottom:24px;">업체로부터 받은 견적서를 업로드하면 AI가 자동으로 데이터를 추출합니다.</p>
+
+        <div class="qd-upload-zone" id="qd-upload-zone"
+             onclick="document.getElementById('qd-file-input').click()">
+          <input type="file" id="qd-file-input" accept=".pdf,.jpg,.jpeg,.png" style="display:none;" onchange="qdFileSelected(this)">
+          <div id="qd-upload-placeholder">
+            <span class="material-symbols-outlined" style="font-size:48px; color:#94a3b8; display:block; margin-bottom:12px;">cloud_upload</span>
+            <div style="font-size:16px; font-weight:600; color:#475569; margin-bottom:4px;">견적서를 드래그하거나 클릭하여 업로드</div>
+            <div style="font-size:13px; color:#94a3b8;">PDF, JPG, PNG (최대 20MB)</div>
+          </div>
+          <div id="qd-upload-info" class="qd-hidden">
+            <span class="material-symbols-outlined" style="font-size:48px; color:#059669; display:block; margin-bottom:12px;">description</span>
+            <div style="font-size:16px; font-weight:600; color:#059669;" id="qd-file-name"></div>
+            <div style="font-size:13px; color:#64748b; margin-top:4px;" id="qd-file-size"></div>
+          </div>
+        </div>
+
+        <div style="text-align:center; margin-top:24px;">
+          <button class="qd-btn qd-btn-primary" id="qd-analyze-btn" onclick="qdAnalyze()" disabled>
+            <span class="material-symbols-outlined">auto_awesome</span>
+            <span id="qd-analyze-text">AI 분석 시작</span>
+          </button>
+        </div>
+
+        <div id="qd-error" class="qd-hidden" style="margin-top:16px; padding:12px 16px; background:#fef2f2; border:1px solid #fecaca; border-radius:10px; color:#dc2626; font-size:14px; display:flex; align-items:center; gap:8px;">
+          <span class="material-symbols-outlined" style="font-size:18px;">error</span>
+          <span id="qd-error-msg"></span>
+        </div>
+      </div>
+
+      <!-- 안내 -->
+      <div class="qd-card" style="background:#f0fdf4; border-color:#bbf7d0;">
+        <h3 style="font-size:15px; font-weight:700; color:#166534; margin-bottom:12px; display:flex; align-items:center; gap:6px;">
+          <span class="material-symbols-outlined" style="font-size:20px;">lightbulb</span>
+          이런 분에게 추천합니다
+        </h3>
+        <ul style="font-size:14px; color:#15803d; line-height:2;">
+          <li>- 1인 소액수의 계약 서류를 한 번에 만들고 싶은 분</li>
+          <li>- 견적서를 받았는데 사업계획서·소요예산·예정가격·과업지시서 등을 따로 작성하기 번거로운 분</li>
+          <li>- 견적서 데이터를 직접 옮겨적다가 오타가 나는 게 걱정인 분</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ===== STEP 2: 데이터 확인/수정 ===== -->
+    <div id="qd-step2" class="qd-hidden">
+      <div class="qd-card">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;">
+          <h2 style="font-size:20px; font-weight:700; color:#1e293b; display:flex; align-items:center; gap:8px;">
+            <span class="material-symbols-outlined text-indigo-500">edit_note</span>
+            추출 데이터 확인
+          </h2>
+          <button class="qd-btn qd-btn-secondary qd-btn-sm" onclick="qdGoStep(1)">
+            <span class="material-symbols-outlined" style="font-size:16px;">arrow_back</span> 다시 업로드
+          </button>
+        </div>
+        <p style="font-size:14px; color:#64748b; margin-bottom:24px;">AI가 추출한 데이터를 확인하고 필요시 수정하세요. 추가 입력 항목도 작성해주세요.</p>
+
+        <!-- 업체 정보 -->
+        <div style="font-size:14px; font-weight:700; color:#475569; margin-bottom:12px; padding-bottom:6px; border-bottom:1px solid #e5e7eb;">업체 정보 (견적서에서 추출)</div>
+        <div class="qd-grid" style="margin-bottom:16px;">
+          <div>
+            <label class="qd-label">업체명</label>
+            <input type="text" class="qd-input" id="qd-company-name">
+          </div>
+          <div>
+            <label class="qd-label">사업자등록번호</label>
+            <input type="text" class="qd-input" id="qd-business-no">
+          </div>
+        </div>
+        <div class="qd-grid" style="margin-bottom:16px;">
+          <div>
+            <label class="qd-label">대표자</label>
+            <input type="text" class="qd-input" id="qd-representative">
+          </div>
+          <div>
+            <label class="qd-label">견적일자</label>
+            <input type="date" class="qd-input" id="qd-quote-date">
+          </div>
+        </div>
+
+        <!-- 건명 -->
+        <div style="font-size:14px; font-weight:700; color:#475569; margin-bottom:12px; margin-top:24px; padding-bottom:6px; border-bottom:1px solid #e5e7eb;">건명/품목</div>
+        <div style="margin-bottom:16px;">
+          <label class="qd-label">건명 (사업명) <span class="qd-required">*</span></label>
+          <input type="text" class="qd-input" id="qd-project-name" placeholder="예: 사무실 에어컨 구매">
+        </div>
+
+        <!-- 내역 항목 -->
+        <div style="font-size:14px; font-weight:700; color:#475569; margin-bottom:12px; margin-top:24px; padding-bottom:6px; border-bottom:1px solid #e5e7eb;">내역 항목</div>
+        <div style="overflow-x:auto;">
+          <table class="qd-items-table" id="qd-items-table">
+            <thead>
+              <tr>
+                <th style="width:30px;">No</th>
+                <th style="min-width:160px;">품명</th>
+                <th style="min-width:120px;">규격</th>
+                <th style="width:60px;">단위</th>
+                <th style="width:70px;">수량</th>
+                <th style="width:100px;">단가</th>
+                <th style="width:100px;">금액</th>
+                <th style="width:36px;"></th>
+              </tr>
+            </thead>
+            <tbody id="qd-items-body">
+            </tbody>
+          </table>
+        </div>
+        <div style="margin-top:8px;">
+          <button class="qd-btn qd-btn-secondary qd-btn-sm" onclick="qdAddItem()">
+            <span class="material-symbols-outlined" style="font-size:16px;">add</span> 항목 추가
+          </button>
+        </div>
+
+        <!-- 금액 요약 -->
+        <div class="qd-summary" id="qd-amount-summary">
+          <div class="qd-summary-item">
+            <div class="label">공급가액</div>
+            <div class="value" id="qd-supply-display">0</div>
+          </div>
+          <div class="qd-summary-item">
+            <div class="label">부가세 (10%)</div>
+            <div class="value" id="qd-vat-display">0</div>
+          </div>
+          <div class="qd-summary-item" style="background:#eef2ff; border-color:#c7d2fe;">
+            <div class="label" style="color:#4f46e5;">합계금액</div>
+            <div class="value" style="color:#4f46e5;" id="qd-total-display">0</div>
+          </div>
+        </div>
+
+        <!-- 추가 입력 -->
+        <div style="font-size:14px; font-weight:700; color:#475569; margin-bottom:12px; margin-top:24px; padding-bottom:6px; border-bottom:1px solid #e5e7eb;">추가 입력 (사업계획서용)</div>
+        <div class="qd-grid" style="margin-bottom:16px;">
+          <div>
+            <label class="qd-label">사업부서 <span class="qd-required">*</span></label>
+            <input type="text" class="qd-input" id="qd-department" placeholder="예: 총무과">
+          </div>
+          <div>
+            <label class="qd-label">담당자</label>
+            <input type="text" class="qd-input" id="qd-manager" placeholder="예: 홍길동 주무관">
+          </div>
+        </div>
+        <div class="qd-grid" style="margin-bottom:16px;">
+          <div>
+            <label class="qd-label">담당자 연락처</label>
+            <input type="text" class="qd-input" id="qd-dept-phone" placeholder="예: 02-1234-5678">
+          </div>
+          <div>
+            <label class="qd-label">계약 구분</label>
+            <select class="qd-input qd-select" id="qd-contract-type" onchange="qdUpdateTypeFields()">
+              <option value="물품">물품 구매</option>
+              <option value="용역">용역</option>
+              <option value="공사">공사</option>
+            </select>
+          </div>
+        </div>
+        <div style="margin-bottom:16px;">
+          <label class="qd-label">사업 필요성 <span class="qd-required">*</span></label>
+          <textarea class="qd-input qd-textarea" id="qd-necessity" placeholder="사업을 추진해야 하는 이유를 간단히 작성하세요.&#10;예: 기존 에어컨이 노후화되어 냉방효율이 떨어지고 전력 소비가 과다하여 교체가 필요함"></textarea>
+        </div>
+
+        <!-- 용역 추가 입력 -->
+        <div id="qd-fields-service" class="qd-hidden">
+          <div style="font-size:14px; font-weight:700; color:#475569; margin-bottom:12px; margin-top:24px; padding-bottom:6px; border-bottom:1px solid #e5e7eb;">
+            과업지시서 추가 정보 <span style="font-size:12px; font-weight:400; color:#94a3b8;">용역</span>
+          </div>
+          <div class="qd-grid" style="margin-bottom:16px;">
+            <div>
+              <label class="qd-label">과업 기간</label>
+              <input type="text" class="qd-input" id="qd-task-period" placeholder="예: 계약일로부터 30일">
+            </div>
+            <div>
+              <label class="qd-label">용역 장소</label>
+              <input type="text" class="qd-input" id="qd-task-location" placeholder="예: 발주기관 지정 장소">
+            </div>
+          </div>
+          <div style="margin-bottom:16px;">
+            <label class="qd-label">납품물</label>
+            <textarea class="qd-input qd-textarea" id="qd-deliverables" placeholder="납품물 목록을 작성하세요.&#10;예: 최종보고서 2부, 결과물 CD 1매" style="min-height:60px;"></textarea>
+          </div>
+        </div>
+
+        <!-- 공사 추가 입력 -->
+        <div id="qd-fields-construction" class="qd-hidden">
+          <div style="font-size:14px; font-weight:700; color:#475569; margin-bottom:12px; margin-top:24px; padding-bottom:6px; border-bottom:1px solid #e5e7eb;">
+            시공지시서 추가 정보 <span style="font-size:12px; font-weight:400; color:#94a3b8;">공사</span>
+          </div>
+          <div class="qd-grid" style="margin-bottom:16px;">
+            <div>
+              <label class="qd-label">공사 장소</label>
+              <input type="text" class="qd-input" id="qd-construction-location" placeholder="예: 본관 2층 사무실">
+            </div>
+            <div>
+              <label class="qd-label">공사 기간</label>
+              <input type="text" class="qd-input" id="qd-construction-period" placeholder="예: 착공일로부터 30일">
+            </div>
+          </div>
+          <div style="margin-bottom:16px;">
+            <label class="qd-label">시공 시 유의사항</label>
+            <textarea class="qd-input qd-textarea" id="qd-construction-notes" placeholder="시공 유의사항을 작성하세요.&#10;예: 근무시간 외 작업, 분진 및 소음 최소화" style="min-height:60px;"></textarea>
+          </div>
+        </div>
+
+        <div style="text-align:center; margin-top:28px;">
+          <button class="qd-btn qd-btn-success" id="qd-generate-btn" onclick="qdGenerateDocuments()">
+            <span class="material-symbols-outlined">description</span>
+            <span id="qd-generate-text">3개 문서 일괄 생성</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== STEP 3: 문서 생성 결과 ===== -->
+    <div id="qd-step3" class="qd-hidden">
+      <div class="qd-card" style="padding:0; overflow:hidden;">
+        <div style="padding:20px 28px 0; display:flex; align-items:center; justify-content:space-between;">
+          <h2 style="font-size:20px; font-weight:700; color:#1e293b; display:flex; align-items:center; gap:8px;">
+            <span class="material-symbols-outlined text-green-600">check_circle</span>
+            문서 생성 완료
+          </h2>
+          <button class="qd-btn qd-btn-secondary qd-btn-sm" onclick="qdGoStep(2)">
+            <span class="material-symbols-outlined" style="font-size:16px;">arrow_back</span> 데이터 수정
+          </button>
+        </div>
+
+        <!-- Tabs -->
+        <div style="padding:16px 28px 0;">
+          <div class="qd-tabs">
+            <div class="qd-tab active" onclick="qdSwitchTab('plan')">
+              <span class="material-symbols-outlined" style="font-size:16px; vertical-align:middle;">assignment</span>
+              사업계획서
+            </div>
+            <div class="qd-tab" onclick="qdSwitchTab('budget')">
+              <span class="material-symbols-outlined" style="font-size:16px; vertical-align:middle;">calculate</span>
+              소요예산
+            </div>
+            <div class="qd-tab" onclick="qdSwitchTab('price')">
+              <span class="material-symbols-outlined" style="font-size:16px; vertical-align:middle;">price_check</span>
+              예정가격
+            </div>
+            <div class="qd-tab qd-hidden" id="qd-tab-btn-taskorder" onclick="qdSwitchTab('taskorder')">
+              <span class="material-symbols-outlined" style="font-size:16px; vertical-align:middle;">description</span>
+              과업지시서
+            </div>
+            <div class="qd-tab qd-hidden" id="qd-tab-btn-estimate" onclick="qdSwitchTab('estimate')">
+              <span class="material-symbols-outlined" style="font-size:16px; vertical-align:middle;">receipt_long</span>
+              내역서+시공지시서
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab: 사업계획서 -->
+        <div class="qd-tab-content active" id="qd-tab-plan">
+          <div style="padding:20px 28px;">
+            <div class="qd-actions no-print">
+              <button class="qd-btn qd-btn-secondary qd-btn-sm" onclick="qdCopyDoc('plan')">
+                <span class="material-symbols-outlined" style="font-size:16px;">content_copy</span> 복사
+              </button>
+              <button class="qd-btn qd-btn-secondary qd-btn-sm" onclick="qdDownloadDoc('plan', '사업계획서')">
+                <span class="material-symbols-outlined" style="font-size:16px;">download</span> 다운로드
+              </button>
+              <button class="qd-btn qd-btn-secondary qd-btn-sm" onclick="qdPrintDoc('plan')">
+                <span class="material-symbols-outlined" style="font-size:16px;">print</span> 인쇄
+              </button>
+            </div>
+            <div class="qd-doc" id="qd-doc-plan"></div>
+          </div>
+        </div>
+
+        <!-- Tab: 소요예산 -->
+        <div class="qd-tab-content" id="qd-tab-budget">
+          <div style="padding:20px 28px;">
+            <div class="qd-actions no-print">
+              <button class="qd-btn qd-btn-secondary qd-btn-sm" onclick="qdCopyDoc('budget')">
+                <span class="material-symbols-outlined" style="font-size:16px;">content_copy</span> 복사
+              </button>
+              <button class="qd-btn qd-btn-secondary qd-btn-sm" onclick="qdDownloadDoc('budget', '소요예산추정')">
+                <span class="material-symbols-outlined" style="font-size:16px;">download</span> 다운로드
+              </button>
+              <button class="qd-btn qd-btn-secondary qd-btn-sm" onclick="qdPrintDoc('budget')">
+                <span class="material-symbols-outlined" style="font-size:16px;">print</span> 인쇄
+              </button>
+            </div>
+            <div class="qd-doc" id="qd-doc-budget"></div>
+          </div>
+        </div>
+
+        <!-- Tab: 예정가격 -->
+        <div class="qd-tab-content" id="qd-tab-price">
+          <div style="padding:20px 28px;">
+            <div class="qd-actions no-print">
+              <button class="qd-btn qd-btn-secondary qd-btn-sm" onclick="qdCopyDoc('price')">
+                <span class="material-symbols-outlined" style="font-size:16px;">content_copy</span> 복사
+              </button>
+              <button class="qd-btn qd-btn-secondary qd-btn-sm" onclick="qdDownloadDoc('price', '예정가격조서')">
+                <span class="material-symbols-outlined" style="font-size:16px;">download</span> 다운로드
+              </button>
+              <button class="qd-btn qd-btn-secondary qd-btn-sm" onclick="qdPrintDoc('price')">
+                <span class="material-symbols-outlined" style="font-size:16px;">print</span> 인쇄
+              </button>
+            </div>
+            <div class="qd-doc" id="qd-doc-price"></div>
+          </div>
+        </div>
+
+        <!-- Tab: 과업지시서 (용역) -->
+        <div class="qd-tab-content" id="qd-tab-taskorder">
+          <div style="padding:20px 28px;">
+            <div class="qd-actions no-print">
+              <button class="qd-btn qd-btn-secondary qd-btn-sm" onclick="qdCopyDoc('taskorder')">
+                <span class="material-symbols-outlined" style="font-size:16px;">content_copy</span> 복사
+              </button>
+              <button class="qd-btn qd-btn-secondary qd-btn-sm" onclick="qdDownloadDoc('taskorder', '과업지시서')">
+                <span class="material-symbols-outlined" style="font-size:16px;">download</span> 다운로드
+              </button>
+              <button class="qd-btn qd-btn-secondary qd-btn-sm" onclick="qdPrintDoc('taskorder')">
+                <span class="material-symbols-outlined" style="font-size:16px;">print</span> 인쇄
+              </button>
+            </div>
+            <div class="qd-doc" id="qd-doc-taskorder"></div>
+          </div>
+        </div>
+
+        <!-- Tab: 내역서+시공지시서 (공사) -->
+        <div class="qd-tab-content" id="qd-tab-estimate">
+          <div style="padding:20px 28px;">
+            <div class="qd-actions no-print">
+              <button class="qd-btn qd-btn-secondary qd-btn-sm" onclick="qdCopyDoc('estimate')">
+                <span class="material-symbols-outlined" style="font-size:16px;">content_copy</span> 복사
+              </button>
+              <button class="qd-btn qd-btn-secondary qd-btn-sm" onclick="qdDownloadDoc('estimate', '내역서_시공지시서')">
+                <span class="material-symbols-outlined" style="font-size:16px;">download</span> 다운로드
+              </button>
+              <button class="qd-btn qd-btn-secondary qd-btn-sm" onclick="qdPrintDoc('estimate')">
+                <span class="material-symbols-outlined" style="font-size:16px;">print</span> 인쇄
+              </button>
+            </div>
+            <div class="qd-doc" id="qd-doc-estimate"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 전체 다시하기 -->
+      <div style="text-align:center; margin-top:16px;">
+        <button class="qd-btn qd-btn-secondary" onclick="qdReset()">
+          <span class="material-symbols-outlined" style="font-size:18px;">refresh</span> 새 견적서로 다시 시작
+        </button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- 토스트 -->
+<div class="qd-toast" id="qd-toast">
+  <span class="material-symbols-outlined" style="font-size:18px;">check_circle</span>
+  <span id="qd-toast-msg"></span>
+</div>
+
+<script>
+// ========== 유틸 ==========
+function qdEscape(str) {
+  if (!str) return '';
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function qdFmt(n) {
+  return Number(n || 0).toLocaleString();
+}
+
+function qdNumberToKorean(n) {
+  if (!n || n === 0) return '영';
+  const units = ['', '만', '억', '조'];
+  const digits = ['', '일', '이', '삼', '사', '오', '육', '칠', '팔', '구'];
+  const subUnits = ['', '십', '백', '천'];
+  let result = '';
+  let unitIndex = 0;
+  while (n > 0) {
+    let part = n % 10000;
+    if (part > 0) {
+      let partStr = '';
+      let subIndex = 0;
+      while (part > 0) {
+        let d = part % 10;
+        if (d > 0) {
+          partStr = (d === 1 && subIndex > 0 ? '' : digits[d]) + subUnits[subIndex] + partStr;
+        }
+        part = Math.floor(part / 10);
+        subIndex++;
+      }
+      result = partStr + units[unitIndex] + ' ' + result;
+    }
+    n = Math.floor(n / 10000);
+    unitIndex++;
+  }
+  return result.trim();
+}
+
+function qdShowToast(msg) {
+  const t = document.getElementById('qd-toast');
+  document.getElementById('qd-toast-msg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function qdDateStr() {
+  const d = new Date();
+  return d.getFullYear() + '.' + String(d.getMonth()+1).padStart(2,'0') + '.' + String(d.getDate()).padStart(2,'0');
+}
+
+// ========== Step 전환 ==========
+function qdGoStep(n) {
+  document.getElementById('qd-step1').classList.toggle('qd-hidden', n !== 1);
+  document.getElementById('qd-step2').classList.toggle('qd-hidden', n !== 2);
+  document.getElementById('qd-step3').classList.toggle('qd-hidden', n !== 3);
+
+  document.querySelectorAll('.qd-step').forEach(el => {
+    const s = parseInt(el.dataset.step);
+    el.classList.remove('active', 'done');
+    if (s < n) el.classList.add('done');
+    if (s === n) el.classList.add('active');
+  });
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ========== STEP 1: 파일 업로드 ==========
+let qdSelectedFile = null;
+
+// 드래그 앤 드롭
+const uploadZone = document.getElementById('qd-upload-zone');
+uploadZone.addEventListener('dragover', (e) => { e.preventDefault(); uploadZone.classList.add('dragover'); });
+uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
+uploadZone.addEventListener('drop', (e) => {
+  e.preventDefault();
+  uploadZone.classList.remove('dragover');
+  if (e.dataTransfer.files.length > 0) {
+    document.getElementById('qd-file-input').files = e.dataTransfer.files;
+    qdFileSelected(document.getElementById('qd-file-input'));
+  }
+});
+
+function qdFileSelected(input) {
+  const file = input.files[0];
+  if (!file) return;
+
+  const allowed = ['application/pdf', 'image/jpeg', 'image/png'];
+  if (!allowed.includes(file.type)) {
+    qdShowError('지원하지 않는 파일 형식입니다. (PDF, JPG, PNG만 가능)');
+    return;
+  }
+  if (file.size > 20 * 1024 * 1024) {
+    qdShowError('파일 크기는 20MB 이하여야 합니다.');
+    return;
+  }
+
+  qdSelectedFile = file;
+  qdHideError();
+
+  document.getElementById('qd-upload-placeholder').classList.add('qd-hidden');
+  document.getElementById('qd-upload-info').classList.remove('qd-hidden');
+  document.getElementById('qd-file-name').textContent = file.name;
+  document.getElementById('qd-file-size').textContent = (file.size / 1024 / 1024).toFixed(2) + ' MB';
+  uploadZone.classList.add('has-file');
+  document.getElementById('qd-analyze-btn').disabled = false;
+}
+
+function qdShowError(msg) {
+  document.getElementById('qd-error').classList.remove('qd-hidden');
+  document.getElementById('qd-error-msg').textContent = msg;
+}
+
+function qdHideError() {
+  document.getElementById('qd-error').classList.add('qd-hidden');
+}
+
+// ========== AI 분석 ==========
+function qdAnalyze() {
+  if (!qdSelectedFile) return;
+  qdHideError();
+
+  const btn = document.getElementById('qd-analyze-btn');
+  const textEl = document.getElementById('qd-analyze-text');
+  btn.disabled = true;
+  textEl.innerHTML = '<span class="qd-spinner"></span> AI 분석 중...';
+
+  const formData = new FormData();
+  formData.append('file', qdSelectedFile);
+
+  fetch('/quote-documents/extract', {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.content || ''
+    }
+  })
+  .then(r => r.json())
+  .then(data => {
+    btn.disabled = false;
+    textEl.innerHTML = '<span class="material-symbols-outlined">auto_awesome</span> AI 분석 시작';
+
+    if (data.success) {
+      qdPopulateFields(data.fields);
+      qdGoStep(2);
+      qdShowToast('견적서 분석이 완료되었습니다');
+    } else {
+      qdShowError(data.error || '분석에 실패했습니다.');
+    }
+  })
+  .catch(err => {
+    btn.disabled = false;
+    textEl.innerHTML = '<span class="material-symbols-outlined">auto_awesome</span> AI 분석 시작';
+    qdShowError('네트워크 오류가 발생했습니다. 다시 시도해주세요.');
+  });
+}
+
+// ========== STEP 2: 필드 채우기 ==========
+function qdPopulateFields(f) {
+  document.getElementById('qd-company-name').value = f.company_name || '';
+  document.getElementById('qd-business-no').value = f.business_no || '';
+  document.getElementById('qd-representative').value = f.representative || '';
+  document.getElementById('qd-project-name').value = f.project_name || '';
+
+  if (f.quote_date) {
+    document.getElementById('qd-quote-date').value = f.quote_date;
+  }
+
+  // 항목 렌더
+  const tbody = document.getElementById('qd-items-body');
+  tbody.innerHTML = '';
+  if (f.items && f.items.length > 0) {
+    f.items.forEach(item => qdAddItemRow(item));
+  } else {
+    qdAddItemRow({});
+  }
+
+  qdRecalc();
+}
+
+let qdItemIndex = 0;
+
+function qdAddItemRow(item) {
+  const tbody = document.getElementById('qd-items-body');
+  const idx = ++qdItemIndex;
+  const tr = document.createElement('tr');
+  tr.id = 'qd-item-' + idx;
+  tr.innerHTML =
+    '<td style="text-align:center; color:#94a3b8; font-size:12px;">' + tbody.children.length + 1 + '</td>' +
+    '<td><input type="text" class="qd-item-name" value="' + qdAttr(item.name) + '" placeholder="품명"></td>' +
+    '<td><input type="text" class="qd-item-spec" value="' + qdAttr(item.spec) + '" placeholder="규격"></td>' +
+    '<td><input type="text" class="qd-item-unit" value="' + qdAttr(item.unit || 'EA') + '" style="text-align:center;"></td>' +
+    '<td><input type="number" class="qd-item-qty qd-num" value="' + (item.qty || 0) + '" min="0" onchange="qdRecalc()" oninput="qdRecalc()"></td>' +
+    '<td><input type="number" class="qd-item-price qd-num" value="' + (item.unit_price || 0) + '" min="0" onchange="qdRecalc()" oninput="qdRecalc()"></td>' +
+    '<td class="qd-item-amount">0</td>' +
+    '<td class="qd-item-remove" onclick="qdRemoveItem(' + idx + ')"><span class="material-symbols-outlined" style="font-size:18px;">close</span></td>';
+  tbody.appendChild(tr);
+  qdRecalc();
+}
+
+function qdAddItem() {
+  qdAddItemRow({});
+}
+
+function qdRemoveItem(idx) {
+  const tr = document.getElementById('qd-item-' + idx);
+  if (tr) tr.remove();
+  qdRenumber();
+  qdRecalc();
+}
+
+function qdRenumber() {
+  document.querySelectorAll('#qd-items-body tr').forEach((tr, i) => {
+    tr.querySelector('td').textContent = i + 1;
+  });
+}
+
+function qdAttr(val) {
+  if (!val) return '';
+  return String(val).replace(/"/g, '&quot;');
+}
+
+function qdRecalc() {
+  let supply = 0;
+  document.querySelectorAll('#qd-items-body tr').forEach(tr => {
+    const qty = parseInt(tr.querySelector('.qd-item-qty')?.value) || 0;
+    const price = parseInt(tr.querySelector('.qd-item-price')?.value) || 0;
+    const amount = qty * price;
+    supply += amount;
+    const amountCell = tr.querySelector('.qd-item-amount');
+    if (amountCell) amountCell.textContent = qdFmt(amount);
+  });
+
+  const vat = Math.round(supply * 0.1);
+  const total = supply + vat;
+
+  document.getElementById('qd-supply-display').textContent = qdFmt(supply) + '원';
+  document.getElementById('qd-vat-display').textContent = qdFmt(vat) + '원';
+  document.getElementById('qd-total-display').textContent = qdFmt(total) + '원';
+}
+
+// ========== 계약유형별 필드 표시 ==========
+function qdUpdateTypeFields() {
+  const type = document.getElementById('qd-contract-type').value;
+  document.getElementById('qd-fields-service').classList.toggle('qd-hidden', type !== '용역');
+  document.getElementById('qd-fields-construction').classList.toggle('qd-hidden', type !== '공사');
+  const count = type === '물품' ? 3 : 4;
+  document.getElementById('qd-generate-text').textContent = count + '개 문서 일괄 생성';
+}
+
+// ========== 데이터 수집 ==========
+function qdCollectData() {
+  const items = [];
+  let supply = 0;
+  document.querySelectorAll('#qd-items-body tr').forEach(tr => {
+    const name = tr.querySelector('.qd-item-name')?.value?.trim() || '';
+    const spec = tr.querySelector('.qd-item-spec')?.value?.trim() || '';
+    const unit = tr.querySelector('.qd-item-unit')?.value?.trim() || 'EA';
+    const qty = parseInt(tr.querySelector('.qd-item-qty')?.value) || 0;
+    const unitPrice = parseInt(tr.querySelector('.qd-item-price')?.value) || 0;
+    const amount = qty * unitPrice;
+    supply += amount;
+    if (name) {
+      items.push({ name, spec, unit, qty, unitPrice, amount });
+    }
+  });
+
+  const vat = Math.round(supply * 0.1);
+  const total = supply + vat;
+
+  return {
+    companyName: document.getElementById('qd-company-name').value.trim(),
+    businessNo: document.getElementById('qd-business-no').value.trim(),
+    representative: document.getElementById('qd-representative').value.trim(),
+    quoteDate: document.getElementById('qd-quote-date').value,
+    projectName: document.getElementById('qd-project-name').value.trim(),
+    department: document.getElementById('qd-department').value.trim() || '○○과',
+    manager: document.getElementById('qd-manager').value.trim(),
+    deptPhone: document.getElementById('qd-dept-phone').value.trim(),
+    contractType: document.getElementById('qd-contract-type').value,
+    necessity: document.getElementById('qd-necessity').value.trim(),
+    // 용역 추가
+    taskPeriod: document.getElementById('qd-task-period').value.trim(),
+    taskLocation: document.getElementById('qd-task-location').value.trim(),
+    deliverables: document.getElementById('qd-deliverables').value.trim(),
+    // 공사 추가
+    constructionLocation: document.getElementById('qd-construction-location').value.trim(),
+    constructionPeriod: document.getElementById('qd-construction-period').value.trim(),
+    constructionNotes: document.getElementById('qd-construction-notes').value.trim(),
+    items,
+    supply,
+    vat,
+    total
+  };
+}
+
+// ========== STEP 3: 문서 생성 ==========
+function qdGenerateDocuments() {
+  const d = qdCollectData();
+
+  if (!d.projectName) { qdShowToast('건명(사업명)을 입력하세요'); return; }
+  if (!d.necessity) { qdShowToast('사업 필요성을 입력하세요'); return; }
+  if (d.items.length === 0) { qdShowToast('품목을 1개 이상 입력하세요'); return; }
+
+  // 기본 3개 문서
+  qdBuildPlanDoc(d);
+  qdBuildBudgetDoc(d);
+  qdBuildPriceDoc(d);
+
+  // 계약유형별 추가 문서 + 탭 표시
+  const isService = d.contractType === '용역';
+  const isConstruction = d.contractType === '공사';
+  document.getElementById('qd-tab-btn-taskorder').classList.toggle('qd-hidden', !isService);
+  document.getElementById('qd-tab-btn-estimate').classList.toggle('qd-hidden', !isConstruction);
+
+  if (isService) qdBuildTaskOrderDoc(d);
+  if (isConstruction) qdBuildCostEstimateDoc(d);
+
+  const count = (isService || isConstruction) ? 4 : 3;
+  qdGoStep(3);
+  qdShowToast(count + '개 문서가 생성되었습니다');
+}
+
+// ----- 사업계획서 -----
+function qdBuildPlanDoc(d) {
+  let h = '';
+  h += '<div class="qd-doc-header"><div class="qd-doc-title">사 업 계 획 서</div></div>';
+
+  // 기본정보
+  h += '<table class="qd-doc-table">';
+  h += '<tr><th style="width:120px;">사업명</th><td>' + qdEscape(d.projectName) + '</td></tr>';
+  h += '<tr><th>사업부서</th><td>' + qdEscape(d.department) + '</td></tr>';
+  if (d.manager) {
+    h += '<tr><th>담당자</th><td>' + qdEscape(d.manager) + (d.deptPhone ? ' (' + qdEscape(d.deptPhone) + ')' : '') + '</td></tr>';
+  }
+  h += '<tr><th>계약구분</th><td>' + qdEscape(d.contractType) + ' 수의계약 (1인 견적)</td></tr>';
+  h += '<tr><th>작성일</th><td>' + qdDateStr() + '</td></tr>';
+  h += '</table>';
+
+  // 필요성
+  h += '<div class="qd-doc-section">';
+  h += '<div class="qd-doc-section-title">1. 사업 필요성</div>';
+  h += '<div class="qd-doc-content">' + qdEscape(d.necessity) + '</div>';
+  h += '</div>';
+
+  // 사업내용
+  h += '<div class="qd-doc-section">';
+  h += '<div class="qd-doc-section-title">2. 사업 내용</div>';
+  h += '<table class="qd-doc-table">';
+  h += '<tr><th>품명</th><th>규격</th><th style="text-align:center;">수량</th><th style="text-align:right;">금액</th></tr>';
+  d.items.forEach(item => {
+    h += '<tr><td>' + qdEscape(item.name) + '</td><td>' + qdEscape(item.spec) + '</td><td style="text-align:center;">' + item.qty + ' ' + qdEscape(item.unit) + '</td><td class="qd-right">' + qdFmt(item.amount) + '원</td></tr>';
+  });
+  h += '</table>';
+  h += '</div>';
+
+  // 소요예산
+  h += '<div class="qd-doc-section">';
+  h += '<div class="qd-doc-section-title">3. 소요 예산</div>';
+  h += '<table class="qd-doc-table">';
+  h += '<tr><th style="width:120px;">금액</th><td style="font-weight:700; font-size:16px; color:#4f46e5;">금 ' + qdFmt(d.total) + '원 (' + qdNumberToKorean(d.total) + '원)</td></tr>';
+  h += '<tr><th>내역</th><td>공급가액 ' + qdFmt(d.supply) + '원 + 부가세 ' + qdFmt(d.vat) + '원</td></tr>';
+  h += '</table>';
+  h += '</div>';
+
+  // 추진방법
+  h += '<div class="qd-doc-section">';
+  h += '<div class="qd-doc-section-title">4. 추진 방법</div>';
+  h += '<div class="qd-doc-content">- 계약방법: ' + qdEscape(d.contractType) + ' 수의계약 (1인 견적)\n- 계약근거: 지방계약법 시행령 제25조 제1항 제5호</div>';
+  h += '</div>';
+
+  // 붙임
+  h += '<div class="qd-doc-section" style="margin-top:32px;">';
+  h += '<div style="font-size:13px; color:#64748b;">붙임  1. 견적서 1부</div>';
+  h += '<div style="font-size:13px; color:#64748b;">      2. 소요예산 추정서 1부</div>';
+  h += '<div style="font-size:13px; color:#64748b;">      3. 예정가격 조서 1부</div>';
+  h += '<div style="font-size:13px; color:#64748b;">      4. 수의계약 사유서 1부. 끝.</div>';
+  h += '</div>';
+
+  h += '<div class="qd-doc-footer">' + qdEscape(d.department) + '<br><span style="font-size:12px; color:#94a3b8;">이 문서는 실무(silmu.kr) 견적서 일괄 문서생성기로 작성되었습니다.</span></div>';
+
+  document.getElementById('qd-doc-plan').innerHTML = h;
+}
+
+// ----- 소요예산 추정 -----
+function qdBuildBudgetDoc(d) {
+  let h = '';
+  h += '<div class="qd-doc-header"><div class="qd-doc-title">소 요 예 산 추 정 서</div></div>';
+
+  h += '<table class="qd-doc-table">';
+  h += '<tr><th style="width:120px;">건명</th><td>' + qdEscape(d.projectName) + '</td></tr>';
+  h += '<tr><th>추정근거</th><td>거래실례가격 (견적서 기반)</td></tr>';
+  h += '<tr><th>작성일</th><td>' + qdDateStr() + '</td></tr>';
+  h += '</table>';
+
+  // 내역표
+  h += '<div class="qd-doc-section">';
+  h += '<div class="qd-doc-section-title">내역</div>';
+  h += '<table class="qd-doc-table">';
+  h += '<tr><th style="text-align:center;">No</th><th>품명</th><th>규격</th><th style="text-align:center;">단위</th><th style="text-align:center;">수량</th><th style="text-align:right;">단가(원)</th><th style="text-align:right;">금액(원)</th></tr>';
+  d.items.forEach((item, i) => {
+    h += '<tr><td style="text-align:center;">' + (i+1) + '</td><td>' + qdEscape(item.name) + '</td><td>' + qdEscape(item.spec) + '</td><td style="text-align:center;">' + qdEscape(item.unit) + '</td><td style="text-align:center;">' + qdFmt(item.qty) + '</td><td class="qd-right">' + qdFmt(item.unitPrice) + '</td><td class="qd-right">' + qdFmt(item.amount) + '</td></tr>';
+  });
+  h += '<tr style="background:#f8fafc; font-weight:700;"><td colspan="6" style="text-align:right; border:1px solid #e2e8f0; padding:8px 12px;">공급가액</td><td class="qd-right" style="border:1px solid #e2e8f0; padding:8px 12px;">' + qdFmt(d.supply) + '</td></tr>';
+  h += '<tr style="background:#f8fafc;"><td colspan="6" style="text-align:right; border:1px solid #e2e8f0; padding:8px 12px;">부가가치세 (10%)</td><td class="qd-right" style="border:1px solid #e2e8f0; padding:8px 12px;">' + qdFmt(d.vat) + '</td></tr>';
+  h += '<tr style="background:#eef2ff; font-weight:700; font-size:15px;"><td colspan="6" style="text-align:right; border:1px solid #c7d2fe; padding:10px 12px; color:#4f46e5;">합계</td><td class="qd-right" style="border:1px solid #c7d2fe; padding:10px 12px; color:#4f46e5;">' + qdFmt(d.total) + '</td></tr>';
+  h += '</table>';
+  h += '</div>';
+
+  // 금액 한글 표기
+  h += '<div style="padding:12px 16px; background:#f8fafc; border-radius:10px; margin:16px 0; font-size:14px;">';
+  h += '<strong>금액:</strong> 금 ' + qdFmt(d.total) + '원 (' + qdNumberToKorean(d.total) + '원)';
+  h += '</div>';
+
+  // 견적 업체 정보
+  if (d.companyName) {
+    h += '<div class="qd-doc-section">';
+    h += '<div class="qd-doc-section-title">견적 업체</div>';
+    h += '<table class="qd-doc-table">';
+    h += '<tr><th style="width:120px;">업체명</th><td>' + qdEscape(d.companyName) + '</td></tr>';
+    if (d.businessNo) h += '<tr><th>사업자등록번호</th><td>' + qdEscape(d.businessNo) + '</td></tr>';
+    if (d.representative) h += '<tr><th>대표자</th><td>' + qdEscape(d.representative) + '</td></tr>';
+    if (d.quoteDate) h += '<tr><th>견적일</th><td>' + qdEscape(d.quoteDate) + '</td></tr>';
+    h += '</table>';
+    h += '</div>';
+  }
+
+  h += '<div class="qd-doc-footer">' + qdEscape(d.department) + '<br><span style="font-size:12px; color:#94a3b8;">이 문서는 실무(silmu.kr) 견적서 일괄 문서생성기로 작성되었습니다.</span></div>';
+
+  document.getElementById('qd-doc-budget').innerHTML = h;
+}
+
+// ----- 예정가격 조서 -----
+function qdBuildPriceDoc(d) {
+  // 수의계약 기준금액 판단
+  const thresholdLabel = d.contractType === '공사' ? '5천만원' : '2천만원';
+  const thresholdAmount = d.contractType === '공사' ? 50000000 : 20000000;
+  const isUnder = d.total <= thresholdAmount;
+
+  let h = '';
+  h += '<div class="qd-doc-header"><div class="qd-doc-title">예 정 가 격 조 서</div></div>';
+
+  h += '<table class="qd-doc-table">';
+  h += '<tr><th style="width:140px;">건명</th><td>' + qdEscape(d.projectName) + '</td></tr>';
+  h += '<tr><th>계약 구분</th><td>' + qdEscape(d.contractType) + '</td></tr>';
+  h += '<tr><th>가격결정 방법</th><td>거래실례가격 (견적서 기준)</td></tr>';
+  h += '<tr><th>작성일</th><td>' + qdDateStr() + '</td></tr>';
+  h += '</table>';
+
+  // 예정가격 산출
+  h += '<div class="qd-doc-section">';
+  h += '<div class="qd-doc-section-title">예정가격 산출</div>';
+  h += '<table class="qd-doc-table">';
+  h += '<tr><th style="width:180px;">거래실례가격 (공급가액)</th><td class="qd-right" style="font-weight:600;">' + qdFmt(d.supply) + '원</td></tr>';
+  h += '<tr><th>부가가치세 (10%)</th><td class="qd-right">' + qdFmt(d.vat) + '원</td></tr>';
+  h += '<tr style="background:#eef2ff;"><th style="font-weight:700; color:#4f46e5;">예정가격</th><td class="qd-right" style="font-weight:700; font-size:16px; color:#4f46e5;">' + qdFmt(d.total) + '원</td></tr>';
+  h += '</table>';
+  h += '</div>';
+
+  // 한글 금액
+  h += '<div style="padding:12px 16px; background:#f8fafc; border-radius:10px; margin:16px 0; font-size:14px;">';
+  h += '<strong>예정가격:</strong> 금 ' + qdFmt(d.total) + '원 (' + qdNumberToKorean(d.total) + '원)';
+  h += '</div>';
+
+  // 수의계약 가능 여부
+  h += '<div class="qd-doc-section">';
+  h += '<div class="qd-doc-section-title">수의계약 해당 여부</div>';
+  if (isUnder) {
+    h += '<div style="padding:16px; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:10px; display:flex; align-items:center; gap:10px;">';
+    h += '<span class="material-symbols-outlined" style="color:#16a34a; font-size:24px;">check_circle</span>';
+    h += '<div><div style="font-weight:700; color:#166534;">1인 수의계약 가능</div>';
+    h += '<div style="font-size:13px; color:#15803d;">예정가격 ' + qdFmt(d.total) + '원 ≤ ' + qdEscape(d.contractType) + ' 기준금액 ' + thresholdLabel + '</div></div>';
+    h += '</div>';
+  } else {
+    h += '<div style="padding:16px; background:#fef2f2; border:1px solid #fecaca; border-radius:10px; display:flex; align-items:center; gap:10px;">';
+    h += '<span class="material-symbols-outlined" style="color:#dc2626; font-size:24px;">warning</span>';
+    h += '<div><div style="font-weight:700; color:#991b1b;">1인 수의계약 기준금액 초과</div>';
+    h += '<div style="font-size:13px; color:#b91c1c;">예정가격 ' + qdFmt(d.total) + '원 > ' + qdEscape(d.contractType) + ' 기준금액 ' + thresholdLabel + ' → 2인 이상 견적 또는 입찰 필요</div></div>';
+    h += '</div>';
+  }
+  h += '</div>';
+
+  // 법적 근거
+  h += '<div class="qd-doc-section">';
+  h += '<div class="qd-doc-section-title">관련 법령</div>';
+  h += '<div class="qd-doc-content">- 지방계약법 시행령 제9조 (예정가격의 결정기준)\n- 지방계약법 시행령 제10조 (예정가격의 결정방법)\n- 지방계약법 시행령 제25조 (수의계약에 의할 수 있는 경우)</div>';
+  h += '</div>';
+
+  // 견적 업체 정보
+  if (d.companyName) {
+    h += '<div class="qd-doc-section">';
+    h += '<div class="qd-doc-section-title">견적 제출 업체</div>';
+    h += '<table class="qd-doc-table">';
+    h += '<tr><th style="width:120px;">업체명</th><td>' + qdEscape(d.companyName) + '</td></tr>';
+    if (d.businessNo) h += '<tr><th>사업자등록번호</th><td>' + qdEscape(d.businessNo) + '</td></tr>';
+    if (d.representative) h += '<tr><th>대표자</th><td>' + qdEscape(d.representative) + '</td></tr>';
+    h += '</table>';
+    h += '</div>';
+  }
+
+  h += '<div class="qd-doc-footer">' + qdEscape(d.department) + '<br><span style="font-size:12px; color:#94a3b8;">이 문서는 실무(silmu.kr) 견적서 일괄 문서생성기로 작성되었습니다.</span></div>';
+
+  document.getElementById('qd-doc-price').innerHTML = h;
+}
+
+// ----- 과업지시서 (용역) -----
+function qdBuildTaskOrderDoc(d) {
+  let h = '';
+  h += '<div class="qd-doc-header"><div class="qd-doc-title">과 업 지 시 서</div></div>';
+
+  // 기본정보
+  h += '<table class="qd-doc-table">';
+  h += '<tr><th style="width:120px;">과업명</th><td>' + qdEscape(d.projectName) + '</td></tr>';
+  h += '<tr><th>발주부서</th><td>' + qdEscape(d.department) + '</td></tr>';
+  if (d.manager) {
+    h += '<tr><th>담당자</th><td>' + qdEscape(d.manager) + (d.deptPhone ? ' (' + qdEscape(d.deptPhone) + ')' : '') + '</td></tr>';
+  }
+  if (d.taskPeriod) h += '<tr><th>과업 기간</th><td>' + qdEscape(d.taskPeriod) + '</td></tr>';
+  if (d.taskLocation) h += '<tr><th>수행 장소</th><td>' + qdEscape(d.taskLocation) + '</td></tr>';
+  h += '<tr><th>작성일</th><td>' + qdDateStr() + '</td></tr>';
+  h += '</table>';
+
+  // 과업 목적
+  h += '<div class="qd-doc-section">';
+  h += '<div class="qd-doc-section-title">1. 과업 목적</div>';
+  h += '<div class="qd-doc-content">' + qdEscape(d.necessity) + '</div>';
+  h += '</div>';
+
+  // 과업 내용
+  h += '<div class="qd-doc-section">';
+  h += '<div class="qd-doc-section-title">2. 과업 범위 및 내용</div>';
+  h += '<table class="qd-doc-table">';
+  h += '<tr><th style="text-align:center;">No</th><th>과업 항목</th><th>규격/내용</th><th style="text-align:center;">단위</th><th style="text-align:center;">수량</th></tr>';
+  d.items.forEach((item, i) => {
+    h += '<tr><td style="text-align:center;">' + (i+1) + '</td><td>' + qdEscape(item.name) + '</td><td>' + qdEscape(item.spec) + '</td><td style="text-align:center;">' + qdEscape(item.unit) + '</td><td style="text-align:center;">' + qdFmt(item.qty) + '</td></tr>';
+  });
+  h += '</table>';
+  h += '</div>';
+
+  // 과업 기간
+  if (d.taskPeriod) {
+    h += '<div class="qd-doc-section">';
+    h += '<div class="qd-doc-section-title">3. 과업 기간</div>';
+    h += '<div class="qd-doc-content">' + qdEscape(d.taskPeriod) + '</div>';
+    h += '</div>';
+  }
+
+  // 납품물
+  let sectionNum = d.taskPeriod ? 4 : 3;
+  if (d.deliverables) {
+    h += '<div class="qd-doc-section">';
+    h += '<div class="qd-doc-section-title">' + sectionNum + '. 납품물</div>';
+    h += '<div class="qd-doc-content">' + qdEscape(d.deliverables) + '</div>';
+    h += '</div>';
+    sectionNum++;
+  }
+
+  // 소요 예산
+  h += '<div class="qd-doc-section">';
+  h += '<div class="qd-doc-section-title">' + sectionNum + '. 소요 예산</div>';
+  h += '<table class="qd-doc-table">';
+  h += '<tr><th style="width:120px;">금액</th><td style="font-weight:700; color:#4f46e5;">금 ' + qdFmt(d.total) + '원 (' + qdNumberToKorean(d.total) + '원)</td></tr>';
+  h += '<tr><th>내역</th><td>공급가액 ' + qdFmt(d.supply) + '원 + 부가세 ' + qdFmt(d.vat) + '원</td></tr>';
+  h += '</table>';
+  h += '</div>';
+  sectionNum++;
+
+  // 기타 조건
+  h += '<div class="qd-doc-section">';
+  h += '<div class="qd-doc-section-title">' + sectionNum + '. 기타 조건</div>';
+  h += '<div class="qd-doc-content">- 계약방법: 용역 수의계약 (1인 견적)\n- 과업 수행 중 발주자와 긴밀히 협의하여야 한다.\n- 과업 내용의 변경이 필요한 경우 사전에 발주자의 승인을 받아야 한다.\n- 납품물의 지식재산권은 발주기관에 귀속한다.</div>';
+  h += '</div>';
+
+  h += '<div class="qd-doc-footer">' + qdEscape(d.department) + '<br><span style="font-size:12px; color:#94a3b8;">이 문서는 실무(silmu.kr) 견적서 일괄 문서생성기로 작성되었습니다.</span></div>';
+
+  document.getElementById('qd-doc-taskorder').innerHTML = h;
+}
+
+// ----- 내역서 + 시공지시서 (공사) -----
+function qdBuildCostEstimateDoc(d) {
+  let h = '';
+
+  // ===== 파트 1: 내역서 =====
+  h += '<div class="qd-doc-header"><div class="qd-doc-title">공 사 내 역 서</div></div>';
+
+  h += '<table class="qd-doc-table">';
+  h += '<tr><th style="width:120px;">공사명</th><td>' + qdEscape(d.projectName) + '</td></tr>';
+  if (d.constructionLocation) h += '<tr><th>공사 장소</th><td>' + qdEscape(d.constructionLocation) + '</td></tr>';
+  if (d.constructionPeriod) h += '<tr><th>공사 기간</th><td>' + qdEscape(d.constructionPeriod) + '</td></tr>';
+  h += '<tr><th>작성일</th><td>' + qdDateStr() + '</td></tr>';
+  h += '</table>';
+
+  // 내역 항목
+  h += '<div class="qd-doc-section">';
+  h += '<div class="qd-doc-section-title">공사 내역</div>';
+  h += '<table class="qd-doc-table">';
+  h += '<tr><th style="text-align:center;">No</th><th>공종/품명</th><th>규격</th><th style="text-align:center;">단위</th><th style="text-align:center;">수량</th><th style="text-align:right;">단가(원)</th><th style="text-align:right;">금액(원)</th></tr>';
+  d.items.forEach((item, i) => {
+    h += '<tr><td style="text-align:center;">' + (i+1) + '</td><td>' + qdEscape(item.name) + '</td><td>' + qdEscape(item.spec) + '</td><td style="text-align:center;">' + qdEscape(item.unit) + '</td><td style="text-align:center;">' + qdFmt(item.qty) + '</td><td class="qd-right">' + qdFmt(item.unitPrice) + '</td><td class="qd-right">' + qdFmt(item.amount) + '</td></tr>';
+  });
+  h += '<tr style="background:#f8fafc; font-weight:700;"><td colspan="6" style="text-align:right; border:1px solid #e2e8f0; padding:8px 12px;">직접공사비 소계</td><td class="qd-right" style="border:1px solid #e2e8f0; padding:8px 12px;">' + qdFmt(d.supply) + '</td></tr>';
+  h += '<tr style="background:#f8fafc;"><td colspan="6" style="text-align:right; border:1px solid #e2e8f0; padding:8px 12px;">부가가치세 (10%)</td><td class="qd-right" style="border:1px solid #e2e8f0; padding:8px 12px;">' + qdFmt(d.vat) + '</td></tr>';
+  h += '<tr style="background:#eef2ff; font-weight:700; font-size:15px;"><td colspan="6" style="text-align:right; border:1px solid #c7d2fe; padding:10px 12px; color:#4f46e5;">합계</td><td class="qd-right" style="border:1px solid #c7d2fe; padding:10px 12px; color:#4f46e5;">' + qdFmt(d.total) + '</td></tr>';
+  h += '</table>';
+  h += '</div>';
+
+  h += '<div style="padding:12px 16px; background:#f8fafc; border-radius:10px; margin:16px 0; font-size:14px;">';
+  h += '<strong>금액:</strong> 금 ' + qdFmt(d.total) + '원 (' + qdNumberToKorean(d.total) + '원)';
+  h += '</div>';
+
+  // 구분선
+  h += '<div style="margin:40px 0 32px; border-top:3px double #cbd5e1; position:relative; text-align:center;">';
+  h += '<span style="position:relative; top:-12px; background:#fff; padding:0 16px; font-size:13px; color:#94a3b8;">시공지시서</span>';
+  h += '</div>';
+
+  // ===== 파트 2: 시공지시서 =====
+  h += '<div class="qd-doc-header"><div class="qd-doc-title">시 공 지 시 서</div></div>';
+
+  h += '<table class="qd-doc-table">';
+  h += '<tr><th style="width:120px;">공사명</th><td>' + qdEscape(d.projectName) + '</td></tr>';
+  h += '<tr><th>시공부서</th><td>' + qdEscape(d.department) + '</td></tr>';
+  if (d.manager) {
+    h += '<tr><th>감독관</th><td>' + qdEscape(d.manager) + (d.deptPhone ? ' (' + qdEscape(d.deptPhone) + ')' : '') + '</td></tr>';
+  }
+  if (d.constructionLocation) h += '<tr><th>공사 장소</th><td>' + qdEscape(d.constructionLocation) + '</td></tr>';
+  if (d.constructionPeriod) h += '<tr><th>공사 기간</th><td>' + qdEscape(d.constructionPeriod) + '</td></tr>';
+  h += '<tr><th>공사 금액</th><td style="font-weight:700; color:#4f46e5;">금 ' + qdFmt(d.total) + '원</td></tr>';
+  h += '<tr><th>지시일</th><td>' + qdDateStr() + '</td></tr>';
+  h += '</table>';
+
+  // 시공 내용
+  h += '<div class="qd-doc-section">';
+  h += '<div class="qd-doc-section-title">1. 시공 내용</div>';
+  h += '<table class="qd-doc-table">';
+  h += '<tr><th>공종/품명</th><th>규격</th><th style="text-align:center;">수량</th></tr>';
+  d.items.forEach(item => {
+    h += '<tr><td>' + qdEscape(item.name) + '</td><td>' + qdEscape(item.spec) + '</td><td style="text-align:center;">' + qdFmt(item.qty) + ' ' + qdEscape(item.unit) + '</td></tr>';
+  });
+  h += '</table>';
+  h += '</div>';
+
+  // 유의사항
+  h += '<div class="qd-doc-section">';
+  h += '<div class="qd-doc-section-title">2. 시공 시 유의사항</div>';
+  const defaultNotes = '- 안전관리에 만전을 기하고, 안전사고 발생 시 시공자가 책임진다.\n- 기존 시설물 훼손 시 원상복구하여야 한다.\n- 작업 완료 후 현장을 깨끗이 정리·정돈한다.';
+  const notes = d.constructionNotes ? qdEscape(d.constructionNotes) + '\n' + defaultNotes : defaultNotes;
+  h += '<div class="qd-doc-content">' + notes + '</div>';
+  h += '</div>';
+
+  // 서명란
+  h += '<div style="margin-top:40px; display:flex; justify-content:space-around; text-align:center;">';
+  h += '<div><div style="font-size:13px; color:#64748b; margin-bottom:40px;">시공지시자 (감독관)</div><div style="border-top:1px solid #334155; padding-top:8px; width:120px; margin:0 auto; font-size:13px; color:#334155;">' + qdEscape(d.manager || '(서명)') + '</div></div>';
+  h += '<div><div style="font-size:13px; color:#64748b; margin-bottom:40px;">수급인 (시공자)</div><div style="border-top:1px solid #334155; padding-top:8px; width:120px; margin:0 auto; font-size:13px; color:#334155;">(서명)</div></div>';
+  h += '</div>';
+
+  h += '<div class="qd-doc-footer">' + qdEscape(d.department) + '<br><span style="font-size:12px; color:#94a3b8;">이 문서는 실무(silmu.kr) 견적서 일괄 문서생성기로 작성되었습니다.</span></div>';
+
+  document.getElementById('qd-doc-estimate').innerHTML = h;
+}
+
+// ========== 탭 전환 ==========
+function qdSwitchTab(tab) {
+  document.querySelectorAll('.qd-tab').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.qd-tab-content').forEach(el => el.classList.remove('active'));
+
+  event.currentTarget.classList.add('active');
+  document.getElementById('qd-tab-' + tab).classList.add('active');
+}
+
+// ========== 복사 / 다운로드 / 인쇄 ==========
+function qdCopyDoc(type) {
+  const el = document.getElementById('qd-doc-' + type);
+  const text = el.innerText || el.textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    qdShowToast('클립보드에 복사되었습니다');
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    qdShowToast('클립보드에 복사되었습니다');
+  });
+}
+
+function qdDownloadDoc(type, docName) {
+  const el = document.getElementById('qd-doc-' + type);
+  const text = el.innerText || el.textContent;
+  const pName = document.getElementById('qd-project-name').value.trim() || '문서';
+  const blob = new Blob([text], { type:'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = docName + '_' + pName + '.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  qdShowToast('파일이 다운로드되었습니다');
+}
+
+function qdPrintDoc(type) {
+  const el = document.getElementById('qd-doc-' + type);
+  el.classList.add('qd-doc-print-target');
+  window.print();
+  el.classList.remove('qd-doc-print-target');
+}
+
+// ========== 리셋 ==========
+function qdReset() {
+  qdSelectedFile = null;
+  document.getElementById('qd-file-input').value = '';
+  document.getElementById('qd-upload-placeholder').classList.remove('qd-hidden');
+  document.getElementById('qd-upload-info').classList.add('qd-hidden');
+  document.getElementById('qd-upload-zone').classList.remove('has-file');
+  document.getElementById('qd-analyze-btn').disabled = true;
+  qdHideError();
+  qdGoStep(1);
+}
+</script>

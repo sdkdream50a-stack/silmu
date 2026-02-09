@@ -3,7 +3,7 @@
     <div class="icon-container icon-container-sm bg-slate-100">
       <span class="material-symbols-outlined text-slate-600">account_tree</span>
     </div>
-    수의시담 업무 흐름도
+    수의시담 실무흐름도
   </h3>
 
   <!-- 프로세스 개요 -->
@@ -23,20 +23,6 @@
         <span class="material-symbols-outlined text-slate-300">arrow_forward</span>
       <% end %>
     <% end %>
-  </div>
-
-  <!-- 수의시담 발생 조건 -->
-  <div class="flex justify-center mb-8">
-    <div class="bg-amber-50 border-2 border-amber-300 rounded-2xl p-6 inline-block shadow-soft">
-      <div class="text-center mb-4">
-        <span class="material-symbols-outlined text-4xl text-amber-500">warning</span>
-        <h4 class="text-lg font-bold text-slate-800 mt-2">수의시담 발생 조건</h4>
-      </div>
-      <div class="text-center text-slate-700">
-        <p class="text-lg font-semibold text-amber-700">견적가격 > 예정가격</p>
-        <p class="text-sm text-slate-600 mt-2">견적가격이 예정가격을 초과하는 경우<br>가격협상(수의시담)을 진행할 수 있습니다.</p>
-      </div>
-    </div>
   </div>
 
   <!-- 상세 흐름도 -->
@@ -67,6 +53,12 @@
         <span class="material-symbols-outlined">lightbulb</span>
         <strong>판단기준:</strong> 견적가격이 예정가격 이하이면 바로 계약 체결, 초과하면 수의시담 진행
       </div>
+      <div class="mt-4 flex flex-wrap gap-2">
+        <a href="<%= estimated_price_path %>" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold rounded-lg border border-indigo-200 transition-colors">
+          <span class="material-symbols-outlined" style="font-size:14px">calculate</span>
+          예정가격 계산
+        </a>
+      </div>
     </div>
 
     <!-- STEP 2 -->
@@ -74,7 +66,9 @@
       <div class="flex items-center gap-4 mb-6">
         <div class="w-14 h-14 gradient-emerald text-white rounded-2xl flex items-center justify-center font-bold text-2xl shadow-lg">2</div>
         <div>
-          <h4 class="text-xl font-bold text-slate-900">수의시담 요청</h4>
+          <h4 class="text-xl font-bold text-slate-900">수의시담 요청
+            <span class="inline-flex items-center gap-1 ml-2 px-2 py-0.5 bg-rose-100 text-rose-600 text-xs font-normal rounded-full"><span class="material-symbols-outlined" style="font-size:12px">edit_document</span>공문생산</span>
+          </h4>
           <p class="text-emerald-600 font-medium">계약담당자 → 계약상대자</p>
         </div>
       </div>
@@ -111,7 +105,9 @@
       <div class="flex items-center gap-4 mb-6">
         <div class="w-14 h-14 gradient-slate text-white rounded-2xl flex items-center justify-center font-bold text-2xl shadow-lg">3</div>
         <div>
-          <h4 class="text-xl font-bold text-slate-900">수의시담 진행</h4>
+          <h4 class="text-xl font-bold text-slate-900">수의시담 진행
+            <span class="inline-flex items-center gap-1 ml-2 px-2 py-0.5 bg-rose-100 text-rose-600 text-xs font-normal rounded-full"><span class="material-symbols-outlined" style="font-size:12px">edit_document</span>공문생산</span>
+          </h4>
           <p class="text-slate-600 font-medium">계약담당자 + 계약상대자</p>
         </div>
       </div>
@@ -170,6 +166,12 @@
         <span class="material-symbols-outlined">error</span>
         <strong>중요:</strong> 재견적가격은 반드시 <u>최초 견적가격 이하</u>여야 함 (인상 불가)
       </div>
+      <div class="mt-4 flex flex-wrap gap-2">
+        <a href="<%= cost_calculation_path %>" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold rounded-lg border border-indigo-200 transition-colors">
+          <span class="material-symbols-outlined" style="font-size:14px">fact_check</span>
+          원가계산서 검토
+        </a>
+      </div>
     </div>
 
     <!-- STEP 5 -->
@@ -177,7 +179,9 @@
       <div class="flex items-center gap-4 mb-6">
         <div class="w-14 h-14 bg-gradient-to-br from-rose-500 to-rose-600 text-white rounded-2xl flex items-center justify-center font-bold text-2xl shadow-lg">5</div>
         <div>
-          <h4 class="text-xl font-bold text-slate-900">계약상대자 결정</h4>
+          <h4 class="text-xl font-bold text-slate-900">계약상대자 결정
+            <span class="inline-flex items-center gap-1 ml-2 px-2 py-0.5 bg-rose-100 text-rose-600 text-xs font-normal rounded-full"><span class="material-symbols-outlined" style="font-size:12px">edit_document</span>공문생산</span>
+          </h4>
           <p class="text-rose-600 font-medium">계약담당자</p>
         </div>
       </div>
@@ -198,76 +202,104 @@
         <span class="material-symbols-outlined">gavel</span>
         <strong>법적근거:</strong> 지방자치단체 입찰 및 계약집행기준 제74조 (수의시담)
       </div>
+      <div class="mt-4 flex flex-wrap gap-2">
+        <a href="<%= contract_guarantee_path %>" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold rounded-lg border border-indigo-200 transition-colors">
+          <span class="material-symbols-outlined" style="font-size:14px">shield</span>
+          계약보증금 계산
+        </a>
+      </div>
     </div>
   </div>
 
-  <!-- 핵심 체크포인트 -->
-  <div class="mt-10 gradient-premium text-white rounded-2xl p-8">
-    <h4 class="font-bold text-xl mb-6 text-center flex items-center justify-center gap-2">
-      <span class="material-symbols-outlined">push_pin</span>
-      수의시담 핵심 체크포인트
-    </h4>
-    <div class="grid md:grid-cols-3 gap-5">
-      <div class="bg-white/10 backdrop-blur rounded-xl p-5">
-        <div class="text-rose-300 font-bold mb-4 flex items-center gap-2">
-          <span class="material-symbols-outlined">block</span>
-          절대 금지
+  <!-- 참고 안내 (접히는 섹션) -->
+  <details open class="mt-10 border border-slate-200 rounded-2xl overflow-hidden">
+    <summary class="flex items-center gap-3 p-4 bg-slate-50 hover:bg-slate-100 transition-colors cursor-pointer">
+      <span class="material-symbols-outlined text-slate-500">info</span>
+      <span class="font-semibold text-slate-700">참고 안내</span>
+      <span class="text-xs text-slate-400 ml-auto">발생조건 · 핵심 체크포인트 · 필수서류</span>
+    </summary>
+    <div class="p-4 space-y-4">
+      <!-- 수의시담 발생 조건 -->
+      <div class="bg-amber-50 border border-amber-300 rounded-xl p-4">
+        <div class="flex items-start gap-3">
+          <span class="material-symbols-outlined text-amber-500">warning</span>
+          <div>
+            <h4 class="font-semibold text-amber-800 mb-1">수의시담 발생 조건</h4>
+            <p class="text-sm text-amber-700"><strong>견적가격 > 예정가격</strong></p>
+            <p class="text-xs text-amber-600 mt-1">견적가격이 예정가격을 초과하는 경우 가격협상(수의시담)을 진행할 수 있습니다.</p>
+          </div>
         </div>
-        <ul class="space-y-2.5 text-slate-100 text-sm">
-          <li class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-sm text-rose-400">close</span>
-            수의시담 2회 이상 실시
-          </li>
-          <li class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-sm text-rose-400">close</span>
-            예정가격 사전 공개
-          </li>
-          <li class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-sm text-rose-400">close</span>
-            재견적가 인상 허용
-          </li>
-        </ul>
       </div>
-      <div class="bg-white/10 backdrop-blur rounded-xl p-5">
-        <div class="text-emerald-300 font-bold mb-4 flex items-center gap-2">
-          <span class="material-symbols-outlined">check_circle</span>
-          필수 서류
+
+      <!-- 핵심 체크포인트 -->
+      <div class="gradient-premium text-white rounded-xl p-6">
+        <h4 class="font-bold text-lg mb-4 text-center flex items-center justify-center gap-2">
+          <span class="material-symbols-outlined">push_pin</span>
+          수의시담 핵심 체크포인트
+        </h4>
+        <div class="grid md:grid-cols-3 gap-5">
+          <div class="bg-white/10 backdrop-blur rounded-xl p-5">
+            <div class="text-rose-300 font-bold mb-4 flex items-center gap-2">
+              <span class="material-symbols-outlined">block</span>
+              절대 금지
+            </div>
+            <ul class="space-y-2.5 text-slate-100 text-sm">
+              <li class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm text-rose-400">close</span>
+                수의시담 2회 이상 실시
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm text-rose-400">close</span>
+                예정가격 사전 공개
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm text-rose-400">close</span>
+                재견적가 인상 허용
+              </li>
+            </ul>
+          </div>
+          <div class="bg-white/10 backdrop-blur rounded-xl p-5">
+            <div class="text-emerald-300 font-bold mb-4 flex items-center gap-2">
+              <span class="material-symbols-outlined">check_circle</span>
+              필수 서류
+            </div>
+            <ul class="space-y-2.5 text-slate-100 text-sm">
+              <li class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm text-emerald-400">check</span>
+                시담조서 (협상 내용 기록)
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm text-emerald-400">check</span>
+                재견적서 (인하된 가격)
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm text-emerald-400">check</span>
+                시담 참석 확인서
+              </li>
+            </ul>
+          </div>
+          <div class="bg-white/10 backdrop-blur rounded-xl p-5">
+            <div class="text-indigo-300 font-bold mb-4 flex items-center gap-2">
+              <span class="material-symbols-outlined">tips_and_updates</span>
+              실무 팁
+            </div>
+            <ul class="space-y-2.5 text-slate-100 text-sm">
+              <li class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm text-indigo-400">star</span>
+                시담 전 협상 여지 파악
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm text-indigo-400">star</span>
+                시담조서 상세 기록
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm text-indigo-400">star</span>
+                서면 시담도 가능
+              </li>
+            </ul>
+          </div>
         </div>
-        <ul class="space-y-2.5 text-slate-100 text-sm">
-          <li class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-sm text-emerald-400">check</span>
-            시담조서 (협상 내용 기록)
-          </li>
-          <li class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-sm text-emerald-400">check</span>
-            재견적서 (인하된 가격)
-          </li>
-          <li class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-sm text-emerald-400">check</span>
-            시담 참석 확인서
-          </li>
-        </ul>
-      </div>
-      <div class="bg-white/10 backdrop-blur rounded-xl p-5">
-        <div class="text-indigo-300 font-bold mb-4 flex items-center gap-2">
-          <span class="material-symbols-outlined">tips_and_updates</span>
-          실무 팁
-        </div>
-        <ul class="space-y-2.5 text-slate-100 text-sm">
-          <li class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-sm text-indigo-400">star</span>
-            시담 전 협상 여지 파악
-          </li>
-          <li class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-sm text-indigo-400">star</span>
-            시담조서 상세 기록
-          </li>
-          <li class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-sm text-indigo-400">star</span>
-            서면 시담도 가능
-          </li>
-        </ul>
       </div>
     </div>
-  </div>
+  </details>
 </div>

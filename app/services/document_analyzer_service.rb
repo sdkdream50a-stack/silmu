@@ -120,6 +120,9 @@ class DocumentAnalyzerService
     if document_type == "task_extraction"
       return build_task_extraction_prompt(extracted_text)
     end
+    if document_type == "quote_extraction"
+      return build_quote_extraction_prompt(extracted_text)
+    end
 
     type_label = case document_type
     when "goods" then "구매규격서 (물품 구매)"
@@ -481,6 +484,86 @@ class DocumentAnalyzerService
     { success: true, fields: fields }
   rescue JSON::ParserError
     { success: false, error: "AI 응답 형식이 올바르지 않습니다." }
+  end
+
+  def build_quote_extraction_prompt(extracted_text = nil)
+    text_section = if extracted_text
+      "## 추출된 문서 텍스트\n#{extracted_text}"
+    else
+      "## 첨부 이미지\n위 이미지는 견적서(quotation)입니다."
+    end
+
+    <<~PROMPT
+      당신은 한국 공공기관 수의계약 견적서 분석 전문가입니다.
+
+      아래 견적서에서 사업계획서·소요예산·예정가격 조서 작성에 필요한 정보를 추출해주세요.
+
+      #{text_section}
+
+      ## 추출할 필드
+
+      ### 업체 정보
+      - company_name: 업체명 (상호)
+      - business_no: 사업자등록번호
+      - representative: 대표자명
+      - contact_person: 담당자
+      - contact_phone: 연락처 (전화번호)
+
+      ### 건명/품목
+      - project_name: 건명 또는 품목 요약 (견적서 상단에 기재된 건명)
+
+      ### 내역 항목 (items 배열)
+      각 항목에 대해:
+      - name: 품명
+      - spec: 규격/사양
+      - unit: 단위 (예: "개", "EA", "식", "m²")
+      - qty: 수량 (숫자)
+      - unit_price: 단가 (숫자, 원 단위)
+
+      ### 금액
+      - supply_amount: 공급가액 (숫자, 원 단위)
+      - vat_amount: 부가세 (숫자, 원 단위)
+      - total_amount: 합계금액 (숫자, 원 단위)
+
+      ### 기타
+      - quote_date: 견적일자 (YYYY-MM-DD 형식)
+      - validity_period: 견적 유효기간
+      - delivery_period: 납품기한/납기
+      - payment_terms: 결제조건
+      - remarks: 비고/특이사항
+
+      ## 규칙
+      1. 문서에 명시적으로 있는 정보만 추출하세요.
+      2. 추측하지 마세요. 없는 정보는 null로 표기하세요.
+      3. 금액은 반드시 숫자만 (원 단위). 쉼표 제거. 예: "15,000,000" → 15000000
+      4. items에는 실제 품목만 포함. 소계/합계/부가세 행은 제외하세요.
+      5. 수량과 단가를 알 수 없으면 qty: 0, unit_price: 0으로 표기하세요.
+      6. project_name이 없으면 품목들을 종합하여 간단히 요약하세요.
+      7. 반드시 JSON 형식으로만 응답하세요.
+
+      ## 응답 형식
+      ```json
+      {
+        "company_name": "...",
+        "business_no": "...",
+        "representative": "...",
+        "contact_person": "...",
+        "contact_phone": "...",
+        "project_name": "...",
+        "items": [
+          { "name": "...", "spec": "...", "unit": "EA", "qty": 10, "unit_price": 50000 }
+        ],
+        "supply_amount": 500000,
+        "vat_amount": 50000,
+        "total_amount": 550000,
+        "quote_date": "2026-01-15",
+        "validity_period": "...",
+        "delivery_period": "...",
+        "payment_terms": "...",
+        "remarks": "..."
+      }
+      ```
+    PROMPT
   end
 
   def build_task_extraction_prompt(extracted_text = nil)

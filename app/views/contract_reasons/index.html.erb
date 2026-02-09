@@ -1,0 +1,555 @@
+<%# 수의계약 사유서 생성기 %>
+
+<style>
+.cr-card { background:#fff; border-radius:16px; border:1px solid #e5e7eb; padding:28px; margin-bottom:24px; }
+.cr-label { display:block; font-size:13px; font-weight:700; color:#334155; margin-bottom:6px; }
+.cr-label .cr-required { color:#ef4444; margin-left:2px; }
+.cr-input { width:100%; border:1px solid #e5e7eb; border-radius:10px; padding:10px 14px; font-size:14px; color:#1e293b; transition:border-color .2s, box-shadow .2s; }
+.cr-input:focus { outline:none; border-color:#059669; box-shadow:0 0 0 3px rgba(5,150,105,.1); }
+.cr-textarea { min-height:90px; resize:vertical; font-family:inherit; }
+.cr-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.cr-btn { display:inline-flex; align-items:center; gap:6px; padding:12px 28px; border-radius:12px; font-weight:600; font-size:15px; border:none; cursor:pointer; transition:all .2s; }
+.cr-btn-primary { background:#059669; color:#fff; }
+.cr-btn-primary:hover { background:#047857; }
+.cr-btn-secondary { background:#f1f5f9; color:#475569; border:1px solid #e2e8f0; }
+.cr-btn-secondary:hover { background:#e2e8f0; }
+
+/* Step cards */
+.cr-step { margin-bottom:20px; }
+.cr-step-header { font-size:14px; font-weight:700; color:#065f46; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+.cr-step-num { width:24px; height:24px; background:#059669; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; }
+
+/* Type / reason selection */
+.cr-option-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; }
+.cr-option-btn { background:#fff; border:2px solid #e5e7eb; border-radius:14px; padding:18px 14px; text-align:center; cursor:pointer; transition:all .2s; }
+.cr-option-btn:hover { border-color:#059669; background:#ecfdf5; }
+.cr-option-btn.selected { border-color:#059669; background:#ecfdf5; box-shadow:0 0 0 3px rgba(5,150,105,.15); }
+.cr-option-btn .cr-opt-icon { font-size:28px; color:#059669; margin-bottom:6px; }
+.cr-option-btn .cr-opt-name { font-weight:700; font-size:14px; color:#1e293b; }
+.cr-option-btn .cr-opt-desc { font-size:11px; color:#64748b; margin-top:2px; }
+
+.cr-reason-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.cr-reason-btn { background:#fff; border:2px solid #e5e7eb; border-radius:12px; padding:14px; cursor:pointer; transition:all .2s; text-align:left; }
+.cr-reason-btn:hover { border-color:#059669; background:#ecfdf5; }
+.cr-reason-btn.selected { border-color:#059669; background:#ecfdf5; box-shadow:0 0 0 3px rgba(5,150,105,.15); }
+.cr-reason-btn .cr-reason-name { font-weight:700; font-size:13px; color:#1e293b; margin-bottom:3px; }
+.cr-reason-btn .cr-reason-law { font-size:11px; color:#059669; }
+
+.cr-law-box { background:#ecfdf5; border:1px solid #a7f3d0; border-radius:12px; padding:14px 18px; margin-top:12px; display:none; }
+.cr-law-box.active { display:block; }
+.cr-law-box .cr-law-title { font-size:13px; font-weight:700; color:#065f46; margin-bottom:6px; }
+.cr-law-box .cr-law-text { font-size:13px; color:#334155; line-height:1.7; }
+
+.cr-detail-section { display:none; }
+.cr-detail-section.active { display:block; }
+
+.cr-example-hint { font-size:12px; color:#94a3b8; margin-top:4px; cursor:pointer; }
+.cr-example-hint:hover { color:#059669; text-decoration:underline; }
+
+/* Result */
+.cr-result { background:#fff; border:2px solid #a7f3d0; border-radius:16px; padding:32px; display:none; }
+.cr-result.active { display:block; }
+.cr-doc-header { text-align:center; margin-bottom:28px; padding-bottom:20px; border-bottom:2px solid #1e293b; }
+.cr-doc-title { font-size:22px; font-weight:800; color:#1e293b; letter-spacing:2px; }
+.cr-doc-section { margin-bottom:18px; }
+.cr-doc-section-title { font-size:14px; font-weight:700; color:#059669; margin-bottom:8px; padding:6px 12px; background:#ecfdf5; border-radius:8px; display:inline-block; }
+.cr-doc-content { font-size:14px; color:#334155; line-height:1.8; padding:8px 0 8px 12px; border-left:3px solid #d1fae5; white-space:pre-wrap; }
+.cr-doc-table { width:100%; border-collapse:collapse; margin:8px 0; }
+.cr-doc-table th { background:#f0fdf4; padding:8px 12px; text-align:left; border:1px solid #d1fae5; font-size:13px; font-weight:600; color:#065f46; }
+.cr-doc-table td { padding:8px 12px; border:1px solid #e2e8f0; font-size:14px; color:#1e293b; }
+.cr-doc-footer { text-align:center; margin-top:32px; padding-top:20px; border-top:1px solid #e2e8f0; color:#64748b; font-size:13px; }
+
+.cr-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:20px; }
+
+.cr-toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(100px); background:#1e293b; color:#fff; padding:12px 24px; border-radius:12px; font-size:14px; font-weight:600; z-index:9999; transition:transform .3s ease; display:flex; align-items:center; gap:8px; }
+.cr-toast.show { transform:translateX(-50%) translateY(0); }
+
+@media print {
+  body * { visibility:hidden; }
+  #cr-result, #cr-result * { visibility:visible; }
+  #cr-result { position:absolute; left:0; top:0; width:100%; padding:20px; border:none; }
+  .no-print { display:none !important; }
+}
+@media (max-width:640px) {
+  .cr-option-grid { grid-template-columns:1fr; }
+  .cr-reason-grid { grid-template-columns:1fr; }
+  .cr-grid { grid-template-columns:1fr; }
+  .cr-doc-title { font-size:18px; }
+}
+</style>
+
+<!-- 헤더 -->
+<section class="gradient-emerald text-white py-12 lg:py-16">
+  <div class="container-wide">
+    <div class="flex items-start gap-5">
+      <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 shadow-lg">
+        <span class="material-symbols-outlined text-4xl text-white">edit_document</span>
+      </div>
+      <div>
+        <h1 class="text-3xl lg:text-4xl font-bold tracking-tight mb-2">수의계약 사유서 생성기</h1>
+        <p class="text-emerald-100 text-lg">계약구분과 사유를 선택하면 법적 근거가 포함된 사유서를 자동 생성합니다</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-10">
+  <div class="container-wide max-w-4xl">
+
+    <div class="cr-card" id="cr-form-card">
+      <h2 style="font-size:20px; font-weight:700; color:#1e293b; margin-bottom:20px; display:flex; align-items:center; gap:8px;">
+        <span class="material-symbols-outlined text-emerald-500">checklist</span>
+        사유서 작성
+      </h2>
+
+      <!-- Step 1: 계약 구분 -->
+      <div class="cr-step">
+        <div class="cr-step-header">
+          <div class="cr-step-num">1</div>
+          계약 구분 선택 <span class="cr-required" style="color:#ef4444;">*</span>
+        </div>
+        <div class="cr-option-grid" id="cr-type-grid">
+          <div class="cr-option-btn" data-type="goods" onclick="crSelectType(this)">
+            <div class="cr-opt-icon"><span class="material-symbols-outlined">inventory_2</span></div>
+            <div class="cr-opt-name">물품</div>
+            <div class="cr-opt-desc">물품 구매·제조</div>
+          </div>
+          <div class="cr-option-btn" data-type="service" onclick="crSelectType(this)">
+            <div class="cr-opt-icon"><span class="material-symbols-outlined">engineering</span></div>
+            <div class="cr-opt-name">용역</div>
+            <div class="cr-opt-desc">용역·위탁·연구</div>
+          </div>
+          <div class="cr-option-btn" data-type="construction" onclick="crSelectType(this)">
+            <div class="cr-opt-icon"><span class="material-symbols-outlined">construction</span></div>
+            <div class="cr-opt-name">공사</div>
+            <div class="cr-opt-desc">시설·토목·건축 공사</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: 수의계약 사유 -->
+      <div class="cr-step">
+        <div class="cr-step-header">
+          <div class="cr-step-num">2</div>
+          수의계약 사유 선택 <span class="cr-required" style="color:#ef4444;">*</span>
+        </div>
+        <div class="cr-reason-grid" id="cr-reason-grid">
+          <div class="cr-reason-btn" data-reason="small_amount" onclick="crSelectReason(this)">
+            <div class="cr-reason-name">추정가격 기준 이하 (소액수의)</div>
+            <div class="cr-reason-law">지방계약법 시행령 제25조제1항제5호</div>
+          </div>
+          <div class="cr-reason-btn" data-reason="special_tech" onclick="crSelectReason(this)">
+            <div class="cr-reason-name">특정인의 기술·용역 필요</div>
+            <div class="cr-reason-law">지방계약법 시행령 제25조제1항제4호</div>
+          </div>
+          <div class="cr-reason-btn" data-reason="sole_source" onclick="crSelectReason(this)">
+            <div class="cr-reason-name">유일 업체 (독점)</div>
+            <div class="cr-reason-law">지방계약법 시행령 제25조제1항제4호</div>
+          </div>
+          <div class="cr-reason-btn" data-reason="urgent" onclick="crSelectReason(this)">
+            <div class="cr-reason-name">긴급한 경우</div>
+            <div class="cr-reason-law">지방계약법 시행령 제25조제1항제2호</div>
+          </div>
+          <div class="cr-reason-btn" data-reason="other" onclick="crSelectReason(this)">
+            <div class="cr-reason-name">기타 사유</div>
+            <div class="cr-reason-law">지방계약법 시행령 제25조</div>
+          </div>
+        </div>
+
+        <!-- 법적 근거 자동 표시 -->
+        <div class="cr-law-box" id="cr-law-box">
+          <div class="cr-law-title" id="cr-law-title"></div>
+          <div class="cr-law-text" id="cr-law-text"></div>
+        </div>
+      </div>
+
+      <!-- Step 3: 세부 정보 -->
+      <div class="cr-step cr-detail-section" id="cr-detail-section">
+        <div class="cr-step-header">
+          <div class="cr-step-num">3</div>
+          세부 정보 입력
+        </div>
+
+        <div class="cr-grid" style="margin-bottom:16px;">
+          <div>
+            <label class="cr-label">계약건명 <span class="cr-required">*</span></label>
+            <input type="text" class="cr-input" id="cr-contract-name" placeholder="예: 사무실 LED 조명 교체">
+          </div>
+          <div>
+            <label class="cr-label">소요예산 <span class="cr-required">*</span></label>
+            <input type="text" class="cr-input" id="cr-budget" placeholder="예: 15,000,000" oninput="crFormatBudget(this)">
+            <div style="font-size:12px; color:#94a3b8; margin-top:4px;" id="cr-budget-text"></div>
+          </div>
+        </div>
+
+        <div class="cr-grid" style="margin-bottom:16px;">
+          <div>
+            <label class="cr-label">VAT 구분</label>
+            <select class="cr-input" id="cr-vat">
+              <option value="included">VAT 포함</option>
+              <option value="excluded">VAT 별도</option>
+            </select>
+          </div>
+          <div>
+            <label class="cr-label">납품(완료) 기한</label>
+            <input type="text" class="cr-input" id="cr-delivery" placeholder="예: 계약체결 후 30일 이내">
+          </div>
+        </div>
+
+        <div class="cr-grid" style="margin-bottom:16px;">
+          <div>
+            <label class="cr-label">계약업체명</label>
+            <input type="text" class="cr-input" id="cr-company" placeholder="예: (주)한빛조명">
+          </div>
+          <div>
+            <label class="cr-label">사업자등록번호</label>
+            <input type="text" class="cr-input" id="cr-business-no" placeholder="예: 123-45-67890">
+          </div>
+        </div>
+
+        <div style="margin-bottom:16px;">
+          <label class="cr-label">수의계약 사유 상세 <span class="cr-required">*</span></label>
+          <textarea class="cr-input cr-textarea" id="cr-reason-detail" placeholder="수의계약으로 진행해야 하는 구체적인 사유를 작성하세요."></textarea>
+          <div class="cr-example-hint" id="cr-example-hint" onclick="crFillExample()">예시문 보기</div>
+        </div>
+
+        <div style="margin-bottom:16px;">
+          <label class="cr-label">추진경위</label>
+          <textarea class="cr-input cr-textarea" id="cr-background" placeholder="사업 추진 경위를 작성하세요.&#10;예: 2026.1월 사업필요성 검토 → 2월 예산확보 → 3월 업체 선정 및 계약 추진"></textarea>
+        </div>
+
+        <div class="cr-grid" style="margin-bottom:16px;">
+          <div>
+            <label class="cr-label">부서</label>
+            <input type="text" class="cr-input" id="cr-department" placeholder="예: 총무과">
+          </div>
+          <div>
+            <label class="cr-label">담당자</label>
+            <input type="text" class="cr-input" id="cr-manager" placeholder="예: 홍길동 주무관">
+          </div>
+        </div>
+
+        <div style="text-align:center; margin-top:24px;">
+          <button class="cr-btn cr-btn-primary" onclick="crGenerate()">
+            <span class="material-symbols-outlined">description</span>
+            사유서 생성
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 결과 -->
+    <div class="cr-result" id="cr-result">
+      <div class="no-print cr-actions" style="margin-top:0; margin-bottom:20px;">
+        <button class="cr-btn cr-btn-secondary" onclick="crCopy()">
+          <span class="material-symbols-outlined" style="font-size:18px;">content_copy</span> 복사
+        </button>
+        <button class="cr-btn cr-btn-secondary" onclick="crDownload()">
+          <span class="material-symbols-outlined" style="font-size:18px;">download</span> 다운로드
+        </button>
+        <button class="cr-btn cr-btn-secondary" onclick="window.print()">
+          <span class="material-symbols-outlined" style="font-size:18px;">print</span> 인쇄
+        </button>
+        <button class="cr-btn cr-btn-secondary" onclick="crReset()" style="margin-left:auto;">
+          <span class="material-symbols-outlined" style="font-size:18px;">refresh</span> 다시 작성
+        </button>
+      </div>
+      <div id="cr-doc-content"></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- 토스트 -->
+<div class="cr-toast" id="cr-toast">
+  <span class="material-symbols-outlined" style="font-size:18px;">check_circle</span>
+  <span id="cr-toast-msg"></span>
+</div>
+
+<script>
+// Data
+var crState = { type: null, reason: null };
+
+var crTypeLabels = {
+  goods: '물품',
+  service: '용역',
+  construction: '공사'
+};
+
+var crReasonData = {
+  small_amount: {
+    title: '소액수의계약 (추정가격 기준 이하)',
+    law: '지방계약법 시행령 제25조제1항제5호',
+    lawText: '추정가격이 물품·용역의 경우 2천만원 이하(2인 이상 견적: 5천만원 이하), 공사의 경우 5천만원 이하(2인 이상 견적: 2억원 이하)인 경우 수의계약을 할 수 있다.',
+    examples: {
+      goods: '본 건은 추정가격이 금 ○○원으로 지방계약법 시행령 제25조제1항제5호에 따른 소액수의계약 대상에 해당하여 수의계약으로 추진하고자 합니다.',
+      service: '본 건은 추정가격이 금 ○○원으로 지방계약법 시행령 제25조제1항제5호에 따른 소액수의계약 대상에 해당하여 수의계약으로 추진하고자 합니다.',
+      construction: '본 건은 추정가격이 금 ○○원으로 지방계약법 시행령 제25조제1항제5호에 따른 소액수의계약 대상에 해당하여 수의계약으로 추진하고자 합니다.'
+    }
+  },
+  special_tech: {
+    title: '특정인의 기술·용역이 필요한 경우',
+    law: '지방계약법 시행령 제25조제1항제4호',
+    lawText: '특정인의 기술·용역 또는 특정 위치·구조·품질·성능·효율 등으로 인하여 경쟁을 할 수 없는 경우에 수의계약을 할 수 있다.',
+    examples: {
+      goods: '본 건은 기존 설비와의 호환성 및 동일 규격 유지를 위해 특정 제조사의 제품 공급이 불가피하여, 지방계약법 시행령 제25조제1항제4호에 따라 수의계약으로 추진하고자 합니다.',
+      service: '본 건은 해당 분야의 전문적인 기술과 경험이 필요한 용역으로, 동 업체가 관련 분야에서 독보적인 기술력과 실적을 보유하고 있어 지방계약법 시행령 제25조제1항제4호에 따라 수의계약으로 추진하고자 합니다.',
+      construction: '본 건은 기존 시설물의 구조적 특성상 시공한 업체의 기술 지원이 필수적이며, 지방계약법 시행령 제25조제1항제4호에 따라 수의계약으로 추진하고자 합니다.'
+    }
+  },
+  sole_source: {
+    title: '유일 업체 (독점)',
+    law: '지방계약법 시행령 제25조제1항제4호',
+    lawText: '특정인의 기술·용역 또는 특정 위치·구조·품질·성능·효율 등으로 인하여 경쟁을 할 수 없는 경우에 수의계약을 할 수 있다.',
+    examples: {
+      goods: '본 건은 해당 물품의 국내 독점 공급업체가 ○○(주)로, 동등 이상의 제품을 공급할 수 있는 업체가 없어 경쟁이 불가능하므로 지방계약법 시행령 제25조제1항제4호에 따라 수의계약으로 추진하고자 합니다.',
+      service: '본 건은 해당 시스템의 개발·유지보수가 가능한 업체가 ○○(주)만 유일하여, 경쟁을 할 수 없는 경우에 해당하므로 지방계약법 시행령 제25조제1항제4호에 따라 수의계약으로 추진하고자 합니다.',
+      construction: '본 건은 해당 공법의 특허권을 ○○(주)가 독점 보유하고 있어 경쟁이 불가능하므로, 지방계약법 시행령 제25조제1항제4호에 따라 수의계약으로 추진하고자 합니다.'
+    }
+  },
+  urgent: {
+    title: '긴급한 경우',
+    law: '지방계약법 시행령 제25조제1항제2호',
+    lawText: '천재·지변, 작전상 병력이동, 긴급한 행사, 원자재의 가격급등, 그 밖에 이에 준하는 경우로서 입찰에 부칠 여유가 없는 경우에 수의계약을 할 수 있다.',
+    examples: {
+      goods: '본 건은 ○○(긴급 사유)로 인해 조속한 조치가 필요하나, 입찰에 부칠 경우 소요기간(약 ○일)으로 인해 적기 대응이 불가능하여 지방계약법 시행령 제25조제1항제2호에 따라 수의계약으로 긴급 추진하고자 합니다.',
+      service: '본 건은 ○○(긴급 사유)로 인해 긴급히 용역을 수행해야 하며, 입찰에 부칠 시간적 여유가 없어 지방계약법 시행령 제25조제1항제2호에 따라 수의계약으로 긴급 추진하고자 합니다.',
+      construction: '본 건은 ○○(긴급 사유)로 인한 시설물 피해 복구를 위해 긴급 시공이 필요하여, 입찰에 부칠 여유가 없으므로 지방계약법 시행령 제25조제1항제2호에 따라 수의계약으로 긴급 추진하고자 합니다.'
+    }
+  },
+  other: {
+    title: '기타 사유',
+    law: '지방계약법 시행령 제25조',
+    lawText: '지방계약법 시행령 제25조에서 정하는 수의계약 사유에 해당하는 경우 수의계약을 할 수 있다.',
+    examples: {
+      goods: '본 건은 지방계약법 시행령 제25조에 따라 수의계약 사유에 해당하여 수의계약으로 추진하고자 합니다. (구체적 사유를 작성하세요)',
+      service: '본 건은 지방계약법 시행령 제25조에 따라 수의계약 사유에 해당하여 수의계약으로 추진하고자 합니다. (구체적 사유를 작성하세요)',
+      construction: '본 건은 지방계약법 시행령 제25조에 따라 수의계약 사유에 해당하여 수의계약으로 추진하고자 합니다. (구체적 사유를 작성하세요)'
+    }
+  }
+};
+
+function crSelectType(el) {
+  document.querySelectorAll('#cr-type-grid .cr-option-btn').forEach(function(b) { b.classList.remove('selected'); });
+  el.classList.add('selected');
+  crState.type = el.dataset.type;
+  // Update example if reason already selected
+  if (crState.reason) {
+    crUpdateLawBox();
+  }
+}
+
+function crSelectReason(el) {
+  document.querySelectorAll('#cr-reason-grid .cr-reason-btn').forEach(function(b) { b.classList.remove('selected'); });
+  el.classList.add('selected');
+  crState.reason = el.dataset.reason;
+  crUpdateLawBox();
+  document.getElementById('cr-detail-section').classList.add('active');
+}
+
+function crUpdateLawBox() {
+  var data = crReasonData[crState.reason];
+  if (!data) return;
+  document.getElementById('cr-law-title').textContent = data.law;
+  document.getElementById('cr-law-text').textContent = data.lawText;
+  document.getElementById('cr-law-box').classList.add('active');
+}
+
+function crFillExample() {
+  if (!crState.type) { crShowToast('계약 구분을 먼저 선택하세요'); return; }
+  if (!crState.reason) { crShowToast('수의계약 사유를 먼저 선택하세요'); return; }
+  var data = crReasonData[crState.reason];
+  document.getElementById('cr-reason-detail').value = data.examples[crState.type];
+}
+
+function crFormatBudget(el) {
+  var v = el.value.replace(/[^\d]/g, '');
+  if (v) {
+    el.value = Number(v).toLocaleString();
+    document.getElementById('cr-budget-text').textContent = crNumberToKorean(Number(v)) + '원';
+  } else {
+    document.getElementById('cr-budget-text').textContent = '';
+  }
+}
+
+function crNumberToKorean(n) {
+  if (n === 0) return '영';
+  var units = ['', '만', '억', '조'];
+  var digits = ['', '일', '이', '삼', '사', '오', '육', '칠', '팔', '구'];
+  var subUnits = ['', '십', '백', '천'];
+  var result = '';
+  var unitIndex = 0;
+  while (n > 0) {
+    var part = n % 10000;
+    if (part > 0) {
+      var partStr = '';
+      var subIndex = 0;
+      while (part > 0) {
+        var d = part % 10;
+        if (d > 0) {
+          partStr = (d === 1 && subIndex > 0 ? '' : digits[d]) + subUnits[subIndex] + partStr;
+        }
+        part = Math.floor(part / 10);
+        subIndex++;
+      }
+      result = partStr + units[unitIndex] + ' ' + result;
+    }
+    n = Math.floor(n / 10000);
+    unitIndex++;
+  }
+  return result.trim();
+}
+
+function crEscape(str) {
+  var div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function crGenerate() {
+  if (!crState.type) { crShowToast('계약 구분을 선택하세요'); return; }
+  if (!crState.reason) { crShowToast('수의계약 사유를 선택하세요'); return; }
+
+  var contractName = document.getElementById('cr-contract-name').value.trim();
+  var budget = document.getElementById('cr-budget').value.trim();
+  var reasonDetail = document.getElementById('cr-reason-detail').value.trim();
+
+  if (!contractName) { crShowToast('계약건명을 입력하세요'); return; }
+  if (!budget) { crShowToast('소요예산을 입력하세요'); return; }
+  if (!reasonDetail) { crShowToast('수의계약 사유 상세를 입력하세요'); return; }
+
+  var vat = document.getElementById('cr-vat').value;
+  var delivery = document.getElementById('cr-delivery').value.trim();
+  var company = document.getElementById('cr-company').value.trim();
+  var businessNo = document.getElementById('cr-business-no').value.trim();
+  var background = document.getElementById('cr-background').value.trim();
+  var dept = document.getElementById('cr-department').value.trim() || '○○과';
+  var manager = document.getElementById('cr-manager').value.trim();
+
+  var budgetNum = Number(budget.replace(/[^\d]/g, ''));
+  var budgetKorean = crNumberToKorean(budgetNum);
+  var data = crReasonData[crState.reason];
+  var typeLabel = crTypeLabels[crState.type];
+  var vatLabel = vat === 'included' ? 'VAT 포함' : 'VAT 별도';
+
+  var today = new Date();
+  var dateStr = today.getFullYear() + '.' + String(today.getMonth()+1).padStart(2,'0') + '.' + String(today.getDate()).padStart(2,'0');
+
+  var html = '';
+  html += '<div class="cr-doc-header">';
+  html += '<div class="cr-doc-title">수의계약 요청(사유)서</div>';
+  html += '</div>';
+
+  // 기본정보
+  html += '<table class="cr-doc-table">';
+  html += '<tr><th style="width:130px;">계약건명</th><td>' + crEscape(contractName) + '</td></tr>';
+  html += '<tr><th>계약 구분</th><td>' + crEscape(typeLabel) + '</td></tr>';
+  html += '<tr><th>소요예산</th><td style="font-weight:700;">금 ' + budget + '원 (' + budgetKorean + '원) <span style="color:#64748b; font-weight:400; font-size:13px;">(' + vatLabel + ')</span></td></tr>';
+  if (company) {
+    html += '<tr><th>계약업체</th><td>' + crEscape(company);
+    if (businessNo) html += ' <span style="color:#64748b; font-size:13px;">(사업자등록번호: ' + crEscape(businessNo) + ')</span>';
+    html += '</td></tr>';
+  }
+  if (delivery) {
+    html += '<tr><th>납품(완료)기한</th><td>' + crEscape(delivery) + '</td></tr>';
+  }
+  html += '<tr><th>작성부서</th><td>' + crEscape(dept);
+  if (manager) html += ' / ' + crEscape(manager);
+  html += '</td></tr>';
+  html += '<tr><th>작성일</th><td>' + dateStr + '</td></tr>';
+  html += '</table>';
+
+  // 수의계약 사유
+  html += '<div class="cr-doc-section">';
+  html += '<div class="cr-doc-section-title">1. 수의계약 사유</div>';
+  html += '<div class="cr-doc-content">' + crEscape(reasonDetail) + '</div>';
+  html += '</div>';
+
+  // 법적 근거
+  html += '<div class="cr-doc-section">';
+  html += '<div class="cr-doc-section-title">2. 법적 근거</div>';
+  html += '<div class="cr-doc-content">';
+  html += '<strong>' + crEscape(data.law) + '</strong>\n';
+  html += crEscape(data.lawText);
+  html += '</div>';
+  html += '</div>';
+
+  // 추진경위
+  if (background) {
+    html += '<div class="cr-doc-section">';
+    html += '<div class="cr-doc-section-title">3. 추진경위</div>';
+    html += '<div class="cr-doc-content">' + crEscape(background) + '</div>';
+    html += '</div>';
+  }
+
+  // 향후 계획
+  var planNum = background ? 4 : 3;
+  html += '<div class="cr-doc-section">';
+  html += '<div class="cr-doc-section-title">' + planNum + '. 향후 계획</div>';
+  html += '<div class="cr-doc-content">';
+  html += '위와 같은 사유로 수의계약을 체결하고자 하오니 검토하여 주시기 바랍니다.';
+  html += '</div>';
+  html += '</div>';
+
+  // 붙임
+  html += '<div class="cr-doc-section" style="margin-top:28px;">';
+  html += '<div style="font-size:13px; color:#64748b;">붙임  1. 사업계획서 1부</div>';
+  html += '<div style="font-size:13px; color:#64748b;">      2. 견적서 1부</div>';
+  html += '<div style="font-size:13px; color:#64748b;">      3. 예정가격 조서 1부. 끝.</div>';
+  html += '</div>';
+
+  html += '<div class="cr-doc-footer">';
+  html += crEscape(dept) + '<br>';
+  html += '<span style="font-size:12px; color:#94a3b8;">이 문서는 실무(silmu.kr) 수의계약 사유서 생성기로 작성되었습니다.</span>';
+  html += '</div>';
+
+  document.getElementById('cr-doc-content').innerHTML = html;
+  document.getElementById('cr-result').classList.add('active');
+  document.getElementById('cr-result').scrollIntoView({ behavior:'smooth', block:'start' });
+  crShowToast('수의계약 사유서가 생성되었습니다');
+}
+
+function crCopy() {
+  var el = document.getElementById('cr-doc-content');
+  var text = el.innerText || el.textContent;
+  navigator.clipboard.writeText(text).then(function() {
+    crShowToast('클립보드에 복사되었습니다');
+  }).catch(function() {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    crShowToast('클립보드에 복사되었습니다');
+  });
+}
+
+function crDownload() {
+  var el = document.getElementById('cr-doc-content');
+  var text = el.innerText || el.textContent;
+  var name = document.getElementById('cr-contract-name').value.trim() || '수의계약사유서';
+  var blob = new Blob([text], { type:'text/plain;charset=utf-8' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = '수의계약사유서_' + name + '.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  crShowToast('파일이 다운로드되었습니다');
+}
+
+function crReset() {
+  document.getElementById('cr-result').classList.remove('active');
+  document.getElementById('cr-form-card').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+function crShowToast(msg) {
+  var toast = document.getElementById('cr-toast');
+  document.getElementById('cr-toast-msg').textContent = msg;
+  toast.classList.add('show');
+  setTimeout(function() { toast.classList.remove('show'); }, 2500);
+}
+</script>

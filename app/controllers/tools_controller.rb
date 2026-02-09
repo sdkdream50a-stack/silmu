@@ -2,7 +2,7 @@ class ToolsController < ApplicationController
   def index
     set_meta_tags(
       title: "실무 도구",
-      description: "계약방식 결정, 예정가격 계산, 계약보증금 계산, 여비계산 등 공무원 업무를 자동화하는 14개 도구.",
+      description: "계약방식 결정, 예정가격 계산, 계약보증금 계산, 여비계산 등 공무원 업무를 자동화하는 17개 도구.",
       keywords: "계약방식, 예정가격 계산기, 계약보증금, 여비계산기, 법정기간, PDF 도구",
       og: { title: "실무 도구 — 실무", url: request.original_url }
     )

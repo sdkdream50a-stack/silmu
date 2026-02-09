@@ -1,0 +1,73 @@
+class QuoteDocumentsController < ApplicationController
+  skip_before_action :verify_authenticity_token, only: [:extract]
+  before_action :verify_request_origin, only: [:extract]
+
+  MAX_FILE_SIZE = 20.megabytes
+  ALLOWED_CONTENT_TYPES = %w[application/pdf image/jpeg image/png].freeze
+
+  RATE_LIMIT = 5
+  RATE_PERIOD = 1.minute
+
+  def index
+    set_meta_tags(
+      title: "견적서 일괄 문서생성",
+      description: "견적서 1장을 업로드하면 사업계획서·소요예산·예정가격 조서를 한 번에 자동 생성합니다.",
+      keywords: "견적서, 사업계획서, 소요예산, 예정가격, 수의계약, 일괄생성",
+      og: { title: "견적서 일괄 문서생성 — 실무", url: request.original_url }
+    )
+  end
+
+  def extract
+    if rate_limited?
+      return render json: { success: false, error: "요청이 너무 많습니다. 잠시 후 다시 시도해 주세요." }, status: :too_many_requests
+    end
+
+    unless params[:file].present?
+      return render json: { success: false, error: "파일을 업로드해주세요." }, status: :unprocessable_entity
+    end
+
+    file = params[:file]
+
+    unless file.respond_to?(:content_type) && ALLOWED_CONTENT_TYPES.include?(file.content_type)
+      return render json: { success: false, error: "지원하지 않는 파일 형식입니다. (PDF, JPG, PNG만 가능)" }, status: :unprocessable_entity
+    end
+
+    if file.size > MAX_FILE_SIZE
+      return render json: { success: false, error: "파일 크기는 20MB 이하여야 합니다." }, status: :unprocessable_entity
+    end
+
+    result = DocumentAnalyzerService.new.analyze(file: file, document_type: "quote_extraction")
+
+    if result[:success]
+      render json: result
+    else
+      render json: result, status: :unprocessable_entity
+    end
+  rescue => e
+    Rails.logger.error("QuoteDocumentsController error: #{e.message}")
+    render json: { success: false, error: "문서 분석 중 오류가 발생했습니다." }, status: :internal_server_error
+  end
+
+  private
+
+  def rate_limited?
+    key = "quote_doc_rate:#{request.remote_ip}"
+    count = Rails.cache.read(key).to_i
+
+    if count >= RATE_LIMIT
+      true
+    else
+      Rails.cache.write(key, count + 1, expires_in: RATE_PERIOD)
+      false
+    end
+  end
+
+  def verify_request_origin
+    allowed_origins = [request.base_url, "https://silmu.kr", "https://www.silmu.kr"]
+    origin = request.headers["Origin"] || request.headers["Referer"]&.then { |r| URI.parse(r).then { |u| "#{u.scheme}://#{u.host}#{":#{u.port}" unless [80, 443].include?(u.port)}" } rescue nil }
+
+    unless origin.present? && allowed_origins.any? { |allowed| origin.start_with?(allowed) }
+      render json: { success: false, error: "허용되지 않은 요청입니다." }, status: :forbidden
+    end
+  end
+end

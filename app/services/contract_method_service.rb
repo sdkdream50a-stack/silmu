@@ -112,6 +112,7 @@ class ContractMethodService
           method_detail: "견적서 생략 또는 1인 견적",
           basis: "지방계약법 시행령 제25조제1항제5호 가목, 제30조제2항",
           note: "추정가격 200만원 이하 (200만원 미만은 견적서 생략 가능)",
+          type_display_name: "경미한 건설공사",
           documents: %w[견적서 사업자등록증사본]
         },
         {
@@ -120,7 +121,8 @@ class ContractMethodService
           method_detail: "1인 견적 수의계약",
           basis: "지방계약법 시행령 제25조제1항제5호 가목",
           note: "추정가격 2천만원 이하 (경미한 건설공사, 건설업 등록 불필요)",
-          documents: %w[견적서 사업자등록증사본 설계서]
+          type_display_name: "경미한 건설공사",
+          documents: %w[견적서 사업자등록증사본]
         },
         {
           max: 50_000_000,
@@ -128,6 +130,7 @@ class ContractMethodService
           method_detail: "2인 이상 견적 수의계약",
           basis: "지방계약법 시행령 제25조제1항제5호 가목, 건설산업기본법 시행령 제8조",
           note: "추정가격 5천만원 이하 (경미한 건설공사)",
+          type_display_name: "경미한 건설공사",
           special_condition: "공사예정금액 5천만원 미만 시 건설업 등록 없이 시공 가능 (건설산업기본법 시행령 제8조)",
           documents: %w[견적서(2인이상) 견적비교표 설계서 사업자등록증사본 청렴서약서 수의계약사유서]
         },
@@ -161,6 +164,7 @@ class ContractMethodService
           method_detail: "견적서 생략 또는 1인 견적",
           basis: "지방계약법 시행령 제25조제1항제5호 가목, 제30조제2항",
           note: "추정가격 200만원 이하 (200만원 미만은 견적서 생략 가능)",
+          type_display_name: "경미한 건설공사",
           documents: %w[견적서 사업자등록증사본]
         },
         {
@@ -169,8 +173,9 @@ class ContractMethodService
           method_detail: "1인 견적 수의계약",
           basis: "지방계약법 시행령 제25조제1항제5호 가목",
           note: "추정가격 2천만원 이하",
+          type_display_name: "경미한 건설공사",
           special_condition: "공사예정금액 1,500만원 미만은 경미한 건설공사로 전문공사업 등록 불필요 (건설산업기본법 시행령 제8조)",
-          documents: %w[견적서 사업자등록증사본 설계서]
+          documents: %w[견적서 사업자등록증사본]
         },
         {
           max: 200_000_000,
@@ -202,6 +207,7 @@ class ContractMethodService
           method_detail: "견적서 생략 또는 1인 견적",
           basis: "지방계약법 시행령 제25조제1항제5호 가목, 제30조제2항",
           note: "추정가격 200만원 이하 (200만원 미만은 견적서 생략 가능)",
+          type_display_name: "경미한 건설공사",
           documents: %w[견적서 사업자등록증사본]
         },
         {
@@ -210,7 +216,8 @@ class ContractMethodService
           method_detail: "1인 견적 수의계약",
           basis: "지방계약법 시행령 제25조제1항제5호 가목",
           note: "추정가격 2천만원 이하",
-          documents: %w[견적서 사업자등록증사본 설계서]
+          type_display_name: "경미한 건설공사",
+          documents: %w[견적서 사업자등록증사본]
         },
         {
           max: 50_000_000,
@@ -218,6 +225,7 @@ class ContractMethodService
           method_detail: "2인 이상 견적 수의계약",
           basis: "지방계약법 시행령 제25조제1항제5호 가목, 각 개별법령(전기공사업법 등)",
           note: "추정가격 5천만원 이하",
+          type_display_name: "경미한 건설공사",
           special_condition: "각 개별법령에서 정한 경미한 공사 범위 내 시 해당 공사업 등록 없이 가능",
           documents: %w[견적서(2인이상) 견적비교표 설계서 사업자등록증사본 청렴서약서 수의계약사유서]
         },
@@ -294,7 +302,7 @@ class ContractMethodService
         success: true,
         contract_type: {
           key: type_sym,
-          name: type_info[:name],
+          name: threshold[:type_display_name] || type_info[:name],
           icon: type_info[:icon]
         },
         estimated_price: price,
