@@ -1,4 +1,4 @@
-<%# 내역서 + 시공지시서 생성기 %>
+<%# 물량내역서 + 시방서 생성기 %>
 
 <style>
 .ce-step-card { background:#fff; border-radius:16px; border:1px solid #e5e7eb; padding:32px; margin-bottom:24px; display:none; }
@@ -124,7 +124,7 @@
     <!-- Step 1: 공사유형 선택 -->
     <div class="ce-step-card active" id="ce-step1">
       <h2 class="ce-section-title">공사유형 선택</h2>
-      <p class="ce-section-desc">내역서를 작성할 공사 유형을 선택하세요. 유형별 기본 항목이 자동으로 채워집니다.</p>
+      <p class="ce-section-desc">물량내역서를 작성할 공사 유형을 선택하세요. 유형별 기본 항목이 자동으로 채워집니다.</p>
 
       <div class="ce-type-grid" id="ce-type-grid">
         <% @construction_types.each do |type| %>
@@ -277,38 +277,38 @@
           <span class="material-symbols-outlined text-lg">arrow_back</span> 이전
         </button>
         <button class="ce-btn ce-btn-primary" onclick="ceGoStep(4)">
-          다음: 시공지시서 <span class="material-symbols-outlined text-lg">arrow_forward</span>
+          다음: 시방서 <span class="material-symbols-outlined text-lg">arrow_forward</span>
         </button>
       </div>
     </div>
 
-    <!-- Step 4: 시공지시서 + 출력 -->
+    <!-- Step 4: 시방서 + 출력 -->
     <div class="ce-step-card" id="ce-step4">
-      <h2 class="ce-section-title">시공지시서 및 출력</h2>
-      <p class="ce-section-desc">시공지시사항을 확인·수정하고 문서를 출력하세요.</p>
+      <h2 class="ce-section-title">시방서 및 출력</h2>
+      <p class="ce-section-desc">시방 내용을 확인·수정하고 문서를 출력하세요.</p>
 
       <div class="ce-instruction-box">
-        <h4><span class="material-symbols-outlined" style="vertical-align:middle;font-size:18px;">engineering</span> 시공 지시사항 (기본 템플릿)</h4>
+        <h4><span class="material-symbols-outlined" style="vertical-align:middle;font-size:18px;">engineering</span> 시방 사항 (기본 템플릿)</h4>
         <pre id="ce-instruction-template"></pre>
       </div>
 
       <div class="ce-form-group">
-        <label>추가 지시사항 (선택)</label>
-        <textarea id="ce-custom-instructions" rows="3" placeholder="추가적인 시공 지시사항을 입력하세요"></textarea>
+        <label>추가 시방 사항 (선택)</label>
+        <textarea id="ce-custom-instructions" rows="3" placeholder="추가 시방 사항을 입력하세요"></textarea>
       </div>
 
       <!-- 결과 미리보기 -->
       <div id="ce-result-area" style="display:none;">
         <div class="ce-result-section">
           <div class="ce-result-title">
-            <span class="material-symbols-outlined text-indigo-500">description</span> 내역서 미리보기
+            <span class="material-symbols-outlined text-indigo-500">description</span> 물량내역서 미리보기
           </div>
           <div id="ce-result-estimate"></div>
         </div>
 
         <div class="ce-result-section">
           <div class="ce-result-title">
-            <span class="material-symbols-outlined text-amber-600">engineering</span> 시공지시서 미리보기
+            <span class="material-symbols-outlined text-amber-600">engineering</span> 시방서 미리보기
           </div>
           <div id="ce-result-instruction"></div>
         </div>
@@ -323,10 +323,10 @@
             <span class="material-symbols-outlined text-lg">auto_awesome</span> 문서 생성
           </button>
           <button class="ce-btn ce-btn-success" id="ce-btn-print" style="display:none;" onclick="cePrint('estimate')">
-            <span class="material-symbols-outlined text-lg">print</span> 내역서 인쇄
+            <span class="material-symbols-outlined text-lg">print</span> 물량내역서 인쇄
           </button>
           <button class="ce-btn ce-btn-success" id="ce-btn-print2" style="display:none;" onclick="cePrint('instruction')">
-            <span class="material-symbols-outlined text-lg">print</span> 시공지시서 인쇄
+            <span class="material-symbols-outlined text-lg">print</span> 시방서 인쇄
           </button>
         </div>
       </div>
@@ -391,7 +391,7 @@ document.addEventListener('turbo:load', function() {
       ceApplyAnalyzedItems();
     }
     if (step === 4) {
-      // 시공지시서 템플릿 세팅
+      // 시방서 내용 세팅
       var templates = <%= raw CostEstimateGeneratorService::INSTRUCTION_TEMPLATES.to_json %>;
       var tmpl = templates[ceSelectedType] || '';
       document.getElementById('ce-instruction-template').textContent = tmpl;
@@ -542,8 +542,8 @@ document.addEventListener('turbo:load', function() {
     var est = data.estimate;
     var ins = data.instruction;
 
-    // 내역서 미리보기
-    var html = '<div style="text-align:center;margin-bottom:16px;"><strong style="font-size:17px;">' + ceEsc(est.type_name) + ' 내역서</strong></div>';
+    // 물량내역서 미리보기
+    var html = '<div style="text-align:center;margin-bottom:16px;"><strong style="font-size:17px;">' + ceEsc(est.type_name) + ' 물량내역서</strong></div>';
     html += '<table style="width:100%;font-size:13px;margin-bottom:12px;"><tr><td><strong>공사명:</strong> ' + ceEsc(est.info.project_name) + '</td><td><strong>장소:</strong> ' + ceEsc(est.info.location || '-') + '</td></tr>';
     html += '<tr><td><strong>기간:</strong> ' + ceEsc(est.info.duration || '-') + '</td><td><strong>담당:</strong> ' + ceEsc(est.info.department || '') + ' ' + ceEsc(est.info.manager || '') + '</td></tr></table>';
 
@@ -566,8 +566,9 @@ document.addEventListener('turbo:load', function() {
     html += '</div>';
     document.getElementById('ce-result-estimate').innerHTML = html;
 
-    // 시공지시서 미리보기
-    var iHtml = '<div style="text-align:center;margin-bottom:16px;"><strong style="font-size:17px;">' + ceEsc(ins.type_name) + ' 시공지시서</strong></div>';
+    // 시방서 미리보기
+    var iHtml = '<div style="text-align:center;margin-bottom:16px;"><strong style="font-size:17px;">' + ceEsc(ins.type_name) + ' 시방서</strong></div>';
+
     iHtml += '<table style="width:100%;font-size:13px;margin-bottom:16px;border-collapse:collapse;">';
     iHtml += '<tr><td style="padding:6px;border-bottom:1px solid #e5e7eb;"><strong>공사명</strong></td><td style="padding:6px;border-bottom:1px solid #e5e7eb;">' + ceEsc(ins.info.project_name) + '</td></tr>';
     iHtml += '<tr><td style="padding:6px;border-bottom:1px solid #e5e7eb;"><strong>공사금액</strong></td><td style="padding:6px;border-bottom:1px solid #e5e7eb;">' + ceComma(ins.total) + ' 원 (VAT 포함)</td></tr>';
@@ -575,13 +576,13 @@ document.addEventListener('turbo:load', function() {
     iHtml += '<tr><td style="padding:6px;border-bottom:1px solid #e5e7eb;"><strong>공사장소</strong></td><td style="padding:6px;border-bottom:1px solid #e5e7eb;">' + ceEsc(ins.info.location || '-') + '</td></tr>';
     iHtml += '</table>';
 
-    iHtml += '<div style="margin-bottom:16px;"><strong style="color:#92400e;">시공 지시사항</strong><pre style="white-space:pre-wrap;font-family:inherit;font-size:14px;line-height:1.8;background:#fffbeb;padding:16px;border-radius:10px;margin-top:8px;">' + ceEsc(ins.template) + '</pre></div>';
+    iHtml += '<div style="margin-bottom:16px;"><strong style="color:#92400e;">시방 사항</strong><pre style="white-space:pre-wrap;font-family:inherit;font-size:14px;line-height:1.8;background:#fffbeb;padding:16px;border-radius:10px;margin-top:8px;">' + ceEsc(ins.template) + '</pre></div>';
 
     if (ins.custom) {
-      iHtml += '<div style="margin-bottom:16px;"><strong style="color:#1e40af;">추가 지시사항</strong><pre style="white-space:pre-wrap;font-family:inherit;font-size:14px;line-height:1.8;background:#eff6ff;padding:16px;border-radius:10px;margin-top:8px;">' + ceEsc(ins.custom) + '</pre></div>';
+      iHtml += '<div style="margin-bottom:16px;"><strong style="color:#1e40af;">추가 시방 사항</strong><pre style="white-space:pre-wrap;font-family:inherit;font-size:14px;line-height:1.8;background:#eff6ff;padding:16px;border-radius:10px;margin-top:8px;">' + ceEsc(ins.custom) + '</pre></div>';
     }
 
-    iHtml += '<div style="margin-top:24px;text-align:right;font-size:14px;"><p>위와 같이 시공을 지시합니다.</p><br><table style="margin-left:auto;border-collapse:collapse;"><tr><td style="border:1px solid #d1d5db;padding:8px 24px;background:#f8fafc;">담당</td><td style="border:1px solid #d1d5db;padding:8px 24px;background:#f8fafc;">팀장</td><td style="border:1px solid #d1d5db;padding:8px 24px;background:#f8fafc;">과장</td></tr><tr><td style="border:1px solid #d1d5db;padding:20px 24px;"></td><td style="border:1px solid #d1d5db;padding:20px 24px;"></td><td style="border:1px solid #d1d5db;padding:20px 24px;"></td></tr></table></div>';
+    iHtml += '<div style="margin-top:24px;text-align:right;font-size:14px;"><p>위 내용에 따라 시공하여야 한다.</p><br><table style="margin-left:auto;border-collapse:collapse;"><tr><td style="border:1px solid #d1d5db;padding:8px 24px;background:#f8fafc;">담당</td><td style="border:1px solid #d1d5db;padding:8px 24px;background:#f8fafc;">팀장</td><td style="border:1px solid #d1d5db;padding:8px 24px;background:#f8fafc;">과장</td></tr><tr><td style="border:1px solid #d1d5db;padding:20px 24px;"></td><td style="border:1px solid #d1d5db;padding:20px 24px;"></td><td style="border:1px solid #d1d5db;padding:20px 24px;"></td></tr></table></div>';
 
     document.getElementById('ce-result-instruction').innerHTML = iHtml;
   }
@@ -599,7 +600,7 @@ document.addEventListener('turbo:load', function() {
   };
 
   function buildEstimatePrint(est) {
-    var h = '<div class="print-header"><h2>' + ceEsc(est.type_name) + ' 내역서</h2></div>';
+    var h = '<div class="print-header"><h2>' + ceEsc(est.type_name) + ' 물량내역서</h2></div>';
     h += '<table class="print-info"><tr><td><strong>공사명:</strong></td><td>' + ceEsc(est.info.project_name) + '</td><td><strong>장소:</strong></td><td>' + ceEsc(est.info.location || '-') + '</td></tr>';
     h += '<tr><td><strong>기간:</strong></td><td>' + ceEsc(est.info.duration || '-') + '</td><td><strong>담당:</strong></td><td>' + ceEsc(est.info.department || '') + ' ' + ceEsc(est.info.manager || '') + '</td></tr></table>';
     h += '<table class="ce-print-table"><thead><tr><th>No</th><th>공종/품명</th><th>규격</th><th>단위</th><th>수량</th><th>단가(원)</th><th>금액(원)</th></tr></thead><tbody>';
@@ -621,18 +622,18 @@ document.addEventListener('turbo:load', function() {
   }
 
   function buildInstructionPrint(ins) {
-    var h = '<div class="print-header"><h2>' + ceEsc(ins.type_name) + ' 시공지시서</h2></div>';
+    var h = '<div class="print-header"><h2>' + ceEsc(ins.type_name) + ' 시방서</h2></div>';
     h += '<table class="ce-print-table" style="margin-bottom:20px;"><tbody>';
     h += '<tr><td style="width:100px;background:#f0f0f0;font-weight:bold;">공사명</td><td>' + ceEsc(ins.info.project_name) + '</td></tr>';
     h += '<tr><td style="background:#f0f0f0;font-weight:bold;">공사금액</td><td>' + ceComma(ins.total) + ' 원 (VAT 포함)</td></tr>';
     h += '<tr><td style="background:#f0f0f0;font-weight:bold;">공사기간</td><td>' + ceEsc(ins.info.duration || '-') + '</td></tr>';
     h += '<tr><td style="background:#f0f0f0;font-weight:bold;">공사장소</td><td>' + ceEsc(ins.info.location || '-') + '</td></tr>';
     h += '</tbody></table>';
-    h += '<div style="margin-bottom:16px;"><strong>시공 지시사항</strong><pre style="white-space:pre-wrap;font-family:serif;line-height:1.8;margin-top:8px;">' + ceEsc(ins.template) + '</pre></div>';
+    h += '<div style="margin-bottom:16px;"><strong>시방 사항</strong><pre style="white-space:pre-wrap;font-family:serif;line-height:1.8;margin-top:8px;">' + ceEsc(ins.template) + '</pre></div>';
     if (ins.custom) {
-      h += '<div style="margin-bottom:16px;"><strong>추가 지시사항</strong><pre style="white-space:pre-wrap;font-family:serif;line-height:1.8;margin-top:8px;">' + ceEsc(ins.custom) + '</pre></div>';
+      h += '<div style="margin-bottom:16px;"><strong>추가 시방 사항</strong><pre style="white-space:pre-wrap;font-family:serif;line-height:1.8;margin-top:8px;">' + ceEsc(ins.custom) + '</pre></div>';
     }
-    h += '<div style="margin-top:30px;text-align:center;"><p>위와 같이 시공을 지시합니다.</p><br><p>20    년    월    일</p></div>';
+    h += '<div style="margin-top:30px;text-align:center;"><p>위 내용에 따라 시공하여야 한다.</p><br><p>20    년    월    일</p></div>';
     h += '<div class="print-sign"><table><tr><td>담당</td><td>팀장</td><td>과장</td></tr><tr><td style="height:50px;"></td><td></td><td></td></tr></table></div>';
     return h;
   }
