@@ -68,6 +68,7 @@
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     font-feature-settings: 'kern' 1;
+    color-scheme: light only;
   }
 
   body {
