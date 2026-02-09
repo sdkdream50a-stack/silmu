@@ -38,7 +38,7 @@ jobs:
 
     steps:
       - name: 소스코드 체크아웃
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
