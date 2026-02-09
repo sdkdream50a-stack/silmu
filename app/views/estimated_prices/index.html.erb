@@ -244,14 +244,10 @@
         </div>
       </div>
 
-      <!-- 부가세·예정가격 -->
-      <div style="background:#f8fafc; border-radius:12px; padding:16px 20px; margin-top:8px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-          <span style="font-size:14px; color:#64748b;">부가가치세 (10%)</span>
-          <span style="font-size:16px; font-weight:700; color:#334155;" id="ep-vat-display">0 원</span>
-        </div>
-        <div style="display:flex; justify-content:space-between; align-items:center; padding-top:10px; border-top:2px solid #e2e8f0;">
-          <span style="font-size:16px; font-weight:700; color:#059669;">예정가격 (예상)</span>
+      <!-- 추정가격 (VAT 제외) -->
+      <div style="background:#f0fdf4; border-radius:12px; padding:16px 20px; margin-top:8px;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-size:16px; font-weight:700; color:#059669;">추정가격 (VAT 제외)</span>
           <span style="font-size:20px; font-weight:800; color:#059669;" id="ep-total-display">0 원</span>
         </div>
       </div>
@@ -377,9 +373,7 @@ document.addEventListener('turbo:load', function() {
       for (var i = 0; i < ids.length; i++) sub += parseInt(document.getElementById(ids[i]).value) || 0;
       document.getElementById('ep-subtotal-construction').textContent = epComma(sub) + ' 원';
     }
-    var vat = Math.round(sub * 0.1);
-    document.getElementById('ep-vat-display').textContent = epComma(vat) + ' 원';
-    document.getElementById('ep-total-display').textContent = epComma(sub + vat) + ' 원';
+    document.getElementById('ep-total-display').textContent = epComma(sub) + ' 원';
   };
 
   function epCalculate() {
@@ -426,17 +420,17 @@ document.addEventListener('turbo:load', function() {
   function epRenderResult(r) {
     var html = '';
 
-    // 예정가격 히어로
+    // 추정가격 히어로
     html += '<div class="ep-price-hero">';
-    html += '<div class="ep-price-label">' + epEsc(r.type_name) + ' 예정가격</div>';
-    html += '<div class="ep-price-value">' + epComma(r.estimated_price) + '원</div>';
-    html += '<div class="ep-price-sub">기초금액 ' + epComma(r.base_amount) + '원 + 부가세 ' + epComma(r.vat) + '원</div>';
+    html += '<div class="ep-price-label">' + epEsc(r.type_name) + ' 추정가격 (VAT 제외)</div>';
+    html += '<div class="ep-price-value">' + epComma(r.base_amount) + '원</div>';
+    html += '<div class="ep-price-sub" style="color:#64748b;">참고: VAT 포함 시 ' + epComma(r.estimated_price) + '원</div>';
     html += '</div>';
 
     // 상세 내역
     html += '<div class="ep-detail-grid">';
-    html += '<div class="ep-detail-item"><div class="ep-detail-label">기초금액</div><div class="ep-detail-value">' + epComma(r.base_amount) + '원</div></div>';
-    html += '<div class="ep-detail-item"><div class="ep-detail-label">부가가치세 (10%)</div><div class="ep-detail-value">' + epComma(r.vat) + '원</div></div>';
+    html += '<div class="ep-detail-item"><div class="ep-detail-label">추정가격 (VAT 제외)</div><div class="ep-detail-value">' + epComma(r.base_amount) + '원</div></div>';
+    html += '<div class="ep-detail-item"><div class="ep-detail-label">참고: VAT 포함</div><div class="ep-detail-value" style="color:#64748b;">' + epComma(r.estimated_price) + '원</div></div>';
     html += '</div>';
 
     // 수의계약 가능 여부
@@ -487,7 +481,7 @@ document.addEventListener('turbo:load', function() {
     html += '• 예정가격 작성기준: 「국가를 당사자로 하는 계약에 관한 법률 시행령」 제9조<br>';
     html += '• 복수예비가격: 동 시행령 제9조의2 (기초금액의 ±3% 범위 내 15개 작성)<br>';
     html += '• 수의계약 기준: 동 시행령 제26조 (추정가격 기준)<br>';
-    html += '• 본 계산 결과는 참고용이며, 실제 예정가격은 원가계산 기준에 따라 별도 산정해야 합니다.';
+    html += '• 본 계산 결과는 참고용이며, 실제 추정가격은 원가계산 기준에 따라 별도 산정해야 합니다.';
     html += '</div></div>';
 
     document.getElementById('ep-result-area').innerHTML = html;
