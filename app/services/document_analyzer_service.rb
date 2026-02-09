@@ -126,7 +126,7 @@ class DocumentAnalyzerService
 
     type_label = case document_type
     when "goods" then "구매규격서 (물품 구매)"
-    when "service" then "과업지시서 (용역)"
+    when "service" then "과업내용서 (용역)"
     else "계약문서"
     end
 
@@ -258,7 +258,7 @@ class DocumentAnalyzerService
       당신은 한국 공공기관 공사계약 기성검사 전문가입니다.
 
       아래 문서에서 기성검사 체크리스트 작성에 필요한 정보를 추출해주세요.
-      계약서, 내역서, 기성신청서, 시공지시서 등 공사 관련 서류에서 계약정보와 검사정보를 정확히 추출하는 것이 핵심입니다.
+      계약서, 물량내역서, 기성신청서, 시방서 등 공사 관련 서류에서 계약정보와 검사정보를 정확히 추출하는 것이 핵심입니다.
 
       #{text_section}
 

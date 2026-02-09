@@ -157,7 +157,7 @@ class ContractDocumentService
             description: "2인 이상 견적 요청",
             legal_basis: "지방계약법 시행령 제30조",
             caution: "용역 범위와 기간을 명확히 제시. 2천만원 초과 시 G2B 전자견적 의무",
-            tip: "과업지시서 초안과 함께 견적 요청"
+            tip: "과업내용서 초안과 함께 견적 요청"
           },
           {
             id: "estimate", name: "견적서", required: true,
@@ -193,7 +193,7 @@ class ContractDocumentService
             id: "contract_form", name: "용역 표준계약서", required: true,
             description: "계약서 본문",
             legal_basis: "지방계약법 제14조, 시행령 제49조",
-            caution: "과업지시서를 계약서 별첨으로 포함",
+            caution: "과업내용서를 계약서 별첨으로 포함",
             tip: "지식재산권 귀속 조항 확인 필수"
           },
           {
@@ -243,7 +243,7 @@ class ContractDocumentService
           {
             id: "personnel_list", name: "투입인력 명단", required: true,
             description: "용역 투입 인력",
-            legal_basis: "과업지시서, 계약집행기준",
+            legal_basis: "과업내용서, 계약집행기준",
             caution: "제안서 인력과 실제 투입인력 일치 확인",
             tip: "인력 변경 시 사전 승인 절차 안내"
           },
@@ -267,14 +267,14 @@ class ContractDocumentService
             id: "inspection_report", name: "검사검수조서", required: true,
             description: "용역 결과 검수",
             legal_basis: "지방계약법 시행령 제64조",
-            caution: "과업지시서 기준 성과품 검수",
+            caution: "과업내용서 기준 성과품 검수",
             tip: "필요시 전문가 검수 의뢰 가능"
           },
           {
             id: "deliverables", name: "성과품 목록", required: true,
             description: "납품 산출물",
             legal_basis: "지방계약법 시행령 제64조",
-            caution: "과업지시서 성과품과 일치 확인",
+            caution: "과업내용서 성과품과 일치 확인",
             tip: "전자파일 및 인쇄물 각각 수량 확인"
           },
           {

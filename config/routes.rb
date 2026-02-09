@@ -54,7 +54,7 @@ Rails.application.routes.draw do
   post "contract-methods/determine", to: "contract_methods#determine"
   get "contract-methods/table/:type", to: "contract_methods#table", as: :contract_method_table
 
-  # 내역서+시공지시서 생성기
+  # 물량내역서+시방서 생성기
   get "tools/cost-estimate", to: "cost_estimates#index", as: :cost_estimate
   get "cost-estimates/default-items/:type", to: "cost_estimates#default_items", as: :cost_estimate_default_items
   post "cost-estimates/generate", to: "cost_estimates#generate"
