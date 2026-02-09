@@ -369,12 +369,12 @@ document.addEventListener('turbo:load', function() {
     let method, color, icon, desc, checklist;
     if (category === 'construction') {
       if (amount <= 20000000) { method='1인 견적 수의계약'; color='emerald'; icon='person'; desc='추정가격 2천만원 이하 공사'; checklist=['견적서 1부 징구','계약서 작성 (간이계약서 가능)','착공신고서','준공검사 및 대가 지급']; }
-      else if (amount <= 200000000) { method='2인 이상 견적 수의계약'; color='indigo'; icon='group'; desc='추정가격 2천만원 초과 ~ 2억원 이하 공사'; checklist=['2인 이상 견적서 징구','예정가격 작성','계약서 작성','착공신고서 → 준공검사 → 대가 지급']; }
-      else { method='경쟁입찰'; color='slate'; icon='groups'; desc='추정가격 2억원 초과 공사'; checklist=['입찰공고 (7일 이상)','예정가격 작성 (복수예비가격)','적격심사','계약 체결 → 착공 → 준공검사']; }
+      else if (amount <= 200000000) { method='2인 이상 견적 수의계약'; color='indigo'; icon='group'; desc='추정가격 2천만원 초과 ~ 2억원 이하 공사'; checklist=['추정가격 산정','2인 이상 견적서 징구','예정가격 작성','계약서 작성','착공신고서 → 준공검사 → 대가 지급']; }
+      else { method='경쟁입찰'; color='slate'; icon='groups'; desc='추정가격 2억원 초과 공사'; checklist=['추정가격 산정','입찰공고 (7일 이상)','예정가격 작성 (복수예비가격)','적격심사','계약 체결 → 착공 → 준공검사']; }
     } else {
       if (amount <= 20000000) { method='1인 견적 수의계약'; color='emerald'; icon='person'; desc=`추정가격 2천만원 이하 ${category==='goods'?'물품':'용역'}`; checklist=['견적서 1부 징구','계약서 작성 (간이계약서 가능)','검수 및 대가 지급']; }
-      else if (amount <= 100000000) { method='2인 이상 견적 수의계약'; color='indigo'; icon='group'; desc=`추정가격 2천만원 초과 ~ 1억원 이하 ${category==='goods'?'물품':'용역'}`; checklist=['2인 이상 견적서 징구','예정가격 작성','계약서 작성','검수 및 대가 지급']; }
-      else { method='경쟁입찰'; color='slate'; icon='groups'; desc=`추정가격 1억원 초과 ${category==='goods'?'물품':'용역'}`; checklist=['입찰공고 (7일 이상)','예정가격 작성 (복수예비가격)','적격심사 또는 최저가낙찰','계약 체결 → 검수 → 대가 지급']; }
+      else if (amount <= 100000000) { method='2인 이상 견적 수의계약'; color='indigo'; icon='group'; desc=`추정가격 2천만원 초과 ~ 1억원 이하 ${category==='goods'?'물품':'용역'}`; checklist=['추정가격 산정','2인 이상 견적서 징구','예정가격 작성','계약서 작성','검수 및 대가 지급']; }
+      else { method='경쟁입찰'; color='slate'; icon='groups'; desc=`추정가격 1억원 초과 ${category==='goods'?'물품':'용역'}`; checklist=['추정가격 산정','입찰공고 (7일 이상)','예정가격 작성 (복수예비가격)','적격심사 또는 최저가낙찰','계약 체결 → 검수 → 대가 지급']; }
     }
     priceResult.classList.remove('hidden');
     priceResultContent.className = `p-4 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm`;
