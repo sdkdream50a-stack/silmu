@@ -702,7 +702,7 @@
           <input type="text" id="estimated-price" placeholder="0" inputmode="numeric" oninput="formatPrice(this)" onkeydown="if(event.key==='Enter'){event.preventDefault();determineMethod();}">
           <span class="unit">원</span>
         </div>
-        <p class="amount-hint" id="amount-hint">설계금액 또는 예정가격 작성 전 대략적인 예상 금액을 입력하세요</p>
+        <p class="amount-hint" id="amount-hint">추정가격 산정을 위한 대략적인 예상 금액을 입력하세요</p>
         <div class="quick-amounts">
           <span class="quick-amount" onclick="addAmount(100000)">+10만</span>
           <span class="quick-amount" onclick="addAmount(1000000)">+100만</span>
@@ -918,7 +918,7 @@
       hint.style.color = 'var(--color-emerald-600)';
       hint.style.fontWeight = '600';
     } else {
-      hint.textContent = '설계금액 또는 예정가격 작성 전 대략적인 예상 금액을 입력하세요';
+      hint.textContent = '추정가격 산정을 위한 대략적인 예상 금액을 입력하세요';
       hint.style.color = '#64748b';
       hint.style.fontWeight = '400';
     }
