@@ -22,9 +22,7 @@ servers:
 #
 proxy:
   ssl: true
-  host:
-    - silmu.kr
-    - www.silmu.kr
+  host: silmu.kr
 
 # Where you keep your container images.
 registry:
