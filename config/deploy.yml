@@ -7,10 +7,10 @@ image: silmu
 # Deploy to these servers.
 servers:
   web:
-    - 192.168.0.1
+    - 141.164.53.97
   # job:
   #   hosts:
-  #     - 192.168.0.1
+  #     - 141.164.53.97
   #   cmd: bin/jobs
 
 # Enable SSL auto certification via Let's Encrypt and allow for multiple apps on a single web server.
