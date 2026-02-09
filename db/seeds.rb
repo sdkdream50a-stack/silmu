@@ -7,3 +7,9 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+# db/seeds/ 디렉토리의 모든 시드 파일 로드
+Dir[Rails.root.join("db/seeds/**/*.rb")].sort.each do |seed_file|
+  puts "📂 Loading #{seed_file.sub("#{Rails.root}/", '')}..."
+  load seed_file
+end
