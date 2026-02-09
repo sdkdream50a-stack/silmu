@@ -192,7 +192,7 @@
         </h3>
         <ul style="font-size:14px; color:#15803d; line-height:2;">
           <li>- 1인 소액수의 계약 서류를 한 번에 만들고 싶은 분</li>
-          <li>- 견적서를 받았는데 사업계획서·소요예산·예정가격·과업지시서 등을 따로 작성하기 번거로운 분</li>
+          <li>- 견적서를 받았는데 사업계획서·소요예산·예정가격·과업내용서 등을 따로 작성하기 번거로운 분</li>
           <li>- 견적서 데이터를 직접 옮겨적다가 오타가 나는 게 걱정인 분</li>
         </ul>
       </div>
@@ -318,7 +318,7 @@
         <!-- 용역 추가 입력 -->
         <div id="qd-fields-service" class="qd-hidden">
           <div style="font-size:14px; font-weight:700; color:#475569; margin-bottom:12px; margin-top:24px; padding-bottom:6px; border-bottom:1px solid #e5e7eb;">
-            과업지시서 추가 정보 <span style="font-size:12px; font-weight:400; color:#94a3b8;">용역</span>
+            과업내용서 추가 정보 <span style="font-size:12px; font-weight:400; color:#94a3b8;">용역</span>
           </div>
           <div class="qd-grid" style="margin-bottom:16px;">
             <div>
@@ -339,7 +339,7 @@
         <!-- 공사 추가 입력 -->
         <div id="qd-fields-construction" class="qd-hidden">
           <div style="font-size:14px; font-weight:700; color:#475569; margin-bottom:12px; margin-top:24px; padding-bottom:6px; border-bottom:1px solid #e5e7eb;">
-            시공지시서 추가 정보 <span style="font-size:12px; font-weight:400; color:#94a3b8;">공사</span>
+            시방서 추가 정보 <span style="font-size:12px; font-weight:400; color:#94a3b8;">공사</span>
           </div>
           <div class="qd-grid" style="margin-bottom:16px;">
             <div>
@@ -396,11 +396,11 @@
             </div>
             <div class="qd-tab qd-hidden" id="qd-tab-btn-taskorder" onclick="qdSwitchTab('taskorder')">
               <span class="material-symbols-outlined" style="font-size:16px; vertical-align:middle;">description</span>
-              과업지시서
+              과업내용서
             </div>
             <div class="qd-tab qd-hidden" id="qd-tab-btn-estimate" onclick="qdSwitchTab('estimate')">
               <span class="material-symbols-outlined" style="font-size:16px; vertical-align:middle;">receipt_long</span>
-              내역서+시공지시서
+              물량내역서+시방서
             </div>
           </div>
         </div>
@@ -459,14 +459,14 @@
           </div>
         </div>
 
-        <!-- Tab: 과업지시서 (용역) -->
+        <!-- Tab: 과업내용서 (용역) -->
         <div class="qd-tab-content" id="qd-tab-taskorder">
           <div style="padding:20px 28px;">
             <div class="qd-actions no-print">
               <button class="qd-btn qd-btn-secondary qd-btn-sm" onclick="qdCopyDoc('taskorder')">
                 <span class="material-symbols-outlined" style="font-size:16px;">content_copy</span> 복사
               </button>
-              <button class="qd-btn qd-btn-secondary qd-btn-sm" onclick="qdDownloadDoc('taskorder', '과업지시서')">
+              <button class="qd-btn qd-btn-secondary qd-btn-sm" onclick="qdDownloadDoc('taskorder', '과업내용서')">
                 <span class="material-symbols-outlined" style="font-size:16px;">download</span> 다운로드
               </button>
               <button class="qd-btn qd-btn-secondary qd-btn-sm" onclick="qdPrintDoc('taskorder')">
@@ -477,14 +477,14 @@
           </div>
         </div>
 
-        <!-- Tab: 내역서+시공지시서 (공사) -->
+        <!-- Tab: 물량내역서+시방서 (공사) -->
         <div class="qd-tab-content" id="qd-tab-estimate">
           <div style="padding:20px 28px;">
             <div class="qd-actions no-print">
               <button class="qd-btn qd-btn-secondary qd-btn-sm" onclick="qdCopyDoc('estimate')">
                 <span class="material-symbols-outlined" style="font-size:16px;">content_copy</span> 복사
               </button>
-              <button class="qd-btn qd-btn-secondary qd-btn-sm" onclick="qdDownloadDoc('estimate', '내역서_시공지시서')">
+              <button class="qd-btn qd-btn-secondary qd-btn-sm" onclick="qdDownloadDoc('estimate', '물량내역서_시방서')">
                 <span class="material-symbols-outlined" style="font-size:16px;">download</span> 다운로드
               </button>
               <button class="qd-btn qd-btn-secondary qd-btn-sm" onclick="qdPrintDoc('estimate')">
