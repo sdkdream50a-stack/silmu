@@ -2,7 +2,7 @@ class HomeController < ApplicationController
   def index
     set_meta_tags(
       title: "계약 실무, 이제 혼자 고민하지 마세요",
-      description: "공무원을 위한 계약 실무 가이드 — 수의계약, 입찰, 검수, 예산 업무를 쉽고 정확하게. 14개 자동화 도구와 20개 업무 가이드 제공.",
+      description: "공무원을 위한 계약 실무 가이드 — 수의계약, 입찰, 검수, 예산 업무를 쉽고 정확하게. 16개 자동화 도구와 25개 법령 가이드 제공.",
       keywords: "공무원, 계약 실무, 수의계약, 입찰, 검수, 예산, 실무 도구",
       og: { title: "실무 — 공무원 계약 실무 가이드", url: request.original_url }
     )
