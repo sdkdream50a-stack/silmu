@@ -72,6 +72,16 @@ Rails.application.routes.draw do
   get "tools/cost-calculation", to: "cost_calculations#index", as: :cost_calculation
   post "cost-calculations/review", to: "cost_calculations#review"
 
+  # 견적서 일괄 문서생성
+  get "tools/quote-auto", to: "quote_documents#index", as: :quote_auto
+  post "quote-documents/extract", to: "quote_documents#extract"
+
+  # 사업계획서 생성기
+  get "tools/project-plan", to: "project_plans#index", as: :project_plan
+
+  # 수의계약 사유서 생성기
+  get "tools/contract-reason", to: "contract_reasons#index", as: :contract_reason
+
   # 예정가격 계산기
   get "tools/estimated-price", to: "estimated_prices#index", as: :estimated_price
   post "estimated-prices/calculate", to: "estimated_prices#calculate"

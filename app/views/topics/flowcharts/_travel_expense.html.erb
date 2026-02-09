@@ -1,57 +1,25 @@
-<!-- 여비 업무 흐름도 -->
+<!-- 여비 실무흐름도 -->
 <div class="card">
   <div class="card-header">
     <h2 class="text-xl font-bold text-slate-900 flex items-center gap-3">
-      <span class="material-symbols-outlined text-primary-500">account_tree</span>
-      여비(출장비) 업무 흐름도
+      <span class="material-symbols-outlined text-indigo-500">account_tree</span>
+      여비(출장비) 실무흐름도
     </h2>
     <p class="text-slate-600 mt-1">공무원 국내·해외 출장 여비 처리 절차</p>
   </div>
 
   <div class="p-6">
-    <!-- 여비 구성 안내 -->
-    <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6">
-      <div class="flex items-start gap-3">
-        <span class="material-symbols-outlined text-blue-600">info</span>
-        <div>
-          <h4 class="font-semibold text-blue-800 mb-2">여비의 구성</h4>
-          <div class="grid grid-cols-2 md:grid-cols-5 gap-2 text-sm">
-            <div class="bg-white rounded-lg p-2 text-center">
-              <span class="font-medium text-slate-700">운임</span>
-              <p class="text-slate-500 text-xs">교통비</p>
-            </div>
-            <div class="bg-white rounded-lg p-2 text-center">
-              <span class="font-medium text-slate-700">일비</span>
-              <p class="text-slate-500 text-xs">25,000원/일</p>
-            </div>
-            <div class="bg-white rounded-lg p-2 text-center">
-              <span class="font-medium text-slate-700">숙박비</span>
-              <p class="text-slate-500 text-xs">상한액 이내</p>
-            </div>
-            <div class="bg-white rounded-lg p-2 text-center">
-              <span class="font-medium text-slate-700">식비</span>
-              <p class="text-slate-500 text-xs">25,000원/일</p>
-            </div>
-            <div class="bg-white rounded-lg p-2 text-center">
-              <span class="font-medium text-slate-700">이전비</span>
-              <p class="text-slate-500 text-xs">부임여비</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 흐름도 -->
+    <!-- 처리 절차 -->
     <div class="space-y-4">
-      <!-- Step 1 -->
+      <!-- Step 1: 출장 계획 수립 (indigo) -->
       <div class="flex items-start gap-4">
-        <div class="flex-shrink-0 w-10 h-10 bg-primary-500 text-white rounded-full flex items-center justify-center font-bold">1</div>
-        <div class="flex-1 bg-surface-50 rounded-xl p-4 border border-surface-200">
-          <h4 class="font-semibold text-slate-800 mb-2">출장 계획 수립</h4>
-          <ul class="text-sm text-slate-600 space-y-1">
+        <div class="flex-shrink-0 w-10 h-10 bg-indigo-500 text-white rounded-full flex items-center justify-center font-bold">1</div>
+        <div class="flex-1 bg-indigo-50 rounded-xl p-4 border border-indigo-200">
+          <h4 class="font-semibold text-indigo-800 mb-2">출장 계획 수립</h4>
+          <ul class="text-sm text-slate-700 space-y-1">
             <li>• 출장 목적 및 필요성 검토</li>
             <li>• 출장 기간, 장소, 경로 결정</li>
-            <li>• 교통수단 선택 (대중교통 원칙)</li>
+            <li>• 교통수단 선택 (<strong class="text-indigo-700">대중교통 원칙</strong>)</li>
             <li>• 숙박 필요 여부 판단</li>
           </ul>
         </div>
@@ -61,20 +29,19 @@
         <span class="material-symbols-outlined text-slate-300 text-2xl">arrow_downward</span>
       </div>
 
-      <!-- Step 2 -->
+      <!-- Step 2: 출장명령서 작성 및 결재 (blue) -->
       <div class="flex items-start gap-4">
-        <div class="flex-shrink-0 w-10 h-10 bg-primary-500 text-white rounded-full flex items-center justify-center font-bold">2</div>
-        <div class="flex-1 bg-surface-50 rounded-xl p-4 border border-surface-200">
-          <h4 class="font-semibold text-slate-800 mb-2">출장명령서 작성 및 결재</h4>
-          <ul class="text-sm text-slate-600 space-y-1">
+        <div class="flex-shrink-0 w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">2</div>
+        <div class="flex-1 bg-blue-50 rounded-xl p-4 border border-blue-200">
+          <h4 class="font-semibold text-blue-800 mb-2">출장명령서 작성 및 결재
+            <span class="inline-flex items-center gap-1 ml-2 px-2 py-0.5 bg-rose-100 text-rose-600 text-xs font-normal rounded-full"><span class="material-symbols-outlined" style="font-size:12px">edit_document</span>공문생산</span>
+          </h4>
+          <ul class="text-sm text-slate-700 space-y-1">
             <li>• 출장명령서 작성 (전자문서)</li>
             <li>• 출장 목적, 일정, 경로 기재</li>
             <li>• 출장명령권자 결재</li>
-            <li>• <strong>반드시 출장 전 결재 완료</strong></li>
+            <li>• <strong class="text-blue-700">반드시 출장 전 결재 완료</strong></li>
           </ul>
-          <div class="mt-3 bg-red-50 rounded-lg p-3 text-sm">
-            <span class="text-red-700">⚠️ 사후 출장명령서 작성은 감사 지적 대상</span>
-          </div>
         </div>
       </div>
 
@@ -82,19 +49,18 @@
         <span class="material-symbols-outlined text-slate-300 text-2xl">arrow_downward</span>
       </div>
 
-      <!-- Step 3 -->
+      <!-- Step 3: 여비 선지급 신청 (slate, optional) -->
       <div class="flex items-start gap-4">
-        <div class="flex-shrink-0 w-10 h-10 bg-surface-400 text-white rounded-full flex items-center justify-center font-bold">3</div>
-        <div class="flex-1 bg-surface-50 rounded-xl p-4 border border-surface-200 border-dashed">
-          <h4 class="font-semibold text-slate-800 mb-2">여비 선지급 신청 (선택사항)</h4>
-          <ul class="text-sm text-slate-600 space-y-1">
+        <div class="flex-shrink-0 w-10 h-10 bg-slate-400 text-white rounded-full flex items-center justify-center font-bold">3</div>
+        <div class="flex-1 bg-slate-50 rounded-xl p-4 border border-slate-200 border-dashed">
+          <h4 class="font-semibold text-slate-800 mb-2">여비 선지급 신청 <span class="text-xs font-normal text-slate-400">(선택사항)</span>
+            <span class="inline-flex items-center gap-1 ml-2 px-2 py-0.5 bg-rose-100 text-rose-600 text-xs font-normal rounded-full"><span class="material-symbols-outlined" style="font-size:12px">edit_document</span>공문생산</span>
+          </h4>
+          <ul class="text-sm text-slate-700 space-y-1">
             <li>• 여비 개산급 신청 (필요시)</li>
-            <li>• 예상 여비 산출</li>
+            <li>• <strong class="text-slate-700">예상 여비 산출</strong></li>
             <li>• 선지급 결재</li>
           </ul>
-          <div class="mt-3 bg-blue-50 rounded-lg p-3 text-sm">
-            <span class="text-blue-700">💡 국내출장은 사후 정산도 가능, 해외출장은 선지급 권장</span>
-          </div>
         </div>
       </div>
 
@@ -102,14 +68,14 @@
         <span class="material-symbols-outlined text-slate-300 text-2xl">arrow_downward</span>
       </div>
 
-      <!-- Step 4 -->
+      <!-- Step 4: 출장 수행 (violet) -->
       <div class="flex items-start gap-4">
-        <div class="flex-shrink-0 w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">4</div>
-        <div class="flex-1 bg-blue-50 rounded-xl p-4 border border-blue-200">
-          <h4 class="font-semibold text-blue-800 mb-2">출장 수행</h4>
-          <ul class="text-sm text-blue-700 space-y-1">
+        <div class="flex-shrink-0 w-10 h-10 bg-violet-500 text-white rounded-full flex items-center justify-center font-bold">4</div>
+        <div class="flex-1 bg-violet-50 rounded-xl p-4 border border-violet-200">
+          <h4 class="font-semibold text-violet-800 mb-2">출장 수행</h4>
+          <ul class="text-sm text-slate-700 space-y-1">
             <li>• 출장명령서에 따라 업무 수행</li>
-            <li>• <strong>증빙서류 수집</strong> (교통비, 숙박비 영수증)</li>
+            <li>• <strong class="text-violet-700">증빙서류 수집</strong> (교통비, 숙박비 영수증)</li>
             <li>• 일정 변경 시 사전 보고</li>
           </ul>
         </div>
@@ -119,17 +85,25 @@
         <span class="material-symbols-outlined text-slate-300 text-2xl">arrow_downward</span>
       </div>
 
-      <!-- Step 5 -->
+      <!-- Step 5: 출장 복명 및 여비 정산 (amber) -->
       <div class="flex items-start gap-4">
-        <div class="flex-shrink-0 w-10 h-10 bg-primary-500 text-white rounded-full flex items-center justify-center font-bold">5</div>
-        <div class="flex-1 bg-surface-50 rounded-xl p-4 border border-surface-200">
-          <h4 class="font-semibold text-slate-800 mb-2">출장 복명 및 여비 정산</h4>
-          <ul class="text-sm text-slate-600 space-y-1">
+        <div class="flex-shrink-0 w-10 h-10 bg-amber-500 text-white rounded-full flex items-center justify-center font-bold">5</div>
+        <div class="flex-1 bg-amber-50 rounded-xl p-4 border border-amber-200">
+          <h4 class="font-semibold text-amber-800 mb-2">출장 복명 및 여비 정산
+            <span class="inline-flex items-center gap-1 ml-2 px-2 py-0.5 bg-rose-100 text-rose-600 text-xs font-normal rounded-full"><span class="material-symbols-outlined" style="font-size:12px">edit_document</span>공문생산</span>
+          </h4>
+          <ul class="text-sm text-slate-700 space-y-1">
             <li>• 출장 복명서 작성</li>
             <li>• 여비 정산서 작성</li>
             <li>• 증빙서류 첨부 (교통비, 숙박비)</li>
-            <li>• <strong>출장 종료 후 7일 이내</strong> 정산</li>
+            <li>• <strong class="text-amber-700">출장 종료 후 7일 이내</strong> 정산</li>
           </ul>
+          <div class="mt-3 flex flex-wrap gap-2">
+            <a href="<%= travel_calculator_path %>" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-700 text-xs font-semibold rounded-lg border border-amber-200 transition-colors">
+              <span class="material-symbols-outlined" style="font-size:14px">calculator</span>
+              여비계산기
+            </a>
+          </div>
         </div>
       </div>
 
@@ -137,111 +111,142 @@
         <span class="material-symbols-outlined text-slate-300 text-2xl">arrow_downward</span>
       </div>
 
-      <!-- Step 6 -->
+      <!-- Step 6: 여비 지급 (green) -->
       <div class="flex items-start gap-4">
         <div class="flex-shrink-0 w-10 h-10 bg-green-500 text-white rounded-full flex items-center justify-center font-bold">6</div>
         <div class="flex-1 bg-green-50 rounded-xl p-4 border border-green-200">
-          <h4 class="font-semibold text-green-800 mb-2">여비 지급</h4>
-          <ul class="text-sm text-green-700 space-y-1">
+          <h4 class="font-semibold text-green-800 mb-2">여비 지급
+            <span class="inline-flex items-center gap-1 ml-2 px-2 py-0.5 bg-rose-100 text-rose-600 text-xs font-normal rounded-full"><span class="material-symbols-outlined" style="font-size:12px">edit_document</span>공문생산</span>
+          </h4>
+          <ul class="text-sm text-slate-700 space-y-1">
             <li>• 정산서 검토 및 결재</li>
-            <li>• 여비 지급 (실비+정액)</li>
+            <li>• 여비 지급 (<strong class="text-green-700">실비+정액</strong>)</li>
             <li>• 선지급 초과분 반납 (해당 시)</li>
           </ul>
         </div>
       </div>
     </div>
 
-    <!-- 여비 종류별 지급 기준 -->
-    <div class="mt-8">
-      <div class="flex items-center justify-between mb-4">
-        <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
-          <span class="material-symbols-outlined text-primary-500">payments</span>
-          여비 종류별 지급 기준
-        </h3>
-        <span class="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded-full">2025년 개정 기준 (현행)</span>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="bg-surface-50 rounded-xl p-4 border border-surface-200">
-          <h4 class="font-semibold text-slate-800 mb-3 flex items-center gap-2">
-            <span class="material-symbols-outlined text-blue-500">directions_bus</span>
-            운임 (교통비)
-          </h4>
-          <ul class="text-sm text-slate-600 space-y-2">
-            <li><strong>철도</strong>: KTX 일반실 (5급 이상 특실 가능)</li>
-            <li><strong>항공</strong>: 이코노미클래스 (5급 이상 비즈니스 가능)</li>
-            <li><strong>자가용</strong>: 연료비 실비 (사전 승인 시)</li>
-            <li><strong>실비 정산</strong> - 영수증 필수</li>
-          </ul>
+    <!-- 참고 안내 (접히는 섹션) -->
+    <details open class="mt-8 border border-slate-200 rounded-xl overflow-hidden">
+      <summary class="flex items-center gap-3 p-4 bg-slate-50 hover:bg-slate-100 transition-colors cursor-pointer">
+        <span class="material-symbols-outlined text-slate-500">info</span>
+        <span class="font-semibold text-slate-700">참고 안내</span>
+        <span class="text-xs text-slate-400 ml-auto">여비구성 · 지급기준 · 주의사항</span>
+      </summary>
+      <div class="p-4 space-y-4">
+        <!-- 여비 구성 -->
+        <div class="bg-blue-50 border border-blue-200 rounded-xl p-4">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined text-blue-600">info</span>
+            <div>
+              <h4 class="font-semibold text-blue-800 mb-2">여비의 구성</h4>
+              <div class="grid grid-cols-2 md:grid-cols-5 gap-2 text-sm">
+                <div class="bg-white rounded-lg p-2 text-center">
+                  <span class="font-medium text-slate-700">운임</span>
+                  <p class="text-slate-500 text-xs">교통비</p>
+                </div>
+                <div class="bg-white rounded-lg p-2 text-center">
+                  <span class="font-medium text-slate-700">일비</span>
+                  <p class="text-slate-500 text-xs">25,000원/일</p>
+                </div>
+                <div class="bg-white rounded-lg p-2 text-center">
+                  <span class="font-medium text-slate-700">숙박비</span>
+                  <p class="text-slate-500 text-xs">상한액 이내</p>
+                </div>
+                <div class="bg-white rounded-lg p-2 text-center">
+                  <span class="font-medium text-slate-700">식비</span>
+                  <p class="text-slate-500 text-xs">25,000원/일</p>
+                </div>
+                <div class="bg-white rounded-lg p-2 text-center">
+                  <span class="font-medium text-slate-700">이전비</span>
+                  <p class="text-slate-500 text-xs">부임여비</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="bg-surface-50 rounded-xl p-4 border border-surface-200">
-          <h4 class="font-semibold text-slate-800 mb-3 flex items-center gap-2">
-            <span class="material-symbols-outlined text-green-500">wallet</span>
-            일비
-          </h4>
-          <ul class="text-sm text-slate-600 space-y-2">
-            <li><strong>국내출장</strong>: 25,000원/일</li>
-            <li><strong>4시간 미만</strong>: 일비의 1/2</li>
-            <li><strong>공용차량 이용</strong>: 일비의 1/2</li>
-            <li><strong>정액 지급</strong> - 영수증 불필요</li>
-          </ul>
+        <!-- 여비 종류별 지급 기준 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-surface-50 rounded-xl p-4 border border-surface-200">
+            <h4 class="font-semibold text-slate-800 mb-3 flex items-center gap-2">
+              <span class="material-symbols-outlined text-blue-500">directions_bus</span>
+              운임 (교통비)
+            </h4>
+            <ul class="text-sm text-slate-600 space-y-2">
+              <li><strong>철도</strong>: KTX 일반실 (5급 이상 특실 가능)</li>
+              <li><strong>항공</strong>: 이코노미클래스 (5급 이상 비즈니스 가능)</li>
+              <li><strong>자가용</strong>: 연료비 실비 (사전 승인 시)</li>
+              <li><strong>실비 정산</strong> - 영수증 필수</li>
+            </ul>
+          </div>
+          <div class="bg-surface-50 rounded-xl p-4 border border-surface-200">
+            <h4 class="font-semibold text-slate-800 mb-3 flex items-center gap-2">
+              <span class="material-symbols-outlined text-green-500">wallet</span>
+              일비
+            </h4>
+            <ul class="text-sm text-slate-600 space-y-2">
+              <li><strong>국내출장</strong>: 25,000원/일</li>
+              <li><strong>4시간 미만</strong>: 일비의 1/2</li>
+              <li><strong>공용차량 이용</strong>: 일비의 1/2</li>
+              <li><strong>정액 지급</strong> - 영수증 불필요</li>
+            </ul>
+          </div>
+          <div class="bg-surface-50 rounded-xl p-4 border border-surface-200">
+            <h4 class="font-semibold text-slate-800 mb-3 flex items-center gap-2">
+              <span class="material-symbols-outlined text-purple-500">hotel</span>
+              숙박비
+            </h4>
+            <ul class="text-sm text-slate-600 space-y-2">
+              <li><strong>서울</strong>: 상한 100,000원</li>
+              <li><strong>광역시</strong>: 상한 80,000원</li>
+              <li><strong>기타 지역</strong>: 상한 70,000원</li>
+              <li><strong>실비 정산</strong> - 영수증 필수 (상한 이내)</li>
+            </ul>
+          </div>
+          <div class="bg-surface-50 rounded-xl p-4 border border-surface-200">
+            <h4 class="font-semibold text-slate-800 mb-3 flex items-center gap-2">
+              <span class="material-symbols-outlined text-orange-500">restaurant</span>
+              식비
+            </h4>
+            <ul class="text-sm text-slate-600 space-y-2">
+              <li><strong>국내출장</strong>: 25,000원/일</li>
+              <li><strong>숙박 없는 경우</strong>: 20,000원/일</li>
+              <li><strong>4시간 미만</strong>: 미지급</li>
+              <li><strong>정액 지급</strong> - 영수증 불필요</li>
+            </ul>
+          </div>
         </div>
 
-        <div class="bg-surface-50 rounded-xl p-4 border border-surface-200">
-          <h4 class="font-semibold text-slate-800 mb-3 flex items-center gap-2">
-            <span class="material-symbols-outlined text-purple-500">hotel</span>
-            숙박비
-          </h4>
-          <ul class="text-sm text-slate-600 space-y-2">
-            <li><strong>서울</strong>: 상한 100,000원</li>
-            <li><strong>광역시</strong>: 상한 80,000원</li>
-            <li><strong>기타 지역</strong>: 상한 70,000원</li>
-            <li><strong>실비 정산</strong> - 영수증 필수 (상한 이내)</li>
-          </ul>
+        <!-- 주의사항 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-red-50 border border-red-200 rounded-xl p-4">
+            <h4 class="font-semibold text-red-800 mb-2 flex items-center gap-2">
+              <span class="material-symbols-outlined text-red-600">warning</span>
+              감사 지적 주의사항
+            </h4>
+            <ul class="text-sm text-red-700 space-y-1">
+              <li>• 출장명령 없이 여비 청구</li>
+              <li>• 사후 출장명령서 작성</li>
+              <li>• 허위 증빙 제출</li>
+              <li>• 출장 기간 부풀리기</li>
+            </ul>
+          </div>
+          <div class="bg-teal-50 border border-teal-200 rounded-xl p-4">
+            <h4 class="font-semibold text-teal-800 mb-2 flex items-center gap-2">
+              <span class="material-symbols-outlined text-teal-600">check_circle</span>
+              필수 확인사항
+            </h4>
+            <ul class="text-sm text-teal-700 space-y-1">
+              <li>• 출장 전 출장명령서 결재</li>
+              <li>• 증빙서류 보관 (운임, 숙박)</li>
+              <li>• 7일 이내 정산</li>
+              <li>• 상한액 초과 여부 확인</li>
+            </ul>
+          </div>
         </div>
-
-        <div class="bg-surface-50 rounded-xl p-4 border border-surface-200">
-          <h4 class="font-semibold text-slate-800 mb-3 flex items-center gap-2">
-            <span class="material-symbols-outlined text-orange-500">restaurant</span>
-            식비
-          </h4>
-          <ul class="text-sm text-slate-600 space-y-2">
-            <li><strong>국내출장</strong>: 25,000원/일</li>
-            <li><strong>숙박 없는 경우</strong>: 20,000원/일</li>
-            <li><strong>4시간 미만</strong>: 미지급</li>
-            <li><strong>정액 지급</strong> - 영수증 불필요</li>
-          </ul>
-        </div>
       </div>
-    </div>
-
-    <!-- 주의사항 -->
-    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div class="bg-red-50 border border-red-200 rounded-xl p-4">
-        <h4 class="font-semibold text-red-800 mb-2 flex items-center gap-2">
-          <span class="material-symbols-outlined text-red-600">warning</span>
-          감사 지적 주의사항
-        </h4>
-        <ul class="text-sm text-red-700 space-y-1">
-          <li>• 출장명령 없이 여비 청구</li>
-          <li>• 사후 출장명령서 작성</li>
-          <li>• 허위 증빙 제출</li>
-          <li>• 출장 기간 부풀리기</li>
-        </ul>
-      </div>
-      <div class="bg-teal-50 border border-teal-200 rounded-xl p-4">
-        <h4 class="font-semibold text-teal-800 mb-2 flex items-center gap-2">
-          <span class="material-symbols-outlined text-teal-600">check_circle</span>
-          필수 확인사항
-        </h4>
-        <ul class="text-sm text-teal-700 space-y-1">
-          <li>• 출장 전 출장명령서 결재</li>
-          <li>• 증빙서류 보관 (운임, 숙박)</li>
-          <li>• 7일 이내 정산</li>
-          <li>• 상한액 초과 여부 확인</li>
-        </ul>
-      </div>
-    </div>
+    </details>
   </div>
 </div>

@@ -108,8 +108,13 @@
 <section class="bg-white/80 backdrop-blur-xl border-b border-gray-100 sticky top-16 z-40 shadow-soft">
   <div class="container-wide">
     <nav class="flex gap-2 overflow-x-auto py-3 -mx-4 px-4 scrollbar-hide" id="topic-tabs">
-      <button onclick="showTab('law')" data-tab="law"
+      <button onclick="showTab('flowchart')" data-tab="flowchart"
               class="tab-btn px-5 py-2.5 bg-slate-800 text-white rounded-xl text-sm font-semibold whitespace-nowrap flex items-center gap-2 transition-all duration-200 shadow-md">
+        <span class="material-symbols-outlined text-lg">account_tree</span>
+        실무흐름도
+      </button>
+      <button onclick="showTab('law')" data-tab="law"
+              class="tab-btn px-5 py-2.5 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-xl text-sm font-medium whitespace-nowrap flex items-center gap-2 transition-all duration-200">
         <span class="material-symbols-outlined text-lg">balance</span>
         법령 3단 비교
       </button>
@@ -143,11 +148,6 @@
         <span class="material-symbols-outlined text-lg">draft</span>
         서식/양식
       </button>
-      <button onclick="showTab('flowchart')" data-tab="flowchart"
-              class="tab-btn px-5 py-2.5 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-xl text-sm font-medium whitespace-nowrap flex items-center gap-2 transition-all duration-200">
-        <span class="material-symbols-outlined text-lg">account_tree</span>
-        흐름도
-      </button>
     </nav>
   </div>
 </section>
@@ -158,8 +158,36 @@
         <div class="lg:flex lg:gap-10">
       <!-- 메인 콘텐츠 영역 -->
       <div class="flex-1 min-w-0">
+        <!-- 실무흐름도 -->
+        <div class="tab-panel active" data-tab="flowchart">
+          <% if @topic.slug == 'price-negotiation' %>
+            <%= render 'topics/flowcharts/price_negotiation', topic: @topic %>
+          <% elsif @topic.slug == 'private-contract-limit' || @topic.slug == 'private-contract' || @topic.slug == 'private-contract-amount' %>
+            <%= render 'topics/flowcharts/private_contract', topic: @topic %>
+          <% elsif @topic.slug == 'small-amount-contract' %>
+            <%= render 'topics/flowcharts/small_amount_contract', topic: @topic %>
+          <% elsif @topic.slug == 'emergency-contract' %>
+            <%= render 'topics/flowcharts/emergency_contract', topic: @topic %>
+          <% elsif @topic.slug == 'dual-quote' %>
+            <%= render 'topics/flowcharts/dual_quote', topic: @topic %>
+          <% elsif @topic.slug == 'single-quote' %>
+            <%= render 'topics/flowcharts/single_quote', topic: @topic %>
+          <% elsif @topic.slug == 'travel-expense' %>
+            <%= render 'topics/flowcharts/travel_expense', topic: @topic %>
+          <% elsif @topic.slug == 'year-end-settlement' %>
+            <%= render 'topics/flowcharts/year_end_settlement', topic: @topic %>
+          <% elsif @topic.slug == 'budget-carryover' %>
+            <%= render 'topics/flowcharts/budget_carryover', topic: @topic %>
+          <% else %>
+            <div class="card p-16 text-center">
+              <span class="material-symbols-outlined text-6xl text-slate-200 mb-4">account_tree</span>
+              <p class="text-slate-500 text-lg">실무흐름도가 준비 중입니다.</p>
+            </div>
+          <% end %>
+        </div>
+
         <!-- 법령 3단 비교 -->
-        <div class="tab-panel active" data-tab="law">
+        <div class="tab-panel" data-tab="law">
           <% if @topic.has_law_content? %>
             <!-- 캐스케이드 카드 레이아웃 -->
             <div class="law-cascade-container overflow-x-auto">
@@ -791,36 +819,6 @@
           <% end %>
         </div>
 
-        <!-- 흐름도 -->
-        <div class="tab-panel" data-tab="flowchart">
-          <% if @topic.slug == 'price-negotiation' %>
-            <%= render 'topics/flowcharts/price_negotiation', topic: @topic %>
-          <% elsif @topic.slug == 'private-contract-limit' || @topic.slug == 'private-contract' || @topic.slug == 'private-contract-amount' %>
-            <%= render 'topics/flowcharts/private_contract', topic: @topic %>
-          <% elsif @topic.slug == 'small-amount-contract' %>
-            <%= render 'topics/flowcharts/small_amount_contract', topic: @topic %>
-          <% elsif @topic.slug == 'emergency-contract' %>
-            <%= render 'topics/flowcharts/emergency_contract', topic: @topic %>
-          <% elsif @topic.slug == 'dual-quote' %>
-            <%= render 'topics/flowcharts/dual_quote', topic: @topic %>
-          <% elsif @topic.slug == 'single-quote' %>
-            <%= render 'topics/flowcharts/single_quote', topic: @topic %>
-          <% elsif @topic.slug == 'travel-expense' %>
-            <%= render 'topics/flowcharts/travel_expense', topic: @topic %>
-          <% elsif @topic.slug == 'year-end-settlement' %>
-            <%= render 'topics/flowcharts/year_end_settlement', topic: @topic %>
-          <% elsif @topic.slug == 'budget-carryover' %>
-            <%= render 'topics/flowcharts/budget_carryover', topic: @topic %>
-          <% else %>
-            <!-- 기본 준비중 메시지 -->
-            <div class="card p-16 text-center">
-              <span class="material-symbols-outlined text-6xl text-slate-200 mb-4">account_tree</span>
-              <p class="text-slate-500 text-lg">흐름도가 준비 중입니다.</p>
-            </div>
-          <% end %>
-        </div>
-
-
         <!-- 자주 묻는 질문 -->
         <% if @topic.faq_list.any? %>
           <div class="card p-6 lg:p-8 mt-10">
@@ -865,10 +863,10 @@
             </h3>
             <nav class="space-y-1">
               <% [
+                { tab: "flowchart", icon: "account_tree", title: "실무흐름도" },
                 { tab: "law", icon: "balance", title: "법령 3단 비교" },
-                { tab: "forms", icon: "draft", title: "서식/양식" },
-                { tab: "flowchart", icon: "account_tree", title: "흐름도" },
-                { tab: "tips", icon: "lightbulb", title: "실무주의" }
+                { tab: "tips", icon: "lightbulb", title: "실무주의" },
+                { tab: "forms", icon: "draft", title: "서식/양식" }
               ].each do |item| %>
                 <button onclick="showTab('<%= item[:tab] %>')"
                         class="w-full flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-surface-100 rounded-xl transition-all duration-200 text-left group">
