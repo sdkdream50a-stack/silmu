@@ -107,6 +107,29 @@
 <section class="py-10">
   <div class="container-wide max-w-4xl">
 
+    <!-- 견적서 업로드 자동입력 -->
+    <%= render 'shared/quote_upload_zone', tool_id: 'ep' %>
+    <script>
+    function quMapFields_ep(f) {
+      // 물품 기본 선택 (가장 흔한 1인 수의)
+      var goodsBtn = document.querySelector('#ep-type-grid [data-type="goods"]');
+      if (goodsBtn && typeof epSelectType === 'function') epSelectType(goodsBtn);
+
+      if (f.items && f.items.length > 0) {
+        var firstItem = f.items[0];
+        // 단가 × 수량
+        if (firstItem.unit_price) quSetField('ep-unit_price', firstItem.unit_price);
+        if (firstItem.qty) quSetField('ep-quantity', firstItem.qty);
+      } else if (f.supply_amount) {
+        quSetField('ep-unit_price', f.supply_amount);
+      }
+      // Step 2로 이동
+      var btnStep1 = document.getElementById('ep-btn-step1');
+      if (btnStep1) btnStep1.disabled = false;
+      setTimeout(function() { if (typeof epGoStep === 'function') epGoStep(2); }, 500);
+    }
+    </script>
+
     <div class="ep-step-indicator" id="ep-steps">
       <div class="ep-step-dot active"></div>
       <div class="ep-step-dot"></div>

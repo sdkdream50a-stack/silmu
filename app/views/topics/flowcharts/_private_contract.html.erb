@@ -31,11 +31,14 @@
     <div class="bg-indigo-50 rounded-2xl p-6 border-l-4 border-indigo-500">
       <div class="flex items-center gap-4 mb-6">
         <div class="w-14 h-14 gradient-indigo text-white rounded-2xl flex items-center justify-center font-bold text-2xl shadow-lg">1</div>
-        <div>
-          <h4 class="text-xl font-bold text-slate-900">사전준비
-            <span class="inline-flex items-center gap-1 ml-2 px-2 py-0.5 bg-rose-100 text-rose-600 text-xs font-normal rounded-full"><span class="material-symbols-outlined" style="font-size:12px">edit_document</span>공문생산</span>
-          </h4>
-          <p class="text-indigo-600 font-medium">사업부서</p>
+        <div class="flex-1">
+          <div class="flex items-center justify-between">
+            <div>
+              <h4 class="text-xl font-bold text-slate-900">사전준비</h4>
+              <p class="text-indigo-600 font-medium">사업부서</p>
+            </div>
+            <span class="doc-tool-badge" onclick="showDocPopup('step1')"><span class="material-symbols-outlined" style="font-size:16px">edit_document</span>공문/양식 생성 도구</span>
+          </div>
         </div>
       </div>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -45,61 +48,16 @@
           { icon: "calculate", title: "예정가격 작성", desc: "거래실례가격 조사", path: estimated_price_path },
           { icon: "edit_document", title: "수의계약 사유서", desc: "법적 근거 명시", path: contract_reason_path }
         ].each do |item| %>
-          <% if item[:path] %>
-            <a href="<%= item[:path] %>" class="bg-white rounded-xl p-4 text-center shadow-soft hover-lift block border-2 border-transparent hover:border-indigo-300 transition-colors">
-              <span class="material-symbols-outlined text-3xl text-indigo-500 mb-2"><%= item[:icon] %></span>
-              <div class="text-sm font-semibold text-slate-800"><%= item[:title] %></div>
-              <div class="text-xs text-slate-500 mt-1"><%= item[:desc] %></div>
-              <div class="text-xs text-indigo-500 mt-2 font-medium flex items-center justify-center gap-1">
-                <span class="material-symbols-outlined" style="font-size:12px;">open_in_new</span> 도구 열기
-              </div>
-            </a>
-          <% else %>
-            <div class="bg-white rounded-xl p-4 text-center shadow-soft hover-lift">
-              <span class="material-symbols-outlined text-3xl text-indigo-500 mb-2"><%= item[:icon] %></span>
-              <div class="text-sm font-semibold text-slate-800"><%= item[:title] %></div>
-              <div class="text-xs text-slate-500 mt-1"><%= item[:desc] %></div>
-            </div>
-          <% end %>
+            <div class="bg-white rounded-xl p-4 text-center shadow-soft">
+            <span class="material-symbols-outlined text-3xl text-indigo-500 mb-2"><%= item[:icon] %></span>
+            <div class="text-sm font-semibold text-slate-800"><%= item[:title] %></div>
+            <div class="text-xs text-slate-500 mt-1"><%= item[:desc] %></div>
+          </div>
         <% end %>
       </div>
-      <div class="mt-5 p-4 bg-indigo-100 rounded-xl text-sm text-indigo-800 flex items-center gap-2">
-        <span class="material-symbols-outlined">lightbulb</span>
-        <strong>체크포인트:</strong> 추정가격이 수의계약 기준금액 이내인지 확인 (물품/용역 1인: 2천만원, 2인: 5천만원 / 공사 1인: 5천만원, 2인: 2억원)
-      </div>
-      <div class="mt-4 flex flex-wrap gap-2">
-        <a href="<%= project_plan_path %>" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold rounded-lg border border-indigo-200 transition-colors">
-          <span class="material-symbols-outlined" style="font-size:14px">assignment</span>
-          사업계획서 생성
-        </a>
-        <a href="<%= budget_estimator_path %>" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold rounded-lg border border-indigo-200 transition-colors">
-          <span class="material-symbols-outlined" style="font-size:14px">calculate</span>
-          소요예산 추정
-        </a>
-        <a href="<%= estimated_price_path %>" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold rounded-lg border border-indigo-200 transition-colors">
-          <span class="material-symbols-outlined" style="font-size:14px">calculate</span>
-          예정가격 계산
-        </a>
-        <a href="<%= contract_reason_path %>" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold rounded-lg border border-indigo-200 transition-colors">
-          <span class="material-symbols-outlined" style="font-size:14px">edit_document</span>
-          수의계약 사유서
-        </a>
-        <a href="<%= contract_method_path %>" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold rounded-lg border border-indigo-200 transition-colors">
-          <span class="material-symbols-outlined" style="font-size:14px">decision</span>
-          계약방식 결정
-        </a>
-        <a href="/forms/과업지시서.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold rounded-lg border border-indigo-200 transition-colors">
-          <span class="material-symbols-outlined" style="font-size:14px">description</span>
-          과업지시서 <span class="text-indigo-400 font-normal">용역</span>
-        </a>
-        <a href="<%= cost_estimate_path %>" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold rounded-lg border border-indigo-200 transition-colors">
-          <span class="material-symbols-outlined" style="font-size:14px">receipt_long</span>
-          내역서+시공지시서 <span class="text-indigo-400 font-normal">공사</span>
-        </a>
-        <a href="<%= quote_auto_path %>" class="inline-flex items-center gap-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-lg shadow-sm transition-colors">
-          <span class="material-symbols-outlined" style="font-size:14px">auto_awesome</span>
-          견적서로 일괄 생성
-        </a>
+      <div class="mt-5 p-4 bg-white border border-slate-200 rounded-xl text-sm text-slate-700 flex items-center gap-2">
+        <span class="material-symbols-outlined text-indigo-400 flex-shrink-0">lightbulb</span>
+        <span><strong>체크포인트:</strong> 추정가격이 수의계약 기준금액 이내인지 확인 (물품/용역 1인: 2천만원, 2인: 5천만원 / 공사 1인: 5천만원, 2인: 2억원)</span>
       </div>
     </div>
 
@@ -121,21 +79,26 @@
     <div class="bg-emerald-50 rounded-2xl p-6 border-l-4 border-emerald-500">
       <div class="flex items-center gap-4 mb-6">
         <div class="w-14 h-14 gradient-emerald text-white rounded-2xl flex items-center justify-center font-bold text-2xl shadow-lg">2</div>
-        <div>
-          <h4 class="text-xl font-bold text-slate-900">견적징구
-            <span class="inline-flex items-center gap-1 ml-2 px-2 py-0.5 bg-rose-100 text-rose-600 text-xs font-normal rounded-full"><span class="material-symbols-outlined" style="font-size:12px">edit_document</span>공문생산</span>
-            <span class="inline-flex items-center gap-1 ml-1 px-2 py-0.5 bg-emerald-100 text-emerald-600 text-xs font-normal rounded-full"><span class="material-symbols-outlined" style="font-size:12px">computer</span>시스템</span>
-          </h4>
-          <p class="text-emerald-600 font-medium">사업부서/계약부서</p>
+        <div class="flex-1">
+          <div class="flex items-center justify-between">
+            <div>
+              <h4 class="text-xl font-bold text-slate-900">견적징구</h4>
+              <div class="flex items-center gap-2">
+                <p class="text-emerald-600 font-medium">사업부서/계약부서</p>
+                <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-emerald-100 text-emerald-600 text-xs font-medium rounded-full"><span class="material-symbols-outlined" style="font-size:14px">computer</span>시스템</span>
+              </div>
+            </div>
+            <span class="doc-tool-badge" onclick="showDocPopup('step2')"><span class="material-symbols-outlined" style="font-size:16px">edit_document</span>공문/양식 생성 도구</span>
+          </div>
         </div>
       </div>
       <div class="grid md:grid-cols-3 gap-5">
         <% [
-          { icon: "outgoing_mail", title: "견적요청", items: ["2인: 나라장터 공개", "1인: 직접 요청 가능", "규격/마감일 명시"] },
+          { icon: "outgoing_mail", title: "견적요청", items: ["2인: 나라장터 공고", "1인: 직접 요청 가능", "규격/마감일 명시"] },
           { icon: "inbox", title: "견적서 접수", items: ["나라장터 또는 직접 접수", "사업자등록증 확인", "마감일시 준수 확인"] },
           { icon: "how_to_reg", title: "계약상대자 선정", items: ["예정가격 이하 확인", "최저가 업체 선정", "적격성 검토"] }
         ].each do |item| %>
-          <div class="bg-white rounded-xl p-5 shadow-soft hover-lift">
+          <div class="bg-white rounded-xl p-5 shadow-soft">
             <div class="flex items-center justify-center mb-4">
               <span class="material-symbols-outlined text-3xl text-emerald-500"><%= item[:icon] %></span>
             </div>
@@ -151,15 +114,9 @@
           </div>
         <% end %>
       </div>
-      <div class="mt-5 p-4 bg-amber-100 rounded-xl text-sm text-amber-800 flex items-center gap-2">
-        <span class="material-symbols-outlined">warning</span>
-        <strong>주의:</strong> 견적서는 반드시 계약 체결 <u>전</u>에 징구해야 합니다. 사후 징구는 감사 지적!
-      </div>
-      <div class="mt-4 flex flex-wrap gap-2">
-        <a href="<%= estimated_price_path %>" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold rounded-lg border border-indigo-200 transition-colors">
-          <span class="material-symbols-outlined" style="font-size:14px">calculate</span>
-          예정가격 계산
-        </a>
+      <div class="mt-5 p-4 bg-white border border-slate-200 rounded-xl text-sm text-slate-700 flex items-center gap-2">
+        <span class="material-symbols-outlined text-amber-400 flex-shrink-0">warning</span>
+        <span><strong>주의:</strong> 견적서는 반드시 계약 체결 <strong class="text-amber-600">전</strong>에 징구해야 합니다. 사후 징구는 감사 지적!</span>
       </div>
     </div>
 
@@ -167,11 +124,14 @@
     <div class="bg-slate-50 rounded-2xl p-6 border-l-4 border-slate-500">
       <div class="flex items-center gap-4 mb-6">
         <div class="w-14 h-14 gradient-slate text-white rounded-2xl flex items-center justify-center font-bold text-2xl shadow-lg">3</div>
-        <div>
-          <h4 class="text-xl font-bold text-slate-900">계약체결
-            <span class="inline-flex items-center gap-1 ml-2 px-2 py-0.5 bg-rose-100 text-rose-600 text-xs font-normal rounded-full"><span class="material-symbols-outlined" style="font-size:12px">edit_document</span>공문생산</span>
-          </h4>
-          <p class="text-slate-600 font-medium">계약부서</p>
+        <div class="flex-1">
+          <div class="flex items-center justify-between">
+            <div>
+              <h4 class="text-xl font-bold text-slate-900">계약체결</h4>
+              <p class="text-slate-600 font-medium">계약부서</p>
+            </div>
+            <span class="doc-tool-badge" onclick="showDocPopup('step3')"><span class="material-symbols-outlined" style="font-size:16px">edit_document</span>공문/양식 생성 도구</span>
+          </div>
         </div>
       </div>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -181,22 +141,12 @@
           { icon: "account_balance_wallet", title: "보증금", desc: "5천만원 이하 면제가능" },
           { icon: "send", title: "계약통지", desc: "계약상대자 통보" }
         ].each do |item| %>
-          <div class="bg-white rounded-xl p-4 text-center shadow-soft hover-lift">
+          <div class="bg-white rounded-xl p-4 text-center shadow-soft">
             <span class="material-symbols-outlined text-3xl text-slate-500 mb-2"><%= item[:icon] %></span>
             <div class="text-sm font-semibold text-slate-800"><%= item[:title] %></div>
             <div class="text-xs text-slate-500 mt-1"><%= item[:desc] %></div>
           </div>
         <% end %>
-      </div>
-      <div class="mt-4 flex flex-wrap gap-2">
-        <a href="<%= contract_documents_path %>" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold rounded-lg border border-indigo-200 transition-colors">
-          <span class="material-symbols-outlined" style="font-size:14px">description</span>
-          계약서류 생성
-        </a>
-        <a href="<%= contract_guarantee_path %>" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold rounded-lg border border-indigo-200 transition-colors">
-          <span class="material-symbols-outlined" style="font-size:14px">shield</span>
-          계약보증금 계산
-        </a>
       </div>
     </div>
 
@@ -204,11 +154,14 @@
     <div class="bg-amber-50 rounded-2xl p-6 border-l-4 border-amber-500">
       <div class="flex items-center gap-4 mb-6">
         <div class="w-14 h-14 gradient-amber text-white rounded-2xl flex items-center justify-center font-bold text-2xl shadow-lg">4</div>
-        <div>
-          <h4 class="text-xl font-bold text-slate-900">이행 및 검수
-            <span class="inline-flex items-center gap-1 ml-2 px-2 py-0.5 bg-rose-100 text-rose-600 text-xs font-normal rounded-full"><span class="material-symbols-outlined" style="font-size:12px">edit_document</span>공문생산</span>
-          </h4>
-          <p class="text-amber-600 font-medium">사업부서</p>
+        <div class="flex-1">
+          <div class="flex items-center justify-between">
+            <div>
+              <h4 class="text-xl font-bold text-slate-900">이행 및 검수</h4>
+              <p class="text-amber-600 font-medium">사업부서</p>
+            </div>
+            <span class="doc-tool-badge" onclick="showDocPopup('step4')"><span class="material-symbols-outlined" style="font-size:16px">edit_document</span>공문/양식 생성 도구</span>
+          </div>
         </div>
       </div>
       <div class="grid md:grid-cols-3 gap-5">
@@ -217,7 +170,7 @@
           { icon: "search", title: "검수", items: ["규격/수량 확인", "품질 검사", "하자 여부 점검"] },
           { icon: "task", title: "검수조서 작성", items: ["검수일자 기록", "검수자 서명", "합격/불합격 판정"] }
         ].each do |item| %>
-          <div class="bg-white rounded-xl p-5 shadow-soft hover-lift">
+          <div class="bg-white rounded-xl p-5 shadow-soft">
             <div class="flex items-center justify-center mb-4">
               <span class="material-symbols-outlined text-3xl text-amber-500"><%= item[:icon] %></span>
             </div>
@@ -239,11 +192,14 @@
     <div class="bg-rose-50 rounded-2xl p-6 border-l-4 border-rose-500">
       <div class="flex items-center gap-4 mb-6">
         <div class="w-14 h-14 bg-gradient-to-br from-rose-500 to-rose-600 text-white rounded-2xl flex items-center justify-center font-bold text-2xl shadow-lg">5</div>
-        <div>
-          <h4 class="text-xl font-bold text-slate-900">대금지급
-            <span class="inline-flex items-center gap-1 ml-2 px-2 py-0.5 bg-rose-100 text-rose-600 text-xs font-normal rounded-full"><span class="material-symbols-outlined" style="font-size:12px">edit_document</span>공문생산</span>
-          </h4>
-          <p class="text-rose-600 font-medium">회계부서</p>
+        <div class="flex-1">
+          <div class="flex items-center justify-between">
+            <div>
+              <h4 class="text-xl font-bold text-slate-900">대금지급</h4>
+              <p class="text-rose-600 font-medium">회계부서</p>
+            </div>
+            <span class="doc-tool-badge" onclick="showDocPopup('step5')"><span class="material-symbols-outlined" style="font-size:16px">edit_document</span>공문/양식 생성 도구</span>
+          </div>
         </div>
       </div>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -253,16 +209,16 @@
           { icon: "account_balance", title: "대금이체", desc: "5일 이내 지급" },
           { icon: "folder", title: "서류보관", desc: "5년간 보존" }
         ].each do |item| %>
-          <div class="bg-white rounded-xl p-4 text-center shadow-soft hover-lift">
+          <div class="bg-white rounded-xl p-4 text-center shadow-soft">
             <span class="material-symbols-outlined text-3xl text-rose-500 mb-2"><%= item[:icon] %></span>
             <div class="text-sm font-semibold text-slate-800"><%= item[:title] %></div>
             <div class="text-xs text-slate-500 mt-1"><%= item[:desc] %></div>
           </div>
         <% end %>
       </div>
-      <div class="mt-5 p-4 bg-rose-100 rounded-xl text-sm text-rose-800 flex items-center gap-2">
-        <span class="material-symbols-outlined">gavel</span>
-        <strong>법적근거:</strong> 지방계약법 시행령 제108조 - 검사완료 후 5일 이내 대금 지급
+      <div class="mt-5 p-4 bg-white border border-slate-200 rounded-xl text-sm text-slate-700 flex items-center gap-2">
+        <span class="material-symbols-outlined text-rose-400 flex-shrink-0">gavel</span>
+        <span><strong>법적근거:</strong> 지방계약법 시행령 제108조 - 검사완료 후 5일 이내 대금 지급</span>
       </div>
     </div>
   </div>
@@ -275,68 +231,68 @@
       <span class="text-xs text-slate-400 ml-auto">핵심 체크포인트 · 금지사항 · 필수서류</span>
     </summary>
     <div class="p-4">
-  <div class="gradient-premium text-white rounded-2xl p-8">
-    <h4 class="font-bold text-xl mb-6 text-center flex items-center justify-center gap-2">
-      <span class="material-symbols-outlined">push_pin</span>
+  <div class="bg-slate-50 border border-slate-200 rounded-2xl p-8">
+    <h4 class="font-bold text-xl mb-6 text-center flex items-center justify-center gap-2 text-slate-800">
+      <span class="material-symbols-outlined text-indigo-500">push_pin</span>
       수의계약 핵심 체크포인트
     </h4>
     <div class="grid md:grid-cols-3 gap-5">
-      <div class="bg-white/10 backdrop-blur rounded-xl p-5">
-        <div class="text-rose-300 font-bold mb-4 flex items-center gap-2">
+      <div class="bg-rose-50 border border-rose-200 rounded-xl p-5">
+        <div class="text-rose-600 font-bold mb-4 flex items-center gap-2">
           <span class="material-symbols-outlined">block</span>
           절대 금지
         </div>
-        <ul class="space-y-2.5 text-slate-100 text-sm">
+        <ul class="space-y-2.5 text-slate-700 text-sm">
           <li class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-sm text-rose-400">close</span>
+            <span class="material-symbols-outlined text-sm text-rose-500">close</span>
             분할계약 (감사 1순위)
           </li>
           <li class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-sm text-rose-400">close</span>
+            <span class="material-symbols-outlined text-sm text-rose-500">close</span>
             사후 견적서 징구
           </li>
           <li class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-sm text-rose-400">close</span>
+            <span class="material-symbols-outlined text-sm text-rose-500">close</span>
             예정가격 미작성
           </li>
         </ul>
       </div>
-      <div class="bg-white/10 backdrop-blur rounded-xl p-5">
-        <div class="text-emerald-300 font-bold mb-4 flex items-center gap-2">
+      <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-5">
+        <div class="text-emerald-600 font-bold mb-4 flex items-center gap-2">
           <span class="material-symbols-outlined">check_circle</span>
           필수 서류
         </div>
-        <ul class="space-y-2.5 text-slate-100 text-sm">
+        <ul class="space-y-2.5 text-slate-700 text-sm">
           <li class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-sm text-emerald-400">check</span>
+            <span class="material-symbols-outlined text-sm text-emerald-500">check</span>
             수의계약 사유서
           </li>
           <li class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-sm text-emerald-400">check</span>
+            <span class="material-symbols-outlined text-sm text-emerald-500">check</span>
             견적서 (1인/2인)
           </li>
           <li class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-sm text-emerald-400">check</span>
+            <span class="material-symbols-outlined text-sm text-emerald-500">check</span>
             예정가격 조서
           </li>
         </ul>
       </div>
-      <div class="bg-white/10 backdrop-blur rounded-xl p-5">
-        <div class="text-indigo-300 font-bold mb-4 flex items-center gap-2">
+      <div class="bg-indigo-50 border border-indigo-200 rounded-xl p-5">
+        <div class="text-indigo-600 font-bold mb-4 flex items-center gap-2">
           <span class="material-symbols-outlined">tips_and_updates</span>
           실무 팁
         </div>
-        <ul class="space-y-2.5 text-slate-100 text-sm">
+        <ul class="space-y-2.5 text-slate-700 text-sm">
           <li class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-sm text-indigo-400">star</span>
+            <span class="material-symbols-outlined text-sm text-indigo-500">star</span>
             견적 마감일시 명확히
           </li>
           <li class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-sm text-indigo-400">star</span>
+            <span class="material-symbols-outlined text-sm text-indigo-500">star</span>
             동일 조건으로 요청
           </li>
           <li class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-sm text-indigo-400">star</span>
+            <span class="material-symbols-outlined text-sm text-indigo-500">star</span>
             서류는 시간순 정리
           </li>
         </ul>
@@ -346,3 +302,163 @@
     </div>
   </details>
 </div>
+
+<!-- 공문생산 팝업 -->
+<div id="doc-popup-overlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:9999; display:none; align-items:center; justify-content:center;" onclick="if(event.target===this) closeDocPopup()">
+  <div style="background:#fff; border-radius:16px; max-width:480px; width:90%; max-height:80vh; overflow-y:auto; padding:28px; box-shadow:0 20px 60px rgba(0,0,0,.2); animation:docPopupIn .2s ease;">
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span class="material-symbols-outlined" style="color:#e11d48; font-size:22px;">edit_document</span>
+        <h3 id="doc-popup-title" style="font-size:18px; font-weight:700; color:#1e293b; margin:0;"></h3>
+      </div>
+      <button onclick="closeDocPopup()" style="background:none; border:none; cursor:pointer; padding:4px;">
+        <span class="material-symbols-outlined" style="color:#94a3b8; font-size:22px;">close</span>
+      </button>
+    </div>
+    <div id="doc-popup-body"></div>
+  </div>
+</div>
+
+<style>
+@keyframes docPopupIn { from { opacity:0; transform:scale(.95) translateY(10px); } to { opacity:1; transform:scale(1) translateY(0); } }
+.doc-tool-badge {
+  display:inline-flex; align-items:center; gap:6px; margin-top:4px;
+  padding:6px 14px; background:#fff1f2; color:#e11d48;
+  font-size:13px; font-weight:600; border-radius:10px;
+  cursor:pointer; border:1.5px solid #fecdd3;
+  box-shadow:0 1px 3px rgba(225,29,72,.1);
+  transition:all .2s ease;
+}
+.doc-tool-badge:hover {
+  transform:translateY(-2px) scale(1.04);
+  box-shadow:0 6px 20px rgba(225,29,72,.2);
+  background:#ffe4e6; border-color:#fda4af;
+}
+.doc-tool-badge:active { transform:translateY(0) scale(.98); box-shadow:0 1px 2px rgba(225,29,72,.1); }
+.doc-item { display:flex; align-items:flex-start; gap:10px; padding:12px; border-radius:10px; border:1px solid #e2e8f0; margin-bottom:8px; }
+.doc-item .doc-icon { flex-shrink:0; width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; }
+.doc-item .doc-name { font-size:14px; font-weight:600; color:#1e293b; }
+.doc-item .doc-desc { font-size:12px; color:#64748b; margin-top:2px; }
+.doc-item.has-tool { cursor:pointer; transition:all .15s; }
+.doc-item.has-tool:hover { border-color:#818cf8; background:#f5f3ff; }
+</style>
+
+<script>
+var docPopupData = {
+  step1: {
+    title: '사전준비 단계 공문/양식',
+    groups: [
+      { label: '필수 공문', icon: 'verified', color: '#dc2626', items: [
+        { name: '사업계획서', desc: '사업 필요성, 내용, 예산, 기대효과 기안', icon: 'assignment', color: '#4f46e5', tool: '<%= project_plan_path %>' },
+        { name: '수의계약 사유서', desc: '수의계약 법적 근거 명시 (시행령 제25조)', icon: 'edit_document', color: '#059669', tool: '<%= contract_reason_path %>' },
+        { name: '예정가격 조서', desc: '거래실례가격 기반 예정가격 산정', icon: 'calculate', color: '#059669', tool: '<%= estimated_price_path %>' }
+      ]},
+      { label: '계약유형별 추가 문서', icon: 'category', color: '#6366f1', items: [
+        { name: '과업지시서', desc: '용역 계약 시 과업 범위·기간 명시', icon: 'description', color: '#6366f1', tool: '/forms/과업지시서.html', tag: '용역' },
+        { name: '내역서 + 시공지시서', desc: '공사 계약 시 공종별 내역·시공 방법', icon: 'receipt_long', color: '#6366f1', tool: '<%= cost_estimate_path %>', tag: '공사' }
+      ]},
+      { label: '내부 검토용', icon: 'fact_check', color: '#64748b', items: [
+        { name: '소요예산 추정', desc: '예산과목 확인, 배정 여부 내부 검토', icon: 'savings', color: '#64748b', tool: '<%= budget_estimator_path %>' },
+        { name: '계약방식 결정', desc: '1인/2인 견적 여부 판단 (금액 기준)', icon: 'swap_horiz', color: '#64748b', tool: '<%= contract_method_path %>' }
+      ]},
+      { label: '일괄 생성', icon: 'auto_awesome', color: '#4f46e5', items: [
+        { name: '견적서로 일괄 생성', desc: '견적서 업로드만으로 사업계획서·사유서·예정가격 자동 생성', icon: 'auto_awesome', color: '#4f46e5', tool: '<%= quote_auto_path %>', featured: true }
+      ]}
+    ]
+  },
+  step2: {
+    title: '견적징구 단계 공문/양식',
+    groups: [
+      { label: '필수', icon: 'verified', color: '#dc2626', items: [
+        { name: '견적 공고/요청', desc: '2인: 나라장터·학교장터에 견적 공고 (의무)', icon: 'outgoing_mail', color: '#059669', note: '1인: 전화·이메일·팩스 등 직접 요청 가능', tool: '<%= legal_period_path %>', toolLabel: '공고기간 계산' },
+        { name: '예정가격 비교', desc: '견적가격이 예정가격(Step1 작성) 이하인지 확인', icon: 'compare', color: '#059669' }
+      ]},
+      { label: '2인 견적 시 필요', icon: 'group', color: '#6366f1', items: [
+        { name: '견적서 접수대장', desc: '접수된 견적서 목록·일시 관리', icon: 'inbox', color: '#6366f1', note: '1인 견적 시 생략' },
+        { name: '업체 적격성 검토서', desc: '사업자등록증, 실적 등 확인', icon: 'how_to_reg', color: '#6366f1' }
+      ]}
+    ]
+  },
+  step3: {
+    title: '계약체결 단계 공문/양식',
+    groups: [
+      { label: '필수', icon: 'verified', color: '#dc2626', items: [
+        { name: '계약서', desc: '계약조건·금액·이행기간 명시', icon: 'article', color: '#475569', tool: '<%= contract_documents_path %>', note: '소액은 청구서로 갈음 가능' },
+        { name: '계약보증금', desc: '계약금액의 10% 납부 또는 면제', icon: 'shield', color: '#475569', tool: '<%= contract_guarantee_path %>', note: '5천만원 이하 면제 가능' }
+      ]},
+      { label: '계약상대자 제출', icon: 'person', color: '#6366f1', items: [
+        { name: '사업자등록증 사본', desc: '계약상대자 자격 확인용', icon: 'badge', color: '#6366f1' },
+        { name: '인감증명서', desc: '계약서 날인 확인용', icon: 'verified', color: '#6366f1', note: '소액·청구서 갈음 시 생략' },
+        { name: '착수신고서', desc: '이행 착수 통보 (해당 시)', icon: 'play_circle', color: '#6366f1' }
+      ]}
+    ]
+  },
+  step4: {
+    title: '이행/검수 단계 공문/양식',
+    groups: [
+      { label: '필수', icon: 'verified', color: '#dc2626', items: [
+        { name: '검수조서', desc: '규격·수량·품질 검사 및 합격/불합격 판정 기록', icon: 'fact_check', color: '#d97706', note: '소액 물품은 간이검수 가능' }
+      ]},
+      { label: '계약상대자 제출', icon: 'person', color: '#6366f1', items: [
+        { name: '납품서(완료보고서)', desc: '계약상대자가 이행 완료 시 제출', icon: 'local_shipping', color: '#6366f1' }
+      ]},
+      { label: '하자 발생 시', icon: 'warning', color: '#64748b', items: [
+        { name: '하자보수 요청서', desc: '불합격·하자 발견 시 보수 요청', icon: 'build', color: '#64748b' },
+        { name: '하자보증금', desc: '계약금액의 2~5% (공종별 상이)', icon: 'shield', color: '#64748b', tool: '<%= contract_guarantee_path %>' }
+      ]}
+    ]
+  },
+  step5: {
+    title: '대금지급 단계 공문/양식',
+    groups: [
+      { label: '필수', icon: 'verified', color: '#dc2626', items: [
+        { name: '지출결의서', desc: '지출원인행위 결의 (검수완료 후 5일 이내)', icon: 'request_quote', color: '#e11d48' }
+      ]},
+      { label: '지출결의서 첨부서류', icon: 'attach_file', color: '#64748b', items: [
+        { name: '세금계산서', desc: '계약상대자 발행 (적격 여부 확인)', icon: 'receipt', color: '#64748b' },
+        { name: '검수조서', desc: '검수 완료 증빙', icon: 'fact_check', color: '#64748b' },
+        { name: '계약서 사본', desc: '계약 내용 확인용', icon: 'article', color: '#64748b' },
+        { name: '견적서·사업자등록증', desc: '계약 근거 서류', icon: 'folder', color: '#64748b' }
+      ]},
+      { label: '계약상대자 제출', icon: 'person', color: '#6366f1', items: [
+        { name: '대금청구서', desc: '계약상대자가 대금 지급 청구', icon: 'request_quote', color: '#6366f1' }
+      ]}
+    ]
+  }
+};
+
+function showDocPopup(step) {
+  var data = docPopupData[step];
+  if (!data) return;
+  document.getElementById('doc-popup-title').textContent = data.title;
+  var html = '';
+  data.groups.forEach(function(group) {
+    html += '<div style="display:flex; align-items:center; gap:6px; margin:16px 0 8px; padding-bottom:6px; border-bottom:1px solid #f1f5f9;">';
+    html += '<span class="material-symbols-outlined" style="font-size:16px; color:' + group.color + ';">' + group.icon + '</span>';
+    html += '<span style="font-size:13px; font-weight:700; color:' + group.color + ';">' + group.label + '</span>';
+    html += '</div>';
+    group.items.forEach(function(item) {
+      var tag = item.tag ? ' <span style="font-size:11px; color:#94a3b8; background:#f1f5f9; padding:1px 6px; border-radius:4px; margin-left:4px;">' + item.tag + '</span>' : '';
+      var toolAttr = item.tool ? ' has-tool" onclick="window.location.href=\'' + item.tool + '\'"' : '"';
+      var featuredStyle = item.featured ? ' style="background:#eef2ff; border-color:#a5b4fc;"' : '';
+      html += '<div class="doc-item' + toolAttr + featuredStyle + '>';
+      html += '<div class="doc-icon" style="background:' + item.color + '15;"><span class="material-symbols-outlined" style="font-size:18px; color:' + item.color + ';">' + item.icon + '</span></div>';
+      html += '<div><div class="doc-name">' + item.name + tag;
+      if (item.tool && !item.toolLabel) html += ' <span class="material-symbols-outlined" style="font-size:12px; color:#818cf8; vertical-align:middle;">open_in_new</span>';
+      html += '</div><div class="doc-desc">' + item.desc + '</div>';
+      if (item.note) html += '<div style="font-size:11px; color:#d97706; margin-top:3px; display:flex; align-items:center; gap:3px;"><span class="material-symbols-outlined" style="font-size:12px;">info</span>' + item.note + '</div>';
+      if (item.toolLabel) html += '<div style="margin-top:5px;"><a href="' + item.tool + '" style="font-size:11px; color:#4f46e5; font-weight:600; display:inline-flex; align-items:center; gap:3px; text-decoration:none;" onclick="event.stopPropagation();"><span class="material-symbols-outlined" style="font-size:13px;">calculate</span>' + item.toolLabel + ' <span class="material-symbols-outlined" style="font-size:11px;">open_in_new</span></a></div>';
+      html += '</div>';
+      html += '</div>';
+    });
+  });
+  document.getElementById('doc-popup-body').innerHTML = html;
+  document.getElementById('doc-popup-overlay').style.display = 'flex';
+}
+
+function closeDocPopup() {
+  document.getElementById('doc-popup-overlay').style.display = 'none';
+}
+
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeDocPopup(); });
+</script>

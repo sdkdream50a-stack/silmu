@@ -28,7 +28,7 @@
             <li>• <strong class="text-red-700">경쟁입찰 불가 사유 명확화</strong></li>
           </ul>
           <div class="mt-3 flex flex-wrap gap-2">
-            <a href="<%= budget_estimator_path %>" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-700 text-xs font-semibold rounded-lg border border-red-200 transition-colors">
+            <a href="<%= budget_estimator_path %>" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-red-50 text-red-700 text-xs font-semibold rounded-lg border border-red-200 shadow-sm hover:shadow-md active:shadow-inner active:bg-red-100 transition-all">
               <span class="material-symbols-outlined" style="font-size:14px">calculate</span>
               소요예산 추정
             </a>
@@ -89,7 +89,7 @@
             <li>• 계약서 작성 및 체결</li>
           </ul>
           <div class="mt-3 flex flex-wrap gap-2">
-            <a href="<%= contract_documents_path %>" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-semibold rounded-lg border border-blue-200 transition-colors">
+            <a href="<%= contract_documents_path %>" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-blue-50 text-blue-700 text-xs font-semibold rounded-lg border border-blue-200 shadow-sm hover:shadow-md active:shadow-inner active:bg-blue-100 transition-all">
               <span class="material-symbols-outlined" style="font-size:14px">description</span>
               계약서류 생성
             </a>
@@ -126,24 +126,24 @@
       </summary>
       <div class="p-4 space-y-4">
         <!-- 나라장터 면제 -->
-        <div class="bg-teal-50 border border-teal-300 rounded-xl p-4">
+        <div class="bg-white border border-slate-200 rounded-xl p-4">
           <div class="flex items-start gap-3">
-            <span class="material-symbols-outlined text-teal-600">verified</span>
+            <span class="material-symbols-outlined text-teal-500">verified</span>
             <div>
-              <h4 class="font-semibold text-teal-800 mb-1">나라장터 이용 면제</h4>
-              <p class="text-sm text-teal-700">긴급수의의 경우 지정정보처리장치(나라장터) 이용 의무가 <strong>면제</strong>될 수 있습니다.</p>
-              <p class="text-xs text-teal-600 mt-1">근거: 지방계약법 시행령 제30조②단서 (행정안전부장관이 정한 경우)</p>
+              <h4 class="font-semibold text-slate-800 mb-1">나라장터 이용 면제</h4>
+              <p class="text-sm text-slate-700">긴급수의의 경우 지정정보처리장치(나라장터) 이용 의무가 <strong>면제</strong>될 수 있습니다.</p>
+              <p class="text-xs text-slate-500 mt-1">근거: 지방계약법 시행령 제30조②단서 (행정안전부장관이 정한 경우)</p>
             </div>
           </div>
         </div>
 
         <!-- 긴급수의 요건 -->
-        <div class="bg-red-50 border border-red-200 rounded-xl p-4">
+        <div class="bg-white border border-slate-200 rounded-xl p-4">
           <div class="flex items-start gap-3">
-            <span class="material-symbols-outlined text-red-600">emergency</span>
+            <span class="material-symbols-outlined text-red-400">emergency</span>
             <div>
-              <h4 class="font-semibold text-red-800 mb-2">긴급수의 인정 요건</h4>
-              <ul class="text-sm text-red-700 space-y-1">
+              <h4 class="font-semibold text-slate-800 mb-2">긴급수의 인정 요건</h4>
+              <ul class="text-sm text-slate-700 space-y-1">
                 <li>• <strong>천재지변</strong>: 자연재해, 재난 등</li>
                 <li>• <strong>작전상 병력이동</strong>: 군사적 긴급상황</li>
                 <li>• <strong>긴급한 행사</strong>: 국가적 행사, VIP 방문 등</li>
@@ -156,24 +156,24 @@
 
         <!-- 체크포인트 -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="bg-blue-50 border border-blue-200 rounded-xl p-4">
-            <h4 class="font-semibold text-blue-800 mb-2 flex items-center gap-2">
-              <span class="material-symbols-outlined text-blue-600">check_circle</span>
+          <div class="bg-white border border-slate-200 rounded-xl p-4">
+            <h4 class="font-semibold text-slate-800 mb-2 flex items-center gap-2">
+              <span class="material-symbols-outlined text-blue-400">check_circle</span>
               필수 구비서류
             </h4>
-            <ul class="text-sm text-blue-700 space-y-1">
+            <ul class="text-sm text-slate-700 space-y-1">
               <li>• 긴급수의 사유서</li>
               <li>• 긴급상황 증빙자료</li>
               <li>• 견적서</li>
               <li>• 계약서</li>
             </ul>
           </div>
-          <div class="bg-amber-50 border border-amber-200 rounded-xl p-4">
-            <h4 class="font-semibold text-amber-800 mb-2 flex items-center gap-2">
-              <span class="material-symbols-outlined text-amber-600">gavel</span>
+          <div class="bg-white border border-slate-200 rounded-xl p-4">
+            <h4 class="font-semibold text-slate-800 mb-2 flex items-center gap-2">
+              <span class="material-symbols-outlined text-amber-400">gavel</span>
               감사 대비 사항
             </h4>
-            <ul class="text-sm text-amber-700 space-y-1">
+            <ul class="text-sm text-slate-700 space-y-1">
               <li>• 긴급성 입증 자료 보관</li>
               <li>• 가격 적정성 검토 기록</li>
               <li>• 사후 보완 서류 정비</li>
