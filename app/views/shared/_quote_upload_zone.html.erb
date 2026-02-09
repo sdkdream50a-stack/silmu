@@ -1,0 +1,154 @@
+<%# 견적서 업로드 자동입력 컴포넌트
+  사용법: render 'shared/quote_upload_zone', tool_id: 'pp'
+  각 도구에서 quMapFields_<tool_id>(fields) 함수를 정의해야 함 %>
+<% tid = local_assigns[:tool_id] || 'qu' %>
+
+<style>
+.qu-upload-box { border:2px dashed #c7d2fe; background:#faf5ff; border-radius:14px; padding:16px 20px; margin-bottom:20px; }
+.qu-upload-toggle { cursor:pointer; display:flex; align-items:center; gap:8px; user-select:none; }
+.qu-upload-toggle:hover .qu-toggle-label { color:#4338ca; }
+.qu-toggle-label { font-size:15px; font-weight:700; color:#4f46e5; transition:color .15s; }
+.qu-toggle-desc { font-size:12px; color:#94a3b8; }
+.qu-toggle-arrow { margin-left:auto; transition:transform .2s; }
+.qu-toggle-arrow.open { transform:rotate(180deg); }
+.qu-drop-zone { border:2px dashed #d1d5db; border-radius:12px; padding:28px 20px; text-align:center; cursor:pointer; transition:all .2s; background:#fff; margin-top:14px; }
+.qu-drop-zone:hover { border-color:#818cf8; background:#eef2ff; }
+.qu-drop-zone.dragover { border-color:#4f46e5; background:#eef2ff; }
+.qu-upload-result { margin-top:12px; padding:12px 16px; border-radius:10px; display:flex; align-items:flex-start; gap:8px; }
+.qu-upload-result.success { background:#ecfdf5; border:1px solid #a7f3d0; }
+.qu-upload-result.error { background:#fef2f2; border:1px solid #fecaca; }
+</style>
+
+<div class="qu-upload-box" id="<%= tid %>-upload-box">
+  <div class="qu-upload-toggle" onclick="quToggle('<%= tid %>')">
+    <span class="material-symbols-outlined" style="color:#7c3aed;">upload_file</span>
+    <span class="qu-toggle-label">견적서로 자동입력</span>
+    <span class="qu-toggle-desc">견적서만 넣으면 양식이 자동으로 채워집니다</span>
+    <span class="material-symbols-outlined qu-toggle-arrow" id="<%= tid %>-arrow" style="color:#94a3b8; font-size:20px;">expand_more</span>
+  </div>
+
+  <div id="<%= tid %>-upload-content" style="display:none;">
+    <div class="qu-drop-zone" id="<%= tid %>-drop-zone"
+         ondragover="event.preventDefault(); this.classList.add('dragover');"
+         ondragleave="this.classList.remove('dragover');"
+         ondrop="event.preventDefault(); this.classList.remove('dragover'); quUpload('<%= tid %>', event.dataTransfer.files[0]);"
+         onclick="document.getElementById('<%= tid %>-file-input').click();">
+      <input type="file" id="<%= tid %>-file-input" accept=".pdf,.jpg,.jpeg,.png" style="display:none;"
+             onchange="quUpload('<%= tid %>', this.files[0]);">
+      <span class="material-symbols-outlined" style="font-size:40px; color:#c7d2fe;">cloud_upload</span>
+      <div style="font-size:14px; font-weight:600; color:#475569; margin-top:6px;">견적서 파일을 끌어다 놓거나 클릭</div>
+      <div style="font-size:12px; color:#94a3b8; margin-top:4px;">PDF, JPG, PNG (최대 20MB)</div>
+    </div>
+
+    <div id="<%= tid %>-upload-loading" style="display:none; text-align:center; padding:24px;">
+      <div style="display:inline-block; width:28px; height:28px; border:3px solid #e2e8f0; border-top-color:#4f46e5; border-radius:50%; animation:qu-spin 1s linear infinite;"></div>
+      <div style="font-size:14px; color:#475569; margin-top:10px; font-weight:500;">AI가 견적서를 분석하고 있습니다...</div>
+      <div style="font-size:12px; color:#94a3b8; margin-top:4px;">보통 10~30초 소요</div>
+    </div>
+
+    <div id="<%= tid %>-upload-result" style="display:none;"></div>
+  </div>
+</div>
+
+<style>
+@keyframes qu-spin { to { transform:rotate(360deg); } }
+</style>
+
+<script>
+function quToggle(tid) {
+  const content = document.getElementById(tid + '-upload-content');
+  const arrow = document.getElementById(tid + '-arrow');
+  if (content.style.display === 'none') {
+    content.style.display = 'block';
+    arrow.classList.add('open');
+  } else {
+    content.style.display = 'none';
+    arrow.classList.remove('open');
+  }
+}
+
+async function quUpload(tid, file) {
+  if (!file) return;
+
+  // Validate
+  const allowed = ['application/pdf', 'image/jpeg', 'image/png'];
+  if (!allowed.includes(file.type)) {
+    quShowResult(tid, 'error', 'PDF, JPG, PNG 파일만 업로드 가능합니다.');
+    return;
+  }
+  if (file.size > 20 * 1024 * 1024) {
+    quShowResult(tid, 'error', '파일 크기는 20MB 이하만 가능합니다.');
+    return;
+  }
+
+  // Show loading
+  const dropZone = document.getElementById(tid + '-drop-zone');
+  const loading = document.getElementById(tid + '-upload-loading');
+  const resultEl = document.getElementById(tid + '-upload-result');
+  dropZone.style.display = 'none';
+  loading.style.display = 'block';
+  resultEl.style.display = 'none';
+
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+    const resp = await fetch('/quote-documents/extract', {
+      method: 'POST',
+      headers: csrfToken ? { 'X-CSRF-Token': csrfToken } : {},
+      body: formData
+    });
+
+    const data = await resp.json();
+
+    if (data.success && data.fields) {
+      // Call tool-specific mapping function
+      const mapFn = window['quMapFields_' + tid];
+      if (mapFn) {
+        mapFn(data.fields);
+      }
+
+      // Show success
+      let summary = '';
+      if (data.fields.company_name) summary += data.fields.company_name;
+      if (data.fields.total_amount) summary += ' / ' + Number(data.fields.total_amount).toLocaleString() + '원';
+      if (data.fields.project_name) summary += ' / ' + data.fields.project_name;
+
+      quShowResult(tid, 'success',
+        '견적서 데이터가 자동입력되었습니다.' +
+        (summary ? '<div style="font-size:12px; color:#047857; margin-top:4px;">' + summary + '</div>' : '') +
+        '<div style="font-size:11px; color:#64748b; margin-top:6px;">자동입력된 내용을 확인하고 필요시 수정하세요.</div>'
+      );
+    } else {
+      quShowResult(tid, 'error', data.error || '견적서 분석에 실패했습니다. 다시 시도해주세요.');
+    }
+  } catch (err) {
+    quShowResult(tid, 'error', '서버 연결 오류: ' + err.message);
+  } finally {
+    loading.style.display = 'none';
+    dropZone.style.display = 'block';
+  }
+}
+
+function quShowResult(tid, type, message) {
+  const el = document.getElementById(tid + '-upload-result');
+  const icon = type === 'success' ? 'check_circle' : 'error';
+  const iconColor = type === 'success' ? '#059669' : '#dc2626';
+  el.className = 'qu-upload-result ' + type;
+  el.innerHTML = '<span class="material-symbols-outlined" style="color:' + iconColor + '; flex-shrink:0;">' + icon + '</span><div>' + message + '</div>';
+  el.style.display = 'flex';
+}
+
+// Helper: set input value and trigger highlight animation
+function quSetField(id, value) {
+  const el = document.getElementById(id);
+  if (!el || !value) return;
+  el.value = value;
+  el.style.transition = 'background .3s';
+  el.style.background = '#ecfdf5';
+  setTimeout(() => { el.style.background = ''; }, 2000);
+  // Trigger any oninput handlers
+  el.dispatchEvent(new Event('input', { bubbles: true }));
+}
+</script>

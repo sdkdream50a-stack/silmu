@@ -167,7 +167,7 @@ class ContractDocumentService
             tip: "견적서에 업체 인감(직인) 날인 여부와 유효기간을 반드시 확인"
           },
           {
-            id: "task_specification", name: "과업지시서", required: true,
+            id: "task_specification", name: "과업내용서(과업지시서)", required: true,
             description: "용역 범위 및 내용",
             legal_basis: "지방계약법 시행령 제8조, 계약집행기준",
             caution: "과업 내용, 범위, 성과품 목록 구체적 명시",
