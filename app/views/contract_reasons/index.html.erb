@@ -96,6 +96,27 @@
 <section class="py-10">
   <div class="container-wide max-w-4xl">
 
+    <!-- 견적서 업로드 자동입력 -->
+    <%= render 'shared/quote_upload_zone', tool_id: 'cr' %>
+    <script>
+    function quMapFields_cr(f) {
+      quSetField('cr-contract-name', f.project_name);
+      if (f.total_amount) quSetField('cr-budget', Number(f.total_amount).toLocaleString());
+      quSetField('cr-company', f.company_name);
+      quSetField('cr-business-no', f.business_no);
+      if (f.delivery_period) quSetField('cr-delivery', f.delivery_period);
+      // 소액수의 자동 선택
+      var amt = Number(f.total_amount) || 0;
+      if (amt > 0 && amt <= 50000000) {
+        var smallBtn = document.querySelector('[data-reason="small_amount"]');
+        if (smallBtn && typeof crSelectReason === 'function') crSelectReason(smallBtn);
+      }
+      // 세부 정보 섹션 표시
+      var detailSection = document.getElementById('cr-detail-section');
+      if (detailSection) detailSection.classList.add('active');
+    }
+    </script>
+
     <div class="cr-card" id="cr-form-card">
       <h2 style="font-size:20px; font-weight:700; color:#1e293b; margin-bottom:20px; display:flex; align-items:center; gap:8px;">
         <span class="material-symbols-outlined text-emerald-500">checklist</span>
