@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  # Kamal 헬스체크용
+  get "up" => "rails/health#show", as: :rails_health_check
+
   devise_for :users
   root "home#index"
 
