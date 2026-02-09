@@ -1,5 +1,5 @@
-# 예정가격 계산기 서비스
-# 계약유형별 원가항목을 합산하여 예정가격을 산출
+# 추정가격 계산기 서비스
+# 계약유형별 원가항목을 합산하여 추정가격(VAT 제외)을 산출
 class EstimatedPriceService
   # 계약 유형
   CONTRACT_TYPES = {
