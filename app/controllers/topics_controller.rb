@@ -20,7 +20,7 @@ class TopicsController < ApplicationController
       description: @topic.summary.truncate(155),
       keywords: @topic.keywords,
       og: {
-        title: "#{@topic.name} 실무 가이드",
+        title: "#{@topic.name} 실무 가이드 | 실무.kr",
         description: @topic.summary.truncate(200),
         url: request.original_url,
         type: "article"

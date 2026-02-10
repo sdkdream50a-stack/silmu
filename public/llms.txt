@@ -1,49 +1,74 @@
-# 실무 (silmu.kr)
-> 공무원을 위한 계약 실무 가이드, 자동화 도구, 법령 해설, 문서 양식을 제공합니다.
+# 실무.kr (silmu.kr)
+
+> 실무.kr은 대한민국 공무원(지방자치단체·교육청·공공기관)을 위한 **계약·예산 실무 가이드 플랫폼**입니다.
+> 지방계약법·국가계약법 기반의 법령 해설, 실무 자동화 도구, 문서 양식, 감사사례를 무료로 제공합니다.
+
+## 사이트 정보
+- 운영: 실무.kr
+- 도메인: https://silmu.kr
+- 이메일: hello@silmu.kr
+- 언어: 한국어
+- 대상: 대한민국 공무원 (계약·재무 담당자)
+- 콘텐츠 수: 법령 가이드 25개, 자동화 도구 19개, 실무 서식 23개, 감사사례 31건
+
+## 주요 법령 근거
+- 지방자치단체를 당사자로 하는 계약에 관한 법률 (지방계약법)
+- 지방자치단체를 당사자로 하는 계약에 관한 법률 시행령 (지방계약법 시행령)
+- 지방자치단체 입찰 및 계약집행기준 (행정안전부 예규)
+- 국가를 당사자로 하는 계약에 관한 법률 (국가계약법)
 
 ## 핵심 법령 가이드 (Topics)
-- [수의계약](https://silmu.kr/topics/private-contract): 경쟁입찰 없이 특정인을 선정하여 체결하는 계약의 요건, 절차, 금액 기준
-- [소액수의](https://silmu.kr/topics/small-amount-contract): 추정가격 기준 소액 수의계약 절차와 기준
+
+### 수의계약
+- [수의계약](https://silmu.kr/topics/private-contract): 경쟁입찰 없이 특정인을 선정하여 체결하는 계약의 요건, 절차, 금액 기준. 지방계약법 시행령 제25조 근거.
+- [소액수의](https://silmu.kr/topics/small-amount-contract): 추정가격 기준 소액 수의계약 절차와 기준 (물품 2천만원, 용역 2천만원, 공사 8천만원 이하)
 - [긴급수의](https://silmu.kr/topics/emergency-contract): 긴급한 사유로 인한 수의계약(특명수의) 요건과 사례
 - [수의계약 금액](https://silmu.kr/topics/private-contract-amount): 수의계약 금액 기준 및 견적 방법 총정리
 - [수의계약 한도](https://silmu.kr/topics/private-contract-limit): 수의계약 체결이 가능한 추정가격 한도 기준
 - [1인견적](https://silmu.kr/topics/single-quote): 1인 견적에 의한 수의계약 (소액 수의계약)
 - [2인견적](https://silmu.kr/topics/dual-quote): 2인 이상 견적에 의한 수의계약
 - [수의시담](https://silmu.kr/topics/price-negotiation): 수의계약 시 계약상대자와의 가격 협상 절차
-- [물품선정위원회](https://silmu.kr/topics/goods-selection-committee): 물품 구매 시 규격·모델을 공정하게 선정하기 위한 위원회 운영 방법
-- [나라장터·학교장터 전자계약](https://silmu.kr/topics/e-procurement-guide): 나라장터(G2B)와 학교장터(S2B) 전자입찰·전자계약 절차
+
+### 입찰·계약
 - [입찰](https://silmu.kr/topics/bidding): 일반경쟁·제한경쟁·지명경쟁 입찰의 요건, 절차, 낙찰자 결정 방법
-- [입찰공고](https://silmu.kr/topics/bid-announcement): 입찰공고 작성 방법, 법정 공고기간, 필수 기재사항, 재공고·긴급공고 절차
+- [입찰공고](https://silmu.kr/topics/bid-announcement): 입찰공고 작성 방법, 법정 공고기간(7일/10일), 필수 기재사항, 재공고·긴급공고 절차
+- [전자입찰](https://silmu.kr/topics/e-bidding): 나라장터(G2B) 전자입찰 절차, 입찰서 제출, 전자계약 체결
 - [계약체결](https://silmu.kr/topics/contract-execution): 낙찰자 결정 후 계약서 작성, 계약보증금 납부, 계약체결 기한 등 절차
-- [계약보증금](https://silmu.kr/topics/contract-guarantee-deposit): 계약보증금 납부 기준, 면제 요건, 보증서 종류, 귀속 및 반환 절차
+- [계약보증금](https://silmu.kr/topics/contract-guarantee-deposit): 계약보증금 납부 기준(계약금액의 10%), 면제 요건, 보증서 종류
 - [예정가격](https://silmu.kr/topics/estimated-price): 예정가격의 결정 방법, 기초금액 작성, 복수예비가격, 거래실례가격 등
+
+### 계약 이행·관리
 - [검수·검사](https://silmu.kr/topics/inspection): 계약 이행 완료 후 검사·검수 절차, 검사조서 작성, 대가 지급 기한
+- [대금지급](https://silmu.kr/topics/payment): 계약대금(선금·기성금·준공금) 지급 기한(14일), 지연이자, 선금 정산
 - [지체상금](https://silmu.kr/topics/late-penalty): 계약 이행 지체 시 지체상금 부과 기준, 산정 방법, 면제 사유
 - [하자보증](https://silmu.kr/topics/defect-warranty): 하자보증금 납부 기준, 하자담보책임기간, 하자보수 절차
 - [설계변경](https://silmu.kr/topics/design-change): 설계변경의 요건, 절차, 계약금액 조정 방법, 신규비목 단가 산정
 - [물가변동](https://silmu.kr/topics/price-escalation): 물가변동에 의한 계약금액 조정(ESC) 요건, 지수조정률·품목조정률 산정
-- [대금지급](https://silmu.kr/topics/payment): 계약대금(선금·기성금·준공금) 지급 기한, 지연이자, 선금 정산
 - [계약해제·해지](https://silmu.kr/topics/contract-termination): 계약 해제·해지의 사유, 절차, 법적 효과, 부정당업자 제재
 - [하도급](https://silmu.kr/topics/subcontract): 하도급 허용 범위, 통지 의무, 대금 직접지급, 재하도급 제한
 - [공동도급](https://silmu.kr/topics/joint-contract): 공동이행·분담이행 방식, 공동수급체 구성, 지분율 기준
-- [전자입찰](https://silmu.kr/topics/e-bidding): 나라장터(G2B) 전자입찰 절차, 입찰서 제출, 전자계약 체결
+
+### 기타
+- [물품선정위원회](https://silmu.kr/topics/goods-selection-committee): 물품 구매 시 규격·모델을 공정하게 선정하기 위한 위원회 운영 방법
+- [나라장터·학교장터 전자계약](https://silmu.kr/topics/e-procurement-guide): 나라장터(G2B)와 학교장터(S2B) 전자입찰·전자계약 절차
 - [예산이월](https://silmu.kr/topics/budget-carryover): 명시이월, 사고이월, 계속비이월의 요건과 절차
 - [여비](https://silmu.kr/topics/travel-expense): 공무원 국내·외 출장 시 여비 지급 기준과 청구 절차
 - [연말정산](https://silmu.kr/topics/year-end-settlement): 공무원 연말정산 절차와 주요 변경사항
 
-## 실무 도구 (Tools)
-- [계약방식 결정 도우미](https://silmu.kr/tools/contract-method): 금액·유형별 계약방식 자동 판단
-- [계약서류 원클릭 생성기](https://silmu.kr/tools/contract-documents): 계약 유형에 맞는 서류 자동 생성
-- [예정가격 계산기](https://silmu.kr/tools/estimated-price): 예정가격 자동 산정
-- [계약보증금 계산기](https://silmu.kr/tools/contract-guarantee): 계약보증금 자동 계산
+## 실무 자동화 도구 (Tools)
+- [계약방식 결정 도우미](https://silmu.kr/tools/contract-method): 금액·유형 입력 → 수의계약/경쟁입찰 자동 판단
+- [계약서류 원클릭 생성기](https://silmu.kr/tools/contract-documents): 계약 유형에 맞는 필요서류 자동 생성
+- [예정가격 계산기](https://silmu.kr/tools/estimated-price): 예정가격 자동 산정 (거래실례가격, 원가계산 등)
+- [계약보증금 계산기](https://silmu.kr/tools/contract-guarantee): 계약보증금·하자보증금 자동 계산
 - [소요예산 추정기](https://silmu.kr/tools/budget-estimator): 사업 예산 추정 도구
-- [법정기간 계산기](https://silmu.kr/tools/legal-period): 계약 관련 법정기간 자동 계산
-- [여비계산기](https://silmu.kr/tools/travel-calculator): 국내·외 출장 여비 자동 계산
-- [내역서+시공지시서 생성기](https://silmu.kr/tools/cost-estimate): 공사 내역서와 시공지시서 자동 생성
+- [법정기간 계산기](https://silmu.kr/tools/legal-period): 계약 관련 법정기간(공고기간, 이의신청 등) 자동 계산
+- [여비계산기](https://silmu.kr/tools/travel-calculator): 국내·외 출장 여비(일비·숙박비·식비) 자동 계산
+- [물량내역서+시방서 생성기](https://silmu.kr/tools/cost-estimate): 공사 물량내역서와 시방서 자동 생성
 - [설계변경 검토서 도우미](https://silmu.kr/tools/design-change): 설계변경 검토서 작성 도우미
 - [기성검사 체크리스트](https://silmu.kr/tools/progress-inspection): 기성검사 체크리스트 자동 생성
 - [원가계산서 검토 가이드](https://silmu.kr/tools/cost-calculation): 원가계산서 검토 도우미
 - [PDF 도구](https://silmu.kr/tools/pdf): PDF 분할, 합치기, 페이지번호 추가
+- [공문서 AI 작성 도우미](https://silmu.kr/tools/official-document): AI 기반 공문서 초안 작성
 
 ## 업무 가이드 (Guides)
 - [물품 구매 및 검수 절차 가이드](https://silmu.kr/guides/1): 물품 구매부터 검수까지 전체 절차
@@ -58,10 +83,23 @@
 - [계약업무 사전 체크리스트](https://silmu.kr/guides/pre-contract-checklist): 계약 전 확인사항 체크리스트
 
 ## 문서 양식 (Templates)
-- [양식 자료실](https://silmu.kr/templates): 계약서, 검수조서, 기안문 등 23종 양식 다운로드
+- [양식 자료실](https://silmu.kr/templates): 수의계약사유서, 검수조서, 견적서, 예정가격조서, 계약서 등 23종 양식
 
 ## 감사사례 (Audit Cases)
-- [감사사례 모음](https://silmu.kr/audit-cases): 공공계약 감사에서 자주 지적되는 31건의 사례를 카테고리별로 정리 (수의계약, 입찰, 계약체결, 계약이행, 대금지급, 하도급)
+- [감사사례 모음](https://silmu.kr/audit-cases): 공공계약 감사에서 자주 지적되는 31건의 사례 (수의계약, 입찰, 계약체결, 계약이행, 대금지급, 하도급)
 
 ## 자주 묻는 질문 (FAQ)
 - [FAQ](https://silmu.kr/faq): 수의계약, 입찰, 대금지급, 나라장터, 물품선정 관련 FAQ
+
+## 자주 묻는 질문 요약
+Q: 수의계약은 얼마까지 가능한가요?
+A: 물품·용역은 추정가격 2천만원 이하, 공사는 8천만원 이하에서 수의계약이 가능합니다 (지방계약법 시행령 제25조).
+
+Q: 1인 견적과 2인 견적의 차이는?
+A: 추정가격이 물품·용역 500만원, 공사 2천만원 이하이면 1인 견적이 가능하고, 그 이상이면 2인 이상 견적을 받아야 합니다.
+
+Q: 계약보증금은 얼마인가요?
+A: 계약금액의 10% 이상이며, 추정가격 5천만원 이하 등 일정 요건 충족 시 면제 가능합니다.
+
+Q: 대금지급 기한은?
+A: 검사 완료 후 14일 이내에 지급해야 하며, 지연 시 지연이자를 지급해야 합니다.
