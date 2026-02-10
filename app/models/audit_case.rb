@@ -26,6 +26,11 @@ class AuditCase < ApplicationRecord
     "중대" => "중대"
   }.freeze
 
+  def checkpoint_list
+    return [] if checkpoints.blank?
+    JSON.parse(checkpoints) rescue []
+  end
+
   def related_topic
     return nil if topic_slug.blank?
     Topic.published.find_by(slug: topic_slug)

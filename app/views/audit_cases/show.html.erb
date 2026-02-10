@@ -112,42 +112,26 @@
           </div>
 
           <!-- 실무 체크포인트 -->
-          <div class="card p-5 lg:p-6 bg-indigo-50/50 border border-indigo-100">
-            <h2 class="text-base font-bold text-indigo-800 flex items-center gap-2 mb-3">
-              <span class="material-symbols-outlined text-lg">checklist</span>
-              실무 체크포인트
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <div class="flex items-start gap-2 p-3 bg-white rounded-xl text-sm">
-                <span class="material-symbols-outlined text-indigo-500 text-lg flex-shrink-0">shield</span>
-                <div>
-                  <span class="font-semibold text-slate-800">사전 예방</span>
-                  <p class="text-xs text-slate-500 mt-0.5"><%= @audit_case.legal_basis %> 조항을 사전에 확인하세요</p>
-                </div>
-              </div>
-              <div class="flex items-start gap-2 p-3 bg-white rounded-xl text-sm">
-                <span class="material-symbols-outlined text-indigo-500 text-lg flex-shrink-0">fact_check</span>
-                <div>
-                  <span class="font-semibold text-slate-800">서류 점검</span>
-                  <p class="text-xs text-slate-500 mt-0.5">관련 근거 서류가 빠짐없이 구비되었는지 확인하세요</p>
-                </div>
-              </div>
-              <div class="flex items-start gap-2 p-3 bg-white rounded-xl text-sm">
-                <span class="material-symbols-outlined text-indigo-500 text-lg flex-shrink-0">schedule</span>
-                <div>
-                  <span class="font-semibold text-slate-800">기한 준수</span>
-                  <p class="text-xs text-slate-500 mt-0.5">법정 처리기한 및 절차 순서를 반드시 지키세요</p>
-                </div>
-              </div>
-              <div class="flex items-start gap-2 p-3 bg-white rounded-xl text-sm">
-                <span class="material-symbols-outlined text-indigo-500 text-lg flex-shrink-0">history_edu</span>
-                <div>
-                  <span class="font-semibold text-slate-800">기록 보관</span>
-                  <p class="text-xs text-slate-500 mt-0.5">의사결정 과정과 근거를 문서로 남기세요</p>
-                </div>
+          <% checkpoints = @audit_case.checkpoint_list %>
+          <% if checkpoints.any? %>
+            <div class="card p-5 lg:p-6 bg-indigo-50/50 border border-indigo-100">
+              <h2 class="text-base font-bold text-indigo-800 flex items-center gap-2 mb-3">
+                <span class="material-symbols-outlined text-lg">checklist</span>
+                실무 체크포인트
+              </h2>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <% checkpoints.each do |cp| %>
+                  <div class="flex items-start gap-2 p-3 bg-white rounded-xl text-sm">
+                    <span class="material-symbols-outlined text-indigo-500 text-lg flex-shrink-0"><%= cp["icon"] %></span>
+                    <div>
+                      <span class="font-semibold text-slate-800"><%= cp["title"] %></span>
+                      <p class="text-xs text-slate-500 mt-0.5"><%= cp["desc"] %></p>
+                    </div>
+                  </div>
+                <% end %>
               </div>
             </div>
-          </div>
+          <% end %>
 
           <!-- 상세 내용 (있을 경우) -->
           <% if @audit_case.detail.present? %>
