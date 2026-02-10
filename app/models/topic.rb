@@ -27,19 +27,22 @@ class Topic < ApplicationRecord
   before_validation :generate_slug, if: -> { slug.blank? && name.present? }
 
   # 키워드 매칭으로 토픽 찾기
-  def self.find_by_query(query)
+  def self.find_by_query(query, exclude_slug: nil)
     return none if query.blank?
 
+    scope = published
+    scope = scope.where.not(slug: exclude_slug) if exclude_slug.present?
+
     # 1. 정확한 이름 매칭
-    exact = published.where("name ILIKE ?", "%#{sanitize_sql_like(query)}%").first
+    exact = scope.where("name ILIKE ?", "%#{sanitize_sql_like(query)}%").first
     return exact if exact
 
     # 2. 키워드 매칭
-    keyword_match = published.where("keywords ILIKE ?", "%#{sanitize_sql_like(query)}%").first
+    keyword_match = scope.where("keywords ILIKE ?", "%#{sanitize_sql_like(query)}%").first
     return keyword_match if keyword_match
 
     # 3. 전문 검색
-    published.search_by_keyword(query).first
+    scope.search_by_keyword(query).first
   end
 
   # 관련 토픽 찾기
