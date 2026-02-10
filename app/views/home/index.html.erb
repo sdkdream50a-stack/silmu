@@ -39,12 +39,12 @@
         </form>
         <div class="mt-8 flex flex-wrap justify-center gap-3">
           <% [
-            ["gavel", "수의계약", "indigo"],
-            ["shopping_bag", "물품구매", "emerald"],
-            ["engineering", "공사계약", "amber"],
-            ["design_services", "용역계약", "pink"]
-          ].each do |icon, keyword, color| %>
-            <%= link_to chatbot_search_path(q: keyword), class: "group inline-flex items-center gap-2 rounded-full bg-slate-800/50 px-4 py-2 text-sm font-medium text-slate-300 hover:bg-indigo-600/20 hover:text-white hover:border-indigo-500/50 transition-all backdrop-blur-sm border border-slate-700/50", data: { turbo: false } do %>
+            [topic_path("private-contract"), "gavel", "수의계약", "indigo"],
+            [topic_path("bidding"), "shopping_bag", "입찰", "emerald"],
+            [topic_path("contract-execution"), "engineering", "계약체결", "amber"],
+            [topic_path("inspection"), "design_services", "검수·검사", "pink"]
+          ].each do |path, icon, keyword, color| %>
+            <%= link_to path, class: "group inline-flex items-center gap-2 rounded-full bg-slate-800/50 px-4 py-2 text-sm font-medium text-slate-300 hover:bg-indigo-600/20 hover:text-white hover:border-indigo-500/50 transition-all backdrop-blur-sm border border-slate-700/50" do %>
               <span class="material-symbols-outlined text-[16px] text-<%= color %>-400 group-hover:text-<%= color %>-300"><%= icon %></span> <%= keyword %>
             <% end %>
           <% end %>
@@ -129,8 +129,8 @@
     <!-- Minor Tools -->
     <div class="grid grid-cols-2 gap-6 md:grid-cols-4">
       <% [
-        [pdf_tools_path, "calendar_month", "계약기간 산정"],
-        [travel_calculator_path, "percent", "지연배상금 계산"],
+        [legal_period_path, "calendar_month", "계약기간 산정"],
+        [contract_guarantee_path, "percent", "계약보증금 계산"],
         [pre_contract_checklist_path, "checklist_rtl", "사전 체크리스트"],
         [contract_flow_path, "account_tree", "계약 흐름도"]
       ].each do |path, icon, label| %>
