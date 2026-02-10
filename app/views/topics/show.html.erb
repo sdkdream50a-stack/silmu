@@ -178,6 +178,8 @@
             <%= render 'topics/flowcharts/budget_carryover', topic: @topic %>
           <% elsif @topic.slug == 'late-penalty' %>
             <%= render 'topics/flowcharts/late_penalty', topic: @topic %>
+          <% elsif @topic.slug == 'contract-guarantee-deposit' %>
+            <%= render 'topics/flowcharts/contract_guarantee_deposit', topic: @topic %>
           <% else %>
             <div class="card p-16 text-center">
               <span class="material-symbols-outlined text-6xl text-slate-200 mb-4">account_tree</span>
