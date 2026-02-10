@@ -2,6 +2,10 @@
 <% content_for :hide_footer, true %>
 <% content_for :head do %>
   <meta name="turbo-cache-control" content="no-cache">
+  <style>
+    #calendar-root { height: calc(100vh - 4rem); height: calc(100dvh - 4rem); }
+    @media (min-width: 1024px) { #calendar-root { height: calc(100vh - 4.5rem); height: calc(100dvh - 4.5rem); } }
+  </style>
 <% end %>
 
 <%
@@ -175,7 +179,9 @@
   week_dates = (0..6).map { |i| week_start + i }
 %>
 
-<div class="flex min-h-[calc(100vh-4rem)] lg:min-h-[calc(100vh-4.5rem)] overflow-hidden bg-slate-50"
+<% content_for :hide_quick_menu, true %>
+
+<div class="flex overflow-hidden bg-slate-50"
      data-user-signed-in="<%= user_signed_in? %>"
      id="calendar-root">
   <!-- 사이드바 -->
@@ -539,7 +545,7 @@
 </div>
 
 <!-- 모바일 하단 탭 바 -->
-<nav class="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-slate-200 safe-area-bottom px-6 pb-6 pt-2">
+<nav class="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-slate-200 px-6 pt-2" style="padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 1.5rem))">
   <ul class="flex justify-between items-center">
     <li class="flex-1">
       <button class="mobile-tab-item w-full flex flex-col items-center justify-center gap-1 py-2 text-slate-400 hover:text-slate-600 transition-colors group" data-view="inbox">
