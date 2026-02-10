@@ -1,0 +1,162 @@
+<!-- 설계변경 실무흐름도 -->
+<div class="card">
+  <div class="card-header">
+    <h2 class="text-xl font-bold text-slate-900 flex items-center gap-3">
+      <span class="material-symbols-outlined text-indigo-500">account_tree</span>
+      설계변경 실무흐름도
+    </h2>
+    <p class="text-slate-600 mt-1">사유 발생 → 타당성 검토 → 변경설계 → 금액 산정 → 변경계약</p>
+  </div>
+
+  <div class="p-6">
+    <div class="mb-6 p-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-800 flex items-start gap-2">
+      <span class="material-symbols-outlined text-red-500 mt-0.5" style="font-size:18px">block</span>
+      <span><strong>핵심 원칙</strong> 설계변경은 반드시 <strong>사전 승인 후 시공</strong> — 사후 설계변경은 감사 지적 1순위</span>
+    </div>
+
+    <div class="space-y-4">
+      <div class="mb-2">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded-full">
+          <span class="material-symbols-outlined" style="font-size:14px">flag</span>
+          PHASE 1 — 사유 확인 · 검토
+        </span>
+      </div>
+
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">1</div>
+        <div class="flex-1 bg-blue-50 rounded-xl p-4 border border-blue-200">
+          <h4 class="font-semibold text-blue-800 mb-2">설계변경 사유 발생 · 확인</h4>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• <strong class="text-blue-700">설계서 오류·누락:</strong> 도면과 시방서 모순, 누락 사항</li>
+            <li>• <strong class="text-blue-700">현장 조건 상이:</strong> 지질, 지하매설물 등이 설계서와 다름</li>
+            <li>• <strong class="text-blue-700">시공 불가:</strong> 설계 공법이 현장에서 시공 불가능</li>
+            <li>• <strong class="text-blue-700">발주기관 요구:</strong> 사업계획 변경, 민원 반영</li>
+            <li>• 설계변경 사유서 작성 + 감독관 현장확인서</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="flex justify-center"><span class="material-symbols-outlined text-slate-300 text-2xl">arrow_downward</span></div>
+
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-violet-500 text-white rounded-full flex items-center justify-center font-bold">2</div>
+        <div class="flex-1 bg-violet-50 rounded-xl p-4 border border-violet-200">
+          <h4 class="font-semibold text-violet-800 mb-2">타당성 검토 · 승인</h4>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• 현장 조사 및 기술적 타당성 검토</li>
+            <li>• 총공사비 <strong class="text-violet-700">10% 이내:</strong> 계약담당자 승인</li>
+            <li>• 총공사비 <strong class="text-violet-700">10% 초과:</strong> 기관장 승인 + 예산 확보</li>
+            <li>• 주요 구조물 변경 시 → 설계심의위원회 검토</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="flex justify-center"><span class="material-symbols-outlined text-slate-300 text-2xl">arrow_downward</span></div>
+
+      <div class="mb-2">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-100 text-amber-700 text-xs font-bold rounded-full">
+          <span class="material-symbols-outlined" style="font-size:14px">flag</span>
+          PHASE 2 — 변경설계 · 금액 산정
+        </span>
+      </div>
+
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-amber-500 text-white rounded-full flex items-center justify-center font-bold">3</div>
+        <div class="flex-1 bg-amber-50 rounded-xl p-4 border border-amber-200">
+          <h4 class="font-semibold text-amber-800 mb-2">변경설계도서 작성</h4>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• <strong class="text-amber-700">변경설계도면</strong> (변경 전·후 대비)</li>
+            <li>• <strong class="text-amber-700">변경수량산출서</strong> (물량 증감 내역)</li>
+            <li>• <strong class="text-amber-700">변경산출내역서</strong> (단가 적용 근거)</li>
+            <li>• 신규비목 발생 시 단가 산정 근거 확보</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="flex justify-center"><span class="material-symbols-outlined text-slate-300 text-2xl">arrow_downward</span></div>
+
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold">4</div>
+        <div class="flex-1 bg-orange-50 rounded-xl p-4 border border-orange-200">
+          <h4 class="font-semibold text-orange-800 mb-2">계약금액 산정</h4>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• <strong class="text-orange-700">기존 비목:</strong> 증감 물량 x 계약단가</li>
+            <li>• <strong class="text-orange-700">신규비목:</strong> ①설계변경 당시 단가 → ②거래실례가격 → ③감정가격</li>
+            <li>• 계약단가 > 예정가격 단가인 비목 감소 시 → <strong class="text-orange-700">예정가격 단가</strong> 적용</li>
+            <li>• 변경 전·후 총괄표 작성</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="flex justify-center"><span class="material-symbols-outlined text-slate-300 text-2xl">arrow_downward</span></div>
+
+      <div class="mb-2">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full">
+          <span class="material-symbols-outlined" style="font-size:14px">flag</span>
+          PHASE 3 — 변경계약 체결
+        </span>
+      </div>
+
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-green-500 text-white rounded-full flex items-center justify-center font-bold">5</div>
+        <div class="flex-1 bg-green-50 rounded-xl p-4 border border-green-200">
+          <h4 class="font-semibold text-green-800 mb-2">변경계약 체결 · 공기 연장</h4>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• 설계변경 완료일(또는 청구일)부터 <strong class="text-green-700">30일 이내</strong> 계약금액 조정</li>
+            <li>• <strong class="text-green-700">변경계약서</strong> + 변경산출내역서 작성</li>
+            <li>• 추가 공사기간은 <strong class="text-green-700">공기 연장</strong> (해당 기간 지체상금 면제)</li>
+            <li>• 계약보증금 추가 납부 여부 확인</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <details open class="mt-8 border border-slate-200 rounded-xl overflow-hidden">
+      <summary class="flex items-center gap-3 p-4 bg-slate-50 hover:bg-slate-100 transition-colors cursor-pointer">
+        <span class="material-symbols-outlined text-slate-500">info</span>
+        <span class="font-semibold text-slate-700">참고 안내</span>
+        <span class="text-xs text-slate-400 ml-auto">설계변경 vs 물량변경 · 감사대비</span>
+      </summary>
+      <div class="p-4 space-y-4">
+        <div class="bg-white border border-slate-200 rounded-xl p-4">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined text-blue-500">compare</span>
+            <div class="w-full">
+              <h4 class="font-semibold text-slate-800 mb-3">설계변경 vs 단순 물량변경</h4>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                <div class="p-3 bg-blue-50 rounded-lg border border-blue-100">
+                  <div class="font-bold text-blue-800 mb-2">설계변경</div>
+                  <p class="text-slate-700">설계도서 자체를 변경</p>
+                  <p class="text-xs text-slate-500 mt-1">도면 변경 있음</p>
+                  <p class="text-xs text-slate-500">신규비목 발생 가능</p>
+                  <p class="text-xs text-slate-500">설계변경 심의 필요</p>
+                </div>
+                <div class="p-3 bg-amber-50 rounded-lg border border-amber-100">
+                  <div class="font-bold text-amber-800 mb-2">물량변경</div>
+                  <p class="text-slate-700">당초 설계 범위 내 수량 증감</p>
+                  <p class="text-xs text-slate-500 mt-1">도면 변경 없음</p>
+                  <p class="text-xs text-slate-500">계약단가 적용</p>
+                  <p class="text-xs text-slate-500">정산 시 조정</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-red-50 border border-red-200 rounded-xl p-4">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined text-red-500">gavel</span>
+            <div>
+              <h4 class="font-semibold text-red-800 mb-2">감사 대비 체크리스트</h4>
+              <ul class="text-sm text-slate-700 space-y-1.5">
+                <li class="flex items-start gap-2"><span class="material-symbols-outlined text-red-400 text-lg mt-0.5">warning</span><span><strong>사후 설계변경</strong> — 승인 없이 시공 후 변경 처리 (가장 많은 지적)</span></li>
+                <li class="flex items-start gap-2"><span class="material-symbols-outlined text-red-400 text-lg mt-0.5">warning</span><span><strong>신규비목 단가 과다</strong> — 객관적 근거 없이 높은 단가 적용 시 환수</span></li>
+                <li class="flex items-start gap-2"><span class="material-symbols-outlined text-red-400 text-lg mt-0.5">warning</span><span><strong>10% 범위 미확인</strong> — 초과 시 기관장 승인 없이 처리하면 부적정</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </details>
+  </div>
+</div>
