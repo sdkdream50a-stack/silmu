@@ -222,8 +222,8 @@ var docPopupData = {
     title: '긴급수의 사유서 단계 공문/양식',
     groups: [
       { label: '필수', icon: 'verified', color: '#dc2626', items: [
-        { name: '긴급수의 사유서', desc: '긴급수의 필요성 및 사유 기재', icon: 'edit_document', color: '#dc2626' },
-        { name: '긴급상황 증빙자료', desc: '긴급성 입증 관련 자료 첨부', icon: 'attach_file', color: '#dc2626' }
+        { name: '긴급수의 사유서', desc: '긴급수의 필요성 및 사유 기재', icon: 'edit_document', color: '#dc2626', tool: '<%= contract_reason_path %>', toolLabel: '사유서 생성기' },
+        { name: '긴급상황 증빙자료', desc: '긴급성 입증 관련 자료 첨부 (자체 준비)', icon: 'attach_file', color: '#dc2626' }
       ]}
     ]
   },
@@ -240,11 +240,11 @@ var docPopupData = {
     title: '이행/사후관리 단계 공문/양식',
     groups: [
       { label: '필수', icon: 'verified', color: '#dc2626', items: [
-        { name: '검수조서', desc: '규격·수량·품질 검사 기록', icon: 'fact_check', color: '#d97706' },
-        { name: '지출결의서', desc: '지출원인행위 결의', icon: 'request_quote', color: '#e11d48' }
+        { name: '검수조서', desc: '규격·수량·품질 검사 기록', icon: 'fact_check', color: '#d97706', tool: '<%= progress_inspection_path %>' },
+        { name: '지출결의서', desc: '지출원인행위 결의', icon: 'request_quote', color: '#e11d48', tool: '<%= official_document_path %>?type=draft', toolLabel: 'AI 공문서 (기안문)' }
       ]},
       { label: '사후 관리', icon: 'folder', color: '#64748b', items: [
-        { name: '긴급수의 결과보고서', desc: '긴급수의 집행 결과 정리·보고', icon: 'summarize', color: '#64748b' }
+        { name: '긴급수의 결과보고서', desc: '긴급수의 집행 결과 정리·보고', icon: 'summarize', color: '#64748b', tool: '<%= official_document_path %>?type=report', toolLabel: 'AI 공문서 (보고문)' }
       ]}
     ]
   }

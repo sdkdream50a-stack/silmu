@@ -50,51 +50,113 @@
         </div>
 
         <!-- 핵심 정보 카드 -->
-        <div class="space-y-6 mb-8">
+        <div class="space-y-5 mb-8">
           <!-- 지적사항 -->
-          <div class="card p-6 border-l-4 border-red-500">
-            <h2 class="font-bold text-red-800 flex items-center gap-2 mb-3">
-              <span class="material-symbols-outlined">report</span>
+          <div class="card p-5 lg:p-6 border-l-4 border-red-500">
+            <h2 class="text-base font-bold text-red-800 flex items-center gap-2 mb-3">
+              <span class="material-symbols-outlined text-lg">report</span>
               지적사항
             </h2>
-            <p class="text-slate-700 leading-relaxed"><%= simple_format(@audit_case.issue) %></p>
+            <div class="text-sm text-slate-700 leading-relaxed"><%= simple_format(@audit_case.issue) %></div>
+            <div class="mt-3 flex items-center gap-2 px-3 py-2 bg-red-50 rounded-lg text-xs text-red-700">
+              <span class="material-symbols-outlined text-sm">warning</span>
+              <span>심각도: <strong><%= @audit_case.severity %></strong></span>
+              <span class="mx-1 text-red-300">|</span>
+              <span>분야: <strong><%= @audit_case.category %></strong></span>
+            </div>
           </div>
 
           <!-- 관련근거 -->
-          <div class="card p-6 border-l-4 border-blue-500">
-            <h2 class="font-bold text-blue-800 flex items-center gap-2 mb-3">
-              <span class="material-symbols-outlined">menu_book</span>
+          <div class="card p-5 lg:p-6 border-l-4 border-blue-500">
+            <h2 class="text-base font-bold text-blue-800 flex items-center gap-2 mb-3">
+              <span class="material-symbols-outlined text-lg">menu_book</span>
               관련근거
             </h2>
-            <p class="text-slate-700 font-medium"><%= @audit_case.legal_basis %></p>
+            <div class="flex items-start gap-3 p-3 bg-blue-50 rounded-xl">
+              <span class="material-symbols-outlined text-blue-500 mt-0.5 flex-shrink-0">gavel</span>
+              <div>
+                <p class="text-sm font-semibold text-blue-900"><%= @audit_case.legal_basis %></p>
+                <% if @audit_case.topic_slug.present? && @related_topic %>
+                  <%= link_to topic_path(@related_topic.slug), class: "inline-flex items-center gap-1 mt-2 text-xs text-blue-600 hover:text-blue-800 font-medium" do %>
+                    <span class="material-symbols-outlined text-xs">open_in_new</span>
+                    해당 법령 가이드 보기
+                  <% end %>
+                <% end %>
+              </div>
+            </div>
           </div>
 
           <!-- 조치내용 -->
-          <div class="card p-6 border-l-4 border-orange-500">
-            <h2 class="font-bold text-orange-800 flex items-center gap-2 mb-3">
-              <span class="material-symbols-outlined">assignment_turned_in</span>
+          <div class="card p-5 lg:p-6 border-l-4 border-orange-500">
+            <h2 class="text-base font-bold text-orange-800 flex items-center gap-2 mb-3">
+              <span class="material-symbols-outlined text-lg">assignment_turned_in</span>
               조치내용
             </h2>
-            <p class="text-slate-700 leading-relaxed"><%= simple_format(@audit_case.action_taken) %></p>
+            <div class="text-sm text-slate-700 leading-relaxed">
+              <% @audit_case.action_taken.split(',').map(&:strip).each do |action| %>
+                <div class="flex items-start gap-2 mb-2">
+                  <span class="material-symbols-outlined text-orange-500 text-sm mt-0.5 flex-shrink-0">check_circle</span>
+                  <span><%= action %></span>
+                </div>
+              <% end %>
+            </div>
           </div>
 
           <!-- 교훈/시사점 -->
-          <div class="card p-6 border-l-4 border-green-500 bg-green-50/50">
-            <h2 class="font-bold text-green-800 flex items-center gap-2 mb-3">
-              <span class="material-symbols-outlined">lightbulb</span>
+          <div class="card p-5 lg:p-6 border-l-4 border-green-500 bg-green-50/30">
+            <h2 class="text-base font-bold text-green-800 flex items-center gap-2 mb-3">
+              <span class="material-symbols-outlined text-lg">lightbulb</span>
               교훈 및 시사점
             </h2>
-            <p class="text-slate-700 leading-relaxed"><%= simple_format(@audit_case.lesson) %></p>
+            <div class="text-sm text-slate-700 leading-relaxed"><%= simple_format(@audit_case.lesson) %></div>
+          </div>
+
+          <!-- 실무 체크포인트 -->
+          <div class="card p-5 lg:p-6 bg-indigo-50/50 border border-indigo-100">
+            <h2 class="text-base font-bold text-indigo-800 flex items-center gap-2 mb-3">
+              <span class="material-symbols-outlined text-lg">checklist</span>
+              실무 체크포인트
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div class="flex items-start gap-2 p-3 bg-white rounded-xl text-sm">
+                <span class="material-symbols-outlined text-indigo-500 text-lg flex-shrink-0">shield</span>
+                <div>
+                  <span class="font-semibold text-slate-800">사전 예방</span>
+                  <p class="text-xs text-slate-500 mt-0.5"><%= @audit_case.legal_basis %> 조항을 사전에 확인하세요</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-2 p-3 bg-white rounded-xl text-sm">
+                <span class="material-symbols-outlined text-indigo-500 text-lg flex-shrink-0">fact_check</span>
+                <div>
+                  <span class="font-semibold text-slate-800">서류 점검</span>
+                  <p class="text-xs text-slate-500 mt-0.5">관련 근거 서류가 빠짐없이 구비되었는지 확인하세요</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-2 p-3 bg-white rounded-xl text-sm">
+                <span class="material-symbols-outlined text-indigo-500 text-lg flex-shrink-0">schedule</span>
+                <div>
+                  <span class="font-semibold text-slate-800">기한 준수</span>
+                  <p class="text-xs text-slate-500 mt-0.5">법정 처리기한 및 절차 순서를 반드시 지키세요</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-2 p-3 bg-white rounded-xl text-sm">
+                <span class="material-symbols-outlined text-indigo-500 text-lg flex-shrink-0">history_edu</span>
+                <div>
+                  <span class="font-semibold text-slate-800">기록 보관</span>
+                  <p class="text-xs text-slate-500 mt-0.5">의사결정 과정과 근거를 문서로 남기세요</p>
+                </div>
+              </div>
+            </div>
           </div>
 
           <!-- 상세 내용 (있을 경우) -->
           <% if @audit_case.detail.present? %>
-            <div class="card p-6">
-              <h2 class="font-bold text-slate-900 flex items-center gap-2 mb-4">
-                <span class="material-symbols-outlined">description</span>
+            <div class="card p-5 lg:p-6">
+              <h2 class="text-base font-bold text-slate-900 flex items-center gap-2 mb-4">
+                <span class="material-symbols-outlined text-lg">description</span>
                 상세 분석
               </h2>
-              <div class="prose prose-navy max-w-none text-slate-700 leading-relaxed">
+              <div class="text-sm text-slate-700 leading-relaxed">
                 <%= simple_format(@audit_case.detail) %>
               </div>
             </div>

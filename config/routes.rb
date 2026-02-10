@@ -79,6 +79,10 @@ Rails.application.routes.draw do
   # 사업계획서 생성기
   get "tools/project-plan", to: "project_plans#index", as: :project_plan
 
+  # 공문서 AI 작성 도우미
+  get "tools/official-document", to: "official_documents#index", as: :official_document
+  post "official-documents/generate", to: "official_documents#generate"
+
   # 수의계약 사유서 생성기
   get "tools/contract-reason", to: "contract_reasons#index", as: :contract_reason
 

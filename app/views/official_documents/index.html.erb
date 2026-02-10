@@ -1,0 +1,392 @@
+<%# 공문서 AI 작성 도우미 %>
+
+<style>
+.od-card { background:#fff; border-radius:16px; border:1px solid #e5e7eb; padding:28px; margin-bottom:24px; }
+.od-label { display:block; font-size:13px; font-weight:700; color:#334155; margin-bottom:6px; }
+.od-label .od-required { color:#ef4444; margin-left:2px; }
+.od-input { width:100%; border:1px solid #e5e7eb; border-radius:10px; padding:10px 14px; font-size:14px; color:#1e293b; transition:border-color .2s, box-shadow .2s; background:#fff; }
+.od-input:focus { outline:none; border-color:#4f46e5; box-shadow:0 0 0 3px rgba(79,70,229,.1); }
+.od-textarea { min-height:120px; resize:vertical; font-family:inherit; }
+.od-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.od-btn { display:inline-flex; align-items:center; gap:6px; padding:12px 28px; border-radius:12px; font-weight:600; font-size:15px; border:none; cursor:pointer; transition:all .2s; }
+.od-btn-primary { background:#4f46e5; color:#fff; }
+.od-btn-primary:hover { background:#4338ca; }
+.od-btn-primary:disabled { background:#a5b4fc; cursor:not-allowed; }
+.od-btn-secondary { background:#f1f5f9; color:#475569; border:1px solid #e2e8f0; }
+.od-btn-secondary:hover { background:#e2e8f0; }
+
+/* Step */
+.od-step { margin-bottom:20px; }
+.od-step-header { font-size:14px; font-weight:700; color:#312e81; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+.od-step-num { width:24px; height:24px; background:#4f46e5; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; }
+
+/* Type grid */
+.od-type-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; }
+.od-type-btn { background:#fff; border:2px solid #e5e7eb; border-radius:14px; padding:18px 14px; text-align:center; cursor:pointer; transition:all .2s; }
+.od-type-btn:hover { border-color:#4f46e5; background:#eef2ff; }
+.od-type-btn.selected { border-color:#4f46e5; background:#eef2ff; box-shadow:0 0 0 3px rgba(79,70,229,.15); }
+.od-type-btn .od-type-icon { font-size:28px; color:#4f46e5; margin-bottom:6px; }
+.od-type-btn .od-type-name { font-weight:700; font-size:14px; color:#1e293b; }
+.od-type-btn .od-type-desc { font-size:11px; color:#64748b; margin-top:2px; }
+
+/* Tone selector */
+.od-tone-group { display:flex; gap:10px; flex-wrap:wrap; }
+.od-tone-btn { padding:8px 18px; border:2px solid #e5e7eb; border-radius:10px; font-size:13px; font-weight:600; color:#475569; cursor:pointer; transition:all .2s; background:#fff; }
+.od-tone-btn:hover { border-color:#4f46e5; }
+.od-tone-btn.selected { border-color:#4f46e5; background:#eef2ff; color:#4f46e5; }
+
+.od-form-section { display:none; }
+.od-form-section.active { display:block; }
+
+/* Result */
+.od-result { background:#fff; border:2px solid #a5b4fc; border-radius:16px; padding:32px; display:none; }
+.od-result.active { display:block; }
+.od-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:0; margin-bottom:20px; }
+
+/* Loading */
+.od-loading { display:none; text-align:center; padding:40px 20px; }
+.od-loading.active { display:block; }
+.od-spinner { width:40px; height:40px; border:4px solid #e2e8f0; border-top:4px solid #4f46e5; border-radius:50%; animation:odSpin .8s linear infinite; margin:0 auto 16px; }
+@keyframes odSpin { to { transform:rotate(360deg); } }
+
+/* Toast */
+.od-toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(100px); background:#1e293b; color:#fff; padding:12px 24px; border-radius:12px; font-size:14px; font-weight:600; z-index:9999; transition:transform .3s ease; display:flex; align-items:center; gap:8px; }
+.od-toast.show { transform:translateX(-50%) translateY(0); }
+
+/* Info box */
+.od-info-box { background:#eef2ff; border:1px solid #c7d2fe; border-radius:12px; padding:14px 18px; margin-bottom:20px; display:flex; align-items:flex-start; gap:10px; }
+.od-info-box .material-symbols-outlined { color:#4f46e5; flex-shrink:0; margin-top:1px; }
+.od-info-text { font-size:13px; color:#475569; line-height:1.6; }
+
+@media print {
+  body * { visibility:hidden; }
+  #od-result, #od-result * { visibility:visible; }
+  #od-result { position:absolute; left:0; top:0; width:100%; padding:20px; border:none; }
+  .no-print { display:none !important; }
+}
+@media (max-width:640px) {
+  .od-type-grid { grid-template-columns:1fr 1fr; }
+  .od-grid { grid-template-columns:1fr; }
+}
+</style>
+
+<!-- 헤더 -->
+<section class="gradient-indigo text-white py-12 lg:py-16">
+  <div class="container-wide">
+    <div class="flex items-start gap-5">
+      <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 shadow-lg">
+        <span class="material-symbols-outlined text-4xl text-white">auto_awesome</span>
+      </div>
+      <div>
+        <h1 class="text-3xl lg:text-4xl font-bold tracking-tight mb-2">공문서 AI 작성 도우미</h1>
+        <p class="text-indigo-100 text-lg">행정업무운영규정에 맞는 공문서를 AI가 자동으로 작성합니다</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-10">
+  <div class="container-wide max-w-4xl">
+
+    <div class="od-info-box">
+      <span class="material-symbols-outlined" style="font-size:20px;">info</span>
+      <div class="od-info-text">
+        행정업무의 운영 및 혁신에 관한 규정(대통령령)에 따른 표준 공문서 형식으로 작성됩니다.
+        생성된 문서는 실무에 맞게 수정하여 사용하세요.
+      </div>
+    </div>
+
+    <div class="od-card" id="od-form-card">
+      <h2 style="font-size:20px; font-weight:700; color:#1e293b; margin-bottom:20px; display:flex; align-items:center; gap:8px;">
+        <span class="material-symbols-outlined text-indigo-500">edit_note</span>
+        공문서 작성
+      </h2>
+
+      <!-- Step 1: 문서 유형 선택 -->
+      <div class="od-step">
+        <div class="od-step-header">
+          <div class="od-step-num">1</div>
+          문서 유형 선택 <span style="color:#ef4444; margin-left:2px;">*</span>
+        </div>
+        <div class="od-type-grid" id="od-type-grid">
+          <div class="od-type-btn" data-type="draft" onclick="odSelectType(this)">
+            <div class="od-type-icon"><span class="material-symbols-outlined">assignment</span></div>
+            <div class="od-type-name">기안문(품의서)</div>
+            <div class="od-type-desc">내부 승인 요청·예산 집행</div>
+          </div>
+          <div class="od-type-btn" data-type="cooperation" onclick="odSelectType(this)">
+            <div class="od-type-icon"><span class="material-symbols-outlined">handshake</span></div>
+            <div class="od-type-name">협조문</div>
+            <div class="od-type-desc">타 부서·기관에 협조 요청</div>
+          </div>
+          <div class="od-type-btn" data-type="notification" onclick="odSelectType(this)">
+            <div class="od-type-icon"><span class="material-symbols-outlined">campaign</span></div>
+            <div class="od-type-name">통보문</div>
+            <div class="od-type-desc">결과·계약 체결 통보</div>
+          </div>
+          <div class="od-type-btn" data-type="report" onclick="odSelectType(this)">
+            <div class="od-type-icon"><span class="material-symbols-outlined">summarize</span></div>
+            <div class="od-type-name">보고문</div>
+            <div class="od-type-desc">추진현황·결과 보고</div>
+          </div>
+          <div class="od-type-btn" data-type="reply" onclick="odSelectType(this)">
+            <div class="od-type-icon"><span class="material-symbols-outlined">reply</span></div>
+            <div class="od-type-name">회신문</div>
+            <div class="od-type-desc">질의·요청에 대한 답변</div>
+          </div>
+          <div class="od-type-btn" data-type="inquiry" onclick="odSelectType(this)">
+            <div class="od-type-icon"><span class="material-symbols-outlined">help</span></div>
+            <div class="od-type-name">의견조회문</div>
+            <div class="od-type-desc">관련 부서 의견 조회</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: 입력 폼 -->
+      <div class="od-step od-form-section" id="od-form-section">
+        <div class="od-step-header">
+          <div class="od-step-num">2</div>
+          공문 정보 입력
+        </div>
+
+        <div class="od-grid" style="margin-bottom:16px;">
+          <div>
+            <label class="od-label">수신 <span class="od-required">*</span></label>
+            <input type="text" class="od-input" id="od-recipient" placeholder="예: 총무과장, ○○시장">
+          </div>
+          <div>
+            <label class="od-label">제목 <span class="od-required">*</span></label>
+            <input type="text" class="od-input" id="od-title" placeholder="예: 사무실 LED 조명 교체 추진 계획">
+          </div>
+        </div>
+
+        <div style="margin-bottom:16px;">
+          <label class="od-label">작성 내용 요약 <span class="od-required">*</span></label>
+          <textarea class="od-input od-textarea" id="od-content-summary" placeholder="AI가 본문을 생성할 핵심 내용을 작성하세요.&#10;&#10;예: 노후된 형광등을 LED 조명으로 교체하려고 합니다. 총 150개 교체 예정이며, 예산은 1,500만원입니다. 에너지 절감 효과가 약 40% 예상됩니다. 3월 중 시행 예정."></textarea>
+        </div>
+
+        <div class="od-grid" style="margin-bottom:16px;">
+          <div>
+            <label class="od-label">발신 부서</label>
+            <input type="text" class="od-input" id="od-sender-dept" placeholder="예: 총무과">
+          </div>
+          <div>
+            <label class="od-label">담당자명</label>
+            <input type="text" class="od-input" id="od-sender-name" placeholder="예: 홍길동">
+          </div>
+        </div>
+
+        <div class="od-grid" style="margin-bottom:16px;">
+          <div>
+            <label class="od-label">연락처</label>
+            <input type="text" class="od-input" id="od-sender-phone" placeholder="예: 02-1234-5678">
+          </div>
+          <div>
+            <label class="od-label">관련 문서 번호</label>
+            <input type="text" class="od-input" id="od-related-doc" placeholder="예: 총무과-1234호(2026.2.10.)">
+          </div>
+        </div>
+
+        <div style="margin-bottom:16px;">
+          <label class="od-label">붙임 파일명 <span style="font-weight:400; color:#94a3b8;">(쉼표로 구분)</span></label>
+          <input type="text" class="od-input" id="od-attachments" placeholder="예: 사업계획서, 예산내역서, 견적서">
+        </div>
+
+        <div style="margin-bottom:16px;">
+          <label class="od-label">톤 선택</label>
+          <div class="od-tone-group" id="od-tone-group">
+            <div class="od-tone-btn selected" data-tone="normal" onclick="odSelectTone(this)">일반</div>
+            <div class="od-tone-btn" data-tone="formal" onclick="odSelectTone(this)">격식</div>
+            <div class="od-tone-btn" data-tone="concise" onclick="odSelectTone(this)">간결</div>
+          </div>
+        </div>
+
+        <div style="text-align:center; margin-top:24px;">
+          <button class="od-btn od-btn-primary" id="od-generate-btn" onclick="odGenerate()">
+            <span class="material-symbols-outlined">auto_awesome</span>
+            공문서 생성
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 로딩 -->
+    <div class="od-loading" id="od-loading">
+      <div class="od-spinner"></div>
+      <div style="font-size:15px; font-weight:600; color:#4f46e5;">AI가 공문서를 작성하고 있습니다...</div>
+      <div style="font-size:13px; color:#94a3b8; margin-top:8px;">행정업무운영규정에 맞게 작성 중 (약 10~20초)</div>
+    </div>
+
+    <!-- 결과 -->
+    <div class="od-result" id="od-result">
+      <div class="no-print od-actions">
+        <button class="od-btn od-btn-secondary" onclick="odCopy()">
+          <span class="material-symbols-outlined" style="font-size:18px;">content_copy</span> 복사
+        </button>
+        <button class="od-btn od-btn-secondary" onclick="odDownload()">
+          <span class="material-symbols-outlined" style="font-size:18px;">download</span> 다운로드
+        </button>
+        <button class="od-btn od-btn-secondary" onclick="window.print()">
+          <span class="material-symbols-outlined" style="font-size:18px;">print</span> 인쇄
+        </button>
+        <button class="od-btn od-btn-secondary" onclick="odRegenerate()" id="od-regenerate-btn">
+          <span class="material-symbols-outlined" style="font-size:18px;">refresh</span> 다시 생성
+        </button>
+        <button class="od-btn od-btn-secondary" onclick="odReset()" style="margin-left:auto;">
+          <span class="material-symbols-outlined" style="font-size:18px;">restart_alt</span> 새 문서 작성
+        </button>
+      </div>
+      <div id="od-doc-content"></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- 토스트 -->
+<div class="od-toast" id="od-toast">
+  <span class="material-symbols-outlined" style="font-size:18px;">check_circle</span>
+  <span id="od-toast-msg"></span>
+</div>
+
+<script>
+var odState = { type: null, tone: 'normal' };
+
+var odTypeLabels = {
+  draft: '기안문(품의서)',
+  cooperation: '협조문',
+  notification: '통보문',
+  report: '보고문',
+  reply: '회신문',
+  inquiry: '의견조회문'
+};
+
+function odSelectType(el) {
+  document.querySelectorAll('#od-type-grid .od-type-btn').forEach(function(b) { b.classList.remove('selected'); });
+  el.classList.add('selected');
+  odState.type = el.dataset.type;
+  document.getElementById('od-form-section').classList.add('active');
+}
+
+function odSelectTone(el) {
+  document.querySelectorAll('#od-tone-group .od-tone-btn').forEach(function(b) { b.classList.remove('selected'); });
+  el.classList.add('selected');
+  odState.tone = el.dataset.tone;
+}
+
+// URL 파라미터로 문서 유형 사전 선택 (?type=notification 등)
+(function() {
+  var params = new URLSearchParams(window.location.search);
+  var preType = params.get('type');
+  if (preType && odTypeLabels[preType]) {
+    var btn = document.querySelector('#od-type-grid .od-type-btn[data-type="' + preType + '"]');
+    if (btn) odSelectType(btn);
+  }
+})();
+
+function odGenerate() {
+  if (!odState.type) { odShowToast('문서 유형을 선택하세요'); return; }
+  var recipient = document.getElementById('od-recipient').value.trim();
+  var title = document.getElementById('od-title').value.trim();
+  var contentSummary = document.getElementById('od-content-summary').value.trim();
+
+  if (!recipient) { odShowToast('수신을 입력하세요'); return; }
+  if (!title) { odShowToast('제목을 입력하세요'); return; }
+  if (!contentSummary) { odShowToast('작성 내용 요약을 입력하세요'); return; }
+
+  var btn = document.getElementById('od-generate-btn');
+  btn.disabled = true;
+  document.getElementById('od-loading').classList.add('active');
+  document.getElementById('od-result').classList.remove('active');
+
+  var params = {
+    doc_type: odState.type,
+    recipient: recipient,
+    title: title,
+    content_summary: contentSummary,
+    sender_dept: document.getElementById('od-sender-dept').value.trim(),
+    sender_name: document.getElementById('od-sender-name').value.trim(),
+    sender_phone: document.getElementById('od-sender-phone').value.trim(),
+    related_doc: document.getElementById('od-related-doc').value.trim(),
+    attachments: document.getElementById('od-attachments').value.trim(),
+    tone: odState.tone
+  };
+
+  fetch('/official-documents/generate', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+    },
+    body: JSON.stringify(params)
+  })
+  .then(function(res) { return res.json(); })
+  .then(function(data) {
+    btn.disabled = false;
+    document.getElementById('od-loading').classList.remove('active');
+
+    if (data.success) {
+      document.getElementById('od-doc-content').innerHTML = data.html;
+      document.getElementById('od-result').classList.add('active');
+      document.getElementById('od-result').scrollIntoView({ behavior:'smooth', block:'start' });
+      odShowToast('공문서가 생성되었습니다');
+    } else {
+      odShowToast(data.error || '생성에 실패했습니다');
+    }
+  })
+  .catch(function(err) {
+    btn.disabled = false;
+    document.getElementById('od-loading').classList.remove('active');
+    odShowToast('네트워크 오류가 발생했습니다');
+  });
+}
+
+function odRegenerate() {
+  document.getElementById('od-result').classList.remove('active');
+  odGenerate();
+}
+
+function odCopy() {
+  var el = document.getElementById('od-doc-content');
+  var text = el.innerText || el.textContent;
+  navigator.clipboard.writeText(text).then(function() {
+    odShowToast('클립보드에 복사되었습니다');
+  }).catch(function() {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    odShowToast('클립보드에 복사되었습니다');
+  });
+}
+
+function odDownload() {
+  var el = document.getElementById('od-doc-content');
+  var text = el.innerText || el.textContent;
+  var title = document.getElementById('od-title').value.trim() || '공문서';
+  var typeLabel = odTypeLabels[odState.type] || '공문서';
+  var blob = new Blob([text], { type:'text/plain;charset=utf-8' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = typeLabel + '_' + title + '.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  odShowToast('파일이 다운로드되었습니다');
+}
+
+function odReset() {
+  document.getElementById('od-result').classList.remove('active');
+  document.getElementById('od-form-card').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+function odShowToast(msg) {
+  var toast = document.getElementById('od-toast');
+  document.getElementById('od-toast-msg').textContent = msg;
+  toast.classList.add('show');
+  setTimeout(function() { toast.classList.remove('show'); }, 2500);
+}
+</script>

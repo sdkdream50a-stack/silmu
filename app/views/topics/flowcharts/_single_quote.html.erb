@@ -260,14 +260,14 @@ var docPopupData = {
     title: '이행/대금지급 단계 공문/양식',
     groups: [
       { label: '필수', icon: 'verified', color: '#dc2626', items: [
-        { name: '검수조서', desc: '규격·수량·품질 검사 기록', icon: 'fact_check', color: '#d97706', note: '소액 물품은 간이검수 가능' },
-        { name: '지출결의서', desc: '지출원인행위 결의 (검수완료 후 5일 이내)', icon: 'request_quote', color: '#e11d48' }
+        { name: '검수조서', desc: '규격·수량·품질 검사 기록', icon: 'fact_check', color: '#d97706', tool: '<%= progress_inspection_path %>', note: '소액 물품은 간이검수 가능' },
+        { name: '지출결의서', desc: '지출원인행위 결의 (검수완료 후 5일 이내)', icon: 'request_quote', color: '#e11d48', tool: '<%= official_document_path %>?type=draft', toolLabel: 'AI 공문서 (기안문)' }
       ]},
       { label: '하자보수', icon: 'build', color: '#ea580c', items: [
-        { name: '하자보수보증금', desc: '공사·용역 시 하자보수보증금 징구/면제 확인', icon: 'shield', color: '#ea580c', note: '시행령 제71조' }
+        { name: '하자보수보증금', desc: '공사·용역 시 하자보수보증금 징구/면제 확인', icon: 'shield', color: '#ea580c', tool: '<%= contract_guarantee_path %>', note: '시행령 제71조' }
       ]},
       { label: '계약상대자 제출', icon: 'person', color: '#6366f1', items: [
-        { name: '대금청구서', desc: '계약상대자가 대금 지급 청구', icon: 'request_quote', color: '#6366f1' }
+        { name: '대금청구서', desc: '계약상대자가 대금 지급 청구', icon: 'request_quote', color: '#6366f1', tool: '<%= template_path(5) %>', toolLabel: '서식 다운로드' }
       ]}
     ]
   }
