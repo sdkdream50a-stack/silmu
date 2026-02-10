@@ -6,7 +6,7 @@ class FeedbackMailer < ApplicationMailer
     @email = email
 
     mail(
-      to: "hello@silmu.kr",
+      to: "50adreamfire@gmail.com",
       subject: "[실무.kr 의견] #{category}"
     )
   end
