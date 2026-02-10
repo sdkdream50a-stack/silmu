@@ -52,13 +52,23 @@
             <div class="grid grid-cols-2 gap-4">
               <div>
                 <label class="block text-sm font-semibold text-slate-700 mb-2">출발지</label>
-                <input type="text" id="departure" placeholder="예: 서울" class="input" required>
+                <input type="text" id="departure" list="city-list" placeholder="예: 서울" class="input" required>
               </div>
               <div>
                 <label class="block text-sm font-semibold text-slate-700 mb-2">목적지</label>
-                <input type="text" id="destination" placeholder="예: 부산" class="input" required>
+                <input type="text" id="destination" list="city-list" placeholder="예: 부산" class="input" required>
               </div>
             </div>
+            <datalist id="city-list">
+              <option value="서울"><option value="부산"><option value="대구"><option value="인천">
+              <option value="광주"><option value="대전"><option value="울산"><option value="세종">
+              <option value="수원"><option value="창원"><option value="전주"><option value="청주">
+              <option value="춘천"><option value="강릉"><option value="제주"><option value="여수">
+              <option value="포항"><option value="목포"><option value="진주"><option value="원주">
+              <option value="천안"><option value="안동"><option value="경주"><option value="속초">
+              <option value="평택"><option value="구미"><option value="충주"><option value="군산">
+              <option value="익산"><option value="순천"><option value="김포">
+            </datalist>
 
             <!-- 출장 기간 -->
             <div class="grid grid-cols-2 gap-4">
@@ -266,45 +276,130 @@ document.addEventListener('turbo:load', function() {
     });
   });
 
-  // 여비 기준표 (국내, 2026년 기준 - 공무원여비규정 별표2)
-  // ※ 2023년 3월 개정으로 일비/식비 상향, 숙박비는 지역별 차등
-  const rates = {
-    // 숙박비 (1박당) - 지역별 차등 (모든 직급 동일)
-    // 서울: 100,000원, 광역시: 80,000원, 기타: 70,000원
-    accommodationByRegion: {
-      'seoul': 100000,      // 서울
-      'metro': 80000,       // 광역시 (부산, 대구, 인천, 광주, 대전, 울산)
-      'other': 70000        // 기타 지역
-    },
-    // 식비 (1일당) - 모든 직급 동일 25,000원
-    meal: 25000,
-    // 일비 (1일당) - 모든 직급 동일 25,000원
-    daily: 25000,
-    // 운임 (왕복 기준, 서울-부산 예시)
-    fare: {
-      train: 120000,  // KTX
-      bus: 60000,     // 고속버스
-      car: 80000,     // 자차 (유류비 + 통행료)
-      flight: 200000  // 항공
-    }
+  // ── 도시 좌표 데이터 ──
+  const cities = {
+    '서울':[37.5665,126.978],'부산':[35.1796,129.0756],'대구':[35.8714,128.6014],
+    '인천':[37.4563,126.7052],'광주':[35.1595,126.8526],'대전':[36.3504,127.3845],
+    '울산':[35.5384,129.3114],'세종':[36.48,127.26],'수원':[37.2636,127.0286],
+    '창원':[35.228,128.6811],'전주':[35.8242,127.148],'청주':[36.6424,127.489],
+    '춘천':[37.8813,127.7298],'강릉':[37.7519,128.8761],'제주':[33.4996,126.5312],
+    '여수':[34.7604,127.6622],'포항':[36.019,129.3435],'목포':[34.8118,126.3922],
+    '진주':[35.1802,128.1076],'원주':[37.3422,127.9202],'천안':[36.8151,127.1139],
+    '안동':[36.5684,128.7294],'경주':[35.8562,129.2247],'속초':[38.207,128.5918],
+    '평택':[36.992,127.089],'구미':[36.1197,128.3444],'충주':[36.991,127.9259],
+    '군산':[35.9676,126.7369],'익산':[35.9483,126.9577],'순천':[34.9506,127.4874],
+    '김포':[37.6152,126.7156]
   };
 
-  // 목적지별 지역 구분 (간단 판별용)
-  function getRegionType(destination) {
-    const metro = ['부산', '대구', '인천', '광주', '대전', '울산'];
-    if (destination.includes('서울')) return 'seoul';
-    for (const city of metro) {
-      if (destination.includes(city)) return 'metro';
-    }
+  // ── KTX/SRT 편도 일반실 (원) ──
+  const trainFares = {
+    '서울-부산':59800,'서울-대전':23700,'서울-대구':43500,'서울-울산':55500,
+    '서울-광주':41500,'서울-목포':48200,'서울-여수':51900,'서울-강릉':27600,
+    '서울-포항':48200,'서울-경주':52000,'서울-창원':52000,'서울-진주':48000,
+    '서울-천안':14800,'서울-전주':32000,'서울-청주':16000,'서울-원주':16000,
+    '서울-안동':32000,'서울-순천':46000,
+    '대전-부산':36800,'대전-대구':21000,'대전-광주':22000,'대전-전주':13000,
+    '대구-부산':16200,'대구-울산':14000,'대구-포항':14000,'대구-경주':12000,
+    '부산-울산':8200
+  };
+
+  // ── 고속/시외버스 편도 일반 (원) ──
+  const busFares = {
+    '서울-부산':23800,'서울-대전':9400,'서울-대구':18500,'서울-광주':18700,
+    '서울-울산':25000,'서울-전주':13000,'서울-강릉':17500,'서울-춘천':6800,
+    '서울-목포':24300,'서울-여수':23900,'서울-진주':22700,'서울-포항':22800,
+    '서울-창원':24500,'서울-천안':5500,'서울-청주':8000,'서울-원주':8300,
+    '서울-안동':17600,'서울-속초':16500,'서울-경주':22100,'서울-인천':2500,
+    '서울-세종':10200,'서울-수원':3000,'서울-평택':5500,'서울-충주':10000,
+    '서울-군산':14500,'서울-익산':13500,'서울-순천':22000,'서울-구미':16000,
+    '서울-김포':2000,
+    '대전-부산':17000,'대전-대구':10500,'대전-광주':12000,'대전-전주':6500,
+    '대전-청주':3000,'대전-세종':2500,'대전-천안':4000,
+    '대구-부산':8500,'대구-울산':7000,'대구-포항':6500,'대구-경주':4500,
+    '대구-안동':7500,'대구-구미':4000,
+    '부산-울산':5500,'부산-경주':7000,'부산-창원':4500,'부산-진주':9000,
+    '광주-전주':7000,'광주-목포':6500,'광주-여수':12000,'광주-순천':9000
+  };
+
+  // ── 항공 왕복 이코노미 평균 (원, 이미 왕복) ──
+  const flightFares = {
+    '서울-제주':130000,'서울-부산':110000,'서울-울산':120000,'서울-광주':100000,
+    '서울-여수':120000,'서울-포항':110000,'부산-제주':100000,'대구-제주':110000,
+    '청주-제주':100000,'광주-제주':90000,'여수-제주':80000,'울산-제주':100000,
+    '인천-제주':130000
+  };
+
+  // ── 여비 정액 (공무원여비규정 별표2) ──
+  const accommodationByRegion = { seoul: 100000, metro: 80000, other: 70000 };
+  const mealRate = 25000;
+  const dailyRate = 25000;
+
+  // ── 유틸리티 함수 ──
+  function haversine(lat1, lon1, lat2, lon2) {
+    const R = 6371, rad = Math.PI / 180;
+    const dLat = (lat2-lat1)*rad, dLon = (lon2-lon1)*rad;
+    const a = Math.sin(dLat/2)**2 + Math.cos(lat1*rad)*Math.cos(lat2*rad)*Math.sin(dLon/2)**2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  }
+
+  function getRoadDist(c1, c2) {
+    const p1 = cities[c1], p2 = cities[c2];
+    if (!p1 || !p2) return null;
+    return Math.round(haversine(p1[0],p1[1],p2[0],p2[1]) * 1.3);
+  }
+
+  function matchCity(input) {
+    input = input.trim();
+    if (!input) return null;
+    if (cities[input]) return input;
+    for (const c of Object.keys(cities)) { if (input.startsWith(c)) return c; }
+    for (const c of Object.keys(cities)) { if (c.startsWith(input)) return c; }
+    for (const c of Object.keys(cities)) { if (input.includes(c) || c.includes(input)) return c; }
+    return null;
+  }
+
+  function lookupFare(table, c1, c2) {
+    return table[c1+'-'+c2] || table[c2+'-'+c1] || null;
+  }
+
+  function getRegionType(dest) {
+    const metro = ['부산','대구','인천','광주','대전','울산'];
+    if (dest.includes('서울')) return 'seoul';
+    for (const city of metro) { if (dest.includes(city)) return 'metro'; }
     return 'other';
   }
 
-  const transportNames = {
-    train: 'KTX',
-    bus: '고속버스',
-    car: '자차',
-    flight: '항공'
-  };
+  function calcFare(transport, c1, c2) {
+    const dist = getRoadDist(c1, c2);
+    if (!dist || dist < 1) return { fare: 0, estimated: true, desc: '동일 지역' };
+    const isIsland = (c1 === '제주' || c2 === '제주');
+    let fare, estimated = false, desc;
+
+    if (transport === 'train') {
+      if (isIsland) return { fare: 0, desc: '제주는 철도 노선이 없습니다', unavailable: true };
+      const known = lookupFare(trainFares, c1, c2);
+      if (known) { fare = known * 2; desc = 'KTX 왕복 일반실'; }
+      else { fare = Math.round(dist*140/100)*100*2; estimated = true; desc = 'KTX 추정 왕복'; }
+    } else if (transport === 'bus') {
+      if (isIsland) return { fare: 0, desc: '제주는 시외버스 노선이 없습니다', unavailable: true };
+      const known = lookupFare(busFares, c1, c2);
+      if (known) { fare = known * 2; desc = '고속버스 왕복 일반'; }
+      else { fare = Math.round(dist*57/100)*100*2; estimated = true; desc = '고속버스 추정 왕복'; }
+    } else if (transport === 'car') {
+      if (isIsland) return { fare: 0, desc: '제주는 자차 이동 불가', unavailable: true };
+      fare = Math.round(dist*2*177/1000)*1000;
+      estimated = true;
+      desc = '자차 왕복 약 '+(dist*2).toLocaleString()+'km (유류비+통행료)';
+    } else if (transport === 'flight') {
+      const known = lookupFare(flightFares, c1, c2);
+      if (known) { fare = known; desc = '항공 왕복 이코노미'; }
+      else if (isIsland) { fare = 120000; estimated = true; desc = '제주 항공 추정 왕복'; }
+      else { fare = Math.min(200000, Math.max(80000, Math.round(dist*300/1000)*1000)); estimated = true; desc = '항공 추정 왕복'; }
+    }
+    return { fare: fare||0, estimated, desc };
+  }
+
+  const transportNames = { train: 'KTX', bus: '고속버스', car: '자차', flight: '항공' };
 
   // 폼 제출 처리
   document.getElementById('travel-form').addEventListener('submit', function(e) {
@@ -314,11 +409,9 @@ document.addEventListener('turbo:load', function() {
     const destination = document.getElementById('destination').value;
     const startDate = new Date(document.getElementById('start_date').value);
     const endDate = new Date(document.getElementById('end_date').value);
-    const grade = document.getElementById('grade').value;
     const transport = document.querySelector('input[name="transport"]:checked').value;
     const needAccommodation = document.getElementById('accommodation').checked;
 
-    // 일수 계산
     const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
     const nights = days - 1;
 
@@ -327,55 +420,61 @@ document.addEventListener('turbo:load', function() {
       if (errorEl) {
         errorEl.textContent = '도착일은 출발일 이후여야 합니다.';
         errorEl.classList.remove('hidden');
-        setTimeout(() => errorEl.classList.add('hidden'), 3000);
+        setTimeout(function(){ errorEl.classList.add('hidden'); }, 3000);
       }
       return;
     }
 
-    // 금액 계산
+    // 도시 매칭 및 운임 계산
+    const c1 = matchCity(departure);
+    const c2 = matchCity(destination);
+    let fareResult;
+    if (c1 && c2) {
+      fareResult = calcFare(transport, c1, c2);
+    } else {
+      fareResult = { fare: 0, estimated: true, desc: '목록에서 도시를 선택해주세요', unavailable: true };
+    }
+
+    // 숙박/식비/일비
     const regionType = getRegionType(destination);
-    const fareAmount = rates.fare[transport];
-    const accommodationRate = rates.accommodationByRegion[regionType];
-    const accommodationAmount = needAccommodation ? accommodationRate * nights : 0;
-    const mealAmount = rates.meal * days;
-    const dailyAmount = rates.daily * days;
-    const totalAmount = fareAmount + accommodationAmount + mealAmount + dailyAmount;
+    const accRate = accommodationByRegion[regionType];
+    const accAmount = needAccommodation ? accRate * nights : 0;
+    const mealAmount = mealRate * days;
+    const dailyAmount = dailyRate * days;
+    const totalAmount = fareResult.fare + accAmount + mealAmount + dailyAmount;
 
     // 결과 표시
     document.getElementById('result-placeholder').classList.add('hidden');
     document.getElementById('result-content').classList.remove('hidden');
 
-    // 총액
     document.getElementById('total-amount').textContent = '₩ ' + totalAmount.toLocaleString();
-
-    // 요약
-    document.getElementById('summary-route').textContent = `${departure} → ${destination}`;
-    document.getElementById('summary-days').textContent = nights > 0 ? `${nights}박 ${days}일` : `당일`;
+    document.getElementById('summary-route').textContent = departure + ' → ' + destination;
+    document.getElementById('summary-days').textContent = nights > 0 ? nights + '박 ' + days + '일' : '당일';
     document.getElementById('summary-transport').textContent = transportNames[transport];
 
     // 운임
-    document.getElementById('fare-desc').textContent = `${transportNames[transport]} 왕복 (${departure} ↔ ${destination})`;
-    document.getElementById('fare-amount').textContent = '₩ ' + fareAmount.toLocaleString();
+    let fareDesc = fareResult.desc + ' (' + departure + ' ↔ ' + destination + ')';
+    if (fareResult.estimated && !fareResult.unavailable) fareDesc = '≈ ' + fareDesc;
+    if (fareResult.unavailable) fareDesc = fareResult.desc;
+    document.getElementById('fare-desc').textContent = fareDesc;
+    document.getElementById('fare-amount').textContent = fareResult.unavailable ? '-' : '₩ ' + fareResult.fare.toLocaleString();
 
     // 숙박비
     const regionNames = { seoul: '서울', metro: '광역시', other: '기타지역' };
     if (needAccommodation && nights > 0) {
       document.getElementById('accommodation-row').classList.remove('hidden');
-      document.getElementById('accommodation-desc').textContent = `${accommodationRate.toLocaleString()}원(${regionNames[regionType]}) × ${nights}박`;
-      document.getElementById('accommodation-amount').textContent = '₩ ' + accommodationAmount.toLocaleString();
+      document.getElementById('accommodation-desc').textContent = accRate.toLocaleString() + '원(' + regionNames[regionType] + ') × ' + nights + '박';
+      document.getElementById('accommodation-amount').textContent = '₩ ' + accAmount.toLocaleString();
     } else {
       document.getElementById('accommodation-row').classList.add('hidden');
     }
 
-    // 식비
-    document.getElementById('meal-desc').textContent = `${rates.meal.toLocaleString()}원 × ${days}일`;
+    // 식비/일비
+    document.getElementById('meal-desc').textContent = mealRate.toLocaleString() + '원 × ' + days + '일';
     document.getElementById('meal-amount').textContent = '₩ ' + mealAmount.toLocaleString();
-
-    // 일비
-    document.getElementById('daily-desc').textContent = `${rates.daily.toLocaleString()}원 × ${days}일`;
+    document.getElementById('daily-desc').textContent = dailyRate.toLocaleString() + '원 × ' + days + '일';
     document.getElementById('daily-amount').textContent = '₩ ' + dailyAmount.toLocaleString();
 
-    // 결과 영역으로 스크롤 (모바일)
     if (window.innerWidth < 1024) {
       document.getElementById('result-content').scrollIntoView({ behavior: 'smooth' });
     }
