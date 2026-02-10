@@ -725,6 +725,7 @@ document.addEventListener('turbo:load', function() {
     })
     .then(function(r) { return r.json(); })
     .then(function(result) {
+      if (window.checkAiLoginRequired && window.checkAiLoginRequired(result)) { btn.disabled = false; return; }
       if (result.success && result.fields) {
         ceAnalyzedData = result.fields;
         var itemCount = (result.fields.items || []).length;

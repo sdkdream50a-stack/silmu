@@ -1,6 +1,7 @@
 class DocumentAnalysisController < ApplicationController
   # 정적 HTML(public/forms/)에서 호출하므로 CSRF 예외 처리 + Origin 검증으로 보완
   skip_before_action :verify_authenticity_token, only: [:analyze]
+  before_action :require_login_for_ai, only: [:analyze]
   before_action :verify_request_origin, only: [:analyze]
 
   MAX_FILE_SIZE = 20.megabytes
@@ -48,13 +49,13 @@ class DocumentAnalysisController < ApplicationController
   private
 
   def rate_limited?
-    ip = request.remote_ip
+    key_id = current_user&.id || request.remote_ip
 
-    minute_key = "doc_analysis_rate:#{ip}"
+    minute_key = "doc_analysis_rate:#{key_id}"
     minute_count = Rails.cache.read(minute_key).to_i
     return true if minute_count >= RATE_LIMIT
 
-    daily_key = "doc_analysis_daily:#{ip}:#{Date.today}"
+    daily_key = "doc_analysis_daily:#{key_id}:#{Date.today}"
     daily_count = Rails.cache.read(daily_key).to_i
     return true if daily_count >= DAILY_LIMIT
 

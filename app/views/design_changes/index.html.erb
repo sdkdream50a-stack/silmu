@@ -536,6 +536,7 @@ document.addEventListener('turbo:load', function() {
     })
     .then(function(r) { return r.json(); })
     .then(function(result) {
+      if (window.checkAiLoginRequired && window.checkAiLoginRequired(result)) { btn.disabled = false; return; }
       if (result.success && result.fields) {
         dcAnalyzedData = result.fields;
         var count = Object.keys(result.fields).filter(function(k) { return result.fields[k] != null; }).length;

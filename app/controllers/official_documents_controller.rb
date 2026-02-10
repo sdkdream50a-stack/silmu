@@ -1,4 +1,6 @@
 class OfficialDocumentsController < ApplicationController
+  before_action :require_login_for_ai, only: [:generate]
+
   # IP당 분당 3회, 일일 30회 제한
   RATE_LIMIT = 3
   RATE_PERIOD = 1.minute
@@ -34,21 +36,15 @@ class OfficialDocumentsController < ApplicationController
   private
 
   def rate_limited?
-    ip = request.remote_ip
+    key_id = current_user&.id || request.remote_ip
 
-    # 분당 제한
-    minute_key = "official_doc_rate:#{ip}"
+    minute_key = "official_doc_rate:#{key_id}"
     minute_count = Rails.cache.read(minute_key).to_i
-    if minute_count >= RATE_LIMIT
-      return true
-    end
+    return true if minute_count >= RATE_LIMIT
 
-    # 일일 제한
-    daily_key = "official_doc_daily:#{ip}:#{Date.today}"
+    daily_key = "official_doc_daily:#{key_id}:#{Date.today}"
     daily_count = Rails.cache.read(daily_key).to_i
-    if daily_count >= DAILY_LIMIT
-      return true
-    end
+    return true if daily_count >= DAILY_LIMIT
 
     Rails.cache.write(minute_key, minute_count + 1, expires_in: RATE_PERIOD)
     Rails.cache.write(daily_key, daily_count + 1, expires_in: 24.hours)

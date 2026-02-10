@@ -1,5 +1,6 @@
 class QuoteDocumentsController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [:extract]
+  before_action :require_login_for_ai, only: [:extract]
   before_action :verify_request_origin, only: [:extract]
 
   MAX_FILE_SIZE = 20.megabytes
@@ -52,13 +53,13 @@ class QuoteDocumentsController < ApplicationController
   private
 
   def rate_limited?
-    ip = request.remote_ip
+    key_id = current_user&.id || request.remote_ip
 
-    minute_key = "quote_doc_rate:#{ip}"
+    minute_key = "quote_doc_rate:#{key_id}"
     minute_count = Rails.cache.read(minute_key).to_i
     return true if minute_count >= RATE_LIMIT
 
-    daily_key = "quote_doc_daily:#{ip}:#{Date.today}"
+    daily_key = "quote_doc_daily:#{key_id}:#{Date.today}"
     daily_count = Rails.cache.read(daily_key).to_i
     return true if daily_count >= DAILY_LIMIT
 

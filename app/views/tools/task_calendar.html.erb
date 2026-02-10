@@ -2377,6 +2377,7 @@
     .then(r => r.json())
     .then(data => {
       guideSkeleton.classList.add("hidden");
+      if (window.checkAiLoginRequired && window.checkAiLoginRequired(data)) { closeGuide(); return; }
       if (data.success && data.content) {
         guideContent.innerHTML = data.content;
         guideContent.classList.remove("hidden");

@@ -1,5 +1,7 @@
 class TaskGuidesController < ApplicationController
-  # IP당 분당 10회, 일일 50회 제한 (캐싱 우회 악용 방지)
+  before_action :require_login_for_ai, only: [:show]
+
+  # 사용자당 분당 10회, 일일 50회 제한 (캐싱 우회 악용 방지)
   RATE_LIMIT = 10
   RATE_PERIOD = 1.minute
   DAILY_LIMIT = 50
@@ -45,13 +47,13 @@ class TaskGuidesController < ApplicationController
   private
 
   def rate_limited?
-    ip = request.remote_ip
+    key_id = current_user&.id || request.remote_ip
 
-    minute_key = "task_guide_rate:#{ip}"
+    minute_key = "task_guide_rate:#{key_id}"
     minute_count = Rails.cache.read(minute_key).to_i
     return true if minute_count >= RATE_LIMIT
 
-    daily_key = "task_guide_daily:#{ip}:#{Date.today}"
+    daily_key = "task_guide_daily:#{key_id}:#{Date.today}"
     daily_count = Rails.cache.read(daily_key).to_i
     return true if daily_count >= DAILY_LIMIT
 

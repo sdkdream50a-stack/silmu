@@ -500,6 +500,7 @@ document.addEventListener('turbo:load', function() {
       .then(function(data) {
         btn.disabled = false;
         spinner.style.display = 'none';
+        if (window.checkAiLoginRequired && window.checkAiLoginRequired(data)) return;
         if (data.success && data.fields) {
           ccAnalyzedData = data.fields;
           ccShowStatus('success', 'AI 분석 완료! 금액이 자동 입력되었습니다.');

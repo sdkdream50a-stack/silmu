@@ -8,6 +8,16 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def require_login_for_ai
+    return if current_user
+
+    respond_to do |format|
+      format.json { render json: { success: false, error: "로그인이 필요한 기능입니다.", login_required: true }, status: :unauthorized }
+      format.html { redirect_to new_user_session_path, alert: "로그인이 필요한 기능입니다." }
+      format.any  { render json: { success: false, error: "로그인이 필요한 기능입니다.", login_required: true }, status: :unauthorized }
+    end
+  end
+
   def capture_utm_params
     utm_keys = %i[utm_source utm_medium utm_campaign utm_term utm_content]
     utm_data = params.slice(*utm_keys).permit(*utm_keys).to_h.symbolize_keys
