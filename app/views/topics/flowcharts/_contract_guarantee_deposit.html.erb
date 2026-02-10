@@ -1,0 +1,385 @@
+<!-- 계약보증금 실무흐름도 -->
+<div class="card">
+  <div class="card-header">
+    <h2 class="text-xl font-bold text-slate-900 flex items-center gap-3">
+      <span class="material-symbols-outlined text-indigo-500">account_tree</span>
+      계약보증금 실무흐름도
+    </h2>
+    <p class="text-slate-600 mt-1">입찰보증금 → 계약보증금 → 하자보증금의 전체 보증금 관리 절차</p>
+  </div>
+
+  <div class="p-6">
+    <!-- 한시적 특례 안내 -->
+    <div class="mb-6 p-3 bg-purple-50 border border-purple-200 rounded-xl text-sm text-purple-800 flex items-start gap-2">
+      <span class="material-symbols-outlined text-purple-500 mt-0.5" style="font-size:18px">campaign</span>
+      <span><strong>한시적 특례 적용 중 (~2026.6.30)</strong> 입찰보증금 5%→<strong>2.5%</strong>, 계약보증금 10%→<strong>5%</strong>, 이행보증서 40%→<strong>20%</strong> (행안부 고시 제2025-72호)</span>
+    </div>
+
+    <!-- 처리 절차 -->
+    <div class="space-y-4">
+      <!-- Phase A: 입찰 단계 -->
+      <div class="mb-2">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded-full">
+          <span class="material-symbols-outlined" style="font-size:14px">flag</span>
+          PHASE 1 — 입찰 단계
+        </span>
+      </div>
+
+      <!-- Step 1: blue -->
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">1</div>
+        <div class="flex-1 bg-blue-50 rounded-xl p-4 border border-blue-200">
+          <h4 class="font-semibold text-blue-800 mb-2">입찰보증금 납부·확인</h4>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• 입찰금액의 <strong class="text-blue-700">5% 이상</strong> 납부 확인 (법 제14조)</li>
+            <li>• 보증서 유효기간: 입찰일 <strong class="text-blue-700">이후까지</strong> 유효한지 확인</li>
+            <li>• 소액수의·공공기관 등은 <strong class="text-blue-700">면제 가능</strong></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="flex justify-center">
+        <span class="material-symbols-outlined text-slate-300 text-2xl">arrow_downward</span>
+      </div>
+
+      <!-- Step 2: violet -->
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-violet-500 text-white rounded-full flex items-center justify-center font-bold">2</div>
+        <div class="flex-1 bg-violet-50 rounded-xl p-4 border border-violet-200">
+          <h4 class="font-semibold text-violet-800 mb-2">낙찰 후 입찰보증금 처리</h4>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• <strong class="text-violet-700">미낙찰자:</strong> 입찰보증금 즉시 반환</li>
+            <li>• <strong class="text-violet-700">낙찰자:</strong> 계약 체결 후 반환</li>
+            <li>• 낙찰자가 계약 미체결 시 → <strong class="text-red-600">보증금 귀속</strong></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="flex justify-center">
+        <span class="material-symbols-outlined text-slate-300 text-2xl">arrow_downward</span>
+      </div>
+
+      <!-- Phase B: 계약 단계 -->
+      <div class="mb-2">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-100 text-amber-700 text-xs font-bold rounded-full">
+          <span class="material-symbols-outlined" style="font-size:14px">flag</span>
+          PHASE 2 — 계약 체결 단계
+        </span>
+      </div>
+
+      <!-- Step 3: amber -->
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-amber-500 text-white rounded-full flex items-center justify-center font-bold">3</div>
+        <div class="flex-1 bg-amber-50 rounded-xl p-4 border border-amber-200">
+          <div class="flex items-start justify-between mb-2">
+            <h4 class="font-semibold text-amber-800">계약보증금 면제 여부 판단</h4>
+            <span class="doc-tool-badge" onclick="showDocPopup('step3')"><span class="material-symbols-outlined" style="font-size:14px">edit_document</span>공문/양식 생성 도구</span>
+          </div>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• <strong class="text-amber-700">물품·용역:</strong> 추정가격 5천만원 이하 → 면제 가능</li>
+            <li>• <strong class="text-amber-700">공사:</strong> 추정가격 1억원 이하 → 면제 가능</li>
+            <li>• 공공기관과의 계약 → 전액 면제</li>
+            <li class="text-xs text-red-600 ml-3">※ 면제해도 불이행 시 10% 상당액 징수 가능 (시행령 제39조②)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="flex justify-center">
+        <span class="material-symbols-outlined text-slate-300 text-2xl">arrow_downward</span>
+      </div>
+
+      <!-- Step 4: orange -->
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold">4</div>
+        <div class="flex-1 bg-orange-50 rounded-xl p-4 border border-orange-200">
+          <h4 class="font-semibold text-orange-800 mb-2">계약보증금 납부·접수</h4>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• 계약금액의 <strong class="text-orange-700">10% 이상</strong> 납부 확인 (시행령 제37조)</li>
+            <li>• 납부 방법: 현금 / 보증보험증권 / 지급보증서 / 공제조합 보증서</li>
+            <li>• <strong class="text-orange-700">이행보증 방식</strong> 선택 시: 계약금액의 <strong>40% 이상</strong> 이행보증서</li>
+            <li>• 보증서 유효기간: 계약기간 <strong class="text-orange-700">이후까지</strong> 유효한지 확인</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="flex justify-center">
+        <span class="material-symbols-outlined text-slate-300 text-2xl">arrow_downward</span>
+      </div>
+
+      <!-- Phase C: 이행·준공 단계 -->
+      <div class="mb-2">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full">
+          <span class="material-symbols-outlined" style="font-size:14px">flag</span>
+          PHASE 3 — 이행 완료·준공 단계
+        </span>
+      </div>
+
+      <!-- Step 5: green -->
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-green-500 text-white rounded-full flex items-center justify-center font-bold">5</div>
+        <div class="flex-1 bg-green-50 rounded-xl p-4 border border-green-200">
+          <div class="flex items-start justify-between mb-2">
+            <h4 class="font-semibold text-green-800">계약보증금 반환 또는 귀속</h4>
+            <span class="doc-tool-badge" onclick="showDocPopup('step5')"><span class="material-symbols-outlined" style="font-size:14px">edit_document</span>공문/양식 생성 도구</span>
+          </div>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• <strong class="text-green-700">정상 이행:</strong> 검사·검수 완료 후 보증금 반환</li>
+            <li>• <strong class="text-red-600">계약 불이행 시:</strong></li>
+            <li class="text-xs text-slate-600 ml-3">① 이행 최고 (기한 부여) → ② 귀속 결정 → ③ 보증기관 청구</li>
+            <li class="text-xs text-red-500 ml-3">※ 면제된 경우에도 계약금액의 10% 상당액 징수</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="flex justify-center">
+        <span class="material-symbols-outlined text-slate-300 text-2xl">arrow_downward</span>
+      </div>
+
+      <!-- Step 6: teal -->
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-teal-500 text-white rounded-full flex items-center justify-center font-bold">6</div>
+        <div class="flex-1 bg-teal-50 rounded-xl p-4 border border-teal-200">
+          <h4 class="font-semibold text-teal-800 mb-2">하자보증금 납부·관리</h4>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• 준공검사 완료 후, 대금 지급 <strong class="text-teal-700">전까지</strong> 납부</li>
+            <li>• 공종별 <strong class="text-teal-700">2~5%</strong> 차등 납부 (시행령 제51조)</li>
+            <li class="text-xs text-slate-500 ml-3">구조체 5%(5년) / 지붕·방수 3~4%(3년) / 도장·미장 2%(1년)</li>
+            <li>• 공종별 하자보증기간 만료 시 <strong class="text-teal-700">분할 반환</strong> 가능</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 참고 안내 (접히는 섹션) -->
+    <details open class="mt-8 border border-slate-200 rounded-xl overflow-hidden">
+      <summary class="flex items-center gap-3 p-4 bg-slate-50 hover:bg-slate-100 transition-colors cursor-pointer">
+        <span class="material-symbols-outlined text-slate-500">info</span>
+        <span class="font-semibold text-slate-700">참고 안내</span>
+        <span class="text-xs text-slate-400 ml-auto">3종 비교 · 보증서 종류 · 감사대비</span>
+      </summary>
+      <div class="p-4 space-y-4">
+        <!-- 3종 보증금 비교표 -->
+        <div class="bg-white border border-slate-200 rounded-xl p-4">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined text-blue-500">compare</span>
+            <div class="w-full">
+              <h4 class="font-semibold text-slate-800 mb-3">3종 보증금 비교</h4>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+                <div class="p-3 bg-blue-50 rounded-lg border border-blue-100">
+                  <div class="font-bold text-blue-800 mb-2">입찰보증금</div>
+                  <p class="text-slate-700"><strong>입찰금액의 5%</strong></p>
+                  <p class="text-xs text-slate-500 mt-1">시기: 입찰 참가 시</p>
+                  <p class="text-xs text-slate-500">귀속: 계약 미체결 시</p>
+                  <p class="text-xs text-slate-500">반환: 낙찰자 결정 후</p>
+                </div>
+                <div class="p-3 bg-amber-50 rounded-lg border border-amber-100">
+                  <div class="font-bold text-amber-800 mb-2">계약보증금</div>
+                  <p class="text-slate-700"><strong>계약금액의 10%</strong></p>
+                  <p class="text-xs text-slate-500 mt-1">시기: 계약 체결 시</p>
+                  <p class="text-xs text-slate-500">귀속: 계약 불이행 시</p>
+                  <p class="text-xs text-slate-500">반환: 이행 완료 후</p>
+                </div>
+                <div class="p-3 bg-teal-50 rounded-lg border border-teal-100">
+                  <div class="font-bold text-teal-800 mb-2">하자보증금</div>
+                  <p class="text-slate-700"><strong>계약금액의 2~5%</strong></p>
+                  <p class="text-xs text-slate-500 mt-1">시기: 준공 후</p>
+                  <p class="text-xs text-slate-500">귀속: 하자보수 불이행 시</p>
+                  <p class="text-xs text-slate-500">반환: 보증기간 만료 후</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 면제 기준 -->
+        <div class="bg-white border border-slate-200 rounded-xl p-4">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined text-green-500">check_circle</span>
+            <div>
+              <h4 class="font-semibold text-slate-800 mb-2">계약보증금 면제 기준 <span class="text-xs font-normal bg-green-100 text-green-700 px-2 py-0.5 rounded-full">시행령 제38조</span></h4>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                <div class="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
+                  <span class="material-symbols-outlined text-green-400">inventory_2</span>
+                  <div>
+                    <span class="font-semibold text-slate-800">물품·용역</span>
+                    <p class="text-green-700 font-bold">추정가격 5천만원 이하</p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
+                  <span class="material-symbols-outlined text-green-400">construction</span>
+                  <div>
+                    <span class="font-semibold text-slate-800">공사</span>
+                    <p class="text-green-700 font-bold">추정가격 1억원 이하</p>
+                  </div>
+                </div>
+              </div>
+              <p class="text-xs text-red-500 mt-2">※ 면제 = 납부 면제일 뿐, 불이행 시 10% 상당액 징수는 가능</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 보증서 종류 -->
+        <div class="bg-white border border-slate-200 rounded-xl p-4">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined text-indigo-500">shield</span>
+            <div>
+              <h4 class="font-semibold text-slate-800 mb-2">납부 방법 (보증서 종류)</h4>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+                <div class="flex items-center gap-2 text-slate-700">
+                  <span class="material-symbols-outlined text-indigo-400 text-lg">check</span>
+                  보증보험증권 (서울보증보험)
+                </div>
+                <div class="flex items-center gap-2 text-slate-700">
+                  <span class="material-symbols-outlined text-indigo-400 text-lg">check</span>
+                  은행 지급보증서
+                </div>
+                <div class="flex items-center gap-2 text-slate-700">
+                  <span class="material-symbols-outlined text-indigo-400 text-lg">check</span>
+                  공제조합 보증서
+                </div>
+                <div class="flex items-center gap-2 text-slate-700">
+                  <span class="material-symbols-outlined text-indigo-400 text-lg">check</span>
+                  현금 납부
+                </div>
+              </div>
+              <p class="text-xs text-slate-500 mt-2">※ 계약상대자가 자유 선택 — 특정 보증수단만 요구 불가</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 감사 대비 -->
+        <div class="bg-red-50 border border-red-200 rounded-xl p-4">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined text-red-500">gavel</span>
+            <div>
+              <h4 class="font-semibold text-red-800 mb-2">감사 대비 체크리스트</h4>
+              <ul class="text-sm text-slate-700 space-y-1.5">
+                <li class="flex items-start gap-2">
+                  <span class="material-symbols-outlined text-red-400 text-lg mt-0.5">warning</span>
+                  <span><strong>면제 기준 착각</strong> — 물품·용역(5천만원)과 공사(1억원) 기준이 다름</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="material-symbols-outlined text-red-400 text-lg mt-0.5">warning</span>
+                  <span><strong>보증서 유효기간 미확인</strong> — 계약기간보다 짧은 보증서 수령 시 무효</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="material-symbols-outlined text-red-400 text-lg mt-0.5">warning</span>
+                  <span><strong>불이행 후 미귀속</strong> — 보증금 귀속 절차 미이행 시 감사 지적</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="material-symbols-outlined text-red-400 text-lg mt-0.5">warning</span>
+                  <span><strong>하자보증금 조기 반환</strong> — 보증기간 만료 전 전액 반환 시 감사 지적</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- 공문생산 팝업 -->
+<div id="doc-popup-overlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:9999; display:none; align-items:center; justify-content:center;" onclick="if(event.target===this) closeDocPopup()">
+  <div style="background:#fff; border-radius:16px; max-width:480px; width:90%; max-height:80vh; overflow-y:auto; padding:28px; box-shadow:0 20px 60px rgba(0,0,0,.2); animation:docPopupIn .2s ease;">
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span class="material-symbols-outlined" style="color:#e11d48; font-size:22px;">edit_document</span>
+        <h3 id="doc-popup-title" style="font-size:18px; font-weight:700; color:#1e293b; margin:0;"></h3>
+      </div>
+      <button onclick="closeDocPopup()" style="background:none; border:none; cursor:pointer; padding:4px;">
+        <span class="material-symbols-outlined" style="color:#94a3b8; font-size:22px;">close</span>
+      </button>
+    </div>
+    <div id="doc-popup-body"></div>
+  </div>
+</div>
+
+<style>
+@keyframes docPopupIn { from { opacity:0; transform:scale(.95) translateY(10px); } to { opacity:1; transform:scale(1) translateY(0); } }
+.doc-tool-badge {
+  display:inline-flex; align-items:center; gap:6px; margin-top:4px;
+  padding:6px 14px; background:#fff1f2; color:#e11d48;
+  font-size:13px; font-weight:600; border-radius:10px;
+  cursor:pointer; border:1.5px solid #fecdd3;
+  box-shadow:0 1px 3px rgba(225,29,72,.1);
+  transition:all .2s ease;
+}
+.doc-tool-badge:hover {
+  transform:translateY(-2px) scale(1.04);
+  box-shadow:0 6px 20px rgba(225,29,72,.2);
+  background:#ffe4e6; border-color:#fda4af;
+}
+.doc-tool-badge:active { transform:translateY(0) scale(.98); box-shadow:0 1px 2px rgba(225,29,72,.1); }
+.doc-item { display:flex; align-items:flex-start; gap:10px; padding:12px; border-radius:10px; border:1px solid #e2e8f0; margin-bottom:8px; }
+.doc-item .doc-icon { flex-shrink:0; width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; }
+.doc-item .doc-name { font-size:14px; font-weight:600; color:#1e293b; }
+.doc-item .doc-desc { font-size:12px; color:#64748b; margin-top:2px; }
+.doc-item.has-tool { cursor:pointer; transition:all .15s; }
+.doc-item.has-tool:hover { border-color:#818cf8; background:#f5f3ff; }
+</style>
+
+<script>
+var docPopupData = {
+  step3: {
+    title: '면제 판단·계약 체결 단계 공문/양식',
+    groups: [
+      { label: '도구', icon: 'build', color: '#6366f1', items: [
+        { name: '계약보증금 계산', desc: '면제 여부·보증금액·보증서 종류 자동 산정', icon: 'calculate', color: '#6366f1', tool: '<%= contract_guarantee_path %>' }
+      ]},
+      { label: '필수', icon: 'verified', color: '#dc2626', items: [
+        { name: '계약서', desc: '계약조건·금액·이행기간·보증금 명시', icon: 'article', color: '#475569', tool: '<%= contract_documents_path %>' },
+        { name: '보증보험증권/보증서', desc: '계약상대자가 제출 (유효기간 반드시 확인)', icon: 'shield', color: '#059669' }
+      ]}
+    ]
+  },
+  step5: {
+    title: '보증금 반환·귀속 단계 공문/양식',
+    groups: [
+      { label: '정상 이행 시', icon: 'check_circle', color: '#059669', items: [
+        { name: '검수조서', desc: '규격·수량·품질 검사 기록', icon: 'fact_check', color: '#d97706', tool: '<%= progress_inspection_path %>' },
+        { name: '보증금 반환 기안', desc: '검수 완료 후 보증금 반환 결의', icon: 'request_quote', color: '#059669', tool: '<%= official_document_path %>?type=draft', toolLabel: 'AI 공문서 (기안문)' }
+      ]},
+      { label: '계약 불이행 시', icon: 'report', color: '#dc2626', items: [
+        { name: '이행 최고 통보서', desc: '기한을 정하여 이행 독촉 통보', icon: 'outgoing_mail', color: '#dc2626', tool: '<%= official_document_path %>?type=notification', toolLabel: 'AI 공문서 (통보문)' },
+        { name: '보증금 귀속 결정 기안', desc: '보증금 귀속 결정 및 보증기관 청구', icon: 'gavel', color: '#dc2626', tool: '<%= official_document_path %>?type=draft', toolLabel: 'AI 공문서 (기안문)' }
+      ]}
+    ]
+  }
+};
+
+function showDocPopup(step) {
+  var data = docPopupData[step];
+  if (!data) return;
+  document.getElementById('doc-popup-title').textContent = data.title;
+  var html = '';
+  data.groups.forEach(function(group) {
+    html += '<div style="display:flex; align-items:center; gap:6px; margin:16px 0 8px; padding-bottom:6px; border-bottom:1px solid #f1f5f9;">';
+    html += '<span class="material-symbols-outlined" style="font-size:16px; color:' + group.color + ';">' + group.icon + '</span>';
+    html += '<span style="font-size:13px; font-weight:700; color:' + group.color + ';">' + group.label + '</span>';
+    html += '</div>';
+    group.items.forEach(function(item) {
+      var tag = item.tag ? ' <span style="font-size:11px; color:#94a3b8; background:#f1f5f9; padding:1px 6px; border-radius:4px; margin-left:4px;">' + item.tag + '</span>' : '';
+      var toolAttr = item.tool ? ' has-tool" onclick="window.location.href=\'' + item.tool + '\'"' : '"';
+      var featuredStyle = item.featured ? ' style="background:#eef2ff; border-color:#a5b4fc;"' : '';
+      html += '<div class="doc-item' + toolAttr + featuredStyle + '>';
+      html += '<div class="doc-icon" style="background:' + item.color + '15;"><span class="material-symbols-outlined" style="font-size:18px; color:' + item.color + ';">' + item.icon + '</span></div>';
+      html += '<div><div class="doc-name">' + item.name + tag;
+      if (item.tool && !item.toolLabel) html += ' <span class="material-symbols-outlined" style="font-size:12px; color:#818cf8; vertical-align:middle;">open_in_new</span>';
+      html += '</div><div class="doc-desc">' + item.desc + '</div>';
+      if (item.note) html += '<div style="font-size:11px; color:#d97706; margin-top:3px; display:flex; align-items:center; gap:3px;"><span class="material-symbols-outlined" style="font-size:12px;">info</span>' + item.note + '</div>';
+      if (item.toolLabel) html += '<div style="margin-top:5px;"><a href="' + item.tool + '" style="font-size:11px; color:#4f46e5; font-weight:600; display:inline-flex; align-items:center; gap:3px; text-decoration:none;" onclick="event.stopPropagation();"><span class="material-symbols-outlined" style="font-size:13px;">calculate</span>' + item.toolLabel + ' <span class="material-symbols-outlined" style="font-size:11px;">open_in_new</span></a></div>';
+      html += '</div>';
+      html += '</div>';
+    });
+  });
+  document.getElementById('doc-popup-body').innerHTML = html;
+  document.getElementById('doc-popup-overlay').style.display = 'flex';
+}
+
+function closeDocPopup() {
+  document.getElementById('doc-popup-overlay').style.display = 'none';
+}
+
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeDocPopup(); });
+</script>
