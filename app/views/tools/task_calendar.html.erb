@@ -992,6 +992,10 @@
     }
   }
 
+  // --- 사이드바 (switchView보다 먼저 선언 필요) ---
+  const sidebar = document.getElementById("sidebar");
+  const toggleBtn = document.getElementById("btn-sidebar-toggle");
+
   document.querySelectorAll(".nav-item").forEach(n => {
     n.addEventListener("click", () => switchView(n.dataset.view));
   });
@@ -1002,8 +1006,6 @@
   switchView("today");
 
   // --- 사이드바 토글 (모바일) ---
-  const sidebar = document.getElementById("sidebar");
-  const toggleBtn = document.getElementById("btn-sidebar-toggle");
   toggleBtn.addEventListener("click", () => {
     sidebar.classList.toggle("hidden");
     sidebar.classList.toggle("flex");
