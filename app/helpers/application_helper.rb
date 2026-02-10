@@ -1,4 +1,10 @@
 module ApplicationHelper
+  ACTIVE_TOOL_COUNT = 18
+
+  def tool_count
+    ACTIVE_TOOL_COUNT
+  end
+
   def utm_params
     session[:utm_params] || {}
   end

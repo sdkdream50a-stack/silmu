@@ -176,7 +176,7 @@
             </span>
             <p class="text-sm text-slate-700">
               <span class="font-semibold text-slate-900">블로그에서 오셨군요!</span>
-              계약·예산 <strong>무료 자동화 도구 16개</strong>를 바로 사용해 보세요.
+              계약·예산 <strong>무료 자동화 도구 <%= tool_count %>개</strong>를 바로 사용해 보세요.
               <% unless current_page?(tools_path) %>
                 <%= link_to "전체 도구 보기 →", tools_path, class: "text-emerald-600 font-semibold hover:text-emerald-700 ml-1 whitespace-nowrap" %>
               <% end %>
@@ -234,7 +234,7 @@
           <span class="w-10 h-10 bg-emerald-500 rounded-lg flex items-center justify-center">
             <span class="material-symbols-outlined text-white">apps</span>
           </span>
-          <span class="text-sm font-bold text-emerald-700">전체 16개 도구 보기</span>
+          <span class="text-sm font-bold text-emerald-700">전체 <%= tool_count %>개 도구 보기</span>
         <% end %>
       </div>
 
@@ -248,7 +248,7 @@
           <span class="material-symbols-outlined text-2xl transition-transform group-hover:rotate-12" id="quick-menu-icon">widgets</span>
           <span class="text-[9px] font-semibold mt-0.5 opacity-80" id="quick-menu-text">도구</span>
           <!-- 알림 배지 -->
-          <span class="absolute -top-1 -right-1 w-5 h-5 bg-emerald-500 rounded-full flex items-center justify-center text-[10px] font-bold text-white shadow-sm" id="quick-menu-badge">14</span>
+          <span class="absolute -top-1 -right-1 w-5 h-5 bg-emerald-500 rounded-full flex items-center justify-center text-[10px] font-bold text-white shadow-sm" id="quick-menu-badge"><%= tool_count %></span>
         </button>
       </div>
     </div>
@@ -335,10 +335,6 @@
                   <span class="material-symbols-outlined text-lg">mail</span>
                   hello@silmu.kr
                 </a>
-              </li>
-              <li class="text-slate-400 text-sm pt-2">
-                평일 09:00 - 18:00<br>
-                (주말/공휴일 휴무)
               </li>
             </ul>
           </div>
