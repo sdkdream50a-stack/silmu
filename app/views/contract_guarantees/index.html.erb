@@ -144,8 +144,8 @@
         </div>
       </div>
 
-      <!-- 하자보증 공종 선택 -->
-      <div class="cg-form-group">
+      <!-- 하자보증 공종 선택 (공사 계약만 표시) -->
+      <div class="cg-form-group" id="cg-defect-section" style="display:none;">
         <label>하자보증 공종 <span class="cg-sublabel">(공사인 경우, 복수 선택 가능)</span></label>
         <div class="cg-checkbox-grid" id="cg-defect-types">
           <% @defect_work_types.each do |wt| %>
@@ -233,7 +233,21 @@ document.addEventListener('turbo:load', function() {
     document.querySelectorAll('.cg-type-btn').forEach(function(b) { b.classList.remove('selected'); });
     el.classList.add('selected');
     cgSelectedType = el.dataset.type;
+    cgToggleDefectSection();
   };
+
+  function cgToggleDefectSection() {
+    var section = document.getElementById('cg-defect-section');
+    if (!section) return;
+    if (cgSelectedType === 'construction') {
+      section.style.display = '';
+    } else {
+      section.style.display = 'none';
+      // 공사가 아닌 경우 체크박스 해제
+      section.querySelectorAll('input[type="checkbox"]').forEach(function(cb) { cb.checked = false; });
+      section.querySelectorAll('.cg-checkbox-item').forEach(function(item) { item.classList.remove('checked'); });
+    }
+  }
 
   window.cgCalculate = function() {
     if (cgAmount <= 0) {
