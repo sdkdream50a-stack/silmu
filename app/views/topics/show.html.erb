@@ -385,7 +385,44 @@
 
         <!-- 감사사례 -->
         <div class="tab-panel" data-tab="audit" id="panel-audit">
-          <% if @topic.audit_cases.present? %>
+          <% if @related_audit_cases.any? %>
+            <div class="space-y-4">
+              <% @related_audit_cases.each do |ac| %>
+                <%= link_to audit_case_path(slug: ac.slug), class: "block card card-hover p-5 lg:p-6 group" do %>
+                  <div class="flex items-start justify-between mb-3">
+                    <span class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-semibold bg-red-50 text-red-700"><%= ac.category %></span>
+                    <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium
+                      <%= case ac.severity
+                          when '경미' then 'bg-amber-50 text-amber-700'
+                          when '보통' then 'bg-orange-50 text-orange-700'
+                          when '중대' then 'bg-red-100 text-red-800'
+                          else 'bg-gray-50 text-gray-600'
+                          end %>">
+                      <%= ac.severity %>
+                    </span>
+                  </div>
+                  <h3 class="text-base font-bold text-slate-900 mb-2 group-hover:text-red-600 transition-colors"><%= ac.title %></h3>
+                  <p class="text-slate-600 text-sm mb-3 leading-relaxed line-clamp-2"><%= ac.issue.truncate(150) %></p>
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs text-slate-400 flex items-center gap-1">
+                      <span class="material-symbols-outlined text-sm">gavel</span>
+                      <%= ac.legal_basis %>
+                    </span>
+                    <span class="text-xs text-red-500 font-medium flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      상세 보기
+                      <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                    </span>
+                  </div>
+                <% end %>
+              <% end %>
+            </div>
+            <div class="mt-6 text-center">
+              <%= link_to audit_cases_path, class: "inline-flex items-center gap-2 px-6 py-3 bg-red-50 text-red-700 rounded-xl font-semibold hover:bg-red-100 transition-colors" do %>
+                <span class="material-symbols-outlined text-lg">folder_open</span>
+                전체 감사사례 <%= AuditCase.published.count %>건 보기
+              <% end %>
+            </div>
+          <% elsif @topic.audit_cases.present? %>
             <div class="card p-6 lg:p-8">
               <div class="legal-content">
                 <%= render_legal_content(@topic.audit_cases) %>

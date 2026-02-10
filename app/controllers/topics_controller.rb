@@ -9,6 +9,7 @@ class TopicsController < ApplicationController
     @topic.increment_view!
     @related_topics = @topic.related_topics
     @related_articles = CafeArticle.find_similar(@topic.name, limit: 10)
+    @related_audit_cases = @topic.related_audit_cases
 
     # 키워드 파라미터가 있으면 해당 키워드 섹션 표시
     @active_keyword = params[:keyword]
