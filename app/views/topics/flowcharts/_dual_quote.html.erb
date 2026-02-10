@@ -216,7 +216,7 @@ var docPopupData = {
         { name: '예정가격 조서', desc: '기초금액 공고 및 복수예비가격 산정 (필수)', icon: 'calculate', color: '#059669', tool: '<%= estimated_price_path %>' }
       ]},
       { label: '내부 검토용', icon: 'fact_check', color: '#64748b', items: [
-        { name: '소요예산 추정', desc: '예산과목 확인, 배정 여부 내부 검토', icon: 'savings', color: '#64748b' }
+        { name: '소요예산 추정', desc: '예산과목 확인, 배정 여부 내부 검토', icon: 'savings', color: '#64748b', tool: '<%= budget_estimator_path %>' }
       ]}
     ]
   },
@@ -224,8 +224,8 @@ var docPopupData = {
     title: '견적서 접수 단계 공문/양식',
     groups: [
       { label: '필수', icon: 'verified', color: '#dc2626', items: [
-        { name: '견적서 접수대장', desc: '접수된 견적서 목록·일시 관리', icon: 'inbox', color: '#059669' },
-        { name: '견적 비교표', desc: '견적금액 비교 및 최저가 확인', icon: 'compare', color: '#059669' }
+        { name: '견적서 접수대장', desc: '접수된 견적서 목록·일시 관리', icon: 'inbox', color: '#059669', tool: '<%= templates_path %>', toolLabel: '서식 템플릿' },
+        { name: '견적 비교표', desc: '견적금액 비교 및 최저가 확인', icon: 'compare', color: '#059669', tool: '<%= templates_path %>', toolLabel: '서식 템플릿' }
       ]},
       { label: '도구', icon: 'build', color: '#6366f1', items: [
         { name: '추정가격 계산', desc: '추정가격 산정 및 비교', icon: 'calculate', color: '#6366f1', tool: '<%= estimated_price_path %>' }
