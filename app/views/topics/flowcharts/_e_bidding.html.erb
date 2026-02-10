@@ -1,0 +1,158 @@
+<!-- 전자입찰 실무흐름도 -->
+<div class="card">
+  <div class="card-header">
+    <h2 class="text-xl font-bold text-slate-900 flex items-center gap-3">
+      <span class="material-symbols-outlined text-indigo-500">account_tree</span>
+      전자입찰 실무흐름도
+    </h2>
+    <p class="text-slate-600 mt-1">나라장터 등록 → 공고 확인 → 입찰서 제출 → 전자개찰 → 전자계약</p>
+  </div>
+
+  <div class="p-6">
+    <div class="mb-6 p-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-800 flex items-start gap-2">
+      <span class="material-symbols-outlined text-red-500 mt-0.5" style="font-size:18px">block</span>
+      <span><strong>의무 기준</strong> 추정가격 <strong>2천만원 초과</strong> 시 나라장터(G2B) 전자입찰 의무 (전자조달법 시행령 제6조)</span>
+    </div>
+
+    <div class="space-y-4">
+      <div class="mb-2">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded-full">
+          <span class="material-symbols-outlined" style="font-size:14px">flag</span>
+          PHASE 1 — 사전 준비
+        </span>
+      </div>
+
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">1</div>
+        <div class="flex-1 bg-blue-50 rounded-xl p-4 border border-blue-200">
+          <h4 class="font-semibold text-blue-800 mb-2">나라장터 이용자 등록 · 인증 준비</h4>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• <strong class="text-blue-700">이용자 등록:</strong> 나라장터(G2B) 회원가입 (사업자등록증 기반)</li>
+            <li>• <strong class="text-blue-700">공동인증서:</strong> 사업자용 범용 공동인증서 발급</li>
+            <li>• <strong class="text-blue-700">보안토큰:</strong> 조달청 지사 또는 대행기관에서 수령</li>
+            <li class="text-xs text-slate-500">※ 최초 등록 3~5영업일 소요 — 입찰 전 미리 준비</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="flex justify-center"><span class="material-symbols-outlined text-slate-300 text-2xl">arrow_downward</span></div>
+
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-violet-500 text-white rounded-full flex items-center justify-center font-bold">2</div>
+        <div class="flex-1 bg-violet-50 rounded-xl p-4 border border-violet-200">
+          <h4 class="font-semibold text-violet-800 mb-2">입찰공고 확인 · 참가 신청</h4>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• 나라장터에서 입찰공고 검색·확인 (참가자격, 마감일시)</li>
+            <li>• 입찰 참가 신청 및 <strong class="text-violet-700">입찰보증금 5%</strong> 납부</li>
+            <li>• 규격서·설계서 다운로드 확인</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="flex justify-center"><span class="material-symbols-outlined text-slate-300 text-2xl">arrow_downward</span></div>
+
+      <div class="mb-2">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-100 text-amber-700 text-xs font-bold rounded-full">
+          <span class="material-symbols-outlined" style="font-size:14px">flag</span>
+          PHASE 2 — 전자입찰 · 개찰
+        </span>
+      </div>
+
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-amber-500 text-white rounded-full flex items-center justify-center font-bold">3</div>
+        <div class="flex-1 bg-amber-50 rounded-xl p-4 border border-amber-200">
+          <h4 class="font-semibold text-amber-800 mb-2">전자입찰서 제출</h4>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• <strong class="text-amber-700">이중 인증:</strong> 공동인증서 + 보안토큰으로 로그인</li>
+            <li>• 입찰금액 입력 (부가세 포함/제외 여부 확인)</li>
+            <li>• 마감 <strong class="text-amber-700">30분~1시간 전</strong> 여유 있게 제출 권장</li>
+            <li class="text-xs text-red-600">※ 마감시간은 초 단위까지 적용 — 1초라도 지나면 접수 불가</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="flex justify-center"><span class="material-symbols-outlined text-slate-300 text-2xl">arrow_downward</span></div>
+
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold">4</div>
+        <div class="flex-1 bg-orange-50 rounded-xl p-4 border border-orange-200">
+          <h4 class="font-semibold text-orange-800 mb-2">전자개찰 · 낙찰자 결정</h4>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• 입찰 마감 즉시 시스템 <strong class="text-orange-700">자동 개찰</strong></li>
+            <li>• 2억원 이상: 복수예비가격 4개 자동 추첨 → 예정가격 확정</li>
+            <li>• 예정가격 이하 최저가 순 자동 판정 → 낙찰자 결정</li>
+            <li>• 암호화된 입찰서 자동 복호화 → 관리자도 열람 불가</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="flex justify-center"><span class="material-symbols-outlined text-slate-300 text-2xl">arrow_downward</span></div>
+
+      <div class="mb-2">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full">
+          <span class="material-symbols-outlined" style="font-size:14px">flag</span>
+          PHASE 3 — 전자계약
+        </span>
+      </div>
+
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-green-500 text-white rounded-full flex items-center justify-center font-bold">5</div>
+        <div class="flex-1 bg-green-50 rounded-xl p-4 border border-green-200">
+          <h4 class="font-semibold text-green-800 mb-2">전자계약 체결</h4>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• 낙찰통지 후 <strong class="text-green-700">10일 이내</strong> 전자계약 체결</li>
+            <li>• 나라장터에서 전자서명으로 계약서 날인 대체</li>
+            <li>• 계약서 원본은 나라장터 시스템에 보관</li>
+            <li>• 계약보증금 납부 확인</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <details open class="mt-8 border border-slate-200 rounded-xl overflow-hidden">
+      <summary class="flex items-center gap-3 p-4 bg-slate-50 hover:bg-slate-100 transition-colors cursor-pointer">
+        <span class="material-symbols-outlined text-slate-500">info</span>
+        <span class="font-semibold text-slate-700">참고 안내</span>
+        <span class="text-xs text-slate-400 ml-auto">G2B vs S2B · 감사대비</span>
+      </summary>
+      <div class="p-4 space-y-4">
+        <div class="bg-white border border-slate-200 rounded-xl p-4">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined text-blue-500">compare</span>
+            <div class="w-full">
+              <h4 class="font-semibold text-slate-800 mb-3">나라장터(G2B) vs 학교장터(S2B)</h4>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                <div class="p-3 bg-blue-50 rounded-lg border border-blue-100">
+                  <div class="font-bold text-blue-800 mb-2">나라장터(G2B)</div>
+                  <p class="text-slate-700">조달청 운영</p>
+                  <p class="text-xs text-slate-500 mt-1">대상: 국가·지방·공공기관</p>
+                  <p class="text-xs text-slate-500">기준: 2천만원 초과 의무</p>
+                </div>
+                <div class="p-3 bg-amber-50 rounded-lg border border-amber-100">
+                  <div class="font-bold text-amber-800 mb-2">학교장터(S2B)</div>
+                  <p class="text-slate-700">교직원공제회 운영</p>
+                  <p class="text-xs text-slate-500 mt-1">대상: 초·중·고등학교</p>
+                  <p class="text-xs text-slate-500">기준: 학교별 자체 기준</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-red-50 border border-red-200 rounded-xl p-4">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined text-red-500">gavel</span>
+            <div>
+              <h4 class="font-semibold text-red-800 mb-2">감사 대비 체크리스트</h4>
+              <ul class="text-sm text-slate-700 space-y-1.5">
+                <li class="flex items-start gap-2"><span class="material-symbols-outlined text-red-400 text-lg mt-0.5">warning</span><span><strong>전자입찰 의무 미준수</strong> — 2천만원 초과인데 서면입찰로 진행 시 부적정</span></li>
+                <li class="flex items-start gap-2"><span class="material-symbols-outlined text-red-400 text-lg mt-0.5">warning</span><span><strong>인증서 만료 미확인</strong> — 입찰 당일 인증서 만료로 제출 실패</span></li>
+                <li class="flex items-start gap-2"><span class="material-symbols-outlined text-red-400 text-lg mt-0.5">warning</span><span><strong>마감시간 조작</strong> — 마감 후 소급 연장 시 무효 처리 + 징계</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </details>
+  </div>
+</div>

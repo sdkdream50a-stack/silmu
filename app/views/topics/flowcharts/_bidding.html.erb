@@ -1,0 +1,169 @@
+<!-- 입찰 실무흐름도 -->
+<div class="card">
+  <div class="card-header">
+    <h2 class="text-xl font-bold text-slate-900 flex items-center gap-3">
+      <span class="material-symbols-outlined text-indigo-500">account_tree</span>
+      입찰 실무흐름도
+    </h2>
+    <p class="text-slate-600 mt-1">입찰공고 → 참가등록 → 입찰서 제출 → 개찰 → 낙찰자 결정 → 계약 체결</p>
+  </div>
+
+  <div class="p-6">
+    <div class="mb-6 p-3 bg-purple-50 border border-purple-200 rounded-xl text-sm text-purple-800 flex items-start gap-2">
+      <span class="material-symbols-outlined text-purple-500 mt-0.5" style="font-size:18px">campaign</span>
+      <span><strong>한시적 특례(~2026.6.30)</strong> 1인 입찰 시 재공고 없이 바로 수의계약 가능 (행안부 고시 제2025-72호)</span>
+    </div>
+
+    <div class="space-y-4">
+      <div class="mb-2">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded-full">
+          <span class="material-symbols-outlined" style="font-size:14px">flag</span>
+          PHASE 1 — 입찰 준비
+        </span>
+      </div>
+
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">1</div>
+        <div class="flex-1 bg-blue-50 rounded-xl p-4 border border-blue-200">
+          <h4 class="font-semibold text-blue-800 mb-2">입찰 방법 결정</h4>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• <strong class="text-blue-700">일반경쟁</strong> (원칙) — 자격을 갖춘 모든 업체 참가</li>
+            <li>• <strong class="text-blue-700">제한경쟁</strong> — 실적·기술·지역 등 자격 제한</li>
+            <li>• <strong class="text-blue-700">지명경쟁</strong> — 5인 이상 지명 (5천만원 이하, 10인 이내)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="flex justify-center"><span class="material-symbols-outlined text-slate-300 text-2xl">arrow_downward</span></div>
+
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-violet-500 text-white rounded-full flex items-center justify-center font-bold">2</div>
+        <div class="flex-1 bg-violet-50 rounded-xl p-4 border border-violet-200">
+          <h4 class="font-semibold text-violet-800 mb-2">입찰공고 · 참가등록</h4>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• 나라장터(G2B) 입찰공고 등록 (추정가격별 공고기간 준수)</li>
+            <li>• 입찰참가자 등록 및 <strong class="text-violet-700">입찰보증금 5% 이상</strong> 납부</li>
+            <li>• 입찰참가자격(면허·등록·제재 여부) 확인</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="flex justify-center"><span class="material-symbols-outlined text-slate-300 text-2xl">arrow_downward</span></div>
+
+      <div class="mb-2">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-100 text-amber-700 text-xs font-bold rounded-full">
+          <span class="material-symbols-outlined" style="font-size:14px">flag</span>
+          PHASE 2 — 입찰 · 개찰
+        </span>
+      </div>
+
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-amber-500 text-white rounded-full flex items-center justify-center font-bold">3</div>
+        <div class="flex-1 bg-amber-50 rounded-xl p-4 border border-amber-200">
+          <h4 class="font-semibold text-amber-800 mb-2">입찰서 제출 · 개찰</h4>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• 전자입찰서 제출 (마감시간 엄수, 공동인증서+보안토큰)</li>
+            <li>• 입찰 마감 즉시 시스템 <strong class="text-amber-700">자동 개찰</strong></li>
+            <li>• 2억원 이상: 복수예비가격 4개 추첨 → 평균 = 예정가격</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="flex justify-center"><span class="material-symbols-outlined text-slate-300 text-2xl">arrow_downward</span></div>
+
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold">4</div>
+        <div class="flex-1 bg-orange-50 rounded-xl p-4 border border-orange-200">
+          <h4 class="font-semibold text-orange-800 mb-2">낙찰자 결정</h4>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• <strong class="text-orange-700">최저가 낙찰:</strong> 10억 미만 물품·용역</li>
+            <li>• <strong class="text-orange-700">적격심사 낙찰:</strong> 10억 이상 물품·용역, 300억 미만 공사</li>
+            <li>• <strong class="text-orange-700">종합심사 낙찰:</strong> 300억 이상 공사</li>
+            <li>• 낙찰하한율 미만 투찰 시 자동 탈락</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="flex justify-center"><span class="material-symbols-outlined text-slate-300 text-2xl">arrow_downward</span></div>
+
+      <div class="mb-2">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full">
+          <span class="material-symbols-outlined" style="font-size:14px">flag</span>
+          PHASE 3 — 계약 체결
+        </span>
+      </div>
+
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-green-500 text-white rounded-full flex items-center justify-center font-bold">5</div>
+        <div class="flex-1 bg-green-50 rounded-xl p-4 border border-green-200">
+          <h4 class="font-semibold text-green-800 mb-2">낙찰통지 · 계약 체결</h4>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• 낙찰자에게 <strong class="text-green-700">낙찰통지서</strong> 발송</li>
+            <li>• 낙찰통지 후 <strong class="text-green-700">10일 이내</strong> 계약 체결</li>
+            <li>• 미체결 시 → 차순위자 통보 또는 재입찰, 부정당업자 제재 검토</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="flex justify-center"><span class="material-symbols-outlined text-slate-300 text-2xl">arrow_downward</span></div>
+
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-teal-500 text-white rounded-full flex items-center justify-center font-bold">6</div>
+        <div class="flex-1 bg-teal-50 rounded-xl p-4 border border-teal-200">
+          <h4 class="font-semibold text-teal-800 mb-2">유찰 시 처리</h4>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• 1인 참가 → <strong class="text-teal-700">유찰</strong> → 재공고입찰</li>
+            <li>• 재공고에도 1인 참가 → 그 1인과 <strong class="text-teal-700">수의계약</strong> 가능</li>
+            <li class="text-xs text-purple-600">※ 한시적 특례: 1인 입찰 시 재공고 없이 바로 수의계약</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <details open class="mt-8 border border-slate-200 rounded-xl overflow-hidden">
+      <summary class="flex items-center gap-3 p-4 bg-slate-50 hover:bg-slate-100 transition-colors cursor-pointer">
+        <span class="material-symbols-outlined text-slate-500">info</span>
+        <span class="font-semibold text-slate-700">참고 안내</span>
+        <span class="text-xs text-slate-400 ml-auto">낙찰하한율 · 감사대비</span>
+      </summary>
+      <div class="p-4 space-y-4">
+        <div class="bg-white border border-slate-200 rounded-xl p-4">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined text-blue-500">compare</span>
+            <div class="w-full">
+              <h4 class="font-semibold text-slate-800 mb-3">낙찰하한율 <span class="text-xs font-normal bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">2025.7.1 예규 개정</span></h4>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                <div class="p-3 bg-blue-50 rounded-lg border border-blue-100">
+                  <div class="font-bold text-blue-800 mb-2">공사</div>
+                  <p class="text-slate-700">10억 미만: <strong>89.745%</strong></p>
+                  <p class="text-slate-700">10~50억: <strong>88.745%</strong></p>
+                  <p class="text-slate-700">50~100억: <strong>87.495%</strong></p>
+                </div>
+                <div class="p-3 bg-amber-50 rounded-lg border border-amber-100">
+                  <div class="font-bold text-amber-800 mb-2">물품·용역</div>
+                  <p class="text-slate-700">2천만원 초과: <strong>88%</strong></p>
+                  <p class="text-slate-700">2천만원 이하: <strong>90%</strong></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-red-50 border border-red-200 rounded-xl p-4">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined text-red-500">gavel</span>
+            <div>
+              <h4 class="font-semibold text-red-800 mb-2">감사 대비 체크리스트</h4>
+              <ul class="text-sm text-slate-700 space-y-1.5">
+                <li class="flex items-start gap-2"><span class="material-symbols-outlined text-red-400 text-lg mt-0.5">warning</span><span><strong>공고기간 착각</strong> — 10억 이상은 15일인데 7일만 공고</span></li>
+                <li class="flex items-start gap-2"><span class="material-symbols-outlined text-red-400 text-lg mt-0.5">warning</span><span><strong>참가자격 과다 제한</strong> — 불필요하게 높은 실적 요건</span></li>
+                <li class="flex items-start gap-2"><span class="material-symbols-outlined text-red-400 text-lg mt-0.5">warning</span><span><strong>예정가격 누설</strong> — 개찰 전 노출 시 형사처벌 대상</span></li>
+                <li class="flex items-start gap-2"><span class="material-symbols-outlined text-red-400 text-lg mt-0.5">warning</span><span><strong>낙찰 후 계약 지연</strong> — 10일 이내 미체결 시 제재 검토</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </details>
+  </div>
+</div>
