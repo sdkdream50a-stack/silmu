@@ -1844,6 +1844,12 @@
 
         const result = await response.json();
 
+        if (result.login_required) {
+          if (confirm('로그인이 필요한 기능입니다.\n로그인 페이지로 이동하시겠습니까?')) {
+            window.location.href = '/users/sign_in';
+          }
+          return;
+        }
         if (result.success && result.fields) {
           analyzedData = result.fields;
           const fieldCount = Object.keys(result.fields).length;

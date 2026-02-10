@@ -102,6 +102,7 @@ async function quUpload(tid, file) {
 
     const data = await resp.json();
 
+    if (window.checkAiLoginRequired && window.checkAiLoginRequired(data)) return;
     if (data.success && data.fields) {
       // Call tool-specific mapping function
       const mapFn = window['quMapFields_' + tid];

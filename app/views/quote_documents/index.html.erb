@@ -120,6 +120,22 @@
 <section class="py-10">
   <div class="container-wide max-w-5xl">
 
+    <% unless user_signed_in? %>
+      <div class="qd-card" style="background:linear-gradient(135deg,#eef2ff,#e0e7ff); border-color:#c7d2fe; text-align:center; padding:40px 28px;">
+        <span class="material-symbols-outlined" style="font-size:48px; color:#4f46e5; margin-bottom:12px;">lock</span>
+        <h2 style="font-size:20px; font-weight:700; color:#312e81; margin-bottom:8px;">로그인이 필요한 기능입니다</h2>
+        <p style="color:#4338ca; margin-bottom:20px; font-size:15px;">AI 문서 분석 기능은 회원만 이용할 수 있습니다.<br>무료 회원가입 후 바로 사용하세요.</p>
+        <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+          <a href="<%= new_user_session_path %>" class="qd-btn qd-btn-primary">
+            <span class="material-symbols-outlined">login</span> 로그인
+          </a>
+          <a href="<%= new_user_registration_path %>" class="qd-btn qd-btn-secondary">
+            <span class="material-symbols-outlined">person_add</span> 회원가입
+          </a>
+        </div>
+      </div>
+    <% end %>
+
     <!-- Steps Indicator -->
     <div class="qd-steps" id="qd-steps">
       <div class="qd-step active" data-step="1">
@@ -656,6 +672,7 @@ function qdAnalyze() {
   .then(data => {
     btn.disabled = false;
     textEl.innerHTML = '<span class="material-symbols-outlined">auto_awesome</span> AI 분석 시작';
+    if (window.checkAiLoginRequired && window.checkAiLoginRequired(data)) return;
 
     if (data.success) {
       qdPopulateFields(data.fields);

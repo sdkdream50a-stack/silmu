@@ -88,6 +88,22 @@
 <section class="py-10">
   <div class="container-wide max-w-4xl">
 
+    <% unless user_signed_in? %>
+      <div class="od-card" style="background:linear-gradient(135deg,#eef2ff,#e0e7ff); border-color:#c7d2fe; text-align:center; padding:40px 28px; margin-bottom:24px;">
+        <span class="material-symbols-outlined" style="font-size:48px; color:#4f46e5; margin-bottom:12px;">lock</span>
+        <h2 style="font-size:20px; font-weight:700; color:#312e81; margin-bottom:8px;">로그인이 필요한 기능입니다</h2>
+        <p style="color:#4338ca; margin-bottom:20px; font-size:15px;">AI 공문서 작성 기능은 회원만 이용할 수 있습니다.<br>무료 회원가입 후 바로 사용하세요.</p>
+        <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+          <a href="<%= new_user_session_path %>" class="od-btn od-btn-primary" style="text-decoration:none;">
+            <span class="material-symbols-outlined">login</span> 로그인
+          </a>
+          <a href="<%= new_user_registration_path %>" class="od-btn" style="background:#f1f5f9; color:#475569; border:1px solid #e2e8f0; text-decoration:none;">
+            <span class="material-symbols-outlined">person_add</span> 회원가입
+          </a>
+        </div>
+      </div>
+    <% end %>
+
     <div class="od-info-box">
       <span class="material-symbols-outlined" style="font-size:20px;">info</span>
       <div class="od-info-text">
@@ -323,6 +339,7 @@ function odGenerate() {
   .then(function(data) {
     btn.disabled = false;
     document.getElementById('od-loading').classList.remove('active');
+    if (window.checkAiLoginRequired && window.checkAiLoginRequired(data)) return;
 
     if (data.success) {
       document.getElementById('od-doc-content').innerHTML = data.html;
