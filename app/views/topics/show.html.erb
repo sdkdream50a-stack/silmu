@@ -7,11 +7,22 @@
     "@type": "Article",
     "headline": "#{@topic.name} — 법령·절차·실무 가이드",
     "description": @topic.summary,
-    "author": { "@type": "Organization", "name": "실무" },
-    "publisher": { "@type": "Organization", "name": "실무", "logo": { "@type": "ImageObject", "url": "https://silmu.kr/icon.png" } },
+    "author": { "@type": "Organization", "name": "실무.kr" },
+    "publisher": { "@type": "Organization", "name": "실무.kr", "logo": { "@type": "ImageObject", "url": "https://silmu.kr/icon.png" } },
     "url": request.original_url,
+    "image": "https://silmu.kr/og-image.png",
     "inLanguage": "ko",
+    "dateModified": @topic.updated_at.iso8601,
     "mainEntityOfPage": request.original_url
+  }) %>
+  <%= json_ld({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "홈", "item": "https://silmu.kr" },
+      { "@type": "ListItem", "position": 2, "name": @topic.category_name, "item": "https://silmu.kr/guides" },
+      { "@type": "ListItem", "position": 3, "name": @topic.name, "item": request.original_url }
+    ]
   }) %>
   <% if @topic.faq_list.present? %>
     <%= json_ld({
