@@ -64,6 +64,11 @@ class Topic < ApplicationRecord
     keywords.split(',').map(&:strip)
   end
 
+  # 관련 감사사례 (DB 기반)
+  def related_audit_cases
+    AuditCase.published.where(topic_slug: slug).recent
+  end
+
   # FAQ 배열로 반환 (JSON 파싱)
   def faq_list
     return [] if faqs.blank?
