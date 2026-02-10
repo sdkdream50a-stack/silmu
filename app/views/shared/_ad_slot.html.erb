@@ -1,0 +1,13 @@
+<%# 광고 슬롯 파셜 — AdSense 미설정 시 아무것도 렌더링하지 않음 %>
+<%# 사용법: render 'shared/ad_slot', position: 'top' %>
+<% if Rails.env.production? && ENV['ADSENSE_CLIENT_ID'].present? %>
+  <div class="ad-slot ad-slot-<%= local_assigns[:position] || 'default' %> my-6">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="<%= ENV['ADSENSE_CLIENT_ID'] %>"
+         data-ad-slot="auto"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+<% end %>
