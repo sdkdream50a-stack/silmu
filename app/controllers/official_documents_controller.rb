@@ -1,4 +1,9 @@
 class OfficialDocumentsController < ApplicationController
+  # IP당 분당 3회, 일일 30회 제한
+  RATE_LIMIT = 3
+  RATE_PERIOD = 1.minute
+  DAILY_LIMIT = 30
+
   def index
     set_meta_tags(
       title: "공문서 AI 작성 도우미",
@@ -9,6 +14,10 @@ class OfficialDocumentsController < ApplicationController
   end
 
   def generate
+    if rate_limited?
+      return render json: { success: false, error: "요청이 너무 많습니다. 잠시 후 다시 시도해 주세요." }, status: :too_many_requests
+    end
+
     service = OfficialDocumentService.new(generate_params)
     result = service.generate
 
@@ -23,6 +32,28 @@ class OfficialDocumentsController < ApplicationController
   end
 
   private
+
+  def rate_limited?
+    ip = request.remote_ip
+
+    # 분당 제한
+    minute_key = "official_doc_rate:#{ip}"
+    minute_count = Rails.cache.read(minute_key).to_i
+    if minute_count >= RATE_LIMIT
+      return true
+    end
+
+    # 일일 제한
+    daily_key = "official_doc_daily:#{ip}:#{Date.today}"
+    daily_count = Rails.cache.read(daily_key).to_i
+    if daily_count >= DAILY_LIMIT
+      return true
+    end
+
+    Rails.cache.write(minute_key, minute_count + 1, expires_in: RATE_PERIOD)
+    Rails.cache.write(daily_key, daily_count + 1, expires_in: 24.hours)
+    false
+  end
 
   def generate_params
     params.permit(

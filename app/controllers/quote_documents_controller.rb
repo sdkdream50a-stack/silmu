@@ -7,6 +7,7 @@ class QuoteDocumentsController < ApplicationController
 
   RATE_LIMIT = 5
   RATE_PERIOD = 1.minute
+  DAILY_LIMIT = 50
 
   def index
     set_meta_tags(
@@ -51,15 +52,19 @@ class QuoteDocumentsController < ApplicationController
   private
 
   def rate_limited?
-    key = "quote_doc_rate:#{request.remote_ip}"
-    count = Rails.cache.read(key).to_i
+    ip = request.remote_ip
 
-    if count >= RATE_LIMIT
-      true
-    else
-      Rails.cache.write(key, count + 1, expires_in: RATE_PERIOD)
-      false
-    end
+    minute_key = "quote_doc_rate:#{ip}"
+    minute_count = Rails.cache.read(minute_key).to_i
+    return true if minute_count >= RATE_LIMIT
+
+    daily_key = "quote_doc_daily:#{ip}:#{Date.today}"
+    daily_count = Rails.cache.read(daily_key).to_i
+    return true if daily_count >= DAILY_LIMIT
+
+    Rails.cache.write(minute_key, minute_count + 1, expires_in: RATE_PERIOD)
+    Rails.cache.write(daily_key, daily_count + 1, expires_in: 24.hours)
+    false
   end
 
   def verify_request_origin
