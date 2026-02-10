@@ -19,6 +19,9 @@ class DocumentAnalyzerService
     start_date end_date inspection payment remarks
   ].freeze
 
+  # 단순 추출 작업은 Haiku, 복잡한 분석은 Sonnet
+  HAIKU_TYPES = %w[task_extraction quote_extraction].freeze
+
   def initialize
     @api_key = ENV["ANTHROPIC_API_KEY"]
   end
@@ -36,11 +39,23 @@ class DocumentAnalyzerService
       return { success: false, error: "파일 크기는 20MB 이하여야 합니다." }
     end
 
-    if content_type == "application/pdf"
+    # 파일 해시 기반 캐싱 — 동일 파일 재분석 방지
+    file_data = file.read
+    file.rewind
+    cache_key = "doc_analysis:#{document_type}:#{Digest::SHA256.hexdigest(file_data)}"
+    cached = Rails.cache.read(cache_key)
+    return cached if cached
+
+    result = if content_type == "application/pdf"
       analyze_pdf(file, document_type)
     else
       analyze_image(file, document_type, content_type)
     end
+
+    # 성공한 결과만 캐싱 (24시간)
+    Rails.cache.write(cache_key, result, expires_in: 24.hours) if result[:success]
+
+    result
   rescue => e
     Rails.logger.error("DocumentAnalyzerService error: #{e.message}")
     { success: false, error: "문서 분석 중 오류가 발생했습니다." }
@@ -48,7 +63,12 @@ class DocumentAnalyzerService
 
   private
 
+  def model_for_type(document_type)
+    HAIKU_TYPES.include?(document_type) ? "claude-haiku-4-5-20251001" : "claude-sonnet-4-20250514"
+  end
+
   def analyze_pdf(file, document_type)
+    @current_document_type = document_type
     text = extract_pdf_text(file)
 
     if text.blank?
@@ -68,6 +88,7 @@ class DocumentAnalyzerService
   end
 
   def analyze_image(file, document_type, content_type)
+    @current_document_type = document_type
     base64_data = Base64.strict_encode64(file.read)
     file.rewind
 
@@ -442,7 +463,7 @@ class DocumentAnalyzerService
     request["anthropic-version"] = "2023-06-01"
 
     request.body = {
-      model: "claude-sonnet-4-20250514",
+      model: model_for_type(@current_document_type),
       max_tokens: 3000,
       messages: messages
     }.to_json

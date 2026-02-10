@@ -6,9 +6,10 @@ class DocumentAnalysisController < ApplicationController
   MAX_FILE_SIZE = 20.megabytes
   ALLOWED_CONTENT_TYPES = %w[application/pdf image/jpeg image/png].freeze
 
-  # IP당 분당 5회 제한
+  # IP당 분당 5회, 일일 50회 제한
   RATE_LIMIT = 5
   RATE_PERIOD = 1.minute
+  DAILY_LIMIT = 50
 
   def analyze
     # 속도 제한 검사
@@ -47,15 +48,19 @@ class DocumentAnalysisController < ApplicationController
   private
 
   def rate_limited?
-    key = "doc_analysis_rate:#{request.remote_ip}"
-    count = Rails.cache.read(key).to_i
+    ip = request.remote_ip
 
-    if count >= RATE_LIMIT
-      true
-    else
-      Rails.cache.write(key, count + 1, expires_in: RATE_PERIOD)
-      false
-    end
+    minute_key = "doc_analysis_rate:#{ip}"
+    minute_count = Rails.cache.read(minute_key).to_i
+    return true if minute_count >= RATE_LIMIT
+
+    daily_key = "doc_analysis_daily:#{ip}:#{Date.today}"
+    daily_count = Rails.cache.read(daily_key).to_i
+    return true if daily_count >= DAILY_LIMIT
+
+    Rails.cache.write(minute_key, minute_count + 1, expires_in: RATE_PERIOD)
+    Rails.cache.write(daily_key, daily_count + 1, expires_in: 24.hours)
+    false
   end
 
   def verify_request_origin
