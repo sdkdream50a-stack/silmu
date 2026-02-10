@@ -182,10 +182,16 @@
                 <ul class="space-y-3 text-sm">
                   <% @guide[:sections][:laws].each do |law| %>
                     <li>
-                      <a href="https://www.law.go.kr" target="_blank" class="text-blue-600 hover:underline flex items-center gap-1">
-                        <%= law %>
-                        <span class="material-symbols-outlined text-xs">open_in_new</span>
-                      </a>
+                      <% if law.is_a?(Hash) && law[:url] %>
+                        <a href="<%= law[:url] %>" target="_blank" class="text-blue-600 hover:underline flex items-center gap-1">
+                          <%= law[:name] %>
+                          <span class="material-symbols-outlined text-xs">open_in_new</span>
+                        </a>
+                      <% elsif law.is_a?(Hash) %>
+                        <span class="text-gray-600"><%= law[:name] %></span>
+                      <% else %>
+                        <span class="text-gray-600"><%= law %></span>
+                      <% end %>
                     </li>
                   <% end %>
                 </ul>
