@@ -31,8 +31,8 @@ class ChatbotController < ApplicationController
     @board = params[:board].to_s.strip.truncate(50) if params[:board].present?
 
     if @query.present? && @query.length >= 2
-      # 1. 토픽 매칭 시도
-      @topic = Topic.find_by_query(@query)
+      # 1. 토픽 매칭 시도 (출발 토픽 제외)
+      @topic = Topic.find_by_query(@query, exclude_slug: params[:exclude])
 
       # 2. 관련 게시글 검색
       @results = CafeArticle.find_similar(@query, limit: 20)
