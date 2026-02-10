@@ -75,6 +75,7 @@
 - [검수조서 작성 가이드](https://silmu.kr/guides/2): 물품 납품 후 검수조서 작성 방법
 - [예정가격 작성 가이드](https://silmu.kr/guides/3): 적정 예정가격 산정 방법과 절차
 - [수의계약 체결 실무 가이드](https://silmu.kr/guides/4): 수의계약 요건, 절차, 주의사항
+- [입찰 실무 가이드](https://silmu.kr/guides/9): 경쟁입찰(일반·제한·지명) 요건, 공고기간, 낙찰자 결정 절차
 - [출장 여비 청구 가이드](https://silmu.kr/guides/5): 국내/국외 출장 여비 청구 방법
 - [연가 사용 및 관리 가이드](https://silmu.kr/guides/6): 연가일수 계산과 관리 방법
 - [민원 응대 매뉴얼](https://silmu.kr/guides/7): 민원인 응대 시 주의사항과 처리 절차
