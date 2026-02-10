@@ -55,6 +55,23 @@
       }
     </style>
 
+    <% if Rails.env.production? && ENV['GA_MEASUREMENT_ID'].present? %>
+      <!-- Google Analytics 4 -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=<%= ENV['GA_MEASUREMENT_ID'] %>"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '<%= ENV['GA_MEASUREMENT_ID'] %>');
+      </script>
+    <% end %>
+
+    <% if Rails.env.production? && ENV['ADSENSE_CLIENT_ID'].present? %>
+      <!-- Google AdSense -->
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=<%= ENV['ADSENSE_CLIENT_ID'] %>"
+           crossorigin="anonymous"></script>
+    <% end %>
+
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
   </head>
@@ -195,6 +212,8 @@
     <main class="flex-1">
       <%= yield %>
     </main>
+
+    <%= render 'shared/ad_slot', position: 'bottom' %>
 
     <!-- 퀵메뉴 (플로팅 버튼) — 강화 버전 -->
     <div class="fixed bottom-6 right-6 z-50<%= ' hidden' if content_for?(:hide_quick_menu) %>" id="quick-menu">
