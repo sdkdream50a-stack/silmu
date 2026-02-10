@@ -8,21 +8,30 @@
 
   <!-- 프로세스 개요 -->
   <div class="flex flex-wrap justify-center items-center gap-3 mb-10">
-    <% [
-      { step: "1", title: "견적가격 확인", color: "point" },
-      { step: "2", title: "시담 요청", color: "forest" },
-      { step: "3", title: "시담 진행", color: "navy" },
-      { step: "4", title: "재견적 징구", color: "warm" },
-      { step: "5", title: "계약상대자 결정", color: "rose" }
-    ].each_with_index do |item, index| %>
-      <div class="flex items-center gap-2 px-4 py-2.5 bg-<%= item[:color] %>-100 text-<%= item[:color] %>-700 rounded-xl font-semibold text-sm shadow-soft">
-        <span class="w-6 h-6 bg-<%= item[:color] %>-600 text-white rounded-full flex items-center justify-center text-xs font-bold"><%= item[:step] %></span>
-        <%= item[:title] %>
-      </div>
-      <% unless index == 4 %>
-        <span class="material-symbols-outlined text-slate-300">arrow_forward</span>
-      <% end %>
-    <% end %>
+    <div class="flex items-center gap-2 px-4 py-2.5 bg-indigo-100 text-indigo-700 rounded-xl font-semibold text-sm shadow-soft">
+      <span class="w-6 h-6 bg-indigo-600 text-white rounded-full flex items-center justify-center text-xs font-bold">1</span>
+      견적가격 확인
+    </div>
+    <span class="material-symbols-outlined text-slate-300">arrow_forward</span>
+    <div class="flex items-center gap-2 px-4 py-2.5 bg-emerald-100 text-emerald-700 rounded-xl font-semibold text-sm shadow-soft">
+      <span class="w-6 h-6 bg-emerald-600 text-white rounded-full flex items-center justify-center text-xs font-bold">2</span>
+      시담 요청
+    </div>
+    <span class="material-symbols-outlined text-slate-300">arrow_forward</span>
+    <div class="flex items-center gap-2 px-4 py-2.5 bg-slate-100 text-slate-700 rounded-xl font-semibold text-sm shadow-soft">
+      <span class="w-6 h-6 bg-slate-600 text-white rounded-full flex items-center justify-center text-xs font-bold">3</span>
+      시담 진행
+    </div>
+    <span class="material-symbols-outlined text-slate-300">arrow_forward</span>
+    <div class="flex items-center gap-2 px-4 py-2.5 bg-amber-100 text-amber-700 rounded-xl font-semibold text-sm shadow-soft">
+      <span class="w-6 h-6 bg-amber-600 text-white rounded-full flex items-center justify-center text-xs font-bold">4</span>
+      재견적 징구
+    </div>
+    <span class="material-symbols-outlined text-slate-300">arrow_forward</span>
+    <div class="flex items-center gap-2 px-4 py-2.5 bg-rose-100 text-rose-700 rounded-xl font-semibold text-sm shadow-soft">
+      <span class="w-6 h-6 bg-rose-600 text-white rounded-full flex items-center justify-center text-xs font-bold">5</span>
+      계약상대자 결정
+    </div>
   </div>
 
   <!-- 상세 흐름도 -->
