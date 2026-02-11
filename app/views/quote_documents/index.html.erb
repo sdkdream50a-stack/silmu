@@ -821,7 +821,7 @@ function qdAddItemRow(item) {
   const tr = document.createElement('tr');
   tr.id = 'qd-item-' + idx;
   tr.innerHTML =
-    '<td style="text-align:center; color:#94a3b8; font-size:12px;">' + tbody.children.length + 1 + '</td>' +
+    '<td style="text-align:center; color:#94a3b8; font-size:12px;">' + (tbody.children.length + 1) + '</td>' +
     '<td><input type="text" class="qd-item-name" value="' + qdAttr(item.name) + '" placeholder="품명"></td>' +
     '<td><input type="text" class="qd-item-spec" value="' + qdAttr(item.spec) + '" placeholder="규격"></td>' +
     '<td><input type="text" class="qd-item-unit" value="' + qdAttr(item.unit || 'EA') + '" style="text-align:center;"></td>' +
