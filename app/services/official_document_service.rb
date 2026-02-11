@@ -87,8 +87,16 @@ class OfficialDocumentService
   def generate
     return nil unless @api_key
 
+    # 동일 입력 캐싱 — 반복 API 호출 방지
+    cache_key = "official_doc:#{Digest::SHA256.hexdigest(build_user_message)}"
+    cached = Rails.cache.read(cache_key)
+    return cached if cached
+
     content = call_anthropic_api
-    sanitize_html(content) if content
+    result = sanitize_html(content) if content
+
+    Rails.cache.write(cache_key, result, expires_in: 7.days) if result.present?
+    result
   rescue => e
     Rails.logger.error "OfficialDocumentService error: #{e.message}"
     nil
