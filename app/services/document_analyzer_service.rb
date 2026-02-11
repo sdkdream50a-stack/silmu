@@ -56,7 +56,7 @@ class DocumentAnalyzerService
     end
 
     # 성공한 결과만 캐싱 (24시간)
-    Rails.cache.write(cache_key, result, expires_in: 24.hours) if result[:success]
+    Rails.cache.write(cache_key, result, expires_in: 7.days) if result[:success]
 
     result
   rescue => e
@@ -117,7 +117,7 @@ class DocumentAnalyzerService
     messages = [{ role: "user", content: content_blocks }]
     result = call_api(messages)
 
-    Rails.cache.write(cache_key, result, expires_in: 24.hours) if result[:success]
+    Rails.cache.write(cache_key, result, expires_in: 7.days) if result[:success]
     result
   rescue => e
     Rails.logger.error("DocumentAnalyzerService multi-file error: #{e.message}")
