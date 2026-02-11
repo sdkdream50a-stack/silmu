@@ -749,6 +749,31 @@ function qdPopulateFields(f) {
     document.getElementById('qd-quote-date').value = f.quote_date;
   }
 
+  // 계약 구분 자동 설정
+  if (f.contract_type) {
+    const typeMap = { '물품': '물품', '용역': '용역', '공사': '공사' };
+    const typeVal = typeMap[f.contract_type];
+    if (typeVal) {
+      document.getElementById('qd-contract-type').value = typeVal;
+      qdUpdateTypeFields();
+    }
+  }
+
+  // 사업 필요성 자동 채움
+  if (f.necessity) {
+    document.getElementById('qd-necessity').value = f.necessity;
+  }
+
+  // 납품기한 → 용역 과업기간 / 공사기간에도 반영
+  if (f.delivery_period) {
+    const ctype = document.getElementById('qd-contract-type').value;
+    if (ctype === '용역') {
+      document.getElementById('qd-task-period').value = f.delivery_period;
+    } else if (ctype === '공사') {
+      document.getElementById('qd-construction-period').value = f.delivery_period;
+    }
+  }
+
   // 항목 렌더
   const tbody = document.getElementById('qd-items-body');
   tbody.innerHTML = '';
