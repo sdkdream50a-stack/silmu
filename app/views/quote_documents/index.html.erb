@@ -548,6 +548,7 @@
   <span id="qd-toast-msg"></span>
 </div>
 
+<script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
 <script>
 // ========== 유틸 ==========
 function qdEscape(str) {
@@ -961,6 +962,47 @@ function qdGenerateDocuments() {
   qdShowToast(count + '개 문서가 생성되었습니다');
 }
 
+// ----- 기대효과 생성 (plain text, HTML 용도 시 qdEscape 필요) -----
+function qdBuildExpectedEffects(d) {
+  var effects = [];
+  var t = d.contractType;
+  var pn = d.projectName;
+  if (t === '물품') {
+    effects.push('- ' + pn + ' 도입을 통한 업무 효율성 향상');
+    effects.push('- 노후 장비(시설) 교체로 유지보수 비용 절감');
+    effects.push('- 안전하고 쾌적한 업무환경 조성');
+  } else if (t === '용역') {
+    effects.push('- 전문 용역 수행을 통한 ' + pn + ' 성과물 확보');
+    effects.push('- 체계적 분석 및 전문 결과물 기반 업무 품질 향상');
+    effects.push('- 내부 인력 부담 경감 및 전문성 확보');
+  } else {
+    effects.push('- ' + pn + ' 시행으로 시설물 안전성 확보');
+    effects.push('- 시설물 기능 개선 및 수명 연장');
+    effects.push('- 이용자 편의 증진 및 쾌적한 환경 조성');
+  }
+  return effects.join('\n');
+}
+
+// ----- 관련 법규 생성 -----
+function qdBuildLegalRefs(d) {
+  var refs = [];
+  refs.push('- 지방자치단체를 당사자로 하는 계약에 관한 법률 (지방계약법)');
+  refs.push('- 동법 시행령 제25조 (수의계약에 의할 수 있는 경우)');
+  refs.push('- 동법 시행령 제9조 (예정가격의 결정기준)');
+  if (d.contractType === '물품') {
+    refs.push('- 물품관리법 및 동법 시행령');
+    refs.push('- 지방자치단체 세출예산 집행기준 (행정안전부)');
+  } else if (d.contractType === '용역') {
+    refs.push('- 지방자치단체 입찰 및 계약 집행기준 (행정안전부)');
+    refs.push('- 용역계약 일반조건 (지방계약법 시행규칙 별지)');
+  } else {
+    refs.push('- 건설산업기본법 및 동법 시행령');
+    refs.push('- 지방자치단체 공사계약 일반조건');
+    refs.push('- 시설물의 안전 및 유지관리에 관한 특별법');
+  }
+  return refs.join('\n');
+}
+
 // ----- 사업계획서 -----
 function qdBuildPlanDoc(d) {
   let h = '';
@@ -980,7 +1022,19 @@ function qdBuildPlanDoc(d) {
   // 필요성
   h += '<div class="qd-doc-section">';
   h += '<div class="qd-doc-section-title">1. 사업 필요성</div>';
+
+  // 가. 추진 배경 및 필요성
+  h += '<div style="font-size:13px; font-weight:600; color:#334155; margin:12px 0 6px 4px;">가. 추진 배경 및 필요성</div>';
   h += '<div class="qd-doc-content">' + qdEscape(d.necessity) + '</div>';
+
+  // 나. 기대효과
+  h += '<div style="font-size:13px; font-weight:600; color:#334155; margin:12px 0 6px 4px;">나. 기대효과</div>';
+  h += '<div class="qd-doc-content">' + qdEscape(qdBuildExpectedEffects(d)) + '</div>';
+
+  // 다. 관련 법규 및 지침
+  h += '<div style="font-size:13px; font-weight:600; color:#334155; margin:12px 0 6px 4px;">다. 관련 법규 및 지침</div>';
+  h += '<div class="qd-doc-content">' + qdEscape(qdBuildLegalRefs(d)) + '</div>';
+
   h += '</div>';
 
   // 사업내용
@@ -1356,19 +1410,296 @@ function qdCopyDoc(type) {
 }
 
 function qdDownloadDoc(type, docName) {
-  const el = document.getElementById('qd-doc-' + type);
-  const text = el.innerText || el.textContent;
-  const pName = document.getElementById('qd-project-name').value.trim() || '문서';
-  const blob = new Blob([text], { type:'text/plain;charset=utf-8' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = docName + '_' + pName + '.txt';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-  qdShowToast('파일이 다운로드되었습니다');
+  var d = qdCollectData();
+  var pName = d.projectName || '문서';
+
+  var builders = {
+    plan: qdExcelPlan,
+    budget: qdExcelBudget,
+    price: qdExcelPrice,
+    taskorder: qdExcelTaskOrder,
+    estimate: qdExcelEstimate
+  };
+
+  var builder = builders[type];
+  if (!builder) return;
+
+  var ws = builder(d);
+  var wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, docName);
+  XLSX.writeFile(wb, docName + '_' + pName + '.xlsx');
+  qdShowToast('엑셀 파일이 다운로드되었습니다');
+}
+
+// ----- 엑셀: 사업계획서 -----
+function qdExcelPlan(d) {
+  var rows = [];
+  rows.push(['사 업 계 획 서']);
+  rows.push([]);
+  rows.push(['사업명', d.projectName]);
+  rows.push(['사업부서', d.department]);
+  if (d.manager) rows.push(['담당자', d.manager + (d.deptPhone ? ' (' + d.deptPhone + ')' : '')]);
+  rows.push(['계약구분', d.contractType + ' 수의계약 (1인 견적)']);
+  rows.push(['작성일', qdDateStr()]);
+  rows.push([]);
+
+  rows.push(['1. 사업 필요성']);
+  rows.push(['가. 추진 배경 및 필요성']);
+  rows.push([d.necessity]);
+  rows.push([]);
+  rows.push(['나. 기대효과']);
+  qdBuildExpectedEffects(d).split('\n').forEach(function(line) { rows.push([line]); });
+  rows.push([]);
+  rows.push(['다. 관련 법규 및 지침']);
+  qdBuildLegalRefs(d).split('\n').forEach(function(line) { rows.push([line]); });
+  rows.push([]);
+
+  rows.push(['2. 사업 내용']);
+  rows.push(['No', '품명', '규격', '수량', '단위', '단가', '금액']);
+  d.items.forEach(function(item, i) {
+    rows.push([i + 1, item.name, item.spec, item.qty, item.unit, item.unitPrice, item.amount]);
+  });
+  rows.push([]);
+
+  rows.push(['3. 소요 예산']);
+  rows.push(['금액', d.total, '', '', '', '', '금 ' + qdFmt(d.total) + '원 (' + qdNumberToKorean(d.total) + '원)']);
+  if (d.overhead > 0) {
+    rows.push(['내역', '직접비 ' + qdFmt(d.directCost) + '원 + 간접비 등 ' + qdFmt(d.overhead) + '원 + 부가세 ' + qdFmt(d.vat) + '원']);
+  } else {
+    rows.push(['내역', '공급가액 ' + qdFmt(d.supply) + '원 + 부가세 ' + qdFmt(d.vat) + '원']);
+  }
+  rows.push([]);
+
+  rows.push(['4. 추진 방법']);
+  rows.push(['계약방법', d.contractType + ' 수의계약 (1인 견적)']);
+  rows.push(['계약근거', '지방계약법 시행령 제25조 제1항 제5호']);
+
+  var ws = XLSX.utils.aoa_to_sheet(rows);
+  ws['!cols'] = [{wch:14},{wch:24},{wch:20},{wch:10},{wch:8},{wch:14},{wch:14}];
+  ws['!merges'] = [{s:{r:0,c:0},e:{r:0,c:6}}];
+  return ws;
+}
+
+// ----- 엑셀: 소요예산추정서 -----
+function qdExcelBudget(d) {
+  var rows = [];
+  rows.push(['소 요 예 산 추 정 서']);
+  rows.push([]);
+  rows.push(['건명', d.projectName]);
+  rows.push(['추정근거', '거래실례가격 (견적서 기반)']);
+  rows.push(['작성일', qdDateStr()]);
+  rows.push([]);
+
+  rows.push(['내역']);
+  rows.push(['No', '품명', '규격', '단위', '수량', '단가(원)', '금액(원)']);
+  d.items.forEach(function(item, i) {
+    rows.push([i + 1, item.name, item.spec, item.unit, item.qty, item.unitPrice, item.amount]);
+  });
+  if (d.overhead > 0) {
+    rows.push(['', '', '', '', '', '직접비 소계', d.directCost]);
+    rows.push(['', '', '', '', '', '간접비·관리비·이윤', d.overhead]);
+  }
+  rows.push(['', '', '', '', '', '공급가액', d.supply]);
+  rows.push(['', '', '', '', '', '부가가치세 (10%)', d.vat]);
+  rows.push(['', '', '', '', '', '합계', d.total]);
+  rows.push([]);
+
+  rows.push(['금액', '금 ' + qdFmt(d.total) + '원 (' + qdNumberToKorean(d.total) + '원)']);
+  rows.push([]);
+
+  if (d.companyName) {
+    rows.push(['견적 업체']);
+    rows.push(['업체명', d.companyName]);
+    if (d.businessNo) rows.push(['사업자등록번호', d.businessNo]);
+    if (d.representative) rows.push(['대표자', d.representative]);
+    if (d.quoteDate) rows.push(['견적일', d.quoteDate]);
+  }
+
+  var ws = XLSX.utils.aoa_to_sheet(rows);
+  ws['!cols'] = [{wch:6},{wch:22},{wch:18},{wch:8},{wch:8},{wch:18},{wch:16}];
+  ws['!merges'] = [{s:{r:0,c:0},e:{r:0,c:6}}];
+  return ws;
+}
+
+// ----- 엑셀: 예정가격조서 -----
+function qdExcelPrice(d) {
+  var thresholdLabel = d.contractType === '공사' ? '5천만원' : '2천만원';
+  var thresholdAmount = d.contractType === '공사' ? 50000000 : 20000000;
+  var isUnder = d.supply <= thresholdAmount;
+
+  var rows = [];
+  rows.push(['예 정 가 격 조 서']);
+  rows.push([]);
+  rows.push(['건명', d.projectName]);
+  rows.push(['계약 구분', d.contractType]);
+  rows.push(['가격결정 방법', '거래실례가격 (견적서 기준)']);
+  rows.push(['작성일', qdDateStr()]);
+  rows.push([]);
+
+  rows.push(['1. 추정가격 산정 (부가세 제외)']);
+  if (d.overhead > 0) {
+    rows.push(['직접비', d.directCost]);
+    rows.push(['간접비·관리비·이윤', d.overhead]);
+  }
+  rows.push(['추정가격 (공급가액)', d.supply]);
+  rows.push(['※ 추정가격 = 부가세 제외 금액. 계약방법(수의/입찰) 결정 기준 (지방계약법 시행령 제7조)']);
+  rows.push([]);
+
+  rows.push(['2. 예정가격 결정 (부가세 포함)']);
+  rows.push(['추정가격', d.supply]);
+  rows.push(['부가가치세 (10%)', d.vat]);
+  rows.push(['예정가격', d.total]);
+  rows.push(['※ 예정가격 = 추정가격 + 부가세. 계약 체결 기준가 (지방계약법 시행령 제9조)']);
+  rows.push([]);
+
+  rows.push(['추정가격 (부가세 제외)', '금 ' + qdFmt(d.supply) + '원 (' + qdNumberToKorean(d.supply) + '원)']);
+  rows.push(['예정가격 (부가세 포함)', '금 ' + qdFmt(d.total) + '원 (' + qdNumberToKorean(d.total) + '원)']);
+  rows.push([]);
+
+  rows.push(['수의계약 해당 여부']);
+  if (isUnder) {
+    rows.push(['판정', '1인 수의계약 가능']);
+    rows.push(['사유', '추정가격 ' + qdFmt(d.supply) + '원 ≤ ' + d.contractType + ' 기준금액 ' + thresholdLabel + ' (부가세 제외 기준)']);
+  } else {
+    rows.push(['판정', '1인 수의계약 기준금액 초과']);
+    rows.push(['사유', '추정가격 ' + qdFmt(d.supply) + '원 > ' + d.contractType + ' 기준금액 ' + thresholdLabel + ' → 2인 이상 견적 또는 입찰 필요']);
+  }
+  rows.push([]);
+
+  if (d.companyName) {
+    rows.push(['견적 제출 업체']);
+    rows.push(['업체명', d.companyName]);
+    if (d.businessNo) rows.push(['사업자등록번호', d.businessNo]);
+    if (d.representative) rows.push(['대표자', d.representative]);
+  }
+
+  var ws = XLSX.utils.aoa_to_sheet(rows);
+  ws['!cols'] = [{wch:24},{wch:50}];
+  ws['!merges'] = [{s:{r:0,c:0},e:{r:0,c:1}}];
+  return ws;
+}
+
+// ----- 엑셀: 과업내용서 -----
+function qdExcelTaskOrder(d) {
+  var rows = [];
+  rows.push(['과 업 내 용 서']);
+  rows.push([]);
+  rows.push(['과업명', d.projectName]);
+  rows.push(['발주부서', d.department]);
+  if (d.manager) rows.push(['담당자', d.manager + (d.deptPhone ? ' (' + d.deptPhone + ')' : '')]);
+  if (d.taskPeriod) rows.push(['과업 기간', d.taskPeriod]);
+  if (d.taskLocation) rows.push(['수행 장소', d.taskLocation]);
+  rows.push(['작성일', qdDateStr()]);
+  rows.push([]);
+
+  rows.push(['1. 과업 목적']);
+  rows.push([d.necessity]);
+  rows.push([]);
+
+  rows.push(['2. 과업 범위 및 내용']);
+  rows.push(['No', '과업 항목', '규격/내용', '단위', '수량']);
+  d.items.forEach(function(item, i) {
+    rows.push([i + 1, item.name, item.spec, item.unit, item.qty]);
+  });
+  rows.push([]);
+
+  var sn = 3;
+  if (d.taskPeriod) {
+    rows.push([sn + '. 과업 기간']);
+    rows.push([d.taskPeriod]);
+    rows.push([]);
+    sn++;
+  }
+  if (d.deliverables) {
+    rows.push([sn + '. 납품물']);
+    rows.push([d.deliverables]);
+    rows.push([]);
+    sn++;
+  }
+
+  rows.push([sn + '. 소요 예산']);
+  rows.push(['금액', d.total, '', '', '금 ' + qdFmt(d.total) + '원 (' + qdNumberToKorean(d.total) + '원)']);
+  if (d.overhead > 0) {
+    rows.push(['내역', '직접비 ' + qdFmt(d.directCost) + '원 + 간접비 등 ' + qdFmt(d.overhead) + '원 + 부가세 ' + qdFmt(d.vat) + '원']);
+  } else {
+    rows.push(['내역', '공급가액 ' + qdFmt(d.supply) + '원 + 부가세 ' + qdFmt(d.vat) + '원']);
+  }
+
+  var ws = XLSX.utils.aoa_to_sheet(rows);
+  ws['!cols'] = [{wch:12},{wch:24},{wch:22},{wch:8},{wch:10}];
+  ws['!merges'] = [{s:{r:0,c:0},e:{r:0,c:4}}];
+  return ws;
+}
+
+// ----- 엑셀: 물량내역서+시방서 -----
+function qdExcelEstimate(d) {
+  var rows = [];
+
+  // === 물량내역서 ===
+  rows.push(['물 량 내 역 서']);
+  rows.push([]);
+  rows.push(['공사명', d.projectName]);
+  if (d.constructionLocation) rows.push(['공사 장소', d.constructionLocation]);
+  if (d.constructionPeriod) rows.push(['공사 기간', d.constructionPeriod]);
+  rows.push(['작성일', qdDateStr()]);
+  rows.push([]);
+
+  rows.push(['공사 내역']);
+  rows.push(['No', '공종/품명', '규격', '단위', '수량', '단가(원)', '금액(원)']);
+  d.items.forEach(function(item, i) {
+    rows.push([i + 1, item.name, item.spec, item.unit, item.qty, item.unitPrice, item.amount]);
+  });
+  rows.push(['', '', '', '', '', '직접공사비 소계', d.directCost]);
+  if (d.overhead > 0) {
+    rows.push(['', '', '', '', '', '간접비·관리비·이윤', d.overhead]);
+    rows.push(['', '', '', '', '', '공급가액', d.supply]);
+  }
+  rows.push(['', '', '', '', '', '부가가치세 (10%)', d.vat]);
+  rows.push(['', '', '', '', '', '합계', d.total]);
+  rows.push([]);
+  rows.push(['금액', '금 ' + qdFmt(d.total) + '원 (' + qdNumberToKorean(d.total) + '원)']);
+  rows.push([]);
+  rows.push([]);
+
+  // === 시방서 ===
+  rows.push(['시   방   서']);
+  rows.push([]);
+  rows.push(['공사명', d.projectName]);
+  rows.push(['시공부서', d.department]);
+  if (d.manager) rows.push(['감독관', d.manager + (d.deptPhone ? ' (' + d.deptPhone + ')' : '')]);
+  if (d.constructionLocation) rows.push(['공사 장소', d.constructionLocation]);
+  if (d.constructionPeriod) rows.push(['공사 기간', d.constructionPeriod]);
+  rows.push(['공사 금액', '금 ' + qdFmt(d.total) + '원']);
+  rows.push(['지시일', qdDateStr()]);
+  rows.push([]);
+
+  rows.push(['1. 시공 내용']);
+  rows.push(['공종/품명', '규격', '수량']);
+  d.items.forEach(function(item) {
+    rows.push([item.name, item.spec, item.qty + ' ' + item.unit]);
+  });
+  rows.push([]);
+
+  rows.push(['2. 시공 시 유의사항']);
+  var defaultNotes = '- 안전관리에 만전을 기하고, 안전사고 발생 시 시공자가 책임진다.\n- 기존 시설물 훼손 시 원상복구하여야 한다.\n- 작업 완료 후 현장을 깨끗이 정리·정돈한다.';
+  var notes = d.constructionNotes ? d.constructionNotes + '\n' + defaultNotes : defaultNotes;
+  notes.split('\n').forEach(function(line) {
+    rows.push([line]);
+  });
+
+  var ws = XLSX.utils.aoa_to_sheet(rows);
+  ws['!cols'] = [{wch:16},{wch:22},{wch:18},{wch:8},{wch:8},{wch:18},{wch:16}];
+  ws['!merges'] = [{s:{r:0,c:0},e:{r:0,c:6}}];
+
+  // 시방서 제목행 병합 찾기
+  for (var r = 0; r < rows.length; r++) {
+    if (rows[r][0] === '시   방   서') {
+      ws['!merges'].push({s:{r:r,c:0},e:{r:r,c:6}});
+      break;
+    }
+  }
+
+  return ws;
 }
 
 function qdPrintDoc(type) {
