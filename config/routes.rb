@@ -76,6 +76,10 @@ Rails.application.routes.draw do
   get "tools/quote-auto", to: "quote_documents#index", as: :quote_auto
   post "quote-documents/extract", to: "quote_documents#extract"
 
+  # 견적서 검토 시스템 (로그인 불필요)
+  get "tools/quote-review", to: "quote_reviews#index", as: :quote_review
+  post "quote-reviews/analyze", to: "quote_reviews#analyze"
+
   # 사업계획서 생성기
   get "tools/project-plan", to: "project_plans#index", as: :project_plan
 
