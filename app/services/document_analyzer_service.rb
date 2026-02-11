@@ -14,7 +14,7 @@ class DocumentAnalyzerService
   MAX_FILE_SIZE = 20.megabytes
 
   # 프롬프트 변경 시 버전을 올려 캐시 무효화
-  PROMPT_VERSION = 4
+  PROMPT_VERSION = 5
 
   EXTRACT_FIELDS = %w[
     project_name organization department budget contract_period
@@ -568,7 +568,8 @@ class DocumentAnalyzerService
     # 금액 필드를 정수로 정규화 (AI가 "1,500,000" 같은 문자열로 반환하는 경우 대비)
     %w[supply_amount vat_amount total_amount].each do |key|
       next unless fields.key?(key)
-      fields[key] = fields[key].to_s.gsub(/[^\d]/, "").to_i
+      val = fields[key]
+      fields[key] = val.is_a?(Numeric) ? val.to_i : val.to_s.gsub(/[^\d]/, "").to_i
     end
 
     # items 배열 내 숫자 필드도 정규화
@@ -576,7 +577,8 @@ class DocumentAnalyzerService
       fields["items"].each do |item|
         %w[qty unit_price].each do |key|
           next unless item.key?(key)
-          item[key] = item[key].to_s.gsub(/[^\d]/, "").to_i
+          val = item[key]
+          item[key] = val.is_a?(Numeric) ? val.to_i : val.to_s.gsub(/[^\d]/, "").to_i
         end
       end
     end
