@@ -31,13 +31,13 @@
     <div class="qu-drop-zone" id="<%= tid %>-drop-zone"
          ondragover="event.preventDefault(); this.classList.add('dragover');"
          ondragleave="this.classList.remove('dragover');"
-         ondrop="event.preventDefault(); this.classList.remove('dragover'); quUpload('<%= tid %>', event.dataTransfer.files[0]);"
+         ondrop="event.preventDefault(); this.classList.remove('dragover'); quUpload('<%= tid %>', event.dataTransfer.files);"
          onclick="document.getElementById('<%= tid %>-file-input').click();">
-      <input type="file" id="<%= tid %>-file-input" accept=".pdf,.jpg,.jpeg,.png" style="display:none;"
-             onchange="quUpload('<%= tid %>', this.files[0]);">
+      <input type="file" id="<%= tid %>-file-input" accept=".pdf,.jpg,.jpeg,.png" multiple style="display:none;"
+             onchange="quUpload('<%= tid %>', this.files);">
       <span class="material-symbols-outlined" style="font-size:40px; color:#c7d2fe;">cloud_upload</span>
       <div style="font-size:14px; font-weight:600; color:#475569; margin-top:6px;">견적서 파일을 끌어다 놓거나 클릭</div>
-      <div style="font-size:12px; color:#94a3b8; margin-top:4px;">PDF, JPG, PNG (최대 20MB)</div>
+      <div style="font-size:12px; color:#94a3b8; margin-top:4px;">PDF, JPG, PNG (파일당 최대 20MB, 여러 장 가능)</div>
     </div>
 
     <div id="<%= tid %>-upload-loading" style="display:none; text-align:center; padding:24px;">
@@ -67,18 +67,21 @@ function quToggle(tid) {
   }
 }
 
-async function quUpload(tid, file) {
-  if (!file) return;
+async function quUpload(tid, fileList) {
+  const files = Array.from(fileList);
+  if (files.length === 0) return;
 
   // Validate
   const allowed = ['application/pdf', 'image/jpeg', 'image/png'];
-  if (!allowed.includes(file.type)) {
-    quShowResult(tid, 'error', 'PDF, JPG, PNG 파일만 업로드 가능합니다.');
-    return;
-  }
-  if (file.size > 20 * 1024 * 1024) {
-    quShowResult(tid, 'error', '파일 크기는 20MB 이하만 가능합니다.');
-    return;
+  for (const file of files) {
+    if (!allowed.includes(file.type)) {
+      quShowResult(tid, 'error', 'PDF, JPG, PNG 파일만 업로드 가능합니다.');
+      return;
+    }
+    if (file.size > 20 * 1024 * 1024) {
+      quShowResult(tid, 'error', '개별 파일 크기는 20MB 이하만 가능합니다.');
+      return;
+    }
   }
 
   // Show loading
@@ -91,7 +94,7 @@ async function quUpload(tid, file) {
 
   try {
     const formData = new FormData();
-    formData.append('file', file);
+    files.forEach(f => formData.append('files[]', f));
 
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
     const resp = await fetch('/quote-documents/extract', {

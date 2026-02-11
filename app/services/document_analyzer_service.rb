@@ -61,6 +61,66 @@ class DocumentAnalyzerService
     { success: false, error: "문서 분석 중 오류가 발생했습니다." }
   end
 
+  # 다중 파일 분석 (견적서 여러 장 등)
+  def analyze_multiple(files:, document_type:)
+    return { success: false, error: "API 키가 설정되지 않았습니다." } unless @api_key.present?
+    return { success: false, error: "파일을 업로드해주세요." } if files.blank?
+
+    # 단일 파일이면 기존 메서드로 위임
+    return analyze(file: files.first, document_type: document_type) if files.size == 1
+
+    files.each do |file|
+      unless file.respond_to?(:content_type) && ALLOWED_CONTENT_TYPES.include?(file.content_type)
+        return { success: false, error: "지원하지 않는 파일 형식입니다. (PDF, JPG, PNG만 가능)" }
+      end
+      if file.size > MAX_FILE_SIZE
+        return { success: false, error: "개별 파일 크기는 20MB 이하여야 합니다." }
+      end
+    end
+
+    # 다중 파일 캐시 키
+    digests = files.map { |f| d = f.read; f.rewind; Digest::SHA256.hexdigest(d) }
+    cache_key = "doc_analysis:#{document_type}:multi:#{Digest::SHA256.hexdigest(digests.sort.join)}"
+    cached = Rails.cache.read(cache_key)
+    return cached if cached
+
+    @current_document_type = document_type
+
+    pdf_files = files.select { |f| f.content_type == "application/pdf" }
+    image_files = files.reject { |f| f.content_type == "application/pdf" }
+
+    content_blocks = []
+
+    # 이미지 블록 추가
+    image_files.each do |file|
+      base64_data = Base64.strict_encode64(file.read)
+      file.rewind
+      content_blocks << {
+        type: "image",
+        source: { type: "base64", media_type: file.content_type, data: base64_data }
+      }
+    end
+
+    # PDF 텍스트 추출·결합
+    pdf_text = pdf_files.map { |f| extract_pdf_text(f) }.reject(&:blank?).join("\n\n---\n\n")
+    if pdf_text.present?
+      max_len = [8000 * pdf_files.size, 24000].min
+      pdf_text = pdf_text[0..max_len] if pdf_text.length > max_len
+    end
+
+    prompt = build_prompt(document_type, pdf_text.presence)
+    content_blocks << { type: "text", text: prompt }
+
+    messages = [{ role: "user", content: content_blocks }]
+    result = call_api(messages)
+
+    Rails.cache.write(cache_key, result, expires_in: 24.hours) if result[:success]
+    result
+  rescue => e
+    Rails.logger.error("DocumentAnalyzerService multi-file error: #{e.message}")
+    { success: false, error: "문서 분석 중 오류가 발생했습니다." }
+  end
+
   private
 
   def model_for_type(document_type)
