@@ -284,6 +284,25 @@
           </button>
         </div>
 
+        <!-- 간접비 (원가계산서 기반 공사 견적일 때 표시) -->
+        <div id="qd-overhead-section" class="qd-hidden" style="margin-top:16px; padding:14px 16px; background:#fffbeb; border:1px solid #fde68a; border-radius:10px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+            <div>
+              <div style="font-size:13px; font-weight:600; color:#92400e; display:flex; align-items:center; gap:4px;">
+                <span class="material-symbols-outlined" style="font-size:16px;">info</span>
+                간접비·관리비·이윤 (원가계산서 기반)
+              </div>
+              <div style="font-size:12px; color:#a16207; margin-top:2px;">간접노무비, 보험료, 기타경비, 일반관리비, 이윤 등이 포함된 금액입니다</div>
+            </div>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <input type="number" class="qd-input" id="qd-overhead-input" value="0" min="0"
+                     style="width:150px; text-align:right; padding:6px 10px; font-size:14px; font-weight:600;"
+                     onchange="qdRecalc()" oninput="qdRecalc()">
+              <span style="font-size:13px; color:#64748b;">원</span>
+            </div>
+          </div>
+        </div>
+
         <!-- 금액 요약 -->
         <div class="qd-summary" id="qd-amount-summary">
           <div class="qd-summary-item">
@@ -739,7 +758,33 @@ function qdPopulateFields(f) {
     qdAddItemRow({});
   }
 
+  // 간접비 자동 감지: AI가 추출한 공급가액과 항목 합계의 차이
+  const itemSum = qdGetItemSum();
+  const aiSupply = parseInt(f.supply_amount) || 0;
+  const overheadEl = document.getElementById('qd-overhead-input');
+  const overheadSection = document.getElementById('qd-overhead-section');
+
+  if (aiSupply > 0 && aiSupply > itemSum && (aiSupply - itemSum) > 100) {
+    const overhead = aiSupply - itemSum;
+    overheadEl.value = overhead;
+    overheadSection.classList.remove('qd-hidden');
+  } else {
+    overheadEl.value = 0;
+    overheadSection.classList.add('qd-hidden');
+  }
+
   qdRecalc();
+}
+
+// 항목 합계(직접비) 계산 헬퍼
+function qdGetItemSum() {
+  let sum = 0;
+  document.querySelectorAll('#qd-items-body tr').forEach(tr => {
+    const qty = parseInt(tr.querySelector('.qd-item-qty')?.value) || 0;
+    const price = parseInt(tr.querySelector('.qd-item-price')?.value) || 0;
+    sum += qty * price;
+  });
+  return sum;
 }
 
 let qdItemIndex = 0;
@@ -785,16 +830,18 @@ function qdAttr(val) {
 }
 
 function qdRecalc() {
-  let supply = 0;
+  let directCost = 0;
   document.querySelectorAll('#qd-items-body tr').forEach(tr => {
     const qty = parseInt(tr.querySelector('.qd-item-qty')?.value) || 0;
     const price = parseInt(tr.querySelector('.qd-item-price')?.value) || 0;
     const amount = qty * price;
-    supply += amount;
+    directCost += amount;
     const amountCell = tr.querySelector('.qd-item-amount');
     if (amountCell) amountCell.textContent = qdFmt(amount);
   });
 
+  const overhead = parseInt(document.getElementById('qd-overhead-input')?.value) || 0;
+  const supply = directCost + overhead;
   const vat = Math.round(supply * 0.1);
   const total = supply + vat;
 
@@ -815,7 +862,7 @@ function qdUpdateTypeFields() {
 // ========== 데이터 수집 ==========
 function qdCollectData() {
   const items = [];
-  let supply = 0;
+  let directCost = 0;
   document.querySelectorAll('#qd-items-body tr').forEach(tr => {
     const name = tr.querySelector('.qd-item-name')?.value?.trim() || '';
     const spec = tr.querySelector('.qd-item-spec')?.value?.trim() || '';
@@ -823,12 +870,14 @@ function qdCollectData() {
     const qty = parseInt(tr.querySelector('.qd-item-qty')?.value) || 0;
     const unitPrice = parseInt(tr.querySelector('.qd-item-price')?.value) || 0;
     const amount = qty * unitPrice;
-    supply += amount;
+    directCost += amount;
     if (name) {
       items.push({ name, spec, unit, qty, unitPrice, amount });
     }
   });
 
+  const overhead = parseInt(document.getElementById('qd-overhead-input')?.value) || 0;
+  const supply = directCost + overhead;
   const vat = Math.round(supply * 0.1);
   const total = supply + vat;
 
@@ -852,6 +901,8 @@ function qdCollectData() {
     constructionPeriod: document.getElementById('qd-construction-period').value.trim(),
     constructionNotes: document.getElementById('qd-construction-notes').value.trim(),
     items,
+    directCost,
+    overhead,
     supply,
     vat,
     total
@@ -923,7 +974,11 @@ function qdBuildPlanDoc(d) {
   h += '<div class="qd-doc-section-title">3. 소요 예산</div>';
   h += '<table class="qd-doc-table">';
   h += '<tr><th style="width:120px;">금액</th><td style="font-weight:700; font-size:16px; color:#4f46e5;">금 ' + qdFmt(d.total) + '원 (' + qdNumberToKorean(d.total) + '원)</td></tr>';
-  h += '<tr><th>내역</th><td>공급가액 ' + qdFmt(d.supply) + '원 + 부가세 ' + qdFmt(d.vat) + '원</td></tr>';
+  if (d.overhead > 0) {
+    h += '<tr><th>내역</th><td>직접비 ' + qdFmt(d.directCost) + '원 + 간접비 등 ' + qdFmt(d.overhead) + '원 + 부가세 ' + qdFmt(d.vat) + '원</td></tr>';
+  } else {
+    h += '<tr><th>내역</th><td>공급가액 ' + qdFmt(d.supply) + '원 + 부가세 ' + qdFmt(d.vat) + '원</td></tr>';
+  }
   h += '</table>';
   h += '</div>';
 
@@ -965,6 +1020,10 @@ function qdBuildBudgetDoc(d) {
   d.items.forEach((item, i) => {
     h += '<tr><td style="text-align:center;">' + (i+1) + '</td><td>' + qdEscape(item.name) + '</td><td>' + qdEscape(item.spec) + '</td><td style="text-align:center;">' + qdEscape(item.unit) + '</td><td style="text-align:center;">' + qdFmt(item.qty) + '</td><td class="qd-right">' + qdFmt(item.unitPrice) + '</td><td class="qd-right">' + qdFmt(item.amount) + '</td></tr>';
   });
+  if (d.overhead > 0) {
+    h += '<tr style="background:#f8fafc; font-weight:600;"><td colspan="6" style="text-align:right; border:1px solid #e2e8f0; padding:8px 12px;">직접비 소계</td><td class="qd-right" style="border:1px solid #e2e8f0; padding:8px 12px;">' + qdFmt(d.directCost) + '</td></tr>';
+    h += '<tr style="background:#fffbeb;"><td colspan="6" style="text-align:right; border:1px solid #e2e8f0; padding:8px 12px;">간접비·관리비·이윤</td><td class="qd-right" style="border:1px solid #e2e8f0; padding:8px 12px;">' + qdFmt(d.overhead) + '</td></tr>';
+  }
   h += '<tr style="background:#f8fafc; font-weight:700;"><td colspan="6" style="text-align:right; border:1px solid #e2e8f0; padding:8px 12px;">공급가액</td><td class="qd-right" style="border:1px solid #e2e8f0; padding:8px 12px;">' + qdFmt(d.supply) + '</td></tr>';
   h += '<tr style="background:#f8fafc;"><td colspan="6" style="text-align:right; border:1px solid #e2e8f0; padding:8px 12px;">부가가치세 (10%)</td><td class="qd-right" style="border:1px solid #e2e8f0; padding:8px 12px;">' + qdFmt(d.vat) + '</td></tr>';
   h += '<tr style="background:#eef2ff; font-weight:700; font-size:15px;"><td colspan="6" style="text-align:right; border:1px solid #c7d2fe; padding:10px 12px; color:#4f46e5;">합계</td><td class="qd-right" style="border:1px solid #c7d2fe; padding:10px 12px; color:#4f46e5;">' + qdFmt(d.total) + '</td></tr>';
@@ -996,10 +1055,10 @@ function qdBuildBudgetDoc(d) {
 
 // ----- 예정가격 조서 -----
 function qdBuildPriceDoc(d) {
-  // 수의계약 기준금액 판단
+  // 수의계약 기준금액 판단 — 추정가격(부가세 제외 = 공급가액) 기준
   const thresholdLabel = d.contractType === '공사' ? '5천만원' : '2천만원';
   const thresholdAmount = d.contractType === '공사' ? 50000000 : 20000000;
-  const isUnder = d.total <= thresholdAmount;
+  const isUnder = d.supply <= thresholdAmount;
 
   let h = '';
   h += '<div class="qd-doc-header"><div class="qd-doc-title">예 정 가 격 조 서</div></div>';
@@ -1015,6 +1074,10 @@ function qdBuildPriceDoc(d) {
   h += '<div class="qd-doc-section">';
   h += '<div class="qd-doc-section-title">예정가격 산출</div>';
   h += '<table class="qd-doc-table">';
+  if (d.overhead > 0) {
+    h += '<tr><th style="width:180px;">직접비</th><td class="qd-right">' + qdFmt(d.directCost) + '원</td></tr>';
+    h += '<tr><th>간접비·관리비·이윤</th><td class="qd-right">' + qdFmt(d.overhead) + '원</td></tr>';
+  }
   h += '<tr><th style="width:180px;">거래실례가격 (공급가액)</th><td class="qd-right" style="font-weight:600;">' + qdFmt(d.supply) + '원</td></tr>';
   h += '<tr><th>부가가치세 (10%)</th><td class="qd-right">' + qdFmt(d.vat) + '원</td></tr>';
   h += '<tr style="background:#eef2ff;"><th style="font-weight:700; color:#4f46e5;">예정가격</th><td class="qd-right" style="font-weight:700; font-size:16px; color:#4f46e5;">' + qdFmt(d.total) + '원</td></tr>';
@@ -1023,7 +1086,8 @@ function qdBuildPriceDoc(d) {
 
   // 한글 금액
   h += '<div style="padding:12px 16px; background:#f8fafc; border-radius:10px; margin:16px 0; font-size:14px;">';
-  h += '<strong>예정가격:</strong> 금 ' + qdFmt(d.total) + '원 (' + qdNumberToKorean(d.total) + '원)';
+  h += '<div><strong>추정가격 (부가세 제외):</strong> 금 ' + qdFmt(d.supply) + '원 (' + qdNumberToKorean(d.supply) + '원)</div>';
+  h += '<div style="margin-top:4px;"><strong>예정가격 (부가세 포함):</strong> 금 ' + qdFmt(d.total) + '원 (' + qdNumberToKorean(d.total) + '원)</div>';
   h += '</div>';
 
   // 수의계약 가능 여부
@@ -1033,13 +1097,13 @@ function qdBuildPriceDoc(d) {
     h += '<div style="padding:16px; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:10px; display:flex; align-items:center; gap:10px;">';
     h += '<span class="material-symbols-outlined" style="color:#16a34a; font-size:24px;">check_circle</span>';
     h += '<div><div style="font-weight:700; color:#166534;">1인 수의계약 가능</div>';
-    h += '<div style="font-size:13px; color:#15803d;">예정가격 ' + qdFmt(d.total) + '원 ≤ ' + qdEscape(d.contractType) + ' 기준금액 ' + thresholdLabel + '</div></div>';
+    h += '<div style="font-size:13px; color:#15803d;">추정가격 ' + qdFmt(d.supply) + '원 ≤ ' + qdEscape(d.contractType) + ' 기준금액 ' + thresholdLabel + ' (부가세 제외 기준)</div></div>';
     h += '</div>';
   } else {
     h += '<div style="padding:16px; background:#fef2f2; border:1px solid #fecaca; border-radius:10px; display:flex; align-items:center; gap:10px;">';
     h += '<span class="material-symbols-outlined" style="color:#dc2626; font-size:24px;">warning</span>';
     h += '<div><div style="font-weight:700; color:#991b1b;">1인 수의계약 기준금액 초과</div>';
-    h += '<div style="font-size:13px; color:#b91c1c;">예정가격 ' + qdFmt(d.total) + '원 > ' + qdEscape(d.contractType) + ' 기준금액 ' + thresholdLabel + ' → 2인 이상 견적 또는 입찰 필요</div></div>';
+    h += '<div style="font-size:13px; color:#b91c1c;">추정가격 ' + qdFmt(d.supply) + '원 > ' + qdEscape(d.contractType) + ' 기준금액 ' + thresholdLabel + ' (부가세 제외 기준) → 2인 이상 견적 또는 입찰 필요</div></div>';
     h += '</div>';
   }
   h += '</div>';
@@ -1124,7 +1188,11 @@ function qdBuildTaskOrderDoc(d) {
   h += '<div class="qd-doc-section-title">' + sectionNum + '. 소요 예산</div>';
   h += '<table class="qd-doc-table">';
   h += '<tr><th style="width:120px;">금액</th><td style="font-weight:700; color:#4f46e5;">금 ' + qdFmt(d.total) + '원 (' + qdNumberToKorean(d.total) + '원)</td></tr>';
-  h += '<tr><th>내역</th><td>공급가액 ' + qdFmt(d.supply) + '원 + 부가세 ' + qdFmt(d.vat) + '원</td></tr>';
+  if (d.overhead > 0) {
+    h += '<tr><th>내역</th><td>직접비 ' + qdFmt(d.directCost) + '원 + 간접비 등 ' + qdFmt(d.overhead) + '원 + 부가세 ' + qdFmt(d.vat) + '원</td></tr>';
+  } else {
+    h += '<tr><th>내역</th><td>공급가액 ' + qdFmt(d.supply) + '원 + 부가세 ' + qdFmt(d.vat) + '원</td></tr>';
+  }
   h += '</table>';
   h += '</div>';
   sectionNum++;
@@ -1162,7 +1230,11 @@ function qdBuildCostEstimateDoc(d) {
   d.items.forEach((item, i) => {
     h += '<tr><td style="text-align:center;">' + (i+1) + '</td><td>' + qdEscape(item.name) + '</td><td>' + qdEscape(item.spec) + '</td><td style="text-align:center;">' + qdEscape(item.unit) + '</td><td style="text-align:center;">' + qdFmt(item.qty) + '</td><td class="qd-right">' + qdFmt(item.unitPrice) + '</td><td class="qd-right">' + qdFmt(item.amount) + '</td></tr>';
   });
-  h += '<tr style="background:#f8fafc; font-weight:700;"><td colspan="6" style="text-align:right; border:1px solid #e2e8f0; padding:8px 12px;">직접공사비 소계</td><td class="qd-right" style="border:1px solid #e2e8f0; padding:8px 12px;">' + qdFmt(d.supply) + '</td></tr>';
+  h += '<tr style="background:#f8fafc; font-weight:700;"><td colspan="6" style="text-align:right; border:1px solid #e2e8f0; padding:8px 12px;">직접공사비 소계</td><td class="qd-right" style="border:1px solid #e2e8f0; padding:8px 12px;">' + qdFmt(d.directCost) + '</td></tr>';
+  if (d.overhead > 0) {
+    h += '<tr style="background:#fffbeb;"><td colspan="6" style="text-align:right; border:1px solid #e2e8f0; padding:8px 12px;">간접비·관리비·이윤</td><td class="qd-right" style="border:1px solid #e2e8f0; padding:8px 12px;">' + qdFmt(d.overhead) + '</td></tr>';
+    h += '<tr style="background:#f8fafc; font-weight:600;"><td colspan="6" style="text-align:right; border:1px solid #e2e8f0; padding:8px 12px;">공급가액</td><td class="qd-right" style="border:1px solid #e2e8f0; padding:8px 12px;">' + qdFmt(d.supply) + '</td></tr>';
+  }
   h += '<tr style="background:#f8fafc;"><td colspan="6" style="text-align:right; border:1px solid #e2e8f0; padding:8px 12px;">부가가치세 (10%)</td><td class="qd-right" style="border:1px solid #e2e8f0; padding:8px 12px;">' + qdFmt(d.vat) + '</td></tr>';
   h += '<tr style="background:#eef2ff; font-weight:700; font-size:15px;"><td colspan="6" style="text-align:right; border:1px solid #c7d2fe; padding:10px 12px; color:#4f46e5;">합계</td><td class="qd-right" style="border:1px solid #c7d2fe; padding:10px 12px; color:#4f46e5;">' + qdFmt(d.total) + '</td></tr>';
   h += '</table>';
@@ -1275,6 +1347,8 @@ function qdPrintDoc(type) {
 function qdReset() {
   qdSelectedFiles = [];
   document.getElementById('qd-file-input').value = '';
+  document.getElementById('qd-overhead-input').value = 0;
+  document.getElementById('qd-overhead-section').classList.add('qd-hidden');
   document.getElementById('qd-upload-placeholder').classList.remove('qd-hidden');
   document.getElementById('qd-upload-info').classList.add('qd-hidden');
   document.getElementById('qd-upload-zone').classList.remove('has-file');

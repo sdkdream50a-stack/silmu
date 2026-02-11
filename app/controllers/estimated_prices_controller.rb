@@ -1,14 +1,14 @@
-# 예정가격 계산기 컨트롤러
+# 추정가격 계산기 컨트롤러
 class EstimatedPricesController < ApplicationController
 
   # GET /tools/estimated-price
   def index
     @contract_types = EstimatedPriceService.get_contract_types
     set_meta_tags(
-      title: "예정가격 계산기",
-      description: "물품·용역·공사의 예정가격을 자동으로 산정합니다. 부가세, 일반관리비, 이윤 등을 자동 반영.",
-      keywords: "예정가격, 예정가격 계산기, 예정가격 산정, 부가세, 일반관리비",
-      og: { title: "예정가격 계산기 — 실무.kr", url: request.original_url }
+      title: "추정가격 계산기 (예정가격 산출)",
+      description: "물품·용역·공사의 추정가격(부가세 제외)을 자동 산출합니다. 수의계약 기준금액 판단, 일반관리비·이윤 요율 검증까지.",
+      keywords: "추정가격, 추정가격 계산기, 예정가격, 예정가격 계산기, 수의계약 기준금액, 부가세",
+      og: { title: "추정가격 계산기 — 실무.kr", url: request.original_url }
     )
   end
 

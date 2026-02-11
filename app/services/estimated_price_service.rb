@@ -85,19 +85,19 @@ class EstimatedPriceService
         amounts[item[:id].to_sym] = params[item[:id]].to_i
       end
 
-      # 기초금액 계산
+      # 기초금액 계산 (= 추정가격, VAT 제외)
       base_amount = calculate_base_amount(type, amounts)
       vat = (base_amount * VAT_RATE).round(0)
-      estimated_price = base_amount + vat
+      total_with_vat = base_amount + vat
 
       # 요율 검증
       warnings = check_rate_limits(type, amounts, base_amount)
 
-      # 수의계약 가능 여부 + 견적 요건
+      # 수의계약 가능 여부 + 견적 요건 — 추정가격(VAT 제외) 기준 비교
       threshold = PRIVATE_CONTRACT_THRESHOLDS[type]
-      estimate_requirement = determine_estimate_requirement(estimated_price)
+      estimate_requirement = determine_estimate_requirement(base_amount)
       private_contract = {
-        available: estimated_price <= threshold,
+        available: base_amount <= threshold,
         threshold: threshold,
         type_name: CONTRACT_TYPES[type][:name],
         estimate_requirement: estimate_requirement
@@ -112,7 +112,7 @@ class EstimatedPriceService
           type_name: CONTRACT_TYPES[type][:name],
           base_amount: base_amount,
           vat: vat,
-          estimated_price: estimated_price,
+          estimated_price: total_with_vat,
           amounts: amounts,
           warnings: warnings,
           private_contract: private_contract,
@@ -186,14 +186,15 @@ class EstimatedPriceService
     end
 
     def determine_estimate_requirement(price)
+      # price = 추정가격 (VAT 제외)
       if price <= 2_000_000
-        { type: "생략가능", desc: "200만원 이하: 견적서 생략 또는 1인 견적", basis: "지방계약법 시행령 제30조제2항" }
-      elsif price <= 22_000_000
-        { type: "1인견적", desc: "2천만원 이하(부가세 포함 2,200만원): 1인 견적 수의계약", basis: "지방계약법 시행령 제25조제1항제5호" }
+        { type: "생략가능", desc: "추정가격 200만원 이하: 견적서 생략 또는 1인 견적", basis: "지방계약법 시행령 제30조제2항" }
+      elsif price <= 20_000_000
+        { type: "1인견적", desc: "추정가격 2천만원 이하: 1인 견적 수의계약", basis: "지방계약법 시행령 제25조제1항제5호" }
       elsif price <= 50_000_000
-        { type: "2인 이상 견적", desc: "5천만원 이하: 2인 이상 견적 비교 (특례기업은 1인 가능)", basis: "지방계약법 시행령 제25조제1항제5호, 제30조제1항" }
-      elsif price <= 110_000_000
-        { type: "특례기업 수의계약", desc: "1억원 이하: 소기업·여성·장애인·사회적기업 등은 2인 이상 견적 수의계약 가능", basis: "지방계약법 시행령 제25조제1항제5호 다목~마목" }
+        { type: "2인 이상 견적", desc: "추정가격 5천만원 이하: 2인 이상 견적 비교 (특례기업은 1인 가능)", basis: "지방계약법 시행령 제25조제1항제5호, 제30조제1항" }
+      elsif price <= 100_000_000
+        { type: "특례기업 수의계약", desc: "추정가격 1억원 이하: 소기업·여성·장애인·사회적기업 등은 2인 이상 견적 수의계약 가능", basis: "지방계약법 시행령 제25조제1항제5호 다목~마목" }
       else
         { type: "입찰", desc: "수의계약 기준 초과: 경쟁입찰 진행 필요", basis: "지방계약법 제9조" }
       end
