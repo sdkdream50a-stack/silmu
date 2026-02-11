@@ -786,7 +786,7 @@ function qdPopulateFields(f) {
 
   // 간접비 자동 감지: AI가 추출한 공급가액과 항목 합계의 차이
   const itemSum = qdGetItemSum();
-  const aiSupply = parseInt(f.supply_amount) || 0;
+  const aiSupply = qdNum(f.supply_amount);
   const overheadEl = document.getElementById('qd-overhead-input');
   const overheadSection = document.getElementById('qd-overhead-section');
 
@@ -806,8 +806,8 @@ function qdPopulateFields(f) {
 function qdGetItemSum() {
   let sum = 0;
   document.querySelectorAll('#qd-items-body tr').forEach(tr => {
-    const qty = parseInt(tr.querySelector('.qd-item-qty')?.value) || 0;
-    const price = parseInt(tr.querySelector('.qd-item-price')?.value) || 0;
+    const qty = qdNum(tr.querySelector('.qd-item-qty')?.value);
+    const price = qdNum(tr.querySelector('.qd-item-price')?.value);
     sum += qty * price;
   });
   return sum;
@@ -825,8 +825,8 @@ function qdAddItemRow(item) {
     '<td><input type="text" class="qd-item-name" value="' + qdAttr(item.name) + '" placeholder="품명"></td>' +
     '<td><input type="text" class="qd-item-spec" value="' + qdAttr(item.spec) + '" placeholder="규격"></td>' +
     '<td><input type="text" class="qd-item-unit" value="' + qdAttr(item.unit || 'EA') + '" style="text-align:center;"></td>' +
-    '<td><input type="number" class="qd-item-qty qd-num" value="' + (item.qty || 0) + '" min="0" onchange="qdRecalc()" oninput="qdRecalc()"></td>' +
-    '<td><input type="number" class="qd-item-price qd-num" value="' + (item.unit_price || 0) + '" min="0" onchange="qdRecalc()" oninput="qdRecalc()"></td>' +
+    '<td><input type="number" class="qd-item-qty qd-num" value="' + qdNum(item.qty) + '" min="0" onchange="qdRecalc()" oninput="qdRecalc()"></td>' +
+    '<td><input type="number" class="qd-item-price qd-num" value="' + qdNum(item.unit_price) + '" min="0" onchange="qdRecalc()" oninput="qdRecalc()"></td>' +
     '<td class="qd-item-amount">0</td>' +
     '<td class="qd-item-remove" onclick="qdRemoveItem(' + idx + ')"><span class="material-symbols-outlined" style="font-size:18px;">close</span></td>';
   tbody.appendChild(tr);
@@ -850,6 +850,11 @@ function qdRenumber() {
   });
 }
 
+function qdNum(val) {
+  if (val == null) return 0;
+  return parseInt(String(val).replace(/[^\d]/g, ''), 10) || 0;
+}
+
 function qdAttr(val) {
   if (!val) return '';
   return String(val).replace(/"/g, '&quot;');
@@ -858,15 +863,15 @@ function qdAttr(val) {
 function qdRecalc() {
   let directCost = 0;
   document.querySelectorAll('#qd-items-body tr').forEach(tr => {
-    const qty = parseInt(tr.querySelector('.qd-item-qty')?.value) || 0;
-    const price = parseInt(tr.querySelector('.qd-item-price')?.value) || 0;
+    const qty = qdNum(tr.querySelector('.qd-item-qty')?.value);
+    const price = qdNum(tr.querySelector('.qd-item-price')?.value);
     const amount = qty * price;
     directCost += amount;
     const amountCell = tr.querySelector('.qd-item-amount');
     if (amountCell) amountCell.textContent = qdFmt(amount);
   });
 
-  const overhead = parseInt(document.getElementById('qd-overhead-input')?.value) || 0;
+  const overhead = qdNum(document.getElementById('qd-overhead-input')?.value);
   const supply = directCost + overhead;
   const vat = Math.round(supply * 0.1);
   const total = supply + vat;
@@ -893,8 +898,8 @@ function qdCollectData() {
     const name = tr.querySelector('.qd-item-name')?.value?.trim() || '';
     const spec = tr.querySelector('.qd-item-spec')?.value?.trim() || '';
     const unit = tr.querySelector('.qd-item-unit')?.value?.trim() || 'EA';
-    const qty = parseInt(tr.querySelector('.qd-item-qty')?.value) || 0;
-    const unitPrice = parseInt(tr.querySelector('.qd-item-price')?.value) || 0;
+    const qty = qdNum(tr.querySelector('.qd-item-qty')?.value);
+    const unitPrice = qdNum(tr.querySelector('.qd-item-price')?.value);
     const amount = qty * unitPrice;
     directCost += amount;
     if (name) {
@@ -902,7 +907,7 @@ function qdCollectData() {
     }
   });
 
-  const overhead = parseInt(document.getElementById('qd-overhead-input')?.value) || 0;
+  const overhead = qdNum(document.getElementById('qd-overhead-input')?.value);
   const supply = directCost + overhead;
   const vat = Math.round(supply * 0.1);
   const total = supply + vat;

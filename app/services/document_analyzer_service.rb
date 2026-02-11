@@ -14,7 +14,7 @@ class DocumentAnalyzerService
   MAX_FILE_SIZE = 20.megabytes
 
   # 프롬프트 변경 시 버전을 올려 캐시 무효화
-  PROMPT_VERSION = 2
+  PROMPT_VERSION = 3
 
   EXTRACT_FIELDS = %w[
     project_name organization department budget contract_period
@@ -565,6 +565,23 @@ class DocumentAnalyzerService
       hash[key] = value
     end
 
+    # 금액 필드를 정수로 정규화 (AI가 "1,500,000" 같은 문자열로 반환하는 경우 대비)
+    NUMERIC_FIELDS = %w[supply_amount vat_amount total_amount].freeze
+    NUMERIC_FIELDS.each do |key|
+      next unless fields.key?(key)
+      fields[key] = fields[key].to_s.gsub(/[^\d]/, "").to_i
+    end
+
+    # items 배열 내 숫자 필드도 정규화
+    if fields["items"].is_a?(Array)
+      fields["items"].each do |item|
+        %w[qty unit_price].each do |key|
+          next unless item.key?(key)
+          item[key] = item[key].to_s.gsub(/[^\d]/, "").to_i
+        end
+      end
+    end
+
     { success: true, fields: fields }
   rescue JSON::ParserError
     { success: false, error: "AI 응답 형식이 올바르지 않습니다." }
@@ -631,7 +648,10 @@ class DocumentAnalyzerService
       ## 규칙
       1. 문서에 명시적으로 있는 정보만 추출하세요. 단, contract_type과 necessity는 품목 내용을 바탕으로 판단/생성하세요.
       2. 추측하지 마세요. 없는 정보는 null로 표기하세요.
-      3. 금액은 반드시 숫자만 (원 단위). 쉼표 제거. 예: "15,000,000" → 15000000
+      3. 금액(supply_amount, vat_amount, total_amount, unit_price, qty)은 반드시 JSON 숫자 타입으로 출력하세요. 문자열이 아닌 숫자입니다.
+         - 올바른 예: "unit_price": 15000000, "qty": 2
+         - 잘못된 예: "unit_price": "15,000,000", "qty": "2"
+         - 쉼표, "원", "개" 등 단위 문자를 포함하지 마세요.
       4. items에는 실제 품목만 포함. 소계/합계/부가세 행은 제외하세요.
       5. 수량과 단가를 알 수 없으면 qty: 0, unit_price: 0으로 표기하세요.
       6. project_name이 없으면 품목들을 종합하여 간단히 요약하세요.

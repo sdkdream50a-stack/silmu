@@ -101,12 +101,13 @@
     <script>
     function quMapFields_cr(f) {
       quSetField('cr-contract-name', f.project_name);
-      if (f.total_amount) quSetField('cr-budget', Number(f.total_amount).toLocaleString());
+      var totalAmt = parseInt(String(f.total_amount || 0).replace(/[^\d]/g, ''), 10) || 0;
+      if (totalAmt) quSetField('cr-budget', totalAmt.toLocaleString());
       quSetField('cr-company', f.company_name);
       quSetField('cr-business-no', f.business_no);
       if (f.delivery_period) quSetField('cr-delivery', f.delivery_period);
       // 소액수의 자동 선택
-      var amt = Number(f.total_amount) || 0;
+      var amt = totalAmt;
       if (amt > 0 && amt <= 100000000) {
         var smallBtn = document.querySelector('[data-reason="small_amount"]');
         if (smallBtn && typeof crSelectReason === 'function') crSelectReason(smallBtn);
