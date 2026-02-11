@@ -1439,31 +1439,29 @@ function qdDownloadDoc(type, docName) {
 
 // A4 인쇄 설정
 function qdSetPrintA4(ws) {
-  // 여백 (인치): 좌우 2cm≈0.79in, 상하 2cm≈0.79in
-  ws['!margins'] = { left: 0.79, right: 0.79, top: 0.79, bottom: 0.79, header: 0.3, footer: 0.3 };
-  // 페이지 설정: A4(9), 세로방향, 페이지 너비에 맞춤
-  ws['!pageSetup'] = { paperSize: 9, orientation: 'portrait', fitToWidth: 1, fitToHeight: 0, scale: 0 };
-  // 행 높이 기본값
-  if (!ws['!sheetFormat']) ws['!sheetFormat'] = {};
-  ws['!sheetFormat'].defaultRowHeight = 16;
+  ws['!margins'] = { left: 0.59, right: 0.59, top: 0.59, bottom: 0.59, header: 0.2, footer: 0.2 };
+  ws['!pageSetup'] = { paperSize: 9, orientation: 'portrait', fitToWidth: 1, fitToHeight: 1, scale: 0 };
 }
 
 // ========== 엑셀 스타일 유틸리티 ==========
 var XS = {
   border: {top:{style:'thin'},bottom:{style:'thin'},left:{style:'thin'},right:{style:'thin'}},
-  titleFont: {bold:true, sz:14},
-  sectionFont: {bold:true, sz:11},
-  headerFont: {bold:true, sz:10},
-  bodyFont: {sz:10},
+  titleFont: {bold:true, sz:13},
+  sectionFont: {bold:true, sz:10},
+  headerFont: {bold:true, sz:9},
+  bodyFont: {sz:9},
   numFmt: '#,##0',
-  center: {horizontal:'center', vertical:'center'},
-  left: {horizontal:'left', vertical:'center'},
-  right: {horizontal:'right', vertical:'center'},
+  wrap: {wrapText:true, vertical:'center'},
+  center: {horizontal:'center', vertical:'center', wrapText:true},
+  left: {horizontal:'left', vertical:'center', wrapText:true},
+  right: {horizontal:'right', vertical:'center', wrapText:true},
   gray: {fgColor:{rgb:'F2F2F2'}}
 };
 function xsCell(ws, r, c, style) {
   var addr = XLSX.utils.encode_cell({r:r,c:c});
   if (!ws[addr]) ws[addr] = {v:'',t:'s'};
+  if (!style.alignment) style.alignment = XS.wrap;
+  else if (!style.alignment.wrapText) style.alignment.wrapText = true;
   ws[addr].s = Object.assign({}, ws[addr].s||{}, style);
   return ws[addr];
 }
@@ -1471,17 +1469,17 @@ function xsTitle(ws, r, colEnd) {
   for (var c=0;c<=colEnd;c++) xsCell(ws,r,c,{font:XS.titleFont, alignment:XS.center});
 }
 function xsSection(ws, r) {
-  xsCell(ws,r,0,{font:XS.sectionFont});
+  xsCell(ws,r,0,{font:XS.sectionFont, alignment:XS.wrap});
 }
 function xsLabel(ws, r, c) {
-  xsCell(ws,r,c||0,{font:{bold:true,sz:10}});
+  xsCell(ws,r,c||0,{font:{bold:true,sz:9}, alignment:XS.wrap});
 }
 function xsTableHeader(ws, r, sc, ec) {
   for (var c=sc;c<=ec;c++) xsCell(ws,r,c,{font:XS.headerFont, border:XS.border, fill:XS.gray, alignment:XS.center});
 }
 function xsTableRow(ws, r, sc, ec, numCols) {
   for (var c=sc;c<=ec;c++) {
-    var s = {font:XS.bodyFont, border:XS.border};
+    var s = {font:XS.bodyFont, border:XS.border, alignment:XS.left};
     if (numCols && numCols.indexOf(c)>=0) {
       s.alignment = XS.right;
       var addr = XLSX.utils.encode_cell({r:r,c:c});
@@ -1491,8 +1489,8 @@ function xsTableRow(ws, r, sc, ec, numCols) {
   }
 }
 function xsSummaryRow(ws, r, labelCol, valCol) {
-  xsCell(ws,r,labelCol,{font:{bold:true,sz:10}, border:XS.border, alignment:XS.right});
-  var s = {font:{bold:true,sz:10}, border:XS.border, alignment:XS.right};
+  xsCell(ws,r,labelCol,{font:{bold:true,sz:9}, border:XS.border, alignment:XS.right});
+  var s = {font:{bold:true,sz:9}, border:XS.border, alignment:XS.right};
   var addr = XLSX.utils.encode_cell({r:r,c:valCol});
   if (ws[addr] && ws[addr].t==='n') ws[addr].z = XS.numFmt;
   xsCell(ws,r,valCol,s);
@@ -1553,7 +1551,7 @@ function qdExcelPlan(d) {
   rows.push(['계약근거', '지방계약법 시행령 제25조 제1항 제5호']); ri++;
 
   var ws = XLSX.utils.aoa_to_sheet(rows);
-  ws['!cols'] = [{wch:10},{wch:24},{wch:22},{wch:10},{wch:8},{wch:14},{wch:16}];
+  ws['!cols'] = [{wch:5},{wch:16},{wch:14},{wch:7},{wch:6},{wch:11},{wch:12}];
   ws['!merges'] = [{s:{r:0,c:0},e:{r:0,c:C}}];
 
   // 스타일 적용
@@ -1615,7 +1613,7 @@ function qdExcelBudget(d) {
   }
 
   var ws = XLSX.utils.aoa_to_sheet(rows);
-  ws['!cols'] = [{wch:6},{wch:24},{wch:20},{wch:8},{wch:8},{wch:18},{wch:16}];
+  ws['!cols'] = [{wch:5},{wch:16},{wch:14},{wch:6},{wch:6},{wch:12},{wch:12}];
   ws['!merges'] = [{s:{r:0,c:0},e:{r:0,c:C}}];
 
   xsTitle(ws, 0, C);
@@ -1688,7 +1686,7 @@ function qdExcelPrice(d) {
   }
 
   var ws = XLSX.utils.aoa_to_sheet(rows);
-  ws['!cols'] = [{wch:26},{wch:52}];
+  ws['!cols'] = [{wch:22},{wch:46}];
   ws['!merges'] = [{s:{r:0,c:0},e:{r:0,c:1}}];
 
   xsTitle(ws, 0, 1);
@@ -1756,7 +1754,7 @@ function qdExcelTaskOrder(d) {
   }
 
   var ws = XLSX.utils.aoa_to_sheet(rows);
-  ws['!cols'] = [{wch:10},{wch:24},{wch:24},{wch:8},{wch:10}];
+  ws['!cols'] = [{wch:7},{wch:18},{wch:18},{wch:7},{wch:8}];
   ws['!merges'] = [{s:{r:0,c:0},e:{r:0,c:C}}];
 
   xsTitle(ws, 0, C);
@@ -1840,7 +1838,7 @@ function qdExcelEstimate(d) {
   notes.split('\n').forEach(function(line) { rows.push([line]); ri++; });
 
   var ws = XLSX.utils.aoa_to_sheet(rows);
-  ws['!cols'] = [{wch:10},{wch:24},{wch:22},{wch:8},{wch:8},{wch:18},{wch:16}];
+  ws['!cols'] = [{wch:5},{wch:16},{wch:14},{wch:6},{wch:6},{wch:12},{wch:12}];
   ws['!merges'] = [
     {s:{r:0,c:0},e:{r:0,c:C}},
     {s:{r:specTitleR,c:0},e:{r:specTitleR,c:C}}
