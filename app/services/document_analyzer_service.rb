@@ -13,6 +13,9 @@ class DocumentAnalyzerService
 
   MAX_FILE_SIZE = 20.megabytes
 
+  # 프롬프트 변경 시 버전을 올려 캐시 무효화
+  PROMPT_VERSION = 2
+
   EXTRACT_FIELDS = %w[
     project_name organization department budget contract_period
     purpose scope tasks deliverables personnel
@@ -42,7 +45,7 @@ class DocumentAnalyzerService
     # 파일 해시 기반 캐싱 — 동일 파일 재분석 방지
     file_data = file.read
     file.rewind
-    cache_key = "doc_analysis:#{document_type}:#{Digest::SHA256.hexdigest(file_data)}"
+    cache_key = "doc_analysis:v#{PROMPT_VERSION}:#{document_type}:#{Digest::SHA256.hexdigest(file_data)}"
     cached = Rails.cache.read(cache_key)
     return cached if cached
 
@@ -80,7 +83,7 @@ class DocumentAnalyzerService
 
     # 다중 파일 캐시 키
     digests = files.map { |f| d = f.read; f.rewind; Digest::SHA256.hexdigest(d) }
-    cache_key = "doc_analysis:#{document_type}:multi:#{Digest::SHA256.hexdigest(digests.sort.join)}"
+    cache_key = "doc_analysis:v#{PROMPT_VERSION}:#{document_type}:multi:#{Digest::SHA256.hexdigest(digests.sort.join)}"
     cached = Rails.cache.read(cache_key)
     return cached if cached
 
