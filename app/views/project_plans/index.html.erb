@@ -67,7 +67,8 @@
     <script>
     function quMapFields_pp(f) {
       quSetField('pp-project-name', f.project_name);
-      if (f.total_amount) quSetField('pp-budget', Number(f.total_amount).toLocaleString());
+      var ppAmt = parseInt(String(f.total_amount || 0).replace(/[^\d]/g, ''), 10) || 0;
+      if (ppAmt) quSetField('pp-budget', ppAmt.toLocaleString());
       if (f.contact_phone) quSetField('pp-contact', f.contact_phone);
       // 사업 내용: 품목 요약
       if (f.items && f.items.length > 0) {
