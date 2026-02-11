@@ -1430,10 +1430,22 @@ function qdDownloadDoc(type, docName) {
   if (!builder) return;
 
   var ws = builder(d);
+  qdSetPrintA4(ws);
   var wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, docName);
   XLSX.writeFile(wb, docName + '_' + pName + '.xlsx');
   qdShowToast('엑셀 파일이 다운로드되었습니다');
+}
+
+// A4 인쇄 설정
+function qdSetPrintA4(ws) {
+  // 여백 (인치): 좌우 2cm≈0.79in, 상하 2cm≈0.79in
+  ws['!margins'] = { left: 0.79, right: 0.79, top: 0.79, bottom: 0.79, header: 0.3, footer: 0.3 };
+  // 페이지 설정: A4(9), 세로방향, 페이지 너비에 맞춤
+  ws['!pageSetup'] = { paperSize: 9, orientation: 'portrait', fitToWidth: 1, fitToHeight: 0, scale: 0 };
+  // 행 높이 기본값
+  if (!ws['!sheetFormat']) ws['!sheetFormat'] = {};
+  ws['!sheetFormat'].defaultRowHeight = 16;
 }
 
 // ========== 엑셀 스타일 유틸리티 ==========
