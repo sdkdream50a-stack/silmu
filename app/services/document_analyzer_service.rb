@@ -566,8 +566,7 @@ class DocumentAnalyzerService
     end
 
     # 금액 필드를 정수로 정규화 (AI가 "1,500,000" 같은 문자열로 반환하는 경우 대비)
-    NUMERIC_FIELDS = %w[supply_amount vat_amount total_amount].freeze
-    NUMERIC_FIELDS.each do |key|
+    %w[supply_amount vat_amount total_amount].each do |key|
       next unless fields.key?(key)
       fields[key] = fields[key].to_s.gsub(/[^\d]/, "").to_i
     end
