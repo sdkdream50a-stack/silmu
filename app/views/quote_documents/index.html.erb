@@ -174,16 +174,16 @@
 
         <div class="qd-upload-zone" id="qd-upload-zone"
              onclick="document.getElementById('qd-file-input').click()">
-          <input type="file" id="qd-file-input" accept=".pdf,.jpg,.jpeg,.png" style="display:none;" onchange="qdFileSelected(this)">
+          <input type="file" id="qd-file-input" accept=".pdf,.jpg,.jpeg,.png" multiple style="display:none;" onchange="qdFilesSelected(this)">
           <div id="qd-upload-placeholder">
             <span class="material-symbols-outlined" style="font-size:48px; color:#94a3b8; display:block; margin-bottom:12px;">cloud_upload</span>
             <div style="font-size:16px; font-weight:600; color:#475569; margin-bottom:4px;">견적서를 드래그하거나 클릭하여 업로드</div>
-            <div style="font-size:13px; color:#94a3b8;">PDF, JPG, PNG (최대 20MB)</div>
+            <div style="font-size:13px; color:#94a3b8;">PDF, JPG, PNG (파일당 최대 20MB, 여러 장 가능)</div>
           </div>
           <div id="qd-upload-info" class="qd-hidden">
             <span class="material-symbols-outlined" style="font-size:48px; color:#059669; display:block; margin-bottom:12px;">description</span>
-            <div style="font-size:16px; font-weight:600; color:#059669;" id="qd-file-name"></div>
-            <div style="font-size:13px; color:#64748b; margin-top:4px;" id="qd-file-size"></div>
+            <div id="qd-file-list"></div>
+            <div style="font-size:12px; color:#94a3b8; margin-top:8px;">클릭하거나 드래그하여 파일을 더 추가할 수 있습니다</div>
           </div>
         </div>
 
@@ -599,7 +599,7 @@ function qdGoStep(n) {
 }
 
 // ========== STEP 1: 파일 업로드 ==========
-let qdSelectedFile = null;
+let qdSelectedFiles = [];
 
 // 드래그 앤 드롭
 const uploadZone = document.getElementById('qd-upload-zone');
@@ -609,34 +609,64 @@ uploadZone.addEventListener('drop', (e) => {
   e.preventDefault();
   uploadZone.classList.remove('dragover');
   if (e.dataTransfer.files.length > 0) {
-    document.getElementById('qd-file-input').files = e.dataTransfer.files;
-    qdFileSelected(document.getElementById('qd-file-input'));
+    qdAddFiles(e.dataTransfer.files);
   }
 });
 
-function qdFileSelected(input) {
-  const file = input.files[0];
-  if (!file) return;
+function qdFilesSelected(input) {
+  if (input.files.length > 0) {
+    qdAddFiles(input.files);
+  }
+  input.value = '';
+}
 
+function qdAddFiles(fileList) {
   const allowed = ['application/pdf', 'image/jpeg', 'image/png'];
-  if (!allowed.includes(file.type)) {
-    qdShowError('지원하지 않는 파일 형식입니다. (PDF, JPG, PNG만 가능)');
-    return;
+  for (const file of fileList) {
+    if (!allowed.includes(file.type)) {
+      qdShowError('지원하지 않는 파일 형식입니다. (PDF, JPG, PNG만 가능)');
+      return;
+    }
+    if (file.size > 20 * 1024 * 1024) {
+      qdShowError('개별 파일 크기는 20MB 이하여야 합니다.');
+      return;
+    }
   }
-  if (file.size > 20 * 1024 * 1024) {
-    qdShowError('파일 크기는 20MB 이하여야 합니다.');
-    return;
-  }
-
-  qdSelectedFile = file;
   qdHideError();
+  for (const file of fileList) {
+    if (!qdSelectedFiles.some(f => f.name === file.name && f.size === file.size)) {
+      qdSelectedFiles.push(file);
+    }
+  }
+  qdUpdateFileList();
+}
 
-  document.getElementById('qd-upload-placeholder').classList.add('qd-hidden');
-  document.getElementById('qd-upload-info').classList.remove('qd-hidden');
-  document.getElementById('qd-file-name').textContent = file.name;
-  document.getElementById('qd-file-size').textContent = (file.size / 1024 / 1024).toFixed(2) + ' MB';
-  uploadZone.classList.add('has-file');
-  document.getElementById('qd-analyze-btn').disabled = false;
+function qdRemoveFile(index) {
+  event.stopPropagation();
+  qdSelectedFiles.splice(index, 1);
+  qdUpdateFileList();
+}
+
+function qdUpdateFileList() {
+  const hasFiles = qdSelectedFiles.length > 0;
+  document.getElementById('qd-upload-placeholder').classList.toggle('qd-hidden', hasFiles);
+  document.getElementById('qd-upload-info').classList.toggle('qd-hidden', !hasFiles);
+  uploadZone.classList.toggle('has-file', hasFiles);
+  document.getElementById('qd-analyze-btn').disabled = !hasFiles;
+  if (hasFiles) {
+    let html = '';
+    qdSelectedFiles.forEach((f, i) => {
+      html += '<div style="display:flex;align-items:center;gap:8px;padding:3px 0;">' +
+        '<span class="material-symbols-outlined" style="font-size:16px;color:#059669;">description</span>' +
+        '<span style="font-size:14px;color:#1e293b;">' + qdEscape(f.name) + '</span>' +
+        '<span style="font-size:12px;color:#94a3b8;">(' + (f.size/1024/1024).toFixed(2) + ' MB)</span>' +
+        '<span class="material-symbols-outlined" onclick="qdRemoveFile(' + i + ')" style="cursor:pointer;color:#ef4444;font-size:16px;">close</span>' +
+        '</div>';
+    });
+    const totalSize = qdSelectedFiles.reduce((s, f) => s + f.size, 0);
+    html += '<div style="font-size:12px;color:#64748b;margin-top:6px;">' + qdSelectedFiles.length + '개 파일 · 총 ' + (totalSize/1024/1024).toFixed(2) + ' MB</div>';
+    document.getElementById('qd-file-list').innerHTML = html;
+  }
 }
 
 function qdShowError(msg) {
@@ -650,7 +680,7 @@ function qdHideError() {
 
 // ========== AI 분석 ==========
 function qdAnalyze() {
-  if (!qdSelectedFile) return;
+  if (qdSelectedFiles.length === 0) return;
   qdHideError();
 
   const btn = document.getElementById('qd-analyze-btn');
@@ -659,7 +689,7 @@ function qdAnalyze() {
   textEl.innerHTML = '<span class="qd-spinner"></span> AI 분석 중...';
 
   const formData = new FormData();
-  formData.append('file', qdSelectedFile);
+  qdSelectedFiles.forEach(f => formData.append('files[]', f));
 
   fetch('/quote-documents/extract', {
     method: 'POST',
@@ -1243,7 +1273,7 @@ function qdPrintDoc(type) {
 
 // ========== 리셋 ==========
 function qdReset() {
-  qdSelectedFile = null;
+  qdSelectedFiles = [];
   document.getElementById('qd-file-input').value = '';
   document.getElementById('qd-upload-placeholder').classList.remove('qd-hidden');
   document.getElementById('qd-upload-info').classList.add('qd-hidden');

@@ -24,21 +24,26 @@ class QuoteDocumentsController < ApplicationController
       return render json: { success: false, error: "요청이 너무 많습니다. 잠시 후 다시 시도해 주세요." }, status: :too_many_requests
     end
 
-    unless params[:file].present?
+    # 다중 파일(files[]) 또는 단일 파일(file) 지원
+    files = if params[:files].present?
+      Array(params[:files])
+    elsif params[:file].present?
+      [params[:file]]
+    else
       return render json: { success: false, error: "파일을 업로드해주세요." }, status: :unprocessable_entity
     end
 
-    file = params[:file]
+    files.each do |file|
+      unless file.respond_to?(:content_type) && ALLOWED_CONTENT_TYPES.include?(file.content_type)
+        return render json: { success: false, error: "지원하지 않는 파일 형식입니다. (PDF, JPG, PNG만 가능)" }, status: :unprocessable_entity
+      end
 
-    unless file.respond_to?(:content_type) && ALLOWED_CONTENT_TYPES.include?(file.content_type)
-      return render json: { success: false, error: "지원하지 않는 파일 형식입니다. (PDF, JPG, PNG만 가능)" }, status: :unprocessable_entity
+      if file.size > MAX_FILE_SIZE
+        return render json: { success: false, error: "개별 파일 크기는 20MB 이하여야 합니다." }, status: :unprocessable_entity
+      end
     end
 
-    if file.size > MAX_FILE_SIZE
-      return render json: { success: false, error: "파일 크기는 20MB 이하여야 합니다." }, status: :unprocessable_entity
-    end
-
-    result = DocumentAnalyzerService.new.analyze(file: file, document_type: "quote_extraction")
+    result = DocumentAnalyzerService.new.analyze_multiple(files: files, document_type: "quote_extraction")
 
     if result[:success]
       render json: result
