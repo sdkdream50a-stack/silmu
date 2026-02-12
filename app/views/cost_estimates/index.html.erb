@@ -140,40 +140,7 @@
 
       <!-- AI 문서 분석 (선택사항) -->
       <div id="ce-ai-upload" style="display:none; margin-top:24px; padding-top:20px; border-top:1px solid #e5e7eb;">
-        <h3 style="font-size:16px; font-weight:700; color:#1e293b; margin-bottom:4px; display:flex; align-items:center; gap:8px;">
-          <span class="material-symbols-outlined" style="color:#6366f1;">auto_awesome</span>
-          AI 견적서 분석
-          <span style="font-size:12px; font-weight:400; color:#94a3b8;">(선택사항)</span>
-        </h3>
-        <p style="font-size:13px; color:#64748b; margin-bottom:16px;">견적서나 내역서를 업로드하면 AI가 분석하여 항목을 자동으로 채워줍니다.</p>
-
-        <div id="ce-upload-zone" style="border:2px dashed #c7d2fe; border-radius:12px; padding:28px 20px; text-align:center; cursor:pointer; background:#fafafe; transition:all .2s;"
-             onclick="document.getElementById('ce-file-input').click()"
-             ondragover="ceHandleDragOver(event)" ondragleave="ceHandleDragLeave(event)" ondrop="ceHandleDrop(event)">
-          <span class="material-symbols-outlined" style="font-size:36px; color:#a5b4fc; margin-bottom:6px;">cloud_upload</span>
-          <p style="font-size:14px; color:#64748b; margin-bottom:2px;">파일을 드래그하거나 클릭하여 선택</p>
-          <small style="font-size:12px; color:#94a3b8;">PDF, JPG, PNG (최대 20MB)</small>
-        </div>
-        <input type="file" id="ce-file-input" accept=".pdf,.jpg,.jpeg,.png" style="display:none" onchange="ceFileSelect(event)">
-
-        <div id="ce-file-info" style="display:none; margin-top:12px; padding:12px 16px; background:#fff; border:1px solid #e5e7eb; border-radius:10px; align-items:center; gap:12px;">
-          <span class="material-symbols-outlined" style="font-size:22px; color:#6366f1;">description</span>
-          <div style="flex:1;">
-            <div id="ce-file-name" style="font-size:14px; font-weight:600; color:#1e293b;"></div>
-            <div id="ce-file-size" style="font-size:12px; color:#64748b;"></div>
-          </div>
-          <button onclick="ceClearFile()" style="padding:5px 12px; background:#fef2f2; color:#ef4444; border:none; border-radius:8px; cursor:pointer; font-size:13px;">삭제</button>
-        </div>
-
-        <button id="ce-btn-analyze" style="display:none; margin-top:12px; width:100%; padding:13px; background:linear-gradient(135deg,#6366f1,#8b5cf6); color:#fff; border:none; border-radius:12px; font-size:15px; font-weight:600; cursor:pointer; align-items:center; justify-content:center; gap:8px;" onclick="ceAnalyzeDocument()">
-          <span class="material-symbols-outlined" style="vertical-align:middle; font-size:20px;">auto_awesome</span>
-          AI 분석 시작
-        </button>
-
-        <div id="ce-analysis-status" style="display:none; margin-top:12px; padding:12px 16px; border-radius:10px; font-size:14px; align-items:center; gap:10px;">
-          <div id="ce-analysis-spinner" style="width:18px; height:18px; border:2px solid #bfdbfe; border-top-color:#4f46e5; border-radius:50%; animation:ceSpin .8s linear infinite;"></div>
-          <span id="ce-analysis-msg"></span>
-        </div>
+        <%= render 'shared/quote_upload_zone', tool_id: 'ce' %>
       </div>
 
       <div style="margin-top:24px; text-align:right;">
@@ -339,12 +306,39 @@
 <div class="ce-print-area" id="ce-print-area"></div>
 
 <script>
+// 견적서 자동입력 매핑 함수 (물량내역서+시방서용)
+window.quMapFields_ce = function(fields) {
+  // 기본정보 입력 (Step 2)
+  if (fields.project_name) quSetField('ce-project-name', fields.project_name);
+  if (fields.location) quSetField('ce-location', fields.location);
+  if (fields.duration) quSetField('ce-duration', fields.duration);
+  if (fields.department) quSetField('ce-department', fields.department);
+  if (fields.manager) quSetField('ce-manager', fields.manager);
+
+  // 항목 자동입력 (Step 3)
+  if (fields.items && Array.isArray(fields.items)) {
+    // 분석된 항목으로 교체
+    ceItems = fields.items.map(function(item, idx) {
+      return {
+        id: ++ceRowId,
+        name: item.name || '',
+        spec: item.spec || '',
+        unit: item.unit || '식',
+        qty: parseFloat(item.qty) || 0,
+        unit_price: parseFloat(item.unit_price) || 0,
+        amount: (parseFloat(item.qty) || 0) * (parseFloat(item.unit_price) || 0)
+      };
+    });
+    if (typeof ceRenderItems === 'function') ceRenderItems();
+  }
+};
+
 document.addEventListener('turbo:load', function() {
   var ceStepCard = document.getElementById('ce-step1');
   if (!ceStepCard) return;
 
   var ceSelectedType = null;
-  var ceItems = [];
+  window.ceItems = window.ceItems || [];
   var ceRowId = 0;
   var ceResult = null;
 
