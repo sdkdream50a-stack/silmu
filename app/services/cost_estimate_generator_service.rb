@@ -141,10 +141,25 @@ class CostEstimateGeneratorService
       items = parse_items(params[:items])
       info = params[:info] || {}
       custom_instructions = params[:custom_instructions] || ""
+      contract_type = params[:contract_type] || 'private'
 
       material_cost = items.sum { |i| i[:amount] }
-      indirect = calculate_indirect_costs(material_cost)
-      total = indirect[:total_with_vat]
+
+      # 계약 방식에 따른 처리
+      if contract_type == 'private'
+        # 수의계약: 간접비 계산 안 함
+        subtotal = material_cost
+        vat = (material_cost * 0.10).round(0)
+        total = subtotal + vat
+        indirect_costs = []
+      else
+        # 경쟁입찰: 간접비 계산
+        indirect = calculate_indirect_costs(material_cost)
+        subtotal = indirect[:subtotal]
+        vat = indirect[:vat]
+        total = indirect[:total_with_vat]
+        indirect_costs = indirect[:details]
+      end
 
       # 선택된 유형 이름 조합
       type_names = types.map { |t| CONSTRUCTION_TYPES[t][:name] }.join(", ")
@@ -156,16 +171,18 @@ class CostEstimateGeneratorService
         success: true,
         estimate: {
           type_name: type_names,
+          contract_type: contract_type,
           info: info,
           items: items,
           material_cost: material_cost,
-          indirect_costs: indirect[:details],
-          subtotal: indirect[:subtotal],
-          vat: indirect[:vat],
+          indirect_costs: indirect_costs,
+          subtotal: subtotal,
+          vat: vat,
           total: total
         },
         instruction: {
           type_name: type_names,
+          contract_type: contract_type,
           info: info,
           template: combined_templates,
           custom: custom_instructions,
