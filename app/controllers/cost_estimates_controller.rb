@@ -24,7 +24,7 @@ class CostEstimatesController < ApplicationController
   # POST /cost-estimates/generate
   def generate
     result = CostEstimateGeneratorService.generate(
-      construction_type: params[:construction_type],
+      construction_types: params[:construction_types] || [params[:construction_type]].compact,
       items: params[:items],
       info: info_params,
       custom_instructions: params[:custom_instructions]

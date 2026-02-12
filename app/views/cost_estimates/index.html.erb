@@ -6,10 +6,12 @@
 .ce-type-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:16px; }
 .ce-type-btn { background:#fff; border:2px solid #e5e7eb; border-radius:14px; padding:24px 16px; text-align:center; cursor:pointer; transition:all .2s; }
 .ce-type-btn:hover { border-color:#6366f1; background:#eef2ff; }
-.ce-type-btn.selected { border-color:#4f46e5; background:#eef2ff; box-shadow:0 0 0 3px rgba(79,70,229,.15); }
+.ce-type-btn.selected { border-color:#4f46e5; background:#eef2ff; box-shadow:0 0 0 3px rgba(79,70,229,.15); position:relative; }
 .ce-type-btn .ce-icon { width:48px; height:48px; border-radius:12px; display:flex; align-items:center; justify-content:center; margin:0 auto 12px; background:#f1f5f9; }
 .ce-type-btn.selected .ce-icon { background:#4f46e5; color:#fff; }
 .ce-type-btn.selected .ce-icon .material-symbols-outlined { color:#fff; }
+.ce-type-btn .ce-check { position:absolute; top:8px; right:8px; width:24px; height:24px; border-radius:50%; background:#4f46e5; color:#fff; display:none; align-items:center; justify-content:center; font-size:16px; }
+.ce-type-btn.selected .ce-check { display:flex; }
 .ce-type-btn .ce-type-name { font-weight:700; color:#1e293b; font-size:15px; }
 .ce-type-btn .ce-type-desc { font-size:13px; color:#64748b; margin-top:4px; }
 
@@ -124,11 +126,14 @@
     <!-- Step 1: 공사유형 선택 -->
     <div class="ce-step-card active" id="ce-step1">
       <h2 class="ce-section-title">공사유형 선택</h2>
-      <p class="ce-section-desc">물량내역서를 작성할 공사 유형을 선택하세요. 유형별 기본 항목이 자동으로 채워집니다.</p>
+      <p class="ce-section-desc">물량내역서를 작성할 공사 유형을 선택하세요 (복수 선택 가능). 유형별 기본 항목이 자동으로 채워집니다.</p>
 
       <div class="ce-type-grid" id="ce-type-grid">
         <% @construction_types.each do |type| %>
           <div class="ce-type-btn" data-type="<%= type[:id] %>" onclick="ceSelectType(this)">
+            <div class="ce-check">
+              <span class="material-symbols-outlined" style="font-size:16px;">check</span>
+            </div>
             <div class="ce-icon">
               <span class="material-symbols-outlined text-2xl text-indigo-500"><%= type[:icon] %></span>
             </div>
@@ -339,7 +344,7 @@ document.addEventListener('turbo:load', function() {
   var ceStepCard = document.getElementById('ce-step1');
   if (!ceStepCard) return;
 
-  var ceSelectedType = null;
+  var ceSelectedTypes = [];
   window.ceItems = window.ceItems || [];
   var ceRowId = 0;
   var ceResult = null;
@@ -347,29 +352,61 @@ document.addEventListener('turbo:load', function() {
   var ceUploadedFile = null;
   var ceAnalyzedData = null;
 
-  // 공사유형 선택
+  // 공사유형 선택 (다중 선택)
   window.ceSelectType = function(el) {
-    var btns = document.querySelectorAll('.ce-type-btn');
-    for (var i = 0; i < btns.length; i++) { btns[i].classList.remove('selected'); }
-    el.classList.add('selected');
-    ceSelectedType = el.dataset.type;
-    document.getElementById('ce-btn-step1').disabled = false;
+    var type = el.dataset.type;
+
+    // 토글 방식
+    if (el.classList.contains('selected')) {
+      el.classList.remove('selected');
+      var idx = ceSelectedTypes.indexOf(type);
+      if (idx > -1) ceSelectedTypes.splice(idx, 1);
+    } else {
+      el.classList.add('selected');
+      ceSelectedTypes.push(type);
+    }
+
+    // 최소 1개 선택되어야 다음 버튼 활성화
+    document.getElementById('ce-btn-step1').disabled = ceSelectedTypes.length === 0;
 
     // AI 업로드 섹션 표시
-    document.getElementById('ce-ai-upload').style.display = 'block';
+    document.getElementById('ce-ai-upload').style.display = ceSelectedTypes.length > 0 ? 'block' : 'none';
 
-    // 기본 항목 로드
-    fetch('/cost-estimates/default-items/' + ceSelectedType, {
-      headers: { 'Accept': 'application/json', 'X-CSRF-Token': document.querySelector('meta[name=csrf-token]').content }
-    })
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      if (data.success) {
-        ceItems = data.items;
-        ceRenderTable();
-      }
-    });
+    // 선택된 모든 유형의 기본 항목 로드 및 병합
+    ceLoadAllSelectedItems();
   };
+
+  // 선택된 모든 공사 유형의 항목을 병합
+  function ceLoadAllSelectedItems() {
+    if (ceSelectedTypes.length === 0) {
+      ceItems = [];
+      ceRenderTable();
+      return;
+    }
+
+    var allItems = [];
+    var promises = ceSelectedTypes.map(function(type) {
+      return fetch('/cost-estimates/default-items/' + type, {
+        headers: { 'Accept': 'application/json', 'X-CSRF-Token': document.querySelector('meta[name=csrf-token]').content }
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.success) {
+          return data.items;
+        }
+        return [];
+      });
+    });
+
+    Promise.all(promises).then(function(itemsArrays) {
+      allItems = [];
+      itemsArrays.forEach(function(items) {
+        allItems = allItems.concat(items);
+      });
+      ceItems = allItems;
+      ceRenderTable();
+    });
+  }
 
   // 스텝 이동
   window.ceGoStep = function(step) {
@@ -387,9 +424,15 @@ document.addEventListener('turbo:load', function() {
       ceApplyAnalyzedItems();
     }
     if (step === 4) {
-      // 시방서 내용 세팅
+      // 시방서 내용 세팅 (선택된 모든 유형의 시방서 병합)
       var templates = <%= raw CostEstimateGeneratorService::INSTRUCTION_TEMPLATES.to_json %>;
-      var tmpl = templates[ceSelectedType] || '';
+      var combinedTemplates = [];
+      ceSelectedTypes.forEach(function(type) {
+        if (templates[type]) {
+          combinedTemplates.push(templates[type]);
+        }
+      });
+      var tmpl = combinedTemplates.join('\n\n---\n\n');
       document.getElementById('ce-instruction-template').textContent = tmpl;
     }
 
@@ -503,7 +546,7 @@ document.addEventListener('turbo:load', function() {
     };
 
     var body = {
-      construction_type: ceSelectedType,
+      construction_types: ceSelectedTypes,
       items: ceItems,
       project_name: info.project_name,
       location: info.location,
