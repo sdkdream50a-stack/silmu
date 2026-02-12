@@ -10,7 +10,7 @@ class PdfToolsController < ApplicationController
       title: "PDF 도구",
       description: "PDF 분할, 합치기, 페이지번호 추가 등 공무원 업무에 유용한 PDF 편집 도구.",
       keywords: "PDF 분할, PDF 합치기, 페이지번호, PDF 도구, PDF 편집",
-      og: { title: "PDF 도구 — 실무.kr", url: request.original_url }
+      og: { title: "PDF 도구 — 실무.kr", url: canonical_url }
     )
   end
 

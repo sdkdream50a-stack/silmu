@@ -43,4 +43,10 @@ class ApplicationController < ActionController::Base
       twitter: { card: "summary_large_image", image: "https://silmu.kr/og-image.png" }
     )
   end
+
+  # SEO: 쿼리 파라미터 제거한 canonical URL 반환
+  def canonical_url
+    @canonical_url ||= request.original_url.split('?').first
+  end
+  helper_method :canonical_url
 end

@@ -20,10 +20,11 @@ class TopicsController < ApplicationController
       title: "#{@topic.name} — 법령·절차·실무 가이드",
       description: @topic.summary.truncate(155),
       keywords: @topic.keywords,
+      canonical: canonical_url,
       og: {
         title: "#{@topic.name} 실무 가이드 | 실무.kr",
         description: @topic.summary.truncate(200),
-        url: request.original_url,
+        url: canonical_url,
         type: "article"
       }
     )
