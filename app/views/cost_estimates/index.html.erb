@@ -185,6 +185,34 @@
         </div>
       </div>
 
+      <!-- 결재라인 입력 -->
+      <div style="margin-top:20px; padding-top:20px; border-top:1px solid #e5e7eb;">
+        <div style="margin-bottom:12px;">
+          <label style="display:block; font-weight:600; font-size:14px; color:#334155; margin-bottom:8px;">결재라인 (선택)</label>
+          <p style="font-size:13px; color:#64748b; margin-bottom:12px;">출력물에 포함될 결재 직위를 입력하세요. 빈칸으로 두면 해당 칸이 생략됩니다.</p>
+        </div>
+        <div class="ce-form-row">
+          <div class="ce-form-group">
+            <label>담당</label>
+            <input type="text" id="ce-approval-staff" placeholder="예: 주무관">
+          </div>
+          <div class="ce-form-group">
+            <label>팀장/계장</label>
+            <input type="text" id="ce-approval-team" placeholder="예: 팀장">
+          </div>
+        </div>
+        <div class="ce-form-row">
+          <div class="ce-form-group">
+            <label>과장</label>
+            <input type="text" id="ce-approval-section" placeholder="예: 과장">
+          </div>
+          <div class="ce-form-group">
+            <label>국장/부장</label>
+            <input type="text" id="ce-approval-director" placeholder="예: 국장">
+          </div>
+        </div>
+      </div>
+
       <div style="display:flex; justify-content:space-between; margin-top:24px;">
         <button class="ce-btn ce-btn-secondary" onclick="ceGoStep(1)">
           <span class="material-symbols-outlined text-lg">arrow_back</span> 이전
@@ -542,7 +570,11 @@ document.addEventListener('turbo:load', function() {
       location: document.getElementById('ce-location').value,
       duration: document.getElementById('ce-duration').value,
       department: document.getElementById('ce-department').value,
-      manager: document.getElementById('ce-manager').value
+      manager: document.getElementById('ce-manager').value,
+      approval_staff: document.getElementById('ce-approval-staff').value,
+      approval_team: document.getElementById('ce-approval-team').value,
+      approval_section: document.getElementById('ce-approval-section').value,
+      approval_director: document.getElementById('ce-approval-director').value
     };
 
     var body = {
@@ -553,6 +585,10 @@ document.addEventListener('turbo:load', function() {
       duration: info.duration,
       department: info.department,
       manager: info.manager,
+      approval_staff: info.approval_staff,
+      approval_team: info.approval_team,
+      approval_section: info.approval_section,
+      approval_director: info.approval_director,
       custom_instructions: document.getElementById('ce-custom-instructions').value
     };
 
@@ -621,7 +657,7 @@ document.addEventListener('turbo:load', function() {
       iHtml += '<div style="margin-bottom:16px;"><strong style="color:#1e40af;">추가 시방 사항</strong><pre style="white-space:pre-wrap;font-family:inherit;font-size:14px;line-height:1.8;background:#eff6ff;padding:16px;border-radius:10px;margin-top:8px;">' + ceEsc(ins.custom) + '</pre></div>';
     }
 
-    iHtml += '<div style="margin-top:24px;text-align:right;font-size:14px;"><p>위 내용에 따라 시공하여야 한다.</p><br><table style="margin-left:auto;border-collapse:collapse;"><tr><td style="border:1px solid #d1d5db;padding:8px 24px;background:#f8fafc;">담당</td><td style="border:1px solid #d1d5db;padding:8px 24px;background:#f8fafc;">팀장</td><td style="border:1px solid #d1d5db;padding:8px 24px;background:#f8fafc;">과장</td></tr><tr><td style="border:1px solid #d1d5db;padding:20px 24px;"></td><td style="border:1px solid #d1d5db;padding:20px 24px;"></td><td style="border:1px solid #d1d5db;padding:20px 24px;"></td></tr></table></div>';
+    iHtml += '<div style="margin-top:24px;text-align:right;font-size:14px;"><p>위 내용에 따라 시공하여야 한다.</p><br>' + buildApprovalLine(ins.info, false) + '</div>';
 
     document.getElementById('ce-result-instruction').innerHTML = iHtml;
   }
@@ -656,7 +692,7 @@ document.addEventListener('turbo:load', function() {
     h += '<tr><td colspan="6" style="text-align:center">부가가치세</td><td style="text-align:right">' + ceComma(est.vat) + '</td></tr>';
     h += '<tr style="font-weight:bold;background:#f0f0f0;"><td colspan="6" style="text-align:center">합계</td><td style="text-align:right">' + ceComma(est.total) + '</td></tr>';
     h += '</tbody></table>';
-    h += '<div class="print-sign"><table><tr><td>담당</td><td>팀장</td><td>과장</td></tr><tr><td style="height:50px;"></td><td></td><td></td></tr></table></div>';
+    h += buildApprovalLine(est.info, true);
     return h;
   }
 
@@ -673,7 +709,7 @@ document.addEventListener('turbo:load', function() {
       h += '<div style="margin-bottom:16px;"><strong>추가 시방 사항</strong><pre style="white-space:pre-wrap;font-family:serif;line-height:1.8;margin-top:8px;">' + ceEsc(ins.custom) + '</pre></div>';
     }
     h += '<div style="margin-top:30px;text-align:center;"><p>위 내용에 따라 시공하여야 한다.</p><br><p>20    년    월    일</p></div>';
-    h += '<div class="print-sign"><table><tr><td>담당</td><td>팀장</td><td>과장</td></tr><tr><td style="height:50px;"></td><td></td><td></td></tr></table></div>';
+    h += buildApprovalLine(ins.info, true);
     return h;
   }
 
@@ -683,6 +719,38 @@ document.addEventListener('turbo:load', function() {
 
   function ceEsc(s) { if (!s) return ''; var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
   window.ceEsc = ceEsc;
+
+  // 결재라인 테이블 생성 (입력된 직위만 포함)
+  function buildApprovalLine(info, isPrint) {
+    var positions = [];
+    if (info.approval_staff && info.approval_staff.trim()) positions.push(info.approval_staff.trim());
+    if (info.approval_team && info.approval_team.trim()) positions.push(info.approval_team.trim());
+    if (info.approval_section && info.approval_section.trim()) positions.push(info.approval_section.trim());
+    if (info.approval_director && info.approval_director.trim()) positions.push(info.approval_director.trim());
+
+    // 입력된 직위가 없으면 기본값 사용
+    if (positions.length === 0) {
+      positions = ['담당', '팀장', '과장'];
+    }
+
+    var headerRow = positions.map(function(p) {
+      return '<td>' + ceEsc(p) + '</td>';
+    }).join('');
+
+    var signRow = positions.map(function() {
+      return '<td style="height:50px;"></td>';
+    }).join('');
+
+    if (isPrint) {
+      return '<div class="print-sign"><table><tr>' + headerRow + '</tr><tr>' + signRow + '</tr></table></div>';
+    } else {
+      return '<table style="margin-left:auto;border-collapse:collapse;"><tr>' +
+             positions.map(function(p) { return '<td style="border:1px solid #d1d5db;padding:8px 24px;background:#f8fafc;">' + ceEsc(p) + '</td>'; }).join('') +
+             '</tr><tr>' +
+             positions.map(function() { return '<td style="border:1px solid #d1d5db;padding:20px 24px;"></td>'; }).join('') +
+             '</tr></table>';
+    }
+  }
 
   // === AI 문서 분석 기능 ===
 
