@@ -49,6 +49,8 @@
 .ce-btn-secondary:hover { background:#e2e8f0; }
 .ce-btn-success { background:#059669; color:#fff; }
 .ce-btn-success:hover { background:#047857; }
+.ce-btn-info { background:#0ea5e9; color:#fff; }
+.ce-btn-info:hover { background:#0284c7; }
 .ce-btn:disabled { opacity:.5; cursor:not-allowed; }
 
 .ce-step-indicator { display:flex; gap:8px; margin-bottom:28px; }
@@ -347,15 +349,21 @@
         <button class="ce-btn ce-btn-secondary" onclick="ceGoStep(3)">
           <span class="material-symbols-outlined text-lg">arrow_back</span> 이전
         </button>
-        <div style="display:flex; gap:12px;">
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
           <button class="ce-btn ce-btn-primary" onclick="ceGenerate()">
             <span class="material-symbols-outlined text-lg">auto_awesome</span> 문서 생성
           </button>
           <button class="ce-btn ce-btn-success" id="ce-btn-print" style="display:none;" onclick="cePrint('estimate')">
             <span class="material-symbols-outlined text-lg">print</span> 물량내역서 인쇄
           </button>
+          <button class="ce-btn ce-btn-info" id="ce-btn-download" style="display:none;" onclick="ceDownload('estimate')">
+            <span class="material-symbols-outlined text-lg">download</span> 물량내역서 다운로드
+          </button>
           <button class="ce-btn ce-btn-success" id="ce-btn-print2" style="display:none;" onclick="cePrint('instruction')">
             <span class="material-symbols-outlined text-lg">print</span> 시방서 인쇄
+          </button>
+          <button class="ce-btn ce-btn-info" id="ce-btn-download2" style="display:none;" onclick="ceDownload('instruction')">
+            <span class="material-symbols-outlined text-lg">download</span> 시방서 다운로드
           </button>
         </div>
       </div>
@@ -661,6 +669,8 @@ document.addEventListener('turbo:load', function() {
         document.getElementById('ce-result-area').style.display = 'block';
         document.getElementById('ce-btn-print').style.display = '';
         document.getElementById('ce-btn-print2').style.display = '';
+        document.getElementById('ce-btn-download').style.display = '';
+        document.getElementById('ce-btn-download2').style.display = '';
       }
     });
   };
@@ -747,6 +757,50 @@ document.addEventListener('turbo:load', function() {
       printArea.innerHTML = buildInstructionPrint(ceResult.instruction);
     }
     window.print();
+  };
+
+  // 다운로드 (한글파일 호환 HTML)
+  window.ceDownload = function(docType) {
+    if (!ceResult) return;
+
+    var content, filename;
+    if (docType === 'estimate') {
+      content = buildEstimatePrint(ceResult.estimate);
+      filename = (ceResult.estimate.info.project_name || '물량내역서') + '_물량내역서.html';
+    } else {
+      content = buildInstructionPrint(ceResult.instruction);
+      filename = (ceResult.instruction.info.project_name || '시방서') + '_시방서.html';
+    }
+
+    var htmlContent = '<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8">';
+    htmlContent += '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
+    htmlContent += '<title>' + filename.replace('.html', '') + '</title>';
+    htmlContent += '<style>';
+    htmlContent += 'body { font-family: "맑은 고딕", "Malgun Gothic", sans-serif; padding: 40px; max-width: 900px; margin: 0 auto; }';
+    htmlContent += 'table { width: 100%; border-collapse: collapse; margin: 20px 0; }';
+    htmlContent += 'th, td { border: 1px solid #333; padding: 8px 12px; }';
+    htmlContent += 'th { background: #f0f0f0; font-weight: bold; text-align: center; }';
+    htmlContent += 'td { vertical-align: middle; }';
+    htmlContent += '.print-header { text-align: center; margin-bottom: 30px; }';
+    htmlContent += '.print-header h2 { font-size: 24px; margin-bottom: 10px; }';
+    htmlContent += '.print-info { border: none; margin: 20px 0; }';
+    htmlContent += '.print-info td { border: none; padding: 6px 12px; }';
+    htmlContent += '.print-sign { margin-top: 40px; text-align: right; }';
+    htmlContent += '.print-sign table { margin-left: auto; border-collapse: collapse; }';
+    htmlContent += '.print-sign td { border: 1px solid #333; padding: 12px 24px; text-align: center; min-width: 80px; height: 60px; }';
+    htmlContent += 'pre { white-space: pre-wrap; font-family: inherit; line-height: 1.8; }';
+    htmlContent += '</style>';
+    htmlContent += '</head><body>';
+    htmlContent += content;
+    htmlContent += '</body></html>';
+
+    var blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   function buildEstimatePrint(est) {
