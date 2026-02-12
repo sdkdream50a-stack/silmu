@@ -781,6 +781,16 @@
           <div class="content" id="basis-content"></div>
         </div>
 
+        <!-- 낙찰하한율 (입찰인 경우에만 표시) -->
+        <div id="lowest-bid-rate-box" style="display: none; padding: 20px; background: linear-gradient(135deg, #fef3c7, #fde68a); border-left: 4px solid #f59e0b; border-radius: 0 14px 14px 0; margin-bottom: 20px;">
+          <div style="font-size: 12px; color: #92400e; font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+            <span class="material-symbols-outlined" style="font-size: 18px;">percent</span>
+            낙찰하한율
+          </div>
+          <div style="font-size: 20px; font-weight: 700; color: #78350f; margin-bottom: 8px;" id="lowest-bid-rate-value"></div>
+          <div style="font-size: 13px; color: #92400e;" id="lowest-bid-rate-note"></div>
+        </div>
+
         <!-- 경고/안내 -->
         <div id="warnings-container"></div>
 
@@ -1061,6 +1071,16 @@
 
     // 법령 근거
     document.getElementById('basis-content').textContent = result.result.basis;
+
+    // 낙찰하한율 표시 (입찰인 경우)
+    const lowestBidRateBox = document.getElementById('lowest-bid-rate-box');
+    if (result.lowest_bid_rate) {
+      lowestBidRateBox.style.display = 'block';
+      document.getElementById('lowest-bid-rate-value').textContent = result.lowest_bid_rate.rate;
+      document.getElementById('lowest-bid-rate-note').textContent = result.lowest_bid_rate.note + ' (' + result.lowest_bid_rate.detail + ')';
+    } else {
+      lowestBidRateBox.style.display = 'none';
+    }
 
     // 경고/안내 (안전한 DOM 조작)
     const warningsContainer = document.getElementById('warnings-container');

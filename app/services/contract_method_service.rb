@@ -262,6 +262,25 @@ class ContractMethodService
     social_cooperative: { name: "사회적협동조합", threshold: 50_000_000, basis: "협동조합 기본법" }
   }.freeze
 
+  # 낙찰하한율 기준 (지방계약법 시행령 제42조, 지방계약법 시행규칙 별표2)
+  LOWEST_BID_RATES = {
+    construction: {
+      name: "공사",
+      rates: [
+        { min: 100_000_000_000, max: Float::INFINITY, rate: "87.745% ~ 89.745%", detail: "1,000억원 이상" },
+        { min: 30_000_000_000, max: 100_000_000_000, rate: "87.495% ~ 89.495%", detail: "300억원 이상 ~ 1,000억원 미만" },
+        { min: 0, max: 30_000_000_000, rate: "87.745% ~ 89.745%", detail: "300억원 미만" }
+      ]
+    },
+    goods_service: {
+      name: "물품·용역",
+      rates: [
+        { min: 20_000_001, max: Float::INFINITY, rate: "88.0%", detail: "2천만원 초과" },
+        { min: 0, max: 20_000_000, rate: "90.0%", detail: "2천만원 이하" }
+      ]
+    }
+  }.freeze
+
   # 관련 법령 정보
   RELATED_LAWS = {
     "지방계약법" => "https://www.law.go.kr/법령/지방자치단체를당사자로하는계약에관한법률",
@@ -324,6 +343,7 @@ class ContractMethodService
           special_applied: threshold[:special_applied] || false
         },
         special_enterprise: special_info,
+        lowest_bid_rate: calculate_lowest_bid_rate(type_sym, price, threshold[:method]),
         related_laws: RELATED_LAWS,
         warnings: generate_warnings(type_sym, price),
         tips: generate_tips(type_sym, price, threshold[:method])
@@ -374,6 +394,27 @@ class ContractMethodService
       { success: false, error: message }
     end
 
+    def calculate_lowest_bid_rate(type, price, method)
+      # 입찰이 아니면 낙찰하한율 없음
+      return nil unless method == "입찰"
+
+      # 공사 vs 물품·용역 구분
+      category = [ :construction_general, :construction_special, :construction_etc ].include?(type) ? :construction : :goods_service
+      rates_info = LOWEST_BID_RATES[category]
+
+      # 금액 구간 찾기
+      rate_data = rates_info[:rates].find { |r| price >= r[:min] && price < r[:max] }
+
+      return nil unless rate_data
+
+      {
+        category: rates_info[:name],
+        rate: rate_data[:rate],
+        detail: rate_data[:detail],
+        note: "예정가격의 #{rate_data[:rate]} 범위 내에서 최저가 낙찰"
+      }
+    end
+
     def generate_warnings(type, price)
       warnings = []
 
@@ -386,6 +427,22 @@ class ContractMethodService
           message: "계약상대자가 수의계약 배제사유에 해당하는지 반드시 확인하세요. 체결제한확인서를 징구하고 나라장터(G2B)에서 부정당업자 제재현황을 조회해야 합니다.",
           link: "https://www.g2b.go.kr"
         }
+      end
+
+      # 낙찰하한율 안내 (입찰인 경우)
+      if threshold && threshold[:method] == "입찰"
+        category = [ :construction_general, :construction_special, :construction_etc ].include?(type) ? :construction : :goods_service
+        rates_info = LOWEST_BID_RATES[category]
+        rate_data = rates_info[:rates].find { |r| price >= r[:min] && price < r[:max] }
+
+        if rate_data
+          warnings << {
+            level: "info",
+            title: "낙찰하한율 — #{rate_data[:rate]}",
+            message: "#{rates_info[:name]} #{rate_data[:detail]} 입찰의 낙찰하한율은 예정가격의 #{rate_data[:rate]}입니다. 이 범위 미만으로 입찰하면 무효 처리됩니다. (지방계약법 시행령 제42조, 시행규칙 별표2)",
+            link: nil
+          }
+        end
       end
 
       # G2B 전자견적 의무 안내 (2천만원 초과 수의계약)
@@ -458,7 +515,8 @@ class ContractMethodService
 
       if method.include?("입찰")
         tips << "입찰공고 기간은 최소 7일 이상 확보해야 합니다. (긴급 시 5일)"
-        tips << "낙찰하한율을 미리 확인하세요. (공사 89.745%~87.495%, 물품·용역 88%/2천만원 이하 90%)"
+        tips << "낙찰하한율 미만으로 입찰하면 무효 처리되므로, 예정가격 대비 적정 입찰가를 산정하세요."
+        tips << "적격심사 또는 최저가낙찰제 적용 여부를 공고문에서 반드시 확인하세요."
         tips << "2회 유찰 시 수의계약 전환이 가능합니다. (지방계약법 시행령 제25조제1항제2호)"
       end
 
