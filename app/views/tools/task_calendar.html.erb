@@ -230,13 +230,24 @@
 
     <!-- 상시 체크리스트 -->
     <div class="px-2 py-3 border-t border-gray-100">
-      <div class="flex items-center justify-between mb-2 px-1">
-        <p class="text-[10px] font-bold text-gray-500 uppercase tracking-wider">상시 체크리스트</p>
-        <button id="btn-add-standing-item" class="text-gray-400 hover:text-indigo-600 transition-colors">
+      <!-- 접기/펼치기 헤더 -->
+      <div id="standing-header" class="flex items-center justify-between px-1 py-1.5 cursor-pointer hover:bg-gray-50 rounded-lg transition-colors group">
+        <div class="flex items-center gap-2 flex-1 min-w-0">
+          <span id="standing-toggle-icon" class="material-symbols-outlined text-gray-400 group-hover:text-indigo-600 transition-all" style="font-size:18px">expand_more</span>
+          <div class="flex-1 min-w-0">
+            <p class="text-[10px] font-bold text-gray-500 uppercase tracking-wider">상시 체크리스트</p>
+            <p id="standing-summary" class="text-[10px] text-gray-400"></p>
+          </div>
+        </div>
+        <button id="btn-add-standing-item" class="text-gray-400 hover:text-indigo-600 transition-colors" onclick="event.stopPropagation()">
           <span class="material-symbols-outlined" style="font-size:18px">add</span>
         </button>
       </div>
-      <div id="standing-checklist-container" class="space-y-1.5"></div>
+
+      <!-- 항목 리스트 (접을 수 있음) -->
+      <div id="standing-items-wrapper" class="mt-2 transition-all duration-200 overflow-hidden" style="max-height: 0px;">
+        <div id="standing-checklist-container" class="space-y-1.5 overflow-y-auto" style="max-height: 250px;"></div>
+      </div>
     </div>
 
     <!-- 이번 달 진행률 -->
@@ -2506,6 +2517,7 @@
 
   // --- 상시 체크리스트 관리 ---
   const STANDING_CHECKLIST_KEY = "silmu_standing_checklist";
+  const STANDING_EXPANDED_KEY = "silmu_standing_expanded";
   const CHECKLIST_COLORS = [
     { bg: "bg-red-50", text: "text-red-700", border: "border-red-200" },
     { bg: "bg-orange-50", text: "text-orange-700", border: "border-orange-200" },
@@ -2535,13 +2547,62 @@
     if (isSignedIn) syncToServer({ standing_checklist: items });
   }
 
+  function isStandingExpanded() {
+    return localStorage.getItem(STANDING_EXPANDED_KEY) !== "false";
+  }
+
+  function setStandingExpanded(expanded) {
+    localStorage.setItem(STANDING_EXPANDED_KEY, expanded ? "true" : "false");
+  }
+
+  function updateStandingSummary() {
+    const items = loadStandingChecklist();
+    const summaryEl = document.getElementById("standing-summary");
+    if (!summaryEl) return;
+
+    if (items.length === 0) {
+      summaryEl.textContent = "항목 없음";
+      return;
+    }
+
+    const completed = items.filter(i => i.checked).length;
+    const total = items.length;
+    const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
+    summaryEl.textContent = `${completed}/${total} 완료 (${percent}%)`;
+  }
+
+  function toggleStandingChecklist() {
+    const wrapper = document.getElementById("standing-items-wrapper");
+    const icon = document.getElementById("standing-toggle-icon");
+    const isExpanded = isStandingExpanded();
+
+    if (isExpanded) {
+      // 접기
+      wrapper.style.maxHeight = "0px";
+      icon.textContent = "chevron_right";
+      setStandingExpanded(false);
+    } else {
+      // 펼치기
+      const container = document.getElementById("standing-checklist-container");
+      const contentHeight = container.scrollHeight;
+      wrapper.style.maxHeight = Math.min(contentHeight + 20, 270) + "px";
+      icon.textContent = "expand_more";
+      setStandingExpanded(true);
+    }
+  }
+
   function renderStandingChecklist() {
     const items = loadStandingChecklist();
     const container = document.getElementById("standing-checklist-container");
-    if (!container) return;
+    const wrapper = document.getElementById("standing-items-wrapper");
+    if (!container || !wrapper) return;
+
+    // 요약 업데이트
+    updateStandingSummary();
 
     if (items.length === 0) {
-      container.innerHTML = '<p class="text-xs text-gray-400 text-center py-3">상시 체크리스트가 없습니다</p>';
+      container.innerHTML = '<p class="text-xs text-gray-400 text-center py-3">항목을 추가해주세요</p>';
+      wrapper.style.maxHeight = "60px";
       return;
     }
 
@@ -2563,6 +2624,16 @@
         </div>
       `;
     }).join("");
+
+    // 펼침/접힘 상태 복원
+    if (isStandingExpanded()) {
+      const contentHeight = container.scrollHeight;
+      wrapper.style.maxHeight = Math.min(contentHeight + 20, 270) + "px";
+      document.getElementById("standing-toggle-icon").textContent = "expand_more";
+    } else {
+      wrapper.style.maxHeight = "0px";
+      document.getElementById("standing-toggle-icon").textContent = "chevron_right";
+    }
 
     // 체크박스 이벤트
     container.querySelectorAll(".standing-item-cb").forEach(cb => {
@@ -2587,6 +2658,9 @@
       });
     });
   }
+
+  // 헤더 클릭 시 토글
+  document.getElementById("standing-header")?.addEventListener("click", toggleStandingChecklist);
 
   function escapeHtml(str) {
     const div = document.createElement("div");
