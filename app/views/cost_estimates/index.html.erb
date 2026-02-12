@@ -698,6 +698,14 @@ document.addEventListener('turbo:load', function() {
 
     html += '<div class="ce-summary-row"><span class="ce-summary-label">부가가치세</span><span class="ce-summary-value">' + ceComma(est.vat) + ' 원</span></div>';
     html += '<div class="ce-summary-row total"><span>합계</span><span>' + ceComma(est.total) + ' 원</span></div>';
+
+    // 수의계약 안내문
+    if (isPrivate) {
+      html += '<div style="margin-top:12px;padding:12px;background:#fef3c7;border-left:3px solid #f59e0b;border-radius:6px;font-size:12px;color:#92400e;line-height:1.6;">';
+      html += '<strong>※ 간접비 미포함 안내:</strong> 본 금액은 직접공사비이며, 일반관리비·이윤·보험료·산업안전보건관리비 등 간접비는 포함되지 않았습니다. 계약업체가 자체적으로 산정합니다.';
+      html += '</div>';
+    }
+
     html += '</div>';
     document.getElementById('ce-result-estimate').innerHTML = html;
 
@@ -710,6 +718,13 @@ document.addEventListener('turbo:load', function() {
     iHtml += '<tr><td style="padding:6px;border-bottom:1px solid #e5e7eb;"><strong>공사기간</strong></td><td style="padding:6px;border-bottom:1px solid #e5e7eb;">' + ceEsc(ins.info.duration || '-') + '</td></tr>';
     iHtml += '<tr><td style="padding:6px;border-bottom:1px solid #e5e7eb;"><strong>공사장소</strong></td><td style="padding:6px;border-bottom:1px solid #e5e7eb;">' + ceEsc(ins.info.location || '-') + '</td></tr>';
     iHtml += '</table>';
+
+    // 수의계약 안내문
+    if (isPrivate) {
+      iHtml += '<div style="margin-bottom:16px;padding:12px;background:#fef3c7;border-left:3px solid #f59e0b;border-radius:6px;font-size:12px;color:#92400e;line-height:1.6;">';
+      iHtml += '<strong>※ 간접비 미포함 안내:</strong> 본 금액은 직접공사비이며, 일반관리비·이윤·보험료·산업안전보건관리비 등 간접비는 포함되지 않았습니다. 계약업체가 자체적으로 산정합니다.';
+      iHtml += '</div>';
+    }
 
     iHtml += '<div style="margin-bottom:16px;"><strong style="color:#92400e;">시방 사항</strong><pre style="white-space:pre-wrap;font-family:inherit;font-size:14px;line-height:1.8;background:#fffbeb;padding:16px;border-radius:10px;margin-top:8px;">' + ceEsc(ins.template) + '</pre></div>';
 
@@ -765,11 +780,21 @@ document.addEventListener('turbo:load', function() {
     }
 
     h += '</tbody></table>';
+
+    // 수의계약 안내문
+    if (isPrivate) {
+      h += '<div style="margin:20px 0;padding:12px;background:#fef3c7;border-left:3px solid #f59e0b;border-radius:6px;font-size:13px;color:#92400e;line-height:1.6;">';
+      h += '<strong>※ 간접비 미포함 안내:</strong> 본 금액은 직접공사비이며, 일반관리비·이윤·보험료·산업안전보건관리비 등 간접비는 포함되지 않았습니다. 계약업체가 자체적으로 산정합니다.';
+      h += '</div>';
+    }
+
     h += buildApprovalLine(est.info, true);
     return h;
   }
 
   function buildInstructionPrint(ins) {
+    var isPrivate = ins.contract_type === 'private';
+
     var h = '<div class="print-header"><h2>' + ceEsc(ins.type_name) + ' 시방서</h2></div>';
     h += '<table class="ce-print-table" style="margin-bottom:20px;"><tbody>';
     h += '<tr><td style="width:100px;background:#f0f0f0;font-weight:bold;">공사명</td><td>' + ceEsc(ins.info.project_name) + '</td></tr>';
@@ -777,6 +802,14 @@ document.addEventListener('turbo:load', function() {
     h += '<tr><td style="background:#f0f0f0;font-weight:bold;">공사기간</td><td>' + ceEsc(ins.info.duration || '-') + '</td></tr>';
     h += '<tr><td style="background:#f0f0f0;font-weight:bold;">공사장소</td><td>' + ceEsc(ins.info.location || '-') + '</td></tr>';
     h += '</tbody></table>';
+
+    // 수의계약 안내문
+    if (isPrivate) {
+      h += '<div style="margin-bottom:20px;padding:12px;background:#fef3c7;border-left:3px solid #f59e0b;border-radius:6px;font-size:13px;color:#92400e;line-height:1.6;">';
+      h += '<strong>※ 간접비 미포함 안내:</strong> 본 금액은 직접공사비이며, 일반관리비·이윤·보험료·산업안전보건관리비 등 간접비는 포함되지 않았습니다. 계약업체가 자체적으로 산정합니다.';
+      h += '</div>';
+    }
+
     h += '<div style="margin-bottom:16px;"><strong>시방 사항</strong><pre style="white-space:pre-wrap;font-family:serif;line-height:1.8;margin-top:8px;">' + ceEsc(ins.template) + '</pre></div>';
     if (ins.custom) {
       h += '<div style="margin-bottom:16px;"><strong>추가 시방 사항</strong><pre style="white-space:pre-wrap;font-family:serif;line-height:1.8;margin-top:8px;">' + ceEsc(ins.custom) + '</pre></div>';
