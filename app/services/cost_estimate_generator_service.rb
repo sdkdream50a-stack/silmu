@@ -131,8 +131,12 @@ class CostEstimateGeneratorService
     end
 
     def generate(params)
-      type = params[:construction_type].to_s.to_sym
-      return { success: false, error: "유효하지 않은 공사유형입니다." } unless CONSTRUCTION_TYPES.key?(type)
+      # 다중 공사유형 지원
+      types = Array(params[:construction_types] || params[:construction_type])
+                .map { |t| t.to_s.to_sym }
+                .select { |t| CONSTRUCTION_TYPES.key?(t) }
+
+      return { success: false, error: "유효하지 않은 공사유형입니다." } if types.empty?
 
       items = parse_items(params[:items])
       info = params[:info] || {}
@@ -142,10 +146,16 @@ class CostEstimateGeneratorService
       indirect = calculate_indirect_costs(material_cost)
       total = indirect[:total_with_vat]
 
+      # 선택된 유형 이름 조합
+      type_names = types.map { |t| CONSTRUCTION_TYPES[t][:name] }.join(", ")
+
+      # 선택된 유형의 시방서 템플릿 조합
+      combined_templates = types.map { |t| INSTRUCTION_TEMPLATES[t] }.compact.join("\n\n---\n\n")
+
       {
         success: true,
         estimate: {
-          type_name: CONSTRUCTION_TYPES[type][:name],
+          type_name: type_names,
           info: info,
           items: items,
           material_cost: material_cost,
@@ -155,9 +165,9 @@ class CostEstimateGeneratorService
           total: total
         },
         instruction: {
-          type_name: CONSTRUCTION_TYPES[type][:name],
+          type_name: type_names,
           info: info,
-          template: INSTRUCTION_TEMPLATES[type],
+          template: combined_templates,
           custom: custom_instructions,
           total: total
         }
