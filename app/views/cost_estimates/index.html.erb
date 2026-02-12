@@ -89,6 +89,10 @@
 @keyframes ceSpin { to { transform:rotate(360deg); } }
 .ce-ai-filled { background:#f0fdf4 !important; border-color:#86efac !important; }
 
+.ce-contract-type-btn { padding:16px; border:2px solid #e5e7eb; border-radius:12px; cursor:pointer; transition:all .2s; background:#fff; }
+.ce-contract-type-btn:hover { border-color:#6366f1; background:#f8fafc; }
+.ce-contract-type-btn.selected { border-color:#4f46e5; background:#eef2ff; box-shadow:0 0 0 3px rgba(79,70,229,.1); }
+
 @media (max-width:640px) {
   .ce-type-grid { grid-template-columns:repeat(2, 1fr); gap:10px; }
   .ce-type-btn { padding:16px 10px; }
@@ -159,6 +163,31 @@
     <div class="ce-step-card" id="ce-step2">
       <h2 class="ce-section-title">기본정보 입력</h2>
       <p class="ce-section-desc">공사 기본 정보를 입력하세요.</p>
+
+      <!-- 계약 방식 선택 -->
+      <div class="ce-form-group" style="margin-bottom:24px; padding:16px; background:#f8fafc; border-radius:12px; border:1px solid #e5e7eb;">
+        <label style="margin-bottom:12px;">계약 방식 *</label>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div class="ce-contract-type-btn selected" data-type="private" onclick="ceSelectContractType(this)">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+              <span class="material-symbols-outlined text-lg text-indigo-600">handshake</span>
+              <strong>수의계약</strong>
+            </div>
+            <div style="font-size:12px; color:#64748b;">간소화 (시방서 + 품목 리스트)</div>
+          </div>
+          <div class="ce-contract-type-btn" data-type="bidding" onclick="ceSelectContractType(this)">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+              <span class="material-symbols-outlined text-lg text-indigo-600">gavel</span>
+              <strong>경쟁입찰</strong>
+            </div>
+            <div style="font-size:12px; color:#64748b;">상세 내역 (간접비 포함)</div>
+          </div>
+        </div>
+        <p style="font-size:13px; color:#64748b; margin-top:8px; line-height:1.5;">
+          💡 수의계약: 간접비 계산 없이 품목과 시방서만 생성 (일반적)<br>
+          💡 경쟁입찰: 일반관리비·이윤 등 간접비 포함 상세 내역 생성
+        </p>
+      </div>
 
       <div class="ce-form-group">
         <label>공사명 *</label>
@@ -373,12 +402,21 @@ document.addEventListener('turbo:load', function() {
   if (!ceStepCard) return;
 
   var ceSelectedTypes = [];
+  var ceContractType = 'private'; // 기본값: 수의계약
   window.ceItems = window.ceItems || [];
   var ceRowId = 0;
   var ceResult = null;
 
   var ceUploadedFile = null;
   var ceAnalyzedData = null;
+
+  // 계약 방식 선택
+  window.ceSelectContractType = function(el) {
+    var btns = document.querySelectorAll('.ce-contract-type-btn');
+    for (var i = 0; i < btns.length; i++) { btns[i].classList.remove('selected'); }
+    el.classList.add('selected');
+    ceContractType = el.dataset.type;
+  };
 
   // 공사유형 선택 (다중 선택)
   window.ceSelectType = function(el) {
@@ -531,6 +569,21 @@ document.addEventListener('turbo:load', function() {
     var directCost = 0;
     for (var i = 0; i < ceItems.length; i++) { directCost += (ceItems[i].amount || 0); }
 
+    document.getElementById('ce-direct-cost').textContent = ceComma(directCost) + ' 원';
+
+    // 수의계약: 간접비 계산 안 함
+    if (ceContractType === 'private') {
+      var vat = Math.round(directCost * 0.10);
+      var total = directCost + vat;
+
+      document.getElementById('ce-indirect-rows').innerHTML = '<div style="text-align:center; padding:12px; color:#64748b; font-size:13px;">수의계약 방식: 간접비 계산 생략</div>';
+      document.getElementById('ce-subtotal').textContent = ceComma(directCost) + ' 원';
+      document.getElementById('ce-vat').textContent = ceComma(vat) + ' 원';
+      document.getElementById('ce-total').textContent = ceComma(total) + ' 원';
+      return;
+    }
+
+    // 경쟁입찰: 간접비 계산
     var laborRatio = 0.4;
     var laborCost = Math.round(directCost * laborRatio);
     var materialOnly = directCost - laborCost;
@@ -547,8 +600,6 @@ document.addEventListener('turbo:load', function() {
     var subtotal = directCost + general + profit + insurance + safety;
     var vat = Math.round(subtotal * 0.10);
     var total = subtotal + vat;
-
-    document.getElementById('ce-direct-cost').textContent = ceComma(directCost) + ' 원';
 
     var indirectHtml = '';
     indirectHtml += '<div class="ce-summary-row"><span class="ce-summary-label">일반관리비 (6%)</span><span class="ce-summary-value">' + ceComma(general) + ' 원</span></div>';
@@ -579,6 +630,7 @@ document.addEventListener('turbo:load', function() {
 
     var body = {
       construction_types: ceSelectedTypes,
+      contract_type: ceContractType,
       items: ceItems,
       project_name: info.project_name,
       location: info.location,
@@ -616,9 +668,11 @@ document.addEventListener('turbo:load', function() {
   function ceRenderResult(data) {
     var est = data.estimate;
     var ins = data.instruction;
+    var isPrivate = est.contract_type === 'private';
 
     // 물량내역서 미리보기
-    var html = '<div style="text-align:center;margin-bottom:16px;"><strong style="font-size:17px;">' + ceEsc(est.type_name) + ' 물량내역서</strong></div>';
+    var contractLabel = isPrivate ? ' (수의계약용)' : ' (경쟁입찰용)';
+    var html = '<div style="text-align:center;margin-bottom:16px;"><strong style="font-size:17px;">' + ceEsc(est.type_name) + ' 물량내역서' + contractLabel + '</strong></div>';
     html += '<table style="width:100%;font-size:13px;margin-bottom:12px;"><tr><td><strong>공사명:</strong> ' + ceEsc(est.info.project_name) + '</td><td><strong>장소:</strong> ' + ceEsc(est.info.location || '-') + '</td></tr>';
     html += '<tr><td><strong>기간:</strong> ' + ceEsc(est.info.duration || '-') + '</td><td><strong>담당:</strong> ' + ceEsc(est.info.department || '') + ' ' + ceEsc(est.info.manager || '') + '</td></tr></table>';
 
@@ -630,12 +684,18 @@ document.addEventListener('turbo:load', function() {
     html += '</tbody></table>';
 
     html += '<div class="ce-summary" style="margin-top:12px;">';
-    html += '<div class="ce-summary-row"><span class="ce-summary-label">직접공사비</span><span class="ce-summary-value">' + ceComma(est.material_cost) + ' 원</span></div>';
-    for (var j = 0; j < est.indirect_costs.length; j++) {
-      var ic = est.indirect_costs[j];
-      html += '<div class="ce-summary-row"><span class="ce-summary-label">' + ceEsc(ic.name) + ' (' + ceEsc(ic.note) + ')</span><span class="ce-summary-value">' + ceComma(ic.amount) + ' 원</span></div>';
+    var costLabel = isPrivate ? '공사비 합계' : '직접공사비';
+    html += '<div class="ce-summary-row"><span class="ce-summary-label">' + costLabel + '</span><span class="ce-summary-value">' + ceComma(est.material_cost) + ' 원</span></div>';
+
+    // 경쟁입찰인 경우만 간접비 표시
+    if (!isPrivate) {
+      for (var j = 0; j < est.indirect_costs.length; j++) {
+        var ic = est.indirect_costs[j];
+        html += '<div class="ce-summary-row"><span class="ce-summary-label">' + ceEsc(ic.name) + ' (' + ceEsc(ic.note) + ')</span><span class="ce-summary-value">' + ceComma(ic.amount) + ' 원</span></div>';
+      }
+      html += '<div class="ce-summary-row"><span class="ce-summary-label">소계</span><span class="ce-summary-value">' + ceComma(est.subtotal) + ' 원</span></div>';
     }
-    html += '<div class="ce-summary-row"><span class="ce-summary-label">소계</span><span class="ce-summary-value">' + ceComma(est.subtotal) + ' 원</span></div>';
+
     html += '<div class="ce-summary-row"><span class="ce-summary-label">부가가치세</span><span class="ce-summary-value">' + ceComma(est.vat) + ' 원</span></div>';
     html += '<div class="ce-summary-row total"><span>합계</span><span>' + ceComma(est.total) + ' 원</span></div>';
     html += '</div>';
@@ -675,7 +735,10 @@ document.addEventListener('turbo:load', function() {
   };
 
   function buildEstimatePrint(est) {
-    var h = '<div class="print-header"><h2>' + ceEsc(est.type_name) + ' 물량내역서</h2></div>';
+    var isPrivate = est.contract_type === 'private';
+    var contractLabel = isPrivate ? ' (수의계약용)' : ' (경쟁입찰용)';
+
+    var h = '<div class="print-header"><h2>' + ceEsc(est.type_name) + ' 물량내역서' + contractLabel + '</h2></div>';
     h += '<table class="print-info"><tr><td><strong>공사명:</strong></td><td>' + ceEsc(est.info.project_name) + '</td><td><strong>장소:</strong></td><td>' + ceEsc(est.info.location || '-') + '</td></tr>';
     h += '<tr><td><strong>기간:</strong></td><td>' + ceEsc(est.info.duration || '-') + '</td><td><strong>담당:</strong></td><td>' + ceEsc(est.info.department || '') + ' ' + ceEsc(est.info.manager || '') + '</td></tr></table>';
     h += '<table class="ce-print-table"><thead><tr><th>No</th><th>공종/품명</th><th>규격</th><th>단위</th><th>수량</th><th>단가(원)</th><th>금액(원)</th></tr></thead><tbody>';
@@ -683,14 +746,24 @@ document.addEventListener('turbo:load', function() {
       var item = est.items[i];
       h += '<tr><td style="text-align:center">' + (i+1) + '</td><td>' + ceEsc(item.name) + '</td><td>' + ceEsc(item.spec) + '</td><td style="text-align:center">' + ceEsc(item.unit) + '</td><td style="text-align:right">' + item.qty + '</td><td style="text-align:right">' + ceComma(item.unit_price) + '</td><td style="text-align:right">' + ceComma(item.amount) + '</td></tr>';
     }
-    h += '<tr style="font-weight:bold;background:#f0f0f0;"><td colspan="6" style="text-align:center">직접공사비 소계</td><td style="text-align:right">' + ceComma(est.material_cost) + '</td></tr>';
-    for (var j = 0; j < est.indirect_costs.length; j++) {
-      var ic = est.indirect_costs[j];
-      h += '<tr><td colspan="6" style="text-align:center">' + ceEsc(ic.name) + '</td><td style="text-align:right">' + ceComma(ic.amount) + '</td></tr>';
+
+    // 수의계약: 간접비 생략
+    if (isPrivate) {
+      h += '<tr style="font-weight:bold;background:#f0f0f0;"><td colspan="6" style="text-align:center">공사비 합계</td><td style="text-align:right">' + ceComma(est.material_cost) + '</td></tr>';
+      h += '<tr><td colspan="6" style="text-align:center">부가가치세</td><td style="text-align:right">' + ceComma(est.vat) + '</td></tr>';
+      h += '<tr style="font-weight:bold;background:#f0f0f0;"><td colspan="6" style="text-align:center">합계</td><td style="text-align:right">' + ceComma(est.total) + '</td></tr>';
+    } else {
+      // 경쟁입찰: 간접비 포함
+      h += '<tr style="font-weight:bold;background:#f0f0f0;"><td colspan="6" style="text-align:center">직접공사비 소계</td><td style="text-align:right">' + ceComma(est.material_cost) + '</td></tr>';
+      for (var j = 0; j < est.indirect_costs.length; j++) {
+        var ic = est.indirect_costs[j];
+        h += '<tr><td colspan="6" style="text-align:center">' + ceEsc(ic.name) + '</td><td style="text-align:right">' + ceComma(ic.amount) + '</td></tr>';
+      }
+      h += '<tr><td colspan="6" style="text-align:center">소계 (공급가액)</td><td style="text-align:right">' + ceComma(est.subtotal) + '</td></tr>';
+      h += '<tr><td colspan="6" style="text-align:center">부가가치세</td><td style="text-align:right">' + ceComma(est.vat) + '</td></tr>';
+      h += '<tr style="font-weight:bold;background:#f0f0f0;"><td colspan="6" style="text-align:center">합계</td><td style="text-align:right">' + ceComma(est.total) + '</td></tr>';
     }
-    h += '<tr><td colspan="6" style="text-align:center">소계 (공급가액)</td><td style="text-align:right">' + ceComma(est.subtotal) + '</td></tr>';
-    h += '<tr><td colspan="6" style="text-align:center">부가가치세</td><td style="text-align:right">' + ceComma(est.vat) + '</td></tr>';
-    h += '<tr style="font-weight:bold;background:#f0f0f0;"><td colspan="6" style="text-align:center">합계</td><td style="text-align:right">' + ceComma(est.total) + '</td></tr>';
+
     h += '</tbody></table>';
     h += buildApprovalLine(est.info, true);
     return h;
