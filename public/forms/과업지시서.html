@@ -746,6 +746,53 @@
       background: var(--red-500);
       color: white;
     }
+    #files-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    #files-list.visible {
+      display: flex;
+    }
+    .file-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+    }
+    .file-item .file-icon {
+      font-size: 24px;
+      color: var(--navy-600);
+    }
+    .file-item .file-details {
+      flex: 1;
+    }
+    .file-item .file-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--navy-900);
+    }
+    .file-item .file-size {
+      font-size: 12px;
+      color: #64748b;
+    }
+    .file-item .btn-remove-file {
+      padding: 6px 12px;
+      background: var(--red-100);
+      color: var(--red-500);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.2s;
+    }
+    .file-item .btn-remove-file:hover {
+      background: var(--red-500);
+      color: white;
+    }
     .btn-analyze {
       margin-top: 12px;
       width: 100%;
@@ -961,17 +1008,12 @@
              ondrop="handleDrop(event)">
           <span class="material-symbols-outlined">cloud_upload</span>
           <p>파일을 드래그하거나 클릭하여 선택</p>
-          <small>PDF, JPG, PNG (최대 20MB)</small>
+          <small>PDF, JPG, PNG (개당 20MB 이하, 여러 파일 가능)</small>
         </div>
-        <input type="file" id="file-input" accept=".pdf,.jpg,.jpeg,.png" style="display:none" onchange="handleFileSelect(event)">
+        <input type="file" id="file-input" accept=".pdf,.jpg,.jpeg,.png" style="display:none" onchange="handleFileSelect(event)" multiple>
 
-        <div class="file-info" id="file-info">
-          <span class="material-symbols-outlined file-icon">description</span>
-          <div class="file-details">
-            <div class="file-name" id="file-name"></div>
-            <div class="file-size" id="file-size"></div>
-          </div>
-          <button class="btn-clear-file" onclick="clearFile()">삭제</button>
+        <div id="files-list" style="margin-top: 12px; display: none;">
+          <!-- Multiple files will be shown here -->
         </div>
 
         <button class="btn-analyze" id="btn-analyze" onclick="analyzeDocument()">
@@ -1218,7 +1260,7 @@
     let currentStep = 1;
     let selectedType = null;
     let selectedTemplate = null;
-    let uploadedFile = null;
+    let uploadedFiles = [];
     let analyzedData = null;
 
     // 유형별 문서명 및 레이블
@@ -1762,50 +1804,84 @@
       e.preventDefault();
       e.stopPropagation();
       document.getElementById('upload-zone').classList.remove('dragover');
-      const files = e.dataTransfer.files;
+      const files = Array.from(e.dataTransfer.files);
       if (files.length > 0) {
-        processFile(files[0]);
+        processFiles(files);
       }
     }
 
     function handleFileSelect(e) {
-      const files = e.target.files;
+      const files = Array.from(e.target.files);
       if (files.length > 0) {
-        processFile(files[0]);
+        processFiles(files);
       }
     }
 
-    function processFile(file) {
+    function processFiles(files) {
       const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png'];
-      if (!allowedTypes.includes(file.type)) {
-        showToast('PDF, JPG, PNG 파일만 업로드 가능합니다.');
-        return;
+
+      for (const file of files) {
+        if (!allowedTypes.includes(file.type)) {
+          showToast(`${file.name}: PDF, JPG, PNG 파일만 업로드 가능합니다.`);
+          continue;
+        }
+        if (file.size > 20 * 1024 * 1024) {
+          showToast(`${file.name}: 파일 크기는 20MB 이하여야 합니다.`);
+          continue;
+        }
+        uploadedFiles.push(file);
       }
-      if (file.size > 20 * 1024 * 1024) {
-        showToast('파일 크기는 20MB 이하여야 합니다.');
-        return;
+
+      if (uploadedFiles.length > 0) {
+        renderFilesList();
+        document.getElementById('upload-zone').style.display = 'none';
+        document.getElementById('btn-analyze').classList.add('visible');
+
+        // 이전 분석 상태 초기화
+        hideAnalysisStatus();
+        analyzedData = null;
       }
+    }
 
-      uploadedFile = file;
+    function renderFilesList() {
+      const filesList = document.getElementById('files-list');
+      filesList.innerHTML = '';
 
-      // 파일 정보 표시
-      document.getElementById('file-name').textContent = file.name;
-      const sizeMB = (file.size / (1024 * 1024)).toFixed(1);
-      document.getElementById('file-size').textContent = sizeMB + 'MB';
-      document.getElementById('file-info').classList.add('visible');
-      document.getElementById('upload-zone').style.display = 'none';
-      document.getElementById('btn-analyze').classList.add('visible');
+      uploadedFiles.forEach((file, index) => {
+        const fileItem = document.createElement('div');
+        fileItem.className = 'file-item';
+        fileItem.innerHTML = `
+          <span class="material-symbols-outlined file-icon">description</span>
+          <div class="file-details">
+            <div class="file-name">${file.name}</div>
+            <div class="file-size">${(file.size / (1024 * 1024)).toFixed(1)}MB</div>
+          </div>
+          <button class="btn-remove-file" onclick="removeFile(${index})">삭제</button>
+        `;
+        filesList.appendChild(fileItem);
+      });
 
-      // 이전 분석 상태 초기화
-      hideAnalysisStatus();
-      analyzedData = null;
+      filesList.style.display = uploadedFiles.length > 0 ? 'flex' : 'none';
+    }
+
+    function removeFile(index) {
+      uploadedFiles.splice(index, 1);
+      renderFilesList();
+
+      if (uploadedFiles.length === 0) {
+        document.getElementById('upload-zone').style.display = '';
+        document.getElementById('btn-analyze').classList.remove('visible');
+        document.getElementById('file-input').value = '';
+        hideAnalysisStatus();
+        analyzedData = null;
+      }
     }
 
     function clearFile() {
-      uploadedFile = null;
+      uploadedFiles = [];
       analyzedData = null;
       document.getElementById('file-input').value = '';
-      document.getElementById('file-info').classList.remove('visible');
+      document.getElementById('files-list').style.display = 'none';
       document.getElementById('upload-zone').style.display = '';
       document.getElementById('btn-analyze').classList.remove('visible');
       hideAnalysisStatus();
@@ -1826,7 +1902,7 @@
     }
 
     async function analyzeDocument() {
-      if (!uploadedFile || !selectedType) return;
+      if (uploadedFiles.length === 0 || !selectedType) return;
 
       const btn = document.getElementById('btn-analyze');
       btn.disabled = true;
@@ -1834,10 +1910,12 @@
 
       try {
         const formData = new FormData();
-        formData.append('file', uploadedFile);
+        uploadedFiles.forEach(file => {
+          formData.append('files[]', file);
+        });
         formData.append('document_type', selectedType);
 
-        const response = await fetch('/document-analysis/analyze', {
+        const response = await fetch('/quote-documents/extract', {
           method: 'POST',
           body: formData
         });
@@ -1853,7 +1931,7 @@
         if (result.success && result.fields) {
           analyzedData = result.fields;
           const fieldCount = Object.keys(result.fields).length;
-          showAnalysisStatus('success', `분석 완료! ${fieldCount}개 항목을 추출했습니다. 다음 단계에서 자동 입력됩니다.`);
+          showAnalysisStatus('success', `분석 완료! ${uploadedFiles.length}개 파일에서 ${fieldCount}개 항목을 추출했습니다. 다음 단계에서 자동 입력됩니다.`);
         } else {
           showAnalysisStatus('error', result.error || '문서 분석에 실패했습니다.');
         }
