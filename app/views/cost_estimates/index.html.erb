@@ -307,6 +307,8 @@
 
 <script>
 // 견적서 자동입력 매핑 함수 (물량내역서+시방서용)
+// AI 파일 분석 후 필드 매핑 함수
+window.ceNextId = window.ceNextId || 0;
 window.quMapFields_ce = function(fields) {
   // 기본정보 입력 (Step 2)
   if (fields.project_name) quSetField('ce-project-name', fields.project_name);
@@ -318,9 +320,9 @@ window.quMapFields_ce = function(fields) {
   // 항목 자동입력 (Step 3)
   if (fields.items && Array.isArray(fields.items)) {
     // 분석된 항목으로 교체
-    ceItems = fields.items.map(function(item, idx) {
+    window.ceItems = fields.items.map(function(item, idx) {
       return {
-        id: ++ceRowId,
+        id: ++window.ceNextId,
         name: item.name || '',
         spec: item.spec || '',
         unit: item.unit || '식',
