@@ -8,7 +8,7 @@ class EstimatedPricesController < ApplicationController
       title: "추정가격 계산기 (예정가격 산출)",
       description: "물품·용역·공사의 추정가격(부가세 제외)을 자동 산출합니다. 수의계약 기준금액 판단, 일반관리비·이윤 요율 검증까지.",
       keywords: "추정가격, 추정가격 계산기, 예정가격, 예정가격 계산기, 수의계약 기준금액, 부가세",
-      og: { title: "추정가격 계산기 — 실무.kr", url: request.original_url }
+      og: { title: "추정가격 계산기 — 실무.kr", url: canonical_url }
     )
   end
 

@@ -2,6 +2,10 @@ Rails.application.routes.draw do
   # Kamal 헬스체크용
   get "up" => "rails/health#show", as: :rails_health_check
 
+  # SEO 최적화: 404 방지 리디렉션
+  get "favicon.ico", to: redirect("/favicon.svg")
+  get "assets/tailwindcss", to: redirect("/assets/application.tailwind-0a9b7463.css")
+
   devise_for :users
   root "home#index"
 

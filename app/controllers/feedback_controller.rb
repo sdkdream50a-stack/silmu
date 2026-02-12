@@ -3,7 +3,7 @@ class FeedbackController < ApplicationController
     set_meta_tags(
       title: "의견보내기",
       description: "실무.kr 콘텐츠 수정 요청, 자료 추가 요청, 기타 의견을 보내주세요.",
-      og: { title: "의견보내기 — 실무.kr", url: request.original_url }
+      og: { title: "의견보내기 — 실무.kr", url: canonical_url }
     )
   end
 

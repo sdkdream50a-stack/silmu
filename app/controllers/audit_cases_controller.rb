@@ -14,10 +14,11 @@ class AuditCasesController < ApplicationController
       title: "감사사례 모음 — 계약 실무 감사 지적 사례",
       description: "공공계약 감사에서 자주 지적되는 사례를 카테고리별로 정리했습니다. 수의계약, 입찰, 계약이행, 대금지급 등 분야별 감사 지적사항과 대응 방법을 확인하세요.",
       keywords: "감사사례,감사 지적,계약 감사,수의계약 감사,입찰 감사,공공계약 감사,감사 대비",
+      canonical: canonical_url,
       og: {
         title: "감사사례 모음 — 계약 실무 감사 지적 사례",
         description: "공공계약 감사에서 자주 지적되는 사례를 분야별로 정리했습니다.",
-        url: request.original_url
+        url: canonical_url
       }
     )
   end
@@ -35,10 +36,11 @@ class AuditCasesController < ApplicationController
       title: "#{@audit_case.title} — 감사사례",
       description: "#{@audit_case.issue.truncate(150)}",
       keywords: "감사사례,#{@audit_case.category},#{@audit_case.legal_basis}",
+      canonical: canonical_url,
       og: {
         title: "#{@audit_case.title} — 감사사례",
         description: @audit_case.issue.truncate(200),
-        url: request.original_url,
+        url: canonical_url,
         type: "article"
       }
     )
