@@ -43,7 +43,11 @@ class CostEstimatesController < ApplicationController
       location: params[:location],
       duration: params[:duration],
       manager: params[:manager],
-      department: params[:department]
+      department: params[:department],
+      approval_staff: params[:approval_staff],
+      approval_team: params[:approval_team],
+      approval_section: params[:approval_section],
+      approval_director: params[:approval_director]
     }
   end
 end
