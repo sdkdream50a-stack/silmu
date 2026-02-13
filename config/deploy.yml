@@ -48,6 +48,7 @@ env:
     SOLID_QUEUE_IN_PUMA: true
     GA_MEASUREMENT_ID: G-DGH1M308BH
     ADSENSE_CLIENT_ID: ca-pub-6241798439911569
+    ADMIN_EMAIL: hello@silmu.kr
     DB_HOST: 172.18.0.1
 
     # Set number of processes dedicated to Solid Queue (default: 1)
