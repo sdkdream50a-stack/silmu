@@ -1,15 +1,20 @@
-# examples:
-#   periodic_cleanup:
-#     class: CleanSoftDeletedRecordsJob
-#     queue: background
-#     args: [ 1000, { batch_size: 500 } ]
-#     schedule: every hour
-#   periodic_cleanup_with_command:
-#     command: "SoftDeletedRecord.due.delete_all"
-#     priority: 2
-#     schedule: at 5am every day
+# Solid Queue recurring jobs (Rails 8)
+# SEO 모니터링 자동화
 
-production:
-  clear_solid_queue_finished_jobs:
-    command: "SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"
-    schedule: every hour at minute 12
+# 매주 월요일 오전 9시 - SEO 주간 리포트
+weekly_seo_report:
+  class: SeoReportJob
+  args: ["weekly"]
+  schedule: "0 9 * * 1" # 매주 월요일 9시
+
+# 매월 1일 오전 10시 - PageSpeed 월간 리포트
+monthly_performance_report:
+  class: SeoReportJob
+  args: ["monthly"]
+  schedule: "0 10 1 * *" # 매월 1일 10시
+
+# 매주 수요일 오후 3시 - 깨진 링크 체크
+weekly_link_check:
+  class: SeoReportJob
+  args: ["links"]
+  schedule: "0 15 * * 3" # 매주 수요일 15시
