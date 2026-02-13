@@ -1,0 +1,103 @@
+<%# 소셜 공유 버튼 컴포넌트 %>
+<div class="flex items-center gap-3 <%= local_assigns[:class] %>">
+  <span class="text-sm text-slate-500 font-medium">공유하기:</span>
+
+  <%# 카카오톡 %>
+  <button onclick="shareKakao('<%= local_assigns[:title] %>', '<%= local_assigns[:url] || canonical_url %>', '<%= local_assigns[:description] %>')"
+          class="flex items-center justify-center w-10 h-10 rounded-full bg-yellow-400 hover:bg-yellow-500 text-white transition-colors"
+          title="카카오톡 공유">
+    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M12 3c5.799 0 10.5 3.664 10.5 8.185 0 4.52-4.701 8.184-10.5 8.184a13.5 13.5 0 0 1-1.727-.11l-4.408 2.883c-.501.265-.678.236-.472-.413l.892-3.678c-2.88-1.46-4.785-3.99-4.785-6.866C1.5 6.665 6.201 3 12 3zm5.907 8.06l1.47-1.424a.472.472 0 0 0-.656-.678l-1.928 1.866V9.282a.472.472 0 0 0-.944 0v2.557a.471.471 0 0 0 0 .222V13.5a.472.472 0 0 0 .944 0v-1.363l.427-.413 1.428 2.033a.472.472 0 1 0 .773-.543l-1.514-2.155zm-2.958 1.924h-1.46V9.297a.472.472 0 0 0-.943 0v4.159c0 .26.211.472.471.472h1.932a.472.472 0 1 0 0-.944zm-5.857-1.092h.943v2.088a.472.472 0 1 0 .943 0v-2.088h.943a.472.472 0 0 0 0-.943h-2.829a.472.472 0 1 0 0 .943zm-2.136-1.439l-.006.03v3.413a.472.472 0 0 0 .943 0V10.47l1.181 2.406a.472.472 0 0 0 .847 0l1.18-2.406v3.433a.472.472 0 0 0 .944 0V10.48l-.006-.029a.527.527 0 0 0-.008-.063v-.003a.514.514 0 0 0-.024-.071.558.558 0 0 0-.04-.07.477.477 0 0 0-.06-.08.541.541 0 0 0-.073-.06.551.551 0 0 0-.084-.048.558.558 0 0 0-.092-.027l-.028-.005a.558.558 0 0 0-.117 0l-.027.005a.551.551 0 0 0-.093.027.577.577 0 0 0-.084.048.452.452 0 0 0-.073.06.477.477 0 0 0-.06.08.474.474 0 0 0-.04.07.558.558 0 0 0-.024.071v.003a.509.509 0 0 0-.008.063z"/>
+    </svg>
+  </button>
+
+  <%# 페이스북 %>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=<%= ERB::Util.url_encode(local_assigns[:url] || canonical_url) %>"
+     target="_blank"
+     rel="noopener noreferrer"
+     class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 hover:bg-blue-700 text-white transition-colors"
+     title="페이스북 공유">
+    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+    </svg>
+  </a>
+
+  <%# 트위터 %>
+  <a href="https://twitter.com/intent/tweet?text=<%= ERB::Util.url_encode(local_assigns[:title]) %>&url=<%= ERB::Util.url_encode(local_assigns[:url] || canonical_url) %>"
+     target="_blank"
+     rel="noopener noreferrer"
+     class="flex items-center justify-center w-10 h-10 rounded-full bg-slate-900 hover:bg-slate-950 text-white transition-colors"
+     title="트위터 공유">
+    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+    </svg>
+  </a>
+
+  <%# URL 복사 %>
+  <button onclick="copyToClipboard('<%= local_assigns[:url] || canonical_url %>')"
+          class="flex items-center justify-center w-10 h-10 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-700 transition-colors"
+          title="링크 복사">
+    <span class="material-symbols-outlined text-lg">link</span>
+  </button>
+</div>
+
+<script>
+// 카카오톡 공유
+function shareKakao(title, url, description) {
+  if (!window.Kakao) {
+    alert('카카오톡 공유 기능을 불러오는 중입니다. 잠시 후 다시 시도해주세요.');
+    return;
+  }
+
+  Kakao.Share.sendDefault({
+    objectType: 'feed',
+    content: {
+      title: title,
+      description: description,
+      imageUrl: 'https://silmu.kr/og-image.png',
+      link: {
+        mobileWebUrl: url,
+        webUrl: url,
+      },
+    },
+    buttons: [
+      {
+        title: '자세히 보기',
+        link: {
+          mobileWebUrl: url,
+          webUrl: url,
+        },
+      },
+    ],
+  });
+}
+
+// URL 복사
+function copyToClipboard(text) {
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => {
+      alert('링크가 클립보드에 복사되었습니다!');
+    }).catch(() => {
+      fallbackCopy(text);
+    });
+  } else {
+    fallbackCopy(text);
+  }
+}
+
+function fallbackCopy(text) {
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.style.position = 'fixed';
+  textarea.style.opacity = '0';
+  document.body.appendChild(textarea);
+  textarea.select();
+  try {
+    document.execCommand('copy');
+    alert('링크가 클립보드에 복사되었습니다!');
+  } catch (err) {
+    alert('복사에 실패했습니다. 수동으로 복사해주세요: ' + text);
+  }
+  document.body.removeChild(textarea);
+}
+</script>
