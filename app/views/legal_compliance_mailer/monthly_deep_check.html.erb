@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .header {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+      padding: 30px 20px;
+      border-radius: 8px 8px 0 0;
+      text-align: center;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+    .header p {
+      margin: 10px 0 0 0;
+      opacity: 0.9;
+      font-size: 14px;
+    }
+    .content {
+      background: white;
+      padding: 30px;
+      border: 1px solid #e0e0e0;
+      border-top: none;
+    }
+    .ai-badge {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: bold;
+      margin: 10px 0;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    .stats {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #dee2e6;
+    }
+    .stat-row:last-child {
+      border-bottom: none;
+    }
+    .stat-label {
+      font-weight: 600;
+      color: #495057;
+    }
+    .stat-value {
+      color: #212529;
+      font-weight: bold;
+    }
+    .change-item {
+      background: #e7f3ff;
+      border-left: 4px solid #007bff;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 4px;
+    }
+    .change-header {
+      font-weight: bold;
+      color: #004085;
+      margin-bottom: 8px;
+    }
+    .change-detail {
+      font-size: 14px;
+      color: #555;
+      margin: 5px 0;
+    }
+    .correction {
+      background: #fff3cd;
+      padding: 10px;
+      border-radius: 4px;
+      margin: 8px 0;
+    }
+    .footer {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 0 0 8px 8px;
+      text-align: center;
+      font-size: 12px;
+      color: #6c757d;
+    }
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      background: #f5576c;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      margin: 10px 0;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🤖 법령 AI 검증 월간 리포트</h1>
+    <p><%= @timestamp.strftime('%Y년 %m월') %></p>
+  </div>
+
+  <div class="content">
+    <div class="ai-badge">
+      ✨ Claude AI 심층 검증
+    </div>
+
+    <p>
+      Anthropic Claude API를 사용하여 토픽 콘텐츠의 법령 정합성을 심층 검증했습니다.
+    </p>
+
+    <div class="stats">
+      <h3 style="margin-top: 0;">📊 검증 결과</h3>
+      <div class="stat-row">
+        <span class="stat-label">수정된 항목</span>
+        <span class="stat-value" style="color: <%= @changes.any? ? '#007bff' : '#28a745' %>">
+          <%= @changes.count %>건
+        </span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">오류 발생</span>
+        <span class="stat-value" style="color: <%= @errors.any? ? '#dc3545' : '#28a745' %>">
+          <%= @errors.count %>건
+        </span>
+      </div>
+    </div>
+
+    <% if @changes.any? %>
+      <h3>🔧 자동 수정된 항목</h3>
+      <p>AI가 법령 불일치를 발견하고 자동으로 수정했습니다.</p>
+
+      <% @changes.first(5).each do |change| %>
+        <div class="change-item">
+          <div class="change-header">
+            [<%= change[:topic] %>] <%= change[:field] %>
+          </div>
+          <div class="correction">
+            <strong>수정 전:</strong> <%= change[:wrong_value] %><br>
+            <strong>수정 후:</strong> <%= change[:correct_value] %>
+          </div>
+          <div class="change-detail">
+            <strong>사유:</strong> <%= change[:reason] %>
+          </div>
+          <div class="change-detail">
+            <strong>근거:</strong> <%= change[:source] %>
+          </div>
+        </div>
+      <% end %>
+
+      <% if @changes.count > 5 %>
+        <p style="margin-top: 10px; color: #004085;">
+          외 <%= @changes.count - 5 %>건 추가 수정
+        </p>
+      <% end %>
+
+      <p style="margin-top: 20px; padding: 15px; background: #d4edda; border-radius: 4px; color: #155724;">
+        <strong>✅ 자동 수정 완료</strong><br>
+        모든 수정 사항이 데이터베이스에 저장되었습니다.
+      </p>
+    <% else %>
+      <div style="text-align: center; padding: 30px; background: #d4edda; border-radius: 8px; margin: 20px 0;">
+        <h3 style="margin: 0; color: #155724;">✅ 모든 콘텐츠가 최신 법령과 일치</h3>
+        <p style="margin: 10px 0 0 0; color: #155724;">수정이 필요한 항목이 없습니다.</p>
+      </div>
+    <% end %>
+
+    <% if @errors.any? %>
+      <h3 style="color: #dc3545;">⚠️ 검증 중 오류 발생</h3>
+      <div style="background: #f8d7da; border-left: 4px solid #dc3545; padding: 15px; margin: 10px 0;">
+        <% @errors.first(3).each do |error| %>
+          <div style="padding: 8px 0;">
+            <strong><%= error[:topic] %></strong> - <%= error[:field] %><br>
+            <%= error[:error] %>
+          </div>
+        <% end %>
+        <% if @errors.count > 3 %>
+          <p style="margin-top: 10px;">외 <%= @errors.count - 3 %>건</p>
+        <% end %>
+      </div>
+    <% end %>
+
+    <h3>🔍 검증 범위</h3>
+    <ul style="line-height: 1.8;">
+      <li><strong>law_content</strong> - 법률 조항</li>
+      <li><strong>decree_content</strong> - 시행령 조항</li>
+      <li><strong>rule_content</strong> - 시행규칙</li>
+      <li><strong>regulation_content</strong> - 지침/예규</li>
+      <li><strong>practical_tips</strong> - 실무 팁</li>
+    </ul>
+
+    <h3>📋 참조 법령</h3>
+    <ul style="line-height: 1.8;">
+      <li><a href="https://www.law.go.kr/법령/지방자치단체를당사자로하는계약에관한법률시행령">지방계약법 시행령</a> (2025-07-08 개정)</li>
+      <li><a href="https://www.law.go.kr/법령/공무원여비규정">공무원여비규정</a> (2026-01-02 개정)</li>
+    </ul>
+
+    <div style="text-align: center; margin-top: 30px;">
+      <a href="https://silmu.kr/topics" class="btn">토픽 바로가기</a>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>
+      이 이메일은 자동 발송되었습니다.<br>
+      실무.kr 법령 AI 검증 시스템 | hello@silmu.kr
+    </p>
+    <p style="margin-top: 10px; font-size: 11px;">
+      매월 1일 오전 10시 자동 발송
+    </p>
+  </div>
+</body>
+</html>
