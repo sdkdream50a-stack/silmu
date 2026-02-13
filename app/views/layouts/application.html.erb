@@ -362,6 +362,9 @@
               <li><%= link_to "감사사례", audit_cases_path, class: "text-slate-300 hover:text-white transition-colors" %></li>
               <li><%= link_to "도구", tools_path, class: "text-slate-300 hover:text-white transition-colors" %></li>
               <li><%= link_to "자료실", guide_resources_path, class: "text-slate-300 hover:text-white transition-colors" %></li>
+              <li><%= link_to "업데이트 소식", updates_path, class: "text-slate-300 hover:text-white transition-colors flex items-center gap-1" do %>
+                업데이트 소식 <span class="text-emerald-400 text-xs">NEW</span>
+              <% end %></li>
               <li><%= link_to "자주 묻는 질문", faq_path, class: "text-slate-300 hover:text-white transition-colors" %></li>
               <li><%= link_to "의견보내기", feedback_path, class: "text-slate-300 hover:text-white transition-colors" %></li>
             </ul>
@@ -395,11 +398,19 @@
         </div>
 
         <!-- Bottom -->
-        <div class="border-t border-slate-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p class="text-slate-400 text-sm">&copy; <%= Time.current.year %> 실무.kr All rights reserved.</p>
-          <div class="flex gap-6 text-sm">
-            <%= link_to "이용약관", terms_path, class: "text-slate-400 hover:text-white transition-colors" %>
-            <%= link_to "개인정보처리방침", privacy_path, class: "text-slate-400 hover:text-white transition-colors" %>
+        <div class="border-t border-slate-800 mt-12 pt-8">
+          <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-4">
+            <div class="text-center md:text-left">
+              <p class="text-slate-400 text-sm mb-2">&copy; <%= Time.current.year %> 실무.kr All rights reserved.</p>
+              <p class="text-slate-500 text-xs flex items-start gap-2">
+                <span class="material-symbols-outlined text-amber-400 text-sm mt-0.5 flex-shrink-0">warning</span>
+                <span>본 사이트의 모든 콘텐츠(도구, 가이드, 서식)는 무단 전재 및 재배포를 금지합니다.<br class="hidden sm:block"/>개인 업무용 사용은 자유롭게 가능합니다.</span>
+              </p>
+            </div>
+            <div class="flex gap-6 text-sm">
+              <%= link_to "이용약관", terms_path, class: "text-slate-400 hover:text-white transition-colors" %>
+              <%= link_to "개인정보처리방침", privacy_path, class: "text-slate-400 hover:text-white transition-colors" %>
+            </div>
           </div>
         </div>
       </div>
