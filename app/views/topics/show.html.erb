@@ -103,12 +103,13 @@
         </div>
       </div>
 
-      <!-- 액션 버튼 -->
-      <div class="mt-6 lg:mt-0 flex gap-3">
-        <button class="btn btn-glass btn-sm" onclick="if(navigator.share){navigator.share({title:document.title,url:location.href})}else{navigator.clipboard.writeText(location.href);this.querySelector('span:last-child').textContent='복사됨!';setTimeout(()=>{this.querySelector('span:last-child').textContent='공유'},1500)}">
-          <span class="material-symbols-outlined text-lg">share</span>
-          <span>공유</span>
-        </button>
+      <!-- 소셜 공유 버튼 -->
+      <div class="mt-6 lg:mt-0">
+        <%= render 'shared/social_share',
+                   title: "#{@topic.name} — 실무.kr",
+                   description: @topic.summary,
+                   url: canonical_url,
+                   class: "flex-wrap lg:flex-nowrap" %>
       </div>
     </div>
   </div>

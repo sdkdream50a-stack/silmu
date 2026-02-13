@@ -84,3 +84,6 @@ gem "combine_pdf"  # PDF 합치기/분할
 gem "prawn"        # PDF 생성 및 페이지 번호
 gem "pdf-reader"   # PDF 읽기/분석
 gem "rubyzip"      # ZIP 파일 생성
+
+# ========== SEO 모니터링 ==========
+gem "whenever", require: false  # Cron job 관리

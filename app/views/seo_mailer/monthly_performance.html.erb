@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; color: #333; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .header { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+    .content { background: #fff; padding: 30px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 10px 10px; }
+    .section { margin-bottom: 30px; }
+    .section h2 { color: #10b981; border-bottom: 2px solid #10b981; padding-bottom: 10px; margin-bottom: 15px; }
+    .metric { background: #f0fdf4; padding: 20px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #10b981; }
+    .metric-name { font-weight: bold; color: #065f46; margin-bottom: 5px; }
+    .metric-value { font-size: 28px; font-weight: bold; color: #10b981; }
+    .metric-unit { font-size: 14px; color: #6b7280; }
+    .score { text-align: center; margin: 30px 0; }
+    .score-circle { width: 120px; height: 120px; border-radius: 50%; border: 8px solid #10b981; display: inline-flex; align-items: center; justify-content: center; font-size: 36px; font-weight: bold; color: #10b981; }
+    .opportunities { list-style: none; padding: 0; }
+    .opportunities li { padding: 15px; background: #fef3c7; margin-bottom: 10px; border-radius: 5px; border-left: 4px solid #f59e0b; }
+    .footer { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1 style="margin: 0;">⚡ PageSpeed 월간 리포트</h1>
+      <p style="margin: 10px 0 0 0; opacity: 0.9;"><%= @date.strftime('%Y년 %m월') %></p>
+    </div>
+
+    <div class="content">
+      <!-- Performance Score -->
+      <div class="section">
+        <h2>종합 성능 점수</h2>
+        <div class="score">
+          <div class="score-circle">
+            <%= @report[:performance_score] %>
+          </div>
+          <p style="margin-top: 15px; color: #6b7280;">100점 만점</p>
+        </div>
+      </div>
+
+      <!-- Core Web Vitals -->
+      <div class="section">
+        <h2>📊 Core Web Vitals</h2>
+
+        <div class="metric">
+          <div class="metric-name">First Contentful Paint (FCP)</div>
+          <div class="metric-value"><%= @report[:fcp] %> <span class="metric-unit">초</span></div>
+          <p style="margin: 10px 0 0 0; color: #6b7280; font-size: 14px;">첫 번째 콘텐츠가 화면에 표시되는 시간</p>
+        </div>
+
+        <div class="metric">
+          <div class="metric-name">Largest Contentful Paint (LCP)</div>
+          <div class="metric-value"><%= @report[:lcp] %> <span class="metric-unit">초</span></div>
+          <p style="margin: 10px 0 0 0; color: #6b7280; font-size: 14px;">가장 큰 콘텐츠가 표시되는 시간 (2.5초 이하 권장)</p>
+        </div>
+
+        <div class="metric">
+          <div class="metric-name">Total Blocking Time (TBT)</div>
+          <div class="metric-value"><%= @report[:tbt] %> <span class="metric-unit">ms</span></div>
+          <p style="margin: 10px 0 0 0; color: #6b7280; font-size: 14px;">페이지가 반응하지 않는 총 시간</p>
+        </div>
+
+        <div class="metric">
+          <div class="metric-name">Cumulative Layout Shift (CLS)</div>
+          <div class="metric-value"><%= @report[:cls] %></div>
+          <p style="margin: 10px 0 0 0; color: #6b7280; font-size: 14px;">레이아웃 변경 누적 점수 (0.1 이하 권장)</p>
+        </div>
+      </div>
+
+      <!-- 개선 제안 -->
+      <div class="section">
+        <h2>💡 개선 제안</h2>
+        <ul class="opportunities">
+          <% @report[:opportunities].each do |opp| %>
+            <li><%= opp %></li>
+          <% end %>
+        </ul>
+      </div>
+
+      <div class="footer">
+        <p>실무.kr SEO 자동 모니터링 시스템</p>
+        <p><a href="https://silmu.kr" style="color: #10b981; text-decoration: none;">실무.kr 방문하기</a></p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
