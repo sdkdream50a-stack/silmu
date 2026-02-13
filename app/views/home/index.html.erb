@@ -201,9 +201,12 @@
         </h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <% [
-            ["/topics/private-contract", "handshake", "수의계약", "1인 견적 가능 금액 및 요건, 예외 사항 완벽 정리", "indigo"],
-            ["/topics/emergency-contract", "warning", "긴급계약", "재해/재난 시 신속 대응을 위한 긴급 입찰 절차", "rose"],
-            ["/topics/budget-carryover", "history", "예산이월", "사고이월 및 명시이월 처리를 위한 연말 필수 체크리스트", "emerald"]
+            [topic_path("private-contract"), "handshake", "수의계약", "1인 견적 가능 금액 및 요건, 예외 사항 완벽 정리", "indigo"],
+            [topic_path("bidding"), "gavel", "경쟁입찰", "공고기간, 적격심사, 낙찰자 결정 절차 완벽 가이드", "violet"],
+            [topic_path("contract-execution"), "description", "계약체결", "계약서 작성부터 보증금 징수까지 단계별 실무", "amber"],
+            [topic_path("inspection"), "fact_check", "검수·검사", "물품·용역·공사 검수조서 작성 및 하자검사 절차", "emerald"],
+            [topic_path("payment"), "payments", "대금지급", "선금·기성금·잔금 지급 요건 및 지연 시 조치사항", "blue"],
+            [topic_path("travel-expense"), "flight_takeoff", "출장비", "국내·외 출장 여비 지급 기준과 청구 절차 (2025)", "rose"]
           ].each do |path, icon, title, desc, color| %>
             <%= link_to path, class: "group flex items-start gap-4 rounded-2xl bg-white p-6 shadow-sm border border-slate-100 transition-all hover:shadow-lg hover:-translate-y-1 hover:border-indigo-100 cursor-pointer" do %>
               <div class="shrink-0 flex h-12 w-12 items-center justify-center rounded-xl bg-<%= color %>-50 text-<%= color %>-600 group-hover:bg-<%= color %>-600 group-hover:text-white transition-colors">
