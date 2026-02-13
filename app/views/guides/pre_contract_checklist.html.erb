@@ -270,6 +270,47 @@
     flex-shrink: 0;
   }
 
+  /* 관련 도구 */
+  .related-tools {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed #e2e8f0;
+    flex-wrap: wrap;
+  }
+  .related-tools .material-symbols-outlined {
+    font-size: 16px;
+    color: var(--color-indigo-600);
+    flex-shrink: 0;
+  }
+  .related-tools strong {
+    font-size: 12px;
+    color: var(--color-slate-700);
+    margin-right: 4px;
+  }
+  .related-tools a {
+    font-size: 12px;
+    padding: 4px 10px;
+    background: var(--color-indigo-50);
+    color: var(--color-indigo-700);
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .related-tools a:hover {
+    background: var(--color-indigo-100);
+    color: var(--color-indigo-800);
+    transform: translateY(-1px);
+  }
+  .related-tools a .material-symbols-outlined {
+    font-size: 14px;
+  }
+
   /* 요약 카드 */
   .summary-card {
     background: white;
@@ -533,6 +574,14 @@
                   구매 목적에 맞는 최소한의 규격 설정
                 </div>
               </div>
+              <div class="related-tools">
+                <span class="material-symbols-outlined">link</span>
+                <strong>관련 도구:</strong>
+                <%= link_to contract_method_path do %>
+                  <span class="material-symbols-outlined">gavel</span>
+                  계약방식 결정
+                <% end %>
+              </div>
             </div>
           </div>
           <div class="check-item" onclick="toggleCheck(this)">
@@ -560,6 +609,14 @@
                   <span class="material-symbols-outlined">lightbulb</span>
                   필수 사양과 선택 사양을 구분하여 기재
                 </div>
+              </div>
+              <div class="related-tools">
+                <span class="material-symbols-outlined">link</span>
+                <strong>관련 도구:</strong>
+                <%= link_to cost_estimate_path do %>
+                  <span class="material-symbols-outlined">description</span>
+                  물량내역서+시방서 생성기
+                <% end %>
               </div>
             </div>
           </div>
@@ -609,6 +666,14 @@
                   추정가격 2천만원 이하 수의계약 시 예정가격 작성 생략 가능 (시행령 제9조)
                 </div>
               </div>
+              <div class="related-tools">
+                <span class="material-symbols-outlined">link</span>
+                <strong>관련 도구:</strong>
+                <%= link_to estimated_price_path do %>
+                  <span class="material-symbols-outlined">calculate</span>
+                  예정가격 계산기
+                <% end %>
+              </div>
             </div>
           </div>
           <div class="check-item" onclick="toggleCheck(this)">
@@ -636,6 +701,18 @@
                   2,000만원 초과 시 반드시 2인 이상 견적 비교 필요
                 </div>
               </div>
+              <div class="related-tools">
+                <span class="material-symbols-outlined">link</span>
+                <strong>관련 도구:</strong>
+                <%= link_to quote_review_path do %>
+                  <span class="material-symbols-outlined">rate_review</span>
+                  견적서 검토 시스템
+                <% end %>
+                <%= link_to contract_reason_path do %>
+                  <span class="material-symbols-outlined">description</span>
+                  수의계약 사유서
+                <% end %>
+              </div>
             </div>
           </div>
           <div class="check-item" onclick="toggleCheck(this)">
@@ -658,6 +735,14 @@
                   <span class="material-symbols-outlined">warning</span>
                   2,000만원 초과 시 2인 이상 견적 필수
                 </div>
+              </div>
+              <div class="related-tools">
+                <span class="material-symbols-outlined">link</span>
+                <strong>관련 도구:</strong>
+                <%= link_to quote_review_path do %>
+                  <span class="material-symbols-outlined">rate_review</span>
+                  견적서 검토 시스템
+                <% end %>
               </div>
             </div>
           </div>
@@ -754,6 +839,18 @@
                   2천만원 초과 수의계약 시 G2B 전자견적 필수 (시행령 제39조)
                 </div>
               </div>
+              <div class="related-tools">
+                <span class="material-symbols-outlined">link</span>
+                <strong>관련 도구:</strong>
+                <%= link_to contract_method_path do %>
+                  <span class="material-symbols-outlined">gavel</span>
+                  계약방식 결정
+                <% end %>
+                <%= link_to contract_reason_path do %>
+                  <span class="material-symbols-outlined">description</span>
+                  수의계약 사유서
+                <% end %>
+              </div>
             </div>
           </div>
           <div class="check-item" onclick="toggleCheck(this)">
@@ -781,6 +878,14 @@
                   <span class="material-symbols-outlined">lightbulb</span>
                   동일 시기, 동일 목적, 동일 장소의 계약은 합산하여 계약방법 결정
                 </div>
+              </div>
+              <div class="related-tools">
+                <span class="material-symbols-outlined">link</span>
+                <strong>관련 도구:</strong>
+                <%= link_to audit_cases_path do %>
+                  <span class="material-symbols-outlined">search</span>
+                  감사사례 검색
+                <% end %>
               </div>
             </div>
           </div>
@@ -908,6 +1013,14 @@
                 <span class="material-symbols-outlined">gavel</span>
                 지방계약법 제14조, 시행령 제49조
               </div>
+              <div class="related-tools">
+                <span class="material-symbols-outlined">link</span>
+                <strong>관련 도구:</strong>
+                <%= link_to contract_documents_path do %>
+                  <span class="material-symbols-outlined">description</span>
+                  계약서류 생성기
+                <% end %>
+              </div>
             </div>
           </div>
           <div class="check-item" onclick="toggleCheck(this)">
@@ -924,6 +1037,14 @@
               <div class="legal-basis">
                 <span class="material-symbols-outlined">gavel</span>
                 지방계약법 시행령 제51조
+              </div>
+              <div class="related-tools">
+                <span class="material-symbols-outlined">link</span>
+                <strong>관련 도구:</strong>
+                <%= link_to contract_guarantee_path do %>
+                  <span class="material-symbols-outlined">calculate</span>
+                  계약보증금 계산기
+                <% end %>
               </div>
             </div>
           </div>
@@ -1063,6 +1184,14 @@
                   성과품 목록, 제출 형태, 수량 구체적으로 명시
                 </div>
               </div>
+              <div class="related-tools">
+                <span class="material-symbols-outlined">link</span>
+                <strong>관련 도구:</strong>
+                <%= link_to cost_estimate_path do %>
+                  <span class="material-symbols-outlined">description</span>
+                  과업내용서 생성기
+                <% end %>
+              </div>
             </div>
           </div>
         </div>
@@ -1106,6 +1235,14 @@
                   추정가격 2천만원 이하 수의계약 시 예정가격 작성 생략 가능 (시행령 제9조)
                 </div>
               </div>
+              <div class="related-tools">
+                <span class="material-symbols-outlined">link</span>
+                <strong>관련 도구:</strong>
+                <%= link_to cost_calculation_path do %>
+                  <span class="material-symbols-outlined">calculate</span>
+                  원가계산서 검토
+                <% end %>
+              </div>
             </div>
           </div>
           <div class="check-item" onclick="toggleCheck(this)">
@@ -1133,6 +1270,18 @@
                   2,000만원 초과 시 반드시 2인 이상 견적 비교 필요
                 </div>
               </div>
+              <div class="related-tools">
+                <span class="material-symbols-outlined">link</span>
+                <strong>관련 도구:</strong>
+                <%= link_to quote_review_path do %>
+                  <span class="material-symbols-outlined">rate_review</span>
+                  견적서 검토 시스템
+                <% end %>
+                <%= link_to contract_reason_path do %>
+                  <span class="material-symbols-outlined">description</span>
+                  수의계약 사유서
+                <% end %>
+              </div>
             </div>
           </div>
           <div class="check-item" onclick="toggleCheck(this)">
@@ -1149,6 +1298,14 @@
               <div class="legal-basis">
                 <span class="material-symbols-outlined">gavel</span>
                 예정가격 작성기준(기획재정부 고시)
+              </div>
+              <div class="related-tools">
+                <span class="material-symbols-outlined">link</span>
+                <strong>관련 도구:</strong>
+                <%= link_to cost_calculation_path do %>
+                  <span class="material-symbols-outlined">calculate</span>
+                  원가계산서 검토
+                <% end %>
               </div>
             </div>
           </div>
@@ -1239,6 +1396,18 @@
                   2천만원 초과 수의계약 시 G2B 전자견적 필수 (시행령 제39조)
                 </div>
               </div>
+              <div class="related-tools">
+                <span class="material-symbols-outlined">link</span>
+                <strong>관련 도구:</strong>
+                <%= link_to contract_method_path do %>
+                  <span class="material-symbols-outlined">gavel</span>
+                  계약방식 결정
+                <% end %>
+                <%= link_to contract_reason_path do %>
+                  <span class="material-symbols-outlined">description</span>
+                  수의계약 사유서
+                <% end %>
+              </div>
             </div>
           </div>
           <div class="check-item" onclick="toggleCheck(this)">
@@ -1262,6 +1431,14 @@
                   <span class="material-symbols-outlined">warning</span>
                   분할계약은 감사 지적의 가장 대표적인 사례 - 사전준비 단계에서 검토 필수
                 </div>
+              </div>
+              <div class="related-tools">
+                <span class="material-symbols-outlined">link</span>
+                <strong>관련 도구:</strong>
+                <%= link_to audit_cases_path do %>
+                  <span class="material-symbols-outlined">search</span>
+                  감사사례 검색
+                <% end %>
               </div>
             </div>
           </div>
@@ -1486,6 +1663,14 @@
                 <span class="material-symbols-outlined">gavel</span>
                 건설기술진흥법 제48조, 지방계약법 시행령 제14조
               </div>
+              <div class="related-tools">
+                <span class="material-symbols-outlined">link</span>
+                <strong>관련 도구:</strong>
+                <%= link_to cost_estimate_path do %>
+                  <span class="material-symbols-outlined">description</span>
+                  물량내역서+시방서 생성기
+                <% end %>
+              </div>
             </div>
           </div>
           <div class="check-item" onclick="toggleCheck(this)">
@@ -1502,6 +1687,14 @@
               <div class="legal-basis">
                 <span class="material-symbols-outlined">gavel</span>
                 지방계약법 시행령 제7조
+              </div>
+              <div class="related-tools">
+                <span class="material-symbols-outlined">link</span>
+                <strong>관련 도구:</strong>
+                <%= link_to budget_estimator_path do %>
+                  <span class="material-symbols-outlined">calculate</span>
+                  소요예산 추정기
+                <% end %>
               </div>
             </div>
           </div>
@@ -1554,6 +1747,18 @@
                   추정가격 2천만원 이하 수의계약 시 예정가격 작성 생략 가능 (시행령 제9조)
                 </div>
               </div>
+              <div class="related-tools">
+                <span class="material-symbols-outlined">link</span>
+                <strong>관련 도구:</strong>
+                <%= link_to contract_method_path do %>
+                  <span class="material-symbols-outlined">gavel</span>
+                  계약방식 결정
+                <% end %>
+                <%= link_to contract_reason_path do %>
+                  <span class="material-symbols-outlined">description</span>
+                  수의계약 사유서
+                <% end %>
+              </div>
             </div>
           </div>
           <div class="check-item" onclick="toggleCheck(this)">
@@ -1581,6 +1786,18 @@
                   2,000만원 초과 시 반드시 2인 이상 견적 비교 필요
                 </div>
               </div>
+              <div class="related-tools">
+                <span class="material-symbols-outlined">link</span>
+                <strong>관련 도구:</strong>
+                <%= link_to quote_review_path do %>
+                  <span class="material-symbols-outlined">rate_review</span>
+                  견적서 검토 시스템
+                <% end %>
+                <%= link_to contract_reason_path do %>
+                  <span class="material-symbols-outlined">description</span>
+                  수의계약 사유서
+                <% end %>
+              </div>
             </div>
           </div>
           <div class="check-item" onclick="toggleCheck(this)">
@@ -1604,6 +1821,14 @@
                   <span class="material-symbols-outlined">warning</span>
                   분할계약은 감사 지적의 가장 대표적인 사례 - 사전준비 단계에서 검토 필수
                 </div>
+              </div>
+              <div class="related-tools">
+                <span class="material-symbols-outlined">link</span>
+                <strong>관련 도구:</strong>
+                <%= link_to audit_cases_path do %>
+                  <span class="material-symbols-outlined">search</span>
+                  감사사례 검색
+                <% end %>
               </div>
             </div>
           </div>
@@ -1747,6 +1972,14 @@
                 <span class="material-symbols-outlined">gavel</span>
                 지방계약법 제14조
               </div>
+              <div class="related-tools">
+                <span class="material-symbols-outlined">link</span>
+                <strong>관련 도구:</strong>
+                <%= link_to contract_documents_path do %>
+                  <span class="material-symbols-outlined">description</span>
+                  계약서류 생성기
+                <% end %>
+              </div>
             </div>
           </div>
           <div class="check-item" onclick="toggleCheck(this)">
@@ -1764,6 +1997,14 @@
               <div class="legal-basis">
                 <span class="material-symbols-outlined">gavel</span>
                 지방계약법 시행령 제51조
+              </div>
+              <div class="related-tools">
+                <span class="material-symbols-outlined">link</span>
+                <strong>관련 도구:</strong>
+                <%= link_to contract_guarantee_path do %>
+                  <span class="material-symbols-outlined">calculate</span>
+                  계약보증금 계산기
+                <% end %>
               </div>
             </div>
           </div>
