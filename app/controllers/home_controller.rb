@@ -31,4 +31,12 @@ class HomeController < ApplicationController
       og: { title: "실무.kr 이용약관", url: canonical_url }
     )
   end
+
+  def updates
+    set_meta_tags(
+      title: "업데이트 소식",
+      description: "실무.kr의 최신 기능 추가, 콘텐츠 업데이트, 개선 사항을 확인하세요.",
+      og: { title: "업데이트 소식 — 실무.kr", url: canonical_url }
+    )
+  end
 end

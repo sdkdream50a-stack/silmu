@@ -126,6 +126,9 @@ Rails.application.routes.draw do
   # 서비스 소개
   get "about", to: "home#about", as: :about
 
+  # 업데이트 소식
+  get "updates", to: "home#updates", as: :updates
+
   # 법적 페이지
   get "privacy", to: "home#privacy", as: :privacy
   get "terms", to: "home#terms", as: :terms
