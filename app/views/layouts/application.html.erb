@@ -39,8 +39,10 @@
       "description": "공무원을 위한 계약 실무 가이드, 자동화 도구, 법령 해설"
     }) %>
 
-    <%# Fonts %>
+    <%# Fonts - Optimized for performance %>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/toss/tossface/dist/tossface.css">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
@@ -309,7 +311,7 @@
       <!-- Top gradient line -->
       <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent"></div>
       <div class="container-wide py-16 lg:py-20">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-8">
           <!-- Brand -->
           <div class="lg:col-span-2">
             <div class="flex items-center gap-3 mb-6">
@@ -354,6 +356,19 @@
               <li><%= link_to "자료실", guide_resources_path, class: "text-slate-300 hover:text-white transition-colors" %></li>
               <li><%= link_to "자주 묻는 질문", faq_path, class: "text-slate-300 hover:text-white transition-colors" %></li>
               <li><%= link_to "의견보내기", feedback_path, class: "text-slate-300 hover:text-white transition-colors" %></li>
+            </ul>
+          </div>
+
+          <!-- Popular Topics -->
+          <div>
+            <h3 class="font-semibold text-lg mb-5">인기 토픽</h3>
+            <ul class="space-y-3">
+              <li><%= link_to "수의계약", topic_path("private-contract"), class: "text-slate-300 hover:text-white transition-colors" %></li>
+              <li><%= link_to "경쟁입찰", topic_path("bidding"), class: "text-slate-300 hover:text-white transition-colors" %></li>
+              <li><%= link_to "계약체결", topic_path("contract-execution"), class: "text-slate-300 hover:text-white transition-colors" %></li>
+              <li><%= link_to "대금지급", topic_path("payment"), class: "text-slate-300 hover:text-white transition-colors" %></li>
+              <li><%= link_to "검수·검사", topic_path("inspection"), class: "text-slate-300 hover:text-white transition-colors" %></li>
+              <li><%= link_to "출장비", topic_path("travel-expense"), class: "text-slate-300 hover:text-white transition-colors" %></li>
             </ul>
           </div>
 
