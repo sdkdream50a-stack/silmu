@@ -18,3 +18,17 @@ weekly_link_check:
   class: SeoReportJob
   args: ["links"]
   schedule: "0 15 * * 3" # 매주 수요일 15시
+
+# 법령 정합성 자동 검증
+
+# 매주 월요일 오전 10시 - 법령 주간 검증
+weekly_legal_check:
+  class: LegalComplianceJob
+  args: ["check"]
+  schedule: "0 10 * * 1" # 매주 월요일 10시
+
+# 매월 1일 오전 11시 - AI 심층 검증
+monthly_legal_deep_check:
+  class: LegalComplianceJob
+  args: ["deep_check"]
+  schedule: "0 11 1 * *" # 매월 1일 11시
