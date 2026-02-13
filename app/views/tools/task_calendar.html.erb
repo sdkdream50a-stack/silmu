@@ -647,10 +647,8 @@
       </div>
       <div class="space-y-2">
         <label class="block text-sm font-bold text-gray-900">카테고리</label>
-        <div class="flex flex-wrap gap-2">
-          <% cat_colors.each do |name, c| %>
-            <button type="button" class="cat-select-btn px-3 py-1.5 rounded-full text-xs font-semibold border border-transparent transition-all <%= c[:badge] %> <%= c[:text] %>" data-cat="<%= name %>"><%= name %></button>
-          <% end %>
+        <div id="regular-cat-container" class="flex flex-wrap gap-2">
+          <!-- 카테고리 버튼은 JavaScript로 동적 렌더링 -->
         </div>
       </div>
     </div>
@@ -679,13 +677,8 @@
       </div>
       <div class="space-y-2">
         <label class="block text-sm font-bold text-gray-900">카테고리</label>
-        <div class="flex flex-wrap gap-2">
-          <% cat_colors.each do |name, c| %>
-            <button type="button" class="onetime-cat-btn flex h-8 items-center justify-center gap-1.5 rounded-full px-3 ring-1 ring-inset ring-gray-200 text-xs font-medium text-gray-500 transition-all hover:ring-indigo-300" data-cat="<%= name %>">
-              <div class="w-1.5 h-1.5 rounded-full <%= c[:dot] %>"></div>
-              <%= name %>
-            </button>
-          <% end %>
+        <div id="onetime-cat-container" class="flex flex-wrap gap-2">
+          <!-- 카테고리 버튼은 JavaScript로 동적 렌더링 -->
         </div>
       </div>
     </div>
@@ -1253,28 +1246,66 @@
     });
   });
 
-  // 분류 선택 (정기업무)
-  document.querySelectorAll(".cat-select-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      document.querySelectorAll(".cat-select-btn").forEach(b => b.classList.remove("ring-2", "ring-indigo-400"));
-      btn.classList.add("ring-2", "ring-indigo-400");
-      selectedCat = btn.dataset.cat;
+  // 카테고리 버튼 동적 렌더링
+  function renderCategoryButtons() {
+    const currentCats = loadCats();
+    const regularContainer = document.getElementById("regular-cat-container");
+    const onetimeContainer = document.getElementById("onetime-cat-container");
+
+    // 정기업무 카테고리 버튼
+    regularContainer.innerHTML = "";
+    Object.entries(currentCats).forEach(([name, c]) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "cat-select-btn px-3 py-1.5 rounded-full text-xs font-semibold border border-transparent transition-all";
+      btn.dataset.cat = name;
+      btn.textContent = name;
+      btn.style.background = c.bg;
+      btn.style.color = c.text;
+      regularContainer.appendChild(btn);
     });
+
+    // 비정기업무 카테고리 버튼
+    onetimeContainer.innerHTML = "";
+    Object.entries(currentCats).forEach(([name, c]) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "onetime-cat-btn flex h-8 items-center justify-center gap-1.5 rounded-full px-3 ring-1 ring-inset ring-gray-200 text-xs font-medium text-gray-500 transition-all hover:ring-indigo-300";
+      btn.dataset.cat = name;
+
+      const dot = document.createElement("div");
+      dot.className = "w-1.5 h-1.5 rounded-full";
+      dot.style.background = c.dot;
+
+      btn.appendChild(dot);
+      btn.appendChild(document.createTextNode(name));
+      onetimeContainer.appendChild(btn);
+    });
+  }
+
+  // 분류 선택 (정기업무) - 이벤트 위임 방식
+  document.getElementById("regular-cat-container").addEventListener("click", (e) => {
+    const btn = e.target.closest(".cat-select-btn");
+    if (!btn) return;
+    document.querySelectorAll(".cat-select-btn").forEach(b => b.classList.remove("ring-2", "ring-indigo-400"));
+    btn.classList.add("ring-2", "ring-indigo-400");
+    selectedCat = btn.dataset.cat;
   });
 
-  // 분류 선택 (비정기업무)
-  document.querySelectorAll(".onetime-cat-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      document.querySelectorAll(".onetime-cat-btn").forEach(b => b.classList.remove("ring-2", "ring-indigo-400"));
-      btn.classList.add("ring-2", "ring-indigo-400");
-      selectedOnetimeCat = btn.dataset.cat;
-    });
+  // 분류 선택 (비정기업무) - 이벤트 위임 방식
+  document.getElementById("onetime-cat-container").addEventListener("click", (e) => {
+    const btn = e.target.closest(".onetime-cat-btn");
+    if (!btn) return;
+    document.querySelectorAll(".onetime-cat-btn").forEach(b => b.classList.remove("ring-2", "ring-indigo-400"));
+    btn.classList.add("ring-2", "ring-indigo-400");
+    selectedOnetimeCat = btn.dataset.cat;
   });
 
   // 비정기 날짜 기본값 = 오늘
   document.getElementById("onetime-date").valueAsDate = new Date();
 
   function openAddModal(dateStr, inboxMonth) {
+    renderCategoryButtons(); // 최신 카테고리 목록 반영
     addFromInboxMonth = inboxMonth || null;
     modalAdd.classList.remove("hidden");
     // 날짜가 지정된 경우 비정기 탭으로
