@@ -26,7 +26,11 @@ class LegalComplianceJob < ApplicationJob
     stdout, stderr, status = Open3.capture3("cd #{Rails.root} && bundle exec rake legal:ci_check 2>&1")
 
     begin
-      result = JSON.parse(stdout, symbolize_names: true)
+      # JSON만 추출 (첫 번째 { 부터 마지막 } 까지)
+      json_match = stdout.match(/(\{[\s\S]*\})/)
+      raise JSON::ParserError, "JSON not found in output" unless json_match
+
+      result = JSON.parse(json_match[1], symbolize_names: true)
 
       report = {
         success: result[:success],
