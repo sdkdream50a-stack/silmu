@@ -10,7 +10,7 @@ class AuditCasesController < ApplicationController
     @categories = AuditCase.published.distinct.pluck(:category).compact.sort
     @total_count = AuditCase.published.count
 
-    set_meta_tags(
+    meta = {
       title: "감사사례 모음 — 계약 실무 감사 지적 사례",
       description: "공공계약 감사에서 자주 지적되는 사례를 카테고리별로 정리했습니다. 수의계약, 입찰, 계약이행, 대금지급 등 분야별 감사 지적사항과 대응 방법을 확인하세요.",
       keywords: "감사사례,감사 지적,계약 감사,수의계약 감사,입찰 감사,공공계약 감사,감사 대비",
@@ -20,7 +20,9 @@ class AuditCasesController < ApplicationController
         description: "공공계약 감사에서 자주 지적되는 사례를 분야별로 정리했습니다.",
         url: canonical_url
       }
-    )
+    }
+    meta[:robots] = "noindex, follow" if @category.present? || @severity.present?
+    set_meta_tags(meta)
   end
 
   def show
