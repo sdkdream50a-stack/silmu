@@ -6,6 +6,25 @@ Rails.application.routes.draw do
   get "favicon.ico", to: redirect("/favicon.svg")
   get "assets/tailwindcss", to: redirect("/assets/application.tailwind-0a9b7463.css")
 
+  # SEO: POST 전용 엔드포인트 GET 접근 시 리디렉트 (Googlebot 404 방지)
+  get "pdf_tools/split", to: redirect("/tools/pdf")
+  get "pdf_tools/merge", to: redirect("/tools/pdf")
+  get "pdf_tools/add_page_numbers", to: redirect("/tools/pdf")
+  get "pdf_tools/info", to: redirect("/tools/pdf")
+  get "estimations/calculate", to: redirect("/tools/budget-estimator")
+  get "contract-documents/generate", to: redirect("/tools/contract-documents")
+  get "contract-methods/determine", to: redirect("/tools/contract-method")
+  get "cost-estimates/generate", to: redirect("/tools/cost-estimate")
+  get "design-changes/generate", to: redirect("/tools/design-change")
+  get "progress-inspections/generate", to: redirect("/tools/progress-inspection")
+  get "quote-documents/extract", to: redirect("/tools/quote-auto")
+  get "quote-reviews/analyze", to: redirect("/tools/quote-review")
+  get "official-documents/generate", to: redirect("/tools/official-document")
+  get "estimated-prices/calculate", to: redirect("/tools/estimated-price")
+  get "legal-periods/calculate", to: redirect("/tools/legal-period")
+  get "contract-guarantees/calculate", to: redirect("/tools/contract-guarantee")
+  get "document-analysis/analyze", to: redirect("/tools")
+
   devise_for :users
   root "home#index"
 
