@@ -27,6 +27,7 @@ class ChatbotController < ApplicationController
   end
 
   def search
+    set_meta_tags(robots: "noindex, follow")
     @query = params[:q].to_s.strip.truncate(200)
     @board = params[:board].to_s.strip.truncate(50) if params[:board].present?
 

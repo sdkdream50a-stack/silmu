@@ -292,13 +292,15 @@ class GuidesController < ApplicationController
 
   def index
     canonical_url = request.original_url.split('?').first
-    set_meta_tags(
+    meta = {
       title: "업무 가이드",
       description: "공무원 계약·검수·예산 업무를 단계별로 안내하는 실무 가이드. 물품 구매, 수의계약, 검수조서, 예정가격 작성 등.",
       keywords: "업무 가이드, 물품 구매, 검수조서, 예정가격, 수의계약, 여비, 연가",
       og: { title: "업무 가이드 — 실무.kr", url: canonical_url },
       canonical: canonical_url
-    )
+    }
+    meta[:robots] = "noindex, follow" if params[:category].present?
+    set_meta_tags(meta)
   end
 
   def show
