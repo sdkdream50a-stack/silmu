@@ -19,6 +19,11 @@ weekly_link_check:
   args: ["links"]
   schedule: "0 15 * * 3" # 매주 수요일 15시
 
+# 매일 오전 6시 - 사이트맵 핑 (검색엔진 알림)
+daily_sitemap_ping:
+  class: SitemapPingJob
+  schedule: "0 6 * * *" # 매일 06시
+
 # 법령 정합성 자동 검증
 
 # 매주 월요일 오전 10시 - 법령 주간 검증
