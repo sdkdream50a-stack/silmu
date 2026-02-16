@@ -24,6 +24,7 @@ Rails.application.routes.draw do
   get "legal-periods/calculate", to: redirect("/tools/legal-period")
   get "contract-guarantees/calculate", to: redirect("/tools/contract-guarantee")
   get "document-analysis/analyze", to: redirect("/tools")
+  get "cost-estimates/default-items", to: redirect("/tools/cost-estimate")
 
   devise_for :users
   root "home#index"
