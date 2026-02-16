@@ -7,7 +7,7 @@
     "name": @guide[:title],
     "description": @guide[:description],
     "inLanguage": "ko",
-    "author": { "@type": "Organization", "name": "실무" },
+    "author": { "@type": "Organization", "name": "실무.kr" },
     "step": [
       @guide[:sections][:step1],
       @guide[:sections][:step2],
@@ -16,6 +16,15 @@
     ].compact.each_with_index.map { |step, i|
       { "@type": "HowToStep", "position": i + 1, "name": step[:title], "text": step[:items].join(". ") }
     }
+  }) %>
+  <%= json_ld({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "홈", "item": "https://silmu.kr" },
+      { "@type": "ListItem", "position": 2, "name": "실무가이드", "item": "https://silmu.kr/guides" },
+      { "@type": "ListItem", "position": 3, "name": @guide[:title] }
+    ]
   }) %>
 <% end %>
 
