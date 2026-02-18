@@ -132,13 +132,13 @@
 
           <!-- Desktop Menu -->
           <div class="hidden lg:flex items-center gap-8">
-            <%= link_to "실무가이드", guides_path, class: "nav-link py-2" %>
-            <%= link_to "법령가이드", topics_path, class: "nav-link py-2" %>
-            <%= link_to "감사사례", audit_cases_path, class: "nav-link py-2" %>
-            <%= link_to "도구", tools_path, class: "nav-link py-2" %>
-            <%= link_to "업무달력", task_calendar_path, class: "nav-link py-2" %>
-            <%= link_to "자료실", guide_resources_path, class: "nav-link py-2" %>
-            <%= link_to "의견보내기", feedback_path, class: "nav-link py-2" %>
+            <%= link_to "실무가이드", guides_path, class: nav_class(:guides) %>
+            <%= link_to "법령가이드", topics_path, class: nav_class(:topics) %>
+            <%= link_to "감사사례", audit_cases_path, class: nav_class(:audit_cases) %>
+            <%= link_to "도구", tools_path, class: nav_class(:tools) %>
+            <%= link_to "업무달력", task_calendar_path, class: nav_class(:task_calendar) %>
+            <%= link_to "자료실", guide_resources_path, class: nav_class(:resources) %>
+            <%= link_to "의견보내기", feedback_path, class: nav_class(:feedback) %>
           </div>
 
           <!-- Auth Buttons -->
@@ -167,13 +167,16 @@
       <!-- Mobile Menu -->
       <div class="lg:hidden hidden" id="mobile-menu">
         <div class="px-4 py-4 space-y-1 bg-white border-t border-gray-100">
-          <%= link_to "실무가이드", guides_path, class: "block px-4 py-3.5 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
-          <%= link_to "법령가이드", topics_path, class: "block px-4 py-3.5 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
-          <%= link_to "감사사례", audit_cases_path, class: "block px-4 py-3.5 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
-          <%= link_to "도구", tools_path, class: "block px-4 py-3.5 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
-          <%= link_to "업무달력", task_calendar_path, class: "block px-4 py-3.5 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
-          <%= link_to "자료실", guide_resources_path, class: "block px-4 py-3.5 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
-          <%= link_to "의견보내기", feedback_path, class: "block px-4 py-3.5 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
+          <% mobile_base = "block px-4 py-3.5 rounded-xl font-medium transition-colors" %>
+          <% mobile_normal = "#{mobile_base} text-slate-700 hover:bg-gray-50" %>
+          <% mobile_active = "#{mobile_base} text-indigo-600 bg-indigo-50 font-semibold" %>
+          <%= link_to "실무가이드", guides_path, class: (request.path.start_with?("/guides") && !request.path.start_with?("/guides/resources") ? mobile_active : mobile_normal) %>
+          <%= link_to "법령가이드", topics_path, class: (request.path.start_with?("/topics") ? mobile_active : mobile_normal) %>
+          <%= link_to "감사사례", audit_cases_path, class: (request.path.start_with?("/audit-cases") ? mobile_active : mobile_normal) %>
+          <%= link_to "도구", tools_path, class: (request.path.start_with?("/tools") && !request.path.start_with?("/tools/task-calendar") ? mobile_active : mobile_normal) %>
+          <%= link_to "업무달력", task_calendar_path, class: (request.path.start_with?("/tools/task-calendar") ? mobile_active : mobile_normal) %>
+          <%= link_to "자료실", guide_resources_path, class: (request.path.start_with?("/guides/resources") ? mobile_active : mobile_normal) %>
+          <%= link_to "의견보내기", feedback_path, class: (request.path.start_with?("/feedback") ? mobile_active : mobile_normal) %>
 
           <div class="h-px bg-gray-200 my-3"></div>
 

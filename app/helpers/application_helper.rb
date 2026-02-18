@@ -17,6 +17,20 @@ module ApplicationHelper
     utm_source == "naver_blog"
   end
 
+  # 현재 페이지에 해당하는 네비게이션 메뉴에 활성 클래스 반환
+  def nav_class(section)
+    active = case section
+    when :guides       then request.path.start_with?("/guides") && !request.path.start_with?("/guides/resources")
+    when :topics       then request.path.start_with?("/topics")
+    when :audit_cases  then request.path.start_with?("/audit-cases")
+    when :tools        then request.path.start_with?("/tools") && !request.path.start_with?("/tools/task-calendar")
+    when :task_calendar then request.path.start_with?("/tools/task-calendar")
+    when :resources    then request.path.start_with?("/guides/resources")
+    when :feedback     then request.path.start_with?("/feedback")
+    end
+    active ? "nav-link py-2 nav-link-active" : "nav-link py-2"
+  end
+
   # 법령 콘텐츠를 HTML로 변환 (간단한 Markdown 변환)
   # 조, 항, 호 기준으로 줄바꿈하고 가시성 향상
   def render_legal_content(content)
