@@ -16,13 +16,15 @@ class GuidesController < ApplicationController
   end
 
   def show
-    @guide = Guide.published.find(params[:id])
-    @guide.increment_view!
+    @guide = Guide.published.find_by!(slug: params[:slug])
 
-    # external_link가 있는 가이드는 해당 토픽으로 리디렉트
-    if @guide.external_link.present? && @guide.has_full_content?
-      # 콘텐츠 있으면 show 페이지 표시 (external_link는 관련 링크로만 활용)
+    # full content 없이 external_link만 있는 가이드는 해당 페이지로 리디렉트
+    if @guide.external_link.present? && !@guide.has_full_content?
+      redirect_to @guide.external_link, status: :moved_permanently
+      return
     end
+
+    @guide.increment_view!
 
     @related_guides = Guide.published.where.not(id: @guide.id).limit(3).ordered
 

@@ -8,6 +8,11 @@ class Guide < ApplicationRecord
 
   before_validation :generate_slug, if: -> { slug.blank? && title.present? }
 
+  # guide_path(guide) → /guides/purchase-and-inspection
+  def to_param
+    slug
+  end
+
   # sections JSONB를 HashWithIndifferentAccess로 반환 (기존 뷰의 심볼 키 호환)
   def sections
     raw = self[:sections]
