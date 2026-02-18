@@ -47,11 +47,9 @@
     <!-- 카테고리 필터 -->
     <div class="flex flex-wrap gap-2" id="category-tabs">
       <button data-category="전체" class="tab-btn active px-5 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-semibold shadow-md transition-all">전체</button>
-      <button data-category="계약" class="tab-btn px-5 py-2.5 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-xl text-sm font-medium transition-all">계약</button>
-      <button data-category="예산" class="tab-btn px-5 py-2.5 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-xl text-sm font-medium transition-all">예산</button>
-      <button data-category="인사" class="tab-btn px-5 py-2.5 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-xl text-sm font-medium transition-all">인사</button>
-      <button data-category="복무" class="tab-btn px-5 py-2.5 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-xl text-sm font-medium transition-all">복무</button>
-      <button data-category="민원" class="tab-btn px-5 py-2.5 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-xl text-sm font-medium transition-all">민원</button>
+      <% @guides.map(&:category).uniq.each do |cat| %>
+        <button data-category="<%= cat %>" class="tab-btn px-5 py-2.5 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-xl text-sm font-medium transition-all"><%= cat %></button>
+      <% end %>
     </div>
   </div>
 </section>

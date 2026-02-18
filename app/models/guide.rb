@@ -28,6 +28,7 @@ class Guide < ApplicationRecord
 
   def increment_view!
     self.class.update_counters(id, view_count: 1)
+    Rails.cache.delete("guides/popular")
   end
 
   private
