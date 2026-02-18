@@ -48,7 +48,7 @@ class TopicsController < ApplicationController
   }.freeze
 
   def index
-    @topics_by_category = Topic.published.order(:sort_order, :name).group_by(&:category)
+    @topics_by_category = Topic.published.order(:name).group_by(&:category)
     @total_count = Topic.published.count
 
     set_meta_tags(
