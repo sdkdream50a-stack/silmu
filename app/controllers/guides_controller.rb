@@ -28,6 +28,11 @@ class GuidesController < ApplicationController
 
     @guide.increment_view!
 
+    # 최근 본 가이드 쿠키 업데이트 (최대 5개)
+    recent = JSON.parse(cookies[:recent_guides] || "[]") rescue []
+    recent = ([  @guide.slug] + recent).uniq.first(5)
+    cookies[:recent_guides] = { value: recent.to_json, expires: 30.days, same_site: :lax }
+
     @related_guides = Rails.cache.fetch("guides/related/#{@guide.slug}", expires_in: 1.hour) do
       same_cat = Guide.published.where(category: @guide.category).where.not(id: @guide.id).ordered.limit(2).to_a
       fill     = [3 - same_cat.size, 0].max
