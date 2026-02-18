@@ -1,12 +1,13 @@
 class HomeController < ApplicationController
   def index
     @topic_count      = Rails.cache.fetch("stats/topic_count", expires_in: 30.minutes) { Topic.published.count }
+    @guide_count      = Rails.cache.fetch("stats/guide_count", expires_in: 30.minutes) { Guide.published.count }
     @audit_case_count = Rails.cache.fetch("stats/audit_case_count", expires_in: 30.minutes) { AuditCase.published.count }
     @template_count   = TemplatesController::TEMPLATES.count
 
     set_meta_tags(
       title: "계약 실무, 이제 혼자 고민하지 마세요",
-      description: "공무원을 위한 계약 실무 가이드 — 수의계약, 입찰, 검수, 예산 업무를 쉽고 정확하게. 19개 자동화 도구와 29개 법령 가이드 제공.",
+      description: "공무원을 위한 계약 실무 가이드 — 수의계약, 입찰, 검수, 예산 업무를 쉽고 정확하게. 19개 자동화 도구와 #{@topic_count + @guide_count}개 가이드 제공.",
       keywords: "공무원, 계약 실무, 수의계약, 입찰, 검수, 예산, 실무 도구",
       og: { title: "실무.kr — 공무원 계약 실무 가이드", url: canonical_url }
     )

@@ -1,6 +1,6 @@
 class GuidesController < ApplicationController
   def index
-    @guides            = Guide.published.ordered
+    @guides            = Rails.cache.fetch("guides/all", expires_in: 1.hour) { Guide.published.ordered.to_a }
     @popular_guides    = Rails.cache.fetch("guides/popular", expires_in: 1.hour) { Guide.published.order(view_count: :desc).limit(5).to_a }
     @audit_case_count  = Rails.cache.fetch("stats/audit_case_count", expires_in: 30.minutes) { AuditCase.published.count }
 
@@ -21,6 +21,7 @@ class GuidesController < ApplicationController
 
     # full content 없이 external_link만 있는 가이드는 해당 페이지로 리디렉트
     if @guide.external_link.present? && !@guide.has_full_content?
+      @guide.increment_view!
       redirect_to @guide.external_link, status: :moved_permanently
       return
     end

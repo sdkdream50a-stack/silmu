@@ -33,6 +33,7 @@ class Guide < ApplicationRecord
   private
 
   def expire_cache
+    Rails.cache.delete("guides/all")
     Rails.cache.delete("guides/popular")
     Rails.cache.delete("stats/guide_count")
   end
