@@ -32,6 +32,38 @@ class TopicsController < ApplicationController
     "year-end-settlement"     => [],
   }.freeze
 
+  # 토픽별 개별 아이콘 매핑
+  TOPIC_ICONS = {
+    "private-contract"           => "handshake",
+    "private-contract-overview"  => "handshake",
+    "private-contract-limit"     => "rule",
+    "private-contract-amount"    => "calculate",
+    "single-quote"               => "person",
+    "dual-quote"                 => "group",
+    "emergency-contract"         => "emergency",
+    "price-negotiation"          => "forum",
+    "bidding"                    => "gavel",
+    "bid-announcement"           => "campaign",
+    "e-bidding"                  => "computer",
+    "e-procurement-guide"        => "shopping_cart",
+    "contract-execution"         => "description",
+    "contract-guarantee-deposit" => "security",
+    "estimated-price"            => "calculate",
+    "inspection"                 => "fact_check",
+    "payment"                    => "payments",
+    "design-change"              => "edit_note",
+    "price-escalation"           => "trending_up",
+    "late-penalty"               => "schedule",
+    "defect-warranty"            => "verified_user",
+    "contract-termination"       => "cancel",
+    "joint-contract"             => "groups",
+    "subcontract"                => "account_tree",
+    "goods-selection-committee"  => "inventory_2",
+    "travel-expense"             => "flight_takeoff",
+    "year-end-settlement"        => "receipt_long",
+    "budget-carryover"           => "savings",
+  }.freeze
+
   TOOL_DEFINITIONS = {
     contract_method:   { icon: "gavel",        title: "계약방식 결정",   desc: "금액 입력 → 방식 바로 확인", color: "emerald" },
     contract_documents:{ icon: "fact_check",   title: "서류 체크리스트", desc: "필요 서류 원클릭 생성",       color: "indigo" },
