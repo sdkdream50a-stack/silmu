@@ -74,19 +74,24 @@
         </div>
 
         <!-- 토픽 카드 그리드 -->
+        <% color = cfg[:color]; icon = cfg[:icon] %>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <% topics.each do |topic| %>
-            <%= link_to topic_path(topic.slug), class: "group flex items-start gap-4 rounded-2xl bg-white p-5 shadow-sm border border-slate-100 transition-all hover:shadow-lg hover:-translate-y-0.5 hover:border-<%= cfg[:color] %>-100 cursor-pointer" do %>
-              <div class="shrink-0 flex h-11 w-11 items-center justify-center rounded-xl bg-<%= cfg[:color] %>-50 text-<%= cfg[:color] %>-600 group-hover:bg-<%= cfg[:color] %>-600 group-hover:text-white transition-colors">
-                <span class="material-symbols-outlined text-xl"><%= cfg[:icon] %></span>
+            <% card_class = "group flex items-start gap-4 rounded-2xl bg-white p-5 shadow-sm border border-slate-100 transition-all hover:shadow-lg hover:-translate-y-0.5 hover:border-#{color}-100 cursor-pointer" %>
+            <% icon_wrap = "shrink-0 flex h-11 w-11 items-center justify-center rounded-xl bg-#{color}-50 text-#{color}-600 group-hover:bg-#{color}-600 group-hover:text-white transition-colors" %>
+            <% title_class = "font-bold text-base text-slate-900 group-hover:text-#{color}-600 transition-colors mb-1" %>
+            <% arrow_class = "material-symbols-outlined text-slate-300 group-hover:text-#{color}-400 transition-colors self-center text-lg" %>
+            <%= link_to topic_path(topic.slug), class: card_class do %>
+              <div class="<%= icon_wrap %>">
+                <span class="material-symbols-outlined text-xl"><%= icon %></span>
               </div>
               <div class="flex-1 min-w-0">
-                <h3 class="font-bold text-base text-slate-900 group-hover:text-<%= cfg[:color] %>-600 transition-colors mb-1"><%= topic.name %></h3>
+                <h3 class="<%= title_class %>"><%= topic.name %></h3>
                 <% if topic.summary.present? %>
                   <p class="text-sm text-slate-500 leading-snug line-clamp-2"><%= topic.summary.truncate(60) %></p>
                 <% end %>
               </div>
-              <span class="material-symbols-outlined text-slate-300 group-hover:text-<%= cfg[:color] %>-400 transition-colors self-center text-lg">chevron_right</span>
+              <span class="<%= arrow_class %>">chevron_right</span>
             <% end %>
           <% end %>
         </div>
