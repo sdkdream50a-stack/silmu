@@ -4,18 +4,18 @@
   <%= json_ld({
     "@context": "https://schema.org",
     "@type": "HowTo",
-    "name": @guide[:title],
-    "description": @guide[:description],
+    "name": @guide.title,
+    "description": @guide.description,
     "inLanguage": "ko",
     "author": { "@type": "Organization", "name": "실무.kr" },
-    "step": [
-      @guide[:sections][:step1],
-      @guide[:sections][:step2],
-      @guide[:sections][:step3],
-      @guide[:sections][:step4]
+    "step": (@guide.sections ? [
+      @guide.sections[:step1],
+      @guide.sections[:step2],
+      @guide.sections[:step3],
+      @guide.sections[:step4]
     ].compact.each_with_index.map { |step, i|
-      { "@type": "HowToStep", "position": i + 1, "name": step[:title], "text": step[:items].join(". ") }
-    }
+      { "@type": "HowToStep", "position": i + 1, "name": step[:title], "text": Array(step[:items]).join(". ") }
+    } : [])
   }) %>
   <%= json_ld({
     "@context": "https://schema.org",
@@ -23,7 +23,7 @@
     "itemListElement": [
       { "@type": "ListItem", "position": 1, "name": "홈", "item": "https://silmu.kr" },
       { "@type": "ListItem", "position": 2, "name": "실무가이드", "item": "https://silmu.kr/guides" },
-      { "@type": "ListItem", "position": 3, "name": @guide[:title] }
+      { "@type": "ListItem", "position": 3, "name": @guide.title }
     ]
   }) %>
 <% end %>
@@ -46,10 +46,12 @@
           <nav class="space-y-2 text-sm">
             <a href="#overview" class="block py-2 px-3 bg-emerald-50 text-emerald-600 rounded-lg font-medium">1. 개요</a>
             <a href="#requirements" class="block py-2 px-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">2. 사전 준비 사항</a>
-            <a href="#step1" class="block py-2 px-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">3. Step 1: <%= @guide[:sections][:step1][:title] %></a>
-            <a href="#step2" class="block py-2 px-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">4. Step 2: <%= @guide[:sections][:step2][:title] %></a>
-            <a href="#step3" class="block py-2 px-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">5. Step 3: <%= @guide[:sections][:step3][:title] %></a>
-            <a href="#step4" class="block py-2 px-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">6. Step 4: <%= @guide[:sections][:step4][:title] %></a>
+            <% if @guide.sections %>
+            <a href="#step1" class="block py-2 px-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">3. Step 1: <%= @guide.sections[:step1]&.dig(:title) %></a>
+            <a href="#step2" class="block py-2 px-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">4. Step 2: <%= @guide.sections[:step2]&.dig(:title) %></a>
+            <a href="#step3" class="block py-2 px-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">5. Step 3: <%= @guide.sections[:step3]&.dig(:title) %></a>
+            <a href="#step4" class="block py-2 px-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">6. Step 4: <%= @guide.sections[:step4]&.dig(:title) %></a>
+            <% end %>
             <a href="#cautions" class="block py-2 px-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">7. 주의사항</a>
             <a href="#related" class="block py-2 px-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">8. 관련 법령</a>
           </nav>
@@ -62,24 +64,24 @@
           <!-- 헤더 -->
           <div class="p-6 md:p-8 border-b">
             <div class="flex items-center gap-3 mb-4">
-              <span class="text-xs font-semibold px-3 py-1 bg-<%= @guide[:category_color] %>-100 text-<%= @guide[:category_color] %>-600 rounded-full"><%= @guide[:category] %></span>
-              <% if @guide[:badge] %>
-                <span class="text-xs font-semibold px-3 py-1 bg-amber-100 text-amber-600 rounded-full"><%= @guide[:badge] %></span>
+              <span class="text-xs font-semibold px-3 py-1 bg-<%= @guide.category_color %>-100 text-<%= @guide.category_color %>-600 rounded-full"><%= @guide.category %></span>
+              <% if @guide.badge.present? %>
+                <span class="text-xs font-semibold px-3 py-1 bg-amber-100 text-amber-600 rounded-full"><%= @guide.badge %></span>
               <% end %>
             </div>
-            <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4"><%= @guide[:title] %></h1>
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4"><%= @guide.title %></h1>
             <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500">
               <span class="flex items-center gap-1">
                 <span class="material-symbols-outlined text-lg">calendar_today</span>
-                <%= @guide[:date] %>
+                <%= @guide.published_on&.strftime("%Y.%m.%d") %>
               </span>
               <span class="flex items-center gap-1">
                 <span class="material-symbols-outlined text-lg">visibility</span>
-                <%= @guide[:views] %>회
+                <%= @guide.view_count %>회
               </span>
               <span class="flex items-center gap-1">
                 <span class="material-symbols-outlined text-lg">person</span>
-                <%= @guide[:author] %>
+                <%= @guide.author %>
               </span>
             </div>
 
@@ -103,7 +105,7 @@
                 개요
               </h2>
               <p class="text-gray-700 leading-relaxed">
-                <%= @guide[:description] %>
+                <%= @guide.description %>
                 지방계약법 및 관련 규정에 따른 절차를 준수하여 감사 지적 없이 안전하게 업무를 처리할 수 있도록 안내합니다.
               </p>
             </section>
@@ -114,7 +116,7 @@
                 사전 준비 사항
               </h2>
               <ul class="space-y-3 text-gray-700">
-                <% @guide[:sections][:requirements].each do |req| %>
+                <% @guide.sections&.dig(:requirements)&.each do |req| %>
                   <li class="flex gap-3">
                     <span class="material-symbols-outlined text-emerald-600 shrink-0">check_circle</span>
                     <p><strong><%= req[:title] %>:</strong> <%= req[:desc] %></p>
@@ -124,7 +126,7 @@
             </section>
 
             <% [:step1, :step2, :step3, :step4].each_with_index do |step_key, index| %>
-              <% step = @guide[:sections][step_key] %>
+              <% step = @guide.sections&.dig(step_key) %>
               <section id="<%= step_key %>" class="mb-12">
                 <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                   <span class="w-8 h-8 flex items-center justify-center bg-emerald-100 text-emerald-600 rounded-lg text-sm font-bold"><%= index + 3 %></span>
@@ -172,7 +174,7 @@
               </h2>
               <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg">
                 <ul class="space-y-3 text-amber-800">
-                  <% @guide[:sections][:cautions].each do |caution| %>
+                  <% @guide.sections&.dig(:cautions)&.each do |caution| %>
                     <li class="flex gap-2">
                       <span class="material-symbols-outlined text-amber-600 shrink-0">warning</span>
                       <p><%= caution %></p>
@@ -189,7 +191,7 @@
               </h2>
               <div class="bg-blue-50 rounded-xl p-6">
                 <ul class="space-y-3 text-sm">
-                  <% @guide[:sections][:laws].each do |law| %>
+                  <% @guide.sections&.dig(:laws)&.each do |law| %>
                     <li>
                       <% if law.is_a?(Hash) && law[:url] %>
                         <a href="<%= law[:url] %>" target="_blank" class="text-blue-600 hover:underline flex items-center gap-1">
@@ -213,11 +215,12 @@
         <section class="mt-12">
           <h2 class="text-xl font-bold text-gray-900 mb-6">관련 가이드</h2>
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            <% GuidesController::GUIDES.values.reject { |g| g[:id] == @guide[:id] }.first(3).each do |related| %>
-              <%= link_to guide_path(related[:id]), class: "bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-shadow" do %>
-                <span class="text-xs font-semibold px-2 py-1 bg-<%= related[:category_color] %>-100 text-<%= related[:category_color] %>-600 rounded-full"><%= related[:category] %></span>
-                <h3 class="font-bold text-gray-900 mt-3 mb-2"><%= related[:title] %></h3>
-                <p class="text-gray-500 text-sm"><%= related[:description].truncate(30) %></p>
+            <% @related_guides.each do |related| %>
+              <% related_link = related.external_link.present? ? related.external_link : guide_path(related) %>
+              <%= link_to related_link, class: "bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-shadow" do %>
+                <span class="text-xs font-semibold px-2 py-1 bg-<%= related.category_color %>-100 text-<%= related.category_color %>-600 rounded-full"><%= related.category %></span>
+                <h3 class="font-bold text-gray-900 mt-3 mb-2"><%= related.title %></h3>
+                <p class="text-gray-500 text-sm"><%= related.summary.to_s.truncate(50) %></p>
               <% end %>
             <% end %>
           </div>

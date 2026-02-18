@@ -1,0 +1,335 @@
+# Created: 2026-02-18 00:40
+# Guide 시드 데이터 — GuidesController::GUIDES + index guide_items 통합
+
+guides_data = [
+  # ── full-content 가이드 (show 페이지 있음) ──────────────────────────────
+  {
+    sort_order: 10, slug: "purchase-and-inspection",
+    title: "물품 구매 및 검수 절차 가이드",
+    category: "계약", category_color: "emerald", badge: nil, tag: "신규",
+    summary: "물품 구매부터 검수, 대금 지급까지 전체 절차를 단계별로 설명합니다.",
+    description: "본 가이드는 공무원이 물품을 구매하고 검수하는 전체 절차를 단계별로 설명합니다.",
+    author: "실무팀", published_on: Date.new(2026, 2, 1), view_count: 42,
+    sections: {
+      requirements: [
+        { title: "예산 확인", desc: "해당 사업의 예산이 배정되어 있는지 확인합니다." },
+        { title: "품목 규격 확정", desc: "구매할 물품의 정확한 규격과 수량을 확정합니다." },
+        { title: "계약 방법 결정", desc: "금액에 따라 수의계약 또는 입찰 여부를 결정합니다." },
+        { title: "중소기업 제품 확인", desc: "5천만원 초과 시 중소기업 경쟁제품 여부를 확인합니다." }
+      ],
+      step1: { title: "구매 요청", items: ["수요 부서에서 물품 구매 요청서를 작성합니다.", "구매 요청서에는 품명, 규격, 수량, 예상 가격, 납품 희망일 등을 명시합니다.", "예산 배정 여부를 확인하고, 계약 담당 부서로 요청서를 전달합니다."] },
+      step2: { title: "견적 수집", items: ["2개 이상의 업체로부터 견적서를 수집합니다. (수의계약 시)", "견적서에는 품명, 규격, 단가, 총액, 부가세, 유효기간이 포함되어야 합니다.", "나라장터 종합쇼핑몰 가격을 조사하여 적정 가격인지 비교합니다.", "최저가 또는 최적 조건의 업체를 선정합니다."] },
+      step3: { title: "계약 체결", items: ["선정된 업체의 사업자등록증, 통장사본 등 필수 서류를 징구합니다.", "계약서를 작성하고 계약보증금(계약금액의 10%)을 징수합니다.", "청렴서약서를 징구하고, 부정당업자 제재 여부를 확인합니다.", "계약 체결 기안을 결재받고 계약을 체결합니다."] },
+      step4: { title: "검수 및 대금 지급", items: ["물품 납품 시 납품서와 함께 물품을 인수합니다.", "계약 내용과 동일한 규격, 수량인지 검수하고 검수조서를 작성합니다.", "세금계산서를 수령하고 대금 지급을 요청합니다.", "검수일로부터 14일 이내에 대금을 지급합니다."] },
+      cautions: ["물품 1억원 초과 시 경쟁입찰이 필요합니다. (소기업·소상공인 특례 적용 시)", "동일 업체와 연속 3회 이상 수의계약 시 청렴성 문제가 발생할 수 있습니다.", "분할계약 금지 - 동일 목적의 계약을 나누어 수의계약하면 안 됩니다.", "납품 전 선금 지급은 원칙적으로 불가합니다. (계약이행보증 필요)"],
+      laws: [
+        { name: "지방자치단체를 당사자로 하는 계약에 관한 법률", url: "https://www.law.go.kr/법령/지방자치단체를당사자로하는계약에관한법률" },
+        { name: "지방자치단체를 당사자로 하는 계약에 관한 법률 시행령", url: "https://www.law.go.kr/법령/지방자치단체를당사자로하는계약에관한법률시행령" },
+        { name: "지방자치단체 입찰 및 계약 집행기준 (행정안전부 예규)", url: "https://www.law.go.kr/행정규칙/지방자치단체입찰및계약집행기준" },
+        { name: "지방자치단체 물품관리 조례 (지자체별 상이)" }
+      ]
+    }
+  },
+  {
+    sort_order: 120, slug: "inspection-report",
+    title: "검수조서 작성 가이드",
+    category: "계약", category_color: "emerald", badge: nil, tag: nil,
+    summary: "물품 납품 후 검수조서를 정확하게 작성하는 방법 안내",
+    description: "물품 납품 후 검수조서를 정확하게 작성하는 방법을 안내합니다.",
+    author: "실무팀", published_on: Date.new(2026, 1, 28), view_count: 35,
+    sections: {
+      requirements: [
+        { title: "계약서 확인", desc: "계약서상의 품명, 규격, 수량을 미리 확인합니다." },
+        { title: "납품서 수령", desc: "업체로부터 납품서를 수령합니다." },
+        { title: "검수 장소 확보", desc: "물품을 검수할 수 있는 적절한 장소를 확보합니다." },
+        { title: "검수자 지정", desc: "검수를 수행할 담당자를 지정합니다." }
+      ],
+      step1: { title: "물품 인수", items: ["납품업체로부터 물품과 납품서를 인수합니다.", "외관상 파손 여부를 1차 확인합니다.", "납품 수량을 계약서와 대조하여 확인합니다."] },
+      step2: { title: "규격 검사", items: ["계약서에 명시된 규격과 납품된 물품의 규격을 비교합니다.", "필요시 측정도구를 사용하여 정밀 검사합니다.", "규격 미달 시 반품 또는 교환을 요청합니다."] },
+      step3: { title: "검수조서 작성", items: ["검수조서 양식에 품명, 규격, 수량을 기재합니다.", "검수 결과(합격/불합격)를 명시합니다.", "검수자와 입회자의 서명을 받습니다.", "검수일자를 정확하게 기재합니다."] },
+      step4: { title: "후속 처리", items: ["검수조서 원본을 계약 담당 부서에 제출합니다.", "물품을 지정된 장소에 보관합니다.", "물품대장에 입고 내역을 기록합니다.", "대금 지급 요청을 진행합니다."] },
+      cautions: ["검수는 반드시 납품 당일 또는 익일 내에 완료해야 합니다.", "검수자와 계약 담당자가 동일인이 되지 않도록 합니다.", "검수조서 없이 대금을 지급하면 안 됩니다.", "규격 미달 물품을 합격 처리하면 변상책임이 발생할 수 있습니다."],
+      laws: [
+        { name: "물품관리법", url: "https://www.law.go.kr/법령/물품관리법" },
+        { name: "지방자치단체를 당사자로 하는 계약에 관한 법률 시행령 제64조", url: "https://www.law.go.kr/법령/지방자치단체를당사자로하는계약에관한법률시행령" },
+        { name: "지방자치단체 물품관리 조례 (지자체별 상이)" }
+      ]
+    }
+  },
+  {
+    sort_order: 130, slug: "estimated-price",
+    title: "추정가격·예정가격 산정 가이드",
+    category: "계약", category_color: "emerald", badge: "필수", tag: "필수",
+    summary: "추정가격(VAT 제외)과 예정가격(VAT 포함)의 차이 및 산정 방법과 절차",
+    description: "추정가격(VAT 제외)과 예정가격(VAT 포함)의 차이 및 산정 방법과 절차를 안내합니다. 계약방식 결정부터 예정가격조서 작성까지 단계별로 설명합니다.",
+    author: "실무팀", published_on: Date.new(2026, 1, 20), view_count: 58,
+    sections: {
+      requirements: [
+        { title: "예산 배정 확인", desc: "해당 사업의 예산이 배정되어 있는지 확인합니다." },
+        { title: "구매 대상 확정", desc: "물품·용역·공사의 규격과 범위를 확정합니다." },
+        { title: "시장조사 계획", desc: "가격 조사 방법, 대상, 기간을 계획합니다." },
+        { title: "개념 구분 이해", desc: "추정가격(VAT 제외)과 예정가격(VAT 포함)의 차이를 이해합니다." }
+      ],
+      step1: { title: "추정가격 산정", items: ["나라장터 종합쇼핑몰에서 동일·유사 물품 가격을 조사합니다.", "3개 이상 업체로부터 견적서를 수집하여 비교합니다.", "추정가격 = 목적물의 가격 (부가가치세, 관급자재비 제외)", "추정가격에 따라 계약방식을 결정합니다. (수의계약/입찰 구분 기준)"] },
+      step2: { title: "예정가격 결정", items: ["추정가격에 부가가치세(10%)를 가산하여 예정가격을 산정합니다.", "예정가격 = 추정가격 + 부가가치세 + 관급자재비 등", "시장조사 결과를 근거로 가격 적정성을 검토합니다.", "극단적으로 높거나 낮은 가격은 제외하고 적정 가격 범위를 산정합니다."] },
+      step3: { title: "예정가격조서 작성", items: ["예정가격조서를 작성하고 결정 사유를 명확히 기재합니다.", "결재권자의 승인을 받습니다.", "예정가격조서는 별도로 봉인 보관합니다.", "추정가격 2천만원 이하 수의계약 시 예정가격조서 작성 생략 가능합니다. (시행령 제9조)"] },
+      step4: { title: "예정가격 운용", items: ["예정가격은 입찰 전까지 비공개로 관리합니다. (개찰 시까지 비밀 유지)", "입찰 시: 예정가격 이하 최저가 입찰자가 낙찰됩니다.", "수의계약 시: 예정가격 범위 내에서 계약 상대자와 협의합니다.", "대형공사 등은 복수예비가격을 작성하여 운영합니다."] },
+      cautions: ["추정가격과 예정가격을 혼동하지 마세요. 추정가격은 VAT 제외, 예정가격은 VAT 포함입니다.", "예정가격을 사전에 누설하면 형사처벌 대상입니다.", "시장조사 없이 임의로 가격을 산정하면 감사 지적 대상입니다.", "계약을 분할하여 추정가격을 낮추는 행위(분할계약)는 금지됩니다."],
+      laws: [
+        { name: "지방자치단체를 당사자로 하는 계약에 관한 법률", url: "https://www.law.go.kr/법령/지방자치단체를당사자로하는계약에관한법률" },
+        { name: "동법 시행령 제7조(예정가격), 제7조의2(추정가격), 제9조(비밀유지)", url: "https://www.law.go.kr/법령/지방자치단체를당사자로하는계약에관한법률시행령" },
+        { name: "지방자치단체 입찰 및 계약 집행기준 (행정안전부 예규)", url: "https://www.law.go.kr/행정규칙/지방자치단체입찰및계약집행기준" }
+      ]
+    }
+  },
+  {
+    sort_order: 20, slug: "private-contract-guide",
+    title: "수의계약 체결 실무 가이드",
+    category: "계약", category_color: "emerald", badge: "인기", tag: "신규",
+    summary: "수의계약의 요건, 절차, 주의사항을 상세히 안내합니다.",
+    description: "수의계약의 요건, 절차, 주의사항을 상세히 안내합니다.",
+    author: "실무팀", published_on: Date.new(2026, 1, 28), view_count: 38,
+    external_link: "/topics/private-contract",
+    sections: {
+      requirements: [
+        { title: "수의계약 사유 확인", desc: "지방계약법상 수의계약 허용 사유에 해당하는지 확인합니다." },
+        { title: "추정가격 산정", desc: "계약 금액이 수의계약 한도 이내인지 확인합니다." },
+        { title: "예산 확보", desc: "해당 예산이 배정되어 있는지 확인합니다." },
+        { title: "업체 선정 기준", desc: "공정한 업체 선정 기준을 마련합니다." }
+      ],
+      step1: { title: "수의계약 가능 여부 판단", items: ["추정가격 2천만원 이하 여부를 확인합니다.", "특수한 기술이 필요한 경우 등 예외 사유를 검토합니다.", "긴급을 요하는 경우의 요건을 확인합니다."] },
+      step2: { title: "견적서 징구", items: ["2개 이상 업체로부터 견적서를 받습니다.", "2천만원 이하는 1개 업체 견적도 가능합니다. (특례 기업은 5천만원 이하)", "견적서의 유효기간과 조건을 확인합니다."] },
+      step3: { title: "계약 상대자 결정", items: ["최저가 또는 최적 조건의 업체를 선정합니다.", "수의계약 사유서를 작성합니다.", "업체의 자격요건(사업자등록, 제재여부 등)을 확인합니다."] },
+      step4: { title: "계약 체결", items: ["계약서를 작성하고 날인합니다.", "청렴서약서를 징구합니다.", "계약보증금을 징수하거나 면제 사유를 확인합니다.", "계약 체결 기안을 결재받습니다."] },
+      cautions: ["동일 목적의 계약을 분할하여 수의계약하면 안 됩니다.", "동일 업체와 연속 3회 이상 계약 시 감사 지적 위험이 있습니다.", "수의계약 사유가 불명확하면 입찰로 전환해야 합니다.", "긴급 수의계약은 사후에 반드시 소명자료를 구비해야 합니다."],
+      laws: [
+        { name: "지방자치단체를 당사자로 하는 계약에 관한 법률 제9조", url: "https://www.law.go.kr/법령/지방자치단체를당사자로하는계약에관한법률" },
+        { name: "동법 시행령 제25조", url: "https://www.law.go.kr/법령/지방자치단체를당사자로하는계약에관한법률시행령" },
+        { name: "지방자치단체 입찰 및 계약 집행기준 (행정안전부 예규)", url: "https://www.law.go.kr/행정규칙/지방자치단체입찰및계약집행기준" }
+      ]
+    }
+  },
+  {
+    sort_order: 140, slug: "travel-expense-guide",
+    title: "출장 여비 청구 가이드",
+    category: "예산", category_color: "amber", badge: nil, tag: "업데이트",
+    summary: "국내/국외 출장 시 일비·숙박비·식비 지급 기준과 청구 방법",
+    description: "국내/국외 출장 시 여비 청구 방법과 증빙 서류를 안내합니다.",
+    author: "실무팀", published_on: Date.new(2026, 1, 25), view_count: 35,
+    sections: {
+      requirements: [
+        { title: "출장 명령 확인", desc: "출장 명령이 사전에 승인되었는지 확인합니다." },
+        { title: "여비 규정 확인", desc: "해당 기관의 여비 규정을 확인합니다." },
+        { title: "증빙 서류 준비", desc: "교통비, 숙박비 등 영수증을 준비합니다." },
+        { title: "정산 기한 확인", desc: "출장 완료 후 정산 기한을 확인합니다." }
+      ],
+      step1: { title: "출장 계획", items: ["출장 목적과 일정을 명확히 합니다.", "교통편과 숙소를 사전에 예약합니다.", "출장 명령서를 작성하여 결재를 받습니다."] },
+      step2: { title: "출장 수행", items: ["출장 명령에 따라 업무를 수행합니다.", "교통비, 숙박비 영수증을 반드시 수령합니다.", "출장 결과를 기록합니다."] },
+      step3: { title: "여비 정산", items: ["출장 복귀 후 5일 이내에 정산합니다.", "여비 정산서를 작성합니다.", "영수증 등 증빙서류를 첨부합니다.", "실비 정산과 정액 지급 항목을 구분합니다."] },
+      step4: { title: "지급 완료", items: ["정산서 검토 후 결재를 받습니다.", "회계 부서에 지급 요청을 합니다.", "여비가 지급되면 정산을 완료합니다."] },
+      cautions: ["허위 출장이나 과다 청구 시 징계 및 변상 대상입니다.", "영수증 없이 실비를 청구할 수 없습니다.", "출장 명령 없이 출장하면 여비를 지급받을 수 없습니다.", "정산 기한을 초과하면 지급이 지연될 수 있습니다."],
+      laws: [
+        { name: "공무원 여비 규정 (대통령령)", url: "https://www.law.go.kr/법령/공무원여비규정" },
+        { name: "지방공무원 여비 업무 처리기준 (행정안전부 예규)", url: "https://www.law.go.kr/행정규칙/지방공무원여비업무처리기준" },
+        { name: "각 지방자치단체 여비 조례 (지자체별 상이)" }
+      ]
+    }
+  },
+  {
+    sort_order: 160, slug: "annual-leave-guide",
+    title: "연가 사용 및 관리 가이드",
+    category: "복무", category_color: "blue", badge: nil, tag: nil,
+    summary: "연가일수 계산, 사용 절차, 미사용 연가 보상 처리 방법",
+    description: "연가일수 계산, 사용 절차, 미사용 연가 처리 방법을 안내합니다.",
+    author: "실무팀", published_on: Date.new(2026, 1, 22), view_count: 38,
+    sections: {
+      requirements: [
+        { title: "연가일수 확인", desc: "본인의 잔여 연가일수를 확인합니다." },
+        { title: "업무 조정", desc: "연가 기간 동안 업무 대행자를 지정합니다." },
+        { title: "사전 승인", desc: "연가 사용 전 사전 승인을 받습니다." },
+        { title: "증빙 준비", desc: "병가 등 특별한 경우 증빙서류를 준비합니다." }
+      ],
+      step1: { title: "연가일수 산정", items: ["재직기간에 따른 연가일수를 확인합니다.", "전년도 미사용 연가 이월분을 확인합니다.", "사용한 연가일수를 차감합니다."] },
+      step2: { title: "연가 신청", items: ["전자인사시스템에서 연가를 신청합니다.", "연가 사유와 기간을 입력합니다.", "업무 대행자를 지정합니다.", "결재권자의 승인을 받습니다."] },
+      step3: { title: "연가 사용", items: ["승인된 기간 동안 연가를 사용합니다.", "긴급 상황 발생 시 연락 가능한 상태를 유지합니다.", "연가 중 복귀가 필요하면 연가를 취소합니다."] },
+      step4: { title: "연가 관리", items: ["연말 잔여 연가일수를 확인합니다.", "저축연가 또는 연가보상비 신청 여부를 결정합니다.", "다음 연도 연가 계획을 수립합니다."] },
+      cautions: ["연가는 사전 승인 없이 사용할 수 없습니다.", "허위 병가 사용 시 징계 대상입니다.", "연가 일수를 초과하여 사용하면 결근 처리됩니다.", "저축연가는 연간 10일을 초과할 수 없습니다."],
+      laws: [
+        { name: "국가공무원 복무규정 (대통령령)", url: "https://www.law.go.kr/법령/국가공무원복무규정" },
+        { name: "지방공무원 복무규정 (대통령령)", url: "https://www.law.go.kr/법령/지방공무원복무규정" },
+        { name: "각 지방자치단체 복무 조례 (지자체별 상이)" }
+      ]
+    }
+  },
+  {
+    sort_order: 170, slug: "civil-complaint-guide",
+    title: "민원 응대 매뉴얼",
+    category: "민원", category_color: "violet", badge: nil, tag: nil,
+    summary: "민원인 응대 시 주의사항 및 처리 절차 안내",
+    description: "민원인 응대 시 주의사항 및 처리 절차를 안내합니다.",
+    author: "실무팀", published_on: Date.new(2026, 1, 20), view_count: 15,
+    sections: {
+      requirements: [
+        { title: "민원 내용 파악", desc: "민원인의 요구사항을 정확히 파악합니다." },
+        { title: "담당자 확인", desc: "해당 민원의 담당 부서와 담당자를 확인합니다." },
+        { title: "처리 기한 확인", desc: "민원 유형별 법정 처리 기한을 확인합니다." },
+        { title: "관련 법령 검토", desc: "민원 처리에 필요한 관련 법령을 검토합니다." }
+      ],
+      step1: { title: "민원 접수", items: ["민원인의 인적사항과 연락처를 확인합니다.", "민원 내용을 정확하게 기록합니다.", "접수증을 발급합니다.", "담당 부서에 민원을 이송합니다."] },
+      step2: { title: "민원 검토", items: ["민원 내용의 적법성을 검토합니다.", "필요한 경우 보완 자료를 요청합니다.", "유사 민원 처리 사례를 확인합니다.", "처리 방향을 결정합니다."] },
+      step3: { title: "민원 처리", items: ["관련 부서와 협의하여 처리합니다.", "처리 결과를 문서로 작성합니다.", "결재권자의 승인을 받습니다.", "처리 기한 내에 완료합니다."] },
+      step4: { title: "결과 통보", items: ["민원인에게 처리 결과를 통보합니다.", "불만족 시 이의신청 절차를 안내합니다.", "민원 처리 내역을 기록 관리합니다."] },
+      cautions: ["민원인에게 불친절하게 응대하면 안 됩니다.", "처리 기한을 초과하면 지연 사유를 통보해야 합니다.", "민원인의 개인정보를 유출하면 안 됩니다.", "부당한 요구에는 정중하게 거절해야 합니다."],
+      laws: [
+        { name: "민원 처리에 관한 법률", url: "https://www.law.go.kr/법령/민원처리에관한법률" },
+        { name: "민원 처리에 관한 법률 시행령", url: "https://www.law.go.kr/법령/민원처리에관한법률시행령" },
+        { name: "각 지방자치단체 민원 조례 (지자체별 상이)" }
+      ]
+    }
+  },
+  {
+    sort_order: 150, slug: "budget-carryover-guide",
+    title: "예산 이월 실무 가이드",
+    category: "예산", category_color: "amber", badge: nil, tag: nil,
+    summary: "명시이월, 사고이월, 계속비이월의 요건과 절차 비교",
+    description: "명시이월, 사고이월, 계속비이월의 요건과 절차를 안내합니다.",
+    author: "실무팀", published_on: Date.new(2026, 1, 18), view_count: 28,
+    external_link: "/topics/budget-carryover",
+    sections: {
+      requirements: [
+        { title: "이월 사유 확인", desc: "이월이 필요한 명확한 사유를 확인합니다." },
+        { title: "이월 유형 결정", desc: "명시이월, 사고이월 등 유형을 결정합니다." },
+        { title: "이월 기한 확인", desc: "이월 신청 및 승인 기한을 확인합니다." },
+        { title: "관련 서류 준비", desc: "이월 신청에 필요한 서류를 준비합니다." }
+      ],
+      step1: { title: "이월 유형 판단", items: ["명시이월: 예산 편성 시 미리 이월을 예정한 경우", "사고이월: 연도 내 지출하지 못한 불가피한 사유가 있는 경우", "계속비이월: 계속비 사업의 연부액 이월", "각 유형별 요건을 검토합니다."] },
+      step2: { title: "이월 신청", items: ["이월 신청서를 작성합니다.", "이월 사유를 상세히 기재합니다.", "집행 잔액과 이월 금액을 명확히 합니다.", "관련 증빙자료를 첨부합니다."] },
+      step3: { title: "승인 및 이월", items: ["재정 부서의 검토를 받습니다.", "이월 승인을 받습니다.", "다음 연도 예산에 이월액을 반영합니다.", "이월 내역을 회계시스템에 등록합니다."] },
+      step4: { title: "이월예산 집행", items: ["이월된 예산은 다음 연도에 우선 집행합니다.", "이월 사업의 추진 상황을 관리합니다.", "재이월은 원칙적으로 불가합니다.", "집행 잔액은 불용 처리합니다."] },
+      cautions: ["이월 사유가 불명확하면 불용 처리될 수 있습니다.", "사고이월은 엄격한 요건 심사를 거칩니다.", "이월 신청 기한을 준수해야 합니다.", "허위 이월 신청은 징계 대상입니다."],
+      laws: [
+        { name: "지방재정법", url: "https://www.law.go.kr/법령/지방재정법" },
+        { name: "지방재정법 시행령", url: "https://www.law.go.kr/법령/지방재정법시행령" },
+        { name: "지방자치단체 예산편성 운영기준 (행정안전부 훈령)", url: "https://www.law.go.kr/행정규칙/지방자치단체예산편성운영기준" }
+      ]
+    }
+  },
+  {
+    sort_order: 30, slug: "bidding-guide",
+    title: "입찰 실무 가이드",
+    category: "계약", category_color: "emerald", badge: "필수", tag: "신규",
+    summary: "경쟁입찰(일반·제한·지명)의 요건, 공고기간, 낙찰자 결정 절차를 단계별로 안내합니다.",
+    description: "경쟁입찰(일반경쟁·제한경쟁·지명경쟁)의 요건, 절차, 낙찰자 결정 방법을 단계별로 안내합니다.",
+    author: "실무팀", published_on: Date.new(2026, 2, 11), view_count: 0,
+    external_link: "/topics/bidding",
+    sections: {
+      requirements: [
+        { title: "추정가격 확인", desc: "추정가격이 수의계약 한도를 초과하여 입찰 대상인지 확인합니다." },
+        { title: "입찰 방법 결정", desc: "일반경쟁·제한경쟁·지명경쟁 중 적합한 방식을 결정합니다." },
+        { title: "규격서·과업내용서 준비", desc: "물품 규격서, 용역 과업내용서, 공사 설계서를 사전에 확정합니다." },
+        { title: "예정가격 작성", desc: "거래실례가격·원가계산 등 객관적 자료로 예정가격을 산정합니다." }
+      ],
+      step1: { title: "입찰공고", items: ["나라장터(G2B)에 입찰공고를 등록합니다. (추정가격 2천만원 초과 시 전자입찰 의무)", "공고기간을 확인합니다: 10억원 미만 7일, 10~50억원 15일, 50억원 이상 40일.", "공고 내용에 입찰 일시·장소, 참가자격, 낙찰자 결정 방법, 입찰보증금 등을 명시합니다.", "규격서·과업내용서·설계서 등 입찰 관련 서류를 공고와 함께 게시합니다."] },
+      step2: { title: "입찰 참가 및 개찰", items: ["입찰 참가자의 자격요건(면허·등록, 실적, 재무 상태 등)을 사전 확인합니다.", "입찰서 접수를 마감하고, 2인 이상 유효한 입찰이 있는지 확인합니다.", "유찰(2인 미만) 시 재공고입찰을 실시합니다. (재공고 시 공고기간 5일까지 단축 가능)", "개찰 시 입찰금액과 예정가격을 대조하여 적격 여부를 판단합니다."] },
+      step3: { title: "낙찰자 결정", items: ["최저가 낙찰: 예정가격 이하 최저가 입찰자를 낙찰자로 결정합니다.", "적격심사(물품·용역): 최저가 순으로 납품 능력, 실적, 재무 상태 등을 종합 심사합니다.", "종합평가(대형 용역·공사): 기술능력·가격을 종합 평가하여 최고 점수자를 낙찰합니다.", "낙찰자에게 낙찰 통지를 하고, 10일 이내에 계약을 체결합니다."] },
+      step4: { title: "계약 체결", items: ["낙찰자로부터 계약보증금(계약금액의 10%)을 징수합니다. (면제 요건 확인)", "계약서를 작성하고 쌍방이 기명날인합니다.", "청렴서약서, 사업자등록증, 인감증명서 등 필수 서류를 징구합니다.", "계약 체결 후 착수 신고서를 받고 사업 관리에 착수합니다."] },
+      cautions: ["공고기간 미달 시 입찰 자체가 무효 처리됩니다.", "특정 업체에 유리한 규격(특정 상표·모델명 기재)을 설정하면 입찰 취소 및 감사 지적 대상입니다.", "재공고입찰 시 참가자격 등 조건을 변경하면 '재공고'가 아닌 '신규 공고'로 처리해야 합니다.", "예정가격은 개찰 전까지 절대 비공개입니다. 누설 시 형사처벌(5년 이하 징역) 대상입니다."],
+      laws: [
+        { name: "지방자치단체를 당사자로 하는 계약에 관한 법률 제9조(경쟁입찰)", url: "https://www.law.go.kr/법령/지방자치단체를당사자로하는계약에관한법률" },
+        { name: "동법 시행령 제13조(참가자격), 제14조(제한경쟁), 제16조(공고기간)", url: "https://www.law.go.kr/법령/지방자치단체를당사자로하는계약에관한법률시행령" },
+        { name: "지방자치단체 입찰 및 계약집행기준 (행정안전부 예규)", url: "https://www.law.go.kr/행정규칙/지방자치단체입찰및계약집행기준" },
+        { name: "전자조달의 이용 및 촉진에 관한 법률 (전자입찰)", url: "https://www.law.go.kr/법령/전자조달의이용및촉진에관한법률" }
+      ]
+    }
+  },
+  # ── 링크 전용 가이드 (external_link → 토픽 페이지) ──────────────────
+  {
+    sort_order: 40, slug: "emergency-contract-guide",
+    title: "긴급계약 체결 가이드",
+    category: "계약", category_color: "emerald", badge: nil, tag: nil,
+    summary: "긴급사유, 수의계약 근거, 긴급공고 절차를 안내합니다.",
+    description: "긴급계약 체결 가이드",
+    author: "실무팀", published_on: Date.new(2026, 1, 26), view_count: 30,
+    external_link: "/topics/emergency-contract"
+  },
+  {
+    sort_order: 50, slug: "price-negotiation-guide",
+    title: "가격협상(협상에 의한 계약) 가이드",
+    category: "계약", category_color: "emerald", badge: nil, tag: nil,
+    summary: "협상계약 대상, 제안서 평가, 가격 협상 절차를 안내합니다.",
+    description: "가격협상에 의한 계약 가이드",
+    author: "실무팀", published_on: Date.new(2026, 1, 22), view_count: 25,
+    external_link: "/topics/price-negotiation"
+  },
+  {
+    sort_order: 60, slug: "private-contract-amount-guide",
+    title: "수의계약 금액기준 가이드",
+    category: "계약", category_color: "emerald", badge: nil, tag: nil,
+    summary: "물품·용역·공사별 수의계약 가능 금액기준과 적용방법을 안내합니다.",
+    description: "수의계약 금액기준 가이드",
+    author: "실무팀", published_on: Date.new(2026, 1, 20), view_count: 36,
+    external_link: "/topics/private-contract-amount"
+  },
+  {
+    sort_order: 70, slug: "private-contract-limit-guide",
+    title: "수의계약 한도액 가이드",
+    category: "계약", category_color: "emerald", badge: nil, tag: nil,
+    summary: "수의계약 연간 한도액 산정기준과 초과 시 처리방법을 안내합니다.",
+    description: "수의계약 한도액 가이드",
+    author: "실무팀", published_on: Date.new(2026, 1, 18), view_count: 28,
+    external_link: "/topics/private-contract-limit"
+  },
+  {
+    sort_order: 80, slug: "single-quote-guide",
+    title: "1인견적 수의계약 가이드",
+    category: "계약", category_color: "emerald", badge: nil, tag: nil,
+    summary: "1인견적 가능 금액기준, 절차, 주의사항을 안내합니다.",
+    description: "1인견적 수의계약 가이드",
+    author: "실무팀", published_on: Date.new(2026, 1, 16), view_count: 32,
+    external_link: "/topics/single-quote"
+  },
+  {
+    sort_order: 90, slug: "dual-quote-guide",
+    title: "2인 이상 견적 수의계약 가이드",
+    category: "계약", category_color: "emerald", badge: nil, tag: nil,
+    summary: "2인 이상 견적 대상, 견적서 징구 방법, 낙찰자 결정 절차를 안내합니다.",
+    description: "2인 이상 견적 수의계약 가이드",
+    author: "실무팀", published_on: Date.new(2026, 1, 14), view_count: 27,
+    external_link: "/topics/dual-quote"
+  },
+  {
+    sort_order: 100, slug: "goods-selection-committee-guide",
+    title: "물품선정위원회 운영 가이드",
+    category: "계약", category_color: "emerald", badge: nil, tag: nil,
+    summary: "물품선정위원회 구성, 심의 대상, 운영 절차를 안내합니다.",
+    description: "물품선정위원회 운영 가이드",
+    author: "실무팀", published_on: Date.new(2026, 1, 12), view_count: 20,
+    external_link: "/topics/goods-selection-committee"
+  },
+  {
+    sort_order: 110, slug: "e-procurement-guide",
+    title: "나라장터·학교장터 전자계약 가이드",
+    category: "계약", category_color: "emerald", badge: nil, tag: "신규",
+    summary: "전자조달 시스템 활용, 입찰 등록, 계약 체결 절차를 안내합니다.",
+    description: "나라장터·학교장터 전자계약 가이드",
+    author: "실무팀", published_on: Date.new(2026, 1, 10), view_count: 24,
+    external_link: "/topics/e-procurement-guide"
+  },
+  {
+    sort_order: 155, slug: "year-end-settlement-guide",
+    title: "연말정산 완벽 가이드",
+    category: "인사", category_color: "blue", badge: nil, tag: "업데이트",
+    summary: "2025년 변경사항, 소득공제·세액공제 항목별 정리",
+    description: "연말정산 완벽 가이드",
+    author: "실무팀", published_on: Date.new(2026, 1, 15), view_count: 45,
+    external_link: "/topics/year-end-settlement"
+  }
+]
+
+puts "  Creating guides..."
+guides_data.each do |attrs|
+  Guide.find_or_create_by!(slug: attrs[:slug]) do |g|
+    g.assign_attributes(attrs)
+  end
+end
+puts "  ✓ #{Guide.count} guides created"

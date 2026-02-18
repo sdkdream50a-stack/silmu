@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_18_001914) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_18_003505) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -64,6 +64,30 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_18_001914) do
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_calendar_data_on_user_id", unique: true
+  end
+
+  create_table "guides", force: :cascade do |t|
+    t.string "author", default: "실무팀"
+    t.string "badge"
+    t.string "category"
+    t.string "category_color", default: "emerald"
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.string "external_link"
+    t.boolean "published", default: true, null: false
+    t.date "published_on"
+    t.jsonb "sections"
+    t.string "slug", null: false
+    t.integer "sort_order", default: 0, null: false
+    t.text "summary"
+    t.string "tag"
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.integer "view_count", default: 0, null: false
+    t.index ["category"], name: "index_guides_on_category"
+    t.index ["published"], name: "index_guides_on_published"
+    t.index ["slug"], name: "index_guides_on_slug", unique: true
+    t.index ["sort_order"], name: "index_guides_on_sort_order"
   end
 
   create_table "laws", force: :cascade do |t|

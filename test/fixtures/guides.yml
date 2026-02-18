@@ -1,0 +1,17 @@
+one:
+  title: 물품 구매 및 검수 절차 가이드
+  slug: test-guide-one
+  category: 계약
+  category_color: emerald
+  published: true
+  sort_order: 10
+  view_count: 0
+
+two:
+  title: 검수조서 작성 가이드
+  slug: test-guide-two
+  category: 계약
+  category_color: emerald
+  published: true
+  sort_order: 20
+  view_count: 0
