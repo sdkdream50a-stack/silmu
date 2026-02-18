@@ -8,6 +8,11 @@
   </url>
 
   <%# 토픽 (법령 가이드) %>
+  <url>
+    <loc>https://silmu.kr/topics</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
   <% @topics.each do |topic| %>
   <url>
     <loc>https://silmu.kr/topics/<%= topic.slug %></loc>
