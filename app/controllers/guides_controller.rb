@@ -291,7 +291,7 @@ class GuidesController < ApplicationController
   }.freeze
 
   def index
-    @audit_case_count = AuditCase.published.count
+    @audit_case_count = Rails.cache.fetch("stats/audit_case_count", expires_in: 30.minutes) { AuditCase.published.count }
 
     canonical_url = request.original_url.split('?').first
     meta = {

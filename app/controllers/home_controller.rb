@@ -1,8 +1,8 @@
 class HomeController < ApplicationController
   def index
-    @topic_count        = Topic.published.count
-    @audit_case_count   = AuditCase.published.count
-    @template_count     = TemplatesController::TEMPLATES.count
+    @topic_count      = Rails.cache.fetch("stats/topic_count", expires_in: 30.minutes) { Topic.published.count }
+    @audit_case_count = Rails.cache.fetch("stats/audit_case_count", expires_in: 30.minutes) { AuditCase.published.count }
+    @template_count   = TemplatesController::TEMPLATES.count
 
     set_meta_tags(
       title: "계약 실무, 이제 혼자 고민하지 마세요",

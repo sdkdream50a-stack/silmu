@@ -221,6 +221,7 @@
         </div>
 
         <!-- 법령 3단 비교 -->
+        <% cache [@topic, "law_tabs", @topic.updated_at.to_i] do %>
         <div class="tab-panel" data-tab="law">
           <% if @topic.has_law_content? %>
             <!-- 캐스케이드 카드 레이아웃 -->
@@ -346,6 +347,7 @@
             </div>
           <% end %>
         </div>
+        <% end %>
 
         <!-- 예규/지침 -->
         <div class="tab-panel" data-tab="regulation" id="panel-regulation">
