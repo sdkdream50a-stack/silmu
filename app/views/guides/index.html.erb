@@ -70,7 +70,7 @@
 
         <div class="space-y-4" id="items-list">
           <% @guides.each do |guide| %>
-            <% guide_link = guide.external_link.present? ? guide.external_link : guide_path(guide) %>
+            <% guide_link = guide.has_full_content? ? guide_path(guide) : (guide.external_link.present? ? guide.external_link : guide_path(guide)) %>
             <%= link_to guide_link, class: "block card card-hover p-6 group item-card", data: { category: guide.category, title: guide.title } do %>
               <div class="flex items-start justify-between mb-3">
                 <span class="badge badge-emerald"><%= guide.category %></span>

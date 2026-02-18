@@ -111,12 +111,14 @@
 
           <!-- 본문 -->
           <% cache [@guide, "body", @guide.updated_at.to_i] do %>
+          <% sec_num = 1 %>
           <div class="p-6 md:p-8 prose-premium">
             <section id="overview" class="mb-12">
               <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <span class="w-8 h-8 flex items-center justify-center bg-emerald-100 text-emerald-600 rounded-lg text-sm font-bold">1</span>
+                <span class="w-8 h-8 flex items-center justify-center bg-emerald-100 text-emerald-600 rounded-lg text-sm font-bold"><%= sec_num %></span>
                 개요
               </h2>
+              <% sec_num += 1 %>
               <p class="text-gray-700 leading-relaxed">
                 <%= @guide.description %>
               </p>
@@ -125,9 +127,10 @@
             <% if @guide.sections&.dig(:requirements)&.any? %>
             <section id="requirements" class="mb-12">
               <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <span class="w-8 h-8 flex items-center justify-center bg-emerald-100 text-emerald-600 rounded-lg text-sm font-bold">2</span>
+                <span class="w-8 h-8 flex items-center justify-center bg-emerald-100 text-emerald-600 rounded-lg text-sm font-bold"><%= sec_num %></span>
                 사전 준비 사항
               </h2>
+              <% sec_num += 1 %>
               <ul class="space-y-3 text-gray-700">
                 <% @guide.sections[:requirements].each do |req| %>
                   <li class="flex gap-3">
@@ -144,7 +147,8 @@
               <% next if step.blank? %>
               <section id="<%= step_key %>" class="mb-12">
                 <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                  <span class="w-8 h-8 flex items-center justify-center bg-emerald-100 text-emerald-600 rounded-lg text-sm font-bold"><%= index + 3 %></span>
+                  <span class="w-8 h-8 flex items-center justify-center bg-emerald-100 text-emerald-600 rounded-lg text-sm font-bold"><%= sec_num %></span>
+                  <% sec_num += 1 %>
                   Step <%= index + 1 %>: <%= step[:title] %>
                 </h2>
                 <ol class="space-y-4 text-gray-700">
@@ -212,7 +216,7 @@
           <h2 class="text-xl font-bold text-gray-900 mb-6">관련 가이드</h2>
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
             <% @related_guides.each do |related| %>
-              <% related_link = related.external_link.present? ? related.external_link : guide_path(related) %>
+              <% related_link = related.has_full_content? ? guide_path(related) : (related.external_link.present? ? related.external_link : guide_path(related)) %>
               <%= link_to related_link, class: "bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-shadow" do %>
                 <span class="text-xs font-semibold px-2 py-1 bg-<%= related.category_color %>-100 text-<%= related.category_color %>-600 rounded-full"><%= related.category %></span>
                 <h3 class="font-bold text-gray-900 mt-3 mb-2"><%= related.title %></h3>
