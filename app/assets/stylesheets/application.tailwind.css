@@ -883,6 +883,9 @@
 /* guides/index 인기 가이드 번호 뱃지 */
 @source inline("bg-emerald-100 text-emerald-600 bg-slate-100 text-slate-500");
 
+/* guides/show category_color 동적 클래스 (emerald, blue, amber, violet) */
+@source inline("bg-violet-100 text-violet-600");
+
 /* ===========================================
    FORCED LIGHT MODE
    모바일 브라우저 강제 다크모드 방지

@@ -8,6 +8,7 @@ class AuditCase < ApplicationRecord
   validates :slug, presence: true, uniqueness: true
 
   before_validation :generate_slug, if: -> { slug.blank? && title.present? }
+  after_commit :expire_count_cache
 
   # 카테고리 목록
   CATEGORIES = {
@@ -50,6 +51,10 @@ class AuditCase < ApplicationRecord
   end
 
   private
+
+  def expire_count_cache
+    Rails.cache.delete("stats/audit_case_count")
+  end
 
   def generate_slug
     base = title.parameterize.presence || "audit-case-#{SecureRandom.hex(4)}"

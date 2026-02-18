@@ -25,6 +25,7 @@ class Topic < ApplicationRecord
 
   # Callbacks
   before_validation :generate_slug, if: -> { slug.blank? && name.present? }
+  after_commit :expire_count_cache
 
   # 키워드 매칭으로 토픽 찾기
   def self.find_by_query(query, exclude_slug: nil)
@@ -128,6 +129,10 @@ class Topic < ApplicationRecord
   end
 
   private
+
+  def expire_count_cache
+    Rails.cache.delete("stats/topic_count")
+  end
 
   def generate_slug
     self.slug = name.parameterize.presence || "topic-#{SecureRandom.hex(4)}"

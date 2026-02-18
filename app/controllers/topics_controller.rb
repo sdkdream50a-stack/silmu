@@ -3,9 +3,11 @@ class TopicsController < ApplicationController
     @topic = Topic.find_by!(slug: params[:slug])
     @topic.increment_view!
     @related_topics = @topic.related_topics
-    @related_articles = CafeArticle.find_similar(@topic.name, limit: 10)
+    @related_articles = Rails.cache.fetch("cafe_articles/similar/#{@topic.slug}", expires_in: 6.hours) do
+      CafeArticle.find_similar(@topic.name, limit: 10).to_a
+    end
     @related_audit_cases = @topic.related_audit_cases
-    @audit_case_total = AuditCase.published.count
+    @audit_case_total = Rails.cache.fetch("stats/audit_case_count", expires_in: 30.minutes) { AuditCase.published.count }
 
     # 부모 토픽인 경우 키워드별 매칭 토픽을 미리 조회 (N+1 방지)
     @keyword_topic_map = @topic.parent_id.nil? ? @topic.keyword_topic_map : {}
