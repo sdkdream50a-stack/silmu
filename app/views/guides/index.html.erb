@@ -169,16 +169,10 @@
               인기 가이드 TOP 5
             </h3>
             <ol class="space-y-3">
-              <% [
-                { title: "연말정산 완벽 가이드", link: "/topics/year-end-settlement" },
-                { title: "물품 구매 및 검수 절차", link: guide_path("purchase-and-inspection") },
-                { title: "수의계약 체결 실무", link: "/topics/private-contract" },
-                { title: "출장 여비 청구", link: "/topics/travel-expense" },
-                { title: "예산 이월 실무", link: "/topics/budget-carryover" }
-              ].each_with_index do |guide, i| %>
+              <% @popular_guides.each_with_index do |guide, i| %>
                 <li class="flex items-center gap-3 group">
                   <span class="w-7 h-7 flex items-center justify-center rounded-full text-xs font-bold <%= i < 3 ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-500' %>"><%= i + 1 %></span>
-                  <%= link_to guide[:title], guide[:link], class: "text-sm text-slate-700 group-hover:text-emerald-600 transition-colors truncate" %>
+                  <%= link_to guide.title, guide_path(guide), class: "text-sm text-slate-700 group-hover:text-emerald-600 transition-colors truncate" %>
                 </li>
               <% end %>
             </ol>

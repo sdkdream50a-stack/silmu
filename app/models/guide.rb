@@ -8,6 +8,8 @@ class Guide < ApplicationRecord
 
   before_validation :generate_slug, if: -> { slug.blank? && title.present? }
 
+  after_commit :expire_cache
+
   # guide_path(guide) → /guides/purchase-and-inspection
   def to_param
     slug
@@ -29,6 +31,11 @@ class Guide < ApplicationRecord
   end
 
   private
+
+  def expire_cache
+    Rails.cache.delete("guides/popular")
+    Rails.cache.delete("stats/guide_count")
+  end
 
   def generate_slug
     self.slug = title.parameterize.presence || "guide-#{SecureRandom.hex(4)}"

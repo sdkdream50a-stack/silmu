@@ -23,9 +23,10 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
-  <% @guides.each do |id, guide| %>
+  <% @guides.each do |guide| %>
   <url>
-    <loc>https://silmu.kr/guides/<%= id %></loc>
+    <loc>https://silmu.kr/guides/<%= guide.slug %></loc>
+    <lastmod><%= guide.updated_at.strftime('%Y-%m-%d') %></lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

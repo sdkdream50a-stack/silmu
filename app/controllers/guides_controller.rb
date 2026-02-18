@@ -1,6 +1,7 @@
 class GuidesController < ApplicationController
   def index
     @guides            = Guide.published.ordered
+    @popular_guides    = Rails.cache.fetch("guides/popular", expires_in: 1.hour) { Guide.published.order(view_count: :desc).limit(5).to_a }
     @audit_case_count  = Rails.cache.fetch("stats/audit_case_count", expires_in: 30.minutes) { AuditCase.published.count }
 
     canonical_url = request.original_url.split("?").first
