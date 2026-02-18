@@ -33,6 +33,12 @@ class GuidesController < ApplicationController
     recent = ([  @guide.slug] + recent).uniq.first(5)
     cookies[:recent_guides] = { value: recent.to_json, expires: 30.days, same_site: :lax }
 
+    # external_link가 topic을 가리키는 경우 관련 Topic 로드
+    if @guide.external_link&.start_with?("/topics/")
+      topic_slug = @guide.external_link.delete_prefix("/topics/")
+      @related_topic = Topic.published.find_by(slug: topic_slug)
+    end
+
     @related_guides = Rails.cache.fetch("guides/related/#{@guide.slug}", expires_in: 1.hour) do
       same_cat = Guide.published.where(category: @guide.category).where.not(id: @guide.id).ordered.limit(2).to_a
       fill     = [3 - same_cat.size, 0].max

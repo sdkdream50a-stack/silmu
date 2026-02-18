@@ -35,6 +35,7 @@ Rails.application.routes.draw do
   get "chatbot/price", to: "chatbot#price_guide", as: :chatbot_price
 
   # 토픽 (법령 가이드)
+  get "topics", to: "topics#index", as: :topics
   get "topics/:slug", to: "topics#show", as: :topic
 
   # 문서 양식
