@@ -98,6 +98,7 @@
           </div>
 
           <!-- 본문 -->
+          <% cache [@guide, "body", @guide.updated_at.to_i] do %>
           <div class="p-6 md:p-8 prose-premium">
             <section id="overview" class="mb-12">
               <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
@@ -209,6 +210,7 @@
               </div>
             </section>
           </div>
+          <% end %>
         </article>
 
         <!-- 추천 가이드 -->

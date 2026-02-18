@@ -28,7 +28,10 @@ class GuidesController < ApplicationController
 
     @guide.increment_view!
 
-    @related_guides = Guide.published.where.not(id: @guide.id).limit(3).ordered
+    same_cat = Guide.published.where(category: @guide.category).where.not(id: @guide.id).ordered.limit(2).to_a
+    fill     = [3 - same_cat.size, 0].max
+    others   = fill > 0 ? Guide.published.where.not(category: @guide.category).where.not(id: @guide.id).ordered.limit(fill).to_a : []
+    @related_guides = same_cat + others
 
     canonical_url = request.original_url.split("?").first
     set_meta_tags(
