@@ -30,6 +30,15 @@ class TopicsController < ApplicationController
     "travel-expense"          => [:travel_calculator],
     "budget-carryover"        => [:budget_estimator],
     "year-end-settlement"     => [],
+    # 2026-02-18 추가
+    "advance-payment"         => [:contract_documents, :progress_inspection],
+    "bid-qualification"       => [:contract_method, :estimated_price],
+    "bid-deposit"             => [:contract_method, :contract_documents],
+    "long-term-contract"      => [:contract_method, :contract_documents],
+    "unit-price-contract"     => [:contract_method, :contract_documents],
+    "spec-price-split-bid"    => [:contract_method, :estimated_price],
+    "performance-guarantee"   => [:contract_guarantee, :contract_documents],
+    "multiple-price"          => [:estimated_price, :legal_period],
   }.freeze
 
   # 토픽별 개별 아이콘 매핑
@@ -62,6 +71,15 @@ class TopicsController < ApplicationController
     "travel-expense"             => "flight_takeoff",
     "year-end-settlement"        => "receipt_long",
     "budget-carryover"           => "savings",
+    # 2026-02-18 추가
+    "advance-payment"            => "payments",
+    "bid-qualification"          => "fact_check",
+    "bid-deposit"                => "lock",
+    "long-term-contract"         => "event_repeat",
+    "unit-price-contract"        => "price_change",
+    "spec-price-split-bid"       => "call_split",
+    "performance-guarantee"      => "verified",
+    "multiple-price"             => "format_list_numbered",
   }.freeze
 
   TOOL_DEFINITIONS = {
