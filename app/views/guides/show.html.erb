@@ -44,16 +44,26 @@
         <div class="sticky top-24 bg-white rounded-xl border border-gray-200 p-6">
           <h3 class="font-bold text-gray-900 mb-4">목차</h3>
           <nav class="space-y-2 text-sm">
-            <a href="#overview" class="block py-2 px-3 bg-emerald-50 text-emerald-600 rounded-lg font-medium">1. 개요</a>
-            <a href="#requirements" class="block py-2 px-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">2. 사전 준비 사항</a>
-            <% if @guide.sections %>
-            <a href="#step1" class="block py-2 px-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">3. Step 1: <%= @guide.sections[:step1]&.dig(:title) %></a>
-            <a href="#step2" class="block py-2 px-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">4. Step 2: <%= @guide.sections[:step2]&.dig(:title) %></a>
-            <a href="#step3" class="block py-2 px-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">5. Step 3: <%= @guide.sections[:step3]&.dig(:title) %></a>
-            <a href="#step4" class="block py-2 px-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">6. Step 4: <%= @guide.sections[:step4]&.dig(:title) %></a>
+            <% toc_num = 1 %>
+            <a href="#overview" class="block py-2 px-3 bg-emerald-50 text-emerald-600 rounded-lg font-medium"><%= toc_num %>. 개요</a>
+            <% toc_num += 1 %>
+            <% if @guide.sections&.dig(:requirements)&.any? %>
+              <a href="#requirements" class="block py-2 px-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors"><%= toc_num %>. 사전 준비 사항</a>
+              <% toc_num += 1 %>
             <% end %>
-            <a href="#cautions" class="block py-2 px-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">7. 주의사항</a>
-            <a href="#related" class="block py-2 px-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">8. 관련 법령</a>
+            <% [:step1, :step2, :step3, :step4].each_with_index do |step_key, i| %>
+              <% if @guide.sections&.dig(step_key)&.dig(:title).present? %>
+                <a href="#<%= step_key %>" class="block py-2 px-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors"><%= toc_num %>. Step <%= i + 1 %>: <%= @guide.sections[step_key][:title] %></a>
+                <% toc_num += 1 %>
+              <% end %>
+            <% end %>
+            <% if @guide.sections&.dig(:cautions)&.any? %>
+              <a href="#cautions" class="block py-2 px-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors"><%= toc_num %>. 주의사항</a>
+              <% toc_num += 1 %>
+            <% end %>
+            <% if @guide.sections&.dig(:laws)&.any? %>
+              <a href="#related" class="block py-2 px-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors"><%= toc_num %>. 관련 법령</a>
+            <% end %>
           </nav>
         </div>
       </div>
@@ -110,13 +120,14 @@
               </p>
             </section>
 
+            <% if @guide.sections&.dig(:requirements)&.any? %>
             <section id="requirements" class="mb-12">
               <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                 <span class="w-8 h-8 flex items-center justify-center bg-emerald-100 text-emerald-600 rounded-lg text-sm font-bold">2</span>
                 사전 준비 사항
               </h2>
               <ul class="space-y-3 text-gray-700">
-                <% @guide.sections&.dig(:requirements)&.each do |req| %>
+                <% @guide.sections[:requirements].each do |req| %>
                   <li class="flex gap-3">
                     <span class="material-symbols-outlined text-emerald-600 shrink-0">check_circle</span>
                     <p><strong><%= req[:title] %>:</strong> <%= req[:desc] %></p>
@@ -124,9 +135,11 @@
                 <% end %>
               </ul>
             </section>
+            <% end %>
 
             <% [:step1, :step2, :step3, :step4].each_with_index do |step_key, index| %>
               <% step = @guide.sections&.dig(step_key) %>
+              <% next if step.blank? %>
               <section id="<%= step_key %>" class="mb-12">
                 <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                   <span class="w-8 h-8 flex items-center justify-center bg-emerald-100 text-emerald-600 rounded-lg text-sm font-bold"><%= index + 3 %></span>
@@ -143,15 +156,15 @@
               </section>
             <% end %>
 
-
+            <% if @guide.sections&.dig(:cautions)&.any? %>
             <section id="cautions" class="mb-12">
               <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <span class="w-8 h-8 flex items-center justify-center bg-amber-100 text-amber-600 rounded-lg text-sm font-bold">7</span>
+                <span class="w-8 h-8 flex items-center justify-center bg-amber-100 text-amber-600 rounded-lg text-sm font-bold"></span>
                 주의사항
               </h2>
               <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg">
                 <ul class="space-y-3 text-amber-800">
-                  <% @guide.sections&.dig(:cautions)&.each do |caution| %>
+                  <% @guide.sections[:cautions].each do |caution| %>
                     <li class="flex gap-2">
                       <span class="material-symbols-outlined text-amber-600 shrink-0">warning</span>
                       <p><%= caution %></p>
@@ -160,15 +173,17 @@
                 </ul>
               </div>
             </section>
+            <% end %>
 
+            <% if @guide.sections&.dig(:laws)&.any? %>
             <section id="related" class="mb-12">
               <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <span class="w-8 h-8 flex items-center justify-center bg-blue-100 text-blue-600 rounded-lg text-sm font-bold">8</span>
+                <span class="w-8 h-8 flex items-center justify-center bg-blue-100 text-blue-600 rounded-lg text-sm font-bold"></span>
                 관련 법령
               </h2>
               <div class="bg-blue-50 rounded-xl p-6">
                 <ul class="space-y-3 text-sm">
-                  <% @guide.sections&.dig(:laws)&.each do |law| %>
+                  <% @guide.sections[:laws].each do |law| %>
                     <li>
                       <% if law.is_a?(Hash) && law[:url] %>
                         <a href="<%= law[:url] %>" target="_blank" class="text-blue-600 hover:underline flex items-center gap-1">
@@ -185,6 +200,7 @@
                 </ul>
               </div>
             </section>
+            <% end %>
           </div>
           <% end %>
         </article>

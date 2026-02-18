@@ -3,6 +3,7 @@ class TopicsController < ApplicationController
     @topic = Topic.find_by!(slug: params[:slug])
     @topic.increment_view!
     @related_topics = @topic.related_topics
+    @related_guide = Guide.published.find_by(external_link: "/topics/#{@topic.slug}")
     @related_articles = Rails.cache.fetch("cafe_articles/similar/#{@topic.slug}", expires_in: 6.hours) do
       CafeArticle.find_similar(@topic.name, limit: 10).to_a
     end

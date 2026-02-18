@@ -950,6 +950,23 @@
             </nav>
           </div>
 
+          <!-- 관련 실무 가이드 -->
+          <% if @related_guide %>
+          <div class="card p-5">
+            <h3 class="font-bold text-slate-900 mb-3 flex items-center gap-2">
+              <span class="material-symbols-outlined text-emerald-600">menu_book</span>
+              단계별 실무 가이드
+            </h3>
+            <%= link_to guide_path(@related_guide), class: "block p-4 bg-emerald-50 rounded-xl border border-emerald-100 hover:border-emerald-300 hover:shadow-medium transition-all duration-200 group" do %>
+              <div class="font-semibold text-slate-900 text-sm group-hover:text-emerald-700 transition-colors"><%= @related_guide.title %></div>
+              <div class="text-xs text-slate-500 mt-1"><%= @related_guide.summary.to_s.truncate(50) %></div>
+              <div class="flex items-center gap-1 text-emerald-600 text-xs font-medium mt-2">
+                단계별 가이드 보기 <span class="material-symbols-outlined text-sm">arrow_forward</span>
+              </div>
+            <% end %>
+          </div>
+          <% end %>
+
           <!-- 관련 도구 — 콘텐츠→행동 연결 CTA -->
           <div class="card-glass bg-gradient-to-br from-emerald-50 to-indigo-50 border-emerald-200 p-5">
             <h3 class="font-bold text-slate-900 mb-4 flex items-center gap-2">
