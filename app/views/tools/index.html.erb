@@ -9,7 +9,7 @@
     <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px); background-size: 40px 40px;"></div>
   </div>
   <div class="container-wide relative">
-    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
       <div class="flex items-start gap-5">
         <div class="w-16 h-16 glass-panel rounded-2xl flex items-center justify-center shadow-lg">
           <span class="material-symbols-outlined text-4xl text-white">construction</span>
@@ -50,24 +50,24 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       <% [
-        { title: "계약방식 결정 도우미", desc: "추정가격과 계약유형으로 적정 계약방식과 필요서류를 확인합니다.", icon: "gavel", color: "forest", category: "AI 도구", path: contract_method_path, badge: "인기" },
-        { title: "계약서류 원클릭 생성기", desc: "물품/용역/공사별 필수 계약서류 체크리스트를 자동 생성합니다.", icon: "fact_check", color: "navy", category: "문서 도구", path: contract_documents_path, badge: "NEW" },
-        { title: "소요예산 추정기", desc: "소규모 공사/용역 시행 전 대략적인 예산을 미리 추정합니다.", icon: "calculate", color: "point", category: "계산기", path: budget_estimator_path, badge: "NEW" },
-        { title: "견적서 검토 도구", desc: "견적서의 적정성을 자동으로 검토합니다.", icon: "fact_check", color: "point", category: "문서 도구", path: "/tools/quote-review", badge: "인기" },
-        { title: "계약문서 생성기", desc: "시방서·구매규격서·과업내용서(과업지시서)를 단계별로 작성합니다.", icon: "description", color: "forest", category: "문서 도구", path: "/forms/과업지시서.html", badge: "NEW" },
-        { title: "PDF 도구", desc: "PDF 분할, 합치기, 쪽번호 매기기를 간편하게 처리합니다.", icon: "picture_as_pdf", color: "warm", category: "문서 도구", path: pdf_tools_path },
-        { title: "여비계산기", desc: "출장 여비(운임, 숙박비, 식비, 일비)를 자동으로 계산합니다.", icon: "directions_car", color: "point", category: "계산기", path: travel_calculator_path },
-        { title: "물량내역서+시방서 생성기", desc: "소액공사 간이 물량내역서와 시방서를 간편하게 작성합니다.", icon: "receipt_long", color: "navy", category: "문서 도구", path: cost_estimate_path, badge: "NEW" },
-        { title: "설계변경 검토서 도우미", desc: "설계변경 사유별 검토서와 절차 체크리스트를 자동 생성합니다.", icon: "swap_horiz", color: "forest", category: "문서 도구", path: design_change_path, badge: "NEW" },
-        { title: "기성검사 체크리스트", desc: "공사 유형별 기성검사 항목을 자동으로 생성합니다.", icon: "checklist", color: "warm", category: "체크리스트", path: progress_inspection_path, badge: "NEW" },
-        { title: "원가계산서 검토 가이드", desc: "용역 원가계산서 항목별 적정성을 자동으로 검토합니다.", icon: "price_check", color: "point", category: "AI 도구", path: cost_calculation_path, badge: "NEW" },
-        { title: "추정가격 계산기", desc: "계약유형별 원가항목을 입력하여 추정가격(VAT 제외)과 복수예비가격을 산출합니다.", icon: "calculate", color: "forest", category: "계산기", path: estimated_price_path, badge: "NEW" },
-        { title: "법정기간 계산기", desc: "입찰공고·계약체결·대금지급·하자보증·지체상금 기한을 자동 계산합니다.", icon: "calendar_month", color: "warm", category: "계산기", path: legal_period_path, badge: "NEW" },
-        { title: "계약보증금 계산기", desc: "계약보증금·하자보증금·인지세를 계약금액에 따라 자동으로 계산합니다.", icon: "shield", color: "point", category: "계산기", path: contract_guarantee_path, badge: "NEW" },
-        { title: "업무 할일 달력", desc: "급여·세무·보험·회계 등 월별 반복 업무를 한눈에 확인하고 체크합니다.", icon: "calendar_month", color: "navy", category: "체크리스트", path: task_calendar_path, badge: "NEW" },
-        { title: "사업계획서 생성기", desc: "사업정보를 입력하면 공문 서식의 사업계획서를 자동 생성합니다.", icon: "assignment", color: "point", category: "문서 도구", path: project_plan_path, badge: "NEW" },
-        { title: "수의계약 사유서 생성기", desc: "계약구분과 사유를 선택하면 법적 근거가 포함된 사유서를 자동 생성합니다.", icon: "edit_document", color: "forest", category: "문서 도구", path: contract_reason_path, badge: "NEW" },
-        { title: "견적서 일괄 문서생성", desc: "견적서 1장을 업로드하면 사업계획서·소요예산·예정가격 조서를 한 번에 자동 생성합니다.", icon: "receipt_long", color: "navy", category: "AI 도구", path: quote_auto_path, badge: "NEW" },
+        { title: "계약방식 결정 도우미", desc: "추정가격과 계약유형으로 적정 계약방식과 필요서류를 확인합니다.", icon: "gavel", color: "emerald", category: "AI 도구", path: contract_method_path, badge: "인기" },
+        { title: "계약서류 원클릭 생성기", desc: "물품/용역/공사별 필수 계약서류 체크리스트를 자동 생성합니다.", icon: "fact_check", color: "blue", category: "문서 도구", path: contract_documents_path, badge: "NEW" },
+        { title: "소요예산 추정기", desc: "소규모 공사/용역 시행 전 대략적인 예산을 미리 추정합니다.", icon: "calculate", color: "indigo", category: "계산기", path: budget_estimator_path, badge: "NEW" },
+        { title: "견적서 검토 도구", desc: "견적서의 적정성을 자동으로 검토합니다.", icon: "fact_check", color: "indigo", category: "문서 도구", path: "/tools/quote-review", badge: "인기" },
+        { title: "계약문서 생성기", desc: "시방서·구매규격서·과업내용서(과업지시서)를 단계별로 작성합니다.", icon: "description", color: "emerald", category: "문서 도구", path: "/forms/과업지시서.html", badge: "NEW" },
+        { title: "PDF 도구", desc: "PDF 분할, 합치기, 쪽번호 매기기를 간편하게 처리합니다.", icon: "picture_as_pdf", color: "amber", category: "문서 도구", path: pdf_tools_path },
+        { title: "여비계산기", desc: "출장 여비(운임, 숙박비, 식비, 일비)를 자동으로 계산합니다.", icon: "directions_car", color: "indigo", category: "계산기", path: travel_calculator_path },
+        { title: "물량내역서+시방서 생성기", desc: "소액공사 간이 물량내역서와 시방서를 간편하게 작성합니다.", icon: "receipt_long", color: "blue", category: "문서 도구", path: cost_estimate_path, badge: "NEW" },
+        { title: "설계변경 검토서 도우미", desc: "설계변경 사유별 검토서와 절차 체크리스트를 자동 생성합니다.", icon: "swap_horiz", color: "emerald", category: "문서 도구", path: design_change_path, badge: "NEW" },
+        { title: "기성검사 체크리스트", desc: "공사 유형별 기성검사 항목을 자동으로 생성합니다.", icon: "checklist", color: "amber", category: "체크리스트", path: progress_inspection_path, badge: "NEW" },
+        { title: "원가계산서 검토 가이드", desc: "용역 원가계산서 항목별 적정성을 자동으로 검토합니다.", icon: "price_check", color: "indigo", category: "AI 도구", path: cost_calculation_path, badge: "NEW" },
+        { title: "추정가격 계산기", desc: "계약유형별 원가항목을 입력하여 추정가격(VAT 제외)과 복수예비가격을 산출합니다.", icon: "calculate", color: "emerald", category: "계산기", path: estimated_price_path, badge: "NEW" },
+        { title: "법정기간 계산기", desc: "입찰공고·계약체결·대금지급·하자보증·지체상금 기한을 자동 계산합니다.", icon: "calendar_month", color: "amber", category: "계산기", path: legal_period_path, badge: "NEW" },
+        { title: "계약보증금 계산기", desc: "계약보증금·하자보증금·인지세를 계약금액에 따라 자동으로 계산합니다.", icon: "shield", color: "indigo", category: "계산기", path: contract_guarantee_path, badge: "NEW" },
+        { title: "업무 할일 달력", desc: "급여·세무·보험·회계 등 월별 반복 업무를 한눈에 확인하고 체크합니다.", icon: "calendar_month", color: "blue", category: "체크리스트", path: task_calendar_path, badge: "NEW" },
+        { title: "사업계획서 생성기", desc: "사업정보를 입력하면 공문 서식의 사업계획서를 자동 생성합니다.", icon: "assignment", color: "indigo", category: "문서 도구", path: project_plan_path, badge: "NEW" },
+        { title: "수의계약 사유서 생성기", desc: "계약구분과 사유를 선택하면 법적 근거가 포함된 사유서를 자동 생성합니다.", icon: "edit_document", color: "emerald", category: "문서 도구", path: contract_reason_path, badge: "NEW" },
+        { title: "견적서 일괄 문서생성", desc: "견적서 1장을 업로드하면 사업계획서·소요예산·예정가격 조서를 한 번에 자동 생성합니다.", icon: "receipt_long", color: "blue", category: "AI 도구", path: quote_auto_path, badge: "NEW" },
         { title: "공문서 AI 작성 도우미", desc: "기안문·협조문·통보문 등 공문서를 AI가 행정업무운영규정에 맞게 자동 작성합니다.", icon: "auto_awesome", color: "indigo", category: "AI 도구", path: official_document_path, badge: "NEW" },
       ].each do |tool| %>
         <%= link_to tool[:path], class: "group card card-interactive card-glow-#{tool[:color]} card-shine p-6 relative overflow-hidden border border-transparent hover:border-#{tool[:color]}-200", data: { category: tool[:category], title: tool[:title] } do %>

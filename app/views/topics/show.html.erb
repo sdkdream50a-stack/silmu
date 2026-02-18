@@ -80,12 +80,7 @@
             <% end %>
           <% else %>
             <%# 부모 토픽인 경우: 서브토픽 또는 키워드 검색 링크 %>
-            <% @topic.keyword_list.first(8).each do |keyword| %>
-              <% # 1. 서브토픽이나 다른 토픽 이름과 일치하는지 확인 %>
-              <% matching_topic = @topic.subtopics.published.find_by("name ILIKE ?", keyword) ||
-                           Topic.published.where.not(id: @topic.id).find_by("name ILIKE ?", keyword) %>
-              <% # 2. 없으면 키워드를 가진 다른 토픽 찾기 (현재 토픽 제외) %>
-              <% matching_topic ||= Topic.published.where.not(id: @topic.id).where("keywords ILIKE ?", "%#{keyword}%").first %>
+            <% @keyword_topic_map.each do |keyword, matching_topic| %>
               <% if matching_topic %>
                 <%= link_to topic_path(matching_topic.slug),
                     class: "px-4 py-2 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-sm text-white transition-all duration-200 flex items-center gap-1.5 border border-white/10 hover:border-white/20" do %>
@@ -1179,6 +1174,7 @@
 @media (max-width: 1024px) {
   .law-cascade-container .flex {
     flex-direction: column;
+    min-width: 0 !important;
   }
   .law-card-stack {
     width: 100% !important;

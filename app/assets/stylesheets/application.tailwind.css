@@ -201,6 +201,20 @@
     box-shadow: 0 10px 40px -10px rgba(99, 102, 241, 0.25), 0 0 0 1px rgba(99, 102, 241, 0.1);
   }
 
+  .card-glow-blue {
+    @apply transition-all duration-300;
+  }
+  .card-glow-blue:hover {
+    box-shadow: 0 10px 40px -10px rgba(59, 130, 246, 0.25), 0 0 0 1px rgba(59, 130, 246, 0.1);
+  }
+
+  .card-glow-amber {
+    @apply transition-all duration-300;
+  }
+  .card-glow-amber:hover {
+    box-shadow: 0 10px 40px -10px rgba(245, 158, 11, 0.25), 0 0 0 1px rgba(245, 158, 11, 0.1);
+  }
+
   .card-glow-slate {
     @apply transition-all duration-300;
   }
@@ -848,6 +862,26 @@
     font-size: 9pt;
   }
 }
+
+/* ===========================================
+   SAFELIST — 동적 클래스 purge 방지
+   ERB 템플릿에서 보간으로 생성되는 클래스를 번들에 강제 포함
+   =========================================== */
+
+/* tools/index: emerald, blue, indigo, amber */
+@source inline("card-glow-emerald card-glow-blue card-glow-indigo card-glow-amber hover:border-emerald-200 hover:border-blue-200 hover:border-indigo-200 hover:border-amber-200 bg-emerald-100 bg-blue-100 bg-indigo-100 bg-amber-100 group-hover:bg-emerald-600 group-hover:bg-blue-600 group-hover:bg-indigo-600 group-hover:bg-amber-600 group-hover:shadow-emerald-500/20 group-hover:shadow-blue-500/20 group-hover:shadow-indigo-500/20 group-hover:shadow-amber-500/20 text-emerald-600 text-blue-600 text-indigo-600 text-amber-600 group-hover:text-emerald-600 group-hover:text-blue-600 group-hover:text-indigo-600 group-hover:text-amber-600");
+
+/* audit_cases/index: red, orange, amber */
+@source inline("hover:bg-red-50 hover:bg-orange-50 hover:bg-amber-50 bg-red-50 bg-orange-50 bg-amber-50 bg-red-500 bg-orange-500 bg-amber-500 group-hover:text-red-700 group-hover:text-orange-700 group-hover:text-amber-700");
+
+/* home/index 히어로 퀵링크: indigo, emerald, amber, pink */
+@source inline("text-indigo-400 text-emerald-400 text-amber-400 text-pink-400 group-hover:text-indigo-300 group-hover:text-emerald-300 group-hover:text-amber-300 group-hover:text-pink-300");
+
+/* home/index 가이드 카드: indigo, violet, amber, emerald, blue, rose */
+@source inline("bg-indigo-50 bg-violet-50 bg-amber-50 bg-emerald-50 bg-blue-50 bg-rose-50 text-indigo-600 text-violet-600 text-amber-600 text-emerald-600 text-blue-600 text-rose-600 group-hover:bg-indigo-600 group-hover:bg-violet-600 group-hover:bg-amber-600 group-hover:bg-emerald-600 group-hover:bg-blue-600 group-hover:bg-rose-600 group-hover:text-indigo-600 group-hover:text-violet-600 group-hover:text-amber-600 group-hover:text-emerald-600 group-hover:text-blue-600 group-hover:text-rose-600");
+
+/* guides/index 인기 가이드 번호 뱃지 */
+@source inline("bg-emerald-100 text-emerald-600 bg-slate-100 text-slate-500");
 
 /* ===========================================
    FORCED LIGHT MODE

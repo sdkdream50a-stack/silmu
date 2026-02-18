@@ -291,6 +291,8 @@ class GuidesController < ApplicationController
   }.freeze
 
   def index
+    @audit_case_count = AuditCase.published.count
+
     canonical_url = request.original_url.split('?').first
     meta = {
       title: "업무 가이드",

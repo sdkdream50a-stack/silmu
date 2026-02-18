@@ -1,5 +1,9 @@
 class HomeController < ApplicationController
   def index
+    @topic_count        = Topic.published.count
+    @audit_case_count   = AuditCase.published.count
+    @template_count     = TemplatesController::TEMPLATES.count
+
     set_meta_tags(
       title: "계약 실무, 이제 혼자 고민하지 마세요",
       description: "공무원을 위한 계약 실무 가이드 — 수의계약, 입찰, 검수, 예산 업무를 쉽고 정확하게. 16개 자동화 도구와 25개 법령 가이드 제공.",

@@ -64,6 +64,36 @@ class Topic < ApplicationRecord
     keywords.split(',').map(&:strip)
   end
 
+  # 키워드별 매칭 토픽을 단일 쿼리로 조회 (N+1 방지)
+  # 반환값: { "키워드" => Topic 또는 nil }
+  def keyword_topic_map(limit: 8)
+    kws = keyword_list.first(limit)
+    return {} if kws.empty?
+
+    subtopics_loaded = subtopics.published.to_a
+
+    safe_kws = kws.map { |k| Topic.sanitize_sql_like(k) }
+    name_cond = kws.map { "name ILIKE ?" }.join(" OR ")
+    kw_cond   = safe_kws.map { "keywords ILIKE ?" }.join(" OR ")
+
+    candidates = Topic.published
+                      .where.not(id: id)
+                      .where(
+                        "(#{name_cond}) OR (#{kw_cond})",
+                        *kws,
+                        *safe_kws.map { |k| "%#{k}%" }
+                      )
+                      .to_a
+
+    kws.each_with_object({}) do |keyword, map|
+      kw_down = keyword.downcase
+      match = subtopics_loaded.find { |t| t.name.downcase == kw_down }
+      match ||= candidates.find { |t| t.name.downcase == kw_down }
+      match ||= candidates.find { |t| t.keywords.to_s.downcase.include?(kw_down) }
+      map[keyword] = match
+    end
+  end
+
   # 관련 감사사례 (DB 기반)
   def related_audit_cases
     AuditCase.published.where(topic_slug: slug).recent

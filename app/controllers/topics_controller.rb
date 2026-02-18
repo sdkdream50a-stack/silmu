@@ -11,6 +11,9 @@ class TopicsController < ApplicationController
     @related_articles = CafeArticle.find_similar(@topic.name, limit: 10)
     @related_audit_cases = @topic.related_audit_cases
 
+    # 부모 토픽인 경우 키워드별 매칭 토픽을 미리 조회 (N+1 방지)
+    @keyword_topic_map = @topic.parent_id.nil? ? @topic.keyword_topic_map : {}
+
     # 키워드 파라미터가 있으면 해당 키워드 섹션 표시
     @active_keyword = params[:keyword]
     @page_rendered_at = Time.current

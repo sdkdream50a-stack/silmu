@@ -155,7 +155,7 @@
 
           <!-- Mobile menu button -->
           <div class="lg:hidden flex items-center">
-            <button type="button" id="mobile-menu-btn" class="p-2 text-slate-600 hover:text-slate-900 hover:bg-gray-100 rounded-xl transition-colors">
+            <button type="button" id="mobile-menu-btn" class="p-2.5 text-slate-600 hover:text-slate-900 hover:bg-gray-100 rounded-xl transition-colors">
               <span class="material-symbols-outlined text-2xl">menu</span>
             </button>
           </div>
@@ -165,26 +165,26 @@
       <!-- Mobile Menu -->
       <div class="lg:hidden hidden" id="mobile-menu">
         <div class="px-4 py-4 space-y-1 bg-white border-t border-gray-100">
-          <%= link_to "실무가이드", guides_path, class: "block px-4 py-3 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
-          <%= link_to "감사사례", audit_cases_path, class: "block px-4 py-3 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
-          <%= link_to "도구", tools_path, class: "block px-4 py-3 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
-          <%= link_to "업무달력", task_calendar_path, class: "block px-4 py-3 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
-          <%= link_to "자료실", guide_resources_path, class: "block px-4 py-3 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
-          <%= link_to "의견보내기", feedback_path, class: "block px-4 py-3 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
+          <%= link_to "실무가이드", guides_path, class: "block px-4 py-3.5 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
+          <%= link_to "감사사례", audit_cases_path, class: "block px-4 py-3.5 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
+          <%= link_to "도구", tools_path, class: "block px-4 py-3.5 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
+          <%= link_to "업무달력", task_calendar_path, class: "block px-4 py-3.5 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
+          <%= link_to "자료실", guide_resources_path, class: "block px-4 py-3.5 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
+          <%= link_to "의견보내기", feedback_path, class: "block px-4 py-3.5 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
 
           <div class="h-px bg-gray-200 my-3"></div>
 
           <% if user_signed_in? %>
-            <%= link_to mypage_path, class: "block px-4 py-3 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" do %>
+            <%= link_to mypage_path, class: "block px-4 py-3.5 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" do %>
               <span class="flex items-center gap-2">
                 <span class="material-symbols-outlined">account_circle</span>
                 마이페이지
               </span>
             <% end %>
-            <%= button_to "로그아웃", destroy_user_session_path, method: :delete, class: "w-full text-left px-4 py-3 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
+            <%= button_to "로그아웃", destroy_user_session_path, method: :delete, class: "w-full text-left px-4 py-3.5 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
           <% else %>
-            <%= link_to "로그인", new_user_session_path, class: "block px-4 py-3 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
-            <%= link_to "시작하기", new_user_registration_path, class: "block px-4 py-3 bg-slate-800 text-white text-center rounded-xl font-semibold hover:bg-slate-900 transition-colors" %>
+            <%= link_to "로그인", new_user_session_path, class: "block px-4 py-3.5 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors" %>
+            <%= link_to "시작하기", new_user_registration_path, class: "block px-4 py-3.5 bg-slate-800 text-white text-center rounded-xl font-semibold hover:bg-slate-900 transition-colors" %>
           <% end %>
         </div>
       </div>
