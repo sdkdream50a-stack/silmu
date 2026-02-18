@@ -3,12 +3,14 @@ class AuditCasesController < ApplicationController
     @category = params[:category]
     @severity = params[:severity]
 
-    @audit_cases = AuditCase.published.recent
-    @audit_cases = @audit_cases.by_category(@category) if @category.present?
-    @audit_cases = @audit_cases.by_severity(@severity) if @severity.present?
+    # 전체를 한 번만 로드 후 Ruby에서 필터링 → 3 쿼리 → 1 쿼리
+    all_cases    = AuditCase.published.recent.to_a
+    @categories  = all_cases.map(&:category).compact.uniq.sort
+    @total_count = all_cases.size
 
-    @categories = AuditCase.published.distinct.pluck(:category).compact.sort
-    @total_count = AuditCase.published.count
+    @audit_cases = all_cases
+    @audit_cases = @audit_cases.select { |ac| ac.category == @category } if @category.present?
+    @audit_cases = @audit_cases.select { |ac| ac.severity == @severity } if @severity.present?
 
     meta = {
       title: "감사사례 모음 — 계약 실무 감사 지적 사례",

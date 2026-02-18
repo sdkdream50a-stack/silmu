@@ -415,7 +415,7 @@
             <div class="mt-6 text-center">
               <%= link_to audit_cases_path, class: "inline-flex items-center gap-2 px-6 py-3 bg-red-50 text-red-700 rounded-xl font-semibold hover:bg-red-100 transition-colors" do %>
                 <span class="material-symbols-outlined text-lg">folder_open</span>
-                전체 감사사례 <%= AuditCase.published.count %>건 보기
+                전체 감사사례 <%= @audit_case_total %>건 보기
               <% end %>
             </div>
           <% elsif @topic.audit_cases.present? %>

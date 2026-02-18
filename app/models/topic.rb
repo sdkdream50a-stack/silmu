@@ -53,9 +53,9 @@ class Topic < ApplicationRecord
          .limit(limit)
   end
 
-  # 조회수 증가
+  # 조회수 증가 (update_counters: updated_at 보존, atomic 단일 쿼리)
   def increment_view!
-    increment!(:view_count)
+    self.class.update_counters(id, view_count: 1)
   end
 
   # 키워드 배열로 반환

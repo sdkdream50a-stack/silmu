@@ -1,15 +1,11 @@
 class TopicsController < ApplicationController
   def show
-    # 캐시 방지
-    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    response.headers["Pragma"] = "no-cache"
-    response.headers["Expires"] = "0"
-
     @topic = Topic.find_by!(slug: params[:slug])
     @topic.increment_view!
     @related_topics = @topic.related_topics
     @related_articles = CafeArticle.find_similar(@topic.name, limit: 10)
     @related_audit_cases = @topic.related_audit_cases
+    @audit_case_total = AuditCase.published.count
 
     # 부모 토픽인 경우 키워드별 매칭 토픽을 미리 조회 (N+1 방지)
     @keyword_topic_map = @topic.parent_id.nil? ? @topic.keyword_topic_map : {}

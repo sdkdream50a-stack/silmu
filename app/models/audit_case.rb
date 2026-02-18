@@ -46,7 +46,7 @@ class AuditCase < ApplicationRecord
   end
 
   def increment_view!
-    increment!(:view_count)
+    self.class.update_counters(id, view_count: 1)
   end
 
   private
