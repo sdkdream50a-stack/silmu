@@ -37,6 +37,12 @@ class Guide < ApplicationRecord
     Rails.cache.delete("guides/all")
     Rails.cache.delete("guides/popular")
     Rails.cache.delete("stats/guide_count")
+    Rails.cache.delete("guides/related/#{slug}")
+    # external_link가 topic URL인 경우 해당 topic의 캐시도 무효화
+    if external_link&.start_with?("/topics/")
+      topic_slug = external_link.delete_prefix("/topics/")
+      Rails.cache.delete("topic_guide/#{topic_slug}")
+    end
   end
 
   def generate_slug

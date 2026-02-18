@@ -28,10 +28,12 @@ class GuidesController < ApplicationController
 
     @guide.increment_view!
 
-    same_cat = Guide.published.where(category: @guide.category).where.not(id: @guide.id).ordered.limit(2).to_a
-    fill     = [3 - same_cat.size, 0].max
-    others   = fill > 0 ? Guide.published.where.not(category: @guide.category).where.not(id: @guide.id).ordered.limit(fill).to_a : []
-    @related_guides = same_cat + others
+    @related_guides = Rails.cache.fetch("guides/related/#{@guide.slug}", expires_in: 1.hour) do
+      same_cat = Guide.published.where(category: @guide.category).where.not(id: @guide.id).ordered.limit(2).to_a
+      fill     = [3 - same_cat.size, 0].max
+      others   = fill > 0 ? Guide.published.where.not(category: @guide.category).where.not(id: @guide.id).ordered.limit(fill).to_a : []
+      same_cat + others
+    end
 
     canonical_url = request.original_url.split("?").first
     set_meta_tags(
