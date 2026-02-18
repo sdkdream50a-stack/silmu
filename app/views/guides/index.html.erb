@@ -20,9 +20,10 @@
           <div class="text-2xl font-bold"><%= @guides.count %></div>
           <div class="text-xs text-emerald-100 mt-0.5">전체 가이드</div>
         </div>
+        <% top_cat, top_cat_count = @guides.group_by(&:category).max_by { |_, v| v.size }.then { |k, v| [k, v.size] } %>
         <div class="text-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/15">
-          <div class="text-2xl font-bold"><%= @guides.count { |g| g.category == "계약" } %></div>
-          <div class="text-xs text-emerald-100 mt-0.5">계약 분야</div>
+          <div class="text-2xl font-bold"><%= top_cat_count %></div>
+          <div class="text-xs text-emerald-100 mt-0.5"><%= top_cat %> 분야</div>
         </div>
         <div class="text-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/15">
           <div class="text-2xl font-bold"><%= @guides.map(&:category).uniq.count %></div>
