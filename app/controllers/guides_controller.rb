@@ -4,6 +4,14 @@ class GuidesController < ApplicationController
     @popular_guides    = Rails.cache.fetch("guides/popular", expires_in: 1.hour) { Guide.published.order(view_count: :desc).limit(5).to_a }
     @audit_case_count  = Rails.cache.fetch("stats/audit_case_count", expires_in: 30.minutes) { AuditCase.published.count }
 
+    recent_slugs = JSON.parse(cookies[:recent_guides] || "[]") rescue []
+    if recent_slugs.any?
+      guides_by_slug = Guide.published.where(slug: recent_slugs).index_by(&:slug)
+      @recent_guides = recent_slugs.filter_map { |slug| guides_by_slug[slug] }
+    else
+      @recent_guides = []
+    end
+
     canonical_url = request.original_url.split("?").first
     meta = {
       title: "업무 가이드",

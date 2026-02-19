@@ -183,17 +183,17 @@
               <span class="material-symbols-outlined text-slate-400">history</span>
               최근 본 가이드
             </h3>
-            <ul class="space-y-3">
-              <% [
-                { title: "수의계약 체결 실무", link: "/topics/private-contract" },
-                { title: "출장 여비 청구", link: "/topics/travel-expense" },
-                { title: "예산 이월 실무", link: "/topics/budget-carryover" }
-              ].each do |guide| %>
-                <li>
-                  <%= link_to guide[:title], guide[:link], class: "text-sm text-slate-700 hover:text-emerald-600 transition-colors" %>
-                </li>
-              <% end %>
-            </ul>
+            <% if @recent_guides.any? %>
+              <ul class="space-y-3">
+                <% @recent_guides.each do |guide| %>
+                  <li>
+                    <%= link_to guide.title, guide_path(guide), class: "text-sm text-slate-700 hover:text-emerald-600 transition-colors truncate block" %>
+                  </li>
+                <% end %>
+              </ul>
+            <% else %>
+              <p class="text-sm text-slate-400">아직 본 가이드가 없습니다.<br>가이드를 클릭하면 여기에 표시됩니다.</p>
+            <% end %>
           </div>
 
           <!-- AI 상담 CTA -->
