@@ -9,7 +9,7 @@
 - 이메일: hello@silmu.kr
 - 언어: 한국어
 - 대상: 대한민국 공무원 (계약·재무 담당자)
-- 콘텐츠 수: 법령 가이드 25개, 자동화 도구 19개, 실무 서식 23개, 감사사례 55건
+- 콘텐츠 수: 법령 가이드 37개, 자동화 도구 19개, 실무 서식 23개, 감사사례 55건
 
 ## 주요 법령 근거
 - 지방자치단체를 당사자로 하는 계약에 관한 법률 (지방계약법)
@@ -54,6 +54,14 @@
 - [예산이월](https://silmu.kr/topics/budget-carryover): 명시이월, 사고이월, 계속비이월의 요건과 절차
 - [여비](https://silmu.kr/topics/travel-expense): 공무원 국내·외 출장 시 여비 지급 기준과 청구 절차
 - [연말정산](https://silmu.kr/topics/year-end-settlement): 공무원 연말정산 절차와 주요 변경사항
+- [선금](https://silmu.kr/topics/advance-payment): 선금 지급 요건(30% 범위), 선금보증금, 정산 절차
+- [적격심사](https://silmu.kr/topics/bid-qualification): 입찰 낙찰자 결정 시 적격심사 기준, 심사 항목, 낙찰하한율
+- [입찰보증금](https://silmu.kr/topics/bid-deposit): 입찰보증금 납부 기준(입찰금액의 5%), 면제 요건, 귀속 사유
+- [장기계속계약](https://silmu.kr/topics/long-term-contract): 장기계속계약 체결 요건, 차수별 계약, 총사업비 관리
+- [단가계약](https://silmu.kr/topics/unit-price-contract): 단가계약 체결 요건, 단가 결정 방법, 계약금액 조정
+- [규격가격분리입찰](https://silmu.kr/topics/spec-price-split-bid): 규격 입찰과 가격 입찰을 분리하여 실시하는 입찰 방법
+- [이행보증](https://silmu.kr/topics/performance-guarantee): 계약 이행 보증금 납부 기준, 보증서 종류, 면제 요건
+- [복수예비가격](https://silmu.kr/topics/multiple-price): 예정가격 결정을 위한 복수예비가격 작성 방법과 추첨 절차
 
 ## 실무 자동화 도구 (Tools)
 - [계약방식 결정 도우미](https://silmu.kr/tools/contract-method): 금액·유형 입력 → 수의계약/경쟁입찰 자동 판단

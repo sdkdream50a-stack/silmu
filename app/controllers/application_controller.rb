@@ -39,7 +39,7 @@ class ApplicationController < ActionController::Base
       separator: "|",
       reverse: true,
       description: "공무원을 위한 계약 실무 가이드 — 수의계약, 입찰, 검수, 예산 업무를 쉽고 정확하게",
-      og: { site_name: "실무.kr", type: "website", locale: "ko_KR", image: "https://silmu.kr/og-image.png" },
+      og: { site_name: "실무.kr", type: "website", locale: "ko_KR", image: { _: "https://silmu.kr/og-image.png", width: 1200, height: 630, type: "image/png" } },
       twitter: { card: "summary_large_image", image: "https://silmu.kr/og-image.png" }
     )
   end
