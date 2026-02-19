@@ -20,7 +20,7 @@
 </div>
 
 <!-- Hero Section -->
-<div class="relative w-full hero-gradient overflow-hidden pb-24 pt-4 lg:pt-6">
+<div class="relative w-full hero-gradient overflow-hidden pb-12 pt-4 lg:pt-6">
   <div class="absolute top-0 left-1/4 h-96 w-96 rounded-full bg-indigo-500/20 blur-3xl filter"></div>
   <div class="absolute bottom-0 right-1/4 h-96 w-96 rounded-full bg-violet-500/10 blur-3xl filter"></div>
   <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -43,7 +43,7 @@
 
       <!-- Search -->
       <div class="w-full max-w-3xl mb-16 relative z-10">
-        <form action="<%= chatbot_search_path %>" method="get" data-turbo="false">
+        <form action="<%= chatbot_path %>" method="get" data-turbo="false">
           <div class="search-glass relative flex items-center rounded-2xl overflow-hidden p-2 transition-all duration-300">
             <div class="flex h-14 w-14 items-center justify-center text-indigo-300 pl-2">
               <span class="material-symbols-outlined text-3xl">search</span>
@@ -92,7 +92,7 @@
 </div>
 
 <!-- Core Tools Section -->
-<section class="bg-background-light py-24 relative">
+<section class="bg-background-light py-16 relative">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div class="mb-12 flex items-end justify-between">
       <div>
