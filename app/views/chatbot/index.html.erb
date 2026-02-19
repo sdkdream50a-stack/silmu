@@ -170,6 +170,20 @@
 </div>
 
 <script>
+// /chatbot/search?q=xxx 직접 접근 시 자동 검색
+document.addEventListener('DOMContentLoaded', function() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const q = urlParams.get('q');
+  if (q) {
+    const input = document.querySelector('input[name="q"]');
+    const form = input && input.closest('form');
+    if (input && form) {
+      input.value = q;
+      form.requestSubmit();
+    }
+  }
+});
+
 // 금액 포맷팅 (천 단위 콤마)
 function formatPrice(input) {
   let value = input.value.replace(/[^\d]/g, '');

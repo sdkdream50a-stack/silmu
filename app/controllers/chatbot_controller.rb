@@ -27,6 +27,11 @@ class ChatbotController < ApplicationController
   end
 
   def search
+    # 직접 URL 접근 시 chatbot 인덱스로 리다이렉트
+    unless turbo_frame_request?
+      redirect_to chatbot_path(q: params[:q].presence), status: :moved_permanently and return
+    end
+
     set_meta_tags(robots: "noindex, follow")
     @query = params[:q].to_s.strip.truncate(200)
     @board = params[:board].to_s.strip.truncate(50) if params[:board].present?
