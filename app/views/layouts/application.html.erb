@@ -69,30 +69,65 @@
     </style>
 
     <% if Rails.env.production? && ENV['GA_MEASUREMENT_ID'].present? %>
-      <!-- Google Analytics 4 -->
-      <script async src="https://www.googletagmanager.com/gtag/js?id=<%= ENV['GA_MEASUREMENT_ID'] %>"></script>
+      <!-- Google Analytics 4 - 지연 로딩으로 LCP 개선 -->
       <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', '<%= ENV['GA_MEASUREMENT_ID'] %>');
+        function loadGoogleAnalytics() {
+          const script = document.createElement('script');
+          script.src = 'https://www.googletagmanager.com/gtag/js?id=<%= ENV['GA_MEASUREMENT_ID'] %>';
+          script.async = true;
+          document.head.appendChild(script);
+
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', '<%= ENV['GA_MEASUREMENT_ID'] %>');
+        }
+
+        // requestIdleCallback 사용 (유휴 시간에 로드) 또는 3초 후
+        if ('requestIdleCallback' in window) {
+          requestIdleCallback(loadGoogleAnalytics, { timeout: 3000 });
+        } else {
+          setTimeout(loadGoogleAnalytics, 3000);
+        }
       </script>
     <% end %>
 
     <% if Rails.env.production? && ENV['ADSENSE_CLIENT_ID'].present? %>
-      <!-- Google AdSense -->
-      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=<%= ENV['ADSENSE_CLIENT_ID'] %>"
-           crossorigin="anonymous"></script>
+      <!-- Google AdSense - 지연 로딩으로 LCP 개선 -->
+      <script>
+        function loadAdSense() {
+          const script = document.createElement('script');
+          script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=<%= ENV['ADSENSE_CLIENT_ID'] %>';
+          script.async = true;
+          script.crossOrigin = 'anonymous';
+          document.head.appendChild(script);
+        }
+
+        // requestIdleCallback 사용 (유휴 시간에 로드) 또는 2초 후
+        if ('requestIdleCallback' in window) {
+          requestIdleCallback(loadAdSense, { timeout: 2000 });
+        } else {
+          setTimeout(loadAdSense, 2000);
+        }
+      </script>
     <% end %>
 
     <% if Rails.env.production? && Rails.application.credentials.clarity_project_id.present? %>
-      <!-- Microsoft Clarity -->
-      <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-          c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-          t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-          y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "<%= Rails.application.credentials.clarity_project_id %>");
+      <!-- Microsoft Clarity - 지연 로딩 -->
+      <script>
+        function loadClarity() {
+          (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+          })(window, document, "clarity", "script", "<%= Rails.application.credentials.clarity_project_id %>");
+        }
+
+        if ('requestIdleCallback' in window) {
+          requestIdleCallback(loadClarity, { timeout: 3000 });
+        } else {
+          setTimeout(loadClarity, 3000);
+        }
       </script>
     <% end %>
 
