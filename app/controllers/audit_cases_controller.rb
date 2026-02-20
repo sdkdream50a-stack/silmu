@@ -20,7 +20,8 @@ class AuditCasesController < ApplicationController
       og: {
         title: "감사사례 모음 — 계약 실무 감사 지적 사례",
         description: "공공계약 감사에서 자주 지적되는 사례를 분야별로 정리했습니다.",
-        url: canonical_url
+        url: canonical_url,
+        image: "https://silmu.kr/og-image.png"
       }
     }
     meta[:robots] = "noindex, follow" if @category.present? || @severity.present?
@@ -45,6 +46,7 @@ class AuditCasesController < ApplicationController
         title: "#{@audit_case.title} — 감사사례",
         description: @audit_case.issue.truncate(200),
         url: canonical_url,
+        image: "https://silmu.kr/og-image.png",
         type: "article"
       }
     )

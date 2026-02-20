@@ -6,7 +6,11 @@ class FaqController < ApplicationController
       title: "자주 묻는 질문",
       description: "수의계약, 입찰, 대금지급, 나라장터, 물품선정 등 공무원 계약 업무 FAQ. 실무에서 자주 궁금해하는 질문과 답변 모음.",
       keywords: "FAQ, 수의계약 질문, 입찰 질문, 계약 FAQ, 나라장터 FAQ",
-      og: { title: "자주 묻는 질문 — 실무.kr", url: canonical_url }
+      og: {
+        title: "자주 묻는 질문 — 실무.kr",
+        url: canonical_url,
+        image: "https://silmu.kr/og-image.png"
+      }
     )
   end
 
