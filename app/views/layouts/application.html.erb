@@ -54,6 +54,32 @@
     <%# Iconify - SVG 아이콘 프레임워크 (Material Symbols 대체, 1.1MB → 50KB) %>
     <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
 
+    <script>
+      // Material Symbols → Iconify 자동 변환
+      function convertMaterialIcons() {
+        const icons = document.querySelectorAll('.material-symbols-outlined:not([data-icon])');
+        icons.forEach(icon => {
+          const iconName = icon.textContent.trim();
+          if (iconName) {
+            const iconifyName = iconName.replace(/_/g, '-');
+            icon.setAttribute('data-icon', `material-symbols:${iconifyName}`);
+            icon.textContent = '';
+            icon.classList.add('iconify');
+          }
+        });
+        // Iconify 스캔 실행
+        if (typeof Iconify !== 'undefined' && Iconify.scan) {
+          Iconify.scan();
+        }
+      }
+
+      // 페이지 로드 시 변환
+      document.addEventListener('DOMContentLoaded', convertMaterialIcons);
+      // Turbo 네비게이션 후 변환
+      document.addEventListener('turbo:load', convertMaterialIcons);
+      document.addEventListener('turbo:render', convertMaterialIcons);
+    </script>
+
     <style>
       /* Material Symbols를 Iconify로 자동 변환 */
       .material-symbols-outlined {
@@ -62,7 +88,7 @@
         width: 1em;
         height: 1em;
       }
-      .material-symbols-outlined.iconify {
+      .iconify {
         width: 1em;
         height: 1em;
       }
@@ -150,7 +176,7 @@
     </script>
   </head>
 
-  <body class="min-h-screen flex flex-col" data-controller="iconify" data-user-signed-in="<%= user_signed_in? %>">
+  <body class="min-h-screen flex flex-col" data-user-signed-in="<%= user_signed_in? %>">
     <!-- Navigation — enhanced glass effect -->
     <nav class="bg-white/85 backdrop-blur-2xl border-b border-gray-100/60 sticky top-0 z-50 transition-all duration-300" id="main-nav">
       <div class="container-wide">
