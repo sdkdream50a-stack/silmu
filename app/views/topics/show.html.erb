@@ -914,6 +914,45 @@
           <% end %>
         </div>
 
+        <!-- 실무자 해설 (탭 밖, 항상 표시) -->
+        <% if @topic.commentary.present? %>
+          <div class="mt-12" id="commentary">
+            <!-- 섹션 구분선 + 타이틀 -->
+            <div class="flex items-center gap-4 mb-6">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center shadow-md">
+                  <span class="material-symbols-outlined text-white" style="font-size:20px">rate_review</span>
+                </div>
+                <div>
+                  <h2 class="text-xl font-bold text-slate-900">실무자 해설</h2>
+                  <p class="text-xs text-slate-500 mt-0.5">현장 경험 기반 실무 적용 포인트</p>
+                </div>
+              </div>
+              <div class="flex-1 h-px bg-gradient-to-r from-indigo-200 to-transparent"></div>
+              <span class="px-3 py-1 bg-indigo-50 text-indigo-600 text-xs font-semibold rounded-full border border-indigo-100">실무 가이드</span>
+            </div>
+
+            <!-- 본문 카드 -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+              <!-- 상단 강조 띠 -->
+              <div class="h-1.5 bg-gradient-to-r from-indigo-500 via-violet-500 to-indigo-400"></div>
+
+              <div class="px-6 py-8 commentary-body">
+                <%= render_legal_content(@topic.commentary) %>
+              </div>
+
+              <!-- 면책 문구 -->
+              <div class="mx-6 mb-6 p-4 bg-amber-50 rounded-xl border border-amber-200 flex items-start gap-3">
+                <span class="material-symbols-outlined text-amber-500 text-lg mt-0.5 shrink-0">gavel</span>
+                <p class="text-xs text-amber-800 leading-relaxed">
+                  <strong>참고 정보 안내</strong> — 본 내용은 일반적인 참고 정보이며 법률적 조언이 아닙니다.
+                  개별 사안의 적용은 담당 기관(조달청, 감사원) 또는 전문가 상담을 통해 확인하시기 바랍니다.
+                </p>
+              </div>
+            </div>
+          </div>
+        <% end %>
+
         <!-- 자주 묻는 질문 -->
         <% if @topic.faq_list.any? %>
           <div class="card p-6 lg:p-8 mt-10">
@@ -1155,7 +1194,82 @@
   /* 기본 캐스케이드 상태 유지 */
 }
 
-/* 스크롤바 스타일 */
+/* ───── 실무자 해설 섹션 ───── */
+.commentary-body .legal-h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 1.75rem 0 0.75rem;
+  padding: 0.6rem 1rem;
+  background: linear-gradient(to right, #eef2ff, transparent);
+  border-left: 4px solid #6366f1;
+  border-radius: 0 8px 8px 0;
+}
+.commentary-body .legal-h3:first-child {
+  margin-top: 0;
+}
+.commentary-body .legal-h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #334155;
+  margin: 1.25rem 0 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.commentary-body .legal-h4::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #6366f1;
+  flex-shrink: 0;
+}
+.commentary-body .legal-text {
+  font-size: 0.9rem;
+  color: #475569;
+  line-height: 1.8;
+  margin-bottom: 0.5rem;
+}
+.commentary-body .legal-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 1rem;
+  space-y: 0.25rem;
+}
+.commentary-body .legal-list-item {
+  font-size: 0.875rem;
+  color: #475569;
+  padding: 0.35rem 0 0.35rem 1.5rem;
+  position: relative;
+  line-height: 1.7;
+}
+.commentary-body .legal-list-item::before {
+  content: '▸';
+  position: absolute;
+  left: 0.25rem;
+  color: #6366f1;
+  font-size: 0.75rem;
+  top: 0.5rem;
+}
+.commentary-body .legal-blockquote {
+  margin: 0.6rem 0;
+  padding: 0.9rem 1rem 0.9rem 1.1rem;
+  background: #fef9f0;
+  border: 1px solid #fde68a;
+  border-left: 4px solid #f59e0b;
+  border-radius: 0 10px 10px 0;
+  font-size: 0.875rem;
+  color: #78350f;
+  line-height: 1.7;
+}
+.commentary-body strong {
+  color: #1e293b;
+  font-weight: 700;
+}
+
+/* ───── 스크롤바 스타일 ───── */
 .law-card-content::-webkit-scrollbar {
   width: 6px;
 }

@@ -75,7 +75,10 @@ module ApplicationHelper
     # 7. 밑줄 텍스트 변환 (__텍스트__ -> <u>)
     html = html.gsub(/__([^_]+)__/, '<u>\1</u>')
 
-    # 8. 목록 항목 (- 또는 *)
+    # 8. 인용구 (> ...) - 감사사례 등에 사용
+    html = html.gsub(/^>\s*(.+)$/, '<div class="legal-blockquote">\1</div>')
+
+    # 8-1. 목록 항목 (- 또는 *)
     html = html.gsub(/^[-*]\s+(.+)$/, '<li class="legal-list-item">\1</li>')
     # 연속된 li를 ul로 감싸기
     html = html.gsub(/(<li class="legal-list-item">.*?<\/li>\n?)+/) do |match|

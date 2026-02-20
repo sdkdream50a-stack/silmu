@@ -444,8 +444,8 @@
         <% end %>
 
         <% if today_exact.empty? %>
-          <!-- 빈 상태 -->
-          <div class="mt-12">
+          <!-- 빈 상태 (기본 업무 없을 때) — custom_tasks 있으면 JS가 숨김 처리 -->
+          <div id="today-empty-state" class="mt-12">
             <div class="flex items-center justify-between mb-6">
               <h3 class="text-slate-400 text-xs font-bold uppercase tracking-widest">완료</h3>
               <div class="h-px bg-slate-100 flex-grow ml-4"></div>
@@ -463,6 +463,23 @@
             </div>
           </div>
         <% end %>
+
+        <!-- 오늘 내 추가 업무 (JS 동적 렌더링) -->
+        <div id="today-custom-section" class="hidden mt-6">
+          <div class="flex items-center gap-2 mb-4">
+            <div class="relative flex h-3 w-3">
+              <span class="relative inline-flex rounded-full h-3 w-3 bg-amber-400"></span>
+            </div>
+            <h2 class="text-amber-600 text-xs font-bold tracking-widest uppercase">내 추가 업무</h2>
+          </div>
+          <div id="today-custom-tasks"></div>
+          <div class="py-3 mt-2">
+            <button class="btn-inline-add flex items-center gap-2 px-2 py-2.5 text-sm text-slate-400 hover:text-indigo-600 transition-colors w-full rounded-lg hover:bg-indigo-50/50" data-date="<%= today.strftime('%Y-%m-%d') %>">
+              <span class="material-symbols-outlined" style="font-size:18px">add</span>
+              업무 추가
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1196,7 +1213,65 @@
         renderCustomTasks();
       });
     });
+    // 오늘 뷰 custom_tasks 동기화
+    renderTodayCustomTasks();
+    // 현재 주간/월간 뷰이면 재렌더링
+    if (currentView === "upcoming" && typeof renderWeekTimeline === "function") renderWeekTimeline();
+    if (currentView === "monthly" && typeof renderMonthlyTimeline === "function") renderMonthlyTimeline();
   }
+
+  // 오늘 뷰에 내 추가 업무 표시
+  function renderTodayCustomTasks() {
+    const todayStr = "<%= today.strftime('%Y-%m-%d') %>";
+    const parts = todayStr.split("-");
+    const ty = parseInt(parts[0]), tm = parseInt(parts[1]), td = parseInt(parts[2]);
+    const todayDow = new Date(ty, tm - 1, td).getDay();
+    const customs = loadCustom().filter(t => {
+      if (t.repeat === "monthly") return t.day === td;
+      if (t.repeat === "weekly") return t.weekday === todayDow;
+      if (t.repeat === "once" && t.date) return t.date === todayStr;
+      return false;
+    });
+    const section = document.getElementById("today-custom-section");
+    const container = document.getElementById("today-custom-tasks");
+    const emptyState = document.getElementById("today-empty-state");
+    if (!section || !container) return;
+    if (!customs.length) {
+      section.classList.add("hidden");
+      if (emptyState) emptyState.classList.remove("hidden");
+      return;
+    }
+    section.classList.remove("hidden");
+    if (emptyState) emptyState.classList.add("hidden");
+    container.innerHTML = customs.map((t, idx) => {
+      const cc = catColorMap[t.cat] || {bg:"#f1f5f9",text:"#475569"};
+      const key = "custom_today_" + tm + "_" + idx + "_" + t.title;
+      return '<div class="task-item group flex items-start gap-4 py-5 border-b-2 border-dotted border-slate-100 hover:bg-slate-50 transition-colors rounded-lg px-2 -mx-2">' +
+        '<label class="flex-shrink-0 pt-0.5 cursor-pointer">' +
+          '<input type="checkbox" class="task-cb sr-only" data-key="' + key + '">' +
+          '<span class="check-box w-[22px] h-[22px] rounded-full border-2 border-slate-300 flex items-center justify-center hover:border-indigo-400 transition-colors">' +
+            '<svg class="w-3 h-3 text-white opacity-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>' +
+          '</span>' +
+        '</label>' +
+        '<div class="flex flex-col flex-1 gap-1.5 min-w-0">' +
+          '<p class="task-text text-sm font-semibold text-slate-800 leading-tight">' + t.title + '</p>' +
+          '<div class="flex items-center gap-2 flex-wrap">' +
+            '<span class="inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium ring-1 ring-inset ring-slate-500/10 w-fit" style="background:' + cc.bg + ';color:' + cc.text + '">' + (t.cat || "서무") + '</span>' +
+          '</div>' +
+        '</div>' +
+        '</div>';
+    }).join("");
+    container.querySelectorAll(".task-cb").forEach(cb => {
+      if (state[cb.dataset.key]) { cb.checked = true; applyCheck(cb, true); }
+      cb.addEventListener("change", () => {
+        state[cb.dataset.key] = cb.checked;
+        saveState(state);
+        applyCheck(cb, cb.checked);
+        updateTodayCount();
+      });
+    });
+  }
+
   renderCustomTasks();
 
   // --- 모달: 업무 추가 (3탭) ---
@@ -1505,6 +1580,18 @@
   <% end %>
   updateProgress();
 
+  // custom_tasks 중 특정 날짜에 해당하는 것만 추출하여 allTasks 형식으로 반환
+  function getCustomTasksForDate(year, month, day) {
+    const dow = new Date(year, month - 1, day).getDay();
+    const dateStr = year + "-" + String(month).padStart(2,"0") + "-" + String(day).padStart(2,"0");
+    return loadCustom().filter(t => {
+      if (t.repeat === "monthly") return t.day === day;
+      if (t.repeat === "weekly") return t.weekday === dow;
+      if (t.repeat === "once" && t.date) return t.date === dateStr;
+      return false;
+    }).map(t => ({ month, day, cat: t.cat || "서무", title: t.title }));
+  }
+
   searchInput.addEventListener("input", () => {
     const q = searchInput.value.trim().toLowerCase();
     if (!q) {
@@ -1669,8 +1756,8 @@
       if (isSun || hName) rowBg = "bg-red-50/30 hover:bg-red-50/50";
       else if (isSat) rowBg = "bg-blue-50/30 hover:bg-blue-50/50";
 
-      // 해당 날짜 업무 필터
-      const tasks = allTasks.filter(t => t.month === m && t.day === dd);
+      // 해당 날짜 업무 필터 (기본 + 내 추가 업무)
+      const tasks = [...allTasks.filter(t => t.month === m && t.day === dd), ...getCustomTasksForDate(d.getFullYear(), m, dd)];
 
       // 날짜 라벨
       let dayLabel = dayNamesKo[dow];
@@ -1825,11 +1912,11 @@
       const wEnd = week[week.length - 1];
       const wLabel = m + "/" + wStart.getDate() + " ~ " + (wEnd.getMonth() + 1) + "/" + wEnd.getDate();
 
-      // 해당 주의 업무 수집
+      // 해당 주의 업무 수집 (기본 + 내 추가 업무)
       let weekTasks = [];
       week.forEach(date => {
         const dd = date.getDate();
-        const tasks = allTasks.filter(t => t.month === m && t.day === dd);
+        const tasks = [...allTasks.filter(t => t.month === m && t.day === dd), ...getCustomTasksForDate(monthlyYear, m, dd)];
         tasks.forEach(t => weekTasks.push({ ...t, date: date }));
       });
 
