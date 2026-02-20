@@ -954,6 +954,52 @@
     </div>
   </header>
 
+  <!-- 도구 설명 섹션 (접을 수 있음) -->
+  <details style="background: linear-gradient(to bottom, #f0f4f8, white); border-bottom: 1px solid #e2e8f0;">
+    <summary style="padding: 16px 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px; font-weight: 600; color: #1e3a5f; transition: background 0.2s;">
+      <span class="material-symbols-outlined" style="font-size: 20px;">info</span>
+      <span>이 도구를 사용하는 이유 (펼치기)</span>
+    </summary>
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 24px 24px;">
+      <div style="background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; padding: 32px;">
+        <div style="color: #334155; font-size: 14px; line-height: 1.7; margin-bottom: 24px;">
+          <p style="margin-bottom: 16px;">
+            견적서는 예산 집행과 계약 체결의 핵심 근거 자료이지만, 항목 누락, 단가 오류, 수량 불일치 등의 문제가 자주 발생합니다.
+            특히 복잡한 견적서는 여러 페이지에 걸쳐 품목이 나열되어 있어 일일이 확인하기 어렵고,
+            적정성 검토 없이 계약을 체결하면 예산 낭비나 감사 지적으로 이어질 수 있습니다.
+            이 도구는 견적서를 업로드하면 AI가 자동으로 품목·수량·단가를 인식하고,
+            항목별 적정성(단가 비교, 수량 검증, 사양 확인), 누락 항목, 이상 금액 등을 실시간으로 분석하여
+            담당자가 견적서의 문제점을 빠르게 파악하고 적정한 계약을 체결할 수 있도록 지원합니다.
+          </p>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; font-size: 13px;">
+          <div style="display: flex; align-items: start; gap: 8px;">
+            <span class="material-symbols-outlined" style="color: #2e7d32; flex-shrink: 0; margin-top: 2px; font-size: 18px;">check_circle</span>
+            <span style="color: #475569;">견적서 업로드 시 AI가 품목·수량·단가 자동 인식 (OCR)</span>
+          </div>
+          <div style="display: flex; align-items: start; gap: 8px;">
+            <span class="material-symbols-outlined" style="color: #2e7d32; flex-shrink: 0; margin-top: 2px; font-size: 18px;">check_circle</span>
+            <span style="color: #475569;">항목별 적정성 자동 분석 (단가, 수량, 사양)</span>
+          </div>
+          <div style="display: flex; align-items: start; gap: 8px;">
+            <span class="material-symbols-outlined" style="color: #2e7d32; flex-shrink: 0; margin-top: 2px; font-size: 18px;">check_circle</span>
+            <span style="color: #475569;">누락 항목, 이상 금액, 중복 계상 자동 감지</span>
+          </div>
+          <div style="display: flex; align-items: start; gap: 8px;">
+            <span class="material-symbols-outlined" style="color: #2e7d32; flex-shrink: 0; margin-top: 2px; font-size: 18px;">check_circle</span>
+            <span style="color: #475569;">검토 의견서 자동 생성 및 PDF 다운로드</span>
+          </div>
+        </div>
+        <div style="background: #fffbeb; border-left: 4px solid #f59e0b; padding: 16px 20px; border-radius: 8px; margin-top: 24px;">
+          <p style="font-size: 13px; color: #475569; line-height: 1.6;">
+            본 도구는 AI 기반 견적서 분석 도구입니다. 분석 결과는 AI가 견적서를 자동으로 인식한 것이므로,
+            품목명·수량·단가 등이 정확히 인식되었는지 반드시 확인하고, 적정성 판단은 시장조사 및 관련 대가기준을 근거로 담당자가 최종 검증해야 합니다.
+          </p>
+        </div>
+      </div>
+    </div>
+  </details>
+
   <div class="main-container">
     <!-- 왼쪽: 견적서 업로드/미리보기 -->
     <div class="viewer-panel">
