@@ -43,25 +43,28 @@
 
     <%# Fonts - Optimized for performance & CLS %>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/toss/tossface/dist/tossface.css" media="print" onload="this.media='all'">
-    <%# Material Symbols: 비동기 로딩으로 렌더 블로킹 방지 (~300KB) %>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"></noscript>
 
     <%# Icons %>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="apple-touch-icon" href="/icon.png">
 
+    <%# Iconify - SVG 아이콘 프레임워크 (Material Symbols 대체, 1.1MB → 50KB) %>
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js" defer></script>
+
     <style>
+      /* Material Symbols를 Iconify로 자동 변환 */
       .material-symbols-outlined {
-        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         display: inline-block;
         vertical-align: middle;
-        overflow: hidden;
+        width: 1em;
+        height: 1em;
+      }
+      .material-symbols-outlined.iconify {
+        width: 1em;
+        height: 1em;
       }
     </style>
 
@@ -112,7 +115,7 @@
     </script>
   </head>
 
-  <body class="min-h-screen flex flex-col" data-user-signed-in="<%= user_signed_in? %>">
+  <body class="min-h-screen flex flex-col" data-controller="iconify" data-user-signed-in="<%= user_signed_in? %>">
     <!-- Navigation — enhanced glass effect -->
     <nav class="bg-white/85 backdrop-blur-2xl border-b border-gray-100/60 sticky top-0 z-50 transition-all duration-300" id="main-nav">
       <div class="container-wide">
