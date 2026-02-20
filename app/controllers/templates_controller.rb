@@ -34,6 +34,10 @@ class TemplatesController < ApplicationController
 
   def index
     @templates = TEMPLATES
+
+    # 정적 콘텐츠이므로 장기 캐싱
+    expires_in 1.day, public: true, stale_while_revalidate: 7.days
+
     set_meta_tags(
       title: "문서 양식",
       description: "계약서, 검수조서, 기안문, 사유서 등 공무원 업무에 필요한 23종 문서 양식을 무료로 다운로드하세요.",

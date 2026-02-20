@@ -1,5 +1,8 @@
 class ToolsController < ApplicationController
   def index
+    # HTTP 캐싱: 도구 목록은 변경이 드물므로 1시간 캐시
+    expires_in 1.hour, public: true, stale_while_revalidate: 1.day
+
     set_meta_tags(
       title: "실무 도구",
       description: "계약방식 결정, 예정가격 계산, 계약보증금 계산, 여비계산 등 공무원 업무를 자동화하는 #{ApplicationHelper::ACTIVE_TOOL_COUNT}개 도구.",

@@ -3,14 +3,19 @@ class AuditCasesController < ApplicationController
     @category = params[:category]
     @severity = params[:severity]
 
-    # 전체를 한 번만 로드 후 Ruby에서 필터링 → 3 쿼리 → 1 쿼리
-    all_cases    = AuditCase.published.recent.to_a
+    # 전체를 캐싱 후 Ruby에서 필터링 → DB 쿼리 0 (캐시 히트 시)
+    all_cases = Rails.cache.fetch("audit_cases/all_published", expires_in: 30.minutes) do
+      AuditCase.published.recent.to_a
+    end
     @categories  = all_cases.map(&:category).compact.uniq.sort
     @total_count = all_cases.size
 
     @audit_cases = all_cases
     @audit_cases = @audit_cases.select { |ac| ac.category == @category } if @category.present?
     @audit_cases = @audit_cases.select { |ac| ac.severity == @severity } if @severity.present?
+
+    # HTTP 캐싱: 5분간 캐시
+    expires_in 5.minutes, public: true, stale_while_revalidate: 1.hour
 
     meta = {
       title: "감사사례 모음 — 계약 실무 감사 지적 사례",
@@ -31,11 +36,16 @@ class AuditCasesController < ApplicationController
   def show
     @audit_case = AuditCase.published.find_by!(slug: params[:slug])
     @audit_case.increment_view!
-    @related_topic = @audit_case.related_topic
-    @related_cases = AuditCase.published
-                              .where(category: @audit_case.category)
-                              .where.not(id: @audit_case.id)
-                              .limit(4)
+    @related_topic = Rails.cache.fetch("audit_case_topic/#{@audit_case.slug}", expires_in: 1.hour) do
+      @audit_case.related_topic
+    end
+    @related_cases = Rails.cache.fetch("audit_case_related/#{@audit_case.slug}", expires_in: 1.hour) do
+      AuditCase.published
+               .where(category: @audit_case.category)
+               .where.not(id: @audit_case.id)
+               .limit(4)
+               .to_a
+    end
 
     set_meta_tags(
       title: "#{@audit_case.title} — 감사사례",

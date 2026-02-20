@@ -33,9 +33,20 @@ module ApplicationHelper
 
   # 법령 콘텐츠를 HTML로 변환 (간단한 Markdown 변환)
   # 조, 항, 호 기준으로 줄바꿈하고 가시성 향상
+  # 결과를 캐싱하여 무거운 정규식 처리를 반복하지 않음
   def render_legal_content(content)
     return '' if content.blank?
 
+    cache_key = "legal_content/#{Digest::MD5.hexdigest(content)}"
+    cached = Rails.cache.read(cache_key)
+    return cached.html_safe if cached
+
+    result = _render_legal_content_impl(content)
+    Rails.cache.write(cache_key, result, expires_in: 24.hours)
+    result.html_safe
+  end
+
+  def _render_legal_content_impl(content)
     html = sanitize(content, tags: [], attributes: []).dup
 
     # 1. Markdown 테이블을 HTML 테이블로 변환
@@ -94,7 +105,7 @@ module ApplicationHelper
     # 11. 전체를 div 태그로 감싸기 (p 대신 div 사용)
     html = "<div class=\"legal-text\">#{html}</div>"
 
-    html.html_safe
+    html
   end
 
   # Markdown 테이블을 HTML 테이블로 변환

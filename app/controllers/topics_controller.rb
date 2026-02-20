@@ -98,8 +98,12 @@ class TopicsController < ApplicationController
   }.freeze
 
   def index
-    @topics_by_category = Topic.published.order(view_count: :desc).group_by(&:category)
-    @total_count = Topic.published.count
+    all_topics = Topic.published.order(view_count: :desc).to_a
+    @topics_by_category = all_topics.group_by(&:category)
+    @total_count = all_topics.size
+
+    # HTTP 캐싱: CDN/브라우저에서 5분간 캐시, stale-while-revalidate로 백그라운드 갱신
+    expires_in 5.minutes, public: true, stale_while_revalidate: 1.hour
 
     set_meta_tags(
       title: "법령 가이드 — 주요 법령·절차 완벽 정리",
@@ -118,18 +122,28 @@ class TopicsController < ApplicationController
   def show
     @topic = Topic.find_by!(slug: params[:slug])
     @topic.increment_view!
-    @related_topics = @topic.related_topics
+    @related_topics = Rails.cache.fetch("topic_related/#{@topic.slug}", expires_in: 1.hour) do
+      @topic.related_topics.to_a
+    end
     @related_guide = Rails.cache.fetch("topic_guide/#{@topic.slug}", expires_in: 1.hour) do
       Guide.published.find_by(external_link: "/topics/#{@topic.slug}")
     end
     @related_articles = Rails.cache.fetch("cafe_articles/similar/#{@topic.slug}", expires_in: 6.hours) do
       CafeArticle.find_similar(@topic.name, limit: 10).to_a
     end
-    @related_audit_cases = @topic.related_audit_cases
+    @related_audit_cases = Rails.cache.fetch("topic_audit_cases/#{@topic.slug}", expires_in: 1.hour) do
+      @topic.related_audit_cases.to_a
+    end
     @audit_case_total = Rails.cache.fetch("stats/audit_case_count", expires_in: 30.minutes) { AuditCase.published.count }
 
     # 부모 토픽인 경우 키워드별 매칭 토픽을 미리 조회 (N+1 방지)
     @keyword_topic_map = @topic.parent_id.nil? ? @topic.keyword_topic_map : {}
+
+    # 서브토픽인 경우: 부모와 형제 토픽을 미리 로드 (뷰에서 DB 쿼리 방지)
+    if @topic.parent_id.present?
+      @parent_topic = @topic.parent
+      @sibling_topics = @parent_topic.subtopics.published.where.not(id: @topic.id).to_a
+    end
 
     # 키워드 파라미터가 있으면 해당 키워드 섹션 표시
     @active_keyword = params[:keyword]

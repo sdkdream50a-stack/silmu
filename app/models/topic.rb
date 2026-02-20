@@ -132,6 +132,8 @@ class Topic < ApplicationRecord
 
   def expire_count_cache
     Rails.cache.delete("stats/topic_count")
+    Rails.cache.delete("topic_related/#{slug}")
+    Rails.cache.delete("topic_audit_cases/#{slug}")
   end
 
   def generate_slug

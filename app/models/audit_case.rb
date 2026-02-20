@@ -54,6 +54,9 @@ class AuditCase < ApplicationRecord
 
   def expire_count_cache
     Rails.cache.delete("stats/audit_case_count")
+    Rails.cache.delete("audit_cases/all_published")
+    Rails.cache.delete("audit_case_topic/#{slug}")
+    Rails.cache.delete("audit_case_related/#{slug}")
   end
 
   def generate_slug

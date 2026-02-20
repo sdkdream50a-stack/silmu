@@ -12,6 +12,13 @@ class GuidesController < ApplicationController
       @recent_guides = []
     end
 
+    # HTTP 캐싱: 최근 본 가이드가 없는 경우만 public 캐시 (쿠키 기반 개인화 방지)
+    if @recent_guides.empty?
+      expires_in 5.minutes, public: true, stale_while_revalidate: 1.hour
+    else
+      expires_in 1.minute, public: false
+    end
+
     canonical_url = request.original_url.split("?").first
     meta = {
       title: "업무 가이드",

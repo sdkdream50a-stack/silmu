@@ -64,14 +64,14 @@
 
         <!-- 키워드 태그 (서브토픽 링크) -->
         <div class="flex flex-wrap gap-2 mt-6">
-          <% if @topic.parent.present? %>
+          <% if @parent_topic.present? %>
             <%# 서브토픽인 경우: 부모 토픽과 형제 토픽들 표시 %>
-            <%= link_to topic_path(@topic.parent.slug),
+            <%= link_to topic_path(@parent_topic.slug),
                 class: "px-4 py-2 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-full text-sm text-white font-medium transition-all duration-200 flex items-center gap-1.5 border border-white/20" do %>
               <span class="material-symbols-outlined text-sm">arrow_back</span>
-              <%= @topic.parent.name %>
+              <%= @parent_topic.name %>
             <% end %>
-            <% @topic.parent.subtopics.published.where.not(id: @topic.id).each do |sibling| %>
+            <% @sibling_topics.each do |sibling| %>
               <%= link_to topic_path(sibling.slug),
                   class: "px-4 py-2 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-sm text-white transition-all duration-200 flex items-center gap-1.5 border border-white/10 hover:border-white/20" do %>
                 <span class="material-symbols-outlined text-sm">tag</span>

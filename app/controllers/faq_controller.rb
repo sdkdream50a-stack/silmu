@@ -2,6 +2,10 @@
 class FaqController < ApplicationController
   def index
     @categories = faq_data
+
+    # FAQ는 정적 콘텐츠이므로 장기 캐싱
+    expires_in 1.day, public: true, stale_while_revalidate: 7.days
+
     set_meta_tags(
       title: "자주 묻는 질문",
       description: "수의계약, 입찰, 대금지급, 나라장터, 물품선정 등 공무원 계약 업무 FAQ. 실무에서 자주 궁금해하는 질문과 답변 모음.",

@@ -3,6 +3,7 @@
   <head>
     <%= display_meta_tags %>
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="turbo-prefetch" content="true">
     <meta name="color-scheme" content="light only">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="application-name" content="실무.kr">
@@ -46,7 +47,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/toss/tossface/dist/tossface.css" media="print" onload="this.media='all'">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <%# Material Symbols: 비동기 로딩으로 렌더 블로킹 방지 (~300KB) %>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"></noscript>
 
     <%# Icons %>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -93,14 +96,19 @@
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
 
-    <%# 카카오톡 공유 SDK — defer로 메인 스레드 블로킹 방지 %>
-    <script defer src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js" integrity="sha384-TiCUE00h+M5TT2VUq/h8APYs18OmZ+8O8JPhS9+P1QquCGQ+2bRpL9lE1vJ0Zx1s" crossorigin="anonymous"></script>
+    <%# 카카오톡 공유 SDK — 지연 로딩: 공유 버튼 클릭 시에만 초기화 %>
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        if (window.Kakao && !Kakao.isInitialized()) {
-          Kakao.init('<%= Rails.application.credentials.kakao_js_key || "YOUR_KAKAO_JS_KEY" %>');
-        }
-      });
+      window.initKakao = function() {
+        if (window.Kakao) { if (!Kakao.isInitialized()) Kakao.init('<%= Rails.application.credentials.kakao_js_key || "YOUR_KAKAO_JS_KEY" %>'); return Promise.resolve(); }
+        return new Promise(function(resolve) {
+          var s = document.createElement('script');
+          s.src = 'https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js';
+          s.integrity = 'sha384-TiCUE00h+M5TT2VUq/h8APYs18OmZ+8O8JPhS9+P1QquCGQ+2bRpL9lE1vJ0Zx1s';
+          s.crossOrigin = 'anonymous';
+          s.onload = function() { Kakao.init('<%= Rails.application.credentials.kakao_js_key || "YOUR_KAKAO_JS_KEY" %>'); resolve(); };
+          document.head.appendChild(s);
+        });
+      };
     </script>
   </head>
 
@@ -431,73 +439,43 @@
     <script>
       (function() {
         // Mobile Menu Toggle
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-
+        var mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        var mobileMenu = document.getElementById('mobile-menu');
         if (mobileMenuBtn && mobileMenu) {
-          mobileMenuBtn.addEventListener('click', () => {
+          mobileMenuBtn.addEventListener('click', function() {
             mobileMenu.classList.toggle('hidden');
-            const icon = mobileMenuBtn.querySelector('.material-symbols-outlined');
-            icon.textContent = mobileMenu.classList.contains('hidden') ? 'menu' : 'close';
+            mobileMenuBtn.querySelector('.material-symbols-outlined').textContent = mobileMenu.classList.contains('hidden') ? 'menu' : 'close';
           });
         }
 
-        // Navbar scroll effect
-        window.addEventListener('scroll', () => {
-          const nav = document.getElementById('main-nav');
-          if (!nav) return;
-          if (window.scrollY > 10) {
-            nav.classList.add('shadow-soft');
-            nav.style.borderBottomColor = 'rgba(0,0,0,0.06)';
-          } else {
-            nav.classList.remove('shadow-soft');
-            nav.style.borderBottomColor = '';
-          }
-        });
+        // Navbar scroll effect (passive + rAF throttle)
+        var nav = document.getElementById('main-nav');
+        if (nav) {
+          var ticking = false;
+          window.addEventListener('scroll', function() {
+            if (!ticking) { ticking = true; requestAnimationFrame(function() {
+              if (window.scrollY > 10) { nav.classList.add('shadow-soft'); nav.style.borderBottomColor = 'rgba(0,0,0,0.06)'; }
+              else { nav.classList.remove('shadow-soft'); nav.style.borderBottomColor = ''; }
+              ticking = false;
+            }); }
+          }, {passive: true});
+        }
 
         // Quick Menu Toggle
-        const quickMenuBtn = document.getElementById('quick-menu-btn');
-        const quickMenuItems = document.getElementById('quick-menu-items');
-        const quickMenuIcon = document.getElementById('quick-menu-icon');
-        const quickMenuText = document.getElementById('quick-menu-text');
-        const quickMenuLabel = document.getElementById('quick-menu-label');
-        const quickMenuBadge = document.getElementById('quick-menu-badge');
-
-        if (quickMenuBtn && quickMenuItems) {
-          quickMenuBtn.addEventListener('click', () => {
-            quickMenuItems.classList.toggle('hidden');
-            if (quickMenuLabel) quickMenuLabel.classList.add('hidden');
-            if (quickMenuItems.classList.contains('hidden')) {
-              quickMenuIcon.textContent = 'widgets';
-              if (quickMenuText) quickMenuText.textContent = '도구';
-              if (quickMenuBadge) quickMenuBadge.classList.remove('hidden');
-            } else {
-              quickMenuIcon.textContent = 'close';
-              if (quickMenuText) quickMenuText.textContent = '닫기';
-              if (quickMenuBadge) quickMenuBadge.classList.add('hidden');
-              localStorage.setItem('silmu_quick_menu_seen', 'true');
-            }
+        var qBtn = document.getElementById('quick-menu-btn'), qItems = document.getElementById('quick-menu-items');
+        var qIcon = document.getElementById('quick-menu-icon'), qText = document.getElementById('quick-menu-text');
+        var qLabel = document.getElementById('quick-menu-label'), qBadge = document.getElementById('quick-menu-badge');
+        if (qBtn && qItems) {
+          function closeQuickMenu() { qItems.classList.add('hidden'); qIcon.textContent='widgets'; if(qText) qText.textContent='도구'; if(qBadge) qBadge.classList.remove('hidden'); }
+          qBtn.addEventListener('click', function() {
+            qItems.classList.toggle('hidden'); if(qLabel) qLabel.classList.add('hidden');
+            if (qItems.classList.contains('hidden')) { closeQuickMenu(); }
+            else { qIcon.textContent='close'; if(qText) qText.textContent='닫기'; if(qBadge) qBadge.classList.add('hidden'); localStorage.setItem('silmu_quick_menu_seen','true'); }
           });
-
-          // 외부 클릭 시 닫기
-          document.addEventListener('click', (e) => {
-            if (!quickMenuBtn.contains(e.target) && !quickMenuItems.contains(e.target)) {
-              quickMenuItems.classList.add('hidden');
-              quickMenuIcon.textContent = 'widgets';
-              if (quickMenuText) quickMenuText.textContent = '도구';
-              if (quickMenuBadge) quickMenuBadge.classList.remove('hidden');
-            }
-          });
-
-          // 첫 방문 시 라벨 표시 + 버튼 펄스 효과
+          document.addEventListener('click', function(e) { if(!qBtn.contains(e.target)&&!qItems.contains(e.target)) closeQuickMenu(); });
           if (!localStorage.getItem('silmu_quick_menu_seen')) {
-            setTimeout(() => {
-              if (quickMenuLabel) quickMenuLabel.classList.remove('hidden');
-              quickMenuBtn.classList.add('quick-menu-pulse');
-              setTimeout(() => {
-                if (quickMenuLabel) quickMenuLabel.classList.add('hidden');
-                quickMenuBtn.classList.remove('quick-menu-pulse');
-              }, 5000);
+            setTimeout(function() { if(qLabel) qLabel.classList.remove('hidden'); qBtn.classList.add('quick-menu-pulse');
+              setTimeout(function() { if(qLabel) qLabel.classList.add('hidden'); qBtn.classList.remove('quick-menu-pulse'); }, 5000);
             }, 2000);
           }
         }
