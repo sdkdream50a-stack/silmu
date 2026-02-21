@@ -393,29 +393,116 @@ document.addEventListener('turbo:load', function() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // 필드 에러 표시 헬퍼 함수
+  function lpShowFieldError(fieldId, message) {
+    var field = document.getElementById(fieldId);
+    if (!field) return;
+
+    // 기존 에러 제거
+    lpClearFieldError(fieldId);
+
+    // 필드에 에러 스타일 추가
+    field.style.borderColor = '#dc2626';
+    field.style.boxShadow = '0 0 0 3px rgba(220, 38, 38, 0.1)';
+
+    // 에러 메시지 추가
+    var errorDiv = document.createElement('div');
+    errorDiv.className = 'lp-field-error';
+    errorDiv.style.cssText = 'color:#dc2626;font-size:13px;margin-top:6px;display:flex;align-items:center;gap:4px;';
+    errorDiv.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;" data-icon="material-symbols:error">error</span>' + lpEsc(message);
+    field.parentNode.appendChild(errorDiv);
+
+    // 스크롤하여 필드 표시
+    field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    // Iconify 스캔
+    if (typeof Iconify !== 'undefined') Iconify.scan();
+  }
+
+  function lpClearFieldError(fieldId) {
+    var field = document.getElementById(fieldId);
+    if (!field) return;
+
+    // 스타일 초기화
+    field.style.borderColor = '';
+    field.style.boxShadow = '';
+
+    // 에러 메시지 제거
+    var errorDiv = field.parentNode.querySelector('.lp-field-error');
+    if (errorDiv) errorDiv.remove();
+  }
+
+  function lpClearAllErrors() {
+    var errors = document.querySelectorAll('.lp-field-error');
+    for (var i = 0; i < errors.length; i++) errors[i].remove();
+
+    var fields = document.querySelectorAll('input[id^="lp-"]');
+    for (var i = 0; i < fields.length; i++) {
+      fields[i].style.borderColor = '';
+      fields[i].style.boxShadow = '';
+    }
+  }
+
   window.lpCalc = function(type) {
+    // 기존 에러 초기화
+    lpClearAllErrors();
+
     var body = { period_type: type };
 
     if (type === 'announcement') {
       body.estimated_amount = document.getElementById('lp-est-amount').value || '0';
       body.announcement_date = document.getElementById('lp-ann-date').value;
       body.urgent = document.getElementById('lp-urgent').checked;
+
+      // 검증: 공고일 필수
+      if (!body.announcement_date) {
+        lpShowFieldError('lp-ann-date', '공고일을 입력해 주세요');
+        return;
+      }
     } else if (type === 'contract_signing') {
       body.notification_date = document.getElementById('lp-notif-date').value;
+
+      // 검증: 낙찰자 결정통지일 필수
+      if (!body.notification_date) {
+        lpShowFieldError('lp-notif-date', '낙찰자 결정통지일을 입력해 주세요');
+        return;
+      }
     } else if (type === 'payment') {
       body.payment_type = document.getElementById('lp-pay-type').value;
       body.inspection_date = document.getElementById('lp-insp-date').value;
+
+      // 검증: 검사일 필수
+      if (!body.inspection_date) {
+        lpShowFieldError('lp-insp-date', '검사일을 입력해 주세요');
+        return;
+      }
     } else if (type === 'defect_warranty') {
       body.completion_date = document.getElementById('lp-comp-date').value;
       var checks = document.querySelectorAll('#lp-work-types input:checked');
       var wt = [];
       for (var i = 0; i < checks.length; i++) wt.push(checks[i].value);
       body.work_types = wt;
+
+      // 검증: 준공일 필수
+      if (!body.completion_date) {
+        lpShowFieldError('lp-comp-date', '준공일을 입력해 주세요');
+        return;
+      }
     } else if (type === 'late_penalty') {
       body.penalty_type = document.getElementById('lp-pen-type').value;
       body.contract_amount = document.getElementById('lp-contract-amount').value || '0';
       body.due_date = document.getElementById('lp-due-date').value;
       body.actual_date = document.getElementById('lp-actual-date').value;
+
+      // 검증: 납기일, 실제완료일 필수
+      if (!body.due_date) {
+        lpShowFieldError('lp-due-date', '납기일을 입력해 주세요');
+        return;
+      }
+      if (!body.actual_date) {
+        lpShowFieldError('lp-actual-date', '실제완료일을 입력해 주세요');
+        return;
+      }
     }
 
     fetch('/legal-periods/calculate', {

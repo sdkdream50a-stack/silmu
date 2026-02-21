@@ -2753,14 +2753,20 @@
     if (isExpanded) {
       // 접기
       wrapper.style.maxHeight = "0px";
-      icon.textContent = "chevron_right";
+      if (icon) {
+        icon.setAttribute('data-icon', 'material-symbols:chevron-right');
+        if (typeof Iconify !== 'undefined') Iconify.scan();
+      }
       setStandingExpanded(false);
     } else {
       // 펼치기
       const container = document.getElementById("standing-checklist-container");
       const contentHeight = container.scrollHeight;
       wrapper.style.maxHeight = Math.min(contentHeight + 20, 270) + "px";
-      icon.textContent = "expand_more";
+      if (icon) {
+        icon.setAttribute('data-icon', 'material-symbols:expand-more');
+        if (typeof Iconify !== 'undefined') Iconify.scan();
+      }
       setStandingExpanded(true);
     }
   }
@@ -2800,13 +2806,20 @@
     }).join("");
 
     // 펼침/접힘 상태 복원
+    const toggleIcon = document.getElementById("standing-toggle-icon");
     if (isStandingExpanded()) {
       const contentHeight = container.scrollHeight;
       wrapper.style.maxHeight = Math.min(contentHeight + 20, 270) + "px";
-      document.getElementById("standing-toggle-icon").textContent = "expand_more";
+      if (toggleIcon) {
+        toggleIcon.setAttribute('data-icon', 'material-symbols:expand-more');
+        if (typeof Iconify !== 'undefined') Iconify.scan();
+      }
     } else {
       wrapper.style.maxHeight = "0px";
-      document.getElementById("standing-toggle-icon").textContent = "chevron_right";
+      if (toggleIcon) {
+        toggleIcon.setAttribute('data-icon', 'material-symbols:chevron-right');
+        if (typeof Iconify !== 'undefined') Iconify.scan();
+      }
     }
 
     // 체크박스 이벤트

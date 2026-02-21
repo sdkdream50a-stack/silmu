@@ -527,7 +527,14 @@
         if (mobileMenuBtn && mobileMenu) {
           mobileMenuBtn.addEventListener('click', function() {
             mobileMenu.classList.toggle('hidden');
-            mobileMenuBtn.querySelector('.material-symbols-outlined').textContent = mobileMenu.classList.contains('hidden') ? 'menu' : 'close';
+            var icon = mobileMenuBtn.querySelector('.material-symbols-outlined');
+            if (icon) {
+              var iconName = mobileMenu.classList.contains('hidden') ? 'menu' : 'close';
+              icon.setAttribute('data-icon', 'material-symbols:' + iconName);
+              if (typeof Iconify !== 'undefined') {
+                Iconify.scan();
+              }
+            }
           });
         }
 
@@ -549,11 +556,27 @@
         var qIcon = document.getElementById('quick-menu-icon'), qText = document.getElementById('quick-menu-text');
         var qLabel = document.getElementById('quick-menu-label'), qBadge = document.getElementById('quick-menu-badge');
         if (qBtn && qItems) {
-          function closeQuickMenu() { qItems.classList.add('hidden'); qIcon.textContent='widgets'; if(qText) qText.textContent='도구'; if(qBadge) qBadge.classList.remove('hidden'); }
+          function closeQuickMenu() {
+            qItems.classList.add('hidden');
+            if (qIcon) {
+              qIcon.setAttribute('data-icon', 'material-symbols:widgets');
+              if (typeof Iconify !== 'undefined') Iconify.scan();
+            }
+            if(qText) qText.textContent='도구';
+            if(qBadge) qBadge.classList.remove('hidden');
+          }
           qBtn.addEventListener('click', function() {
             qItems.classList.toggle('hidden'); if(qLabel) qLabel.classList.add('hidden');
             if (qItems.classList.contains('hidden')) { closeQuickMenu(); }
-            else { qIcon.textContent='close'; if(qText) qText.textContent='닫기'; if(qBadge) qBadge.classList.add('hidden'); localStorage.setItem('silmu_quick_menu_seen','true'); }
+            else {
+              if (qIcon) {
+                qIcon.setAttribute('data-icon', 'material-symbols:close');
+                if (typeof Iconify !== 'undefined') Iconify.scan();
+              }
+              if(qText) qText.textContent='닫기';
+              if(qBadge) qBadge.classList.add('hidden');
+              localStorage.setItem('silmu_quick_menu_seen','true');
+            }
           });
           document.addEventListener('click', function(e) { if(!qBtn.contains(e.target)&&!qItems.contains(e.target)) closeQuickMenu(); });
           if (!localStorage.getItem('silmu_quick_menu_seen')) {

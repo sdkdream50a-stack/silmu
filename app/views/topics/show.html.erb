@@ -1142,12 +1142,68 @@
   min-width: 64px !important;
   margin-left: 0 !important;
   margin-top: 0 !important;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
 }
 .law-card-stack.collapsed .law-card {
   transform: none;
+  transition: all 0.2s ease-in-out;
 }
 .law-card-stack.collapsed .law-card-content {
   display: none;
+}
+
+/* 접힌 카드 호버 효과 - 클릭 가능함을 명확히 표시 */
+.law-card-stack.collapsed:hover {
+  transform: translateX(6px);
+}
+.law-card-stack.collapsed:hover .law-card {
+  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15);
+}
+.law-card-stack.collapsed[data-card="law"]:hover .law-card {
+  border-color: #4f46e5;
+}
+.law-card-stack.collapsed[data-card="decree"]:hover .law-card {
+  border-color: #059669;
+}
+.law-card-stack.collapsed[data-card="rule"]:hover .law-card {
+  border-color: #ea580c;
+}
+
+/* 모바일에서 터치 영역 확대 */
+@media (max-width: 768px) {
+  .law-card-stack.collapsed {
+    flex: 0 0 80px !important;
+    width: 80px !important;
+    min-width: 80px !important;
+  }
+  .law-card-stack.collapsed .law-card > div:first-child > div:last-child > div:first-child > div:first-child {
+    width: 3rem;
+    height: 3rem;
+  }
+  .law-card-stack.collapsed .law-card > div:first-child > div:last-child > div:first-child > div:first-child span {
+    font-size: 1.5rem;
+  }
+}
+
+/* 초기 로드 시 힌트 애니메이션 - 접힌 카드가 클릭 가능함을 알림 */
+@keyframes law-card-hint {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(3px); }
+  75% { transform: translateX(-2px); }
+}
+
+.law-card-stack.collapsed.hint-animation {
+  animation: law-card-hint 0.6s ease-in-out 2;
+  animation-delay: 0.5s;
+}
+
+.law-card-stack.collapsed[data-card="decree"].hint-animation {
+  animation-delay: 0.7s;
+}
+
+.law-card-stack.collapsed[data-card="rule"].hint-animation {
+  animation-delay: 0.9s;
 }
 /* 헤더만 표시 — 법률 헤더 높이에 맞춤 */
 .law-card-stack.collapsed .law-card > div:first-child {
@@ -1347,12 +1403,28 @@ function initLawCards() {
   allCards.forEach(card => {
     if (card.dataset.card === 'law') {
       card.classList.add('expanded');
-      card.classList.remove('collapsed');
+      card.classList.remove('collapsed', 'hint-animation');
     } else {
       card.classList.add('collapsed');
       card.classList.remove('expanded');
+
+      // 초기 로드 시 힌트 애니메이션 추가 (한 번만)
+      if (!sessionStorage.getItem('law-cards-seen')) {
+        card.classList.add('hint-animation');
+
+        // 애니메이션 완료 후 클래스 제거
+        setTimeout(() => {
+          card.classList.remove('hint-animation');
+        }, 2500);
+      }
     }
   });
+
+  // 세션 중 한 번만 힌트 표시
+  if (!sessionStorage.getItem('law-cards-seen')) {
+    sessionStorage.setItem('law-cards-seen', 'true');
+  }
+
   expandedCard = 'law';
 }
 
@@ -1386,11 +1458,17 @@ function toggleFaq(index) {
 
   if (answer.classList.contains('hidden')) {
     answer.classList.remove('hidden');
-    icon.textContent = 'expand_less';
+    if (icon) {
+      icon.setAttribute('data-icon', 'material-symbols:expand-less');
+      if (typeof Iconify !== 'undefined') Iconify.scan();
+    }
     icon.style.transform = 'rotate(180deg)';
   } else {
     answer.classList.add('hidden');
-    icon.textContent = 'expand_more';
+    if (icon) {
+      icon.setAttribute('data-icon', 'material-symbols:expand-more');
+      if (typeof Iconify !== 'undefined') Iconify.scan();
+    }
     icon.style.transform = 'rotate(0deg)';
   }
 }

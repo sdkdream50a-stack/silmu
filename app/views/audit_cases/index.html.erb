@@ -40,14 +40,47 @@
   </div>
 </section>
 
-<!-- 카테고리 필터 -->
+<!-- 카테고리 필터 및 검색 -->
 <section class="bg-white/80 backdrop-blur-xl border-b border-gray-100 sticky top-16 z-40 shadow-soft">
   <div class="container-wide py-4">
-    <div class="flex flex-wrap gap-2" id="category-tabs">
-      <%= link_to "전체", audit_cases_path, class: "tab-btn px-5 py-2.5 rounded-xl text-sm font-semibold transition-all #{@category.blank? ? 'bg-red-600 text-white shadow-md' : 'bg-surface-100 text-slate-600 hover:bg-surface-200'}" %>
-      <% @categories.each do |cat| %>
-        <%= link_to cat, audit_cases_path(category: cat), class: "tab-btn px-5 py-2.5 rounded-xl text-sm font-medium transition-all #{@category == cat ? 'bg-red-600 text-white shadow-md' : 'bg-surface-100 text-slate-600 hover:bg-surface-200'}" %>
-      <% end %>
+    <!-- 검색창 -->
+    <div class="mb-4">
+      <div class="relative max-w-md">
+        <input
+          type="text"
+          id="case-search"
+          placeholder="사례 제목 또는 내용 검색..."
+          class="w-full px-5 py-3 pl-12 pr-4 bg-white border-2 border-gray-200 rounded-xl text-sm focus:border-red-500 focus:ring-0 transition-colors"
+          oninput="filterCases()"
+        >
+        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" data-icon="material-symbols:search">search</span>
+      </div>
+    </div>
+
+    <!-- 카테고리 탭 & 심각도 필터 -->
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+      <div class="flex flex-wrap gap-2" id="category-tabs">
+        <%= link_to "전체", audit_cases_path, class: "tab-btn px-5 py-2.5 rounded-xl text-sm font-semibold transition-all #{@category.blank? ? 'bg-red-600 text-white shadow-md' : 'bg-surface-100 text-slate-600 hover:bg-surface-200'}" %>
+        <% @categories.each do |cat| %>
+          <%= link_to cat, audit_cases_path(category: cat), class: "tab-btn px-5 py-2.5 rounded-xl text-sm font-medium transition-all #{@category == cat ? 'bg-red-600 text-white shadow-md' : 'bg-surface-100 text-slate-600 hover:bg-surface-200'}" %>
+        <% end %>
+      </div>
+
+      <!-- 심각도 필터 -->
+      <div class="flex gap-2">
+        <button onclick="filterBySeverity('')" class="severity-filter active px-4 py-2 rounded-lg text-xs font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200 transition-all" data-severity="">
+          전체
+        </button>
+        <button onclick="filterBySeverity('중대')" class="severity-filter px-4 py-2 rounded-lg text-xs font-semibold bg-red-50 text-red-700 hover:bg-red-100 transition-all" data-severity="중대">
+          중대
+        </button>
+        <button onclick="filterBySeverity('보통')" class="severity-filter px-4 py-2 rounded-lg text-xs font-semibold bg-orange-50 text-orange-700 hover:bg-orange-100 transition-all" data-severity="보통">
+          보통
+        </button>
+        <button onclick="filterBySeverity('경미')" class="severity-filter px-4 py-2 rounded-lg text-xs font-semibold bg-amber-50 text-amber-700 hover:amber-100 transition-all" data-severity="경미">
+          경미
+        </button>
+      </div>
     </div>
   </div>
 </section>
@@ -62,14 +95,15 @@
             <% if @category.present? %>
               <span class="font-bold text-slate-900"><%= @category %></span> 분야
             <% end %>
-            총 <span class="font-bold text-slate-900"><%= @audit_cases.count %></span>개 사례
+            총 <span class="font-bold text-slate-900" id="case-count"><%= @audit_cases.count %></span>개 사례
+            <span id="filtered-info" class="text-sm text-red-600 ml-2" style="display:none;"></span>
           </p>
         </div>
 
         <% if @audit_cases.any? %>
-          <div class="space-y-4">
+          <div class="space-y-4" id="cases-container">
             <% @audit_cases.each do |audit_case| %>
-              <%= link_to audit_case_path(slug: audit_case.slug), class: "block card card-hover p-6 group" do %>
+              <%= link_to audit_case_path(slug: audit_case.slug), class: "block card card-hover p-6 group case-item", data: { title: audit_case.title.downcase, issue: audit_case.issue.downcase, severity: audit_case.severity } do %>
                 <div class="flex items-start justify-between mb-3">
                   <span class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-semibold bg-red-50 text-red-700"><%= audit_case.category %></span>
                   <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium
@@ -101,6 +135,16 @@
                 </div>
               <% end %>
             <% end %>
+          </div>
+
+          <!-- 검색 결과 없음 메시지 -->
+          <div id="no-results" class="text-center py-16" style="display:none;">
+            <span class="material-symbols-outlined text-6xl text-slate-200 mb-4" data-icon="material-symbols:search-off">search_off</span>
+            <p class="text-slate-500 text-lg font-semibold mb-2">검색 결과가 없습니다</p>
+            <p class="text-slate-400 text-sm">다른 검색어나 필터를 시도해보세요</p>
+            <button onclick="clearFilters()" class="inline-block mt-4 px-5 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-semibold">
+              필터 초기화
+            </button>
           </div>
         <% else %>
           <div class="text-center py-16">
@@ -197,3 +241,109 @@
     </div>
   </div>
 </section>
+
+<script>
+// 현재 선택된 심각도 필터
+let currentSeverity = '';
+
+// 검색 필터링
+function filterCases() {
+  const searchTerm = document.getElementById('case-search').value.toLowerCase().trim();
+  const cases = document.querySelectorAll('.case-item');
+  let visibleCount = 0;
+
+  cases.forEach(caseItem => {
+    const title = caseItem.dataset.title || '';
+    const issue = caseItem.dataset.issue || '';
+    const severity = caseItem.dataset.severity || '';
+
+    // 검색어 매칭
+    const matchesSearch = searchTerm === '' || title.includes(searchTerm) || issue.includes(searchTerm);
+
+    // 심각도 필터 매칭
+    const matchesSeverity = currentSeverity === '' || severity === currentSeverity;
+
+    // 두 조건 모두 만족하면 표시
+    if (matchesSearch && matchesSeverity) {
+      caseItem.style.display = 'block';
+      visibleCount++;
+    } else {
+      caseItem.style.display = 'none';
+    }
+  });
+
+  updateCaseCount(visibleCount, cases.length);
+}
+
+// 심각도 필터링
+function filterBySeverity(severity) {
+  currentSeverity = severity;
+
+  // 버튼 활성화 상태 변경
+  document.querySelectorAll('.severity-filter').forEach(btn => {
+    if (btn.dataset.severity === severity) {
+      btn.classList.add('active');
+      btn.style.fontWeight = '700';
+    } else {
+      btn.classList.remove('active');
+      btn.style.fontWeight = '600';
+    }
+  });
+
+  // 필터 적용
+  filterCases();
+}
+
+// 사례 개수 업데이트
+function updateCaseCount(visible, total) {
+  const countEl = document.getElementById('case-count');
+  const filteredInfoEl = document.getElementById('filtered-info');
+  const noResultsEl = document.getElementById('no-results');
+  const casesContainer = document.getElementById('cases-container');
+
+  if (visible === 0) {
+    // 검색 결과 없음
+    casesContainer.style.display = 'none';
+    noResultsEl.style.display = 'block';
+  } else {
+    // 검색 결과 있음
+    casesContainer.style.display = 'block';
+    noResultsEl.style.display = 'none';
+
+    if (visible < total) {
+      countEl.textContent = visible;
+      filteredInfoEl.textContent = `(전체 ${total}개 중)`;
+      filteredInfoEl.style.display = 'inline';
+    } else {
+      countEl.textContent = total;
+      filteredInfoEl.style.display = 'none';
+    }
+  }
+}
+
+// 필터 초기화
+function clearFilters() {
+  // 검색어 초기화
+  document.getElementById('case-search').value = '';
+
+  // 심각도 필터 초기화
+  currentSeverity = '';
+  document.querySelectorAll('.severity-filter').forEach(btn => {
+    if (btn.dataset.severity === '') {
+      btn.classList.add('active');
+      btn.style.fontWeight = '700';
+    } else {
+      btn.classList.remove('active');
+      btn.style.fontWeight = '600';
+    }
+  });
+
+  // 필터 재적용
+  filterCases();
+}
+
+// Iconify 스캔
+if (typeof Iconify !== 'undefined') {
+  Iconify.scan();
+}
+</script>

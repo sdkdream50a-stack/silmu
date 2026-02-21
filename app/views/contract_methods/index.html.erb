@@ -1018,19 +1018,77 @@
     const text = document.getElementById('btn-text');
     if (loading) {
       btn.disabled = true;
-      icon.textContent = 'hourglass_empty';
+      if (icon) {
+        icon.setAttribute('data-icon', 'material-symbols:hourglass-empty');
+        if (typeof Iconify !== 'undefined') Iconify.scan();
+      }
       icon.classList.add('animate-spin');
       text.textContent = '확인 중...';
     } else {
       btn.disabled = !(selectedType && estimatedPrice > 0);
-      icon.textContent = 'search';
+      if (icon) {
+        icon.setAttribute('data-icon', 'material-symbols:search');
+        if (typeof Iconify !== 'undefined') Iconify.scan();
+      }
       icon.classList.remove('animate-spin');
       text.textContent = '계약방식 확인하기';
     }
   }
 
+  // 필드 에러 표시 헬퍼 함수
+  function showFieldError(message) {
+    const priceInput = document.getElementById('estimated-price');
+    if (!priceInput) return;
+
+    // 기존 에러 제거
+    clearFieldError();
+
+    // 필드에 에러 스타일 추가
+    priceInput.style.borderColor = '#dc2626';
+    priceInput.style.boxShadow = '0 0 0 3px rgba(220, 38, 38, 0.1)';
+
+    // 에러 메시지 추가
+    const hintEl = document.getElementById('amount-hint');
+    if (hintEl) {
+      hintEl.style.color = '#dc2626';
+      hintEl.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;vertical-align:middle;margin-right:4px;" data-icon="material-symbols:error">error</span>' + message;
+      if (typeof Iconify !== 'undefined') Iconify.scan();
+    }
+
+    // 스크롤하여 필드 표시
+    priceInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  function clearFieldError() {
+    const priceInput = document.getElementById('estimated-price');
+    const hintEl = document.getElementById('amount-hint');
+
+    if (priceInput) {
+      priceInput.style.borderColor = '';
+      priceInput.style.boxShadow = '';
+    }
+
+    if (hintEl) {
+      hintEl.style.color = '';
+      hintEl.textContent = '추정가격 산정을 위한 대략적인 예상 금액을 입력하세요';
+    }
+  }
+
   async function determineMethod() {
-    if (!selectedType || estimatedPrice <= 0) return;
+    // 검증: 계약 유형 선택 여부
+    if (!selectedType) {
+      showError('계약 유형을 선택해 주세요');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    // 검증: 추정가격 입력 여부
+    if (estimatedPrice <= 0) {
+      showFieldError('추정가격을 입력해 주세요');
+      return;
+    }
+
+    clearFieldError();
 
     hideError();
     setLoading(true);
@@ -1173,11 +1231,12 @@
       item.className = 'doc-item';
       const icon = document.createElement('span');
       icon.className = 'material-symbols-outlined';
-      icon.textContent = 'description';
+      icon.setAttribute('data-icon', 'material-symbols:description');
       item.appendChild(icon);
       item.appendChild(document.createTextNode(doc));
       docList.appendChild(item);
     });
+    if (typeof Iconify !== 'undefined') Iconify.scan();
 
     // 팁 (안전한 DOM 조작)
     const tipsContainer = document.getElementById('tips-container');
