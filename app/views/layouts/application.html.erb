@@ -74,7 +74,26 @@
       }
 
       // 페이지 로드 시 변환
-      document.addEventListener('DOMContentLoaded', convertMaterialIcons);
+      document.addEventListener('DOMContentLoaded', function() {
+        convertMaterialIcons();
+
+        // MutationObserver로 동적 생성 아이콘 감지
+        const observer = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.addedNodes.length > 0) {
+              // 새로 추가된 노드에서 아이콘 변환
+              convertMaterialIcons();
+            }
+          });
+        });
+
+        // body 전체 감시
+        observer.observe(document.body, {
+          childList: true,
+          subtree: true
+        });
+      });
+
       // Turbo 네비게이션 후 변환
       document.addEventListener('turbo:load', convertMaterialIcons);
       document.addEventListener('turbo:render', convertMaterialIcons);
