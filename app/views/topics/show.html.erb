@@ -214,6 +214,8 @@
             <%= render 'topics/flowcharts/bid_announcement', topic: @topic %>
           <% elsif @topic.slug == 'bidding' %>
             <%= render 'topics/flowcharts/bidding', topic: @topic %>
+          <% elsif @topic.slug == 'bid-qualification' %>
+            <%= render 'topics/flowcharts/bid_qualification', topic: @topic %>
           <% elsif @topic.slug == 'e-bidding' %>
             <%= render 'topics/flowcharts/e_bidding', topic: @topic %>
           <% elsif @topic.slug == 'estimated-price' %>

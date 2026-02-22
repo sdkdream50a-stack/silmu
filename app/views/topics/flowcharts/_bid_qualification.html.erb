@@ -1,0 +1,353 @@
+<%# Created: 2026-02-22 20:30 %>
+<div class="card p-6 lg:p-8">
+  <h3 class="text-xl font-bold text-slate-900 text-center mb-8 flex items-center justify-center gap-2">
+    <div class="icon-container icon-container-sm bg-slate-100">
+      <span class="material-symbols-outlined text-slate-600">account_tree</span>
+    </div>
+    적격심사 실무흐름도
+  </h3>
+
+  <!-- 프로세스 개요 -->
+  <div class="flex flex-wrap justify-center items-center gap-3 mb-10">
+    <% [
+      { step: "1", title: "입찰 준비 및 공고", bg: "#eef2ff", text: "#4338ca", badge: "#4f46e5" },
+      { step: "2", title: "서류 접수 및 적격심사", bg: "#fef3c7", text: "#b45309", badge: "#f59e0b" },
+      { step: "3", title: "자동 채점 및 낙찰자 결정", bg: "#dcfce7", text: "#047857", badge: "#059669" },
+      { step: "4", title: "계약 체결", bg: "#f1f5f9", text: "#334155", badge: "#475569" }
+    ].each_with_index do |item, index| %>
+      <div class="flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm shadow-soft" style="background:<%= item[:bg] %>; color:<%= item[:text] %>;">
+        <span class="w-6 h-6 text-white rounded-full flex items-center justify-center text-xs font-bold" style="background:<%= item[:badge] %>;"><%= item[:step] %></span>
+        <%= item[:title] %>
+      </div>
+      <% unless index == 3 %>
+        <span class="material-symbols-outlined text-slate-300">arrow_forward</span>
+      <% end %>
+    <% end %>
+  </div>
+
+  <!-- 상세 흐름도 -->
+  <div class="space-y-8">
+    <!-- STEP 1: 입찰 준비 및 공고 -->
+    <div class="bg-indigo-50 rounded-2xl p-6 border-l-4 border-indigo-500">
+      <div class="flex items-center gap-4 mb-6">
+        <div class="w-14 h-14 gradient-indigo text-white rounded-2xl flex items-center justify-center font-bold text-2xl shadow-lg">1</div>
+        <div class="flex-1">
+          <h4 class="text-xl font-bold text-slate-900">입찰 준비 및 공고</h4>
+          <p class="text-indigo-600 font-medium">적격심사 기준 확정, 추정가격 산정, 입찰공고</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <% [
+          { icon: "calculate", title: "추정가격 산정", desc: "시장조사·거래실례가 기반", path: estimated_price_path },
+          { icon: "gavel", title: "계약방식 결정", desc: "적격심사 대상 여부 판단", path: contract_method_path },
+          { icon: "rule", title: "적격심사 기준표 작성", desc: "비가격 평가 항목 배점", path: nil },
+          { icon: "campaign", title: "입찰공고 등록", desc: "나라장터 공고 (공고기간 준수)", path: nil }
+        ].each do |item| %>
+          <% if item[:path] %>
+            <a href="<%= item[:path] %>" class="bg-white rounded-xl p-4 text-center shadow-soft hover:shadow-md hover:border-indigo-300 border border-transparent transition-all">
+              <span class="material-symbols-outlined text-3xl text-indigo-500 mb-2"><%= item[:icon] %></span>
+              <div class="text-sm font-semibold text-slate-800"><%= item[:title] %></div>
+              <div class="text-xs text-slate-500 mt-1"><%= item[:desc] %></div>
+            </a>
+          <% else %>
+            <div class="bg-white rounded-xl p-4 text-center shadow-soft">
+              <span class="material-symbols-outlined text-3xl text-indigo-500 mb-2"><%= item[:icon] %></span>
+              <div class="text-sm font-semibold text-slate-800"><%= item[:title] %></div>
+              <div class="text-xs text-slate-500 mt-1"><%= item[:desc] %></div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+      <div class="mt-5 p-4 bg-white border border-slate-200 rounded-xl text-sm text-slate-700 flex items-center gap-2">
+        <span class="material-symbols-outlined text-indigo-400 flex-shrink-0">lightbulb</span>
+        <span><strong>체크포인트:</strong> 적격심사 대상인지 확인 (공사: 300억원 미만, 물품·용역: 2억원 이상). 적격심사 기준표는 입찰공고와 함께 반드시 공개해야 하며, 사후 변경 시 감사 지적 대상입니다.</span>
+      </div>
+    </div>
+
+    <!-- STEP 2: 서류 접수 및 적격심사 -->
+    <div class="bg-amber-50 rounded-2xl p-6 border-l-4 border-amber-500">
+      <div class="flex items-center gap-4 mb-6">
+        <div class="w-14 h-14 gradient-amber text-white rounded-2xl flex items-center justify-center font-bold text-2xl shadow-lg">2</div>
+        <div class="flex-1">
+          <div class="flex items-center justify-between">
+            <div>
+              <h4 class="text-xl font-bold text-slate-900">서류 접수 및 적격심사</h4>
+              <p class="text-amber-600 font-medium">최저가 입찰자부터 순차 심사, 이행능력·가격·신인도 평가</p>
+            </div>
+            <span class="doc-tool-badge" onclick="showDocPopup('step2')"><span class="material-symbols-outlined" style="font-size:16px">edit_document</span>공문/양식 생성 도구</span>
+          </div>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <% [
+          { icon: "receipt_long", title: "입찰서 개봉", desc: "최저가 입찰자부터 순위 확정", path: nil },
+          { icon: "fact_check", title: "적격심사 서류 요청", desc: "최저가 입찰자에게 서류 제출 요청", path: nil },
+          { icon: "verified", title: "서류 진위 확인", desc: "실적증명서·면허 등 위조 여부 검증", path: nil },
+          { icon: "group", title: "평가위원회 구성", desc: "평가위원 3인 이상 선정", path: nil }
+        ].each do |item| %>
+          <div class="bg-white rounded-xl p-4 text-center shadow-soft">
+            <span class="material-symbols-outlined text-3xl text-amber-500 mb-2"><%= item[:icon] %></span>
+            <div class="text-sm font-semibold text-slate-800"><%= item[:title] %></div>
+            <div class="text-xs text-slate-500 mt-1"><%= item[:desc] %></div>
+          </div>
+        <% end %>
+      </div>
+      <div class="mt-5 p-4 bg-white border border-slate-200 rounded-xl text-sm text-slate-700 flex items-center gap-2">
+        <span class="material-symbols-outlined text-amber-400 flex-shrink-0">lightbulb</span>
+        <span><strong>체크포인트:</strong> 적격심사는 <strong>최저가 입찰자부터 순차 심사</strong>가 원칙입니다. 서류 제출 기한은 3일 이상 부여하며, 위조 서류 제출 시 입찰 무효 처리됩니다.</span>
+      </div>
+    </div>
+
+    <!-- STEP 3: 자동 채점 및 낙찰자 결정 -->
+    <div class="bg-emerald-50 rounded-2xl p-6 border-l-4 border-emerald-500">
+      <div class="flex items-center gap-4 mb-6">
+        <div class="w-14 h-14 gradient-emerald text-white rounded-2xl flex items-center justify-center font-bold text-2xl shadow-lg">3</div>
+        <div class="flex-1">
+          <h4 class="text-xl font-bold text-slate-900">자동 채점 및 낙찰자 결정</h4>
+          <p class="text-emerald-600 font-medium">가격점수 + 비가격점수 합산, 95점 기준 적격 여부 판정</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <% [
+          { icon: "auto_awesome", title: "적격심사 자동 채점기", desc: "가격·비가격 점수 자동 계산 ⭐", path: qualification_evaluation_path, featured: true },
+          { icon: "analytics", title: "가격점수 산출", desc: "예정가격 대비 투찰가 평가", path: nil },
+          { icon: "stars", title: "비가격점수 평가", desc: "이행능력·신인도 평가", path: nil },
+          { icon: "workspace_premium", title: "낙찰자 최종 결정", desc: "95점 이상 + 낙찰하한율 이상", path: nil }
+        ].each do |item| %>
+          <% if item[:path] %>
+            <a href="<%= item[:path] %>" class="bg-white rounded-xl p-4 text-center shadow-soft hover:shadow-md hover:border-emerald-300 border <%= item[:featured] ? 'border-emerald-300 ring-2 ring-emerald-100' : 'border-transparent' %> transition-all relative">
+              <% if item[:featured] %>
+                <span class="absolute -top-2 -right-2 w-6 h-6 bg-emerald-500 text-white rounded-full flex items-center justify-center text-xs font-bold">⭐</span>
+              <% end %>
+              <span class="material-symbols-outlined text-3xl text-emerald-500 mb-2"><%= item[:icon] %></span>
+              <div class="text-sm font-semibold text-slate-800"><%= item[:title] %></div>
+              <div class="text-xs text-slate-500 mt-1"><%= item[:desc] %></div>
+            </a>
+          <% else %>
+            <div class="bg-white rounded-xl p-4 text-center shadow-soft">
+              <span class="material-symbols-outlined text-3xl text-emerald-500 mb-2"><%= item[:icon] %></span>
+              <div class="text-sm font-semibold text-slate-800"><%= item[:title] %></div>
+              <div class="text-xs text-slate-500 mt-1"><%= item[:desc] %></div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+      <div class="mt-5 p-4 bg-white border border-slate-200 rounded-xl text-sm text-slate-700 flex items-center gap-2">
+        <span class="material-symbols-outlined text-emerald-400 flex-shrink-0">lightbulb</span>
+        <span><strong>체크포인트:</strong> 공사는 <strong>85점 이상</strong>, 물품·용역은 <strong>95점 이상</strong> 시 적격입니다. 적격 판정을 받더라도 <strong>낙찰하한율 미만</strong> 투찰 시 낙찰 불가합니다. 부적격 시 차순위자를 순차 심사합니다.</span>
+      </div>
+    </div>
+
+    <!-- STEP 4: 계약 체결 -->
+    <div class="bg-slate-50 rounded-2xl p-6 border-l-4 border-slate-500">
+      <div class="flex items-center gap-4 mb-6">
+        <div class="w-14 h-14 gradient-slate text-white rounded-2xl flex items-center justify-center font-bold text-2xl shadow-lg">4</div>
+        <div class="flex-1">
+          <h4 class="text-xl font-bold text-slate-900">계약 체결</h4>
+          <p class="text-slate-600 font-medium">낙찰자에게 통지, 계약보증금 납부, 계약서 작성</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <% [
+          { icon: "notification_important", title: "낙찰자 통지", desc: "낙찰통지서 발송 (즉시)", path: nil },
+          { icon: "paid", title: "계약보증금 납부", desc: "계약금액의 10% 이상", path: contract_guarantee_path },
+          { icon: "description", title: "계약서 작성", desc: "표준계약서식 사용", path: contract_documents_path },
+          { icon: "check_circle", title: "계약 체결 완료", desc: "10일 이내 계약 체결", path: nil }
+        ].each do |item| %>
+          <% if item[:path] %>
+            <a href="<%= item[:path] %>" class="bg-white rounded-xl p-4 text-center shadow-soft hover:shadow-md hover:border-slate-300 border border-transparent transition-all">
+              <span class="material-symbols-outlined text-3xl text-slate-500 mb-2"><%= item[:icon] %></span>
+              <div class="text-sm font-semibold text-slate-800"><%= item[:title] %></div>
+              <div class="text-xs text-slate-500 mt-1"><%= item[:desc] %></div>
+            </a>
+          <% else %>
+            <div class="bg-white rounded-xl p-4 text-center shadow-soft">
+              <span class="material-symbols-outlined text-3xl text-slate-500 mb-2"><%= item[:icon] %></span>
+              <div class="text-sm font-semibold text-slate-800"><%= item[:title] %></div>
+              <div class="text-xs text-slate-500 mt-1"><%= item[:desc] %></div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+      <div class="mt-5 p-4 bg-white border border-slate-200 rounded-xl text-sm text-slate-700 flex items-center gap-2">
+        <span class="material-symbols-outlined text-slate-400 flex-shrink-0">lightbulb</span>
+        <span><strong>체크포인트:</strong> 낙찰통지 후 <strong>10일 이내</strong> 계약을 체결해야 합니다. 낙찰자가 계약을 거부하거나 기한 내 미체결 시 부정당업자 제재 대상이며, 차순위자와 계약을 진행합니다.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 참고 안내 (접히는 섹션) -->
+  <details open class="mt-10 border border-slate-200 rounded-2xl overflow-hidden">
+    <summary class="flex items-center gap-3 p-4 bg-slate-50 hover:bg-slate-100 transition-colors cursor-pointer">
+      <span class="material-symbols-outlined text-slate-500">info</span>
+      <span class="font-semibold text-slate-700">참고 안내</span>
+      <span class="text-xs text-slate-400 ml-auto">핵심 체크포인트 · 금지사항 · 필수서류</span>
+    </summary>
+    <div class="p-4">
+      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-8">
+        <h4 class="font-bold text-xl mb-6 text-center flex items-center justify-center gap-2 text-slate-800">
+          <span class="material-symbols-outlined text-indigo-500">push_pin</span>
+          적격심사 핵심 체크포인트
+        </h4>
+        <div class="grid md:grid-cols-3 gap-5">
+          <div class="bg-rose-50 border border-rose-200 rounded-xl p-5">
+            <div class="text-rose-600 font-bold mb-4 flex items-center gap-2">
+              <span class="material-symbols-outlined">block</span>
+              절대 금지
+            </div>
+            <ul class="space-y-2.5 text-slate-700 text-sm">
+              <li class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm text-rose-500">close</span>
+                평가 기준 사후 변경
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm text-rose-500">close</span>
+                비공개 항목 평가
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm text-rose-500">close</span>
+                평가위원 외 인원 참여
+              </li>
+            </ul>
+          </div>
+          <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-5">
+            <div class="text-emerald-600 font-bold mb-4 flex items-center gap-2">
+              <span class="material-symbols-outlined">check_circle</span>
+              필수 서류
+            </div>
+            <ul class="space-y-2.5 text-slate-700 text-sm">
+              <li class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm text-emerald-500">check</span>
+                적격심사 기준표
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm text-emerald-500">check</span>
+                업체 제출 서류
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm text-emerald-500">check</span>
+                평가 결과표
+              </li>
+            </ul>
+          </div>
+          <div class="bg-indigo-50 border border-indigo-200 rounded-xl p-5">
+            <div class="text-indigo-600 font-bold mb-4 flex items-center gap-2">
+              <span class="material-symbols-outlined">tips_and_updates</span>
+              실무 팁
+            </div>
+            <ul class="space-y-2.5 text-slate-700 text-sm">
+              <li class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm text-indigo-500">star</span>
+                95점 기준 명확히 공지
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm text-indigo-500">star</span>
+                평가위원 3인 이상
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm text-indigo-500">star</span>
+                평가 결과 즉시 문서화
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </details>
+</div>
+
+<!-- 공문생산 팝업 -->
+<div id="doc-popup-overlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:9999; display:none; align-items:center; justify-content:center;" onclick="if(event.target===this) closeDocPopup()">
+  <div style="background:#fff; border-radius:16px; max-width:480px; width:90%; max-height:80vh; overflow-y:auto; padding:28px; box-shadow:0 20px 60px rgba(0,0,0,.2); animation:docPopupIn .2s ease;">
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span class="material-symbols-outlined" style="color:#e11d48; font-size:22px;">edit_document</span>
+        <h3 id="doc-popup-title" style="font-size:18px; font-weight:700; color:#1e293b; margin:0;"></h3>
+      </div>
+      <button onclick="closeDocPopup()" style="background:none; border:none; cursor:pointer; padding:4px;">
+        <span class="material-symbols-outlined" style="color:#94a3b8; font-size:22px;">close</span>
+      </button>
+    </div>
+    <div id="doc-popup-body"></div>
+  </div>
+</div>
+
+<style>
+@keyframes docPopupIn { from { opacity:0; transform:scale(.95) translateY(10px); } to { opacity:1; transform:scale(1) translateY(0); } }
+.doc-tool-badge {
+  display:inline-flex; align-items:center; gap:6px; margin-top:4px;
+  padding:6px 14px; background:#fff1f2; color:#e11d48;
+  font-size:13px; font-weight:600; border-radius:10px;
+  cursor:pointer; border:1.5px solid #fecdd3;
+  box-shadow:0 1px 3px rgba(225,29,72,.1);
+  transition:all .2s ease;
+}
+.doc-tool-badge:hover {
+  transform:translateY(-2px) scale(1.04);
+  box-shadow:0 6px 20px rgba(225,29,72,.2);
+  background:#ffe4e6; border-color:#fda4af;
+}
+.doc-tool-badge:active { transform:translateY(0) scale(.98); box-shadow:0 1px 2px rgba(225,29,72,.1); }
+.doc-item { display:flex; align-items:flex-start; gap:10px; padding:12px; border-radius:10px; border:1px solid #e2e8f0; margin-bottom:8px; }
+.doc-item .doc-icon { flex-shrink:0; width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; }
+.doc-item .doc-name { font-size:14px; font-weight:600; color:#1e293b; }
+.doc-item .doc-desc { font-size:12px; color:#64748b; margin-top:2px; }
+.doc-item.has-tool { cursor:pointer; transition:all .15s; }
+.doc-item.has-tool:hover { border-color:#818cf8; background:#f5f3ff; }
+</style>
+
+<script>
+var docPopupData = {
+  step2: {
+    title: '적격심사 단계 공문/양식',
+    groups: [
+      { label: '자동 채점', icon: 'auto_awesome', color: '#4f46e5', items: [
+        { name: '적격심사 자동 채점기', desc: '가격점수 + 비가격점수 자동 계산, 95점 기준 판정, 낙찰자 자동 선정', icon: 'fact_check', color: '#4f46e5', tool: '<%= qualification_evaluation_path %>', featured: true }
+      ]},
+      { label: '필수 서류', icon: 'verified', color: '#dc2626', items: [
+        { name: '적격심사 기준표', desc: '비가격 평가 항목별 배점 (입찰공고 시 공개)', icon: 'rule', color: '#dc2626' },
+        { name: '업체 제출 서류 체크리스트', desc: '실적증명서·면허증·경영상태표 등 필수 서류 목록', icon: 'checklist', color: '#dc2626', tool: '<%= contract_documents_path %>' },
+        { name: '적격심사 평가 결과표', desc: '평가위원 개별 점수 및 합산 결과 기록', icon: 'analytics', color: '#dc2626' }
+      ]},
+      { label: '평가위원회', icon: 'group', color: '#6366f1', items: [
+        { name: '평가위원 위촉장', desc: '평가위원 3인 이상 위촉 (내부 2인 + 외부 1인 권장)', icon: 'badge', color: '#6366f1' },
+        { name: '평가위원회 회의록', desc: '평가 진행 과정 및 결과 기록', icon: 'summarize', color: '#6366f1' }
+      ]},
+      { label: '검토용', icon: 'fact_check', color: '#64748b', items: [
+        { name: '원가계산서 검토', desc: '업체 제출 원가계산서 항목별 검토', icon: 'receipt_long', color: '#64748b', tool: '<%= cost_estimate_path %>' }
+      ]}
+    ]
+  }
+};
+
+function showDocPopup(step) {
+  var data = docPopupData[step];
+  if (!data) return;
+  document.getElementById('doc-popup-title').textContent = data.title;
+  var html = '';
+  data.groups.forEach(function(group) {
+    html += '<div style="display:flex; align-items:center; gap:6px; margin:16px 0 8px; padding-bottom:6px; border-bottom:1px solid #f1f5f9;">';
+    html += '<span class="material-symbols-outlined" style="font-size:16px; color:' + group.color + ';">' + group.icon + '</span>';
+    html += '<span style="font-size:13px; font-weight:700; color:' + group.color + ';">' + group.label + '</span>';
+    html += '</div>';
+    group.items.forEach(function(item) {
+      var toolAttr = item.tool ? ' has-tool" onclick="window.location.href=\'' + item.tool + '\'"' : '"';
+      var featuredStyle = item.featured ? ' style="background:#eef2ff; border-color:#a5b4fc;"' : '';
+      html += '<div class="doc-item' + toolAttr + featuredStyle + '>';
+      html += '<div class="doc-icon" style="background:' + item.color + '15;"><span class="material-symbols-outlined" style="font-size:18px; color:' + item.color + ';">' + item.icon + '</span></div>';
+      html += '<div><div class="doc-name">' + item.name;
+      if (item.tool) html += ' <span class="material-symbols-outlined" style="font-size:12px; color:#818cf8; vertical-align:middle;">open_in_new</span>';
+      html += '</div><div class="doc-desc">' + item.desc + '</div></div>';
+      html += '</div>';
+    });
+  });
+  document.getElementById('doc-popup-body').innerHTML = html;
+  document.getElementById('doc-popup-overlay').style.display = 'flex';
+}
+
+function closeDocPopup() {
+  document.getElementById('doc-popup-overlay').style.display = 'none';
+}
+
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeDocPopup(); });
+</script>
