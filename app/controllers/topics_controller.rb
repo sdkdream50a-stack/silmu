@@ -156,16 +156,32 @@ class TopicsController < ApplicationController
     # SEO 메타 태그
     set_meta_tags(
       title: "#{@topic.name} — 법령·절차·실무 가이드",
-      description: @topic.summary.truncate(155),
+      description: generate_seo_description(@topic),
       keywords: @topic.keywords,
       canonical: canonical_url,
       og: {
         title: "#{@topic.name} 실무 가이드 | 실무.kr",
-        description: @topic.summary.truncate(200),
+        description: generate_seo_description(@topic, 200),
         url: canonical_url,
         image: "https://silmu.kr/og-image.png",
         type: "article"
       }
     )
+  end
+
+  private
+
+  # SEO description 생성: commentary가 있으면 commentary 사용 (150자 이상 보장)
+  def generate_seo_description(topic, length = 155)
+    if topic.commentary.present?
+      # commentary에서 HTML 태그 제거 후 앞부분 사용
+      ActionView::Base.full_sanitizer.sanitize(topic.commentary)
+        .gsub(/\s+/, ' ')
+        .strip
+        .truncate(length)
+    else
+      # commentary가 없으면 summary 사용
+      topic.summary.truncate(length)
+    end
   end
 end
