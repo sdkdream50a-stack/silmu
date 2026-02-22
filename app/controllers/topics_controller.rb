@@ -103,7 +103,7 @@ class TopicsController < ApplicationController
 
     # 계약 카테고리: 논리적 순서로 정렬 (수의계약 → 입찰 → 계약체결 → 보증금 → 이행 → 변경/종료)
     contract_order = %w[
-      private-contract-overview private-contract-limit private-contract-amount
+      private-contract private-contract-limit private-contract-amount
       single-quote dual-quote quote-collection-guide
       price-negotiation emergency-contract small-amount-contract split-contract-prohibition
       bidding bid-announcement e-bidding estimated-price multiple-price
@@ -113,7 +113,6 @@ class TopicsController < ApplicationController
       contract-guarantee-deposit bid-deposit performance-guarantee defect-warranty
       inspection payment advance-payment late-penalty
       design-change price-escalation contract-termination
-      private-contract
     ]
 
     if @topics_by_category["contract"]
