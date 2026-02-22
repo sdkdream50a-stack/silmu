@@ -183,10 +183,10 @@
         </div>
         <div class="w-full lg:w-auto flex-1 max-w-lg">
           <div class="flex gap-3 mb-3">
-            <select id="price-category" class="flex-shrink-0 w-24 rounded-xl border-0 bg-white/10 backdrop-blur-md text-white px-3 py-4 text-sm font-medium focus:ring-indigo-500">
-              <option value="goods" class="text-slate-900">물품</option>
-              <option value="service" class="text-slate-900">용역</option>
-              <option value="construction" class="text-slate-900">공사</option>
+            <select id="price-category" class="flex-shrink-0 w-24 rounded-xl border-2 border-white/20 bg-white/15 backdrop-blur-md text-white px-3 py-4 text-sm font-bold focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 shadow-lg">
+              <option value="goods" class="text-slate-900 font-bold">물품</option>
+              <option value="service" class="text-slate-900 font-bold">용역</option>
+              <option value="construction" class="text-slate-900 font-bold">공사</option>
             </select>
             <div class="flex-1 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-2 flex items-center shadow-lg">
               <input id="price-input" class="w-full bg-transparent border-0 px-4 py-2 text-2xl font-bold text-white placeholder:text-slate-500 focus:ring-0" placeholder="예: 20,000,000" type="text"/>
@@ -381,7 +381,11 @@ document.addEventListener('turbo:load', function() {
 
   document.querySelectorAll('.price-quick-btn').forEach(btn => {
     btn.addEventListener('click', function() {
-      priceInput.value = Number(this.dataset.value).toLocaleString();
+      // 기존 값 가져오기 (콤마 제거 후 숫자 변환)
+      const currentValue = parseInt(priceInput.value.replace(/,/g, '')) || 0;
+      // 버튼 값과 합산
+      const newValue = currentValue + Number(this.dataset.value);
+      priceInput.value = newValue.toLocaleString();
       calculateMethod();
     });
   });
