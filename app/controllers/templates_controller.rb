@@ -30,6 +30,11 @@ class TemplatesController < ApplicationController
     { id: 21, title: "출장 복명서", desc: "국내/국외 출장 복명서 양식", category: "기안문", formats: ["HWP"], color: "forest" },
     { id: 22, title: "업무 인수인계서", desc: "직위 변경 시 업무 인수인계 양식", category: "기타", formats: ["HWP", "DOCX"], color: "warm" },
     { id: 23, title: "회의록", desc: "각종 회의 결과 기록 양식", category: "기타", formats: ["HWP", "PDF"], color: "navy" },
+
+    # 예산 관련 양식
+    { id: 24, title: "예산요구서", desc: "예산편성 시 각 부서에서 제출하는 예산요구서 양식", category: "기안문", formats: ["HWP", "XLSX"], color: "point", badge: "NEW" },
+    { id: 25, title: "예산집행계획서", desc: "예산 집행 계획을 수립하는 양식", category: "기안문", formats: ["HWP", "XLSX"], color: "forest", badge: "NEW" },
+    { id: 26, title: "예산이월요청서", desc: "예산 이월 요청 시 사용하는 양식", category: "기안문", formats: ["HWP"], color: "warm", badge: "NEW" },
   ].freeze
 
   def index
@@ -40,7 +45,7 @@ class TemplatesController < ApplicationController
 
     set_meta_tags(
       title: "문서 양식",
-      description: "계약서, 검수조서, 기안문, 사유서 등 공무원 업무에 필요한 23종 문서 양식을 무료로 다운로드하세요.",
+      description: "계약서, 검수조서, 기안문, 사유서 등 공무원 업무에 필요한 26종 문서 양식을 무료로 다운로드하세요.",
       keywords: "문서 양식, 계약서, 검수조서, 기안문, 수의계약 사유서, 견적서, 예정가격조서",
       og: {
         title: "문서 양식 — 실무.kr",
