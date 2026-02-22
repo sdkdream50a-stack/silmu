@@ -1,0 +1,432 @@
+<%# Created: 2026-02-22 20:45 %>
+<%# 복수예비가격 실무흐름도 %>
+
+<div class="space-y-8">
+  <!-- 프로세스 개요 -->
+  <div class="bg-gradient-to-r from-indigo-50 to-emerald-50 rounded-2xl p-6 border border-indigo-100">
+    <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+      <span class="material-symbols-outlined text-indigo-600">account_tree</span>
+      복수예비가격 프로세스
+    </h3>
+    <div class="flex items-center gap-3 overflow-x-auto pb-2">
+      <div class="flex items-center gap-2 px-4 py-2 bg-white rounded-lg shadow-sm whitespace-nowrap">
+        <span class="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs flex items-center justify-center font-bold">1</span>
+        <span class="text-sm font-medium text-slate-700">예정가격 산정</span>
+      </div>
+      <span class="material-symbols-outlined text-slate-300">arrow_forward</span>
+      <div class="flex items-center gap-2 px-4 py-2 bg-white rounded-lg shadow-sm whitespace-nowrap">
+        <span class="w-6 h-6 rounded-full bg-amber-500 text-white text-xs flex items-center justify-center font-bold">2</span>
+        <span class="text-sm font-medium text-slate-700">복수예비가격 15개 생성</span>
+      </div>
+      <span class="material-symbols-outlined text-slate-300">arrow_forward</span>
+      <div class="flex items-center gap-2 px-4 py-2 bg-white rounded-lg shadow-sm whitespace-nowrap">
+        <span class="w-6 h-6 rounded-full bg-emerald-600 text-white text-xs flex items-center justify-center font-bold">3</span>
+        <span class="text-sm font-medium text-slate-700">추첨 및 평균 산출</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 1: 예정가격 산정 -->
+  <div class="card overflow-hidden" style="border-left: 4px solid #4f46e5;">
+    <div class="bg-indigo-50 px-6 py-4 border-b border-indigo-100">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <span class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold shadow-md">1</span>
+          <div>
+            <h4 class="font-bold text-slate-900 flex items-center gap-2">
+              예정가격 산정
+              <span class="doc-tool-badge" onclick="showDocPopup('step1')">
+                <span class="material-symbols-outlined" style="font-size:16px">edit_document</span>
+                공문/양식 생성 도구
+              </span>
+            </h4>
+            <p class="text-sm text-slate-600">기초금액 산정, 예비가격 범위 확정</p>
+          </div>
+        </div>
+        <span class="px-3 py-1 bg-indigo-600 text-white text-xs font-semibold rounded-full">입찰 준비</span>
+      </div>
+    </div>
+    <div class="p-6">
+      <div class="grid sm:grid-cols-2 gap-4 mb-5">
+        <a href="<%= estimated_price_path %>" class="group block p-4 bg-gradient-to-br from-indigo-50 to-white border-2 border-indigo-300 rounded-xl hover:border-indigo-500 hover:shadow-lg transition-all">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined text-indigo-600 text-2xl">calculate</span>
+            <div class="flex-1 min-w-0">
+              <div class="font-bold text-slate-900 group-hover:text-indigo-600 transition-colors flex items-center gap-2">
+                기초금액 산정
+                <span class="text-xs px-2 py-0.5 bg-indigo-600 text-white rounded-full">핵심</span>
+              </div>
+              <div class="text-sm text-slate-500 mt-1">시장조사·원가계산 기반 ⭐</div>
+            </div>
+          </div>
+        </a>
+        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined text-slate-600 text-2xl">trending_up</span>
+            <div class="flex-1 min-w-0">
+              <div class="font-semibold text-slate-900">예비가격 범위 확인</div>
+              <div class="text-sm text-slate-500 mt-1">기초금액 ±2% ~ ±15%</div>
+            </div>
+          </div>
+        </div>
+        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined text-slate-600 text-2xl">percent</span>
+            <div class="flex-1 min-w-0">
+              <div class="font-semibold text-slate-900">적용 구간 결정</div>
+              <div class="text-sm text-slate-500 mt-1">2억 미만: ±2%, 이상: ±15%</div>
+            </div>
+          </div>
+        </div>
+        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined text-slate-600 text-2xl">rule</span>
+            <div class="flex-1 min-w-0">
+              <div class="font-semibold text-slate-900">예정가격 조서 작성</div>
+              <div class="text-sm text-slate-500 mt-1">기초금액 산출 근거 명시</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-blue-50 border border-blue-200 rounded-xl p-4">
+        <div class="flex items-start gap-3">
+          <span class="material-symbols-outlined text-blue-600 shrink-0">info</span>
+          <p class="text-sm text-blue-900"><strong>체크포인트</strong>: 복수예비가격은 <strong>2억원 이상 입찰</strong>에 적용됩니다. 2억 미만은 기초금액 ±2%, 2억 이상은 ±15% 범위에서 15개 예비가격을 생성합니다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2: 복수예비가격 15개 생성 -->
+  <div class="card overflow-hidden" style="border-left: 4px solid #f59e0b;">
+    <div class="bg-amber-50 px-6 py-4 border-b border-amber-100">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <span class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center font-bold shadow-md">2</span>
+          <div>
+            <h4 class="font-bold text-slate-900">복수예비가격 15개 생성</h4>
+            <p class="text-sm text-slate-600">나라장터 시스템 자동 생성, 15개 예비가격 확정</p>
+          </div>
+        </div>
+        <span class="px-3 py-1 bg-amber-500 text-white text-xs font-semibold rounded-full">시스템 자동</span>
+      </div>
+    </div>
+    <div class="p-6">
+      <div class="grid sm:grid-cols-2 gap-4 mb-5">
+        <div class="p-4 bg-amber-50 border-2 border-amber-300 rounded-xl">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined text-amber-600 text-2xl">auto_awesome</span>
+            <div class="flex-1 min-w-0">
+              <div class="font-bold text-slate-900">나라장터 자동 생성</div>
+              <div class="text-sm text-slate-600 mt-1">기초금액 입력 시 자동 계산</div>
+            </div>
+          </div>
+        </div>
+        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined text-slate-600 text-2xl">format_list_numbered</span>
+            <div class="flex-1 min-w-0">
+              <div class="font-semibold text-slate-900">15개 예비가격 확정</div>
+              <div class="text-sm text-slate-500 mt-1">기초금액 ±15% 범위 내</div>
+            </div>
+          </div>
+        </div>
+        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined text-slate-600 text-2xl">visibility_off</span>
+            <div class="flex-1 min-w-0">
+              <div class="font-semibold text-slate-900">예비가격 봉인</div>
+              <div class="text-sm text-slate-500 mt-1">개찰 전까지 비공개</div>
+            </div>
+          </div>
+        </div>
+        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined text-slate-600 text-2xl">lock</span>
+            <div class="flex-1 min-w-0">
+              <div class="font-semibold text-slate-900">시스템 잠금</div>
+              <div class="text-sm text-slate-500 mt-1">입찰공고 후 수정 불가</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-amber-50 border border-amber-200 rounded-xl p-4">
+        <div class="flex items-start gap-3">
+          <span class="material-symbols-outlined text-amber-600 shrink-0">warning</span>
+          <p class="text-sm text-amber-900"><strong>체크포인트</strong>: 복수예비가격은 <strong>나라장터 시스템이 자동 생성</strong>하므로 담당자가 직접 계산할 필요 없습니다. 입찰공고 후에는 수정 불가하니 기초금액을 정확히 입력하세요.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3: 추첨 및 평균 산출 -->
+  <div class="card overflow-hidden" style="border-left: 4px solid #059669;">
+    <div class="bg-emerald-50 px-6 py-4 border-b border-emerald-100">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <span class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold shadow-md">3</span>
+          <div>
+            <h4 class="font-bold text-slate-900">추첨 및 평균 산출</h4>
+            <p class="text-sm text-slate-600">개찰 시 4개 추첨, 평균값 = 예정가격</p>
+          </div>
+        </div>
+        <span class="px-3 py-1 bg-emerald-600 text-white text-xs font-semibold rounded-full">낙찰 결정</span>
+      </div>
+    </div>
+    <div class="p-6">
+      <div class="grid sm:grid-cols-2 gap-4 mb-5">
+        <div class="p-4 bg-emerald-50 border-2 border-emerald-300 rounded-xl">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined text-emerald-600 text-2xl">casino</span>
+            <div class="flex-1 min-w-0">
+              <div class="font-bold text-slate-900">4개 예비가격 추첨</div>
+              <div class="text-sm text-slate-600 mt-1">개찰 시 시스템 자동 추첨</div>
+            </div>
+          </div>
+        </div>
+        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined text-slate-600 text-2xl">calculate</span>
+            <div class="flex-1 min-w-0">
+              <div class="font-semibold text-slate-900">4개 평균 계산</div>
+              <div class="text-sm text-slate-500 mt-1">평균값 = 예정가격 확정</div>
+            </div>
+          </div>
+        </div>
+        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined text-slate-600 text-2xl">compare_arrows</span>
+            <div class="flex-1 min-w-0">
+              <div class="font-semibold text-slate-900">투찰가 비교</div>
+              <div class="text-sm text-slate-500 mt-1">예정가격 이하 최저가 선정</div>
+            </div>
+          </div>
+        </div>
+        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined text-slate-600 text-2xl">check_circle</span>
+            <div class="flex-1 min-w-0">
+              <div class="font-semibold text-slate-900">낙찰자 결정</div>
+              <div class="text-sm text-slate-500 mt-1">낙찰하한율 이상 여부 확인</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-blue-50 border border-blue-200 rounded-xl p-4">
+        <div class="flex items-start gap-3">
+          <span class="material-symbols-outlined text-blue-600 shrink-0">info</span>
+          <p class="text-sm text-blue-900"><strong>체크포인트</strong>: 4개 예비가격 추첨은 <strong>개찰 시 자동 진행</strong>되며, 평균값이 예정가격으로 확정됩니다. 예정가격 초과 투찰은 무효이며, 낙찰하한율 미만 투찰도 자동 탈락합니다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 체크포인트 3컬럼 -->
+  <div class="grid md:grid-cols-3 gap-4">
+    <div class="card p-5 border-l-4 border-red-500">
+      <h5 class="font-bold text-slate-900 mb-3 flex items-center gap-2">
+        <span class="material-symbols-outlined text-red-600">cancel</span>
+        절대 금지
+      </h5>
+      <ul class="space-y-2 text-sm text-slate-700">
+        <li class="flex items-start gap-2">
+          <span class="text-red-600 mt-0.5">•</span>
+          <span>입찰공고 후 기초금액 변경</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-red-600 mt-0.5">•</span>
+          <span>개찰 전 예비가격 유출 (형사처벌 대상)</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-red-600 mt-0.5">•</span>
+          <span>2억 미만 입찰에 복수예비가격 적용</span>
+        </li>
+      </ul>
+    </div>
+    <div class="card p-5 border-l-4 border-emerald-500">
+      <h5 class="font-bold text-slate-900 mb-3 flex items-center gap-2">
+        <span class="material-symbols-outlined text-emerald-600">verified</span>
+        필수 서류
+      </h5>
+      <ul class="space-y-2 text-sm text-slate-700">
+        <li class="flex items-start gap-2">
+          <span class="text-emerald-600 mt-0.5">•</span>
+          <span>예정가격 조서 (기초금액 산출 근거)</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-emerald-600 mt-0.5">•</span>
+          <span>시장조사 결과 (3곳 이상 거래실례가)</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-emerald-600 mt-0.5">•</span>
+          <span>개찰조서 (추첨된 4개 예비가격 명시)</span>
+        </li>
+      </ul>
+    </div>
+    <div class="card p-5 border-l-4 border-blue-500">
+      <h5 class="font-bold text-slate-900 mb-3 flex items-center gap-2">
+        <span class="material-symbols-outlined text-blue-600">tips_and_updates</span>
+        실무 팁
+      </h5>
+      <ul class="space-y-2 text-sm text-slate-700">
+        <li class="flex items-start gap-2">
+          <span class="text-blue-600 mt-0.5">•</span>
+          <span>기초금액은 소수점 이하 절사 권장</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-blue-600 mt-0.5">•</span>
+          <span>나라장터 시스템 자동 계산 신뢰</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-blue-600 mt-0.5">•</span>
+          <span>개찰 전 예비가격 보안 철저 (별도 봉인)</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- 공문/양식 생성도구 팝업 -->
+<div id="docPopup" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50 p-4" onclick="hideDocPopup(event)">
+  <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[85vh] overflow-hidden" onclick="event.stopPropagation()">
+    <div class="sticky top-0 bg-gradient-to-r from-indigo-600 to-emerald-600 text-white px-6 py-4 flex items-center justify-between z-10">
+      <h3 class="text-xl font-bold" id="popupTitle">공문/양식 생성 도구</h3>
+      <button onclick="hideDocPopup()" class="w-8 h-8 rounded-lg hover:bg-white/20 flex items-center justify-center transition-colors">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <div class="p-6 overflow-y-auto max-h-[calc(85vh-80px)]" id="popupContent">
+      <!-- 동적 콘텐츠 -->
+    </div>
+  </div>
+</div>
+
+<style>
+.doc-tool-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(99, 102, 241, 0.3);
+}
+.doc-tool-badge:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(99, 102, 241, 0.4);
+}
+</style>
+
+<script>
+var docPopupData = {
+  step1: {
+    title: '예정가격 산정 단계 공문/양식',
+    groups: [
+      {
+        label: '필수 도구',
+        icon: 'auto_awesome',
+        color: '#4f46e5',
+        items: [
+          {
+            name: '추정가격 계산기',
+            desc: '시장조사·거래실례가 기반 기초금액 산정',
+            icon: 'calculate',
+            color: '#4f46e5',
+            tool: '<%= estimated_price_path %>',
+            featured: true
+          }
+        ]
+      },
+      {
+        label: '필수 서류',
+        icon: 'verified',
+        color: '#dc2626',
+        items: [
+          {
+            name: '예정가격 조서',
+            desc: '기초금액 산출 근거 및 복수예비가격 범위 명시',
+            icon: 'description',
+            color: '#dc2626'
+          },
+          {
+            name: '시장조사 결과',
+            desc: '3곳 이상 거래실례가 조사 (원가계산 시 생략 가능)',
+            icon: 'search',
+            color: '#dc2626'
+          }
+        ]
+      },
+      {
+        label: '검토용',
+        icon: 'fact_check',
+        color: '#64748b',
+        items: [
+          {
+            name: '원가계산서 검토',
+            desc: '업체 원가계산서 항목별 검토 (공사·용역)',
+            icon: 'receipt_long',
+            color: '#64748b',
+            tool: '<%= cost_estimate_path %>'
+          }
+        ]
+      }
+    ]
+  }
+};
+
+function showDocPopup(step) {
+  var data = docPopupData[step];
+  if (!data) return;
+
+  document.getElementById('popupTitle').textContent = data.title;
+
+  var html = '';
+  data.groups.forEach(function(group) {
+    html += '<div class="mb-6 last:mb-0">';
+    html += '<h4 class="font-bold text-slate-900 mb-3 flex items-center gap-2">';
+    html += '<span class="material-symbols-outlined" style="color:' + group.color + '">' + group.icon + '</span>';
+    html += group.label;
+    html += '</h4>';
+    html += '<div class="grid sm:grid-cols-2 gap-3">';
+
+    group.items.forEach(function(item) {
+      var tag = item.tool ? 'a' : 'div';
+      var href = item.tool ? ' href="' + item.tool + '"' : '';
+      var hoverClass = item.tool ? ' hover:shadow-lg hover:scale-[1.02]' : '';
+
+      html += '<' + tag + href + ' class="block p-4 bg-white border-2 border-slate-200 rounded-xl transition-all' + hoverClass + '">';
+      html += '<div class="flex items-start gap-3">';
+      html += '<span class="material-symbols-outlined text-2xl" style="color:' + item.color + '">' + item.icon + '</span>';
+      html += '<div class="flex-1 min-w-0">';
+      html += '<div class="font-semibold text-slate-900 flex items-center gap-2">';
+      html += item.name;
+      if (item.featured) {
+        html += '<span class="px-2 py-0.5 bg-indigo-600 text-white text-xs rounded-full">핵심</span>';
+      }
+      html += '</div>';
+      html += '<div class="text-sm text-slate-500 mt-1">' + item.desc + '</div>';
+      html += '</div>';
+      html += '</div>';
+      html += '</' + tag + '>';
+    });
+
+    html += '</div></div>';
+  });
+
+  document.getElementById('popupContent').innerHTML = html;
+  document.getElementById('docPopup').classList.remove('hidden');
+  document.getElementById('docPopup').classList.add('flex');
+}
+
+function hideDocPopup(event) {
+  if (!event || event.target.id === 'docPopup' || event.currentTarget.tagName === 'BUTTON') {
+    document.getElementById('docPopup').classList.add('hidden');
+    document.getElementById('docPopup').classList.remove('flex');
+  }
+}
+</script>

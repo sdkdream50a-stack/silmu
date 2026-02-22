@@ -216,6 +216,10 @@
             <%= render 'topics/flowcharts/bidding', topic: @topic %>
           <% elsif @topic.slug == 'bid-qualification' %>
             <%= render 'topics/flowcharts/bid_qualification', topic: @topic %>
+          <% elsif @topic.slug == 'long-term-contract' %>
+            <%= render 'topics/flowcharts/long_term_contract', topic: @topic %>
+          <% elsif @topic.slug == 'multiple-price' %>
+            <%= render 'topics/flowcharts/multiple_price', topic: @topic %>
           <% elsif @topic.slug == 'e-bidding' %>
             <%= render 'topics/flowcharts/e_bidding', topic: @topic %>
           <% elsif @topic.slug == 'estimated-price' %>
