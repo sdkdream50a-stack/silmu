@@ -221,8 +221,29 @@
           <span class="material-symbols-outlined text-indigo-600">library_books</span> 주요 법령 가이드
         </h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <%# Featured: 수의계약 (가로 전폭, 강조 스타일) %>
+          <%= link_to topic_path("private-contract"), class: "group relative sm:col-span-2 flex items-start gap-5 rounded-2xl bg-gradient-to-br from-indigo-50 via-white to-violet-50 p-6 shadow-sm border-2 border-indigo-200 transition-all hover:shadow-lg hover:-translate-y-1 hover:border-indigo-400 cursor-pointer overflow-hidden" do %>
+            <div class="absolute top-3 right-3">
+              <span class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold bg-indigo-600 text-white rounded-full">
+                <span class="material-symbols-outlined text-sm">star</span> 필수 가이드
+              </span>
+            </div>
+            <div class="shrink-0 flex h-14 w-14 items-center justify-center rounded-xl bg-indigo-100 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+              <span class="material-symbols-outlined text-3xl">handshake</span>
+            </div>
+            <div class="pr-24 sm:pr-28">
+              <h3 class="font-bold text-xl text-slate-900 group-hover:text-indigo-600 transition-colors">수의계약</h3>
+              <p class="mt-1.5 text-sm text-slate-600 leading-relaxed">1인 견적 가능 금액 및 요건, 예외 사항 완벽 정리</p>
+              <div class="mt-3 flex flex-wrap gap-2">
+                <span class="inline-flex items-center gap-1 text-xs text-indigo-600 bg-indigo-50 border border-indigo-100 rounded-md px-2 py-0.5 font-medium">수의계약 한도</span>
+                <span class="inline-flex items-center gap-1 text-xs text-indigo-600 bg-indigo-50 border border-indigo-100 rounded-md px-2 py-0.5 font-medium">1인 견적</span>
+                <span class="inline-flex items-center gap-1 text-xs text-indigo-600 bg-indigo-50 border border-indigo-100 rounded-md px-2 py-0.5 font-medium">수의계약 사유</span>
+              </div>
+            </div>
+          <% end %>
+
+          <%# 나머지 5개 카드 (기존 스타일) %>
           <% [
-            [topic_path("private-contract"), "handshake", "수의계약", "1인 견적 가능 금액 및 요건, 예외 사항 완벽 정리", "indigo"],
             [topic_path("bidding"), "gavel", "경쟁입찰", "공고기간, 적격심사, 낙찰자 결정 절차 완벽 가이드", "violet"],
             [topic_path("contract-execution"), "description", "계약체결", "계약서 작성부터 보증금 징수까지 단계별 실무", "amber"],
             [topic_path("inspection"), "fact_check", "검수·검사", "물품·용역·공사 검수조서 작성 및 하자검사 절차", "emerald"],

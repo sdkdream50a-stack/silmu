@@ -882,6 +882,9 @@
 /* guides/show category_color 동적 클래스 (emerald, blue, amber, violet) */
 @source inline("bg-violet-100 text-violet-600");
 
+/* home/index 수의계약 Featured 카드 */
+@source inline("from-indigo-50 via-white to-violet-50 border-indigo-200 hover:border-indigo-400 bg-indigo-100 border-indigo-100");
+
 /* topics/index 서브그룹 점프 칩: JS에서 동적으로 토글 */
 @source inline("inline-flex items-center gap-1.5 bg-indigo-50 border-indigo-300 text-indigo-700 hover:bg-indigo-50 hover:border-indigo-200 hover:text-indigo-700");
 
