@@ -341,7 +341,7 @@ function openDocPopup(event) {
 
     items.forEach(item => {
       const itemCard = document.createElement('a');
-      itemCard.href = `/tools/ai-document?prompt=${encodeURIComponent(item.prompt)}`;
+      itemCard.href = `/tools/official-document?prompt=${encodeURIComponent(item.prompt)}`;
       itemCard.className = 'bg-gradient-to-br from-white to-amber-50 border-2 border-amber-200 hover:border-amber-400 rounded-lg p-4 transition-all hover:shadow-lg cursor-pointer';
       itemCard.setAttribute('data-turbo', 'false');
       itemCard.innerHTML = `

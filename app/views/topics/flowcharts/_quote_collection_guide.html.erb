@@ -347,7 +347,7 @@ function openDocPopup(event) {
     itemsGrid.className = 'grid grid-cols-1 md:grid-cols-2 gap-3 mb-6';
     items.forEach(item => {
       const itemCard = document.createElement('a');
-      itemCard.href = `/tools/ai-document?prompt=${encodeURIComponent(item.prompt)}`;
+      itemCard.href = `/tools/official-document?prompt=${encodeURIComponent(item.prompt)}`;
       itemCard.className = 'bg-gradient-to-br from-white to-amber-50 border-2 border-amber-200 hover:border-amber-400 rounded-lg p-4 transition-all hover:shadow-lg cursor-pointer';
       itemCard.setAttribute('data-turbo', 'false');
       itemCard.innerHTML = `<div class="flex items-start gap-3"><span class="material-symbols-outlined text-amber-600 text-2xl">${item.icon}</span><div><h5 class="font-bold text-gray-900 mb-1">${item.title}</h5><p class="text-sm text-gray-600">${item.desc}</p></div></div>`;
