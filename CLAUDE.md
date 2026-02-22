@@ -41,7 +41,14 @@
 RAILS_MASTER_KEY=<credentials.yml.enc 복호화 키>
 ANTHROPIC_API_KEY=<Claude API 키>
 SILMU_DATABASE_PASSWORD=<PostgreSQL 비밀번호>
+KAMAL_REGISTRY_PASSWORD=<GitHub PAT (ghcr.io 접근용)>
 ```
+
+**GitHub Container Registry (GHCR):**
+- Registry: `ghcr.io/sdkdream50a-stack/silmu`
+- Username: `sdkdream50a-stack`
+- Token: GitHub Classic PAT with `repo`, `write:packages`, `delete:packages`
+- Public 패키지 (무료, 용량 무제한)
 
 ### 공개 환경변수 (config/deploy.yml)
 ```bash
