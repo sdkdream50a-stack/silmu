@@ -120,26 +120,26 @@
         </div>
       <% end %>
 
-      <%= link_to contract_documents_path, class: "group relative overflow-hidden rounded-3xl bg-white p-10 shadow-xl hover:shadow-2xl hover:-translate-y-3 transition-all duration-500 border-2 border-slate-100 hover:border-violet-200" do %>
-        <div class="absolute inset-0 bg-gradient-to-br from-violet-50/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-        <div class="relative z-10 mb-7 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-violet-50 text-violet-600 shadow-md group-hover:bg-violet-600 group-hover:text-white transition-colors duration-300">
-          <span class="material-symbols-outlined text-4xl">post_add</span>
+      <%= link_to contract_guarantee_path, class: "group relative overflow-hidden rounded-3xl bg-white p-10 shadow-xl hover:shadow-2xl hover:-translate-y-3 transition-all duration-500 border-2 border-slate-100 hover:border-amber-200" do %>
+        <div class="absolute inset-0 bg-gradient-to-br from-amber-50/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div class="relative z-10 mb-7 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-50 text-amber-600 shadow-md group-hover:bg-amber-600 group-hover:text-white transition-colors duration-300">
+          <span class="material-symbols-outlined text-4xl">percent</span>
         </div>
-        <h3 class="relative z-10 text-2xl font-bold text-slate-900 mb-4 tracking-tight">서류 원클릭 생성</h3>
-        <p class="relative z-10 text-base text-slate-600 leading-relaxed mb-10">계약 정보 입력 한 번으로 <strong class="text-violet-700 font-bold">내부결재부터 계약서까지</strong> 모든 필수 서류를 자동 생성합니다.</p>
-        <div class="relative z-10 flex items-center text-violet-600 font-bold text-base group-hover:translate-x-2 transition-transform duration-300">
+        <h3 class="relative z-10 text-2xl font-bold text-slate-900 mb-4 tracking-tight">계약보증금 계산</h3>
+        <p class="relative z-10 text-base text-slate-600 leading-relaxed mb-10">계약금액만 입력하면 <strong class="text-amber-700 font-bold">계약·이행·하자·선금 보증금</strong>을 법령 기준에 맞게 자동 계산합니다.</p>
+        <div class="relative z-10 flex items-center text-amber-600 font-bold text-base group-hover:translate-x-2 transition-transform duration-300">
           <span>지금 확인하기</span>
           <span class="material-symbols-outlined ml-2 text-xl">arrow_forward</span>
         </div>
       <% end %>
 
-      <%= link_to budget_estimator_path, class: "group relative overflow-hidden rounded-3xl bg-white p-10 shadow-xl hover:shadow-2xl hover:-translate-y-3 transition-all duration-500 border-2 border-slate-100 hover:border-emerald-200" do %>
+      <%= link_to estimated_price_path, class: "group relative overflow-hidden rounded-3xl bg-white p-10 shadow-xl hover:shadow-2xl hover:-translate-y-3 transition-all duration-500 border-2 border-slate-100 hover:border-emerald-200" do %>
         <div class="absolute inset-0 bg-gradient-to-br from-emerald-50/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
         <div class="relative z-10 mb-7 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600 shadow-md group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-300">
-          <span class="material-symbols-outlined text-4xl">calculate</span>
+          <span class="material-symbols-outlined text-4xl">payments</span>
         </div>
-        <h3 class="relative z-10 text-2xl font-bold text-slate-900 mb-4 tracking-tight">소요예산 추정기</h3>
-        <p class="relative z-10 text-base text-slate-600 leading-relaxed mb-10">복잡한 원가계산 없이 <strong class="text-emerald-700 font-bold">빅데이터 기반</strong>으로 적정 예산을 빠르고 정확하게 추정하세요.</p>
+        <h3 class="relative z-10 text-2xl font-bold text-slate-900 mb-4 tracking-tight">예정가격 산정</h3>
+        <p class="relative z-10 text-base text-slate-600 leading-relaxed mb-10">시장조사 가격을 입력하면 <strong class="text-emerald-700 font-bold">복수예비가격 85~100%</strong> 범위의 적정 예정가격을 즉시 산출합니다.</p>
         <div class="relative z-10 flex items-center text-emerald-600 font-bold text-base group-hover:translate-x-2 transition-transform duration-300">
           <span>지금 확인하기</span>
           <span class="material-symbols-outlined ml-2 text-xl">arrow_forward</span>
@@ -148,10 +148,9 @@
     </div>
 
     <!-- Minor Tools -->
-    <div class="grid grid-cols-2 gap-6 md:grid-cols-4">
+    <div class="grid grid-cols-2 gap-6 md:grid-cols-3">
       <% [
         [legal_period_path, "calendar_month", "계약기간 산정"],
-        [contract_guarantee_path, "percent", "계약보증금 계산"],
         [pre_contract_checklist_path, "checklist_rtl", "사전 체크리스트"],
         [contract_flow_path, "account_tree", "계약 흐름도"]
       ].each do |path, icon, label| %>
