@@ -12,12 +12,15 @@ class HomeController < ApplicationController
       expires_in 5.minutes, public: true, stale_while_revalidate: 30.minutes
     end
 
+    description_text = "공무원을 위한 계약 실무 종합 플랫폼. 수의계약, 입찰, 예산 등 #{@topic_count}개 법령 가이드와 #{ApplicationHelper::ACTIVE_TOOL_COUNT}개 자동화 도구로 복잡한 절차를 쉽게 해결하세요. #{@audit_case_count}건 감사사례로 실수를 예방하고, 업무 시간을 단축하세요."
+
     set_meta_tags(
       title: "계약 실무, 이제 혼자 고민하지 마세요",
-      description: "공무원을 위한 계약 실무 가이드 — 수의계약, 입찰, 검수, 예산 업무를 쉽고 정확하게. #{ApplicationHelper::ACTIVE_TOOL_COUNT}개 자동화 도구와 #{@topic_count + @guide_count}개 가이드 제공.",
+      description: description_text,
       keywords: "공무원, 계약 실무, 수의계약, 입찰, 검수, 예산, 실무 도구",
       og: {
         title: "실무.kr — 공무원 계약 실무 가이드",
+        description: description_text,
         url: canonical_url,
         image: "https://silmu.kr/og-image.png",
         type: "website"
@@ -28,13 +31,17 @@ class HomeController < ApplicationController
   def about
     expires_in 1.day, public: true, stale_while_revalidate: 7.days
 
+    description_text = "실무(silmu.kr)는 공무원의 계약·예산 업무를 돕는 무료 플랫폼입니다. 법령 가이드 37개, 자동화 도구 18개, 감사사례 55건, 서식 템플릿 23개를 제공하여 복잡한 법령과 절차를 쉽게 이해하고 실무에 바로 적용할 수 있도록 지원합니다."
+
     set_meta_tags(
       title: "서비스 소개",
-      description: "실무(silmu.kr)는 공무원의 계약·예산 업무를 돕는 무료 서비스입니다. 법령 가이드, 자동화 도구, 문서 양식을 제공합니다.",
+      description: description_text,
       og: {
         title: "실무.kr 서비스 소개",
+        description: description_text,
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png"
+        image: "https://silmu.kr/og-image.png",
+        type: "website"
       }
     )
   end
@@ -42,13 +49,17 @@ class HomeController < ApplicationController
   def privacy
     expires_in 1.day, public: true, stale_while_revalidate: 7.days
 
+    description_text = "실무(silmu.kr)의 개인정보처리방침입니다. 개인정보 수집 및 이용 목적, 보유 기간, 제3자 제공, 파기 절차, 이용자 권리 등을 상세히 안내합니다. 문의사항은 hello@silmu.kr로 연락주세요."
+
     set_meta_tags(
       title: "개인정보처리방침",
-      description: "실무(silmu.kr) 개인정보처리방침입니다.",
+      description: description_text,
       og: {
         title: "실무.kr 개인정보처리방침",
+        description: description_text,
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png"
+        image: "https://silmu.kr/og-image.png",
+        type: "website"
       }
     )
   end
@@ -56,13 +67,17 @@ class HomeController < ApplicationController
   def terms
     expires_in 1.day, public: true, stale_while_revalidate: 7.days
 
+    description_text = "실무(silmu.kr) 서비스 이용약관입니다. 서비스 이용 조건, 계정 관리, 콘텐츠 저작권, 면책 조항, 분쟁 해결 등을 명시합니다. 서비스 이용 전 반드시 확인해주세요. 문의: hello@silmu.kr"
+
     set_meta_tags(
       title: "이용약관",
-      description: "실무(silmu.kr) 서비스 이용약관입니다.",
+      description: description_text,
       og: {
         title: "실무.kr 이용약관",
+        description: description_text,
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png"
+        image: "https://silmu.kr/og-image.png",
+        type: "website"
       }
     )
   end
