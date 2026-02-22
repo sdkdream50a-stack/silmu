@@ -2,7 +2,7 @@
 service: silmu
 
 # Name of the container image (use your-user/app-name on external registries).
-image: silmu
+image: sdkdream50a-stack/silmu
 
 # Deploy to these servers.
 servers:
@@ -26,15 +26,13 @@ proxy:
 
 # Where you keep your container images.
 registry:
-  # Alternatives: hub.docker.com / registry.digitalocean.com / ghcr.io / ...
-  server: localhost:5555
+  # GitHub Container Registry (no Docker Desktop required)
+  server: ghcr.io
+  username: sdkdream50a-stack
 
-  # Needed for authenticated registries.
-  # username: your-user
-
-  # Always use an access token rather than real password when possible.
-  # password:
-  #   - KAMAL_REGISTRY_PASSWORD
+  # GitHub Personal Access Token with write:packages permission
+  password:
+    - KAMAL_REGISTRY_PASSWORD
 
 # Inject ENV variables into containers (secrets come from .kamal/secrets).
 env:
@@ -85,14 +83,11 @@ asset_path: /rails/public/assets
 # Configure the image builder.
 builder:
   arch: amd64
+  # Build on remote server and push to GitHub Container Registry
   remote: ssh://root@141.164.53.97
-  #
-  # # Pass arguments and secrets to the Docker build process
-  # args:
-  #   RUBY_VERSION: 3.3.6
-  # secrets:
-  #   - GITHUB_TOKEN
-  #   - RAILS_MASTER_KEY
+  # Pass secrets to Docker build process
+  secrets:
+    - RAILS_MASTER_KEY
 
 # Use a different ssh user than root
 # ssh:
