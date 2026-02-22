@@ -1,0 +1,443 @@
+<%# Created: 2026-02-22 17:35 %>
+
+<div class="bg-white border-2 border-indigo-200 rounded-lg p-6 mb-8">
+  <div class="flex items-start gap-3 mb-4">
+    <span class="material-symbols-outlined text-indigo-600 text-3xl">receipt_long</span>
+    <div>
+      <h2 class="text-2xl font-bold text-gray-900 mb-2">단가계약 체결 프로세스</h2>
+      <p class="text-gray-600 leading-relaxed">
+        물품이나 용역을 단가로 계약하고, 필요한 수량만큼 수시로 구매하는 단가계약 절차를 안내합니다.
+        지방계약법 시행령 제20조(단가계약) 규정에 따라 4단계로 진행됩니다.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 1: 단가계약 판단 및 준비 -->
+<div class="bg-gradient-to-br from-indigo-50 to-white border-2 border-indigo-200 rounded-lg p-6 mb-6">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="inline-flex items-center justify-center w-10 h-10 bg-indigo-600 text-white rounded-full font-bold">1</span>
+    <h3 class="text-xl font-bold text-indigo-900">단가계약 판단 및 준비</h3>
+  </div>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    단가계약 대상인지 판단하고, 계약 방식을 결정합니다. 수량이 확정되지 않았거나 수시로 구매가 필요한 경우 단가계약이 적합합니다.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-white rounded-lg p-4 border-2 border-indigo-100 hover:border-indigo-300 transition-colors cursor-pointer">
+      <a href="<%= contract_method_path %>" class="flex items-center gap-3 mb-2" data-turbo="false">
+        <span class="material-symbols-outlined text-indigo-600">gavel</span>
+        <h4 class="font-bold text-gray-900">단가계약 대상 판단 ⭐</h4>
+      </a>
+      <p class="text-sm text-gray-600">수량 불확정, 수시 구매 필요 여부</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-indigo-100 hover:border-indigo-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-indigo-600">inventory</span>
+        <h4 class="font-bold text-gray-900">품목 및 규격 정리</h4>
+      </div>
+      <p class="text-sm text-gray-600">품목별 단가 산출 기준 마련</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-indigo-100 hover:border-indigo-300 transition-colors cursor-pointer">
+      <a href="<%= estimated_price_path %>" class="flex items-center gap-3 mb-2" data-turbo="false">
+        <span class="material-symbols-outlined text-indigo-600">calculate</span>
+        <h4 class="font-bold text-gray-900">예정단가 산정</h4>
+      </a>
+      <p class="text-sm text-gray-600">품목별 시장단가 조사</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-indigo-100 hover:border-indigo-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-indigo-600">percent</span>
+        <h4 class="font-bold text-gray-900">계약 한도액 결정</h4>
+      </div>
+      <p class="text-sm text-gray-600">연간 예상 소요액 산정</p>
+    </div>
+  </div>
+
+  <div class="mt-4 p-4 bg-indigo-100 border-l-4 border-indigo-500 rounded">
+    <p class="text-sm text-indigo-900 font-medium">
+      ✓ 단가계약은 수량이 확정되지 않은 경우에만 체결 가능합니다 (시행령 제20조)
+    </p>
+  </div>
+</div>
+
+<!-- STEP 2: 단가 결정 및 계약 체결 -->
+<div class="bg-gradient-to-br from-amber-50 to-white border-2 border-amber-200 rounded-lg p-6 mb-6">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="inline-flex items-center justify-center w-10 h-10 bg-amber-500 text-white rounded-full font-bold">2</span>
+    <h3 class="text-xl font-bold text-amber-900">단가 결정 및 계약 체결</h3>
+  </div>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    입찰 또는 견적을 통해 단가를 결정하고, 단가계약을 체결합니다. 계약서에는 품목별 단가와 계약 한도액을 명시합니다.
+  </p>
+
+  <!-- 공문/양식 생성 도구 버튼 -->
+  <button
+    onclick="openDocPopup(event)"
+    class="w-full mb-6 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold py-4 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2"
+  >
+    <span class="material-symbols-outlined text-2xl">auto_awesome</span>
+    <span>공문/양식 생성 도구 (AI 자동 작성)</span>
+  </button>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-white rounded-lg p-4 border-2 border-amber-100 hover:border-amber-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-amber-600">campaign</span>
+        <h4 class="font-bold text-gray-900">입찰공고 또는 견적 요청</h4>
+      </div>
+      <p class="text-sm text-gray-600">한도액 기준으로 계약 방식 결정</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-amber-100 hover:border-amber-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-amber-600">trending_down</span>
+        <h4 class="font-bold text-gray-900">낙찰자 결정</h4>
+      </div>
+      <p class="text-sm text-gray-600">품목별 최저가 또는 적격가 선정</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-amber-100 hover:border-amber-300 transition-colors cursor-pointer">
+      <a href="<%= contract_documents_path %>" class="flex items-center gap-3 mb-2" data-turbo="false">
+        <span class="material-symbols-outlined text-amber-600">description</span>
+        <h4 class="font-bold text-gray-900">단가계약서 작성 ⭐</h4>
+      </a>
+      <p class="text-sm text-gray-600">품목별 단가, 한도액, 계약기간</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-amber-100 hover:border-amber-300 transition-colors cursor-pointer">
+      <a href="<%= contract_guarantee_path %>" class="flex items-center gap-3 mb-2" data-turbo="false">
+        <span class="material-symbols-outlined text-amber-600">shield</span>
+        <h4 class="font-bold text-gray-900">계약보증금 징구</h4>
+      </a>
+      <p class="text-sm text-gray-600">한도액의 10% (면제 요건 확인)</p>
+    </div>
+  </div>
+
+  <div class="mt-4 p-4 bg-amber-100 border-l-4 border-amber-500 rounded">
+    <p class="text-sm text-amber-900 font-medium">
+      ⚠️ 단가계약서에는 품목별 단가, 계약 한도액, 계약기간을 반드시 명시해야 합니다
+    </p>
+  </div>
+</div>
+
+<!-- STEP 3: 물품 구매 및 검수 -->
+<div class="bg-gradient-to-br from-emerald-50 to-white border-2 border-emerald-200 rounded-lg p-6 mb-6">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="inline-flex items-center justify-center w-10 h-10 bg-emerald-600 text-white rounded-full font-bold">3</span>
+    <h3 class="text-xl font-bold text-emerald-900">물품 구매 및 검수</h3>
+  </div>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    필요한 수량만큼 계약자에게 납품을 요청하고, 납품된 물품을 검수합니다. 각 납품 건마다 검수를 진행합니다.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-white rounded-lg p-4 border-2 border-emerald-100 hover:border-emerald-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-emerald-600">shopping_cart</span>
+        <h4 class="font-bold text-gray-900">납품 요청</h4>
+      </div>
+      <p class="text-sm text-gray-600">품목, 수량, 납품 기한 명시</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-emerald-100 hover:border-emerald-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-emerald-600">local_shipping</span>
+        <h4 class="font-bold text-gray-900">물품 납품</h4>
+      </div>
+      <p class="text-sm text-gray-600">계약자가 요청 수량 납품</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-emerald-100 hover:border-emerald-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-emerald-600">fact_check</span>
+        <h4 class="font-bold text-gray-900">검수 실시</h4>
+      </div>
+      <p class="text-sm text-gray-600">품질, 수량, 규격 적합성 확인</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-emerald-100 hover:border-emerald-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-emerald-600">receipt</span>
+        <h4 class="font-bold text-gray-900">검수조서 작성</h4>
+      </div>
+      <p class="text-sm text-gray-600">검수 결과 기록 및 보관</p>
+    </div>
+  </div>
+
+  <div class="mt-4 p-4 bg-emerald-100 border-l-4 border-emerald-500 rounded">
+    <p class="text-sm text-emerald-900 font-medium">
+      ✓ 각 납품 건마다 검수조서를 작성하고, 대금 지급 시 첨부해야 합니다
+    </p>
+  </div>
+</div>
+
+<!-- STEP 4: 대금 지급 및 정산 -->
+<div class="bg-gradient-to-br from-slate-50 to-white border-2 border-slate-200 rounded-lg p-6 mb-6">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="inline-flex items-center justify-center w-10 h-10 bg-slate-600 text-white rounded-full font-bold">4</span>
+    <h3 class="text-xl font-bold text-slate-900">대금 지급 및 정산</h3>
+  </div>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    검수가 완료된 물품에 대해 대금을 지급하고, 계약 종료 시 한도액 대비 실제 구매액을 정산합니다.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-white rounded-lg p-4 border-2 border-slate-100 hover:border-slate-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-slate-600">calculate</span>
+        <h4 class="font-bold text-gray-900">대금 계산</h4>
+      </div>
+      <p class="text-sm text-gray-600">단가 × 납품 수량</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-slate-100 hover:border-slate-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-slate-600">payments</span>
+        <h4 class="font-bold text-gray-900">대금 지급</h4>
+      </div>
+      <p class="text-sm text-gray-600">검수조서 첨부하여 지급</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-slate-100 hover:border-slate-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-slate-600">trending_up</span>
+        <h4 class="font-bold text-gray-900">한도액 누계 관리</h4>
+      </div>
+      <p class="text-sm text-gray-600">총 지급액이 한도액 초과 방지</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-slate-100 hover:border-slate-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-slate-600">summarize</span>
+        <h4 class="font-bold text-gray-900">계약 종료 정산</h4>
+      </div>
+      <p class="text-sm text-gray-600">실제 구매액 정리 및 보증금 반환</p>
+    </div>
+  </div>
+
+  <div class="mt-4 p-4 bg-slate-100 border-l-4 border-slate-500 rounded">
+    <p class="text-sm text-slate-900 font-medium">
+      ✓ 계약 한도액을 초과하여 구매하면 감사 지적 대상이므로, 누계 관리가 필수입니다
+    </p>
+  </div>
+</div>
+
+<!-- 체크포인트 3컬럼 -->
+<div class="bg-white border-2 border-gray-300 rounded-lg p-6 mb-8">
+  <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+    <span class="material-symbols-outlined text-indigo-600">checklist</span>
+    체크포인트
+  </h3>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <!-- 절대 금지 사항 -->
+    <div class="border-2 border-red-200 rounded-lg p-4 bg-red-50">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="material-symbols-outlined text-red-600">block</span>
+        <h4 class="font-bold text-red-900">절대 금지 사항</h4>
+      </div>
+      <ul class="space-y-2 text-sm text-gray-700">
+        <li class="flex items-start gap-2">
+          <span class="text-red-600 font-bold shrink-0">✗</span>
+          <span><strong>한도액 초과 구매:</strong> 계약 한도액을 초과하여 구매하면 감사 지적</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-red-600 font-bold shrink-0">✗</span>
+          <span><strong>검수 누락:</strong> 검수조서 없이 대금 지급 시 부정 지급</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-red-600 font-bold shrink-0">✗</span>
+          <span><strong>단가 임의 변경:</strong> 계약서 단가와 다른 금액으로 지급 금지</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- 필수 서류 -->
+    <div class="border-2 border-emerald-200 rounded-lg p-4 bg-emerald-50">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="material-symbols-outlined text-emerald-600">folder_open</span>
+        <h4 class="font-bold text-emerald-900">필수 서류</h4>
+      </div>
+      <ul class="space-y-2 text-sm text-gray-700">
+        <li class="flex items-start gap-2">
+          <span class="text-emerald-600 font-bold shrink-0">✓</span>
+          <span><strong>단가계약서:</strong> 품목별 단가, 한도액, 계약기간 명시</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-emerald-600 font-bold shrink-0">✓</span>
+          <span><strong>검수조서:</strong> 각 납품 건마다 작성 (품목, 수량, 규격 확인)</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-emerald-600 font-bold shrink-0">✓</span>
+          <span><strong>납품 요청서:</strong> 품목, 수량, 납품 기한 명시</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- 실무 팁 -->
+    <div class="border-2 border-blue-200 rounded-lg p-4 bg-blue-50">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="material-symbols-outlined text-blue-600">tips_and_updates</span>
+        <h4 class="font-bold text-blue-900">실무 팁</h4>
+      </div>
+      <ul class="space-y-2 text-sm text-gray-700">
+        <li class="flex items-start gap-2">
+          <span class="text-blue-600 font-bold shrink-0">💡</span>
+          <span><strong>한도액 여유 확보:</strong> 예상 소요액의 110~120% 수준으로 한도액 설정</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-blue-600 font-bold shrink-0">💡</span>
+          <span><strong>계약기간 설정:</strong> 연간 단가계약은 회계연도 종료일까지</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-blue-600 font-bold shrink-0">💡</span>
+          <span><strong>누계 관리 시스템:</strong> 엑셀로 지급액 누계를 실시간 관리</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- 공문/양식 생성 팝업 모달 -->
+<div id="docPopup" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+    <div class="sticky top-0 bg-gradient-to-r from-amber-500 to-orange-500 text-white p-6 rounded-t-lg">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-3xl">auto_awesome</span>
+          <h3 class="text-2xl font-bold">단가계약 관련 공문·양식 자동 생성</h3>
+        </div>
+        <button onclick="closeDocPopup()" class="text-white hover:text-gray-200 transition-colors">
+          <span class="material-symbols-outlined text-3xl">close</span>
+        </button>
+      </div>
+      <p class="mt-2 text-amber-50">필요한 양식을 선택하면 AI가 자동으로 작성해드립니다</p>
+    </div>
+
+    <div class="p-6">
+      <div id="docCategories" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- JavaScript로 동적 생성 -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// 공문/양식 생성 팝업 데이터
+const docPopupData = {
+  "단가계약 체결": [
+    {
+      title: "입찰공고문 (단가계약)",
+      desc: "단가계약 입찰공고 양식",
+      icon: "campaign",
+      prompt: "단가계약 입찰공고문을 작성해줘. 사무용품 단가계약, 한도액 5천만원, 계약기간 1년, 공고기간 7일."
+    },
+    {
+      title: "단가계약서",
+      desc: "품목별 단가 명시한 계약서",
+      icon: "description",
+      prompt: "단가계약서를 작성해줘. 사무용품 10개 품목, 한도액 5천만원, 계약기간 2026.3.1~2027.2.28."
+    }
+  ],
+  "납품 관련": [
+    {
+      title: "납품 요청서",
+      desc: "품목, 수량, 납품 기한 명시",
+      icon: "shopping_cart",
+      prompt: "납품 요청서를 작성해줘. A4용지 50박스, 볼펜 100개, 납품 기한 7일 이내."
+    },
+    {
+      title: "검수조서",
+      desc: "납품 물품 검수 결과 기록",
+      icon: "fact_check",
+      prompt: "검수조서를 작성해줘. A4용지 50박스 납품, 품질·수량·규격 적합 확인."
+    }
+  ],
+  "대금 지급": [
+    {
+      title: "대금 지급 품의서",
+      desc: "검수 완료 후 대금 지급 결재",
+      icon: "payments",
+      prompt: "대금 지급 품의서를 작성해줘. A4용지 50박스 @ 15,000원 = 750,000원, 검수 완료."
+    }
+  ],
+  "정산용": [
+    {
+      title: "단가계약 정산서",
+      desc: "계약 종료 시 실제 구매액 정리",
+      icon: "summarize",
+      prompt: "단가계약 정산서를 작성해줘. 한도액 5천만원, 실제 구매액 4,200만원, 계약기간 종료."
+    }
+  ]
+};
+
+function openDocPopup(event) {
+  event.preventDefault();
+  const popup = document.getElementById('docPopup');
+  const categoriesContainer = document.getElementById('docCategories');
+
+  categoriesContainer.innerHTML = '';
+
+  Object.entries(docPopupData).forEach(([category, items]) => {
+    const categoryDiv = document.createElement('div');
+    categoryDiv.className = 'col-span-full';
+    categoryDiv.innerHTML = `
+      <h4 class="font-bold text-lg text-gray-900 mb-3 flex items-center gap-2">
+        <span class="material-symbols-outlined text-amber-600">folder</span>
+        ${category}
+      </h4>
+    `;
+
+    const itemsGrid = document.createElement('div');
+    itemsGrid.className = 'grid grid-cols-1 md:grid-cols-2 gap-3 mb-6';
+
+    items.forEach(item => {
+      const itemCard = document.createElement('a');
+      itemCard.href = `/tools/ai-document?prompt=${encodeURIComponent(item.prompt)}`;
+      itemCard.className = 'bg-gradient-to-br from-white to-amber-50 border-2 border-amber-200 hover:border-amber-400 rounded-lg p-4 transition-all hover:shadow-lg cursor-pointer';
+      itemCard.setAttribute('data-turbo', 'false');
+      itemCard.innerHTML = `
+        <div class="flex items-start gap-3">
+          <span class="material-symbols-outlined text-amber-600 text-2xl">${item.icon}</span>
+          <div>
+            <h5 class="font-bold text-gray-900 mb-1">${item.title}</h5>
+            <p class="text-sm text-gray-600">${item.desc}</p>
+          </div>
+        </div>
+      `;
+      itemsGrid.appendChild(itemCard);
+    });
+
+    categoryDiv.appendChild(itemsGrid);
+    categoriesContainer.appendChild(categoryDiv);
+  });
+
+  popup.classList.remove('hidden');
+}
+
+function closeDocPopup() {
+  document.getElementById('docPopup').classList.add('hidden');
+}
+
+// ESC 키로 팝업 닫기
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'Escape') {
+    closeDocPopup();
+  }
+});
+
+// 팝업 배경 클릭 시 닫기
+document.getElementById('docPopup')?.addEventListener('click', function(event) {
+  if (event.target === this) {
+    closeDocPopup();
+  }
+});
+</script>

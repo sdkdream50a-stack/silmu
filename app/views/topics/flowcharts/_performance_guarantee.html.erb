@@ -1,0 +1,449 @@
+<%# Created: 2026-02-22 17:40 %>
+
+<div class="bg-white border-2 border-indigo-200 rounded-lg p-6 mb-8">
+  <div class="flex items-start gap-3 mb-4">
+    <span class="material-symbols-outlined text-indigo-600 text-3xl">verified_user</span>
+    <div>
+      <h2 class="text-2xl font-bold text-gray-900 mb-2">계약이행보증금 관리 프로세스</h2>
+      <p class="text-gray-600 leading-relaxed">
+        계약자가 계약을 이행하지 못할 경우를 대비하여 징구하는 계약보증금의 관리 절차를 안내합니다.
+        지방계약법 시행령 제43조(계약보증금) 규정에 따라 4단계로 진행됩니다.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 1: 계약보증금 판단 및 계산 -->
+<div class="bg-gradient-to-br from-indigo-50 to-white border-2 border-indigo-200 rounded-lg p-6 mb-6">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="inline-flex items-center justify-center w-10 h-10 bg-indigo-600 text-white rounded-full font-bold">1</span>
+    <h3 class="text-xl font-bold text-indigo-900">계약보증금 판단 및 계산</h3>
+  </div>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    계약보증금 징구 대상인지 판단하고, 보증금액을 계산합니다. 계약금액의 10% 이상을 원칙으로 합니다.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-white rounded-lg p-4 border-2 border-indigo-100 hover:border-indigo-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-indigo-600">rule</span>
+        <h4 class="font-bold text-gray-900">징구 대상 판단</h4>
+      </div>
+      <p class="text-sm text-gray-600">계약 유형 및 금액 기준 확인</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-indigo-100 hover:border-indigo-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-indigo-600">cancel</span>
+        <h4 class="font-bold text-gray-900">면제 요건 확인</h4>
+      </div>
+      <p class="text-sm text-gray-600">소기업·장애인·여성기업 등</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-indigo-100 hover:border-indigo-300 transition-colors cursor-pointer">
+      <a href="<%= contract_guarantee_path %>" class="flex items-center gap-3 mb-2" data-turbo="false">
+        <span class="material-symbols-outlined text-indigo-600">calculate</span>
+        <h4 class="font-bold text-gray-900">보증금액 계산 ⭐</h4>
+      </a>
+      <p class="text-sm text-gray-600">계약금액의 10% (원칙)</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-indigo-100 hover:border-indigo-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-indigo-600">compare_arrows</span>
+        <h4 class="font-bold text-gray-900">보증 방법 선택</h4>
+      </div>
+      <p class="text-sm text-gray-600">보증서, 현금, 국채 등</p>
+    </div>
+  </div>
+
+  <div class="mt-4 p-4 bg-indigo-100 border-l-4 border-indigo-500 rounded">
+    <p class="text-sm text-indigo-900 font-medium">
+      ✓ 계약보증금은 계약금액의 10% 이상이며, 면제 요건을 반드시 확인해야 합니다 (시행령 제43조)
+    </p>
+  </div>
+</div>
+
+<!-- STEP 2: 보증서 제출 -->
+<div class="bg-gradient-to-br from-amber-50 to-white border-2 border-amber-200 rounded-lg p-6 mb-6">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="inline-flex items-center justify-center w-10 h-10 bg-amber-500 text-white rounded-full font-bold">2</span>
+    <h3 class="text-xl font-bold text-amber-900">보증서 제출</h3>
+  </div>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    계약자가 계약보증금을 납부하거나 보증서를 제출합니다. 보증서는 계약 체결 전 또는 체결과 동시에 제출해야 합니다.
+  </p>
+
+  <!-- 공문/양식 생성 도구 버튼 -->
+  <button
+    onclick="openDocPopup(event)"
+    class="w-full mb-6 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold py-4 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2"
+  >
+    <span class="material-symbols-outlined text-2xl">auto_awesome</span>
+    <span>공문/양식 생성 도구 (AI 자동 작성)</span>
+  </button>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-white rounded-lg p-4 border-2 border-amber-100 hover:border-amber-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-amber-600">shield</span>
+        <h4 class="font-bold text-gray-900">보증서 종류 확인</h4>
+      </div>
+      <p class="text-sm text-gray-600">이행보증서, 지급보증서, 서울보증보험 등</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-amber-100 hover:border-amber-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-amber-600">task_alt</span>
+        <h4 class="font-bold text-gray-900">보증서 적정성 검토</h4>
+      </div>
+      <p class="text-sm text-gray-600">보증금액, 보증기간, 계약번호 일치</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-amber-100 hover:border-amber-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-amber-600">upload_file</span>
+        <h4 class="font-bold text-gray-900">보증서 접수</h4>
+      </div>
+      <p class="text-sm text-gray-600">원본 보증서 수령 및 보관</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-amber-100 hover:border-amber-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-amber-600">description</span>
+        <h4 class="font-bold text-gray-900">보증대장 기록</h4>
+      </div>
+      <p class="text-sm text-gray-600">보증서 번호, 금액, 기간 등 관리</p>
+    </div>
+  </div>
+
+  <div class="mt-4 p-4 bg-amber-100 border-l-4 border-amber-500 rounded">
+    <p class="text-sm text-amber-900 font-medium">
+      ⚠️ 보증서 없이 계약을 체결하면 감사 지적 대상입니다 (계약보증금 징구 누락)
+    </p>
+  </div>
+</div>
+
+<!-- STEP 3: 계약 이행 관리 -->
+<div class="bg-gradient-to-br from-emerald-50 to-white border-2 border-emerald-200 rounded-lg p-6 mb-6">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="inline-flex items-center justify-center w-10 h-10 bg-emerald-600 text-white rounded-full font-bold">3</span>
+    <h3 class="text-xl font-bold text-emerald-900">계약 이행 관리</h3>
+  </div>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    계약자가 계약을 이행하는 동안 보증서를 안전하게 보관하고, 계약 이행 여부를 관리합니다.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-white rounded-lg p-4 border-2 border-emerald-100 hover:border-emerald-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-emerald-600">folder_supervised</span>
+        <h4 class="font-bold text-gray-900">보증서 보관</h4>
+      </div>
+      <p class="text-sm text-gray-600">금고 또는 보안 캐비넷 보관</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-emerald-100 hover:border-emerald-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-emerald-600">calendar_today</span>
+        <h4 class="font-bold text-gray-900">보증기간 관리</h4>
+      </div>
+      <p class="text-sm text-gray-600">보증기간 만료 전 연장 또는 반환</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-emerald-100 hover:border-emerald-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-emerald-600">construction</span>
+        <h4 class="font-bold text-gray-900">이행 상황 점검</h4>
+      </div>
+      <p class="text-sm text-gray-600">공정률, 품질, 납기 준수 여부</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-emerald-100 hover:border-emerald-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-emerald-600">warning</span>
+        <h4 class="font-bold text-gray-900">불이행 조치</h4>
+      </div>
+      <p class="text-sm text-gray-600">계약 해제 시 보증금 귀속 절차</p>
+    </div>
+  </div>
+
+  <div class="mt-4 p-4 bg-emerald-100 border-l-4 border-emerald-500 rounded">
+    <p class="text-sm text-emerald-900 font-medium">
+      ✓ 계약자가 계약을 이행하지 못할 경우, 보증서를 청구하여 손해를 배상받을 수 있습니다
+    </p>
+  </div>
+</div>
+
+<!-- STEP 4: 보증금 반환 또는 귀속 -->
+<div class="bg-gradient-to-br from-slate-50 to-white border-2 border-slate-200 rounded-lg p-6 mb-6">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="inline-flex items-center justify-center w-10 h-10 bg-slate-600 text-white rounded-full font-bold">4</span>
+    <h3 class="text-xl font-bold text-slate-900">보증금 반환 또는 귀속</h3>
+  </div>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    계약이 완료되면 보증서를 계약자에게 반환하고, 불이행 시에는 보증금을 귀속 처리합니다.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-white rounded-lg p-4 border-2 border-slate-100 hover:border-slate-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-slate-600">fact_check</span>
+        <h4 class="font-bold text-gray-900">계약 완료 확인</h4>
+      </div>
+      <p class="text-sm text-gray-600">검사·검수 완료 및 대금 지급</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-slate-100 hover:border-slate-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-slate-600">restore</span>
+        <h4 class="font-bold text-gray-900">보증서 반환</h4>
+      </div>
+      <p class="text-sm text-gray-600">계약자에게 원본 보증서 반환</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-slate-100 hover:border-slate-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-slate-600">gavel</span>
+        <h4 class="font-bold text-gray-900">불이행 시 귀속 절차</h4>
+      </div>
+      <p class="text-sm text-gray-600">계약 해제 → 보증서 청구 → 귀속</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-slate-100 hover:border-slate-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-slate-600">archive</span>
+        <h4 class="font-bold text-gray-900">서류 정리</h4>
+      </div>
+      <p class="text-sm text-gray-600">반환 확인서 또는 귀속 조서</p>
+    </div>
+  </div>
+
+  <div class="mt-4 p-4 bg-slate-100 border-l-4 border-slate-500 rounded">
+    <p class="text-sm text-slate-900 font-medium">
+      ✓ 계약이 완료되면 지체 없이 보증서를 반환해야 하며, 반환 시 반환 확인서를 받아야 합니다
+    </p>
+  </div>
+</div>
+
+<!-- 체크포인트 3컬럼 -->
+<div class="bg-white border-2 border-gray-300 rounded-lg p-6 mb-8">
+  <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+    <span class="material-symbols-outlined text-indigo-600">checklist</span>
+    체크포인트
+  </h3>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <!-- 절대 금지 사항 -->
+    <div class="border-2 border-red-200 rounded-lg p-4 bg-red-50">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="material-symbols-outlined text-red-600">block</span>
+        <h4 class="font-bold text-red-900">절대 금지 사항</h4>
+      </div>
+      <ul class="space-y-2 text-sm text-gray-700">
+        <li class="flex items-start gap-2">
+          <span class="text-red-600 font-bold shrink-0">✗</span>
+          <span><strong>보증서 없이 계약:</strong> 계약보증금 징구 누락 시 감사 지적</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-red-600 font-bold shrink-0">✗</span>
+          <span><strong>보증서 분실:</strong> 보증서 원본을 분실하면 재발급 절차 복잡</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-red-600 font-bold shrink-0">✗</span>
+          <span><strong>반환 누락:</strong> 계약 완료 후 보증서 미반환 시 민원 발생</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- 필수 서류 -->
+    <div class="border-2 border-emerald-200 rounded-lg p-4 bg-emerald-50">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="material-symbols-outlined text-emerald-600">folder_open</span>
+        <h4 class="font-bold text-emerald-900">필수 서류</h4>
+      </div>
+      <ul class="space-y-2 text-sm text-gray-700">
+        <li class="flex items-start gap-2">
+          <span class="text-emerald-600 font-bold shrink-0">✓</span>
+          <span><strong>계약이행보증서:</strong> 보증기관 발행 (계약금액의 10%)</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-emerald-600 font-bold shrink-0">✓</span>
+          <span><strong>보증대장:</strong> 보증서 번호, 금액, 기간 관리 대장</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-emerald-600 font-bold shrink-0">✓</span>
+          <span><strong>반환 확인서:</strong> 계약 완료 후 보증서 반환 시 작성</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- 실무 팁 -->
+    <div class="border-2 border-blue-200 rounded-lg p-4 bg-blue-50">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="material-symbols-outlined text-blue-600">tips_and_updates</span>
+        <h4 class="font-bold text-blue-900">실무 팁</h4>
+      </div>
+      <ul class="space-y-2 text-sm text-gray-700">
+        <li class="flex items-start gap-2">
+          <span class="text-blue-600 font-bold shrink-0">💡</span>
+          <span><strong>면제 요건 활용:</strong> 소기업·장애인기업 등은 보증금 면제 가능</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-blue-600 font-bold shrink-0">💡</span>
+          <span><strong>보증기간 여유:</strong> 계약기간 + 30일 이상으로 설정</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-blue-600 font-bold shrink-0">💡</span>
+          <span><strong>보증대장 엑셀 관리:</strong> 반환 일자, 담당자 기록으로 누락 방지</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- 공문/양식 생성 팝업 모달 -->
+<div id="docPopup" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+    <div class="sticky top-0 bg-gradient-to-r from-amber-500 to-orange-500 text-white p-6 rounded-t-lg">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-3xl">auto_awesome</span>
+          <h3 class="text-2xl font-bold">계약보증금 관련 공문·양식 자동 생성</h3>
+        </div>
+        <button onclick="closeDocPopup()" class="text-white hover:text-gray-200 transition-colors">
+          <span class="material-symbols-outlined text-3xl">close</span>
+        </button>
+      </div>
+      <p class="mt-2 text-amber-50">필요한 양식을 선택하면 AI가 자동으로 작성해드립니다</p>
+    </div>
+
+    <div class="p-6">
+      <div id="docCategories" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- JavaScript로 동적 생성 -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// 공문/양식 생성 팝업 데이터
+const docPopupData = {
+  "보증서 제출": [
+    {
+      title: "계약이행보증서 제출 공문",
+      desc: "계약자가 보증서를 제출하는 공문",
+      icon: "mail",
+      prompt: "계약이행보증서 제출 공문을 작성해줘. 계약금액 3억원, 보증금액 3천만원 (10%), 보증기관 서울보증보험."
+    },
+    {
+      title: "보증서 적정성 검토 보고서",
+      desc: "담당자가 보증서를 검토한 결과",
+      icon: "fact_check",
+      prompt: "계약이행보증서 적정성 검토 보고서를 작성해줘. 보증금액, 보증기간, 계약번호 일치 여부 확인."
+    }
+  ],
+  "보증서 관리": [
+    {
+      title: "보증대장",
+      desc: "보증서 번호, 금액, 기간 관리",
+      icon: "table",
+      prompt: "보증대장 양식을 만들어줘. 보증서 번호, 계약명, 보증금액, 보증기간, 반환일자, 담당자 컬럼 포함."
+    },
+    {
+      title: "보증기간 연장 요청서",
+      desc: "보증기간 만료 전 연장 신청",
+      icon: "calendar_month",
+      prompt: "보증기간 연장 요청서를 작성해줘. 기존 보증기간 2026.12.31까지, 연장 요청 기간 2027.3.31까지."
+    }
+  ],
+  "보증서 반환": [
+    {
+      title: "보증서 반환 공문",
+      desc: "계약 완료 후 계약자에게 반환",
+      icon: "restore",
+      prompt: "계약이행보증서 반환 공문을 작성해줘. 계약 완료 및 검사 합격, 보증서 원본 반환."
+    },
+    {
+      title: "보증서 반환 확인서",
+      desc: "계약자가 보증서 수령 확인",
+      icon: "receipt",
+      prompt: "보증서 반환 확인서를 작성해줘. 보증서 원본 수령 확인, 계약자 서명란 포함."
+    }
+  ],
+  "귀속 처리": [
+    {
+      title: "계약보증금 귀속 조서",
+      desc: "계약 불이행 시 보증금 귀속",
+      icon: "gavel",
+      prompt: "계약보증금 귀속 조서를 작성해줘. 계약 해제 사유, 보증서 청구 내역, 귀속 금액 포함."
+    }
+  ]
+};
+
+function openDocPopup(event) {
+  event.preventDefault();
+  const popup = document.getElementById('docPopup');
+  const categoriesContainer = document.getElementById('docCategories');
+
+  categoriesContainer.innerHTML = '';
+
+  Object.entries(docPopupData).forEach(([category, items]) => {
+    const categoryDiv = document.createElement('div');
+    categoryDiv.className = 'col-span-full';
+    categoryDiv.innerHTML = `
+      <h4 class="font-bold text-lg text-gray-900 mb-3 flex items-center gap-2">
+        <span class="material-symbols-outlined text-amber-600">folder</span>
+        ${category}
+      </h4>
+    `;
+
+    const itemsGrid = document.createElement('div');
+    itemsGrid.className = 'grid grid-cols-1 md:grid-cols-2 gap-3 mb-6';
+
+    items.forEach(item => {
+      const itemCard = document.createElement('a');
+      itemCard.href = `/tools/ai-document?prompt=${encodeURIComponent(item.prompt)}`;
+      itemCard.className = 'bg-gradient-to-br from-white to-amber-50 border-2 border-amber-200 hover:border-amber-400 rounded-lg p-4 transition-all hover:shadow-lg cursor-pointer';
+      itemCard.setAttribute('data-turbo', 'false');
+      itemCard.innerHTML = `
+        <div class="flex items-start gap-3">
+          <span class="material-symbols-outlined text-amber-600 text-2xl">${item.icon}</span>
+          <div>
+            <h5 class="font-bold text-gray-900 mb-1">${item.title}</h5>
+            <p class="text-sm text-gray-600">${item.desc}</p>
+          </div>
+        </div>
+      `;
+      itemsGrid.appendChild(itemCard);
+    });
+
+    categoryDiv.appendChild(itemsGrid);
+    categoriesContainer.appendChild(categoryDiv);
+  });
+
+  popup.classList.remove('hidden');
+}
+
+function closeDocPopup() {
+  document.getElementById('docPopup').classList.add('hidden');
+}
+
+// ESC 키로 팝업 닫기
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'Escape') {
+    closeDocPopup();
+  }
+});
+
+// 팝업 배경 클릭 시 닫기
+document.getElementById('docPopup')?.addEventListener('click', function(event) {
+  if (event.target === this) {
+    closeDocPopup();
+  }
+});
+</script>

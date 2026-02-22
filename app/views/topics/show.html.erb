@@ -220,6 +220,14 @@
             <%= render 'topics/flowcharts/long_term_contract', topic: @topic %>
           <% elsif @topic.slug == 'multiple-price' %>
             <%= render 'topics/flowcharts/multiple_price', topic: @topic %>
+          <% elsif @topic.slug == 'spec-price-split-bid' %>
+            <%= render 'topics/flowcharts/spec_price_split_bid', topic: @topic %>
+          <% elsif @topic.slug == 'advance-payment' %>
+            <%= render 'topics/flowcharts/advance_payment', topic: @topic %>
+          <% elsif @topic.slug == 'unit-price-contract' %>
+            <%= render 'topics/flowcharts/unit_price_contract', topic: @topic %>
+          <% elsif @topic.slug == 'performance-guarantee' %>
+            <%= render 'topics/flowcharts/performance_guarantee', topic: @topic %>
           <% elsif @topic.slug == 'e-bidding' %>
             <%= render 'topics/flowcharts/e_bidding', topic: @topic %>
           <% elsif @topic.slug == 'estimated-price' %>
