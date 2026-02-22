@@ -39,6 +39,9 @@ class TopicsController < ApplicationController
     "spec-price-split-bid"    => [:contract_method, :estimated_price],
     "performance-guarantee"   => [:contract_guarantee, :contract_documents],
     "multiple-price"          => [:estimated_price, :legal_period],
+    # 2026-02-22 추가
+    "lowest-bid-rate"         => [:estimated_price, :legal_period, :contract_method],
+    "quote-collection-guide"  => [:quote_review, :contract_method, :contract_documents],
   }.freeze
 
   # 토픽별 개별 아이콘 매핑
@@ -80,6 +83,9 @@ class TopicsController < ApplicationController
     "spec-price-split-bid"       => "call_split",
     "performance-guarantee"      => "verified",
     "multiple-price"             => "format_list_numbered",
+    # 2026-02-22 추가
+    "lowest-bid-rate"            => "trending_down",
+    "quote-collection-guide"     => "description",
   }.freeze
 
   TOOL_DEFINITIONS = {
