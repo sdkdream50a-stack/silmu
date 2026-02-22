@@ -98,8 +98,31 @@ class TopicsController < ApplicationController
   }.freeze
 
   def index
-    all_topics = Topic.published.order(view_count: :desc).to_a
+    all_topics = Topic.published.to_a
     @topics_by_category = all_topics.group_by(&:category)
+
+    # 계약 카테고리: 논리적 순서로 정렬 (수의계약 → 입찰 → 계약체결 → 보증금 → 이행 → 변경/종료)
+    contract_order = %w[
+      private-contract-overview private-contract-limit private-contract-amount
+      single-quote dual-quote quote-collection-guide
+      price-negotiation emergency-contract small-amount-contract split-contract-prohibition
+      bidding bid-announcement e-bidding estimated-price multiple-price
+      lowest-bid-rate bid-qualification spec-price-split-bid goods-selection-committee
+      contract-execution e-procurement-guide unit-price-contract long-term-contract
+      joint-contract subcontract
+      contract-guarantee-deposit bid-deposit performance-guarantee defect-warranty
+      inspection payment advance-payment late-penalty
+      design-change price-escalation contract-termination
+      private-contract
+    ]
+
+    if @topics_by_category["contract"]
+      @topics_by_category["contract"] = @topics_by_category["contract"].sort_by do |topic|
+        idx = contract_order.index(topic.slug)
+        idx ? idx : 999 # 순서에 없는 토픽은 맨 뒤로
+      end
+    end
+
     @total_count = all_topics.size
 
     # HTTP 캐싱: CDN/브라우저에서 5분간 캐시, stale-while-revalidate로 백그라운드 갱신
