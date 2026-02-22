@@ -18,6 +18,7 @@ class HomeController < ApplicationController
       title: "계약 실무, 이제 혼자 고민하지 마세요",
       description: description_text,
       keywords: "공무원, 계약 실무, 수의계약, 입찰, 검수, 예산, 실무 도구",
+      canonical: canonical_url,
       og: {
         title: "실무.kr — 공무원 계약 실무 가이드",
         description: description_text,
