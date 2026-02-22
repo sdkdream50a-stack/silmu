@@ -128,6 +128,9 @@ class TopicsController < ApplicationController
       end
     end
 
+    # 계약 카테고리 서브그룹 (36개 토픽을 6개 논리 그룹으로 분류)
+    @contract_subgroups = build_contract_subgroups(@topics_by_category["contract"] || [])
+
     @total_count = all_topics.size
 
     # HTTP 캐싱: CDN/브라우저에서 5분간 캐시, stale-while-revalidate로 백그라운드 갱신
@@ -198,6 +201,44 @@ class TopicsController < ApplicationController
   end
 
   private
+
+  # 계약 카테고리 토픽을 6개 서브그룹으로 분류
+  # 각 그룹: { id:, label:, icon:, desc:, slugs:, topics: }
+  CONTRACT_SUBGROUP_DEFS = [
+    { id: "private-contract", label: "수의계약",   icon: "handshake",     desc: "수의계약 요건, 한도, 견적 절차",
+      slugs: %w[private-contract private-contract-overview private-contract-limit private-contract-amount
+                single-quote dual-quote quote-collection-guide price-negotiation emergency-contract
+                small-amount-contract] },
+    { id: "bidding",          label: "경쟁입찰",   icon: "gavel",         desc: "입찰공고, 전자입찰, 예정가격, 적격심사",
+      slugs: %w[bidding bid-announcement e-bidding estimated-price multiple-price
+                lowest-bid-rate bid-qualification spec-price-split-bid goods-selection-committee] },
+    { id: "execution",        label: "계약체결",   icon: "description",   desc: "계약서 작성, 전자계약, 특수계약",
+      slugs: %w[contract-execution e-procurement-guide unit-price-contract long-term-contract
+                joint-contract subcontract split-contract-prohibition] },
+    { id: "guarantee",        label: "보증금/담보", icon: "security",     desc: "계약보증금, 입찰보증금, 이행보증, 하자보증",
+      slugs: %w[contract-guarantee-deposit bid-deposit performance-guarantee defect-warranty] },
+    { id: "performance",      label: "계약이행",   icon: "engineering",   desc: "검수, 대금지급, 선금, 지체상금",
+      slugs: %w[inspection payment advance-payment late-penalty] },
+    { id: "change",           label: "변경/종료",  icon: "edit_note",     desc: "설계변경, 물가변동, 계약해제",
+      slugs: %w[design-change price-escalation contract-termination] },
+  ].freeze
+
+  def build_contract_subgroups(contract_topics)
+    return [] if contract_topics.blank?
+
+    slug_to_topic = contract_topics.index_by(&:slug)
+
+    CONTRACT_SUBGROUP_DEFS.filter_map do |defn|
+      group_topics = defn[:slugs].filter_map { |s| slug_to_topic.delete(s) }
+      next if group_topics.empty?
+
+      defn.merge(topics: group_topics)
+    end.tap do |groups|
+      # 매핑되지 않은 토픽이 있으면 마지막 그룹에 추가
+      remaining = slug_to_topic.values
+      groups.last[:topics].concat(remaining) if remaining.any? && groups.any?
+    end
+  end
 
   # SEO description 생성: commentary가 있으면 commentary 사용 (150자 이상 보장)
   def generate_seo_description(topic, length = 155)

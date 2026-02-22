@@ -882,6 +882,9 @@
 /* guides/show category_color 동적 클래스 (emerald, blue, amber, violet) */
 @source inline("bg-violet-100 text-violet-600");
 
+/* topics/index 서브그룹 점프 칩: JS에서 동적으로 토글 */
+@source inline("bg-indigo-50 border-indigo-300 text-indigo-700 hover:bg-indigo-50 hover:border-indigo-200 hover:text-indigo-700");
+
 /* ===========================================
    FORCED LIGHT MODE
    모바일 브라우저 강제 다크모드 방지
