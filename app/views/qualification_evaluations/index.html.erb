@@ -1,0 +1,187 @@
+<%# Created: 2026-02-22 %>
+<div class="max-w-5xl mx-auto">
+  <!-- 헤더 -->
+  <div class="mb-8">
+    <div class="flex items-center gap-3 mb-4">
+      <span class="iconify w-10 h-10 text-forest-600" data-icon="mdi:clipboard-check-outline"></span>
+      <h1 class="text-3xl font-bold text-gray-900">적격심사 자동 채점기</h1>
+    </div>
+    <p class="text-lg text-gray-600">
+      2억원 이상 공사·용역 입찰의 적격심사 점수를 자동으로 계산합니다
+    </p>
+  </div>
+
+  <!-- 설명 섹션 -->
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+    <h2 class="text-xl font-bold text-gray-900 mb-4">📋 적격심사란?</h2>
+    <p class="text-gray-700 mb-4">
+      <strong>적격심사</strong>는 2억원 이상 공사·용역 입찰에서 가격(60~70점)과 비가격(30~40점)을 종합평가하여
+      <strong class="text-forest-600">95점 이상 업체 중 최저가</strong>를 낙찰자로 선정하는 제도입니다.
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <div class="bg-blue-50 p-4 rounded-lg">
+        <h3 class="font-bold text-blue-900 mb-2">🏗️ 공사</h3>
+        <ul class="text-sm text-blue-800 space-y-1">
+          <li>• 가격점수: 60점</li>
+          <li>• 비가격점수: 40점</li>
+          <li>• 낙찰하한율: 89.745%</li>
+        </ul>
+      </div>
+      <div class="bg-purple-50 p-4 rounded-lg">
+        <h3 class="font-bold text-purple-900 mb-2">💼 용역</h3>
+        <ul class="text-sm text-purple-800 space-y-1">
+          <li>• 가격점수: 70점</li>
+          <li>• 비가격점수: 30점</li>
+          <li>• 낙찰하한율: 없음</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 class="font-bold text-gray-900 mb-2">주요 기능</h3>
+    <ul class="space-y-2 text-gray-700">
+      <li class="flex items-start gap-2">
+        <span class="iconify w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" data-icon="mdi:check-circle"></span>
+        <span><strong>가격점수 자동 계산</strong> — 입찰가격 입력 시 낙찰하한율 적용 및 가격점수 자동 산출</span>
+      </li>
+      <li class="flex items-start gap-2">
+        <span class="iconify w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" data-icon="mdi:check-circle"></span>
+        <span><strong>비가격점수 입력</strong> — 시공능력평가액, 신인도 등 비가격 요소 점수 입력</span>
+      </li>
+      <li class="flex items-start gap-2">
+        <span class="iconify w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" data-icon="mdi:check-circle"></span>
+        <span><strong>총점 자동 계산</strong> — 가격 + 비가격 합산 후 100점 환산</span>
+      </li>
+      <li class="flex items-start gap-2">
+        <span class="iconify w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" data-icon="mdi:check-circle"></span>
+        <span><strong>적격 여부 판정</strong> — 95점 기준 자동 판정</span>
+      </li>
+      <li class="flex items-start gap-2">
+        <span class="iconify w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" data-icon="mdi:check-circle"></span>
+        <span><strong>낙찰자 자동 선정</strong> — 적격자 중 최저가 업체 자동 표시</span>
+      </li>
+    </ul>
+
+    <div class="mt-4 p-4 bg-amber-50 border-l-4 border-amber-500 rounded">
+      <p class="text-sm text-amber-900">
+        <strong>⚠️ 주의:</strong> 본 도구는 기본적인 적격심사 계산을 위한 참고용입니다.
+        실제 적격심사는 기관별 세부 기준, 평가항목, 배점 등이 다를 수 있으므로 반드시 해당 입찰공고문과 적격심사기준을 확인하시기 바랍니다.
+      </p>
+    </div>
+  </div>
+
+  <!-- 입력 폼 -->
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+    <%= form_with url: qualification_evaluations_evaluate_path, method: :post, local: false, data: { controller: "qualification-evaluation", action: "submit->qualification-evaluation#submit" } do |f| %>
+      <!-- 1. 사업 기본 정보 -->
+      <div class="mb-6">
+        <h3 class="text-lg font-bold text-gray-900 mb-4">1. 사업 기본 정보</h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">사업 종류</label>
+            <%= select_tag :project_type,
+                options_for_select([
+                  ["공사 (가격 60점 / 비가격 40점)", "construction"],
+                  ["용역 (가격 70점 / 비가격 30점)", "service"]
+                ], "construction"),
+                class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-forest-500 focus:border-transparent",
+                data: { action: "change->qualification-evaluation#updateScoreStructure" }
+            %>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">예정가격 (원)</label>
+            <%= number_field_tag :estimated_price, nil,
+                placeholder: "예: 500000000",
+                class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-forest-500 focus:border-transparent"
+            %>
+          </div>
+
+          <div data-qualification-evaluation-target="floorRateContainer">
+            <label class="block text-sm font-medium text-gray-700 mb-2">낙찰하한율 (%)</label>
+            <%= number_field_tag :floor_rate, 89.745,
+                step: 0.001,
+                class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-forest-500 focus:border-transparent"
+            %>
+            <p class="text-xs text-gray-500 mt-1">공사: 89.745% (2026년 1월 변경)</p>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">입찰 업체 수</label>
+            <%= number_field_tag :bidder_count, 3,
+                min: 1, max: 10,
+                class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-forest-500 focus:border-transparent",
+                data: { action: "change->qualification-evaluation#updateBidderFields" }
+            %>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. 입찰 업체 정보 -->
+      <div class="mb-6">
+        <h3 class="text-lg font-bold text-gray-900 mb-4">2. 입찰 업체 정보</h3>
+
+        <div data-qualification-evaluation-target="bidderFields">
+          <!-- Stimulus controller가 동적으로 생성 -->
+        </div>
+      </div>
+
+      <!-- 제출 버튼 -->
+      <div class="flex justify-end">
+        <%= button_tag type: :submit,
+            class: "bg-forest-600 hover:bg-forest-700 text-white font-bold py-3 px-8 rounded-lg transition-colors duration-200" do %>
+          <span class="flex items-center gap-2">
+            <span class="iconify" data-icon="mdi:calculator"></span>
+            적격심사 계산하기
+          </span>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- 결과 표시 영역 -->
+  <div id="evaluation-result" class="hidden" data-qualification-evaluation-target="result">
+    <!-- 결과가 여기에 표시됩니다 -->
+  </div>
+
+  <!-- 법령 근거 -->
+  <div class="bg-gray-50 rounded-lg border border-gray-200 p-6 mt-8">
+    <h3 class="text-lg font-bold text-gray-900 mb-4">📖 법령 근거</h3>
+
+    <div class="space-y-3 text-sm text-gray-700">
+      <div>
+        <strong class="text-forest-600">지방계약법 시행령 제42조의2 (적격심사)</strong>
+        <p class="mt-1">① 지방자치단체의 장은 추정가격이 2억원 이상인 공사 또는 2억원 이상인 물품의 제조·구매와 용역에 대하여는
+        가격과 가격 외의 요소를 종합적으로 고려하여 낙찰자를 결정할 수 있다.</p>
+      </div>
+
+      <div>
+        <strong class="text-forest-600">적격심사 기준</strong>
+        <p class="mt-1">• 공사: 가격 60점 + 비가격 40점 = 100점<br>
+        • 용역: 가격 70점 + 비가격 30점 = 100점<br>
+        • 적격 기준: 95점 이상<br>
+        • 낙찰자: 적격자 중 최저가</p>
+      </div>
+
+      <div>
+        <strong class="text-forest-600">비가격 평가항목 (예시)</strong>
+        <p class="mt-1">• 시공능력평가액 (공사)<br>
+        • 과거 계약 이행실적<br>
+        • 신인도 (부정당업자 제재 여부)<br>
+        • 기술능력<br>
+        • 지역업체 여부 (지역제한 입찰 시)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 면책 조항 -->
+  <div class="mt-6 p-4 bg-red-50 border-l-4 border-red-500 rounded">
+    <p class="text-sm text-red-900">
+      <strong>⚠️ 법적 책임 안내</strong><br>
+      본 도구는 일반적인 적격심사 계산 방법을 구현한 것으로, 참고용으로만 사용하시기 바랍니다.
+      실제 입찰의 적격심사는 기관별 세부 기준, 평가항목, 배점 방식이 다를 수 있으므로 반드시 해당 입찰공고문과 적격심사기준표를 확인하시고,
+      담당 부서의 검토를 받으시기 바랍니다. 본 도구의 계산 결과로 인한 어떠한 법적 책임도 지지 않습니다.
+    </p>
+  </div>
+</div>

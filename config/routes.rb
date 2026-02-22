@@ -23,6 +23,7 @@ Rails.application.routes.draw do
   get "estimated-prices/calculate", to: redirect("/tools/estimated-price")
   get "legal-periods/calculate", to: redirect("/tools/legal-period")
   get "contract-guarantees/calculate", to: redirect("/tools/contract-guarantee")
+  get "qualification-evaluations/evaluate", to: redirect("/tools/qualification-evaluation")
   get "document-analysis/analyze", to: redirect("/tools")
   get "cost-estimates/default-items", to: redirect("/tools/cost-estimate")
 
@@ -126,6 +127,10 @@ Rails.application.routes.draw do
   # 계약보증금 계산기
   get "tools/contract-guarantee", to: "contract_guarantees#index", as: :contract_guarantee
   post "contract-guarantees/calculate", to: "contract_guarantees#calculate"
+
+  # 적격심사 자동 채점기
+  get "tools/qualification-evaluation", to: "qualification_evaluations#index", as: :qualification_evaluation
+  post "qualification-evaluations/evaluate", to: "qualification_evaluations#evaluate"
 
   # 감사사례
   get "audit-cases", to: "audit_cases#index", as: :audit_cases
