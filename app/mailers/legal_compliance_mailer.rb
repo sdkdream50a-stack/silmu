@@ -35,4 +35,18 @@ class LegalComplianceMailer < ApplicationMailer
       subject: "[긴급] 실무.kr 법령 검증 오류 발생"
     )
   end
+
+  # AI 검증 트리거 리포트 (중대 오류 발견 시)
+  def ai_triggered_check(result, triggering_errors)
+    @result = result
+    @triggering_errors = triggering_errors
+    @changes = result[:changes] || []
+    @errors = result[:errors] || []
+    @timestamp = Time.current
+
+    mail(
+      to: ENV['ADMIN_EMAIL'],
+      subject: "[실무.kr] AI 법령 검증 결과 (중대 오류 #{triggering_errors.count}건 발견)"
+    )
+  end
 end

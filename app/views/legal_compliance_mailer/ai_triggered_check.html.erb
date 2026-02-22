@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .header {
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+      color: white;
+      padding: 30px 20px;
+      border-radius: 8px 8px 0 0;
+      text-align: center;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+    .header p {
+      margin: 10px 0 0 0;
+      opacity: 0.9;
+      font-size: 14px;
+    }
+    .content {
+      background: white;
+      padding: 30px;
+      border: 1px solid #e0e0e0;
+      border-top: none;
+    }
+    .alert-badge {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: bold;
+      margin: 10px 0;
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: white;
+    }
+    .stats {
+      background: #fef3c7;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      border-left: 4px solid #f59e0b;
+    }
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #fde68a;
+    }
+    .stat-row:last-child {
+      border-bottom: none;
+    }
+    .stat-label {
+      font-weight: 600;
+      color: #78350f;
+    }
+    .stat-value {
+      color: #92400e;
+      font-weight: bold;
+    }
+    .trigger-item {
+      background: #fee2e2;
+      border-left: 4px solid #dc2626;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 4px;
+    }
+    .trigger-header {
+      font-weight: bold;
+      color: #991b1b;
+      margin-bottom: 8px;
+    }
+    .change-item {
+      background: #e7f3ff;
+      border-left: 4px solid #007bff;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 4px;
+    }
+    .change-header {
+      font-weight: bold;
+      color: #004085;
+      margin-bottom: 8px;
+    }
+    .correction {
+      background: #fff3cd;
+      padding: 10px;
+      border-radius: 4px;
+      margin: 8px 0;
+    }
+    .footer {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 0 0 8px 8px;
+      text-align: center;
+      font-size: 12px;
+      color: #6c757d;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>⚠️ AI 법령 검증 트리거됨</h1>
+    <p><%= @timestamp.strftime('%Y년 %m월 %d일 %H:%M') %></p>
+  </div>
+
+  <div class="content">
+    <div class="alert-badge">
+      🚨 중대 오류 발견 → AI 검증 실행
+    </div>
+
+    <p>
+      규칙 기반 검증에서 <strong><%= @triggering_errors.count %>건의 중대 오류</strong>를 발견하여 AI 심층 검증을 실행했습니다.
+    </p>
+
+    <% topic_changes = @changes.select { |c| c[:topic] } %>
+    <% tool_errors = @errors.select { |e| e[:tool] } %>
+    <% other_errors = @errors.reject { |e| e[:tool] } %>
+
+    <div class="stats">
+      <h3 style="margin-top: 0; color: #92400e;">📊 AI 검증 결과</h3>
+      <div class="stat-row">
+        <span class="stat-label">트리거된 오류</span>
+        <span class="stat-value"><%= @triggering_errors.count %>건</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">토픽 자동 수정</span>
+        <span class="stat-value" style="color: <%= topic_changes.any? ? '#007bff' : '#28a745' %>">
+          <%= topic_changes.count %>건
+        </span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">도구 오류</span>
+        <span class="stat-value" style="color: <%= tool_errors.any? ? '#dc3545' : '#28a745' %>">
+          <%= tool_errors.count %>건
+        </span>
+      </div>
+    </div>
+
+    <h3>🚨 트리거된 중대 오류</h3>
+    <% @triggering_errors.first(5).each do |error| %>
+      <div class="trigger-item">
+        <div class="trigger-header">
+          <%= error[:file] || "알 수 없음" %>
+        </div>
+        <div style="font-size: 14px; color: #555;">
+          <%= error[:message] || error[:description] || "오류 내용 없음" %>
+        </div>
+      </div>
+    <% end %>
+    <% if @triggering_errors.count > 5 %>
+      <p style="margin-top: 10px; color: #991b1b;">외 <%= @triggering_errors.count - 5 %>건</p>
+    <% end %>
+
+    <% if topic_changes.any? %>
+      <h3 style="margin-top: 30px;">🔧 AI 자동 수정</h3>
+      <% topic_changes.first(3).each do |change| %>
+        <div class="change-item">
+          <div class="change-header">
+            [<%= change[:topic] %>] <%= change[:field] %>
+          </div>
+          <div class="correction">
+            <strong>수정 전:</strong> <%= change[:wrong_value] %><br>
+            <strong>수정 후:</strong> <%= change[:correct_value] %>
+          </div>
+          <div style="font-size: 14px; color: #555; margin-top: 8px;">
+            <strong>근거:</strong> <%= change[:source] %>
+          </div>
+        </div>
+      <% end %>
+      <% if topic_changes.count > 3 %>
+        <p style="margin-top: 10px; color: #004085;">외 <%= topic_changes.count - 3 %>건 추가 수정</p>
+      <% end %>
+
+      <p style="margin-top: 20px; padding: 15px; background: #d4edda; border-radius: 4px; color: #155724;">
+        <strong>✅ 자동 수정 완료</strong><br>
+        모든 수정 사항이 데이터베이스에 저장되었습니다.
+      </p>
+    <% else %>
+      <p style="margin-top: 20px; padding: 15px; background: #d4edda; border-radius: 4px; color: #155724;">
+        <strong>✅ AI 검증 결과: 수정 필요 없음</strong><br>
+        중대 오류로 판단되었으나 AI 검증 결과 수정이 필요하지 않습니다.
+      </p>
+    <% end %>
+
+    <h3 style="margin-top: 30px;">💰 비용 절감 효과</h3>
+    <p style="background: #e0f2fe; padding: 15px; border-radius: 4px; border-left: 4px solid #0284c7;">
+      <strong>하이브리드 검증 시스템</strong><br>
+      • 규칙 기반 검증: 무료 (항상 실행)<br>
+      • AI 검증: 중대 오류 발견 시에만 실행 (비용 발생)<br>
+      • 예상 절감율: <strong>약 70%</strong> (월 $9 → $2-3)
+    </p>
+
+    <div style="text-align: center; margin-top: 30px;">
+      <a href="https://silmu.kr/topics" style="display: inline-block; padding: 12px 24px; background: #f59e0b; color: white; text-decoration: none; border-radius: 6px; font-weight: bold;">토픽 바로가기</a>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>
+      이 이메일은 중대 오류 발견 시 자동 발송됩니다.<br>
+      실무.kr 하이브리드 법령 검증 시스템 | hello@silmu.kr
+    </p>
+    <p style="margin-top: 10px; font-size: 11px;">
+      규칙 기반 검증: 매주 월요일 10시 / 매월 1일, 15일 11시
+    </p>
+  </div>
+</body>
+</html>
