@@ -32,8 +32,8 @@ weekly_legal_check:
   args: ["check"]
   schedule: "0 10 * * 1" # 매주 월요일 10시
 
-# 매월 1일 오전 11시 - AI 심층 검증
-monthly_legal_deep_check:
+# 매월 1일, 15일 오전 11시 - AI 심층 검증 (격주 1회)
+biweekly_legal_deep_check:
   class: LegalComplianceJob
   args: ["deep_check"]
-  schedule: "0 11 1 * *" # 매월 1일 11시
+  schedule: "0 11 1,15 * *" # 매월 1일, 15일 11시 (격주)
