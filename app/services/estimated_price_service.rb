@@ -55,11 +55,11 @@ class EstimatedPriceService
                     general_admin: { max: 0.08, basis: "재료비+노무비+경비", name: "일반관리비" } }
   }.freeze
 
-  # 수의계약 기준금액
+  # 수의계약 기준금액 (지방계약법 시행령 제25조 제1항 제1호)
   PRIVATE_CONTRACT_THRESHOLDS = {
-    goods: 50_000_000,
-    service: 50_000_000,
-    construction: 160_000_000
+    goods: 20_000_000,          # 2천만원 (일반)
+    service: 20_000_000,        # 2천만원 (일반)
+    construction: 200_000_000   # 2억원 (전문공사 기준)
   }.freeze
 
   VAT_RATE = 0.10
@@ -188,15 +188,13 @@ class EstimatedPriceService
     def determine_estimate_requirement(price)
       # price = 추정가격 (VAT 제외)
       if price <= 2_000_000
-        { type: "생략가능", desc: "추정가격 200만원 이하: 견적서 생략 또는 1인 견적", basis: "지방계약법 시행령 제30조제2항" }
+        { type: "생략가능", desc: "추정가격 2백만원 이하: 견적서 생략 또는 1인 견적", basis: "지방계약법 시행령 제30조제2항" }
       elsif price <= 20_000_000
         { type: "1인견적", desc: "추정가격 2천만원 이하: 1인 견적 수의계약", basis: "지방계약법 시행령 제25조제1항제5호" }
-      elsif price <= 50_000_000
-        { type: "2인 이상 견적", desc: "추정가격 5천만원 이하: 2인 이상 견적 비교 (특례기업은 1인 가능)", basis: "지방계약법 시행령 제25조제1항제5호, 제30조제1항" }
       elsif price <= 100_000_000
-        { type: "특례기업 수의계약", desc: "추정가격 1억원 이하: 소기업·여성·장애인·사회적기업 등은 2인 이상 견적 수의계약 가능", basis: "지방계약법 시행령 제25조제1항제5호 다목~마목" }
+        { type: "2인 이상 견적 또는 특례 수의", desc: "2천만원 초과: 일반 기업은 입찰, 특례기업(청년창업·소기업·여성·장애인·사회적기업 등)은 5천만원~1억원 이하 수의계약 가능", basis: "지방계약법 시행령 제25조제1항제5호" }
       else
-        { type: "입찰", desc: "수의계약 기준 초과: 경쟁입찰 진행 필요", basis: "지방계약법 제9조" }
+        { type: "입찰", desc: "1억원 초과: 경쟁입찰 진행 필요", basis: "지방계약법 제9조" }
       end
     end
 
