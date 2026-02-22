@@ -1,0 +1,354 @@
+<%# Created: 2026-02-22 19:15 %>
+
+<div class="bg-white border-2 border-indigo-200 rounded-lg p-6 mb-8">
+  <div class="flex items-start gap-3 mb-4">
+    <span class="material-symbols-outlined text-indigo-600 text-3xl">cloud</span>
+    <div>
+      <h2 class="text-2xl font-bold text-gray-900 mb-2">전자조달 이용 프로세스 (나라장터 G2B)</h2>
+      <p class="text-gray-600 leading-relaxed">
+        나라장터(G2B) 시스템을 통한 전자조달 전 과정을 안내합니다.
+        전자조달법 및 지방계약법 시행령에 따라 4단계로 진행됩니다.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 1: 나라장터 가입 및 인증 -->
+<div class="bg-gradient-to-br from-indigo-50 to-white border-2 border-indigo-200 rounded-lg p-6 mb-6">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="inline-flex items-center justify-center w-10 h-10 bg-indigo-600 text-white rounded-full font-bold">1</span>
+    <h3 class="text-xl font-bold text-indigo-900">나라장터 가입 및 인증</h3>
+  </div>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    나라장터(www.g2b.go.kr) 시스템에 회원가입하고 공인인증서를 등록합니다.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-white rounded-lg p-4 border-2 border-indigo-100 hover:border-indigo-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-indigo-600">person_add</span>
+        <h4 class="font-bold text-gray-900">회원가입</h4>
+      </div>
+      <p class="text-sm text-gray-600">나라장터 사이트 회원가입</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-indigo-100 hover:border-indigo-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-indigo-600">key</span>
+        <h4 class="font-bold text-gray-900">공인인증서 등록</h4>
+      </div>
+      <p class="text-sm text-gray-600">전자입찰용 공인인증서 발급 및 등록</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-indigo-100 hover:border-indigo-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-indigo-600">business</span>
+        <h4 class="font-bold text-gray-900">업체 정보 입력</h4>
+      </div>
+      <p class="text-sm text-gray-600">사업자등록증, 업종, 실적 등록</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-indigo-100 hover:border-indigo-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-indigo-600">verified_user</span>
+        <h4 class="font-bold text-gray-900">신용평가 등록</h4>
+      </div>
+      <p class="text-sm text-gray-600">신용평가서 등록 (입찰 참가자격)</p>
+    </div>
+  </div>
+
+  <div class="mt-4 p-4 bg-indigo-100 border-l-4 border-indigo-500 rounded">
+    <p class="text-sm text-indigo-900 font-medium">
+      ✓ 공인인증서는 최소 유효기간 30일 이상 남아 있어야 입찰 참가 가능합니다
+    </p>
+  </div>
+</div>
+
+<!-- STEP 2: 입찰 참가 및 입찰서 작성 -->
+<div class="bg-gradient-to-br from-amber-50 to-white border-2 border-amber-200 rounded-lg p-6 mb-6">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="inline-flex items-center justify-center w-10 h-10 bg-amber-500 text-white rounded-full font-bold">2</span>
+    <h3 class="text-xl font-bold text-amber-900">입찰 참가 및 입찰서 작성</h3>
+  </div>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    나라장터에서 입찰공고를 검색하고, 입찰서류를 작성하여 제출합니다.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-white rounded-lg p-4 border-2 border-amber-100 hover:border-amber-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-amber-600">search</span>
+        <h4 class="font-bold text-gray-900">입찰공고 검색</h4>
+      </div>
+      <p class="text-sm text-gray-600">업종, 지역, 금액별 검색</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-amber-100 hover:border-amber-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-amber-600">description</span>
+        <h4 class="font-bold text-gray-900">입찰서류 다운로드</h4>
+      </div>
+      <p class="text-sm text-gray-600">입찰공고, 시방서, 내역서 다운</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-amber-100 hover:border-amber-300 transition-colors">
+      <a href="<%= estimated_price_path %>" class="flex items-center gap-3 mb-2" data-turbo="false">
+        <span class="material-symbols-outlined text-amber-600">calculate</span>
+        <h4 class="font-bold text-gray-900">입찰가격 산정 ⭐</h4>
+      </a>
+      <p class="text-sm text-gray-600">기초금액 기준 입찰가 결정</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-amber-100 hover:border-amber-300 transition-colors">
+      <button
+        onclick="openDocPopup('입찰서류', '나라장터 전자입찰을 위한 입찰서류', 'bid_documents')"
+        class="flex items-center gap-3 mb-2 text-left w-full"
+      >
+        <span class="material-symbols-outlined text-amber-600">upload_file</span>
+        <h4 class="font-bold text-gray-900">입찰서 작성 및 제출 ⭐</h4>
+      </button>
+      <p class="text-sm text-gray-600">전자입찰서 작성 후 마감 전 제출</p>
+    </div>
+  </div>
+
+  <div class="mt-4 p-4 bg-amber-100 border-l-4 border-amber-500 rounded">
+    <p class="text-sm text-amber-900 font-medium">
+      ⚠️ 입찰 마감시간 1시간 전까지 제출 권장 (시스템 오류 대비)
+    </p>
+  </div>
+</div>
+
+<!-- STEP 3: 개찰 및 낙찰 -->
+<div class="bg-gradient-to-br from-emerald-50 to-white border-2 border-emerald-200 rounded-lg p-6 mb-6">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="inline-flex items-center justify-center w-10 h-10 bg-emerald-600 text-white rounded-full font-bold">3</span>
+    <h3 class="text-xl font-bold text-emerald-900">개찰 및 낙찰</h3>
+  </div>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    전자개찰을 통해 입찰가격이 공개되고, 낙찰자가 결정됩니다.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-white rounded-lg p-4 border-2 border-emerald-100 hover:border-emerald-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-emerald-600">folder_open</span>
+        <h4 class="font-bold text-gray-900">전자개찰</h4>
+      </div>
+      <p class="text-sm text-gray-600">나라장터 시스템에서 자동 개찰</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-emerald-100 hover:border-emerald-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-emerald-600">compare_arrows</span>
+        <h4 class="font-bold text-gray-900">입찰가격 공개</h4>
+      </div>
+      <p class="text-sm text-gray-600">모든 입찰자의 입찰가 공개</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-emerald-100 hover:border-emerald-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-emerald-600">verified</span>
+        <h4 class="font-bold text-gray-900">낙찰자 결정</h4>
+      </div>
+      <p class="text-sm text-gray-600">최저가 또는 적격심사 통과 업체</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-emerald-100 hover:border-emerald-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-emerald-600">mail</span>
+        <h4 class="font-bold text-gray-900">낙찰 통보</h4>
+      </div>
+      <p class="text-sm text-gray-600">나라장터 알림 및 이메일 발송</p>
+    </div>
+  </div>
+
+  <div class="mt-4 p-4 bg-emerald-100 border-l-4 border-emerald-500 rounded">
+    <p class="text-sm text-emerald-900 font-medium">
+      ✓ 개찰 결과는 나라장터 시스템에서 실시간으로 확인할 수 있습니다
+    </p>
+  </div>
+</div>
+
+<!-- STEP 4: 전자계약 체결 및 이행 -->
+<div class="bg-gradient-to-br from-slate-50 to-white border-2 border-slate-200 rounded-lg p-6 mb-6">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="inline-flex items-center justify-center w-10 h-10 bg-slate-600 text-white rounded-full font-bold">4</span>
+    <h3 class="text-xl font-bold text-slate-900">전자계약 체결 및 이행</h3>
+  </div>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    나라장터에서 전자계약을 체결하고, 계약 이행 후 대금을 지급받습니다.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-white rounded-lg p-4 border-2 border-slate-100 hover:border-slate-300 transition-colors">
+      <button
+        onclick="openDocPopup('전자계약서', '나라장터 전자계약서 작성', 'e_contract')"
+        class="flex items-center gap-3 mb-2 text-left w-full"
+      >
+        <span class="material-symbols-outlined text-slate-600">edit_document</span>
+        <h4 class="font-bold text-gray-900">전자계약서 작성 ⭐</h4>
+      </button>
+      <p class="text-sm text-gray-600">나라장터에서 전자서명</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-slate-100 hover:border-slate-300 transition-colors">
+      <a href="<%= contract_guarantee_path %>" class="flex items-center gap-3 mb-2" data-turbo="false">
+        <span class="material-symbols-outlined text-slate-600">shield</span>
+        <h4 class="font-bold text-gray-900">계약보증금 납부</h4>
+      </a>
+      <p class="text-sm text-gray-600">계약금액의 10% 보증보험</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-slate-100 hover:border-slate-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-slate-600">construction</span>
+        <h4 class="font-bold text-gray-900">계약 이행</h4>
+      </div>
+      <p class="text-sm text-gray-600">공사/용역 수행 또는 물품 납품</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-slate-100 hover:border-slate-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-slate-600">payments</span>
+        <h4 class="font-bold text-gray-900">대금 지급</h4>
+      </div>
+      <p class="text-sm text-gray-600">검사 합격 후 전자지급</p>
+    </div>
+  </div>
+
+  <div class="mt-4 p-4 bg-slate-100 border-l-4 border-slate-500 rounded">
+    <p class="text-sm text-slate-900 font-medium">
+      ✓ 전자계약 체결 후 계약서 원본은 나라장터 시스템에 보관됩니다 (법적 효력 동일)
+    </p>
+  </div>
+</div>
+
+<!-- 체크포인트 3컬럼 -->
+<div class="bg-white border-2 border-gray-300 rounded-lg p-6 mb-8">
+  <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+    <span class="material-symbols-outlined text-indigo-600">checklist</span>
+    체크포인트
+  </h3>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="border-2 border-red-200 rounded-lg p-4 bg-red-50">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="material-symbols-outlined text-red-600">block</span>
+        <h4 class="font-bold text-red-900">절대 금지 사항</h4>
+      </div>
+      <ul class="space-y-2 text-sm text-gray-700">
+        <li class="flex items-start gap-2">
+          <span class="text-red-600 font-bold shrink-0">✗</span>
+          <span><strong>공인인증서 공유:</strong> 타인에게 인증서 대여 금지</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-red-600 font-bold shrink-0">✗</span>
+          <span><strong>마감시간 초과:</strong> 입찰 마감 후 제출 불가 (1초도 불가)</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-red-600 font-bold shrink-0">✗</span>
+          <span><strong>필수 서류 누락:</strong> 입찰보증금, 신용평가서 등 필수 서류 미제출</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="border-2 border-emerald-200 rounded-lg p-4 bg-emerald-50">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="material-symbols-outlined text-emerald-600">folder_open</span>
+        <h4 class="font-bold text-emerald-900">필수 서류</h4>
+      </div>
+      <ul class="space-y-2 text-sm text-gray-700">
+        <li class="flex items-start gap-2">
+          <span class="text-emerald-600 font-bold shrink-0">✓</span>
+          <span><strong>입찰서:</strong> 나라장터 전자입찰서 (전자서명 필수)</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-emerald-600 font-bold shrink-0">✓</span>
+          <span><strong>입찰보증금:</strong> 보증보험증권 또는 현금</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-emerald-600 font-bold shrink-0">✓</span>
+          <span><strong>계약보증금:</strong> 낙찰 후 계약금액의 10% 납부</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="border-2 border-blue-200 rounded-lg p-4 bg-blue-50">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="material-symbols-outlined text-blue-600">tips_and_updates</span>
+        <h4 class="font-bold text-blue-900">실무 팁</h4>
+      </div>
+      <ul class="space-y-2 text-sm text-gray-700">
+        <li class="flex items-start gap-2">
+          <span class="text-blue-600 font-bold shrink-0">💡</span>
+          <span><strong>알림 설정:</strong> 나라장터 알림 설정으로 입찰 공고 자동 수신</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-blue-600 font-bold shrink-0">💡</span>
+          <span><strong>여유 있게 제출:</strong> 입찰 마감 1시간 전까지 제출 권장</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-blue-600 font-bold shrink-0">💡</span>
+          <span><strong>인증서 미리 준비:</strong> 공인인증서 유효기간 사전 확인</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript Modal Popup -->
+<script>
+  window.docPopupData = window.docPopupData || {};
+
+  window.docPopupData['bid_documents'] = {
+    title: '입찰서류',
+    description: '나라장터 전자입찰을 위한 입찰서류',
+    categories: [
+      {
+        name: '입찰 참가',
+        items: [
+          { name: '전자입찰서', prompt: '나라장터 전자입찰서 작성 (입찰가격, 입찰보증금 명시)' },
+          { name: '입찰보증금 증빙', prompt: '입찰보증금 납부 증빙 (보증보험증권 또는 현금 영수증)' },
+          { name: '신용평가서', prompt: '기업 신용평가서 (유효기간 내)' },
+          { name: '사업자등록증', prompt: '사업자등록증 사본 (법인등기부등본 포함)' }
+        ]
+      },
+      {
+        name: '자격 증명',
+        items: [
+          { name: '면허증 (해당 시)', prompt: '업종별 면허증 또는 등록증 사본' },
+          { name: '실적증명서', prompt: '유사 실적 증명서 (공고 요건 충족)' },
+          { name: '납세증명서', prompt: '국세·지방세 완납증명서 (최근 3개월 이내)' }
+        ]
+      }
+    ]
+  };
+
+  window.docPopupData['e_contract'] = {
+    title: '전자계약서',
+    description: '나라장터 전자계약서 작성',
+    categories: [
+      {
+        name: '계약 체결',
+        items: [
+          { name: '전자계약서', prompt: '나라장터 전자계약서 작성 (공인인증서 전자서명)' },
+          { name: '계약보증금 증빙', prompt: '계약보증금 납부 증빙 (계약금액의 10%)' },
+          { name: '이행보증보험증권', prompt: '이행(계약)보증보험증권 제출' },
+          { name: '통장 사본', prompt: '계약대금 입금용 통장 사본' }
+        ]
+      },
+      {
+        name: '이행 관리',
+        items: [
+          { name: '공정표 (공사)', prompt: '공사 공정표 (공사 계약 시)' },
+          { name: '착수신고서', prompt: '계약 착수신고서 (계약 체결 후 7일 이내)' },
+          { name: '준공서류', prompt: '준공서류 체크리스트 (준공 시 제출)' }
+        ]
+      }
+    ]
+  };
+</script>

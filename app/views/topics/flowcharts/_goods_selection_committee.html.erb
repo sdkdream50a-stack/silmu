@@ -1,0 +1,354 @@
+<%# Created: 2026-02-22 19:20 %>
+
+<div class="bg-white border-2 border-indigo-200 rounded-lg p-6 mb-8">
+  <div class="flex items-start gap-3 mb-4">
+    <span class="material-symbols-outlined text-indigo-600 text-3xl">groups</span>
+    <div>
+      <h2 class="text-2xl font-bold text-gray-900 mb-2">물품 선정위원회 운영 프로세스</h2>
+      <p class="text-gray-600 leading-relaxed">
+        일정 금액 이상의 물품 구매 시 선정위원회를 구성하여 품질과 가격을 심사하는 절차를 안내합니다.
+        지방계약법 시행령 제42조의3 (물품 선정위원회) 규정에 따라 4단계로 진행됩니다.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 1: 선정위원회 구성 요건 확인 -->
+<div class="bg-gradient-to-br from-indigo-50 to-white border-2 border-indigo-200 rounded-lg p-6 mb-6">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="inline-flex items-center justify-center w-10 h-10 bg-indigo-600 text-white rounded-full font-bold">1</span>
+    <h3 class="text-xl font-bold text-indigo-900">선정위원회 구성 요건 확인</h3>
+  </div>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    물품 선정위원회 구성이 필요한지 판단합니다. 일반적으로 추정가격 2억원 이상 물품 구매 시 구성합니다.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-white rounded-lg p-4 border-2 border-indigo-100 hover:border-indigo-300 transition-colors">
+      <a href="<%= estimated_price_path %>" class="flex items-center gap-3 mb-2" data-turbo="false">
+        <span class="material-symbols-outlined text-indigo-600">calculate</span>
+        <h4 class="font-bold text-gray-900">추정가격 확인 ⭐</h4>
+      </a>
+      <p class="text-sm text-gray-600">물품 구매 추정가격 산정</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-indigo-100 hover:border-indigo-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-indigo-600">rule</span>
+        <h4 class="font-bold text-gray-900">법령 기준 확인</h4>
+      </div>
+      <p class="text-sm text-gray-600">조례 및 규정 확인 (2억원 이상)</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-indigo-100 hover:border-indigo-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-indigo-600">inventory</span>
+        <h4 class="font-bold text-gray-900">물품 성격 확인</h4>
+      </div>
+      <p class="text-sm text-gray-600">전문성, 기술력 평가 필요 여부</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-indigo-100 hover:border-indigo-300 transition-colors">
+      <button
+        onclick="openDocPopup('구성 검토서', '물품 선정위원회 구성 검토서', 'committee_review')"
+        class="flex items-center gap-3 mb-2 text-left w-full"
+      >
+        <span class="material-symbols-outlined text-indigo-600">description</span>
+        <h4 class="font-bold text-gray-900">구성 검토서 작성 ⭐</h4>
+      </button>
+      <p class="text-sm text-gray-600">위원회 구성 필요성 검토</p>
+    </div>
+  </div>
+
+  <div class="mt-4 p-4 bg-indigo-100 border-l-4 border-indigo-500 rounded">
+    <p class="text-sm text-indigo-900 font-medium">
+      ✓ 자치단체 조례에 따라 금액 기준이 다를 수 있으므로 반드시 확인하세요
+    </p>
+  </div>
+</div>
+
+<!-- STEP 2: 위원회 구성 및 회의 개최 -->
+<div class="bg-gradient-to-br from-amber-50 to-white border-2 border-amber-200 rounded-lg p-6 mb-6">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="inline-flex items-center justify-center w-10 h-10 bg-amber-500 text-white rounded-full font-bold">2</span>
+    <h3 class="text-xl font-bold text-amber-900">위원회 구성 및 회의 개최</h3>
+  </div>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    물품 선정위원회를 구성하고 회의를 개최합니다. 일반적으로 5명 이상의 위원으로 구성합니다.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-white rounded-lg p-4 border-2 border-amber-100 hover:border-amber-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-amber-600">group_add</span>
+        <h4 class="font-bold text-gray-900">위원 선정</h4>
+      </div>
+      <p class="text-sm text-gray-600">5명 이상 (내부 3명 + 외부 전문가 2명)</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-amber-100 hover:border-amber-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-amber-600">person_check</span>
+        <h4 class="font-bold text-gray-900">위원장 지정</h4>
+      </div>
+      <p class="text-sm text-gray-600">위원 중 1명을 위원장으로 지정</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-amber-100 hover:border-amber-300 transition-colors">
+      <button
+        onclick="openDocPopup('회의 소집 공문', '물품 선정위원회 회의 소집 공문', 'meeting_notice')"
+        class="flex items-center gap-3 mb-2 text-left w-full"
+      >
+        <span class="material-symbols-outlined text-amber-600">mail</span>
+        <h4 class="font-bold text-gray-900">회의 소집 공문 ⭐</h4>
+      </button>
+      <p class="text-sm text-gray-600">위원들에게 회의 일정 통보</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-amber-100 hover:border-amber-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-amber-600">calendar_today</span>
+        <h4 class="font-bold text-gray-900">회의 일정 조율</h4>
+      </div>
+      <p class="text-sm text-gray-600">위원 일정 조율 및 회의 장소 확보</p>
+    </div>
+  </div>
+
+  <div class="mt-4 p-4 bg-amber-100 border-l-4 border-amber-500 rounded">
+    <p class="text-sm text-amber-900 font-medium">
+      ⚠️ 이해관계가 있는 위원은 심사에서 제척해야 합니다 (공정성 확보)
+    </p>
+  </div>
+</div>
+
+<!-- STEP 3: 물품 심사 및 선정 -->
+<div class="bg-gradient-to-br from-emerald-50 to-white border-2 border-emerald-200 rounded-lg p-6 mb-6">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="inline-flex items-center justify-center w-10 h-10 bg-emerald-600 text-white rounded-full font-bold">3</span>
+    <h3 class="text-xl font-bold text-emerald-900">물품 심사 및 선정</h3>
+  </div>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    위원회 회의를 통해 물품의 품질, 가격, 성능 등을 종합적으로 평가하여 선정합니다.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-white rounded-lg p-4 border-2 border-emerald-100 hover:border-emerald-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-emerald-600">fact_check</span>
+        <h4 class="font-bold text-gray-900">심사 기준 설정</h4>
+      </div>
+      <p class="text-sm text-gray-600">품질(50%), 가격(30%), 성능(20%) 등</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-emerald-100 hover:border-emerald-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-emerald-600">compare</span>
+        <h4 class="font-bold text-gray-900">제품 비교 평가</h4>
+      </div>
+      <p class="text-sm text-gray-600">여러 제품의 사양·성능 비교</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-emerald-100 hover:border-emerald-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-emerald-600">rule</span>
+        <h4 class="font-bold text-gray-900">적격 여부 판단</h4>
+      </div>
+      <p class="text-sm text-gray-600">품질 기준 충족 여부 확인</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-emerald-100 hover:border-emerald-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-emerald-600">how_to_vote</span>
+        <h4 class="font-bold text-gray-900">의결 (과반수)</h4>
+      </div>
+      <p class="text-sm text-gray-600">재적 위원 과반수 출석 및 찬성</p>
+    </div>
+  </div>
+
+  <div class="mt-4 p-4 bg-emerald-100 border-l-4 border-emerald-500 rounded">
+    <p class="text-sm text-emerald-900 font-medium">
+      ✓ 품질과 가격을 종합적으로 평가하여 최적의 물품을 선정합니다
+    </p>
+  </div>
+</div>
+
+<!-- STEP 4: 선정 결과 확정 및 계약 체결 -->
+<div class="bg-gradient-to-br from-slate-50 to-white border-2 border-slate-200 rounded-lg p-6 mb-6">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="inline-flex items-center justify-center w-10 h-10 bg-slate-600 text-white rounded-full font-bold">4</span>
+    <h3 class="text-xl font-bold text-slate-900">선정 결과 확정 및 계약 체결</h3>
+  </div>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    위원회 심사 결과를 확정하고, 선정된 물품으로 계약을 체결합니다.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-white rounded-lg p-4 border-2 border-slate-100 hover:border-slate-300 transition-colors">
+      <button
+        onclick="openDocPopup('회의록', '물품 선정위원회 회의록', 'meeting_minutes')"
+        class="flex items-center gap-3 mb-2 text-left w-full"
+      >
+        <span class="material-symbols-outlined text-slate-600">description</span>
+        <h4 class="font-bold text-gray-900">회의록 작성 ⭐</h4>
+      </button>
+      <p class="text-sm text-gray-600">심사 과정 및 결과 기록</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-slate-100 hover:border-slate-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-slate-600">verified</span>
+        <h4 class="font-bold text-gray-900">선정 결과 확정</h4>
+      </div>
+      <p class="text-sm text-gray-600">위원회 의결 결과 확정</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-slate-100 hover:border-slate-300 transition-colors">
+      <a href="<%= contract_documents_path %>" class="flex items-center gap-3 mb-2" data-turbo="false">
+        <span class="material-symbols-outlined text-slate-600">edit_document</span>
+        <h4 class="font-bold text-gray-900">계약서 작성 ⭐</h4>
+      </a>
+      <p class="text-sm text-gray-600">선정된 물품으로 계약 체결</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-slate-100 hover:border-slate-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-slate-600">archive</span>
+        <h4 class="font-bold text-gray-900">증빙 자료 보관</h4>
+      </div>
+      <p class="text-sm text-gray-600">회의록, 심사표 등 보관 (감사 대비)</p>
+    </div>
+  </div>
+
+  <div class="mt-4 p-4 bg-slate-100 border-l-4 border-slate-500 rounded">
+    <p class="text-sm text-slate-900 font-medium">
+      ✓ 선정위원회 회의록은 법적 근거 자료이므로 반드시 작성·보관해야 합니다
+    </p>
+  </div>
+</div>
+
+<!-- 체크포인트 3컬럼 -->
+<div class="bg-white border-2 border-gray-300 rounded-lg p-6 mb-8">
+  <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+    <span class="material-symbols-outlined text-indigo-600">checklist</span>
+    체크포인트
+  </h3>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="border-2 border-red-200 rounded-lg p-4 bg-red-50">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="material-symbols-outlined text-red-600">block</span>
+        <h4 class="font-bold text-red-900">절대 금지 사항</h4>
+      </div>
+      <ul class="space-y-2 text-sm text-gray-700">
+        <li class="flex items-start gap-2">
+          <span class="text-red-600 font-bold shrink-0">✗</span>
+          <span><strong>이해관계 위원 참여:</strong> 특정 업체와 이해관계 있는 위원 심사 참여 금지</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-red-600 font-bold shrink-0">✗</span>
+          <span><strong>회의록 미작성:</strong> 회의록 없이 구두로만 결정 금지</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-red-600 font-bold shrink-0">✗</span>
+          <span><strong>과반수 미달 의결:</strong> 정족수 미달 시 의결 무효</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="border-2 border-emerald-200 rounded-lg p-4 bg-emerald-50">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="material-symbols-outlined text-emerald-600">folder_open</span>
+        <h4 class="font-bold text-emerald-900">필수 서류</h4>
+      </div>
+      <ul class="space-y-2 text-sm text-gray-700">
+        <li class="flex items-start gap-2">
+          <span class="text-emerald-600 font-bold shrink-0">✓</span>
+          <span><strong>구성 검토서:</strong> 위원회 구성 필요성 및 위원 명단</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-emerald-600 font-bold shrink-0">✓</span>
+          <span><strong>회의 소집 공문:</strong> 위원들에게 회의 일정 통보</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-emerald-600 font-bold shrink-0">✓</span>
+          <span><strong>회의록:</strong> 심사 과정 및 결과 기록 (서명 필수)</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="border-2 border-blue-200 rounded-lg p-4 bg-blue-50">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="material-symbols-outlined text-blue-600">tips_and_updates</span>
+        <h4 class="font-bold text-blue-900">실무 팁</h4>
+      </div>
+      <ul class="space-y-2 text-sm text-gray-700">
+        <li class="flex items-start gap-2">
+          <span class="text-blue-600 font-bold shrink-0">💡</span>
+          <span><strong>외부 전문가 활용:</strong> 객관성 확보를 위해 외부 전문가 2명 이상 포함</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-blue-600 font-bold shrink-0">💡</span>
+          <span><strong>심사표 미리 준비:</strong> 평가 기준과 배점을 사전에 준비</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-blue-600 font-bold shrink-0">💡</span>
+          <span><strong>감사 대비:</strong> 회의록과 심사표를 반드시 보관</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript Modal Popup -->
+<script>
+  window.docPopupData = window.docPopupData || {};
+
+  window.docPopupData['committee_review'] = {
+    title: '구성 검토서',
+    description: '물품 선정위원회 구성 검토서',
+    categories: [
+      {
+        name: '구성',
+        items: [
+          { name: '위원회 구성 검토서', prompt: '물품 선정위원회 구성 필요성 검토서 (추정가격, 물품 성격, 법령 근거)' },
+          { name: '위원 명단', prompt: '위원회 위원 명단 (내부 위원 3명 + 외부 전문가 2명, 경력 및 전문 분야 명시)' },
+          { name: '위원장 지정 공문', prompt: '위원회 위원장 지정 공문 (위원 중 1명)' }
+        ]
+      }
+    ]
+  };
+
+  window.docPopupData['meeting_notice'] = {
+    title: '회의 소집 공문',
+    description: '물품 선정위원회 회의 소집 공문',
+    categories: [
+      {
+        name: '소집',
+        items: [
+          { name: '회의 소집 공문', prompt: '물품 선정위원회 회의 소집 공문 (일시, 장소, 안건 명시)' },
+          { name: '심사 자료', prompt: '위원들에게 배포할 심사 자료 (물품 사양, 가격 비교표 등)' },
+          { name: '심사표 양식', prompt: '물품 심사표 양식 (평가 기준 및 배점)' }
+        ]
+      }
+    ]
+  };
+
+  window.docPopupData['meeting_minutes'] = {
+    title: '회의록',
+    description: '물품 선정위원회 회의록',
+    categories: [
+      {
+        name: '회의록',
+        items: [
+          { name: '회의록', prompt: '물품 선정위원회 회의록 (일시, 장소, 참석 위원, 심사 과정, 의결 결과 기록)' },
+          { name: '심사표 (위원별)', prompt: '위원별 심사표 (평가 점수 기록 및 서명)' },
+          { name: '선정 결과 보고서', prompt: '물품 선정 결과 보고서 (최종 선정 물품 및 사유)' }
+        ]
+      }
+    ]
+  };
+</script>

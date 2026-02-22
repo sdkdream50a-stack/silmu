@@ -1,0 +1,237 @@
+<%# Created: 2026-02-22 18:25 %>
+
+<div class="bg-white border-2 border-indigo-200 rounded-lg p-6 mb-8">
+  <div class="flex items-start gap-3 mb-4">
+    <span class="material-symbols-outlined text-indigo-600 text-3xl">block</span>
+    <div>
+      <h2 class="text-2xl font-bold text-gray-900 mb-2">분할발주 위반 여부 판단 프로세스</h2>
+      <p class="text-gray-600 leading-relaxed">
+        계약 분할이 정당한지 또는 위법한 분할발주인지 판단하는 절차를 안내합니다.
+        지방계약법 시행령 제77조 (분할계약 금지) 규정에 따라 3단계로 진행됩니다.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 1: 분할 사유 확인 -->
+<div class="bg-gradient-to-br from-indigo-50 to-white border-2 border-indigo-200 rounded-lg p-6 mb-6">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="inline-flex items-center justify-center w-10 h-10 bg-indigo-600 text-white rounded-full font-bold">1</span>
+    <h3 class="text-xl font-bold text-indigo-900">분할 사유 확인</h3>
+  </div>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    계약을 분할하려는 사유가 정당한지, 입찰 회피 목적인지 판단합니다.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-white rounded-lg p-4 border-2 border-indigo-100 hover:border-indigo-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-indigo-600">gavel</span>
+        <h4 class="font-bold text-gray-900">분할 사유 파악</h4>
+      </div>
+      <p class="text-sm text-gray-600">예산 부족, 긴급성, 전문성 등</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-indigo-100 hover:border-indigo-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-indigo-600">calculate</span>
+        <h4 class="font-bold text-gray-900">총 사업비 확인</h4>
+      </div>
+      <p class="text-sm text-gray-600">분할 전 전체 사업비 산정</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-indigo-100 hover:border-indigo-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-indigo-600">calendar_today</span>
+        <h4 class="font-bold text-gray-900">시기 확인</h4>
+      </div>
+      <p class="text-sm text-gray-600">동일 회계연도 여부</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-indigo-100 hover:border-indigo-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-indigo-600">location_on</span>
+        <h4 class="font-bold text-gray-900">장소 확인</h4>
+      </div>
+      <p class="text-sm text-gray-600">동일 장소·목적 여부</p>
+    </div>
+  </div>
+
+  <div class="mt-4 p-4 bg-indigo-100 border-l-4 border-indigo-500 rounded">
+    <p class="text-sm text-indigo-900 font-medium">
+      ✓ 입찰 또는 계약 방법을 회피할 목적으로 계약을 분할하면 위법입니다 (시행령 제77조)
+    </p>
+  </div>
+</div>
+
+<!-- STEP 2: 위법성 판단 -->
+<div class="bg-gradient-to-br from-amber-50 to-white border-2 border-amber-200 rounded-lg p-6 mb-6">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="inline-flex items-center justify-center w-10 h-10 bg-amber-500 text-white rounded-full font-bold">2</span>
+    <h3 class="text-xl font-bold text-amber-900">위법성 판단</h3>
+  </div>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    5가지 기준으로 위법한 분할발주인지 판단합니다.
+  </p>
+
+  <div class="grid grid-cols-1 gap-4">
+    <div class="bg-red-50 border-2 border-red-300 rounded-lg p-4">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-red-600">warning</span>
+        <h4 class="font-bold text-red-900">위법한 분할발주 (감사 지적)</h4>
+      </div>
+      <ul class="text-sm text-gray-700 space-y-1">
+        <li>✗ 동일한 물품·공사·용역을 고의로 분할하여 수의계약 체결</li>
+        <li>✗ 총 사업비가 입찰 한도를 초과하지만 분할하여 수의계약</li>
+        <li>✗ 동일 회계연도, 동일 장소, 동일 목적으로 2회 이상 분할</li>
+        <li>✗ 합리적 사유 없이 의도적으로 분할하여 입찰 회피</li>
+      </ul>
+    </div>
+
+    <div class="bg-emerald-50 border-2 border-emerald-300 rounded-lg p-4">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-emerald-600">check_circle</span>
+        <h4 class="font-bold text-emerald-900">적법한 계약 분할</h4>
+      </div>
+      <ul class="text-sm text-gray-700 space-y-1">
+        <li>✓ 예산 부족으로 연차별로 나누어 시행 (장기계속계약)</li>
+        <li>✓ 긴급한 사유로 일부 먼저 발주 후 나머지 발주</li>
+        <li>✓ 전문성이 다른 공종을 별도로 발주 (설계·시공 분리 등)</li>
+        <li>✓ 사업 성격이 달라 분할이 불가피한 경우</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="mt-4 p-4 bg-amber-100 border-l-4 border-amber-500 rounded">
+    <p class="text-sm text-amber-900 font-medium">
+      ⚠️ 의심스러우면 "분할발주 적정성 검토서"를 작성하여 근거를 남겨야 합니다
+    </p>
+  </div>
+</div>
+
+<!-- STEP 3: 조치 결정 -->
+<div class="bg-gradient-to-br from-emerald-50 to-white border-2 border-emerald-200 rounded-lg p-6 mb-6">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="inline-flex items-center justify-center w-10 h-10 bg-emerald-600 text-white rounded-full font-bold">3</span>
+    <h3 class="text-xl font-bold text-emerald-900">조치 결정</h3>
+  </div>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    판단 결과에 따라 적법하게 계약을 진행하거나, 통합하여 입찰을 실시합니다.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-white rounded-lg p-4 border-2 border-emerald-100 hover:border-emerald-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-emerald-600">check</span>
+        <h4 class="font-bold text-gray-900">적법 시: 분할 진행</h4>
+      </div>
+      <p class="text-sm text-gray-600">정당한 사유로 분할 계약</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-emerald-100 hover:border-emerald-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-emerald-600">merge</span>
+        <h4 class="font-bold text-gray-900">위법 시: 통합 입찰</h4>
+      </div>
+      <p class="text-sm text-gray-600">통합하여 일반경쟁입찰 실시</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-emerald-100 hover:border-emerald-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-emerald-600">description</span>
+        <h4 class="font-bold text-gray-900">검토서 작성</h4>
+      </div>
+      <p class="text-sm text-gray-600">분할 사유 및 적법성 검토 기록</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-emerald-100 hover:border-emerald-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-emerald-600">shield</span>
+        <h4 class="font-bold text-gray-900">증빙 자료 보관</h4>
+      </div>
+      <p class="text-sm text-gray-600">감사 대비 근거 자료 보관</p>
+    </div>
+  </div>
+
+  <div class="mt-4 p-4 bg-emerald-100 border-l-4 border-emerald-500 rounded">
+    <p class="text-sm text-emerald-900 font-medium">
+      ✓ 분할발주가 위법으로 판단되면 감사 지적 및 계약 무효 처리될 수 있습니다
+    </p>
+  </div>
+</div>
+
+<!-- 체크포인트 3컬럼 -->
+<div class="bg-white border-2 border-gray-300 rounded-lg p-6 mb-8">
+  <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+    <span class="material-symbols-outlined text-indigo-600">checklist</span>
+    체크포인트
+  </h3>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="border-2 border-red-200 rounded-lg p-4 bg-red-50">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="material-symbols-outlined text-red-600">block</span>
+        <h4 class="font-bold text-red-900">절대 금지 사항</h4>
+      </div>
+      <ul class="space-y-2 text-sm text-gray-700">
+        <li class="flex items-start gap-2">
+          <span class="text-red-600 font-bold shrink-0">✗</span>
+          <span><strong>입찰 회피 분할:</strong> 한도 초과 사업을 고의로 분할</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-red-600 font-bold shrink-0">✗</span>
+          <span><strong>동일 사업 반복 분할:</strong> 동일 목적으로 2회 이상 분할</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-red-600 font-bold shrink-0">✗</span>
+          <span><strong>사유 없이 분할:</strong> 합리적 근거 없이 분할</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="border-2 border-emerald-200 rounded-lg p-4 bg-emerald-50">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="material-symbols-outlined text-emerald-600">folder_open</span>
+        <h4 class="font-bold text-emerald-900">필수 서류</h4>
+      </div>
+      <ul class="space-y-2 text-sm text-gray-700">
+        <li class="flex items-start gap-2">
+          <span class="text-emerald-600 font-bold shrink-0">✓</span>
+          <span><strong>분할발주 적정성 검토서:</strong> 분할 사유 및 근거</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-emerald-600 font-bold shrink-0">✓</span>
+          <span><strong>총 사업비 산출서:</strong> 분할 전 전체 금액</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-emerald-600 font-bold shrink-0">✓</span>
+          <span><strong>사업계획서:</strong> 분할 필요성 설명 자료</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="border-2 border-blue-200 rounded-lg p-4 bg-blue-50">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="material-symbols-outlined text-blue-600">tips_and_updates</span>
+        <h4 class="font-bold text-blue-900">실무 팁</h4>
+      </div>
+      <ul class="space-y-2 text-sm text-gray-700">
+        <li class="flex items-start gap-2">
+          <span class="text-blue-600 font-bold shrink-0">💡</span>
+          <span><strong>의심스러우면 통합:</strong> 분할 적법성이 애매하면 통합 입찰</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-blue-600 font-bold shrink-0">💡</span>
+          <span><strong>장기계속계약 활용:</strong> 연차별 분할은 장기계속계약 사용</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-blue-600 font-bold shrink-0">💡</span>
+          <span><strong>감사 대비:</strong> 분할 사유를 문서로 명확히 기록</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

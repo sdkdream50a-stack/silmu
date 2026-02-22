@@ -1,0 +1,243 @@
+<%# Created: 2026-02-22 18:35 %>
+
+<div class="bg-white border-2 border-indigo-200 rounded-lg p-6 mb-8">
+  <div class="flex items-start gap-3 mb-4">
+    <span class="material-symbols-outlined text-indigo-600 text-3xl">percent</span>
+    <div>
+      <h2 class="text-2xl font-bold text-gray-900 mb-2">낙찰하한율 적용 프로세스</h2>
+      <p class="text-gray-600 leading-relaxed">
+        최저가 낙찰 시 과도한 저가 입찰을 방지하는 낙찰하한율 적용 절차를 안내합니다.
+        지방계약법 시행령 제43조의2 (낙찰하한율) 규정에 따라 3단계로 진행됩니다.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 1: 낙찰하한율 적용 대상 판단 -->
+<div class="bg-gradient-to-br from-indigo-50 to-white border-2 border-indigo-200 rounded-lg p-6 mb-6">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="inline-flex items-center justify-center w-10 h-10 bg-indigo-600 text-white rounded-full font-bold">1</span>
+    <h3 class="text-xl font-bold text-indigo-900">낙찰하한율 적용 대상 판단</h3>
+  </div>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    낙찰하한율이 적용되는 공사인지 판단합니다. 추정가격 1억원 이상 공사가 원칙입니다.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-white rounded-lg p-4 border-2 border-indigo-100 hover:border-indigo-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-indigo-600">construction</span>
+        <h4 class="font-bold text-gray-900">대상 공사 확인</h4>
+      </div>
+      <p class="text-sm text-gray-600">추정가격 1억원 이상 공사</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-indigo-100 hover:border-indigo-300 transition-colors">
+      <a href="<%= estimated_price_path %>" class="flex items-center gap-3 mb-2" data-turbo="false">
+        <span class="material-symbols-outlined text-indigo-600">calculate</span>
+        <h4 class="font-bold text-gray-900">추정가격 확인 ⭐</h4>
+      </a>
+      <p class="text-sm text-gray-600">기초금액 산정</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-indigo-100 hover:border-indigo-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-indigo-600">percent</span>
+        <h4 class="font-bold text-gray-900">낙찰하한율 확인</h4>
+      </div>
+      <p class="text-sm text-gray-600">2026년 기준: 89.745%</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-indigo-100 hover:border-indigo-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-indigo-600">campaign</span>
+        <h4 class="font-bold text-gray-900">공고문에 명시</h4>
+      </div>
+      <p class="text-sm text-gray-600">낙찰하한율 적용 여부 공고</p>
+    </div>
+  </div>
+
+  <div class="mt-4 p-4 bg-indigo-100 border-l-4 border-indigo-500 rounded">
+    <p class="text-sm text-indigo-900 font-medium">
+      ✓ 2026년 낙찰하한율: 89.745% (2025년 87.745%에서 2% 상승)
+    </p>
+  </div>
+</div>
+
+<!-- STEP 2: 개찰 및 낙찰자 결정 -->
+<div class="bg-gradient-to-br from-amber-50 to-white border-2 border-amber-200 rounded-lg p-6 mb-6">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="inline-flex items-center justify-center w-10 h-10 bg-amber-500 text-white rounded-full font-bold">2</span>
+    <h3 class="text-xl font-bold text-amber-900">개찰 및 낙찰자 결정</h3>
+  </div>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    입찰가격이 낙찰하한율 이상인지 확인하고, 기준을 충족하는 최저가 업체를 낙찰자로 결정합니다.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-white rounded-lg p-4 border-2 border-amber-100 hover:border-amber-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-amber-600">folder_open</span>
+        <h4 class="font-bold text-gray-900">개찰 실시</h4>
+      </div>
+      <p class="text-sm text-gray-600">입찰서 개봉 및 가격 공개</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-amber-100 hover:border-amber-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-amber-600">calculate</span>
+        <h4 class="font-bold text-gray-900">낙찰하한가 계산</h4>
+      </div>
+      <p class="text-sm text-gray-600">기초금액 × 89.745%</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-amber-100 hover:border-amber-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-amber-600">compare_arrows</span>
+        <h4 class="font-bold text-gray-900">입찰가 vs 하한가 비교</h4>
+      </div>
+      <p class="text-sm text-gray-600">하한가 이상만 유효</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-amber-100 hover:border-amber-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-amber-600">verified</span>
+        <h4 class="font-bold text-gray-900">낙찰자 결정</h4>
+      </div>
+      <p class="text-sm text-gray-600">유효 입찰 중 최저가</p>
+    </div>
+  </div>
+
+  <div class="mt-4 p-4 bg-amber-100 border-l-4 border-amber-500 rounded">
+    <p class="text-sm text-amber-900 font-medium">
+      ⚠️ 낙찰하한율 미달 입찰은 무효 처리됩니다 (과도한 저가 입찰 방지)
+    </p>
+  </div>
+</div>
+
+<!-- STEP 3: 계약 체결 및 이행 관리 -->
+<div class="bg-gradient-to-br from-emerald-50 to-white border-2 border-emerald-200 rounded-lg p-6 mb-6">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="inline-flex items-center justify-center w-10 h-10 bg-emerald-600 text-white rounded-full font-bold">3</span>
+    <h3 class="text-xl font-bold text-emerald-900">계약 체결 및 이행 관리</h3>
+  </div>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    낙찰자와 계약을 체결하고, 저가 낙찰로 인한 부실 시공을 방지하기 위해 철저히 관리합니다.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-white rounded-lg p-4 border-2 border-emerald-100 hover:border-emerald-300 transition-colors">
+      <a href="<%= contract_documents_path %>" class="flex items-center gap-3 mb-2" data-turbo="false">
+        <span class="material-symbols-outlined text-emerald-600">edit_document</span>
+        <h4 class="font-bold text-gray-900">계약서 작성 ⭐</h4>
+      </a>
+      <p class="text-sm text-gray-600">표준계약서 작성</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-emerald-100 hover:border-emerald-300 transition-colors">
+      <a href="<%= contract_guarantee_path %>" class="flex items-center gap-3 mb-2" data-turbo="false">
+        <span class="material-symbols-outlined text-emerald-600">shield</span>
+        <h4 class="font-bold text-gray-900">계약보증금 징구</h4>
+      </a>
+      <p class="text-sm text-gray-600">계약금액의 10%</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-emerald-100 hover:border-emerald-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-emerald-600">visibility</span>
+        <h4 class="font-bold text-gray-900">공사 감독 강화</h4>
+      </div>
+      <p class="text-sm text-gray-600">저가 낙찰 시 부실 방지</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-emerald-100 hover:border-emerald-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-emerald-600">fact_check</span>
+        <h4 class="font-bold text-gray-900">검사 철저</h4>
+      </div>
+      <p class="text-sm text-gray-600">품질 기준 엄격 적용</p>
+    </div>
+  </div>
+
+  <div class="mt-4 p-4 bg-emerald-100 border-l-4 border-emerald-500 rounded">
+    <p class="text-sm text-emerald-900 font-medium">
+      ✓ 낙찰하한율 적용으로 과도한 저가 낙찰을 방지하여 공사 품질을 확보합니다
+    </p>
+  </div>
+</div>
+
+<!-- 체크포인트 3컬럼 -->
+<div class="bg-white border-2 border-gray-300 rounded-lg p-6 mb-8">
+  <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+    <span class="material-symbols-outlined text-indigo-600">checklist</span>
+    체크포인트
+  </h3>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="border-2 border-red-200 rounded-lg p-4 bg-red-50">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="material-symbols-outlined text-red-600">block</span>
+        <h4 class="font-bold text-red-900">절대 금지 사항</h4>
+      </div>
+      <ul class="space-y-2 text-sm text-gray-700">
+        <li class="flex items-start gap-2">
+          <span class="text-red-600 font-bold shrink-0">✗</span>
+          <span><strong>하한율 미달 낙찰:</strong> 89.745% 미만 입찰 무효</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-red-600 font-bold shrink-0">✗</span>
+          <span><strong>공고 누락:</strong> 공고문에 낙찰하한율 명시 필수</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-red-600 font-bold shrink-0">✗</span>
+          <span><strong>부실 방치:</strong> 저가 낙찰 시 부실 시공 감독 소홀 금지</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="border-2 border-emerald-200 rounded-lg p-4 bg-emerald-50">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="material-symbols-outlined text-emerald-600">folder_open</span>
+        <h4 class="font-bold text-emerald-900">필수 서류</h4>
+      </div>
+      <ul class="space-y-2 text-sm text-gray-700">
+        <li class="flex items-start gap-2">
+          <span class="text-emerald-600 font-bold shrink-0">✓</span>
+          <span><strong>입찰공고문:</strong> 낙찰하한율 89.745% 명시</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-emerald-600 font-bold shrink-0">✓</span>
+          <span><strong>개찰조서:</strong> 입찰가 vs 하한가 비교 기록</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-emerald-600 font-bold shrink-0">✓</span>
+          <span><strong>낙찰자 결정서:</strong> 유효 입찰 최저가 선정 근거</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="border-2 border-blue-200 rounded-lg p-4 bg-blue-50">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="material-symbols-outlined text-blue-600">tips_and_updates</span>
+        <h4 class="font-bold text-blue-900">실무 팁</h4>
+      </div>
+      <ul class="space-y-2 text-sm text-gray-700">
+        <li class="flex items-start gap-2">
+          <span class="text-blue-600 font-bold shrink-0">💡</span>
+          <span><strong>2026년 변경사항:</strong> 87.745% → 89.745% (2% 상승)</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-blue-600 font-bold shrink-0">💡</span>
+          <span><strong>자동 계산:</strong> 나라장터 시스템에서 자동 판정</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-blue-600 font-bold shrink-0">💡</span>
+          <span><strong>감독 강화:</strong> 저가 낙찰 시 공사 감독 더욱 철저히</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

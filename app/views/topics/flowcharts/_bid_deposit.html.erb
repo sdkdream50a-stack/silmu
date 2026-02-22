@@ -1,0 +1,435 @@
+<%# Created: 2026-02-22 18:00 %>
+
+<div class="bg-white border-2 border-indigo-200 rounded-lg p-6 mb-8">
+  <div class="flex items-start gap-3 mb-4">
+    <span class="material-symbols-outlined text-indigo-600 text-3xl">lock</span>
+    <div>
+      <h2 class="text-2xl font-bold text-gray-900 mb-2">입찰보증금 제출 프로세스</h2>
+      <p class="text-gray-600 leading-relaxed">
+        입찰에 참여할 때 제출하는 입찰보증금의 관리 절차를 안내합니다.
+        지방계약법 시행령 제42조(입찰보증금) 규정에 따라 4단계로 진행됩니다.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 1: 입찰보증금 판단 및 계산 -->
+<div class="bg-gradient-to-br from-indigo-50 to-white border-2 border-indigo-200 rounded-lg p-6 mb-6">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="inline-flex items-center justify-center w-10 h-10 bg-indigo-600 text-white rounded-full font-bold">1</span>
+    <h3 class="text-xl font-bold text-indigo-900">입찰보증금 판단 및 계산</h3>
+  </div>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    입찰보증금 제출 대상인지 판단하고, 보증금액을 계산합니다. 추정가격의 5% 이상이 원칙입니다.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-white rounded-lg p-4 border-2 border-indigo-100 hover:border-indigo-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-indigo-600">rule</span>
+        <h4 class="font-bold text-gray-900">제출 대상 판단</h4>
+      </div>
+      <p class="text-sm text-gray-600">일반경쟁입찰·제한경쟁입찰</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-indigo-100 hover:border-indigo-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-indigo-600">cancel</span>
+        <h4 class="font-bold text-gray-900">면제 요건 확인</h4>
+      </div>
+      <p class="text-sm text-gray-600">소기업·장애인·여성기업 등</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-indigo-100 hover:border-indigo-300 transition-colors cursor-pointer">
+      <a href="<%= estimated_price_path %>" class="flex items-center gap-3 mb-2" data-turbo="false">
+        <span class="material-symbols-outlined text-indigo-600">calculate</span>
+        <h4 class="font-bold text-gray-900">보증금액 계산 ⭐</h4>
+      </a>
+      <p class="text-sm text-gray-600">추정가격의 5% (원칙)</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-indigo-100 hover:border-indigo-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-indigo-600">payment</span>
+        <h4 class="font-bold text-gray-900">보증 방법 선택</h4>
+      </div>
+      <p class="text-sm text-gray-600">보증서, 현금, 국채, 공탁 등</p>
+    </div>
+  </div>
+
+  <div class="mt-4 p-4 bg-indigo-100 border-l-4 border-indigo-500 rounded">
+    <p class="text-sm text-indigo-900 font-medium">
+      ✓ 입찰보증금은 추정가격의 5% 이상이며, 면제 요건을 반드시 확인해야 합니다 (시행령 제42조)
+    </p>
+  </div>
+</div>
+
+<!-- STEP 2: 입찰서류 제출 -->
+<div class="bg-gradient-to-br from-amber-50 to-white border-2 border-amber-200 rounded-lg p-6 mb-6">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="inline-flex items-center justify-center w-10 h-10 bg-amber-500 text-white rounded-full font-bold">2</span>
+    <h3 class="text-xl font-bold text-amber-900">입찰서류 제출</h3>
+  </div>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    입찰 참가자가 입찰서와 함께 입찰보증금 또는 보증서를 제출합니다. 입찰 마감 전까지 제출해야 합니다.
+  </p>
+
+  <!-- 공문/양식 생성 도구 버튼 -->
+  <button
+    onclick="openDocPopup(event)"
+    class="w-full mb-6 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold py-4 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2"
+  >
+    <span class="material-symbols-outlined text-2xl">auto_awesome</span>
+    <span>공문/양식 생성 도구 (AI 자동 작성)</span>
+  </button>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-white rounded-lg p-4 border-2 border-amber-100 hover:border-amber-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-amber-600">description</span>
+        <h4 class="font-bold text-gray-900">입찰서 작성</h4>
+      </div>
+      <p class="text-sm text-gray-600">입찰금액, 이행각서 등</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-amber-100 hover:border-amber-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-amber-600">shield</span>
+        <h4 class="font-bold text-gray-900">입찰보증서 제출</h4>
+      </div>
+      <p class="text-sm text-gray-600">은행 또는 보증기관 발행</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-amber-100 hover:border-amber-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-amber-600">task_alt</span>
+        <h4 class="font-bold text-gray-900">서류 적정성 확인</h4>
+      </div>
+      <p class="text-sm text-gray-600">보증금액, 보증기간, 계약번호</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-amber-100 hover:border-amber-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-amber-600">upload</span>
+        <h4 class="font-bold text-gray-900">나라장터 업로드</h4>
+      </div>
+      <p class="text-sm text-gray-600">전자입찰 시 온라인 제출</p>
+    </div>
+  </div>
+
+  <div class="mt-4 p-4 bg-amber-100 border-l-4 border-amber-500 rounded">
+    <p class="text-sm text-amber-900 font-medium">
+      ⚠️ 입찰보증금 없이 입찰하면 입찰 무효 처리됩니다 (시행령 제42조 제1항)
+    </p>
+  </div>
+</div>
+
+<!-- STEP 3: 개찰 및 낙찰 -->
+<div class="bg-gradient-to-br from-emerald-50 to-white border-2 border-emerald-200 rounded-lg p-6 mb-6">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="inline-flex items-center justify-center w-10 h-10 bg-emerald-600 text-white rounded-full font-bold">3</span>
+    <h3 class="text-xl font-bold text-emerald-900">개찰 및 낙찰</h3>
+  </div>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    개찰을 진행하고 낙찰자를 결정합니다. 낙찰되지 못한 업체의 보증금은 반환됩니다.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-white rounded-lg p-4 border-2 border-emerald-100 hover:border-emerald-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-emerald-600">folder_open</span>
+        <h4 class="font-bold text-gray-900">개찰 실시</h4>
+      </div>
+      <p class="text-sm text-gray-600">입찰서 확인 및 가격 공개</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-emerald-100 hover:border-emerald-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-emerald-600">verified</span>
+        <h4 class="font-bold text-gray-900">낙찰자 결정</h4>
+      </div>
+      <p class="text-sm text-gray-600">최저가 또는 적격가 선정</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-emerald-100 hover:border-emerald-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-emerald-600">restore</span>
+        <h4 class="font-bold text-gray-900">낙찰자 외 보증금 반환</h4>
+      </div>
+      <p class="text-sm text-gray-600">탈락 업체 보증서 즉시 반환</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-emerald-100 hover:border-emerald-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-emerald-600">swap_horiz</span>
+        <h4 class="font-bold text-gray-900">계약보증금으로 전환</h4>
+      </div>
+      <p class="text-sm text-gray-600">낙찰자는 계약이행보증금 제출</p>
+    </div>
+  </div>
+
+  <div class="mt-4 p-4 bg-emerald-100 border-l-4 border-emerald-500 rounded">
+    <p class="text-sm text-emerald-900 font-medium">
+      ✓ 낙찰자의 입찰보증금은 계약이행보증금으로 전환되거나 반환됩니다
+    </p>
+  </div>
+</div>
+
+<!-- STEP 4: 보증금 귀속 또는 반환 -->
+<div class="bg-gradient-to-br from-slate-50 to-white border-2 border-slate-200 rounded-lg p-6 mb-6">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="inline-flex items-center justify-center w-10 h-10 bg-slate-600 text-white rounded-full font-bold">4</span>
+    <h3 class="text-xl font-bold text-slate-900">보증금 귀속 또는 반환</h3>
+  </div>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    낙찰자가 계약을 체결하면 보증금을 반환하고, 계약 체결을 거부하면 보증금을 귀속 처리합니다.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-white rounded-lg p-4 border-2 border-slate-100 hover:border-slate-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-slate-600">handshake</span>
+        <h4 class="font-bold text-gray-900">계약 체결</h4>
+      </div>
+      <p class="text-sm text-gray-600">낙찰자와 계약서 작성</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-slate-100 hover:border-slate-300 transition-colors cursor-pointer">
+      <a href="<%= contract_guarantee_path %>" class="flex items-center gap-3 mb-2" data-turbo="false">
+        <span class="material-symbols-outlined text-slate-600">shield_lock</span>
+        <h4 class="font-bold text-gray-900">계약이행보증금 징구</h4>
+      </a>
+      <p class="text-sm text-gray-600">계약금액의 10% 보증서</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-slate-100 hover:border-slate-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-slate-600">check_circle</span>
+        <h4 class="font-bold text-gray-900">입찰보증금 반환</h4>
+      </div>
+      <p class="text-sm text-gray-600">계약 체결 후 즉시 반환</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-slate-100 hover:border-slate-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-slate-600">warning</span>
+        <h4 class="font-bold text-gray-900">계약 거부 시 귀속</h4>
+      </div>
+      <p class="text-sm text-gray-600">낙찰 후 계약 거부 시 몰수</p>
+    </div>
+  </div>
+
+  <div class="mt-4 p-4 bg-slate-100 border-l-4 border-slate-500 rounded">
+    <p class="text-sm text-slate-900 font-medium">
+      ✓ 낙찰자가 계약 체결을 거부하면 입찰보증금은 국고에 귀속됩니다 (시행령 제42조 제5항)
+    </p>
+  </div>
+</div>
+
+<!-- 체크포인트 3컬럼 -->
+<div class="bg-white border-2 border-gray-300 rounded-lg p-6 mb-8">
+  <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+    <span class="material-symbols-outlined text-indigo-600">checklist</span>
+    체크포인트
+  </h3>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <!-- 절대 금지 사항 -->
+    <div class="border-2 border-red-200 rounded-lg p-4 bg-red-50">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="material-symbols-outlined text-red-600">block</span>
+        <h4 class="font-bold text-red-900">절대 금지 사항</h4>
+      </div>
+      <ul class="space-y-2 text-sm text-gray-700">
+        <li class="flex items-start gap-2">
+          <span class="text-red-600 font-bold shrink-0">✗</span>
+          <span><strong>보증금 없이 입찰:</strong> 입찰보증금 미제출 시 입찰 무효</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-red-600 font-bold shrink-0">✗</span>
+          <span><strong>보증금액 부족:</strong> 추정가격의 5% 미만 시 입찰 무효</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-red-600 font-bold shrink-0">✗</span>
+          <span><strong>보증기간 미달:</strong> 입찰 마감일까지 유효하지 않으면 무효</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- 필수 서류 -->
+    <div class="border-2 border-emerald-200 rounded-lg p-4 bg-emerald-50">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="material-symbols-outlined text-emerald-600">folder_open</span>
+        <h4 class="font-bold text-emerald-900">필수 서류</h4>
+      </div>
+      <ul class="space-y-2 text-sm text-gray-700">
+        <li class="flex items-start gap-2">
+          <span class="text-emerald-600 font-bold shrink-0">✓</span>
+          <span><strong>입찰보증서:</strong> 보증기관 발행 (추정가격의 5%)</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-emerald-600 font-bold shrink-0">✓</span>
+          <span><strong>입찰서:</strong> 입찰금액, 이행각서 포함</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-emerald-600 font-bold shrink-0">✓</span>
+          <span><strong>자격증빙서류:</strong> 사업자등록증, 면허증 등</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- 실무 팁 -->
+    <div class="border-2 border-blue-200 rounded-lg p-4 bg-blue-50">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="material-symbols-outlined text-blue-600">tips_and_updates</span>
+        <h4 class="font-bold text-blue-900">실무 팁</h4>
+      </div>
+      <ul class="space-y-2 text-sm text-gray-700">
+        <li class="flex items-start gap-2">
+          <span class="text-blue-600 font-bold shrink-0">💡</span>
+          <span><strong>면제 요건 활용:</strong> 소기업·장애인기업 등은 보증금 면제 가능</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-blue-600 font-bold shrink-0">💡</span>
+          <span><strong>보증기간 여유:</strong> 입찰일 + 30일 이상으로 설정</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-blue-600 font-bold shrink-0">💡</span>
+          <span><strong>전환 가능:</strong> 입찰보증금을 계약이행보증금으로 전환 신청 가능</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- 공문/양식 생성 팝업 모달 -->
+<div id="docPopup" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+    <div class="sticky top-0 bg-gradient-to-r from-amber-500 to-orange-500 text-white p-6 rounded-t-lg">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-3xl">auto_awesome</span>
+          <h3 class="text-2xl font-bold">입찰보증금 관련 공문·양식 자동 생성</h3>
+        </div>
+        <button onclick="closeDocPopup()" class="text-white hover:text-gray-200 transition-colors">
+          <span class="material-symbols-outlined text-3xl">close</span>
+        </button>
+      </div>
+      <p class="mt-2 text-amber-50">필요한 양식을 선택하면 AI가 자동으로 작성해드립니다</p>
+    </div>
+
+    <div class="p-6">
+      <div id="docCategories" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- JavaScript로 동적 생성 -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// 공문/양식 생성 팝업 데이터
+const docPopupData = {
+  "입찰 준비": [
+    {
+      title: "입찰공고문",
+      desc: "입찰보증금 비율 명시한 공고",
+      icon: "campaign",
+      prompt: "입찰공고문을 작성해줘. 공사 일반경쟁입찰, 추정가격 3억원, 입찰보증금 5% (1,500만원), 공고기간 15일."
+    },
+    {
+      title: "입찰보증금 안내문",
+      desc: "입찰 참가자용 보증금 안내",
+      icon: "info",
+      prompt: "입찰보증금 안내문을 작성해줘. 제출 방법 (보증서/현금/국채), 면제 대상, 귀속 사유 포함."
+    }
+  ],
+  "입찰 참가": [
+    {
+      title: "입찰보증서 제출 확인서",
+      desc: "보증서 제출 확인 양식",
+      icon: "receipt",
+      prompt: "입찰보증서 제출 확인서를 작성해줘. 보증기관, 보증금액, 보증기간, 제출일시 포함."
+    }
+  ],
+  "개찰 후": [
+    {
+      title: "입찰보증금 반환 공문",
+      desc: "탈락 업체 보증금 반환",
+      icon: "restore",
+      prompt: "입찰보증금 반환 공문을 작성해줘. 개찰 결과 탈락, 보증서 원본 반환."
+    },
+    {
+      title: "입찰보증금 귀속 조서",
+      desc: "낙찰자 계약 거부 시 귀속",
+      icon: "gavel",
+      prompt: "입찰보증금 귀속 조서를 작성해줘. 낙찰자 계약 체결 거부 사유, 보증금 국고 귀속 처리."
+    }
+  ]
+};
+
+function openDocPopup(event) {
+  event.preventDefault();
+  const popup = document.getElementById('docPopup');
+  const categoriesContainer = document.getElementById('docCategories');
+
+  categoriesContainer.innerHTML = '';
+
+  Object.entries(docPopupData).forEach(([category, items]) => {
+    const categoryDiv = document.createElement('div');
+    categoryDiv.className = 'col-span-full';
+    categoryDiv.innerHTML = `
+      <h4 class="font-bold text-lg text-gray-900 mb-3 flex items-center gap-2">
+        <span class="material-symbols-outlined text-amber-600">folder</span>
+        ${category}
+      </h4>
+    `;
+
+    const itemsGrid = document.createElement('div');
+    itemsGrid.className = 'grid grid-cols-1 md:grid-cols-2 gap-3 mb-6';
+
+    items.forEach(item => {
+      const itemCard = document.createElement('a');
+      itemCard.href = `/tools/ai-document?prompt=${encodeURIComponent(item.prompt)}`;
+      itemCard.className = 'bg-gradient-to-br from-white to-amber-50 border-2 border-amber-200 hover:border-amber-400 rounded-lg p-4 transition-all hover:shadow-lg cursor-pointer';
+      itemCard.setAttribute('data-turbo', 'false');
+      itemCard.innerHTML = `
+        <div class="flex items-start gap-3">
+          <span class="material-symbols-outlined text-amber-600 text-2xl">${item.icon}</span>
+          <div>
+            <h5 class="font-bold text-gray-900 mb-1">${item.title}</h5>
+            <p class="text-sm text-gray-600">${item.desc}</p>
+          </div>
+        </div>
+      `;
+      itemsGrid.appendChild(itemCard);
+    });
+
+    categoryDiv.appendChild(itemsGrid);
+    categoriesContainer.appendChild(categoryDiv);
+  });
+
+  popup.classList.remove('hidden');
+}
+
+function closeDocPopup() {
+  document.getElementById('docPopup').classList.add('hidden');
+}
+
+// ESC 키로 팝업 닫기
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'Escape') {
+    closeDocPopup();
+  }
+});
+
+// 팝업 배경 클릭 시 닫기
+document.getElementById('docPopup')?.addEventListener('click', function(event) {
+  if (event.target === this) {
+    closeDocPopup();
+  }
+});
+</script>

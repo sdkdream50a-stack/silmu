@@ -1,0 +1,345 @@
+<%# Created: 2026-02-22 18:20 %>
+
+<div class="bg-white border-2 border-indigo-200 rounded-lg p-6 mb-8">
+  <div class="flex items-start gap-3 mb-4">
+    <span class="material-symbols-outlined text-indigo-600 text-3xl">account_balance_wallet</span>
+    <div>
+      <h2 class="text-2xl font-bold text-gray-900 mb-2">예산 편성 프로세스</h2>
+      <p class="text-gray-600 leading-relaxed">
+        다음 회계연도 예산을 편성하는 절차를 안내합니다.
+        지방재정법 제36조~제42조 규정에 따라 5~12월 기간 동안 6단계로 진행됩니다.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 1: 예산편성지침 수립 (5~6월) -->
+<div class="bg-gradient-to-br from-indigo-50 to-white border-2 border-indigo-200 rounded-lg p-6 mb-6">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="inline-flex items-center justify-center w-10 h-10 bg-indigo-600 text-white rounded-full font-bold">1</span>
+    <h3 class="text-xl font-bold text-indigo-900">예산편성지침 수립 (5~6월)</h3>
+  </div>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    재정 당국이 예산편성지침을 수립하여 각 부서에 통보합니다.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-white rounded-lg p-4 border-2 border-indigo-100 hover:border-indigo-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-indigo-600">description</span>
+        <h4 class="font-bold text-gray-900">지침 수립</h4>
+      </div>
+      <p class="text-sm text-gray-600">예산 규모, 편성 기준 등</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-indigo-100 hover:border-indigo-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-indigo-600">campaign</span>
+        <h4 class="font-bold text-gray-900">지침 통보</h4>
+      </div>
+      <p class="text-sm text-gray-600">각 실·국·과에 통보</p>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 2: 예산요구서 작성 (7~8월) -->
+<div class="bg-gradient-to-br from-amber-50 to-white border-2 border-amber-200 rounded-lg p-6 mb-6">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="inline-flex items-center justify-center w-10 h-10 bg-amber-500 text-white rounded-full font-bold">2</span>
+    <h3 class="text-xl font-bold text-amber-900">예산요구서 작성 (7~8월)</h3>
+  </div>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    각 부서가 다음 연도 예산요구서를 작성하여 재정과에 제출합니다.
+  </p>
+
+  <button
+    onclick="openDocPopup(event)"
+    class="w-full mb-6 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold py-4 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2"
+  >
+    <span class="material-symbols-outlined text-2xl">auto_awesome</span>
+    <span>공문/양식 생성 도구 (AI 자동 작성)</span>
+  </button>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-white rounded-lg p-4 border-2 border-amber-100 hover:border-amber-300 transition-colors">
+      <a href="<%= budget_estimator_path %>" class="flex items-center gap-3 mb-2" data-turbo="false">
+        <span class="material-symbols-outlined text-amber-600">calculate</span>
+        <h4 class="font-bold text-gray-900">소요예산 산정 ⭐</h4>
+      </a>
+      <p class="text-sm text-gray-600">사업별 예산 산출</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-amber-100 hover:border-amber-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-amber-600">edit_document</span>
+        <h4 class="font-bold text-gray-900">예산요구서 작성</h4>
+      </div>
+      <p class="text-sm text-gray-600">사업 타당성, 추진 계획 등</p>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 3: 예산안 심사 (9월) -->
+<div class="bg-gradient-to-br from-emerald-50 to-white border-2 border-emerald-200 rounded-lg p-6 mb-6">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="inline-flex items-center justify-center w-10 h-10 bg-emerald-600 text-white rounded-full font-bold">3</span>
+    <h3 class="text-xl font-bold text-emerald-900">예산안 심사 (9월)</h3>
+  </div>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    재정 당국이 각 부서 예산요구서를 심사하고 조정합니다.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-white rounded-lg p-4 border-2 border-emerald-100 hover:border-emerald-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-emerald-600">fact_check</span>
+        <h4 class="font-bold text-gray-900">타당성 심사</h4>
+      </div>
+      <p class="text-sm text-gray-600">사업 필요성, 효과 검토</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-emerald-100 hover:border-emerald-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-emerald-600">compare_arrows</span>
+        <h4 class="font-bold text-gray-900">예산 조정</h4>
+      </div>
+      <p class="text-sm text-gray-600">가용 재원 범위 내 조정</p>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 4: 예산안 편성 (10월) -->
+<div class="bg-gradient-to-br from-blue-50 to-white border-2 border-blue-200 rounded-lg p-6 mb-6">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="inline-flex items-center justify-center w-10 h-10 bg-blue-600 text-white rounded-full font-bold">4</span>
+    <h3 class="text-xl font-bold text-blue-900">예산안 편성 (10월)</h3>
+  </div>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    단체장이 예산안을 최종 편성하고 지방의회에 제출합니다.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-white rounded-lg p-4 border-2 border-blue-100 hover:border-blue-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-blue-600">approval</span>
+        <h4 class="font-bold text-gray-900">단체장 결재</h4>
+      </div>
+      <p class="text-sm text-gray-600">예산안 최종 승인</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-blue-100 hover:border-blue-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-blue-600">upload</span>
+        <h4 class="font-bold text-gray-900">의회 제출</h4>
+      </div>
+      <p class="text-sm text-gray-600">회계연도 시작 50일 전까지</p>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 5: 의회 심의·의결 (11~12월) -->
+<div class="bg-gradient-to-br from-purple-50 to-white border-2 border-purple-200 rounded-lg p-6 mb-6">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="inline-flex items-center justify-center w-10 h-10 bg-purple-600 text-white rounded-full font-bold">5</span>
+    <h3 class="text-xl font-bold text-purple-900">의회 심의·의결 (11~12월)</h3>
+  </div>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    지방의회가 예산안을 심의하고 의결합니다.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-white rounded-lg p-4 border-2 border-purple-100 hover:border-purple-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-purple-600">groups</span>
+        <h4 class="font-bold text-gray-900">상임위 심사</h4>
+      </div>
+      <p class="text-sm text-gray-600">소관 상임위원회 심사</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-purple-100 hover:border-purple-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-purple-600">check_circle</span>
+        <h4 class="font-bold text-gray-900">본회의 의결</h4>
+      </div>
+      <p class="text-sm text-gray-600">회계연도 시작 5일 전까지</p>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 6: 예산 확정 및 집행 (12월~다음해) -->
+<div class="bg-gradient-to-br from-slate-50 to-white border-2 border-slate-200 rounded-lg p-6 mb-6">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="inline-flex items-center justify-center w-10 h-10 bg-slate-600 text-white rounded-full font-bold">6</span>
+    <h3 class="text-xl font-bold text-slate-900">예산 확정 및 집행 (12월~다음해)</h3>
+  </div>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    의회 의결로 예산이 확정되면 다음 해 1월 1일부터 집행합니다.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-white rounded-lg p-4 border-2 border-slate-100 hover:border-slate-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-slate-600">gavel</span>
+        <h4 class="font-bold text-gray-900">예산 확정</h4>
+      </div>
+      <p class="text-sm text-gray-600">의회 의결로 확정</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-slate-100 hover:border-slate-300 transition-colors">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-slate-600">play_arrow</span>
+        <h4 class="font-bold text-gray-900">예산 집행</h4>
+      </div>
+      <p class="text-sm text-gray-600">1월 1일부터 사업 추진</p>
+    </div>
+  </div>
+</div>
+
+<!-- 체크포인트 3컬럼 -->
+<div class="bg-white border-2 border-gray-300 rounded-lg p-6 mb-8">
+  <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+    <span class="material-symbols-outlined text-indigo-600">checklist</span>
+    체크포인트
+  </h3>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="border-2 border-red-200 rounded-lg p-4 bg-red-50">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="material-symbols-outlined text-red-600">block</span>
+        <h4 class="font-bold text-red-900">절대 금지 사항</h4>
+      </div>
+      <ul class="space-y-2 text-sm text-gray-700">
+        <li class="flex items-start gap-2">
+          <span class="text-red-600 font-bold shrink-0">✗</span>
+          <span><strong>일정 지연:</strong> 예산요구서 제출 기한 엄수</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-red-600 font-bold shrink-0">✗</span>
+          <span><strong>근거 부실:</strong> 예산 산출 근거 없이 요구 금지</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-red-600 font-bold shrink-0">✗</span>
+          <span><strong>과다 요구:</strong> 비현실적인 예산 요구 지양</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="border-2 border-emerald-200 rounded-lg p-4 bg-emerald-50">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="material-symbols-outlined text-emerald-600">folder_open</span>
+        <h4 class="font-bold text-emerald-900">필수 서류</h4>
+      </div>
+      <ul class="space-y-2 text-sm text-gray-700">
+        <li class="flex items-start gap-2">
+          <span class="text-emerald-600 font-bold shrink-0">✓</span>
+          <span><strong>예산요구서:</strong> 사업명, 예산액, 사업 내용</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-emerald-600 font-bold shrink-0">✓</span>
+          <span><strong>산출 근거:</strong> 세부 내역 및 단가 자료</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-emerald-600 font-bold shrink-0">✓</span>
+          <span><strong>사업계획서:</strong> 추진 배경, 목표, 효과</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="border-2 border-blue-200 rounded-lg p-4 bg-blue-50">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="material-symbols-outlined text-blue-600">tips_and_updates</span>
+        <h4 class="font-bold text-blue-900">실무 팁</h4>
+      </div>
+      <ul class="space-y-2 text-sm text-gray-700">
+        <li class="flex items-start gap-2">
+          <span class="text-blue-600 font-bold shrink-0">💡</span>
+          <span><strong>7~8월이 핵심:</strong> 예산요구서 작성 기간 집중</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-blue-600 font-bold shrink-0">💡</span>
+          <span><strong>과거 사례 활용:</strong> 전년도 예산서 참조</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-blue-600 font-bold shrink-0">💡</span>
+          <span><strong>설득 자료 준비:</strong> 사업 타당성 강조</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div id="docPopup" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+    <div class="sticky top-0 bg-gradient-to-r from-amber-500 to-orange-500 text-white p-6 rounded-t-lg">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-3xl">auto_awesome</span>
+          <h3 class="text-2xl font-bold">예산 편성 관련 공문·양식 자동 생성</h3>
+        </div>
+        <button onclick="closeDocPopup()" class="text-white hover:text-gray-200 transition-colors">
+          <span class="material-symbols-outlined text-3xl">close</span>
+        </button>
+      </div>
+      <p class="mt-2 text-amber-50">필요한 양식을 선택하면 AI가 자동으로 작성해드립니다</p>
+    </div>
+
+    <div class="p-6">
+      <div id="docCategories" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const docPopupData = {
+  "예산요구서": [
+    {title: "예산요구서", desc: "사업별 예산 신청", icon: "description", prompt: "예산요구서를 작성해줘. 사무용품 구매 사업, 2027년 예산 3천만원, 사업 필요성 및 산출 근거 포함."},
+    {title: "사업계획서", desc: "예산요구 근거 자료", icon: "assignment", prompt: "사업계획서를 작성해줘. 청사 환경개선 사업, 추진 배경, 목표, 기대효과, 예산 5천만원."}
+  ],
+  "검토서": [
+    {title: "예산 심사 의견서", desc: "재정과 심사 결과", icon: "fact_check", prompt: "예산 심사 의견서를 작성해줘. 요구액 3천만원, 심사 결과 2,500만원 조정, 조정 사유 포함."}
+  ]
+};
+
+function openDocPopup(event) {
+  event.preventDefault();
+  const popup = document.getElementById('docPopup');
+  const categoriesContainer = document.getElementById('docCategories');
+  categoriesContainer.innerHTML = '';
+  Object.entries(docPopupData).forEach(([category, items]) => {
+    const categoryDiv = document.createElement('div');
+    categoryDiv.className = 'col-span-full';
+    categoryDiv.innerHTML = `<h4 class="font-bold text-lg text-gray-900 mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-amber-600">folder</span>${category}</h4>`;
+    const itemsGrid = document.createElement('div');
+    itemsGrid.className = 'grid grid-cols-1 md:grid-cols-2 gap-3 mb-6';
+    items.forEach(item => {
+      const itemCard = document.createElement('a');
+      itemCard.href = `/tools/ai-document?prompt=${encodeURIComponent(item.prompt)}`;
+      itemCard.className = 'bg-gradient-to-br from-white to-amber-50 border-2 border-amber-200 hover:border-amber-400 rounded-lg p-4 transition-all hover:shadow-lg cursor-pointer';
+      itemCard.setAttribute('data-turbo', 'false');
+      itemCard.innerHTML = `<div class="flex items-start gap-3"><span class="material-symbols-outlined text-amber-600 text-2xl">${item.icon}</span><div><h5 class="font-bold text-gray-900 mb-1">${item.title}</h5><p class="text-sm text-gray-600">${item.desc}</p></div></div>`;
+      itemsGrid.appendChild(itemCard);
+    });
+    categoryDiv.appendChild(itemsGrid);
+    categoriesContainer.appendChild(categoryDiv);
+  });
+  popup.classList.remove('hidden');
+}
+
+function closeDocPopup() {
+  document.getElementById('docPopup').classList.add('hidden');
+}
+
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'Escape') { closeDocPopup(); }
+});
+
+document.getElementById('docPopup')?.addEventListener('click', function(event) {
+  if (event.target === this) { closeDocPopup(); }
+});
+</script>

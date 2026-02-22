@@ -1,0 +1,325 @@
+<%# Created: 2026-02-22 18:15 %>
+
+<div class="bg-white border-2 border-indigo-200 rounded-lg p-6 mb-8">
+  <div class="flex items-start gap-3 mb-4">
+    <span class="material-symbols-outlined text-indigo-600 text-3xl">payments</span>
+    <div>
+      <h2 class="text-2xl font-bold text-gray-900 mb-2">수의계약 금액 산정 프로세스</h2>
+      <p class="text-gray-600 leading-relaxed">
+        수의계약 시 적정한 계약금액을 산정하는 절차를 안내합니다.
+        지방계약법 시행령 제25조, 제30조 규정에 따라 3단계로 진행됩니다.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 1: 추정가격 산정 -->
+<div class="bg-gradient-to-br from-indigo-50 to-white border-2 border-indigo-200 rounded-lg p-6 mb-6">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="inline-flex items-center justify-center w-10 h-10 bg-indigo-600 text-white rounded-full font-bold">1</span>
+    <h3 class="text-xl font-bold text-indigo-900">추정가격 산정</h3>
+  </div>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    견적을 요청하기 전에 추정가격을 산정합니다. 시장단가 조사 및 유사 사례를 참고합니다.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-white rounded-lg p-4 border-2 border-indigo-100 hover:border-indigo-300 transition-colors cursor-pointer">
+      <a href="<%= estimated_price_path %>" class="flex items-center gap-3 mb-2" data-turbo="false">
+        <span class="material-symbols-outlined text-indigo-600">calculate</span>
+        <h4 class="font-bold text-gray-900">추정가격 계산기 ⭐</h4>
+      </a>
+      <p class="text-sm text-gray-600">시장단가 기반 산정</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-indigo-100 hover:border-indigo-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-indigo-600">search</span>
+        <h4 class="font-bold text-gray-900">시장단가 조사</h4>
+      </div>
+      <p class="text-sm text-gray-600">나라장터, 인터넷 검색 등</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-indigo-100 hover:border-indigo-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-indigo-600">history</span>
+        <h4 class="font-bold text-gray-900">과거 계약 사례</h4>
+      </div>
+      <p class="text-sm text-gray-600">유사 품목 과거 가격 참조</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-indigo-100 hover:border-indigo-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-indigo-600">description</span>
+        <h4 class="font-bold text-gray-900">산출 근거 작성</h4>
+      </div>
+      <p class="text-sm text-gray-600">추정가격 산출 내역서</p>
+    </div>
+  </div>
+
+  <div class="mt-4 p-4 bg-indigo-100 border-l-4 border-indigo-500 rounded">
+    <p class="text-sm text-indigo-900 font-medium">
+      ✓ 추정가격은 견적가격 적정성 판단의 기준이 됩니다
+    </p>
+  </div>
+</div>
+
+<!-- STEP 2: 견적 취득 및 가격 협상 -->
+<div class="bg-gradient-to-br from-amber-50 to-white border-2 border-amber-200 rounded-lg p-6 mb-6">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="inline-flex items-center justify-center w-10 h-10 bg-amber-500 text-white rounded-full font-bold">2</span>
+    <h3 class="text-xl font-bold text-amber-900">견적 취득 및 가격 협상</h3>
+  </div>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    업체로부터 견적서를 받고, 추정가격과 비교하여 가격을 협상합니다.
+  </p>
+
+  <button
+    onclick="openDocPopup(event)"
+    class="w-full mb-6 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold py-4 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2"
+  >
+    <span class="material-symbols-outlined text-2xl">auto_awesome</span>
+    <span>공문/양식 생성 도구 (AI 자동 작성)</span>
+  </button>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-white rounded-lg p-4 border-2 border-amber-100 hover:border-amber-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-amber-600">mail</span>
+        <h4 class="font-bold text-gray-900">견적 요청</h4>
+      </div>
+      <p class="text-sm text-gray-600">1인 또는 2인 이상 견적</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-amber-100 hover:border-amber-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-amber-600">compare</span>
+        <h4 class="font-bold text-gray-900">견적가 vs 추정가 비교</h4>
+      </div>
+      <p class="text-sm text-gray-600">과다 청구 방지</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-amber-100 hover:border-amber-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-amber-600">handshake</span>
+        <h4 class="font-bold text-gray-900">가격 협상</h4>
+      </div>
+      <p class="text-sm text-gray-600">추정가격 범위 내 조정</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-amber-100 hover:border-amber-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-amber-600">fact_check</span>
+        <h4 class="font-bold text-gray-900">가격 적정성 검토</h4>
+      </div>
+      <p class="text-sm text-gray-600">과다 여부 판단 및 결재</p>
+    </div>
+  </div>
+
+  <div class="mt-4 p-4 bg-amber-100 border-l-4 border-amber-500 rounded">
+    <p class="text-sm text-amber-900 font-medium">
+      ⚠️ 견적가격이 추정가격을 크게 초과하면 가격 협상 또는 재견적 요청이 필요합니다
+    </p>
+  </div>
+</div>
+
+<!-- STEP 3: 계약금액 결정 및 체결 -->
+<div class="bg-gradient-to-br from-emerald-50 to-white border-2 border-emerald-200 rounded-lg p-6 mb-6">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="inline-flex items-center justify-center w-10 h-10 bg-emerald-600 text-white rounded-full font-bold">3</span>
+    <h3 class="text-xl font-bold text-emerald-900">계약금액 결정 및 체결</h3>
+  </div>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    최종 계약금액을 결정하고, 계약서를 작성하여 계약을 체결합니다.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-white rounded-lg p-4 border-2 border-emerald-100 hover:border-emerald-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-emerald-600">check_circle</span>
+        <h4 class="font-bold text-gray-900">계약금액 확정</h4>
+      </div>
+      <p class="text-sm text-gray-600">협상 후 최종 금액 결정</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-emerald-100 hover:border-emerald-300 transition-colors cursor-pointer">
+      <a href="<%= contract_documents_path %>" class="flex items-center gap-3 mb-2" data-turbo="false">
+        <span class="material-symbols-outlined text-emerald-600">edit_document</span>
+        <h4 class="font-bold text-gray-900">계약서 작성 ⭐</h4>
+      </a>
+      <p class="text-sm text-gray-600">표준계약서 또는 간이계약서</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-emerald-100 hover:border-emerald-300 transition-colors cursor-pointer">
+      <a href="<%= contract_guarantee_path %>" class="flex items-center gap-3 mb-2" data-turbo="false">
+        <span class="material-symbols-outlined text-emerald-600">shield</span>
+        <h4 class="font-bold text-gray-900">계약보증금 징구</h4>
+      </a>
+      <p class="text-sm text-gray-600">면제 요건 확인 후 징구</p>
+    </div>
+
+    <div class="bg-white rounded-lg p-4 border-2 border-emerald-100 hover:border-emerald-300 transition-colors cursor-pointer">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="material-symbols-outlined text-emerald-600">handshake</span>
+        <h4 class="font-bold text-gray-900">계약 체결</h4>
+      </div>
+      <p class="text-sm text-gray-600">양 당사자 서명 및 날인</p>
+    </div>
+  </div>
+
+  <div class="mt-4 p-4 bg-emerald-100 border-l-4 border-emerald-500 rounded">
+    <p class="text-sm text-emerald-900 font-medium">
+      ✓ 계약금액은 계약서에 명확히 기재해야 하며, 추후 변경 시 계약변경 계약서를 작성해야 합니다
+    </p>
+  </div>
+</div>
+
+<!-- 체크포인트 3컬럼 -->
+<div class="bg-white border-2 border-gray-300 rounded-lg p-6 mb-8">
+  <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+    <span class="material-symbols-outlined text-indigo-600">checklist</span>
+    체크포인트
+  </h3>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="border-2 border-red-200 rounded-lg p-4 bg-red-50">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="material-symbols-outlined text-red-600">block</span>
+        <h4 class="font-bold text-red-900">절대 금지 사항</h4>
+      </div>
+      <ul class="space-y-2 text-sm text-gray-700">
+        <li class="flex items-start gap-2">
+          <span class="text-red-600 font-bold shrink-0">✗</span>
+          <span><strong>추정가격 없이 계약:</strong> 가격 적정성 판단 불가</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-red-600 font-bold shrink-0">✗</span>
+          <span><strong>과다 견적 방치:</strong> 예산 낭비 및 감사 지적</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-red-600 font-bold shrink-0">✗</span>
+          <span><strong>구두 합의만:</strong> 계약서 없이 구두 약속만 하면 분쟁 발생</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="border-2 border-emerald-200 rounded-lg p-4 bg-emerald-50">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="material-symbols-outlined text-emerald-600">folder_open</span>
+        <h4 class="font-bold text-emerald-900">필수 서류</h4>
+      </div>
+      <ul class="space-y-2 text-sm text-gray-700">
+        <li class="flex items-start gap-2">
+          <span class="text-emerald-600 font-bold shrink-0">✓</span>
+          <span><strong>추정가격 산출 내역서:</strong> 시장단가 조사 자료 첨부</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-emerald-600 font-bold shrink-0">✓</span>
+          <span><strong>견적서:</strong> 업체가 제출한 견적서 (1인 또는 2인 이상)</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-emerald-600 font-bold shrink-0">✓</span>
+          <span><strong>가격 적정성 검토서:</strong> 추정가 vs 견적가 비교 분석</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="border-2 border-blue-200 rounded-lg p-4 bg-blue-50">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="material-symbols-outlined text-blue-600">tips_and_updates</span>
+        <h4 class="font-bold text-blue-900">실무 팁</h4>
+      </div>
+      <ul class="space-y-2 text-sm text-gray-700">
+        <li class="flex items-start gap-2">
+          <span class="text-blue-600 font-bold shrink-0">💡</span>
+          <span><strong>나라장터 활용:</strong> 유사 품목 계약 가격 검색 가능</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-blue-600 font-bold shrink-0">💡</span>
+          <span><strong>가격 협상 문서화:</strong> 협상 과정을 기록으로 남기기</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-blue-600 font-bold shrink-0">💡</span>
+          <span><strong>예산 범위 고려:</strong> 추정가격이 예산을 초과하지 않도록 주의</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div id="docPopup" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+    <div class="sticky top-0 bg-gradient-to-r from-amber-500 to-orange-500 text-white p-6 rounded-t-lg">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-3xl">auto_awesome</span>
+          <h3 class="text-2xl font-bold">수의계약 금액 관련 공문·양식 자동 생성</h3>
+        </div>
+        <button onclick="closeDocPopup()" class="text-white hover:text-gray-200 transition-colors">
+          <span class="material-symbols-outlined text-3xl">close</span>
+        </button>
+      </div>
+      <p class="mt-2 text-amber-50">필요한 양식을 선택하면 AI가 자동으로 작성해드립니다</p>
+    </div>
+
+    <div class="p-6">
+      <div id="docCategories" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const docPopupData = {
+  "추정가격": [
+    {title: "추정가격 산출 내역서", desc: "시장단가 기반 가격 산정", icon: "calculate", prompt: "추정가격 산출 내역서를 작성해줘. 사무용품 10종, 나라장터 평균가 기준, 총 1,800만원."},
+    {title: "시장단가 조사서", desc: "3개 업체 이상 가격 조사", icon: "search", prompt: "시장단가 조사서를 작성해줘. A4용지 3개 업체 가격 조사, 평균 15,000원."}
+  ],
+  "견적 및 협상": [
+    {title: "견적 요청 공문", desc: "업체에게 견적 요청", icon: "mail", prompt: "견적 요청 공문을 작성해줘. 사무용품 구매 예정, 추정가격 1,800만원, 견적 마감 5일."},
+    {title: "가격 협상 내역서", desc: "협상 과정 기록", icon: "handshake", prompt: "가격 협상 내역서를 작성해줘. 최초 견적 2,000만원 → 협상 후 1,800만원 합의."}
+  ],
+  "검토서": [
+    {title: "가격 적정성 검토서", desc: "추정가 vs 견적가 비교", icon: "fact_check", prompt: "가격 적정성 검토서를 작성해줘. 추정가 1,800만원, 견적가 1,850만원, 협상으로 1,800만원 확정."}
+  ]
+};
+
+function openDocPopup(event) {
+  event.preventDefault();
+  const popup = document.getElementById('docPopup');
+  const categoriesContainer = document.getElementById('docCategories');
+  categoriesContainer.innerHTML = '';
+  Object.entries(docPopupData).forEach(([category, items]) => {
+    const categoryDiv = document.createElement('div');
+    categoryDiv.className = 'col-span-full';
+    categoryDiv.innerHTML = `<h4 class="font-bold text-lg text-gray-900 mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-amber-600">folder</span>${category}</h4>`;
+    const itemsGrid = document.createElement('div');
+    itemsGrid.className = 'grid grid-cols-1 md:grid-cols-2 gap-3 mb-6';
+    items.forEach(item => {
+      const itemCard = document.createElement('a');
+      itemCard.href = `/tools/ai-document?prompt=${encodeURIComponent(item.prompt)}`;
+      itemCard.className = 'bg-gradient-to-br from-white to-amber-50 border-2 border-amber-200 hover:border-amber-400 rounded-lg p-4 transition-all hover:shadow-lg cursor-pointer';
+      itemCard.setAttribute('data-turbo', 'false');
+      itemCard.innerHTML = `<div class="flex items-start gap-3"><span class="material-symbols-outlined text-amber-600 text-2xl">${item.icon}</span><div><h5 class="font-bold text-gray-900 mb-1">${item.title}</h5><p class="text-sm text-gray-600">${item.desc}</p></div></div>`;
+      itemsGrid.appendChild(itemCard);
+    });
+    categoryDiv.appendChild(itemsGrid);
+    categoriesContainer.appendChild(categoryDiv);
+  });
+  popup.classList.remove('hidden');
+}
+
+function closeDocPopup() {
+  document.getElementById('docPopup').classList.add('hidden');
+}
+
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'Escape') { closeDocPopup(); }
+});
+
+document.getElementById('docPopup')?.addEventListener('click', function(event) {
+  if (event.target === this) { closeDocPopup(); }
+});
+</script>
