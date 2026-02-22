@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   get "progress-inspections/generate", to: redirect("/tools/progress-inspection")
   get "quote-documents/extract", to: redirect("/tools/quote-auto")
   get "quote-reviews/analyze", to: redirect("/tools/quote-review")
+  get "cost-calculations/review", to: redirect("/tools/cost-calculation")
   get "official-documents/generate", to: redirect("/tools/official-document")
   get "estimated-prices/calculate", to: redirect("/tools/estimated-price")
   get "legal-periods/calculate", to: redirect("/tools/legal-period")
