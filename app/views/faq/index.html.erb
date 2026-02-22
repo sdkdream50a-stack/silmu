@@ -13,50 +13,51 @@
 <% end %>
 
 <style>
-.faq-category { margin-bottom:32px; }
-.faq-category-header { display:flex; align-items:center; gap:12px; margin-bottom:16px; padding-bottom:12px; border-bottom:2px solid #e2e8f0; }
-.faq-category-icon { width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; }
-.faq-category-title { font-size:20px; font-weight:700; color:#1e293b; }
-.faq-category-count { font-size:13px; color:#94a3b8; margin-left:auto; }
+.faq-category { margin-bottom:48px; }
+.faq-category-header { display:flex; align-items:center; gap:16px; margin-bottom:24px; padding-bottom:16px; border-bottom:3px solid #e2e8f0; }
+.faq-category-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; }
+.faq-category-title { font-size:24px; font-weight:700; color:#0f172a; }
+.faq-category-count { font-size:15px; color:#94a3b8; font-weight:600; margin-left:auto; }
 
-.faq-item { border:1px solid #e5e7eb; border-radius:12px; margin-bottom:10px; overflow:hidden; background:#fff; transition:all .15s; }
-.faq-item:hover { border-color:#cbd5e1; }
-.faq-question { display:flex; align-items:center; gap:12px; padding:16px 20px; cursor:pointer; font-weight:600; font-size:15px; color:#1e293b; }
-.faq-question .faq-q-icon { color:#94a3b8; font-size:20px; flex-shrink:0; transition:transform .2s; }
+.faq-item { border:2px solid #e5e7eb; border-radius:16px; margin-bottom:14px; overflow:hidden; background:#fff; transition:all .2s; box-shadow:0 1px 3px rgba(0,0,0,0.05); }
+.faq-item:hover { border-color:#cbd5e1; box-shadow:0 4px 12px rgba(0,0,0,0.08); }
+.faq-question { display:flex; align-items:center; gap:16px; padding:20px 24px; cursor:pointer; font-weight:600; font-size:16px; color:#1e293b; }
+.faq-question .faq-q-icon { color:#6366f1; font-size:24px; flex-shrink:0; transition:transform .2s; }
 .faq-question .faq-q-text { flex:1; }
-.faq-question .faq-toggle { color:#94a3b8; font-size:22px; flex-shrink:0; transition:transform .2s; }
+.faq-question .faq-toggle { color:#94a3b8; font-size:28px; flex-shrink:0; transition:transform .2s; }
 .faq-item.open .faq-toggle { transform:rotate(180deg); }
-.faq-answer { display:none; padding:0 20px 18px 52px; font-size:14px; color:#475569; line-height:1.8; white-space:pre-line; }
+.faq-answer { display:none; padding:0 24px 24px 64px; font-size:15px; color:#475569; line-height:1.75; white-space:pre-line; }
 .faq-item.open .faq-answer { display:block; }
 
-.faq-nav { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:32px; }
-.faq-nav-btn { padding:8px 18px; border:1px solid #e2e8f0; border-radius:20px; font-size:14px; font-weight:600; color:#475569; cursor:pointer; transition:all .15s; background:#fff; text-decoration:none; }
+.faq-nav { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:40px; }
+.faq-nav-btn { padding:10px 22px; border:2px solid #e2e8f0; border-radius:24px; font-size:15px; font-weight:700; color:#475569; cursor:pointer; transition:all .2s; background:#fff; text-decoration:none; }
 .faq-nav-btn:hover { border-color:#6366f1; color:#4338ca; background:#eef2ff; }
-.faq-nav-btn.active { border-color:#6366f1; color:#fff; background:#6366f1; }
+.faq-nav-btn.active { border-color:#6366f1; color:#fff; background:#6366f1; box-shadow:0 4px 12px rgba(99,102,241,0.3); }
 
-.faq-search-wrap { position:relative; max-width:500px; margin-bottom:28px; }
-.faq-search-wrap input { width:100%; padding:12px 18px 12px 44px; border:2px solid #e5e7eb; border-radius:12px; font-size:15px; }
-.faq-search-wrap input:focus { outline:none; border-color:#6366f1; box-shadow:0 0 0 3px rgba(99,102,241,.1); }
-.faq-search-wrap .material-symbols-outlined { position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#94a3b8; }
+.faq-search-wrap { position:relative; max-width:600px; margin-bottom:36px; }
+.faq-search-wrap input { width:100%; padding:16px 20px 16px 56px; border:2px solid #e5e7eb; border-radius:16px; font-size:16px; }
+.faq-search-wrap input:focus { outline:none; border-color:#6366f1; box-shadow:0 0 0 4px rgba(99,102,241,.12); }
+.faq-search-wrap .material-symbols-outlined { position:absolute; left:18px; top:50%; transform:translateY(-50%); color:#94a3b8; font-size:24px; }
 
-.faq-empty { text-align:center; padding:40px 20px; color:#94a3b8; font-size:15px; }
+.faq-empty { text-align:center; padding:60px 20px; color:#94a3b8; font-size:16px; }
 
 @media (max-width:640px) {
-  .faq-answer { padding-left:20px; }
-  .faq-question { padding:14px 16px; font-size:14px; }
+  .faq-answer { padding-left:24px; }
+  .faq-question { padding:16px 18px; font-size:15px; }
+  .faq-category-title { font-size:20px; }
 }
 </style>
 
 <!-- 헤더 -->
-<section class="gradient-indigo text-white py-12 lg:py-16">
+<section class="gradient-indigo text-white py-14 lg:py-20">
   <div class="container-wide">
-    <div class="flex items-start gap-5">
-      <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 shadow-lg">
-        <span class="material-symbols-outlined text-4xl text-white">help</span>
+    <div class="flex items-start gap-6">
+      <div class="w-20 h-20 bg-white/10 backdrop-blur-md rounded-3xl flex items-center justify-center border-2 border-white/20 shadow-2xl">
+        <span class="material-symbols-outlined text-5xl text-white">help</span>
       </div>
       <div>
-        <h1 class="text-3xl lg:text-4xl font-bold tracking-tight mb-2">자주 묻는 질문</h1>
-        <p class="text-indigo-100 text-lg">계약 실무에서 자주 나오는 질문과 답변</p>
+        <h1 class="text-4xl lg:text-5xl font-bold tracking-tight mb-3">자주 묻는 질문</h1>
+        <p class="text-indigo-100 text-xl font-medium">계약 실무에서 자주 나오는 질문과 답변</p>
       </div>
     </div>
   </div>
