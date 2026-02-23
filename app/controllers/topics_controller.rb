@@ -44,6 +44,19 @@ class TopicsController < ApplicationController
     "quote-collection-guide"  => [:quote_review, :contract_method, :contract_documents],
   }.freeze
 
+  # 플로차트가 있는 토픽 목록
+  FLOWCHART_SLUGS = %w[
+    price-negotiation private-contract private-contract-limit private-contract-amount
+    emergency-contract dual-quote single-quote travel-expense year-end-settlement
+    budget-carryover late-penalty contract-guarantee-deposit subcontract bid-announcement
+    bidding bid-qualification long-term-contract multiple-price spec-price-split-bid
+    advance-payment unit-price-contract performance-guarantee e-bidding estimated-price
+    contract-execution inspection payment design-change price-escalation contract-termination
+    joint-contract defect-warranty bid-deposit small-amount-contract budget-compilation
+    split-contract-prohibition quote-collection-guide lowest-bid-rate e-procurement-guide
+    goods-selection-committee
+  ].freeze
+
   # 토픽별 개별 아이콘 매핑
   TOPIC_ICONS = {
     "private-contract"           => "handshake",
@@ -166,6 +179,9 @@ class TopicsController < ApplicationController
       @topic.related_audit_cases.to_a
     end
     @audit_case_total = Rails.cache.fetch("stats/audit_case_count", expires_in: 30.minutes) { AuditCase.published.count }
+
+    # 플로차트 존재 여부 (P1-1: 플로차트 없으면 기본 탭을 '법령 내용'으로 변경)
+    @has_flowchart = FLOWCHART_SLUGS.include?(@topic.slug)
 
     # 부모 토픽인 경우 키워드별 매칭 토픽을 미리 조회 (N+1 방지)
     @keyword_topic_map = @topic.parent_id.nil? ? @topic.keyword_topic_map : {}

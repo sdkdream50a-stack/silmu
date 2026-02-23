@@ -43,15 +43,20 @@
 
       <!-- Search -->
       <div class="w-full max-w-3xl mb-16 relative z-10">
-        <form action="<%= chatbot_path %>" method="get" data-turbo="false">
+        <form action="<%= chatbot_path %>" method="get" data-turbo="false" id="search-form">
           <div class="search-glass relative flex items-center rounded-2xl overflow-hidden p-2 transition-all duration-300">
             <div class="flex h-14 w-14 items-center justify-center text-indigo-300 pl-2">
               <span class="material-symbols-outlined text-3xl">search</span>
             </div>
-            <input name="q" class="h-14 w-full border-0 bg-transparent px-4 text-white placeholder:text-slate-400 focus:ring-0 text-lg" placeholder="무엇을 도와드릴까요? (예: 수의계약 한도, 물품구매 절차)" type="text"/>
+            <input name="q" id="search-input" class="h-14 w-full border-0 bg-transparent px-4 text-white placeholder:text-slate-400 focus:ring-0 text-lg" placeholder="무엇을 도와드릴까요? (예: 수의계약 한도, 물품구매 절차)" type="text" autocomplete="off"/>
             <button type="submit" class="hidden sm:flex h-12 items-center justify-center rounded-xl bg-indigo-600 px-8 text-base font-bold text-white transition-all hover:bg-indigo-500 shadow-lg shadow-indigo-600/30">
               검색
             </button>
+          </div>
+          <!-- 자동완성 힌트 -->
+          <div id="search-hint" class="hidden mt-2 text-center text-sm text-indigo-300 animate-pulse">
+            <span class="material-symbols-outlined text-base align-middle">keyboard_return</span>
+            <span class="ml-1">Enter로 검색</span>
           </div>
         </form>
         <div class="mt-8 flex flex-wrap justify-center gap-3">
@@ -99,7 +104,7 @@
         <h2 class="text-4xl font-bold text-slate-900 sm:text-5xl tracking-tight mb-4">핵심 실무 도구</h2>
         <p class="text-xl text-slate-600 font-medium">복잡한 업무를 <strong class="text-indigo-700 font-bold">클릭 몇 번</strong>으로 해결하는 프리미엄 툴킷</p>
       </div>
-      <%= link_to tools_path, class: "hidden group items-center gap-2 px-5 py-3 text-base font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-lg hover:shadow-xl transition-all sm:flex" do %>
+      <%= link_to tools_path, class: "group flex items-center gap-2 px-5 py-3 text-base font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-lg hover:shadow-xl transition-all" do %>
         전체 도구 보기
         <span class="material-symbols-outlined text-xl group-hover:translate-x-1 transition-transform">arrow_forward</span>
       <% end %>
@@ -440,6 +445,40 @@ document.addEventListener('turbo:load', function() {
       </div>`;
   }
   priceCategory.addEventListener('change', function() { if (priceInput.value) calculateMethod(); });
+});
+</script>
+
+<!-- 검색 자동완성 힌트 (P1-2) -->
+<script>
+document.addEventListener('turbo:load', function() {
+  const searchInput = document.getElementById('search-input');
+  const searchHint = document.getElementById('search-hint');
+  const searchForm = document.getElementById('search-form');
+  if (!searchInput) return;
+
+  // 입력 감지 - 3자 이상 입력 시 힌트 표시
+  searchInput.addEventListener('input', function() {
+    const value = this.value.trim();
+    if (value.length >= 3) {
+      searchHint.classList.remove('hidden');
+    } else {
+      searchHint.classList.add('hidden');
+    }
+  });
+
+  // 빈 검색 방지
+  searchForm.addEventListener('submit', function(e) {
+    const value = searchInput.value.trim();
+    if (value.length === 0) {
+      e.preventDefault();
+      searchInput.focus();
+    }
+  });
+
+  // 포커스 잃을 때 힌트 숨김
+  searchInput.addEventListener('blur', function() {
+    setTimeout(() => searchHint.classList.add('hidden'), 200);
+  });
 });
 </script>
 
