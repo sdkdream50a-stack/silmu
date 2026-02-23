@@ -2917,6 +2917,14 @@
     renderStandingChecklist();
     updateTodayCount();
     updateProgress();
+
+    // 법정기간 계산기에서 추가된 경우 토스트 표시
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('added') === 'legal-period') {
+      showToast("법정기간이 업무달력에 추가되었습니다", "check_circle");
+      // URL 정리 (파라미터 제거)
+      window.history.replaceState({}, '', '/tools/task-calendar');
+    }
   });
 })();
 </script>

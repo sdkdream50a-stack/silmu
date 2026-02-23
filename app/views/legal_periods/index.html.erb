@@ -539,6 +539,12 @@ document.addEventListener('turbo:load', function() {
       } else {
         html += '<div class="lp-ref-box">' + lpEsc(r.note) + '</div>';
       }
+      // 업무달력에 추가 버튼
+      html += '<div class="no-print" style="margin-top:16px;text-align:center;">';
+      html += '<button onclick="lpAddToCalendar(\'입찰공고 마감 (개찰가능일)\', \'' + r.end_date + '\')" ';
+      html += 'class="lp-btn lp-btn-primary" style="background:#4f46e5;color:white;border:none;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all 0.2s;">';
+      html += '<span class="material-symbols-outlined" style="font-size:18px;">event</span> 업무달력에 추가</button>';
+      html += '</div>';
 
     } else if (r.type === 'contract_signing') {
       html += '<div class="lp-result-title"><span class="material-symbols-outlined" style="color:#d97706;">draw</span> 계약체결기한 계산 결과</div>';
@@ -548,6 +554,12 @@ document.addEventListener('turbo:load', function() {
       html += '<div class="lp-info-item"><div class="lp-info-label">체결기한</div><div class="lp-info-value" style="color:#d97706;">' + r.deadline + ' (' + r.deadline_weekday + ')</div></div>';
       html += '</div>';
       html += '<div class="lp-ref-box">' + lpEsc(r.note) + '</div>';
+      // 업무달력에 추가 버튼
+      html += '<div class="no-print" style="margin-top:16px;text-align:center;">';
+      html += '<button onclick="lpAddToCalendar(\'계약체결 기한\', \'' + r.deadline + '\')" ';
+      html += 'class="lp-btn lp-btn-primary" style="background:#4f46e5;color:white;border:none;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all 0.2s;">';
+      html += '<span class="material-symbols-outlined" style="font-size:18px;">event</span> 업무달력에 추가</button>';
+      html += '</div>';
 
     } else if (r.type === 'payment') {
       html += '<div class="lp-result-title"><span class="material-symbols-outlined" style="color:#d97706;">payments</span> 대금지급기한 계산 결과</div>';
@@ -557,6 +569,12 @@ document.addEventListener('turbo:load', function() {
       html += '<div class="lp-info-item"><div class="lp-info-label">지급기한</div><div class="lp-info-value" style="color:#d97706;">' + r.deadline + ' (' + r.deadline_weekday + ')</div></div>';
       html += '</div>';
       html += '<div class="lp-ref-box">' + lpEsc(r.note) + '</div>';
+      // 업무달력에 추가 버튼
+      html += '<div class="no-print" style="margin-top:16px;text-align:center;">';
+      html += '<button onclick="lpAddToCalendar(\'' + lpEsc(r.payment_type_name) + ' 지급기한\', \'' + r.deadline + '\')" ';
+      html += 'class="lp-btn lp-btn-primary" style="background:#4f46e5;color:white;border:none;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all 0.2s;">';
+      html += '<span class="material-symbols-outlined" style="font-size:18px;">event</span> 업무달력에 추가</button>';
+      html += '</div>';
 
     } else if (r.type === 'defect_warranty') {
       html += '<div class="lp-result-title"><span class="material-symbols-outlined" style="color:#d97706;">shield</span> 하자보증기간 계산 결과</div>';
@@ -602,5 +620,34 @@ document.addEventListener('turbo:load', function() {
 
   function lpComma(n) { return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
   function lpEsc(s) { if (!s) return ''; var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+  // 업무달력에 추가
+  window.lpAddToCalendar = function(title, date) {
+    const CUSTOM_KEY = "silmu_custom_tasks";
+    let customs = [];
+    try {
+      customs = JSON.parse(localStorage.getItem(CUSTOM_KEY) || "[]");
+    } catch (e) {
+      console.error("localStorage 읽기 실패:", e);
+    }
+
+    // 새 업무 추가
+    customs.push({
+      title: title,
+      repeat: "once",
+      date: date,
+      time: null,
+      cat: "계약"
+    });
+
+    try {
+      localStorage.setItem(CUSTOM_KEY, JSON.stringify(customs));
+      // 업무달력으로 이동
+      window.location.href = '/tools/task-calendar?added=legal-period';
+    } catch (e) {
+      console.error("localStorage 저장 실패:", e);
+      alert("업무 추가에 실패했습니다. 브라우저 설정을 확인해주세요.");
+    }
+  };
 });
 </script>
