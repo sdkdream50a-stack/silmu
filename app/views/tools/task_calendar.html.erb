@@ -405,7 +405,7 @@
                 h_name = holidays[[m, t[:day]]]
                 date_color = (is_sun || h_name) ? 'text-red-500' : is_sat ? 'text-blue-500' : 'text-slate-400'
               %>
-              <div class="task-item group flex items-center gap-3 px-3 py-3 hover:bg-white hover:shadow-sm transition-all rounded-lg" data-task-key="<%= m %>_<%= t[:title] %>">
+              <div class="task-item group flex items-center gap-3 px-3 py-3 hover:bg-white hover:shadow-sm transition-all rounded-lg" data-task-key="<%= m %>_<%= t[:title] %>" data-task-id="<%= m %>_<%= t[:title] %>" data-task-month="<%= m %>" data-task-day="<%= t[:day] %>" data-task-cat="<%= t[:cat] %>">
                 <label class="flex-shrink-0 cursor-pointer">
                   <input type="checkbox" class="task-cb sr-only" data-key="<%= m %>_<%= t[:title] %>">
                   <span class="check-box w-[22px] h-[22px] rounded-full border-2 border-slate-300 flex items-center justify-center hover:border-indigo-400 transition-colors">
@@ -424,6 +424,15 @@
                     <% end %>
                     <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-semibold <%= tc[:badge] %> <%= tc[:text] %>"><%= t[:cat] %></span>
                   </div>
+                </div>
+                <!-- 수정/삭제 버튼 -->
+                <div class="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
+                  <button class="btn-edit-default-task flex-shrink-0 w-7 h-7 rounded-lg hover:bg-indigo-50 flex items-center justify-center text-slate-400 hover:text-indigo-600" title="수정" data-task-id="<%= m %>_<%= t[:title] %>">
+                    <span class="material-symbols-outlined" style="font-size:18px">edit</span>
+                  </button>
+                  <button class="btn-delete-default-task flex-shrink-0 w-7 h-7 rounded-lg hover:bg-red-50 flex items-center justify-center text-slate-400 hover:text-red-600" title="삭제" data-task-id="<%= m %>_<%= t[:title] %>">
+                    <span class="material-symbols-outlined" style="font-size:18px">delete</span>
+                  </button>
                 </div>
               </div>
             <% end %>
@@ -2917,6 +2926,115 @@
     renderStandingChecklist();
     updateTodayCount();
     updateProgress();
+
+    // === 기본 정기 업무 삭제/수정 기능 ===
+    const DELETED_TASKS_KEY = "silmu_deleted_default_tasks";
+
+    // 삭제된 업무 목록 로드
+    function loadDeletedTasks() {
+      try {
+        return JSON.parse(localStorage.getItem(DELETED_TASKS_KEY) || "[]");
+      } catch {
+        return [];
+      }
+    }
+
+    // 삭제된 업무 저장
+    function saveDeletedTasks(deletedList) {
+      try {
+        localStorage.setItem(DELETED_TASKS_KEY, JSON.stringify(deletedList));
+        syncToServer({ deleted_default_tasks: deletedList });
+      } catch (e) {
+        console.error("삭제 목록 저장 실패:", e);
+      }
+    }
+
+    // 페이지 로드 시 삭제된 업무 숨김
+    function hideDeletedTasks() {
+      const deletedList = loadDeletedTasks();
+      deletedList.forEach(taskId => {
+        const taskItem = document.querySelector(`.task-item[data-task-id="${taskId}"]`);
+        if (taskItem) {
+          taskItem.style.display = "none";
+        }
+      });
+    }
+
+    // 삭제 버튼 이벤트
+    document.querySelectorAll(".btn-delete-default-task").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const taskId = btn.dataset.taskId;
+        const taskItem = btn.closest(".task-item");
+        const taskTitle = taskItem.querySelector(".task-text").textContent;
+
+        if (!confirm(`"${taskTitle}" 업무를 삭제하시겠습니까?\n\n삭제된 업무는 다시 복구할 수 없습니다.`)) {
+          return;
+        }
+
+        const deletedList = loadDeletedTasks();
+        if (!deletedList.includes(taskId)) {
+          deletedList.push(taskId);
+          saveDeletedTasks(deletedList);
+        }
+
+        taskItem.style.display = "none";
+        showToast("업무가 삭제되었습니다", "delete");
+      });
+    });
+
+    // 수정 버튼 이벤트
+    document.querySelectorAll(".btn-edit-default-task").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const taskId = btn.dataset.taskId;
+        const taskItem = btn.closest(".task-item");
+        const taskTitle = taskItem.querySelector(".task-text").textContent;
+        const taskMonth = taskItem.dataset.taskMonth;
+        const taskDay = taskItem.dataset.taskDay;
+        const taskCat = taskItem.dataset.taskCat;
+
+        // 업무 추가 모달 열기
+        modalAdd.classList.remove("hidden");
+
+        // 비정기업무 탭으로 전환
+        document.querySelector('.modal-tab[data-modal-tab="onetime"]').click();
+
+        // 기존 값으로 채우기
+        taskInput.value = taskTitle;
+        document.getElementById("onetime-date").value = `2026-${String(taskMonth).padStart(2, '0')}-${String(taskDay).padStart(2, '0')}`;
+        document.getElementById("onetime-time").value = "";
+
+        // 카테고리 선택
+        selectedOnetimeCat = taskCat;
+        document.querySelectorAll("#onetime-cat-container .cat-btn").forEach(catBtn => {
+          const isSelected = catBtn.textContent.trim() === taskCat;
+          catBtn.classList.toggle("ring-2", isSelected);
+          catBtn.classList.toggle("ring-indigo-600", isSelected);
+        });
+
+        // 저장 시 원본 삭제 + 새 업무 추가
+        const submitBtn = document.getElementById("modal-submit");
+        const originalHandler = submitBtn.onclick;
+        submitBtn.onclick = function() {
+          // 원본 업무 삭제
+          const deletedList = loadDeletedTasks();
+          if (!deletedList.includes(taskId)) {
+            deletedList.push(taskId);
+            saveDeletedTasks(deletedList);
+          }
+          taskItem.style.display = "none";
+
+          // 원래 핸들러 실행 (새 업무 추가)
+          if (originalHandler) originalHandler.call(this);
+
+          showToast("업무가 수정되었습니다", "edit");
+        };
+      });
+    });
+
+    // 초기 실행: 삭제된 업무 숨김
+    hideDeletedTasks();
 
     // 법정기간 계산기에서 추가된 경우 토스트 표시
     const urlParams = new URLSearchParams(window.location.search);
