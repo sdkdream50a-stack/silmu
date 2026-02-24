@@ -120,6 +120,12 @@ class TopicsController < ApplicationController
     all_topics = Topic.published.to_a
     @topics_by_category = all_topics.group_by(&:category)
 
+    # 카테고리 표시 순서 정의 (뷰의 category_config와 동일)
+    category_order = %w[contract budget expense salary subsidy property travel duty other]
+    @topics_by_category = @topics_by_category.sort_by do |cat, _|
+      category_order.index(cat) || 999 # 순서에 없는 카테고리는 맨 뒤로
+    end.to_h
+
     # 계약 카테고리: 논리적 순서로 정렬 (수의계약 → 입찰 → 계약체결 → 보증금 → 이행 → 변경/종료)
     contract_order = %w[
       private-contract private-contract-limit private-contract-amount
