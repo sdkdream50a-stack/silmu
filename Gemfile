@@ -87,3 +87,6 @@ gem "rubyzip"      # ZIP 파일 생성
 
 # ========== SEO 모니터링 ==========
 gem "whenever", require: false  # Cron job 관리
+
+# ========== Google Analytics ==========
+gem "google-analytics-data"  # GA4 Data API v1

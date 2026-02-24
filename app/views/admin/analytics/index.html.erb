@@ -1,0 +1,214 @@
+<%# Created: 2026-02-24 22:25 %>
+<%# GA4 Analytics 대시보드 (Admin 전용) %>
+
+<% content_for :title, "Google Analytics 대시보드" %>
+
+<div class="container-wide py-8">
+  <div class="flex justify-between items-center mb-8">
+    <div>
+      <h1 class="text-3xl font-bold text-slate-900 mb-2">Google Analytics 대시보드</h1>
+      <p class="text-slate-600">실무.kr 트래픽 및 사용자 행동 분석</p>
+    </div>
+
+    <%# 기간 선택 %>
+    <div class="flex gap-2">
+      <%= link_to "1일", admin_analytics_path(days: 1), class: "px-4 py-2 rounded-lg transition-colors #{@days == 1 ? 'bg-slate-900 text-white' : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50'}" %>
+      <%= link_to "7일", admin_analytics_path(days: 7), class: "px-4 py-2 rounded-lg transition-colors #{@days == 7 ? 'bg-slate-900 text-white' : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50'}" %>
+      <%= link_to "14일", admin_analytics_path(days: 14), class: "px-4 py-2 rounded-lg transition-colors #{@days == 14 ? 'bg-slate-900 text-white' : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50'}" %>
+      <%= link_to "30일", admin_analytics_path(days: 30), class: "px-4 py-2 rounded-lg transition-colors #{@days == 30 ? 'bg-slate-900 text-white' : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50'}" %>
+    </div>
+  </div>
+
+  <% if @data.nil? %>
+    <%# 에러 상태 %>
+    <div class="bg-red-50 border border-red-200 rounded-xl p-6 text-center">
+      <span class="material-symbols-outlined text-red-600 text-5xl mb-4">error</span>
+      <h2 class="text-xl font-bold text-red-900 mb-2">데이터를 불러올 수 없습니다</h2>
+      <p class="text-red-700 mb-4"><%= flash[:alert] %></p>
+      <p class="text-sm text-red-600">
+        Rails credentials에 Google Analytics Service Account가 올바르게 설정되었는지 확인하세요.
+      </p>
+    </div>
+  <% else %>
+    <%# 마지막 업데이트 시간 %>
+    <div class="text-sm text-slate-500 mb-6">
+      <span class="material-symbols-outlined text-base align-middle">schedule</span>
+      마지막 업데이트: <%= @data[:last_updated].in_time_zone('Seoul').strftime('%Y-%m-%d %H:%M:%S') %>
+      (캐시: 5분)
+    </div>
+
+    <%# 1. 주요 지표 카드 %>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <%# 실시간 활성 사용자 %>
+      <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl p-6 text-white shadow-lg">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-emerald-100">실시간 활성 사용자</span>
+          <span class="material-symbols-outlined">visibility</span>
+        </div>
+        <div class="text-4xl font-bold"><%= @data[:real_time] %></div>
+        <div class="text-emerald-100 text-sm mt-2">현재 접속 중</div>
+      </div>
+
+      <%# WAU %>
+      <div class="bg-white rounded-xl p-6 border border-slate-200 shadow-sm">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-slate-600">주간 활성 사용자</span>
+          <span class="material-symbols-outlined text-indigo-600">calendar_today</span>
+        </div>
+        <div class="text-4xl font-bold text-slate-900"><%= number_with_delimiter(@data[:weekly_monthly][:wau]) %></div>
+        <div class="text-slate-500 text-sm mt-2">최근 7일</div>
+      </div>
+
+      <%# MAU %>
+      <div class="bg-white rounded-xl p-6 border border-slate-200 shadow-sm">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-slate-600">월간 활성 사용자</span>
+          <span class="material-symbols-outlined text-purple-600">event</span>
+        </div>
+        <div class="text-4xl font-bold text-slate-900"><%= number_with_delimiter(@data[:weekly_monthly][:mau]) %></div>
+        <div class="text-slate-500 text-sm mt-2">최근 30일</div>
+      </div>
+
+      <%# 총 페이지뷰 %>
+      <div class="bg-white rounded-xl p-6 border border-slate-200 shadow-sm">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-slate-600">페이지뷰</span>
+          <span class="material-symbols-outlined text-amber-600">pageview</span>
+        </div>
+        <div class="text-4xl font-bold text-slate-900"><%= number_with_delimiter(@data[:page_views][:top_pages].sum { |p| p[:views] }) %></div>
+        <div class="text-slate-500 text-sm mt-2">최근 <%= @days %>일</div>
+      </div>
+    </div>
+
+    <%# 2. 신규 vs 재방문 %>
+    <div class="bg-white rounded-xl p-6 border border-slate-200 shadow-sm mb-8">
+      <h2 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-indigo-600">group</span>
+        신규 vs 재방문 사용자
+      </h2>
+      <div class="grid grid-cols-2 gap-6">
+        <div class="text-center">
+          <div class="text-5xl font-bold text-emerald-600 mb-2"><%= number_with_delimiter(@data[:new_vs_returning][:new]) %></div>
+          <div class="text-slate-600">신규 사용자</div>
+          <div class="text-sm text-slate-500 mt-1">
+            <%= ((@data[:new_vs_returning][:new].to_f / (@data[:new_vs_returning][:new] + @data[:new_vs_returning][:returning])) * 100).round(1) %>%
+          </div>
+        </div>
+        <div class="text-center">
+          <div class="text-5xl font-bold text-indigo-600 mb-2"><%= number_with_delimiter(@data[:new_vs_returning][:returning]) %></div>
+          <div class="text-slate-600">재방문 사용자</div>
+          <div class="text-sm text-slate-500 mt-1">
+            <%= ((@data[:new_vs_returning][:returning].to_f / (@data[:new_vs_returning][:new] + @data[:new_vs_returning][:returning])) * 100).round(1) %>%
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%# 3. 참여도 지표 %>
+    <div class="bg-white rounded-xl p-6 border border-slate-200 shadow-sm mb-8">
+      <h2 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-purple-600">analytics</span>
+        참여도 지표
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="text-center">
+          <div class="text-4xl font-bold text-slate-900 mb-2"><%= @data[:engagement][:avg_session_duration].round(0) %>초</div>
+          <div class="text-slate-600">평균 세션 시간</div>
+        </div>
+        <div class="text-center">
+          <div class="text-4xl font-bold text-slate-900 mb-2"><%= @data[:engagement][:bounce_rate].round(1) %>%</div>
+          <div class="text-slate-600">이탈률</div>
+        </div>
+        <div class="text-center">
+          <div class="text-4xl font-bold text-slate-900 mb-2"><%= @data[:engagement][:engagement_rate].round(1) %>%</div>
+          <div class="text-slate-600">참여율</div>
+        </div>
+      </div>
+    </div>
+
+    <%# 4. 인기 페이지 Top 10 %>
+    <div class="bg-white rounded-xl p-6 border border-slate-200 shadow-sm mb-8">
+      <h2 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-amber-600">trending_up</span>
+        인기 페이지 Top 10
+      </h2>
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead>
+            <tr class="border-b border-slate-200">
+              <th class="text-left py-3 px-4 text-slate-600 font-semibold">#</th>
+              <th class="text-left py-3 px-4 text-slate-600 font-semibold">페이지</th>
+              <th class="text-right py-3 px-4 text-slate-600 font-semibold">페이지뷰</th>
+              <th class="text-right py-3 px-4 text-slate-600 font-semibold">사용자</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @data[:top_pages].each_with_index do |page, index| %>
+              <tr class="border-b border-slate-100 hover:bg-slate-50">
+                <td class="py-3 px-4 text-slate-500"><%= index + 1 %></td>
+                <td class="py-3 px-4">
+                  <div class="font-medium text-slate-900"><%= truncate(page[:title], length: 60) %></div>
+                  <div class="text-sm text-slate-500"><%= page[:path] %></div>
+                </td>
+                <td class="py-3 px-4 text-right font-semibold text-slate-900"><%= number_with_delimiter(page[:views]) %></td>
+                <td class="py-3 px-4 text-right text-slate-600"><%= number_with_delimiter(page[:users]) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <%# 5. 유입 경로 %>
+    <div class="bg-white rounded-xl p-6 border border-slate-200 shadow-sm mb-8">
+      <h2 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-teal-600">source</span>
+        유입 경로
+      </h2>
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead>
+            <tr class="border-b border-slate-200">
+              <th class="text-left py-3 px-4 text-slate-600 font-semibold">소스</th>
+              <th class="text-left py-3 px-4 text-slate-600 font-semibold">매체</th>
+              <th class="text-right py-3 px-4 text-slate-600 font-semibold">세션</th>
+              <th class="text-right py-3 px-4 text-slate-600 font-semibold">사용자</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @data[:traffic_sources].each do |source| %>
+              <tr class="border-b border-slate-100 hover:bg-slate-50">
+                <td class="py-3 px-4 font-medium text-slate-900"><%= source[:source] %></td>
+                <td class="py-3 px-4 text-slate-600"><%= source[:medium] %></td>
+                <td class="py-3 px-4 text-right font-semibold text-slate-900"><%= number_with_delimiter(source[:sessions]) %></td>
+                <td class="py-3 px-4 text-right text-slate-600"><%= number_with_delimiter(source[:users]) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <%# 6. DAU 그래프 (간단한 막대 그래프) %>
+    <div class="bg-white rounded-xl p-6 border border-slate-200 shadow-sm">
+      <h2 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-indigo-600">show_chart</span>
+        일별 활성 사용자 (DAU)
+      </h2>
+      <div class="space-y-2">
+        <% max_users = @data[:daily_users].map { |d| d[:active_users] }.max %>
+        <% @data[:daily_users].last(14).each do |day| %>
+          <div class="flex items-center gap-3">
+            <div class="text-sm text-slate-600 w-24"><%= Date.parse(day[:date]).strftime('%m/%d (%a)') %></div>
+            <div class="flex-1 bg-slate-100 rounded-lg overflow-hidden h-8 flex items-center">
+              <div class="bg-gradient-to-r from-indigo-500 to-purple-600 h-full flex items-center justify-end px-2"
+                   style="width: <%= (day[:active_users].to_f / max_users * 100).round(2) %>%">
+                <span class="text-white text-sm font-semibold"><%= day[:active_users] %></span>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>

@@ -162,6 +162,7 @@ Rails.application.routes.draw do
   # 관리자
   namespace :admin do
     resources :newsletters, only: [:new, :create]
+    get "analytics", to: "analytics#index", as: :analytics
   end
 
   # 사이트맵
