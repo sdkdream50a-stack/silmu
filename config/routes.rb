@@ -4,7 +4,6 @@ Rails.application.routes.draw do
 
   # SEO 최적화: 404 방지 리디렉션
   get "favicon.ico", to: redirect("/favicon.svg")
-  get "assets/tailwindcss", to: redirect("/assets/application.tailwind-0a9b7463.css")
 
   # SEO: POST 전용 엔드포인트 GET 접근 시 리디렉트 (Googlebot 404 방지)
   get "pdf_tools/split", to: redirect("/tools/pdf")
