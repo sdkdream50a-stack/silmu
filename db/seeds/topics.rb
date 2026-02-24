@@ -771,7 +771,6 @@ A: 원칙적으로 원도급 실적만 인정됩니다. (단, 일부 공고에�
   COMMENTARY
 
   t.published = true
-  t.published_at = Time.current
   t.view_count = 0
 end
 
