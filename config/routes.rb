@@ -4,6 +4,8 @@ Rails.application.routes.draw do
 
   # SEO 최적화: 404 방지 리디렉션
   get "favicon.ico", to: redirect("/favicon.svg")
+  get "audit_cases", to: redirect("/audit-cases", status: 301), as: :audit_cases_underscore
+  get "audit_cases/:slug", to: redirect("/audit-cases/%{slug}", status: 301), as: :audit_case_underscore
 
   # SEO: POST 전용 엔드포인트 GET 접근 시 리디렉트 (Googlebot 404 방지)
   get "pdf_tools/split", to: redirect("/tools/pdf")
