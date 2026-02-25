@@ -366,51 +366,87 @@ export default class extends Controller {
     }
 
     const yearLabel = tab === "yearend" ? "2025연말정산" : "2026퇴직정산"
-    const ws = this.buildExcelSheet(res.result, res.input.ginam)
+    const ws = this.buildExcelSheet(res.result, res.input, yearLabel)
     const wb = XLSX.utils.book_new()
     XLSX.utils.book_append_sheet(wb, ws, yearLabel)
     const today = new Date().toISOString().slice(0, 10).replace(/-/g, "")
     XLSX.writeFile(wb, `4대보험정산_${yearLabel}_${today}.xlsx`)
   }
 
-  // ── 엑셀 시트 데이터 생성 (숫자값 보존) ──
-  buildExcelSheet(result, ginam) {
+  // ── 엑셀 내역서 생성 (입력값 + 계산 결과 전체) ──
+  buildExcelSheet(result, input, yearLabel) {
     const r = result
-    const g = ginam || {}
-    const NA = "해당없음"
+    const g = input.ginam || {}
+    const fmt = n => (typeof n === "number") ? n : 0
+    const NA = "-"
     const NO_SETTLE = "정산없음"
+    const today = new Date().toLocaleString("ko-KR", { timeZone: "Asia/Seoul" })
+
     const settleTxt = (val) => {
       if (val === null || val === undefined) return NO_SETTLE
       return val
     }
 
+    // ─ 1. 제목 ─
     const rows = [
+      ["4대보험 정산보험료 계산 내역서"],
+      [],
+      // ─ 2. 정산 기본 정보 ─
+      ["[ 정산 기본 정보 ]"],
+      ["정산 구분", yearLabel],
+      ["계산 일시", today],
+      [],
+      // ─ 3. 입력 정보 ─
+      ["[ 입력 정보 ]"],
+      ["항목", "금액 / 값"],
+      ["보수월액", input.bonsuWol],
+      ["보수총액 (건강·요양·연금 기준)", input.bonsuTotal],
+      ["근무월수", input.geunMonths],
+      ["월중입사 여부", input.wolIp === "Y" ? "예 (Y)" : "아니오 (N)"],
+      ...(input.wolIp === "Y" ? [["1일 포함 근무월수", input.il1Month]] : []),
+      ["산재보험료율", `${((input.accidentRate || 0) * 100).toFixed(3)}%`],
+      [],
+      // ─ 4. 기납 보험료 ─
+      ["[ 기납 보험료 ]"],
+      ["항목", "개인 (근로자)", "기관 (사용자)"],
+      ["국민연금", g.pension_p ?? 0, g.pension_g ?? 0],
+      ["건강보험",  g.health_p  ?? 0, g.health_g  ?? 0],
+      ["장기요양",  g.care_p    ?? 0, g.care_g    ?? 0],
+      ["고용보험",  g.employ_p  ?? 0, g.employ_g  ?? 0],
+      ["산재보험",  NA,               g.accident_g ?? 0],
+      [],
+      // ─ 5. 계산 결과 ─
+      ["[ 계산 결과 ]"],
       ["구분", "월 보험료", "기납 보험료", "결정 보험료", "정산 보험료", "비고"],
-      ["국민연금 (개인)", r.pension.monthly.p, g.pension_p ?? NA, NO_SETTLE, NO_SETTLE, "정산 없음"],
-      ["국민연금 (기관)", r.pension.monthly.g, g.pension_g ?? NA, NO_SETTLE, NO_SETTLE, "정산 없음"],
-      ["건강보험 (개인)", r.health.monthly.p,     g.health_p  ?? 0, r.health.decided.p,     settleTxt(r.health.settlement.p), ""],
-      ["건강보험 (기관)", r.health.monthly.g,     g.health_g  ?? 0, r.health.decided.g,     settleTxt(r.health.settlement.g), ""],
-      ["장기요양 (개인)", r.care.monthly.p,       g.care_p    ?? 0, r.care.decided.p,       settleTxt(r.care.settlement.p), ""],
-      ["장기요양 (기관)", r.care.monthly.g,       g.care_g    ?? 0, r.care.decided.g,       settleTxt(r.care.settlement.g), ""],
+      ["국민연금 (개인)", r.pension.monthly.p, g.pension_p ?? 0, NO_SETTLE, NO_SETTLE, "정산 없음"],
+      ["국민연금 (기관)", r.pension.monthly.g, g.pension_g ?? 0, NO_SETTLE, NO_SETTLE, "정산 없음"],
+      ["건강보험 (개인)", r.health.monthly.p,     g.health_p  ?? 0, r.health.decided.p,     settleTxt(r.health.settlement.p),     ""],
+      ["건강보험 (기관)", r.health.monthly.g,     g.health_g  ?? 0, r.health.decided.g,     settleTxt(r.health.settlement.g),     ""],
+      ["장기요양 (개인)", r.care.monthly.p,       g.care_p    ?? 0, r.care.decided.p,       settleTxt(r.care.settlement.p),       ""],
+      ["장기요양 (기관)", r.care.monthly.g,       g.care_g    ?? 0, r.care.decided.g,       settleTxt(r.care.settlement.g),       ""],
       ["고용보험 (개인)", r.employment.monthly.p, g.employ_p  ?? 0, r.employment.decided.p, settleTxt(r.employment.settlement.p), ""],
       ["고용보험 (기관)", r.employment.monthly.g, g.employ_g  ?? 0, r.employment.decided.g, settleTxt(r.employment.settlement.g), ""],
-      ["산재보험 (개인)", NA,                     NA,               NA,                     NA, "개인 부담 없음"],
-      ["산재보험 (기관)", r.accident.monthly.g,   g.accident_g ?? 0, r.accident.decided.g,  settleTxt(r.accident.settlement.g), ""],
+      ["산재보험 (개인)", NA, NA, NA, NA, "개인 부담 없음"],
+      ["산재보험 (기관)", r.accident.monthly.g,   g.accident_g ?? 0, r.accident.decided.g,  settleTxt(r.accident.settlement.g),   ""],
     ]
 
-    // 합계 행 (연금·산재개인 제외)
+    // 합계 행 (연금 제외)
     const ginamSum = (g.health_p || 0) + (g.health_g || 0) + (g.care_p || 0) + (g.care_g || 0)
       + (g.employ_p || 0) + (g.employ_g || 0) + (g.accident_g || 0)
     const sumOf = (key) => [r.health, r.care, r.employment].reduce((s, ins) => s + (ins[key]?.p || 0) + (ins[key]?.g || 0), 0)
       + (r.accident[key]?.g || 0)
     rows.push(["합계 (연금 제외)", "", ginamSum, sumOf("decided"), sumOf("settlement"), ""])
 
+    // ─ 6. 실무 안내 ─
+    rows.push([], ["※ 정산 보험료 양수(+) = 추가 징수 → 이번 달 급여에서 공제"])
+    rows.push(["※ 정산 보험료 음수(-) = 환급     → 이번 달 급여에 가산"])
+    rows.push(["※ 국민연금은 보수월액 기준 부과되며 연간 정산 없음"])
+
     const ws = XLSX.utils.aoa_to_sheet(rows)
 
-    // 열 너비 설정
-    ws["!cols"] = [{ wch: 18 }, { wch: 14 }, { wch: 14 }, { wch: 14 }, { wch: 16 }, { wch: 18 }]
+    // 열 너비
+    ws["!cols"] = [{ wch: 26 }, { wch: 16 }, { wch: 16 }, { wch: 16 }, { wch: 18 }, { wch: 20 }]
 
-    // 정산 보험료 열(E) — 양수=추가징수, 음수=환급 메모 없음, 숫자 그대로
     return ws
   }
 }
