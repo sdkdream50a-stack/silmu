@@ -9,3 +9,6 @@ application.register("mobile-menu", MobileMenuController)
 
 import UtmBannerController from "./utm_banner_controller"
 application.register("utm-banner", UtmBannerController)
+
+import InsuranceCalculatorController from "./insurance_calculator_controller"
+application.register("insurance-calculator", InsuranceCalculatorController)

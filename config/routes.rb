@@ -134,6 +134,9 @@ Rails.application.routes.draw do
   get "tools/qualification-evaluation", to: "qualification_evaluations#index", as: :qualification_evaluation
   post "qualification-evaluations/evaluate", to: "qualification_evaluations#evaluate"
 
+  # 4대보험 정산보험료 계산기
+  get "tools/insurance-calculator", to: "insurance_calculators#index", as: :insurance_calculator
+
   # 감사사례
   get "audit-cases", to: "audit_cases#index", as: :audit_cases
   get "audit-cases/:slug", to: "audit_cases#show", as: :audit_case

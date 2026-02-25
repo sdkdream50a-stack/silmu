@@ -1,0 +1,65 @@
+<%# 4대보험 정산보험료 계산기 %>
+
+<% content_for :head do %>
+  <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+<% end %>
+
+<div data-controller="insurance-calculator" class="max-w-5xl mx-auto px-4 py-8">
+
+  <%# ── 헤더 ── %>
+  <div class="flex items-start justify-between mb-6">
+    <div>
+      <h1 class="text-2xl font-bold text-slate-900">4대보험 정산보험료 계산기</h1>
+      <p class="text-sm text-slate-500 mt-1">연말정산·퇴직정산 보험료를 자동 계산합니다. 계산은 브라우저 내에서만 처리되며 서버로 전송되지 않습니다.</p>
+    </div>
+    <%# 합산 모드 토글 %>
+    <button
+      data-action="click->insurance-calculator#toggleAdvanced"
+      data-insurance-calculator-target="advancedToggle"
+      class="flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-slate-200 text-sm font-semibold text-slate-600 hover:border-indigo-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all whitespace-nowrap ml-4">
+      <span class="material-symbols-outlined text-base">add_circle</span>
+      연말·퇴직 합산 계산
+    </button>
+  </div>
+
+  <%# ── 탭 ── %>
+  <div class="flex gap-1 mb-6 bg-slate-100 rounded-xl p-1" data-insurance-calculator-target="tabBar">
+    <button data-action="click->insurance-calculator#switchTab" data-tab="yearend"
+      data-insurance-calculator-target="tabBtn"
+      class="flex-1 py-2.5 px-4 rounded-lg text-sm font-semibold transition-all bg-white text-slate-900 shadow-sm">
+      연말정산 <span class="text-xs text-slate-400">(2025)</span>
+    </button>
+    <button data-action="click->insurance-calculator#switchTab" data-tab="retire"
+      data-insurance-calculator-target="tabBtn"
+      class="flex-1 py-2.5 px-4 rounded-lg text-sm font-semibold transition-all text-slate-500 hover:text-slate-700">
+      퇴직정산 <span class="text-xs text-slate-400">(2026)</span>
+    </button>
+    <%# 합산 탭 — 기본 hidden %>
+    <button data-action="click->insurance-calculator#switchTab" data-tab="combined"
+      data-insurance-calculator-target="tabBtn combinedTab"
+      class="flex-1 py-2.5 px-4 rounded-lg text-sm font-semibold transition-all text-slate-500 hover:text-slate-700 hidden">
+      합산 결과
+    </button>
+  </div>
+
+  <%# ── 연말정산 패널 ── %>
+  <div data-insurance-calculator-target="panel" data-panel="yearend">
+    <%= render "insurance_calculators/input_panel", tab: "yearend", year: 2025 %>
+  </div>
+
+  <%# ── 퇴직정산 패널 ── %>
+  <div data-insurance-calculator-target="panel" data-panel="retire" class="hidden">
+    <%= render "insurance_calculators/input_panel", tab: "retire", year: 2026 %>
+  </div>
+
+  <%# ── 합산 결과 패널 ── %>
+  <div data-insurance-calculator-target="panel combinedPanel" data-panel="combined" class="hidden">
+    <div class="bg-white rounded-2xl border border-slate-200 p-6">
+      <p class="text-sm text-slate-500 mb-4">연말정산과 퇴직정산을 각각 계산한 뒤, 이 탭에서 합산 결과를 확인하세요.</p>
+      <div data-insurance-calculator-target="combinedResult">
+        <p class="text-slate-400 text-sm text-center py-8">위 두 탭에서 계산을 완료하면 자동으로 합산됩니다.</p>
+      </div>
+    </div>
+  </div>
+
+</div>

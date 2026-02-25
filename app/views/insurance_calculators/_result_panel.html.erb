@@ -1,0 +1,44 @@
+<%# 결과 테이블 파셜 — tab: "yearend"|"retire"|"combined" %>
+<div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+  <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+    <h2 class="text-base font-bold text-slate-800">계산 결과</h2>
+    <% unless tab == "combined" %>
+    <button
+      data-action="click->insurance-calculator#downloadExcel"
+      data-tab="<%= tab %>"
+      class="flex items-center gap-1.5 text-sm font-semibold text-emerald-700 hover:text-emerald-800 border border-emerald-300 hover:border-emerald-400 px-3 py-1.5 rounded-lg transition-all bg-emerald-50 hover:bg-emerald-100">
+      <span class="material-symbols-outlined text-base">download</span>
+      엑셀 저장
+    </button>
+    <% end %>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm" data-insurance-calculator-target="resultTable<%= tab.capitalize %>">
+      <thead class="bg-slate-50">
+        <tr>
+          <th class="text-left px-4 py-3 text-slate-500 font-semibold text-xs uppercase tracking-wide">구분</th>
+          <th class="text-right px-4 py-3 text-slate-500 font-semibold text-xs">월 보험료</th>
+          <th class="text-right px-4 py-3 text-slate-500 font-semibold text-xs">기납 보험료</th>
+          <th class="text-right px-4 py-3 text-slate-500 font-semibold text-xs">결정 보험료</th>
+          <th class="text-right px-4 py-3 text-slate-500 font-semibold text-xs min-w-[120px]">정산 보험료</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100" data-insurance-calculator-target="resultBody<%= tab.capitalize %>">
+        <%# JavaScript로 동적 렌더링 %>
+      </tbody>
+      <tfoot class="bg-slate-50 border-t-2 border-slate-200" data-insurance-calculator-target="resultFoot<%= tab.capitalize %>">
+        <%# 합계 행 — JavaScript로 동적 렌더링 %>
+      </tfoot>
+    </table>
+  </div>
+
+  <%# 실무 안내문 (고정) %>
+  <div class="px-6 py-3 bg-blue-50 border-t border-blue-100">
+    <p class="text-xs text-blue-700">
+      <span class="font-semibold">※ 실무 안내:</span>
+      <span class="text-red-600 font-semibold">추가 징수액</span>은 이번 달 급여에서 공제(-)하고,
+      <span class="text-blue-600 font-semibold">환급액</span>은 급여에 더해서(+) 지급하세요.
+    </p>
+  </div>
+</div>
