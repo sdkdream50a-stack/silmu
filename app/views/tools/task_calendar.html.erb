@@ -773,6 +773,14 @@
         </div>
       </div>
       <div class="space-y-2">
+        <label class="block text-sm font-bold text-gray-900">기간 설정 <span class="text-xs font-normal text-gray-400 ml-1">(며칠간 계속 표시)</span></label>
+        <div class="flex items-center gap-3">
+          <input type="number" id="onetime-duration" min="1" max="365" value="1"
+            class="w-24 h-11 rounded-xl border border-gray-200 bg-white text-sm text-gray-800 px-4 text-center outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
+          <span class="text-sm text-gray-500">일간 <span class="text-gray-400 text-xs">(1 = 해당 날만)</span></span>
+        </div>
+      </div>
+      <div class="space-y-2">
         <label class="block text-sm font-bold text-gray-900">카테고리</label>
         <div id="onetime-cat-container" class="flex flex-wrap gap-2">
           <!-- 카테고리 버튼은 JavaScript로 동적 렌더링 -->
@@ -1218,6 +1226,37 @@
   function loadCustom() { try { return JSON.parse(localStorage.getItem(CUSTOM_KEY) || "[]"); } catch { return []; } }
   function saveCustom(arr) { localStorage.setItem(CUSTOM_KEY, JSON.stringify(arr)); syncToServer({ custom_tasks: arr }); checkSyncBanner(); }
 
+  // 수정 중인 인덱스 (-1 = 신규 추가)
+  let editingIdx = -1;
+  function resetModalHeader() {
+    document.querySelector("#modal-add h2").textContent = "새 업무 추가";
+    document.getElementById("modal-submit").innerHTML = '<span class="material-symbols-outlined" style="font-size:18px">add</span> 업무 추가';
+    editingIdx = -1;
+  }
+
+  // 기간 task: 특정 날짜가 범위 안에 있는지 확인
+  function taskCoversDate(t, dateStr) {
+    if (!t.date) return false;
+    const duration = t.duration_days || 1;
+    const start = new Date(t.date + "T00:00:00");
+    const end = new Date(start);
+    end.setDate(end.getDate() + duration - 1);
+    const target = new Date(dateStr + "T00:00:00");
+    return target >= start && target <= end;
+  }
+
+  // 기간 task: 해당 월(m, year)과 범위가 겹치는지 확인
+  function taskOverlapsMonth(t, year, m) {
+    if (!t.date) return false;
+    const duration = t.duration_days || 1;
+    const start = new Date(t.date + "T00:00:00");
+    const end = new Date(start);
+    end.setDate(end.getDate() + duration - 1);
+    const monthStart = new Date(year, m - 1, 1);
+    const monthEnd = new Date(year, m, 0); // 말일
+    return start <= monthEnd && end >= monthStart;
+  }
+
   const catColorMap = {
     "급여":{bg:"#d1fae5",text:"#047857"},"세무":{bg:"#fef3c7",text:"#b45309"},
     "보험":{bg:"#dbeafe",text:"#1d4ed8"},"회계":{bg:"#ede9fe",text:"#6d28d9"},
@@ -1244,13 +1283,20 @@
           label = "매주 " + dayLabels[t.weekday];
           sublabel = "매주";
         } else if (t.repeat === "once" && t.date) {
-          const parts = t.date.split("-");
-          const taskMonth = parseInt(parts[1]);
-          const taskDay = parseInt(parts[2]);
-          if (taskMonth === m) {
+          const yearHint = parseInt(area.dataset.year || new Date().getFullYear());
+          if (taskOverlapsMonth(t, yearHint, m)) {
             show = true;
-            label = m + "/" + taskDay;
-            if (t.time) label += " " + t.time;
+            const parts = t.date.split("-");
+            const taskDay = parseInt(parts[2]);
+            const duration = t.duration_days || 1;
+            if (duration > 1) {
+              const endDate = new Date(t.date + "T00:00:00");
+              endDate.setDate(endDate.getDate() + duration - 1);
+              label = parseInt(parts[1]) + "/" + taskDay + " ~ " + (endDate.getMonth()+1) + "/" + endDate.getDate() + " (" + duration + "일간)";
+            } else {
+              label = parseInt(parts[1]) + "/" + taskDay;
+              if (t.time) label += " " + t.time;
+            }
             sublabel = "일회성";
           }
         }
@@ -1273,8 +1319,12 @@
               '<span class="px-1.5 py-0.5 rounded text-[10px] font-semibold" style="background:' + cc.bg + ';color:' + cc.text + '">' + (t.cat||"서무") + '</span>' +
             '</div>' +
           '</div>' +
-          '<button class="del-custom-btn hidden group-hover:flex w-6 h-6 rounded-full hover:bg-red-50 items-center justify-center flex-shrink-0" data-idx="' + idx + '">' +
-            '<span class="material-symbols-outlined text-red-400" style="font-size:16px">close</span></button>';
+          '<div class="hidden group-hover:flex items-center gap-1">' +
+            '<button class="edit-custom-btn w-6 h-6 rounded-full hover:bg-blue-50 flex items-center justify-center flex-shrink-0" data-idx="' + idx + '">' +
+              '<span class="material-symbols-outlined text-blue-400" style="font-size:16px">edit</span></button>' +
+            '<button class="del-custom-btn w-6 h-6 rounded-full hover:bg-red-50 flex items-center justify-center flex-shrink-0" data-idx="' + idx + '">' +
+              '<span class="material-symbols-outlined text-red-400" style="font-size:16px">close</span></button>' +
+          '</div>';
         area.appendChild(row);
       });
     });
@@ -1285,6 +1335,13 @@
         customs.splice(parseInt(btn.dataset.idx), 1);
         saveCustom(customs);
         renderCustomTasks();
+      });
+    });
+    document.querySelectorAll(".edit-custom-btn").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const customs = loadCustom();
+        openEditModal(parseInt(btn.dataset.idx), customs[parseInt(btn.dataset.idx)]);
       });
     });
     // 오늘 뷰 custom_tasks 동기화
@@ -1303,7 +1360,7 @@
     const customs = loadCustom().filter(t => {
       if (t.repeat === "monthly") return t.day === td;
       if (t.repeat === "weekly") return t.weekday === todayDow;
-      if (t.repeat === "once" && t.date) return t.date === todayStr;
+      if (t.repeat === "once" && t.date) return taskCoversDate(t, todayStr);
       return false;
     });
     const section = document.getElementById("today-custom-section");
@@ -1484,9 +1541,61 @@
     btn.addEventListener("click", () => openAddModal(btn.dataset.date, btn.dataset.inboxMonth));
   });
 
-  document.getElementById("modal-cancel").addEventListener("click", () => modalAdd.classList.add("hidden"));
-  document.getElementById("modal-close-x").addEventListener("click", () => modalAdd.classList.add("hidden"));
-  modalAdd.addEventListener("click", () => modalAdd.classList.add("hidden"));
+  function closeAddModal() { modalAdd.classList.add("hidden"); resetModalHeader(); }
+  document.getElementById("modal-cancel").addEventListener("click", closeAddModal);
+  document.getElementById("modal-close-x").addEventListener("click", closeAddModal);
+  modalAdd.addEventListener("click", closeAddModal);
+
+  // 기존 업무 수정
+  function openEditModal(idx, task) {
+    editingIdx = idx;
+    renderCategoryButtons();
+    modalAdd.classList.remove("hidden");
+    document.querySelector("#modal-add h2").textContent = "업무 수정";
+    document.getElementById("modal-submit").innerHTML = '<span class="material-symbols-outlined" style="font-size:18px">save</span> 저장';
+
+    if (task.repeat === "once") {
+      document.querySelector('.modal-tab[data-modal-tab="onetime"]').click();
+      document.getElementById("onetime-task-input").value = task.title;
+      document.getElementById("onetime-date").value = task.date || "";
+      document.getElementById("onetime-time").value = task.time || "";
+      document.getElementById("onetime-duration").value = task.duration_days || 1;
+      selectedOnetimeCat = task.cat || "서무";
+      setTimeout(() => {
+        document.querySelectorAll(".onetime-cat-btn").forEach(b => {
+          const active = b.dataset.cat === selectedOnetimeCat;
+          b.classList.toggle("ring-2", active);
+          b.classList.toggle("ring-indigo-400", active);
+        });
+      }, 60);
+    } else {
+      document.querySelector('.modal-tab[data-modal-tab="regular"]').click();
+      taskInput.value = task.title;
+      repeatSelect.value = task.repeat || "monthly";
+      repeatSelect.dispatchEvent(new Event("change"));
+      if (task.repeat === "monthly") {
+        document.getElementById("new-task-day").value = task.day || 1;
+      } else if (task.repeat === "weekly") {
+        selectedWeekday = task.weekday;
+        document.querySelectorAll(".weekday-btn").forEach(b => {
+          const active = parseInt(b.dataset.weekday) === task.weekday;
+          b.classList.toggle("bg-indigo-600", active);
+          b.classList.toggle("text-white", active);
+          b.classList.toggle("border-indigo-600", active);
+          b.classList.toggle("border-slate-200", !active);
+          b.classList.toggle("text-slate-500", !active);
+        });
+      }
+      selectedCat = task.cat || "서무";
+      setTimeout(() => {
+        document.querySelectorAll(".cat-select-btn").forEach(b => {
+          const active = b.dataset.cat === selectedCat;
+          b.classList.toggle("ring-2", active);
+          b.classList.toggle("ring-indigo-400", active);
+        });
+      }, 60);
+    }
+  }
 
   // 제출 (3탭 분기)
   document.getElementById("modal-submit").addEventListener("click", () => {
@@ -1495,29 +1604,45 @@
       if (!val) return;
       const customs = loadCustom();
       const rep = repeatSelect.value;
+      let newTask;
       if (rep === "monthly") {
-        customs.push({ title: val, repeat: "monthly", day: parseInt(document.getElementById("new-task-day").value), cat: selectedCat });
+        newTask = { title: val, repeat: "monthly", day: parseInt(document.getElementById("new-task-day").value), cat: selectedCat };
       } else {
         if (selectedWeekday === null) { alert("요일을 선택하세요"); return; }
-        customs.push({ title: val, repeat: "weekly", weekday: selectedWeekday, cat: selectedCat });
+        newTask = { title: val, repeat: "weekly", weekday: selectedWeekday, cat: selectedCat };
+      }
+      if (editingIdx >= 0) {
+        customs[editingIdx] = newTask;
+        showToast("업무가 수정되었습니다", "check_circle");
+      } else {
+        customs.push(newTask);
       }
       saveCustom(customs);
       taskInput.value = "";
       modalAdd.classList.add("hidden");
+      resetModalHeader();
       renderCustomTasks();
 
     } else if (activeModalTab === "onetime") {
       const val = document.getElementById("onetime-task-input").value.trim();
       const dateVal = document.getElementById("onetime-date").value;
       const timeVal = document.getElementById("onetime-time").value || null;
+      const durationVal = Math.max(1, parseInt(document.getElementById("onetime-duration").value) || 1);
       if (!val) { alert("업무 내용을 입력하세요"); return; }
       if (!dateVal) { alert("날짜를 선택하세요"); return; }
       const customs = loadCustom();
-      customs.push({ title: val, repeat: "once", date: dateVal, time: timeVal, cat: selectedOnetimeCat });
+      const newTask = { title: val, repeat: "once", date: dateVal, time: durationVal > 1 ? null : timeVal, duration_days: durationVal > 1 ? durationVal : undefined, cat: selectedOnetimeCat };
+      if (editingIdx >= 0) {
+        customs[editingIdx] = newTask;
+        showToast("업무가 수정되었습니다", "check_circle");
+      } else {
+        customs.push(newTask);
+        showToast("비정기 업무가 추가되었습니다", "check_circle");
+      }
       saveCustom(customs);
       modalAdd.classList.add("hidden");
+      resetModalHeader();
       renderCustomTasks();
-      showToast("비정기 업무가 추가되었습니다", "check_circle");
 
     } else if (activeModalTab === "document") {
       const cbs = document.querySelectorAll("#doc-extracted-tasks input[type=checkbox].doc-task-cb:checked");
@@ -1661,7 +1786,7 @@
     return loadCustom().filter(t => {
       if (t.repeat === "monthly") return t.day === day;
       if (t.repeat === "weekly") return t.weekday === dow;
-      if (t.repeat === "once" && t.date) return t.date === dateStr;
+      if (t.repeat === "once" && t.date) return taskCoversDate(t, dateStr);
       return false;
     }).map(t => ({ month, day, cat: t.cat || "서무", title: t.title }));
   }
