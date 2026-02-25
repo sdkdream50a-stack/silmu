@@ -1,0 +1,216 @@
+<!-- 계약기간 연장 실무흐름도 -->
+<div class="card">
+  <div class="card-header">
+    <h2 class="text-xl font-bold text-slate-900 flex items-center gap-3">
+      <span class="material-symbols-outlined text-indigo-500">account_tree</span>
+      계약기간 연장 실무흐름도
+    </h2>
+    <p class="text-slate-600 mt-1">천재지변·발주기관 귀책 등 정당 사유 발생 시 계약기간 연장 절차</p>
+  </div>
+
+  <div class="p-6">
+    <div class="mb-6 p-3 bg-blue-50 border border-blue-200 rounded-xl text-sm text-blue-800 flex items-start gap-2">
+      <span class="material-symbols-outlined text-blue-500 mt-0.5" style="font-size:18px">info</span>
+      <span>계약기간 연장은 <strong>천재지변·발주기관 귀책 등 정당한 사유</strong>가 있을 때만 가능합니다. 계약상대자 과실(인력 부족, 자재 조달 실패)로 인한 지연은 연장 불가합니다. (지방계약법 시행령 제74조)</span>
+    </div>
+
+    <div class="space-y-4">
+      <!-- Step 1 -->
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-indigo-500 text-white rounded-full flex items-center justify-center font-bold">1</div>
+        <div class="flex-1 bg-indigo-50 rounded-xl p-4 border border-indigo-200">
+          <h4 class="font-semibold text-indigo-800 mb-2">연장 사유 발생 확인</h4>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• <strong>천재지변</strong>: 태풍, 지진, 폭우 등으로 공사 중단</li>
+            <li>• <strong>발주기관 귀책</strong>: 설계 변경 지시, 부지 미확보, 관급 자재 지연</li>
+            <li>• <strong>관계 법령 변경</strong>: 공사 중 법령 개정으로 공법 변경</li>
+            <li>• <strong>불가항력</strong>: 전쟁, 감염병 등</li>
+            <li>• <strong>기타 정당 사유</strong>: 발주기관이 인정하는 사유</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Arrow -->
+      <div class="flex justify-center">
+        <span class="material-symbols-outlined text-slate-400 text-2xl">arrow_downward</span>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">2</div>
+        <div class="flex-1 bg-blue-50 rounded-xl p-4 border border-blue-200">
+          <h4 class="font-semibold text-blue-800 mb-2">연장 신청서 제출 <span class="text-xs font-normal text-blue-600">(준공기한 30일 전 권장)</span></h4>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• <strong>제출 시기</strong>: 준공기한 30일 전 권장, 최소 10일 전</li>
+            <li>• <strong>필수 서류</strong>: 연장 사유 증빙, 공사 진행 현황, 잔여 공사 일정표</li>
+            <li>• 연장 필요 일수 및 사유를 구체적으로 기재</li>
+          </ul>
+          <!-- 공문 생성 버튼 -->
+          <button onclick="showDocPopup('period-extension-request')" class="doc-tool-badge mt-3">
+            <span class="material-symbols-outlined" style="font-size:14px">description</span>
+            계약기간 연장신청서 생성
+          </button>
+        </div>
+      </div>
+
+      <!-- Arrow -->
+      <div class="flex justify-center">
+        <span class="material-symbols-outlined text-slate-400 text-2xl">arrow_downward</span>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-amber-500 text-white rounded-full flex items-center justify-center font-bold">3</div>
+        <div class="flex-1 bg-amber-50 rounded-xl p-4 border border-amber-200">
+          <h4 class="font-semibold text-amber-800 mb-2">발주기관 검토 및 심의</h4>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• 연장 사유의 정당성 검토</li>
+            <li>• 연장 일수의 적정성 판단</li>
+            <li>• 계약상대자 귀책 여부 확인</li>
+            <li>• 내부 심의위원회 승인 (필요시)</li>
+          </ul>
+          <div class="mt-3 p-2 bg-amber-100 rounded-lg text-xs text-amber-800">
+            <strong>⚠️ 주의</strong>: 연장 사유가 계약상대자 귀책이면 연장 불가 → 지체상금 부과
+          </div>
+        </div>
+      </div>
+
+      <!-- Arrow -->
+      <div class="flex justify-center">
+        <span class="material-symbols-outlined text-slate-400 text-2xl">arrow_downward</span>
+      </div>
+
+      <!-- Step 4: 분기 -->
+      <div class="grid grid-cols-2 gap-4">
+        <div class="bg-green-50 rounded-xl p-4 border-2 border-green-300">
+          <h4 class="font-semibold text-green-800 mb-2 text-sm flex items-center gap-1">
+            <span class="material-symbols-outlined text-green-600" style="font-size:16px">check_circle</span>
+            승인 시 → 변경계약 체결
+          </h4>
+          <ul class="text-xs text-slate-700 space-y-1">
+            <li>• 변경계약서 작성 (기간 수정)</li>
+            <li>• 보증금 갱신 (필요시)</li>
+            <li>• 연장 기간 지체상금 면제</li>
+          </ul>
+        </div>
+        <div class="bg-red-50 rounded-xl p-4 border-2 border-red-300">
+          <h4 class="font-semibold text-red-800 mb-2 text-sm flex items-center gap-1">
+            <span class="material-symbols-outlined text-red-600" style="font-size:16px">cancel</span>
+            불승인 시 → 지체상금 부과
+          </h4>
+          <ul class="text-xs text-slate-700 space-y-1">
+            <li>• 준공기한 초과 일수에 지체상금</li>
+            <li>• 계약금액 × 지체일수 × 1/1,000</li>
+            <li>• 이의신청 가능 (이의신청서 제출)</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Arrow -->
+      <div class="flex justify-center">
+        <span class="material-symbols-outlined text-slate-400 text-2xl">arrow_downward</span>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-green-500 text-white rounded-full flex items-center justify-center font-bold">5</div>
+        <div class="flex-1 bg-green-50 rounded-xl p-4 border border-green-200">
+          <h4 class="font-semibold text-green-800 mb-2">변경계약 체결 완료</h4>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• 변경 계약서 서명·날인</li>
+            <li>• 나라장터(G2B) 계약 정보 갱신</li>
+            <li>• 변경된 준공기한에 따라 공사 계속 진행</li>
+          </ul>
+          <button onclick="showDocPopup('period-extension-change')" class="doc-tool-badge mt-3">
+            <span class="material-symbols-outlined" style="font-size:14px">description</span>
+            변경계약서 생성
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 참고 정보 -->
+    <details class="mt-6 border border-slate-200 rounded-xl overflow-hidden">
+      <summary class="bg-slate-50 px-4 py-3 cursor-pointer font-semibold text-slate-700 hover:bg-slate-100 flex items-center gap-2">
+        <span class="material-symbols-outlined text-slate-500" style="font-size:18px">expand_more</span>
+        연장 사유 판단 기준 및 유의사항
+      </summary>
+      <div class="p-4 text-sm text-slate-700 space-y-3">
+        <div>
+          <p class="font-semibold text-slate-800 mb-1">연장 가능 vs 불가 판단 기준</p>
+          <table class="w-full border-collapse text-xs">
+            <thead>
+              <tr class="bg-slate-100">
+                <th class="border border-slate-200 px-2 py-1 text-left">구분</th>
+                <th class="border border-slate-200 px-2 py-1 text-left">사례</th>
+                <th class="border border-slate-200 px-2 py-1 text-left">연장 가부</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="border border-slate-200 px-2 py-1">천재지변</td>
+                <td class="border border-slate-200 px-2 py-1">집중호우로 공사장 침수</td>
+                <td class="border border-slate-200 px-2 py-1 text-green-700 font-semibold">가능</td>
+              </tr>
+              <tr>
+                <td class="border border-slate-200 px-2 py-1">발주기관 귀책</td>
+                <td class="border border-slate-200 px-2 py-1">설계 변경 지시로 공사 중단</td>
+                <td class="border border-slate-200 px-2 py-1 text-green-700 font-semibold">가능</td>
+              </tr>
+              <tr class="bg-red-50">
+                <td class="border border-slate-200 px-2 py-1">계약자 귀책</td>
+                <td class="border border-slate-200 px-2 py-1">자재 조달 실패, 인력 부족</td>
+                <td class="border border-slate-200 px-2 py-1 text-red-700 font-semibold">불가</td>
+              </tr>
+              <tr class="bg-red-50">
+                <td class="border border-slate-200 px-2 py-1">계획 오류</td>
+                <td class="border border-slate-200 px-2 py-1">공사 기간 과소 산정</td>
+                <td class="border border-slate-200 px-2 py-1 text-red-700 font-semibold">불가</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="p-3 bg-amber-50 border border-amber-200 rounded-lg">
+          <p class="font-semibold text-amber-800 mb-1">📋 감사 체크리스트</p>
+          <ul class="text-xs text-amber-900 space-y-1">
+            <li>☐ 연장 사유가 계약상대자 귀책이 아닌지 확인</li>
+            <li>☐ 연장 신청서에 구체적 사유와 증빙 첨부</li>
+            <li>☐ 준공기한 전에 연장 신청·승인 완료</li>
+            <li>☐ 변경계약 체결 및 나라장터 업데이트</li>
+          </ul>
+        </div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- 공문 생성 팝업 -->
+<div id="doc-popup-overlay" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4" onclick="hideDocPopup()">
+  <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6" onclick="event.stopPropagation()">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-lg font-bold text-slate-900">공문/양식 생성 도구</h3>
+      <button onclick="hideDocPopup()" class="text-slate-400 hover:text-slate-600">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <p class="text-slate-600 text-sm mb-4" id="popup-desc">AI를 활용하여 맞춤형 서식을 생성합니다.</p>
+    <a href="/tools/official-document" class="btn-primary w-full text-center block">
+      <span class="material-symbols-outlined align-middle mr-1" style="font-size:18px">description</span>
+      공문/양식 생성 도구 열기
+    </a>
+  </div>
+</div>
+
+<script>
+function showDocPopup(type) {
+  const desc = {
+    'period-extension-request': '계약기간 연장신청서를 AI가 자동 생성합니다. 연장 사유, 필요 일수, 증빙 자료를 입력하면 공문 형식으로 완성됩니다.',
+    'period-extension-change': '계약기간 변경계약서를 AI가 자동 생성합니다. 당초 기간, 연장 기간, 사유를 입력하세요.'
+  };
+  document.getElementById('popup-desc').textContent = desc[type] || 'AI를 활용하여 맞춤형 서식을 생성합니다.';
+  document.getElementById('doc-popup-overlay').classList.remove('hidden');
+}
+function hideDocPopup() {
+  document.getElementById('doc-popup-overlay').classList.add('hidden');
+}
+</script>

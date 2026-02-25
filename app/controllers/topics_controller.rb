@@ -55,6 +55,10 @@ class TopicsController < ApplicationController
     joint-contract defect-warranty bid-deposit small-amount-contract budget-compilation
     split-contract-prohibition quote-collection-guide lowest-bid-rate e-procurement-guide
     goods-selection-committee
+    qualification-failure contract-guarantee-exemption private-contract-justification
+    goods-vs-service-contract bid-participation-restriction additional-contract-limit
+    penalty-reduction-procedure contract-period-extension e-bidding-error-faq
+    contract-amount-adjustment
   ].freeze
 
   # 토픽별 개별 아이콘 매핑

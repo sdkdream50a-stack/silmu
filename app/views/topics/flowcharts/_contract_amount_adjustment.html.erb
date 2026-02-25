@@ -1,0 +1,229 @@
+<!-- 계약금액 조정 실무흐름도 -->
+<div class="card">
+  <div class="card-header">
+    <h2 class="text-xl font-bold text-slate-900 flex items-center gap-3">
+      <span class="material-symbols-outlined text-indigo-500">account_tree</span>
+      계약금액 조정 실무흐름도
+    </h2>
+    <p class="text-slate-600 mt-1">물가변동·설계변경·법령 변경 시 계약금액 조정 절차 (지방계약법 제22조)</p>
+  </div>
+
+  <div class="p-6">
+    <div class="mb-6 p-3 bg-blue-50 border border-blue-200 rounded-xl text-sm text-blue-800 flex items-start gap-2">
+      <span class="material-symbols-outlined text-blue-500 mt-0.5" style="font-size:18px">info</span>
+      <span>계약금액 조정은 <strong>물가 3% 이상 변동 + 계약 체결 후 90일 경과</strong> 시 신청 가능합니다. 추가계약(수량 증가, 10% 한도)과는 다른 절차입니다. (지방계약법 제22조, 시행령 제74조)</span>
+    </div>
+
+    <!-- 조정 사유 비교 카드 -->
+    <div class="mb-6 grid grid-cols-3 gap-3 text-xs">
+      <div class="bg-indigo-50 border border-indigo-200 rounded-xl p-3 text-center">
+        <div class="font-bold text-indigo-700 text-sm mb-1">📈 물가변동</div>
+        <div class="text-slate-600">3% 이상 변동<br>+ 90일 경과</div>
+      </div>
+      <div class="bg-blue-50 border border-blue-200 rounded-xl p-3 text-center">
+        <div class="font-bold text-blue-700 text-sm mb-1">📐 설계변경</div>
+        <div class="text-slate-600">발주기관 요청<br>또는 불가피한 사유</div>
+      </div>
+      <div class="bg-purple-50 border border-purple-200 rounded-xl p-3 text-center">
+        <div class="font-bold text-purple-700 text-sm mb-1">⚖️ 법령변경</div>
+        <div class="text-slate-600">공사 중 관련<br>법령 개정</div>
+      </div>
+    </div>
+
+    <div class="space-y-4">
+      <!-- Step 1 -->
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-indigo-500 text-white rounded-full flex items-center justify-center font-bold">1</div>
+        <div class="flex-1 bg-indigo-50 rounded-xl p-4 border border-indigo-200">
+          <h4 class="font-semibold text-indigo-800 mb-2">조정 사유 발생 확인</h4>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• <strong>물가변동</strong>: 계약 체결 후 90일 경과 + 품목 가격 3% 이상 변동</li>
+            <li>• <strong>설계변경</strong>: 발주기관 설계 변경 지시 또는 불가피한 현장 여건</li>
+            <li>• <strong>법령 변경</strong>: 공사 중 관계 법령 개정으로 공법 변경 필요</li>
+            <li>• <strong>천재지변·불가항력</strong>: 태풍, 감염병 등</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Arrow -->
+      <div class="flex justify-center">
+        <span class="material-symbols-outlined text-slate-400 text-2xl">arrow_downward</span>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">2</div>
+        <div class="flex-1 bg-blue-50 rounded-xl p-4 border border-blue-200">
+          <h4 class="font-semibold text-blue-800 mb-2">조정 요건 충족 여부 검토</h4>
+          <div class="space-y-2 text-sm">
+            <div class="p-2 bg-white rounded-lg border border-blue-100">
+              <span class="font-semibold text-blue-700">물가변동 조정</span>
+              <ul class="text-slate-600 mt-1 space-y-0.5 text-xs">
+                <li>• 통계청 생산자물가지수(PPI) 또는 한국건설기술연구원 자료 확인</li>
+                <li>• 3% 이상 변동 품목만 조정 대상</li>
+                <li>• 변동 전후 시점: 계약 체결일 vs 조정 신청일</li>
+              </ul>
+            </div>
+            <div class="p-2 bg-white rounded-lg border border-blue-100">
+              <span class="font-semibold text-blue-700">설계변경 조정</span>
+              <ul class="text-slate-600 mt-1 space-y-0.5 text-xs">
+                <li>• 설계변경 지시서 또는 현장 여건 변경 사실 확인</li>
+                <li>• 변경 전·후 수량 및 단가 산출</li>
+              </ul>
+            </div>
+          </div>
+          <div class="mt-3 p-2 bg-blue-100 rounded-lg text-xs text-blue-800">
+            <strong>⚠️ 물가조정 vs 추가계약 구분</strong><br>
+            물가조정: 단가 변경 (한도 없음) | 추가계약: 수량·범위 증가 (10% 한도)
+          </div>
+        </div>
+      </div>
+
+      <!-- Arrow -->
+      <div class="flex justify-center">
+        <span class="material-symbols-outlined text-slate-400 text-2xl">arrow_downward</span>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-amber-500 text-white rounded-full flex items-center justify-center font-bold">3</div>
+        <div class="flex-1 bg-amber-50 rounded-xl p-4 border border-amber-200">
+          <h4 class="font-semibold text-amber-800 mb-2">조정 신청서 제출</h4>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• 조정 신청서 작성 (조정 사유, 조정 금액, 산출 근거)</li>
+            <li>• <strong>필수 첨부 서류</strong>:
+              <ul class="ml-3 mt-1 space-y-0.5 text-xs text-slate-600">
+                <li>- 물가 변동 증빙 (통계청 자료)</li>
+                <li>- 조정 금액 산출 내역서</li>
+                <li>- 계약상대자 견적서</li>
+                <li>- 설계변경의 경우: 설계변경 지시서</li>
+              </ul>
+            </li>
+          </ul>
+          <button onclick="showDocPopup('adjustment-request')" class="doc-tool-badge mt-3">
+            <span class="material-symbols-outlined" style="font-size:14px">description</span>
+            계약금액 조정신청서 생성
+          </button>
+        </div>
+      </div>
+
+      <!-- Arrow -->
+      <div class="flex justify-center">
+        <span class="material-symbols-outlined text-slate-400 text-2xl">arrow_downward</span>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold">4</div>
+        <div class="flex-1 bg-slate-50 rounded-xl p-4 border border-slate-200">
+          <h4 class="font-semibold text-slate-800 mb-2">발주기관 검토 및 내부 결재</h4>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• 조정 사유 및 산출 금액의 적정성 검토</li>
+            <li>• 설계변경의 경우: 감독관 현장 확인</li>
+            <li>• 예산 확인 (증액의 경우 예산 배정 필요)</li>
+            <li>• 내부 결재 완료</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Arrow -->
+      <div class="flex justify-center">
+        <span class="material-symbols-outlined text-slate-400 text-2xl">arrow_downward</span>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-green-500 text-white rounded-full flex items-center justify-center font-bold">5</div>
+        <div class="flex-1 bg-green-50 rounded-xl p-4 border border-green-200">
+          <h4 class="font-semibold text-green-800 mb-2">변경계약 체결</h4>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• 변경 계약서 작성 (조정된 금액 반영)</li>
+            <li>• 계약상대자 서명·날인</li>
+            <li>• 나라장터(G2B) 계약 정보 업데이트</li>
+            <li>• 조정 금액 지급 (다음 기성에 반영)</li>
+          </ul>
+          <button onclick="showDocPopup('adjustment-change')" class="doc-tool-badge mt-3">
+            <span class="material-symbols-outlined" style="font-size:14px">description</span>
+            변경계약서 생성
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 참고 정보 -->
+    <details class="mt-6 border border-slate-200 rounded-xl overflow-hidden">
+      <summary class="bg-slate-50 px-4 py-3 cursor-pointer font-semibold text-slate-700 hover:bg-slate-100 flex items-center gap-2">
+        <span class="material-symbols-outlined text-slate-500" style="font-size:18px">expand_more</span>
+        조정 계산 방법 및 FAQ
+      </summary>
+      <div class="p-4 text-sm text-slate-700 space-y-3">
+        <div>
+          <p class="font-semibold text-slate-800 mb-2">물가변동 조정 계산 예시</p>
+          <div class="p-3 bg-slate-50 rounded-lg text-xs font-mono">
+            <div>계약금액: 1억원 (철근 50톤, 계약 단가 200만원/톤)</div>
+            <div class="mt-1">현재 철근 시세: 215만원/톤 (+7.5%)</div>
+            <div class="mt-1 font-bold text-indigo-700">조정 금액: 50톤 × (215만 - 200만) = 750만원 증액</div>
+          </div>
+        </div>
+        <div>
+          <p class="font-semibold text-slate-800 mb-1">자주 묻는 질문</p>
+          <div class="space-y-2">
+            <div class="p-2 bg-slate-50 rounded-lg">
+              <p class="font-semibold text-xs">Q. 물가 3% 미만이면 조정 안 되나요?</p>
+              <p class="text-xs text-slate-600 mt-0.5">네, 3% 이상 변동해야 조정 가능합니다. 미만은 계약상대자가 부담합니다.</p>
+            </div>
+            <div class="p-2 bg-slate-50 rounded-lg">
+              <p class="font-semibold text-xs">Q. 감소분도 조정되나요?</p>
+              <p class="text-xs text-slate-600 mt-0.5">원칙적으로 증가분만 조정됩니다. 물가 하락 시 조정하지 않습니다.</p>
+            </div>
+            <div class="p-2 bg-slate-50 rounded-lg">
+              <p class="font-semibold text-xs">Q. 조정 한도는 없나요?</p>
+              <p class="text-xs text-slate-600 mt-0.5">물가조정은 한도 제한이 없습니다. 추가계약의 10% 한도와는 무관합니다.</p>
+            </div>
+          </div>
+        </div>
+        <div class="p-3 bg-amber-50 border border-amber-200 rounded-lg">
+          <p class="font-semibold text-amber-800 mb-1">📋 감사 체크리스트</p>
+          <ul class="text-xs text-amber-900 space-y-1">
+            <li>☐ 물가변동 3% 이상, 90일 경과 요건 충족 여부 확인</li>
+            <li>☐ 통계청 등 공인 자료로 물가 변동 증빙</li>
+            <li>☐ 조정 금액 산출 내역서 보관</li>
+            <li>☐ 변경계약서 체결 전 내부 결재 완료</li>
+            <li>☐ 추가계약(10% 한도)과 혼동하지 않도록 구분 처리</li>
+          </ul>
+        </div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- 공문 생성 팝업 -->
+<div id="doc-popup-overlay" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4" onclick="hideDocPopup()">
+  <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6" onclick="event.stopPropagation()">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-lg font-bold text-slate-900">공문/양식 생성 도구</h3>
+      <button onclick="hideDocPopup()" class="text-slate-400 hover:text-slate-600">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <p class="text-slate-600 text-sm mb-4" id="popup-desc">AI를 활용하여 맞춤형 서식을 생성합니다.</p>
+    <a href="/tools/official-document" class="btn-primary w-full text-center block">
+      <span class="material-symbols-outlined align-middle mr-1" style="font-size:18px">description</span>
+      공문/양식 생성 도구 열기
+    </a>
+  </div>
+</div>
+
+<script>
+function showDocPopup(type) {
+  const desc = {
+    'adjustment-request': '계약금액 조정신청서를 AI가 자동 생성합니다. 조정 사유, 변동 금액, 산출 근거를 입력하면 공문 형식으로 완성됩니다.',
+    'adjustment-change': '계약금액 변경계약서를 AI가 자동 생성합니다. 당초 금액, 조정 금액, 사유를 입력하세요.'
+  };
+  document.getElementById('popup-desc').textContent = desc[type] || 'AI를 활용하여 맞춤형 서식을 생성합니다.';
+  document.getElementById('doc-popup-overlay').classList.remove('hidden');
+}
+function hideDocPopup() {
+  document.getElementById('doc-popup-overlay').classList.add('hidden');
+}
+</script>

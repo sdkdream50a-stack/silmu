@@ -1,0 +1,230 @@
+<!-- 적격심사 탈락 사유 실무흐름도 -->
+<div class="card">
+  <div class="card-header">
+    <h2 class="text-xl font-bold text-slate-900 flex items-center gap-3">
+      <span class="material-symbols-outlined text-indigo-500">account_tree</span>
+      적격심사 실무흐름도
+    </h2>
+    <p class="text-slate-600 mt-1">2억원 이상 입찰에서 적격심사 서류 제출부터 결과 대응까지</p>
+  </div>
+
+  <div class="p-6">
+    <div class="mb-6 p-3 bg-blue-50 border border-blue-200 rounded-xl text-sm text-blue-800 flex items-start gap-2">
+      <span class="material-symbols-outlined text-blue-500 mt-0.5" style="font-size:18px">gavel</span>
+      <span>적격심사는 <strong>추정가격 2억원 이상</strong> 입찰에 적용됩니다. <strong>가격점수 + 비가격점수 합산 95점 이상</strong>이어야 낙찰 후보가 됩니다. (지방계약법 시행령 제42조의2)</span>
+    </div>
+
+    <div class="space-y-4">
+      <!-- Step 1 -->
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-indigo-500 text-white rounded-full flex items-center justify-center font-bold">1</div>
+        <div class="flex-1 bg-indigo-50 rounded-xl p-4 border border-indigo-200">
+          <h4 class="font-semibold text-indigo-800 mb-2">입찰 전 준비</h4>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• 추정가격 <strong class="text-indigo-700">2억원 이상</strong> 여부 확인 (적격심사 대상)</li>
+            <li>• 공고문 정독: 기술자 기준, 제출 서류 목록, 배점표 확인</li>
+            <li>• <strong class="text-indigo-700">비가격점수 자가 채점</strong> (35점 이상 확보 권장)</li>
+            <li class="text-xs text-slate-500 ml-3">※ 비가격점수 부족 예상 시 입찰 포기 검토</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="flex justify-center"><span class="material-symbols-outlined text-slate-300 text-2xl">arrow_downward</span></div>
+
+      <!-- Step 2 -->
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">2</div>
+        <div class="flex-1 bg-blue-50 rounded-xl p-4 border border-blue-200">
+          <div class="flex items-start justify-between mb-2">
+            <h4 class="font-semibold text-blue-800">적격심사 서류 준비·제출</h4>
+            <span class="doc-tool-badge" onclick="showDocPopup('step2')"><span class="material-symbols-outlined" style="font-size:14px">edit_document</span>공문/양식 생성 도구</span>
+          </div>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• <strong class="text-blue-700">신인도</strong>: 부정당업자 제재 조회 결과 (나라장터)</li>
+            <li>• <strong class="text-blue-700">기술능력</strong>: 기술자 경력증명서 + 자격증 사본</li>
+            <li>• <strong class="text-blue-700">이행실적</strong>: 최근 3년 계약 이행 확인서</li>
+            <li>• 제출 기한 <strong class="text-red-700">최소 1일 전</strong> 완료 (기한 초과 = 해당 항목 0점)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="flex justify-center"><span class="material-symbols-outlined text-slate-300 text-2xl">arrow_downward</span></div>
+
+      <!-- Step 3 -->
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-amber-500 text-white rounded-full flex items-center justify-center font-bold">3</div>
+        <div class="flex-1 bg-amber-50 rounded-xl p-4 border border-amber-200">
+          <h4 class="font-semibold text-amber-800 mb-2">가격 입찰</h4>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• 예정가격 <strong class="text-red-700">이하</strong>로 입찰 (초과 시 자동 탈락)</li>
+            <li>• 최저가 근처 입찰 → <strong class="text-amber-700">가격점수 최대화</strong></li>
+          </ul>
+          <div class="mt-3 p-3 bg-amber-100/60 rounded-lg text-xs text-amber-800">
+            <strong>낙찰 원칙:</strong> 95점 이상 업체 중 <strong>최저가</strong> 업체가 낙찰. 점수 1등 ≠ 낙찰 1등
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-center"><span class="material-symbols-outlined text-slate-300 text-2xl">arrow_downward</span></div>
+
+      <!-- Step 4 -->
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-green-500 text-white rounded-full flex items-center justify-center font-bold">4</div>
+        <div class="flex-1 bg-green-50 rounded-xl p-4 border border-green-200">
+          <h4 class="font-semibold text-green-800 mb-3">적격심사 결과 확인</h4>
+          <div class="grid grid-cols-2 gap-3 mb-2">
+            <div class="p-3 bg-green-100 rounded-lg text-center">
+              <div class="text-green-700 font-bold text-sm">✅ 95점 이상</div>
+              <div class="text-xs text-slate-600 mt-1">낙찰 후보 → 최저가 업체 낙찰</div>
+            </div>
+            <div class="p-3 bg-red-100 rounded-lg text-center">
+              <div class="text-red-700 font-bold text-sm">❌ 95점 미만</div>
+              <div class="text-xs text-slate-600 mt-1">자동 탈락 → 아래 5단계</div>
+            </div>
+          </div>
+          <p class="text-xs text-slate-500">• 나라장터에서 점수 산출 내역 조회 가능</p>
+        </div>
+      </div>
+
+      <div class="flex justify-center"><span class="material-symbols-outlined text-slate-300 text-2xl">arrow_downward</span></div>
+
+      <!-- Step 5 -->
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold">5</div>
+        <div class="flex-1 bg-slate-50 rounded-xl p-4 border border-slate-200">
+          <h4 class="font-semibold text-slate-800 mb-2">탈락 시 대응</h4>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• 나라장터에서 <strong class="text-slate-800">점수 산출 내역</strong> 확인 (탈락 사유 파악)</li>
+            <li>• <strong class="text-slate-800">이의신청</strong>: 명백한 오산(誤算)이 있는 경우만 가능, 30일 이내</li>
+            <li>• 취약 항목 보완 후 재입찰 준비</li>
+            <li class="text-xs text-slate-500 ml-3">※ 단순 점수 부족은 이의신청 대상 아님</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 참고 안내 -->
+    <details open class="mt-8 border border-slate-200 rounded-xl overflow-hidden">
+      <summary class="flex items-center gap-3 p-4 bg-slate-50 hover:bg-slate-100 transition-colors cursor-pointer">
+        <span class="material-symbols-outlined text-slate-500">info</span>
+        <span class="font-semibold text-slate-700">참고 안내</span>
+        <span class="text-xs text-slate-400 ml-auto">점수 구성 · 주요 탈락 사유 · 감사 체크리스트</span>
+      </summary>
+      <div class="p-4 space-y-4">
+        <div class="bg-white border border-slate-200 rounded-xl p-4">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined text-blue-500">calculate</span>
+            <div class="w-full">
+              <h4 class="font-semibold text-slate-800 mb-3">적격심사 점수 구성 <span class="text-xs font-normal bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">시행령 제42조의2</span></h4>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                <div class="p-3 bg-blue-50 rounded-lg">
+                  <div class="font-semibold text-slate-800">가격점수 (60~70점)</div>
+                  <div class="text-blue-700 text-xs mt-1">투찰가격에 따라 자동 산정 / 최저가 = 만점</div>
+                </div>
+                <div class="p-3 bg-violet-50 rounded-lg">
+                  <div class="font-semibold text-slate-800">비가격점수 (30~40점)</div>
+                  <div class="text-violet-700 text-xs mt-1">신인도 + 기술능력 + 이행실적 + 지역업체(선택)</div>
+                </div>
+              </div>
+              <p class="text-xs text-slate-500 mt-2">※ 합계 95점 이상이어야 낙찰 후보 자격</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white border border-slate-200 rounded-xl p-4">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined text-red-400">block</span>
+            <div>
+              <h4 class="font-semibold text-slate-800 mb-2">주요 탈락 사유</h4>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+                <div class="flex items-center gap-2 text-red-700"><span class="material-symbols-outlined text-red-400 text-lg">close</span>서류 미제출 (기한 초과)</div>
+                <div class="flex items-center gap-2 text-red-700"><span class="material-symbols-outlined text-red-400 text-lg">close</span>기술자 자격 미달</div>
+                <div class="flex items-center gap-2 text-red-700"><span class="material-symbols-outlined text-red-400 text-lg">close</span>부정당업자 제재 이력</div>
+                <div class="flex items-center gap-2 text-red-700"><span class="material-symbols-outlined text-red-400 text-lg">close</span>예정가격 초과 입찰</div>
+                <div class="flex items-center gap-2 text-red-700"><span class="material-symbols-outlined text-red-400 text-lg">close</span>이행실적 부족</div>
+                <div class="flex items-center gap-2 text-red-700"><span class="material-symbols-outlined text-red-400 text-lg">close</span>평가표 서식 불일치</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-red-50 border border-red-200 rounded-xl p-4">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined text-red-500">gavel</span>
+            <div>
+              <h4 class="font-semibold text-red-800 mb-2">감사 대비 체크리스트</h4>
+              <ul class="text-sm text-slate-700 space-y-1.5">
+                <li class="flex items-start gap-2"><span class="material-symbols-outlined text-red-400 text-lg mt-0.5">warning</span><span>서류 제출 기한 엄수 — 기한 초과 시 해당 항목 0점, 95점 통과 불가</span></li>
+                <li class="flex items-start gap-2"><span class="material-symbols-outlined text-red-400 text-lg mt-0.5">warning</span><span>부정당업자 사전 조회 — 제재 기간 중 입찰은 무효 처리</span></li>
+                <li class="flex items-start gap-2"><span class="material-symbols-outlined text-red-400 text-lg mt-0.5">warning</span><span>발주기관 제공 양식 사용 — 임의 서식 사용 시 탈락</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- 공문생산 팝업 -->
+<div id="doc-popup-overlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:9999; align-items:center; justify-content:center;" onclick="if(event.target===this) closeDocPopup()">
+  <div style="background:#fff; border-radius:16px; max-width:480px; width:90%; max-height:80vh; overflow-y:auto; padding:28px; box-shadow:0 20px 60px rgba(0,0,0,.2);">
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span class="material-symbols-outlined" style="color:#e11d48; font-size:22px;">edit_document</span>
+        <h3 id="doc-popup-title" style="font-size:18px; font-weight:700; color:#1e293b; margin:0;"></h3>
+      </div>
+      <button onclick="closeDocPopup()" style="background:none; border:none; cursor:pointer; padding:4px;">
+        <span class="material-symbols-outlined" style="color:#94a3b8; font-size:22px;">close</span>
+      </button>
+    </div>
+    <div id="doc-popup-body"></div>
+  </div>
+</div>
+
+<style>
+.doc-tool-badge { display:inline-flex; align-items:center; gap:6px; margin-top:4px; padding:6px 14px; background:#fff1f2; color:#e11d48; font-size:13px; font-weight:600; border-radius:10px; cursor:pointer; border:1.5px solid #fecdd3; transition:all .2s ease; }
+.doc-tool-badge:hover { transform:translateY(-2px) scale(1.04); background:#ffe4e6; }
+.doc-item { display:flex; align-items:flex-start; gap:10px; padding:12px; border-radius:10px; border:1px solid #e2e8f0; margin-bottom:8px; }
+.doc-item .doc-icon { flex-shrink:0; width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; }
+.doc-item .doc-name { font-size:14px; font-weight:600; color:#1e293b; }
+.doc-item .doc-desc { font-size:12px; color:#64748b; margin-top:2px; }
+.doc-item.has-tool { cursor:pointer; transition:all .15s; }
+.doc-item.has-tool:hover { border-color:#818cf8; background:#f5f3ff; }
+</style>
+
+<script>
+var docPopupData = {
+  step2: {
+    title: '적격심사 서류 준비',
+    groups: [
+      { label: '필수 서류', icon: 'verified', color: '#dc2626', items: [
+        { name: '적격심사 평가서', desc: '발주기관 제공 양식 사용 (나라장터 공고문 첨부파일)', icon: 'fact_check', color: '#4f46e5' },
+        { name: '기술자 경력증명서', desc: '기술자 자격·경력 증빙 서류', icon: 'badge', color: '#059669' },
+        { name: '계약 이행 확인서', desc: '최근 3년 이행 실적 증명', icon: 'assignment_turned_in', color: '#059669' }
+      ]},
+      { label: '도구', icon: 'build', color: '#6366f1', items: [
+        { name: '적격심사 자동 채점기', desc: '비가격점수 사전 시뮬레이션', icon: 'calculate', color: '#6366f1', tool: '<%= tool_path("qualification-scoring") %>' }
+      ]}
+    ]
+  }
+};
+
+function showDocPopup(step) {
+  var data = docPopupData[step];
+  if (!data) return;
+  document.getElementById('doc-popup-title').textContent = data.title;
+  var html = '';
+  data.groups.forEach(function(group) {
+    html += '<div style="display:flex; align-items:center; gap:6px; margin:16px 0 8px; padding-bottom:6px; border-bottom:1px solid #f1f5f9;"><span class="material-symbols-outlined" style="font-size:16px; color:' + group.color + ';">' + group.icon + '</span><span style="font-size:13px; font-weight:700; color:' + group.color + ';">' + group.label + '</span></div>';
+    group.items.forEach(function(item) {
+      var toolAttr = item.tool ? ' has-tool" onclick="window.location.href=\'' + item.tool + '\'"' : '"';
+      html += '<div class="doc-item' + toolAttr + '><div class="doc-icon" style="background:' + item.color + '15;"><span class="material-symbols-outlined" style="font-size:18px; color:' + item.color + ';">' + item.icon + '</span></div><div><div class="doc-name">' + item.name + (item.tool ? ' <span class="material-symbols-outlined" style="font-size:12px; color:#818cf8; vertical-align:middle;">open_in_new</span>' : '') + '</div><div class="doc-desc">' + item.desc + '</div></div></div>';
+    });
+  });
+  document.getElementById('doc-popup-body').innerHTML = html;
+  document.getElementById('doc-popup-overlay').style.display = 'flex';
+}
+function closeDocPopup() { document.getElementById('doc-popup-overlay').style.display = 'none'; }
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeDocPopup(); });
+</script>

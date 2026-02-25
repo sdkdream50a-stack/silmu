@@ -1,0 +1,199 @@
+<!-- 수의계약 사유서 작성법 실무흐름도 -->
+<div class="card">
+  <div class="card-header">
+    <h2 class="text-xl font-bold text-slate-900 flex items-center gap-3">
+      <span class="material-symbols-outlined text-indigo-500">account_tree</span>
+      수의계약 사유서 작성 실무흐름도
+    </h2>
+    <p class="text-slate-600 mt-1">수의계약 사유 확인부터 사유서 작성·결재까지 단계별 절차</p>
+  </div>
+
+  <div class="p-6">
+    <div class="mb-6 p-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-800 flex items-start gap-2">
+      <span class="material-symbols-outlined text-red-500 mt-0.5" style="font-size:18px">gavel</span>
+      <span>수의계약 사유서는 <strong>계약 체결 전</strong> 작성·결재가 필수입니다. 허위 작성은 <strong>형법 제227조(허위공문서작성죄)</strong>에 해당합니다. (지방계약법 제9조, 시행령 제25조)</span>
+    </div>
+
+    <div class="space-y-4">
+      <!-- Step 1 -->
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-indigo-500 text-white rounded-full flex items-center justify-center font-bold">1</div>
+        <div class="flex-1 bg-indigo-50 rounded-xl p-4 border border-indigo-200">
+          <h4 class="font-semibold text-indigo-800 mb-2">수의계약 근거 확인</h4>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• <strong class="text-indigo-700">시행령 제25조 각호</strong> 해당 여부 확인</li>
+            <li>• 사유 유형 파악: 소액·긴급·특정·국가기관·불성립 등</li>
+            <li>• 금액 기준 확인 (물품·용역 2천만원, 공사 종합 4억원 등)</li>
+          </ul>
+          <div class="mt-3 grid grid-cols-2 md:grid-cols-3 gap-2">
+            <% [["소액 수의", "제25조 제1항", "indigo"], ["긴급 수의", "법 제9조 제1항 제1호", "red"], ["특정 수의", "법 제9조 제1항 제3호", "amber"], ["국가기관", "법 제9조 제1항 제2호", "blue"], ["입찰 불성립", "제25조 제1항 제5호", "green"]].each do |title, basis, color| %>
+              <div class="p-2 bg-white rounded-lg border border-slate-200 text-center">
+                <div class="text-xs font-bold text-<%= color %>-700"><%= title %></div>
+                <div class="text-xs text-slate-500 mt-0.5"><%= basis %></div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-center"><span class="material-symbols-outlined text-slate-300 text-2xl">arrow_downward</span></div>
+
+      <!-- Step 2 -->
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold">2</div>
+        <div class="flex-1 bg-orange-50 rounded-xl p-4 border border-orange-200">
+          <h4 class="font-semibold text-orange-800 mb-2">객관적 사실 확인 (허위 작성 방지)</h4>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• <strong class="text-red-700">경쟁입찰 가능 여부</strong> 실제 검토 (다른 업체 수행 가능성)</li>
+            <li>• 긴급성: 입찰 기간(최소 10일) 고려 시 정말 부족한가?</li>
+            <li>• 특정성: 해당 업체만 할 수 있는 객관적 이유가 있는가?</li>
+            <li>• <strong class="text-red-700">이해충돌</strong> 여부 확인 (친척·지인 업체 계약 시 신고)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="flex justify-center"><span class="material-symbols-outlined text-slate-300 text-2xl">arrow_downward</span></div>
+
+      <!-- Step 3 -->
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-amber-500 text-white rounded-full flex items-center justify-center font-bold">3</div>
+        <div class="flex-1 bg-amber-50 rounded-xl p-4 border border-amber-200">
+          <div class="flex items-start justify-between mb-2">
+            <h4 class="font-semibold text-amber-800">수의계약 사유서 작성</h4>
+            <span class="doc-tool-badge" onclick="showDocPopup('step3')"><span class="material-symbols-outlined" style="font-size:14px">edit_document</span>공문/양식 생성 도구</span>
+          </div>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• 법령 근거: <strong class="text-amber-700">제○조 제○항 제○호까지 구체적으로</strong> 명시</li>
+            <li>• 계약명, 금액, 상대방, 계약 예정일 기재</li>
+            <li>• 구체적 사유: "급해서" 금지 → 객관적 사실 중심 작성</li>
+            <li>• 상대방 선정 근거: 견적 업체 수, 최저가 선정 여부</li>
+            <li>• 증빙자료 첨부 (견적서, 특허증, 피해사진 등)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="flex justify-center"><span class="material-symbols-outlined text-slate-300 text-2xl">arrow_downward</span></div>
+
+      <!-- Step 4 -->
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">4</div>
+        <div class="flex-1 bg-blue-50 rounded-xl p-4 border border-blue-200">
+          <h4 class="font-semibold text-blue-800 mb-2">내부 검토 및 결재</h4>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• 담당자 자체 점검 → 부서장 검토 → 계약담당자 결재</li>
+            <li>• <strong class="text-blue-700">결재일 = 계약 체결일 이전</strong> 확인</li>
+            <li class="text-xs text-slate-500 ml-3">※ 결재일이 계약일보다 늦으면 "사후 기안" 지적</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="flex justify-center"><span class="material-symbols-outlined text-slate-300 text-2xl">arrow_downward</span></div>
+
+      <!-- Step 5 -->
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-green-500 text-white rounded-full flex items-center justify-center font-bold">5</div>
+        <div class="flex-1 bg-green-50 rounded-xl p-4 border border-green-200">
+          <h4 class="font-semibold text-green-800 mb-2">계약 체결 및 서류 보관</h4>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• 사유서 + 계약서 + 견적서 함께 편철</li>
+            <li>• <strong class="text-green-700">5년 이상 보관</strong> (감사 대비)</li>
+            <li>• 스캔본 별도 보관 권장</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <details open class="mt-8 border border-slate-200 rounded-xl overflow-hidden">
+      <summary class="flex items-center gap-3 p-4 bg-slate-50 hover:bg-slate-100 transition-colors cursor-pointer">
+        <span class="material-symbols-outlined text-slate-500">info</span>
+        <span class="font-semibold text-slate-700">참고 안내</span>
+        <span class="text-xs text-slate-400 ml-auto">허용 사유 · 금지 표현 · 감사 체크리스트</span>
+      </summary>
+      <div class="p-4 space-y-4">
+        <div class="bg-white border border-slate-200 rounded-xl p-4">
+          <h4 class="font-semibold text-slate-800 mb-3">올바른 표현 vs 잘못된 표현</h4>
+          <div class="space-y-3 text-sm">
+            <div class="p-3 bg-green-50 rounded-lg border border-green-200">
+              <div class="text-green-700 font-bold mb-1">✅ 올바른 예시</div>
+              <div class="text-slate-700">"지방계약법 제9조 제1항 제4호 및 시행령 제25조 제1항 제1호에 따라 추정가격 1,500만원 이하 물품 구매로 수의계약을 체결함"</div>
+            </div>
+            <div class="p-3 bg-red-50 rounded-lg border border-red-200">
+              <div class="text-red-700 font-bold mb-1">❌ 잘못된 예시</div>
+              <div class="text-slate-700">"예산이 부족하여", "급하게 필요해서", "관례적으로" → 법적 사유 아님</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-red-50 border border-red-200 rounded-xl p-4">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined text-red-500">gavel</span>
+            <div>
+              <h4 class="font-semibold text-red-800 mb-2">감사 대비 체크리스트</h4>
+              <ul class="text-sm text-slate-700 space-y-1.5">
+                <li class="flex items-start gap-2"><span class="material-symbols-outlined text-red-400 text-lg mt-0.5">warning</span><span><strong>사후 작성</strong> — 계약 체결 후 사유서 작성 시 허위공문서 지적</span></li>
+                <li class="flex items-start gap-2"><span class="material-symbols-outlined text-red-400 text-lg mt-0.5">warning</span><span><strong>법령 근거 불명확</strong> — "시행령 제25조"만 쓰고 호수 누락</span></li>
+                <li class="flex items-start gap-2"><span class="material-symbols-outlined text-red-400 text-lg mt-0.5">warning</span><span><strong>이해충돌 미신고</strong> — 친인척 업체 계약 신고 누락 시 과태료</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<div id="doc-popup-overlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:9999; align-items:center; justify-content:center;" onclick="if(event.target===this) closeDocPopup()">
+  <div style="background:#fff; border-radius:16px; max-width:480px; width:90%; max-height:80vh; overflow-y:auto; padding:28px; box-shadow:0 20px 60px rgba(0,0,0,.2);">
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;">
+      <div style="display:flex; align-items:center; gap:8px;"><span class="material-symbols-outlined" style="color:#e11d48; font-size:22px;">edit_document</span><h3 id="doc-popup-title" style="font-size:18px; font-weight:700; color:#1e293b; margin:0;"></h3></div>
+      <button onclick="closeDocPopup()" style="background:none; border:none; cursor:pointer; padding:4px;"><span class="material-symbols-outlined" style="color:#94a3b8; font-size:22px;">close</span></button>
+    </div>
+    <div id="doc-popup-body"></div>
+  </div>
+</div>
+
+<style>
+.doc-tool-badge { display:inline-flex; align-items:center; gap:6px; margin-top:4px; padding:6px 14px; background:#fff1f2; color:#e11d48; font-size:13px; font-weight:600; border-radius:10px; cursor:pointer; border:1.5px solid #fecdd3; transition:all .2s ease; }
+.doc-tool-badge:hover { transform:translateY(-2px) scale(1.04); background:#ffe4e6; }
+.doc-item { display:flex; align-items:flex-start; gap:10px; padding:12px; border-radius:10px; border:1px solid #e2e8f0; margin-bottom:8px; }
+.doc-item .doc-icon { flex-shrink:0; width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; }
+.doc-item .doc-name { font-size:14px; font-weight:600; color:#1e293b; }
+.doc-item .doc-desc { font-size:12px; color:#64748b; margin-top:2px; }
+.doc-item.has-tool { cursor:pointer; transition:all .15s; }
+.doc-item.has-tool:hover { border-color:#818cf8; background:#f5f3ff; }
+</style>
+
+<script>
+var docPopupData = {
+  step3: {
+    title: '수의계약 사유서 작성',
+    groups: [
+      { label: '필수 문서', icon: 'verified', color: '#dc2626', items: [
+        { name: '수의계약 사유서', desc: '법령 근거 + 구체적 사유 + 상대방 선정 근거 포함', icon: 'edit_document', color: '#e11d48', tool: '<%= contract_reason_path %>' }
+      ]},
+      { label: '첨부 서류', icon: 'attach_file', color: '#6366f1', items: [
+        { name: '견적서', desc: '1인 또는 2인 이상 견적서', icon: 'request_quote', color: '#6366f1', tool: '<%= official_document_path %>?type=draft', toolLabel: 'AI 공문서 (기안문)' },
+        { name: '추정가격 산출서', desc: '시장조사 기반 추정가격 산출', icon: 'calculate', color: '#059669', tool: '<%= estimated_price_path %>' }
+      ]}
+    ]
+  }
+};
+function showDocPopup(step) {
+  var data = docPopupData[step]; if (!data) return;
+  document.getElementById('doc-popup-title').textContent = data.title;
+  var html = '';
+  data.groups.forEach(function(group) {
+    html += '<div style="display:flex; align-items:center; gap:6px; margin:16px 0 8px; padding-bottom:6px; border-bottom:1px solid #f1f5f9;"><span class="material-symbols-outlined" style="font-size:16px; color:' + group.color + ';">' + group.icon + '</span><span style="font-size:13px; font-weight:700; color:' + group.color + ';">' + group.label + '</span></div>';
+    group.items.forEach(function(item) {
+      var toolAttr = item.tool ? ' has-tool" onclick="window.location.href=\'' + item.tool + '\'"' : '"';
+      html += '<div class="doc-item' + toolAttr + '><div class="doc-icon" style="background:' + item.color + '15;"><span class="material-symbols-outlined" style="font-size:18px; color:' + item.color + ';">' + item.icon + '</span></div><div><div class="doc-name">' + item.name + (item.tool && !item.toolLabel ? ' <span class="material-symbols-outlined" style="font-size:12px; color:#818cf8; vertical-align:middle;">open_in_new</span>' : '') + '</div><div class="doc-desc">' + item.desc + '</div>';
+      if (item.toolLabel) html += '<div style="margin-top:5px;"><a href="' + item.tool + '" style="font-size:11px; color:#4f46e5; font-weight:600; display:inline-flex; align-items:center; gap:3px; text-decoration:none;" onclick="event.stopPropagation();"><span class="material-symbols-outlined" style="font-size:13px;">edit</span>' + item.toolLabel + '</a></div>';
+      html += '</div></div>';
+    });
+  });
+  document.getElementById('doc-popup-body').innerHTML = html;
+  document.getElementById('doc-popup-overlay').style.display = 'flex';
+}
+function closeDocPopup() { document.getElementById('doc-popup-overlay').style.display = 'none'; }
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeDocPopup(); });
+</script>

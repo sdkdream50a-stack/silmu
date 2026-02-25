@@ -1,0 +1,230 @@
+<!-- 지체상금 감면 절차 실무흐름도 -->
+<div class="card">
+  <div class="card-header">
+    <h2 class="text-xl font-bold text-slate-900 flex items-center gap-3">
+      <span class="material-symbols-outlined text-indigo-500">account_tree</span>
+      지체상금 감면 실무흐름도
+    </h2>
+    <p class="text-slate-600 mt-1">지체상금 감면 신청부터 결정·통보까지 단계별 절차</p>
+  </div>
+
+  <div class="p-6">
+    <div class="mb-6 p-3 bg-amber-50 border border-amber-200 rounded-xl text-sm text-amber-800 flex items-start gap-2">
+      <span class="material-symbols-outlined text-amber-500 mt-0.5" style="font-size:18px">info</span>
+      <span>지체상금은 <strong>1일당 계약금액의 1/1000</strong>이며, 최대 계약금액의 10%까지 부과됩니다. <strong>발주기관 귀책, 천재지변</strong> 등 정당 사유 시 감면 가능합니다. (지방계약법 제30조)</span>
+    </div>
+
+    <div class="space-y-4">
+      <!-- Step 1 -->
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-indigo-500 text-white rounded-full flex items-center justify-center font-bold">1</div>
+        <div class="flex-1 bg-indigo-50 rounded-xl p-4 border border-indigo-200">
+          <div class="flex items-start justify-between mb-2">
+            <h4 class="font-semibold text-indigo-800">감면 신청서 접수</h4>
+            <span class="doc-tool-badge" onclick="showDocPopup('step1')"><span class="material-symbols-outlined" style="font-size:14px">edit_document</span>공문/양식 생성 도구</span>
+          </div>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• 계약상대자가 <strong class="text-indigo-700">감면 신청서</strong> 제출 (준공 후 30일 이내 권장)</li>
+            <li>• 필수 첨부: 지연 사유 증빙자료 (기상청 증명서, 공문 등)</li>
+            <li>• 접수 후 처리 담당자 지정</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="flex justify-center"><span class="material-symbols-outlined text-slate-300 text-2xl">arrow_downward</span></div>
+
+      <!-- Step 2 -->
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">2</div>
+        <div class="flex-1 bg-blue-50 rounded-xl p-4 border border-blue-200">
+          <h4 class="font-semibold text-blue-800 mb-3">감면 사유 해당 여부 검토</h4>
+          <div class="grid md:grid-cols-2 gap-3 mb-3">
+            <div class="p-3 bg-white rounded-xl border-2 border-green-200">
+              <div class="text-green-700 font-bold text-xs mb-1">✅ 감면 가능 사유</div>
+              <ul class="text-xs text-slate-600 space-y-0.5">
+                <li>• 발주기관 귀책 (자료 지연 등)</li>
+                <li>• 천재지변 (태풍·지진·폭우)</li>
+                <li>• 관급자재 지급 지연</li>
+                <li>• 관계 법령 변경</li>
+                <li>• 불가항력 (전쟁·감염병)</li>
+              </ul>
+            </div>
+            <div class="p-3 bg-white rounded-xl border-2 border-red-200">
+              <div class="text-red-700 font-bold text-xs mb-1">❌ 감면 불가 사유</div>
+              <ul class="text-xs text-slate-600 space-y-0.5">
+                <li>• 인력 부족 (업체 책임)</li>
+                <li>• 자재 조달 실패 (업체 책임)</li>
+                <li>• 하도급 업체 문제</li>
+                <li>• 자금난·경영 사정</li>
+                <li>• 단순 착오</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-center"><span class="material-symbols-outlined text-slate-300 text-2xl">arrow_downward</span></div>
+
+      <!-- Step 3 -->
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-amber-500 text-white rounded-full flex items-center justify-center font-bold">3</div>
+        <div class="flex-1 bg-amber-50 rounded-xl p-4 border border-amber-200">
+          <h4 class="font-semibold text-amber-800 mb-2">감면 일수 산정</h4>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• 전체 지체일수 산정 (이행기한 다음 날 ~ 완료일)</li>
+            <li>• 감면 사유 기간 파악 (증빙 자료 기준)</li>
+            <li>• <strong class="text-amber-700">감면 일수 = 정당 사유로 인한 지연 일수</strong></li>
+          </ul>
+          <div class="mt-3 p-3 bg-amber-100/60 rounded-lg text-xs text-amber-800">
+            <strong>예시)</strong> 전체 지체 20일, 발주기관 귀책 8일 → 감면 8일, 계약상대자 귀책 12일 → 12일분 지체상금 부과
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-center"><span class="material-symbols-outlined text-slate-300 text-2xl">arrow_downward</span></div>
+
+      <!-- Step 4 -->
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">4</div>
+        <div class="flex-1 bg-blue-50 rounded-xl p-4 border border-blue-200">
+          <div class="flex items-start justify-between mb-2">
+            <h4 class="font-semibold text-blue-800">내부 심의 및 결재</h4>
+            <span class="doc-tool-badge" onclick="showDocPopup('step4')"><span class="material-symbols-outlined" style="font-size:14px">edit_document</span>공문/양식 생성 도구</span>
+          </div>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• 담당자 검토 의견서 작성 (감면 타당성 분석)</li>
+            <li>• 내부 심의위원회 또는 결재권자 승인</li>
+            <li>• 감면 금액 확정 (전액 면제 또는 일부 감면)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="flex justify-center"><span class="material-symbols-outlined text-slate-300 text-2xl">arrow_downward</span></div>
+
+      <!-- Step 5 -->
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-green-500 text-white rounded-full flex items-center justify-center font-bold">5</div>
+        <div class="flex-1 bg-green-50 rounded-xl p-4 border border-green-200">
+          <div class="flex items-start justify-between mb-2">
+            <h4 class="font-semibold text-green-800">결과 통보 및 최종 징수</h4>
+            <span class="doc-tool-badge" onclick="showDocPopup('step5')"><span class="material-symbols-outlined" style="font-size:14px">edit_document</span>공문/양식 생성 도구</span>
+          </div>
+          <ul class="text-sm text-slate-700 space-y-1">
+            <li>• 계약상대자에게 감면 결정 통보 (승인 또는 기각)</li>
+            <li>• 최종 지체상금 = 전체 지체상금 - 감면액</li>
+            <li>• 대금 지급 시 공제 처리 (또는 별도 징수)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <details open class="mt-8 border border-slate-200 rounded-xl overflow-hidden">
+      <summary class="flex items-center gap-3 p-4 bg-slate-50 hover:bg-slate-100 transition-colors cursor-pointer">
+        <span class="material-symbols-outlined text-slate-500">info</span>
+        <span class="font-semibold text-slate-700">참고 안내</span>
+        <span class="text-xs text-slate-400 ml-auto">상금 계산 · 일수 기산 · 감사 체크리스트</span>
+      </summary>
+      <div class="p-4 space-y-4">
+        <div class="bg-white border border-slate-200 rounded-xl p-4">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined text-blue-500">calculate</span>
+            <div>
+              <h4 class="font-semibold text-slate-800 mb-2">지체상금 계산 공식</h4>
+              <div class="text-sm font-mono bg-slate-50 p-3 rounded-lg">
+                지체상금 = 계약금액 × 지체일수 × 1/1,000
+              </div>
+              <div class="mt-2 text-xs text-slate-500">
+                최고 한도: 계약금액의 10% / 기산일: 이행기한 다음 날
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-red-50 border border-red-200 rounded-xl p-4">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined text-red-500">gavel</span>
+            <div>
+              <h4 class="font-semibold text-red-800 mb-2">감사 대비 체크리스트</h4>
+              <ul class="text-sm text-slate-700 space-y-1.5">
+                <li class="flex items-start gap-2"><span class="material-symbols-outlined text-red-400 text-lg mt-0.5">warning</span><span><strong>법정 사유 외 감면</strong> — 인력 부족 등 업체 귀책 사유로 감면 시 감사 지적</span></li>
+                <li class="flex items-start gap-2"><span class="material-symbols-outlined text-red-400 text-lg mt-0.5">warning</span><span><strong>증빙 없는 감면</strong> — 구두 설명만으로 감면 승인 시 부당 감면 지적</span></li>
+                <li class="flex items-start gap-2"><span class="material-symbols-outlined text-red-400 text-lg mt-0.5">warning</span><span><strong>기산일 오류</strong> — 이행기한 당일부터 산정 시 과소 징수 (다음 날부터 기산)</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<div id="doc-popup-overlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:9999; align-items:center; justify-content:center;" onclick="if(event.target===this) closeDocPopup()">
+  <div style="background:#fff; border-radius:16px; max-width:480px; width:90%; max-height:80vh; overflow-y:auto; padding:28px; box-shadow:0 20px 60px rgba(0,0,0,.2);">
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;">
+      <div style="display:flex; align-items:center; gap:8px;"><span class="material-symbols-outlined" style="color:#e11d48; font-size:22px;">edit_document</span><h3 id="doc-popup-title" style="font-size:18px; font-weight:700; color:#1e293b; margin:0;"></h3></div>
+      <button onclick="closeDocPopup()" style="background:none; border:none; cursor:pointer; padding:4px;"><span class="material-symbols-outlined" style="color:#94a3b8; font-size:22px;">close</span></button>
+    </div>
+    <div id="doc-popup-body"></div>
+  </div>
+</div>
+
+<style>
+.doc-tool-badge { display:inline-flex; align-items:center; gap:6px; margin-top:4px; padding:6px 14px; background:#fff1f2; color:#e11d48; font-size:13px; font-weight:600; border-radius:10px; cursor:pointer; border:1.5px solid #fecdd3; transition:all .2s ease; }
+.doc-tool-badge:hover { transform:translateY(-2px) scale(1.04); background:#ffe4e6; }
+.doc-item { display:flex; align-items:flex-start; gap:10px; padding:12px; border-radius:10px; border:1px solid #e2e8f0; margin-bottom:8px; }
+.doc-item .doc-icon { flex-shrink:0; width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; }
+.doc-item .doc-name { font-size:14px; font-weight:600; color:#1e293b; }
+.doc-item .doc-desc { font-size:12px; color:#64748b; margin-top:2px; }
+.doc-item.has-tool { cursor:pointer; transition:all .15s; }
+.doc-item.has-tool:hover { border-color:#818cf8; background:#f5f3ff; }
+</style>
+
+<script>
+var docPopupData = {
+  step1: {
+    title: '감면 신청 단계',
+    groups: [
+      { label: '계약상대자 제출', icon: 'person', color: '#6366f1', items: [
+        { name: '지체상금 감면 신청서', desc: '감면 사유·일수·증빙자료 첨부', icon: 'edit_document', color: '#6366f1' }
+      ]}
+    ]
+  },
+  step4: {
+    title: '내부 심의 단계',
+    groups: [
+      { label: '내부 검토', icon: 'fact_check', color: '#64748b', items: [
+        { name: '지체상금 감면 검토서', desc: '감면 타당성 분석 및 결정', icon: 'fact_check', color: '#64748b', tool: '<%= official_document_path %>?type=draft', toolLabel: 'AI 공문서 (기안문)' }
+      ]}
+    ]
+  },
+  step5: {
+    title: '결과 통보 단계',
+    groups: [
+      { label: '필수 발송', icon: 'outgoing_mail', color: '#059669', items: [
+        { name: '지체상금 감면 결정 통보서', desc: '감면 결정 사유·금액·징수 방법 통보', icon: 'outgoing_mail', color: '#059669', tool: '<%= official_document_path %>?type=notification', toolLabel: 'AI 공문서 (통보문)' }
+      ]},
+      { label: '도구', icon: 'calculate', color: '#6366f1', items: [
+        { name: '기간 계산기', desc: '지체일수 자동 계산', icon: 'date_range', color: '#6366f1', tool: '<%= legal_period_path %>' }
+      ]}
+    ]
+  }
+};
+function showDocPopup(step) {
+  var data = docPopupData[step]; if (!data) return;
+  document.getElementById('doc-popup-title').textContent = data.title;
+  var html = '';
+  data.groups.forEach(function(group) {
+    html += '<div style="display:flex; align-items:center; gap:6px; margin:16px 0 8px; padding-bottom:6px; border-bottom:1px solid #f1f5f9;"><span class="material-symbols-outlined" style="font-size:16px; color:' + group.color + ';">' + group.icon + '</span><span style="font-size:13px; font-weight:700; color:' + group.color + ';">' + group.label + '</span></div>';
+    group.items.forEach(function(item) {
+      var toolAttr = item.tool ? ' has-tool" onclick="window.location.href=\'' + item.tool + '\'"' : '"';
+      html += '<div class="doc-item' + toolAttr + '"><div class="doc-icon" style="background:' + item.color + '15;"><span class="material-symbols-outlined" style="font-size:18px; color:' + item.color + ';">' + item.icon + '</span></div><div><div class="doc-name">' + item.name + '</div><div class="doc-desc">' + item.desc + '</div>';
+      if (item.toolLabel) html += '<div style="margin-top:5px;"><a href="' + item.tool + '" style="font-size:11px; color:#4f46e5; font-weight:600;" onclick="event.stopPropagation();">' + item.toolLabel + '</a></div>';
+      html += '</div></div>';
+    });
+  });
+  document.getElementById('doc-popup-body').innerHTML = html;
+  document.getElementById('doc-popup-overlay').style.display = 'flex';
+}
+function closeDocPopup() { document.getElementById('doc-popup-overlay').style.display = 'none'; }
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeDocPopup(); });
+</script>
