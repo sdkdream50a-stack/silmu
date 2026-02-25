@@ -66,7 +66,7 @@
 
       <% if cat == "contract" && @contract_subgroups.present? %>
         <%# 계약 카테고리: 서브그룹 헤더 + 점프 내비게이션 %>
-        <% cache ["topics_contract_subgroups_v2", topics.size, topics.map(&:updated_at).max] do %>
+        <% cache ["topics_contract_subgroups_v3", topics.size, topics.map(&:updated_at).max] do %>
         <div class="topic-section mb-12" data-category="contract">
           <!-- 카테고리 헤더 -->
           <div class="flex items-center gap-3 mb-5">
