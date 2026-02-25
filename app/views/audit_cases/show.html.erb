@@ -120,7 +120,7 @@
               <span class="material-symbols-outlined text-lg">lightbulb</span>
               교훈 및 시사점
             </h2>
-            <div class="text-sm text-slate-700 leading-relaxed"><%= simple_format(@audit_case.lesson) %></div>
+            <div class="text-sm text-slate-700 leading-relaxed audit-content"><%= simple_markdown(@audit_case.lesson) %></div>
           </div>
 
           <!-- 실무 체크포인트 -->
@@ -133,13 +133,20 @@
               </h2>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <% checkpoints.each do |cp| %>
-                  <div class="flex items-start gap-2 p-3 bg-white rounded-xl text-sm">
-                    <span class="material-symbols-outlined text-indigo-500 text-lg flex-shrink-0"><%= cp["icon"] %></span>
-                    <div>
-                      <span class="font-semibold text-slate-800"><%= cp["title"] %></span>
-                      <p class="text-xs text-slate-500 mt-0.5"><%= cp["desc"] %></p>
+                  <% if cp.is_a?(Hash) %>
+                    <div class="flex items-start gap-2 p-3 bg-white rounded-xl text-sm">
+                      <span class="material-symbols-outlined text-indigo-500 text-lg flex-shrink-0"><%= cp["icon"] %></span>
+                      <div>
+                        <span class="font-semibold text-slate-800"><%= cp["title"] %></span>
+                        <p class="text-xs text-slate-500 mt-0.5"><%= cp["desc"] %></p>
+                      </div>
                     </div>
-                  </div>
+                  <% else %>
+                    <div class="flex items-start gap-2 p-3 bg-white rounded-xl text-sm">
+                      <span class="material-symbols-outlined text-indigo-500 text-lg flex-shrink-0">check_circle</span>
+                      <span class="text-slate-700"><%= cp %></span>
+                    </div>
+                  <% end %>
                 <% end %>
               </div>
             </div>
@@ -152,8 +159,8 @@
                 <span class="material-symbols-outlined text-lg">description</span>
                 상세 분석
               </h2>
-              <div class="text-sm text-slate-700 leading-relaxed">
-                <%= simple_format(@audit_case.detail) %>
+              <div class="text-sm text-slate-700 leading-relaxed audit-content">
+                <%= simple_markdown(@audit_case.detail) %>
               </div>
             </div>
           <% end %>
