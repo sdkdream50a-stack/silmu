@@ -42,6 +42,8 @@ class TopicsController < ApplicationController
     # 2026-02-22 추가
     "lowest-bid-rate"         => [:estimated_price, :legal_period, :contract_method],
     "quote-collection-guide"  => [:quote_review, :contract_method, :contract_documents],
+    # 2026-02-25 추가
+    "completion-payment-checklist" => [:progress_inspection, :contract_documents],
   }.freeze
 
   # 플로차트가 있는 토픽 목록
@@ -58,7 +60,7 @@ class TopicsController < ApplicationController
     qualification-failure contract-guarantee-exemption private-contract-justification
     goods-vs-service-contract bid-participation-restriction additional-contract-limit
     penalty-reduction-procedure contract-period-extension e-bidding-error-faq
-    contract-amount-adjustment
+    contract-amount-adjustment completion-payment-checklist
   ].freeze
 
   # 토픽별 개별 아이콘 매핑
@@ -103,6 +105,8 @@ class TopicsController < ApplicationController
     # 2026-02-22 추가
     "lowest-bid-rate"            => "trending_down",
     "quote-collection-guide"     => "description",
+    # 2026-02-25 추가
+    "completion-payment-checklist" => "checklist",
   }.freeze
 
   TOOL_DEFINITIONS = {
