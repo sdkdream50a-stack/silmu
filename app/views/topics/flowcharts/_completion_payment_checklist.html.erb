@@ -14,111 +14,188 @@
       <span><strong>핵심 원칙</strong> — 서류 완비 → 검사 합격 → 하자보증 확인 → 5일 이내 대금 지급 (시행령 제68조)</span>
     </div>
 
-    <!-- 착공 단계 서류 사전 점검 -->
+    <!-- 단계별 서류 사전 점검 -->
     <details class="mb-6 group">
       <summary class="flex items-center justify-between p-4 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-100 transition-colors">
         <div class="flex items-center gap-2">
           <span class="material-symbols-outlined text-slate-500" style="font-size:20px">history_edu</span>
-          <span class="font-bold text-slate-800 text-sm">착공 단계에서 갖춰야 할 서류 사전 점검</span>
-          <span class="px-2 py-0.5 bg-slate-200 text-slate-600 text-xs rounded-full">준공 전 확인</span>
+          <span class="font-bold text-slate-800 text-sm">단계별 사전 서류 총괄 점검</span>
+          <span class="px-2 py-0.5 bg-slate-200 text-slate-600 text-xs rounded-full">사업계획 → 품의 → 착공</span>
         </div>
         <span class="material-symbols-outlined text-slate-400 group-open:rotate-180 transition-transform">expand_more</span>
       </summary>
 
-      <div class="mt-2 p-4 bg-slate-50 border border-slate-200 rounded-xl border-t-0 rounded-t-none">
-        <p class="text-xs text-slate-500 mb-4">준공신고 전 아래 서류들이 계약 착공 시점에 이미 갖춰져 있어야 합니다. 누락된 서류는 준공검사 전 보완하세요.</p>
+      <div class="mt-2 p-4 bg-slate-50 border border-slate-200 rounded-xl">
+        <p class="text-xs text-slate-500 mb-5">준공신고 전 아래 단계별 서류들이 모두 갖춰져 있어야 합니다. 누락된 서류는 준공검사 전 보완하세요.</p>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-          <!-- 계약 체결 서류 -->
-          <div class="p-3 bg-white rounded-xl border border-slate-200">
-            <p class="text-xs font-bold text-slate-700 mb-2 flex items-center gap-1">
-              <span class="material-symbols-outlined text-slate-500" style="font-size:14px">description</span>
-              계약 체결 서류
+        <!-- 1단계: 사업계획 단계 -->
+        <div class="mb-5">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="flex-shrink-0 w-6 h-6 bg-violet-500 text-white rounded-full flex items-center justify-center text-xs font-bold">1</span>
+            <p class="text-xs font-bold text-violet-700 flex items-center gap-1">
+              <span class="material-symbols-outlined" style="font-size:14px">lightbulb</span>
+              사업계획 단계
             </p>
-            <div class="space-y-1.5 text-xs text-slate-700">
-              <label class="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" class="rounded text-slate-600 w-3.5 h-3.5">
-                <span>계약서 (서명·날인본)</span>
-              </label>
-              <label class="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" class="rounded text-slate-600 w-3.5 h-3.5">
-                <span>설계서·내역서·공사시방서</span>
-              </label>
-              <label class="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" class="rounded text-slate-600 w-3.5 h-3.5">
-                <span>계약보증금 납부서 또는 보증보험 증권 (계약금액 15%)</span>
-              </label>
-            </div>
           </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pl-2">
 
-          <!-- 착공 신고 서류 -->
-          <div class="p-3 bg-white rounded-xl border border-slate-200">
-            <p class="text-xs font-bold text-slate-700 mb-2 flex items-center gap-1">
-              <span class="material-symbols-outlined text-slate-500" style="font-size:14px">construction</span>
-              착공 신고 서류
-            </p>
-            <div class="space-y-1.5 text-xs text-slate-700">
-              <label class="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" class="rounded text-slate-600 w-3.5 h-3.5">
-                <span>착공신고서 (착공 전 제출)</span>
-              </label>
-              <label class="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" class="rounded text-slate-600 w-3.5 h-3.5">
-                <span>공정표 (공사 일정)</span>
-              </label>
-              <label class="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" class="rounded text-slate-600 w-3.5 h-3.5">
-                <span>현장대리인 지정서 (1억원 이상 필수)</span>
-              </label>
+            <div class="p-3 bg-white rounded-xl border border-violet-100">
+              <p class="text-xs font-bold text-violet-700 mb-2">사업 기획 서류</p>
+              <div class="space-y-1.5 text-xs text-slate-700">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" class="rounded text-violet-500 w-3.5 h-3.5">
+                  <span>사업계획서 (사업 목적·필요성·규모)</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" class="rounded text-violet-500 w-3.5 h-3.5">
+                  <span>사업비 산출 근거 (개략 공사비 추정)</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" class="rounded text-violet-500 w-3.5 h-3.5">
+                  <span>사업 부서장 결재</span>
+                </label>
+              </div>
             </div>
-          </div>
 
-          <!-- 업체 자격 서류 -->
-          <div class="p-3 bg-white rounded-xl border border-slate-200">
-            <p class="text-xs font-bold text-slate-700 mb-2 flex items-center gap-1">
-              <span class="material-symbols-outlined text-slate-500" style="font-size:14px">badge</span>
-              업체 자격 서류
-            </p>
-            <div class="space-y-1.5 text-xs text-slate-700">
-              <label class="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" class="rounded text-slate-600 w-3.5 h-3.5">
-                <span>사업자등록증 사본</span>
-              </label>
-              <label class="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" class="rounded text-slate-600 w-3.5 h-3.5">
-                <span>건설업 등록증 사본 (500만원 이상 공사)</span>
-              </label>
-              <label class="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" class="rounded text-slate-600 w-3.5 h-3.5">
-                <span>국세·지방세 납세증명서</span>
-              </label>
+            <div class="p-3 bg-white rounded-xl border border-violet-100">
+              <p class="text-xs font-bold text-violet-700 mb-2">예산 확보 서류</p>
+              <div class="space-y-1.5 text-xs text-slate-700">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" class="rounded text-violet-500 w-3.5 h-3.5">
+                  <span>예산 배정 내역 (세목·금액 확인)</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" class="rounded text-violet-500 w-3.5 h-3.5">
+                  <span>예비비 사용 승인서 (예비비 집행 시)</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" class="rounded text-violet-500 w-3.5 h-3.5">
+                  <span>전용·이용 승인서 (예산 전용 시)</span>
+                </label>
+              </div>
             </div>
-          </div>
 
-          <!-- 보험·안전 서류 -->
-          <div class="p-3 bg-white rounded-xl border border-slate-200">
-            <p class="text-xs font-bold text-slate-700 mb-2 flex items-center gap-1">
-              <span class="material-symbols-outlined text-slate-500" style="font-size:14px">security</span>
-              보험·안전 서류
-            </p>
-            <div class="space-y-1.5 text-xs text-slate-700">
-              <label class="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" class="rounded text-slate-600 w-3.5 h-3.5">
-                <span>산재·고용보험 가입증명서</span>
-              </label>
-              <label class="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" class="rounded text-slate-600 w-3.5 h-3.5">
-                <span>선금보증금 증권 (선금 지급 시)</span>
-              </label>
-              <label class="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" class="rounded text-slate-600 w-3.5 h-3.5">
-                <span>안전관리계획서 (1억원 이상 공사)</span>
-              </label>
-            </div>
           </div>
-
         </div>
+
+        <!-- 구분선 -->
+        <div class="flex items-center gap-2 mb-5">
+          <div class="flex-1 border-t border-dashed border-slate-300"></div>
+          <span class="material-symbols-outlined text-slate-300 text-lg">arrow_downward</span>
+          <div class="flex-1 border-t border-dashed border-slate-300"></div>
+        </div>
+
+        <!-- 2단계: 품의 단계 -->
+        <div class="mb-5">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="flex-shrink-0 w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold">2</span>
+            <p class="text-xs font-bold text-blue-700 flex items-center gap-1">
+              <span class="material-symbols-outlined" style="font-size:14px">edit_document</span>
+              품의 단계
+            </p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pl-2">
+
+            <div class="p-3 bg-white rounded-xl border border-blue-100">
+              <p class="text-xs font-bold text-blue-700 mb-2">계약 결정 서류</p>
+              <div class="space-y-1.5 text-xs text-slate-700">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" class="rounded text-blue-500 w-3.5 h-3.5">
+                  <span>지출품의서 (수의계약·입찰 구분 명기)</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" class="rounded text-blue-500 w-3.5 h-3.5">
+                  <span>수의계약 사유서 (1인 수의 시 필수)</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" class="rounded text-blue-500 w-3.5 h-3.5">
+                  <span>계약 방법 결정 내역 (추정가격 기준 확인)</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="p-3 bg-white rounded-xl border border-blue-100">
+              <p class="text-xs font-bold text-blue-700 mb-2">설계·가격 서류</p>
+              <div class="space-y-1.5 text-xs text-slate-700">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" class="rounded text-blue-500 w-3.5 h-3.5">
+                  <span>설계서·도면·시방서 (공사 내용 명세)</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" class="rounded text-blue-500 w-3.5 h-3.5">
+                  <span>예정가격 조서 (원가계산서 또는 견적서)</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" class="rounded text-blue-500 w-3.5 h-3.5">
+                  <span>예정가격 봉인·개봉 결재 (해당 시)</span>
+                </label>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 구분선 -->
+        <div class="flex items-center gap-2 mb-5">
+          <div class="flex-1 border-t border-dashed border-slate-300"></div>
+          <span class="material-symbols-outlined text-slate-300 text-lg">arrow_downward</span>
+          <div class="flex-1 border-t border-dashed border-slate-300"></div>
+        </div>
+
+        <!-- 3단계: 착공 단계 -->
+        <div>
+          <div class="flex items-center gap-2 mb-3">
+            <span class="flex-shrink-0 w-6 h-6 bg-slate-500 text-white rounded-full flex items-center justify-center text-xs font-bold">3</span>
+            <p class="text-xs font-bold text-slate-700 flex items-center gap-1">
+              <span class="material-symbols-outlined" style="font-size:14px">construction</span>
+              착공 단계
+            </p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pl-2">
+
+            <div class="p-3 bg-white rounded-xl border border-slate-200">
+              <p class="text-xs font-bold text-slate-700 mb-2">계약 체결 서류</p>
+              <div class="space-y-1.5 text-xs text-slate-700">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" class="rounded text-slate-600 w-3.5 h-3.5">
+                  <span>계약서 (서명·날인본)</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" class="rounded text-slate-600 w-3.5 h-3.5">
+                  <span>계약보증금 납부서 또는 보증보험 증권 (15%)</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" class="rounded text-slate-600 w-3.5 h-3.5">
+                  <span>사업자등록증·건설업등록증·납세증명서</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="p-3 bg-white rounded-xl border border-slate-200">
+              <p class="text-xs font-bold text-slate-700 mb-2">착공 신고·보험 서류</p>
+              <div class="space-y-1.5 text-xs text-slate-700">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" class="rounded text-slate-600 w-3.5 h-3.5">
+                  <span>착공신고서·공정표</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" class="rounded text-slate-600 w-3.5 h-3.5">
+                  <span>현장대리인 지정서 (1억원 이상)</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" class="rounded text-slate-600 w-3.5 h-3.5">
+                  <span>산재·고용보험 가입증명서</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" class="rounded text-slate-600 w-3.5 h-3.5">
+                  <span>안전관리계획서·선금보증금 (해당 시)</span>
+                </label>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
       </div>
     </details>
 
