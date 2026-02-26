@@ -172,4 +172,7 @@ Rails.application.routes.draw do
 
   # 사이트맵
   get "sitemap.xml", to: "sitemap#index", as: :sitemap, defaults: { format: :xml }
+
+  # RSS 피드 (백링크·구독자 확보용)
+  get "feed.rss", to: "feed#index", defaults: { format: :rss }, as: :feed
 end
