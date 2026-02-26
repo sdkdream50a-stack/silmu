@@ -36,6 +36,14 @@
         <% end %>
 
         <div>
+          <%= f.label :current_password, class: "block text-sm font-semibold text-slate-700 mb-2" do %>
+            현재 비밀번호
+            <span class="font-normal text-slate-400 ml-1">(변경사항 확인 필수)</span>
+          <% end %>
+          <%= f.password_field :current_password, autocomplete: "current-password", placeholder: "••••••••", class: "input" %>
+        </div>
+
+        <div class="border-t border-gray-100 pt-4">
           <%= f.label :password, class: "block text-sm font-semibold text-slate-700 mb-2" do %>
             새 비밀번호
             <span class="font-normal text-slate-400 ml-1">(변경하지 않으려면 비워두세요)</span>
@@ -49,14 +57,6 @@
         <div>
           <%= f.label :password_confirmation, "새 비밀번호 확인", class: "block text-sm font-semibold text-slate-700 mb-2" %>
           <%= f.password_field :password_confirmation, autocomplete: "new-password", placeholder: "••••••••", class: "input" %>
-        </div>
-
-        <div>
-          <%= f.label :current_password, class: "block text-sm font-semibold text-slate-700 mb-2" do %>
-            현재 비밀번호
-            <span class="font-normal text-slate-400 ml-1">(변경사항 확인용)</span>
-          <% end %>
-          <%= f.password_field :current_password, autocomplete: "current-password", placeholder: "••••••••", class: "input" %>
         </div>
 
         <!-- 뉴스레터 수신 -->
