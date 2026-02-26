@@ -7,8 +7,8 @@ class FaqController < ApplicationController
     expires_in 1.day, public: true, stale_while_revalidate: 7.days
 
     set_meta_tags(
-      title: "자주 묻는 질문",
-      description: "수의계약, 입찰, 대금지급, 나라장터, 물품선정 등 공무원 계약 업무 FAQ. 실무에서 자주 궁금해하는 질문과 답변 모음.",
+      title: "자주 묻는 질문 FAQ — 계약·예산 실무 궁금증 해결",
+      description: "수의계약, 입찰, 대금지급, 나라장터, 물품선정위원회, 예산·회계 등 공무원 계약 실무에서 자주 묻는 질문과 정확한 답변 28개. 법령 근거와 함께 실무 적용 방법을 안내합니다.",
       keywords: "FAQ, 수의계약 질문, 입찰 질문, 계약 FAQ, 나라장터 FAQ",
       og: {
         title: "자주 묻는 질문 — 실무.kr",
