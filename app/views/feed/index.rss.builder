@@ -35,7 +35,7 @@ xml.rss version: "2.0", "xmlns:atom" => "http://www.w3.org/2005/Atom" do
         xml.link audit_case_url(audit_case.slug)
         xml.guid audit_case_url(audit_case.slug), isPermaLink: "true"
         xml.description do
-          xml.cdata! audit_case.summary.to_s
+          xml.cdata! audit_case.issue.to_s
         end
         xml.pubDate audit_case.created_at.rfc2822
         xml.category "감사사례"
