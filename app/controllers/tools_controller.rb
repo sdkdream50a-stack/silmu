@@ -23,7 +23,7 @@ class ToolsController < ApplicationController
     description_text = "월별 반복 업무를 한눈에 확인하는 업무 할일 맵. 급여, 세무, 회계, 보고 등 주요 업무 일정을 놓치지 마세요. 달력에 일정을 추가하고, CSV/ICS 파일로 내보내기하여 Google Calendar, Outlook과 연동할 수 있습니다."
 
     set_meta_tags(
-      title: "업무 할일 달력",
+      title: "업무 할일 달력 — 공무원 월별 반복업무 일정 관리",
       description: description_text,
       keywords: "업무달력, 할일목록, 급여일정, 세무신고, 보험료납부, 월별업무",
       og: {
@@ -40,7 +40,7 @@ class ToolsController < ApplicationController
     description_text = "공무원 국내·외 출장 여비를 자동으로 계산합니다. 교통비, 일비, 숙박비, 식비를 한 번에 산출하고, 국내출장과 해외출장을 구분하여 정확한 여비를 계산합니다. 공무원 여비 규정에 따라 자동 계산됩니다."
 
     set_meta_tags(
-      title: "여비계산기",
+      title: "여비계산기 — 공무원 출장 교통비·숙박비·일비 자동 계산",
       description: description_text,
       keywords: "여비계산기, 출장 여비, 공무원 출장비, 교통비, 숙박비",
       og: {

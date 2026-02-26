@@ -4,8 +4,8 @@
 class QualificationEvaluationsController < ApplicationController
   def index
     set_meta_tags(
-      title: "적격심사 자동 채점기",
-      description: "2억원 이상 공사·용역 입찰의 적격심사 점수를 자동으로 계산합니다. 가격점수와 비가격점수를 입력하면 95점 기준 적격 여부를 즉시 판정하고, 낙찰자를 자동 선정합니다.",
+      title: "적격심사 자동 채점기 — 가격·비가격 점수 자동 계산",
+      description: "2억원 이상 공사·용역 입찰의 적격심사 점수를 자동으로 계산합니다. 가격점수와 비가격점수를 입력하면 95점 기준 적격 여부를 즉시 판정하고, 낙찰자를 자동 선정합니다. 지방계약법 시행령 제42조의2 기준.",
       keywords: "적격심사, 적격심사표, 가격점수, 비가격점수, 낙찰자 선정, 입찰평가",
       og: {
         title: "적격심사 자동 채점기 — 실무.kr",

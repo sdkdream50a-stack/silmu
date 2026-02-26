@@ -5,8 +5,8 @@ class LegalPeriodsController < ApplicationController
   def index
     @period_types = LegalPeriodService.get_period_types
     set_meta_tags(
-      title: "법정기간 계산기",
-      description: "입찰공고 기간, 계약체결 기한, 대금지급 기한 등 계약 관련 법정기간을 자동으로 계산합니다.",
+      title: "법정기간 계산기 — 입찰공고·계약·대금지급 기한 자동 산출",
+      description: "입찰공고 기간, 계약체결 기한, 대금지급 기한 등 지방계약법상 법정기간을 자동으로 계산합니다. 추정가격별 공고기간, 공휴일 포함 여부까지 정확하게 산출하세요.",
       keywords: "법정기간, 입찰공고 기간, 계약체결 기한, 대금지급 기한, 기간 계산",
       og: { title: "법정기간 계산기 — 실무.kr", url: canonical_url }
     )

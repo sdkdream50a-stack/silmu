@@ -5,8 +5,8 @@ class EstimatedPricesController < ApplicationController
   def index
     @contract_types = EstimatedPriceService.get_contract_types
     set_meta_tags(
-      title: "추정가격 계산기 (예정가격 산출)",
-      description: "물품·용역·공사의 추정가격(부가세 제외)을 자동 산출합니다. 수의계약 기준금액 판단, 일반관리비·이윤 요율 검증까지.",
+      title: "추정가격 계산기 — 예정가격·수의계약 기준금액 자동 산출",
+      description: "공사·물품·용역의 추정가격(부가세 제외)을 자동으로 산출합니다. 수의계약 기준금액 판단, 일반관리비·이윤 요율 자동 적용, 계약방식까지 한 번에 확인하세요. 2026년 지방계약법 기준.",
       keywords: "추정가격, 추정가격 계산기, 예정가격, 예정가격 계산기, 수의계약 기준금액, 부가세",
       og: { title: "추정가격 계산기 — 실무.kr", url: canonical_url }
     )
