@@ -9,7 +9,7 @@
 - 이메일: hello@silmu.kr
 - 언어: 한국어
 - 대상: 대한민국 공무원 (계약·재무 담당자)
-- 콘텐츠 수: 법령 가이드 37개, 자동화 도구 19개, 실무 서식 23개, 감사사례 55건
+- 콘텐츠 수: 법령 가이드 51개, 자동화 도구 20개, 실무 서식 26종, 감사사례 80건
 
 ## 주요 법령 근거
 - 지방자치단체를 당사자로 하는 계약에 관한 법률 (지방계약법)
@@ -62,6 +62,20 @@
 - [규격가격분리입찰](https://silmu.kr/topics/spec-price-split-bid): 규격 입찰과 가격 입찰을 분리하여 실시하는 입찰 방법
 - [이행보증](https://silmu.kr/topics/performance-guarantee): 계약 이행 보증금 납부 기준, 보증서 종류, 면제 요건
 - [복수예비가격](https://silmu.kr/topics/multiple-price): 예정가격 결정을 위한 복수예비가격 작성 방법과 추첨 절차
+- [낙찰하한율](https://silmu.kr/topics/lowest-bid-rate): 낙찰하한율 기준(89.745%), 적용 방법, 2026년 변경사항
+- [비교견적서 수집 방법](https://silmu.kr/topics/quote-collection-guide): 2인 이상 견적 수집 방법, 경쟁업체 찾는 방법, 공문 예시
+- [분할발주 금지](https://silmu.kr/topics/split-order-prohibition): 분할발주 금지 원칙(지방계약법 시행령 제77조), 위반 vs 적법 사례
+- [예산 편성 절차](https://silmu.kr/topics/budget-compilation): 지방자치단체 예산 편성 절차(지방자치법 제127조), 시도/시군구 기한 구분
+- [적격심사 탈락 사유](https://silmu.kr/topics/bid-disqualification): 적격심사 탈락 사유와 이의신청 방법
+- [계약보증금 면제 조건](https://silmu.kr/topics/guarantee-exemption): 계약보증금 면제 요건 상세 정리
+- [수의계약 사유서 작성](https://silmu.kr/topics/private-contract-reason): 수의계약 사유서 작성 방법, 필수 기재사항, 예시
+- [물품 vs 용역 구분](https://silmu.kr/topics/goods-vs-service): 물품과 용역 구분 기준, 혼합 계약 처리 방법
+- [입찰 참가자격 제한](https://silmu.kr/topics/bid-restriction): 부정당업자 제재, 입찰 참가자격 제한 사유와 기간
+- [추가 계약 한도](https://silmu.kr/topics/additional-contract-limit): 설계변경 등으로 인한 계약금액 증액 한도 기준
+- [지체상금 감면 신청](https://silmu.kr/topics/late-penalty-reduction): 지체상금 감면 사유, 신청 방법, 판단 기준
+- [계약기간 연장](https://silmu.kr/topics/contract-extension): 계약기간 연장 사유, 절차, 지체상금 면제 여부
+- [전자입찰 오류 대처](https://silmu.kr/topics/e-bid-troubleshoot): 나라장터 전자입찰 오류 유형과 대처 방법
+- [계약금액 조정](https://silmu.kr/topics/contract-amount-adjustment): 물가변동·설계변경·환율변동에 의한 계약금액 조정 절차
 
 ## 실무 자동화 도구 (Tools)
 - [계약방식 결정 도우미](https://silmu.kr/tools/contract-method): 금액·유형 입력 → 수의계약/경쟁입찰 자동 판단
@@ -77,6 +91,9 @@
 - [원가계산서 검토 가이드](https://silmu.kr/tools/cost-calculation): 원가계산서 검토 도우미
 - [PDF 도구](https://silmu.kr/tools/pdf): PDF 분할, 합치기, 페이지번호 추가
 - [공문서 AI 작성 도우미](https://silmu.kr/tools/official-document): AI 기반 공문서 초안 작성
+- [적격심사 자동 채점기](https://silmu.kr/tools/qualification-evaluation): 2억원 이상 공사·용역 적격심사 가격·비가격 점수 자동 계산 및 낙찰자 선정
+- [4대보험 정산보험료 계산기](https://silmu.kr/tools/insurance-calculator): 국민연금·건강보험·고용보험 연말·퇴직정산 자동 계산
+- [업무 할일 달력](https://silmu.kr/tools/task-calendar): 급여·세무·보험 등 월별 반복업무 일정 관리, CSV·ICS 내보내기
 
 ## 업무 가이드 (Guides)
 - [물품 구매 및 검수 절차 가이드](https://silmu.kr/guides/1): 물품 구매부터 검수까지 전체 절차
@@ -92,10 +109,10 @@
 - [계약업무 사전 체크리스트](https://silmu.kr/guides/pre-contract-checklist): 계약 전 확인사항 체크리스트
 
 ## 문서 양식 (Templates)
-- [양식 자료실](https://silmu.kr/templates): 수의계약사유서, 검수조서, 견적서, 예정가격조서, 계약서 등 23종 양식
+- [양식 자료실](https://silmu.kr/templates): 수의계약사유서, 검수조서, 견적서, 예정가격조서, 계약서, 예산요구서 등 26종 양식
 
 ## 감사사례 (Audit Cases)
-- [감사사례 모음](https://silmu.kr/audit-cases): 공공계약 감사에서 자주 지적되는 55건의 사례 (수의계약, 입찰, 계약체결, 계약이행, 대금지급, 하도급, 기타)
+- [감사사례 모음](https://silmu.kr/audit-cases): 공공계약 감사에서 자주 지적되는 80건의 사례 (수의계약, 입찰, 계약체결, 계약이행, 대금지급, 하도급, 예산, 회계, 검수/검사)
 
 ## 자주 묻는 질문 (FAQ)
 - [FAQ](https://silmu.kr/faq): 수의계약, 입찰, 대금지급, 나라장터, 물품선정 관련 FAQ
