@@ -158,5 +158,20 @@ silmu/
 
 ---
 
+## 재발 방지 규칙 (silmu 전용)
+
+### Date.today 사용 금지 (CRITICAL)
+**서버 타임존은 UTC이므로 `Date.today`는 한국 시간과 최대 9시간 차이 발생.**
+
+- ❌ `Date.today` — UTC 기준, 자정~09:00 KST 구간에서 하루 오차
+- ✅ `Time.zone.today` — KST 기준 (Rails `config.time_zone = "Seoul"` 적용)
+- ✅ `Time.current.to_date` — 동일
+
+**적용 위치:** 뷰, 컨트롤러, 모델, 잡 등 모든 Ruby 코드
+
+**RuboCop 룰:** `.rubocop.yml`에 `Rails/Date: Enabled: true` 설정으로 자동 감지
+
+---
+
 ## 마지막 업데이트
-2026-02-21 — 하이브리드 CLAUDE.md 구조로 전환
+2026-02-27 — Date.today → Time.zone.today 전면 교체 및 재발 방지 룰 추가

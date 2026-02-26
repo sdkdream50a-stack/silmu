@@ -6,3 +6,8 @@ inherit_gem: { rubocop-rails-omakase: rubocop.yml }
 # # Use `[a, [b, c]]` not `[ a, [ b, c ] ]`
 # Layout/SpaceInsideArrayLiteralBrackets:
 #   Enabled: false
+
+# Date.today는 UTC 기준이라 서버 타임존(UTC)과 한국시간(KST, +9) 불일치 발생.
+# 항상 Time.zone.today 또는 Time.current.to_date 사용할 것.
+Rails/Date:
+  Enabled: true

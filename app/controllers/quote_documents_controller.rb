@@ -64,7 +64,7 @@ class QuoteDocumentsController < ApplicationController
     minute_count = Rails.cache.read(minute_key).to_i
     return true if minute_count >= RATE_LIMIT
 
-    daily_key = "quote_doc_daily:#{key_id}:#{Date.today}"
+    daily_key = "quote_doc_daily:#{key_id}:#{Time.zone.today}"
     daily_count = Rails.cache.read(daily_key).to_i
     return true if daily_count >= DAILY_LIMIT
 
