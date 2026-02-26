@@ -149,8 +149,8 @@
     ],
   }
 
-  today = Date.today
-  year = 2026
+  today = Time.zone.today
+  year = today.year
 
   # 주말·공휴일 마감일을 직전 평일로 조정
   months_tasks = {}
