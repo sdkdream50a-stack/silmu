@@ -35,7 +35,7 @@ class HomeController < ApplicationController
     description_text = "실무(silmu.kr)는 공무원의 계약·예산 업무를 돕는 무료 플랫폼입니다. 법령 가이드 37개, 자동화 도구 18개, 감사사례 55건, 서식 템플릿 23개를 제공하여 복잡한 법령과 절차를 쉽게 이해하고 실무에 바로 적용할 수 있도록 지원합니다."
 
     set_meta_tags(
-      title: "서비스 소개",
+      title: "서비스 소개 — 공무원 계약·예산 실무 무료 플랫폼",
       description: description_text,
       og: {
         title: "실무.kr 서비스 소개",
@@ -87,7 +87,7 @@ class HomeController < ApplicationController
     expires_in 1.hour, public: true, stale_while_revalidate: 1.day
 
     set_meta_tags(
-      title: "업데이트 소식",
+      title: "업데이트 소식 — 최신 기능·법령 가이드·감사사례 안내",
       description: "실무.kr의 최신 기능 추가, 콘텐츠 업데이트, 개선 사항을 확인하세요.",
       og: {
         title: "업데이트 소식 — 실무.kr",

@@ -220,7 +220,7 @@ class TopicsController < ApplicationController
 
     # SEO 메타 태그
     set_meta_tags(
-      title: "#{@topic.name} — 법령·절차·실무 가이드",
+      title: "#{@topic.name} — 지방계약법 근거·절차·실무사례 완전정리",
       description: generate_seo_description(@topic),
       keywords: @topic.keywords,
       canonical: canonical_url,

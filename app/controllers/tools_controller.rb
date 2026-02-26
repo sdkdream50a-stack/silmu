@@ -6,7 +6,7 @@ class ToolsController < ApplicationController
     description_text = "계약방식 결정, 예정가격 계산, 계약보증금 계산, 여비계산, 법정기간 산출 등 공무원 업무를 자동화하는 #{ApplicationHelper::ACTIVE_TOOL_COUNT}개 실무 도구. 복잡한 법령과 절차를 원클릭으로 해결하고, 업무 시간을 단축하세요."
 
     set_meta_tags(
-      title: "실무 도구",
+      title: "실무 도구 — 계약·예산 자동화 계산기 모음",
       description: description_text,
       keywords: "계약방식, 예정가격 계산기, 계약보증금, 여비계산기, 법정기간, PDF 도구",
       og: {
