@@ -125,8 +125,8 @@
       }
     </style>
 
-    <% if Rails.env.production? && ENV['GA_MEASUREMENT_ID'].present? %>
-      <!-- Google Analytics 4 - 지연 로딩으로 LCP 개선 -->
+    <% if Rails.env.production? && ENV['GA_MEASUREMENT_ID'].present? && !current_user&.admin? %>
+      <!-- Google Analytics 4 - 지연 로딩으로 LCP 개선 (어드민 제외) -->
       <script>
         function loadGoogleAnalytics() {
           const script = document.createElement('script');
