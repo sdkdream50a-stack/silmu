@@ -17,16 +17,15 @@
       </div>
       <div class="flex gap-4 lg:gap-6">
         <div class="text-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/15">
-          <div class="text-2xl font-bold"><%= @guides.count %></div>
+          <div class="text-2xl font-bold"><%= @guides.size %></div>
           <div class="text-xs text-emerald-100 mt-0.5">전체 가이드</div>
         </div>
-        <% top_cat, top_cat_count = @guides.group_by(&:category).max_by { |_, v| v.size }.then { |k, v| [k, v.size] } %>
         <div class="text-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/15">
-          <div class="text-2xl font-bold"><%= top_cat_count %></div>
-          <div class="text-xs text-emerald-100 mt-0.5"><%= top_cat %> 분야</div>
+          <div class="text-2xl font-bold"><%= @top_category_count %></div>
+          <div class="text-xs text-emerald-100 mt-0.5"><%= @top_category %> 분야</div>
         </div>
         <div class="text-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/15">
-          <div class="text-2xl font-bold"><%= @guides.map(&:category).uniq.count %></div>
+          <div class="text-2xl font-bold"><%= @category_count %></div>
           <div class="text-xs text-emerald-100 mt-0.5">분야</div>
         </div>
       </div>
@@ -48,7 +47,7 @@
     <!-- 카테고리 필터 -->
     <div class="flex flex-wrap gap-2" id="category-tabs">
       <button data-category="전체" class="tab-btn active px-5 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-semibold shadow-md transition-all">전체</button>
-      <% @guides.map(&:category).uniq.each do |cat| %>
+      <% @guide_categories.each do |cat| %>
         <button data-category="<%= cat %>" class="tab-btn px-5 py-2.5 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-xl text-sm font-medium transition-all"><%= cat %></button>
       <% end %>
     </div>
@@ -68,7 +67,7 @@
           </select>
         </div>
 
-        <% cache ["guides/cards/v1", @guides.size, @guides.map(&:updated_at).max] do %>
+        <% cache ["guides/cards/v2", @guides.size, @guides.last&.updated_at] do %>
         <div class="space-y-4" id="items-list">
           <% @guides.each_with_index do |guide, i| %>
             <% guide_link = guide.has_full_content? ? guide_path(guide) : (guide.external_link.present? ? guide.external_link : guide_path(guide)) %>

@@ -104,7 +104,7 @@
           <% if @category.present? || @severity.present? %>
           <div class="space-y-4" id="cases-container">
             <% @audit_cases.each do |audit_case| %>
-              <%= link_to audit_case_path(slug: audit_case.slug), class: "block card card-hover p-6 group case-item", data: { title: audit_case.title.downcase, issue: audit_case.issue.truncate(200).downcase, severity: audit_case.severity } do %>
+              <%= link_to audit_case_path(slug: audit_case.slug), class: "block card card-hover p-6 group case-item", data: { title: audit_case.title.downcase, issue: audit_case.issue.truncate(100).downcase, severity: audit_case.severity } do %>
                 <div class="flex items-start justify-between mb-3">
                   <span class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-semibold bg-red-50 text-red-700"><%= audit_case.category %></span>
                   <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium
@@ -138,10 +138,10 @@
             <% end %>
           </div>
           <% else %>
-          <% cache ["audit_cases/cards/v1", @audit_cases.size, @audit_cases.map(&:updated_at).max], expires_in: 30.minutes do %>
+          <% cache ["audit_cases/cards/v2", @audit_cases.size, @audit_cases.first&.updated_at], expires_in: 30.minutes do %>
           <div class="space-y-4" id="cases-container">
             <% @audit_cases.each do |audit_case| %>
-              <%= link_to audit_case_path(slug: audit_case.slug), class: "block card card-hover p-6 group case-item", data: { title: audit_case.title.downcase, issue: audit_case.issue.truncate(200).downcase, severity: audit_case.severity } do %>
+              <%= link_to audit_case_path(slug: audit_case.slug), class: "block card card-hover p-6 group case-item", data: { title: audit_case.title.downcase, issue: audit_case.issue.truncate(100).downcase, severity: audit_case.severity } do %>
                 <div class="flex items-start justify-between mb-3">
                   <span class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-semibold bg-red-50 text-red-700"><%= audit_case.category %></span>
                   <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium

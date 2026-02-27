@@ -4,20 +4,23 @@ class GuidesController < ApplicationController
     @popular_guides    = Rails.cache.fetch("guides/popular", expires_in: 1.hour) { Guide.published.order(view_count: :desc).limit(5).to_a }
     @audit_case_count  = Rails.cache.fetch("stats/audit_case_count", expires_in: 30.minutes) { AuditCase.published.count }
 
+    # "최근 본 가이드": 이미 캐시된 @guides에서 찾기 → DB 쿼리 제거 + public 캐시 항상 활성화
     recent_slugs = JSON.parse(cookies[:recent_guides] || "[]") rescue []
     if recent_slugs.any?
-      guides_by_slug = Guide.published.where(slug: recent_slugs).index_by(&:slug)
+      guides_by_slug = @guides.index_by(&:slug)
       @recent_guides = recent_slugs.filter_map { |slug| guides_by_slug[slug] }
     else
       @recent_guides = []
     end
 
-    # HTTP 캐싱: 최근 본 가이드가 없는 경우만 public 캐시 (쿠키 기반 개인화 방지)
-    if @recent_guides.empty?
-      expires_in 5.minutes, public: true, stale_while_revalidate: 1.hour
-    else
-      expires_in 1.minute, public: false
-    end
+    # 뷰 헤더용 통계: 캐시된 @guides에서 계산 (DB 쿼리 없음)
+    grouped = @guides.group_by(&:category)
+    @top_category, @top_category_count = grouped.max_by { |_, v| v.size }.then { |k, v| [k, v.size] }
+    @category_count = grouped.keys.size
+    @guide_categories = grouped.keys
+
+    # HTTP 캐싱: DB 쿼리가 없으므로 항상 public 캐시 가능
+    expires_in 5.minutes, public: true, stale_while_revalidate: 1.hour
 
     canonical_url = request.original_url.split("?").first
     meta = {

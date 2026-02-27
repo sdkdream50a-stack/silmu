@@ -3,7 +3,7 @@
 <%# 수정: 중복 push() 방지를 위해 인라인 스크립트 제거, 중앙 집중 초기화로 변경 %>
 <% if Rails.env.production? && ENV['ADSENSE_CLIENT_ID'].present? %>
   <div class="ad-slot ad-slot-<%= local_assigns[:position] || 'default' %>"
-       style="min-height:100px; contain:layout style paint"
+       style="min-height:90px; max-height:280px; contain:layout style paint; content-visibility:auto; contain-intrinsic-size:auto 90px"
        data-ad-status="pending">
     <ins class="adsbygoogle"
          style="display:block"

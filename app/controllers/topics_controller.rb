@@ -125,7 +125,9 @@ class TopicsController < ApplicationController
   }.freeze
 
   def index
-    all_topics = Rails.cache.fetch(["topics/all_published", Topic.maximum(:updated_at)], expires_in: 30.minutes) do
+    # 캐시 키에 MAX(updated_at) 대신 count 사용 → DB 쿼리 제거
+    # Topic이 변경되면 after_commit에서 캐시 무효화 처리
+    all_topics = Rails.cache.fetch("topics/all_published_v2", expires_in: 30.minutes) do
       Topic.published.to_a
     end
     @topics_by_category = all_topics.group_by(&:category)

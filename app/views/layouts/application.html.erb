@@ -43,7 +43,7 @@
 
     <%# Fonts - 비동기 로딩으로 렌더 블로킹 제거 %>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-    <link rel="preload" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" fetchpriority="high">
     <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"></noscript>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/toss/tossface/dist/tossface.css" media="print" onload="this.media='all'">
 
@@ -56,59 +56,68 @@
     <script src="https://code.iconify.design/3/3.1.0/iconify.min.js" defer></script>
 
     <script>
-      // Material Symbols → Iconify 자동 변환
-      function convertMaterialIcons() {
-        const icons = document.querySelectorAll('.material-symbols-outlined:not([data-icon])');
-        icons.forEach(icon => {
-          const iconName = icon.textContent.trim();
+      // Material Symbols → Iconify 자동 변환 (디바운스 + 범위 한정)
+      var _iconConvertTimer = null;
+      function convertMaterialIcons(root) {
+        var container = root || document.body;
+        if (!container) return;
+        var icons = container.querySelectorAll('.material-symbols-outlined:not([data-icon])');
+        if (icons.length === 0) return;
+        icons.forEach(function(icon) {
+          var iconName = icon.textContent.trim();
           if (iconName) {
-            const iconifyName = iconName.replace(/_/g, '-');
-            icon.setAttribute('data-icon', `material-symbols:${iconifyName}`);
+            icon.setAttribute('data-icon', 'material-symbols:' + iconName.replace(/_/g, '-'));
             icon.textContent = '';
             icon.classList.add('iconify');
           }
         });
-        // Iconify 스캔 실행
         if (typeof Iconify !== 'undefined' && Iconify.scan) {
-          Iconify.scan();
+          Iconify.scan(container);
         }
+      }
+
+      // 디바운스 래퍼: MutationObserver에서 호출 빈도 제한
+      function scheduleConvert() {
+        if (_iconConvertTimer) return;
+        _iconConvertTimer = requestAnimationFrame(function() {
+          _iconConvertTimer = null;
+          convertMaterialIcons();
+        });
       }
 
       // 페이지 로드 시 변환
       document.addEventListener('DOMContentLoaded', function() {
         convertMaterialIcons();
 
-        // MutationObserver로 동적 생성 아이콘 감지
-        const observer = new MutationObserver(function(mutations) {
-          mutations.forEach(function(mutation) {
-            if (mutation.addedNodes.length > 0) {
-              // 새로 추가된 노드에서 아이콘 변환
-              convertMaterialIcons();
-            }
-          });
-        });
-
-        // body 전체 감시
-        observer.observe(document.body, {
-          childList: true,
-          subtree: true
-        });
+        // MutationObserver: 디바운스 + childList만 감시
+        var observer = new MutationObserver(scheduleConvert);
+        observer.observe(document.body, { childList: true, subtree: true });
       });
 
-      // Turbo 네비게이션 후 변환
-      document.addEventListener('turbo:load', convertMaterialIcons);
-      document.addEventListener('turbo:render', convertMaterialIcons);
+      // Turbo 네비게이션 후 변환 (turbo:render만 사용, turbo:load 중복 제거)
+      document.addEventListener('turbo:render', function() { convertMaterialIcons(); });
     </script>
 
     <style>
       /* Material Symbols → Iconify 변환: 공간 고정 (CLS 방지) */
       .material-symbols-outlined {
-        display: inline-block;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         vertical-align: middle;
         width: 1em;
         height: 1em;
+        min-width: 1em;
+        min-height: 1em;
         overflow: hidden;
         font-size: inherit;
+        line-height: 1;
+        /* 텍스트 상태에서 투명 처리 → SVG 변환 후 표시 (CLS 제거) */
+        color: transparent;
+      }
+      .material-symbols-outlined.iconify,
+      .material-symbols-outlined[data-icon] {
+        color: inherit;
       }
       .iconify {
         width: 1em;
@@ -162,25 +171,19 @@
       <!-- AdSense 광고 중앙 집중 초기화 (Turbo 캐시 중복 방지) -->
       <script>
         function initAdSlots() {
-          document.querySelectorAll('.ad-slot[data-ad-status="pending"]').forEach(slot => {
-            const ins = slot.querySelector('ins.adsbygoogle');
+          document.querySelectorAll('.ad-slot[data-ad-status="pending"]').forEach(function(slot) {
+            var ins = slot.querySelector('ins.adsbygoogle');
             if (ins && !ins.dataset.adsbygoogleStatus) {
               try {
                 (adsbygoogle = window.adsbygoogle || []).push({});
-                slot.dataset.adStatus = 'loaded';
-              } catch (e) {
-                // 이미 로드된 광고는 무시
-                console.debug('AdSense already loaded:', e.message);
-              }
+              } catch (e) {}
             }
             slot.dataset.adStatus = 'processed';
           });
         }
 
-        // Turbo 페이지 로드 시마다 실행
+        // turbo:load는 첫 페이지 + Turbo 내비게이션 모두 커버 (DOMContentLoaded 중복 제거)
         document.addEventListener('turbo:load', initAdSlots);
-        // 첫 페이지 로드
-        document.addEventListener('DOMContentLoaded', initAdSlots);
       </script>
     <% end %>
 
@@ -444,7 +447,7 @@
     </style>
 
     <!-- Footer — enhanced with gradient border -->
-    <footer class="bg-slate-900 text-white mt-auto relative<%= ' hidden' if content_for?(:hide_footer) %>">
+    <footer class="bg-slate-900 text-white mt-auto relative<%= ' hidden' if content_for?(:hide_footer) %>" style="content-visibility:auto; contain-intrinsic-size:auto 500px">
       <!-- Top gradient line -->
       <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent"></div>
       <div class="container-wide py-16 lg:py-20">
