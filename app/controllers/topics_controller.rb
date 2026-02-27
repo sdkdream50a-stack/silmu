@@ -125,7 +125,7 @@ class TopicsController < ApplicationController
   }.freeze
 
   def index
-    all_topics = Rails.cache.fetch("topics/all_published", expires_in: 30.minutes) do
+    all_topics = Rails.cache.fetch(["topics/all_published", Topic.maximum(:updated_at)], expires_in: 30.minutes) do
       Topic.published.to_a
     end
     @topics_by_category = all_topics.group_by(&:category)

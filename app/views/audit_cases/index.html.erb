@@ -101,8 +101,7 @@
         </div>
 
         <% if @audit_cases.any? %>
-          <% cache_key = @category.present? || @severity.present? ? nil : ["audit_cases/cards/v1", @audit_cases.size, @audit_cases.map(&:updated_at).max] %>
-          <% cache(cache_key, expires_in: 30.minutes) do %>
+          <% if @category.present? || @severity.present? %>
           <div class="space-y-4" id="cases-container">
             <% @audit_cases.each do |audit_case| %>
               <%= link_to audit_case_path(slug: audit_case.slug), class: "block card card-hover p-6 group case-item", data: { title: audit_case.title.downcase, issue: audit_case.issue.truncate(200).downcase, severity: audit_case.severity } do %>
@@ -138,6 +137,41 @@
               <% end %>
             <% end %>
           </div>
+          <% else %>
+          <% cache ["audit_cases/cards/v1", @audit_cases.size, @audit_cases.map(&:updated_at).max], expires_in: 30.minutes do %>
+          <div class="space-y-4" id="cases-container">
+            <% @audit_cases.each do |audit_case| %>
+              <%= link_to audit_case_path(slug: audit_case.slug), class: "block card card-hover p-6 group case-item", data: { title: audit_case.title.downcase, issue: audit_case.issue.truncate(200).downcase, severity: audit_case.severity } do %>
+                <div class="flex items-start justify-between mb-3">
+                  <span class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-semibold bg-red-50 text-red-700"><%= audit_case.category %></span>
+                  <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium
+                    <%= case audit_case.severity
+                        when '경미' then 'bg-amber-50 text-amber-700'
+                        when '보통' then 'bg-orange-50 text-orange-700'
+                        when '중대' then 'bg-red-100 text-red-800'
+                        else 'bg-gray-50 text-gray-600'
+                        end %>">
+                    <%= audit_case.severity %>
+                  </span>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 mb-2 group-hover:text-red-600 transition-colors"><%= audit_case.title %></h3>
+                <p class="text-slate-600 text-sm mb-3 leading-relaxed line-clamp-2"><%= audit_case.issue.truncate(120) %></p>
+                <div class="flex items-center gap-4 text-xs text-slate-400">
+                  <span class="flex items-center gap-1">
+                    <span class="material-symbols-outlined text-sm">menu_book</span>
+                    <%= audit_case.legal_basis %>
+                  </span>
+                  <% if audit_case.topic_slug.present? %>
+                    <span class="flex items-center gap-1">
+                      <span class="material-symbols-outlined text-sm">link</span>
+                      관련 토픽
+                    </span>
+                  <% end %>
+                </div>
+              <% end %>
+            <% end %>
+          </div>
+          <% end %>
           <% end %>
 
           <!-- 검색 결과 없음 메시지 -->
