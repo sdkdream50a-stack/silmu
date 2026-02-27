@@ -1,4 +1,12 @@
 Rails.application.routes.draw do
+  # exam.silmu.kr 서브도메인 — 공공조달관리사 시험 대비
+  constraints subdomain: 'exam' do
+    scope module: 'exam', as: 'exam' do
+      root to: 'home#index'
+      # 추후 추가: resources :topics, :materials 등
+    end
+  end
+
   # Kamal 헬스체크용
   get "up" => "rails/health#show", as: :rails_health_check
 

@@ -34,6 +34,8 @@ module Silmu
     # in config/environments, which are processed later.
     #
     config.time_zone = "Seoul"
+    # 서브도메인 파싱: "silmu.kr" → tld=1 (exam.silmu.kr 지원)
+    config.action_dispatch.tld_length = 1
     # config.eager_load_paths << Rails.root.join("extras")
   end
 end
