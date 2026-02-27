@@ -68,10 +68,11 @@
           </select>
         </div>
 
+        <% cache ["guides/cards/v1", @guides.size, @guides.map(&:updated_at).max] do %>
         <div class="space-y-4" id="items-list">
-          <% @guides.each do |guide| %>
+          <% @guides.each_with_index do |guide, i| %>
             <% guide_link = guide.has_full_content? ? guide_path(guide) : (guide.external_link.present? ? guide.external_link : guide_path(guide)) %>
-            <%= link_to guide_link, class: "block card card-hover p-6 group item-card", data: { category: guide.category, title: guide.title } do %>
+            <%= link_to guide_link, class: "block card card-hover p-6 group item-card", style: (i >= 6 ? "display:none" : nil), data: { category: guide.category, title: guide.title } do %>
               <div class="flex items-start justify-between mb-3">
                 <span class="badge badge-emerald"><%= guide.category %></span>
                 <% if guide.tag.present? %>
@@ -89,6 +90,7 @@
             <% end %>
           <% end %>
         </div>
+        <% end %>
 
         <!-- 페이지네이션 -->
         <div class="flex justify-center mt-12" id="pagination-container">
