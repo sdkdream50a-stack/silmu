@@ -125,7 +125,9 @@ class TopicsController < ApplicationController
   }.freeze
 
   def index
-    all_topics = Topic.published.to_a
+    all_topics = Rails.cache.fetch("topics/all_published", expires_in: 30.minutes) do
+      Topic.published.to_a
+    end
     @topics_by_category = all_topics.group_by(&:category)
 
     # 카테고리 표시 순서 정의 (뷰의 category_config와 동일)
