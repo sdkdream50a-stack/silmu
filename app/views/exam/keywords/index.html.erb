@@ -1,0 +1,159 @@
+<%# 핵심 용어집 페이지 %>
+
+<!-- 헤더 -->
+<section class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700 text-white py-12 px-4">
+  <div class="max-w-5xl mx-auto">
+    <!-- 브레드크럼 -->
+    <div class="flex items-center gap-2 text-slate-400 text-sm mb-5">
+      <a href="https://exam.silmu.kr" class="hover:text-white transition-colors">홈</a>
+      <span class="material-symbols-outlined text-xs">chevron_right</span>
+      <a href="<%= exam_subjects_path %>" class="hover:text-white transition-colors">커리큘럼</a>
+      <span class="material-symbols-outlined text-xs">chevron_right</span>
+      <span class="text-white">핵심 용어집</span>
+    </div>
+
+    <div class="flex items-start gap-5">
+      <div class="w-14 h-14 bg-yellow-400/20 rounded-2xl flex items-center justify-center flex-shrink-0">
+        <span class="material-symbols-outlined text-yellow-300 text-3xl">dictionary</span>
+      </div>
+      <div>
+        <h1 class="text-3xl md:text-4xl font-bold leading-tight mb-2">핵심 용어집</h1>
+        <p class="text-slate-300">4권 교재 전체 핵심 키워드 <strong class="text-yellow-300"><%= @total_count %>개</strong> 완전 정리</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 필터 & 검색 -->
+<section class="bg-white border-b border-slate-200 sticky top-16 z-40">
+  <div class="max-w-5xl mx-auto px-4 py-4">
+    <%= form_with url: exam_keywords_path, method: :get, local: true, class: "flex flex-col sm:flex-row gap-3" do |f| %>
+      <!-- 과목 필터 탭 -->
+      <div class="flex gap-2 flex-wrap">
+        <a href="<%= exam_keywords_path(q: @search) %>"
+           class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors <%= @filter.blank? || @filter == 0 ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200' %>">
+          전체 <span class="text-xs opacity-70">(<%= @total_count %>)</span>
+        </a>
+        <% [
+          [1, "1권", "emerald"],
+          [2, "2권", "blue"],
+          [3, "3권", "violet"],
+          [4, "4권", "rose"]
+        ].each do |id, label, color| %>
+          <% count = @all_keywords.count { |k| k[:subject_id] == id } %>
+          <a href="<%= exam_keywords_path(subject_id: id, q: @search) %>"
+             class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors <%= @filter == id ? "bg-#{color}-600 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200" %>">
+            <%= label %> <span class="text-xs opacity-70">(<%= count %>)</span>
+          </a>
+        <% end %>
+      </div>
+
+      <!-- 검색 -->
+      <div class="flex gap-2 sm:ml-auto">
+        <div class="relative">
+          <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-base">search</span>
+          <%= f.text_field :q, value: @search,
+              placeholder: "용어 검색...",
+              class: "pl-9 pr-4 py-1.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-48" %>
+          <%= f.hidden_field :subject_id, value: @filter if @filter&.positive? %>
+        </div>
+        <% if @search.present? %>
+          <a href="<%= exam_keywords_path(subject_id: @filter&.positive? ? @filter : nil) %>"
+             class="flex items-center gap-1 px-3 py-1.5 border border-slate-200 rounded-lg text-sm text-slate-500 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-base">close</span>
+            초기화
+          </a>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</section>
+
+<!-- 본문 -->
+<section class="py-8 px-4 bg-slate-50 min-h-screen">
+  <div class="max-w-5xl mx-auto">
+
+    <!-- 결과 카운트 -->
+    <div class="mb-5 flex items-center justify-between">
+      <p class="text-sm text-slate-500">
+        <% if @search.present? %>
+          "<strong class="text-slate-700"><%= @search %></strong>" 검색 결과
+          <strong class="text-slate-700"><%= @filtered_keywords.size %>개</strong>
+        <% else %>
+          총 <strong class="text-slate-700"><%= @filtered_keywords.size %>개</strong> 키워드
+        <% end %>
+      </p>
+    </div>
+
+    <% if @filtered_keywords.empty? %>
+      <!-- 빈 결과 -->
+      <div class="text-center py-20">
+        <span class="material-symbols-outlined text-slate-300 text-6xl">search_off</span>
+        <p class="text-slate-500 mt-4 text-lg">검색 결과가 없습니다</p>
+        <a href="<%= exam_keywords_path %>" class="mt-4 inline-block text-blue-600 hover:underline text-sm">전체 용어집 보기</a>
+      </div>
+    <% else %>
+      <%# 과목별로 그룹화해서 표시 %>
+      <% grouped = @filtered_keywords.group_by { |k| k[:subject_id] } %>
+      <% subject_order = @filter&.positive? ? [@filter] : [1, 2, 3, 4] %>
+
+      <% subject_order.each do |sid| %>
+        <% keywords_in_subject = grouped[sid] %>
+        <% next if keywords_in_subject.blank? %>
+        <% subject = ExamCurriculum.find_subject(sid) %>
+        <% next unless subject %>
+        <% colors = ExamCurriculum.colors(subject[:color]) %>
+
+        <div class="mb-8">
+          <!-- 과목 헤더 -->
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-8 h-8 <%= colors[:bg_dark] %> rounded-lg flex items-center justify-center">
+              <span class="material-symbols-outlined text-white text-base"><%= subject[:icon] %></span>
+            </div>
+            <div>
+              <span class="text-xs font-bold <%= colors[:badge] %> px-2 py-0.5 rounded-full mr-2"><%= subject[:number] %></span>
+              <span class="font-bold text-slate-900"><%= subject[:title] %></span>
+              <span class="text-slate-400 text-sm ml-2"><%= keywords_in_subject.size %>개</span>
+            </div>
+          </div>
+
+          <!-- 키워드 카드 그리드 -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            <% keywords_in_subject.each do |kw| %>
+              <a href="<%= exam_subject_chapter_path(kw[:subject_id], kw[:chapter_number]) %>"
+                 class="bg-white rounded-xl border <%= colors[:border] %> hover:shadow-md hover:<%= colors[:hover_border] || colors[:border] %> px-4 py-3 transition-all group">
+                <div class="flex items-start gap-3">
+                  <div class="w-6 h-6 <%= colors[:bg] %> rounded-md flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span class="material-symbols-outlined text-xs <%= colors[:text_dark] %>">key</span>
+                  </div>
+                  <div class="min-w-0 flex-1">
+                    <div class="font-semibold text-slate-800 text-sm leading-snug group-hover:<%= colors[:text_dark] %> transition-colors">
+                      <%= kw[:keyword] %>
+                    </div>
+                    <div class="text-xs text-slate-400 mt-1 truncate">
+                      제<%= kw[:chapter_number] %>장 · <%= kw[:chapter_title] %>
+                    </div>
+                  </div>
+                  <span class="material-symbols-outlined text-slate-300 text-sm flex-shrink-0 mt-0.5 group-hover:<%= colors[:text_dark] %> transition-colors">arrow_forward_ios</span>
+                </div>
+              </a>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+
+    <!-- 학습 CTA -->
+    <div class="mt-10 bg-gradient-to-r from-blue-700 to-blue-600 rounded-2xl p-6 text-white flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div>
+        <h3 class="font-bold text-lg mb-1">체계적으로 학습하려면?</h3>
+        <p class="text-blue-200 text-sm">과목별 학습 로드맵으로 순서대로 학습하세요.</p>
+      </div>
+      <a href="<%= exam_subjects_path %>"
+         class="flex-shrink-0 bg-white text-blue-700 font-bold px-6 py-3 rounded-xl hover:bg-blue-50 transition-colors flex items-center gap-2">
+        <span class="material-symbols-outlined">school</span>
+        커리큘럼 보기 →
+      </a>
+    </div>
+  </div>
+</section>

@@ -121,18 +121,72 @@
           </div>
 
           <!-- Nav Links -->
-          <div class="hidden md:flex items-center gap-6">
-            <a href="https://exam.silmu.kr#exam-info" class="text-slate-600 hover:text-blue-700 font-medium transition-colors text-sm">시험 정보</a>
-            <a href="https://exam.silmu.kr#free-study" class="text-slate-600 hover:text-blue-700 font-medium transition-colors text-sm">무료 학습</a>
-            <a href="https://silmu.kr/topics" class="text-slate-600 hover:text-blue-700 font-medium transition-colors text-sm">법령가이드</a>
-            <a href="https://silmu.kr/audit-cases" class="text-slate-600 hover:text-blue-700 font-medium transition-colors text-sm">감사사례</a>
+          <div class="hidden md:flex items-center gap-1">
+            <!-- 커리큘럼 드롭다운 -->
+            <div class="relative group">
+              <button class="flex items-center gap-1 px-3 py-2 text-slate-600 hover:text-blue-700 font-medium transition-colors text-sm rounded-lg hover:bg-slate-50">
+                <span class="material-symbols-outlined text-base">school</span>
+                커리큘럼
+                <span class="material-symbols-outlined text-sm">expand_more</span>
+              </button>
+              <!-- 드롭다운 메뉴 -->
+              <div class="absolute top-full left-0 mt-1 w-64 bg-white rounded-xl shadow-lg border border-slate-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50">
+                <div class="p-2">
+                  <a href="<%= exam_subjects_path %>" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-50 transition-colors">
+                    <div class="w-7 h-7 bg-slate-700 rounded-md flex items-center justify-center flex-shrink-0">
+                      <span class="material-symbols-outlined text-white text-sm">format_list_numbered</span>
+                    </div>
+                    <div>
+                      <div class="text-sm font-semibold text-slate-800">전체 커리큘럼</div>
+                      <div class="text-xs text-slate-400">4권 27장 전체 보기</div>
+                    </div>
+                  </a>
+                  <hr class="my-1.5 border-slate-100">
+                  <% [
+                    [1, "공공조달의 이해", "7장", "emerald", "account_balance"],
+                    [2, "공공조달 계획분석", "6장", "blue", "analytics"],
+                    [3, "공공계약관리", "6장", "violet", "handshake"],
+                    [4, "공공조달 관리실무", "8장", "rose", "manage_accounts"]
+                  ].each do |id, title, chapters, color, icon| %>
+                    <a href="<%= exam_subject_path(id) %>" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-50 transition-colors">
+                      <div class="w-7 h-7 bg-<%= color %>-600 rounded-md flex items-center justify-center flex-shrink-0">
+                        <span class="material-symbols-outlined text-white text-sm"><%= icon %></span>
+                      </div>
+                      <div class="min-w-0">
+                        <div class="text-sm font-medium text-slate-800 truncate"><%= id %>권 <%= title %></div>
+                        <div class="text-xs text-slate-400"><%= chapters %></div>
+                      </div>
+                    </a>
+                  <% end %>
+                  <hr class="my-1.5 border-slate-100">
+                  <a href="<%= exam_keywords_path %>" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-yellow-50 transition-colors">
+                    <div class="w-7 h-7 bg-yellow-400 rounded-md flex items-center justify-center flex-shrink-0">
+                      <span class="material-symbols-outlined text-yellow-900 text-sm">dictionary</span>
+                    </div>
+                    <div>
+                      <div class="text-sm font-semibold text-slate-800">핵심 용어집</div>
+                      <div class="text-xs text-slate-400">전체 키워드 한눈에</div>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <a href="https://exam.silmu.kr#exam-info" class="px-3 py-2 text-slate-600 hover:text-blue-700 font-medium transition-colors text-sm rounded-lg hover:bg-slate-50">시험 정보</a>
+            <a href="https://silmu.kr/topics" class="px-3 py-2 text-slate-600 hover:text-blue-700 font-medium transition-colors text-sm rounded-lg hover:bg-slate-50">법령가이드</a>
+            <a href="https://silmu.kr/audit-cases" class="px-3 py-2 text-slate-600 hover:text-blue-700 font-medium transition-colors text-sm rounded-lg hover:bg-slate-50">감사사례</a>
           </div>
 
           <!-- CTA -->
-          <div class="flex items-center">
-            <a href="https://silmu.kr/topics" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors">
-              무료 학습 시작
+          <div class="flex items-center gap-2">
+            <a href="<%= exam_subjects_path %>" class="hidden md:flex items-center gap-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors">
+              <span class="material-symbols-outlined text-base">school</span>
+              학습 시작
             </a>
+            <!-- 모바일 메뉴 버튼 -->
+            <button id="mobile-menu-btn" class="md:hidden p-2 text-slate-600 hover:text-blue-700 rounded-lg hover:bg-slate-50" aria-label="메뉴 열기">
+              <span class="material-symbols-outlined">menu</span>
+            </button>
           </div>
         </div>
       </div>
@@ -176,11 +230,14 @@
             <p class="text-slate-500 text-xs mt-3">by 실무.kr</p>
           </div>
           <div>
-            <h3 class="font-semibold mb-4">바로가기</h3>
+            <h3 class="font-semibold mb-4">커리큘럼</h3>
             <ul class="space-y-2 text-sm">
-              <li><a href="https://silmu.kr/topics" class="text-slate-400 hover:text-white transition-colors">법령가이드 51개</a></li>
-              <li><a href="https://silmu.kr/audit-cases" class="text-slate-400 hover:text-white transition-colors">감사사례 80건</a></li>
-              <li><a href="https://silmu.kr" class="text-slate-400 hover:text-white transition-colors">실무.kr 메인</a></li>
+              <li><a href="<%= exam_subjects_path %>" class="text-slate-400 hover:text-white transition-colors">전체 커리큘럼 (27장)</a></li>
+              <li><a href="<%= exam_subject_path(1) %>" class="text-slate-400 hover:text-white transition-colors">1권 공공조달의 이해</a></li>
+              <li><a href="<%= exam_subject_path(2) %>" class="text-slate-400 hover:text-white transition-colors">2권 공공조달 계획분석</a></li>
+              <li><a href="<%= exam_subject_path(3) %>" class="text-slate-400 hover:text-white transition-colors">3권 공공계약관리</a></li>
+              <li><a href="<%= exam_subject_path(4) %>" class="text-slate-400 hover:text-white transition-colors">4권 공공조달 관리실무</a></li>
+              <li><a href="<%= exam_keywords_path %>" class="text-slate-400 hover:text-white transition-colors">핵심 용어집</a></li>
             </ul>
           </div>
           <div>
@@ -201,9 +258,73 @@
       </div>
     </footer>
 
+    <!-- 모바일 메뉴 -->
+    <div id="mobile-menu" class="hidden md:hidden fixed inset-0 z-50 bg-black/50">
+      <div class="absolute right-0 top-0 h-full w-72 bg-white shadow-xl flex flex-col">
+        <div class="flex items-center justify-between p-4 border-b border-slate-200">
+          <span class="font-bold text-slate-900">메뉴</span>
+          <button id="mobile-menu-close" class="p-2 text-slate-500 hover:text-slate-900 rounded-lg hover:bg-slate-100">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+        <nav class="flex-1 overflow-y-auto p-4 space-y-1">
+          <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider px-3 pt-2 pb-1">커리큘럼</p>
+          <a href="<%= exam_subjects_path %>" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-50 text-slate-700 font-medium">
+            <span class="material-symbols-outlined text-slate-500 text-base">format_list_numbered</span>
+            전체 커리큘럼
+          </a>
+          <% [
+            [1, "공공조달의 이해", "emerald"],
+            [2, "공공조달 계획분석", "blue"],
+            [3, "공공계약관리", "violet"],
+            [4, "공공조달 관리실무", "rose"]
+          ].each do |id, title, color| %>
+            <a href="<%= exam_subject_path(id) %>" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-50 text-slate-700">
+              <span class="w-5 h-5 bg-<%= color %>-100 text-<%= color %>-700 rounded flex items-center justify-center text-xs font-bold flex-shrink-0"><%= id %></span>
+              <span class="text-sm"><%= id %>권 <%= title %></span>
+            </a>
+          <% end %>
+          <a href="<%= exam_keywords_path %>" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-yellow-50 text-slate-700 font-medium">
+            <span class="material-symbols-outlined text-yellow-500 text-base">dictionary</span>
+            핵심 용어집
+          </a>
+          <hr class="border-slate-200 my-2">
+          <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider px-3 pt-2 pb-1">더보기</p>
+          <a href="https://exam.silmu.kr#exam-info" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-50 text-slate-700">
+            <span class="material-symbols-outlined text-slate-500 text-base">info</span>
+            시험 정보
+          </a>
+          <a href="https://silmu.kr/topics" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-50 text-slate-700">
+            <span class="material-symbols-outlined text-slate-500 text-base">menu_book</span>
+            법령가이드
+          </a>
+          <a href="https://silmu.kr/audit-cases" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-50 text-slate-700">
+            <span class="material-symbols-outlined text-slate-500 text-base">gavel</span>
+            감사사례
+          </a>
+        </nav>
+        <div class="p-4 border-t border-slate-200">
+          <a href="<%= exam_subjects_path %>" class="flex items-center justify-center gap-2 bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 transition-colors">
+            <span class="material-symbols-outlined text-base">school</span>
+            학습 시작하기
+          </a>
+        </div>
+      </div>
+    </div>
+
     <script>
       (function() {
-        // Mobile nav toggle (future use)
+        var btn = document.getElementById('mobile-menu-btn');
+        var menu = document.getElementById('mobile-menu');
+        var closeBtn = document.getElementById('mobile-menu-close');
+        function openMenu() { menu && menu.classList.remove('hidden'); }
+        function closeMenu() { menu && menu.classList.add('hidden'); }
+        btn && btn.addEventListener('click', openMenu);
+        closeBtn && closeBtn.addEventListener('click', closeMenu);
+        menu && menu.addEventListener('click', function(e) {
+          if (e.target === menu) closeMenu();
+        });
+        document.addEventListener('turbo:load', function() { closeMenu(); });
       })();
     </script>
   </body>

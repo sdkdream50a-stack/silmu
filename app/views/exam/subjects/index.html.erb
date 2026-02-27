@@ -1,0 +1,104 @@
+<%# 4과목 커리큘럼 목록 페이지 %>
+
+<!-- 헤더 -->
+<section class="bg-gradient-to-br from-slate-900 via-blue-900 to-blue-800 text-white py-16 px-4">
+  <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-2 text-blue-300 text-sm mb-4">
+      <a href="https://exam.silmu.kr" class="hover:text-white transition-colors">홈</a>
+      <span class="material-symbols-outlined text-sm">chevron_right</span>
+      <span>커리큘럼</span>
+    </div>
+    <h1 class="text-3xl md:text-4xl font-bold mb-4">4권 완전 커리큘럼</h1>
+    <p class="text-blue-200 text-lg max-w-2xl">
+      공공조달관리사 표준교재 4권·27장을 체계적으로 학습하세요.<br>
+      각 챕터별 학습목표·핵심키워드·시험 출제 포인트를 제공합니다.
+    </p>
+
+    <!-- 통계 -->
+    <div class="flex flex-wrap gap-6 mt-8 pt-6 border-t border-white/20">
+      <div class="text-center">
+        <div class="text-2xl font-bold text-yellow-300">4권</div>
+        <div class="text-blue-300 text-sm">표준교재</div>
+      </div>
+      <div class="text-center">
+        <div class="text-2xl font-bold text-yellow-300">27장</div>
+        <div class="text-blue-300 text-sm">전체 챕터</div>
+      </div>
+      <div class="text-center">
+        <div class="text-2xl font-bold text-yellow-300"><%= ExamCurriculum.all_keywords.size %>개</div>
+        <div class="text-blue-300 text-sm">핵심 키워드</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4과목 카드 목록 -->
+<section class="py-12 px-4 bg-slate-50">
+  <div class="max-w-5xl mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <% @subjects.each do |subject| %>
+        <% colors = ExamCurriculum.colors(subject[:color]) %>
+        <a href="<%= exam_subject_path(subject[:id]) %>"
+           class="group bg-white rounded-2xl border <%= colors[:border] %> <%= colors[:hover_border] %> hover:shadow-lg transition-all overflow-hidden">
+
+          <!-- 과목 헤더 -->
+          <div class="<%= colors[:bg] %> px-6 py-5 flex items-start gap-4">
+            <div class="w-12 h-12 <%= colors[:bg_dark] %> rounded-xl flex items-center justify-center flex-shrink-0">
+              <span class="material-symbols-outlined text-white text-2xl"><%= subject[:icon] %></span>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-xs font-bold <%= colors[:badge] %> px-2 py-0.5 rounded-full"><%= subject[:number] %></span>
+                <span class="text-xs text-slate-500"><%= subject[:total_chapters] %>장</span>
+              </div>
+              <h2 class="text-lg font-bold text-slate-900 leading-tight"><%= subject[:title] %></h2>
+              <p class="text-sm text-slate-500 mt-0.5"><%= subject[:subtitle] %></p>
+            </div>
+          </div>
+
+          <!-- 챕터 미리보기 -->
+          <div class="px-6 py-4">
+            <p class="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-3">수록 챕터</p>
+            <ul class="space-y-1.5">
+              <% subject[:chapters].first(4).each do |chapter| %>
+                <li class="flex items-center gap-2 text-sm text-slate-700">
+                  <span class="w-5 h-5 rounded-full <%= colors[:bg] %> <%= colors[:text] %> flex items-center justify-center text-xs font-bold flex-shrink-0"><%= chapter[:number] %></span>
+                  <%= chapter[:title] %>
+                </li>
+              <% end %>
+              <% if subject[:chapters].size > 4 %>
+                <li class="text-sm text-slate-400 pl-7">외 <%= subject[:chapters].size - 4 %>개 챕터...</li>
+              <% end %>
+            </ul>
+          </div>
+
+          <!-- CTA -->
+          <div class="px-6 pb-5">
+            <div class="flex items-center gap-1 <%= colors[:text_dark] %> font-semibold text-sm group-hover:gap-2 transition-all">
+              <span class="material-symbols-outlined text-base">school</span>
+              학습 시작하기
+              <span class="material-symbols-outlined text-base">arrow_forward</span>
+            </div>
+          </div>
+        </a>
+      <% end %>
+    </div>
+
+    <!-- 용어집 CTA -->
+    <div class="mt-8 bg-gradient-to-r from-slate-800 to-slate-700 rounded-2xl p-6 text-white flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 bg-yellow-400/20 rounded-xl flex items-center justify-center">
+          <span class="material-symbols-outlined text-yellow-300 text-2xl">dictionary</span>
+        </div>
+        <div>
+          <h3 class="font-bold text-lg">핵심 용어집</h3>
+          <p class="text-slate-300 text-sm">4권 교재 전체 키워드 <%= ExamCurriculum.all_keywords.size %>개 한눈에 보기</p>
+        </div>
+      </div>
+      <a href="<%= exam_keywords_path %>"
+         class="flex-shrink-0 bg-yellow-400 text-slate-900 font-bold px-6 py-3 rounded-xl hover:bg-yellow-300 transition-colors">
+        용어집 보기 →
+      </a>
+    </div>
+  </div>
+</section>

@@ -3,7 +3,10 @@ Rails.application.routes.draw do
   constraints subdomain: 'exam' do
     scope module: 'exam', as: 'exam' do
       root to: 'home#index'
-      # 추후 추가: resources :topics, :materials 등
+      resources :subjects, only: [:index, :show] do
+        resources :chapters, only: [:show], param: :number
+      end
+      get 'keywords', to: 'keywords#index', as: :keywords
     end
   end
 

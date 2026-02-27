@@ -1,0 +1,200 @@
+<%# 챕터 상세 학습 페이지 %>
+<% colors = @colors %>
+
+<!-- 챕터 헤더 -->
+<section class="<%= colors[:bg_dark] %> text-white py-12 px-4">
+  <div class="max-w-4xl mx-auto">
+    <!-- 브레드크럼 -->
+    <div class="flex items-center gap-1 text-white/60 text-sm mb-5 flex-wrap">
+      <a href="https://exam.silmu.kr" class="hover:text-white transition-colors">홈</a>
+      <span class="material-symbols-outlined text-xs">chevron_right</span>
+      <a href="<%= exam_subjects_path %>" class="hover:text-white transition-colors">커리큘럼</a>
+      <span class="material-symbols-outlined text-xs">chevron_right</span>
+      <a href="<%= exam_subject_path(@subject[:id]) %>" class="hover:text-white transition-colors"><%= @subject[:number] %> <%= @subject[:title] %></a>
+      <span class="material-symbols-outlined text-xs">chevron_right</span>
+      <span class="text-white">제<%= @chapter[:number] %>장</span>
+    </div>
+
+    <div class="flex items-center gap-2 mb-3">
+      <span class="text-xs font-bold bg-white/20 px-3 py-1 rounded-full"><%= @subject[:number] %></span>
+      <span class="text-white/60 text-sm">제<%= @chapter[:number] %>장</span>
+    </div>
+    <h1 class="text-3xl md:text-4xl font-bold leading-tight"><%= @chapter[:title] %></h1>
+
+    <!-- 학습 정보 칩 -->
+    <div class="flex flex-wrap gap-3 mt-5">
+      <span class="flex items-center gap-1 bg-white/15 text-sm px-3 py-1.5 rounded-full">
+        <span class="material-symbols-outlined text-sm">list</span>
+        <%= @chapter[:sections].size %>개 절
+      </span>
+      <span class="flex items-center gap-1 bg-white/15 text-sm px-3 py-1.5 rounded-full">
+        <span class="material-symbols-outlined text-sm">key</span>
+        키워드 <%= @chapter[:keywords].size %>개
+      </span>
+      <span class="flex items-center gap-1 bg-white/15 text-sm px-3 py-1.5 rounded-full">
+        <span class="material-symbols-outlined text-sm">flag</span>
+        학습목표 <%= @chapter[:learning_objectives].size %>개
+      </span>
+    </div>
+  </div>
+</section>
+
+<!-- 본문 -->
+<section class="py-10 px-4 bg-slate-50">
+  <div class="max-w-4xl mx-auto space-y-6">
+
+    <!-- 학습목표 -->
+    <div class="bg-white rounded-2xl border <%= colors[:border] %> overflow-hidden">
+      <div class="<%= colors[:bg] %> px-6 py-4 flex items-center gap-3 border-b <%= colors[:border] %>">
+        <div class="w-8 h-8 <%= colors[:bg_dark] %> rounded-lg flex items-center justify-center">
+          <span class="material-symbols-outlined text-white text-base">school</span>
+        </div>
+        <h2 class="font-bold text-slate-900">학습목표 (Learning Objectives)</h2>
+      </div>
+      <div class="px-6 py-5">
+        <p class="text-sm text-slate-500 mb-4">이 장을 학습한 후 다음의 내용을 이해하고 설명할 수 있습니다.</p>
+        <ul class="space-y-2">
+          <% @chapter[:learning_objectives].each_with_index do |obj, i| %>
+            <li class="flex items-start gap-3">
+              <span class="w-5 h-5 rounded-full <%= colors[:bg] %> <%= colors[:text_dark] %> flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5"><%= i + 1 %></span>
+              <span class="text-slate-700 text-sm leading-relaxed"><%= obj %></span>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 절 구성 -->
+    <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+      <div class="bg-slate-50 px-6 py-4 flex items-center gap-3 border-b border-slate-200">
+        <div class="w-8 h-8 bg-slate-600 rounded-lg flex items-center justify-center">
+          <span class="material-symbols-outlined text-white text-base">format_list_numbered</span>
+        </div>
+        <h2 class="font-bold text-slate-900">절 구성</h2>
+      </div>
+      <div class="px-6 py-5">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <% @chapter[:sections].each_with_index do |section, i| %>
+            <div class="flex items-start gap-3 bg-slate-50 rounded-xl px-4 py-3">
+              <span class="text-xs font-bold <%= colors[:badge] %> px-2 py-1 rounded-lg flex-shrink-0">제<%= i + 1 %>절</span>
+              <span class="text-sm text-slate-700 leading-relaxed"><%= section %></span>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <!-- 핵심 키워드 -->
+    <div class="bg-white rounded-2xl border <%= colors[:border] %> overflow-hidden">
+      <div class="<%= colors[:bg] %> px-6 py-4 flex items-center gap-3 border-b <%= colors[:border] %>">
+        <div class="w-8 h-8 <%= colors[:bg_dark] %> rounded-lg flex items-center justify-center">
+          <span class="material-symbols-outlined text-white text-base">key</span>
+        </div>
+        <h2 class="font-bold text-slate-900">핵심 키워드 (Keywords)</h2>
+      </div>
+      <div class="px-6 py-5">
+        <div class="flex flex-wrap gap-2">
+          <% @chapter[:keywords].each do |kw| %>
+            <span class="<%= colors[:badge] %> text-sm px-3 py-1.5 rounded-full font-medium"><%= kw %></span>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <!-- 시험 출제 포인트 -->
+    <div class="bg-white rounded-2xl border border-amber-200 overflow-hidden">
+      <div class="bg-amber-50 px-6 py-4 flex items-center gap-3 border-b border-amber-200">
+        <div class="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center">
+          <span class="material-symbols-outlined text-white text-base">star</span>
+        </div>
+        <h2 class="font-bold text-slate-900">시험 출제 포인트</h2>
+        <span class="text-xs bg-amber-100 text-amber-700 font-semibold px-2 py-0.5 rounded-full ml-auto">중요</span>
+      </div>
+      <div class="px-6 py-5">
+        <ul class="space-y-3">
+          <% @chapter[:exam_points].each do |point| %>
+            <li class="flex items-start gap-3">
+              <span class="material-symbols-outlined text-amber-500 text-base flex-shrink-0 mt-0.5">star</span>
+              <span class="text-slate-700 text-sm leading-relaxed"><%= point %></span>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 관련 법령 가이드 -->
+    <% if @chapter[:related_topic_slugs].any? %>
+      <div class="bg-white rounded-2xl border border-blue-200 overflow-hidden">
+        <div class="bg-blue-50 px-6 py-4 flex items-center gap-3 border-b border-blue-200">
+          <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+            <span class="material-symbols-outlined text-white text-base">menu_book</span>
+          </div>
+          <h2 class="font-bold text-slate-900">관련 법령 가이드</h2>
+          <span class="text-xs text-blue-500 ml-auto">실무.kr 연계</span>
+        </div>
+        <div class="px-6 py-5">
+          <div class="flex flex-wrap gap-3">
+            <% @chapter[:related_topic_slugs].each do |slug| %>
+              <a href="https://silmu.kr/topics/<%= slug %>"
+                 target="_blank"
+                 class="flex items-center gap-2 bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-700 text-sm font-semibold px-4 py-2.5 rounded-xl transition-colors">
+                <span class="material-symbols-outlined text-base">open_in_new</span>
+                <%= slug.gsub('-', ' ').split.map(&:capitalize).join(' ') %>
+              </a>
+            <% end %>
+          </div>
+          <p class="text-xs text-slate-400 mt-3">실무.kr에서 법령 조문·실무 해설을 확인하세요.</p>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- 이전/다음 챕터 네비게이션 -->
+    <div class="grid grid-cols-2 gap-4 pt-2">
+      <div>
+        <% if @prev_chapter %>
+          <a href="<%= exam_subject_chapter_path(@subject[:id], @prev_chapter[:number]) %>"
+             class="flex items-center gap-3 bg-white rounded-xl border border-slate-200 hover:border-slate-400 px-4 py-3 transition-all h-full">
+            <span class="material-symbols-outlined text-slate-400 flex-shrink-0">arrow_back</span>
+            <div class="min-w-0">
+              <div class="text-xs text-slate-400">이전 챕터</div>
+              <div class="text-sm font-semibold text-slate-700">제<%= @prev_chapter[:number] %>장 <%= @prev_chapter[:title] %></div>
+            </div>
+          </a>
+        <% else %>
+          <a href="<%= exam_subject_path(@subject[:id]) %>"
+             class="flex items-center gap-3 bg-white rounded-xl border border-slate-200 hover:border-slate-400 px-4 py-3 transition-all">
+            <span class="material-symbols-outlined text-slate-400 flex-shrink-0">arrow_back</span>
+            <div>
+              <div class="text-xs text-slate-400">과목 목록으로</div>
+              <div class="text-sm font-semibold text-slate-700"><%= @subject[:number] %> <%= @subject[:title] %></div>
+            </div>
+          </a>
+        <% end %>
+      </div>
+      <div class="flex justify-end">
+        <% if @next_chapter %>
+          <a href="<%= exam_subject_chapter_path(@subject[:id], @next_chapter[:number]) %>"
+             class="flex items-center gap-3 bg-white rounded-xl border border-slate-200 hover:border-slate-400 px-4 py-3 transition-all w-full">
+            <div class="min-w-0 text-right flex-1">
+              <div class="text-xs text-slate-400">다음 챕터</div>
+              <div class="text-sm font-semibold text-slate-700">제<%= @next_chapter[:number] %>장 <%= @next_chapter[:title] %></div>
+            </div>
+            <span class="material-symbols-outlined text-slate-400 flex-shrink-0">arrow_forward</span>
+          </a>
+        <% else %>
+          <% next_subject = ExamCurriculum.find_subject(@subject[:id] + 1) %>
+          <% if next_subject %>
+            <a href="<%= exam_subject_path(next_subject[:id]) %>"
+               class="flex items-center gap-3 bg-white rounded-xl border border-slate-200 hover:border-slate-400 px-4 py-3 transition-all w-full">
+              <div class="min-w-0 text-right flex-1">
+                <div class="text-xs text-slate-400">다음 과목으로</div>
+                <div class="text-sm font-semibold text-slate-700"><%= next_subject[:number] %> <%= next_subject[:title] %></div>
+              </div>
+              <span class="material-symbols-outlined text-slate-400 flex-shrink-0">arrow_forward</span>
+            </a>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>
