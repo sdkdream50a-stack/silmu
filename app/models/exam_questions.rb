@@ -11256,4 +11256,26 @@ module ExamQuestions
     ch  = chapter_num.to_i
     QUESTIONS.select { |q| q[:subject_id] == sid && q[:chapter_num] == ch }
   end
+
+  # 난이도 태그 부여 (챕터 내 ID 정렬 기준: 하위 60% = 기초, 상위 40% = 심화)
+  # 반환값: 원본 해시에 difficulty: "basic" | "advanced" 추가
+  def self.with_difficulty(questions)
+    # 챕터별 ID 목록 구성 (정렬된 순서로 인덱스 결정)
+    chapter_ids = {}
+    QUESTIONS.each do |q|
+      key = "#{q[:subject_id]}-#{q[:chapter_num]}"
+      chapter_ids[key] ||= []
+      chapter_ids[key] << q[:id]
+    end
+    chapter_ids.each_value(&:sort!)
+
+    questions.map do |q|
+      key = "#{q[:subject_id]}-#{q[:chapter_num]}"
+      ids = chapter_ids[key] || []
+      idx = ids.index(q[:id]) || 0
+      threshold = (ids.size * 0.6).ceil
+      difficulty = idx < threshold ? "basic" : "advanced"
+      q.merge(difficulty: difficulty)
+    end
+  end
 end

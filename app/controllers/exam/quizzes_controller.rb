@@ -33,7 +33,8 @@ module Exam
 
     # GET /quiz/wrong — 오답 노트 재풀이 (모든 문제를 내려보내고 클라이언트에서 필터)
     def wrong
-      @all_questions = ExamQuestions.all.map { |q| q.slice(:id, :question, :options, :correct, :explanation, :subject_id, :chapter_num) }
+      raw = ExamQuestions.all.map { |q| q.slice(:id, :question, :options, :correct, :explanation, :subject_id, :chapter_num) }
+      @all_questions = ExamQuestions.with_difficulty(raw)
       @chapter_map = ExamCurriculum.chapter_map
       set_meta_tags(
         title: "오답 노트",
@@ -51,8 +52,9 @@ module Exam
       @chapter = ExamCurriculum.find_chapter(params[:subject_id], params[:chapter_num])
       return redirect_to exam_subject_path(@subject[:id]), alert: "존재하지 않는 챕터입니다." unless @chapter
 
-      @questions = ExamQuestions.by_chapter(@subject[:id], @chapter_num)
-                                .map { |q| q.slice(:id, :question, :options, :correct, :explanation, :subject_id, :chapter_num) }
+      raw_questions = ExamQuestions.by_chapter(@subject[:id], @chapter_num)
+                                   .map { |q| q.slice(:id, :question, :options, :correct, :explanation, :subject_id, :chapter_num) }
+      @questions = ExamQuestions.with_difficulty(raw_questions)
       @subject_id = @subject[:id]
       @quiz_title = "#{@subject[:number]} 제#{@chapter_num}장 문제"
       @quiz_subtitle = @chapter[:title]
@@ -81,7 +83,8 @@ module Exam
       @subject_id = params[:id]
 
       if @subject_id == "all"
-        @questions = ExamQuestions.all.map { |q| q.slice(:id, :question, :options, :correct, :explanation, :subject_id, :chapter_num) }
+        raw = ExamQuestions.all.map { |q| q.slice(:id, :question, :options, :correct, :explanation, :subject_id, :chapter_num) }
+        @questions = ExamQuestions.with_difficulty(raw)
         @quiz_title = "전체 모의고사"
         @quiz_subtitle = "4권 전체 — #{@questions.size}문제"
         @subject = nil
@@ -91,7 +94,8 @@ module Exam
         @subject = ExamCurriculum.find_subject(subject_id)
         return redirect_to exam_quiz_index_path, alert: "존재하지 않는 과목입니다." unless @subject
 
-        @questions = ExamQuestions.by_subject(subject_id).map { |q| q.slice(:id, :question, :options, :correct, :explanation, :subject_id, :chapter_num) }
+        raw = ExamQuestions.by_subject(subject_id).map { |q| q.slice(:id, :question, :options, :correct, :explanation, :subject_id, :chapter_num) }
+        @questions = ExamQuestions.with_difficulty(raw)
         @quiz_title = "#{@subject[:number]} 모의고사"
         @quiz_subtitle = @subject[:title]
         @color = @subject[:color]

@@ -23,6 +23,8 @@ export default class extends Controller {
     // 챕터별 통계 초기화
     this.wrongByChapter = {}
     this.totalByChapter = {}
+    // 난이도별 통계 초기화
+    this.diffStats = { basic: { total: 0, wrong: 0 }, advanced: { total: 0, wrong: 0 } }
 
     if (this.wrongModeValue) {
       const wrongIds = getWrongAnswerIds()
@@ -120,7 +122,15 @@ export default class extends Controller {
            ${chapterInfo.title}
          </span>`
       : ""
-    this.questionBadgeTarget.innerHTML = `<span class="inline-flex items-center gap-1 bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full">문제 ${idx + 1}</span>${chapterBadgeHtml}`
+    // 난이도 뱃지
+    const diffBadgeHtml = q.difficulty === "advanced"
+      ? `<span class="inline-flex items-center gap-0.5 bg-rose-100 text-rose-700 text-xs font-bold px-2.5 py-1 rounded-full">
+           <span class="material-symbols-outlined text-xs" style="font-size:13px">local_fire_department</span>심화
+         </span>`
+      : `<span class="inline-flex items-center gap-0.5 bg-emerald-100 text-emerald-700 text-xs font-bold px-2.5 py-1 rounded-full">
+           <span class="material-symbols-outlined text-xs" style="font-size:13px">star</span>기초
+         </span>`
+    this.questionBadgeTarget.innerHTML = `<span class="inline-flex items-center gap-1 bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full">문제 ${idx + 1}</span>${chapterBadgeHtml}${diffBadgeHtml}`
     this.questionTextTarget.textContent = q.question
 
     // 선택지 렌더링
@@ -159,6 +169,10 @@ export default class extends Controller {
         this.wrongByChapter[chapterKey] = (this.wrongByChapter[chapterKey] || 0) + 1
       }
     }
+    // 난이도별 통계 누적
+    const diff = q.difficulty || "basic"
+    this.diffStats[diff].total++
+    if (!isCorrect) this.diffStats[diff].wrong++
 
     if (isCorrect) {
       this.scoreValue++
@@ -307,6 +321,9 @@ export default class extends Controller {
         ${this.wrongModeValue && score > 0 ? `<div class="text-green-600 text-sm mt-2 font-semibold">${score}개 문제가 오답 노트에서 제거되었습니다 ✓</div>` : ""}
       </div>
 
+      <!-- 난이도별 정답률 -->
+      ${this.buildDifficultyStats()}
+
       <!-- 취약 챕터 분석 -->
       ${this.buildChapterAnalysis()}
 
@@ -374,6 +391,57 @@ export default class extends Controller {
       </div>`
   }
 
+  // 난이도별 정답률 섹션
+  buildDifficultyStats() {
+    const b = this.diffStats.basic
+    const a = this.diffStats.advanced
+    if (b.total === 0 && a.total === 0) return ""
+
+    const bPct = b.total > 0 ? Math.round(((b.total - b.wrong) / b.total) * 100) : null
+    const aPct = a.total > 0 ? Math.round(((a.total - a.wrong) / a.total) * 100) : null
+
+    const bBar = bPct !== null
+      ? `<div class="w-full bg-slate-100 rounded-full h-1.5 mt-1">
+           <div class="bg-emerald-400 h-1.5 rounded-full" style="width:${bPct}%"></div>
+         </div>`
+      : ""
+    const aBar = aPct !== null
+      ? `<div class="w-full bg-slate-100 rounded-full h-1.5 mt-1">
+           <div class="bg-rose-400 h-1.5 rounded-full" style="width:${aPct}%"></div>
+         </div>`
+      : ""
+
+    return `
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 mb-6">
+        <h3 class="font-bold text-slate-800 mb-3 flex items-center gap-2 text-sm">
+          <span class="material-symbols-outlined text-indigo-500 text-lg">tune</span>
+          난이도별 정답률
+        </h3>
+        <div class="grid grid-cols-2 gap-4">
+          ${b.total > 0 ? `
+          <div class="bg-emerald-50 rounded-xl p-3">
+            <div class="flex items-center gap-1 mb-1">
+              <span class="material-symbols-outlined text-emerald-600" style="font-size:14px">star</span>
+              <span class="text-xs font-bold text-emerald-700">기초 문제</span>
+            </div>
+            <div class="text-xl font-extrabold text-emerald-700">${bPct}%</div>
+            <div class="text-xs text-emerald-600">${b.total - b.wrong}/${b.total} 정답</div>
+            ${bBar}
+          </div>` : ""}
+          ${a.total > 0 ? `
+          <div class="bg-rose-50 rounded-xl p-3">
+            <div class="flex items-center gap-1 mb-1">
+              <span class="material-symbols-outlined text-rose-600" style="font-size:14px">local_fire_department</span>
+              <span class="text-xs font-bold text-rose-700">심화 문제</span>
+            </div>
+            <div class="text-xl font-extrabold text-rose-700">${aPct}%</div>
+            <div class="text-xs text-rose-600">${a.total - a.wrong}/${a.total} 정답</div>
+            ${aBar}
+          </div>` : ""}
+        </div>
+      </div>`
+  }
+
   // 학습 가이드 빌드
   buildReview() {
     return `
@@ -426,6 +494,7 @@ export default class extends Controller {
     this.answeredValue = false
     this.wrongByChapter = {}
     this.totalByChapter = {}
+    this.diffStats = { basic: { total: 0, wrong: 0 }, advanced: { total: 0, wrong: 0 } }
     this.scoreDisplayTarget.textContent = "0"
     this.resultAreaTarget.classList.add("hidden")
     this.questionAreaTarget.classList.remove("hidden")
