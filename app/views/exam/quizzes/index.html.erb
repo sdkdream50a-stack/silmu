@@ -120,6 +120,38 @@
       <% end %>
     </div>
 
+    <!-- 챕터별 문제 풀기 -->
+    <h2 class="text-xl font-bold text-slate-800 mb-5 mt-10">챕터별 문제 풀기</h2>
+    <div class="space-y-4">
+      <% @subjects.each do |subject| %>
+        <% colors = ExamCurriculum.colors(subject[:color]) %>
+        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+          <!-- 과목 헤더 -->
+          <div class="<%= colors[:bg] %> px-5 py-3 flex items-center gap-3 border-b <%= colors[:border] %>">
+            <span class="<%= colors[:badge] %> text-xs font-bold px-2.5 py-1 rounded-full"><%= subject[:number] %></span>
+            <span class="font-bold text-slate-800"><%= subject[:title] %></span>
+          </div>
+          <!-- 챕터 목록 -->
+          <div class="p-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <% subject[:chapters].each do |chapter| %>
+              <% ch_count = ExamQuestions.by_chapter(subject[:id], chapter[:number]).size %>
+              <a href="<%= exam_quiz_chapter_path(subject_id: subject[:id], chapter_num: chapter[:number]) %>"
+                 class="group flex items-center gap-3 px-4 py-3 rounded-xl border border-slate-100 hover:<%= colors[:bg] %> hover:<%= colors[:border] %> transition-all">
+                <span class="w-7 h-7 rounded-lg <%= colors[:bg_dark] %> flex items-center justify-center flex-shrink-0 text-white text-xs font-bold">
+                  <%= chapter[:number] %>
+                </span>
+                <div class="flex-1 min-w-0">
+                  <div class="text-slate-700 text-sm font-medium truncate"><%= chapter[:title] %></div>
+                  <div class="text-slate-400 text-xs"><%= ch_count %>문제</div>
+                </div>
+                <span class="material-symbols-outlined text-slate-300 group-hover:<%= colors[:text] %> text-base transition-colors">arrow_forward</span>
+              </a>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
     <!-- 학습 분석 링크 -->
     <a href="<%= exam_quiz_analysis_path %>"
        class="group flex items-center justify-between bg-white border border-teal-200 hover:border-teal-400 rounded-2xl px-5 py-4 mt-5 hover:shadow-md transition-all">
