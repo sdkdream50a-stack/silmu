@@ -1,0 +1,132 @@
+<%# 모의고사 선택 페이지 %>
+
+<!-- 헤더 -->
+<section class="bg-gradient-to-br from-slate-900 via-blue-900 to-blue-800 text-white py-16 px-4">
+  <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-2 text-blue-300 text-sm mb-4">
+      <a href="https://exam.silmu.kr" class="hover:text-white transition-colors">홈</a>
+      <span class="material-symbols-outlined text-sm">chevron_right</span>
+      <span>모의고사</span>
+    </div>
+    <div class="flex items-center gap-4 mb-4">
+      <div class="w-14 h-14 bg-yellow-400 rounded-2xl flex items-center justify-center">
+        <span class="material-symbols-outlined text-slate-900 text-3xl">quiz</span>
+      </div>
+      <div>
+        <h1 class="text-3xl md:text-4xl font-bold">모의고사</h1>
+        <p class="text-blue-200 mt-1">실전 감각을 키우는 4지선다 문제풀이</p>
+      </div>
+    </div>
+
+    <!-- 통계 -->
+    <div class="flex flex-wrap gap-8 mt-8 pt-6 border-t border-white/20">
+      <div class="text-center">
+        <div class="text-2xl font-bold text-yellow-300"><%= ExamQuestions.count %>문제</div>
+        <div class="text-blue-300 text-sm">전체 문항</div>
+      </div>
+      <div class="text-center">
+        <div class="text-2xl font-bold text-yellow-300">4과목</div>
+        <div class="text-blue-300 text-sm">과목별 출제</div>
+      </div>
+      <div class="text-center">
+        <div class="text-2xl font-bold text-yellow-300">즉시</div>
+        <div class="text-blue-300 text-sm">채점 + 해설</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 전체 모의고사 -->
+<section class="py-10 px-4 bg-slate-50">
+  <div class="max-w-5xl mx-auto">
+    <a href="<%= exam_quiz_path('all') %>"
+       class="group block bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-6 hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl mb-8">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <div class="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center">
+            <span class="material-symbols-outlined text-white text-3xl">fact_check</span>
+          </div>
+          <div>
+            <div class="text-white/80 text-sm font-medium mb-1">종합 실력 점검</div>
+            <h2 class="text-white text-2xl font-bold">전체 모의고사</h2>
+            <p class="text-white/70 text-sm mt-1">4권 전체 — <%= ExamQuestions.count %>문제 · 약 <%= (ExamQuestions.count * 1.5).ceil %>분</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 bg-white/20 text-white font-bold px-5 py-2.5 rounded-xl group-hover:bg-white/30 transition-colors">
+          <span>시작하기</span>
+          <span class="material-symbols-outlined">arrow_forward</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 과목별 모의고사 -->
+    <h2 class="text-xl font-bold text-slate-800 mb-5">과목별 모의고사</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <% @subjects.each do |subject| %>
+        <% colors = ExamCurriculum.colors(subject[:color]) %>
+        <% q_count = ExamQuestions.count_by_subject(subject[:id]) %>
+        <a href="<%= exam_quiz_path(subject[:id]) %>"
+           class="group bg-white rounded-2xl border <%= colors[:border] %> <%= colors[:hover_border] %> hover:shadow-lg transition-all overflow-hidden">
+
+          <div class="<%= colors[:bg] %> px-5 py-4 flex items-center gap-4">
+            <div class="w-12 h-12 <%= colors[:bg_dark] %> rounded-xl flex items-center justify-center flex-shrink-0">
+              <span class="material-symbols-outlined text-white text-2xl"><%= subject[:icon] %></span>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="<%= colors[:text] %> text-xs font-bold mb-0.5"><%= subject[:number] %></div>
+              <h3 class="text-slate-800 font-bold text-lg truncate"><%= subject[:title] %></h3>
+              <p class="text-slate-500 text-sm"><%= subject[:subtitle] %></p>
+            </div>
+          </div>
+
+          <div class="px-5 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-4 text-sm text-slate-500">
+              <span class="flex items-center gap-1">
+                <span class="material-symbols-outlined text-base">quiz</span>
+                <%= q_count %>문제
+              </span>
+              <span class="flex items-center gap-1">
+                <span class="material-symbols-outlined text-base">schedule</span>
+                약 <%= (q_count * 1.5).ceil %>분
+              </span>
+            </div>
+            <span class="flex items-center gap-1 <%= colors[:text] %> font-semibold text-sm group-hover:gap-2 transition-all">
+              시작
+              <span class="material-symbols-outlined text-base">arrow_forward</span>
+            </span>
+          </div>
+        </a>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<!-- 안내 -->
+<section class="py-8 px-4 bg-white border-t border-slate-100">
+  <div class="max-w-5xl mx-auto">
+    <h3 class="text-base font-bold text-slate-700 mb-4">모의고사 안내</h3>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div class="flex items-start gap-3 p-4 bg-slate-50 rounded-xl">
+        <span class="material-symbols-outlined text-blue-500 mt-0.5">touch_app</span>
+        <div>
+          <div class="font-semibold text-slate-800 text-sm">즉시 채점</div>
+          <div class="text-slate-500 text-xs mt-0.5">선택 즉시 정답/오답 확인</div>
+        </div>
+      </div>
+      <div class="flex items-start gap-3 p-4 bg-slate-50 rounded-xl">
+        <span class="material-symbols-outlined text-blue-500 mt-0.5">lightbulb</span>
+        <div>
+          <div class="font-semibold text-slate-800 text-sm">상세 해설</div>
+          <div class="text-slate-500 text-xs mt-0.5">모든 문제에 해설 제공</div>
+        </div>
+      </div>
+      <div class="flex items-start gap-3 p-4 bg-slate-50 rounded-xl">
+        <span class="material-symbols-outlined text-blue-500 mt-0.5">emoji_events</span>
+        <div>
+          <div class="font-semibold text-slate-800 text-sm">결과 분석</div>
+          <div class="text-slate-500 text-xs mt-0.5">점수·등급·오답 리뷰 제공</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

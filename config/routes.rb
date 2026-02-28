@@ -7,6 +7,8 @@ Rails.application.routes.draw do
         resources :chapters, only: [:show], param: :number
       end
       get 'keywords', to: 'keywords#index', as: :keywords
+      get 'quiz', to: 'quizzes#index', as: :quiz_index
+      get 'quiz/:id', to: 'quizzes#show', as: :quiz
     end
   end
 
