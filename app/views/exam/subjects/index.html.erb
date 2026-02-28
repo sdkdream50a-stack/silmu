@@ -33,13 +33,17 @@
 </section>
 
 <!-- 4과목 카드 목록 -->
-<section class="py-12 px-4 bg-slate-50">
+<section class="py-12 px-4 bg-slate-50"
+         data-controller="exam-progress">
   <div class="max-w-5xl mx-auto">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <% @subjects.each do |subject| %>
         <% colors = ExamCurriculum.colors(subject[:color]) %>
         <a href="<%= exam_subject_path(subject[:id]) %>"
-           class="group bg-white rounded-2xl border <%= colors[:border] %> <%= colors[:hover_border] %> hover:shadow-lg transition-all overflow-hidden">
+           class="group bg-white rounded-2xl border <%= colors[:border] %> <%= colors[:hover_border] %> hover:shadow-lg transition-all overflow-hidden"
+           data-subject-progress
+           data-subject-id="<%= subject[:id] %>"
+           data-subject-total="<%= subject[:total_chapters] %>">
 
           <!-- 과목 헤더 -->
           <div class="<%= colors[:bg] %> px-6 py-5 flex items-start gap-4">
@@ -70,6 +74,16 @@
                 <li class="text-sm text-slate-400 pl-7">외 <%= subject[:chapters].size - 4 %>개 챕터...</li>
               <% end %>
             </ul>
+          </div>
+
+          <!-- 진도 바 (Stimulus가 채움) -->
+          <div class="px-6 pb-4">
+            <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
+              <span data-progress-text class="<%= colors[:text_dark] %> font-medium"></span>
+            </div>
+            <div class="w-full bg-slate-100 rounded-full h-1.5">
+              <div data-progress-bar class="<%= colors[:progress] %> h-1.5 rounded-full transition-all duration-500" style="width:0%"></div>
+            </div>
           </div>
 
           <!-- CTA -->

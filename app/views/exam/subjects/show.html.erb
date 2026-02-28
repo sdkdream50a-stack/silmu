@@ -1,6 +1,10 @@
 <%# 과목 상세 페이지 — 챕터 목록 %>
 <% colors = @colors %>
 
+<div data-controller="exam-progress"
+     data-exam-progress-subject-id-value="<%= @subject[:id] %>"
+     data-exam-progress-total-value="<%= @subject[:chapters].size %>">
+
 <!-- 과목 헤더 -->
 <section class="<%= colors[:bg_dark] %> text-white py-14 px-4">
   <div class="max-w-4xl mx-auto">
@@ -17,10 +21,23 @@
       <div class="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center flex-shrink-0">
         <span class="material-symbols-outlined text-white text-3xl"><%= @subject[:icon] %></span>
       </div>
-      <div>
+      <div class="flex-1 min-w-0">
         <div class="text-white/70 text-sm font-semibold mb-2"><%= @subject[:number] %> · <%= @subject[:total_chapters] %>개 챕터</div>
         <h1 class="text-3xl md:text-4xl font-bold leading-tight"><%= @subject[:title] %></h1>
         <p class="text-white/70 mt-2 text-lg"><%= @subject[:subtitle] %></p>
+
+        <!-- 진행률 바 (Stimulus가 채움) -->
+        <div class="mt-4 pt-4 border-t border-white/20">
+          <div class="flex items-center justify-between text-xs text-white/60 mb-1.5">
+            <span>학습 진도</span>
+            <span data-exam-progress-target="progressText">0/<%= @subject[:chapters].size %> 완료</span>
+          </div>
+          <div class="w-full bg-white/20 rounded-full h-2">
+            <div data-exam-progress-target="progressBar"
+                 class="bg-white h-2 rounded-full transition-all duration-500"
+                 style="width: 0%"></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -36,13 +53,18 @@
 
     <div class="space-y-4">
       <% @subject[:chapters].each do |chapter| %>
-        <div class="bg-white rounded-2xl border <%= colors[:border] %> overflow-hidden">
+        <div class="bg-white rounded-2xl border <%= colors[:border] %> overflow-hidden"
+             data-chapter-key="<%= @subject[:id] %>-<%= chapter[:number] %>">
           <!-- 챕터 헤더 (클릭 가능) -->
           <a href="<%= exam_subject_chapter_path(@subject[:id], chapter[:number]) %>"
              class="group flex items-start gap-4 p-5 hover:bg-slate-50 transition-colors">
-            <!-- 챕터 번호 -->
-            <div class="w-10 h-10 <%= colors[:bg_dark] %> rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5">
-              <span class="text-white font-bold text-sm"><%= chapter[:number] %></span>
+            <!-- 챕터 번호 & 완료 체크 -->
+            <div class="relative flex-shrink-0 mt-0.5">
+              <div class="w-10 h-10 <%= colors[:bg_dark] %> rounded-xl flex items-center justify-center">
+                <span class="text-white font-bold text-sm"><%= chapter[:number] %></span>
+              </div>
+              <!-- 완료 체크마크 (Stimulus가 채움) -->
+              <div data-chapter-status class="absolute -top-1 -right-1"></div>
             </div>
 
             <div class="flex-1 min-w-0">
@@ -72,7 +94,7 @@
             </div>
           </a>
 
-          <!-- 학습목표 미리보기 (접힘) -->
+          <!-- 학습목표 미리보기 -->
           <div class="border-t <%= colors[:border] %> px-5 py-3 <%= colors[:bg] %>">
             <p class="text-xs font-semibold <%= colors[:text] %> mb-1.5 flex items-center gap-1">
               <span class="material-symbols-outlined text-sm">flag</span>
@@ -94,8 +116,21 @@
       <% end %>
     </div>
 
+    <!-- 과목별 모의고사 링크 -->
+    <div class="mt-8 bg-white rounded-2xl border border-slate-200 p-5 flex items-center justify-between gap-4">
+      <div>
+        <div class="text-sm font-bold text-slate-800 mb-1"><%= @subject[:number] %> 모의고사</div>
+        <div class="text-xs text-slate-500"><%= ExamQuestions.count_by_subject(@subject[:id]) %>문제 · 즉시 채점</div>
+      </div>
+      <a href="<%= exam_quiz_path(@subject[:id]) %>"
+         class="inline-flex items-center gap-2 <%= colors[:bg_dark] %> text-white font-semibold px-5 py-2.5 rounded-xl hover:opacity-90 transition-opacity text-sm">
+        <span class="material-symbols-outlined text-base">quiz</span>
+        모의고사 풀기
+      </a>
+    </div>
+
     <!-- 이전/다음 과목 -->
-    <div class="mt-10 grid grid-cols-2 gap-4">
+    <div class="mt-6 grid grid-cols-2 gap-4">
       <div>
         <% if @prev_subject %>
           <a href="<%= exam_subject_path(@prev_subject[:id]) %>"
@@ -123,3 +158,5 @@
     </div>
   </div>
 </section>
+
+</div><%# /data-controller="exam-progress" %>

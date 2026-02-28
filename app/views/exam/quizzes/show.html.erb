@@ -24,7 +24,8 @@
 <section class="py-8 px-4 bg-slate-50 min-h-[60vh]">
   <div class="max-w-3xl mx-auto"
        data-controller="exam-quiz"
-       data-exam-quiz-questions-value="<%= @questions.to_json %>">
+       data-exam-quiz-questions-value="<%= @questions.to_json %>"
+       data-exam-quiz-subject-id-value="<%= @subject_id %>">
 
     <!-- 진행 상태 바 -->
     <div data-exam-quiz-target="progressArea" class="mb-6">

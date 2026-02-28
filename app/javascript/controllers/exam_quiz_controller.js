@@ -1,5 +1,6 @@
 // exam.silmu.kr — 모의고사 문제풀이 Stimulus 컨트롤러
 import { Controller } from "@hotwired/stimulus"
+import { saveQuizScore } from "../exam_progress"
 
 export default class extends Controller {
   static targets = [
@@ -123,6 +124,10 @@ export default class extends Controller {
     const total = this.questionsValue.length
     const score = this.scoreValue
     const pct = Math.round((score / total) * 100)
+
+    // localStorage에 점수 저장 (subjectId는 data attribute에서 읽음)
+    const subjectId = this.element.dataset.examQuizSubjectIdValue || "all"
+    saveQuizScore(subjectId, score, total)
 
     // 등급 결정
     let grade, gradeColor, gradeIcon, gradeBg

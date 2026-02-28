@@ -1,6 +1,10 @@
 <%# 챕터 상세 학습 페이지 %>
 <% colors = @colors %>
 
+<div data-controller="exam-progress"
+     data-exam-progress-subject-id-value="<%= @subject[:id] %>"
+     data-exam-progress-chapter-num-value="<%= @chapter[:number] %>">
+
 <!-- 챕터 헤더 -->
 <section class="<%= colors[:bg_dark] %> text-white py-12 px-4">
   <div class="max-w-4xl mx-auto">
@@ -15,9 +19,13 @@
       <span class="text-white">제<%= @chapter[:number] %>장</span>
     </div>
 
-    <div class="flex items-center gap-2 mb-3">
-      <span class="text-xs font-bold bg-white/20 px-3 py-1 rounded-full"><%= @subject[:number] %></span>
-      <span class="text-white/60 text-sm">제<%= @chapter[:number] %>장</span>
+    <div class="flex items-center justify-between gap-2 mb-3">
+      <div class="flex items-center gap-2">
+        <span class="text-xs font-bold bg-white/20 px-3 py-1 rounded-full"><%= @subject[:number] %></span>
+        <span class="text-white/60 text-sm">제<%= @chapter[:number] %>장</span>
+      </div>
+      <!-- 학습 완료 배지 (Stimulus가 채움) -->
+      <div data-exam-progress-target="badge"></div>
     </div>
     <h1 class="text-3xl md:text-4xl font-bold leading-tight"><%= @chapter[:title] %></h1>
 
@@ -198,3 +206,5 @@
     </div>
   </div>
 </section>
+
+</div><%# /data-controller="exam-progress" %>

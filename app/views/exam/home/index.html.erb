@@ -1,7 +1,8 @@
 <%# exam.silmu.kr 랜딩 페이지 — 공공조달관리사 시험 대비 %>
 
 <!-- 1. Hero Section -->
-<section class="bg-gradient-to-br from-blue-700 via-blue-600 to-indigo-700 text-white py-20 px-4">
+<section class="bg-gradient-to-br from-blue-700 via-blue-600 to-indigo-700 text-white py-20 px-4"
+         data-controller="exam-progress">
   <div class="max-w-4xl mx-auto text-center">
     <!-- 배지 -->
     <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white text-sm font-semibold px-4 py-2 rounded-full mb-6">
@@ -32,8 +33,11 @@
       </a>
     </div>
 
+    <!-- 나의 학습 현황 (Stimulus가 진도 있을 때만 표시) -->
+    <div data-exam-progress-target="statsArea" class="hidden mt-8"></div>
+
     <!-- 통계 -->
-    <div class="grid grid-cols-4 gap-6 mt-16 pt-12 border-t border-white/20 max-w-2xl mx-auto">
+    <div class="grid grid-cols-4 gap-6 mt-8 pt-8 border-t border-white/20 max-w-2xl mx-auto">
       <div class="text-center">
         <div class="text-3xl font-bold text-yellow-300">4권</div>
         <div class="text-blue-200 text-sm mt-1">표준교재</div>
