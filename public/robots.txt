@@ -29,3 +29,4 @@ User-agent: CCBot
 Disallow: /
 
 Sitemap: https://silmu.kr/sitemap.xml
+Sitemap: https://exam.silmu.kr/sitemap.xml

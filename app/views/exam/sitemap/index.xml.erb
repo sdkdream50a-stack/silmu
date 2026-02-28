@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <%# 홈 %>
+  <url>
+    <loc>https://exam.silmu.kr/</loc>
+    <lastmod><%= @today %></lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <%# 커리큘럼 목록 %>
+  <url>
+    <loc>https://exam.silmu.kr/subjects</loc>
+    <lastmod><%= @today %></lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <%# 과목별 페이지 + 챕터 페이지 %>
+  <% @subjects.each do |subject| %>
+  <url>
+    <loc>https://exam.silmu.kr/subjects/<%= subject[:id] %></loc>
+    <lastmod><%= @today %></lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <% subject[:chapters].each do |chapter| %>
+  <url>
+    <loc>https://exam.silmu.kr/subjects/<%= subject[:id] %>/chapters/<%= chapter[:number] %></loc>
+    <lastmod><%= @today %></lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <% end %>
+  <% end %>
+
+  <%# 핵심 용어집 %>
+  <url>
+    <loc>https://exam.silmu.kr/keywords</loc>
+    <lastmod><%= @today %></lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <%# 모의고사 선택 %>
+  <url>
+    <loc>https://exam.silmu.kr/quiz</loc>
+    <lastmod><%= @today %></lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <%# 과목별 모의고사 %>
+  <% @subjects.each do |subject| %>
+  <url>
+    <loc>https://exam.silmu.kr/quiz/<%= subject[:id] %></loc>
+    <lastmod><%= @today %></lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <% end %>
+
+  <%# 전체 모의고사 %>
+  <url>
+    <loc>https://exam.silmu.kr/quiz/all</loc>
+    <lastmod><%= @today %></lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+</urlset>

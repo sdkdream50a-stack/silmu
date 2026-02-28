@@ -9,6 +9,7 @@ Rails.application.routes.draw do
       get 'keywords', to: 'keywords#index', as: :keywords
       get 'quiz', to: 'quizzes#index', as: :quiz_index
       get 'quiz/:id', to: 'quizzes#show', as: :quiz
+      get 'sitemap.xml', to: 'sitemap#index', defaults: { format: :xml }
     end
   end
 

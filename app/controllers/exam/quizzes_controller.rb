@@ -5,6 +5,11 @@ module Exam
     # GET /quiz — 과목 선택 화면
     def index
       @subjects = ExamCurriculum::SUBJECTS
+      set_meta_tags(
+        title: "모의고사",
+        description: "공공조달관리사 4지선다 모의고사. 1~4권 과목별·전체 #{ExamQuestions.count}문제, 즉시 채점·상세 해설 제공.",
+        keywords: "공공조달관리사 모의고사, 공공조달 시험 문제, 국가기술자격 모의고사"
+      )
     end
 
     # GET /quiz/:id — 실제 퀴즈 (id: 1~4 = 과목별, 'all' = 전체)
@@ -29,6 +34,11 @@ module Exam
       end
 
       @estimated_minutes = (@questions.size * 1.5).ceil
+      set_meta_tags(
+        title: @quiz_title,
+        description: "공공조달관리사 #{@quiz_title} — #{@questions.size}문제 4지선다. 즉시 채점과 상세 해설로 실전 감각을 키우세요.",
+        keywords: "공공조달관리사 #{@quiz_title}, 공공조달 시험 모의고사"
+      )
     end
   end
 end
