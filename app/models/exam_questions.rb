@@ -6,7 +6,7 @@ module ExamQuestions
     # 1권: 공공조달의 이해
     # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     {
-      id: 1, subject_id: 1,
+      id: 1, subject_id: 1, chapter_num: 1,
       question: "VFM(Value For Money)의 핵심 의미로 가장 적합한 것은?",
       options: [
         "최저가격으로 구매하는 원칙",
@@ -18,14 +18,14 @@ module ExamQuestions
       explanation: "VFM은 단순 최저가가 아닌 '경쟁을 통해 품질·가격·서비스를 종합 고려한 최적 가치'를 추구합니다. 공공조달의 핵심 원칙으로 출제 빈출 개념입니다."
     },
     {
-      id: 2, subject_id: 1,
+      id: 2, subject_id: 1, chapter_num: 1,
       question: "OECD 회원국 기준 정부 총지출 중 공공조달 지출이 차지하는 비중은 약 얼마인가?",
       options: [ "약 10%", "약 20%", "약 34%", "약 50%" ],
       correct: 2,
       explanation: "OECD 기준 정부 총지출 중 조달지출 비중은 약 34%입니다. 공공조달이 국가경제에서 차지하는 비중이 매우 크다는 것을 보여주는 수치로 자주 출제됩니다."
     },
     {
-      id: 3, subject_id: 1,
+      id: 3, subject_id: 1, chapter_num: 1,
       question: "공공조달의 5대 핵심 원칙으로 옳은 것은?",
       options: [
         "VFM, 윤리, 경쟁, 투명성, 책임성",
@@ -37,21 +37,21 @@ module ExamQuestions
       explanation: "공공조달 5대 원칙은 VFM(최적가치), 윤리(Ethics), 경쟁(Competition), 투명성(Transparency), 책임성(Accountability)입니다. 5가지 영문 명칭과 함께 암기하세요."
     },
     {
-      id: 4, subject_id: 1,
+      id: 4, subject_id: 1, chapter_num: 1,
       question: "다음 중 '비경쟁적 공공조달 방법'에 해당하는 것은?",
       options: [ "공개경쟁입찰", "제한경쟁입찰", "지명경쟁입찰", "수의계약" ],
       correct: 3,
       explanation: "수의계약은 경쟁 없이 특정 업체와 직접 계약하는 비경쟁적 방법입니다. 공개·제한·지명경쟁입찰은 모두 경쟁적 방법에 해당합니다."
     },
     {
-      id: 5, subject_id: 1,
+      id: 5, subject_id: 1, chapter_num: 1,
       question: "국가종합전자조달시스템(나라장터)을 운영하는 기관은?",
       options: [ "기획재정부", "행정안전부", "조달청", "중소벤처기업부" ],
       correct: 2,
       explanation: "나라장터(KONEPS: Korea ON-line E-Procurement System)는 조달청이 운영하는 국가종합전자조달시스템입니다. 조달청의 주요 역할과 함께 이해하세요."
     },
     {
-      id: 6, subject_id: 1,
+      id: 6, subject_id: 1, chapter_num: 1,
       question: "GPP, IPP, SRPP에 대한 설명으로 옳지 않은 것은?",
       options: [
         "GPP는 환경부담 최소화를 목표로 하는 녹색공공조달이다",
@@ -63,7 +63,7 @@ module ExamQuestions
       explanation: "SRPP(Socially Responsible Public Procurement)는 경제성 극대화가 목표가 아닌, 사회적 가치(고용·인권·환경)를 고려하는 사회적 책임조달입니다. ③의 설명이 틀렸습니다."
     },
     {
-      id: 7, subject_id: 1,
+      id: 7, subject_id: 1, chapter_num: 1,
       question: "국가계약법과 지방계약법의 적용 대상에 대한 설명으로 옳은 것은?",
       options: [
         "국가계약법은 지방자치단체에만 적용된다",
@@ -75,7 +75,7 @@ module ExamQuestions
       explanation: "국가계약법은 국가(중앙행정기관·헌법기관 등)에, 지방계약법은 지방자치단체에 각각 적용됩니다. 두 법의 적용 대상 차이는 빈출 문제입니다."
     },
     {
-      id: 8, subject_id: 1,
+      id: 8, subject_id: 1, chapter_num: 1,
       question: "국가계약법 제5조(계약의 원칙)에서 규정하는 내용으로 옳은 것은?",
       options: [
         "최저가 낙찰 원칙",
@@ -87,14 +87,14 @@ module ExamQuestions
       explanation: "국가계약법 제5조는 계약 당사자가 신의성실의 원칙에 따라 계약을 이행하고, 일방적으로 불리한 부당특약을 금지함을 규정합니다."
     },
     {
-      id: 9, subject_id: 1,
+      id: 9, subject_id: 1, chapter_num: 1,
       question: "부정당업자로 제재를 받은 업체에게 내려지는 주요 처분은?",
       options: [ "영업정지", "입찰참가자격 제한", "과징금 부과", "사업자등록 취소" ],
       correct: 1,
       explanation: "부정당업자 제재의 핵심은 '입찰참가자격 제한'입니다. 일정 기간 공공기관 입찰에 참가할 수 없게 됩니다."
     },
     {
-      id: 10, subject_id: 1,
+      id: 10, subject_id: 1, chapter_num: 1,
       question: "공공조달 관련 처분에 대한 이의신청은 처분 통보를 받은 날부터 얼마 이내에 해야 하는가?",
       options: [ "7일 이내", "10일 이내", "15일 이내", "30일 이내" ],
       correct: 2,
@@ -105,7 +105,7 @@ module ExamQuestions
     # 2권: 공공조달 계획분석
     # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     {
-      id: 11, subject_id: 2,
+      id: 11, subject_id: 2, chapter_num: 1,
       question: "공공조달 수명주기(Life Cycle) 5단계를 순서대로 바르게 나열한 것은?",
       options: [
         "시장조사→조달계획→입찰낙찰→계약관리→계약완료",
@@ -117,7 +117,7 @@ module ExamQuestions
       explanation: "공공조달 수명주기는 조달계획→시장조사→입찰낙찰→계약관리→계약완료 순서입니다. '조·시·입·계·완'으로 암기하세요."
     },
     {
-      id: 12, subject_id: 2,
+      id: 12, subject_id: 2, chapter_num: 1,
       question: "SOW(Statement of Work)에 대한 설명으로 옳은 것은?",
       options: [
         "낙찰자 결정 후 작성하는 계약서",
@@ -129,42 +129,42 @@ module ExamQuestions
       explanation: "SOW(Statement of Work)는 조달 과업의 범위, 요건, 일정, 성과기준 등을 상세히 기술한 과업명세서로, 조달계획 단계에서 작성됩니다."
     },
     {
-      id: 13, subject_id: 2,
+      id: 13, subject_id: 2, chapter_num: 1,
       question: "일반 입찰공고의 최소 공고 기간은?",
       options: [ "10일 이상", "20일 이상", "40일 이상", "60일 이상" ],
       correct: 2,
       explanation: "일반 입찰공고는 40일 이상 공고해야 합니다. 5억원 이상 공사는 60일 이상, 긴급 입찰은 10일 이상이 적용됩니다."
     },
     {
-      id: 14, subject_id: 2,
+      id: 14, subject_id: 2, chapter_num: 1,
       question: "사전규격공개가 의무화되는 추정가격 기준은?",
       options: [ "1천만원 이상", "3천만원 이상", "5천만원 이상", "1억원 이상" ],
       correct: 2,
       explanation: "추정가격 5천만원 이상 물품·용역 계약의 경우 입찰 전 규격(사양)을 나라장터에 공개하는 사전규격공개가 의무입니다."
     },
     {
-      id: 15, subject_id: 2,
+      id: 15, subject_id: 2, chapter_num: 1,
       question: "2026년 기준 2억원 이상 공사계약에서 적용되는 낙찰하한율은?",
       options: [ "87.745%", "88.745%", "89.745%", "90.745%" ],
       correct: 2,
       explanation: "2026년 기준 2억원 이상 공사의 낙찰하한율은 89.745%입니다. 이전(87.745%)에서 상향 조정된 수치로, 최신 기준을 암기하세요."
     },
     {
-      id: 16, subject_id: 2,
+      id: 16, subject_id: 2, chapter_num: 1,
       question: "입찰 평가위원회 구성 시 외부 위원 비율 기준은?",
       options: [ "1/3 이상", "과반수(1/2 초과)", "2/3 이상", "3/4 이상" ],
       correct: 2,
       explanation: "평가위원회는 이해충돌 방지를 위해 2/3 이상을 외부 위원으로 구성하는 것이 원칙입니다."
     },
     {
-      id: 17, subject_id: 2,
+      id: 17, subject_id: 2, chapter_num: 1,
       question: "낙찰자 결정에 대한 이의신청은 낙찰자 결정 통보 후 얼마 이내에 해야 하는가?",
       options: [ "3일 이내", "5일 이내", "7일 이내", "10일 이내" ],
       correct: 2,
       explanation: "낙찰자 결정에 대한 이의신청은 낙찰자 결정 통보 후 7일 이내에 제기해야 합니다. (처분 이의신청 15일과 구분하여 암기)"
     },
     {
-      id: 18, subject_id: 2,
+      id: 18, subject_id: 2, chapter_num: 1,
       question: "공공조달 리스크 관리의 4단계를 순서대로 바르게 나열한 것은?",
       options: [
         "평가→식별→대응→모니터링",
@@ -176,7 +176,7 @@ module ExamQuestions
       explanation: "리스크 관리는 리스크 식별→평가→대응→모니터링 순서로 진행합니다. '식평대모'로 암기하세요."
     },
     {
-      id: 19, subject_id: 2,
+      id: 19, subject_id: 2, chapter_num: 1,
       question: "조달계획 단계의 3대 핵심 과업으로 옳은 것은?",
       options: [
         "시장조사, 입찰공고, 계약체결",
@@ -188,7 +188,7 @@ module ExamQuestions
       explanation: "조달계획 단계의 3대 과업은 요구사항 식별, 조달사업팀 구성, 조달전략계획 개발입니다."
     },
     {
-      id: 20, subject_id: 2,
+      id: 20, subject_id: 2, chapter_num: 1,
       question: "전자입찰에서 '투찰'과 '개찰'에 대한 설명으로 옳은 것은?",
       options: [
         "투찰은 전자시스템을 통한 가격 제출이고, 개찰은 투찰 마감 후 전자 개봉하는 절차다",
@@ -204,7 +204,7 @@ module ExamQuestions
     # 3권: 공공계약관리
     # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     {
-      id: 21, subject_id: 3,
+      id: 21, subject_id: 3, chapter_num: 1,
       question: "공공계약(국가계약)의 법적 성격에 대한 대법원 판례의 입장은?",
       options: [
         "공법상 계약으로 행정소송 대상",
@@ -216,7 +216,7 @@ module ExamQuestions
       explanation: "대법원은 공공계약의 법적 성격을 '사적자치가 적용되는 사법(私法)계약'으로 보고 있습니다. 따라서 민법의 신의성실 원칙이 적용됩니다."
     },
     {
-      id: 22, subject_id: 3,
+      id: 22, subject_id: 3, chapter_num: 1,
       question: "물품계약에서 '적격심사'가 적용되는 금액 기준은?",
       options: [
         "5천만원 미만 소액 물품",
@@ -228,7 +228,7 @@ module ExamQuestions
       explanation: "2억원 미만 소액 물품 구매의 경우 납품실적·가격 등을 심사하는 적격심사제도가 적용됩니다."
     },
     {
-      id: 23, subject_id: 3,
+      id: 23, subject_id: 3, chapter_num: 1,
       question: "다수공급자계약(MAS)에 대한 설명으로 옳지 않은 것은?",
       options: [
         "2인 이상의 공급자와 계약을 체결한다",
@@ -240,7 +240,7 @@ module ExamQuestions
       explanation: "MAS는 수의계약이 아닙니다. 다수의 공급자와 계약하여 수요기관이 종합쇼핑몰에서 경쟁적으로 선택할 수 있도록 하는 방식입니다."
     },
     {
-      id: 24, subject_id: 3,
+      id: 24, subject_id: 3, chapter_num: 1,
       question: "턴키(Turn-Key, 일괄입찰) 방식에 대한 설명으로 옳은 것은?",
       options: [
         "설계만 수행하는 방식",
@@ -252,7 +252,7 @@ module ExamQuestions
       explanation: "턴키(일괄입찰)는 설계와 시공을 하나의 계약으로 일괄하여 수행하는 기술형 공사 방식입니다. 대안입찰과 함께 기술형 입찰 방식으로 구분됩니다."
     },
     {
-      id: 25, subject_id: 3,
+      id: 25, subject_id: 3, chapter_num: 1,
       question: "공사 준공 후 하자담보책임 기간은?",
       options: [
         "1~3년 (시설물 종류에 관계없이 동일)",
@@ -264,7 +264,7 @@ module ExamQuestions
       explanation: "하자담보책임 기간은 시설물 종류에 따라 준공 후 1~10년으로 달리 적용됩니다. 예: 가설공사 1년, 구조물 10년."
     },
     {
-      id: 26, subject_id: 3,
+      id: 26, subject_id: 3, chapter_num: 1,
       question: "'기성검사'에 대한 설명으로 옳은 것은?",
       options: [
         "준공 후 최종 점검하는 절차",
@@ -276,7 +276,7 @@ module ExamQuestions
       explanation: "기성검사는 용역·공사 진행 단계별로 계약 내용대로 이행하고 있는지 확인하고, 기성금(중간 대금)을 지급하는 절차입니다. 물품의 '검수'와 구분하세요."
     },
     {
-      id: 27, subject_id: 3,
+      id: 27, subject_id: 3, chapter_num: 1,
       question: "'직접생산확인' 제도의 주요 목적으로 가장 옳은 것은?",
       options: [
         "공급업체의 재무 건전성 확인",
@@ -288,7 +288,7 @@ module ExamQuestions
       explanation: "직접생산확인은 중소기업이 조달청에 납품하는 물품을 직접 생산하는지 여부를 확인하는 제도로, 유통업체의 무자격 납품을 방지합니다."
     },
     {
-      id: 28, subject_id: 3,
+      id: 28, subject_id: 3, chapter_num: 1,
       question: "'벤처나라'의 주요 대상은?",
       options: [
         "대기업의 혁신 제품",
@@ -300,7 +300,7 @@ module ExamQuestions
       explanation: "벤처나라는 벤처·창업기업이 혁신적인 제품을 공공조달 시장에 공급할 수 있도록 지원하는 전용 조달 플랫폼입니다."
     },
     {
-      id: 29, subject_id: 3,
+      id: 29, subject_id: 3, chapter_num: 1,
       question: "용역계약의 대금 지급 방식으로 허용되는 것은?",
       options: [
         "착수금·중도금·잔금 분할 지급",
@@ -312,7 +312,7 @@ module ExamQuestions
       explanation: "용역계약의 대금은 착수금, 중도금, 잔금을 나누어 분할 지급할 수 있습니다. 용역업체의 자금흐름을 지원하기 위한 제도입니다."
     },
     {
-      id: 30, subject_id: 3,
+      id: 30, subject_id: 3, chapter_num: 1,
       question: "'대안입찰'에 대한 설명으로 옳은 것은?",
       options: [
         "발주기관의 원안 설계를 변경 없이 입찰하는 방식",
@@ -328,7 +328,7 @@ module ExamQuestions
     # 4권: 공공조달 관리실무
     # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     {
-      id: 31, subject_id: 4,
+      id: 31, subject_id: 4, chapter_num: 1,
       question: "나라장터 사용자 등록 절차를 순서대로 바르게 나열한 것은?",
       options: [
         "이용약관동의→개인회원가입→등록신청→서류제출→승인",
@@ -340,7 +340,7 @@ module ExamQuestions
       explanation: "나라장터 등록은 개인회원가입→이용약관동의→등록신청→서류제출→승인 5단계로 진행됩니다."
     },
     {
-      id: 32, subject_id: 4,
+      id: 32, subject_id: 4, chapter_num: 1,
       question: "공공조달 원가의 구성 요소로 옳은 것은?",
       options: [
         "직접비 + 간접비 + 이윤 + 부가세",
@@ -352,7 +352,7 @@ module ExamQuestions
       explanation: "공공조달 원가는 직접비 + 간접비 + 일반관리비 + 이윤으로 구성됩니다. 공사원가는 여기에 부가세가 추가됩니다."
     },
     {
-      id: 33, subject_id: 4,
+      id: 33, subject_id: 4, chapter_num: 1,
       question: "용역원가에서 인건비를 산출하는 기준으로 옳은 것은?",
       options: [
         "계약금액 × 일정 비율",
@@ -364,7 +364,7 @@ module ExamQuestions
       explanation: "용역원가 인건비는 노임단가(기술자 등급별 시중 노임단가) × 투입공수(M/M: Man-Month)로 산출합니다."
     },
     {
-      id: 34, subject_id: 4,
+      id: 34, subject_id: 4, chapter_num: 1,
       question: "'협상에 의한 계약' 방식에서 협상 절차의 순서로 옳은 것은?",
       options: [
         "가격협상 → 기술협상 → 최종 낙찰자 결정",
@@ -376,7 +376,7 @@ module ExamQuestions
       explanation: "협상에 의한 계약은 반드시 기술협상을 먼저 완료한 후 가격협상을 진행하는 순서를 따라야 합니다."
     },
     {
-      id: 35, subject_id: 4,
+      id: 35, subject_id: 4, chapter_num: 1,
       question: "계약보증금의 일반적인 납부 기준은?",
       options: [
         "계약금액의 5%",
@@ -388,7 +388,7 @@ module ExamQuestions
       explanation: "계약보증금은 원칙적으로 계약금액의 10~15% 수준으로 납부합니다. 계약 유형에 따라 달리 적용될 수 있습니다."
     },
     {
-      id: 36, subject_id: 4,
+      id: 36, subject_id: 4, chapter_num: 1,
       question: "다수공급자계약(MAS)에서 '2차 계약'이란?",
       options: [
         "조달청이 제조업체와 처음 체결하는 계약",
@@ -400,7 +400,7 @@ module ExamQuestions
       explanation: "MAS에서 2차 계약은 수요기관이 조달청 종합쇼핑몰에서 원하는 공급업체를 선택하여 직접 체결하는 계약입니다."
     },
     {
-      id: 37, subject_id: 4,
+      id: 37, subject_id: 4, chapter_num: 1,
       question: "MAS(다수공급자계약)에서 3개사 이상 견적을 받아야 하는 금액 기준은?",
       options: [
         "1천만원 초과",
@@ -412,14 +412,14 @@ module ExamQuestions
       explanation: "MAS에서 2천만원을 초과하는 구매의 경우 3개사 이상으로부터 견적을 받아야 합니다."
     },
     {
-      id: 38, subject_id: 4,
+      id: 38, subject_id: 4, chapter_num: 1,
       question: "공공기관의 중소기업 제품 구매 목표 비율은 어느 기관이 고시하는가?",
       options: [ "기획재정부", "조달청", "중소벤처기업부", "산업통상자원부" ],
       correct: 2,
       explanation: "공공기관의 중소기업 제품 구매 목표 비율은 중소벤처기업부(구 중소기업청)가 고시합니다. 공공기관은 이 비율 이상으로 중소기업 제품을 구매해야 합니다."
     },
     {
-      id: 39, subject_id: 4,
+      id: 39, subject_id: 4, chapter_num: 1,
       question: "공공기관의 녹색제품 의무구매 근거 법령은?",
       options: [
         "조달사업법",
@@ -431,7 +431,7 @@ module ExamQuestions
       explanation: "공공기관의 녹색제품 의무구매는 '녹색제품 구매촉진에 관한 법률'에 근거합니다."
     },
     {
-      id: 40, subject_id: 4,
+      id: 40, subject_id: 4, chapter_num: 1,
       question: "공공기관의 사회적기업 생산품 우선구매 의무의 법적 근거는?",
       options: [
         "중소기업 제품 구매촉진법",
@@ -447,7 +447,7 @@ module ExamQuestions
     # 1권: 공공조달의 이해 (추가 문제 Q41-55)
     # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     {
-      id: 41, subject_id: 1,
+      id: 41, subject_id: 1, chapter_num: 1,
       question: "조달청의 주요 기능으로 옳지 않은 것은?",
       options: [
         "국가기관 계약 집행 지원",
@@ -459,7 +459,7 @@ module ExamQuestions
       explanation: "국유재산 총괄 관리는 기획재정부 소관입니다. 조달청은 물자 구매·공사 계약 지원, 비축물자 관리, 나라장터 운영이 주요 기능입니다."
     },
     {
-      id: 42, subject_id: 1,
+      id: 42, subject_id: 1, chapter_num: 1,
       question: "WTO 정부조달협정(GPA)의 핵심 원칙으로 옳은 것은?",
       options: [
         "내국민대우·최혜국대우·투명성 원칙",
@@ -471,7 +471,7 @@ module ExamQuestions
       explanation: "WTO GPA는 가입국 간 정부조달 시장을 상호 개방하며, 내국민대우·최혜국대우·투명성을 핵심 원칙으로 합니다. 우리나라는 1997년부터 가입하여 적용됩니다."
     },
     {
-      id: 43, subject_id: 1,
+      id: 43, subject_id: 1, chapter_num: 1,
       question: "입찰참가자격 사전심사(PQ: Pre-Qualification)가 적용되는 경우는?",
       options: [
         "소액 물품 구매",
@@ -483,7 +483,7 @@ module ExamQuestions
       explanation: "PQ제도는 대규모·기술적으로 복잡한 공사에서 시공능력·재무상태·기술인력 등 자격을 사전에 심사하여 입찰참가자를 선별하는 제도입니다."
     },
     {
-      id: 44, subject_id: 1,
+      id: 44, subject_id: 1, chapter_num: 1,
       question: "제한경쟁입찰의 사유로 허용되지 않는 것은?",
       options: [
         "시공실적 제한",
@@ -495,7 +495,7 @@ module ExamQuestions
       explanation: "제한경쟁입찰은 공사 특수성·규모 등 객관적 요건(실적·지역·중소기업 등)에 따라서만 허용됩니다. 발주기관의 주관적 선호는 사유가 될 수 없습니다."
     },
     {
-      id: 45, subject_id: 1,
+      id: 45, subject_id: 1, chapter_num: 1,
       question: "'규격서'와 '과업지시서'에 대한 설명으로 옳은 것은?",
       options: [
         "규격서는 용역, 과업지시서는 물품에 사용",
@@ -507,7 +507,7 @@ module ExamQuestions
       explanation: "규격서는 구매하려는 물품의 품질·사양을 기술하고, 과업지시서(SOW)는 용역 계약에서 수행해야 할 과업 범위·요건·납품물을 기술합니다."
     },
     {
-      id: 46, subject_id: 1,
+      id: 46, subject_id: 1, chapter_num: 1,
       question: "조달청 '우수조달물품' 지정의 주된 효과는?",
       options: [
         "독점 공급권 부여",
@@ -519,7 +519,7 @@ module ExamQuestions
       explanation: "우수조달물품으로 지정되면 수요기관이 별도 입찰 없이 수의계약하거나 우선구매할 수 있어 공급업체의 판로 확대에 유리합니다."
     },
     {
-      id: 47, subject_id: 1,
+      id: 47, subject_id: 1, chapter_num: 1,
       question: "국가계약법상 '장기계속계약'에 대한 설명으로 옳은 것은?",
       options: [
         "3년 이상 대형 공사에만 적용",
@@ -531,7 +531,7 @@ module ExamQuestions
       explanation: "장기계속계약은 이행기간이 수년에 걸치는 공사·용역 등에서, 총액을 확정하되 각 연도 예산 범위 내에서 연차별로 계약을 체결하는 방식입니다."
     },
     {
-      id: 48, subject_id: 1,
+      id: 48, subject_id: 1, chapter_num: 1,
       question: "세계은행(World Bank) 차관 사업의 조달 절차를 따라야 하는 이유는?",
       options: [
         "조달청이 의무적으로 대행하기 때문",
@@ -543,7 +543,7 @@ module ExamQuestions
       explanation: "세계은행 등 국제개발은행의 차관·증여 사업은 자금 공여 조건으로 해당 기관의 조달 가이드라인(국제경쟁입찰·ICB 등) 준수를 요구합니다."
     },
     {
-      id: 49, subject_id: 1,
+      id: 49, subject_id: 1, chapter_num: 1,
       question: "'2단계 경쟁입찰'의 주요 특징으로 옳은 것은?",
       options: [
         "1단계 가격 평가, 2단계 기술 평가",
@@ -555,7 +555,7 @@ module ExamQuestions
       explanation: "2단계 경쟁입찰은 1단계에서 기술제안서의 적합성을 확인하여 통과한 업체만 2단계 가격 경쟁에 참여하는 방식입니다. 기술·가격을 단계적으로 분리 평가합니다."
     },
     {
-      id: 50, subject_id: 1,
+      id: 50, subject_id: 1, chapter_num: 1,
       question: "중앙조달기관(조달청)을 통한 구매와 자체조달의 구분으로 옳은 것은?",
       options: [
         "조달청은 자체조달기관이다",
@@ -567,7 +567,7 @@ module ExamQuestions
       explanation: "중앙조달은 조달청이 수요기관을 대신하여 구매·계약을 집행하는 방식이고, 자체조달은 각 기관이 자체 예산으로 직접 계약을 집행하는 방식입니다."
     },
     {
-      id: 51, subject_id: 1,
+      id: 51, subject_id: 1, chapter_num: 1,
       question: "조달사업에 관한 법률상 '의무조달' 물자의 특징으로 옳은 것은?",
       options: [
         "모든 물품에 금액 무관 적용",
@@ -579,7 +579,7 @@ module ExamQuestions
       explanation: "조달사업법에 따라 조달청장이 고시한 의무구매 대상 물자는 수요기관이 반드시 조달청을 통해 구매해야 합니다."
     },
     {
-      id: 52, subject_id: 1,
+      id: 52, subject_id: 1, chapter_num: 1,
       question: "공공조달에서 '불공정 특약 금지'의 근거 법령은?",
       options: [
         "공정거래법 제23조",
@@ -591,7 +591,7 @@ module ExamQuestions
       explanation: "국가계약법 제5조는 계약 당사자가 신의성실 원칙에 따라 계약을 이행하고, 일방에게 불리한 부당특약(불공정 특약)을 금지한다고 규정합니다."
     },
     {
-      id: 53, subject_id: 1,
+      id: 53, subject_id: 1, chapter_num: 2,
       question: "국제표준화기구(ISO) 규격이 공공조달에서 중요한 이유로 가장 옳은 것은?",
       options: [
         "ISO 규격 제품만 수입 가능하기 때문",
@@ -603,7 +603,7 @@ module ExamQuestions
       explanation: "규격서에 특정 브랜드 명시는 공정경쟁을 저해하므로, ISO 등 국제 표준을 활용하면 특정 업체를 배제하지 않고 품질 요건을 객관적으로 기술할 수 있습니다."
     },
     {
-      id: 54, subject_id: 1,
+      id: 54, subject_id: 1, chapter_num: 2,
       question: "전자입찰 시스템(나라장터)의 장점으로 옳지 않은 것은?",
       options: [
         "입찰 과정의 투명성 제고",
@@ -615,7 +615,7 @@ module ExamQuestions
       explanation: "전자입찰의 주요 장점은 투명성 제고, 담합 방지, 시간·비용 절감, 편의성 향상입니다. 개인 신상정보 수집은 전자입찰의 목적이 아닙니다."
     },
     {
-      id: 55, subject_id: 1,
+      id: 55, subject_id: 1, chapter_num: 2,
       question: "공공조달에서 '성과지표(KPI)' 설정의 주요 목적은?",
       options: [
         "계약 담당자 개인 업무 평가",
@@ -631,7 +631,7 @@ module ExamQuestions
     # 2권: 공공조달 계획분석 (추가 문제 Q56-70)
     # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     {
-      id: 56, subject_id: 2,
+      id: 56, subject_id: 2, chapter_num: 1,
       question: "시장조사 방법으로 적합하지 않은 것은?",
       options: [
         "RFI(정보요청서) 발송",
@@ -643,7 +643,7 @@ module ExamQuestions
       explanation: "시장조사는 공정성을 유지해야 하므로 특정 업체에 계약 내정을 사전 통보하는 것은 엄격히 금지됩니다. RFI, Industry Day, 데이터 분석 등이 적법한 방법입니다."
     },
     {
-      id: 57, subject_id: 2,
+      id: 57, subject_id: 2, chapter_num: 1,
       question: "예정가격 결정 방법 중 '원가계산에 의한 가격'이 적용되는 경우는?",
       options: [
         "시중에 유통되는 표준 물품 구매",
@@ -655,7 +655,7 @@ module ExamQuestions
       explanation: "시장에서 유사한 거래실례가 없거나 신규 개발품 등의 경우, 재료비·노무비·경비·일반관리비·이윤을 직접 산정하는 원가계산 방법을 적용합니다."
     },
     {
-      id: 58, subject_id: 2,
+      id: 58, subject_id: 2, chapter_num: 1,
       question: "복수예비가격 제도에 대한 설명으로 옳은 것은?",
       options: [
         "입찰자가 직접 예비가격을 선택",
@@ -667,7 +667,7 @@ module ExamQuestions
       explanation: "나라장터 전자입찰에서 복수예비가격은 15개 예비가격을 생성하고, 입찰자들이 각 2개씩 선택하여 가장 많이 선택된 4개의 평균값을 예정가격으로 결정합니다."
     },
     {
-      id: 59, subject_id: 2,
+      id: 59, subject_id: 2, chapter_num: 1,
       question: "기술제안입찰(기술형입찰) 평가 항목에 포함되지 않는 것은?",
       options: [
         "기술적 적정성",
@@ -679,7 +679,7 @@ module ExamQuestions
       explanation: "기술제안입찰은 기술 능력(기술적 적정성·인력·장비 등)과 가격을 종합 평가합니다. 대표이사 연령 등 개인적 사항은 평가 대상이 아닙니다."
     },
     {
-      id: 60, subject_id: 2,
+      id: 60, subject_id: 2, chapter_num: 1,
       question: "적격심사에서 '이행실적'을 평가하는 주된 목적은?",
       options: [
         "업체 규모 파악",
@@ -691,7 +691,7 @@ module ExamQuestions
       explanation: "이행실적 평가는 과거에 유사한 계약을 성공적으로 수행한 경험이 있는지 확인하여, 금번 계약도 이행할 능력이 있는지 예측하는 것이 주된 목적입니다."
     },
     {
-      id: 61, subject_id: 2,
+      id: 61, subject_id: 2, chapter_num: 1,
       question: "공고기간 중 입찰공고 내용을 변경해야 할 경우 조치는?",
       options: [
         "기존 공고를 취소하고 변경된 내용으로 재공고",
@@ -703,7 +703,7 @@ module ExamQuestions
       explanation: "입찰공고 내용을 변경해야 하는 경우 기존 공고를 취소하고, 변경 내용이 반영된 재공고를 실시해야 합니다. 변경 사항의 중요도에 따라 공고 기간도 재산정합니다."
     },
     {
-      id: 62, subject_id: 2,
+      id: 62, subject_id: 2, chapter_num: 1,
       question: "조달 원가에서 '일반관리비'의 산정 기준은?",
       options: [
         "직접재료비의 일정 비율",
@@ -715,7 +715,7 @@ module ExamQuestions
       explanation: "일반관리비는 제조원가(직접비)에 업종별 일반관리비율을 곱하여 산정합니다. 재료비·노무비·경비의 합계가 기준이 됩니다."
     },
     {
-      id: 63, subject_id: 2,
+      id: 63, subject_id: 2, chapter_num: 1,
       question: "'독립가격추정(IGE: Independent Government Estimate)'의 목적으로 옳은 것은?",
       options: [
         "공급업체의 이윤 제한",
@@ -727,7 +727,7 @@ module ExamQuestions
       explanation: "IGE는 발주기관이 공급업체 제안가격의 적정성을 독립적으로 평가하기 위해 자체적으로 원가를 추정하는 것으로, 협상의 기준 또는 검증 수단으로 활용됩니다."
     },
     {
-      id: 64, subject_id: 2,
+      id: 64, subject_id: 2, chapter_num: 1,
       question: "조달계획에서 '조달전략'의 주요 결정 요소가 아닌 것은?",
       options: [
         "경쟁 방법(공개·제한·수의)",
@@ -739,7 +739,7 @@ module ExamQuestions
       explanation: "조달전략은 경쟁 방법, 계약 유형, 평가 기준, 성과 측정 방법 등 객관적 요소로 결정해야 합니다. 계약 담당자의 개인적 선호는 조달전략의 결정 요소가 될 수 없습니다."
     },
     {
-      id: 65, subject_id: 2,
+      id: 65, subject_id: 2, chapter_num: 1,
       question: "WTO GPA 적용 기준 금액(공사 분야)으로 가장 근사한 것은?",
       options: [
         "약 2억원",
@@ -751,7 +751,7 @@ module ExamQuestions
       explanation: "WTO GPA 공사 분야 적용 기준은 SDR 5,000,000으로, 한화로 환산하면 약 80~85억원 수준입니다. 이 이상의 공사는 WTO GPA 규정에 따른 국제입찰 절차를 따라야 합니다."
     },
     {
-      id: 66, subject_id: 2,
+      id: 66, subject_id: 2, chapter_num: 1,
       question: "요구사항 정의 시 '성과기반 명세서(PBS)'의 특징으로 옳은 것은?",
       options: [
         "재료 성분까지 상세히 규정",
@@ -763,7 +763,7 @@ module ExamQuestions
       explanation: "PBS(Performance-Based Specification)는 투입 방법 대신 달성해야 할 결과·성과 기준으로 요건을 기술하여, 공급업체가 방법을 자유롭게 결정할 수 있도록 합니다."
     },
     {
-      id: 67, subject_id: 2,
+      id: 67, subject_id: 2, chapter_num: 1,
       question: "'협상에 의한 계약'이 적합한 경우로 옳은 것은?",
       options: [
         "표준화된 물품의 대량 구매",
@@ -775,7 +775,7 @@ module ExamQuestions
       explanation: "협상에 의한 계약은 기술력·창의성·품질 등 가격 외 요소가 중요한 IT 시스템, 전문 컨설팅, 연구용역 등에 적합합니다. 단순 물품 구매에는 일반 경쟁입찰이 원칙입니다."
     },
     {
-      id: 68, subject_id: 2,
+      id: 68, subject_id: 2, chapter_num: 1,
       question: "공공조달 리스크 유형 중 '공급업체 리스크'에 해당하지 않는 것은?",
       options: [
         "공급업체 재무 부실",
@@ -787,7 +787,7 @@ module ExamQuestions
       explanation: "국제 원자재 가격 폭등은 공급업체의 귀책이 아닌 외부 환경(시장) 리스크에 해당합니다. 공급업체 리스크는 공급업체 자체의 경영·역량·이행 관련 위험입니다."
     },
     {
-      id: 69, subject_id: 2,
+      id: 69, subject_id: 2, chapter_num: 1,
       question: "조달 방식 선택 시 '직접 구매'보다 '서비스 외주(아웃소싱)'를 선택하기에 적합한 경우는?",
       options: [
         "내부 인력이 충분하고 핵심 역량에 해당하는 업무",
@@ -799,7 +799,7 @@ module ExamQuestions
       explanation: "전문성이 필요하지만 내부 역량이 부족한 비핵심 업무는 외주(아웃소싱)로 비용·효율을 높일 수 있습니다. 핵심 역량·기밀 업무는 직접 수행이 원칙입니다."
     },
     {
-      id: 70, subject_id: 2,
+      id: 70, subject_id: 2, chapter_num: 1,
       question: "사전규격공개 기간은 입찰공고 전 며칠 이상이어야 하는가?",
       options: [
         "3일 이상",
@@ -815,7 +815,7 @@ module ExamQuestions
     # 3권: 공공계약관리 (추가 문제 Q71-85)
     # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     {
-      id: 71, subject_id: 3,
+      id: 71, subject_id: 3, chapter_num: 1,
       question: "'총액계약'과 '단가계약'의 차이로 옳은 것은?",
       options: [
         "총액계약은 수량 불확실 시 사용",
@@ -827,7 +827,7 @@ module ExamQuestions
       explanation: "총액계약은 공사 전체 금액을 확정하는 방식이고, 단가계약은 단위 가격만 정하고 실제 시행 수량에 따라 최종 금액을 정산하는 방식입니다."
     },
     {
-      id: 72, subject_id: 3,
+      id: 72, subject_id: 3, chapter_num: 1,
       question: "공사계약에서 '선급금'의 법정 지급 한도로 옳은 것은?",
       options: [
         "계약금액의 30% 이내",
@@ -839,7 +839,7 @@ module ExamQuestions
       explanation: "선급금은 계약금액의 70% 이내에서 지급할 수 있습니다. 선급금은 계약 이행을 위한 자금 지원 목적으로 지급되며, 기성검사 시 정산됩니다."
     },
     {
-      id: 73, subject_id: 3,
+      id: 73, subject_id: 3, chapter_num: 1,
       question: "'물가변동(에스컬레이션)'에 따른 계약금액 조정 요건으로 옳은 것은?",
       options: [
         "1% 이상 변동 시 즉시 적용",
@@ -851,7 +851,7 @@ module ExamQuestions
       explanation: "물가변동 계약금액 조정은 계약 후 90일 이상 경과하고, 품목조정률(또는 지수조정률)이 3% 이상 변동한 경우 신청할 수 있습니다. 물가 하락 시에도 적용됩니다."
     },
     {
-      id: 74, subject_id: 3,
+      id: 74, subject_id: 3, chapter_num: 1,
       question: "'분리발주'와 '일괄발주'의 설명으로 옳은 것은?",
       options: [
         "분리발주는 수의계약 한도 맞춤을 위해 공사를 쪼개는 것",
@@ -863,7 +863,7 @@ module ExamQuestions
       explanation: "분리발주는 토목·건축·전기 등 공사 성격에 따라 분리하여 전문업체에 발주하는 방식이고, 일괄발주는 종합건설업체 한 곳에 전체를 맡기는 방식입니다. 수의계약 한도 맞춤을 위한 분리는 불법입니다."
     },
     {
-      id: 75, subject_id: 3,
+      id: 75, subject_id: 3, chapter_num: 1,
       question: "공공계약에서 하도급 관련 발주기관의 의무로 옳은 것은?",
       options: [
         "하도급 업체 선정에 직접 개입할 의무",
@@ -875,7 +875,7 @@ module ExamQuestions
       explanation: "발주기관은 원도급자가 하도급 대금을 적정하게 지급하고 있는지 확인하고, 하도급 대금 직불 요청 시 직접 지급하는 등의 의무가 있습니다."
     },
     {
-      id: 76, subject_id: 3,
+      id: 76, subject_id: 3, chapter_num: 1,
       question: "계약이행 단계에서 허용되는 '계약 변경' 사유로 옳은 것은?",
       options: [
         "업체의 영업 편의를 위한 변경",
@@ -887,7 +887,7 @@ module ExamQuestions
       explanation: "계약 변경은 설계 변경·물가 변동·공기 연장 등 객관적이고 법령에서 정한 사유가 있는 경우에만 허용됩니다. 업체 편의나 임의적 사유로는 변경할 수 없습니다."
     },
     {
-      id: 77, subject_id: 3,
+      id: 77, subject_id: 3, chapter_num: 1,
       question: "공사계약의 '지체상금' 산정 방식으로 옳은 것은?",
       options: [
         "계약금액 × 지체상금율 × 지체일수",
@@ -899,7 +899,7 @@ module ExamQuestions
       explanation: "지체상금은 계약금액에 지체상금율(공사 1/1000 등)과 지체일수를 곱하여 산정합니다. 지체상금율은 공사·물품·용역 등 계약 유형에 따라 다릅니다."
     },
     {
-      id: 78, subject_id: 3,
+      id: 78, subject_id: 3, chapter_num: 1,
       question: "계약 체결 전 '입찰보증금' 납부 목적으로 옳은 것은?",
       options: [
         "발주기관의 수익 창출",
@@ -911,7 +911,7 @@ module ExamQuestions
       explanation: "입찰보증금은 낙찰자가 정당한 이유 없이 계약 체결을 거부할 경우 발주기관의 손실을 보전하기 위한 보증금입니다. 계약보증금·이행보증금·하자보수보증금과 구분하세요."
     },
     {
-      id: 79, subject_id: 3,
+      id: 79, subject_id: 3, chapter_num: 1,
       question: "계약 분쟁 해결 방법 중 '행정심판'을 활용하는 경우로 옳은 것은?",
       options: [
         "민사 손해배상 청구",
@@ -923,7 +923,7 @@ module ExamQuestions
       explanation: "행정심판은 행정청의 위법·부당한 처분에 대해 불복하는 수단입니다. 공공계약에서 입찰참가자격 제한 등 행정처분에 불복할 때 활용합니다."
     },
     {
-      id: 80, subject_id: 3,
+      id: 80, subject_id: 3, chapter_num: 1,
       question: "'설계변경'으로 계약금액 조정 시 단가 산정 기준으로 옳은 것은?",
       options: [
         "현재 시장 거래 가격",
@@ -935,7 +935,7 @@ module ExamQuestions
       explanation: "설계변경으로 인한 계약금액 조정 시 신규 공종은 설계변경 당시 단가로, 기존 공종은 계약단가로 조정합니다. 새로운 단가는 계약단가와 설계변경 당시 단가 중 낮은 금액을 적용합니다."
     },
     {
-      id: 81, subject_id: 3,
+      id: 81, subject_id: 3, chapter_num: 1,
       question: "용역계약에서 '착수보고서' 제출의 주요 목적은?",
       options: [
         "계약 해지 방지",
@@ -947,7 +947,7 @@ module ExamQuestions
       explanation: "착수보고서는 용역 시작 시 수행 계획·투입 인력·세부 일정을 발주기관과 공유하고 확인받는 절차로, 상호 이해를 바탕으로 용역을 원활히 수행하기 위한 것입니다."
     },
     {
-      id: 82, subject_id: 3,
+      id: 82, subject_id: 3, chapter_num: 1,
       question: "'하자보수보증금'의 납부 시기로 옳은 것은?",
       options: [
         "계약 체결 시 납부",
@@ -959,7 +959,7 @@ module ExamQuestions
       explanation: "하자보수보증금은 공사·용역 준공 후 최종 대금 수령 전에 납부합니다. 이후 하자담보책임 기간 동안 하자 발생 시 이를 재원으로 보수합니다."
     },
     {
-      id: 83, subject_id: 3,
+      id: 83, subject_id: 3, chapter_num: 1,
       question: "공공계약에서 '이행지체'와 '이행불능'의 차이로 옳은 것은?",
       options: [
         "이행지체는 계약을 아예 이행 안 함, 이행불능은 늦게 이행",
@@ -971,7 +971,7 @@ module ExamQuestions
       explanation: "이행지체는 이행이 가능하나 기한을 넘긴 경우(지체상금 부과)이고, 이행불능은 재해·도산 등으로 계약 이행 자체가 불가능하게 된 상태(계약 해제·해지 사유)입니다."
     },
     {
-      id: 84, subject_id: 3,
+      id: 84, subject_id: 3, chapter_num: 1,
       question: "낙찰자 결정 후 계약 체결 기한으로 옳은 것은?",
       options: [
         "낙찰 통보 후 3일 이내",
@@ -983,7 +983,7 @@ module ExamQuestions
       explanation: "낙찰자로 통보받은 후 원칙적으로 10일 이내에 계약을 체결해야 합니다. 기간 내 정당한 사유 없이 계약을 체결하지 않으면 입찰보증금이 국고 귀속될 수 있습니다."
     },
     {
-      id: 85, subject_id: 3,
+      id: 85, subject_id: 3, chapter_num: 1,
       question: "공공계약에서 '공동수급체(Joint Venture)' 구성 목적으로 옳은 것은?",
       options: [
         "담합을 위한 업체 간 협력",
@@ -999,7 +999,7 @@ module ExamQuestions
     # 4권: 공공조달 관리실무 (추가 문제 Q86-100)
     # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     {
-      id: 86, subject_id: 4,
+      id: 86, subject_id: 4, chapter_num: 1,
       question: "나라장터 '종합쇼핑몰'에서 구매할 수 있는 물품의 특징은?",
       options: [
         "발주기관이 특별 주문한 맞춤형 제품",
@@ -1011,7 +1011,7 @@ module ExamQuestions
       explanation: "나라장터 종합쇼핑몰은 조달청이 MAS(다수공급자계약) 또는 단가계약으로 사전 등록한 제품을 수요기관이 직접 검색·구매하는 플랫폼입니다."
     },
     {
-      id: 87, subject_id: 4,
+      id: 87, subject_id: 4, chapter_num: 1,
       question: "입찰참가자격 제한 처분의 최대 기간으로 옳은 것은?",
       options: [
         "최대 1개월",
@@ -1023,7 +1023,7 @@ module ExamQuestions
       explanation: "입찰참가자격 제한은 위반 내용에 따라 1개월에서 최대 2년 범위에서 부과됩니다. 위반 유형·횟수에 따라 기간이 달라집니다."
     },
     {
-      id: 88, subject_id: 4,
+      id: 88, subject_id: 4, chapter_num: 1,
       question: "계약보증금 납부가 면제되는 경우로 옳은 것은?",
       options: [
         "계약금액이 5천만원 미만인 경우 자동 면제",
@@ -1035,7 +1035,7 @@ module ExamQuestions
       explanation: "계약보증금 면제는 국가·지방자치단체 등을 상대로 한 계약, 계약이행능력 심사 통과, 보증보험 가입 등 국가계약법령에서 정한 사유에 해당하는 경우에만 허용됩니다."
     },
     {
-      id: 89, subject_id: 4,
+      id: 89, subject_id: 4, chapter_num: 1,
       question: "'혁신조달(InnoPP)' 추진의 주요 목적은?",
       options: [
         "최저가 달성",
@@ -1047,7 +1047,7 @@ module ExamQuestions
       explanation: "혁신조달은 공공부문이 혁신적인 제품·서비스를 선도 구매함으로써 기업의 기술 혁신을 촉진하고, 초기 시장을 형성하여 민간 시장 진출을 지원하는 정책입니다."
     },
     {
-      id: 90, subject_id: 4,
+      id: 90, subject_id: 4, chapter_num: 1,
       question: "공공조달에서 '사회적 가치' 반영 방법으로 옳지 않은 것은?",
       options: [
         "사회적기업 생산품 우선구매",
@@ -1059,7 +1059,7 @@ module ExamQuestions
       explanation: "사회적 가치 반영은 사회적기업, 장애인기업, 여성기업, 녹색제품, 중소기업 등 법령에서 정한 사회적 목적을 위한 것입니다. 특정 종교 단체 우대는 차별로 허용되지 않습니다."
     },
     {
-      id: 91, subject_id: 4,
+      id: 91, subject_id: 4, chapter_num: 1,
       question: "'공공조달 청렴계약제도'에 대한 설명으로 옳은 것은?",
       options: [
         "청렴서약서 미제출 시 입찰 참가 불가",
@@ -1071,7 +1071,7 @@ module ExamQuestions
       explanation: "청렴계약제도는 발주기관과 계약업체가 쌍방 서약을 통해 입찰·계약 과정에서 금품수수·담합 등 부패행위를 하지 않겠다는 약속을 명문화한 제도입니다."
     },
     {
-      id: 92, subject_id: 4,
+      id: 92, subject_id: 4, chapter_num: 1,
       question: "건설 공사 원가 중 '간접노무비'에 해당하는 것은?",
       options: [
         "직접 공사를 수행하는 기능공의 임금",
@@ -1083,7 +1083,7 @@ module ExamQuestions
       explanation: "간접노무비는 직접 공사에 참여하지 않지만 공사 지원·관리를 담당하는 현장 소장, 안전관리자, 행정직원 등의 인건비입니다. 직접 기능공 임금은 직접노무비입니다."
     },
     {
-      id: 93, subject_id: 4,
+      id: 93, subject_id: 4, chapter_num: 1,
       question: "중소기업 '직접생산확인증명서'의 유효기간은?",
       options: [
         "1년",
@@ -1095,7 +1095,7 @@ module ExamQuestions
       explanation: "직접생산확인증명서의 유효기간은 2년입니다. 유효기간 만료 전 갱신 신청을 해야 조달 납품 자격이 유지됩니다."
     },
     {
-      id: 94, subject_id: 4,
+      id: 94, subject_id: 4, chapter_num: 1,
       question: "청탁금지법(김영란법)상 공직자가 직무와 관련 없이 금품을 수수한 경우 처벌 기준은?",
       options: [
         "1회 50만원 초과 시 처벌",
@@ -1107,7 +1107,7 @@ module ExamQuestions
       explanation: "청탁금지법상 직무 무관 금품은 1회 100만원 초과 또는 연간 300만원 초과 수수 시 형사처벌 대상입니다. 직무 관련 금품은 금액에 관계없이 수수가 금지됩니다."
     },
     {
-      id: 95, subject_id: 4,
+      id: 95, subject_id: 4, chapter_num: 2,
       question: "지방계약법상 계약 체결 방법의 원칙으로 옳은 것은?",
       options: [
         "수의계약 원칙",
@@ -1119,7 +1119,7 @@ module ExamQuestions
       explanation: "지방계약법은 계약 체결의 원칙으로 공개경쟁입찰을 규정합니다. 수의계약·제한경쟁·지명경쟁은 법령에서 정한 요건에 해당하는 예외적 경우에만 허용됩니다."
     },
     {
-      id: 96, subject_id: 4,
+      id: 96, subject_id: 4, chapter_num: 2,
       question: "'조달청 우수제품' 지정 심사 항목이 아닌 것은?",
       options: [
         "품질 우수성",
@@ -1131,7 +1131,7 @@ module ExamQuestions
       explanation: "우수조달물품 심사는 품질 우수성·기술력·AS 능력·조달시장 기여도 등을 평가합니다. 최저가 여부는 심사 항목이 아니며, 가격보다 품질과 기술력이 중심입니다."
     },
     {
-      id: 97, subject_id: 4,
+      id: 97, subject_id: 4, chapter_num: 2,
       question: "공공조달에서 '수입물품 구매'를 위해 필요한 절차로 옳은 것은?",
       options: [
         "모든 수입품은 조달청을 통해서만 구매 가능",
@@ -1143,7 +1143,7 @@ module ExamQuestions
       explanation: "공공기관은 원칙적으로 국산품을 우선 구매해야 하며, 수입물품 구매 시에는 국산품으로 대체 불가 사유를 확인하는 절차를 거쳐야 합니다."
     },
     {
-      id: 98, subject_id: 4,
+      id: 98, subject_id: 4, chapter_num: 2,
       question: "공공기관 '청렴도 측정'을 담당하는 기관은?",
       options: [
         "감사원",
@@ -1155,7 +1155,7 @@ module ExamQuestions
       explanation: "공공기관 청렴도 측정은 국민권익위원회가 매년 실시합니다. 외부청렴도·내부청렴도·종합청렴도로 구분하여 측정하며, 결과는 공개됩니다."
     },
     {
-      id: 99, subject_id: 4,
+      id: 99, subject_id: 4, chapter_num: 2,
       question: "공공조달 계약에서 '원가절감 인센티브' 조항의 주요 목적은?",
       options: [
         "계약금액을 강제로 삭감",
@@ -1167,7 +1167,7 @@ module ExamQuestions
       explanation: "원가절감 인센티브는 공급업체가 창의적인 방법으로 원가를 절감하면 절감액의 일부를 공급업체가 가질 수 있게 하여, 비용 절감 혁신을 장려하는 계약 조항입니다."
     },
     {
-      id: 100, subject_id: 4,
+      id: 100, subject_id: 4, chapter_num: 2,
       question: "계약 이행 완료 후 '계약 종결(Contract Closeout)' 단계에서 수행하는 활동이 아닌 것은?",
       options: [
         "최종 검수 및 인수",
@@ -1183,7 +1183,7 @@ module ExamQuestions
     # 1권: 공공조달의 이해 (심화 문제 Q101-125)
     # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     {
-      id: 101, subject_id: 1,
+      id: 101, subject_id: 1, chapter_num: 2,
       question: "공공조달의 3대 목표로 옳은 것은?",
       options: [
         "예산 절감, 속도 향상, 업체 육성",
@@ -1195,7 +1195,7 @@ module ExamQuestions
       explanation: "공공조달의 3대 목표는 경제적 효율성(VFM), 사회적 가치 반영(중소기업·장애인·녹색제품), 정책 목표 달성(혁신·일자리·지역경제)입니다."
     },
     {
-      id: 102, subject_id: 1,
+      id: 102, subject_id: 1, chapter_num: 2,
       question: "공공조달에서 '계약의 원칙'으로 국가계약법에서 정하는 것이 아닌 것은?",
       options: [
         "신의성실 원칙",
@@ -1207,7 +1207,7 @@ module ExamQuestions
       explanation: "국가계약법 제5조는 신의성실, 상호 대등한 입장, 부당특약 금지를 계약 원칙으로 규정합니다. 최저가 우선은 계약 원칙이 아니며, VFM 원칙에 따라 종합 평가합니다."
     },
     {
-      id: 103, subject_id: 1,
+      id: 103, subject_id: 1, chapter_num: 2,
       question: "공기업·준정부기관이 공공조달 계약을 체결할 때 주로 적용받는 법령은?",
       options: [
         "국가계약법",
@@ -1219,7 +1219,7 @@ module ExamQuestions
       explanation: "공기업·준정부기관은 공공기관의 운영에 관한 법률(공운법)에 따라 자체 계약규정을 마련·운영합니다. 국가계약법이나 지방계약법이 직접 적용되지 않습니다."
     },
     {
-      id: 104, subject_id: 1,
+      id: 104, subject_id: 1, chapter_num: 2,
       question: "조달청이 운영하는 '혁신장터'의 주요 대상은?",
       options: [
         "대기업의 해외 수입 제품",
@@ -1231,7 +1231,7 @@ module ExamQuestions
       explanation: "혁신장터는 AI·빅데이터·IoT 등 혁신 기술을 보유한 중소·벤처기업의 제품을 공공기관이 선도 구매할 수 있도록 지원하는 조달청 플랫폼입니다."
     },
     {
-      id: 105, subject_id: 1,
+      id: 105, subject_id: 1, chapter_num: 2,
       question: "국제개발은행(MDB) 차관 사업에서 'ICB(국제경쟁입찰)'가 적용되는 주된 이유는?",
       options: [
         "국내 기업 보호를 위해",
@@ -1243,7 +1243,7 @@ module ExamQuestions
       explanation: "MDB 차관 사업은 자금 공여 조건으로 국제경쟁입찰(ICB) 원칙을 요구합니다. 투명성·경쟁·내국민대우 원칙을 통해 자금이 효율적으로 사용되도록 감시하기 위해서입니다."
     },
     {
-      id: 106, subject_id: 1,
+      id: 106, subject_id: 1, chapter_num: 2,
       question: "공공조달에서 '경쟁촉진'의 효과로 옳지 않은 것은?",
       options: [
         "가격 인하 효과",
@@ -1255,7 +1255,7 @@ module ExamQuestions
       explanation: "경쟁촉진은 가격 인하, 품질 향상, 독점 방지, 납세자 이익 보호, 혁신 유발 등의 효과를 가져옵니다. 담당자 업무 증가는 일부 부작용이지만 경쟁촉진 자체의 '효과'가 아닙니다."
     },
     {
-      id: 107, subject_id: 1,
+      id: 107, subject_id: 1, chapter_num: 2,
       question: "국가계약법상 '수의계약' 허용 사유로 옳지 않은 것은?",
       options: [
         "재해 복구 등 긴급한 경우",
@@ -1267,7 +1267,7 @@ module ExamQuestions
       explanation: "수의계약은 법령에서 정한 객관적 사유(긴급, 특수성, 소액 등)에만 허용됩니다. 담당자의 주관적 선호는 수의계약 사유가 될 수 없으며, 이는 위법입니다."
     },
     {
-      id: 108, subject_id: 1,
+      id: 108, subject_id: 1, chapter_num: 2,
       question: "OECD 공공조달 원칙 12가지 중 '청렴성'의 핵심 내용으로 옳은 것은?",
       options: [
         "모든 계약은 전자조달로만 처리",
@@ -1279,7 +1279,7 @@ module ExamQuestions
       explanation: "OECD 공공조달 원칙에서 청렴성은 이해충돌 방지, 부패 및 담합 방지, 내부 통제·감사 시스템 구축, 행동강령 수립 등을 포함합니다."
     },
     {
-      id: 109, subject_id: 1,
+      id: 109, subject_id: 1, chapter_num: 2,
       question: "공공조달 담당자의 '이해충돌(Conflict of Interest)' 예시로 옳은 것은?",
       options: [
         "입찰 공고 후 질의응답 진행",
@@ -1291,7 +1291,7 @@ module ExamQuestions
       explanation: "이해충돌은 공무 수행자가 업무와 관련된 사적 이익을 가질 때 발생합니다. 평가위원이 심사 업체의 주주이거나 금전 관계가 있으면 전형적인 이해충돌 상황입니다."
     },
     {
-      id: 110, subject_id: 1,
+      id: 110, subject_id: 1, chapter_num: 2,
       question: "공공조달에서 '사회적 책임조달(SRPP)' 반영 사례로 옳지 않은 것은?",
       options: [
         "장애인 고용 업체 우대",
@@ -1303,7 +1303,7 @@ module ExamQuestions
       explanation: "SRPP는 사회적 가치(고용·인권·환경)를 조달에 반영하는 것입니다. 담당자 친족 기업 우대는 이해충돌로 SRPP와 정반대의 행위입니다."
     },
     {
-      id: 111, subject_id: 1,
+      id: 111, subject_id: 1, chapter_num: 2,
       question: "나라장터(KONEPS) 전자입찰에서 '공동인증서(공인인증서)'의 역할로 옳은 것은?",
       options: [
         "가격 자동 산정",
@@ -1315,7 +1315,7 @@ module ExamQuestions
       explanation: "나라장터 전자입찰에서 공동인증서(구 공인인증서)는 입찰자의 신원을 확인하고, 전자서명을 통해 입찰서의 위변조를 방지하는 핵심 보안 수단입니다."
     },
     {
-      id: 112, subject_id: 1,
+      id: 112, subject_id: 1, chapter_num: 2,
       question: "공공조달에서 '녹색공공조달(GPP)'의 주요 도구로 옳은 것은?",
       options: [
         "최저가 입찰제",
@@ -1327,7 +1327,7 @@ module ExamQuestions
       explanation: "GPP는 환경마크 인증, 에너지효율 등급 기준, 재활용 원자재 사용 요건 등을 조달 규격에 반영하여 환경 부담을 줄이는 조달 방식입니다."
     },
     {
-      id: 113, subject_id: 1,
+      id: 113, subject_id: 1, chapter_num: 2,
       question: "공공조달에서 '투명성'을 확보하기 위한 수단으로 옳지 않은 것은?",
       options: [
         "입찰공고 및 계약 결과 공개",
@@ -1339,7 +1339,7 @@ module ExamQuestions
       explanation: "투명성 확보 수단은 공고·결과 공개, 전자조달, 평가기준 사전 공개 등입니다. 평가위원 명단은 담합·청탁 방지를 위해 '비공개'가 원칙이므로, 비공개 자체가 투명성을 해치지는 않습니다."
     },
     {
-      id: 114, subject_id: 1,
+      id: 114, subject_id: 1, chapter_num: 2,
       question: "공공조달에서 '담합(Collusion)' 탐지를 위한 방법으로 옳은 것은?",
       options: [
         "입찰 참가자 수를 제한",
@@ -1351,7 +1351,7 @@ module ExamQuestions
       explanation: "담합 탐지는 입찰가격·낙찰 패턴 분석, 자진신고 감면제(리니언시), 공정위 협조, 전자입찰 데이터 분석 등을 활용합니다."
     },
     {
-      id: 115, subject_id: 1,
+      id: 115, subject_id: 1, chapter_num: 2,
       question: "공공조달 계약 유형 중 '총액계약'의 장점으로 옳은 것은?",
       options: [
         "물가 변동에 유연하게 대응 가능",
@@ -1363,7 +1363,7 @@ module ExamQuestions
       explanation: "총액계약은 발주기관이 총비용을 미리 확정할 수 있어 예산 관리가 용이합니다. 단, 설계 변경·물가 변동 시 조정이 어려울 수 있습니다."
     },
     {
-      id: 116, subject_id: 1,
+      id: 116, subject_id: 1, chapter_num: 2,
       question: "공공기관의 '우선구매 대상' 제품에 해당하지 않는 것은?",
       options: [
         "중증장애인 생산품",
@@ -1375,7 +1375,7 @@ module ExamQuestions
       explanation: "우선구매 대상은 중증장애인·여성기업·사회적기업·중소기업·녹색제품 등 법령에서 정한 사회적 가치 관련 제품입니다. 대기업 프리미엄 제품은 해당되지 않습니다."
     },
     {
-      id: 117, subject_id: 1,
+      id: 117, subject_id: 1, chapter_num: 2,
       question: "지명경쟁입찰이 허용되는 요건으로 옳은 것은?",
       options: [
         "발주기관이 원하는 업체 3~5개를 임의 지명",
@@ -1387,7 +1387,7 @@ module ExamQuestions
       explanation: "지명경쟁은 특수 기술·보안·소규모 등 법정 요건에 해당하는 경우에만 허용되며, 객관적 기준 없이 임의로 업체를 지명하는 것은 위법입니다."
     },
     {
-      id: 118, subject_id: 1,
+      id: 118, subject_id: 1, chapter_num: 2,
       question: "공공조달 '수명주기비용(LCC: Life Cycle Cost)' 분석의 목적으로 옳은 것은?",
       options: [
         "입찰 시 최저가를 낙찰자로 선정",
@@ -1399,7 +1399,7 @@ module ExamQuestions
       explanation: "LCC 분석은 초기 구매가격뿐만 아니라 사용 기간 중 운영비·유지비·처분비까지 포함한 총비용을 비교하여 진정한 경제성을 평가하는 방법입니다."
     },
     {
-      id: 119, subject_id: 1,
+      id: 119, subject_id: 1, chapter_num: 2,
       question: "조달청의 '비축물자' 관리 목적으로 가장 옳은 것은?",
       options: [
         "특정 업체에 독점 공급권 부여",
@@ -1411,7 +1411,7 @@ module ExamQuestions
       explanation: "비축물자는 국가 비상사태, 자연재해, 수급 불균형 등 위기 상황에서 안정적으로 필수 물자를 공급하기 위해 조달청이 사전에 구매·보관하는 물자입니다."
     },
     {
-      id: 120, subject_id: 1,
+      id: 120, subject_id: 1, chapter_num: 3,
       question: "조달청의 '수요예보제'의 주요 효과로 옳은 것은?",
       options: [
         "업체별 매출 보장",
@@ -1423,7 +1423,7 @@ module ExamQuestions
       explanation: "수요예보제는 수요기관이 연간 조달 계획을 사전에 조달청에 통보함으로써 시장 수급을 예측하고, 적기 공급과 가격 안정을 도모하는 제도입니다."
     },
     {
-      id: 121, subject_id: 1,
+      id: 121, subject_id: 1, chapter_num: 3,
       question: "공공조달에서 '전략적 조달(Strategic Procurement)'의 특징으로 옳은 것은?",
       options: [
         "모든 계약을 최저가 입찰로 처리",
@@ -1435,7 +1435,7 @@ module ExamQuestions
       explanation: "전략적 조달은 단순 물품 구매를 넘어 조직의 정책 목표·리스크·공급망 전체를 고려하여 조달 방식을 선택하는 고차원 접근법입니다."
     },
     {
-      id: 122, subject_id: 1,
+      id: 122, subject_id: 1, chapter_num: 3,
       question: "공공기관이 '사회적 가치 실현'을 위해 적용할 수 있는 조달 방식으로 옳지 않은 것은?",
       options: [
         "사회적기업 제품 수의계약",
@@ -1447,7 +1447,7 @@ module ExamQuestions
       explanation: "사회적 가치는 고용·환경·인권·지역경제 등 공익적 기준을 적용합니다. 특정 정당 지지 여부는 조달 평가 기준이 될 수 없으며, 정치적 차별은 위법입니다."
     },
     {
-      id: 123, subject_id: 1,
+      id: 123, subject_id: 1, chapter_num: 3,
       question: "공공조달에서 '분쟁해결위원회(국가계약분쟁조정위원회)' 이용 시 이점으로 옳은 것은?",
       options: [
         "조정 결과에 강제력이 있어 즉시 집행 가능",
@@ -1459,7 +1459,7 @@ module ExamQuestions
       explanation: "국가계약분쟁조정위원회는 행정소송보다 신속하고 비용이 적게 드는 분쟁해결 수단입니다. 조정 결과는 합의 형태이므로 강제집행력이 있는 판결과 다릅니다."
     },
     {
-      id: 124, subject_id: 1,
+      id: 124, subject_id: 1, chapter_num: 3,
       question: "공공조달 '전자조달(e-Procurement)' 도입의 핵심 효과로 옳지 않은 것은?",
       options: [
         "담합·부패 기회 감소",
@@ -1471,7 +1471,7 @@ module ExamQuestions
       explanation: "전자조달은 투명성·효율성 향상에 기여하지만, 복잡한 기술·협상이 필요한 계약은 여전히 인간의 판단이 필요합니다. '완전 자동화'는 과장된 표현입니다."
     },
     {
-      id: 125, subject_id: 1,
+      id: 125, subject_id: 1, chapter_num: 3,
       question: "공공조달 관련 부패방지를 위한 제도적 장치로 옳지 않은 것은?",
       options: [
         "청렴계약제",
@@ -1487,7 +1487,7 @@ module ExamQuestions
     # 2권: 공공조달 계획분석 (심화 문제 Q126-150)
     # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     {
-      id: 126, subject_id: 2,
+      id: 126, subject_id: 2, chapter_num: 2,
       question: "'조달수요 식별' 단계에서 확인해야 할 사항으로 옳지 않은 것은?",
       options: [
         "구매 목적 및 필요성",
@@ -1499,7 +1499,7 @@ module ExamQuestions
       explanation: "조달수요 식별 단계에서는 필요성, 요구 사양, 예산, 이력 등을 검토합니다. 낙찰 업체 세금 납부 현황은 계약 체결 시 검토하는 사항으로, 수요 식별 단계와는 무관합니다."
     },
     {
-      id: 127, subject_id: 2,
+      id: 127, subject_id: 2, chapter_num: 2,
       question: "시장조사 방법 중 'RFI(Request For Information)'의 목적으로 옳은 것은?",
       options: [
         "계약 체결을 위한 공식 제안서 요청",
@@ -1511,7 +1511,7 @@ module ExamQuestions
       explanation: "RFI는 계약 의사 없이 시장 현황·공급 가능성·가격 범위 등을 파악하기 위해 잠재 공급업체에 정보를 요청하는 것입니다. RFP(제안요청서)와 구분하세요."
     },
     {
-      id: 128, subject_id: 2,
+      id: 128, subject_id: 2, chapter_num: 2,
       question: "예정가격 결정에서 '거래실례가격'이 적용되는 경우는?",
       options: [
         "신규 개발품 구매",
@@ -1523,7 +1523,7 @@ module ExamQuestions
       explanation: "거래실례가격은 시장에서 실제로 거래된 가격 데이터로, 표준화된 물품처럼 시장가격 파악이 가능한 경우에 예정가격 결정의 기준으로 활용합니다."
     },
     {
-      id: 129, subject_id: 2,
+      id: 129, subject_id: 2, chapter_num: 2,
       question: "입찰공고 후 '현장설명회(Pre-Bid Conference)' 개최 목적으로 옳은 것은?",
       options: [
         "낙찰자를 사전에 공개 발표",
@@ -1535,7 +1535,7 @@ module ExamQuestions
       explanation: "현장설명회는 입찰 전 참가 희망 업체들이 현장을 직접 확인하고 불명확한 공고 내용에 대해 질의응답하는 자리입니다. 특히 복잡한 공사·용역에서 자주 개최합니다."
     },
     {
-      id: 130, subject_id: 2,
+      id: 130, subject_id: 2, chapter_num: 2,
       question: "낙찰 방식 중 '최저가 낙찰제'의 단점으로 옳은 것은?",
       options: [
         "발주기관의 예산 절감 효과 없음",
@@ -1547,7 +1547,7 @@ module ExamQuestions
       explanation: "최저가 낙찰제는 가격 경쟁이 심해 품질 저하, 덤핑 입찰, 이후 공사 중 설계 변경 남발 등 부작용이 있습니다. 이를 보완하기 위해 종합평가낙찰제, 적격심사제 등이 도입되었습니다."
     },
     {
-      id: 131, subject_id: 2,
+      id: 131, subject_id: 2, chapter_num: 2,
       question: "조달 방식 결정 시 '자체 제작 vs 구매(Make or Buy)' 분석에서 '구매'를 선택하기 적합한 경우는?",
       options: [
         "내부 핵심 역량 보호가 필요한 경우",
@@ -1559,7 +1559,7 @@ module ExamQuestions
       explanation: "비핵심 물품이나 서비스로서 외부 공급이 더 효율적이고 품질이 우수한 경우 구매가 합리적입니다. 핵심 역량·기밀 기술은 자체 제작이 원칙입니다."
     },
     {
-      id: 132, subject_id: 2,
+      id: 132, subject_id: 2, chapter_num: 2,
       question: "입찰 과정에서 '입찰보증금' 납부의 면제 요건으로 옳은 것은?",
       options: [
         "계약금액이 1억원 미만인 경우 자동 면제",
@@ -1571,7 +1571,7 @@ module ExamQuestions
       explanation: "입찰보증금은 국가·지방자치단체 등 공공기관이 입찰에 참가하거나 보증기관 보증서를 제출하는 등 법령에서 정한 요건에 해당하면 면제됩니다."
     },
     {
-      id: 133, subject_id: 2,
+      id: 133, subject_id: 2, chapter_num: 2,
       question: "조달청의 '나라장터 규격 표준화' 서비스의 주요 목적은?",
       options: [
         "특정 브랜드 제품 홍보",
@@ -1583,7 +1583,7 @@ module ExamQuestions
       explanation: "나라장터 규격 표준화는 반복 구매되는 품목의 규격서를 표준화하여 수요기관이 규격서를 별도 작성하지 않아도 되도록 지원하고, 불필요한 중복 개발을 방지합니다."
     },
     {
-      id: 134, subject_id: 2,
+      id: 134, subject_id: 2, chapter_num: 2,
       question: "'협상에 의한 계약(제안서 평가)'에서 기술·가격 배점 기준으로 옳은 것은?",
       options: [
         "가격 90점, 기술 10점",
@@ -1595,7 +1595,7 @@ module ExamQuestions
       explanation: "협상에 의한 계약에서 기술과 가격 배점은 계약 유형, 기술 중요도에 따라 달리 설정합니다. 일반적으로 기술 70~90점, 가격 10~30점 범위이며, 기술 비중이 높습니다."
     },
     {
-      id: 135, subject_id: 2,
+      id: 135, subject_id: 2, chapter_num: 2,
       question: "입찰공고에 반드시 포함해야 하는 사항이 아닌 것은?",
       options: [
         "입찰 일시 및 장소",
@@ -1607,7 +1607,7 @@ module ExamQuestions
       explanation: "입찰공고 필수 기재 사항은 입찰 일시·장소, 납품기한·장소, 예정가격·낙찰 방법, 입찰 자격 등입니다. 담당 공무원의 개인 정보(주민등록번호)는 기재 대상이 아닙니다."
     },
     {
-      id: 136, subject_id: 2,
+      id: 136, subject_id: 2, chapter_num: 2,
       question: "입찰 유찰 후 '재공고 입찰' 기준으로 옳은 것은?",
       options: [
         "최초 공고와 동일한 조건으로만 재공고 가능",
@@ -1619,7 +1619,7 @@ module ExamQuestions
       explanation: "재공고 입찰에서도 2인 이상 유효 입찰이 성립하지 않으면 수의계약으로 전환할 수 있습니다. 단, 재공고 시 조건을 완화하거나 변경하는 것도 가능합니다."
     },
     {
-      id: 137, subject_id: 2,
+      id: 137, subject_id: 2, chapter_num: 2,
       question: "공사계약에서 '공사손해보험' 가입 의무가 부과되는 주된 이유는?",
       options: [
         "업체 이윤 보장",
@@ -1631,7 +1631,7 @@ module ExamQuestions
       explanation: "공사손해보험은 공사 진행 중 사고로 인해 인접 건물 피해, 인명 사고, 재산 손실 등이 발생할 경우 피해를 보전하기 위해 가입을 의무화합니다."
     },
     {
-      id: 138, subject_id: 2,
+      id: 138, subject_id: 2, chapter_num: 2,
       question: "조달 계획 수립 시 '예산 반영'과 '조달 집행'의 관계로 옳은 것은?",
       options: [
         "예산이 없어도 조달 집행 가능",
@@ -1643,7 +1643,7 @@ module ExamQuestions
       explanation: "공공조달은 예산 범위 내에서 집행하는 것이 원칙입니다. 예산 편성 전 계약 체결은 원칙적으로 금지되며, 긴급한 경우 예비비 등 별도 예산 절차를 거쳐야 합니다."
     },
     {
-      id: 139, subject_id: 2,
+      id: 139, subject_id: 2, chapter_num: 2,
       question: "대형 공사에서 '예비타당성조사'의 목적으로 옳은 것은?",
       options: [
         "입찰 참가 업체 자격 사전 검증",
@@ -1655,7 +1655,7 @@ module ExamQuestions
       explanation: "예비타당성조사는 총사업비 500억원 이상의 대형 재정사업에 대해 기획재정부가 경제성·정책성을 사전 검토하는 제도로, 타당성 없는 사업의 추진을 방지합니다."
     },
     {
-      id: 140, subject_id: 2,
+      id: 140, subject_id: 2, chapter_num: 2,
       question: "공사 설계도서 중 '내역서'의 역할로 옳은 것은?",
       options: [
         "공사 공정 일정 관리",
@@ -1667,7 +1667,7 @@ module ExamQuestions
       explanation: "내역서는 공사에 필요한 모든 자재·노무·장비의 수량과 단가를 기재하여 공사 원가의 근거가 되는 문서입니다. 계약금액 조정이나 기성금 산정 시 기준이 됩니다."
     },
     {
-      id: 141, subject_id: 2,
+      id: 141, subject_id: 2, chapter_num: 2,
       question: "입찰 서류로서 '입찰참가신청서'와 '입찰서'의 차이로 옳은 것은?",
       options: [
         "두 문서는 동일함",
@@ -1679,7 +1679,7 @@ module ExamQuestions
       explanation: "입찰참가신청서는 입찰 자격을 갖추었음을 확인하고 입찰 참가 의사를 표명하는 서류이고, 입찰서는 실제 입찰가격(투찰금액)을 기재하여 제출하는 문서입니다."
     },
     {
-      id: 142, subject_id: 2,
+      id: 142, subject_id: 2, chapter_num: 2,
       question: "조달청 원자재 비축 사업의 주요 대상으로 옳은 것은?",
       options: [
         "고급 사치품",
@@ -1691,7 +1691,7 @@ module ExamQuestions
       explanation: "조달청 비축 사업의 대상은 유사시 수급이 불안해질 수 있는 구리·알루미늄 등 원자재, 의료물자 등 전략 물자입니다. 가격 안정과 수급 보장이 목적입니다."
     },
     {
-      id: 143, subject_id: 2,
+      id: 143, subject_id: 2, chapter_num: 2,
       question: "'성과기반계약(PBC: Performance-Based Contract)'의 핵심 특징으로 옳은 것은?",
       options: [
         "투입 방법을 상세히 지시하는 계약",
@@ -1703,7 +1703,7 @@ module ExamQuestions
       explanation: "PBC는 세부 수행 방법 대신 달성해야 할 성과(KPI)를 명시하고, 공급업체가 창의적인 방법으로 성과를 달성할 수 있도록 하는 계약 방식입니다."
     },
     {
-      id: 144, subject_id: 2,
+      id: 144, subject_id: 2, chapter_num: 2,
       question: "공공조달에서 '공급망 리스크 관리'의 주요 항목으로 옳지 않은 것은?",
       options: [
         "주요 공급업체 재무 건전성 모니터링",
@@ -1715,7 +1715,7 @@ module ExamQuestions
       explanation: "공급망 리스크 관리는 재무 건전성, 공급원 다변화, 수급 이력, 지정학적 리스크 등을 관리합니다. 공급업체 대표자의 사생활은 관리 대상이 아닙니다."
     },
     {
-      id: 145, subject_id: 2,
+      id: 145, subject_id: 2, chapter_num: 2,
       question: "전자입찰에서 '차등예가 입찰' 방식에 대한 설명으로 옳은 것은?",
       options: [
         "입찰자마다 서로 다른 예정가격이 적용되는 방식",
@@ -1727,7 +1727,7 @@ module ExamQuestions
       explanation: "차등예가 방식은 복수예비가격 중 입찰자가 선택한 조합이 다르면 예정가격도 달라지는 구조로, 사전 담합을 통한 입찰가격 결정을 어렵게 합니다."
     },
     {
-      id: 146, subject_id: 2,
+      id: 146, subject_id: 2, chapter_num: 2,
       question: "지방계약법상 소액 수의계약의 기준으로 옳은 것은?",
       options: [
         "1천만원 이하",
@@ -1739,7 +1739,7 @@ module ExamQuestions
       explanation: "지방계약법령상 물품·용역 수의계약은 추정가격 2천만원 이하(공사는 2억원 이하)이면 소액 수의계약으로 처리할 수 있습니다."
     },
     {
-      id: 147, subject_id: 2,
+      id: 147, subject_id: 2, chapter_num: 2,
       question: "조달사업법에서 '조달청 집행대상 의무구매'가 적용되는 기관으로 옳은 것은?",
       options: [
         "민간 기업",
@@ -1751,7 +1751,7 @@ module ExamQuestions
       explanation: "조달청 의무구매 제도는 국가기관·지방자치단체·정부투자기관 등 법령에서 지정한 수요기관에 적용됩니다. 민간 기업은 해당되지 않습니다."
     },
     {
-      id: 148, subject_id: 2,
+      id: 148, subject_id: 2, chapter_num: 2,
       question: "입찰 담합 징후를 나타내는 패턴으로 옳은 것은?",
       options: [
         "매회 입찰에서 낙찰자가 바뀌는 경우",
@@ -1763,7 +1763,7 @@ module ExamQuestions
       explanation: "담합의 징후는 낙찰자가 규칙적으로 순번을 돌리는 '교번 낙찰', 낙찰가격이 항상 비슷한 수준을 유지, 들러리 업체가 일부러 높은 가격 투찰 등입니다."
     },
     {
-      id: 149, subject_id: 2,
+      id: 149, subject_id: 2, chapter_num: 2,
       question: "공공기관 조달에서 '수요 통합구매'의 주요 효과로 옳은 것은?",
       options: [
         "각 기관이 개별 구매하여 가격 경쟁력 확보",
@@ -1775,7 +1775,7 @@ module ExamQuestions
       explanation: "수요 통합구매는 분산된 소량 구매를 통합하여 대량 구매에 따른 가격 할인, 규격 표준화, 행정비용 절감 효과를 거둘 수 있습니다."
     },
     {
-      id: 150, subject_id: 2,
+      id: 150, subject_id: 2, chapter_num: 2,
       question: "공공조달 계획 수립 시 '시장 실패(Market Failure)' 상황으로 조달 방식을 변경해야 하는 경우는?",
       options: [
         "시장에 공급 업체가 많고 경쟁이 활발한 경우",
@@ -1791,7 +1791,7 @@ module ExamQuestions
     # 3권: 공공계약관리 (심화 문제 Q151-175)
     # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     {
-      id: 151, subject_id: 3,
+      id: 151, subject_id: 3, chapter_num: 2,
       question: "공사계약에서 '준공검사'와 '기성검사'의 차이로 옳은 것은?",
       options: [
         "준공검사는 착공 시, 기성검사는 완공 후",
@@ -1803,7 +1803,7 @@ module ExamQuestions
       explanation: "준공검사는 공사 전체가 완료된 후 계약대로 이행되었는지 최종 확인하는 절차이고, 기성검사는 공사 진행 단계별로 이행 상태를 확인하고 기성금을 지급하는 절차입니다."
     },
     {
-      id: 152, subject_id: 3,
+      id: 152, subject_id: 3, chapter_num: 2,
       question: "'계약금액 조정' 중 '설계변경'으로 인한 조정이 가능한 경우로 옳지 않은 것은?",
       options: [
         "발주기관의 설계 변경 지시",
@@ -1815,7 +1815,7 @@ module ExamQuestions
       explanation: "설계변경으로 계약금액을 조정받으려면 발주기관의 지시, 예측 불가 현장 조건, 법령 변경 등 객관적 사유가 있어야 합니다. 업체가 임의로 설계를 변경한 경우는 인정되지 않습니다."
     },
     {
-      id: 153, subject_id: 3,
+      id: 153, subject_id: 3, chapter_num: 2,
       question: "'계약 해제'와 '계약 해지'의 차이로 옳은 것은?",
       options: [
         "두 가지는 동일한 법적 효과",
@@ -1827,7 +1827,7 @@ module ExamQuestions
       explanation: "계약 해제는 계약이 처음부터 존재하지 않았던 것으로 원상회복하는 효과(소급 효과)가 있습니다. 계약 해지는 장래에 대해서만 계약의 효력이 소멸합니다."
     },
     {
-      id: 154, subject_id: 3,
+      id: 154, subject_id: 3, chapter_num: 2,
       question: "공사계약에서 '공기 연장'이 인정되는 사유로 옳지 않은 것은?",
       options: [
         "천재지변 등 불가항력",
@@ -1839,7 +1839,7 @@ module ExamQuestions
       explanation: "공기 연장은 계약업체 귀책이 아닌 불가항력, 발주기관 귀책, 법령 변경 등 객관적 사유에 해당하는 경우만 인정됩니다. 계약업체 자체 인력 부족은 업체 귀책으로 인정되지 않습니다."
     },
     {
-      id: 155, subject_id: 3,
+      id: 155, subject_id: 3, chapter_num: 2,
       question: "공공계약에서 '물품 납품 후 검수' 절차에서 확인하는 사항이 아닌 것은?",
       options: [
         "계약 규격과의 일치 여부",
@@ -1851,7 +1851,7 @@ module ExamQuestions
       explanation: "물품 검수는 계약 규격 적합성, 수량, 품질, 포장 상태 등을 확인합니다. 납품업체 직원 신원조회는 검수 절차와 무관합니다."
     },
     {
-      id: 156, subject_id: 3,
+      id: 156, subject_id: 3, chapter_num: 2,
       question: "하도급계약의 적정성 확인을 위해 발주기관이 수행하는 역할로 옳은 것은?",
       options: [
         "하도급 업체와 직접 계약 체결",
@@ -1863,7 +1863,7 @@ module ExamQuestions
       explanation: "발주기관은 원도급자가 체결한 하도급 계약의 내용과 금액이 적정한지 확인하고, 하도급 대금이 제대로 지급되고 있는지 모니터링할 의무가 있습니다."
     },
     {
-      id: 157, subject_id: 3,
+      id: 157, subject_id: 3, chapter_num: 2,
       question: "'납품지체'와 '계약 해제' 사이의 절차로 옳은 것은?",
       options: [
         "납품지체 즉시 자동 계약 해제",
@@ -1875,7 +1875,7 @@ module ExamQuestions
       explanation: "납품지체 발생 시 즉시 해제하지 않고 지체상금을 부과하면서 이행을 촉구하고, 이행이 불가능하거나 계속 지체되는 경우 계약 해제 절차를 진행합니다."
     },
     {
-      id: 158, subject_id: 3,
+      id: 158, subject_id: 3, chapter_num: 2,
       question: "공공계약에서 '이윤율' 산정 기준으로 옳은 것은?",
       options: [
         "계약금액 전체의 일정 비율",
@@ -1887,7 +1887,7 @@ module ExamQuestions
       explanation: "이윤은 업종별 표준 이윤율을 제조원가(직접비+간접비+일반관리비)에 적용하여 산정합니다. 건설업·제조업 등 업종에 따라 이윤율이 다릅니다."
     },
     {
-      id: 159, subject_id: 3,
+      id: 159, subject_id: 3, chapter_num: 2,
       question: "공사계약에서 '자재 검수'의 목적으로 옳은 것은?",
       options: [
         "자재 가격 협상",
@@ -1899,7 +1899,7 @@ module ExamQuestions
       explanation: "자재 검수는 공사에 투입되는 자재가 설계도서·시방서에서 정한 규격과 품질을 충족하는지 확인하여 부실 공사를 방지하기 위한 절차입니다."
     },
     {
-      id: 160, subject_id: 3,
+      id: 160, subject_id: 3, chapter_num: 2,
       question: "공사 준공 후 '하자 분류' 중 '중대 하자'에 해당하는 것은?",
       options: [
         "페인트 색상 미세 차이",
@@ -1911,7 +1911,7 @@ module ExamQuestions
       explanation: "중대 하자는 건물의 사용 목적이나 안전에 영향을 미치는 결함입니다. 구조체 균열로 안전에 위험이 되는 경우가 전형적인 중대 하자입니다."
     },
     {
-      id: 161, subject_id: 3,
+      id: 161, subject_id: 3, chapter_num: 2,
       question: "공공계약에서 '계약 특수조건'의 역할로 옳은 것은?",
       options: [
         "법령을 위반하는 조건 부여",
@@ -1923,7 +1923,7 @@ module ExamQuestions
       explanation: "계약 특수조건은 일반조건에서 다루지 않는 특수한 요건(보안 조건, 특수 검사 기준 등)을 추가하거나 일반조건의 일부 사항을 해당 계약에 맞게 변경하는 역할을 합니다."
     },
     {
-      id: 162, subject_id: 3,
+      id: 162, subject_id: 3, chapter_num: 2,
       question: "공공계약에서 '분할납품(단계적 납품)'이 허용되는 경우로 옳은 것은?",
       options: [
         "납품업체의 편의를 위해 임의 분할",
@@ -1935,7 +1935,7 @@ module ExamQuestions
       explanation: "분할납품은 물량이 많아 한 번에 납품이 어렵거나, 수요기관이 단계적 공급을 필요로 하는 경우 허용됩니다. 업체 편의를 위한 임의 분할은 인정되지 않습니다."
     },
     {
-      id: 163, subject_id: 3,
+      id: 163, subject_id: 3, chapter_num: 2,
       question: "계약보증금의 '귀속' 사유로 옳은 것은?",
       options: [
         "계약 종료 시 자동 귀속",
@@ -1947,7 +1947,7 @@ module ExamQuestions
       explanation: "계약보증금은 계약업체가 귀책으로 계약을 불이행하여 해제·해지된 경우 발주기관에 귀속됩니다. 물가 상승·불가항력 등 업체 귀책이 아닌 사유는 해당되지 않습니다."
     },
     {
-      id: 164, subject_id: 3,
+      id: 164, subject_id: 3, chapter_num: 2,
       question: "'하도급 직접 지급'이 이루어지는 조건으로 옳은 것은?",
       options: [
         "원도급자 요청 없이 발주기관이 임의로 지급",
@@ -1959,7 +1959,7 @@ module ExamQuestions
       explanation: "하도급 대금 직접 지급은 하도급업체가 요청하거나, 원도급자가 부도·파산·하도급 대금 미지급 등의 경우에 발주기관이 하도급업체에 직접 지급하는 제도입니다."
     },
     {
-      id: 165, subject_id: 3,
+      id: 165, subject_id: 3, chapter_num: 2,
       question: "공공계약에서 '보증보험'과 '현금 보증'의 차이로 옳은 것은?",
       options: [
         "보증보험이 항상 더 유리",
@@ -1971,7 +1971,7 @@ module ExamQuestions
       explanation: "현금 보증은 현금을 직접 납부하는 방식이고, 보증보험은 보험사가 발행한 보증서로 업체가 이행하지 못할 경우 보험사가 발주기관에 직접 지급합니다. 법적 효력은 동일합니다."
     },
     {
-      id: 166, subject_id: 3,
+      id: 166, subject_id: 3, chapter_num: 2,
       question: "용역 계약에서 '산출물(Deliverable)' 관리의 중요성으로 옳은 것은?",
       options: [
         "산출물 관리는 용역업체의 의무가 아님",
@@ -1983,7 +1983,7 @@ module ExamQuestions
       explanation: "용역계약에서 산출물(보고서·시스템·도면 등)의 종류·수량·형식·기준을 계약서에 명확히 정의해야 이행 완료 여부, 품질 판단, 대금 지급 기준이 명확해집니다."
     },
     {
-      id: 167, subject_id: 3,
+      id: 167, subject_id: 3, chapter_num: 2,
       question: "공사계약의 '감리' 역할로 옳은 것은?",
       options: [
         "시공업체를 대신하여 공사 수행",
@@ -1995,7 +1995,7 @@ module ExamQuestions
       explanation: "감리는 발주기관을 대리하여 시공 단계에서 설계도서·시방서·관련 법령에 따라 공사가 올바르게 이행되는지 확인하고 시정지시 등을 수행하는 역할입니다."
     },
     {
-      id: 168, subject_id: 3,
+      id: 168, subject_id: 3, chapter_num: 2,
       question: "국가계약법상 '입찰 무효' 사유로 옳지 않은 것은?",
       options: [
         "입찰 참가 자격이 없는 자의 입찰",
@@ -2007,7 +2007,7 @@ module ExamQuestions
       explanation: "입찰가격이 예정가격보다 낮은 것은 입찰 무효 사유가 아닙니다(오히려 최저가 낙찰 대상). 입찰 무효는 자격 미달, 서명·날인 누락, 동일인 이중 투찰 등의 경우입니다."
     },
     {
-      id: 169, subject_id: 3,
+      id: 169, subject_id: 3, chapter_num: 2,
       question: "공사 원가에서 '산업안전보건관리비'가 포함되는 이유로 옳은 것은?",
       options: [
         "업체 이윤 확대를 위해",
@@ -2019,7 +2019,7 @@ module ExamQuestions
       explanation: "산업안전보건관리비는 공사 현장에서 안전시설 설치, 안전교육, 보호장구 지급 등에 소요되는 비용으로, 산업재해 예방을 위해 법령으로 원가에 반드시 계상하도록 규정됩니다."
     },
     {
-      id: 170, subject_id: 3,
+      id: 170, subject_id: 3, chapter_num: 2,
       question: "공공계약에서 '원도급자의 하도급 통보 의무'에 대한 설명으로 옳은 것은?",
       options: [
         "하도급 계약 후 1년 이내 통보",
@@ -2031,7 +2031,7 @@ module ExamQuestions
       explanation: "원도급자는 하도급 계약 체결 후 30일 이내에 하도급 업체명, 계약금액, 하도급 내용 등을 발주기관에 통보해야 합니다. 이를 통해 발주기관이 하도급 적정성을 확인합니다."
     },
     {
-      id: 171, subject_id: 3,
+      id: 171, subject_id: 3, chapter_num: 2,
       question: "용역계약에서 '투입인력 교체' 시 발주기관의 권리로 옳은 것은?",
       options: [
         "투입인력 교체는 업체의 전권이며 발주기관 관여 불가",
@@ -2043,7 +2043,7 @@ module ExamQuestions
       explanation: "용역계약에서 과업에 필수적인 핵심 인력(PM 등)의 교체는 발주기관의 사전 승인을 받아야 합니다. 동등 이상의 자격을 갖춘 인력으로 교체해야 합니다."
     },
     {
-      id: 172, subject_id: 3,
+      id: 172, subject_id: 3, chapter_num: 2,
       question: "공공계약 체결 후 '선급금 정산' 방법으로 옳은 것은?",
       options: [
         "준공 시 일시 정산",
@@ -2055,7 +2055,7 @@ module ExamQuestions
       explanation: "선급금은 공사 진행 단계별 기성금을 지급할 때마다 선급금 지급 비율에 해당하는 금액을 공제하는 방식으로 단계적으로 정산합니다."
     },
     {
-      id: 173, subject_id: 3,
+      id: 173, subject_id: 3, chapter_num: 2,
       question: "'종합심사낙찰제'가 도입된 배경으로 옳은 것은?",
       options: [
         "최저가 낙찰제의 가격 경쟁 심화, 품질 저하, 덤핑 낙찰 등 문제 해결을 위해",
@@ -2067,7 +2067,7 @@ module ExamQuestions
       explanation: "종합심사낙찰제는 최저가 낙찰제의 극심한 가격 경쟁, 덤핑 낙찰, 공사 품질 저하, 계약 이행 중 분쟁 증가 등의 문제를 해결하고자 가격 외 시공능력·사회적 책임 등을 종합 평가하도록 도입되었습니다."
     },
     {
-      id: 174, subject_id: 3,
+      id: 174, subject_id: 3, chapter_num: 2,
       question: "공사계약의 '부분 준공'이 인정되는 경우로 옳은 것은?",
       options: [
         "업체 편의를 위해 임의로 분리",
@@ -2079,7 +2079,7 @@ module ExamQuestions
       explanation: "부분 준공은 공사 목적물의 일부가 독립적으로 사용 가능하고, 발주기관이 사용 편의 등을 이유로 그 부분의 준공을 인정하는 경우에 허용됩니다."
     },
     {
-      id: 175, subject_id: 3,
+      id: 175, subject_id: 3, chapter_num: 2,
       question: "공공계약에서 '원가검토(Cost Analysis)'의 목적으로 옳은 것은?",
       options: [
         "업체의 회계 감사",
@@ -2095,7 +2095,7 @@ module ExamQuestions
     # 4권: 공공조달 관리실무 (심화 문제 Q176-200)
     # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     {
-      id: 176, subject_id: 4,
+      id: 176, subject_id: 4, chapter_num: 2,
       question: "나라장터 전자조달 시스템에서 '전자계약서'의 법적 효력으로 옳은 것은?",
       options: [
         "전자계약서는 법적 효력이 없어 별도 서면 계약 필요",
@@ -2107,7 +2107,7 @@ module ExamQuestions
       explanation: "전자서명법에 따라 공인전자서명이 된 전자계약서는 서면계약서와 동일한 법적 효력을 갖습니다. 나라장터의 전자계약 시스템이 이를 활용합니다."
     },
     {
-      id: 177, subject_id: 4,
+      id: 177, subject_id: 4, chapter_num: 2,
       question: "공공조달 담당자의 '청렴 의무' 위반 시 적용되는 법령으로 옳은 것은?",
       options: [
         "민법만 적용",
@@ -2119,7 +2119,7 @@ module ExamQuestions
       explanation: "공공조달 담당자의 부패 행위에는 부패방지권익위법, 청탁금지법, 형법(뇌물죄), 공직자윤리법 등 여러 법령이 적용될 수 있습니다."
     },
     {
-      id: 178, subject_id: 4,
+      id: 178, subject_id: 4, chapter_num: 2,
       question: "조달청 '나라장터 쇼핑몰'에서 구매 시 '2차 계약(세부계약)'을 체결해야 하는 금액 기준은?",
       options: [
         "1천만원 초과",
@@ -2131,7 +2131,7 @@ module ExamQuestions
       explanation: "나라장터 쇼핑몰(MAS)에서 2천만원을 초과하는 구매 시 3개 이상의 공급업체로부터 견적을 받아 가장 유리한 조건의 업체와 2차 계약을 체결해야 합니다."
     },
     {
-      id: 179, subject_id: 4,
+      id: 179, subject_id: 4, chapter_num: 2,
       question: "공공기관 '여성기업 제품' 우선구매 의무의 근거 법령은?",
       options: [
         "국가계약법",
@@ -2143,7 +2143,7 @@ module ExamQuestions
       explanation: "여성기업 제품 우선구매 의무는 '여성기업지원에 관한 법률'에 근거합니다. 공공기관은 여성기업 제품을 일정 비율 이상 구매하도록 노력해야 합니다."
     },
     {
-      id: 180, subject_id: 4,
+      id: 180, subject_id: 4, chapter_num: 2,
       question: "계약 이행 후 '대금 지급 기한'으로 옳은 것은?",
       options: [
         "검수 완료 후 즉시 지급",
@@ -2155,7 +2155,7 @@ module ExamQuestions
       explanation: "국가계약법령에 따르면 물품 검수·용역 기성검사 완료 후 5일 이내에 대금을 지급하는 것이 원칙입니다. 지연 지급 시 지연이자를 부담해야 합니다."
     },
     {
-      id: 181, subject_id: 4,
+      id: 181, subject_id: 4, chapter_num: 2,
       question: "공공조달에서 '원산지 확인'이 필요한 이유로 옳은 것은?",
       options: [
         "수입품 가격 인상",
@@ -2167,7 +2167,7 @@ module ExamQuestions
       explanation: "원산지 확인은 WTO GPA·FTA 협정에 따른 내국민대우 적용, 국산품 우선 구매 정책 이행 여부 확인, 관세 적용 등을 위해 필요합니다."
     },
     {
-      id: 182, subject_id: 4,
+      id: 182, subject_id: 4, chapter_num: 2,
       question: "'물품 단가계약'의 특징으로 옳은 것은?",
       options: [
         "총구매 수량을 사전 확정",
@@ -2179,7 +2179,7 @@ module ExamQuestions
       explanation: "물품 단가계약은 단위 가격만 미리 협상·결정하고, 수요기관이 필요에 따라 수량을 조절하며 발주하는 방식으로, 수요 변동이 큰 소모품·사무용품 등에 적합합니다."
     },
     {
-      id: 183, subject_id: 4,
+      id: 183, subject_id: 4, chapter_num: 2,
       question: "'조달청 물품 분류 체계(코드)'의 역할로 옳은 것은?",
       options: [
         "업체 신용등급 분류",
@@ -2191,7 +2191,7 @@ module ExamQuestions
       explanation: "조달청 물품 분류코드(나라장터 물품분류코드)는 물품을 카테고리별로 체계화하여 수요기관의 검색, 발주, 통계 분석을 쉽게 하고 조달 행정 효율성을 높이는 역할을 합니다."
     },
     {
-      id: 184, subject_id: 4,
+      id: 184, subject_id: 4, chapter_num: 2,
       question: "공공기관 '에너지효율 1등급 제품 우선구매' 의무의 근거 법령은?",
       options: [
         "국가계약법",
@@ -2203,7 +2203,7 @@ module ExamQuestions
       explanation: "에너지효율 1등급 제품 우선구매는 '에너지이용 합리화법'에 근거합니다. 공공기관은 에너지효율 기준을 충족하는 제품을 우선 구매해야 합니다."
     },
     {
-      id: 185, subject_id: 4,
+      id: 185, subject_id: 4, chapter_num: 2,
       question: "공공조달에서 '전자세금계산서' 발행이 의무화된 이유로 옳은 것은?",
       options: [
         "업체 편의를 위해",
@@ -2215,7 +2215,7 @@ module ExamQuestions
       explanation: "전자세금계산서 의무화는 세금 투명성 확보, 부가가치세 탈루 방지, 세무 행정 효율화, 종이 문서 감축 등을 위해 시행됩니다. 공공계약 대금 지급 시에도 활용됩니다."
     },
     {
-      id: 186, subject_id: 4,
+      id: 186, subject_id: 4, chapter_num: 2,
       question: "나라장터에서 '입찰자격 사전등록' 시 필요한 서류로 적합하지 않은 것은?",
       options: [
         "사업자등록증",
@@ -2227,7 +2227,7 @@ module ExamQuestions
       explanation: "나라장터 등록 서류는 사업자등록증, 업종 면허·자격, 납세증명, 재무제표 등입니다. 대표이사 학력증명서는 요구 서류에 해당하지 않습니다."
     },
     {
-      id: 187, subject_id: 4,
+      id: 187, subject_id: 4, chapter_num: 2,
       question: "공공기관 조달 담당자의 '청렴 서약서' 제출 목적으로 옳은 것은?",
       options: [
         "급여 인상 요건",
@@ -2239,7 +2239,7 @@ module ExamQuestions
       explanation: "청렴 서약서는 조달 담당자가 입찰·계약 과정에서 금품 수수·청탁 등 부패행위를 하지 않겠다고 서약하는 것으로, 청렴계약제의 일환입니다."
     },
     {
-      id: 188, subject_id: 4,
+      id: 188, subject_id: 4, chapter_num: 2,
       question: "공공조달 계약 후 '계약 이행 모니터링'의 주요 방법으로 옳지 않은 것은?",
       options: [
         "정기·수시 현장 점검",
@@ -2251,7 +2251,7 @@ module ExamQuestions
       explanation: "계약 이행 모니터링은 현장 점검, 납품 일정·품질 확인, 이행 보고서 검토 등 공식적인 방법을 사용합니다. 업체 직원 SNS 모니터링은 프라이버시 침해로 부적절합니다."
     },
     {
-      id: 189, subject_id: 4,
+      id: 189, subject_id: 4, chapter_num: 3,
       question: "공공조달에서 '물품 등록(조달청)'이 필요한 이유로 옳은 것은?",
       options: [
         "모든 물품 구매는 사전 등록 의무",
@@ -2263,7 +2263,7 @@ module ExamQuestions
       explanation: "조달청 물품 등록은 MAS, 단가계약 대상 물품을 사전에 등록·심사하여 규격·품질·가격이 적정한 제품만 수요기관에 공급될 수 있도록 하는 절차입니다."
     },
     {
-      id: 190, subject_id: 4,
+      id: 190, subject_id: 4, chapter_num: 3,
       question: "'부정당업자 입찰참가자격 제한'의 효력이 미치는 범위로 옳은 것은?",
       options: [
         "해당 발주기관에서만 제한",
@@ -2275,7 +2275,7 @@ module ExamQuestions
       explanation: "부정당업자 입찰참가자격 제한은 처분 기관에 관계없이 전국 모든 공공기관 입찰에 참가할 수 없도록 하는 효력이 있습니다. 나라장터를 통해 전 기관에 공유됩니다."
     },
     {
-      id: 191, subject_id: 4,
+      id: 191, subject_id: 4, chapter_num: 3,
       question: "공공기관 '장기계약(3년 이상)' 체결 시 필요한 조건으로 옳은 것은?",
       options: [
         "총액 무제한 장기 계약 가능",
@@ -2287,7 +2287,7 @@ module ExamQuestions
       explanation: "장기계속계약은 수년에 걸친 대형 공사·용역에서 총액을 확정하되 각 연도 예산 범위 내에서 연차 계약을 체결하는 방식으로, 예산 초과 집행을 방지합니다."
     },
     {
-      id: 192, subject_id: 4,
+      id: 192, subject_id: 4, chapter_num: 3,
       question: "공공조달에서 '계약 관련 서류 보존 기간'으로 옳은 것은?",
       options: [
         "1년",
@@ -2299,7 +2299,7 @@ module ExamQuestions
       explanation: "공공계약 관련 서류는 국가계약법령에 따라 최소 5년 이상 보존해야 합니다. 감사·이의신청 등에 대비하여 적절한 기간 동안 보관이 의무화됩니다."
     },
     {
-      id: 193, subject_id: 4,
+      id: 193, subject_id: 4, chapter_num: 3,
       question: "공공기관이 '친환경차(전기차·수소차)' 우선 구매를 해야 하는 법적 근거는?",
       options: [
         "국가계약법",
@@ -2311,7 +2311,7 @@ module ExamQuestions
       explanation: "공공기관의 친환경차 의무 구매는 '환경친화적 자동차의 개발 및 보급 촉진에 관한 법률'에 근거합니다. 일정 규모 이상의 공공기관은 신규 차량 구매 시 일정 비율을 친환경차로 해야 합니다."
     },
     {
-      id: 194, subject_id: 4,
+      id: 194, subject_id: 4, chapter_num: 3,
       question: "'조달 성과 측정(KPI)' 지표로 적합하지 않은 것은?",
       options: [
         "계약 단가 절감율",
@@ -2323,7 +2323,7 @@ module ExamQuestions
       explanation: "조달 KPI는 원가 절감, 납기 준수, 품질(불량률), 공급업체 성과, 처리 속도 등 조달 활동의 효율성을 측정합니다. 담당자 개인 근무 연수는 조달 성과 지표가 아닙니다."
     },
     {
-      id: 195, subject_id: 4,
+      id: 195, subject_id: 4, chapter_num: 3,
       question: "공공조달에서 '입찰공고 사전 예고제'의 효과로 옳은 것은?",
       options: [
         "입찰 공고 없이 업체 선정 가능",
@@ -2335,7 +2335,7 @@ module ExamQuestions
       explanation: "사전 예고제는 대형 조달 사업의 입찰 공고 전에 조달 계획을 미리 예고하여 잠재 공급업체가 충분히 준비할 수 있도록 함으로써 경쟁성을 높이는 제도입니다."
     },
     {
-      id: 196, subject_id: 4,
+      id: 196, subject_id: 4, chapter_num: 3,
       question: "공공조달에서 '계약 관련 정보 공개' 원칙으로 옳은 것은?",
       options: [
         "모든 계약 정보를 비공개",
@@ -2347,7 +2347,7 @@ module ExamQuestions
       explanation: "공공조달 계약 정보는 투명성 원칙에 따라 낙찰자, 계약금액, 계약 내용 등 기본 정보는 공개가 원칙입니다. 다만 영업비밀, 국가안보 관련 사항은 예외적으로 비공개할 수 있습니다."
     },
     {
-      id: 197, subject_id: 4,
+      id: 197, subject_id: 4, chapter_num: 3,
       question: "공공기관 조달 담당자의 '직무 범위'를 벗어나는 행위로 옳은 것은?",
       options: [
         "입찰 공고문 작성",
@@ -2359,7 +2359,7 @@ module ExamQuestions
       explanation: "조달 담당자는 적법한 절차에 따라 업무를 수행해야 합니다. 특정 업체에 유리하도록 규격을 임의 변경하는 것은 직권남용, 부패 행위에 해당합니다."
     },
     {
-      id: 198, subject_id: 4,
+      id: 198, subject_id: 4, chapter_num: 3,
       question: "공공기관의 '수입물품 구매 승인' 절차가 필요한 이유로 옳은 것은?",
       options: [
         "관세 면제를 위해",
@@ -2371,7 +2371,7 @@ module ExamQuestions
       explanation: "국산품 우선구매 원칙에 따라, 수입품 구매는 국산품으로 대체할 수 없는 불가피한 경우임을 확인하고 승인받는 절차를 통해 무분별한 수입 구매를 방지합니다."
     },
     {
-      id: 199, subject_id: 4,
+      id: 199, subject_id: 4, chapter_num: 3,
       question: "공공조달 계약 담당자가 감사를 대비하여 반드시 갖추어야 할 서류로 옳지 않은 것은?",
       options: [
         "입찰 공고 기록",
@@ -2383,7 +2383,7 @@ module ExamQuestions
       explanation: "감사 대비 구비 서류는 공고 기록, 평가위원회 회의록, 낙찰 근거, 계약서, 검수 확인서 등 계약 절차 관련 공식 문서입니다. 업체 대표자 개인 신용 보고서는 해당되지 않습니다."
     },
     {
-      id: 200, subject_id: 4,
+      id: 200, subject_id: 4, chapter_num: 3,
       question: "공공조달 '사후관리' 단계의 주요 활동으로 옳지 않은 것은?",
       options: [
         "하자 관리 및 보수 이행 확인",
@@ -2397,21 +2397,21 @@ module ExamQuestions
     # ── 6단계 추가 문제 (201~400) ──────────────────────────────────────────
     # 1권: 공공조달의 이해 (201~250)
     {
-      id: 201, subject_id: 1,
+      id: 201, subject_id: 1, chapter_num: 3,
       question: "공공조달의 3대 원칙으로 가장 거리가 먼 것은?",
       options: ["투명성", "경쟁성", "신속성", "공정성"],
       correct: 2,
       explanation: "공공조달의 3대 원칙은 투명성, 경쟁성, 공정성입니다. 신속성은 행정 효율과 관련된 요소이지만 공공조달의 핵심 원칙에는 포함되지 않습니다."
     },
     {
-      id: 202, subject_id: 1,
+      id: 202, subject_id: 1, chapter_num: 3,
       question: "조달청의 법적 근거가 되는 법률은?",
       options: ["국가계약법", "조달사업에 관한 법률", "국가재정법", "공공기관의 운영에 관한 법률"],
       correct: 1,
       explanation: "조달청의 설치와 운영에 관한 법적 근거는 '조달사업에 관한 법률'입니다. 조달청은 이 법에 따라 물자 조달 및 비축, 시설공사 계약, 정부물자 관리 등의 업무를 수행합니다."
     },
     {
-      id: 203, subject_id: 1,
+      id: 203, subject_id: 1, chapter_num: 3,
       question: "나라장터(G2B)에 대한 설명으로 옳지 않은 것은?",
       options: [
         "조달청이 운영하는 국가종합전자조달시스템이다",
@@ -2423,7 +2423,7 @@ module ExamQuestions
       explanation: "나라장터(G2B)는 민간기업도 입찰 참가, 공고 열람 등을 위해 접속할 수 있습니다. 조달청이 운영하는 국가종합전자조달시스템으로 공공기관과 민간기업 모두 사용합니다."
     },
     {
-      id: 204, subject_id: 1,
+      id: 204, subject_id: 1, chapter_num: 3,
       question: "국가계약법과 지방계약법의 관계에 대한 설명으로 옳은 것은?",
       options: [
         "지방계약법은 국가계약법의 하위법이다",
@@ -2435,7 +2435,7 @@ module ExamQuestions
       explanation: "지방자치단체는 지방계약법(지방자치단체를 당사자로 하는 계약에 관한 법률)을 적용합니다. 국가기관은 국가계약법을 적용하며, 두 법률은 독립적으로 운용됩니다."
     },
     {
-      id: 205, subject_id: 1,
+      id: 205, subject_id: 1, chapter_num: 3,
       question: "WTO 정부조달협정(GPA)의 주요 목적은?",
       options: [
         "각국 정부의 조달 예산을 통합 관리",
@@ -2447,7 +2447,7 @@ module ExamQuestions
       explanation: "WTO 정부조달협정(GPA)은 가입국 정부의 조달 시장을 상호 개방하여 차별 없는 국제 경쟁을 보장하는 것이 목적입니다. 우리나라는 1994년에 가입하였습니다."
     },
     {
-      id: 206, subject_id: 1,
+      id: 206, subject_id: 1, chapter_num: 3,
       question: "공공조달에서 '구매'와 '공사' 계약의 가장 큰 차이점은?",
       options: [
         "계약 금액의 규모",
@@ -2459,7 +2459,7 @@ module ExamQuestions
       explanation: "구매 계약은 물품·서비스 등 유형 물품을 취득하는 것이고, 공사 계약은 토목·건축·전기 등 시설물을 건설·개량하는 계약입니다. 목적물의 성격이 근본적인 차이입니다."
     },
     {
-      id: 207, subject_id: 1,
+      id: 207, subject_id: 1, chapter_num: 3,
       question: "조달청 종합쇼핑몰(쇼핑몰)의 특징으로 옳지 않은 것은?",
       options: [
         "규격화된 물품을 미리 단가 계약하여 수요기관이 직접 구매한다",
@@ -2471,7 +2471,7 @@ module ExamQuestions
       explanation: "조달청 종합쇼핑몰 이용이 의무화된 물품 목록이 있으나, 모든 물품이 반드시 종합쇼핑몰을 통해야 하는 것은 아닙니다. 긴급 구매, 특수 사양 등 예외가 존재합니다."
     },
     {
-      id: 208, subject_id: 1,
+      id: 208, subject_id: 1, chapter_num: 3,
       question: "공공조달에서 '예정가격'을 설정하는 주요 목적은?",
       options: [
         "낙찰자 선정 기준 제공 및 예산 낭비 방지",
@@ -2483,7 +2483,7 @@ module ExamQuestions
       explanation: "예정가격은 입찰 전 기관이 설정하는 추정 적정 가격으로, 낙찰자 선정의 기준(하한율 등)과 예산 낭비 방지 역할을 합니다. 과도한 저가 또는 고가 낙찰을 방지하는 기능도 합니다."
     },
     {
-      id: 209, subject_id: 1,
+      id: 209, subject_id: 1, chapter_num: 3,
       question: "국가계약법상 수의계약 허용 사유에 해당하지 않는 것은?",
       options: [
         "경쟁 입찰이 성립되지 않은 경우",
@@ -2495,7 +2495,7 @@ module ExamQuestions
       explanation: "수의계약은 경쟁 불성립, 긴급, 소액, 특수한 기술·예술·특정 물품 등의 사유로 허용되나, '특정인이 원하는 경우'는 수의계약 사유가 아닙니다. 이는 계약의 공정성을 해치는 이유입니다."
     },
     {
-      id: 210, subject_id: 1,
+      id: 210, subject_id: 1, chapter_num: 3,
       question: "공공조달에서 '다수공급자계약(MAS)'이란?",
       options: [
         "다수의 수요기관이 공동으로 체결하는 계약",
@@ -2507,7 +2507,7 @@ module ExamQuestions
       explanation: "MAS(Multiple Award Schedule)는 동일하거나 유사한 물품·용역을 여러 공급업체와 단가 계약하여 수요기관이 자신의 필요에 맞게 선택 구매할 수 있도록 하는 계약 방식입니다."
     },
     {
-      id: 211, subject_id: 1,
+      id: 211, subject_id: 1, chapter_num: 3,
       question: "공공기관의 친환경 조달에 관한 의무 규정의 근거 법령은?",
       options: [
         "국가계약법",
@@ -2519,7 +2519,7 @@ module ExamQuestions
       explanation: "'녹색제품 구매촉진에 관한 법률'에 따라 공공기관은 환경표지 인증 제품 등 녹색제품을 우선 구매해야 할 의무가 있습니다. 이는 친환경 조달의 법적 근거입니다."
     },
     {
-      id: 212, subject_id: 1,
+      id: 212, subject_id: 1, chapter_num: 3,
       question: "조달 과정에서 '사전규격 공개'의 목적으로 가장 적절한 것은?",
       options: [
         "특정 업체에게 정보를 미리 제공하기 위함",
@@ -2531,7 +2531,7 @@ module ExamQuestions
       explanation: "사전규격 공개는 입찰 전 조달 규격을 공개하여 특정 업체에 유리하도록 규격을 설정하는 행위(규격 담합)를 방지하고, 시장의 의견을 수렴하여 적정한 규격을 설정하기 위한 제도입니다."
     },
     {
-      id: 213, subject_id: 1,
+      id: 213, subject_id: 1, chapter_num: 3,
       question: "공공조달에서 입찰 참가자격을 제한할 수 없는 경우는?",
       options: [
         "특정 지역 업체에게 지역 제한 입찰을 하는 경우",
@@ -2543,7 +2543,7 @@ module ExamQuestions
       explanation: "공공조달에서 인종, 성별, 국적 등 차별적 사유로 입찰 참가자격을 제한하는 것은 헌법상 평등 원칙과 차별금지 원칙에 위반됩니다. 지역 제한·부정당업자 제한·기술 요건은 법적으로 허용됩니다."
     },
     {
-      id: 214, subject_id: 1,
+      id: 214, subject_id: 1, chapter_num: 3,
       question: "공공조달에서 '중소기업 직접 생산 확인'의 목적은?",
       options: [
         "중소기업이 다른 기업 제품을 구매하여 납품하는 것을 방지",
@@ -2555,7 +2555,7 @@ module ExamQuestions
       explanation: "중소기업 직접 생산 확인제도는 중소기업자간 경쟁제품에서 중소기업이 직접 제조·생산하지 않고 대기업 제품을 구매하여 납품하는 이른바 '페이퍼 컴퍼니' 행위를 방지하기 위한 제도입니다."
     },
     {
-      id: 215, subject_id: 1,
+      id: 215, subject_id: 1, chapter_num: 3,
       question: "국가계약법 시행령에서 '추정가격'이란?",
       options: [
         "예정가격의 80%에 해당하는 금액",
@@ -2567,7 +2567,7 @@ module ExamQuestions
       explanation: "추정가격은 계약을 체결하려는 경우 예상되는 계약 금액으로, 부가가치세를 제외한 금액입니다. 입찰 방법(경쟁 여부, 제한 방식 등) 결정 기준이 되며 예정가격 산정의 기초가 됩니다."
     },
     {
-      id: 216, subject_id: 1,
+      id: 216, subject_id: 1, chapter_num: 3,
       question: "공공조달에서 '장기계속계약'에 해당하는 것은?",
       options: [
         "1년을 초과하는 공사를 연차별로 분할 계약하는 방식",
@@ -2579,7 +2579,7 @@ module ExamQuestions
       explanation: "장기계속계약은 여러 회계연도에 걸쳐 이행되는 공사·제조·용역을 대상으로, 전체 사업을 하나로 계약하되 각 회계연도의 예산 범위 내에서 연차별로 이행하는 계약 방식입니다."
     },
     {
-      id: 217, subject_id: 1,
+      id: 217, subject_id: 1, chapter_num: 4,
       question: "공공조달의 전자조달 시스템 활용으로 얻을 수 없는 효과는?",
       options: [
         "조달 과정의 투명성 향상",
@@ -2591,7 +2591,7 @@ module ExamQuestions
       explanation: "전자조달 시스템은 투명성·효율성을 높이지만, 담합 등 불공정 행위를 '완전히' 근절하지는 못합니다. 전자 입찰 환경에서도 담합은 발생할 수 있으며, 이를 위한 별도 조사·처벌 체계가 필요합니다."
     },
     {
-      id: 218, subject_id: 1,
+      id: 218, subject_id: 1, chapter_num: 4,
       question: "조달청에서 운영하는 '혁신제품 시범구매사업'의 주요 목적은?",
       options: [
         "저렴한 수입 제품을 공공기관에 공급",
@@ -2603,14 +2603,14 @@ module ExamQuestions
       explanation: "혁신제품 시범구매사업은 시장에서 충분히 검증되지 않은 혁신적인 신제품·신기술을 공공기관이 선도적으로 구매함으로써 중소·벤처기업의 공공시장 진입을 지원하는 제도입니다."
     },
     {
-      id: 219, subject_id: 1,
+      id: 219, subject_id: 1, chapter_num: 4,
       question: "국가계약법상 계약의 원칙에 해당하지 않는 것은?",
       options: ["신의 성실의 원칙", "계약 내용의 명확성", "이윤 극대화 원칙", "상호 대등한 입장"],
       correct: 2,
       explanation: "국가계약법은 신의 성실, 계약 내용의 명확성, 상호 대등한 입장에서의 계약 체결을 원칙으로 합니다. '이윤 극대화'는 민간 기업의 경영 원칙으로 공공계약의 원칙과 거리가 멉니다."
     },
     {
-      id: 220, subject_id: 1,
+      id: 220, subject_id: 1, chapter_num: 4,
       question: "공공조달에서 '공동 계약(공동이행방식)'의 특징은?",
       options: [
         "모든 구성 업체가 연대하여 책임을 진다",
@@ -2622,7 +2622,7 @@ module ExamQuestions
       explanation: "공동이행방식은 2개 이상의 업체가 공동으로 계약을 이행하되, 구성 업체 전원이 연대하여 계약 이행 책임을 지는 방식입니다. 대표사 파산 등 사고 발생 시 다른 구성원이 연대 책임을 집니다."
     },
     {
-      id: 221, subject_id: 1,
+      id: 221, subject_id: 1, chapter_num: 4,
       question: "공공조달의 '수요조사' 단계에서 확인해야 할 사항이 아닌 것은?",
       options: [
         "실제 필요 수량 및 규격",
@@ -2634,7 +2634,7 @@ module ExamQuestions
       explanation: "수요조사 단계는 수량·규격·시장 가격·예산 확보 등을 파악하는 단계입니다. 납품 업체 사전 선정은 수의계약 등 특수한 경우를 제외하면 입찰을 통해 이루어지며, 수요조사 단계에서 미리 선정하는 것은 부적절합니다."
     },
     {
-      id: 222, subject_id: 1,
+      id: 222, subject_id: 1, chapter_num: 4,
       question: "공공기관의 계약 업무에서 '계약 담당자'의 주요 역할은?",
       options: [
         "예산 편성 및 확정",
@@ -2646,7 +2646,7 @@ module ExamQuestions
       explanation: "계약 담당자는 계약 관련 법령에 따라 계약의 체결·이행·감독에 관한 실무를 처리하는 공무원입니다. 예산 편성은 기획재정부서, 정책 수립은 상위 기관, 입찰 참가 심사는 별도 위원회가 담당합니다."
     },
     {
-      id: 223, subject_id: 1,
+      id: 223, subject_id: 1, chapter_num: 4,
       question: "국가 종합전자조달시스템(나라장터)의 법적 근거는?",
       options: [
         "국가계약법",
@@ -2658,7 +2658,7 @@ module ExamQuestions
       explanation: "나라장터(G2B)는 '조달사업에 관한 법률' 제5조의2를 근거로 조달청장이 구축·운영하는 국가종합전자조달시스템입니다."
     },
     {
-      id: 224, subject_id: 1,
+      id: 224, subject_id: 1, chapter_num: 4,
       question: "공공조달에서 '부정당업자 제재'의 효과로 옳은 것은?",
       options: [
         "모든 상거래 활동 금지",
@@ -2670,7 +2670,7 @@ module ExamQuestions
       explanation: "부정당업자로 제재를 받으면 일정 기간(최대 2년) 동안 국가·지방자치단체 등 공공기관의 입찰 참가자격이 제한됩니다. 영업 전면 금지나 법인 취소 등의 효과는 없습니다."
     },
     {
-      id: 225, subject_id: 1,
+      id: 225, subject_id: 1, chapter_num: 4,
       question: "공공조달에서 입찰보증금의 주요 기능은?",
       options: [
         "낙찰자의 계약 이행을 담보",
@@ -2682,7 +2682,7 @@ module ExamQuestions
       explanation: "입찰보증금은 낙찰자가 정당한 이유 없이 계약 체결을 거부할 경우 국고에 귀속되어, 낙찰 후 계약 체결을 강제하는 기능을 합니다. 계약 이행 담보는 계약보증금의 기능입니다."
     },
     {
-      id: 226, subject_id: 1,
+      id: 226, subject_id: 1, chapter_num: 4,
       question: "공공조달에서 '긴급 조달'이 허용되는 요건으로 적절하지 않은 것은?",
       options: [
         "재해·재난 발생으로 즉각적인 대처가 필요한 경우",
@@ -2694,7 +2694,7 @@ module ExamQuestions
       explanation: "긴급 조달은 재해·재난, 국방, 예측 불가능한 사유 등 객관적 필요성에 의해 허용됩니다. 담당자의 편의나 주관적 판단에 의한 절차 단축은 긴급 조달 요건이 아니며 위법입니다."
     },
     {
-      id: 227, subject_id: 1,
+      id: 227, subject_id: 1, chapter_num: 4,
       question: "공공조달 계약에서 '공정한 경쟁'을 저해하는 행위가 아닌 것은?",
       options: [
         "입찰 담합",
@@ -2706,7 +2706,7 @@ module ExamQuestions
       explanation: "경쟁 입찰을 통한 낙찰자 결정은 공정한 경쟁을 실현하는 올바른 방식입니다. 입찰 담합, 규격 담합, 내부 정보 사전 제공은 모두 공정한 경쟁을 저해하는 불법 행위입니다."
     },
     {
-      id: 228, subject_id: 1,
+      id: 228, subject_id: 1, chapter_num: 4,
       question: "공공조달에서 '지역 제한 입찰'을 적용할 수 있는 주요 근거는?",
       options: [
         "지역 업체 보호 및 지역 경제 활성화",
@@ -2718,7 +2718,7 @@ module ExamQuestions
       explanation: "지역 제한 입찰은 지역 업체를 보호하고 지역 경제를 활성화하기 위한 제도로, 일정 금액 이하의 공사나 물품 구매에서 해당 지역 업체에 우선 기회를 부여합니다."
     },
     {
-      id: 229, subject_id: 1,
+      id: 229, subject_id: 1, chapter_num: 4,
       question: "공공기관의 계약 체결 원칙 중 '계약서 작성 원칙'에 대한 설명으로 옳은 것은?",
       options: [
         "모든 계약은 반드시 서면으로 체결해야 한다",
@@ -2730,7 +2730,7 @@ module ExamQuestions
       explanation: "국가계약법에 따르면 계약 담당자는 원칙적으로 계약서를 작성해야 합니다. 다만 계약의 성질·목적에 비추어 계약서 작성이 필요하지 않은 경우(소액 수의계약 등 일부 예외)에는 생략할 수 있습니다."
     },
     {
-      id: 230, subject_id: 1,
+      id: 230, subject_id: 1, chapter_num: 4,
       question: "공공조달에서 '물가 변동으로 인한 계약금액 조정'의 기준으로 옳은 것은?",
       options: [
         "계약 체결 후 1개월마다 자동 조정",
@@ -2742,7 +2742,7 @@ module ExamQuestions
       explanation: "물가 변동으로 인한 계약금액 조정(에스컬레이션)은 계약 체결 후 90일 이상 경과하고, 품목 조정률 또는 지수 조정률이 일정 기준(3/100) 이상 변동한 경우 적용합니다."
     },
     {
-      id: 231, subject_id: 1,
+      id: 231, subject_id: 1, chapter_num: 4,
       question: "공공조달 '검수' 단계의 주요 목적은?",
       options: [
         "계약 금액 최종 결정",
@@ -2754,7 +2754,7 @@ module ExamQuestions
       explanation: "검수는 납품된 물품·서비스·공사가 계약서·규격서·시방서 등에서 정한 조건에 맞게 이행되었는지 확인하는 절차입니다. 적정하게 이행된 경우에만 대금을 지급합니다."
     },
     {
-      id: 232, subject_id: 1,
+      id: 232, subject_id: 1, chapter_num: 4,
       question: "공공조달 관련 법령에서 '계약예규'란?",
       options: [
         "국회에서 제정한 법률",
@@ -2766,7 +2766,7 @@ module ExamQuestions
       explanation: "계약예규는 기획재정부장관이 국가계약법 시행에 필요한 세부 사항을 정한 행정 규칙(내부 규정)입니다. 법령의 효력은 없으나 행정 내부에서 구속력을 가집니다."
     },
     {
-      id: 233, subject_id: 1,
+      id: 233, subject_id: 1, chapter_num: 4,
       question: "공공조달에서 '입찰 공고' 시 반드시 포함되어야 할 사항이 아닌 것은?",
       options: [
         "입찰 일시 및 장소",
@@ -2778,7 +2778,7 @@ module ExamQuestions
       explanation: "입찰 공고에는 입찰 일시·장소, 목적물 규격·수량, 입찰 참가 자격, 낙찰 기준 등을 포함해야 합니다. 낙찰 후 예상 이익률은 업체가 자체적으로 판단할 사항이며 공고에 포함되지 않습니다."
     },
     {
-      id: 234, subject_id: 1,
+      id: 234, subject_id: 1, chapter_num: 4,
       question: "공공조달에서 '최저가 낙찰제'의 주요 단점은?",
       options: [
         "입찰 경쟁이 치열해져 비용이 증가",
@@ -2790,7 +2790,7 @@ module ExamQuestions
       explanation: "최저가 낙찰제는 가격만을 기준으로 낙찰자를 결정하므로, 과도한 저가 입찰로 납품 품질 저하나 부실 공사가 발생할 위험이 있습니다. 이를 보완하기 위해 적격심사 등 다양한 방식이 사용됩니다."
     },
     {
-      id: 235, subject_id: 1,
+      id: 235, subject_id: 1, chapter_num: 4,
       question: "공공조달의 '사회적 가치' 구현 사례로 가장 적절한 것은?",
       options: [
         "최저 가격의 물품만 구매",
@@ -2802,7 +2802,7 @@ module ExamQuestions
       explanation: "공공조달을 통한 사회적 가치 구현은 장애인 고용, 사회적 기업, 여성기업, 환경 친화적 제품 우대 등을 통해 이루어집니다. 장애인 고용 업체에 대한 가점 부여가 대표적 사례입니다."
     },
     {
-      id: 236, subject_id: 1,
+      id: 236, subject_id: 1, chapter_num: 4,
       question: "공공조달에서 '계약 분할'이 원칙적으로 금지되는 이유는?",
       options: [
         "행정 업무가 증가하기 때문",
@@ -2814,7 +2814,7 @@ module ExamQuestions
       explanation: "계약 분할 금지는 전체 금액이 경쟁 입찰 기준을 초과하는 경우 분할하여 수의계약 등 간편한 방식을 이용하는 편법을 방지하기 위한 것입니다. 분할 발주가 필요한 정당한 사유가 있는 경우에는 허용됩니다."
     },
     {
-      id: 237, subject_id: 1,
+      id: 237, subject_id: 1, chapter_num: 4,
       question: "공공조달에서 '예산 확인 전 계약 체결' 시 발생하는 문제는?",
       options: [
         "계약의 효력이 소급 취소된다",
@@ -2826,7 +2826,7 @@ module ExamQuestions
       explanation: "예산 확보 전 계약 체결은 국가계약법 및 국가재정법 위반으로, 계약 담당자가 변상 책임 또는 징계 처분을 받을 수 있습니다. 공공기관은 반드시 예산이 확보된 범위 내에서 계약을 체결해야 합니다."
     },
     {
-      id: 238, subject_id: 1,
+      id: 238, subject_id: 1, chapter_num: 4,
       question: "공공조달의 '구매 대행' 방식에서 조달청의 역할은?",
       options: [
         "수요기관의 예산을 직접 관리",
@@ -2838,7 +2838,7 @@ module ExamQuestions
       explanation: "조달청의 구매 대행은 수요기관의 요청에 따라 조달청이 수요기관을 대신하여 계약을 체결하고 물품·서비스를 조달하는 방식입니다. 수요기관은 계약 전문성을 갖춘 조달청에 위탁하여 효율적으로 조달할 수 있습니다."
     },
     {
-      id: 239, subject_id: 1,
+      id: 239, subject_id: 1, chapter_num: 5,
       question: "공공조달에서 '원가 계산서'를 작성하는 주요 목적은?",
       options: [
         "납품 업체의 이익을 보장하기 위해",
@@ -2850,14 +2850,14 @@ module ExamQuestions
       explanation: "원가 계산서는 재료비, 노무비, 경비, 일반관리비, 이윤 등을 체계적으로 산출하여 예정가격 결정의 근거자료로 사용됩니다. 과도한 낙찰가 또는 저가 낙찰을 방지하는 기준이 됩니다."
     },
     {
-      id: 240, subject_id: 1,
+      id: 240, subject_id: 1, chapter_num: 5,
       question: "공공조달에서 입찰 공고 후 입찰 참가 등록기간은 원칙적으로 최소 며칠 이상이어야 하는가?",
       options: ["7일", "10일", "14일", "40일"],
       correct: 1,
       explanation: "국가계약법 시행령에 따르면 입찰 공고는 입찰 일시의 전날부터 역산하여 7일 전에 공고하는 것이 원칙이나, 일반경쟁입찰의 경우 공고일부터 입찰일까지 최소 10일 이상의 기간을 두어야 합니다."
     },
     {
-      id: 241, subject_id: 1,
+      id: 241, subject_id: 1, chapter_num: 5,
       question: "공공조달에서 '적격심사'를 적용하는 주요 이유는?",
       options: [
         "가격 외에 이행 능력·품질을 종합적으로 평가하기 위해",
@@ -2869,7 +2869,7 @@ module ExamQuestions
       explanation: "적격심사는 최저가 낙찰제의 단점을 보완하여 가격뿐만 아니라 시공 경험, 재무 상태, 기술 능력 등을 종합적으로 평가하여 계약 이행 능력이 있는 업체를 낙찰자로 선정하는 제도입니다."
     },
     {
-      id: 242, subject_id: 1,
+      id: 242, subject_id: 1, chapter_num: 5,
       question: "공공조달의 '총액 계약'과 '단가 계약'의 차이점은?",
       options: [
         "총액 계약은 수량 미확정, 단가 계약은 수량 확정",
@@ -2881,7 +2881,7 @@ module ExamQuestions
       explanation: "총액 계약은 이행 총 금액을 미리 확정하는 방식이고, 단가 계약은 단위 가격만 확정하고 실제 발주·납품 수량에 따라 최종 금액이 결정되는 방식입니다. 수요량이 불확실한 경우 단가 계약이 적합합니다."
     },
     {
-      id: 243, subject_id: 1,
+      id: 243, subject_id: 1, chapter_num: 5,
       question: "공공기관이 물품을 구매할 때 '수입 물품'보다 '국내 물품'을 우선 구매해야 하는 법적 근거는?",
       options: [
         "국가계약법",
@@ -2893,7 +2893,7 @@ module ExamQuestions
       explanation: "'중소기업제품 구매촉진 및 판로지원에 관한 법률'은 공공기관이 중소기업 생산 제품 및 국내 물품을 우선 구매하도록 규정하고 있습니다. 중소기업 물품 구매 목표 비율도 이 법에서 규정합니다."
     },
     {
-      id: 244, subject_id: 1,
+      id: 244, subject_id: 1, chapter_num: 5,
       question: "공공조달에서 '협상에 의한 계약'이 허용되는 경우는?",
       options: [
         "계약 금액이 소액인 경우",
@@ -2905,7 +2905,7 @@ module ExamQuestions
       explanation: "협상에 의한 계약은 기술·예술적으로 복잡하거나 전문성이 요구되어 사전에 규격을 확정하기 어려운 경우, 연구·개발 용역 등에서 활용됩니다. 단순한 납기 촉박이나 소액 계약은 협상 계약 사유가 아닙니다."
     },
     {
-      id: 245, subject_id: 1,
+      id: 245, subject_id: 1, chapter_num: 5,
       question: "공공조달에서 '하도급'과 관련된 주의사항으로 옳은 것은?",
       options: [
         "원도급자는 전체 공사를 하도급 줄 수 있다",
@@ -2917,7 +2917,7 @@ module ExamQuestions
       explanation: "공공공사에서 하도급 시에는 발주기관에 통보하거나 승인을 받아야 하는 경우가 있으며, 일괄 하도급은 원칙적으로 금지됩니다. 또한 하도급업체의 대금 보호를 위해 직접 지급 청구권도 법으로 보장됩니다."
     },
     {
-      id: 246, subject_id: 1,
+      id: 246, subject_id: 1, chapter_num: 5,
       question: "공공조달에서 '계약 해제·해지'의 사유로 옳지 않은 것은?",
       options: [
         "납품 업체의 계약 이행 지연",
@@ -2929,7 +2929,7 @@ module ExamQuestions
       explanation: "계약 해제·해지는 계약 이행 지연, 품질 불량, 계약자 부도 등 계약 이행에 관한 사유로 이루어집니다. 담당 공무원의 인사 이동은 계약 이행과 무관하며 계약 해제·해지 사유가 아닙니다."
     },
     {
-      id: 247, subject_id: 1,
+      id: 247, subject_id: 1, chapter_num: 5,
       question: "공공조달에서 '사전 원가 검토'의 목적으로 가장 적절한 것은?",
       options: [
         "낙찰자의 수익 보장",
@@ -2941,7 +2941,7 @@ module ExamQuestions
       explanation: "사전 원가 검토는 예정가격 산정 전에 원가 계산이 적정하게 이루어졌는지 검토하여, 과대 또는 과소 산정으로 인한 예산 낭비나 부실 계약을 방지하기 위한 절차입니다."
     },
     {
-      id: 248, subject_id: 1,
+      id: 248, subject_id: 1, chapter_num: 5,
       question: "공공기관의 조달 업무에서 '내부 통제'의 역할은?",
       options: [
         "조달 비용 인위적 감소",
@@ -2953,14 +2953,14 @@ module ExamQuestions
       explanation: "내부 통제는 조달 과정에서 횡령, 담합, 규정 위반 등의 부정·부패를 사전에 방지하고 법령을 준수하도록 감독하는 기능을 합니다. 예산 낭비 방지와 공정성 확보에 중요한 역할을 합니다."
     },
     {
-      id: 249, subject_id: 1,
+      id: 249, subject_id: 1, chapter_num: 5,
       question: "공공조달에서 '기술 평가'를 포함하는 입찰 방식은?",
       options: ["최저가 낙찰제", "기술·가격 분리 입찰(이중봉투제)", "수의계약", "소액 수의계약"],
       correct: 1,
       explanation: "기술·가격 분리 입찰(이중봉투제)은 기술 제안서와 가격 입찰을 별도 봉투에 넣어 제출하도록 하여, 기술 평가를 먼저 실시한 후 가격 평가를 하는 방식입니다. 기술력이 중요한 용역 등에 주로 사용됩니다."
     },
     {
-      id: 250, subject_id: 1,
+      id: 250, subject_id: 1, chapter_num: 5,
       question: "공공조달의 '조달 주기'를 구성하는 단계 순서로 옳은 것은?",
       options: [
         "계획 → 입찰 → 계약 → 이행 → 정산",
@@ -2973,49 +2973,49 @@ module ExamQuestions
     },
     # 2권: 공공조달 계획분석 (251~300)
     {
-      id: 251, subject_id: 2,
+      id: 251, subject_id: 2, chapter_num: 3,
       question: "조달 계획을 수립할 때 가장 먼저 검토해야 할 사항은?",
       options: ["예산 확보 여부", "납품 업체 선정", "입찰 방식 결정", "계약서 작성"],
       correct: 0,
       explanation: "조달 계획의 첫 단계는 예산 확보 여부를 확인하는 것입니다. 예산이 확보되지 않은 상태에서의 계약 체결은 위법이므로, 예산 승인 및 확보 여부를 우선 확인해야 합니다."
     },
     {
-      id: 252, subject_id: 2,
+      id: 252, subject_id: 2, chapter_num: 3,
       question: "조달 수요조사의 주요 내용에 해당하지 않는 것은?",
       options: ["필요 수량 및 규격 파악", "조달 시기 및 납기 결정", "시장 가격 조사", "입찰 낙찰자 사전 결정"],
       correct: 3,
       explanation: "수요조사 단계에서는 필요 수량·규격, 조달 시기·납기, 시장 가격 등을 파악합니다. 입찰 낙찰자를 사전에 결정하는 것은 경쟁 원칙 위반으로 수요조사 내용에 포함되지 않습니다."
     },
     {
-      id: 253, subject_id: 2,
+      id: 253, subject_id: 2, chapter_num: 3,
       question: "조달 계획 수립 시 '시장 조사'의 목적으로 옳지 않은 것은?",
       options: ["적정 예정가격 산정 자료 수집", "공급 가능 업체 현황 파악", "특정 업체와의 사전 협의 진행", "기술 동향 및 규격 파악"],
       correct: 2,
       explanation: "시장 조사는 예정가격 산정, 공급 업체 현황, 기술 동향, 규격 파악 등을 위한 객관적 정보 수집 활동입니다. 특정 업체와의 사전 협의는 공정 경쟁을 저해하는 행위로 시장 조사와 구별됩니다."
     },
     {
-      id: 254, subject_id: 2,
+      id: 254, subject_id: 2, chapter_num: 3,
       question: "조달 계획에서 '납기'를 결정할 때 고려해야 할 사항이 아닌 것은?",
       options: ["실제 사용 시점", "제조·공급 소요 기간", "업체의 수익률", "보관 가능 기간"],
       correct: 2,
       explanation: "납기 결정 시에는 실제 사용 시점, 제조·공급 소요 기간, 운반 기간, 보관 가능 기간 등을 고려합니다. 업체의 수익률은 납기 결정의 고려 요소가 아닙니다."
     },
     {
-      id: 255, subject_id: 2,
+      id: 255, subject_id: 2, chapter_num: 3,
       question: "공공조달에서 '규격서' 작성 시 주의사항으로 옳지 않은 것은?",
       options: ["기능·성능 중심으로 작성", "특정 상표명을 규격으로 지정하지 않는다", "가능한 한 국제 표준을 활용", "1개 업체만 충족 가능한 규격을 설정"],
       correct: 3,
       explanation: "규격서는 특정 업체에 유리하지 않도록 기능·성능 중심으로 작성하고, 특정 상표명 지정을 지양하며 국제 표준을 활용해야 합니다. 1개 업체만 충족 가능한 규격 설정은 경쟁을 제한하는 불공정 행위입니다."
     },
     {
-      id: 256, subject_id: 2,
+      id: 256, subject_id: 2, chapter_num: 3,
       question: "조달 방식 선택 시 '용역'과 '물품'을 구분하는 기준은?",
       options: ["계약 금액의 크기", "유형 물품 공급 여부 및 인적 서비스 제공 여부", "조달 기간의 장단", "수요 기관의 규모"],
       correct: 1,
       explanation: "물품은 유형의 동산을 공급하는 것이고, 용역은 청소·경비·컨설팅 등 인적 서비스를 제공하는 것입니다. 유형 물품의 공급 여부와 인적 서비스 제공 여부가 핵심 구분 기준입니다."
     },
     {
-      id: 257, subject_id: 2,
+      id: 257, subject_id: 2, chapter_num: 3,
       question: "공사 계약에서 '설계서'의 역할은?",
       options: [
         "계약 금액 결정의 유일한 기준",
@@ -3027,21 +3027,21 @@ module ExamQuestions
       explanation: "설계서는 공사의 목적물 형태·규모·공법·자재 등을 정한 계약의 기초 문서로, 공사 시방서·설계도면·물량내역서 등으로 구성됩니다. 계약 이행의 기준이 되며, 설계 변경 시 계약금액도 변경됩니다."
     },
     {
-      id: 258, subject_id: 2,
+      id: 258, subject_id: 2, chapter_num: 3,
       question: "조달 계획 단계에서 '조달 방식 결정'의 고려 요소가 아닌 것은?",
       options: ["계약 금액 규모", "긴급도 및 납기", "담당자의 개인 선호도", "시장 경쟁 상황"],
       correct: 2,
       explanation: "조달 방식은 계약 금액 규모, 긴급도·납기, 시장 경쟁 상황, 기술적 특수성 등을 객관적으로 고려하여 결정합니다. 담당자의 개인 선호도는 고려 요소가 아닙니다."
     },
     {
-      id: 259, subject_id: 2,
+      id: 259, subject_id: 2, chapter_num: 3,
       question: "공공조달에서 '내부 수요 파악'의 방법으로 가장 적절하지 않은 것은?",
       options: ["부서별 소요 계획 제출 요청", "전년도 사용 실적 분석", "외부 컨설팅 회사에 수요 결정 위탁", "현장 방문 및 사용 부서 인터뷰"],
       correct: 2,
       explanation: "내부 수요 파악은 부서별 소요 계획, 전년도 실적, 현장 방문, 사용 부서 의견 수렴 등 내부적 방법으로 이루어집니다. 수요 결정 자체를 외부 컨설팅 회사에 위탁하는 것은 적절하지 않습니다."
     },
     {
-      id: 260, subject_id: 2,
+      id: 260, subject_id: 2, chapter_num: 3,
       question: "조달 계획의 '연간 조달 계획'과 '수시 조달'의 차이점은?",
       options: [
         "연간 조달은 연초에 계획하고 수시 조달은 긴급·돌발 수요에 대응",
@@ -3053,7 +3053,7 @@ module ExamQuestions
       explanation: "연간 조달 계획은 연초에 전체 수요를 예측하여 계획적으로 조달하는 방식이고, 수시 조달은 예측하지 못한 긴급 수요나 돌발 상황에 대응하는 방식입니다."
     },
     {
-      id: 261, subject_id: 2,
+      id: 261, subject_id: 2, chapter_num: 3,
       question: "공공조달에서 '제3자 단가 계약'이란?",
       options: [
         "3개 이상의 업체와 체결하는 계약",
@@ -3065,14 +3065,14 @@ module ExamQuestions
       explanation: "제3자 단가 계약은 조달청이 수요기관을 위하여 미리 단가 계약을 체결하고, 수요기관이 필요 시 별도 입찰 없이 해당 계약을 이용하여 물품을 직접 구매하는 방식입니다."
     },
     {
-      id: 262, subject_id: 2,
+      id: 262, subject_id: 2, chapter_num: 3,
       question: "공공조달에서 '협동 구매'의 장점으로 옳은 것은?",
       options: ["개별 기관이 독자적으로 최적 규격 설정 가능", "규모의 경제로 단가 절감 효과", "신속한 개별 수요 대응", "다양한 규격의 물품 조달 가능"],
       correct: 1,
       explanation: "협동 구매는 여러 기관이 공동으로 수요를 모아 대량 구매함으로써 규모의 경제를 실현하고 단가를 절감하는 것이 주요 장점입니다. 반면 개별 수요의 특수성 반영은 어렵습니다."
     },
     {
-      id: 263, subject_id: 2,
+      id: 263, subject_id: 2, chapter_num: 3,
       question: "조달 계획에서 '총소유비용(TCO)'이란?",
       options: [
         "초기 구매 가격만을 의미",
@@ -3084,49 +3084,49 @@ module ExamQuestions
       explanation: "총소유비용(Total Cost of Ownership)은 구매 가격뿐만 아니라 운영비, 유지보수비, 교육훈련비, 최종 처분 비용까지 포함한 물품·서비스의 전체 생애주기 비용입니다. 단순 최저가 구매보다 합리적인 의사결정을 돕습니다."
     },
     {
-      id: 264, subject_id: 2,
+      id: 264, subject_id: 2, chapter_num: 3,
       question: "공공조달에서 '비용편익분석'의 목적은?",
       options: ["입찰 업체의 재무 상태 평가", "조달 사업의 경제적 타당성 검토", "계약금액 협상", "하도급 비율 산정"],
       correct: 1,
       explanation: "비용편익분석은 특정 조달 사업이나 투자에 소요되는 비용과 그로 인한 편익을 비교하여 사업의 경제적 타당성을 검토하는 분석 방법입니다. 대규모 공공투자사업 전에 필수적으로 실시합니다."
     },
     {
-      id: 265, subject_id: 2,
+      id: 265, subject_id: 2, chapter_num: 3,
       question: "조달 계획의 '우선순위 결정'에서 고려하는 주요 요소는?",
       options: ["담당자의 경력 및 전문성", "긴급도, 중요도, 예산 가용성", "입찰 업체의 희망 납기", "수요 부서장의 직급"],
       correct: 1,
       explanation: "조달 우선순위는 해당 물품·서비스의 긴급도(얼마나 빨리 필요한가), 중요도(없으면 업무에 얼마나 지장이 있는가), 예산 가용성(예산이 확보되어 있는가)을 종합적으로 고려하여 결정합니다."
     },
     {
-      id: 266, subject_id: 2,
+      id: 266, subject_id: 2, chapter_num: 3,
       question: "공공조달에서 '전문 구매 계획'이 필요한 경우는?",
       options: ["소액 사무용품 구매", "첨단 기술이 요구되는 복잡한 장비 조달", "단순 소모품 구매", "단가 계약 물품 주문"],
       correct: 1,
       explanation: "첨단 기술 장비, 복잡한 IT 시스템, 연구장비 등 고도의 기술 전문성이 요구되는 조달은 규격 작성, 평가 기준 설정, 계약 관리 등에 전문적 지식이 필요하므로 전문 구매 계획이 필요합니다."
     },
     {
-      id: 267, subject_id: 2,
+      id: 267, subject_id: 2, chapter_num: 3,
       question: "조달 계획에서 '리스크 관리'의 사례로 적절한 것은?",
       options: ["낙찰 업체 선정 전 미리 계약서 작성", "공급업체 부도 대비 복수 공급처 확보", "예산 절감을 위한 검수 생략", "가격 협상을 위한 입찰 공고 취소"],
       correct: 1,
       explanation: "조달 리스크 관리에는 공급업체 부도·납기 지연 대비 복수 공급처 확보, 가격 급등 대비 선구매, 품질 불량 대비 엄격한 검수 등이 포함됩니다. 복수 공급처 확보가 대표적 리스크 관리 사례입니다."
     },
     {
-      id: 268, subject_id: 2,
+      id: 268, subject_id: 2, chapter_num: 3,
       question: "공공조달에서 '환경성 평가'를 조달 계획에 반영하는 이유는?",
       options: ["환경 규제 준수 및 녹색 조달 정책 이행", "비용 절감을 위해", "낙찰 속도를 높이기 위해", "수입품 규제를 위해"],
       correct: 0,
       explanation: "공공기관은 녹색제품 구매촉진법 등에 따라 환경 영향을 조달 계획에 반영하여 환경표지 인증 제품, 저탄소 제품 등을 우선 구매하는 녹색 조달을 이행해야 할 의무가 있습니다."
     },
     {
-      id: 269, subject_id: 2,
+      id: 269, subject_id: 2, chapter_num: 3,
       question: "공공기관의 '연간 구매 계획서' 작성 시기로 가장 적절한 것은?",
       options: ["회계연도 시작 후 6개월 이내", "회계연도 시작 전 또는 연초", "필요 발생 시 즉시", "예산 집행 마감 직전"],
       correct: 1,
       explanation: "연간 구매 계획서는 해당 연도 예산이 확정된 후 회계연도 시작 전 또는 연초에 작성하여 계획적인 조달이 이루어지도록 해야 합니다. 늦게 작성하면 납기 준수, 예산 효율적 집행이 어렵습니다."
     },
     {
-      id: 270, subject_id: 2,
+      id: 270, subject_id: 2, chapter_num: 3,
       question: "조달 계획에서 '조달 리드타임(Lead Time)'을 고려하는 이유는?",
       options: [
         "계약 후 물품이 실제로 납품되기까지 걸리는 시간을 감안하여 적기 조달하기 위해",
@@ -3138,7 +3138,7 @@ module ExamQuestions
       explanation: "조달 리드타임은 발주에서 납품까지 걸리는 시간으로, 실제 필요 시점에 맞추어 물품을 적기에 조달하려면 납기로부터 역산하여 발주 시점을 결정해야 합니다. 리드타임을 무시하면 납기 지연이 발생합니다."
     },
     {
-      id: 271, subject_id: 2,
+      id: 271, subject_id: 2, chapter_num: 3,
       question: "공공조달에서 '표준 규격'을 사용하는 장점은?",
       options: [
         "특정 업체의 독점적 공급 보장",
@@ -3150,7 +3150,7 @@ module ExamQuestions
       explanation: "표준 규격(KS, ISO 등)을 사용하면 다수 업체가 공급 가능하여 경쟁이 확대되고 가격이 인하됩니다. 또한 상호 호환성이 확보되어 유지보수가 용이하고, 규격 작성의 객관성도 높아집니다."
     },
     {
-      id: 272, subject_id: 2,
+      id: 272, subject_id: 2, chapter_num: 3,
       question: "공공조달에서 '이해충돌' 방지를 위한 조치로 옳은 것은?",
       options: [
         "계약 담당자가 친인척 업체와 계약 시 상급자 보고 후 진행",
@@ -3162,7 +3162,7 @@ module ExamQuestions
       explanation: "이해충돌 방지를 위해 담당자와 특수관계에 있는 업체가 참여하는 계약에서 해당 담당자는 배제되어야 합니다. 이해충돌방지법 등에 따라 이해충돌 상황은 신고하고 회피·제척 절차를 따라야 합니다."
     },
     {
-      id: 273, subject_id: 2,
+      id: 273, subject_id: 2, chapter_num: 3,
       question: "조달 계획에서 '가치 공학(VE, Value Engineering)'의 목적은?",
       options: [
         "계약 금액 인상",
@@ -3174,7 +3174,7 @@ module ExamQuestions
       explanation: "가치 공학(VE)은 물품·공사·서비스의 기능을 유지하거나 개선하면서 비용을 절감하는 방법론으로, 조달 계획 단계에서 VE 분석을 통해 예산을 절약하면서 품질을 확보할 수 있습니다."
     },
     {
-      id: 274, subject_id: 2,
+      id: 274, subject_id: 2, chapter_num: 3,
       question: "공공조달에서 '물품 규격서'와 '시방서'의 차이점은?",
       options: [
         "물품 규격서는 물품, 시방서는 공사에 주로 사용",
@@ -3186,7 +3186,7 @@ module ExamQuestions
       explanation: "물품 규격서는 구매할 물품의 형태·성능·품질 등을 명시한 문서이고, 시방서는 공사에서 사용할 재료·공법·품질 기준 등을 상세히 기술한 문서입니다. 물품과 공사 각각에 주로 사용됩니다."
     },
     {
-      id: 275, subject_id: 2,
+      id: 275, subject_id: 2, chapter_num: 3,
       question: "공공조달 계획에서 '복수 연도 계약(Multi-Year Contract)'의 장점은?",
       options: [
         "매년 입찰을 실시하여 가격 경쟁력 유지",
@@ -3198,7 +3198,7 @@ module ExamQuestions
       explanation: "복수 연도 계약은 여러 회계연도에 걸쳐 동일 계약을 유지함으로써 매년 입찰에 따른 행정 부담을 줄이고, 공급업체가 장기 투자·인력 확보 등을 안정적으로 계획할 수 있는 장점이 있습니다."
     },
     {
-      id: 276, subject_id: 2,
+      id: 276, subject_id: 2, chapter_num: 4,
       question: "공공조달 수요 예측 시 '이동 평균법'을 사용하는 이유는?",
       options: [
         "미래 수요를 100% 정확하게 예측하기 위해",
@@ -3210,21 +3210,21 @@ module ExamQuestions
       explanation: "이동 평균법은 과거 일정 기간의 수요 실적 평균을 계산하여 단기 미래 수요를 예측하는 방법입니다. 급격한 변동이 없는 안정적인 수요에 적합한 예측 기법입니다."
     },
     {
-      id: 277, subject_id: 2,
+      id: 277, subject_id: 2, chapter_num: 4,
       question: "조달 계획에서 '적정 재고 수준'을 결정하는 주요 요인이 아닌 것은?",
       options: ["조달 리드타임", "수요 변동성", "보관 비용", "담당자의 근무 연수"],
       correct: 3,
       explanation: "적정 재고 수준은 조달 리드타임, 수요의 변동성, 보관 비용, 품목의 중요도, 재고 부족 시 비용 등을 고려하여 결정합니다. 담당자의 근무 연수는 재고 수준 결정과 무관합니다."
     },
     {
-      id: 278, subject_id: 2,
+      id: 278, subject_id: 2, chapter_num: 4,
       question: "공공조달 계획 단계에서 국가재정법상 예비타당성 조사 의무 기준 금액은?",
       options: ["50억 원 이상", "100억 원 이상", "300억 원 이상", "500억 원 이상"],
       correct: 3,
       explanation: "국가재정법에 따르면 총사업비 500억 원 이상인 대규모 사업에 대해서는 예비타당성 조사를 실시해야 합니다. 이를 통해 사업의 경제성, 정책적 필요성, 지역균형 발전을 검토합니다."
     },
     {
-      id: 279, subject_id: 2,
+      id: 279, subject_id: 2, chapter_num: 4,
       question: "공공조달에서 '계약 방식 선택 기준표' 작성의 목적은?",
       options: [
         "낙찰자를 미리 결정하기 위해",
@@ -3236,14 +3236,14 @@ module ExamQuestions
       explanation: "계약 방식 선택 기준표는 계약 유형 선택 기준을 문서화하여 일관성과 투명성을 확보하고, 자의적 판단에 의한 계약 방식 결정을 방지하기 위해 작성합니다."
     },
     {
-      id: 280, subject_id: 2,
+      id: 280, subject_id: 2, chapter_num: 4,
       question: "조달 계획에서 '공급 시장 분석'의 핵심 요소가 아닌 것은?",
       options: ["공급 업체 수 및 시장 집중도", "기술 발전 동향", "담당자의 과거 거래 선호", "국내외 가격 동향"],
       correct: 2,
       explanation: "공급 시장 분석에는 공급 업체 수·시장 집중도, 기술 동향, 국내외 가격·환율, 원재료 수급 등이 포함됩니다. 담당자의 개인적 거래 선호는 주관적 요소로 분석 대상이 아닙니다."
     },
     {
-      id: 281, subject_id: 2,
+      id: 281, subject_id: 2, chapter_num: 4,
       question: "공공조달에서 '가격 협상 전략'이 가장 유리한 경우는?",
       options: [
         "공급 업체가 1개뿐인 독점 시장",
@@ -3255,7 +3255,7 @@ module ExamQuestions
       explanation: "가격 협상 전략은 다수의 공급 업체가 존재하는 경쟁적 시장에서 효과적입니다. 독점 공급자가 있는 경우 협상력이 약해지며, 긴급·소액 구매에서는 협상보다 신속한 계약이 우선입니다."
     },
     {
-      id: 282, subject_id: 2,
+      id: 282, subject_id: 2, chapter_num: 4,
       question: "조달 계획에서 '통합 구매(consolidated purchasing)'의 단점은?",
       options: [
         "구매 단가 상승",
@@ -3267,7 +3267,7 @@ module ExamQuestions
       explanation: "통합 구매는 규모의 경제 효과가 있으나, 여러 기관의 수요를 통합하는 과정에서 행정 절차가 복잡해지고, 각 기관별 특수한 수요나 규격을 반영하기 어렵다는 단점이 있습니다."
     },
     {
-      id: 283, subject_id: 2,
+      id: 283, subject_id: 2, chapter_num: 4,
       question: "공공조달에서 '성과 기반 계약(PBC)'의 특징은?",
       options: [
         "이행 방법을 상세히 규정하고 투입(input)을 측정",
@@ -3279,7 +3279,7 @@ module ExamQuestions
       explanation: "성과 기반 계약은 세부 이행 방법보다 달성해야 할 목표 성과(KPI 등)를 계약서에 명시하고, 실제 성과 달성 여부에 따라 대가를 지급하는 방식입니다. 결과 중심의 조달 방식으로 서비스 품질 향상에 유리합니다."
     },
     {
-      id: 284, subject_id: 2,
+      id: 284, subject_id: 2, chapter_num: 4,
       question: "공공조달 계획에서 '소싱 전략' 수립의 목적은?",
       options: [
         "낙찰자를 사전에 결정",
@@ -3291,7 +3291,7 @@ module ExamQuestions
       explanation: "소싱 전략은 물품·서비스를 어디서(국내/해외, 특정 지역), 어떻게(직접 구매, 대리 구매, OEM 등) 조달할지 방향을 설정하는 것으로, 비용·품질·납기·리스크를 최적화하기 위해 수립합니다."
     },
     {
-      id: 285, subject_id: 2,
+      id: 285, subject_id: 2, chapter_num: 4,
       question: "조달 계획에서 '벤치마킹(benchmarking)'의 목적은?",
       options: [
         "경쟁 기업의 전략 무단 모방",
@@ -3303,7 +3303,7 @@ module ExamQuestions
       explanation: "조달 벤치마킹은 선진 조달 기관이나 우수 사례를 참고하여 자기 기관의 조달 프로세스·절차·성과를 개선하기 위한 활동입니다. 학습을 통한 자기 발전이 목적입니다."
     },
     {
-      id: 286, subject_id: 2,
+      id: 286, subject_id: 2, chapter_num: 4,
       question: "공공조달에서 '수의계약 체결 사유'를 문서로 남겨야 하는 이유는?",
       options: [
         "서류 보관 의무 이행만을 위해",
@@ -3315,7 +3315,7 @@ module ExamQuestions
       explanation: "수의계약은 경쟁 원칙의 예외이므로 수의계약 체결 사유를 문서로 명확히 남겨야 합니다. 이는 감사 시 계약의 적법성을 입증하고 자의적 계약 체결을 방지하기 위한 중요한 기록입니다."
     },
     {
-      id: 287, subject_id: 2,
+      id: 287, subject_id: 2, chapter_num: 4,
       question: "공공조달 계획에서 '위험 분담(risk allocation)'의 올바른 원칙은?",
       options: [
         "모든 위험을 공급 업체에게 전가",
@@ -3327,7 +3327,7 @@ module ExamQuestions
       explanation: "위험 분담의 원칙은 특정 위험을 가장 잘 관리하고 최소화할 수 있는 당사자(발주 기관 또는 공급 업체)가 그 위험을 부담하는 것입니다. 일방적 전가는 비효율과 비용 증가를 초래합니다."
     },
     {
-      id: 288, subject_id: 2,
+      id: 288, subject_id: 2, chapter_num: 4,
       question: "공공기관의 물품 구매에서 '수요 통합(demand aggregation)'의 이점은?",
       options: [
         "부서 간 경쟁 촉진",
@@ -3339,7 +3339,7 @@ module ExamQuestions
       explanation: "수요 통합은 여러 부서나 기관의 수요를 하나로 모아 대량 구매함으로써 공급 업체와의 협상력을 높이고 단가를 절감하는 효과가 있습니다. 이는 조달 효율화의 핵심 전략 중 하나입니다."
     },
     {
-      id: 289, subject_id: 2,
+      id: 289, subject_id: 2, chapter_num: 4,
       question: "공공조달 계획에서 '경쟁 분석'이 필요한 이유는?",
       options: [
         "입찰 참가 업체 수를 제한하기 위해",
@@ -3351,7 +3351,7 @@ module ExamQuestions
       explanation: "경쟁 분석을 통해 해당 시장의 공급 업체 수, 시장 집중도, 경쟁 수준 등을 파악하면 적절한 조달 방식(경쟁 입찰 유형, 협상 여지 등)을 선택하는 데 도움이 됩니다."
     },
     {
-      id: 290, subject_id: 2,
+      id: 290, subject_id: 2, chapter_num: 4,
       question: "조달 계획 수립 시 '법령 검토'가 필요한 이유는?",
       options: [
         "계약 체결 지연을 위해",
@@ -3363,7 +3363,7 @@ module ExamQuestions
       explanation: "조달 계획 수립 단계에서 국가계약법, 조달사업법, 중소기업법 등 관련 법령을 검토하여 조달 전 과정이 법적 요건을 충족하도록 해야 합니다. 법령 미준수는 계약 무효, 담당자 징계 등의 결과를 초래합니다."
     },
     {
-      id: 291, subject_id: 2,
+      id: 291, subject_id: 2, chapter_num: 4,
       question: "공공조달에서 '분할 구매 금지' 원칙에 위반되는 사례는?",
       options: [
         "기술적 이유로 2개 기관에 나누어 발주",
@@ -3375,7 +3375,7 @@ module ExamQuestions
       explanation: "연간 수의계약 한도나 경쟁 입찰 기준을 회피할 목적으로 1개 계약으로 가능한 물량을 여러 건으로 분할 발주하는 것은 분할 구매 금지 원칙에 위반됩니다."
     },
     {
-      id: 292, subject_id: 2,
+      id: 292, subject_id: 2, chapter_num: 4,
       question: "조달 계획에서 '구매 타이밍(market timing)' 전략의 올바른 예시는?",
       options: [
         "물가 상승 예상 시 미리 대량 구매하여 비용 절감",
@@ -3387,7 +3387,7 @@ module ExamQuestions
       explanation: "구매 타이밍 전략은 시장 가격 동향을 분석하여 물가 상승 예상 시 미리 구매하거나, 가격 하락 시 대기하는 등 구매 시기를 전략적으로 결정하여 비용을 절감하는 방법입니다."
     },
     {
-      id: 293, subject_id: 2,
+      id: 293, subject_id: 2, chapter_num: 4,
       question: "공공조달 계획에서 '내부 생산과 외부 조달(make or buy) 결정'의 핵심 기준은?",
       options: [
         "담당자의 선호",
@@ -3399,21 +3399,21 @@ module ExamQuestions
       explanation: "내부 생산(make)과 외부 조달(buy) 결정은 비용 비교, 품질 확보 가능성, 전문성, 기관의 핵심 역량 집중, 보안·기밀성 등을 종합적으로 비교하여 효율적인 방식을 선택합니다."
     },
     {
-      id: 294, subject_id: 2,
+      id: 294, subject_id: 2, chapter_num: 4,
       question: "공공조달에서 '조달 효율성 지표'로 사용하기에 적절하지 않은 것은?",
       options: ["계약 체결 소요 기간", "낙찰률(예정가 대비 낙찰가 비율)", "담당자의 초과 근무 시간", "계약 건당 행정 처리 비용"],
       correct: 2,
       explanation: "조달 효율성 지표는 계약 체결 소요 기간, 낙찰률, 행정 처리 비용, 재계약 비율, 불이행률 등 조달 성과를 객관적으로 측정하는 지표입니다. 담당자의 초과 근무 시간은 조달 효율성과 직결되지 않습니다."
     },
     {
-      id: 295, subject_id: 2,
+      id: 295, subject_id: 2, chapter_num: 4,
       question: "조달 계획에서 '규격 표준화'의 효과로 옳지 않은 것은?",
       options: ["구매 비용 절감", "재고 관리 용이", "공급 업체 수 감소로 독점화 위험 증가", "유지보수 용이성 향상"],
       correct: 2,
       explanation: "규격 표준화는 구매 비용 절감, 재고 관리 용이, 상호 호환성·유지보수 향상 등의 효과가 있습니다. 오히려 표준화로 다수 업체가 공급 가능해져 경쟁이 확대되므로 독점화 위험 증가는 표준화의 효과가 아닙니다."
     },
     {
-      id: 296, subject_id: 2,
+      id: 296, subject_id: 2, chapter_num: 4,
       question: "공공조달에서 '계획 구매'와 '긴급 구매'의 비용 차이는?",
       options: [
         "차이가 없다",
@@ -3425,7 +3425,7 @@ module ExamQuestions
       explanation: "계획 구매는 충분한 시간을 갖고 경쟁 입찰, 가격 협상, 최적 소싱 등을 통해 비용을 절감할 수 있습니다. 긴급 구매는 시간 제약으로 수의계약, 프리미엄 납기 비용 등이 발생하여 일반적으로 더 비쌉니다."
     },
     {
-      id: 297, subject_id: 2,
+      id: 297, subject_id: 2, chapter_num: 4,
       question: "공공조달 계획에서 '이해관계자 분석'이 필요한 이유는?",
       options: [
         "계약 업체를 미리 선정하기 위해",
@@ -3437,7 +3437,7 @@ module ExamQuestions
       explanation: "이해관계자 분석은 조달 과정에서 수요 부서, 재무 부서, 감사 부서, 공급 업체, 상급 기관 등 다양한 이해관계자의 요구사항과 관심사를 파악하여 갈등을 예방하고 효과적인 조달을 수행하기 위해 필요합니다."
     },
     {
-      id: 298, subject_id: 2,
+      id: 298, subject_id: 2, chapter_num: 4,
       question: "조달 계획에서 '계약 유형 선택'의 주요 고려 사항은?",
       options: [
         "담당자의 경력",
@@ -3449,7 +3449,7 @@ module ExamQuestions
       explanation: "계약 유형(고정가, 단가, 원가보상, 인센티브 계약 등)은 계약 목적물의 성격, 위험 배분, 가격 결정의 불확실성 정도, 성과 측정 가능성 등을 고려하여 선택합니다."
     },
     {
-      id: 299, subject_id: 2,
+      id: 299, subject_id: 2, chapter_num: 4,
       question: "공공조달에서 '지속가능 조달(sustainable procurement)'의 주요 목표는?",
       options: [
         "가장 저렴한 제품만 구매",
@@ -3461,7 +3461,7 @@ module ExamQuestions
       explanation: "지속가능 조달은 가격(경제적 가치)뿐만 아니라 환경(녹색 조달), 사회(장애인·여성·사회적 기업 지원) 등을 균형 있게 고려하여 조달 의사결정을 내리는 방식입니다."
     },
     {
-      id: 300, subject_id: 2,
+      id: 300, subject_id: 2, chapter_num: 4,
       question: "조달 계획 수립의 최종 산출물로 옳지 않은 것은?",
       options: ["연간 구매 계획서", "조달 방식 결정 근거서", "낙찰자 확정 통보서", "예산 확보 증빙서류"],
       correct: 2,
@@ -3469,7 +3469,7 @@ module ExamQuestions
     },
     # 3권: 공공계약관리 (301~350)
     {
-      id: 301, subject_id: 3,
+      id: 301, subject_id: 3, chapter_num: 3,
       question: "계약 체결 후 '계약보증금'의 주요 기능은?",
       options: [
         "계약 담당자의 징계 대비",
@@ -3481,7 +3481,7 @@ module ExamQuestions
       explanation: "계약보증금은 계약자가 계약을 이행하지 않을 경우 발주기관이 입은 손실을 보전하기 위한 담보금입니다. 일반적으로 계약금액의 10% 이상을 납부하도록 규정되어 있습니다."
     },
     {
-      id: 302, subject_id: 3,
+      id: 302, subject_id: 3, chapter_num: 3,
       question: "공사 계약에서 '설계 변경'이 가능한 경우는?",
       options: [
         "시공 중 설계 도서의 불분명·누락·오류 발견 시",
@@ -3493,7 +3493,7 @@ module ExamQuestions
       explanation: "설계 변경은 설계 도서의 불분명·누락·오류, 현장 여건과 설계의 상이, 발주기관의 필요에 의한 추가·변경 등의 경우 가능합니다. 계약자의 이익을 위한 임의 변경이나 완료 후 소급 변경은 허용되지 않습니다."
     },
     {
-      id: 303, subject_id: 3,
+      id: 303, subject_id: 3, chapter_num: 3,
       question: "국가계약법상 계약 이행 중 '지체상금'의 성격은?",
       options: [
         "계약자에게 지급하는 보상금",
@@ -3505,7 +3505,7 @@ module ExamQuestions
       explanation: "지체상금은 계약자가 계약 기한 내에 계약을 이행하지 못한 경우 지연 일수에 지체상금률을 적용하여 계약금액에서 공제하는 손해배상 예정액입니다. 별도 손해 증명 없이 약정된 비율로 청구합니다."
     },
     {
-      id: 304, subject_id: 3,
+      id: 304, subject_id: 3, chapter_num: 3,
       question: "공사 계약에서 '하자담보책임 기간' 중 계약자의 의무는?",
       options: [
         "추가 공사를 무상으로 시공",
@@ -3517,7 +3517,7 @@ module ExamQuestions
       explanation: "하자담보책임 기간 중 공사 목적물에 하자가 발생하면 계약자는 자비로 보수·수리할 의무가 있습니다. 하자 수리를 거부하거나 지연할 경우 하자보증금으로 발주기관이 직접 보수합니다."
     },
     {
-      id: 305, subject_id: 3,
+      id: 305, subject_id: 3, chapter_num: 3,
       question: "계약 이행 중 '계약금액 조정'이 가능한 사유가 아닌 것은?",
       options: [
         "물가 변동(에스컬레이션)",
@@ -3529,7 +3529,7 @@ module ExamQuestions
       explanation: "계약금액 조정 사유는 물가 변동(에스컬레이션), 설계 변경, 기타 계약 내용의 변경(법령 개정, 예상치 못한 현장 여건 변화 등)입니다. 계약 담당자의 인사 이동은 계약금액 조정 사유가 아닙니다."
     },
     {
-      id: 306, subject_id: 3,
+      id: 306, subject_id: 3, chapter_num: 3,
       question: "공공계약에서 '선금(선급금)'을 지급하는 목적은?",
       options: [
         "계약자의 이익 극대화",
@@ -3541,7 +3541,7 @@ module ExamQuestions
       explanation: "선금(선급금)은 계약자가 계약 이행에 필요한 자재 구입, 인력 고용 등에 필요한 자금을 미리 지원하기 위해 계약금액의 일정 비율을 선지급하는 것입니다. 원활한 계약 이행 지원이 목적입니다."
     },
     {
-      id: 307, subject_id: 3,
+      id: 307, subject_id: 3, chapter_num: 3,
       question: "공사 계약에서 '기성검사'의 주요 목적은?",
       options: [
         "계약자의 이익 확인",
@@ -3553,7 +3553,7 @@ module ExamQuestions
       explanation: "기성검사는 공사 진행 중 일정 기간 동안 완성된 공사 부분(기성고)의 수량과 품질을 확인하여 기성대금을 지급하기 위한 절차입니다. 미완성 부분에 대한 대금 지급을 방지합니다."
     },
     {
-      id: 308, subject_id: 3,
+      id: 308, subject_id: 3, chapter_num: 3,
       question: "계약 관리에서 '계약 이행 감독'의 목적은?",
       options: [
         "계약자의 이익 보호",
@@ -3565,7 +3565,7 @@ module ExamQuestions
       explanation: "계약 이행 감독은 계약자가 계약서·규격서·시방서 등에 따라 적정하게 이행하고 있는지 확인하고, 이행 과정의 문제를 조기에 발견하여 조치함으로써 계약 목적을 달성하기 위한 활동입니다."
     },
     {
-      id: 309, subject_id: 3,
+      id: 309, subject_id: 3, chapter_num: 3,
       question: "공공계약에서 '하자보증금'의 납부 시기는?",
       options: [
         "계약 체결 시",
@@ -3577,7 +3577,7 @@ module ExamQuestions
       explanation: "하자보증금은 공사 준공(완공) 검사 통과 후 또는 물품 납품 완료 후, 하자담보책임 기간 중 발생할 수 있는 하자 수리를 담보하기 위해 납부합니다."
     },
     {
-      id: 310, subject_id: 3,
+      id: 310, subject_id: 3, chapter_num: 3,
       question: "계약 이행 과정에서 '현장 대리인'의 역할은?",
       options: [
         "발주기관의 감독 업무 수행",
@@ -3589,7 +3589,7 @@ module ExamQuestions
       explanation: "현장 대리인은 계약자(시공사)를 대리하여 공사 현장을 관리하고, 발주기관 또는 감리자와 소통하며 공사 현장의 제반 사항을 처리하는 계약자 측 담당자입니다."
     },
     {
-      id: 311, subject_id: 3,
+      id: 311, subject_id: 3, chapter_num: 3,
       question: "공사 계약에서 '준공검사'의 의미는?",
       options: [
         "공사 착공 전 현장 상태 확인",
@@ -3601,7 +3601,7 @@ module ExamQuestions
       explanation: "준공검사는 계약자가 공사를 완료했다고 통보한 후 발주기관이 공사 결과물이 계약 조건(설계도서, 시방서 등)에 맞게 완성되었는지 최종적으로 확인하는 절차입니다. 준공검사 통과 후 준공금을 지급합니다."
     },
     {
-      id: 312, subject_id: 3,
+      id: 312, subject_id: 3, chapter_num: 3,
       question: "계약 관리에서 '클레임(claim)' 처리 방법으로 옳지 않은 것은?",
       options: [
         "계약서에 정해진 절차에 따라 서면으로 제출",
@@ -3613,7 +3613,7 @@ module ExamQuestions
       explanation: "클레임(claim)은 계약 분쟁 해결의 정당한 수단으로, 서면 제출·협의·중재·소송 등의 절차로 처리합니다. 정당한 클레임을 제기했다는 이유만으로 계약자를 부정당업자로 등록하는 것은 위법입니다."
     },
     {
-      id: 313, subject_id: 3,
+      id: 313, subject_id: 3, chapter_num: 3,
       question: "공공계약에서 '계약 해지'와 '계약 해제'의 차이점은?",
       options: [
         "계약 해지는 소급 효과, 계약 해제는 장래 효과",
@@ -3625,7 +3625,7 @@ module ExamQuestions
       explanation: "계약 해지는 계속적 계약관계를 장래를 향하여 소멸시키는 것(기 이행 부분은 유효)이고, 계약 해제는 계약을 처음부터 없었던 것으로 하는 소급 효력이 있는 것입니다."
     },
     {
-      id: 314, subject_id: 3,
+      id: 314, subject_id: 3, chapter_num: 3,
       question: "공사 계약의 '공사 감리'에 대한 설명으로 옳은 것은?",
       options: [
         "계약자가 자체적으로 실시하는 품질 검사",
@@ -3637,7 +3637,7 @@ module ExamQuestions
       explanation: "공사 감리는 발주기관을 대신하여 독립된 감리 전문업체가 설계 도서대로 시공이 이루어지는지 확인하고, 품질·안전·공정을 관리하는 업무입니다. 건설기술진흥법 등에 따라 일정 규모 이상 공사는 의무적으로 감리를 실시합니다."
     },
     {
-      id: 315, subject_id: 3,
+      id: 315, subject_id: 3, chapter_num: 3,
       question: "계약 관리에서 '대금 지급 지연' 발생 시 계약자의 권리는?",
       options: [
         "권리가 없다",
@@ -3649,7 +3649,7 @@ module ExamQuestions
       explanation: "국가계약법에 따라 발주기관이 정해진 기한 내에 대금을 지급하지 않으면 계약자는 지연이자(지체기간 × 지연이자율)를 청구할 권리가 있습니다. 지연이자율은 기획재정부 고시 기준을 적용합니다."
     },
     {
-      id: 316, subject_id: 3,
+      id: 316, subject_id: 3, chapter_num: 3,
       question: "공공계약에서 '계약 문서'의 효력 우선순위가 올바른 것은?",
       options: [
         "계약서 > 설계도면 > 시방서 > 현장설명서",
@@ -3661,7 +3661,7 @@ module ExamQuestions
       explanation: "공사 계약 문서의 효력 우선순위는 계약서 > 설계도면 > 시방서 > 현장설명서 순서가 일반적입니다. 계약서가 최상위 효력을 가지며, 서로 충돌하는 경우 상위 문서가 우선합니다."
     },
     {
-      id: 317, subject_id: 3,
+      id: 317, subject_id: 3, chapter_num: 3,
       question: "공공계약에서 '물가 변동으로 인한 계약금액 조정(에스컬레이션)' 적용 기준은?",
       options: [
         "계약 체결 후 30일 경과 시 자동 적용",
@@ -3673,7 +3673,7 @@ module ExamQuestions
       explanation: "물가 변동 조정(에스컬레이션)은 계약 체결 후 90일 이상 경과하고, 입찰일을 기준으로 품목 조정률 또는 지수 조정률이 3/100 이상 변동한 경우에 계약금액 조정을 신청할 수 있습니다."
     },
     {
-      id: 318, subject_id: 3,
+      id: 318, subject_id: 3, chapter_num: 3,
       question: "계약 이행 중 '계약자 부도' 발생 시 발주기관의 조치로 옳지 않은 것은?",
       options: [
         "계약 해지 검토",
@@ -3685,7 +3685,7 @@ module ExamQuestions
       explanation: "계약자 부도 시 발주기관은 계약 해지 여부를 검토하고, 계약보증금을 귀속 처리하며, 잔여 공사를 위한 새로운 계약을 체결합니다. 부도 상태의 계약자에게 추가 선금을 지급하는 것은 부적절하며 손실을 키울 위험이 있습니다."
     },
     {
-      id: 319, subject_id: 3,
+      id: 319, subject_id: 3, chapter_num: 3,
       question: "공공계약에서 '검사조서'를 작성하는 시기는?",
       options: [
         "계약 체결 전",
@@ -3697,7 +3697,7 @@ module ExamQuestions
       explanation: "검사조서는 물품 납품 또는 공사 준공 검사를 완료한 후 검사 결과(합격 여부, 검사 기준, 검사자 등)를 기록한 문서입니다. 검사조서를 근거로 대금 지급이 이루어집니다."
     },
     {
-      id: 320, subject_id: 3,
+      id: 320, subject_id: 3, chapter_num: 3,
       question: "공사 계약에서 '공사 예정 공정표'의 역할은?",
       options: [
         "납품 일정 확인",
@@ -3709,7 +3709,7 @@ module ExamQuestions
       explanation: "공사 예정 공정표는 공종별·기간별 공사 진행 계획을 나타내는 문서로, 실제 공사 진도와 비교하여 지연 여부를 파악하고 공기(공사 기간) 관리의 기준으로 활용됩니다."
     },
     {
-      id: 321, subject_id: 3,
+      id: 321, subject_id: 3, chapter_num: 3,
       question: "공공계약에서 '공동 수급체(JV)'의 연대 책임에 대한 설명으로 옳은 것은?",
       options: [
         "대표사만 모든 책임을 진다",
@@ -3721,7 +3721,7 @@ module ExamQuestions
       explanation: "공동이행방식 공동수급체에서 구성원 전체는 연대하여 계약 이행에 대한 책임을 집니다. 따라서 특정 구성원이 이행하지 못할 경우 다른 구성원이 그 책임을 이행해야 합니다."
     },
     {
-      id: 322, subject_id: 3,
+      id: 322, subject_id: 3, chapter_num: 3,
       question: "계약 이행 관리에서 '중간 검사'가 필요한 이유는?",
       options: [
         "계약자에게 추가 대금 지급 기회 제공",
@@ -3733,7 +3733,7 @@ module ExamQuestions
       explanation: "중간 검사(매몰 검사)는 공사 진행 중 나중에 은폐되어 확인이 불가능한 부분(기초, 철근 배근, 배관 등)의 시공 상태를 시공 단계에서 확인하기 위해 실시합니다."
     },
     {
-      id: 323, subject_id: 3,
+      id: 323, subject_id: 3, chapter_num: 3,
       question: "공공계약에서 '예산 초과 설계 변경'이 발생할 경우 처리 방법은?",
       options: [
         "계약자가 초과 비용 부담",
@@ -3745,7 +3745,7 @@ module ExamQuestions
       explanation: "설계 변경으로 계약금액이 예산을 초과하는 경우, 사업 범위 조정을 통해 예산 범위 내로 맞추거나 추가 예산을 확보한 후 설계 변경을 진행해야 합니다. 예산 확보 없이 계약금액을 인상하는 것은 위법입니다."
     },
     {
-      id: 324, subject_id: 3,
+      id: 324, subject_id: 3, chapter_num: 3,
       question: "공공계약에서 '계약 이행 보증'이란?",
       options: [
         "계약자가 계약 이행을 보증하기 위해 제공하는 담보",
@@ -3757,7 +3757,7 @@ module ExamQuestions
       explanation: "계약 이행 보증(계약보증금 또는 이행보증보험 등)은 계약자가 계약을 이행할 것을 담보하기 위해 발주기관에 제공하는 것으로, 계약 불이행 시 발주기관이 손실을 보전받을 수 있습니다."
     },
     {
-      id: 325, subject_id: 3,
+      id: 325, subject_id: 3, chapter_num: 3,
       question: "공사 계약에서 '설계 변경으로 인한 계약금액 조정' 시 단가 결정 원칙은?",
       options: [
         "계약자가 제시하는 단가를 그대로 적용",
@@ -3769,7 +3769,7 @@ module ExamQuestions
       explanation: "설계 변경 시 기존 계약에 있는 품목의 단가는 계약단가를 적용하고, 계약에 없는 신규 품목은 산출내역서 작성 기준을 준용하거나 발주기관과 계약자가 협의하여 결정합니다."
     },
     {
-      id: 326, subject_id: 3,
+      id: 326, subject_id: 3, chapter_num: 4,
       question: "공공계약에서 '하도급 대금 직접 지급'이 가능한 경우는?",
       options: [
         "원도급자가 하도급 대금 미지급으로 하도급업체가 시공 거부 시",
@@ -3781,7 +3781,7 @@ module ExamQuestions
       explanation: "하도급 대금 직접 지급은 원도급자가 하도급업체에 대금을 지급하지 않아 하도급업체가 시공을 중단하거나 발주기관에 직접 지급을 요청하는 경우 등에 허용됩니다. 하도급업체 보호 제도입니다."
     },
     {
-      id: 327, subject_id: 3,
+      id: 327, subject_id: 3, chapter_num: 4,
       question: "계약 관리에서 '품질관리계획서'를 제출해야 하는 시기는?",
       options: [
         "공사 완료 후",
@@ -3793,7 +3793,7 @@ module ExamQuestions
       explanation: "품질관리계획서는 공사에서 품질을 확보하기 위한 관리 계획을 담은 문서로, 공사 착공 전 또는 착공 초기에 발주기관에 제출하여 승인을 받은 후 이에 따라 시공해야 합니다."
     },
     {
-      id: 328, subject_id: 3,
+      id: 328, subject_id: 3, chapter_num: 4,
       question: "공공계약에서 '납품 거부'가 가능한 경우는?",
       options: [
         "발주기관이 원하지 않는 경우",
@@ -3805,7 +3805,7 @@ module ExamQuestions
       explanation: "발주기관은 납품된 물품이 계약서·규격서에서 정한 규격·품질에 미치지 못하거나 불량인 경우 납품 거부(반품)를 할 수 있습니다. 단순 납기 지연이 아닌 품질 불량이 납품 거부 사유입니다."
     },
     {
-      id: 329, subject_id: 3,
+      id: 329, subject_id: 3, chapter_num: 4,
       question: "공사 계약에서 '안전 관리 계획'을 제출해야 하는 이유는?",
       options: [
         "계약금액 증액을 위해",
@@ -3817,7 +3817,7 @@ module ExamQuestions
       explanation: "안전 관리 계획은 건설기술진흥법 등에 따라 일정 규모 이상의 공사에서 공사 중 안전사고를 예방하고 작업자를 보호하기 위해 착공 전에 제출·승인받아야 하는 계획서입니다."
     },
     {
-      id: 330, subject_id: 3,
+      id: 330, subject_id: 3, chapter_num: 4,
       question: "공공계약에서 '계약 담당 공무원'이 계약 이행 중 점검해야 할 사항이 아닌 것은?",
       options: [
         "계약 조건 준수 여부",
@@ -3829,7 +3829,7 @@ module ExamQuestions
       explanation: "계약 담당 공무원은 계약 이행 중 계약 조건 준수, 납기 준수, 품질 기준 충족, 현장 안전 관리 등을 점검합니다. 계약자의 개인 재산 현황은 계약 이행 점검 사항이 아닙니다."
     },
     {
-      id: 331, subject_id: 3,
+      id: 331, subject_id: 3, chapter_num: 4,
       question: "공사 계약에서 '전문공사업자'에게 하도급을 줄 수 없는 경우는?",
       options: [
         "원도급자가 직접 시공 능력이 있는 경우",
@@ -3841,7 +3841,7 @@ module ExamQuestions
       explanation: "건설산업기본법에 따라 일괄 하도급(일도급)은 원칙적으로 금지됩니다. 원도급자는 핵심 공정을 직접 시공해야 하며, 발주기관 승인 없이 전체 공사를 다른 업체에 하도급하는 것은 위법입니다."
     },
     {
-      id: 332, subject_id: 3,
+      id: 332, subject_id: 3, chapter_num: 4,
       question: "계약 관리에서 '완성품 검사'와 '중간 검사'의 차이점은?",
       options: [
         "완성품 검사는 공사 중, 중간 검사는 완료 후 실시",
@@ -3853,7 +3853,7 @@ module ExamQuestions
       explanation: "완성품(준공) 검사는 공사 완료 후 최종 결과물이 계약 조건에 맞는지 종합적으로 확인하는 것이고, 중간 검사는 은폐 전에 특정 공정의 시공 상태를 확인하는 것입니다."
     },
     {
-      id: 333, subject_id: 3,
+      id: 333, subject_id: 3, chapter_num: 4,
       question: "공공계약에서 '계약 체결 후 계약서 변경'이 필요한 경우는?",
       options: [
         "계약자의 요구가 있을 때마다",
@@ -3865,7 +3865,7 @@ module ExamQuestions
       explanation: "계약 체결 후 설계 변경, 물가 변동, 기타 계약 내용 변경 등으로 계약금액이나 계약 기간 등이 변경되면 계약서(계약금액 조정 합의서 등)를 변경해야 합니다."
     },
     {
-      id: 334, subject_id: 3,
+      id: 334, subject_id: 3, chapter_num: 4,
       question: "공공계약에서 '검수증'과 '납품확인서'의 역할은?",
       options: [
         "계약 체결 시 작성하는 문서",
@@ -3877,7 +3877,7 @@ module ExamQuestions
       explanation: "검수증 또는 납품확인서는 납품된 물품이 검사 기준에 적합함을 확인한 후 발행하는 서류로, 대금 지급의 근거가 됩니다. 검수 합격 없이는 대금을 지급할 수 없습니다."
     },
     {
-      id: 335, subject_id: 3,
+      id: 335, subject_id: 3, chapter_num: 4,
       question: "공사 계약에서 '감리자'와 '감독자'의 차이점은?",
       options: [
         "두 역할은 동일하다",
@@ -3889,7 +3889,7 @@ module ExamQuestions
       explanation: "감리자는 건설기술진흥법 등에 따라 발주기관이 위탁한 전문 감리업체 소속으로 현장 상주 감리를 수행하고, 감독자는 발주기관 소속 공무원으로 공사 전반을 관리·감독합니다."
     },
     {
-      id: 336, subject_id: 3,
+      id: 336, subject_id: 3, chapter_num: 4,
       question: "공공계약에서 '지체상금'이 면제되는 경우는?",
       options: [
         "계약자가 요청할 때마다",
@@ -3901,7 +3901,7 @@ module ExamQuestions
       explanation: "지체상금은 계약자에게 귀책사유가 있는 경우에 부과합니다. 천재지변, 전쟁, 발주기관의 귀책사유, 불가항력 등 계약자에게 책임 없는 사유로 이행이 지연된 경우에는 지체상금이 면제됩니다."
     },
     {
-      id: 337, subject_id: 3,
+      id: 337, subject_id: 3, chapter_num: 4,
       question: "공공계약에서 '대금 청구 서류'로 필요하지 않은 것은?",
       options: [
         "세금계산서",
@@ -3913,7 +3913,7 @@ module ExamQuestions
       explanation: "대금 청구 서류는 세금계산서, 검사조서(납품확인서), 청구서 등으로 구성됩니다. 계약자의 주민등록등본은 계약 체결 시 자격 확인에 사용되는 서류로, 대금 청구 시에는 필요하지 않습니다."
     },
     {
-      id: 338, subject_id: 3,
+      id: 338, subject_id: 3, chapter_num: 4,
       question: "공사 계약에서 '도급내역서'의 역할은?",
       options: [
         "하도급 업체 목록",
@@ -3925,7 +3925,7 @@ module ExamQuestions
       explanation: "도급내역서(산출내역서)는 공사의 각 공종별 물량과 단가를 기재하여 계약금액의 산출 근거를 나타내는 서류입니다. 설계 변경 시 추가 비용 산정의 기준이 되며 계약 관리의 핵심 서류입니다."
     },
     {
-      id: 339, subject_id: 3,
+      id: 339, subject_id: 3, chapter_num: 4,
       question: "공공계약에서 '하자 유형' 중 '구조상 중요한 하자'에 해당하는 것은?",
       options: [
         "도장(페인트) 일부 벗겨짐",
@@ -3937,7 +3937,7 @@ module ExamQuestions
       explanation: "구조상 중요한 하자는 건물의 안전에 직접적인 영향을 미치는 결함(구조 균열, 기초 침하, 누수 등)으로, 이러한 하자는 하자담보책임 기간이 더 길게 적용됩니다."
     },
     {
-      id: 340, subject_id: 3,
+      id: 340, subject_id: 3, chapter_num: 4,
       question: "공공계약의 분쟁 해결 방법 중 '중재'의 특징은?",
       options: [
         "법원 판결과 동일한 효력 없음",
@@ -3949,7 +3949,7 @@ module ExamQuestions
       explanation: "중재는 당사자 간 합의(중재 약관 또는 별도 합의)에 따라 중재기관에서 진행되며, 중재 판정은 확정 판결과 동일한 효력을 가집니다. 소송보다 신속하고 비공개로 처리되는 장점이 있습니다."
     },
     {
-      id: 341, subject_id: 3,
+      id: 341, subject_id: 3, chapter_num: 4,
       question: "공사 계약에서 '공기(공사 기간) 연장'이 인정되는 사유는?",
       options: [
         "계약자의 인력 부족",
@@ -3961,7 +3961,7 @@ module ExamQuestions
       explanation: "공기 연장은 설계 변경, 천재지변 등 불가항력, 발주기관 귀책사유(설계도서 제공 지연, 용지 확보 지연 등)로 인한 지연에 대해 인정됩니다. 계약자의 인력·자금 부족 등 귀책사유에 의한 지연은 공기 연장 대상이 아닙니다."
     },
     {
-      id: 342, subject_id: 3,
+      id: 342, subject_id: 3, chapter_num: 4,
       question: "공공계약에서 '계약의 이전(양도)'에 관한 설명으로 옳은 것은?",
       options: [
         "계약자는 발주기관 동의 없이 계약을 다른 업체에 이전 가능",
@@ -3973,7 +3973,7 @@ module ExamQuestions
       explanation: "공공계약은 계약자의 신용·능력을 바탕으로 체결되므로, 계약자는 원칙적으로 발주기관의 동의 없이 계약상 지위를 다른 업체에 이전할 수 없습니다. 무단 이전 시 계약 해지 사유가 됩니다."
     },
     {
-      id: 343, subject_id: 3,
+      id: 343, subject_id: 3, chapter_num: 4,
       question: "공공계약에서 '물품 계약'의 '검수 기준'으로 옳지 않은 것은?",
       options: [
         "계약 규격서에서 정한 기준",
@@ -3985,14 +3985,14 @@ module ExamQuestions
       explanation: "물품 검수 기준은 계약 규격서, 국가 표준(KS), 계약서에 명시된 품질 기준 등 객관적 기준에 따라 이루어져야 합니다. 검수자의 주관적 판단만으로 검수 합격 여부를 결정하는 것은 부당합니다."
     },
     {
-      id: 344, subject_id: 3,
+      id: 344, subject_id: 3, chapter_num: 4,
       question: "공공계약에서 '계약 관계 서류' 보관 의무 기간은?",
       options: ["1년", "3년", "5년", "10년"],
       correct: 2,
       explanation: "국가계약법령에 따라 계약 관련 서류(계약서, 검사조서, 대금 지급 서류 등)는 원칙적으로 5년간 보관해야 합니다. 이는 감사 대비 및 분쟁 발생 시 증빙을 위한 것입니다."
     },
     {
-      id: 345, subject_id: 3,
+      id: 345, subject_id: 3, chapter_num: 4,
       question: "공사 계약에서 '안전사고 발생 시' 계약자의 의무는?",
       options: [
         "발주기관에게만 보고",
@@ -4004,7 +4004,7 @@ module ExamQuestions
       explanation: "안전사고 발생 시 계약자는 즉시 응급 조치를 취하고, 발주기관과 산업안전보건법에 따른 관계 기관에 사고를 보고한 후 재발 방지 대책을 수립하여 이행해야 할 의무가 있습니다."
     },
     {
-      id: 346, subject_id: 3,
+      id: 346, subject_id: 3, chapter_num: 4,
       question: "공공계약에서 '계약 이행 실적 평가'의 주요 목적은?",
       options: [
         "계약자의 이익 확인",
@@ -4016,7 +4016,7 @@ module ExamQuestions
       explanation: "계약 이행 실적 평가는 계약자의 납기 준수, 품질 수준, 서비스 등을 평가하여 향후 조달 전략 수립, 우수 업체 우대, 불량 업체 제재 등의 자료로 활용합니다."
     },
     {
-      id: 347, subject_id: 3,
+      id: 347, subject_id: 3, chapter_num: 4,
       question: "공공계약에서 '계약 변경 사항'을 발주기관에 즉시 통보해야 하는 경우는?",
       options: [
         "계약자의 직원이 교체된 경우",
@@ -4028,7 +4028,7 @@ module ExamQuestions
       explanation: "계약자는 법인 명칭 변경, 대표자 변경, 합병·분할, 부도 등 계약의 이행에 영향을 미치는 중요한 변경 사항이 발생하면 즉시 발주기관에 통보해야 합니다."
     },
     {
-      id: 348, subject_id: 3,
+      id: 348, subject_id: 3, chapter_num: 4,
       question: "공사 계약에서 '실시설계'와 '기본설계'의 차이점은?",
       options: [
         "기본설계가 실시설계보다 상세하다",
@@ -4040,7 +4040,7 @@ module ExamQuestions
       explanation: "기본설계는 사업의 방향과 규모·기능을 정하는 개략 계획 단계이고, 실시설계는 실제 시공에 필요한 모든 설계도면, 시방서, 공사비 산출 등을 담은 상세 설계입니다."
     },
     {
-      id: 349, subject_id: 3,
+      id: 349, subject_id: 3, chapter_num: 4,
       question: "공공계약에서 '계약 이행 보고서'를 작성해야 하는 이유는?",
       options: [
         "계약자의 이익 홍보",
@@ -4052,7 +4052,7 @@ module ExamQuestions
       explanation: "계약 이행 보고서는 계약의 이행 과정(주요 진행 상황, 문제점, 조치 사항 등)과 최종 결과를 기록하여 감사 대비, 사후 평가, 향후 유사 사업의 참고 자료로 활용합니다."
     },
     {
-      id: 350, subject_id: 3,
+      id: 350, subject_id: 3, chapter_num: 4,
       question: "공공계약에서 '계약 위반 시' 발주기관의 조치 순서로 가장 적절한 것은?",
       options: [
         "즉시 계약 해지 → 소송 → 협의",
@@ -4065,7 +4065,7 @@ module ExamQuestions
     },
     # 4권: 공공조달 관리실무 (351~400)
     {
-      id: 351, subject_id: 4,
+      id: 351, subject_id: 4, chapter_num: 3,
       question: "공공기관의 재고 관리에서 'ABC 분석'의 목적은?",
       options: [
         "모든 품목을 동등하게 관리하기 위해",
@@ -4077,7 +4077,7 @@ module ExamQuestions
       explanation: "ABC 분석은 재고 품목을 금액 또는 중요도에 따라 A(고가·중요), B(중간), C(저가·단순)로 분류하여 A 품목에 집중 관리 자원을 투입하고 C 품목은 간소화된 방식으로 관리하는 기법입니다."
     },
     {
-      id: 352, subject_id: 4,
+      id: 352, subject_id: 4, chapter_num: 3,
       question: "공공조달 관리실무에서 '납품 지연 패널티(지체상금)'의 부과 기준은?",
       options: [
         "납기를 1일 초과할 때마다 계약금액의 일정 비율",
@@ -4089,7 +4089,7 @@ module ExamQuestions
       explanation: "지체상금은 계약이행기한을 초과한 날수에 계약금액의 지체상금률(공사는 1/1000 내외)을 곱하여 산정합니다. 1일 단위로 부과되며 계약서에 미리 약정된 손해배상 예정액입니다."
     },
     {
-      id: 353, subject_id: 4,
+      id: 353, subject_id: 4, chapter_num: 3,
       question: "조달 실무에서 '발주 시스템'을 통한 전자 발주의 장점이 아닌 것은?",
       options: [
         "발주 오류 감소",
@@ -4101,7 +4101,7 @@ module ExamQuestions
       explanation: "전자 발주 시스템은 발주 오류 감소, 처리 속도 향상, 발주 내역 추적 용이, 비용 절감 등의 장점이 있습니다. 오프라인 종이 서류만으로 관리하는 것은 전자 발주와 반대되는 방식입니다."
     },
     {
-      id: 354, subject_id: 4,
+      id: 354, subject_id: 4, chapter_num: 3,
       question: "공공기관의 물품 관리에서 '불용품(불용 자산)' 처리 방법이 아닌 것은?",
       options: [
         "공개 매각(경매)",
@@ -4113,7 +4113,7 @@ module ExamQuestions
       explanation: "불용품 처리는 공개 매각, 다른 기관 이관, 재활용, 폐기 등의 방법을 사용합니다. 공유재산을 개인에게 무상으로 증여하는 것은 법적으로 허용되지 않습니다."
     },
     {
-      id: 355, subject_id: 4,
+      id: 355, subject_id: 4, chapter_num: 3,
       question: "공공조달 실무에서 '조달 실적 보고'의 주요 내용이 아닌 것은?",
       options: [
         "계약 건수 및 금액",
@@ -4125,7 +4125,7 @@ module ExamQuestions
       explanation: "조달 실적 보고에는 계약 건수·금액, 중소기업 구매 비율, 녹색제품 구매 실적, 수의계약 비율 등 조달 성과 관련 사항이 포함됩니다. 담당자의 급여 내역은 조달 실적 보고 내용이 아닙니다."
     },
     {
-      id: 356, subject_id: 4,
+      id: 356, subject_id: 4, chapter_num: 3,
       question: "공공기관 조달에서 '우선구매제도'의 대상이 아닌 것은?",
       options: [
         "장애인 기업 제품",
@@ -4137,7 +4137,7 @@ module ExamQuestions
       explanation: "우선구매제도는 장애인 기업, 사회적기업, 여성기업, 중소기업, 협동조합 등의 제품을 우선 구매하도록 하여 취약계층을 지원하는 제도입니다. 대기업 계열사 제품은 우선구매 대상이 아닙니다."
     },
     {
-      id: 357, subject_id: 4,
+      id: 357, subject_id: 4, chapter_num: 3,
       question: "조달 실무에서 '공급업체 등록(벤더 등록)'의 목적은?",
       options: [
         "특정 업체를 우대하기 위해",
@@ -4149,7 +4149,7 @@ module ExamQuestions
       explanation: "공급업체 등록(벤더 등록)은 공급업체의 재무 상태, 기술력, 이행 실적 등을 사전에 검증하여 자격 있는 업체만 조달에 참가할 수 있도록 관리함으로써 조달 품질을 확보하는 제도입니다."
     },
     {
-      id: 358, subject_id: 4,
+      id: 358, subject_id: 4, chapter_num: 4,
       question: "공공기관의 '물품 대여(임대) 계약'과 '구매 계약'을 선택하는 기준은?",
       options: [
         "물품의 색상 기준",
@@ -4161,7 +4161,7 @@ module ExamQuestions
       explanation: "임대와 구매 선택은 사용 기간(단기 사용 시 임대 유리), 비용 효율성(TCO 비교), 기술 변화 속도(빠른 기술 변화 시 임대 유리), 초기 자본 가용성 등을 종합적으로 고려합니다."
     },
     {
-      id: 359, subject_id: 4,
+      id: 359, subject_id: 4, chapter_num: 4,
       question: "조달 실무에서 '계약 대장(계약 관리 대장)'의 역할은?",
       options: [
         "계약자의 신용 점수 기록",
@@ -4173,7 +4173,7 @@ module ExamQuestions
       explanation: "계약 대장은 계약 건별로 계약 금액, 계약 기간, 계약자, 이행 상황, 대금 지급 현황 등을 기록하여 계약을 체계적으로 관리하고 감사·통계 자료로 활용하는 문서입니다."
     },
     {
-      id: 360, subject_id: 4,
+      id: 360, subject_id: 4, chapter_num: 4,
       question: "공공조달에서 '복수 경쟁(2인 이상 경쟁)'이 성립하지 않은 경우 취할 수 있는 조치는?",
       options: [
         "입찰을 즉시 무효 처리하고 종료",
@@ -4185,7 +4185,7 @@ module ExamQuestions
       explanation: "경쟁 입찰이 성립되지 않은 경우(2인 미만 입찰), 재공고 입찰을 실시하거나, 재공고 후에도 성립되지 않으면 수의계약을 체결할 수 있습니다."
     },
     {
-      id: 361, subject_id: 4,
+      id: 361, subject_id: 4, chapter_num: 4,
       question: "공공조달 실무에서 '납품 검사' 기준으로 사용되지 않는 것은?",
       options: [
         "국가 표준(KS)",
@@ -4197,7 +4197,7 @@ module ExamQuestions
       explanation: "납품 검사는 국가 표준(KS), 계약 규격서, 공인 기관 시험 성적서 등 객관적 기준에 따라 실시합니다. 검사자의 주관적 취향은 검사 기준이 될 수 없으며, 이를 적용하면 불공정 검사가 됩니다."
     },
     {
-      id: 362, subject_id: 4,
+      id: 362, subject_id: 4, chapter_num: 4,
       question: "공공기관의 물품 관리에서 '재물조사'의 목적은?",
       options: [
         "계약 입찰 준비",
@@ -4209,7 +4209,7 @@ module ExamQuestions
       explanation: "재물조사는 보유 물품의 실제 재고와 장부상 기록을 대조하여 일치 여부를 확인하고, 불용품·망실·훼손 등을 파악하기 위해 실시하는 조사입니다. 연 1회 이상 정기적으로 실시합니다."
     },
     {
-      id: 363, subject_id: 4,
+      id: 363, subject_id: 4, chapter_num: 4,
       question: "조달 실무에서 '계약 이행 보증보험'과 '계약보증금'의 공통점은?",
       options: [
         "발행 기관이 동일하다",
@@ -4221,7 +4221,7 @@ module ExamQuestions
       explanation: "계약 이행 보증보험과 계약보증금은 모두 계약자가 계약을 이행하지 못할 경우 발주기관의 손실을 보전하는 기능을 가집니다. 계약보증금은 현금·증권으로 납부하고, 이행보증보험은 보험 증권으로 대체합니다."
     },
     {
-      id: 364, subject_id: 4,
+      id: 364, subject_id: 4, chapter_num: 4,
       question: "공공조달 실무에서 '수의계약 한도'를 관리해야 하는 이유는?",
       options: [
         "업체의 이익 보장을 위해",
@@ -4233,7 +4233,7 @@ module ExamQuestions
       explanation: "수의계약은 경쟁 원칙의 예외로서 남용되면 특정 업체에 대한 특혜, 예산 낭비, 부패 등이 발생할 수 있습니다. 연간 수의계약 한도를 관리하여 경쟁 원칙이 유지되도록 해야 합니다."
     },
     {
-      id: 365, subject_id: 4,
+      id: 365, subject_id: 4, chapter_num: 4,
       question: "공공조달에서 '다년도 계약'의 관리 시 주의사항은?",
       options: [
         "매년 예산이 자동 확보된다고 가정",
@@ -4245,7 +4245,7 @@ module ExamQuestions
       explanation: "다년도 계약은 각 회계연도의 예산 확보 여부가 계약 이행의 전제가 됩니다. 계약서에 '예산 미확보 시 계약 효력 정지' 조건을 명시하고, 매년 예산 확보 여부를 확인해야 합니다."
     },
     {
-      id: 366, subject_id: 4,
+      id: 366, subject_id: 4, chapter_num: 4,
       question: "조달 실무에서 '이행실적 증명서(실적 확인서)' 발급의 목적은?",
       options: [
         "새로운 입찰 참가 자격으로만 활용",
@@ -4257,7 +4257,7 @@ module ExamQuestions
       explanation: "이행실적 증명서는 발주기관이 계약자에 대해 계약의 이행 완료 사실을 공식적으로 확인해 주는 서류입니다. 계약자는 이를 새로운 입찰 참가 시 실적 증빙으로 활용합니다."
     },
     {
-      id: 367, subject_id: 4,
+      id: 367, subject_id: 4, chapter_num: 4,
       question: "공공기관의 조달 업무에서 '청렴 서약서' 제출의 의미는?",
       options: [
         "계약 불이행 시 손해배상 약속",
@@ -4269,7 +4269,7 @@ module ExamQuestions
       explanation: "청렴 서약서는 계약 당사자가 조달 과정에서 뇌물·금품 수수, 담합, 허위 서류 제출 등 불법·부적정 행위를 하지 않겠다는 의사를 서면으로 표명하는 것으로, 조달 청렴성 확보의 수단입니다."
     },
     {
-      id: 368, subject_id: 4,
+      id: 368, subject_id: 4, chapter_num: 4,
       question: "공공조달 실무에서 '연간 수요 계획 대비 실집행 분석'의 주요 목적은?",
       options: [
         "계약자 선호도 조사",
@@ -4281,7 +4281,7 @@ module ExamQuestions
       explanation: "연간 수요 계획 대비 실집행 분석은 예산 집행 진도를 점검하여 연말 예산 불용 또는 집중 집행을 방지하고, 계획 대비 차이를 파악하여 다음 연도 계획 수립에 반영하기 위해 실시합니다."
     },
     {
-      id: 369, subject_id: 4,
+      id: 369, subject_id: 4, chapter_num: 4,
       question: "조달 실무에서 '직접 구매'와 '대리 구매(조달청 의뢰)' 방식의 선택 기준은?",
       options: [
         "담당자의 선호도",
@@ -4293,7 +4293,7 @@ module ExamQuestions
       explanation: "직접 구매와 조달청 대리 구매의 선택은 계약 금액 규모, 물품의 특수성, 기관의 조달 전문성, 조달 기간, 수수료 등을 종합적으로 고려합니다. 대규모·전문성 필요 품목은 조달청 의뢰가 유리한 경우가 많습니다."
     },
     {
-      id: 370, subject_id: 4,
+      id: 370, subject_id: 4, chapter_num: 4,
       question: "공공기관의 '조달 감사' 시 주요 점검 사항이 아닌 것은?",
       options: [
         "수의계약 사유의 적정성",
@@ -4305,7 +4305,7 @@ module ExamQuestions
       explanation: "조달 감사에서는 수의계약 사유 적정성, 예정가격 산정 적정성, 검수 절차 적정성, 계약 문서 보관 상태 등을 점검합니다. 담당자의 사생활은 감사 점검 대상이 아닙니다."
     },
     {
-      id: 371, subject_id: 4,
+      id: 371, subject_id: 4, chapter_num: 4,
       question: "공공조달 실무에서 '공급망 리스크 관리'의 사례는?",
       options: [
         "단일 공급처에만 의존",
@@ -4317,7 +4317,7 @@ module ExamQuestions
       explanation: "공급망 리스크 관리는 특정 공급처 의존도를 낮추기 위해 핵심 물품에 복수 공급처를 확보하고, 공급 중단에 대비한 안전 재고를 비축하는 등의 방법으로 조달 안정성을 확보하는 활동입니다."
     },
     {
-      id: 372, subject_id: 4,
+      id: 372, subject_id: 4, chapter_num: 4,
       question: "공공조달에서 '조달 계획 vs 실적 분석'에서 집중적으로 검토해야 할 것은?",
       options: [
         "계획과 실적이 100% 일치하는지",
@@ -4329,7 +4329,7 @@ module ExamQuestions
       explanation: "계획 대비 실적 분석에서는 큰 편차가 발생한 품목을 집중 검토하여 편차 원인(수요 변동, 예산 조정, 납기 지연 등)을 파악하고 향후 계획의 정확도를 높이기 위한 개선 방안을 도출합니다."
     },
     {
-      id: 373, subject_id: 4,
+      id: 373, subject_id: 4, chapter_num: 4,
       question: "공공기관 물품 관리에서 '망실(분실)' 발생 시 처리 방법은?",
       options: [
         "별도 조치 없이 장부에서 삭제",
@@ -4341,7 +4341,7 @@ module ExamQuestions
       explanation: "물품 망실(분실) 발생 시 원인 조사를 실시하고, 귀책사유가 있는 담당자에게 변상을 요구하거나 관련 규정에 따른 절차(보고, 승인, 장부 처리 등)를 거쳐야 합니다."
     },
     {
-      id: 374, subject_id: 4,
+      id: 374, subject_id: 4, chapter_num: 4,
       question: "조달 실무에서 '정보시스템(ERP, 조달 시스템 등)' 활용의 장점이 아닌 것은?",
       options: [
         "조달 이력 추적 용이",
@@ -4353,7 +4353,7 @@ module ExamQuestions
       explanation: "조달 정보시스템은 조달 이력 추적, 실시간 재고 파악, 예산 집행 현황 확인, 계약 관리 자동화 등의 장점이 있습니다. 담당자의 경력 자동 관리는 인사 정보 시스템의 기능이지 조달 시스템의 장점이 아닙니다."
     },
     {
-      id: 375, subject_id: 4,
+      id: 375, subject_id: 4, chapter_num: 4,
       question: "공공조달에서 '사후 평가(post-award evaluation)'의 목적은?",
       options: [
         "계약금액 소급 변경",
@@ -4365,7 +4365,7 @@ module ExamQuestions
       explanation: "사후 평가는 계약 이행 완료 후 품질, 납기, 가격 적정성, 서비스 수준 등을 평가하여 향후 유사 조달의 개선 방향을 도출하고, 우수 업체 정보를 축적하는 데 활용합니다."
     },
     {
-      id: 376, subject_id: 4,
+      id: 376, subject_id: 4, chapter_num: 4,
       question: "공공기관의 조달에서 '비밀 유지(정보 보안)' 의무가 특히 중요한 이유는?",
       options: [
         "계약 속도 향상을 위해",
@@ -4377,7 +4377,7 @@ module ExamQuestions
       explanation: "예정가격, 입찰 참가 업체 목록 등 내부 조달 정보가 사전에 유출되면 특정 업체가 유리한 가격을 제출할 수 있어 공정한 경쟁을 저해합니다. 조달 담당자의 비밀 유지 의무는 법적으로 규정되어 있습니다."
     },
     {
-      id: 377, subject_id: 4,
+      id: 377, subject_id: 4, chapter_num: 5,
       question: "공공조달 실무에서 '수의계약 사유서' 작성 시 포함해야 할 내용은?",
       options: [
         "담당자 개인 의견",
@@ -4389,7 +4389,7 @@ module ExamQuestions
       explanation: "수의계약 사유서에는 수의계약이 가능한 법령상 사유, 계약 상대방을 선정한 경위와 이유, 계약 금액이 적정하다는 근거 등을 구체적으로 기재하여 사후 감사에서 적법성을 입증할 수 있도록 해야 합니다."
     },
     {
-      id: 378, subject_id: 4,
+      id: 378, subject_id: 4, chapter_num: 5,
       question: "공공조달에서 '친환경 제품 우선 구매' 이행 실적을 관리해야 하는 이유는?",
       options: [
         "계약금액 절감을 위해",
@@ -4401,7 +4401,7 @@ module ExamQuestions
       explanation: "'녹색제품 구매촉진에 관한 법률'에 따라 공공기관은 환경표지 인증 제품 등 녹색제품의 구매 실적을 관리하고 보고해야 합니다. 목표 달성 여부가 기관 평가에도 반영됩니다."
     },
     {
-      id: 379, subject_id: 4,
+      id: 379, subject_id: 4, chapter_num: 5,
       question: "조달 실무에서 '공급업체 성과 평가 지표(KPI)'로 적절하지 않은 것은?",
       options: [
         "납기 준수율",
@@ -4413,7 +4413,7 @@ module ExamQuestions
       explanation: "공급업체 성과 평가 KPI는 납기 준수율, 불량률, 가격 경쟁력, 서비스 응대, 불만 처리 기간 등이 활용됩니다. 공급업체의 담당 직원 수는 성과와 직결되는 KPI 지표가 아닙니다."
     },
     {
-      id: 380, subject_id: 4,
+      id: 380, subject_id: 4, chapter_num: 5,
       question: "공공기관에서 '수요 예측 오류'로 인한 과잉 재고 발생 시 문제점은?",
       options: [
         "납기 단축",
@@ -4425,7 +4425,7 @@ module ExamQuestions
       explanation: "과잉 재고는 보관 비용(창고, 보험, 관리 등) 증가, 자금의 비효율적 사용, 유효기간 초과 시 폐기 손실 등의 문제를 일으킵니다. 재고 관리의 핵심은 과잉·부족 재고를 모두 방지하는 것입니다."
     },
     {
-      id: 381, subject_id: 4,
+      id: 381, subject_id: 4, chapter_num: 5,
       question: "공공조달 실무에서 '긴급 소요 요청'을 처리할 때 주의사항은?",
       options: [
         "모든 절차를 생략하고 즉시 구매",
@@ -4437,7 +4437,7 @@ module ExamQuestions
       explanation: "긴급 소요가 발생해도 긴급 사유를 문서화하고 관련 법령에서 허용하는 긴급 조달 절차(긴급 수의계약 등)에 따라 처리해야 합니다. 모든 절차를 생략하는 것은 위법입니다."
     },
     {
-      id: 382, subject_id: 4,
+      id: 382, subject_id: 4, chapter_num: 5,
       question: "공공기관의 '물품 관리 담당자'의 주요 책무가 아닌 것은?",
       options: [
         "물품 수령·보관·불출 관리",
@@ -4449,7 +4449,7 @@ module ExamQuestions
       explanation: "물품 관리 담당자의 책무는 물품 수령·보관·불출 관리, 재물조사, 불용품 처리, 장부 기록 등입니다. 공급업체와의 가격 담합은 명백히 위법한 행위로 담당자의 책무가 아닙니다."
     },
     {
-      id: 383, subject_id: 4,
+      id: 383, subject_id: 4, chapter_num: 5,
       question: "공공조달에서 '국내 제품 우선 구매'의 예외가 허용되는 경우는?",
       options: [
         "담당자가 원하는 경우",
@@ -4461,7 +4461,7 @@ module ExamQuestions
       explanation: "국내 제품 우선 구매의 예외는 국내에서 생산되지 않는 물품, WTO 정부조달협정(GPA)에 따른 국제 개방 의무가 있는 경우, 국내 제품이 요구 규격을 충족하지 못하는 경우 등입니다."
     },
     {
-      id: 384, subject_id: 4,
+      id: 384, subject_id: 4, chapter_num: 5,
       question: "조달 실무에서 '계약 이행 기간'을 명확히 설정해야 하는 이유는?",
       options: [
         "계약자의 이익을 보장하기 위해",
@@ -4473,7 +4473,7 @@ module ExamQuestions
       explanation: "계약 이행 기간(납기)을 명확히 설정해야 납기 초과 여부를 객관적으로 판단하고 지체상금을 부과하는 근거가 됩니다. 모호한 납기 설정은 분쟁의 원인이 됩니다."
     },
     {
-      id: 385, subject_id: 4,
+      id: 385, subject_id: 4, chapter_num: 5,
       question: "공공조달에서 '최저가 입찰 결과 검토' 시 주의해야 할 사항은?",
       options: [
         "최저가는 항상 선택해야 한다",
@@ -4485,7 +4485,7 @@ module ExamQuestions
       explanation: "최저가 입찰 결과 검토 시 비정상적으로 낮은 가격(덤핑)은 계약 이행 실패로 이어질 수 있으므로 이행 능력, 하도급 구조, 원가 적정성 등을 함께 검토해야 합니다."
     },
     {
-      id: 386, subject_id: 4,
+      id: 386, subject_id: 4, chapter_num: 5,
       question: "공공기관의 조달에서 '구매 요청서(Purchase Requisition)'의 역할은?",
       options: [
         "계약서 역할",
@@ -4497,7 +4497,7 @@ module ExamQuestions
       explanation: "구매 요청서는 수요 부서가 필요한 물품·서비스의 규격, 수량, 필요 시기, 예산 과목 등을 명시하여 조달 부서에 공식적으로 구매를 요청하는 내부 문서입니다. 조달 업무의 시작점입니다."
     },
     {
-      id: 387, subject_id: 4,
+      id: 387, subject_id: 4, chapter_num: 5,
       question: "조달 실무에서 '공개경쟁입찰 재공고' 시 변경 가능한 사항은?",
       options: [
         "계약 목적물의 근본적인 변경",
@@ -4509,7 +4509,7 @@ module ExamQuestions
       explanation: "재공고 시에는 경쟁 입찰 불성립의 원인을 해소하기 위해 입찰 참가 자격 요건을 완화하거나 공고 기간을 연장하는 등의 변경을 할 수 있습니다. 계약 목적물의 근본적 변경이나 낙찰자 사전 결정은 허용되지 않습니다."
     },
     {
-      id: 388, subject_id: 4,
+      id: 388, subject_id: 4, chapter_num: 5,
       question: "공공기관의 조달에서 '예산 집행 잔액' 관리의 중요성은?",
       options: [
         "잔액은 다음 연도로 자동 이월된다",
@@ -4521,7 +4521,7 @@ module ExamQuestions
       explanation: "예산 집행 잔액 관리는 연말 불용액(미집행 예산)을 최소화하고, 집행 실적을 분석하여 다음 연도 예산 편성 시 정확한 수요를 반영하기 위해 중요합니다. 예산 불용은 다음 연도 예산 삭감의 원인이 됩니다."
     },
     {
-      id: 389, subject_id: 4,
+      id: 389, subject_id: 4, chapter_num: 5,
       question: "공공조달 실무에서 '입찰 결과 분석 보고서' 작성의 목적은?",
       options: [
         "낙찰 업체 홍보",
@@ -4533,7 +4533,7 @@ module ExamQuestions
       explanation: "입찰 결과 분석 보고서는 입찰 참가 업체 수, 낙찰률(예정가 대비 낙찰가 비율), 경쟁도 등을 분석하여 향후 예정가격 설정, 조달 방식 선택 등 조달 전략 개선의 기초 자료로 활용합니다."
     },
     {
-      id: 390, subject_id: 4,
+      id: 390, subject_id: 4, chapter_num: 5,
       question: "공공기관의 '물품 수명 주기 관리'에서 '교체 기준'을 정하는 이유는?",
       options: [
         "계약자의 이익 보장",
@@ -4545,7 +4545,7 @@ module ExamQuestions
       explanation: "물품 교체 기준(내용연수, 수리비 기준, 기능 저하 기준 등)을 명확히 정하면 자의적 교체를 방지하고, 적기에 물품을 교체하여 업무 효율성을 유지하며 예산을 합리적으로 집행할 수 있습니다."
     },
     {
-      id: 391, subject_id: 4,
+      id: 391, subject_id: 4, chapter_num: 5,
       question: "조달 실무에서 '다수공급자계약(MAS) 2단계 경쟁'의 목적은?",
       options: [
         "1단계 계약보다 더 낮은 가격으로 구매하기 위해",
@@ -4557,7 +4557,7 @@ module ExamQuestions
       explanation: "MAS 2단계 경쟁은 다수공급자계약(1단계)을 체결한 공급업체들 중에서 수요기관의 특수한 요건에 맞는 업체를 추가적인 경쟁(2단계)을 통해 선정하여 더 유리한 조건으로 구매하는 방식입니다."
     },
     {
-      id: 392, subject_id: 4,
+      id: 392, subject_id: 4, chapter_num: 5,
       question: "공공기관의 '조달 부서'와 '수요 부서'의 역할 분리가 필요한 이유는?",
       options: [
         "업무 부담을 분산하기 위해",
@@ -4569,7 +4569,7 @@ module ExamQuestions
       explanation: "조달 부서(계약 담당)와 수요 부서(예산 담당·사용자)를 분리하면 상호 견제를 통해 부정 거래·특혜 계약을 방지하고, 조달 전문성을 집중하여 효율적인 구매가 가능합니다."
     },
     {
-      id: 393, subject_id: 4,
+      id: 393, subject_id: 4, chapter_num: 5,
       question: "공공조달 실무에서 '계약 후 관리(Post-Contract Management)'의 핵심 활동은?",
       options: [
         "입찰 공고 준비",
@@ -4581,7 +4581,7 @@ module ExamQuestions
       explanation: "계약 후 관리는 계약 체결 이후 이행 완료까지의 전 과정을 관리하는 것으로, 이행 감독, 대금 지급 관리, 계약 변경 처리, 클레임·분쟁 해결, 최종 성과 평가 등이 핵심 활동입니다."
     },
     {
-      id: 394, subject_id: 4,
+      id: 394, subject_id: 4, chapter_num: 5,
       question: "조달 실무에서 '전자계약' 시스템의 장점이 아닌 것은?",
       options: [
         "계약 서류 분실 방지",
@@ -4593,7 +4593,7 @@ module ExamQuestions
       explanation: "전자계약 시스템은 계약 서류 분실 방지, 원격 서명, 처리 속도 향상, 보관 편의성 등의 장점이 있습니다. 그러나 인터넷 연결이 필요한 시스템이므로 인터넷 없이는 사용할 수 없습니다."
     },
     {
-      id: 395, subject_id: 4,
+      id: 395, subject_id: 4, chapter_num: 5,
       question: "공공기관의 조달에서 '내부 감사'와 '외부 감사'의 차이점은?",
       options: [
         "두 감사는 동일하다",
@@ -4605,7 +4605,7 @@ module ExamQuestions
       explanation: "내부 감사는 기관 내부의 자체 감사 부서가 실시하는 자체 점검이고, 외부 감사는 감사원, 상급 기관, 회계법인 등 외부 기관이 실시하는 감사입니다. 외부 감사는 독립성이 높아 신뢰도가 더 높습니다."
     },
     {
-      id: 396, subject_id: 4,
+      id: 396, subject_id: 4, chapter_num: 6,
       question: "공공조달에서 '역경매(Reverse Auction)' 방식의 특징은?",
       options: [
         "발주기관이 가격을 올려가며 최고 입찰자 선정",
@@ -4617,7 +4617,7 @@ module ExamQuestions
       explanation: "역경매는 공급업체들이 온라인 시스템에서 실시간으로 서로의 가격을 확인하며 경쟁적으로 가격을 낮춰가는 방식입니다. 가격 투명성이 높고 경쟁을 통해 가격 인하 효과가 있습니다."
     },
     {
-      id: 397, subject_id: 4,
+      id: 397, subject_id: 4, chapter_num: 6,
       question: "조달 실무에서 '수요 부서의 소요 요청' 시 포함해야 할 사항이 아닌 것은?",
       options: [
         "필요 수량 및 규격",
@@ -4629,7 +4629,7 @@ module ExamQuestions
       explanation: "소요 요청서에는 필요 수량·규격, 사용 목적·시기, 관련 예산 과목, 긴급도 등을 포함합니다. 낙찰 예상 업체명을 사전에 명시하는 것은 공정한 경쟁을 침해하는 행위로 포함되어서는 안 됩니다."
     },
     {
-      id: 398, subject_id: 4,
+      id: 398, subject_id: 4, chapter_num: 6,
       question: "공공조달에서 '계약 자동 갱신' 조항을 사용할 때 주의할 점은?",
       options: [
         "자동 갱신은 항상 유리하므로 적극 활용",
@@ -4641,7 +4641,7 @@ module ExamQuestions
       explanation: "계약 자동 갱신 조항은 편리하지만, 갱신 시점에 예산이 확보되지 않은 경우 예산 없이 계약이 갱신되는 위험이 있습니다. 매 갱신 시 예산 확보 여부를 확인하고 필요 시 갱신 중단 절차를 취해야 합니다."
     },
     {
-      id: 399, subject_id: 4,
+      id: 399, subject_id: 4, chapter_num: 6,
       question: "공공기관의 조달에서 '지속적 개선(Continuous Improvement)'의 사례로 옳은 것은?",
       options: [
         "동일한 방식 고수",
@@ -4653,7 +4653,7 @@ module ExamQuestions
       explanation: "조달의 지속적 개선은 계약 결과, 이행 실적, 문제점 등을 분석하여 프로세스·시스템·역량을 단계적으로 개선하는 활동입니다. 단순 담당자 교체나 예산 삭감과는 다른 체계적 접근입니다."
     },
     {
-      id: 400, subject_id: 4,
+      id: 400, subject_id: 4, chapter_num: 6,
       question: "공공조달 실무 전반에 걸쳐 '문서 관리'가 중요한 이유는?",
       options: [
         "서류 작성이 담당자의 주요 업무이기 때문",
@@ -4667,7 +4667,7 @@ module ExamQuestions
 
     # ── Subject 1 추가문제 401–450 (공공조달의 이해) ──────────────────────
     {
-      id: 401, subject_id: 1,
+      id: 401, subject_id: 1, chapter_num: 5,
       question: "공공조달에서 '경쟁의 원칙'이 추구하는 핵심 목적은?",
       options: [
         "특정 공급업체와 장기 파트너십 유지",
@@ -4679,7 +4679,7 @@ module ExamQuestions
       explanation: "경쟁의 원칙은 모든 적격 공급자에게 공정한 참여 기회를 보장함으로써 가격·품질 면에서 최적의 가치를 달성하는 데 목적이 있습니다."
     },
     {
-      id: 402, subject_id: 1,
+      id: 402, subject_id: 1, chapter_num: 5,
       question: "조달청의 주요 기능 중 '나라장터(G2B)'와 관련된 역할로 옳은 것은?",
       options: [
         "민간 기업 간 B2B 전자상거래 플랫폼 운영",
@@ -4691,7 +4691,7 @@ module ExamQuestions
       explanation: "나라장터(G2B)는 조달청이 운영하는 국가종합전자조달시스템으로 입찰공고, 투찰, 개찰, 계약 체결 등 조달 전 과정을 온라인으로 처리합니다."
     },
     {
-      id: 403, subject_id: 1,
+      id: 403, subject_id: 1, chapter_num: 5,
       question: "공공조달에서 '가치(Value)'의 개념으로 가장 적절한 것은?",
       options: [
         "최저가 낙찰을 통한 단순 비용 최소화",
@@ -4703,7 +4703,7 @@ module ExamQuestions
       explanation: "현대 공공조달의 '가치(Value for Money)'는 단순 최저가가 아닌 품질·비용·위험·사회적 가치·지속가능성을 종합적으로 고려한 최적 성과를 의미합니다."
     },
     {
-      id: 404, subject_id: 1,
+      id: 404, subject_id: 1, chapter_num: 5,
       question: "국제조달 시장에서 WTO 정부조달협정(GPA)의 주요 원칙은?",
       options: [
         "자국 공급자에게 우선권 부여",
@@ -4715,7 +4715,7 @@ module ExamQuestions
       explanation: "WTO GPA는 협정 가입국 간에 내국민 대우와 최혜국 대우를 적용하여 외국 공급자도 자국 공급자와 동등한 기회를 받도록 하는 비차별 원칙을 핵심으로 합니다."
     },
     {
-      id: 405, subject_id: 1,
+      id: 405, subject_id: 1, chapter_num: 5,
       question: "공공조달에서 이해충돌(Conflict of Interest) 방지를 위한 적절한 조치가 아닌 것은?",
       options: [
         "조달 담당자의 이해관계 신고 의무화",
@@ -4727,7 +4727,7 @@ module ExamQuestions
       explanation: "특정 업체가 기술 규격 초안을 단독 작성하면 자사에 유리한 규격을 설정할 수 있어 이해충돌의 대표적 사례입니다. 나머지는 이해충돌 방지를 위한 적절한 조치입니다."
     },
     {
-      id: 406, subject_id: 1,
+      id: 406, subject_id: 1, chapter_num: 5,
       question: "공공조달에서 '투명성(Transparency)' 원칙을 실현하는 방법으로 옳지 않은 것은?",
       options: [
         "입찰공고를 나라장터에 공개 게시",
@@ -4739,7 +4739,7 @@ module ExamQuestions
       explanation: "투명성 원칙은 조달 절차의 모든 단계에서 정보를 공개하는 것을 요구합니다. 입찰 참가업체 명단 비공개는 투명성에 반하며, 나머지 세 가지는 투명성 실현 방법입니다."
     },
     {
-      id: 407, subject_id: 1,
+      id: 407, subject_id: 1, chapter_num: 5,
       question: "조달청의 '종합쇼핑몰(디지털서비스몰 포함)' 기능에 대한 설명으로 옳은 것은?",
       options: [
         "수요기관이 조달청의 사전 승인 없이 직접 구매할 수 없는 시스템",
@@ -4751,7 +4751,7 @@ module ExamQuestions
       explanation: "조달청 종합쇼핑몰은 조달청이 사전에 계약한 제품·서비스를 카탈로그 방식으로 수요기관이 직접 구매하는 시스템으로, 별도 입찰 없이 신속하게 조달할 수 있습니다."
     },
     {
-      id: 408, subject_id: 1,
+      id: 408, subject_id: 1, chapter_num: 5,
       question: "공공조달에서 '사회적 가치'를 실현하는 방법으로 가장 거리가 먼 것은?",
       options: [
         "장애인 생산품 우선 구매",
@@ -4763,7 +4763,7 @@ module ExamQuestions
       explanation: "사회적 가치 실현은 장애인 생산품 우선 구매, 친환경 제품 구매, 중소기업 지원 등을 포함합니다. 단순 최저가 낙찰을 통한 비용 절감만 추구하는 것은 사회적 가치와 거리가 있습니다."
     },
     {
-      id: 409, subject_id: 1,
+      id: 409, subject_id: 1, chapter_num: 5,
       question: "공공조달에서 '조달 위험(Procurement Risk)' 관리 대상이 아닌 것은?",
       options: [
         "공급자 파산 위험",
@@ -4775,7 +4775,7 @@ module ExamQuestions
       explanation: "조달 위험 관리 대상에는 공급자 파산, 납품 지연, 담당자 역량 부족 등이 포함됩니다. 조달청장의 임기 만료는 조달 자체의 위험 요소가 아닙니다."
     },
     {
-      id: 410, subject_id: 1,
+      id: 410, subject_id: 1, chapter_num: 5,
       question: "공공조달 시장의 특성으로 옳지 않은 것은?",
       options: [
         "수요자(정부)가 공급자보다 강한 협상력을 가지는 경향이 있다",
@@ -4787,7 +4787,7 @@ module ExamQuestions
       explanation: "공공조달은 수익 극대화보다 공공 가치 실현(최적 가치, 투명성, 공정성, 사회적 목표)을 우선합니다. 나머지는 공공조달 시장의 올바른 특성입니다."
     },
     {
-      id: 411, subject_id: 1,
+      id: 411, subject_id: 1, chapter_num: 6,
       question: "「국가를 당사자로 하는 계약에 관한 법률」상 계약의 원칙 중 '신의성실의 원칙'에 대한 설명으로 옳은 것은?",
       options: [
         "계약 당사자 일방이 상대방의 이익을 고려하지 않아도 되는 원칙",
@@ -4799,7 +4799,7 @@ module ExamQuestions
       explanation: "신의성실의 원칙은 계약 당사자 쌍방이 서로 신뢰를 바탕으로 성실하게 계약을 이행해야 한다는 민법상 대원칙으로, 공공계약에도 동일하게 적용됩니다."
     },
     {
-      id: 412, subject_id: 1,
+      id: 412, subject_id: 1, chapter_num: 6,
       question: "공공조달에서 '우선구매제도'의 대상이 되는 제품 유형이 아닌 것은?",
       options: [
         "중소기업 제품",
@@ -4811,7 +4811,7 @@ module ExamQuestions
       explanation: "우선구매제도는 중소기업 제품, 장애인 생산품, 여성기업 제품, 녹색제품 등을 대상으로 합니다. 외국 수입 명품은 우선구매 대상이 아닙니다."
     },
     {
-      id: 413, subject_id: 1,
+      id: 413, subject_id: 1, chapter_num: 6,
       question: "공공조달에서 부패 및 비리가 발생하기 쉬운 단계로 가장 위험성이 높은 시점은?",
       options: [
         "조달 계획 수립 단계",
@@ -4823,7 +4823,7 @@ module ExamQuestions
       explanation: "평가위원 선정 및 낙찰자 결정 단계는 특정 업체에 유리한 평가, 점수 조작, 청탁 등 부패가 발생하기 가장 쉬운 취약 단계입니다."
     },
     {
-      id: 414, subject_id: 1,
+      id: 414, subject_id: 1, chapter_num: 6,
       question: "조달청 '우수조달물품 지정제도'에 대한 설명으로 옳은 것은?",
       options: [
         "조달청이 직접 제조한 물품을 의미한다",
@@ -4835,7 +4835,7 @@ module ExamQuestions
       explanation: "우수조달물품 지정제도는 조달청이 품질·성능·기술력이 우수한 중소기업 물품을 지정하여 수요기관이 경쟁 입찰 없이 수의계약으로 구매할 수 있도록 하는 제도입니다."
     },
     {
-      id: 415, subject_id: 1,
+      id: 415, subject_id: 1, chapter_num: 6,
       question: "공공조달에서 '적격성 심사(Pre-qualification)'의 목적으로 옳은 것은?",
       options: [
         "낙찰자를 사전에 미리 결정하기 위한 절차",
@@ -4847,7 +4847,7 @@ module ExamQuestions
       explanation: "적격성 심사는 입찰 참가 전 공급자의 기술적 역량, 재무 건전성, 경험 등을 검증하여 계약 이행 능력이 있는 적격 공급자만 입찰에 참여하도록 하는 사전 검증 절차입니다."
     },
     {
-      id: 416, subject_id: 1,
+      id: 416, subject_id: 1, chapter_num: 6,
       question: "공공조달 윤리강령에서 금지하는 행위로 옳지 않은 것은?",
       options: [
         "공급자로부터 금품·향응 수수",
@@ -4859,7 +4859,7 @@ module ExamQuestions
       explanation: "공개적인 시장 조사 목적의 사전 미팅(RFI 등)은 허용되는 행위입니다. 금품 수수, 미공개 정보 제공, 사적 청탁 수수는 윤리강령에서 금지하는 행위입니다."
     },
     {
-      id: 417, subject_id: 1,
+      id: 417, subject_id: 1, chapter_num: 6,
       question: "다음 중 조달청의 '비축물자' 관리 목적으로 가장 적절한 것은?",
       options: [
         "공무원 복지용 생필품 비축",
@@ -4871,7 +4871,7 @@ module ExamQuestions
       explanation: "조달청 비축물자는 전쟁·재난·경제 위기 등 국가 비상사태 시 안정적인 물자 공급을 보장하기 위한 전략물자를 사전에 비축하는 제도입니다."
     },
     {
-      id: 418, subject_id: 1,
+      id: 418, subject_id: 1, chapter_num: 6,
       question: "공공조달의 '수요 통합(Aggregation of Demand)' 전략의 주요 이점은?",
       options: [
         "소규모 기관의 독자적 구매 권한 강화",
@@ -4883,7 +4883,7 @@ module ExamQuestions
       explanation: "수요 통합은 여러 기관의 구매 수요를 하나로 묶어 대량 구매함으로써 단가를 낮추고 계약 체결 행정 비용을 절감하는 전략입니다."
     },
     {
-      id: 419, subject_id: 1,
+      id: 419, subject_id: 1, chapter_num: 6,
       question: "공공조달에서 '성과 기반 계약(Performance-Based Contract)'의 특징으로 옳은 것은?",
       options: [
         "투입(Input) 명세를 상세히 규정하고 이를 준수하는 데 초점",
@@ -4895,7 +4895,7 @@ module ExamQuestions
       explanation: "성과 기반 계약은 '어떻게'가 아닌 '무엇을 달성했는가'에 초점을 맞추어, 구체적인 투입 방법보다 산출 결과와 성과 달성 여부로 계약 이행을 평가합니다."
     },
     {
-      id: 420, subject_id: 1,
+      id: 420, subject_id: 1, chapter_num: 6,
       question: "「조달사업에 관한 법률」에서 규정하는 조달청의 주요 업무가 아닌 것은?",
       options: [
         "수요물자 및 시설공사의 계약",
@@ -4907,7 +4907,7 @@ module ExamQuestions
       explanation: "국유재산의 매각은 기획재정부 및 각 기관의 소관으로 조달청의 주요 업무가 아닙니다. 나머지(수요물자 계약, 비축물자 관리, 전자조달시스템 운영)는 조달사업에 관한 법률에 규정된 조달청 업무입니다."
     },
     {
-      id: 421, subject_id: 1,
+      id: 421, subject_id: 1, chapter_num: 6,
       question: "공공조달에서 '녹색조달(Green Procurement)'의 핵심 개념으로 옳은 것은?",
       options: [
         "녹색(Green) 색상이 포함된 제품 우선 구매",
@@ -4919,7 +4919,7 @@ module ExamQuestions
       explanation: "녹색조달은 환경 영향을 최소화하는 친환경 제품·서비스를 구매함으로써 기후 변화 대응과 지속가능한 발전에 기여하는 조달 정책입니다."
     },
     {
-      id: 422, subject_id: 1,
+      id: 422, subject_id: 1, chapter_num: 6,
       question: "공공조달에서 '규격(Specification)' 작성 시 지켜야 할 원칙으로 옳지 않은 것은?",
       options: [
         "필요한 기능과 성능을 명확히 정의",
@@ -4931,7 +4931,7 @@ module ExamQuestions
       explanation: "규격은 특정 업체를 배제하거나 유리하게 설계해서는 안 됩니다. 특정 업체 제품만 해당하는 규격 설정은 경쟁을 제한하는 불공정 행위입니다."
     },
     {
-      id: 423, subject_id: 1,
+      id: 423, subject_id: 1, chapter_num: 6,
       question: "공공조달에서 '협상에 의한 계약(Negotiated Contract)'이 허용되는 경우가 아닌 것은?",
       options: [
         "기술·규격을 사전에 확정하기 어려운 경우",
@@ -4943,7 +4943,7 @@ module ExamQuestions
       explanation: "단순 물품 구매로 경쟁 입찰이 충분히 가능한 경우에는 공개 경쟁 입찰이 원칙이며, 협상에 의한 계약은 기술·창의성·복잡성이 높아 일반 경쟁 입찰로 최적 조달이 어려운 경우에만 허용됩니다."
     },
     {
-      id: 424, subject_id: 1,
+      id: 424, subject_id: 1, chapter_num: 6,
       question: "조달 과정에서 '시장 분석(Market Analysis)'을 실시하는 주요 목적이 아닌 것은?",
       options: [
         "시장 공급 가능성 및 공급자 현황 파악",
@@ -4955,7 +4955,7 @@ module ExamQuestions
       explanation: "시장 분석은 시장 현황 파악, 가격 이해, 전략 수립을 위한 것이지 사전에 특정 공급자와 계약을 확정하기 위한 것이 아닙니다. 사전 계약 확정은 불공정 행위입니다."
     },
     {
-      id: 425, subject_id: 1,
+      id: 425, subject_id: 1, chapter_num: 6,
       question: "공공조달에서 '전자입찰(e-Bidding)' 도입의 주요 효과로 옳지 않은 것은?",
       options: [
         "입찰 참가 비용 및 시간 절감",
@@ -4967,7 +4967,7 @@ module ExamQuestions
       explanation: "전자입찰은 지리적 장벽을 없애 중소기업의 참여를 오히려 확대하는 효과가 있습니다. 나머지(비용 절감, 담합 방지, 투명성 향상)는 전자입찰의 실제 효과입니다."
     },
     {
-      id: 426, subject_id: 1,
+      id: 426, subject_id: 1, chapter_num: 6,
       question: "공공조달에서 '조달 사이클(Procurement Cycle)'의 가장 마지막 단계는?",
       options: [
         "수요 분석 및 계획 수립",
@@ -4979,7 +4979,7 @@ module ExamQuestions
       explanation: "조달 사이클의 마지막 단계는 성과 평가(이행 결과 분석)와 교훈 도출(Lessons Learned)로, 이를 통해 다음 조달 사이클을 개선합니다."
     },
     {
-      id: 427, subject_id: 1,
+      id: 427, subject_id: 1, chapter_num: 6,
       question: "공공조달 관련 국내 법령 체계에서 「국가계약법」의 상위법에 해당하는 것은?",
       options: [
         "지방계약법",
@@ -4991,7 +4991,7 @@ module ExamQuestions
       explanation: "「국가를 당사자로 하는 계약에 관한 법률(국가계약법)」의 상위에는 헌법과 국가재정법(구 예산회계법)이 위치합니다. 국가재정법은 예산·결산·계약 등 국가 재정 전반을 규율합니다."
     },
     {
-      id: 428, subject_id: 1,
+      id: 428, subject_id: 1, chapter_num: 6,
       question: "공공조달에서 '청렴계약제(Integrity Pact)'의 핵심 내용으로 옳은 것은?",
       options: [
         "낙찰자가 청렴 서약을 한 경우 계약금액을 할인해 주는 제도",
@@ -5003,7 +5003,7 @@ module ExamQuestions
       explanation: "청렴계약제(Integrity Pact)는 발주기관과 입찰 참가 업체 모두가 뇌물·리베이트 등 부패 행위를 하지 않겠다고 상호 서약하고, 위반 시 불이익을 받는 반부패 계약 제도입니다."
     },
     {
-      id: 429, subject_id: 1,
+      id: 429, subject_id: 1, chapter_num: 6,
       question: "조달청 '물자 비축' 운영 원칙 중 '안전재고(Safety Stock)'에 대한 설명으로 옳은 것은?",
       options: [
         "평상시 사용량 이하로 유지하는 최소한의 재고",
@@ -5015,7 +5015,7 @@ module ExamQuestions
       explanation: "안전재고는 예상치 못한 수요 급증, 공급 지연, 재난 등에 대비하여 정상 재고 외에 추가로 유지하는 여분의 재고입니다."
     },
     {
-      id: 430, subject_id: 1,
+      id: 430, subject_id: 1, chapter_num: 6,
       question: "공공조달에서 '중소기업자간 경쟁제품(중소기업 전용 품목)' 제도의 목적으로 옳은 것은?",
       options: [
         "대기업의 공공시장 참여를 촉진하기 위한 제도",
@@ -5027,7 +5027,7 @@ module ExamQuestions
       explanation: "중소기업자간 경쟁제품 제도는 특정 품목의 공공 구매 시 중소기업만 입찰에 참여할 수 있도록 하여 중소기업의 판로 확대와 경쟁력 강화를 지원하는 제도입니다."
     },
     {
-      id: 431, subject_id: 1,
+      id: 431, subject_id: 1, chapter_num: 6,
       question: "공공조달에서 '대안 입찰(Alternative Bid)'에 대한 설명으로 옳은 것은?",
       options: [
         "입찰자가 발주기관의 요구사항과 다른 대안적 제안을 함께 제출할 수 있는 입찰 방식",
@@ -5039,7 +5039,7 @@ module ExamQuestions
       explanation: "대안 입찰은 입찰자가 발주기관의 원래 요구사항에 대한 기본 제안 외에, 혁신적이거나 더 효율적인 대안적 제안을 함께 제출할 수 있는 입찰 방식입니다."
     },
     {
-      id: 432, subject_id: 1,
+      id: 432, subject_id: 1, chapter_num: 6,
       question: "공공조달에서 '생애주기비용(Life Cycle Cost, LCC)' 평가의 의미는?",
       options: [
         "조달 담당자의 경력 기간을 고려한 계약 평가",
@@ -5051,7 +5051,7 @@ module ExamQuestions
       explanation: "생애주기비용(LCC)은 제품·서비스의 초기 구매 비용뿐 아니라 운영, 유지보수, 에너지, 폐기 비용까지 포함한 총 비용을 평가하여 장기적으로 가장 경제적인 선택을 하는 방법입니다."
     },
     {
-      id: 433, subject_id: 1,
+      id: 433, subject_id: 1, chapter_num: 7,
       question: "공공조달 관련 국제 규범 중 UN 무역법위원회(UNCITRAL)의 '공공조달 모델법'이 추구하는 핵심 가치가 아닌 것은?",
       options: [
         "최대의 경쟁 달성",
@@ -5063,7 +5063,7 @@ module ExamQuestions
       explanation: "UNCITRAL 공공조달 모델법은 최대 경쟁, 공정성, 투명성, 효율성을 핵심 가치로 추구합니다. 자국 산업 보호를 위한 외국업체 차별은 이 모델법의 원칙에 반합니다."
     },
     {
-      id: 434, subject_id: 1,
+      id: 434, subject_id: 1, chapter_num: 7,
       question: "공공조달에서 '분쟁 해결(Dispute Resolution)' 방법 중 '중재(Arbitration)'의 특징으로 옳은 것은?",
       options: [
         "당사자 간 자율 협상으로 해결하는 방식",
@@ -5075,7 +5075,7 @@ module ExamQuestions
       explanation: "중재는 당사자들이 합의하여 선임한 중재인(또는 중재기관)의 판정에 따라 분쟁을 해결하는 방식으로, 소송보다 신속하고 전문적이며 그 판정이 법원 판결과 동일한 구속력을 가집니다."
     },
     {
-      id: 435, subject_id: 1,
+      id: 435, subject_id: 1, chapter_num: 7,
       question: "공공조달에서 '공급망 관리(Supply Chain Management)'의 주요 목적으로 옳지 않은 것은?",
       options: [
         "공급 중단 위험 최소화",
@@ -5087,7 +5087,7 @@ module ExamQuestions
       explanation: "공급망 관리는 단일 공급자 의존도를 최대화하는 것이 아니라, 복수 공급자 활용으로 공급 중단 위험을 분산시키는 것이 원칙입니다. 나머지는 공급망 관리의 주요 목적입니다."
     },
     {
-      id: 436, subject_id: 1,
+      id: 436, subject_id: 1, chapter_num: 7,
       question: "공공조달에서 '혁신 조달(Innovation Procurement)'의 대표적 방식인 '혁신 파트너십(Innovation Partnership)'의 특징으로 옳은 것은?",
       options: [
         "기존에 시장에서 판매 중인 완성 제품만 구매",
@@ -5099,7 +5099,7 @@ module ExamQuestions
       explanation: "혁신 파트너십(Innovation Partnership)은 시장에 아직 존재하지 않는 혁신적 해결책의 연구·개발부터 최종 완성품 구매까지 하나의 계약 절차 내에서 진행하는 조달 방식입니다."
     },
     {
-      id: 437, subject_id: 1,
+      id: 437, subject_id: 1, chapter_num: 7,
       question: "공공조달에서 '공급자 관계 관리(Supplier Relationship Management, SRM)'의 핵심 활동이 아닌 것은?",
       options: [
         "공급자 성과 모니터링 및 평가",
@@ -5111,7 +5111,7 @@ module ExamQuestions
       explanation: "공급자 관계 관리(SRM)는 공급자 성과 평가, 장기 협력, 역량 개발 지원 등을 포함합니다. 공급자 정보의 무단 공개는 SRM의 활동이 아니며 법적 문제가 될 수 있습니다."
     },
     {
-      id: 438, subject_id: 1,
+      id: 438, subject_id: 1, chapter_num: 7,
       question: "공공조달에서 '최저가 낙찰제'의 단점으로 가장 자주 지적되는 문제점은?",
       options: [
         "조달 절차가 복잡해진다",
@@ -5123,7 +5123,7 @@ module ExamQuestions
       explanation: "최저가 낙찰제의 핵심 문제점은 가격 경쟁만 유발하여 품질 저하, 저가 덤핑 투찰, 계약 이행 부실, 사후 분쟁 증가로 이어질 수 있다는 것입니다."
     },
     {
-      id: 439, subject_id: 1,
+      id: 439, subject_id: 1, chapter_num: 7,
       question: "공공조달에서 '기술·가격 분리 평가(Two-Envelope System)'의 특징으로 옳은 것은?",
       options: [
         "두 명의 평가위원이 각각 별도로 평가하는 방식",
@@ -5135,7 +5135,7 @@ module ExamQuestions
       explanation: "기술·가격 분리 평가(Two-Envelope System)는 기술 제안서와 가격 제안서를 별도 봉투에 제출받아 기술 평가를 먼저 실시한 후 가격을 개봉함으로써 가격이 기술 평가에 영향을 미치는 것을 방지하는 방식입니다."
     },
     {
-      id: 440, subject_id: 1,
+      id: 440, subject_id: 1, chapter_num: 7,
       question: "공공조달에서 '계약 이행 보증(Performance Bond)'의 역할로 옳은 것은?",
       options: [
         "계약자가 계약 대금을 제때 지급받기 위한 보증",
@@ -5147,7 +5147,7 @@ module ExamQuestions
       explanation: "계약 이행 보증(Performance Bond)은 공급자가 계약을 불이행하거나 부실 이행할 경우 발주기관의 손실을 보상하기 위해 공급자가 제공하는 금융 보증 수단입니다."
     },
     {
-      id: 441, subject_id: 1,
+      id: 441, subject_id: 1, chapter_num: 7,
       question: "공공조달에서 '위험 배분(Risk Allocation)' 원칙으로 가장 적절한 것은?",
       options: [
         "모든 위험은 공급자가 부담해야 한다",
@@ -5159,7 +5159,7 @@ module ExamQuestions
       explanation: "위험 배분의 원칙은 특정 위험을 가장 잘 통제하고 관리할 수 있는 당사자에게 배분하는 것입니다. 이를 통해 위험을 효율적으로 관리하고 계약 이행 성공 가능성을 높입니다."
     },
     {
-      id: 442, subject_id: 1,
+      id: 442, subject_id: 1, chapter_num: 7,
       question: "공공조달에서 '지속가능한 조달(Sustainable Procurement)'에 포함되는 요소로 옳지 않은 것은?",
       options: [
         "환경적 지속가능성(탄소 발자국 감소)",
@@ -5171,7 +5171,7 @@ module ExamQuestions
       explanation: "지속가능한 조달은 환경·사회·경제적 지속가능성을 종합적으로 고려하는 것입니다. 단순한 최저가 낙찰을 통한 비용만의 극단적 절감 추구는 지속가능한 조달의 개념에 포함되지 않습니다."
     },
     {
-      id: 443, subject_id: 1,
+      id: 443, subject_id: 1, chapter_num: 7,
       question: "공공조달에서 '사후 평가(Post-Award Evaluation)'를 실시하는 목적으로 옳은 것은?",
       options: [
         "낙찰된 업체를 다시 취소하기 위한 절차",
@@ -5183,7 +5183,7 @@ module ExamQuestions
       explanation: "사후 평가는 계약 이행의 성과·문제점을 분석하여 교훈을 도출하고, 이를 바탕으로 향후 조달 계획 수립, 규격 설계, 업체 선정 기준 등을 개선하는 데 목적이 있습니다."
     },
     {
-      id: 444, subject_id: 1,
+      id: 444, subject_id: 1, chapter_num: 7,
       question: "공공조달 통계 및 정보 공개의 의의로 옳지 않은 것은?",
       options: [
         "시장 분석 및 정책 개선에 활용",
@@ -5195,7 +5195,7 @@ module ExamQuestions
       explanation: "조달 통계·정보 공개는 시장 분석, 부패 감지, 민간 참여 확대에 기여합니다. 정보 독점으로 특정 기관의 권한을 강화하는 것은 공개의 취지에 반합니다."
     },
     {
-      id: 445, subject_id: 1,
+      id: 445, subject_id: 1, chapter_num: 7,
       question: "공공조달 법령 체계에서 '예규(例規)'의 특성으로 옳은 것은?",
       options: [
         "국회의 의결을 거쳐야 효력이 발생하는 규범",
@@ -5207,7 +5207,7 @@ module ExamQuestions
       explanation: "예규는 행정기관이 법령의 범위 내에서 업무 처리 기준을 정한 행정규칙으로, 법령을 보완하고 구체적 집행 기준을 제시하는 역할을 합니다. 법률보다 하위에 있으며 국회 의결이 필요하지 않습니다."
     },
     {
-      id: 446, subject_id: 1,
+      id: 446, subject_id: 1, chapter_num: 7,
       question: "공공조달에서 '담합(Bid Rigging)' 행위의 유형이 아닌 것은?",
       options: [
         "사전에 낙찰자를 정하고 다른 업체가 들러리 입찰하는 행위",
@@ -5219,7 +5219,7 @@ module ExamQuestions
       explanation: "여러 공급자로부터 경쟁 견적을 받아 최저가를 선택하는 것은 정당한 조달 행위입니다. 나머지(들러리 입찰, 시장 분할, 가격 합의)는 모두 담합의 전형적 유형입니다."
     },
     {
-      id: 447, subject_id: 1,
+      id: 447, subject_id: 1, chapter_num: 7,
       question: "국제조달에서 '원산지 규정(Rules of Origin)'의 역할로 옳은 것은?",
       options: [
         "특정 제품이 어느 나라에서 제조되었는지를 결정하는 기준",
@@ -5231,7 +5231,7 @@ module ExamQuestions
       explanation: "원산지 규정(Rules of Origin)은 제품이 어느 나라에서 원산지를 가지는지를 결정하는 기준으로, 무역 협정의 혜택 적용 여부, 관세 부과, 수입 제한 등에 영향을 미칩니다."
     },
     {
-      id: 448, subject_id: 1,
+      id: 448, subject_id: 1, chapter_num: 7,
       question: "공공조달에서 '투명성 국제(Transparency International)'가 측정하는 '부패인식지수(CPI)'와 공공조달의 관계로 옳은 것은?",
       options: [
         "CPI가 높을수록 해당 국가의 공공조달 부패가 심각하다",
@@ -5243,7 +5243,7 @@ module ExamQuestions
       explanation: "부패인식지수(CPI)는 국가 전반의 공공 부문 부패 수준을 측정합니다. CPI 점수가 높을수록(100에 가까울수록) 부패가 적고 청렴하다는 의미로, 공공조달의 투명성·청렴도와 밀접하게 연관됩니다."
     },
     {
-      id: 449, subject_id: 1,
+      id: 449, subject_id: 1, chapter_num: 7,
       question: "공공조달에서 '조달 역량(Procurement Capacity)'을 구성하는 요소가 아닌 것은?",
       options: [
         "법령 및 제도 이해",
@@ -5255,7 +5255,7 @@ module ExamQuestions
       explanation: "조달 역량은 법령 이해, 시장 분석, 협상, 계약 관리 등을 포함합니다. 공급자의 내부 경영 의사결정에 참여하는 것은 조달 역량의 구성 요소가 아니며 오히려 이해충돌 문제를 야기할 수 있습니다."
     },
     {
-      id: 450, subject_id: 1,
+      id: 450, subject_id: 1, chapter_num: 7,
       question: "공공조달에서 '단일 공급원(Sole Source)' 조달의 허용 조건으로 옳은 것은?",
       options: [
         "담당자가 특정 업체를 선호하는 경우",
@@ -5269,7 +5269,7 @@ module ExamQuestions
 
     # ── Subject 2 추가문제 451–500 (공공조달 계획분석) ────────────────────
     {
-      id: 451, subject_id: 2,
+      id: 451, subject_id: 2, chapter_num: 5,
       question: "조달 계획 수립 단계에서 '수요 분석(Needs Analysis)'의 주요 목적으로 옳은 것은?",
       options: [
         "공급자 목록을 작성하기 위한 절차",
@@ -5281,7 +5281,7 @@ module ExamQuestions
       explanation: "수요 분석은 조달 사이클의 출발점으로, 실제로 필요한 물품·서비스가 무엇인지, 얼마나 필요한지, 언제까지 필요한지를 명확히 파악하여 조달 낭비를 방지하는 데 목적이 있습니다."
     },
     {
-      id: 452, subject_id: 2,
+      id: 452, subject_id: 2, chapter_num: 5,
       question: "조달 계획에서 '예산 계획(Budget Planning)'과 '조달 계획(Procurement Planning)'의 관계로 옳은 것은?",
       options: [
         "예산 계획이 수립된 후 독립적으로 조달 계획이 수립된다",
@@ -5293,7 +5293,7 @@ module ExamQuestions
       explanation: "예산 계획과 조달 계획은 상호 연계되어야 합니다. 조달에 필요한 비용이 예산에 반영되어야 하고, 반대로 예산 범위 내에서 조달 계획이 수립되어야 합니다."
     },
     {
-      id: 453, subject_id: 2,
+      id: 453, subject_id: 2, chapter_num: 5,
       question: "조달 계획에서 '조달 방법 선택' 시 고려해야 할 요소가 아닌 것은?",
       options: [
         "계약 금액 규모",
@@ -5305,7 +5305,7 @@ module ExamQuestions
       explanation: "조달 방법 선택 시 계약 금액, 공급자 수, 복잡성, 긴급성, 법적 요건 등 객관적 요소를 고려해야 합니다. 담당 공무원의 개인 선호도는 고려 요소가 아닙니다."
     },
     {
-      id: 454, subject_id: 2,
+      id: 454, subject_id: 2, chapter_num: 5,
       question: "연간 조달 계획에서 '조달 일정 계획(Procurement Schedule)' 수립 시 고려해야 할 사항이 아닌 것은?",
       options: [
         "입찰 공고 기간",
@@ -5317,7 +5317,7 @@ module ExamQuestions
       explanation: "조달 일정 계획 수립 시 입찰 공고 기간, 이행 소요 기간, 예산 마감일 등 제도적·실무적 요소를 고려합니다. 평가위원의 개인 휴가 일정은 고려 요소가 아닙니다."
     },
     {
-      id: 455, subject_id: 2,
+      id: 455, subject_id: 2, chapter_num: 5,
       question: "「국가계약법」상 추정가격 산정의 기준이 되는 것은?",
       options: [
         "전년도 계약 실적 금액",
@@ -5329,7 +5329,7 @@ module ExamQuestions
       explanation: "추정가격은 부가가치세를 제외한 금액으로 산정하며, 입찰 방법(일반경쟁·제한경쟁·수의계약) 결정과 계약 예규 적용 기준이 됩니다."
     },
     {
-      id: 456, subject_id: 2,
+      id: 456, subject_id: 2, chapter_num: 5,
       question: "조달 계획에서 '시장 조사(Market Survey)'를 실시하는 시점으로 가장 적절한 것은?",
       options: [
         "계약 체결 이후",
@@ -5341,7 +5341,7 @@ module ExamQuestions
       explanation: "시장 조사는 조달 계획 수립 단계에서 수요를 확정한 후, 입찰 공고 전에 실시하여 시장 가격·공급자 현황·기술 동향을 파악하고 예정가격 산정과 조달 전략 수립에 활용합니다."
     },
     {
-      id: 457, subject_id: 2,
+      id: 457, subject_id: 2, chapter_num: 5,
       question: "조달 계획에서 '총소유비용(Total Cost of Ownership, TCO)' 분석의 포함 항목으로 옳지 않은 것은?",
       options: [
         "초기 구매 비용",
@@ -5353,7 +5353,7 @@ module ExamQuestions
       explanation: "TCO는 구매·운영·유지·폐기 비용 등 제품 전 생애에 걸친 비용을 포함합니다. 경쟁 업체의 광고 비용은 TCO 분석 항목이 아닙니다."
     },
     {
-      id: 458, subject_id: 2,
+      id: 458, subject_id: 2, chapter_num: 5,
       question: "조달 계획에서 '복수년도 계약(Multi-year Contract)'의 장점으로 옳은 것은?",
       options: [
         "매년 새로운 공급자를 탐색할 수 있다",
@@ -5365,7 +5365,7 @@ module ExamQuestions
       explanation: "복수년도 계약은 매년 반복적인 입찰·계약 행정 비용을 절감하고, 공급자가 장기적 관점에서 인프라·인력에 투자할 수 있도록 유도하는 장점이 있습니다."
     },
     {
-      id: 459, subject_id: 2,
+      id: 459, subject_id: 2, chapter_num: 5,
       question: "조달 계획 수립 시 '조달 위험 식별(Risk Identification)' 항목으로 가장 거리가 먼 것은?",
       options: [
         "공급자 부도·파산 위험",
@@ -5377,7 +5377,7 @@ module ExamQuestions
       explanation: "조달 위험 식별 항목에는 공급자 부도, 원자재 가격 변동, 담당자 교체로 인한 업무 공백 등이 포함됩니다. 조달청장의 해외 출장 일정은 조달 위험 식별 항목이 아닙니다."
     },
     {
-      id: 460, subject_id: 2,
+      id: 460, subject_id: 2, chapter_num: 5,
       question: "「국가계약법」상 '제한경쟁'이 허용되는 요건으로 옳은 것은?",
       options: [
         "담당자가 특정 업체를 선호하는 경우",
@@ -5389,7 +5389,7 @@ module ExamQuestions
       explanation: "제한경쟁은 기술 능력, 자격증, 시공 실적, 재무 상태 등 특정 요건을 충족하는 업체만 입찰에 참가하도록 제한할 객관적 필요가 있는 경우에 허용됩니다."
     },
     {
-      id: 461, subject_id: 2,
+      id: 461, subject_id: 2, chapter_num: 5,
       question: "조달 분석에서 '파레토 분석(ABC 분석)'을 적용하는 목적으로 옳은 것은?",
       options: [
         "공급자의 신용도를 평가하기 위한 분석",
@@ -5401,7 +5401,7 @@ module ExamQuestions
       explanation: "ABC 분석(파레토 분석)은 조달 품목을 금액과 중요도에 따라 A(소수지만 고액·고위험)·B(중간)·C(다수지만 소액)으로 분류하여 A 품목에 관리 역량을 집중하는 방법입니다."
     },
     {
-      id: 462, subject_id: 2,
+      id: 462, subject_id: 2, chapter_num: 5,
       question: "조달 계획에서 '정보요청서(Request for Information, RFI)'의 활용 목적으로 옳은 것은?",
       options: [
         "낙찰자를 공식적으로 선정하기 위한 문서",
@@ -5413,7 +5413,7 @@ module ExamQuestions
       explanation: "RFI는 공식 입찰 전 시장 정보 수집, 기술 동향 파악, 잠재 공급자 현황 확인 등을 위해 공급자에게 발송하는 사전 문서로, 법적 구속력이 없습니다."
     },
     {
-      id: 463, subject_id: 2,
+      id: 463, subject_id: 2, chapter_num: 5,
       question: "조달 계획에서 '계약 유형 선택' 시 고정가격 계약(Fixed-Price Contract)이 적합한 경우는?",
       options: [
         "사업 범위가 불명확하고 기술적 불확실성이 매우 높은 경우",
@@ -5425,7 +5425,7 @@ module ExamQuestions
       explanation: "고정가격 계약은 물품·서비스의 규격과 수량이 명확하고 가격 예측이 가능한 경우에 적합합니다. 불확실성이 높거나 사업 범위가 불명확한 경우에는 원가 정산형 계약이 더 적합합니다."
     },
     {
-      id: 464, subject_id: 2,
+      id: 464, subject_id: 2, chapter_num: 5,
       question: "조달 계획에서 '조달 전략(Procurement Strategy)'을 수립하는 목적으로 옳은 것은?",
       options: [
         "특정 공급자와의 관계를 유지하기 위한 계획",
@@ -5437,7 +5437,7 @@ module ExamQuestions
       explanation: "조달 전략은 특정 조달의 목표를 달성하기 위해 어떤 계약 방식, 계약 유형, 공급자 선정 방법, 위험 관리 방안을 선택할지 결정하는 계획입니다."
     },
     {
-      id: 465, subject_id: 2,
+      id: 465, subject_id: 2, chapter_num: 5,
       question: "조달 계획 분석에서 '이해관계자 분석(Stakeholder Analysis)'의 주요 목적은?",
       options: [
         "공급자의 주주 구성을 파악하기 위한 분석",
@@ -5449,7 +5449,7 @@ module ExamQuestions
       explanation: "이해관계자 분석은 조달에 영향을 미치거나 영향을 받는 모든 집단(수요기관, 재무부서, 감사기관, 공급자, 최종 사용자 등)을 파악하고 그들의 요구·관심사를 관리하는 데 목적이 있습니다."
     },
     {
-      id: 466, subject_id: 2,
+      id: 466, subject_id: 2, chapter_num: 5,
       question: "국가계약법령상 '추정가격' 기준에 따라 일반경쟁 입찰 의무 대상이 되는 공사 금액 기준으로 옳은 것은?",
       options: [
         "추정가격 1억원 초과",
@@ -5461,7 +5461,7 @@ module ExamQuestions
       explanation: "공사의 경우 추정가격이 1억원을 초과하면 원칙적으로 일반경쟁 입찰을 실시해야 합니다(국가계약법 시행령 제26조). 다만 시행령에 따라 제한경쟁·지명경쟁이 허용되는 경우도 있습니다."
     },
     {
-      id: 467, subject_id: 2,
+      id: 467, subject_id: 2, chapter_num: 5,
       question: "조달 계획에서 '조달 위험 대응 전략(Risk Response Strategy)' 중 '위험 회피(Risk Avoidance)'에 해당하는 것은?",
       options: [
         "위험의 영향을 줄이기 위해 보험을 가입하는 것",
@@ -5473,7 +5473,7 @@ module ExamQuestions
       explanation: "위험 회피는 위험이 높은 방법·옵션 자체를 선택하지 않아 위험을 원천적으로 제거하는 전략입니다. 보험 가입은 전가, 예방 조치는 완화(Mitigation)에 해당합니다."
     },
     {
-      id: 468, subject_id: 2,
+      id: 468, subject_id: 2, chapter_num: 5,
       question: "조달 계획에서 '조달 물품 분류 체계(Classification System)' 사용의 이점으로 옳은 것은?",
       options: [
         "공급자 신용평가에 직접 활용할 수 있다",
@@ -5485,7 +5485,7 @@ module ExamQuestions
       explanation: "조달 물품 분류 체계(예: 국가 물품분류 코드, UNSPSC 등)는 조달 통계 집계, 예산 분석, 공급자 검색, 수요 통합 등을 용이하게 하는 표준화 도구입니다."
     },
     {
-      id: 469, subject_id: 2,
+      id: 469, subject_id: 2, chapter_num: 5,
       question: "조달 계획에서 '수요 예측(Demand Forecasting)'이 중요한 이유로 옳지 않은 것은?",
       options: [
         "과도한 재고 보유 방지",
@@ -5497,7 +5497,7 @@ module ExamQuestions
       explanation: "수요 예측은 재고 최적화, 적기 조달, 예산 정확도 향상에 중요합니다. 그러나 특정 공급자를 사전에 선정하기 위한 근거로 활용하는 것은 수요 예측의 목적이 아닙니다."
     },
     {
-      id: 470, subject_id: 2,
+      id: 470, subject_id: 2, chapter_num: 5,
       question: "조달 분석에서 '원가 분석(Cost Analysis)'과 '가격 분석(Price Analysis)'의 차이로 옳은 것은?",
       options: [
         "원가 분석은 최종 계약 금액, 가격 분석은 예정가격 분석이다",
@@ -5509,7 +5509,7 @@ module ExamQuestions
       explanation: "원가 분석은 인건비·재료비·간접비 등 원가 구성 요소를 세부적으로 분석하는 방법이고, 가격 분석은 시장 가격·과거 계약가 등과 비교하여 적정성을 판단하는 방법입니다."
     },
     {
-      id: 471, subject_id: 2,
+      id: 471, subject_id: 2, chapter_num: 5,
       question: "조달 계획에서 '분리 발주(Unbundling)'와 '통합 발주(Bundling)'의 선택 기준으로 옳은 것은?",
       options: [
         "계약 건수를 최소화하기 위해 항상 통합 발주를 선택한다",
@@ -5521,7 +5521,7 @@ module ExamQuestions
       explanation: "분리 발주와 통합 발주 결정은 중소기업 참여 기회, 경쟁 촉진, 시너지 효과, 관리 효율성, 법령 요건 등을 종합적으로 고려해야 합니다."
     },
     {
-      id: 472, subject_id: 2,
+      id: 472, subject_id: 2, chapter_num: 5,
       question: "조달 계획에서 '조달 일정표(Procurement Timeline)' 작성 시 역산 방식(Backward Scheduling)의 의미는?",
       options: [
         "예산 확보 일정부터 순서대로 계획하는 방식",
@@ -5533,7 +5533,7 @@ module ExamQuestions
       explanation: "역산 방식은 물품·서비스가 필요한 날짜를 기준으로, 검수→납품→계약→평가→입찰→공고→기획 순으로 역순으로 일정을 계산하여 각 단계 시작일을 결정하는 방식입니다."
     },
     {
-      id: 473, subject_id: 2,
+      id: 473, subject_id: 2, chapter_num: 5,
       question: "국가계약법령상 '예정가격 작성 기준'으로 옳지 않은 것은?",
       options: [
         "거래실례가격",
@@ -5545,7 +5545,7 @@ module ExamQuestions
       explanation: "예정가격은 거래실례가격, 원가계산가격, 감정가격, 견적가격 등을 기준으로 작성합니다. 낙찰자가 제안한 입찰 금액은 예정가격 작성 기준이 아닙니다."
     },
     {
-      id: 474, subject_id: 2,
+      id: 474, subject_id: 2, chapter_num: 5,
       question: "조달 계획에서 '프레임워크 계약(Framework Agreement)'의 특징으로 옳은 것은?",
       options: [
         "단 한 번의 납품을 위한 단기 계약",
@@ -5557,7 +5557,7 @@ module ExamQuestions
       explanation: "프레임워크 계약은 가격·납기·규격 등 핵심 조건을 사전에 합의해 두고, 수요 발생 시마다 별도의 경쟁 입찰 없이 신속하게 발주할 수 있는 계약 구조로 행정 효율성이 높습니다."
     },
     {
-      id: 475, subject_id: 2,
+      id: 475, subject_id: 2, chapter_num: 5,
       question: "조달 계획 분석에서 'SWOT 분석'을 활용하는 목적으로 옳은 것은?",
       options: [
         "낙찰자 선정 점수 계산",
@@ -5569,7 +5569,7 @@ module ExamQuestions
       explanation: "SWOT 분석은 조달 환경에서 내부의 강점(S)·약점(W)과 외부의 기회(O)·위협(T)을 분석하여 최적의 조달 전략을 수립하는 데 활용합니다."
     },
     {
-      id: 476, subject_id: 2,
+      id: 476, subject_id: 2, chapter_num: 6,
       question: "조달 계획에서 '긴급 조달(Emergency Procurement)'이 인정되는 요건으로 옳은 것은?",
       options: [
         "담당자가 업무 마감 시간에 쫓기는 경우",
@@ -5581,7 +5581,7 @@ module ExamQuestions
       explanation: "긴급 조달은 자연재해, 전쟁, 대규모 사고 등 예측 불가능한 긴급 상황에서 일반 경쟁 절차를 거칠 시간적 여유가 없는 경우에 한해 허용됩니다. 예산 소진을 위한 목적은 긴급 조달 사유가 될 수 없습니다."
     },
     {
-      id: 477, subject_id: 2,
+      id: 477, subject_id: 2, chapter_num: 6,
       question: "조달 계획에서 '공급 시장 분석(Supply Market Analysis)' 결과 활용으로 옳은 것은?",
       options: [
         "입찰 참가 업체에 결과를 공개하여 경쟁을 유도",
@@ -5593,7 +5593,7 @@ module ExamQuestions
       explanation: "공급 시장 분석 결과는 시장의 경쟁 수준, 공급자 역량, 가격 구조 등을 파악하여 최적의 조달 방법, 계약 구조, 공급자 관계 전략을 수립하는 데 활용합니다."
     },
     {
-      id: 478, subject_id: 2,
+      id: 478, subject_id: 2, chapter_num: 6,
       question: "조달 계획에서 '초기 시장 참여(Early Market Engagement, EME)'의 목적으로 옳은 것은?",
       options: [
         "입찰 전에 특정 업체와 계약을 사전 확정하기 위한 것",
@@ -5605,7 +5605,7 @@ module ExamQuestions
       explanation: "초기 시장 참여(EME)는 입찰 전 단계에서 시장 동향·기술 옵션을 탐색하고 잠재 공급자의 의견을 수렴하여 규격 개발과 조달 전략 수립에 반영하기 위한 절차입니다."
     },
     {
-      id: 479, subject_id: 2,
+      id: 479, subject_id: 2, chapter_num: 6,
       question: "조달 계획에서 '대안 분석(Analysis of Alternatives, AoA)'의 목적으로 옳은 것은?",
       options: [
         "낙찰자 결정 후 대안 업체를 순서대로 나열하는 것",
@@ -5617,7 +5617,7 @@ module ExamQuestions
       explanation: "대안 분석(AoA)은 조달 목표를 달성하기 위한 여러 가지 방법(직접 구매, 임대, 외주, 자체 개발 등)의 비용·효과·위험을 비교·평가하여 최적 방안을 선택하는 기획 단계 분석입니다."
     },
     {
-      id: 480, subject_id: 2,
+      id: 480, subject_id: 2, chapter_num: 6,
       question: "조달 계획에서 '구매 또는 제작(Make-or-Buy) 분석'의 핵심 판단 요소가 아닌 것은?",
       options: [
         "자체 제작 역량 보유 여부",
@@ -5629,7 +5629,7 @@ module ExamQuestions
       explanation: "Make-or-Buy 분석의 핵심 판단 요소는 자체 역량, 비용 비교, 핵심 역량 연관성, 기밀성, 납기 등입니다. 담당자의 업무 경력 연수는 판단 요소가 아닙니다."
     },
     {
-      id: 481, subject_id: 2,
+      id: 481, subject_id: 2, chapter_num: 6,
       question: "조달 계획에서 '조달 방법' 중 '경쟁적 대화(Competitive Dialogue)'가 적합한 경우는?",
       options: [
         "규격이 명확한 단순 물품 구매",
@@ -5641,7 +5641,7 @@ module ExamQuestions
       explanation: "경쟁적 대화는 발주기관이 필요(Needs)는 명확히 알지만 최적의 해결책을 사전에 알 수 없는 복잡한 계약(대규모 IT 시스템, 인프라 등)에서 공급자와 대화를 통해 최적안을 함께 발전시키는 조달 방법입니다."
     },
     {
-      id: 482, subject_id: 2,
+      id: 482, subject_id: 2, chapter_num: 6,
       question: "조달 계획에서 '지속가능성 기준(Sustainability Criteria)' 통합 방법으로 옳은 것은?",
       options: [
         "계약 체결 완료 후 별도로 평가한다",
@@ -5653,7 +5653,7 @@ module ExamQuestions
       explanation: "지속가능성 기준은 조달 계획 수립 단계에서 입찰 자격 요건, 기술 규격, 낙찰자 평가 기준에 환경·사회적 요소를 포함시킴으로써 조달 전 과정에서 통합됩니다."
     },
     {
-      id: 483, subject_id: 2,
+      id: 483, subject_id: 2, chapter_num: 6,
       question: "조달 분석에서 '벤치마킹(Benchmarking)'의 활용 목적으로 옳은 것은?",
       options: [
         "특정 공급자의 원가를 파악하기 위한 것",
@@ -5665,7 +5665,7 @@ module ExamQuestions
       explanation: "벤치마킹은 선도 기관의 우수한 조달 사례, 프로세스, 성과 지표를 참고하여 자기 기관의 조달 방법과 성과를 개선하는 데 활용합니다."
     },
     {
-      id: 484, subject_id: 2,
+      id: 484, subject_id: 2, chapter_num: 6,
       question: "조달 계획에서 '핵심성과지표(KPI)' 설정 시 적용하는 'SMART' 원칙에서 'T'가 의미하는 것은?",
       options: [
         "Transparent(투명한)",
@@ -5677,7 +5677,7 @@ module ExamQuestions
       explanation: "SMART 원칙에서 T는 Time-bound(기한이 있는)를 의미합니다. 즉 KPI는 Specific(구체적)·Measurable(측정 가능)·Achievable(달성 가능)·Relevant(관련성 있는)·Time-bound(기한 있는) 요소를 충족해야 합니다."
     },
     {
-      id: 485, subject_id: 2,
+      id: 485, subject_id: 2, chapter_num: 6,
       question: "조달 계획에서 '공동 조달(Cooperative/Joint Procurement)'의 장점으로 옳지 않은 것은?",
       options: [
         "구매력 집중으로 단가 인하",
@@ -5689,7 +5689,7 @@ module ExamQuestions
       explanation: "공동 조달은 구매력 집중, 행정 비용 절감, 전문 역량 공유의 장점이 있지만, 반대로 각 기관의 독자적인 규격 설계 자유도가 줄어드는 단점이 있습니다."
     },
     {
-      id: 486, subject_id: 2,
+      id: 486, subject_id: 2, chapter_num: 6,
       question: "조달 계획에서 '계약 기간 결정' 시 고려해야 할 요소가 아닌 것은?",
       options: [
         "서비스 안정성 확보를 위한 최소 계약 기간",
@@ -5701,7 +5701,7 @@ module ExamQuestions
       explanation: "계약 기간 결정 시 서비스 안정성, 기술 변화 속도, 회계연도 원칙, 시장 변동성 등을 고려합니다. 공급자 대표이사의 임기는 계약 기간 결정 요소가 아닙니다."
     },
     {
-      id: 487, subject_id: 2,
+      id: 487, subject_id: 2, chapter_num: 6,
       question: "조달 분석에서 '비용-편익 분석(Cost-Benefit Analysis, CBA)'의 특징으로 옳은 것은?",
       options: [
         "비용만 고려하고 편익은 제외하는 분석",
@@ -5713,7 +5713,7 @@ module ExamQuestions
       explanation: "비용-편익 분석(CBA)은 조달 대안의 모든 비용과 편익(사회적·경제적 효과 포함)을 화폐가치로 환산하여 순편익(편익-비용)을 계산하고 대안을 비교하는 분석 방법입니다."
     },
     {
-      id: 488, subject_id: 2,
+      id: 488, subject_id: 2, chapter_num: 6,
       question: "조달 계획에서 '리스크 매트릭스(Risk Matrix)' 사용 목적으로 옳은 것은?",
       options: [
         "공급자 재무 상태를 점수로 표시하는 도구",
@@ -5725,7 +5725,7 @@ module ExamQuestions
       explanation: "리스크 매트릭스는 각 위험을 발생 가능성(Likelihood)과 영향도(Impact)의 2차원으로 배치하여 시각화함으로써 어떤 위험에 먼저 대응해야 할지 우선순위를 결정하는 도구입니다."
     },
     {
-      id: 489, subject_id: 2,
+      id: 489, subject_id: 2, chapter_num: 6,
       question: "조달 계획에서 '가치 공학(Value Engineering, VE)'의 핵심 개념으로 옳은 것은?",
       options: [
         "최저가 낙찰을 통한 비용 절감",
@@ -5737,7 +5737,7 @@ module ExamQuestions
       explanation: "가치 공학(VE)은 제품·서비스의 기능을 유지하거나 향상시키면서 불필요한 비용을 제거하는 체계적 분석 방법으로, '가치 = 기능 / 비용'을 최적화하는 데 목적이 있습니다."
     },
     {
-      id: 490, subject_id: 2,
+      id: 490, subject_id: 2, chapter_num: 6,
       question: "조달 계획에서 '납품 방식' 결정 시 'JIT(Just-In-Time)' 방식을 선택하는 주요 이점은?",
       options: [
         "대량 비축으로 공급 안정성 확보",
@@ -5749,7 +5749,7 @@ module ExamQuestions
       explanation: "JIT(Just-In-Time) 방식은 필요한 시점에 필요한 만큼만 납품받아 재고 보관 비용을 최소화하고 불필요한 재고 낭비를 제거하는 데 주요 이점이 있습니다."
     },
     {
-      id: 491, subject_id: 2,
+      id: 491, subject_id: 2, chapter_num: 6,
       question: "조달 계획에서 '핵심 조달 문서(Key Procurement Documents)'에 해당하지 않는 것은?",
       options: [
         "조달 계획서(Procurement Plan)",
@@ -5761,7 +5761,7 @@ module ExamQuestions
       explanation: "핵심 조달 문서는 조달 계획서, 입찰 초청서, 제안 요청서, 계약서, 납품 확인서 등입니다. 공급자 대표이사의 개인 이력서는 핵심 조달 문서가 아닙니다."
     },
     {
-      id: 492, subject_id: 2,
+      id: 492, subject_id: 2, chapter_num: 6,
       question: "조달 계획에서 '가격 현실화(Price Realism)'의 개념으로 옳은 것은?",
       options: [
         "최저가로 낙찰된 업체의 가격이 시장 평균에 비해 비현실적으로 낮아 이행 능력이 의심될 때 검토하는 것",
@@ -5773,7 +5773,7 @@ module ExamQuestions
       explanation: "가격 현실화(Price Realism) 분석은 최저가 입찰자의 가격이 너무 낮아 실제로 계약을 제대로 이행할 수 있는지 의심될 때, 그 가격의 현실성을 검토하는 것입니다."
     },
     {
-      id: 493, subject_id: 2,
+      id: 493, subject_id: 2, chapter_num: 6,
       question: "조달 계획에서 '계획 조달(Planned Procurement)'과 '비계획 조달(Unplanned Procurement)'의 차이로 옳은 것은?",
       options: [
         "계획 조달은 긴급 조달, 비계획 조달은 일반 조달이다",
@@ -5785,7 +5785,7 @@ module ExamQuestions
       explanation: "계획 조달은 연간 조달 계획에 포함되어 사전에 준비된 조달이고, 비계획 조달은 예상치 못한 수요·긴급 상황 등으로 연간 계획 외에 추가로 발생하는 조달입니다."
     },
     {
-      id: 494, subject_id: 2,
+      id: 494, subject_id: 2, chapter_num: 6,
       question: "조달 계획에서 '사전규격공개 제도'의 목적으로 옳은 것은?",
       options: [
         "특정 업체에게 규격 정보를 선제적으로 제공하기 위한 제도",
@@ -5797,7 +5797,7 @@ module ExamQuestions
       explanation: "사전규격공개 제도는 입찰 공고 전에 예정 규격을 나라장터에 공개하여 특정 업체에 유리한 규격 설계를 방지하고, 업계의 의견을 수렴하여 규격의 공정성을 확보하는 제도입니다."
     },
     {
-      id: 495, subject_id: 2,
+      id: 495, subject_id: 2, chapter_num: 6,
       question: "조달 계획에서 '조달 포트폴리오 분석(Procurement Portfolio Analysis)'의 대표적 도구인 '크랄직 매트릭스(Kraljic Matrix)'는 품목을 어떤 기준으로 분류하는가?",
       options: [
         "가격과 납기",
@@ -5809,7 +5809,7 @@ module ExamQuestions
       explanation: "크랄직 매트릭스는 조달 품목을 구매 금액 중요도(profit impact)와 공급 위험도(supply risk)의 2축으로 분류하여 전략 품목·레버리지 품목·병목 품목·일반 품목의 4가지 유형으로 나누고 각 유형에 맞는 조달 전략을 수립합니다."
     },
     {
-      id: 496, subject_id: 2,
+      id: 496, subject_id: 2, chapter_num: 6,
       question: "조달 분석에서 '총비용 모델링(Should-Cost Analysis)'의 목적으로 옳은 것은?",
       options: [
         "과거 계약 실적을 분석하여 단순 평균 단가를 산출하는 것",
@@ -5821,7 +5821,7 @@ module ExamQuestions
       explanation: "Should-Cost 분석은 원자재·인건비·설비비·간접비·이윤 등 원가 구성 요소를 세부 분석하여 이론적으로 '이 정도면 적정하다'는 가격을 산출하고, 이를 협상 목표가로 활용하는 방법입니다."
     },
     {
-      id: 497, subject_id: 2,
+      id: 497, subject_id: 2, chapter_num: 6,
       question: "조달 계획에서 '조달 일정 지연 위험'을 줄이기 위한 방법으로 옳지 않은 것은?",
       options: [
         "충분한 입찰 준비 기간 확보",
@@ -5833,7 +5833,7 @@ module ExamQuestions
       explanation: "낙찰 예정자와 사전에 계약 조건을 합의하는 것은 공정한 경쟁을 훼손하는 불법 행위입니다. 나머지(준비 기간 확보, 버퍼 기간, 복수 공급자 등록)는 일정 지연 위험을 줄이는 적법한 방법입니다."
     },
     {
-      id: 498, subject_id: 2,
+      id: 498, subject_id: 2, chapter_num: 6,
       question: "조달 계획에서 '조달 감사(Procurement Audit)'의 주요 목적으로 옳은 것은?",
       options: [
         "낙찰자의 세금 납부 현황을 확인하는 것",
@@ -5845,7 +5845,7 @@ module ExamQuestions
       explanation: "조달 감사는 조달 절차가 관련 법령과 정책에 따라 적법하게 수행되었는지, 효율적이고 효과적이었는지를 독립적으로 검토하여 문제점을 발견하고 개선하는 것이 목적입니다."
     },
     {
-      id: 499, subject_id: 2,
+      id: 499, subject_id: 2, chapter_num: 6,
       question: "조달 계획에서 '기술 성숙도(Technology Readiness Level, TRL)'를 고려해야 하는 주요 이유는?",
       options: [
         "공급자의 기업 역사가 길수록 TRL이 높아지기 때문",
@@ -5857,7 +5857,7 @@ module ExamQuestions
       explanation: "기술 성숙도(TRL)는 1(기초 연구)에서 9(실용화 완성)까지의 단계로 기술의 성숙 정도를 평가합니다. 조달 계획 시 TRL을 고려하면 미성숙 기술 도입으로 인한 납품 실패·품질 문제 등의 위험을 사전에 파악할 수 있습니다."
     },
     {
-      id: 500, subject_id: 2,
+      id: 500, subject_id: 2, chapter_num: 6,
       question: "조달 계획에서 '의약품·의료기기 조달'의 특수성으로 옳은 것은?",
       options: [
         "허가·인증 요건이 없어 일반 물품과 동일하게 조달",
@@ -5871,7 +5871,7 @@ module ExamQuestions
 
     # ── Subject 3 추가문제 501–550 (공공계약관리) ─────────────────────────
     {
-      id: 501, subject_id: 3,
+      id: 501, subject_id: 3, chapter_num: 5,
       question: "「국가계약법」상 계약 담당 공무원이 계약을 체결할 때 반드시 갖춰야 할 서류가 아닌 것은?",
       options: [
         "계약서",
@@ -5883,7 +5883,7 @@ module ExamQuestions
       explanation: "계약 체결 시 필요한 서류는 계약서, 입찰공고문, 설계서, 산출내역서 등입니다. 낙찰자의 가족관계증명서는 계약 서류가 아닙니다."
     },
     {
-      id: 502, subject_id: 3,
+      id: 502, subject_id: 3, chapter_num: 5,
       question: "「국가계약법」상 '계약보증금' 납부 비율의 원칙으로 옳은 것은?",
       options: [
         "계약금액의 5% 이상",
@@ -5895,7 +5895,7 @@ module ExamQuestions
       explanation: "국가계약법 시행령에 따라 계약보증금은 원칙적으로 계약금액의 10% 이상을 납부해야 합니다. 다만 법령에서 정한 경우 면제·감액이 가능합니다."
     },
     {
-      id: 503, subject_id: 3,
+      id: 503, subject_id: 3, chapter_num: 5,
       question: "계약 이행 관리에서 '계약 변경(Contract Amendment)'이 가능한 경우로 옳지 않은 것은?",
       options: [
         "설계 변경으로 인한 물량 증감",
@@ -5907,7 +5907,7 @@ module ExamQuestions
       explanation: "계약 변경은 설계 변경, 물가 변동, 불가항력 등 법령에서 정한 사유가 있는 경우에만 가능합니다. 발주기관의 편의를 위한 임의 변경은 허용되지 않습니다."
     },
     {
-      id: 504, subject_id: 3,
+      id: 504, subject_id: 3, chapter_num: 5,
       question: "공공계약에서 '하자보수보증금'의 납부 시점으로 옳은 것은?",
       options: [
         "계약 체결 시",
@@ -5919,7 +5919,7 @@ module ExamQuestions
       explanation: "하자보수보증금은 공사·물품 등의 최종 준공(납품) 검사 완료 후 대금 지급 전에 납부하며, 하자보수 기간 동안 하자 발생 시 이를 담보로 하자를 보수합니다."
     },
     {
-      id: 505, subject_id: 3,
+      id: 505, subject_id: 3, chapter_num: 5,
       question: "「국가계약법」상 '지체상금(Delay Penalty)'의 부과 기준으로 옳은 것은?",
       options: [
         "납품 지연 일수 × 계약금액 × 지체상금률",
@@ -5931,7 +5931,7 @@ module ExamQuestions
       explanation: "지체상금은 납품(준공) 지연 일수에 계약금액(또는 미이행 금액)과 지체상금률을 곱하여 산정합니다. 지체상금률은 공사·물품·용역에 따라 다르게 적용됩니다."
     },
     {
-      id: 506, subject_id: 3,
+      id: 506, subject_id: 3, chapter_num: 5,
       question: "공공계약에서 '선금(Advance Payment)' 지급에 관한 설명으로 옳은 것은?",
       options: [
         "선금은 어떤 경우에도 지급할 수 없다",
@@ -5943,7 +5943,7 @@ module ExamQuestions
       explanation: "선금은 계약 이행을 위한 자재 구입 등에 활용하도록 계약 이행 전 지급하는 금액으로, 선금보증서 제출이 원칙이며 지급된 선금은 기성 대금 청구 시 공제합니다."
     },
     {
-      id: 507, subject_id: 3,
+      id: 507, subject_id: 3, chapter_num: 5,
       question: "공공계약에서 '기성검사(Progress Inspection)'의 목적으로 옳은 것은?",
       options: [
         "계약 체결 전 공급자의 역량을 사전 검증",
@@ -5955,7 +5955,7 @@ module ExamQuestions
       explanation: "기성검사는 공사 등 계약 이행 중 이미 완성된 부분(기성 부분)을 확인하여 해당 부분에 대한 기성 대금을 지급하기 위해 실시하는 검사입니다."
     },
     {
-      id: 508, subject_id: 3,
+      id: 508, subject_id: 3, chapter_num: 5,
       question: "공공계약에서 '물가 변동으로 인한 계약금액 조정(에스컬레이션)' 요건으로 옳은 것은?",
       options: [
         "계약 체결 후 30일 이상 경과하고 물가 변동률이 3% 이상인 경우",
@@ -5967,7 +5967,7 @@ module ExamQuestions
       explanation: "물가 변동으로 인한 계약금액 조정은 계약 체결 후(또는 직전 조정 기준일로부터) 90일 이상 경과하고 품목 조정률 또는 지수 조정률이 3% 이상 변동한 경우에 청구할 수 있습니다."
     },
     {
-      id: 509, subject_id: 3,
+      id: 509, subject_id: 3, chapter_num: 5,
       question: "공공계약에서 '설계변경으로 인한 계약금액 조정' 시 단가 적용 원칙으로 옳은 것은?",
       options: [
         "항상 당초 계약 단가를 적용",
@@ -5979,7 +5979,7 @@ module ExamQuestions
       explanation: "설계변경으로 인한 계약금액 조정 시 기존 물량의 단가는 당초 계약 단가를 적용하고, 신규 규격이나 신규 공종은 설계변경 당시의 단가를 적용하는 것이 원칙입니다."
     },
     {
-      id: 510, subject_id: 3,
+      id: 510, subject_id: 3, chapter_num: 5,
       question: "공공계약에서 '검수(Inspection and Acceptance)'의 목적으로 옳은 것은?",
       options: [
         "계약 체결 전 공급자의 신용도 확인",
@@ -5991,7 +5991,7 @@ module ExamQuestions
       explanation: "검수는 납품된 물품, 완성된 공사·용역이 계약서, 설계서, 시방서 등 계약 내용에 적합한지 확인하는 절차로, 대금 지급의 전제 조건입니다."
     },
     {
-      id: 511, subject_id: 3,
+      id: 511, subject_id: 3, chapter_num: 5,
       question: "「국가계약법」상 계약의 해제·해지 사유로 옳지 않은 것은?",
       options: [
         "계약자가 정당한 이유 없이 계약을 이행하지 않는 경우",
@@ -6003,7 +6003,7 @@ module ExamQuestions
       explanation: "계약 이행 후 추가 계약 요청은 계약 해제·해지 사유가 아닙니다. 나머지(이행 거부, 부도·파산, 부정당업자 제재)는 계약 해제·해지의 법정 사유입니다."
     },
     {
-      id: 512, subject_id: 3,
+      id: 512, subject_id: 3, chapter_num: 5,
       question: "공공계약에서 '계약 이행 보고서(Contract Performance Report)'에 포함되어야 할 내용이 아닌 것은?",
       options: [
         "이행 진행 현황 및 달성률",
@@ -6015,7 +6015,7 @@ module ExamQuestions
       explanation: "계약 이행 보고서는 이행 현황, 일정 대비 실적, 위험 요소, 품질 현황 등을 포함합니다. 공급자 대표이사의 개인 신상 정보는 계약 이행 보고서의 내용이 아닙니다."
     },
     {
-      id: 513, subject_id: 3,
+      id: 513, subject_id: 3, chapter_num: 5,
       question: "공공계약에서 '하자담보책임 기간' 중 공사 계약의 일반적인 하자담보 기간으로 옳은 것은?",
       options: [
         "준공일로부터 6개월",
@@ -6027,7 +6027,7 @@ module ExamQuestions
       explanation: "공사 계약의 하자담보책임 기간은 공종별로 다르며, 준공일로부터 1년(일반 시설)~10년(주요 구조부)까지 다양하게 적용됩니다."
     },
     {
-      id: 514, subject_id: 3,
+      id: 514, subject_id: 3, chapter_num: 5,
       question: "공공계약에서 '부정당업자 제재' 처분의 효과로 옳은 것은?",
       options: [
         "해당 기관과의 계약만 금지되고 다른 기관과는 계약 가능",
@@ -6039,7 +6039,7 @@ module ExamQuestions
       explanation: "부정당업자 제재를 받으면 제재 기간 동안 모든 국가기관, 지방자치단체, 공공기관 등의 입찰 참가가 제한됩니다(전국 적용). 기존 계약의 자동 해지는 별도 절차가 필요합니다."
     },
     {
-      id: 515, subject_id: 3,
+      id: 515, subject_id: 3, chapter_num: 5,
       question: "공공계약에서 '장기계속계약'의 특징으로 옳은 것은?",
       options: [
         "총공사금액을 일괄 계약하고 연차별 이행",
@@ -6051,7 +6051,7 @@ module ExamQuestions
       explanation: "장기계속계약은 수년에 걸쳐 이행하는 계약에서 각 회계연도 예산 범위 내의 금액으로 연차 계약을 체결하되, 최종 완성을 위한 총공사 금액을 부기하는 방식입니다."
     },
     {
-      id: 516, subject_id: 3,
+      id: 516, subject_id: 3, chapter_num: 5,
       question: "공공계약에서 '계속비계약'과 '장기계속계약'의 차이로 옳은 것은?",
       options: [
         "계속비계약은 단년도, 장기계속계약은 복수년도 계약이다",
@@ -6063,7 +6063,7 @@ module ExamQuestions
       explanation: "계속비계약은 국회의 계속비 의결을 통해 수년간의 총사업비를 확정하고 이를 기반으로 계약을 체결합니다. 반면 장기계속계약은 연차별 예산 범위 내에서 연차 계약을 체결하는 방식입니다."
     },
     {
-      id: 517, subject_id: 3,
+      id: 517, subject_id: 3, chapter_num: 5,
       question: "공공계약에서 '하도급(Subcontracting)' 관리의 주요 이유로 옳은 것은?",
       options: [
         "원도급 계약자의 이익을 보호하기 위해",
@@ -6075,7 +6075,7 @@ module ExamQuestions
       explanation: "하도급 관리는 하수급인(하도급 업체)의 권리 보호, 품질 관리 연속성 확보, 부실 하도급·불법 재하도급 방지 등을 위한 것입니다."
     },
     {
-      id: 518, subject_id: 3,
+      id: 518, subject_id: 3, chapter_num: 5,
       question: "공공계약에서 '준공(완료) 검사' 후 대금 지급 기한으로 국가계약법령상 원칙은?",
       options: [
         "검사 완료 후 3일 이내",
@@ -6087,7 +6087,7 @@ module ExamQuestions
       explanation: "국가계약법 시행령에 따라 검사(검수) 완료 후 대금은 원칙적으로 5일 이내에 지급해야 합니다. 지연 지급 시 지연이자를 부담합니다."
     },
     {
-      id: 519, subject_id: 3,
+      id: 519, subject_id: 3, chapter_num: 5,
       question: "공공계약에서 '계약 이행 중 품질 관리(Quality Control)'의 책임 소재로 옳은 것은?",
       options: [
         "품질 관리의 모든 책임은 발주기관에 있다",
@@ -6099,7 +6099,7 @@ module ExamQuestions
       explanation: "계약 이행 중 품질 관리의 주된 책임은 계약자(공급자)에게 있습니다. 발주기관은 감독관을 통해 이행 상황을 감독하고, 검사 단계에서 적합성을 최종 확인합니다."
     },
     {
-      id: 520, subject_id: 3,
+      id: 520, subject_id: 3, chapter_num: 5,
       question: "공공계약에서 '계약 이행 보증(Performance Bond)' 몰수 사유로 옳은 것은?",
       options: [
         "계약자가 납품 기한을 1일 초과한 경우",
@@ -6111,7 +6111,7 @@ module ExamQuestions
       explanation: "계약 이행 보증금(계약보증금)은 계약자가 부도·파산으로 계약을 이행할 수 없게 되거나 계약을 포기하여 계약이 해제·해지된 경우에 국고에 귀속(몰수)됩니다."
     },
     {
-      id: 521, subject_id: 3,
+      id: 521, subject_id: 3, chapter_num: 5,
       question: "공공계약에서 '감독관(Supervisory Officer)'의 주요 역할로 옳지 않은 것은?",
       options: [
         "계약 이행 현황 확인 및 지도",
@@ -6123,7 +6123,7 @@ module ExamQuestions
       explanation: "감독관은 계약 이행을 감독하고 지도하는 역할을 하지만, 계약 조건을 임의로 변경할 권한은 없습니다. 계약 변경은 정해진 절차에 따라 발주기관이 처리합니다."
     },
     {
-      id: 522, subject_id: 3,
+      id: 522, subject_id: 3, chapter_num: 5,
       question: "공공계약에서 '지체상금 감면'이 가능한 사유로 옳은 것은?",
       options: [
         "계약자가 지체상금 납부를 거부하는 경우",
@@ -6135,7 +6135,7 @@ module ExamQuestions
       explanation: "지체상금은 천재지변, 전쟁, 사변, 또는 발주기관의 귀책사유(설계 오류, 자재 미지급 등)로 인해 지연이 발생한 경우에는 해당 기간을 지연 기간에서 공제하거나 감면받을 수 있습니다."
     },
     {
-      id: 523, subject_id: 3,
+      id: 523, subject_id: 3, chapter_num: 5,
       question: "공공계약에서 '계약 분쟁 조정' 절차에서 국가계약분쟁조정위원회에 대한 설명으로 옳은 것은?",
       options: [
         "계약 전 입찰 참가 자격을 심사하는 기관",
@@ -6147,7 +6147,7 @@ module ExamQuestions
       explanation: "국가계약분쟁조정위원회는 국가 계약(공사·물품·용역)과 관련하여 발주기관과 계약자 간 분쟁이 발생한 경우, 소송에 이르기 전에 조정을 통해 해결하도록 지원하는 기관입니다."
     },
     {
-      id: 524, subject_id: 3,
+      id: 524, subject_id: 3, chapter_num: 5,
       question: "공공계약에서 '원가계산 용역'이 필요한 경우로 옳은 것은?",
       options: [
         "거래실례가격으로 예정가격 결정이 가능한 단순 물품 구매",
@@ -6159,7 +6159,7 @@ module ExamQuestions
       explanation: "원가계산 용역은 시장에서 거래 사례가 없거나 신규 개발 품목, 특수 규격품처럼 시장 가격을 직접 파악하기 어려운 경우 원가 구성 요소를 분석하여 예정가격을 산정할 때 활용합니다."
     },
     {
-      id: 525, subject_id: 3,
+      id: 525, subject_id: 3, chapter_num: 5,
       question: "공공 공사 계약에서 '실시설계(Detailed Design)'와 '기본설계(Basic Design)'의 차이로 옳은 것은?",
       options: [
         "기본설계는 세부 도면까지 포함하고, 실시설계는 개략적 계획만 포함한다",
@@ -6171,7 +6171,7 @@ module ExamQuestions
       explanation: "기본설계는 사업의 규모·방향·개요를 결정하는 단계이고, 실시설계는 실제 시공에 필요한 세부 도면, 시방서, 물량산출서 등 모든 도서를 확정하는 단계입니다."
     },
     {
-      id: 526, subject_id: 3,
+      id: 526, subject_id: 3, chapter_num: 6,
       question: "공공계약에서 '이행기간 연장(Extension of Time, EOT)' 허용 사유로 옳지 않은 것은?",
       options: [
         "발주기관의 귀책사유로 인한 공사 지연",
@@ -6183,7 +6183,7 @@ module ExamQuestions
       explanation: "이행기간 연장은 발주기관 귀책사유, 불가항력, 설계 변경 등 계약자 귀책이 아닌 사유로 지연된 경우에 허용됩니다. 계약자의 경영 악화는 계약자 귀책사유로 이행기간 연장 사유가 되지 않습니다."
     },
     {
-      id: 527, subject_id: 3,
+      id: 527, subject_id: 3, chapter_num: 6,
       question: "공공계약에서 '안전 관리'에 관한 설명으로 옳은 것은?",
       options: [
         "공사 현장 안전은 하수급인의 책임이며 원도급자는 무관하다",
@@ -6195,7 +6195,7 @@ module ExamQuestions
       explanation: "「산업안전보건법」에 따라 공사 계약자(원도급자)는 안전보건관리 계획을 수립하고 이행할 법적 의무가 있으며, 하수급인에 대한 안전 관리도 원도급자의 책임입니다."
     },
     {
-      id: 528, subject_id: 3,
+      id: 528, subject_id: 3, chapter_num: 6,
       question: "공공계약에서 '준공정산(Final Settlement)' 절차로 옳은 것은?",
       options: [
         "계약 체결 시 최종 금액을 미리 확정하는 절차",
@@ -6207,7 +6207,7 @@ module ExamQuestions
       explanation: "준공정산은 공사·용역 완료 후 실제 이행된 물량, 설계 변경 내용, 물가 조정 등을 반영하여 최종 계약금액을 확정하고 잔여 대금을 지급하는 절차입니다."
     },
     {
-      id: 529, subject_id: 3,
+      id: 529, subject_id: 3, chapter_num: 6,
       question: "공공계약에서 '수의계약 후 가격 협상'에 대한 설명으로 옳은 것은?",
       options: [
         "수의계약 대상자가 제시한 가격을 그대로 수용해야 한다",
@@ -6219,7 +6219,7 @@ module ExamQuestions
       explanation: "수의계약 체결 시에도 예정가격 이하에서 가격 협의를 통해 계약금액을 결정해야 합니다. 예정가격을 초과하여 계약을 체결할 수 없습니다."
     },
     {
-      id: 530, subject_id: 3,
+      id: 530, subject_id: 3, chapter_num: 6,
       question: "공공계약에서 '이행 보증서(Performance Guarantee)' 제출 시기로 옳은 것은?",
       options: [
         "입찰 참가 신청 시",
@@ -6231,7 +6231,7 @@ module ExamQuestions
       explanation: "계약 이행 보증서는 낙찰 통보 후 계약 체결 시에 제출합니다. 계약 체결 전 이행 보증서(또는 계약보증금) 미제출 시 계약 체결이 거부될 수 있습니다."
     },
     {
-      id: 531, subject_id: 3,
+      id: 531, subject_id: 3, chapter_num: 6,
       question: "공공계약에서 '기술제안서(Technical Proposal)' 평가 시 고려 사항이 아닌 것은?",
       options: [
         "기술 방법론의 적절성",
@@ -6243,7 +6243,7 @@ module ExamQuestions
       explanation: "기술제안서 평가는 기술 방법론, 전문 인력, 수행 실적, 품질관리 계획, 일정 계획 등을 기준으로 합니다. 대표이사의 나이는 평가 기준이 아닙니다."
     },
     {
-      id: 532, subject_id: 3,
+      id: 532, subject_id: 3, chapter_num: 6,
       question: "공공계약에서 '납품 기한 단축'을 계약자에게 요청할 때 발주기관이 해야 할 사항으로 옳은 것은?",
       options: [
         "발주기관이 원하면 일방적으로 납기를 단축할 수 있다",
@@ -6255,7 +6255,7 @@ module ExamQuestions
       explanation: "납품 기한 단축은 계약자에게 추가 비용(야간 작업, 인력 증원 등)을 야기할 수 있으므로, 추가 비용을 보상하고 계약 변경 절차를 거쳐야 합니다."
     },
     {
-      id: 533, subject_id: 3,
+      id: 533, subject_id: 3, chapter_num: 6,
       question: "공공계약에서 '계약 이행 중 품질 시험·검사'에 관한 설명으로 옳은 것은?",
       options: [
         "품질 시험·검사 비용은 전액 발주기관이 부담한다",
@@ -6267,7 +6267,7 @@ module ExamQuestions
       explanation: "계약자가 계약 기준에 따라 자체 품질 시험을 실시하고 결과를 기록하며, 발주기관 감독관이 확인 검사를 수행합니다. 불합격 시 보완·재검사 등의 절차가 이어집니다."
     },
     {
-      id: 534, subject_id: 3,
+      id: 534, subject_id: 3, chapter_num: 6,
       question: "공공계약에서 '계약 이행 완료 후 대금 지급'과 관련하여 지연이자 부과 기준으로 옳은 것은?",
       options: [
         "검사 완료 후 5일 이내 미지급 시 지연이자 부과",
@@ -6279,7 +6279,7 @@ module ExamQuestions
       explanation: "국가계약법 시행령에 따라 검사 완료 후 5일 이내에 대금을 지급해야 하며, 이를 초과하면 지연이자(지연일수 × 지연이자율)를 부담해야 합니다."
     },
     {
-      id: 535, subject_id: 3,
+      id: 535, subject_id: 3, chapter_num: 6,
       question: "공공계약에서 '공동수급체(Joint Venture)' 계약에 관한 설명으로 옳은 것은?",
       options: [
         "공동수급체의 각 구성원은 연대하여 계약 이행에 책임을 진다",
@@ -6291,7 +6291,7 @@ module ExamQuestions
       explanation: "공동수급체는 여러 업체가 공동으로 하나의 계약을 이행하며, 원칙적으로 구성원 전원이 연대하여 계약 이행에 책임을 집니다."
     },
     {
-      id: 536, subject_id: 3,
+      id: 536, subject_id: 3, chapter_num: 6,
       question: "공공계약에서 '계약 담당자'의 법적 책임으로 옳지 않은 것은?",
       options: [
         "법령을 위반한 계약 체결에 대한 징계 책임",
@@ -6303,7 +6303,7 @@ module ExamQuestions
       explanation: "계약 담당자가 법령과 절차에 따라 적법하게 계약을 처리한 경우, 이로 인해 민간 사업자가 손실을 입었다 해도 개인적 배상 책임을 지지 않습니다. 고의·중과실이 있는 위법 행위에 대해서만 책임이 발생합니다."
     },
     {
-      id: 537, subject_id: 3,
+      id: 537, subject_id: 3, chapter_num: 6,
       question: "공공계약에서 '계약 이행 과정의 변경 관리(Change Management)'가 중요한 이유로 옳은 것은?",
       options: [
         "변경이 많을수록 계약금액이 올라가 예산 집행이 유리하기 때문",
@@ -6315,7 +6315,7 @@ module ExamQuestions
       explanation: "변경 관리가 제대로 이루어지지 않으면 승인되지 않은 변경이 누적되어 예산 초과, 일정 지연, 분쟁 발생 등의 문제를 야기하므로 체계적인 변경 관리가 중요합니다."
     },
     {
-      id: 538, subject_id: 3,
+      id: 538, subject_id: 3, chapter_num: 6,
       question: "공공계약에서 '클레임(Claim)' 제출 요건으로 옳은 것은?",
       options: [
         "계약 이행 완료 후 5년 이내에 언제든지 제출 가능",
@@ -6327,7 +6327,7 @@ module ExamQuestions
       explanation: "클레임은 계약에서 정한 기간 내에 서면으로 제출해야 합니다. 기간을 초과하거나 구두로만 통보한 경우 클레임 권리를 상실할 수 있습니다."
     },
     {
-      id: 539, subject_id: 3,
+      id: 539, subject_id: 3, chapter_num: 6,
       question: "공공계약에서 '사업관리(PM: Project Management)'와 '계약관리(Contract Management)'의 관계로 옳은 것은?",
       options: [
         "두 개념은 완전히 동일하다",
@@ -6339,7 +6339,7 @@ module ExamQuestions
       explanation: "사업관리(PM)는 일정·비용·품질·범위 등 사업 전체의 목표 달성에 초점을 맞추고, 계약관리는 계약 조건 이행 여부, 당사자 간 권리·의무 관리에 초점을 맞춥니다. 두 개념은 상호 보완적입니다."
     },
     {
-      id: 540, subject_id: 3,
+      id: 540, subject_id: 3, chapter_num: 6,
       question: "공공계약에서 '입찰 보증금(Bid Bond)'의 기능으로 옳은 것은?",
       options: [
         "계약 이행을 보증하는 기능",
@@ -6351,7 +6351,7 @@ module ExamQuestions
       explanation: "입찰 보증금(입찰보증금 또는 입찰보증보험)은 낙찰자가 정당한 이유 없이 계약 체결을 거부·포기하는 경우 발주기관의 손실을 보전하기 위한 것으로, 낙찰 후 계약 체결 의무 이행을 담보합니다."
     },
     {
-      id: 541, subject_id: 3,
+      id: 541, subject_id: 3, chapter_num: 6,
       question: "공공계약에서 '계약서 작성 생략'이 가능한 경우로 옳은 것은?",
       options: [
         "계약금액이 5천만원 미만인 경우",
@@ -6363,7 +6363,7 @@ module ExamQuestions
       explanation: "국가계약법 시행령에서 정한 일정 금액 이하의 소액 계약 등 특정 경우에는 계약서 작성을 생략할 수 있습니다. 임의 판단이나 상대방 거부로는 생략이 불가합니다."
     },
     {
-      id: 542, subject_id: 3,
+      id: 542, subject_id: 3, chapter_num: 6,
       question: "공공계약에서 '계약 특수조건(Special Conditions)'에 대한 설명으로 옳은 것은?",
       options: [
         "특수조건은 일반조건보다 항상 우선 적용된다",
@@ -6375,7 +6375,7 @@ module ExamQuestions
       explanation: "계약 특수조건(Special Conditions)은 특정 계약의 특성을 반영한 조건으로, 일반조건(General Conditions)보다 구체적이며 충돌 시 특수조건이 우선 적용됩니다."
     },
     {
-      id: 543, subject_id: 3,
+      id: 543, subject_id: 3, chapter_num: 6,
       question: "공공계약에서 '적격심사(Pass/Fail Pre-qualification)'와 '종합심사낙찰제'의 차이로 옳은 것은?",
       options: [
         "적격심사는 기술 점수가 높은 업체를 선정하고, 종합심사낙찰제는 최저가를 선정한다",
@@ -6387,7 +6387,7 @@ module ExamQuestions
       explanation: "적격심사는 최저가 입찰자가 기술·경영 상태 등 일정 기준을 충족하는지 확인하는 방식이고, 종합심사낙찰제는 가격·기술·사회적 책임·결격 여부를 종합 평가하여 낙찰자를 결정하는 방식입니다."
     },
     {
-      id: 544, subject_id: 3,
+      id: 544, subject_id: 3, chapter_num: 6,
       question: "공공계약에서 '부정당업자 제재 기간'으로 국가계약법령상 최대 제재 기간은?",
       options: [
         "6개월",
@@ -6399,7 +6399,7 @@ module ExamQuestions
       explanation: "국가계약법령상 부정당업자 제재의 최대 기간은 2년입니다. 위반 사항의 경중에 따라 1개월에서 2년 사이에서 결정됩니다."
     },
     {
-      id: 545, subject_id: 3,
+      id: 545, subject_id: 3, chapter_num: 6,
       question: "공공계약에서 '계약 이행 관리 시스템(Contract Management System)'의 주요 기능으로 옳지 않은 것은?",
       options: [
         "계약 일정 및 마일스톤 추적",
@@ -6411,7 +6411,7 @@ module ExamQuestions
       explanation: "계약 이행 관리 시스템은 일정 추적, 납품 현황 기록, 변경 이력 관리, 대금 지급 현황 등을 기록합니다. 계약자의 개인 금융 정보 수집은 시스템의 기능이 아닙니다."
     },
     {
-      id: 546, subject_id: 3,
+      id: 546, subject_id: 3, chapter_num: 6,
       question: "공공계약에서 '시공 중 설계 변경' 절차로 옳은 것은?",
       options: [
         "시공자가 임의로 설계를 변경하고 완공 후 보고",
@@ -6423,7 +6423,7 @@ module ExamQuestions
       explanation: "시공 중 설계 변경은 변경 사유 발생 → 계약자 또는 발주기관의 변경 요청 → 설계자 검토 및 발주기관 승인 → 계약금액 조정 → 변경 계약 체결의 절차를 거쳐야 합니다."
     },
     {
-      id: 547, subject_id: 3,
+      id: 547, subject_id: 3, chapter_num: 6,
       question: "공공계약에서 '물품 구매 계약'의 검사 시 불합격 처리에 관한 설명으로 옳은 것은?",
       options: [
         "불합격 물품은 전량 폐기해야 한다",
@@ -6435,7 +6435,7 @@ module ExamQuestions
       explanation: "검사에서 불합격 판정을 받은 물품은 계약자의 비용으로 반품, 교체, 보수하여 기준에 적합하게 만든 후 재검사를 받아야 하며, 합격 판정 후에 대금이 지급됩니다."
     },
     {
-      id: 548, subject_id: 3,
+      id: 548, subject_id: 3, chapter_num: 6,
       question: "공공계약에서 '전자 계약(e-Contract)'의 효력에 관한 설명으로 옳은 것은?",
       options: [
         "전자 계약은 서면 계약보다 법적 효력이 약하다",
@@ -6447,7 +6447,7 @@ module ExamQuestions
       explanation: "나라장터(G2B) 전자조달시스템을 통해 체결된 전자 계약은 전자문서법에 따라 서면 계약과 동일한 법적 효력을 가집니다."
     },
     {
-      id: 549, subject_id: 3,
+      id: 549, subject_id: 3, chapter_num: 6,
       question: "공공계약에서 '공사 감리(Construction Supervision)'의 역할로 옳은 것은?",
       options: [
         "공사비를 직접 집행하는 역할",
@@ -6459,7 +6459,7 @@ module ExamQuestions
       explanation: "공사 감리는 설계도서에 따라 공사가 적법하고 적정하게 시공되는지 확인·감독하는 역할로, 품질 확보, 안전 관리, 공정 관리 등을 포함합니다."
     },
     {
-      id: 550, subject_id: 3,
+      id: 550, subject_id: 3, chapter_num: 6,
       question: "공공계약에서 '공사 대금 지급 방식' 중 '기성 지급 방식(Progress Payment)'의 특징으로 옳은 것은?",
       options: [
         "공사 완료 후 전액을 일괄 지급하는 방식",
@@ -6473,7 +6473,7 @@ module ExamQuestions
 
     # ── Subject 4 추가문제 551–600 (공공조달 관리실무) ───────────────────
     {
-      id: 551, subject_id: 4,
+      id: 551, subject_id: 4, chapter_num: 6,
       question: "나라장터(G2B) 전자조달시스템에서 '전자입찰' 참가 시 필요한 본인 인증 수단으로 옳은 것은?",
       options: [
         "공인인증서(공동인증서) 또는 공인전자서명",
@@ -6485,7 +6485,7 @@ module ExamQuestions
       explanation: "나라장터 전자입찰 참가 시에는 공인인증서(공동인증서) 또는 공인전자서명을 통해 본인 인증을 합니다. 전자입찰의 무결성과 비밀성 보장을 위한 필수 절차입니다."
     },
     {
-      id: 552, subject_id: 4,
+      id: 552, subject_id: 4, chapter_num: 6,
       question: "공공조달 실무에서 '예산 집행 현황 관리'의 핵심 목적으로 옳은 것은?",
       options: [
         "예산을 최대한 빨리 소진하여 다음 연도 예산 증가를 도모",
@@ -6497,7 +6497,7 @@ module ExamQuestions
       explanation: "예산 집행 현황 관리의 핵심은 집행 계획 대비 실적을 지속적으로 모니터링하여 집행 부진(연말 예산 소진 집중)이나 초과(예산 위반)를 사전에 방지하는 것입니다."
     },
     {
-      id: 553, subject_id: 4,
+      id: 553, subject_id: 4, chapter_num: 6,
       question: "공공조달 실무에서 '물품 관리 대장(Asset Register)' 작성의 목적으로 옳은 것은?",
       options: [
         "물품 가격 비교를 위해",
@@ -6509,7 +6509,7 @@ module ExamQuestions
       explanation: "물품 관리 대장은 취득·사용·처분 등 물품의 전 생애 이력을 기록하여 현황 파악, 분실·도난 방지, 감사 대비, 내용연수 관리 등에 활용합니다."
     },
     {
-      id: 554, subject_id: 4,
+      id: 554, subject_id: 4, chapter_num: 6,
       question: "공공조달 실무에서 '재고 관리(Inventory Management)'의 핵심 목표로 옳은 것은?",
       options: [
         "가능한 한 많은 재고를 보유하여 공급 안정성 극대화",
@@ -6521,7 +6521,7 @@ module ExamQuestions
       explanation: "재고 관리의 핵심 목표는 과다 재고로 인한 보관 비용 증가와 재고 부족으로 인한 업무 차질(품절 위험) 사이의 균형점에서 최적 재고 수준을 유지하는 것입니다."
     },
     {
-      id: 555, subject_id: 4,
+      id: 555, subject_id: 4, chapter_num: 6,
       question: "공공조달 실무에서 '조달 성과 측정(Procurement Performance Measurement)'의 주요 지표가 아닌 것은?",
       options: [
         "납기 준수율",
@@ -6533,7 +6533,7 @@ module ExamQuestions
       explanation: "조달 성과 지표는 납기 준수율, 단가 절감률, 품질 합격률, 행정 처리 기간, 계약 변경률 등을 포함합니다. 담당자의 근속 연수는 조달 성과 지표가 아닙니다."
     },
     {
-      id: 556, subject_id: 4,
+      id: 556, subject_id: 4, chapter_num: 6,
       question: "공공조달 실무에서 '조달 관련 공문서 보존 기간' 중 계약 관련 서류의 일반적인 보존 기간으로 옳은 것은?",
       options: [
         "1년",
@@ -6545,7 +6545,7 @@ module ExamQuestions
       explanation: "국가계약법 등 관련 법령에 따라 계약 관련 서류는 원칙적으로 5년간 보존해야 합니다. 단, 중요 계약이나 분쟁 가능성이 있는 서류는 더 장기 보존이 필요할 수 있습니다."
     },
     {
-      id: 557, subject_id: 4,
+      id: 557, subject_id: 4, chapter_num: 6,
       question: "공공조달 실무에서 '조달 감사 대비'를 위해 반드시 보관해야 할 서류가 아닌 것은?",
       options: [
         "입찰 공고문 및 입찰 결과",
@@ -6557,7 +6557,7 @@ module ExamQuestions
       explanation: "감사 대비 필수 보관 서류는 입찰 공고문, 예정가격 관련 서류, 낙찰 결정 관련 서류, 계약서, 검수 확인서, 대금 지급 관련 서류 등입니다. 공급자 대표이사의 SNS 게시물은 해당하지 않습니다."
     },
     {
-      id: 558, subject_id: 4,
+      id: 558, subject_id: 4, chapter_num: 6,
       question: "공공조달 실무에서 '조달 정보시스템(e-Procurement System)'의 주요 기능으로 옳지 않은 것은?",
       options: [
         "입찰 공고 및 전자 투찰",
@@ -6569,7 +6569,7 @@ module ExamQuestions
       explanation: "조달 정보시스템은 입찰, 계약, 대금 지급, 통계 등 조달 관련 업무를 지원합니다. 공급자의 세금 신고 대리 처리는 조달 정보시스템의 기능이 아닙니다."
     },
     {
-      id: 559, subject_id: 4,
+      id: 559, subject_id: 4, chapter_num: 6,
       question: "공공조달 실무에서 '수요 기관'이 조달청에 구매를 의뢰할 때 제출해야 하는 서류가 아닌 것은?",
       options: [
         "구매 요구서",
@@ -6581,7 +6581,7 @@ module ExamQuestions
       explanation: "조달청 구매 의뢰 시 구매 요구서, 규격서, 예산 배정 통보서 등이 필요합니다. 기관장의 개인 도장은 제출 서류가 아닙니다."
     },
     {
-      id: 560, subject_id: 4,
+      id: 560, subject_id: 4, chapter_num: 6,
       question: "공공조달 실무에서 '나라장터 종합쇼핑몰 구매' 절차로 옳은 것은?",
       options: [
         "수요 발생 → 입찰 공고 → 낙찰자 선정 → 계약 → 납품",
@@ -6593,7 +6593,7 @@ module ExamQuestions
       explanation: "나라장터 종합쇼핑몰을 통한 구매는 별도의 입찰 없이 등록된 제품을 검색 → 장바구니 → 구매 요청 → 납품 → 검수 → 대금 지급 순으로 진행합니다."
     },
     {
-      id: 561, subject_id: 4,
+      id: 561, subject_id: 4, chapter_num: 6,
       question: "공공조달 실무에서 '조달 업무 매뉴얼(Procurement Manual)'이 필요한 이유로 옳은 것은?",
       options: [
         "조달 담당자의 업무를 완전히 자동화하기 위해",
@@ -6605,7 +6605,7 @@ module ExamQuestions
       explanation: "조달 업무 매뉴얼은 표준화된 절차를 문서화하여 일관성을 확보하고, 담당자 교체 시 업무 연속성을 유지하며, 절차 위반으로 인한 오류와 부패를 방지하는 데 필요합니다."
     },
     {
-      id: 562, subject_id: 4,
+      id: 562, subject_id: 4, chapter_num: 6,
       question: "공공조달 실무에서 '입찰 전 현장 설명회(Pre-Bid Conference)'의 주요 목적으로 옳은 것은?",
       options: [
         "특정 업체를 사전에 선정하기 위한 자리",
@@ -6617,7 +6617,7 @@ module ExamQuestions
       explanation: "입찰 전 현장 설명회는 입찰 예정자들에게 현장 조건, 특수 규격, 유의사항 등을 설명하고, 질의응답을 통해 오해나 불명확한 사항을 해소하여 합리적인 입찰이 이루어지도록 하는 절차입니다."
     },
     {
-      id: 563, subject_id: 4,
+      id: 563, subject_id: 4, chapter_num: 6,
       question: "공공조달 실무에서 '복수예비가격' 제도의 목적으로 옳은 것은?",
       options: [
         "낙찰자를 무작위로 선정하기 위한 제도",
@@ -6629,7 +6629,7 @@ module ExamQuestions
       explanation: "복수예비가격 제도는 15개의 예비가격을 작성하고 입찰자들이 추첨으로 4개를 선택하여 그 평균으로 예정가격을 결정하는 방식으로, 예정가격의 사전 유출을 방지하고 투명성을 확보합니다."
     },
     {
-      id: 564, subject_id: 4,
+      id: 564, subject_id: 4, chapter_num: 6,
       question: "공공조달 실무에서 '낙찰하한율' 제도가 존재하는 이유로 옳은 것은?",
       options: [
         "가장 비싼 가격을 제시한 업체가 낙찰되지 않도록 하기 위해",
@@ -6641,7 +6641,7 @@ module ExamQuestions
       explanation: "낙찰하한율은 예정가격 대비 일정 비율 이하의 가격으로 입찰한 경우 낙찰에서 제외하는 제도로, 지나친 덤핑 투찰로 인한 부실 시공·납품을 방지하기 위한 것입니다."
     },
     {
-      id: 565, subject_id: 4,
+      id: 565, subject_id: 4, chapter_num: 7,
       question: "공공조달 실무에서 '전자 입찰 투찰 마감 시간' 관련 유의사항으로 옳은 것은?",
       options: [
         "마감 시간 이후에도 투찰이 가능하다",
@@ -6653,7 +6653,7 @@ module ExamQuestions
       explanation: "전자 입찰의 투찰 마감 시간은 엄격히 적용되며, 시스템에서 마감 시간이 지나면 자동으로 투찰이 차단됩니다. 시스템 장애의 경우 별도 공지에 따른 조치가 이루어집니다."
     },
     {
-      id: 566, subject_id: 4,
+      id: 566, subject_id: 4, chapter_num: 7,
       question: "공공조달 실무에서 '낙찰 통보' 후 계약 체결 기한으로 국가계약법령상 원칙은?",
       options: [
         "낙찰 통보 후 3일 이내",
@@ -6665,7 +6665,7 @@ module ExamQuestions
       explanation: "국가계약법 시행령에 따라 낙찰자 통보 후 원칙적으로 10일 이내에 계약을 체결해야 합니다. 낙찰자가 정당한 이유 없이 계약 체결을 거부하는 경우 부정당업자 제재 대상이 될 수 있습니다."
     },
     {
-      id: 567, subject_id: 4,
+      id: 567, subject_id: 4, chapter_num: 7,
       question: "공공조달 실무에서 '계약 체결 후 계약 내용의 변경' 시 반드시 필요한 절차는?",
       options: [
         "담당자 구두 합의로 즉시 효력 발생",
@@ -6677,7 +6677,7 @@ module ExamQuestions
       explanation: "계약 내용의 변경은 구두 합의나 일방적 통보가 아닌 변경 계약서(변경 합의서)를 작성하고 양측이 서명·날인함으로써 효력이 발생합니다."
     },
     {
-      id: 568, subject_id: 4,
+      id: 568, subject_id: 4, chapter_num: 7,
       question: "공공조달 실무에서 '입찰 공고문 작성' 시 포함해야 할 필수 항목이 아닌 것은?",
       options: [
         "입찰의 목적(물품명·공사명·용역명)",
@@ -6689,7 +6689,7 @@ module ExamQuestions
       explanation: "입찰 공고문에는 조달 목적, 참가 자격, 규격, 납기, 입찰 일정, 계약 조건, 기관 공식 연락처 등을 포함합니다. 담당자 개인 휴대전화번호는 필수 항목이 아닙니다."
     },
     {
-      id: 569, subject_id: 4,
+      id: 569, subject_id: 4, chapter_num: 7,
       question: "공공조달 실무에서 '개찰(Opening of Bids)' 절차에 관한 설명으로 옳은 것은?",
       options: [
         "개찰은 입찰 마감 전에 실시하여 현황을 파악한다",
@@ -6701,7 +6701,7 @@ module ExamQuestions
       explanation: "개찰은 입찰 마감 후 정해진 일시에 공개적으로 실시합니다. 입찰자의 참관이 허용되며, 전자 개찰 시스템에서는 나라장터를 통해 결과를 공개합니다."
     },
     {
-      id: 570, subject_id: 4,
+      id: 570, subject_id: 4, chapter_num: 7,
       question: "공공조달 실무에서 '긴급 수의계약' 처리 후 반드시 해야 할 사후 조치로 옳은 것은?",
       options: [
         "별도의 사후 조치는 필요 없다",
@@ -6713,7 +6713,7 @@ module ExamQuestions
       explanation: "긴급 수의계약 후에는 긴급 사유의 발생 경위, 계약 내용, 금액, 처리 과정을 상세히 기록하여 보관하고, 향후 감사 시 정당성을 입증할 수 있는 증빙 자료를 준비해야 합니다."
     },
     {
-      id: 571, subject_id: 4,
+      id: 571, subject_id: 4, chapter_num: 7,
       question: "공공조달 실무에서 '내부 통제(Internal Control)' 체계의 핵심 요소로 옳은 것은?",
       options: [
         "한 명의 담당자가 모든 조달 과정을 단독으로 처리하는 것",
@@ -6725,7 +6725,7 @@ module ExamQuestions
       explanation: "내부 통제의 핵심은 업무 분리(한 명이 전 과정을 단독 처리하지 못하도록), 승인 절차, 기록 유지, 정기 감사를 통한 견제와 균형으로 부정·오류를 방지하는 것입니다."
     },
     {
-      id: 572, subject_id: 4,
+      id: 572, subject_id: 4, chapter_num: 7,
       question: "공공조달 실무에서 '조달 데이터 분석(Spend Analysis)'의 주요 활용 목적으로 옳은 것은?",
       options: [
         "공급자의 세금 납부 현황 파악",
@@ -6737,7 +6737,7 @@ module ExamQuestions
       explanation: "지출 분석(Spend Analysis)은 조달 지출 데이터를 품목별·공급자별·부서별로 분석하여 비용 절감 기회 발굴, 수요 통합, 공급자 통합, 조달 전략 수립에 활용합니다."
     },
     {
-      id: 573, subject_id: 4,
+      id: 573, subject_id: 4, chapter_num: 7,
       question: "공공조달 실무에서 '조달 부정행위 신고 제도'에 관한 설명으로 옳은 것은?",
       options: [
         "신고자의 신원이 반드시 공개된다",
@@ -6749,7 +6749,7 @@ module ExamQuestions
       explanation: "공익 신고자 보호법 등에 따라 조달 부정행위 신고 시 신고자의 신원은 보호되며, 익명 또는 비공개 신고가 가능합니다. 신고자 보호와 보상 규정이 마련되어 있습니다."
     },
     {
-      id: 574, subject_id: 4,
+      id: 574, subject_id: 4, chapter_num: 7,
       question: "공공조달 실무에서 '디지털 조달(Digital Procurement)' 전환의 주요 이점으로 옳지 않은 것은?",
       options: [
         "처리 속도 향상 및 행정 비용 절감",
@@ -6761,7 +6761,7 @@ module ExamQuestions
       explanation: "디지털 조달은 속도·비용·투명성·데이터 활용 면에서 이점이 있습니다. 공급자 수 감소나 시장 독점 촉진은 디지털 조달의 이점이 아니며, 오히려 접근성 확대로 공급자 참여가 늘어나는 효과가 있습니다."
     },
     {
-      id: 575, subject_id: 4,
+      id: 575, subject_id: 4, chapter_num: 7,
       question: "공공조달 실무에서 '조달 계획의 연간 공표(Annual Procurement Plan 공개)' 의 이점으로 옳은 것은?",
       options: [
         "특정 업체에게만 정보를 선제적으로 제공",
@@ -6773,7 +6773,7 @@ module ExamQuestions
       explanation: "연간 조달 계획을 공표하면 잠재 공급자들이 사전 준비(인력, 설비, 역량 개발)를 할 수 있어 입찰 참여도가 높아지고 경쟁이 활성화됩니다."
     },
     {
-      id: 576, subject_id: 4,
+      id: 576, subject_id: 4, chapter_num: 7,
       question: "공공조달 실무에서 '가격 협상(Price Negotiation)' 시 활용하는 전략이 아닌 것은?",
       options: [
         "BATNA(최선의 대안) 확인",
@@ -6785,7 +6785,7 @@ module ExamQuestions
       explanation: "가격 협상 전략으로 BATNA 확인, 원가 분석, 시장 가격 비교, 경쟁 압력 활용 등이 있습니다. 개인적 약점을 이용한 압박은 비윤리적이며 허용되지 않는 방법입니다."
     },
     {
-      id: 577, subject_id: 4,
+      id: 577, subject_id: 4, chapter_num: 7,
       question: "공공조달 실무에서 '개인정보보호'와 조달의 관계로 옳은 것은?",
       options: [
         "조달 과정에서는 개인정보보호법이 적용되지 않는다",
@@ -6797,7 +6797,7 @@ module ExamQuestions
       explanation: "개인정보보호법은 조달 과정에도 적용됩니다. 입찰 참가 업체 관계자의 개인정보는 조달 목적에 필요한 범위 내에서만 수집·이용·보관해야 합니다."
     },
     {
-      id: 578, subject_id: 4,
+      id: 578, subject_id: 4, chapter_num: 7,
       question: "공공조달 실무에서 '시방서(Specification/Technical Spec)' 작성 원칙으로 옳지 않은 것은?",
       options: [
         "기술적으로 명확하고 측정 가능하게 작성",
@@ -6809,7 +6809,7 @@ module ExamQuestions
       explanation: "시방서에 특정 업체 제품명·모델명을 직접 명시하면 경쟁을 제한하는 불공정한 규격이 됩니다. 동등품 인정 표현('또는 동등품')이 불가피한 경우에만 최소한으로 허용됩니다."
     },
     {
-      id: 579, subject_id: 4,
+      id: 579, subject_id: 4, chapter_num: 7,
       question: "공공조달 실무에서 '전자 계약서(e-Contract)' 관련 법적 효력의 근거가 되는 법률은?",
       options: [
         "형사소송법",
@@ -6821,7 +6821,7 @@ module ExamQuestions
       explanation: "전자 계약서의 법적 효력은 「전자문서 및 전자거래 기본법」에 근거합니다. 이 법에 따라 전자 문서·전자 서명이 서면 계약과 동일한 법적 효력을 가집니다."
     },
     {
-      id: 580, subject_id: 4,
+      id: 580, subject_id: 4, chapter_num: 7,
       question: "공공조달 실무에서 '공급망 실사(Supply Chain Due Diligence)'의 목적으로 옳은 것은?",
       options: [
         "공급자의 판매 가격을 낮추기 위한 협상 수단",
@@ -6833,7 +6833,7 @@ module ExamQuestions
       explanation: "공급망 실사는 공급자 및 그 하위 공급자들이 노동권(아동 노동 금지 등), 환경 기준, 인권 등 ESG 기준을 준수하는지 확인하여 지속가능한 조달을 실현하는 절차입니다."
     },
     {
-      id: 581, subject_id: 4,
+      id: 581, subject_id: 4, chapter_num: 7,
       question: "공공조달 실무에서 '구매 카드(Purchasing Card, P-Card)' 사용이 적합한 경우는?",
       options: [
         "대규모 공사 계약",
@@ -6845,7 +6845,7 @@ module ExamQuestions
       explanation: "구매 카드(P-Card)는 소액 물품·서비스를 신속하게 구매할 때 활용하며, 입찰·계약 절차 없이 간편하게 처리하여 행정 비용을 절감합니다. 대형·복잡한 계약에는 적합하지 않습니다."
     },
     {
-      id: 582, subject_id: 4,
+      id: 582, subject_id: 4, chapter_num: 7,
       question: "공공조달 실무에서 '인도 조건(Incoterms)' 중 'DDP(Delivered Duty Paid)'의 의미로 옳은 것은?",
       options: [
         "매도인이 물품을 항구에서 선적하면 위험이 매수인에게 이전",
@@ -6857,7 +6857,7 @@ module ExamQuestions
       explanation: "DDP(Delivered Duty Paid)는 매도인이 지정 목적지까지 수출 통관, 국제 운송, 수입 통관, 관세 납부 등 모든 비용과 위험을 부담하여 물품을 인도하는 조건입니다."
     },
     {
-      id: 583, subject_id: 4,
+      id: 583, subject_id: 4, chapter_num: 7,
       question: "공공조달 실무에서 '전자 카탈로그(e-Catalog)' 관리 시 유의사항으로 옳은 것은?",
       options: [
         "한 번 등록하면 가격·규격을 변경할 수 없다",
@@ -6869,7 +6869,7 @@ module ExamQuestions
       explanation: "전자 카탈로그는 가격·규격·재고 정보를 최신 상태로 유지해야 합니다. 허위 또는 오류 정보를 등록하면 부정당업자 제재 등의 불이익을 받을 수 있습니다."
     },
     {
-      id: 584, subject_id: 4,
+      id: 584, subject_id: 4, chapter_num: 8,
       question: "공공조달 실무에서 '조달 직원 역량 개발(Capacity Building)'이 중요한 이유로 옳은 것은?",
       options: [
         "조달 담당자가 많아질수록 비용이 증가하기 때문",
@@ -6881,7 +6881,7 @@ module ExamQuestions
       explanation: "조달 관련 법령, 시장 환경, 기술(특히 디지털 조달)이 빠르게 변화하므로 조달 담당자의 지속적인 역량 개발 없이는 효과적이고 법령에 맞는 조달을 수행하기 어렵습니다."
     },
     {
-      id: 585, subject_id: 4,
+      id: 585, subject_id: 4, chapter_num: 8,
       question: "공공조달 실무에서 '집행 잔액(Unspent Budget)' 발생 시 처리 원칙으로 옳은 것은?",
       options: [
         "집행 잔액은 다음 회계연도로 자동 이월된다",
@@ -6893,7 +6893,7 @@ module ExamQuestions
       explanation: "회계연도가 종료되면 미집행 잔액은 국고에 반납(불용 처리)이 원칙입니다. 사업의 연속성을 위해 이월이 필요한 경우에는 명시이월, 사고이월 등 법령에서 정한 절차를 거쳐야 합니다."
     },
     {
-      id: 586, subject_id: 4,
+      id: 586, subject_id: 4, chapter_num: 8,
       question: "공공조달 실무에서 '조달 관련 민원 처리' 시 유의사항으로 옳은 것은?",
       options: [
         "모든 민원은 무조건 수용해야 한다",
@@ -6905,7 +6905,7 @@ module ExamQuestions
       explanation: "조달 관련 민원은 민원처리에 관한 법률에 따라 법정 기한 내에 처리해야 하며, 민원 내용을 객관적으로 검토하여 법령에 따른 처리 결과와 이유를 민원인에게 통지해야 합니다."
     },
     {
-      id: 587, subject_id: 4,
+      id: 587, subject_id: 4, chapter_num: 8,
       question: "공공조달 실무에서 '조달 결과 보고서(Procurement Outcome Report)' 작성 시 포함해야 할 내용이 아닌 것은?",
       options: [
         "조달 방법 선택 이유",
@@ -6917,7 +6917,7 @@ module ExamQuestions
       explanation: "조달 결과 보고서에는 조달 방법 선택 이유, 낙찰자 선정 근거, 계약금액, 예산 절감 현황, 리스크 등을 포함합니다. 낙찰자 직원의 개인 연봉 정보는 포함 대상이 아닙니다."
     },
     {
-      id: 588, subject_id: 4,
+      id: 588, subject_id: 4, chapter_num: 8,
       question: "공공조달 실무에서 '조달 업무 위탁'이 가능한 경우로 옳은 것은?",
       options: [
         "모든 조달 업무는 외부 위탁이 불가하다",
@@ -6929,7 +6929,7 @@ module ExamQuestions
       explanation: "수요기관은 법령에서 허용하는 범위 내에서 조달청 등 전문기관에 조달 업무를 위탁할 수 있습니다. 단, 위탁 후에도 수요기관은 조달 결과에 대한 최종 책임을 집니다."
     },
     {
-      id: 589, subject_id: 4,
+      id: 589, subject_id: 4, chapter_num: 8,
       question: "공공조달 실무에서 '회계연도 말 집중 발주' 문제의 원인과 해결책으로 옳은 것은?",
       options: [
         "원인: 예산 부족 / 해결: 추가경정예산 편성",
@@ -6941,7 +6941,7 @@ module ExamQuestions
       explanation: "회계연도 말 집중 발주는 연초 조달 계획 미수립과 예산 불용 방지 심리가 주원인입니다. 해결책은 연초부터 연간 조달 계획을 수립하고 분기별 집행 현황을 관리하여 균형 있는 집행을 유도하는 것입니다."
     },
     {
-      id: 590, subject_id: 4,
+      id: 590, subject_id: 4, chapter_num: 8,
       question: "공공조달 실무에서 '입찰 무효' 사유로 옳지 않은 것은?",
       options: [
         "입찰 참가 자격 미충족",
@@ -6953,7 +6953,7 @@ module ExamQuestions
       explanation: "입찰 무효 사유는 참가 자격 미충족, 보증금 미납, 복수 투찰, 담합, 서류 위조 등입니다. 낙찰 후 계약 체결에 이어진 대금 청구는 정당한 행위이며 입찰 무효 사유가 아닙니다."
     },
     {
-      id: 591, subject_id: 4,
+      id: 591, subject_id: 4, chapter_num: 8,
       question: "공공조달 실무에서 '수요 기관 자체 구매'와 '조달청 위탁 구매'의 선택 기준으로 옳은 것은?",
       options: [
         "금액 무관하게 항상 조달청에 위탁해야 한다",
@@ -6965,7 +6965,7 @@ module ExamQuestions
       explanation: "자체 구매와 위탁 구매 선택은 계약 금액, 복잡성, 자체 역량, 법령상 의무 위탁 대상 여부(일정 금액 이상 공사 등)를 종합적으로 검토하여 결정합니다."
     },
     {
-      id: 592, subject_id: 4,
+      id: 592, subject_id: 4, chapter_num: 8,
       question: "공공조달 실무에서 '전자 조달 보안(e-Procurement Security)'을 위한 조치로 옳지 않은 것은?",
       options: [
         "전자 서명 및 암호화 적용",
@@ -6977,7 +6977,7 @@ module ExamQuestions
       explanation: "ID와 비밀번호 공유는 보안의 기본 원칙에 반하며, 부정 접근·책임 소재 불명확 등 심각한 보안 문제를 야기합니다. 나머지는 전자 조달 보안의 적절한 조치입니다."
     },
     {
-      id: 593, subject_id: 4,
+      id: 593, subject_id: 4, chapter_num: 8,
       question: "공공조달 실무에서 '조달 통계(Procurement Statistics)' 활용의 주요 목적으로 옳은 것은?",
       options: [
         "공급자 우대 순위를 결정하기 위해",
@@ -6989,7 +6989,7 @@ module ExamQuestions
       explanation: "조달 통계는 조달 정책 수립, 예산 계획의 근거, 성과 평가, 부정행위 탐지, 투명성 제고 등 다양한 목적으로 활용되는 핵심 데이터입니다."
     },
     {
-      id: 594, subject_id: 4,
+      id: 594, subject_id: 4, chapter_num: 8,
       question: "공공조달 실무에서 '공공기관 청렴 의무'와 관련하여 조달 담당자가 준수해야 할 사항으로 옳지 않은 것은?",
       options: [
         "공급자로부터 식사·선물 등 향응을 거절",
@@ -7001,7 +7001,7 @@ module ExamQuestions
       explanation: "공급자와의 인맥을 활용하여 계약 과정을 처리하는 것은 청렴 의무 위반이며 부정당한 특혜로 이어질 수 있습니다. 나머지(향응 거절, 정보 유출 금지, 이해충돌 회피)는 청렴 의무 준수 사항입니다."
     },
     {
-      id: 595, subject_id: 4,
+      id: 595, subject_id: 4, chapter_num: 8,
       question: "공공조달 실무에서 '혁신 제품 구매 제도(혁신조달)'의 특징으로 옳은 것은?",
       options: [
         "기존 시장에서 판매 중인 완성품만 대상으로 한다",
@@ -7013,7 +7013,7 @@ module ExamQuestions
       explanation: "혁신조달은 공공 수요를 시장에 아직 없는 혁신 기술·제품 개발과 연계하여 창업기업·벤처기업 등의 혁신 제품을 공공 부문이 선도적으로 구매함으로써 혁신 생태계를 지원하는 제도입니다."
     },
     {
-      id: 596, subject_id: 4,
+      id: 596, subject_id: 4, chapter_num: 8,
       question: "공공조달 실무에서 '적격심사' 대상 공사의 규모 기준으로 옳은 것은?",
       options: [
         "추정가격 1억원 미만",
@@ -7025,7 +7025,7 @@ module ExamQuestions
       explanation: "적격심사는 추정가격 1억원 이상 ~ 300억원 미만의 공사에 적용됩니다. 300억원 이상의 대형 공사는 종합심사낙찰제가 적용됩니다."
     },
     {
-      id: 597, subject_id: 4,
+      id: 597, subject_id: 4, chapter_num: 8,
       question: "공공조달 실무에서 '입찰 참가 자격 사전 심사(PQ: Pre-Qualification)'의 주요 심사 항목이 아닌 것은?",
       options: [
         "시공 실적",
@@ -7037,7 +7037,7 @@ module ExamQuestions
       explanation: "PQ(사전심사)는 시공 실적, 기술 능력(인력·장비), 재무 상태(신용도·부채비율), 경영 상태 등을 심사합니다. 대표이사의 개인 취미는 심사 항목이 아닙니다."
     },
     {
-      id: 598, subject_id: 4,
+      id: 598, subject_id: 4, chapter_num: 8,
       question: "공공조달 실무에서 '나라장터 입찰 공고 시 유의사항'으로 옳지 않은 것은?",
       options: [
         "입찰 공고 기간을 법령에서 정한 기간 이상으로 부여",
@@ -7049,7 +7049,7 @@ module ExamQuestions
       explanation: "입찰 공고는 나라장터에 공개적으로 게시하여 모든 잠재적 입찰자가 열람할 수 있어야 합니다. 특정 업체에게만 개별 통보하는 것은 공정성을 해치는 위법 행위입니다."
     },
     {
-      id: 599, subject_id: 4,
+      id: 599, subject_id: 4, chapter_num: 8,
       question: "공공조달 실무에서 '조달 감사 지적 사항' 중 빈도가 높은 유형으로 옳지 않은 것은?",
       options: [
         "예정가격 산정 기준 미준수",
@@ -7061,7 +7061,7 @@ module ExamQuestions
       explanation: "조달 감사에서 빈번히 지적되는 사항은 예정가격 부당 산정, 수의계약 요건 위반, 서류 미비·허위 기재, 과다 계약·부당 지급 등입니다. 담당자의 법정 휴가 사용은 감사 지적 대상이 아닙니다."
     },
     {
-      id: 600, subject_id: 4,
+      id: 600, subject_id: 4, chapter_num: 8,
       question: "공공조달 관리실무 전반에 걸쳐 '조달 청렴성(Procurement Integrity)' 확보를 위한 핵심 원칙으로 옳은 것은?",
       options: [
         "담당자 개인의 재량을 최대한 보장하고 절차를 간소화",
@@ -7099,16 +7099,10 @@ module ExamQuestions
     by_subject(subject_id).size
   end
 
-  # 챕터별 문제 (과목 내 문제를 챕터 수로 균등 분배)
+  # 챕터별 문제 (chapter_num 필드 기반 직접 필터링)
   def self.by_chapter(subject_id, chapter_num)
-    questions = by_subject(subject_id)
-    subject = ExamCurriculum.find_subject(subject_id)
-    return [] unless subject
-
-    total_chapters = subject[:total_chapters]
-    return [] if chapter_num < 1 || chapter_num > total_chapters
-
-    chunk_size = (questions.size.to_f / total_chapters).ceil
-    questions.each_slice(chunk_size).to_a[chapter_num - 1] || []
+    sid = subject_id.to_i
+    ch  = chapter_num.to_i
+    QUESTIONS.select { |q| q[:subject_id] == sid && q[:chapter_num] == ch }
   end
 end
