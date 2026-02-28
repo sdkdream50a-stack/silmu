@@ -1,9 +1,8 @@
-<%# 핵심 용어집 페이지 %>
+<%# 핵심 용어집 — 정의 + 예시 문장 + 문제 연결 %>
 
 <!-- 헤더 -->
 <section class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700 text-white py-12 px-4">
   <div class="max-w-5xl mx-auto">
-    <!-- 브레드크럼 -->
     <div class="flex items-center gap-2 text-slate-400 text-sm mb-5">
       <a href="https://exam.silmu.kr" class="hover:text-white transition-colors">홈</a>
       <span class="material-symbols-outlined text-xs">chevron_right</span>
@@ -12,22 +11,38 @@
       <span class="text-white">핵심 용어집</span>
     </div>
 
-    <div class="flex items-start gap-5">
+    <div class="flex flex-col sm:flex-row items-start gap-5">
       <div class="w-14 h-14 bg-yellow-400/20 rounded-2xl flex items-center justify-center flex-shrink-0">
         <span class="material-symbols-outlined text-yellow-300 text-3xl">dictionary</span>
       </div>
-      <div>
+      <div class="flex-1">
         <h1 class="text-3xl md:text-4xl font-bold leading-tight mb-2">핵심 용어집</h1>
-        <p class="text-slate-300">4권 교재 전체 핵심 키워드 <strong class="text-yellow-300"><%= @total_count %>개</strong> 완전 정리</p>
+        <p class="text-slate-300">4권 교재 전체 <strong class="text-yellow-300"><%= @total_count %>개</strong> 키워드 — 정의·예시·모의고사 문제 연결</p>
+      </div>
+    </div>
+
+    <!-- 통계 배지 -->
+    <div class="flex flex-wrap gap-3 mt-6">
+      <div class="flex items-center gap-2 bg-white/10 rounded-lg px-3 py-2 text-sm">
+        <span class="material-symbols-outlined text-yellow-300 text-base">menu_book</span>
+        전체 용어 <strong class="text-yellow-300 ml-1"><%= @total_count %>개</strong>
+      </div>
+      <div class="flex items-center gap-2 bg-white/10 rounded-lg px-3 py-2 text-sm">
+        <span class="material-symbols-outlined text-emerald-300 text-base">description</span>
+        정의+예시 제공 <strong class="text-emerald-300 ml-1"><%= @detail_count %>개</strong>
+      </div>
+      <div class="flex items-center gap-2 bg-white/10 rounded-lg px-3 py-2 text-sm">
+        <span class="material-symbols-outlined text-blue-300 text-base">quiz</span>
+        모의고사 연결 가능
       </div>
     </div>
   </div>
 </section>
 
 <!-- 필터 & 검색 -->
-<section class="bg-white border-b border-slate-200 sticky top-16 z-40">
-  <div class="max-w-5xl mx-auto px-4 py-4">
-    <%= form_with url: exam_keywords_path, method: :get, local: true, class: "flex flex-col sm:flex-row gap-3" do |f| %>
+<section class="bg-white border-b border-slate-200 sticky top-16 z-40 shadow-sm">
+  <div class="max-w-5xl mx-auto px-4 py-3">
+    <%= form_with url: exam_keywords_path, method: :get, local: true, class: "flex flex-col sm:flex-row gap-3 items-center" do |f| %>
       <!-- 과목 필터 탭 -->
       <div class="flex gap-2 flex-wrap">
         <a href="<%= exam_keywords_path(q: @search) %>"
@@ -53,8 +68,8 @@
         <div class="relative">
           <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-base">search</span>
           <%= f.text_field :q, value: @search,
-              placeholder: "용어 검색...",
-              class: "pl-9 pr-4 py-1.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-48" %>
+              placeholder: "용어·정의 검색...",
+              class: "pl-9 pr-4 py-1.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-52" %>
           <%= f.hidden_field :subject_id, value: @filter if @filter&.positive? %>
         </div>
         <% if @search.present? %>
@@ -73,8 +88,8 @@
 <section class="py-8 px-4 bg-slate-50 min-h-screen">
   <div class="max-w-5xl mx-auto">
 
-    <!-- 결과 카운트 -->
-    <div class="mb-5 flex items-center justify-between">
+    <!-- 결과 카운트 + 사용 안내 -->
+    <div class="mb-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
       <p class="text-sm text-slate-500">
         <% if @search.present? %>
           "<strong class="text-slate-700"><%= @search %></strong>" 검색 결과
@@ -83,10 +98,13 @@
           총 <strong class="text-slate-700"><%= @filtered_keywords.size %>개</strong> 키워드
         <% end %>
       </p>
+      <div class="flex items-center gap-1.5 text-xs text-slate-400 bg-slate-100 rounded-lg px-3 py-1.5">
+        <span class="material-symbols-outlined text-sm">touch_app</span>
+        카드를 클릭하면 정의·예시·문제를 확인할 수 있습니다
+      </div>
     </div>
 
     <% if @filtered_keywords.empty? %>
-      <!-- 빈 결과 -->
       <div class="text-center py-20">
         <span class="material-symbols-outlined text-slate-300 text-6xl">search_off</span>
         <p class="text-slate-500 mt-4 text-lg">검색 결과가 없습니다</p>
@@ -104,11 +122,11 @@
         <% next unless subject %>
         <% colors = ExamCurriculum.colors(subject[:color]) %>
 
-        <div class="mb-8">
+        <div class="mb-10">
           <!-- 과목 헤더 -->
           <div class="flex items-center gap-3 mb-4">
-            <div class="w-8 h-8 <%= colors[:bg_dark] %> rounded-lg flex items-center justify-center">
-              <span class="material-symbols-outlined text-white text-base"><%= subject[:icon] %></span>
+            <div class="w-9 h-9 <%= colors[:bg_dark] %> rounded-xl flex items-center justify-center">
+              <span class="material-symbols-outlined text-white text-lg"><%= subject[:icon] %></span>
             </div>
             <div>
               <span class="text-xs font-bold <%= colors[:badge] %> px-2 py-0.5 rounded-full mr-2"><%= subject[:number] %></span>
@@ -118,11 +136,86 @@
           </div>
 
           <!-- 키워드 카드 그리드 -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <% keywords_in_subject.each do |kw| %>
-              <a href="<%= exam_subject_chapter_path(kw[:subject_id], kw[:chapter_number]) %>"
-                 class="bg-white rounded-xl border <%= colors[:border] %> hover:shadow-md hover:<%= colors[:hover_border] || colors[:border] %> px-4 py-3 transition-all group">
-                <div class="flex items-start gap-3">
+              <% has_detail = kw[:definition].present? %>
+              <% has_quiz = kw[:quiz_ids].any? %>
+
+              <% if has_detail %>
+                <%# 상세 정보 있는 경우: 클릭 가능한 <details> 카드 %>
+                <details class="bg-white rounded-xl border <%= colors[:border] %> hover:shadow-md transition-all group open:shadow-md open:border-opacity-60">
+                  <summary class="flex items-start gap-3 px-4 py-3 cursor-pointer list-none select-none">
+                    <div class="w-6 h-6 <%= colors[:bg] %> rounded-md flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <span class="material-symbols-outlined text-xs <%= colors[:text_dark] %>">key</span>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                      <div class="font-semibold text-slate-800 text-sm leading-snug group-open:<%= colors[:text_dark] %>">
+                        <%= kw[:keyword] %>
+                      </div>
+                      <div class="text-xs text-slate-400 mt-0.5">
+                        제<%= kw[:chapter_number] %>장 · <%= kw[:chapter_title] %>
+                      </div>
+                    </div>
+                    <!-- 배지 영역 -->
+                    <div class="flex items-center gap-1.5 flex-shrink-0">
+                      <% if has_quiz %>
+                        <span class="inline-flex items-center gap-0.5 bg-blue-100 text-blue-700 text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+                          <span class="material-symbols-outlined text-[10px]">quiz</span>
+                          문제
+                        </span>
+                      <% end %>
+                      <span class="material-symbols-outlined text-slate-400 text-sm transition-transform group-open:rotate-90">chevron_right</span>
+                    </div>
+                  </summary>
+
+                  <!-- 펼침 내용 -->
+                  <div class="px-4 pb-4 pt-2 border-t border-slate-100">
+                    <!-- 정의 -->
+                    <div class="mb-3">
+                      <div class="flex items-center gap-1.5 text-xs font-bold text-slate-500 mb-1.5">
+                        <span class="material-symbols-outlined text-sm">info</span>
+                        정의
+                      </div>
+                      <p class="text-sm text-slate-700 leading-relaxed bg-slate-50 rounded-lg px-3 py-2">
+                        <%= kw[:definition] %>
+                      </p>
+                    </div>
+
+                    <!-- 예시 문장 -->
+                    <div class="mb-3">
+                      <div class="flex items-center gap-1.5 text-xs font-bold text-slate-500 mb-1.5">
+                        <span class="material-symbols-outlined text-sm">edit_note</span>
+                        실무 예시
+                      </div>
+                      <p class="text-sm text-slate-600 italic leading-relaxed bg-blue-50 rounded-lg px-3 py-2 border-l-2 border-blue-300">
+                        "<%= kw[:example] %>"
+                      </p>
+                    </div>
+
+                    <!-- 하단 링크 -->
+                    <div class="flex items-center gap-2 flex-wrap">
+                      <a href="<%= exam_subject_chapter_path(kw[:subject_id], kw[:chapter_number]) %>"
+                         class="inline-flex items-center gap-1 <%= colors[:text_dark] %> text-xs font-semibold hover:underline">
+                        <span class="material-symbols-outlined text-sm">school</span>
+                        챕터 학습하기
+                      </a>
+                      <% if has_quiz %>
+                        <% quiz_id = kw[:quiz_ids].first %>
+                        <% subject_id = kw[:subject_id] %>
+                        <a href="<%= exam_quiz_path(subject_id) %>"
+                           class="inline-flex items-center gap-1 bg-blue-600 text-white text-xs font-semibold px-2.5 py-1 rounded-lg hover:bg-blue-700 transition-colors">
+                          <span class="material-symbols-outlined text-sm">quiz</span>
+                          관련 문제 풀기
+                        </a>
+                      <% end %>
+                    </div>
+                  </div>
+                </details>
+
+              <% else %>
+                <%# 상세 정보 없는 경우: 기존 링크 카드 %>
+                <a href="<%= exam_subject_chapter_path(kw[:subject_id], kw[:chapter_number]) %>"
+                   class="bg-white rounded-xl border <%= colors[:border] %> hover:shadow-md px-4 py-3 transition-all group flex items-start gap-3">
                   <div class="w-6 h-6 <%= colors[:bg] %> rounded-md flex items-center justify-center flex-shrink-0 mt-0.5">
                     <span class="material-symbols-outlined text-xs <%= colors[:text_dark] %>">key</span>
                   </div>
@@ -130,29 +223,42 @@
                     <div class="font-semibold text-slate-800 text-sm leading-snug group-hover:<%= colors[:text_dark] %> transition-colors">
                       <%= kw[:keyword] %>
                     </div>
-                    <div class="text-xs text-slate-400 mt-1 truncate">
+                    <div class="text-xs text-slate-400 mt-1">
                       제<%= kw[:chapter_number] %>장 · <%= kw[:chapter_title] %>
                     </div>
                   </div>
                   <span class="material-symbols-outlined text-slate-300 text-sm flex-shrink-0 mt-0.5 group-hover:<%= colors[:text_dark] %> transition-colors">arrow_forward_ios</span>
-                </div>
-              </a>
+                </a>
+              <% end %>
             <% end %>
           </div>
         </div>
       <% end %>
     <% end %>
 
-    <!-- 학습 CTA -->
-    <div class="mt-10 bg-gradient-to-r from-blue-700 to-blue-600 rounded-2xl p-6 text-white flex flex-col sm:flex-row items-center justify-between gap-4">
-      <div>
-        <h3 class="font-bold text-lg mb-1">체계적으로 학습하려면?</h3>
-        <p class="text-blue-200 text-sm">과목별 학습 로드맵으로 순서대로 학습하세요.</p>
-      </div>
+    <!-- CTA -->
+    <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-4">
       <a href="<%= exam_subjects_path %>"
-         class="flex-shrink-0 bg-white text-blue-700 font-bold px-6 py-3 rounded-xl hover:bg-blue-50 transition-colors flex items-center gap-2">
-        <span class="material-symbols-outlined">school</span>
-        커리큘럼 보기 →
+         class="bg-gradient-to-r from-blue-700 to-blue-600 rounded-2xl p-5 text-white flex items-center gap-4 hover:shadow-lg transition-shadow group">
+        <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
+          <span class="material-symbols-outlined text-white text-xl">school</span>
+        </div>
+        <div>
+          <h3 class="font-bold">체계적 커리큘럼 학습</h3>
+          <p class="text-blue-200 text-sm">4권 27챕터 순서대로 학습하기</p>
+        </div>
+        <span class="material-symbols-outlined text-white/60 ml-auto group-hover:translate-x-1 transition-transform">arrow_forward</span>
+      </a>
+      <a href="<%= exam_quiz_index_path %>"
+         class="bg-gradient-to-r from-slate-800 to-slate-700 rounded-2xl p-5 text-white flex items-center gap-4 hover:shadow-lg transition-shadow group">
+        <div class="w-10 h-10 bg-yellow-400/20 rounded-xl flex items-center justify-center flex-shrink-0">
+          <span class="material-symbols-outlined text-yellow-300 text-xl">quiz</span>
+        </div>
+        <div>
+          <h3 class="font-bold">모의고사로 확인</h3>
+          <p class="text-slate-300 text-sm">100문항 즉시채점 모의고사</p>
+        </div>
+        <span class="material-symbols-outlined text-white/60 ml-auto group-hover:translate-x-1 transition-transform">arrow_forward</span>
       </a>
     </div>
   </div>
