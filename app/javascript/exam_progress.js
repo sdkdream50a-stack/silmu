@@ -86,6 +86,22 @@ export function clearAllWrongAnswers() {
   try { localStorage.removeItem(WRONG_KEY) } catch { /* 무시 */ }
 }
 
+// ─── 챕터 퀴즈 완주 배지 ─────────────────────────────
+export function saveChapterQuizDone(subjectId, chapterNum, pct) {
+  const data = load()
+  if (!data.chapterQuizzes) data.chapterQuizzes = {}
+  const key = `${subjectId}-${chapterNum}`
+  const existing = data.chapterQuizzes[key]
+  if (!existing || pct >= existing.pct) {
+    data.chapterQuizzes[key] = { pct, date: new Date().toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' }) }
+    persist(data)
+  }
+}
+
+export function getChapterQuizDones() {
+  return load().chapterQuizzes || {}
+}
+
 // 전체 통계
 export function getStats() {
   const data = load()

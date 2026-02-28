@@ -1,7 +1,7 @@
 // exam.silmu.kr — 학습 진도 추적 Stimulus 컨트롤러
 // 챕터 방문 기록, 과목 진도바, 모의고사 점수 표시
 import { Controller } from "@hotwired/stimulus"
-import { markChapterVisited, getVisitedChapters, getAllProgress, getStats, getWrongAnswerCount } from "../exam_progress"
+import { markChapterVisited, getVisitedChapters, getChapterQuizDones, getAllProgress, getStats, getWrongAnswerCount } from "../exam_progress"
 
 // 과목별 고정 색상 (Tailwind safelist에 포함된 클래스만 사용)
 const SUBJECT_STYLE = {
@@ -61,18 +61,35 @@ export default class extends Controller {
     }
   }
 
-  // ── 과목 상세: 챕터 체크마크 + 진행률 바 ──────────
+  // ── 과목 상세: 챕터 체크마크 + 완주 배지 + 진행률 바 ──────────
   displaySubjectProgress() {
     const visited = getVisitedChapters()
+    const quizDones = getChapterQuizDones()
     const total = this.totalValue || 0
     let done = 0
 
     this.element.querySelectorAll("[data-chapter-key]").forEach(el => {
-      if (visited[el.dataset.chapterKey]) {
+      const key = el.dataset.chapterKey
+      if (visited[key]) {
         done++
         const spot = el.querySelector("[data-chapter-status]")
         if (spot) {
-          spot.innerHTML = `<span class="material-symbols-outlined text-green-500 text-xl">check_circle</span>`
+          if (quizDones[key]) {
+            // 퀴즈 완주: 트로피 (금색) + 점수
+            const pct = quizDones[key].pct
+            spot.innerHTML = `
+              <span class="material-symbols-outlined text-amber-400 text-xl drop-shadow-sm" title="퀴즈 완주 ${pct}%">star</span>`
+          } else {
+            // 방문만: 초록 체크
+            spot.innerHTML = `<span class="material-symbols-outlined text-green-500 text-xl">check_circle</span>`
+          }
+        }
+      } else if (quizDones[el.dataset.chapterKey]) {
+        // 퀴즈는 했는데 챕터 방문 기록 없는 경우 (드물지만)
+        done++
+        const spot = el.querySelector("[data-chapter-status]")
+        if (spot) {
+          spot.innerHTML = `<span class="material-symbols-outlined text-amber-400 text-xl drop-shadow-sm">star</span>`
         }
       }
     })

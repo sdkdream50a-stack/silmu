@@ -26,7 +26,9 @@
        data-controller="exam-quiz"
        data-exam-quiz-questions-value="<%= @questions.to_json %>"
        data-exam-quiz-subject-id-value="<%= @subject_id %>"
-       data-exam-quiz-back-path-value="<%= @back_path %>">
+       data-exam-quiz-back-path-value="<%= @back_path %>"
+       data-exam-quiz-chapter-map-value="<%= (@chapter_map || {}).to_json.html_safe %>"
+       data-exam-quiz-chapter-num-value="<%= @chapter_num || 0 %>">
 
     <!-- 진행 상태 바 -->
     <div data-exam-quiz-target="progressArea" class="mb-6">

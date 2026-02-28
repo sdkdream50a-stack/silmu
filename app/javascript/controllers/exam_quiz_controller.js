@@ -1,6 +1,6 @@
 // exam.silmu.kr — 모의고사 문제풀이 Stimulus 컨트롤러
 import { Controller } from "@hotwired/stimulus"
-import { saveQuizScore, saveWrongAnswer, removeWrongAnswer, getWrongAnswerIds } from "../exam_progress"
+import { saveQuizScore, saveChapterQuizDone, saveWrongAnswer, removeWrongAnswer, getWrongAnswerIds } from "../exam_progress"
 
 export default class extends Controller {
   static targets = [
@@ -229,6 +229,11 @@ export default class extends Controller {
     if (!this.wrongModeValue) {
       const subjectId = this.element.dataset.examQuizSubjectIdValue || "all"
       saveQuizScore(subjectId, score, total)
+      // 챕터 퀴즈 완주 배지 저장
+      const chapterNum = parseInt(this.element.dataset.examQuizChapterNumValue || "0")
+      if (chapterNum > 0) {
+        saveChapterQuizDone(subjectId, chapterNum, pct)
+      }
     }
 
     // 등급 결정
