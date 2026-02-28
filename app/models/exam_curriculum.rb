@@ -169,7 +169,11 @@ module ExamCurriculum
             "녹조제품·환경표지 인증제품 우선구매 요건",
             "사회적기업·장애인기업 생산품 우선구매 법적 근거"
           ],
-          related_topic_slugs: []
+          related_topic_slugs: [
+            "goods-selection-committee",
+            "spec-price-split-bid",
+            "goods-vs-service-contract"
+          ]
         },
         {
           number: 6,
@@ -433,7 +437,12 @@ module ExamCurriculum
             "리스크 관리 4단계: 식별→평가→대응→모니터링",
             "조달 단계별 주요 리스크: 계획(수요오류)→입찰(담합)→계약(이행불이행)"
           ],
-          related_topic_slugs: []
+          related_topic_slugs: [
+            "contract-termination",
+            "defect-warranty",
+            "performance-guarantee",
+            "late-penalty"
+          ]
         }
       ]
     },
@@ -697,7 +706,12 @@ module ExamCurriculum
             "나라장터 공고 분석: 과거 조달 실적 데이터 활용 수요 예측",
             "수요기관 선정: 품목별·지역별 수요기관 우선순위 결정"
           ],
-          related_topic_slugs: []
+          related_topic_slugs: [
+            "bid-announcement",
+            "e-procurement-guide",
+            "long-term-contract",
+            "unit-price-contract"
+          ]
         },
         {
           number: 3,
