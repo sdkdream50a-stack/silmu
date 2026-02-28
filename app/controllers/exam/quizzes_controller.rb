@@ -41,6 +41,32 @@ module Exam
       )
     end
 
+    # GET /quiz/subject/:subject_id/chapter/:chapter_num — 챕터별 문제 풀기
+    def chapter
+      @subject = ExamCurriculum.find_subject(params[:subject_id])
+      return redirect_to exam_quiz_index_path, alert: "존재하지 않는 과목입니다." unless @subject
+
+      @chapter_num = params[:chapter_num].to_i
+      @chapter = ExamCurriculum.find_chapter(params[:subject_id], params[:chapter_num])
+      return redirect_to exam_subject_path(@subject[:id]), alert: "존재하지 않는 챕터입니다." unless @chapter
+
+      @questions = ExamQuestions.by_chapter(@subject[:id], @chapter_num)
+                                .map { |q| q.slice(:id, :question, :options, :correct, :explanation, :subject_id) }
+      @quiz_title = "#{@subject[:number]} 제#{@chapter_num}장 문제"
+      @quiz_subtitle = @chapter[:title]
+      @color = @subject[:color]
+      @estimated_minutes = (@questions.size * 1.5).ceil
+      @back_path = exam_subject_chapter_path(@subject[:id], @chapter_num)
+
+      set_meta_tags(
+        title: "#{@subject[:number]} 제#{@chapter_num}장 — #{@chapter[:title]} 문제",
+        description: "공공조달관리사 #{@subject[:number]} 제#{@chapter_num}장 #{@chapter[:title]} 관련 #{@questions.size}문제. 챕터 학습 후 바로 실력을 확인하세요.",
+        keywords: "공공조달관리사 #{@chapter[:title]} 문제, #{@subject[:title]} #{@chapter_num}장 모의고사"
+      )
+
+      render :show
+    end
+
     # GET /quiz/:id — 실제 퀴즈 (id: 1~4 = 과목별, 'all' = 전체)
     def show
       @subject_id = params[:id]

@@ -204,6 +204,22 @@
         <% end %>
       </div>
     </div>
+
+    <%# 챕터 문제 풀기 버튼 %>
+    <% chapter_q_count = ExamQuestions.by_chapter(@subject[:id], @chapter[:number]).size %>
+    <a href="<%= exam_quiz_chapter_path(subject_id: @subject[:id], chapter_num: @chapter[:number]) %>"
+       class="flex items-center justify-between gap-4 <%= colors[:bg_dark] %> hover:opacity-90 text-white rounded-2xl px-6 py-5 mt-2 transition-all group">
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
+          <span class="material-symbols-outlined text-xl">quiz</span>
+        </div>
+        <div>
+          <div class="text-xs text-white/70 mb-0.5">이 챕터 학습 완료! 바로 문제 풀기</div>
+          <div class="font-bold text-base">제<%= @chapter[:number] %>장 <%= @chapter[:title] %> — <%= chapter_q_count %>문제</div>
+        </div>
+      </div>
+      <span class="material-symbols-outlined text-2xl text-white/70 group-hover:translate-x-1 transition-transform flex-shrink-0">arrow_forward</span>
+    </a>
   </div>
 </section>
 

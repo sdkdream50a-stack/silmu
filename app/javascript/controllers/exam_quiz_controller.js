@@ -13,7 +13,8 @@ export default class extends Controller {
     current: { type: Number, default: 0 },
     score: { type: Number, default: 0 },
     answered: { type: Boolean, default: false },
-    wrongMode: { type: Boolean, default: false }
+    wrongMode: { type: Boolean, default: false },
+    backPath: { type: String, default: "" }
   }
 
   connect() {
@@ -197,7 +198,12 @@ export default class extends Controller {
           <span class="material-symbols-outlined">refresh</span>
           다시 풀기
         </button>
-        ${wrongRemaining > 0 ? `
+        ${this.backPathValue ? `
+        <a href="${this.backPathValue}"
+           class="flex-1 inline-flex items-center justify-center gap-2 bg-white border-2 border-slate-200 hover:border-blue-400 text-slate-700 font-bold px-6 py-3.5 rounded-xl transition-colors">
+          <span class="material-symbols-outlined">arrow_back</span>
+          챕터로 돌아가기
+        </a>` : wrongRemaining > 0 ? `
         <a href="/quiz/wrong"
            class="flex-1 inline-flex items-center justify-center gap-2 bg-orange-50 border-2 border-orange-300 hover:border-orange-400 text-orange-700 font-bold px-6 py-3.5 rounded-xl transition-colors">
           <span class="material-symbols-outlined">error_outline</span>

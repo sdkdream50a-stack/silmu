@@ -25,7 +25,8 @@
   <div class="max-w-3xl mx-auto"
        data-controller="exam-quiz"
        data-exam-quiz-questions-value="<%= @questions.to_json %>"
-       data-exam-quiz-subject-id-value="<%= @subject_id %>">
+       data-exam-quiz-subject-id-value="<%= @subject_id %>"
+       data-exam-quiz-back-path-value="<%= @back_path %>">
 
     <!-- 진행 상태 바 -->
     <div data-exam-quiz-target="progressArea" class="mb-6">

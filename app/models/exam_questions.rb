@@ -7098,4 +7098,17 @@ module ExamQuestions
   def self.count_by_subject(subject_id)
     by_subject(subject_id).size
   end
+
+  # 챕터별 문제 (과목 내 문제를 챕터 수로 균등 분배)
+  def self.by_chapter(subject_id, chapter_num)
+    questions = by_subject(subject_id)
+    subject = ExamCurriculum.find_subject(subject_id)
+    return [] unless subject
+
+    total_chapters = subject[:total_chapters]
+    return [] if chapter_num < 1 || chapter_num > total_chapters
+
+    chunk_size = (questions.size.to_f / total_chapters).ceil
+    questions.each_slice(chunk_size).to_a[chapter_num - 1] || []
+  end
 end
