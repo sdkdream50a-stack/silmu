@@ -107,4 +107,16 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+
+  <%# 챕터별 문제 풀기 %>
+  <% @subjects.each do |subject| %>
+  <% subject[:chapters].each do |chapter| %>
+  <url>
+    <loc>https://exam.silmu.kr/quiz/subject/<%= subject[:id] %>/chapter/<%= chapter[:number] %></loc>
+    <lastmod><%= @today %></lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <% end %>
+  <% end %>
 </urlset>
