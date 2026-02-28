@@ -75,4 +75,36 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
+
+  <%# 실전 시험 모드 %>
+  <url>
+    <loc>https://exam.silmu.kr/quiz/simulation</loc>
+    <lastmod><%= @today %></lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <%# 오답 노트 %>
+  <url>
+    <loc>https://exam.silmu.kr/quiz/wrong</loc>
+    <lastmod><%= @today %></lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <%# 학습 분석 대시보드 %>
+  <url>
+    <loc>https://exam.silmu.kr/quiz/analysis</loc>
+    <lastmod><%= @today %></lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <%# 합격 전략 가이드 %>
+  <url>
+    <loc>https://exam.silmu.kr/exam-strategy</loc>
+    <lastmod><%= @today %></lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>
