@@ -6,7 +6,8 @@ export default class extends Controller {
   static targets = [
     "progressArea", "progressBar", "currentNum", "scoreDisplay",
     "questionArea", "questionBadge", "questionText", "optionsArea",
-    "feedbackArea", "nextArea", "nextBtn", "resultArea", "emptyArea"
+    "feedbackArea", "nextArea", "nextBtn", "resultArea", "emptyArea",
+    "chapterSummaryArea"
   ]
   static values = {
     questions: Array,
@@ -14,10 +15,15 @@ export default class extends Controller {
     score: { type: Number, default: 0 },
     answered: { type: Boolean, default: false },
     wrongMode: { type: Boolean, default: false },
-    backPath: { type: String, default: "" }
+    backPath: { type: String, default: "" },
+    chapterMap: { type: Object, default: {} }
   }
 
   connect() {
+    // 챕터별 통계 초기화
+    this.wrongByChapter = {}
+    this.totalByChapter = {}
+
     if (this.wrongModeValue) {
       const wrongIds = getWrongAnswerIds()
       if (wrongIds.length === 0) {
@@ -32,8 +38,58 @@ export default class extends Controller {
       }
       // 진행바 total 업데이트
       this.progressAreaTarget.querySelector("strong:last-of-type").textContent = this.questionsValue.length
+      // 취약 챕터 요약 렌더링
+      if (this.hasChapterSummaryAreaTarget) {
+        this.chapterSummaryAreaTarget.innerHTML = this.buildWrongChapterSummary()
+      }
     }
     this.showQuestion()
+  }
+
+  // 오답 노트 취약 챕터 요약 (진입 시 표시)
+  buildWrongChapterSummary() {
+    const chapterMap = this.chapterMapValue
+    const countByChapter = {}
+    this.questionsValue.forEach(q => {
+      if (!q.subject_id || !q.chapter_num) return
+      const key = `${q.subject_id}-${q.chapter_num}`
+      countByChapter[key] = (countByChapter[key] || 0) + 1
+    })
+
+    const entries = Object.entries(countByChapter)
+    if (entries.length === 0) return ""
+
+    const sorted = entries
+      .map(([key, count]) => {
+        const info = chapterMap[key] || {}
+        return {
+          key,
+          count,
+          title: info.title || `제${key.split("-")[1]}장`,
+          subjectNumber: info.subject_number || `${key.split("-")[0]}권`
+        }
+      })
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 5)
+
+    const rows = sorted.map(c => `
+      <div class="flex items-center justify-between py-2 border-b border-slate-100 last:border-0">
+        <div class="flex-1 min-w-0">
+          <span class="text-xs font-bold text-slate-400 mr-1">${c.subjectNumber}</span>
+          <span class="text-sm font-medium text-slate-700">${c.title}</span>
+        </div>
+        <span class="text-xs font-bold bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full flex-shrink-0 ml-3">${c.count}문제</span>
+      </div>`).join("")
+
+    return `
+      <div class="bg-orange-50 border border-orange-200 rounded-2xl p-5">
+        <h3 class="font-bold text-orange-800 mb-1 flex items-center gap-2 text-sm">
+          <span class="material-symbols-outlined text-orange-500 text-lg">bar_chart</span>
+          취약 챕터 현황 — 오답 ${this.questionsValue.length}문제
+        </h3>
+        <p class="text-orange-600 text-xs mb-3">오답이 많은 챕터부터 집중 복습하세요.</p>
+        ${rows}
+      </div>`
   }
 
   // 오답 없음 상태 표시
@@ -55,8 +111,16 @@ export default class extends Controller {
     this.progressBarTarget.style.width = `${(idx / total) * 100}%`
     this.currentNumTarget.textContent = idx + 1
 
-    // 문제 배지 & 텍스트
-    this.questionBadgeTarget.textContent = `문제 ${idx + 1}`
+    // 문제 배지 & 텍스트 (챕터 정보 포함)
+    const chapterKey = q.subject_id && q.chapter_num ? `${q.subject_id}-${q.chapter_num}` : null
+    const chapterInfo = chapterKey ? (this.chapterMapValue[chapterKey] || {}) : {}
+    const chapterBadgeHtml = chapterInfo.title
+      ? `<span class="inline-flex items-center gap-1 bg-slate-100 text-slate-500 text-xs px-2.5 py-1 rounded-full">
+           <span class="font-bold text-slate-400">${chapterInfo.subject_number}</span>
+           ${chapterInfo.title}
+         </span>`
+      : ""
+    this.questionBadgeTarget.innerHTML = `<span class="inline-flex items-center gap-1 bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full">문제 ${idx + 1}</span>${chapterBadgeHtml}`
     this.questionTextTarget.textContent = q.question
 
     // 선택지 렌더링
@@ -86,6 +150,15 @@ export default class extends Controller {
     const q = this.questionsValue[this.currentValue]
     const correct = q.correct
     const isCorrect = selected === correct
+
+    // 챕터별 통계 누적
+    const chapterKey = `${q.subject_id}-${q.chapter_num}`
+    if (chapterKey !== 'undefined-undefined') {
+      this.totalByChapter[chapterKey] = (this.totalByChapter[chapterKey] || 0) + 1
+      if (!isCorrect) {
+        this.wrongByChapter[chapterKey] = (this.wrongByChapter[chapterKey] || 0) + 1
+      }
+    }
 
     if (isCorrect) {
       this.scoreValue++
@@ -229,6 +302,9 @@ export default class extends Controller {
         ${this.wrongModeValue && score > 0 ? `<div class="text-green-600 text-sm mt-2 font-semibold">${score}개 문제가 오답 노트에서 제거되었습니다 ✓</div>` : ""}
       </div>
 
+      <!-- 취약 챕터 분석 -->
+      ${this.buildChapterAnalysis()}
+
       <!-- 학습 가이드 -->
       ${this.buildReview()}
 
@@ -238,6 +314,59 @@ export default class extends Controller {
       </div>
     `
     this.resultAreaTarget.classList.remove("hidden")
+  }
+
+  // 챕터별 취약 분석 빌드
+  buildChapterAnalysis() {
+    const entries = Object.entries(this.wrongByChapter)
+    if (entries.length === 0) return ""
+
+    const chapterMap = this.chapterMapValue
+    const weakChapters = entries
+      .map(([key, wrongCount]) => {
+        const total = this.totalByChapter[key] || 1
+        const info = chapterMap[key] || {}
+        return {
+          key,
+          wrongCount,
+          total,
+          pct: Math.round((wrongCount / total) * 100),
+          title: info.title || `제${key.split("-")[1]}장`,
+          subjectNumber: info.subject_number || `${key.split("-")[0]}권`
+        }
+      })
+      .sort((a, b) => b.pct - a.pct || b.wrongCount - a.wrongCount)
+      .slice(0, 5)
+
+    const rows = weakChapters.map(c => {
+      const badgeColor = c.pct >= 60
+        ? "text-red-700 bg-red-50 border border-red-200"
+        : "text-orange-700 bg-orange-50 border border-orange-200"
+      return `
+        <div class="flex items-center justify-between py-2.5 border-b border-slate-100 last:border-0">
+          <div class="flex-1 min-w-0">
+            <span class="text-xs font-bold text-slate-400 mr-1">${c.subjectNumber}</span>
+            <span class="text-sm font-medium text-slate-700">${c.title}</span>
+          </div>
+          <div class="flex items-center gap-2 flex-shrink-0 ml-3">
+            <span class="text-xs text-slate-400">${c.wrongCount}/${c.total}</span>
+            <span class="text-xs font-bold ${badgeColor} px-2 py-0.5 rounded-full">${c.pct}% 오답</span>
+          </div>
+        </div>`
+    }).join("")
+
+    const topChapter = weakChapters[0]
+    return `
+      <div class="bg-white rounded-2xl shadow-sm border border-orange-200 p-6 mb-6">
+        <h3 class="font-bold text-slate-800 mb-1 flex items-center gap-2">
+          <span class="material-symbols-outlined text-orange-500">warning</span>
+          취약 챕터 분석
+        </h3>
+        <p class="text-slate-500 text-xs mb-4">
+          <strong class="text-orange-600">${topChapter.subjectNumber} ${topChapter.title}</strong>이 가장 취약합니다. 해당 챕터를 집중 복습하세요.
+        </p>
+        ${rows}
+      </div>`
   }
 
   // 학습 가이드 빌드
@@ -290,6 +419,8 @@ export default class extends Controller {
     this.currentValue = 0
     this.scoreValue = 0
     this.answeredValue = false
+    this.wrongByChapter = {}
+    this.totalByChapter = {}
     this.scoreDisplayTarget.textContent = "0"
     this.resultAreaTarget.classList.add("hidden")
     this.questionAreaTarget.classList.remove("hidden")
