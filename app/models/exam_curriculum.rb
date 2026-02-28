@@ -887,6 +887,17 @@ module ExamCurriculum
     }
   ].freeze
 
+  # 챕터 키→제목 맵 { "1-1" => { title: ..., subject_number: ... } }
+  def self.chapter_map
+    result = {}
+    SUBJECTS.each do |s|
+      s[:chapters].each do |c|
+        result["#{s[:id]}-#{c[:number]}"] = { title: c[:title], subject_number: s[:number] }
+      end
+    end
+    result
+  end
+
   # 과목 찾기
   def self.find_subject(id)
     SUBJECTS.find { |s| s[:id] == id.to_i }

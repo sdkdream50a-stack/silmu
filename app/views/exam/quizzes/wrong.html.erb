@@ -28,7 +28,11 @@
        data-controller="exam-quiz"
        data-exam-quiz-questions-value="<%= @all_questions.to_json %>"
        data-exam-quiz-wrong-mode-value="true"
-       data-exam-quiz-subject-id-value="wrong">
+       data-exam-quiz-subject-id-value="wrong"
+       data-exam-quiz-chapter-map-value="<%= @chapter_map.to_json.html_safe %>">
+
+    <!-- 취약 챕터 요약 (JS에서 렌더링) -->
+    <div data-exam-quiz-target="chapterSummaryArea" class="mb-5"></div>
 
     <!-- 오답 없음 (초기에는 hidden, JS에서 제어) -->
     <div data-exam-quiz-target="emptyArea" class="hidden">
