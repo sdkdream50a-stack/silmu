@@ -12,3 +12,15 @@ application.register("utm-banner", UtmBannerController)
 
 import InsuranceCalculatorController from "./insurance_calculator_controller"
 application.register("insurance-calculator", InsuranceCalculatorController)
+
+import ExamQuizController from "./exam_quiz_controller"
+application.register("exam-quiz", ExamQuizController)
+
+import ExamProgressController from "./exam_progress_controller"
+application.register("exam-progress", ExamProgressController)
+
+import ExamSimulationController from "./exam_simulation_controller"
+application.register("exam-simulation", ExamSimulationController)
+
+import ExamAnalysisController from "./exam_analysis_controller"
+application.register("exam-analysis", ExamAnalysisController)

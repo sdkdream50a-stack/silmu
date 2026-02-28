@@ -1,0 +1,106 @@
+<%# 학습 분석 대시보드 — localStorage 기반 과목별 성취도 %>
+
+<!-- 헤더 -->
+<section class="bg-gradient-to-br from-slate-900 via-teal-900 to-teal-800 text-white py-10 px-4">
+  <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-2 text-teal-300 text-sm mb-4">
+      <a href="https://exam.silmu.kr" class="hover:text-white transition-colors">홈</a>
+      <span class="material-symbols-outlined text-sm">chevron_right</span>
+      <a href="<%= exam_quiz_index_path %>" class="hover:text-white transition-colors">모의고사</a>
+      <span class="material-symbols-outlined text-sm">chevron_right</span>
+      <span>학습 분석</span>
+    </div>
+    <div class="flex items-center gap-4">
+      <div class="w-14 h-14 bg-teal-400/20 rounded-2xl flex items-center justify-center flex-shrink-0">
+        <span class="material-symbols-outlined text-teal-300 text-3xl">analytics</span>
+      </div>
+      <div>
+        <h1 class="text-2xl md:text-3xl font-bold">학습 분석 대시보드</h1>
+        <p class="text-teal-200 mt-1">챕터 진도 · 과목별 오답 분석 · 학습 패턴</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 대시보드 본문 -->
+<section class="py-8 px-4 bg-slate-50 min-h-[60vh]"
+         data-controller="exam-analysis">
+  <div class="max-w-5xl mx-auto">
+
+    <!-- 데이터 없음 상태 (JS에서 숨김 처리) -->
+    <div data-exam-analysis-target="emptyState">
+      <div class="bg-white rounded-2xl border border-slate-200 p-12 text-center">
+        <div class="w-20 h-20 bg-teal-50 rounded-full flex items-center justify-center mx-auto mb-5">
+          <span class="material-symbols-outlined text-teal-400 text-4xl">analytics</span>
+        </div>
+        <h2 class="text-xl font-bold text-slate-800 mb-2">학습 데이터가 없습니다</h2>
+        <p class="text-slate-500 text-sm mb-6">챕터를 학습하거나 모의고사를 풀면 분석 데이터가 쌓입니다.</p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="/subjects/1"
+             class="inline-flex items-center justify-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-bold px-6 py-3 rounded-xl transition-colors">
+            <span class="material-symbols-outlined">school</span>
+            커리큘럼 학습 시작
+          </a>
+          <a href="<%= exam_quiz_path('all') %>"
+             class="inline-flex items-center justify-center gap-2 bg-white border-2 border-slate-200 hover:border-teal-400 text-slate-700 font-bold px-6 py-3 rounded-xl transition-colors">
+            <span class="material-symbols-outlined">quiz</span>
+            모의고사 풀기
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 분석 내용 (JS에서 표시) -->
+    <div data-exam-analysis-target="dashContent" class="hidden space-y-6">
+
+      <!-- 종합 요약 카드 -->
+      <div data-exam-analysis-target="summaryCards"
+           class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      </div>
+
+      <!-- 챕터 진도 + 모의고사 점수 -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- 챕터 진도 -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-6">
+          <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
+            <span class="material-symbols-outlined text-teal-500">school</span>
+            과목별 챕터 진도
+          </h3>
+          <div data-exam-analysis-target="chapterProgress" class="space-y-4">
+          </div>
+        </div>
+
+        <!-- 모의고사 기록 -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-6">
+          <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
+            <span class="material-symbols-outlined text-blue-500">emoji_events</span>
+            모의고사 기록
+          </h3>
+          <div data-exam-analysis-target="quizHistory" class="space-y-3">
+          </div>
+        </div>
+      </div>
+
+      <!-- 오답 분석 -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-6">
+        <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined text-red-500">error_outline</span>
+          오답 현황 및 취약 분야
+        </h3>
+        <div data-exam-analysis-target="wrongAnalysis">
+        </div>
+      </div>
+
+      <!-- 학습 추천 -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-6">
+        <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined text-amber-500">lightbulb</span>
+          학습 추천
+        </h3>
+        <div data-exam-analysis-target="recommendations" class="space-y-3">
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>

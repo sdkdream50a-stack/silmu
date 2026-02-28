@@ -12,6 +12,25 @@ module Exam
       )
     end
 
+    # GET /quiz/simulation — 실전 시험 모드 (100분 타이머 + 랜덤 + 일괄채점)
+    def simulation
+      @questions = ExamQuestions.all.map { |q| q.slice(:id, :question, :options, :correct, :explanation, :subject_id) }
+      set_meta_tags(
+        title: "실전 시험 모드",
+        description: "공공조달관리사 실전 시험 모드 — #{@questions.size}문제 100분 타이머. 랜덤 순서로 풀고 마지막에 일괄 채점합니다.",
+        keywords: "공공조달관리사 실전 시험, 공공조달 모의고사 타이머"
+      )
+    end
+
+    # GET /quiz/analysis — 학습 분석 대시보드
+    def analysis
+      set_meta_tags(
+        title: "학습 분석 대시보드",
+        description: "과목별 챕터 진도, 모의고사 점수, 오답 분포를 한눈에 확인하세요. 공공조달관리사 합격을 위한 맞춤 학습 추천.",
+        keywords: "공공조달관리사 학습 분석, 공공조달 오답 분석, 시험 대비 학습 추적"
+      )
+    end
+
     # GET /quiz/wrong — 오답 노트 재풀이 (모든 문제를 내려보내고 클라이언트에서 필터)
     def wrong
       @all_questions = ExamQuestions.all.map { |q| q.slice(:id, :question, :options, :correct, :explanation, :subject_id) }
