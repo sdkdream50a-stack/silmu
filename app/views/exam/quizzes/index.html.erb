@@ -98,6 +98,11 @@
         </a>
       <% end %>
     </div>
+
+    <!-- 오답 노트 카드 (JS에서 wrong count 기반으로 렌더링) -->
+    <div class="mt-5" data-controller="exam-progress">
+      <div data-exam-progress-target="wrongCountArea"></div>
+    </div>
   </div>
 </section>
 

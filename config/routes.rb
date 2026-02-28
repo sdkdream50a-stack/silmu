@@ -8,6 +8,7 @@ Rails.application.routes.draw do
       end
       get 'keywords', to: 'keywords#index', as: :keywords
       get 'quiz', to: 'quizzes#index', as: :quiz_index
+      get 'quiz/wrong', to: 'quizzes#wrong', as: :quiz_wrong
       get 'quiz/:id', to: 'quizzes#show', as: :quiz
       get 'exam-info', to: 'exam_info#index', as: :exam_info
       get 'sitemap.xml', to: 'sitemap#index', defaults: { format: :xml }

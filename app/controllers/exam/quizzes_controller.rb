@@ -12,6 +12,16 @@ module Exam
       )
     end
 
+    # GET /quiz/wrong — 오답 노트 재풀이 (모든 문제를 내려보내고 클라이언트에서 필터)
+    def wrong
+      @all_questions = ExamQuestions.all.map { |q| q.slice(:id, :question, :options, :correct, :explanation, :subject_id) }
+      set_meta_tags(
+        title: "오답 노트",
+        description: "틀렸던 문제만 다시 풀어보는 오답 노트. 공공조달관리사 모의고사 오답을 반복 학습하여 완벽하게 정복하세요.",
+        keywords: "공공조달관리사 오답노트, 오답 복습, 공공조달 시험"
+      )
+    end
+
     # GET /quiz/:id — 실제 퀴즈 (id: 1~4 = 과목별, 'all' = 전체)
     def show
       @subject_id = params[:id]

@@ -54,6 +54,38 @@ export function getAllProgress() {
   return load()
 }
 
+// ─── 오답 노트 ─────────────────────────────────
+const WRONG_KEY = 'exam_wrong_answers'
+
+function loadWrong() {
+  try { return JSON.parse(localStorage.getItem(WRONG_KEY)) || [] } catch { return [] }
+}
+
+export function saveWrongAnswer(questionId) {
+  const ids = loadWrong()
+  if (!ids.includes(questionId)) {
+    ids.push(questionId)
+    try { localStorage.setItem(WRONG_KEY, JSON.stringify(ids)) } catch { /* 저장 실패 무시 */ }
+  }
+}
+
+export function removeWrongAnswer(questionId) {
+  const ids = loadWrong().filter(id => id !== questionId)
+  try { localStorage.setItem(WRONG_KEY, JSON.stringify(ids)) } catch { /* 저장 실패 무시 */ }
+}
+
+export function getWrongAnswerIds() {
+  return loadWrong()
+}
+
+export function getWrongAnswerCount() {
+  return loadWrong().length
+}
+
+export function clearAllWrongAnswers() {
+  try { localStorage.removeItem(WRONG_KEY) } catch { /* 무시 */ }
+}
+
 // 전체 통계
 export function getStats() {
   const data = load()

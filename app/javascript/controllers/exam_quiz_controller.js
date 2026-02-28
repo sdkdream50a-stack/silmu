@@ -1,22 +1,45 @@
 // exam.silmu.kr — 모의고사 문제풀이 Stimulus 컨트롤러
 import { Controller } from "@hotwired/stimulus"
-import { saveQuizScore } from "../exam_progress"
+import { saveQuizScore, saveWrongAnswer, removeWrongAnswer, getWrongAnswerIds } from "../exam_progress"
 
 export default class extends Controller {
   static targets = [
     "progressArea", "progressBar", "currentNum", "scoreDisplay",
     "questionArea", "questionBadge", "questionText", "optionsArea",
-    "feedbackArea", "nextArea", "nextBtn", "resultArea"
+    "feedbackArea", "nextArea", "nextBtn", "resultArea", "emptyArea"
   ]
   static values = {
     questions: Array,
     current: { type: Number, default: 0 },
     score: { type: Number, default: 0 },
-    answered: { type: Boolean, default: false }
+    answered: { type: Boolean, default: false },
+    wrongMode: { type: Boolean, default: false }
   }
 
   connect() {
+    if (this.wrongModeValue) {
+      const wrongIds = getWrongAnswerIds()
+      if (wrongIds.length === 0) {
+        this.showEmpty()
+        return
+      }
+      // 오답 ID에 해당하는 문제만 필터링
+      this.questionsValue = this.questionsValue.filter(q => wrongIds.includes(q.id))
+      if (this.questionsValue.length === 0) {
+        this.showEmpty()
+        return
+      }
+      // 진행바 total 업데이트
+      this.progressAreaTarget.querySelector("strong:last-of-type").textContent = this.questionsValue.length
+    }
     this.showQuestion()
+  }
+
+  // 오답 없음 상태 표시
+  showEmpty() {
+    if (this.hasQuestionAreaTarget) this.questionAreaTarget.classList.add("hidden")
+    if (this.hasProgressAreaTarget) this.progressAreaTarget.classList.add("hidden")
+    if (this.hasEmptyAreaTarget) this.emptyAreaTarget.classList.remove("hidden")
   }
 
   // 현재 문제 렌더링
@@ -66,6 +89,9 @@ export default class extends Controller {
     if (isCorrect) {
       this.scoreValue++
       this.scoreDisplayTarget.textContent = this.scoreValue
+      removeWrongAnswer(q.id)  // 맞히면 오답 노트에서 제거
+    } else {
+      saveWrongAnswer(q.id)    // 틀리면 오답 노트에 추가
     }
 
     // 선택지 색상 업데이트
@@ -125,9 +151,11 @@ export default class extends Controller {
     const score = this.scoreValue
     const pct = Math.round((score / total) * 100)
 
-    // localStorage에 점수 저장 (subjectId는 data attribute에서 읽음)
-    const subjectId = this.element.dataset.examQuizSubjectIdValue || "all"
-    saveQuizScore(subjectId, score, total)
+    // 일반 모드에서만 점수 저장
+    if (!this.wrongModeValue) {
+      const subjectId = this.element.dataset.examQuizSubjectIdValue || "all"
+      saveQuizScore(subjectId, score, total)
+    }
 
     // 등급 결정
     let grade, gradeColor, gradeIcon, gradeBg
@@ -148,6 +176,40 @@ export default class extends Controller {
     // 문제 영역 숨기기
     this.questionAreaTarget.classList.add("hidden")
 
+    // 오답 모드 결과 vs 일반 모드 결과
+    const wrongRemaining = getWrongAnswerIds().length
+    const actionButtons = this.wrongModeValue
+      ? `
+        <a href="/quiz/wrong"
+           class="flex-1 inline-flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold px-6 py-3.5 rounded-xl transition-colors">
+          <span class="material-symbols-outlined">refresh</span>
+          오답 다시 풀기 ${wrongRemaining > 0 ? `<span class="bg-white/30 text-white text-xs font-bold px-2 py-0.5 rounded-full ml-1">${wrongRemaining}</span>` : ""}
+        </a>
+        <a href="/quiz"
+           class="flex-1 inline-flex items-center justify-center gap-2 bg-white border-2 border-slate-200 hover:border-blue-400 text-slate-700 font-bold px-6 py-3.5 rounded-xl transition-colors">
+          <span class="material-symbols-outlined">apps</span>
+          모의고사 선택
+        </a>
+      `
+      : `
+        <button data-action="click->exam-quiz#retryQuiz"
+                class="flex-1 inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3.5 rounded-xl transition-colors">
+          <span class="material-symbols-outlined">refresh</span>
+          다시 풀기
+        </button>
+        ${wrongRemaining > 0 ? `
+        <a href="/quiz/wrong"
+           class="flex-1 inline-flex items-center justify-center gap-2 bg-orange-50 border-2 border-orange-300 hover:border-orange-400 text-orange-700 font-bold px-6 py-3.5 rounded-xl transition-colors">
+          <span class="material-symbols-outlined">error_outline</span>
+          오답 노트 <span class="bg-orange-500 text-white text-xs font-bold px-2 py-0.5 rounded-full ml-1">${wrongRemaining}</span>
+        </a>` : `
+        <a href="/quiz"
+           class="flex-1 inline-flex items-center justify-center gap-2 bg-white border-2 border-slate-200 hover:border-blue-400 text-slate-700 font-bold px-6 py-3.5 rounded-xl transition-colors">
+          <span class="material-symbols-outlined">apps</span>
+          다른 과목 선택
+        </a>`}
+      `
+
     // 결과 화면 렌더링
     this.resultAreaTarget.innerHTML = `
       <!-- 점수 카드 -->
@@ -158,42 +220,22 @@ export default class extends Controller {
         <div class="text-6xl font-extrabold text-slate-800 mb-1">${pct}<span class="text-3xl text-slate-400">%</span></div>
         <div class="text-2xl font-bold ${gradeColor} mb-2">${grade}</div>
         <div class="text-slate-500 text-sm">${total}문제 중 ${score}문제 정답</div>
+        ${this.wrongModeValue && score > 0 ? `<div class="text-green-600 text-sm mt-2 font-semibold">${score}개 문제가 오답 노트에서 제거되었습니다 ✓</div>` : ""}
       </div>
 
-      <!-- 오답 리뷰 -->
+      <!-- 학습 가이드 -->
       ${this.buildReview()}
 
       <!-- 액션 버튼 -->
       <div class="flex flex-col sm:flex-row gap-3 mt-6">
-        <button data-action="click->exam-quiz#retryQuiz"
-                class="flex-1 inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3.5 rounded-xl transition-colors">
-          <span class="material-symbols-outlined">refresh</span>
-          다시 풀기
-        </button>
-        <a href="/quiz"
-           class="flex-1 inline-flex items-center justify-center gap-2 bg-white border-2 border-slate-200 hover:border-blue-400 text-slate-700 font-bold px-6 py-3.5 rounded-xl transition-colors">
-          <span class="material-symbols-outlined">apps</span>
-          다른 과목 선택
-        </a>
+        ${actionButtons}
       </div>
     `
     this.resultAreaTarget.classList.remove("hidden")
   }
 
-  // 오답 리뷰 빌드
+  // 학습 가이드 빌드
   buildReview() {
-    const wrongs = []
-    this.questionsValue.forEach((q, i) => {
-      // 정답 여부는 재계산 불필요 — 결과 표시용으로 모든 문제 표시
-    })
-
-    // 전체 문제 요약 (정답/오답 아이콘)
-    const rows = this.questionsValue.map((q, i) => {
-      // 점수를 추적하는 용도로 answered 기록을 남기지 않았으므로,
-      // 결과 화면은 전체 점수만 보여주고 챕터 링크 제공
-      return ""
-    }).join("")
-
     return `
       <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
         <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2">

@@ -1,7 +1,7 @@
 // exam.silmu.kr — 학습 진도 추적 Stimulus 컨트롤러
 // 챕터 방문 기록, 과목 진도바, 모의고사 점수 표시
 import { Controller } from "@hotwired/stimulus"
-import { markChapterVisited, getVisitedChapters, getAllProgress, getStats } from "../exam_progress"
+import { markChapterVisited, getVisitedChapters, getAllProgress, getStats, getWrongAnswerCount } from "../exam_progress"
 
 // 과목별 고정 색상 (Tailwind safelist에 포함된 클래스만 사용)
 const SUBJECT_STYLE = {
@@ -18,7 +18,7 @@ export default class extends Controller {
     chapterNum: Number,
     total: Number
   }
-  static targets = ["badge", "progressBar", "progressText", "scoreArea", "statsArea"]
+  static targets = ["badge", "progressBar", "progressText", "scoreArea", "statsArea", "wrongCountArea"]
 
   connect() {
     // 챕터 페이지: subjectId + chapterNum 값이 있으면 방문 기록
@@ -41,6 +41,10 @@ export default class extends Controller {
     // 홈 페이지: 전체 통계
     if (this.hasStatsAreaTarget) {
       this.displayHomeStats()
+    }
+    // 모의고사 선택 페이지: 오답 노트 카드
+    if (this.hasWrongCountAreaTarget) {
+      this.displayWrongCount()
     }
   }
 
@@ -135,6 +139,47 @@ export default class extends Controller {
         </div>
       `
     }).join("")
+  }
+
+  // ── 오답 노트 카드 ───────────────────────────────
+  displayWrongCount() {
+    const count = getWrongAnswerCount()
+    if (count === 0) {
+      this.wrongCountAreaTarget.innerHTML = `
+        <a href="/quiz/wrong"
+           class="group flex items-center justify-between bg-white border-2 border-dashed border-orange-200 rounded-2xl px-5 py-4 hover:border-orange-400 transition-all">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-orange-50 rounded-xl flex items-center justify-center flex-shrink-0">
+              <span class="material-symbols-outlined text-orange-400 text-2xl">error_outline</span>
+            </div>
+            <div>
+              <div class="text-slate-700 font-semibold text-sm">오답 노트</div>
+              <div class="text-slate-400 text-xs">모의고사를 풀면 틀린 문제가 자동으로 저장됩니다</div>
+            </div>
+          </div>
+          <span class="text-slate-300 text-xs font-medium">비어있음</span>
+        </a>
+      `
+    } else {
+      this.wrongCountAreaTarget.innerHTML = `
+        <a href="/quiz/wrong"
+           class="group flex items-center justify-between bg-gradient-to-r from-orange-500 to-amber-500 rounded-2xl px-5 py-4 hover:from-orange-600 hover:to-amber-600 transition-all shadow-md hover:shadow-lg">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
+              <span class="material-symbols-outlined text-white text-2xl">error_outline</span>
+            </div>
+            <div>
+              <div class="text-white font-bold">오답 노트</div>
+              <div class="text-orange-100 text-sm">틀린 문제 ${count}개 · 지금 바로 복습하기</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 bg-white/20 text-white font-bold px-4 py-2 rounded-xl group-hover:bg-white/30 transition-colors">
+            <span class="bg-white text-orange-500 text-xs font-extrabold px-2 py-0.5 rounded-full">${count}</span>
+            <span class="material-symbols-outlined text-base">arrow_forward</span>
+          </div>
+        </a>
+      `
+    }
   }
 
   // ── 홈 전체 통계 ────────────────────────────────
