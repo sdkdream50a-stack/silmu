@@ -177,6 +177,10 @@
               모의고사
             </a>
             <a href="<%= exam_exam_info_path %>" class="px-3 py-2 text-slate-600 hover:text-blue-700 font-medium transition-colors text-sm rounded-lg hover:bg-slate-50">시험 정보</a>
+            <a href="<%= exam_exam_strategy_path %>" class="flex items-center gap-1 px-3 py-2 text-slate-600 hover:text-amber-600 font-medium transition-colors text-sm rounded-lg hover:bg-amber-50">
+              <span class="material-symbols-outlined text-base">emoji_events</span>
+              합격 전략
+            </a>
             <a href="https://silmu.kr/topics" class="px-3 py-2 text-slate-600 hover:text-blue-700 font-medium transition-colors text-sm rounded-lg hover:bg-slate-50">법령가이드</a>
             <a href="https://silmu.kr/audit-cases" class="px-3 py-2 text-slate-600 hover:text-blue-700 font-medium transition-colors text-sm rounded-lg hover:bg-slate-50">감사사례</a>
           </div>
@@ -245,10 +249,15 @@
             </ul>
           </div>
           <div>
-            <h3 class="font-semibold mb-4">문의</h3>
+            <h3 class="font-semibold mb-4">시험 준비</h3>
             <ul class="space-y-2 text-sm">
+              <li><a href="<%= exam_quiz_index_path %>" class="text-slate-400 hover:text-white transition-colors">모의고사</a></li>
+              <li><a href="<%= exam_quiz_simulation_path %>" class="text-slate-400 hover:text-white transition-colors">실전 시험 모드</a></li>
+              <li><a href="<%= exam_quiz_analysis_path %>" class="text-slate-400 hover:text-white transition-colors">학습 분석</a></li>
+              <li><a href="<%= exam_exam_strategy_path %>" class="text-slate-400 hover:text-white transition-colors">합격 전략</a></li>
+              <li><a href="<%= exam_exam_info_path %>" class="text-slate-400 hover:text-white transition-colors">시험 정보</a></li>
               <li>
-                <a href="mailto:hello@silmu.kr" class="text-slate-400 hover:text-white transition-colors flex items-center gap-2">
+                <a href="mailto:hello@silmu.kr" class="text-slate-400 hover:text-white transition-colors flex items-center gap-2 mt-3">
                   <span class="material-symbols-outlined text-base">mail</span>
                   hello@silmu.kr
                 </a>
@@ -301,6 +310,10 @@
           <a href="<%= exam_exam_info_path %>" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-50 text-slate-700">
             <span class="material-symbols-outlined text-slate-500 text-base">info</span>
             시험 정보
+          </a>
+          <a href="<%= exam_exam_strategy_path %>" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-amber-50 text-slate-700">
+            <span class="material-symbols-outlined text-amber-500 text-base">emoji_events</span>
+            합격 전략
           </a>
           <a href="https://silmu.kr/topics" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-50 text-slate-700">
             <span class="material-symbols-outlined text-slate-500 text-base">menu_book</span>
