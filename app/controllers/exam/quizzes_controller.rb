@@ -63,8 +63,14 @@ module Exam
 
       set_meta_tags(
         title: "#{@subject[:number]} 제#{@chapter_num}장 — #{@chapter[:title]} 문제",
-        description: "공공조달관리사 #{@subject[:number]} 제#{@chapter_num}장 #{@chapter[:title]} 관련 #{@questions.size}문제. 챕터 학습 후 바로 실력을 확인하세요.",
-        keywords: "공공조달관리사 #{@chapter[:title]} 문제, #{@subject[:title]} #{@chapter_num}장 모의고사"
+        description: "공공조달관리사 #{@subject[:number]} 제#{@chapter_num}장 #{@chapter[:title]} 관련 #{@questions.size}문제. 4지선다 즉시 채점·상세 해설로 챕터 학습을 완성하세요.",
+        keywords: "공공조달관리사 #{@chapter[:title]} 문제, #{@subject[:title]} #{@chapter_num}장 모의고사, 공공조달관리사 챕터 문제풀기",
+        og: {
+          title: "#{@subject[:number]} 제#{@chapter_num}장 #{@chapter[:title]} 문제 | 공공조달관리사",
+          description: "공공조달관리사 #{@subject[:number]} 제#{@chapter_num}장 #{@chapter[:title]} #{@questions.size}문제. 즉시 채점과 상세 해설로 실력을 확인하세요.",
+          url: "https://exam.silmu.kr/quiz/subject/#{@subject[:id]}/chapter/#{@chapter_num}",
+          type: "website"
+        }
       )
 
       render :show
@@ -96,7 +102,13 @@ module Exam
       set_meta_tags(
         title: @quiz_title,
         description: "공공조달관리사 #{@quiz_title} — #{@questions.size}문제 4지선다. 즉시 채점과 상세 해설로 실전 감각을 키우세요.",
-        keywords: "공공조달관리사 #{@quiz_title}, 공공조달 시험 모의고사"
+        keywords: "공공조달관리사 #{@quiz_title}, 공공조달 시험 모의고사, 국가기술자격 문제풀이",
+        og: {
+          title: "#{@quiz_title} | 공공조달관리사 모의고사",
+          description: "공공조달관리사 #{@quiz_title} #{@questions.size}문제. 즉시 채점과 상세 해설로 실전 감각을 키우세요.",
+          url: "https://exam.silmu.kr/quiz/#{@subject_id}",
+          type: "website"
+        }
       )
     end
   end
