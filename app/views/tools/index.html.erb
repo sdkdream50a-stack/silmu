@@ -50,7 +50,7 @@
 
     <!-- 카테고리 탭 필터 -->
     <div class="flex flex-wrap gap-2 mb-6">
-      <% [["전체", nil], ["AI 도구", "ai"], ["계산기", "calc"], ["문서 도구", "doc"], ["체크리스트", "check"]].each_with_index do |(label, key), i| %>
+      <% ["전체", "AI 도구", "계산기", "문서 도구", "체크리스트"].each_with_index do |label, i| %>
         <button type="button" onclick="filterTools('<%= label %>')" data-cat="<%= label %>"
                 class="tool-tab-btn px-4 py-2 rounded-xl text-sm font-semibold transition-colors <%= i == 0 ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200' %>">
           <%= label %>
@@ -128,6 +128,22 @@ function filterTools(cat) {
     card.style.display = (cat === '전체' || card.dataset.category === cat) ? '' : 'none';
   });
 }
+
+// Turbo 캐시 복원 시 탭 필터 초기화 (C-2 fix)
+document.addEventListener('turbo:before-cache', function() {
+  var grid = document.getElementById('tools-grid');
+  if (!grid) return;
+  grid.querySelectorAll('[data-category]').forEach(function(card) { card.style.display = ''; });
+  document.querySelectorAll('.tool-tab-btn').forEach(function(btn) {
+    if (btn.dataset.cat === '전체') {
+      btn.classList.remove('bg-slate-100', 'text-slate-700', 'hover:bg-slate-200');
+      btn.classList.add('bg-indigo-600', 'text-white');
+    } else {
+      btn.classList.remove('bg-indigo-600', 'text-white');
+      btn.classList.add('bg-slate-100', 'text-slate-700', 'hover:bg-slate-200');
+    }
+  });
+});
 </script>
 
 <!-- 곧 추가될 도구 -->

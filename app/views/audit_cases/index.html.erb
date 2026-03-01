@@ -77,7 +77,7 @@
         <button onclick="filterBySeverity('보통')" class="severity-filter px-4 py-2 rounded-lg text-xs font-semibold bg-orange-50 text-orange-700 hover:bg-orange-100 transition-all" data-severity="보통">
           보통
         </button>
-        <button onclick="filterBySeverity('경미')" class="severity-filter px-4 py-2 rounded-lg text-xs font-semibold bg-amber-50 text-amber-700 hover:amber-100 transition-all" data-severity="경미">
+        <button onclick="filterBySeverity('경미')" class="severity-filter px-4 py-2 rounded-lg text-xs font-semibold bg-amber-50 text-amber-700 hover:bg-amber-100 transition-all" data-severity="경미">
           경미
         </button>
       </div>
@@ -369,24 +369,35 @@ function updateCaseCount(visible, total) {
 
 // 필터 초기화
 function clearFilters() {
-  // 검색어 초기화
   document.getElementById('case-search').value = '';
-
-  // 심각도 필터 초기화
   currentSeverity = '';
   document.querySelectorAll('.severity-filter').forEach(btn => {
     if (btn.dataset.severity === '') {
       btn.classList.add('active');
-      btn.style.fontWeight = '700';
     } else {
       btn.classList.remove('active');
-      btn.style.fontWeight = '600';
     }
   });
-
-  // 필터 재적용
   filterCases();
 }
+
+// Turbo 캐시 복원 시 필터 상태 초기화 (C-1 fix)
+document.addEventListener('turbo:before-cache', function() {
+  var container = document.getElementById('cases-container');
+  if (!container) return;
+  container.querySelectorAll('.case-item').forEach(function(item) { item.style.display = ''; });
+  var searchEl = document.getElementById('case-search');
+  if (searchEl) searchEl.value = '';
+  var noResults = document.getElementById('no-results');
+  if (noResults) noResults.style.display = 'none';
+  if (container) container.style.display = '';
+  currentSeverity = '';
+  document.querySelectorAll('.severity-filter').forEach(function(btn) {
+    if (btn.dataset.severity === '') { btn.classList.add('active'); }
+    else { btn.classList.remove('active'); }
+    btn.style.removeProperty('font-weight');
+  });
+});
 
 // Iconify 스캔
 if (typeof Iconify !== 'undefined') {

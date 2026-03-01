@@ -114,12 +114,20 @@
           var bar = document.getElementById('exam-notice-bar');
           if (bar) bar.style.display = 'none';
         }
+        window.dismissExamNotice = function() {
+          localStorage.setItem('exam_notice_v1', 'dismissed');
+          var bar = document.getElementById('exam-notice-bar');
+          if (bar) {
+            bar.style.height = bar.offsetHeight + 'px';
+            bar.style.overflow = 'hidden';
+            bar.style.transition = 'height 0.2s';
+            requestAnimationFrame(function() {
+              bar.style.height = '0';
+              setTimeout(function() { bar.style.display = 'none'; }, 200);
+            });
+          }
+        };
       })();
-      function dismissExamNotice() {
-        localStorage.setItem('exam_notice_v1', 'dismissed');
-        var bar = document.getElementById('exam-notice-bar');
-        if (bar) { bar.style.height = bar.offsetHeight + 'px'; bar.style.overflow = 'hidden'; bar.style.transition = 'height 0.2s'; requestAnimationFrame(function(){ bar.style.height = '0'; setTimeout(function(){ bar.style.display = 'none'; }, 200); }); }
-      }
     </script>
 
     <!-- Navigation -->
