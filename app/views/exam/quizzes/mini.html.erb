@@ -70,13 +70,15 @@
       </div>
 
       <!-- 다음 버튼 -->
-      <div data-exam-quiz-target="nextArea" class="hidden mt-6 flex justify-end">
-        <button data-action="click->exam-quiz#nextQuestion"
-                data-exam-quiz-target="nextBtn"
-                class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-3 rounded-xl transition-colors">
-          다음 문제
-          <span class="material-symbols-outlined">arrow_forward</span>
-        </button>
+      <div data-exam-quiz-target="nextArea" class="hidden mt-6">
+        <div class="flex justify-end">
+          <button data-action="click->exam-quiz#nextQuestion"
+                  data-exam-quiz-target="nextBtn"
+                  class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-3 rounded-xl transition-colors">
+            다음 문제
+            <span class="material-symbols-outlined">arrow_forward</span>
+          </button>
+        </div>
       </div>
     </div>
 
