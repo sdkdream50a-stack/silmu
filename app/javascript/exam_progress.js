@@ -1,9 +1,21 @@
 // exam.silmu.kr 학습 진도 localStorage 유틸리티
 const KEY = 'exam_progress'
 
+// v1 → v2 마이그레이션: 4권 "4" 키 → 3과목 "3" 키로 병합 (한 번만 실행)
+function migrateV1QuizKeys(data) {
+  if (!data.quizzes || !data.quizzes["4"]) return data
+  const q4 = data.quizzes["4"]
+  const q3 = data.quizzes["3"]
+  if (!q3 || q4.pct > q3.pct) data.quizzes["3"] = q4
+  delete data.quizzes["4"]
+  persist(data)
+  return data
+}
+
 function load() {
   try {
-    return JSON.parse(localStorage.getItem(KEY)) || { chapters: {}, quizzes: {} }
+    const data = JSON.parse(localStorage.getItem(KEY)) || { chapters: {}, quizzes: {} }
+    return migrateV1QuizKeys(data)
   } catch {
     return { chapters: {}, quizzes: {} }
   }
@@ -154,7 +166,7 @@ export function getStreakCount() {
 export function getStats() {
   const data = load()
   const visitedCount = Object.keys(data.chapters).length
-  const totalChapters = 27
+  const totalChapters = 28
   const quizCount = Object.keys(data.quizzes).length
   const bestPct = quizCount > 0
     ? Math.max(...Object.values(data.quizzes).map(q => q.pct))
