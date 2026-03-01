@@ -1,7 +1,7 @@
 // exam.silmu.kr — 학습 진도 추적 Stimulus 컨트롤러
 // 챕터 방문 기록, 과목 진도바, 모의고사 점수 표시
 import { Controller } from "@hotwired/stimulus"
-import { markChapterVisited, getVisitedChapters, getChapterQuizDones, getAllProgress, getStats, getWrongAnswerCount } from "../exam_progress"
+import { markChapterVisited, getVisitedChapters, getChapterQuizDones, getAllProgress, getStats, getWrongAnswerCount, getStreak } from "../exam_progress"
 
 // 과목별 고정 색상 (Tailwind safelist에 포함된 클래스만 사용)
 const SUBJECT_STYLE = {
@@ -18,7 +18,7 @@ export default class extends Controller {
     chapterNum: Number,
     total: Number
   }
-  static targets = ["badge", "progressBar", "progressText", "scoreArea", "statsArea", "wrongCountArea"]
+  static targets = ["badge", "progressBar", "progressText", "scoreArea", "statsArea", "wrongCountArea", "streakArea"]
 
   connect() {
     // 챕터 페이지: subjectId + chapterNum 값이 있으면 방문 기록
@@ -45,6 +45,10 @@ export default class extends Controller {
     // 모의고사 선택 페이지: 오답 노트 카드
     if (this.hasWrongCountAreaTarget) {
       this.displayWrongCount()
+    }
+    // 스트릭 카드
+    if (this.hasStreakAreaTarget) {
+      this.displayStreak()
     }
   }
 
@@ -197,6 +201,51 @@ export default class extends Controller {
         </a>
       `
     }
+  }
+
+  // ── 학습 스트릭 ──────────────────────────────────
+  displayStreak() {
+    const streak = getStreak()
+    const count = streak.count || 0
+
+    if (count === 0) {
+      this.streakAreaTarget.innerHTML = `
+        <div class="flex items-center justify-between bg-white border border-slate-200 rounded-2xl px-5 py-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center flex-shrink-0">
+              <span class="material-symbols-outlined text-slate-300 text-2xl">local_fire_department</span>
+            </div>
+            <div>
+              <div class="text-slate-700 font-semibold text-sm">학습 스트릭</div>
+              <div class="text-slate-400 text-xs">모의고사를 완료하면 연속 학습일이 기록됩니다</div>
+            </div>
+          </div>
+          <span class="text-slate-300 text-xs font-medium">0일</span>
+        </div>
+      `
+      return
+    }
+
+    const flameCls = count >= 7 ? "text-red-500" : count >= 3 ? "text-orange-500" : "text-amber-400"
+    const bgCls = count >= 7 ? "from-red-500 to-orange-500" : count >= 3 ? "from-orange-400 to-amber-500" : "from-amber-300 to-yellow-400"
+    const label = count >= 30 ? "전설" : count >= 14 ? "대단해요!" : count >= 7 ? "불꽃 학습자" : count >= 3 ? "꾸준해요!" : "시작이 좋아요"
+
+    this.streakAreaTarget.innerHTML = `
+      <div class="bg-gradient-to-r ${bgCls} rounded-2xl px-5 py-4 shadow-md">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
+              <span class="material-symbols-outlined text-white text-2xl">local_fire_department</span>
+            </div>
+            <div>
+              <div class="text-white font-bold">연속 학습 ${count}일째!</div>
+              <div class="text-white/80 text-sm">${label} · 오늘도 학습을 완료하세요</div>
+            </div>
+          </div>
+          <div class="text-white text-3xl font-extrabold">${count}<span class="text-white/70 text-base font-normal">일</span></div>
+        </div>
+      </div>
+    `
   }
 
   // ── 홈 전체 통계 ────────────────────────────────

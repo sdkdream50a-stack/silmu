@@ -9,6 +9,7 @@ Rails.application.routes.draw do
       get 'keywords', to: 'keywords#index', as: :keywords
       get 'quiz', to: 'quizzes#index', as: :quiz_index
       get 'quiz/subject/:subject_id/chapter/:chapter_num', to: 'quizzes#chapter', as: :quiz_chapter
+      get 'quiz/mini', to: 'quizzes#mini', as: :quiz_mini
       get 'quiz/wrong', to: 'quizzes#wrong', as: :quiz_wrong
       get 'quiz/simulation', to: 'quizzes#simulation', as: :quiz_simulation
       get 'quiz/analysis', to: 'quizzes#analysis', as: :quiz_analysis

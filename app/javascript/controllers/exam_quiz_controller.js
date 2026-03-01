@@ -1,6 +1,6 @@
 // exam.silmu.kr — 모의고사 문제풀이 Stimulus 컨트롤러
 import { Controller } from "@hotwired/stimulus"
-import { saveQuizScore, saveChapterQuizDone, saveWrongAnswer, removeWrongAnswer, getWrongAnswerIds } from "../exam_progress"
+import { saveQuizScore, saveChapterQuizDone, saveWrongAnswer, removeWrongAnswer, getWrongAnswerIds, saveStreakToday } from "../exam_progress"
 
 export default class extends Controller {
   static targets = [
@@ -248,6 +248,8 @@ export default class extends Controller {
       if (chapterNum > 0) {
         saveChapterQuizDone(subjectId, chapterNum, pct)
       }
+      // 학습 스트릭 업데이트
+      saveStreakToday()
     }
 
     // 등급 결정

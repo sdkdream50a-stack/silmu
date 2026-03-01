@@ -39,6 +39,40 @@
 <!-- 전체 모의고사 -->
 <section class="py-10 px-4 bg-slate-50">
   <div class="max-w-5xl mx-auto">
+    <!-- 미니 퀴즈 + 스트릭 -->
+    <div class="flex flex-col sm:flex-row gap-4 mb-4" data-controller="exam-progress">
+      <!-- 미니 퀴즈 -->
+      <a href="<%= exam_quiz_mini_path %>"
+         class="group flex-1 flex items-center gap-4 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-2xl px-5 py-4 hover:from-emerald-600 hover:to-teal-600 transition-all shadow-md hover:shadow-lg">
+        <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
+          <span class="material-symbols-outlined text-white text-2xl">bolt</span>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="text-emerald-100 text-xs font-medium mb-0.5">빠른 복습</div>
+          <div class="text-white font-bold">미니 퀴즈</div>
+          <div class="text-emerald-100 text-xs">랜덤 10문제 · 약 15분</div>
+        </div>
+        <span class="material-symbols-outlined text-white/70 group-hover:text-white transition-colors">arrow_forward</span>
+      </a>
+
+      <!-- 스트릭 영역 -->
+      <div class="flex-1" data-exam-progress-target="streakArea">
+        <!-- JS로 채워짐 -->
+        <div class="h-full flex items-center justify-between bg-white border border-slate-200 rounded-2xl px-5 py-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center">
+              <span class="material-symbols-outlined text-slate-300 text-2xl">local_fire_department</span>
+            </div>
+            <div>
+              <div class="text-slate-700 font-semibold text-sm">학습 스트릭</div>
+              <div class="text-slate-400 text-xs">모의고사 완료 후 기록</div>
+            </div>
+          </div>
+          <span class="text-slate-300 text-xs">0일</span>
+        </div>
+      </div>
+    </div>
+
     <!-- 실전 시험 모드 배너 -->
     <a href="<%= exam_quiz_simulation_path %>"
        class="group block bg-gradient-to-r from-purple-700 to-indigo-700 rounded-2xl p-6 hover:from-purple-800 hover:to-indigo-800 transition-all shadow-lg hover:shadow-xl mb-4">

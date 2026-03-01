@@ -2,6 +2,18 @@ module Exam
   class QuizzesController < ApplicationController
     layout "exam"
 
+    # GET /quiz/mini — 랜덤 10문제 미니 퀴즈
+    def mini
+      all_raw = ExamQuestions.all
+      @questions = all_raw.sample(10).map { |q| q.slice(:id, :question, :options, :correct, :explanation, :subject_id, :chapter_num) }
+      @chapter_map = ExamCurriculum.chapter_map
+      set_meta_tags(
+        title: "미니 퀴즈 — 랜덤 10문제",
+        description: "공공조달관리사 랜덤 10문제 미니 퀴즈. 빈 시간에 짧게 실력을 점검하세요. 즉시 채점·상세 해설 제공.",
+        keywords: "공공조달관리사 미니 퀴즈, 랜덤 문제, 빠른 복습"
+      )
+    end
+
     # GET /quiz — 과목 선택 화면
     def index
       @subjects = ExamCurriculum::SUBJECTS
