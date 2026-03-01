@@ -652,7 +652,7 @@ module ExamCurriculum
       subtitle: "전자조달기반 수행절차 일반",
       color: "rose",
       icon: "settings",
-      total_chapters: 8,
+      total_chapters: 9,
       chapters: [
         {
           number: 1,
@@ -882,6 +882,72 @@ module ExamCurriculum
             "사회적기업 육성법: 사회적기업 생산품 우선구매 의무"
           ],
           related_topic_slugs: ["national-vs-local-contract-law"]
+        },
+        {
+          number: 9,
+          title: "공공예산관리 실무",
+          sections: [
+            "예산과목 체계 및 편성 기준",
+            "예산 집행 절차 및 지출원인행위",
+            "예산 이용·전용·이월",
+            "추가경정예산 편성",
+            "예비비 편성 및 사용",
+            "결산 절차",
+            "국고보조금 관리",
+            "지방채 발행 및 재정건전성",
+            "지방자치단체 복식부기 회계"
+          ],
+          learning_objectives: [
+            "예산과목(장·관·항·세항·세세항·목) 체계 이해",
+            "예산 집행 절차와 지출원인행위의 개념 이해",
+            "예산 이용·전용·전용의 허용 요건과 절차 이해",
+            "추가경정예산 편성 요건과 절차 이해",
+            "예비비 한도 및 사용 절차 이해",
+            "결산 절차와 의회 승인 과정 이해",
+            "국고보조금 집행·정산·반납 절차 이해",
+            "지방채 발행 요건과 채무비율 기준 이해",
+            "복식부기 회계(재정상태표·재정운영표) 개념 이해"
+          ],
+          keywords: [
+            "예산과목",
+            "지출원인행위",
+            "이용·전용",
+            "이월(명시이월·사고이월)",
+            "추가경정예산",
+            "예비비(일반예비비·목적예비비)",
+            "결산",
+            "국고보조금",
+            "지방채",
+            "채무비율",
+            "복식부기",
+            "발생주의"
+          ],
+          exam_points: [
+            "지출원인행위: 계약 체결 시 예산을 지정·확보하는 행위 — 집행의 시작",
+            "이용: 예산의 장(章) 간 상호 융통 — 의회 의결 필요",
+            "전용: 세항·목 간 융통 — 행정안전부장관 또는 단체장 승인",
+            "명시이월: 연도 내 지출 못할 것이 명백한 경우 예산으로 미리 의결",
+            "사고이월: 불가피한 사유로 연도 내 미집행 → 다음 연도로 이월",
+            "예비비 한도: 일반회계 예산 총액의 1% 이내 (지방재정법 제43조)",
+            "결산 의회 제출: 회계연도 종료 후 90일 이내",
+            "국고보조금: 용도 외 사용 시 반납 의무, 지도·감독 수인 의무",
+            "지방채 행안부 승인: 채무비율 25% 초과 시 필요",
+            "복식부기 4대 재무제표: 재정상태표·재정운영표·현금흐름표·순자산변동표"
+          ],
+          related_topic_slugs: [
+            "budget-item-standard",
+            "expenditure-commitment",
+            "budget-execution",
+            "budget-transfer",
+            "budget-lapse",
+            "supplementary-budget",
+            "contingency-fund",
+            "budget-settlement",
+            "national-subsidy",
+            "public-debt-management",
+            "local-government-accounting",
+            "accounting-officers"
+          ]
         }
       ]
     }
