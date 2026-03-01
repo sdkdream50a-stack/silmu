@@ -135,6 +135,10 @@ class Topic < ApplicationRecord
     Rails.cache.delete("topics/all_published_v2")
     Rails.cache.delete("topic_related/#{slug}")
     Rails.cache.delete("topic_audit_cases/#{slug}")
+    # 뷰 fragment cache 무효화: 토픽 내용 변경 시 버전 증가 → 캐시 키가 달라져 자연 무효화
+    if saved_change_to_name? || saved_change_to_summary? || saved_change_to_published? || saved_change_to_category?
+      Rails.cache.increment("topics/fragment_version")
+    end
   end
 
   def generate_slug

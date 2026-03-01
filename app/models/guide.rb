@@ -26,9 +26,10 @@ class Guide < ApplicationRecord
     self[:sections].present?
   end
 
+  # update_counters는 updated_at을 갱신하지 않으므로 캐시 타임스탬프 무효화 불요
+  # popular 캐시는 1시간 TTL로 자연 만료시킴 (매 조회마다 삭제 → 불필요한 DB 쿼리 유발 방지)
   def increment_view!
     self.class.update_counters(id, view_count: 1)
-    Rails.cache.delete("guides/popular")
   end
 
   private

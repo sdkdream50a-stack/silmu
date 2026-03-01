@@ -138,7 +138,7 @@
             <% end %>
           </div>
           <% else %>
-          <% cache ["audit_cases/cards/v2", @audit_cases.size, @audit_cases.first&.updated_at], expires_in: 30.minutes do %>
+          <% cache ["audit_cases/cards/v3", @audit_cases.size, @fragment_version], expires_in: 30.minutes do %>
           <div class="space-y-4" id="cases-container">
             <% @audit_cases.each do |audit_case| %>
               <%= link_to audit_case_path(slug: audit_case.slug), class: "block card card-hover p-6 group case-item", data: { title: audit_case.title.downcase, issue: audit_case.issue.truncate(100).downcase, severity: audit_case.severity } do %>

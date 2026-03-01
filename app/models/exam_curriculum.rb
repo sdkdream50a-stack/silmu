@@ -953,31 +953,48 @@ module ExamCurriculum
     }
   ].freeze
 
-  # 챕터 키→제목 맵 { "1-1" => { title: ..., subject_number: ... } }
-  def self.chapter_map
+  # 챕터 키→제목 맵 (메모이제이션: 매 호출마다 재구축 방지)
+  # { "1-1" => { title: ..., subject_number: ... } }
+  CHAPTER_MAP = begin
     result = {}
     SUBJECTS.each do |s|
       s[:chapters].each do |c|
         result["#{s[:id]}-#{c[:number]}"] = { title: c[:title], subject_number: s[:number] }
       end
     end
-    result
+    result.freeze
   end
 
-  # 과목 찾기
+  def self.chapter_map
+    CHAPTER_MAP
+  end
+
+  # 과목 인덱스 (메모이제이션: find 호출마다 배열 순회 방지)
+  SUBJECTS_BY_ID = SUBJECTS.index_by { |s| s[:id] }.freeze
+
+  # 챕터 인덱스 { "subject_id-chapter_number" => chapter_hash }
+  CHAPTERS_INDEX = begin
+    result = {}
+    SUBJECTS.each do |s|
+      s[:chapters].each do |c|
+        result["#{s[:id]}-#{c[:number]}"] = c
+      end
+    end
+    result.freeze
+  end
+
+  # 과목 찾기 — O(1) 해시 조회
   def self.find_subject(id)
-    SUBJECTS.find { |s| s[:id] == id.to_i }
+    SUBJECTS_BY_ID[id.to_i]
   end
 
-  # 챕터 찾기
+  # 챕터 찾기 — O(1) 해시 조회
   def self.find_chapter(subject_id, chapter_number)
-    subject = find_subject(subject_id)
-    return nil unless subject
-    subject[:chapters].find { |c| c[:number] == chapter_number.to_i }
+    CHAPTERS_INDEX["#{subject_id.to_i}-#{chapter_number.to_i}"]
   end
 
-  # 전체 키워드 목록 (과목·챕터 정보 포함)
-  def self.all_keywords
+  # 전체 키워드 목록 (메모이제이션: 3중 루프 재구축 방지)
+  ALL_KEYWORDS = begin
     result = []
     SUBJECTS.each do |subject|
       subject[:chapters].each do |chapter|
@@ -994,7 +1011,11 @@ module ExamCurriculum
         end
       end
     end
-    result
+    result.freeze
+  end
+
+  def self.all_keywords
+    ALL_KEYWORDS
   end
 
   # 과목별 색상 Tailwind 클래스

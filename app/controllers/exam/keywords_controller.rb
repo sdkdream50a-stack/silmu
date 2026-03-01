@@ -33,6 +33,9 @@ class Exam::KeywordsController < ApplicationController
 
     @total_count = @all_keywords.size
 
+    # 정적 콘텐츠이므로 HTTP 캐싱 (필터/검색 파라미터가 있어도 동일 데이터)
+    expires_in 1.hour, public: true, stale_while_revalidate: 1.day
+
     set_meta_tags(
       title: "핵심 용어집 — 정의·예시·문제 연결",
       description: "공공조달관리사 표준교재 4권 핵심 용어 #{@total_count}개 완전 정리. 용어 정의, 실무 예시 문장, 관련 모의고사 문제까지 한 번에 확인하세요.",

@@ -4,6 +4,9 @@ class Exam::SubjectsController < ApplicationController
   def index
     @subjects = ExamCurriculum::SUBJECTS
 
+    # 정적 콘텐츠이므로 HTTP 캐싱
+    expires_in 1.hour, public: true, stale_while_revalidate: 1.day
+
     set_meta_tags(
       title: "4권 커리큘럼",
       description: "공공조달관리사 표준교재 4권(27장) 기반 체계적 학습 커리큘럼. 1권 공공조달의 이해, 2권 계획분석, 3권 계약관리, 4권 관리실무.",
@@ -19,6 +22,9 @@ class Exam::SubjectsController < ApplicationController
     @colors = ExamCurriculum.colors(@subject[:color])
     @prev_subject = ExamCurriculum.find_subject(@subject[:id] - 1)
     @next_subject = ExamCurriculum.find_subject(@subject[:id] + 1)
+
+    # 정적 콘텐츠이므로 HTTP 캐싱
+    expires_in 1.hour, public: true, stale_while_revalidate: 1.day
 
     set_meta_tags(
       title: "#{@subject[:number]}: #{@subject[:title]}",

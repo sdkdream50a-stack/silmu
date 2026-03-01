@@ -13,6 +13,8 @@ class AuditCasesController < ApplicationController
     @audit_cases = all_cases
     @audit_cases = @audit_cases.select { |ac| ac.category == @category } if @category.present?
     @audit_cases = @audit_cases.select { |ac| ac.severity == @severity } if @severity.present?
+    # 뷰 fragment cache 버전
+    @fragment_version = Rails.cache.read("audit_cases/fragment_version") || 0
 
     # HTTP 캐싱: 5분간 캐시
     expires_in 5.minutes, public: true, stale_while_revalidate: 1.hour

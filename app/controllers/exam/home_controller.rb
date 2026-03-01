@@ -2,6 +2,9 @@ class Exam::HomeController < ApplicationController
   layout 'exam'
 
   def index
+    # 정적 콘텐츠이므로 HTTP 캐싱
+    expires_in 1.hour, public: true, stale_while_revalidate: 1.day
+
     set_meta_tags(
       title: "공공조달관리사 시험 대비",
       description: "2026년 신설 공공조달관리사 국가기술자격 시험 대비. 법령 핵심 정리, 감사사례, 실무 도구 제공.",

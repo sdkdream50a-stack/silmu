@@ -167,6 +167,8 @@ class TopicsController < ApplicationController
     @contract_subgroups = build_contract_subgroups(@topics_by_category["contract"] || [])
 
     @total_count = all_topics.size
+    # 뷰 fragment cache 버전 (토픽 내용 변경 시 increment → 캐시 자동 무효화)
+    @fragment_version = Rails.cache.read("topics/fragment_version") || 0
 
     # HTTP 캐싱: CDN/브라우저에서 5분간 캐시, stale-while-revalidate로 백그라운드 갱신
     expires_in 5.minutes, public: true, stale_while_revalidate: 1.hour

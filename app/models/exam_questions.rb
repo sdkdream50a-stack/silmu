@@ -11904,9 +11904,17 @@ module ExamQuestions
     },
   ].freeze
 
-  # 과목별 문제 필터
+  # 과목별 문제 인덱스 (메모이제이션: by_subject 호출마다 400문제 순회 방지)
+  # { subject_id => [question, ...] }
+  QUESTIONS_BY_SUBJECT = QUESTIONS.group_by { |q| q[:subject_id] }.freeze
+
+  # 챕터별 문제 인덱스 (메모이제이션: by_chapter 호출마다 400문제 순회 방지)
+  # { "subject_id-chapter_num" => [question, ...] }
+  QUESTIONS_BY_CHAPTER = QUESTIONS.group_by { |q| "#{q[:subject_id]}-#{q[:chapter_num]}" }.freeze
+
+  # 과목별 문제 필터 — O(1) 해시 조회
   def self.by_subject(subject_id)
-    QUESTIONS.select { |q| q[:subject_id] == subject_id.to_i }
+    QUESTIONS_BY_SUBJECT[subject_id.to_i] || []
   end
 
   # 전체 문제 (무작위 순서)
@@ -11929,32 +11937,42 @@ module ExamQuestions
     by_subject(subject_id).size
   end
 
-  # 챕터별 문제 (chapter_num 필드 기반 직접 필터링)
+  # 챕터별 문제 — O(1) 해시 조회
   def self.by_chapter(subject_id, chapter_num)
-    sid = subject_id.to_i
-    ch  = chapter_num.to_i
-    QUESTIONS.select { |q| q[:subject_id] == sid && q[:chapter_num] == ch }
+    QUESTIONS_BY_CHAPTER["#{subject_id.to_i}-#{chapter_num.to_i}"] || []
+  end
+
+  # 챕터별 ID 목록 (메모이제이션: 호출 시마다 400문제 순회 방지)
+  # { "1-1" => [1,2,3,...], "1-2" => [8,9,...] }
+  CHAPTER_IDS = begin
+    result = {}
+    QUESTIONS.each do |q|
+      key = "#{q[:subject_id]}-#{q[:chapter_num]}"
+      (result[key] ||= []) << q[:id]
+    end
+    result.each_value(&:sort!)
+    result.freeze
+  end
+
+  # 문제별 난이도 맵 (메모이제이션: with_difficulty 호출마다 index 탐색 제거)
+  # { question_id => "basic" | "advanced" }
+  DIFFICULTY_MAP = begin
+    result = {}
+    CHAPTER_IDS.each do |_key, ids|
+      threshold = (ids.size * 0.6).ceil
+      ids.each_with_index do |id, idx|
+        result[id] = idx < threshold ? "basic" : "advanced"
+      end
+    end
+    result.freeze
   end
 
   # 난이도 태그 부여 (챕터 내 ID 정렬 기준: 하위 60% = 기초, 상위 40% = 심화)
   # 반환값: 원본 해시에 difficulty: "basic" | "advanced" 추가
+  # 메모이제이션된 DIFFICULTY_MAP 사용 → O(n) 단순 merge만 수행
   def self.with_difficulty(questions)
-    # 챕터별 ID 목록 구성 (정렬된 순서로 인덱스 결정)
-    chapter_ids = {}
-    QUESTIONS.each do |q|
-      key = "#{q[:subject_id]}-#{q[:chapter_num]}"
-      chapter_ids[key] ||= []
-      chapter_ids[key] << q[:id]
-    end
-    chapter_ids.each_value(&:sort!)
-
     questions.map do |q|
-      key = "#{q[:subject_id]}-#{q[:chapter_num]}"
-      ids = chapter_ids[key] || []
-      idx = ids.index(q[:id]) || 0
-      threshold = (ids.size * 0.6).ceil
-      difficulty = idx < threshold ? "basic" : "advanced"
-      q.merge(difficulty: difficulty)
+      q.merge(difficulty: DIFFICULTY_MAP[q[:id]] || "basic")
     end
   end
 end

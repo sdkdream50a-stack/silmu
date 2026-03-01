@@ -60,6 +60,10 @@ class AuditCase < ApplicationRecord
     Rails.cache.delete("audit_cases/all_published")
     Rails.cache.delete("audit_case_topic/#{slug}")
     Rails.cache.delete("audit_case_related/#{slug}")
+    # 뷰 fragment cache 무효화: 내용 변경 시 버전 증가
+    if saved_change_to_title? || saved_change_to_issue? || saved_change_to_published?
+      Rails.cache.increment("audit_cases/fragment_version")
+    end
   end
 
   def generate_slug

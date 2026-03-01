@@ -10,6 +10,9 @@ class Exam::ChaptersController < ApplicationController
 
     @colors = ExamCurriculum.colors(@subject[:color])
 
+    # 정적 콘텐츠이므로 HTTP 캐싱
+    expires_in 1.hour, public: true, stale_while_revalidate: 1.day
+
     # 이전/다음 챕터
     chapters = @subject[:chapters]
     current_index = chapters.index { |c| c[:number] == @chapter[:number] }
