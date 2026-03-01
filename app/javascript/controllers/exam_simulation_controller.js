@@ -1,9 +1,9 @@
 // exam.silmu.kr — 실전 시험 모드 Stimulus 컨트롤러
-// 100분 타이머 + 랜덤 순서 + 마지막에 일괄 채점
+// 120분 타이머 + 3과목 80문제 + 마지막에 일괄 채점
 import { Controller } from "@hotwired/stimulus"
 import { saveQuizScore, saveWrongAnswer, removeWrongAnswer } from "../exam_progress"
 
-const EXAM_DURATION = 100 * 60  // 100분 (초 단위)
+const EXAM_DURATION = 120 * 60  // 120분 (초 단위)
 
 export default class extends Controller {
   static targets = [
@@ -249,24 +249,26 @@ export default class extends Controller {
     const timeUsedMin = Math.floor(timeUsed / 60)
     const timeUsedSec = timeUsed % 60
 
-    // 과목별 분석
-    const subjectStats = {}
+    // 과목별 분석 (3과목 기준: subject_id 1→1과목, 2→2과목, 3·4→3과목)
+    const examSubjectMap = { 1: 1, 2: 2, 3: 3, 4: 3 }
+    const examSubjectStats = {}
     this.questions.forEach((q, i) => {
-      const sid = q.subject_id
-      if (!subjectStats[sid]) subjectStats[sid] = { total: 0, correct: 0 }
-      subjectStats[sid].total++
-      if (this.answers[i] === q.correct) subjectStats[sid].correct++
+      const esid = examSubjectMap[q.subject_id] || q.subject_id
+      if (!examSubjectStats[esid]) examSubjectStats[esid] = { total: 0, correct: 0 }
+      examSubjectStats[esid].total++
+      if (this.answers[i] === q.correct) examSubjectStats[esid].correct++
     })
 
-    const subjectNames = { 1: "공공조달의 이해", 2: "공공조달 계획분석", 3: "공공계약관리", 4: "공공조달 관리실무" }
-    const subjectColors = { 1: "emerald", 2: "blue", 3: "violet", 4: "rose" }
+    const subjectNames = { 1: "법제도의 이해", 2: "조달계획 수립 및 분석", 3: "계약 관리" }
+    const subjectColors = { 1: "emerald", 2: "blue", 3: "violet" }
 
-    const subjectRows = Object.entries(subjectStats).map(([sid, stat]) => {
+    const subjectRows = [1, 2, 3].filter(esid => examSubjectStats[esid]).map(esid => {
+      const stat = examSubjectStats[esid]
       const spct = Math.round((stat.correct / stat.total) * 100)
-      const c = subjectColors[sid]
+      const c = subjectColors[esid]
       return `
         <div class="flex items-center gap-3">
-          <div class="text-xs text-${c}-600 font-bold w-16 flex-shrink-0">${sid}권</div>
+          <div class="text-xs text-${c}-600 font-bold w-16 flex-shrink-0">${esid}과목</div>
           <div class="flex-1 bg-slate-100 rounded-full h-2">
             <div class="bg-${c}-500 h-2 rounded-full" style="width:${spct}%"></div>
           </div>

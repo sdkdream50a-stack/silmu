@@ -31,16 +31,18 @@ module Exam
       )
     end
 
-    # GET /quiz/simulation — 실전 시험 모드 (100분 타이머 + 랜덤 + 일괄채점)
+    # GET /quiz/simulation — 실전 시험 모드 (120분 타이머 + 3과목 80문제 + 일괄채점)
     def simulation
-      @questions = ExamQuestions.all.map { |q| q.slice(*QUESTION_FIELDS) }
-
-      # 문제 데이터가 변경되지 않으므로 HTTP 캐싱
-      expires_in 1.hour, public: true, stale_while_revalidate: 1.day
+      # 3과목 기준 80문제 샘플링: 1과목 30 + 2과목 20 + 3과목 30
+      q1 = ExamQuestions.by_exam_subject(1).sample(30)
+      q2 = ExamQuestions.by_exam_subject(2).sample(20)
+      q3 = ExamQuestions.by_exam_subject(3).sample(30)
+      raw = (q1 + q2 + q3).shuffle.map { |q| q.slice(*QUESTION_FIELDS) }
+      @questions = ExamQuestions.with_difficulty(raw)
 
       set_meta_tags(
         title: "실전 시험 모드",
-        description: "공공조달관리사 실전 시험 모드 — #{@questions.size}문제 100분 타이머. 랜덤 순서로 풀고 마지막에 일괄 채점합니다.",
+        description: "공공조달관리사 실전 시험 모드 — 3과목 80문제 120분 타이머. 실제 시험과 동일한 환경으로 도전하세요.",
         keywords: "공공조달관리사 실전 시험, 공공조달 모의고사 타이머"
       )
     end
