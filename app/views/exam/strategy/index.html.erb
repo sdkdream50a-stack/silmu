@@ -25,16 +25,16 @@
         <div class="text-amber-300 text-sm">합격 기준</div>
       </div>
       <div class="text-center">
-        <div class="text-2xl font-bold text-yellow-300">4과목</div>
-        <div class="text-amber-300 text-sm">시험 범위</div>
+        <div class="text-2xl font-bold text-yellow-300">3과목</div>
+        <div class="text-amber-300 text-sm">필기 시험 범위</div>
       </div>
       <div class="text-center">
-        <div class="text-2xl font-bold text-yellow-300">100분</div>
-        <div class="text-amber-300 text-sm">시험 시간</div>
+        <div class="text-2xl font-bold text-yellow-300">120분</div>
+        <div class="text-amber-300 text-sm">필기 시험 시간</div>
       </div>
       <div class="text-center">
-        <div class="text-2xl font-bold text-yellow-300">4지선다</div>
-        <div class="text-amber-300 text-sm">문제 형식</div>
+        <div class="text-2xl font-bold text-yellow-300">CBT</div>
+        <div class="text-amber-300 text-sm">필기 시험 방식</div>
       </div>
     </div>
   </div>
@@ -409,12 +409,11 @@
     </h2>
     <p class="text-slate-500 text-sm mb-6">각 과목의 예상 출제 문항 수와 집중해야 할 챕터입니다.</p>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
       <% [
-        { vol: "1권", title: "공공조달의 이해", pct: 25, color_bar: "bg-emerald-500", color_text: "text-emerald-600", color_bg: "bg-emerald-50", color_border: "border-emerald-200", questions: "약 25문항", focus: "VFM·조달 원칙·수명주기" },
-        { vol: "2권", title: "공공조달 계획분석", pct: 25, color_bar: "bg-blue-500", color_text: "text-blue-600", color_bg: "bg-blue-50", color_border: "border-blue-200", questions: "약 25문항", focus: "법령 체계·입찰 자격·수의계약" },
-        { vol: "3권", title: "공공계약관리", pct: 25, color_bar: "bg-violet-500", color_text: "text-violet-600", color_bg: "bg-violet-50", color_border: "border-violet-200", questions: "약 25문항", focus: "보증금·지체상금·계약 변경" },
-        { vol: "4권", title: "공공조달 관리실무", pct: 25, color_bar: "bg-rose-500", color_text: "text-rose-600", color_bg: "bg-rose-50", color_border: "border-rose-200", questions: "약 25문항", focus: "MAS·사회적 가치·디지털조달" }
+        { vol: "1과목", title: "법제도의 이해", pct: 37, color_bar: "bg-emerald-500", color_text: "text-emerald-600", color_bg: "bg-emerald-50", color_border: "border-emerald-200", questions: "30문항", focus: "계약법·조달사업법·나라장터" },
+        { vol: "2과목", title: "조달계획 수립 및 분석", pct: 25, color_bar: "bg-blue-500", color_text: "text-blue-600", color_bg: "bg-blue-50", color_border: "border-blue-200", questions: "20문항", focus: "수요·공급 분석·예정가격 산정" },
+        { vol: "3과목", title: "계약 관리", pct: 37, color_bar: "bg-violet-500", color_text: "text-violet-600", color_bg: "bg-violet-50", color_border: "border-violet-200", questions: "30문항", focus: "입찰·낙찰·계약이행·대금지급" }
       ].each do |s| %>
       <div class="<%= s[:color_bg] %> border <%= s[:color_border] %> rounded-2xl p-5">
         <div class="flex items-center justify-between mb-3">
@@ -434,7 +433,7 @@
     <div class="bg-white border border-slate-200 rounded-xl px-5 py-4 flex items-start gap-3">
       <span class="material-symbols-outlined text-slate-400 text-lg flex-shrink-0 mt-0.5">info</span>
       <p class="text-slate-600 text-sm">
-        4과목 균등 출제 (각 25%) 구조지만, <strong>2권(법령 조문)</strong>과 <strong>3권(계약 실무)</strong>이 상대적으로 어렵습니다. 취약 과목에 20~30% 추가 시간을 배분하세요.
+        1과목(30문항)·3과목(30문항)이 각 37.5%, 2과목(20문항)이 25% 비중입니다. <strong>1과목(법령)</strong>과 <strong>3과목(계약실무)</strong>에 비중을 두어 학습하세요. 총 80문제 중 48개 이상 맞추면 합격입니다.
       </p>
     </div>
   </div>
