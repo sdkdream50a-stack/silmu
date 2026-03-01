@@ -1,0 +1,245 @@
+<%# 성과상여금 계산기 %>
+
+<section class="section py-10">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- 뒤로가기 -->
+    <div class="mb-6">
+      <%= link_to tools_path, class: "inline-flex items-center text-slate-600 hover:text-indigo-600 transition-colors font-medium" do %>
+        <span class="material-symbols-outlined mr-1">arrow_back</span>
+        도구 목록으로
+      <% end %>
+    </div>
+
+    <!-- 페이지 헤더 -->
+    <div class="mb-8">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="icon-container icon-container-lg gradient-amber shadow-lg">
+          <span class="material-symbols-outlined text-3xl text-white">emoji_events</span>
+        </div>
+        <div>
+          <h1 class="text-2xl font-bold text-slate-900">성과상여금 계산기</h1>
+          <p class="text-slate-600 mt-1">공무원 성과등급별 성과상여금 자동 계산</p>
+        </div>
+      </div>
+      <div class="bg-amber-50 border border-amber-200 rounded-xl p-4">
+        <p class="text-sm text-amber-800">
+          <strong>공무원수당 등에 관한 규정 제7조의2 (성과상여금)</strong> 기준: 개인성과평가 결과에 따라 연 1~2회 지급하는 상여금을 계산합니다.
+          기관별·계급별 지급율이 다를 수 있으니 참고용으로 활용하세요.
+        </p>
+      </div>
+    </div>
+
+    <!-- 계산기 -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- 입력 패널 -->
+      <div class="card p-6">
+        <h2 class="text-lg font-bold text-slate-900 mb-5 flex items-center gap-2">
+          <span class="material-symbols-outlined text-amber-500">edit</span>
+          입력 정보
+        </h2>
+
+        <div class="space-y-5">
+          <!-- 월봉급액 -->
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-2">
+              기준일 현재 월봉급액
+              <span class="ml-1 text-xs text-slate-400 font-normal">원</span>
+            </label>
+            <input type="number" id="monthly-salary" placeholder="예: 3800000"
+              class="w-full border border-slate-200 rounded-lg px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-amber-400 bg-slate-50"
+              oninput="calculate()">
+            <p class="text-xs text-slate-400 mt-1">※ 각종 수당 제외, 기본 봉급액만 입력</p>
+          </div>
+
+          <!-- 성과등급 -->
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-2">성과등급 (평가 결과)</label>
+            <div class="grid grid-cols-3 gap-2" id="grade-selector">
+              <button type="button" onclick="selectGrade('S')"
+                class="grade-btn px-4 py-3 rounded-xl border-2 border-slate-200 text-sm font-bold transition-all hover:border-amber-400 text-slate-600"
+                data-grade="S">
+                S등급
+                <div class="text-xs font-normal text-slate-400 mt-0.5">최우수 (172.5%)</div>
+              </button>
+              <button type="button" onclick="selectGrade('A')"
+                class="grade-btn px-4 py-3 rounded-xl border-2 border-amber-400 bg-amber-50 text-sm font-bold transition-all text-amber-700"
+                data-grade="A">
+                A등급
+                <div class="text-xs font-normal text-amber-500 mt-0.5">우수 (125%)</div>
+              </button>
+              <button type="button" onclick="selectGrade('B')"
+                class="grade-btn px-4 py-3 rounded-xl border-2 border-slate-200 text-sm font-bold transition-all hover:border-amber-400 text-slate-600"
+                data-grade="B">
+                B등급
+                <div class="text-xs font-normal text-slate-400 mt-0.5">보통 (85%)</div>
+              </button>
+            </div>
+            <p class="text-xs text-slate-400 mt-2">※ C등급(미흡) 이하는 성과상여금 미지급</p>
+          </div>
+
+          <!-- 지급 횟수 -->
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-2">연간 지급 횟수</label>
+            <select id="pay-count" onchange="calculate()"
+              class="w-full border border-slate-200 rounded-lg px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-amber-400 bg-slate-50">
+              <option value="1">연 1회 (기관 지정)</option>
+              <option value="2">연 2회 (상·하반기)</option>
+            </select>
+            <p class="text-xs text-slate-400 mt-1">※ 기관별로 지급 횟수가 다름</p>
+          </div>
+
+          <!-- 지급 방식 -->
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-2">지급 방식</label>
+            <select id="pay-method" onchange="calculate()"
+              class="w-full border border-slate-200 rounded-lg px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-amber-400 bg-slate-50">
+              <option value="individual">개인 성과 방식</option>
+              <option value="group">부서 성과 포함 방식 (지급율 × 70%)</option>
+            </select>
+          </div>
+        </div>
+
+        <button onclick="calculate()"
+          class="w-full mt-6 px-6 py-3.5 bg-amber-500 text-white font-bold rounded-xl hover:bg-amber-600 transition-colors text-base shadow-md">
+          계산하기
+        </button>
+      </div>
+
+      <!-- 결과 패널 -->
+      <div class="space-y-4">
+        <!-- 선택 등급 표시 -->
+        <div class="card p-5 bg-slate-50">
+          <div class="text-sm font-semibold text-slate-600 mb-1">선택 등급 / 지급율</div>
+          <div id="grade-display" class="text-xl font-bold text-amber-600">A등급 / 125%</div>
+        </div>
+
+        <!-- 성과상여금 -->
+        <div class="card p-6 bg-gradient-to-br from-amber-50 to-yellow-50 border-2 border-amber-200">
+          <div class="text-sm font-semibold text-amber-700 mb-2">성과상여금 (1회 지급액)</div>
+          <div id="bonus-amount" class="text-4xl font-bold text-amber-700 mb-1">0원</div>
+          <div id="bonus-formula" class="text-xs text-amber-600 mt-2">월봉급액 × 지급율</div>
+        </div>
+
+        <!-- 연간 합계 (2회 지급 시) -->
+        <div id="annual-section" class="card p-5 hidden">
+          <div class="text-sm font-semibold text-slate-700 mb-1">연간 성과상여금 합계</div>
+          <div id="annual-amount" class="text-2xl font-bold text-slate-800">0원</div>
+          <div class="text-xs text-slate-400 mt-1">상반기 + 하반기 동일 등급 가정</div>
+        </div>
+
+        <!-- 등급별 지급율 비교 -->
+        <div class="card p-5">
+          <div class="text-sm font-bold text-slate-700 mb-3">등급별 지급율 비교 (5급 이상 일반직 기준)</div>
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-semibold text-amber-700">S등급 (최우수 · 상위 20%)</span>
+              <span class="text-sm font-bold text-amber-700">172.5%</span>
+            </div>
+            <div class="w-full bg-slate-100 rounded-full h-2">
+              <div class="bg-amber-500 h-2 rounded-full" style="width: 100%"></div>
+            </div>
+            <div class="flex items-center justify-between mt-2">
+              <span class="text-sm font-semibold text-amber-600">A등급 (우수 · 상위 30%)</span>
+              <span class="text-sm font-bold text-amber-600">125%</span>
+            </div>
+            <div class="w-full bg-slate-100 rounded-full h-2">
+              <div class="bg-amber-400 h-2 rounded-full" style="width: 72.5%"></div>
+            </div>
+            <div class="flex items-center justify-between mt-2">
+              <span class="text-sm font-semibold text-slate-600">B등급 (보통 · 나머지)</span>
+              <span class="text-sm font-bold text-slate-600">85%</span>
+            </div>
+            <div class="w-full bg-slate-100 rounded-full h-2">
+              <div class="bg-slate-400 h-2 rounded-full" style="width: 49.3%"></div>
+            </div>
+            <div class="flex items-center justify-between mt-2">
+              <span class="text-sm font-semibold text-red-400">C등급 이하</span>
+              <span class="text-sm font-bold text-red-400">0% (미지급)</span>
+            </div>
+          </div>
+          <p class="text-xs text-slate-400 mt-3">※ 계급별·기관별 지급율 상이, 위 기준은 5급 이상 일반직 적용</p>
+        </div>
+
+        <!-- 주의사항 -->
+        <div class="bg-blue-50 border border-blue-200 rounded-xl p-4">
+          <div class="flex gap-2">
+            <span class="material-symbols-outlined text-blue-600 text-lg mt-0.5">info</span>
+            <div class="text-sm text-blue-800">
+              <p class="font-semibold mb-1">계급별 지급율 차이</p>
+              <ul class="space-y-1 text-xs">
+                <li>• <strong>5급 이상:</strong> S 172.5% / A 125% / B 85%</li>
+                <li>• <strong>6급 이하:</strong> S 170% / A 120% / B 80%</li>
+                <li>• <strong>연구·지도직:</strong> 별도 기준 적용</li>
+                <li>• 기관장 재량으로 ±10% 조정 가능</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  let selectedGrade = 'A';
+
+  const RATES = {
+    S: { label: 'S등급 (최우수)', rate: 1.725 },
+    A: { label: 'A등급 (우수)',   rate: 1.25  },
+    B: { label: 'B등급 (보통)',   rate: 0.85  }
+  };
+
+  function selectGrade(grade) {
+    selectedGrade = grade;
+    document.querySelectorAll('.grade-btn').forEach(btn => {
+      if (btn.dataset.grade === grade) {
+        btn.classList.add('border-amber-400', 'bg-amber-50', 'text-amber-700');
+        btn.classList.remove('border-slate-200', 'text-slate-600');
+        btn.querySelector('div').classList.add('text-amber-500');
+        btn.querySelector('div').classList.remove('text-slate-400');
+      } else {
+        btn.classList.remove('border-amber-400', 'bg-amber-50', 'text-amber-700');
+        btn.classList.add('border-slate-200', 'text-slate-600');
+        btn.querySelector('div').classList.remove('text-amber-500');
+        btn.querySelector('div').classList.add('text-slate-400');
+      }
+    });
+    calculate();
+  }
+
+  function calculate() {
+    const salary = parseFloat(document.getElementById('monthly-salary').value) || 0;
+    const payCount = parseInt(document.getElementById('pay-count').value);
+    const payMethod = document.getElementById('pay-method').value;
+
+    const gradeInfo = RATES[selectedGrade];
+    let rate = gradeInfo.rate;
+
+    // 부서 성과 포함 방식은 70% 적용
+    if (payMethod === 'group') rate *= 0.7;
+
+    const bonusAmount = salary * rate;
+    const annualAmount = bonusAmount * payCount;
+
+    document.getElementById('grade-display').textContent =
+      `${gradeInfo.label} / 지급율 ${(rate * 100).toFixed(1)}%`;
+
+    document.getElementById('bonus-amount').textContent =
+      salary > 0 ? Math.round(bonusAmount).toLocaleString('ko-KR') + '원' : '봉급액을 입력하세요';
+
+    document.getElementById('bonus-formula').textContent =
+      salary > 0
+        ? `${salary.toLocaleString('ko-KR')}원 × ${(rate * 100).toFixed(1)}% = ${Math.round(bonusAmount).toLocaleString('ko-KR')}원`
+        : '월봉급액 × 지급율';
+
+    if (payCount === 2 && salary > 0) {
+      document.getElementById('annual-section').classList.remove('hidden');
+      document.getElementById('annual-amount').textContent = Math.round(annualAmount).toLocaleString('ko-KR') + '원';
+    } else {
+      document.getElementById('annual-section').classList.add('hidden');
+    }
+  }
+
+  // 초기 계산
+  calculate();
+</script>

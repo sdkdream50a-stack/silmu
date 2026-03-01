@@ -25,7 +25,7 @@
           <div class="text-xs text-white/70 mt-0.5">활성 도구</div>
         </div>
         <div class="text-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/15">
-          <div class="text-2xl font-bold">9</div>
+          <div class="text-2xl font-bold">11</div>
           <div class="text-xs text-white/70 mt-0.5">계산기</div>
         </div>
         <div class="text-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/15">
@@ -73,8 +73,10 @@
         { title: "4대보험 정산보험료 계산기", desc: "연말정산·퇴직정산 보험료를 자동 계산합니다. 국민연금·건강·요양·고용·산재 합산까지 한 번에 처리하세요.", icon: "health_and_safety", color: "blue", category: "계산기", path: insurance_calculator_path },
         { title: "예산 집행률 계산기", desc: "예산 항목별 집행액을 입력하면 집행률·잔액·권장 기준 대비 현황을 즉시 파악합니다. 월별 집행 속도 분석 포함.", icon: "bar_chart", color: "indigo", category: "계산기", path: budget_execution_rate_path, badge: "NEW" },
         { title: "예비비 한도 계산기", desc: "예산 총액을 입력하면 지방재정법상 예비비 법정 한도(1%)와 적정 편성 금액을 자동 계산합니다.", icon: "savings", color: "amber", category: "계산기", path: contingency_fund_path, badge: "NEW" },
-        { title: "초과근무수당 계산기", desc: "월봉급액과 시간외·야간·휴일 근무시간을 입력하면 공무원수당 규정에 따라 초과근무수당을 자동 계산합니다.", icon: "schedule", color: "indigo", category: "계산기", path: overtime_calculator_path, badge: "NEW" },
-        { title: "연가일수 계산기", desc: "임용일을 입력하면 재직 기간별 부여 연가일수, 잔여 연가, 연가보상비를 자동 계산합니다.", icon: "event_available", color: "emerald", category: "계산기", path: annual_leave_calculator_path, badge: "NEW" },
+        { title: "초과근무수당 계산기", desc: "월봉급액과 시간외·야간·휴일 근무시간을 입력하면 공무원수당 규정에 따라 초과근무수당을 자동 계산합니다.", icon: "schedule", color: "indigo", category: "계산기", path: overtime_calculator_path },
+        { title: "연가일수 계산기", desc: "임용일을 입력하면 재직 기간별 부여 연가일수, 잔여 연가, 연가보상비를 자동 계산합니다.", icon: "event_available", color: "emerald", category: "계산기", path: annual_leave_calculator_path },
+        { title: "퇴직금 계산기", desc: "재직기간과 기준 소득월액으로 공무원 퇴직수당을 자동 계산합니다. 공무원연금법 제64조 기준 재직기간별 지급율(6.5~10%) 자동 적용.", icon: "savings", color: "emerald", category: "계산기", path: severance_calculator_path, badge: "NEW" },
+        { title: "성과상여금 계산기", desc: "성과등급(S·A·B)과 월봉급액으로 성과상여금을 자동 계산합니다. 연간 지급액과 등급별 비교까지 한 번에 확인하세요.", icon: "emoji_events", color: "amber", category: "계산기", path: performance_bonus_calculator_path, badge: "NEW" },
       ].each do |tool| %>
         <%= link_to tool[:path], class: "group card card-interactive card-glow-#{tool[:color]} card-shine p-6 relative overflow-hidden border border-transparent hover:border-#{tool[:color]}-200", data: { category: tool[:category], title: tool[:title] } do %>
           <% if tool[:badge] %>
@@ -109,8 +111,8 @@
 
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
       <% [
-        { title: "퇴직금 계산기", icon: "savings", category: "계산기" },
-        { title: "성과상여금 계산기", icon: "emoji_events", category: "계산기" },
+        { title: "급여명세서 생성기", icon: "description", category: "문서 도구" },
+        { title: "복지포인트 잔액 안내", icon: "redeem", category: "안내" },
       ].each do |tool| %>
         <div class="flex items-center gap-3 px-4 py-3.5 bg-white rounded-xl border border-gray-100/80 hover:border-gray-200 hover:shadow-soft transition-all">
           <span class="w-9 h-9 bg-surface-100 rounded-lg flex items-center justify-center">

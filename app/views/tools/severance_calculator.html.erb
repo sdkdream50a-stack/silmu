@@ -1,0 +1,274 @@
+<%# 퇴직금 계산기 %>
+
+<section class="section py-10">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- 뒤로가기 -->
+    <div class="mb-6">
+      <%= link_to tools_path, class: "inline-flex items-center text-slate-600 hover:text-indigo-600 transition-colors font-medium" do %>
+        <span class="material-symbols-outlined mr-1">arrow_back</span>
+        도구 목록으로
+      <% end %>
+    </div>
+
+    <!-- 페이지 헤더 -->
+    <div class="mb-8">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="icon-container icon-container-lg gradient-emerald shadow-lg">
+          <span class="material-symbols-outlined text-3xl text-white">savings</span>
+        </div>
+        <div>
+          <h1 class="text-2xl font-bold text-slate-900">퇴직금 계산기</h1>
+          <p class="text-slate-600 mt-1">공무원 퇴직수당 및 퇴직급여 자동 계산</p>
+        </div>
+      </div>
+      <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
+        <p class="text-sm text-emerald-800">
+          <strong>공무원연금법 제64조 (퇴직수당)</strong> 기준: 재직기간 1년 이상 공무원이 퇴직할 때 지급하는 퇴직수당을 계산합니다.
+          퇴직급여(연금·일시금)와는 별도로 지급되는 수당입니다.
+        </p>
+      </div>
+    </div>
+
+    <!-- 계산기 -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- 입력 패널 -->
+      <div class="card p-6">
+        <h2 class="text-lg font-bold text-slate-900 mb-5 flex items-center gap-2">
+          <span class="material-symbols-outlined text-emerald-600">edit</span>
+          입력 정보
+        </h2>
+
+        <div class="space-y-5">
+          <!-- 재직기간 -->
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-2">
+              재직기간 입력 방식
+            </label>
+            <div class="flex gap-3 mb-3">
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="radio" name="input-mode" value="years" checked onchange="toggleInputMode(this.value)" class="accent-emerald-600">
+                <span class="text-sm font-medium text-slate-700">연수로 입력</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="radio" name="input-mode" value="dates" onchange="toggleInputMode(this.value)" class="accent-emerald-600">
+                <span class="text-sm font-medium text-slate-700">날짜로 입력</span>
+              </label>
+            </div>
+
+            <!-- 연수 입력 -->
+            <div id="years-input">
+              <div class="flex gap-3">
+                <div class="flex-1">
+                  <label class="block text-xs text-slate-500 mb-1">재직 연수</label>
+                  <input type="number" id="service-years" min="0" max="40" value="10"
+                    class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-slate-50"
+                    oninput="calculate()">
+                </div>
+                <div class="flex-1">
+                  <label class="block text-xs text-slate-500 mb-1">추가 개월 수</label>
+                  <input type="number" id="service-months" min="0" max="11" value="0"
+                    class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-slate-50"
+                    oninput="calculate()">
+                </div>
+              </div>
+            </div>
+
+            <!-- 날짜 입력 -->
+            <div id="dates-input" class="hidden">
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs text-slate-500 mb-1">임용일</label>
+                  <input type="date" id="hire-date"
+                    class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-slate-50"
+                    onchange="calculateFromDates()">
+                </div>
+                <div>
+                  <label class="block text-xs text-slate-500 mb-1">퇴직일</label>
+                  <input type="date" id="retire-date"
+                    class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-slate-50"
+                    onchange="calculateFromDates()">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 기준 소득월액 -->
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-2">
+              기준 소득월액 (퇴직 전 3년 평균 월 보수)
+              <span class="ml-1 text-xs text-slate-400 font-normal">원</span>
+            </label>
+            <input type="number" id="monthly-income" placeholder="예: 4500000"
+              class="w-full border border-slate-200 rounded-lg px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-slate-50"
+              oninput="calculate()">
+            <p class="text-xs text-slate-400 mt-1">※ 공무원 연금공단 제공 기준 소득월액 확인 필요</p>
+          </div>
+
+          <!-- 퇴직 구분 -->
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-2">퇴직 구분</label>
+            <select id="retire-type" onchange="calculate()"
+              class="w-full border border-slate-200 rounded-lg px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-slate-50">
+              <option value="normal">일반 퇴직 (의원면직·정년퇴직 포함)</option>
+              <option value="death">사망으로 인한 퇴직</option>
+            </select>
+          </div>
+        </div>
+
+        <button onclick="calculate()"
+          class="w-full mt-6 px-6 py-3.5 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 transition-colors text-base shadow-md">
+          계산하기
+        </button>
+      </div>
+
+      <!-- 결과 패널 -->
+      <div class="space-y-4">
+        <!-- 재직기간 표시 -->
+        <div class="card p-5 bg-slate-50">
+          <div class="text-sm font-semibold text-slate-600 mb-1">산정 재직기간</div>
+          <div id="service-period-display" class="text-xl font-bold text-slate-800">— 입력 후 계산</div>
+        </div>
+
+        <!-- 퇴직수당 -->
+        <div class="card p-6 bg-gradient-to-br from-emerald-50 to-teal-50 border-2 border-emerald-200">
+          <div class="text-sm font-semibold text-emerald-700 mb-2">퇴직수당 (공무원연금법 제64조)</div>
+          <div id="severance-amount" class="text-4xl font-bold text-emerald-700 mb-1">0원</div>
+          <div id="severance-formula" class="text-xs text-emerald-600 mt-2">기준 소득월액 × 재직기간별 지급율</div>
+        </div>
+
+        <!-- 지급율 안내 -->
+        <div class="card p-5">
+          <div class="text-sm font-bold text-slate-700 mb-3">재직기간별 퇴직수당 지급율</div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-xs">
+              <thead>
+                <tr class="bg-slate-100">
+                  <th class="px-3 py-2 text-left font-semibold text-slate-600">재직기간</th>
+                  <th class="px-3 py-2 text-right font-semibold text-slate-600">지급율 (월)</th>
+                </tr>
+              </thead>
+              <tbody id="rate-table" class="divide-y divide-slate-100">
+                <tr><td class="px-3 py-2 text-slate-600">1년 이상 ~ 5년 미만</td><td class="px-3 py-2 text-right font-bold text-emerald-600">기준소득 × 재직월수 × 6.5%</td></tr>
+                <tr class="bg-slate-50"><td class="px-3 py-2 text-slate-600">5년 이상 ~ 10년 미만</td><td class="px-3 py-2 text-right font-bold text-emerald-600">기준소득 × 재직월수 × 8.5%</td></tr>
+                <tr><td class="px-3 py-2 text-slate-600">10년 이상 ~ 15년 미만</td><td class="px-3 py-2 text-right font-bold text-emerald-600">기준소득 × 재직월수 × 9.0%</td></tr>
+                <tr class="bg-slate-50"><td class="px-3 py-2 text-slate-600">15년 이상 ~ 20년 미만</td><td class="px-3 py-2 text-right font-bold text-emerald-600">기준소득 × 재직월수 × 9.5%</td></tr>
+                <tr><td class="px-3 py-2 text-slate-600">20년 이상</td><td class="px-3 py-2 text-right font-bold text-emerald-600">기준소득 × 재직월수 × 10.0%</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="text-xs text-slate-400 mt-3">※ 공무원연금법 시행령 제36조 기준 (2024년 기준)</p>
+        </div>
+
+        <!-- 주의사항 -->
+        <div class="bg-amber-50 border border-amber-200 rounded-xl p-4">
+          <div class="flex gap-2">
+            <span class="material-symbols-outlined text-amber-600 text-lg mt-0.5">info</span>
+            <div class="text-sm text-amber-800">
+              <p class="font-semibold mb-1">참고사항</p>
+              <ul class="space-y-1 text-xs">
+                <li>• 퇴직수당은 퇴직급여(연금 또는 일시금)와 <strong>별도</strong>로 지급됩니다</li>
+                <li>• 재직기간 1년 미만은 퇴직수당 지급 대상에서 제외됩니다</li>
+                <li>• 정확한 금액은 공무원연금공단(1588-4321)에 문의하세요</li>
+                <li>• 기준 소득월액은 연금공단에서 확인 가능합니다</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  function toggleInputMode(mode) {
+    if (mode === 'years') {
+      document.getElementById('years-input').classList.remove('hidden');
+      document.getElementById('dates-input').classList.add('hidden');
+    } else {
+      document.getElementById('years-input').classList.add('hidden');
+      document.getElementById('dates-input').classList.remove('hidden');
+    }
+    calculate();
+  }
+
+  function calculateFromDates() {
+    const hire = new Date(document.getElementById('hire-date').value);
+    const retire = new Date(document.getElementById('retire-date').value);
+    if (!hire || !retire || isNaN(hire) || isNaN(retire)) return;
+    if (retire <= hire) return;
+
+    const diffMs = retire - hire;
+    const totalDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    const years = Math.floor(totalDays / 365);
+    const remainingDays = totalDays - (years * 365);
+    const months = Math.floor(remainingDays / 30);
+
+    document.getElementById('service-years').value = years;
+    document.getElementById('service-months').value = months;
+    calculate();
+  }
+
+  function calculate() {
+    const years = parseInt(document.getElementById('service-years').value) || 0;
+    const months = parseInt(document.getElementById('service-months').value) || 0;
+    const income = parseFloat(document.getElementById('monthly-income').value) || 0;
+
+    const totalMonths = years * 12 + months;
+    const totalYears = totalMonths / 12;
+
+    // 재직기간 표시
+    let periodText = '';
+    if (years > 0 && months > 0) {
+      periodText = `${years}년 ${months}개월 (총 ${totalMonths}개월)`;
+    } else if (years > 0) {
+      periodText = `${years}년 (총 ${totalMonths}개월)`;
+    } else if (months > 0) {
+      periodText = `${months}개월`;
+    } else {
+      periodText = '미입력';
+    }
+    document.getElementById('service-period-display').textContent = periodText;
+
+    // 1년 미만 체크
+    if (totalMonths < 12) {
+      document.getElementById('severance-amount').textContent = '지급 대상 아님';
+      document.getElementById('severance-formula').textContent = '재직기간 1년 미만은 퇴직수당 지급 제외';
+      return;
+    }
+
+    if (income <= 0) {
+      document.getElementById('severance-amount').textContent = '소득월액을 입력하세요';
+      document.getElementById('severance-formula').textContent = '';
+      return;
+    }
+
+    // 지급율 결정 (재직기간별)
+    let rate;
+    let rateLabel;
+    if (totalYears < 5) {
+      rate = 0.065;
+      rateLabel = '6.5%';
+    } else if (totalYears < 10) {
+      rate = 0.085;
+      rateLabel = '8.5%';
+    } else if (totalYears < 15) {
+      rate = 0.090;
+      rateLabel = '9.0%';
+    } else if (totalYears < 20) {
+      rate = 0.095;
+      rateLabel = '9.5%';
+    } else {
+      rate = 0.100;
+      rateLabel = '10.0%';
+    }
+
+    const amount = income * totalMonths * rate;
+
+    document.getElementById('severance-amount').textContent = Math.round(amount).toLocaleString('ko-KR') + '원';
+    document.getElementById('severance-formula').textContent =
+      `${income.toLocaleString('ko-KR')}원 × ${totalMonths}개월 × ${rateLabel} = ${Math.round(amount).toLocaleString('ko-KR')}원`;
+  }
+
+  // 초기 계산
+  calculate();
+</script>

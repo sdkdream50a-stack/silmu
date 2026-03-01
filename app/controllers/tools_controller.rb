@@ -104,6 +104,40 @@ class ToolsController < ApplicationController
     )
   end
 
+  def severance_calculator
+    description_text = "공무원 퇴직수당을 재직기간과 기준 소득월액으로 자동 계산합니다. 공무원연금법 제64조 기준, 재직기간별 지급율(6.5~10%)을 적용하여 퇴직수당 예상액을 즉시 산출합니다."
+
+    set_meta_tags(
+      title: "퇴직금 계산기 — 공무원 퇴직수당 자동 계산 (재직기간별)",
+      description: description_text,
+      keywords: "퇴직금 계산기, 공무원 퇴직수당, 퇴직수당 계산, 공무원연금법, 재직기간, 기준소득월액",
+      og: {
+        title: "퇴직금 계산기 — 실무.kr",
+        description: description_text,
+        url: canonical_url,
+        image: "https://silmu.kr/og-image.png",
+        type: "website"
+      }
+    )
+  end
+
+  def performance_bonus_calculator
+    description_text = "공무원 성과상여금을 성과등급과 월봉급액으로 자동 계산합니다. S·A·B등급별 지급율(172.5%/125%/85%)을 적용, 연간 지급액까지 한 번에 확인하세요."
+
+    set_meta_tags(
+      title: "성과상여금 계산기 — 공무원 성과등급별 상여금 자동 계산",
+      description: description_text,
+      keywords: "성과상여금, 성과상여금 계산기, 공무원 성과급, 성과등급, S등급 A등급, 공무원수당",
+      og: {
+        title: "성과상여금 계산기 — 실무.kr",
+        description: description_text,
+        url: canonical_url,
+        image: "https://silmu.kr/og-image.png",
+        type: "website"
+      }
+    )
+  end
+
   def travel_calculator
     description_text = "공무원 국내·외 출장 여비를 자동으로 계산합니다. 교통비, 일비, 숙박비, 식비를 한 번에 산출하고, 국내출장과 해외출장을 구분하여 정확한 여비를 계산합니다. 공무원 여비 규정에 따라 자동 계산됩니다."
 

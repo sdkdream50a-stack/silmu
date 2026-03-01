@@ -169,6 +169,12 @@ Rails.application.routes.draw do
   # 연가일수 계산기
   get "tools/annual-leave-calculator", to: "tools#annual_leave_calculator", as: :annual_leave_calculator
 
+  # 퇴직금 계산기
+  get "tools/severance-calculator", to: "tools#severance_calculator", as: :severance_calculator
+
+  # 성과상여금 계산기
+  get "tools/performance-bonus-calculator", to: "tools#performance_bonus_calculator", as: :performance_bonus_calculator
+
   # 감사사례
   get "audit-cases", to: "audit_cases#index", as: :audit_cases
   get "audit-cases/:slug", to: "audit_cases#show", as: :audit_case
