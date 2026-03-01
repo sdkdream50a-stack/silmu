@@ -60,7 +60,7 @@ attrs = {
 
     <div style="background:#fee2e2;padding:12px;border-radius:8px;margin:8px 0;">
     **지급 제외 대상**
-    - 평가 기간 중 재직 기간이 2개월 미만인 자
+    - 평가 기간 중 재직 기간이 3개월 미만인 자
     - 직위해제 중인 자
     - 정직·강등·해임·파면 처분을 받은 자
 
