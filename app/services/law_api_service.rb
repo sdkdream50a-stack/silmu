@@ -100,17 +100,30 @@ class LawApiService
   end
 
   # WAF JS challenge body에서 실제 API URL 추출
-  # var x={o:'PART_O', t:'PART_T', h:'PART_H'}; → t+h+o 가 실제 path+query
-  def parse_waf_redirect(body, original_uri)
-    # t + h + o 순서로 조합
-    t = body[/['"]t['"]\s*:\s*['"]([^'"]+)['"]/,   1]
-    h = body[/['"]h['"]\s*:\s*['"]([^'"]+)['"]/,   1]
-    o = body[/['"]o['"]\s*:\s*['"]([^'"]+)['"]/,   1]
-    return nil unless t && h && o
+  # 두 가지 패턴을 처리:
+  # 패턴A (신): x={o:'FULL_URL',c:1}; z=4; rsu(h)=o.substr(0,c)+o.substr(c+h)
+  # 패턴B (구): x={o:'TAIL',t:'HEAD',h:'MID'}; rsu()=t+h+o
+  def parse_waf_redirect(body, _original_uri)
+    # 패턴A 감지: rsu(z) 사용
+    if body.include?("rsu(z)")
+      o = body[/\bo\s*:\s*'([^']+)'/, 1]
+      c = body[/\bc\s*:\s*(\d+)/, 1]&.to_i
+      z = body[/\bz\s*=\s*(\d+)/, 1]&.to_i
+      if o && c && z
+        real_path = o[0, c] + o[(c + z)..]
+        return URI.join(BASE_URL, real_path)
+      end
+    end
 
-    redirect_path = "#{t}#{h}#{o}"
-    URI.join(BASE_URL, redirect_path)
-  rescue URI::InvalidURIError
+    # 패턴B 감지: t+h+o 조합
+    t = body[/\bt\s*:\s*'([^']+)'/, 1]
+    h = body[/\bh\s*:\s*'([^']+)'/, 1]
+    o = body[/\bo\s*:\s*'([^']+)'/, 1]
+    return URI.join(BASE_URL, "#{t}#{h}#{o}") if t && h && o
+
+    nil
+  rescue URI::InvalidURIError => e
+    Rails.logger.warn "[LawApiService] WAF URL 파싱 오류: #{e.message}"
     nil
   end
 end
