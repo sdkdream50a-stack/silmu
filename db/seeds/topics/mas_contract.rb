@@ -40,18 +40,18 @@ attrs = {
     수요기관은 나라장터 종합쇼핑몰에서 MAS 등록 물품을 검색·비교하여 구매합니다. 별도의 입찰공고 없이 쇼핑몰에서 직접 선택하므로 조달 절차가 대폭 간소화됩니다.
     </div>
 
-    **국가계약법 시행령 제14조 (경쟁 방법의 특례)**
-
-    <div style="background:#dbeafe;padding:12px;border-radius:8px;margin:8px 0;">
-    조달청장은 「조달사업에 관한 법률」에 따른 다수공급자계약을 체결하는 경우 수의계약 또는 지명경쟁계약의 방법으로 할 수 있다. 이 경우 경쟁 방법에 관한 일반 규정의 예외로 인정된다.
-    </div>
-
     <div style="background:#f3f4f6;padding:12px;border-radius:8px;margin:8px 0;">
     ※ 관련 법령: 조달사업에 관한 법률 제9조의2, 제2조 / 국가계약법 시행령 제14조 / 다수공급자계약 업무처리규정(조달청 고시)
     </div>
   CONTENT
   decree_content: <<~CONTENT,
     ## MAS 계약 구조 및 2단계 경쟁
+
+    **국가계약법 시행령 제14조 (경쟁 방법의 특례)**
+
+    <div style="background:#dcfce7;padding:12px;border-radius:8px;margin:8px 0;">
+    조달청장은 「조달사업에 관한 법률」에 따른 다수공급자계약을 체결하는 경우 수의계약 또는 지명경쟁계약의 방법으로 할 수 있다. 이 경우 경쟁 방법에 관한 일반 규정의 예외로 인정된다.
+    </div>
 
     ### MAS 2단계 계약 구조
 

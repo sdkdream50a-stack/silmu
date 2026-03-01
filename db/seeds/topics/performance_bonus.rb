@@ -27,6 +27,10 @@ attrs = {
     ③ 성과상여금은 연 2회(1월·7월) 지급하는 것을 원칙으로 하되, 기관 실정에 따라 연 1회 지급할 수 있다.
     </div>
 
+    <div style="background:#fef3c7;padding:12px;border-radius:8px;margin:8px 0;">
+    ⚠️ 위 지급률(S: 172.5%, A: 125%, B: 85%) 및 등급 비율(30:40:30)은 법령상 기준이며, 실제 지급률과 비율은 인사혁신처 성과상여금 지급 지침으로 매년 조정될 수 있습니다. 해당 연도 지침을 반드시 확인하세요.
+    </div>
+
     <div style="background:#f3f4f6;padding:12px;border-radius:8px;margin:8px 0;">
     ※ 지급 대상: 봉급을 받는 일반직·특정직·별정직 공무원 (단, 임용 후 1년 미만자·휴직자 등은 제외 또는 조정)
     </div>
