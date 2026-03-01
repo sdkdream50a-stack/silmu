@@ -48,7 +48,17 @@
       <span class="badge badge-indigo"><span class="font-bold"><%= tool_count %></span>개 도구</span>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- 카테고리 탭 필터 -->
+    <div class="flex flex-wrap gap-2 mb-6">
+      <% [["전체", nil], ["AI 도구", "ai"], ["계산기", "calc"], ["문서 도구", "doc"], ["체크리스트", "check"]].each_with_index do |(label, key), i| %>
+        <button type="button" onclick="filterTools('<%= label %>')" data-cat="<%= label %>"
+                class="tool-tab-btn px-4 py-2 rounded-xl text-sm font-semibold transition-colors <%= i == 0 ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200' %>">
+          <%= label %>
+        </button>
+      <% end %>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="tools-grid">
       <% [
         { title: "계약방식 결정 도우미", desc: "추정가격과 계약유형으로 적정 계약방식과 필요서류를 확인합니다.", icon: "gavel", color: "emerald", category: "AI 도구", path: contract_method_path, badge: "인기" },
         { title: "계약서류 원클릭 생성기", desc: "물품/용역/공사별 필수 계약서류 체크리스트를 자동 생성합니다.", icon: "fact_check", color: "blue", category: "문서 도구", path: contract_documents_path },
@@ -100,6 +110,25 @@
     </div>
   </div>
 </section>
+
+<script>
+function filterTools(cat) {
+  document.querySelectorAll('.tool-tab-btn').forEach(function(btn) {
+    if (btn.dataset.cat === cat) {
+      btn.classList.remove('bg-slate-100', 'text-slate-700', 'hover:bg-slate-200');
+      btn.classList.add('bg-indigo-600', 'text-white');
+    } else {
+      btn.classList.remove('bg-indigo-600', 'text-white');
+      btn.classList.add('bg-slate-100', 'text-slate-700', 'hover:bg-slate-200');
+    }
+  });
+  var grid = document.getElementById('tools-grid');
+  if (!grid) return;
+  grid.querySelectorAll('[data-category]').forEach(function(card) {
+    card.style.display = (cat === '전체' || card.dataset.category === cat) ? '' : 'none';
+  });
+}
+</script>
 
 <!-- 곧 추가될 도구 -->
 <section class="py-12 bg-surface-50">

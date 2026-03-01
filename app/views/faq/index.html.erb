@@ -74,9 +74,9 @@
 
     <!-- 카테고리 탭 -->
     <div class="faq-nav" id="faq-nav">
-      <span class="faq-nav-btn active" data-cat="all" onclick="faqNavClick(this)">전체</span>
+      <button type="button" class="faq-nav-btn active" data-cat="all" onclick="faqNavClick(this)">전체</button>
       <% @categories.each do |cat| %>
-        <span class="faq-nav-btn" data-cat="<%= cat[:id] %>" onclick="faqNavClick(this)"><%= cat[:title] %></span>
+        <button type="button" class="faq-nav-btn" data-cat="<%= cat[:id] %>" onclick="faqNavClick(this)"><%= cat[:title] %></button>
       <% end %>
     </div>
 
@@ -107,19 +107,19 @@
     </div>
 
     <div class="faq-empty" id="faq-empty" style="display:none;">
-      <span class="material-symbols-outlined text-4xl" style="color:#cbd5e1;">search_off</span>
-      <p style="margin-top:8px;">검색 결과가 없습니다.</p>
+      <span class="material-symbols-outlined text-4xl text-slate-300">search_off</span>
+      <p class="mt-2 text-slate-500">검색 결과가 없습니다.</p>
     </div>
 
     <!-- CTA -->
-    <div style="text-align:center; margin-top:40px; padding:32px; background:#f8fafc; border-radius:16px; border:1px solid #e2e8f0;">
-      <span class="material-symbols-outlined text-3xl" style="color:#6366f1;">lightbulb</span>
-      <h3 style="font-size:18px; font-weight:700; color:#1e293b; margin:12px 0 8px;">더 자세한 내용이 필요하신가요?</h3>
-      <p style="font-size:14px; color:#64748b; margin-bottom:16px;">토픽 페이지에서 법령 원문, 감사사례, 유권해석까지 확인하세요.</p>
-      <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
-        <a href="<%= topic_path('private-contract') %>" style="padding:10px 20px; background:#059669; color:#fff; border-radius:10px; font-weight:600; font-size:14px; text-decoration:none;">수의계약 법령</a>
-        <a href="<%= topic_path('e-procurement-guide') %>" style="padding:10px 20px; background:#6366f1; color:#fff; border-radius:10px; font-weight:600; font-size:14px; text-decoration:none;">나라장터 가이드</a>
-        <a href="<%= topic_path('goods-selection-committee') %>" style="padding:10px 20px; background:#d97706; color:#fff; border-radius:10px; font-weight:600; font-size:14px; text-decoration:none;">물품선정위원회</a>
+    <div class="text-center mt-10 p-8 bg-slate-50 rounded-2xl border border-slate-200">
+      <span class="material-symbols-outlined text-3xl text-indigo-500">lightbulb</span>
+      <h3 class="text-lg font-bold text-slate-900 mt-3 mb-2">더 자세한 내용이 필요하신가요?</h3>
+      <p class="text-sm text-slate-500 mb-4">토픽 페이지에서 법령 원문, 감사사례, 유권해석까지 확인하세요.</p>
+      <div class="flex flex-wrap gap-2.5 justify-center">
+        <a href="<%= topic_path('private-contract') %>" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-semibold text-sm transition-colors">수의계약 법령</a>
+        <a href="<%= topic_path('e-procurement-guide') %>" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold text-sm transition-colors">나라장터 가이드</a>
+        <a href="<%= topic_path('goods-selection-committee') %>" class="px-5 py-2.5 bg-amber-600 hover:bg-amber-700 text-white rounded-xl font-semibold text-sm transition-colors">물품선정위원회</a>
       </div>
     </div>
 
