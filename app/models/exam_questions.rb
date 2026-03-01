@@ -11912,6 +11912,38 @@ module ExamQuestions
   # { "subject_id-chapter_num" => [question, ...] }
   QUESTIONS_BY_CHAPTER = QUESTIONS.group_by { |q| "#{q[:subject_id]}-#{q[:chapter_num]}" }.freeze
 
+  # 시험 과목 정의 (3과목 기준 — 필기 시험 구조)
+  # 3과목 = 1과목(1권), 2과목(2권), 3과목(3권+4권 합산)
+  EXAM_SUBJECTS = [
+    {
+      id: 1,
+      number: "1과목",
+      title: "법제도의 이해",
+      subtitle: "법령·나라장터 시스템 이해",
+      color: "emerald",
+      icon: "gavel",
+      subject_ids: [1]
+    },
+    {
+      id: 2,
+      number: "2과목",
+      title: "조달계획 수립 및 분석",
+      subtitle: "수요·공급 분석·조달 전략",
+      color: "blue",
+      icon: "analytics",
+      subject_ids: [2]
+    },
+    {
+      id: 3,
+      number: "3과목",
+      title: "계약 관리",
+      subtitle: "입찰·낙찰·계약이행·검사·대금",
+      color: "violet",
+      icon: "contract_edit",
+      subject_ids: [3, 4]
+    }
+  ].freeze
+
   # 과목별 문제 필터 — O(1) 해시 조회
   def self.by_subject(subject_id)
     QUESTIONS_BY_SUBJECT[subject_id.to_i] || []
@@ -11935,6 +11967,18 @@ module ExamQuestions
   # 과목별 문제 수
   def self.count_by_subject(subject_id)
     by_subject(subject_id).size
+  end
+
+  # 시험 과목 기준 문제 필터 (3과목 매핑)
+  def self.by_exam_subject(exam_subject_id)
+    exam_subj = EXAM_SUBJECTS.find { |s| s[:id] == exam_subject_id.to_i }
+    return [] unless exam_subj
+    exam_subj[:subject_ids].flat_map { |sid| by_subject(sid) }
+  end
+
+  # 시험 과목별 문제 수
+  def self.count_by_exam_subject(exam_subject_id)
+    by_exam_subject(exam_subject_id).size
   end
 
   # 챕터별 문제 — O(1) 해시 조회

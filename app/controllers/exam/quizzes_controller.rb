@@ -18,14 +18,15 @@ module Exam
 
     # GET /quiz — 과목 선택 화면
     def index
-      @subjects = ExamCurriculum::SUBJECTS
+      @exam_subjects = ExamQuestions::EXAM_SUBJECTS        # 3과목 기준 모의고사 카드
+      @curriculum_subjects = ExamCurriculum::SUBJECTS      # 챕터별 풀기 (4권 유지)
 
       # 정적 콘텐츠이므로 HTTP 캐싱
       expires_in 1.hour, public: true, stale_while_revalidate: 1.day
 
       set_meta_tags(
         title: "모의고사",
-        description: "공공조달관리사 4지선다 모의고사. 1~4권 과목별·전체 #{ExamQuestions.count}문제, 즉시 채점·상세 해설 제공.",
+        description: "공공조달관리사 4지선다 모의고사. 3과목별·전체 #{ExamQuestions.count}문제, 즉시 채점·상세 해설 제공.",
         keywords: "공공조달관리사 모의고사, 공공조달 시험 문제, 국가기술자격 모의고사"
       )
     end
@@ -107,7 +108,7 @@ module Exam
       render :show
     end
 
-    # GET /quiz/:id — 실제 퀴즈 (id: 1~4 = 과목별, 'all' = 전체)
+    # GET /quiz/:id — 실제 퀴즈 (id: 1~3 = 시험 과목별, 'all' = 전체)
     def show
       @subject_id = params[:id]
 
@@ -115,15 +116,15 @@ module Exam
         raw = ExamQuestions.all.map { |q| q.slice(*QUESTION_FIELDS) }
         @questions = ExamQuestions.with_difficulty(raw)
         @quiz_title = "전체 모의고사"
-        @quiz_subtitle = "4권 전체 — #{@questions.size}문제"
+        @quiz_subtitle = "3과목 전체 — #{@questions.size}문제"
         @subject = nil
         @color = "blue"
       else
-        subject_id = @subject_id.to_i
-        @subject = ExamCurriculum.find_subject(subject_id)
+        exam_subject_id = @subject_id.to_i
+        @subject = ExamQuestions::EXAM_SUBJECTS.find { |s| s[:id] == exam_subject_id }
         return redirect_to exam_quiz_index_path, alert: "존재하지 않는 과목입니다." unless @subject
 
-        raw = ExamQuestions.by_subject(subject_id).map { |q| q.slice(*QUESTION_FIELDS) }
+        raw = ExamQuestions.by_exam_subject(exam_subject_id).map { |q| q.slice(*QUESTION_FIELDS) }
         @questions = ExamQuestions.with_difficulty(raw)
         @quiz_title = "#{@subject[:number]} 모의고사"
         @quiz_subtitle = @subject[:title]
