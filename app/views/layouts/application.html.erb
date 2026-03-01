@@ -58,7 +58,9 @@
     <script>
       // Material Symbols → Iconify 자동 변환 (디바운스 + 범위 한정)
       var _iconConvertTimer = null;
-      function convertMaterialIcons(root) {
+      // asyncScan=true: MutationObserver 콜백에서 호출 시 requestIdleCallback으로 비동기 스캔 (INP 개선)
+      // asyncScan=false (기본): 초기 로드 및 Turbo 내비게이션 시 동기 스캔 (즉시 아이콘 표시)
+      function convertMaterialIcons(root, asyncScan) {
         var container = root || document.body;
         if (!container) return;
         var icons = container.querySelectorAll('.material-symbols-outlined:not([data-icon])');
@@ -72,20 +74,29 @@
           }
         });
         if (typeof Iconify !== 'undefined' && Iconify.scan) {
-          Iconify.scan(container);
+          if (asyncScan) {
+            // 비동기 스캔: 유휴 시간에 실행 → 사용자 상호작용 차단 방지 (INP 핵심 개선)
+            if (typeof requestIdleCallback !== 'undefined') {
+              requestIdleCallback(function() { Iconify.scan(container); }, { timeout: 500 });
+            } else {
+              setTimeout(function() { Iconify.scan(container); }, 0);
+            }
+          } else {
+            Iconify.scan(container);
+          }
         }
       }
 
-      // 디바운스 래퍼: MutationObserver에서 호출 빈도 제한
+      // 디바운스 래퍼: MutationObserver에서 호출 빈도 제한 (비동기 스캔으로 INP 보호)
       function scheduleConvert() {
         if (_iconConvertTimer) return;
         _iconConvertTimer = requestAnimationFrame(function() {
           _iconConvertTimer = null;
-          convertMaterialIcons();
+          convertMaterialIcons(null, true); // asyncScan=true
         });
       }
 
-      // 페이지 로드 시 변환
+      // 페이지 로드 시 변환 (동기 스캔 — 초기 아이콘 즉시 표시)
       document.addEventListener('DOMContentLoaded', function() {
         convertMaterialIcons();
 
@@ -94,7 +105,7 @@
         observer.observe(document.body, { childList: true, subtree: true });
       });
 
-      // Turbo 네비게이션 후 변환 (turbo:render만 사용, turbo:load 중복 제거)
+      // Turbo 네비게이션 후 변환 (동기 스캔 — turbo:render만 사용, turbo:load 중복 제거)
       document.addEventListener('turbo:render', function() { convertMaterialIcons(); });
     </script>
 
@@ -561,8 +572,9 @@
             if (icon) {
               var iconName = mobileMenu.classList.contains('hidden') ? 'menu' : 'close';
               icon.setAttribute('data-icon', 'material-symbols:' + iconName);
+              // 전체 문서 대신 해당 아이콘만 스캔 (INP 개선)
               if (typeof Iconify !== 'undefined') {
-                Iconify.scan();
+                Iconify.scan(icon);
               }
             }
           });
@@ -590,7 +602,8 @@
             qItems.classList.add('hidden');
             if (qIcon) {
               qIcon.setAttribute('data-icon', 'material-symbols:widgets');
-              if (typeof Iconify !== 'undefined') Iconify.scan();
+              // qIcon 요소만 스캔 (전체 문서 스캔 → INP 1000ms 방지)
+              if (typeof Iconify !== 'undefined') Iconify.scan(qIcon);
             }
             if(qText) qText.textContent='도구';
             if(qBadge) qBadge.classList.remove('hidden');
@@ -601,7 +614,8 @@
             else {
               if (qIcon) {
                 qIcon.setAttribute('data-icon', 'material-symbols:close');
-                if (typeof Iconify !== 'undefined') Iconify.scan();
+                // qIcon 요소만 스캔 (전체 문서 스캔 → INP 1000ms 방지)
+                if (typeof Iconify !== 'undefined') Iconify.scan(qIcon);
               }
               if(qText) qText.textContent='닫기';
               if(qBadge) qBadge.classList.add('hidden');
