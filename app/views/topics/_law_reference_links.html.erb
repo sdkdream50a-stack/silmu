@@ -1,0 +1,29 @@
+<%# 법제처 국가법령정보센터 원문 링크 바 (토픽 법령 탭 하단)
+    law_refs: { law: {...}, decree: {...}, rule: {...} } %>
+<% return if law_refs.blank? %>
+
+<div class="mt-5 pt-5 border-t border-slate-100">
+  <p class="flex items-center gap-1.5 text-xs font-semibold text-slate-400 uppercase tracking-wide mb-3">
+    <span class="material-symbols-outlined text-sm">gavel</span>
+    법제처 국가법령정보센터 원문
+  </p>
+  <div class="flex flex-wrap gap-2">
+    <% law_type_labels = { law: "법률", decree: "시행령", rule: "시행규칙" }
+       law_type_colors = { law: "indigo", decree: "emerald", rule: "amber" } %>
+    <% [:law, :decree, :rule].each do |type| %>
+      <% ref = law_refs[type]; next if ref.blank? %>
+      <%= link_to ref[:url], target: "_blank", rel: "noopener noreferrer nofollow",
+          class: "inline-flex items-center gap-1.5 px-3 py-1.5
+                  bg-#{law_type_colors[type]}-50 hover:bg-#{law_type_colors[type]}-100
+                  text-#{law_type_colors[type]}-700 border border-#{law_type_colors[type]}-200
+                  text-xs font-medium rounded-lg transition-colors" do %>
+        <span class="material-symbols-outlined text-sm">open_in_new</span>
+        <span><%= law_type_labels[type] %></span>
+        <span class="font-semibold"><%= ref[:name]&.gsub("지방자치단체를 당사자로 하는 계약에 관한 법률", "지방계약법") %></span>
+        <% if ref[:effective_display].present? %>
+          <span class="text-<%=law_type_colors[type]%>-400 hidden sm:inline">(<%=ref[:effective_display]%>)</span>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
