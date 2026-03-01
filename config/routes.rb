@@ -163,6 +163,12 @@ Rails.application.routes.draw do
   # 예비비 한도 계산기
   get "tools/contingency-fund", to: "tools#contingency_fund", as: :contingency_fund
 
+  # 초과근무수당 계산기
+  get "tools/overtime-calculator", to: "tools#overtime_calculator", as: :overtime_calculator
+
+  # 연가일수 계산기
+  get "tools/annual-leave-calculator", to: "tools#annual_leave_calculator", as: :annual_leave_calculator
+
   # 감사사례
   get "audit-cases", to: "audit_cases#index", as: :audit_cases
   get "audit-cases/:slug", to: "audit_cases#show", as: :audit_case

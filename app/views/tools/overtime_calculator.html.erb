@@ -1,0 +1,310 @@
+<%# 초과근무수당 계산기 %>
+
+<section class="section py-10">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- 뒤로가기 -->
+    <div class="mb-6">
+      <%= link_to tools_path, class: "inline-flex items-center text-slate-600 hover:text-indigo-600 transition-colors font-medium" do %>
+        <span class="material-symbols-outlined mr-1">arrow_back</span>
+        도구 목록으로
+      <% end %>
+    </div>
+
+    <!-- 페이지 헤더 -->
+    <div class="mb-8">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="icon-container icon-container-lg gradient-indigo shadow-lg">
+          <span class="material-symbols-outlined text-3xl text-white">schedule</span>
+        </div>
+        <div>
+          <h1 class="text-2xl font-bold text-slate-900">초과근무수당 계산기</h1>
+          <p class="text-slate-500">공무원 시간외·야간·휴일근무수당을 자동으로 계산합니다</p>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl shadow-sm border border-indigo-100 p-6 mt-6">
+        <h2 class="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
+          <span class="material-symbols-outlined text-indigo-600">info</span>
+          이 도구를 사용하는 이유
+        </h2>
+        <div class="prose prose-slate prose-sm max-w-none">
+          <p class="text-slate-700 leading-relaxed mb-3">
+            공무원 초과근무수당은 <strong>공무원수당 등에 관한 규정 제15조</strong>에 따라 '월봉급액 ÷ 209 × 초과근무시간'으로 계산됩니다.
+            시간외근무수당 외에도 야간근무(22:00~06:00)수당과 휴일근무수당이 별도로 적용되므로, 각 유형을 정확히 구분해야 합니다.
+          </p>
+          <p class="text-slate-700 leading-relaxed mb-3">
+            월 지급 한도는 <strong>시간외근무수당 57시간</strong>이며, 초과분은 이월되지 않습니다.
+            이 도구는 봉급액과 근무 유형·시간을 입력하면 수당을 즉시 계산하여 급여 담당자와 직원 모두 활용할 수 있습니다.
+          </p>
+          <div class="bg-amber-50 border-l-4 border-amber-500 p-3 rounded-r-lg mt-4">
+            <p class="text-amber-900 text-xs leading-relaxed">
+              <strong>⚠️ 참고:</strong> 기관·직종에 따라 수당 기준이 다를 수 있습니다. 최종 지급액은 소속 기관의 급여 담당자 확인 후 결정하세요.
+              (근거: 공무원수당 등에 관한 규정 제15조, 제16조)
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lg:flex lg:gap-8">
+      <!-- 입력 폼 -->
+      <div class="lg:w-1/2 mb-8 lg:mb-0">
+        <div class="card p-6">
+          <h2 class="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
+            <span class="material-symbols-outlined text-indigo-600">edit</span>
+            근무 정보 입력
+          </h2>
+
+          <!-- 월봉급액 -->
+          <div class="mb-5">
+            <label class="block text-sm font-semibold text-slate-700 mb-2">
+              월 봉급액 <span class="text-rose-500">*</span>
+              <span class="text-xs text-slate-400 font-normal ml-1">(세전, 각종 수당 제외 봉급만)</span>
+            </label>
+            <div class="relative">
+              <input type="number" id="monthly-salary" class="form-input w-full pr-8"
+                     placeholder="예: 2500000" min="0" step="1000"
+                     oninput="calculate()" />
+              <span class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">원</span>
+            </div>
+            <p class="text-xs text-slate-400 mt-1">봉급표 기준 호봉별 봉급액을 입력하세요</p>
+          </div>
+
+          <!-- 구분선 -->
+          <hr class="border-slate-100 my-5" />
+
+          <!-- 시간외근무 -->
+          <div class="mb-5">
+            <label class="block text-sm font-semibold text-slate-700 mb-1">
+              시간외근무 시간
+              <span class="text-xs text-slate-400 font-normal ml-1">(월 한도 57시간)</span>
+            </label>
+            <p class="text-xs text-slate-400 mb-2">평일 정규근무(09:00~18:00) 외 추가 근무시간</p>
+            <div class="flex items-center gap-2">
+              <input type="number" id="overtime-hours" class="form-input w-28"
+                     placeholder="0" min="0" max="57" step="0.5"
+                     oninput="clampOvertime(); calculate()" />
+              <span class="text-slate-500 text-sm">시간</span>
+              <span id="overtime-over-limit" class="text-xs text-rose-500 hidden">최대 57시간</span>
+            </div>
+          </div>
+
+          <!-- 야간근무 -->
+          <div class="mb-5">
+            <label class="block text-sm font-semibold text-slate-700 mb-1">
+              야간근무 시간
+              <span class="text-xs text-slate-400 font-normal ml-1">(22:00~06:00 근무)</span>
+            </label>
+            <p class="text-xs text-slate-400 mb-2">야간근무수당은 시간외수당에 추가 가산됩니다</p>
+            <div class="flex items-center gap-2">
+              <input type="number" id="night-hours" class="form-input w-28"
+                     placeholder="0" min="0" step="0.5"
+                     oninput="calculate()" />
+              <span class="text-slate-500 text-sm">시간</span>
+            </div>
+          </div>
+
+          <!-- 휴일근무 -->
+          <div class="mb-5">
+            <label class="block text-sm font-semibold text-slate-700 mb-1">
+              휴일근무 시간
+              <span class="text-xs text-slate-400 font-normal ml-1">(토·일·공휴일)</span>
+            </label>
+            <p class="text-xs text-slate-400 mb-2">휴일근무는 시간외·야간 구분 없이 별도 적용</p>
+            <div class="flex items-center gap-2">
+              <input type="number" id="holiday-hours" class="form-input w-28"
+                     placeholder="0" min="0" step="0.5"
+                     oninput="calculate()" />
+              <span class="text-slate-500 text-sm">시간</span>
+            </div>
+          </div>
+
+          <button onclick="calculate()"
+                  class="w-full btn btn-point btn-md mt-2">
+            <span class="material-symbols-outlined">calculate</span>
+            수당 계산하기
+          </button>
+        </div>
+      </div>
+
+      <!-- 결과 -->
+      <div class="lg:w-1/2">
+        <div id="result-area" class="card p-6">
+          <h2 class="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
+            <span class="material-symbols-outlined text-indigo-600">receipt</span>
+            계산 결과
+          </h2>
+
+          <!-- 초기 안내 -->
+          <div id="result-empty" class="text-center py-10 text-slate-400">
+            <span class="material-symbols-outlined text-5xl mb-3 block opacity-40">schedule</span>
+            <p class="text-sm">월봉급액과 근무 시간을 입력하면<br>수당이 자동 계산됩니다.</p>
+          </div>
+
+          <!-- 계산 결과 -->
+          <div id="result-content" class="hidden">
+
+            <!-- 기준 단가 -->
+            <div class="bg-slate-50 rounded-xl p-4 mb-5">
+              <div class="text-xs font-semibold text-slate-500 mb-1">시간당 기준 단가</div>
+              <div class="text-2xl font-bold text-slate-900">
+                <span id="hourly-rate">-</span>
+                <span class="text-base font-normal text-slate-500 ml-1">원/시간</span>
+              </div>
+              <p class="text-xs text-slate-400 mt-1">월봉급액 ÷ 209시간</p>
+            </div>
+
+            <!-- 항목별 수당 -->
+            <div class="space-y-3 mb-5">
+              <div id="row-overtime" class="hidden flex items-center justify-between bg-white border border-slate-100 rounded-xl p-4">
+                <div>
+                  <div class="font-semibold text-slate-800 text-sm">시간외근무수당</div>
+                  <div id="overtime-detail" class="text-xs text-slate-400 mt-0.5"></div>
+                </div>
+                <div id="overtime-pay" class="font-bold text-indigo-600 text-lg"></div>
+              </div>
+
+              <div id="row-night" class="hidden flex items-center justify-between bg-white border border-slate-100 rounded-xl p-4">
+                <div>
+                  <div class="font-semibold text-slate-800 text-sm">야간근무수당</div>
+                  <div id="night-detail" class="text-xs text-slate-400 mt-0.5"></div>
+                </div>
+                <div id="night-pay" class="font-bold text-violet-600 text-lg"></div>
+              </div>
+
+              <div id="row-holiday" class="hidden flex items-center justify-between bg-white border border-slate-100 rounded-xl p-4">
+                <div>
+                  <div class="font-semibold text-slate-800 text-sm">휴일근무수당</div>
+                  <div id="holiday-detail" class="text-xs text-slate-400 mt-0.5"></div>
+                </div>
+                <div id="holiday-pay" class="font-bold text-emerald-600 text-lg"></div>
+              </div>
+            </div>
+
+            <!-- 합계 -->
+            <div class="bg-gradient-to-r from-indigo-600 to-indigo-700 rounded-2xl p-5 text-white">
+              <div class="text-sm font-semibold opacity-80 mb-1">이번 달 초과근무수당 합계</div>
+              <div class="text-3xl font-bold" id="total-pay">-</div>
+              <div class="text-xs opacity-70 mt-1" id="total-detail"></div>
+            </div>
+
+            <!-- 한도 경고 -->
+            <div id="limit-warning" class="hidden mt-4 bg-amber-50 border border-amber-200 rounded-xl p-4">
+              <div class="flex items-start gap-2">
+                <span class="material-symbols-outlined text-amber-600 text-lg mt-0.5">warning</span>
+                <div>
+                  <div class="font-semibold text-amber-800 text-sm">시간외근무 월 한도 초과</div>
+                  <div id="limit-warning-text" class="text-xs text-amber-700 mt-1"></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 계산 기준 안내 -->
+        <div class="mt-4 bg-slate-50 rounded-2xl p-5">
+          <h3 class="text-sm font-bold text-slate-700 mb-3">계산 기준 (공무원수당 등에 관한 규정)</h3>
+          <ul class="text-xs text-slate-500 space-y-1.5 leading-relaxed">
+            <li>• <strong class="text-slate-600">시간외근무수당</strong> = 월봉급액 ÷ 209 × 시간외근무시간 (월 57시간 한도)</li>
+            <li>• <strong class="text-slate-600">야간근무수당</strong> = 시간당 단가 × 야간근무시간 × 0.5 (22:00~06:00)</li>
+            <li>• <strong class="text-slate-600">휴일근무수당</strong> = 시간당 단가 × 휴일근무시간 × 1.5</li>
+            <li>• 시간외·야간·휴일이 중복되는 경우 각각 합산됩니다</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  function formatKRW(n) {
+    return Math.round(n).toLocaleString('ko-KR') + '원';
+  }
+
+  function clampOvertime() {
+    const el = document.getElementById('overtime-hours');
+    const warn = document.getElementById('overtime-over-limit');
+    if (parseFloat(el.value) > 57) {
+      el.value = 57;
+      warn.classList.remove('hidden');
+    } else {
+      warn.classList.add('hidden');
+    }
+  }
+
+  function calculate() {
+    const salary   = parseFloat(document.getElementById('monthly-salary').value) || 0;
+    const overtime = parseFloat(document.getElementById('overtime-hours').value)  || 0;
+    const night    = parseFloat(document.getElementById('night-hours').value)     || 0;
+    const holiday  = parseFloat(document.getElementById('holiday-hours').value)   || 0;
+
+    if (salary <= 0) {
+      document.getElementById('result-empty').classList.remove('hidden');
+      document.getElementById('result-content').classList.add('hidden');
+      return;
+    }
+
+    document.getElementById('result-empty').classList.add('hidden');
+    document.getElementById('result-content').classList.remove('hidden');
+
+    // 시간당 단가 = 월봉급액 / 209
+    const hourlyRate = salary / 209;
+    document.getElementById('hourly-rate').textContent = Math.round(hourlyRate).toLocaleString('ko-KR');
+
+    let total = 0;
+
+    // 시간외근무수당
+    const effectiveOvertime = Math.min(overtime, 57);
+    const overtimePay = hourlyRate * effectiveOvertime;
+    if (overtime > 0) {
+      document.getElementById('row-overtime').classList.remove('hidden');
+      document.getElementById('overtime-detail').textContent =
+        Math.round(hourlyRate).toLocaleString('ko-KR') + '원 × ' + effectiveOvertime + '시간';
+      document.getElementById('overtime-pay').textContent = formatKRW(overtimePay);
+      total += overtimePay;
+      if (overtime > 57) {
+        document.getElementById('limit-warning').classList.remove('hidden');
+        document.getElementById('limit-warning-text').textContent =
+          '입력 ' + overtime + '시간 중 57시간만 인정됩니다. (' + (overtime - 57) + '시간 초과)';
+      } else {
+        document.getElementById('limit-warning').classList.add('hidden');
+      }
+    } else {
+      document.getElementById('row-overtime').classList.add('hidden');
+      document.getElementById('limit-warning').classList.add('hidden');
+    }
+
+    // 야간근무수당 (시간당 단가 × 0.5 가산)
+    const nightPay = hourlyRate * night * 0.5;
+    if (night > 0) {
+      document.getElementById('row-night').classList.remove('hidden');
+      document.getElementById('night-detail').textContent =
+        Math.round(hourlyRate).toLocaleString('ko-KR') + '원 × ' + night + '시간 × 0.5';
+      document.getElementById('night-pay').textContent = formatKRW(nightPay);
+      total += nightPay;
+    } else {
+      document.getElementById('row-night').classList.add('hidden');
+    }
+
+    // 휴일근무수당 (시간당 단가 × 1.5)
+    const holidayPay = hourlyRate * holiday * 1.5;
+    if (holiday > 0) {
+      document.getElementById('row-holiday').classList.remove('hidden');
+      document.getElementById('holiday-detail').textContent =
+        Math.round(hourlyRate).toLocaleString('ko-KR') + '원 × ' + holiday + '시간 × 1.5';
+      document.getElementById('holiday-pay').textContent = formatKRW(holidayPay);
+      total += holidayPay;
+    } else {
+      document.getElementById('row-holiday').classList.add('hidden');
+    }
+
+    document.getElementById('total-pay').textContent = formatKRW(total);
+
+    const parts = [];
+    if (overtime > 0) parts.push('시간외 ' + formatKRW(overtimePay));
+    if (night > 0)     parts.push('야간 ' + formatKRW(nightPay));
+    if (holiday > 0)   parts.push('휴일 ' + formatKRW(holidayPay));
+    document.getElementById('total-detail').textContent = parts.join(' + ');
+  }
+</script>

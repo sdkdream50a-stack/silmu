@@ -1,0 +1,297 @@
+<%# 연가일수 계산기 %>
+
+<section class="section py-10">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- 뒤로가기 -->
+    <div class="mb-6">
+      <%= link_to tools_path, class: "inline-flex items-center text-slate-600 hover:text-indigo-600 transition-colors font-medium" do %>
+        <span class="material-symbols-outlined mr-1">arrow_back</span>
+        도구 목록으로
+      <% end %>
+    </div>
+
+    <!-- 페이지 헤더 -->
+    <div class="mb-8">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="icon-container icon-container-lg gradient-indigo shadow-lg">
+          <span class="material-symbols-outlined text-3xl text-white">event_available</span>
+        </div>
+        <div>
+          <h1 class="text-2xl font-bold text-slate-900">연가일수 계산기</h1>
+          <p class="text-slate-500">재직 기간에 따른 연가일수와 잔여 연가를 자동으로 계산합니다</p>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl shadow-sm border border-indigo-100 p-6 mt-6">
+        <h2 class="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
+          <span class="material-symbols-outlined text-indigo-600">info</span>
+          이 도구를 사용하는 이유
+        </h2>
+        <div class="prose prose-slate prose-sm max-w-none">
+          <p class="text-slate-700 leading-relaxed mb-3">
+            공무원 연가는 <strong>국가공무원 복무규정 제15조</strong>에 따라 재직 기간에 따라 11~21일로 차등 지급됩니다.
+            신규 임용 시에는 임용 월부터 12월까지 남은 월 수에 비례하여 연가가 부여되므로 정확한 일수를 파악하기 어렵습니다.
+          </p>
+          <p class="text-slate-700 leading-relaxed mb-3">
+            이 도구는 임용일을 입력하면 현재 재직 기간을 자동 계산하고, 연도별 부여 연가일수와 사용 연가를 차감한 <strong>잔여 연가일수</strong>를 즉시 확인할 수 있습니다.
+            연가보상비 산정 시에도 활용할 수 있습니다.
+          </p>
+          <div class="bg-amber-50 border-l-4 border-amber-500 p-3 rounded-r-lg mt-4">
+            <p class="text-amber-900 text-xs leading-relaxed">
+              <strong>⚠️ 참고:</strong> 지방공무원·교육공무원 등 직종에 따라 연가 기준이 다를 수 있으며, 병가·공무상 병가 사용 시 연가 일수가 달라질 수 있습니다.
+              (근거: 국가공무원 복무규정 제15조, 지방공무원 복무규정 제7조)
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lg:flex lg:gap-8">
+      <!-- 입력 폼 -->
+      <div class="lg:w-1/2 mb-8 lg:mb-0">
+        <div class="card p-6">
+          <h2 class="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
+            <span class="material-symbols-outlined text-indigo-600">edit</span>
+            근무 정보 입력
+          </h2>
+
+          <!-- 최초 임용일 -->
+          <div class="mb-5">
+            <label class="block text-sm font-semibold text-slate-700 mb-2">
+              최초 임용일 <span class="text-rose-500">*</span>
+            </label>
+            <input type="date" id="hire-date" class="form-input w-full"
+                   oninput="calculate()" />
+            <p class="text-xs text-slate-400 mt-1">처음 공직 임용된 날짜 (경력 합산 기준)</p>
+          </div>
+
+          <!-- 기준 연도 -->
+          <div class="mb-5">
+            <label class="block text-sm font-semibold text-slate-700 mb-2">
+              기준 연도
+            </label>
+            <select id="ref-year" class="form-input w-full" oninput="calculate()">
+            </select>
+          </div>
+
+          <!-- 사용 연가 -->
+          <div class="mb-5">
+            <label class="block text-sm font-semibold text-slate-700 mb-2">
+              이미 사용한 연가
+              <span class="text-xs text-slate-400 font-normal ml-1">(기준 연도 내)</span>
+            </label>
+            <div class="flex items-center gap-2">
+              <input type="number" id="used-leave" class="form-input w-28"
+                     placeholder="0" min="0" max="30" step="0.5"
+                     oninput="calculate()" />
+              <span class="text-slate-500 text-sm">일</span>
+            </div>
+          </div>
+
+          <!-- 연가보상비 기준 일급 (선택) -->
+          <div class="mb-5">
+            <label class="block text-sm font-semibold text-slate-700 mb-2">
+              일급여액 <span class="text-xs text-slate-400 font-normal">(연가보상비 계산 시 선택 입력)</span>
+            </label>
+            <div class="relative">
+              <input type="number" id="daily-wage" class="form-input w-full pr-8"
+                     placeholder="예: 100000" min="0" step="1000"
+                     oninput="calculate()" />
+              <span class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">원</span>
+            </div>
+            <p class="text-xs text-slate-400 mt-1">월봉급액 ÷ 30으로 산출 가능</p>
+          </div>
+
+          <button onclick="calculate()"
+                  class="w-full btn btn-point btn-md mt-2">
+            <span class="material-symbols-outlined">calculate</span>
+            연가 계산하기
+          </button>
+        </div>
+      </div>
+
+      <!-- 결과 -->
+      <div class="lg:w-1/2">
+        <div id="result-area" class="card p-6">
+          <h2 class="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
+            <span class="material-symbols-outlined text-indigo-600">event_note</span>
+            계산 결과
+          </h2>
+
+          <!-- 초기 안내 -->
+          <div id="result-empty" class="text-center py-10 text-slate-400">
+            <span class="material-symbols-outlined text-5xl mb-3 block opacity-40">event_available</span>
+            <p class="text-sm">임용일을 입력하면<br>연가일수가 자동 계산됩니다.</p>
+          </div>
+
+          <!-- 계산 결과 -->
+          <div id="result-content" class="hidden">
+
+            <!-- 재직 기간 -->
+            <div class="bg-slate-50 rounded-xl p-4 mb-5">
+              <div class="text-xs font-semibold text-slate-500 mb-1">총 재직 기간</div>
+              <div class="text-xl font-bold text-slate-900" id="service-period">-</div>
+              <div class="text-xs text-slate-400 mt-1" id="service-detail"></div>
+            </div>
+
+            <!-- 연가 현황 카드 3개 -->
+            <div class="grid grid-cols-3 gap-3 mb-5">
+              <div class="bg-indigo-50 rounded-xl p-4 text-center">
+                <div class="text-xs font-semibold text-indigo-600 mb-1">부여 연가</div>
+                <div class="text-2xl font-bold text-indigo-700" id="total-leave">-</div>
+                <div class="text-xs text-indigo-400 mt-0.5">일</div>
+              </div>
+              <div class="bg-rose-50 rounded-xl p-4 text-center">
+                <div class="text-xs font-semibold text-rose-600 mb-1">사용 연가</div>
+                <div class="text-2xl font-bold text-rose-700" id="used-leave-display">0</div>
+                <div class="text-xs text-rose-400 mt-0.5">일</div>
+              </div>
+              <div class="bg-emerald-50 rounded-xl p-4 text-center">
+                <div class="text-xs font-semibold text-emerald-600 mb-1">잔여 연가</div>
+                <div class="text-2xl font-bold text-emerald-700" id="remaining-leave">-</div>
+                <div class="text-xs text-emerald-400 mt-0.5">일</div>
+              </div>
+            </div>
+
+            <!-- 연가보상비 (선택) -->
+            <div id="compensation-section" class="hidden bg-amber-50 rounded-xl p-4 mb-5">
+              <div class="text-xs font-semibold text-amber-700 mb-1">미사용 연가보상비 (최대 20일 한도)</div>
+              <div class="text-2xl font-bold text-amber-800" id="compensation-pay">-</div>
+              <div class="text-xs text-amber-600 mt-1" id="compensation-detail"></div>
+            </div>
+
+            <!-- 재직 기간별 연가 안내 -->
+            <div class="bg-white border border-slate-100 rounded-xl p-4">
+              <div class="text-xs font-bold text-slate-600 mb-3">📋 현재 적용 기준</div>
+              <div id="leave-rule" class="text-sm text-slate-700"></div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 연가일수 기준표 -->
+        <div class="mt-4 bg-slate-50 rounded-2xl p-5">
+          <h3 class="text-sm font-bold text-slate-700 mb-3">연가일수 기준표 (국가공무원 복무규정 제15조)</h3>
+          <table class="w-full text-xs text-slate-600">
+            <thead>
+              <tr class="border-b border-slate-200">
+                <th class="text-left py-1.5 font-semibold text-slate-700">재직 기간</th>
+                <th class="text-right py-1.5 font-semibold text-slate-700">연가 일수</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              <tr><td class="py-1.5">1개월 이상 ~ 1년 미만</td><td class="text-right font-semibold">11일</td></tr>
+              <tr><td class="py-1.5">1년 이상 ~ 2년 미만</td><td class="text-right font-semibold">12일</td></tr>
+              <tr><td class="py-1.5">2년 이상 ~ 3년 미만</td><td class="text-right font-semibold">14일</td></tr>
+              <tr><td class="py-1.5">3년 이상 ~ 4년 미만</td><td class="text-right font-semibold">15일</td></tr>
+              <tr><td class="py-1.5">4년 이상 ~ 5년 미만</td><td class="text-right font-semibold">17일</td></tr>
+              <tr><td class="py-1.5">5년 이상 ~ 6년 미만</td><td class="text-right font-semibold">20일</td></tr>
+              <tr><td class="py-1.5">6년 이상</td><td class="text-right font-semibold text-indigo-600">21일</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // 기준 연도 셀렉트 초기화
+  (function initYears() {
+    const sel = document.getElementById('ref-year');
+    const cur = new Date().getFullYear();
+    for (let y = cur; y >= cur - 5; y--) {
+      const opt = document.createElement('option');
+      opt.value = y;
+      opt.textContent = y + '년';
+      if (y === cur) opt.selected = true;
+      sel.appendChild(opt);
+    }
+  })();
+
+  // 재직 기간 → 부여 연가일수 반환
+  function getLeaveByYears(totalMonths) {
+    if (totalMonths < 1)  return { days: 0,  label: '1개월 미만 — 연가 없음' };
+    if (totalMonths < 12) return { days: 11, label: '1개월 이상 ~ 1년 미만 → 11일' };
+    const years = Math.floor(totalMonths / 12);
+    if (years < 2)  return { days: 12, label: '1년 이상 ~ 2년 미만 → 12일' };
+    if (years < 3)  return { days: 14, label: '2년 이상 ~ 3년 미만 → 14일' };
+    if (years < 4)  return { days: 15, label: '3년 이상 ~ 4년 미만 → 15일' };
+    if (years < 5)  return { days: 17, label: '4년 이상 ~ 5년 미만 → 17일' };
+    if (years < 6)  return { days: 20, label: '5년 이상 ~ 6년 미만 → 20일' };
+    return { days: 21, label: '6년 이상 → 21일' };
+  }
+
+  function formatKRW(n) {
+    return Math.round(n).toLocaleString('ko-KR') + '원';
+  }
+
+  function calculate() {
+    const hireDateVal = document.getElementById('hire-date').value;
+    if (!hireDateVal) {
+      document.getElementById('result-empty').classList.remove('hidden');
+      document.getElementById('result-content').classList.add('hidden');
+      return;
+    }
+
+    const refYear   = parseInt(document.getElementById('ref-year').value);
+    const usedLeave = parseFloat(document.getElementById('used-leave').value) || 0;
+    const dailyWage = parseFloat(document.getElementById('daily-wage').value) || 0;
+
+    // 기준일: 해당 연도 1월 1일 기준 재직 기간 계산 (신규 임용 연도는 임용일 기준)
+    const hireDate = new Date(hireDateVal);
+    const refDate  = new Date(refYear, 0, 1); // 기준 연도 1월 1일
+
+    // 실제 계산 기준: 기준 연도 1월 1일 시점의 재직 개월 수
+    let diffMs = refDate - hireDate;
+    if (diffMs < 0) diffMs = 0; // 임용 전
+
+    const totalMonths = Math.floor(diffMs / (1000 * 60 * 60 * 24 * 30.44));
+    const years  = Math.floor(totalMonths / 12);
+    const months = totalMonths % 12;
+
+    // 재직 기간 표시
+    let periodText = '';
+    if (years > 0 && months > 0) periodText = years + '년 ' + months + '개월';
+    else if (years > 0)          periodText = years + '년';
+    else if (months > 0)         periodText = months + '개월';
+    else                         periodText = '1개월 미만';
+
+    document.getElementById('service-period').textContent = periodText;
+    document.getElementById('service-detail').textContent =
+      hireDate.toLocaleDateString('ko-KR') + ' 임용 기준 (' + refYear + '.01.01 시점)';
+
+    // 연가 계산
+    const { days, label } = getLeaveByYears(totalMonths);
+
+    // 신규 임용 연도 비례 처리: 임용 연도와 기준 연도가 같으면 월 비례
+    let grantedLeave = days;
+    if (hireDate.getFullYear() === refYear && days > 0) {
+      const hireMonth = hireDate.getMonth(); // 0-indexed
+      const remainMonths = 12 - hireMonth;   // 임용 월 포함 남은 달
+      grantedLeave = Math.ceil(days * remainMonths / 12);
+    }
+
+    const remaining = Math.max(0, grantedLeave - usedLeave);
+
+    document.getElementById('total-leave').textContent     = grantedLeave;
+    document.getElementById('used-leave-display').textContent = usedLeave;
+    document.getElementById('remaining-leave').textContent = remaining;
+    document.getElementById('leave-rule').textContent = label;
+
+    // 연가보상비 (미사용 연가, 최대 20일 한도)
+    if (dailyWage > 0) {
+      const compensationDays = Math.min(remaining, 20);
+      const compensationPay = dailyWage * compensationDays;
+      document.getElementById('compensation-section').classList.remove('hidden');
+      document.getElementById('compensation-pay').textContent = formatKRW(compensationPay);
+      document.getElementById('compensation-detail').textContent =
+        '잔여 ' + remaining + '일 중 최대 20일 한도 → ' + compensationDays + '일 × ' + formatKRW(dailyWage);
+    } else {
+      document.getElementById('compensation-section').classList.add('hidden');
+    }
+
+    document.getElementById('result-empty').classList.add('hidden');
+    document.getElementById('result-content').classList.remove('hidden');
+  }
+</script>

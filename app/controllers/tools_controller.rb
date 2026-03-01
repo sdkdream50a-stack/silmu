@@ -70,6 +70,40 @@ class ToolsController < ApplicationController
     )
   end
 
+  def overtime_calculator
+    description_text = "공무원 시간외·야간·휴일 초과근무수당을 자동 계산합니다. 월봉급액과 근무 유형·시간을 입력하면 공무원수당 등에 관한 규정에 따라 수당이 즉시 산출됩니다."
+
+    set_meta_tags(
+      title: "초과근무수당 계산기 — 공무원 시간외·야간·휴일근무수당 자동 계산",
+      description: description_text,
+      keywords: "초과근무수당, 시간외근무수당, 야간근무수당, 휴일근무수당, 공무원수당, 월봉급액, 209시간",
+      og: {
+        title: "초과근무수당 계산기 — 실무.kr",
+        description: description_text,
+        url: canonical_url,
+        image: "https://silmu.kr/og-image.png",
+        type: "website"
+      }
+    )
+  end
+
+  def annual_leave_calculator
+    description_text = "공무원 재직 기간에 따른 연가일수와 잔여 연가를 자동 계산합니다. 임용일 입력만으로 부여 연가·사용 연가·잔여 연가·연가보상비까지 한 번에 확인하세요."
+
+    set_meta_tags(
+      title: "연가일수 계산기 — 공무원 재직 기간별 연가 자동 계산",
+      description: description_text,
+      keywords: "연가일수, 공무원 연가, 재직기간, 연가보상비, 복무규정, 잔여연가",
+      og: {
+        title: "연가일수 계산기 — 실무.kr",
+        description: description_text,
+        url: canonical_url,
+        image: "https://silmu.kr/og-image.png",
+        type: "website"
+      }
+    )
+  end
+
   def travel_calculator
     description_text = "공무원 국내·외 출장 여비를 자동으로 계산합니다. 교통비, 일비, 숙박비, 식비를 한 번에 산출하고, 국내출장과 해외출장을 구분하여 정확한 여비를 계산합니다. 공무원 여비 규정에 따라 자동 계산됩니다."
 
