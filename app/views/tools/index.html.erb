@@ -25,7 +25,7 @@
           <div class="text-xs text-white/70 mt-0.5">활성 도구</div>
         </div>
         <div class="text-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/15">
-          <div class="text-2xl font-bold">5</div>
+          <div class="text-2xl font-bold">7</div>
           <div class="text-xs text-white/70 mt-0.5">계산기</div>
         </div>
         <div class="text-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/15">
@@ -70,7 +70,9 @@
         { title: "수의계약 사유서 생성기", desc: "계약구분과 사유를 선택하면 법적 근거가 포함된 사유서를 자동 생성합니다.", icon: "edit_document", color: "emerald", category: "문서 도구", path: contract_reason_path },
         { title: "견적서 일괄 문서생성", desc: "견적서 1장을 업로드하면 사업계획서·소요예산·예정가격 조서를 한 번에 자동 생성합니다.", icon: "receipt_long", color: "blue", category: "AI 도구", path: quote_auto_path, badge: "NEW" },
         { title: "공문서 AI 작성 도우미", desc: "기안문·협조문·통보문 등 공문서를 AI가 행정업무운영규정에 맞게 자동 작성합니다.", icon: "auto_awesome", color: "indigo", category: "AI 도구", path: official_document_path, badge: "NEW" },
-        { title: "4대보험 정산보험료 계산기", desc: "연말정산·퇴직정산 보험료를 자동 계산합니다. 국민연금·건강·요양·고용·산재 합산까지 한 번에 처리하세요.", icon: "health_and_safety", color: "blue", category: "계산기", path: insurance_calculator_path, badge: "NEW" },
+        { title: "4대보험 정산보험료 계산기", desc: "연말정산·퇴직정산 보험료를 자동 계산합니다. 국민연금·건강·요양·고용·산재 합산까지 한 번에 처리하세요.", icon: "health_and_safety", color: "blue", category: "계산기", path: insurance_calculator_path },
+        { title: "예산 집행률 계산기", desc: "예산 항목별 집행액을 입력하면 집행률·잔액·권장 기준 대비 현황을 즉시 파악합니다. 월별 집행 속도 분석 포함.", icon: "bar_chart", color: "indigo", category: "계산기", path: budget_execution_rate_path, badge: "NEW" },
+        { title: "예비비 한도 계산기", desc: "예산 총액을 입력하면 지방재정법상 예비비 법정 한도(1%)와 적정 편성 금액을 자동 계산합니다.", icon: "savings", color: "amber", category: "계산기", path: contingency_fund_path, badge: "NEW" },
       ].each do |tool| %>
         <%= link_to tool[:path], class: "group card card-interactive card-glow-#{tool[:color]} card-shine p-6 relative overflow-hidden border border-transparent hover:border-#{tool[:color]}-200", data: { category: tool[:category], title: tool[:title] } do %>
           <% if tool[:badge] %>

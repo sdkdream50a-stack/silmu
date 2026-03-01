@@ -1,0 +1,411 @@
+<%# 예산 집행률 계산기 %>
+
+<section class="section py-10">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- 뒤로가기 -->
+    <div class="mb-6">
+      <%= link_to tools_path, class: "inline-flex items-center text-slate-600 hover:text-indigo-600 transition-colors font-medium" do %>
+        <span class="material-symbols-outlined mr-1">arrow_back</span>
+        도구 목록으로
+      <% end %>
+    </div>
+
+    <!-- 페이지 헤더 -->
+    <div class="mb-8">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="icon-container icon-container-lg gradient-indigo shadow-lg">
+          <span class="material-symbols-outlined text-3xl text-white">bar_chart</span>
+        </div>
+        <div>
+          <h1 class="text-2xl font-bold text-slate-900">예산 집행률 계산기</h1>
+          <p class="text-slate-500">예산 집행 현황과 목표 달성 여부를 즉시 파악하세요</p>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl shadow-sm border border-indigo-100 p-6 mt-6">
+        <h2 class="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
+          <span class="material-symbols-outlined text-indigo-600">info</span>
+          이 도구를 사용하는 이유
+        </h2>
+        <div class="prose prose-slate prose-sm max-w-none">
+          <p class="text-slate-700 leading-relaxed mb-3">
+            예산 집행률은 배정예산 대비 실제 집행액의 비율로, 사업 진행도와 예산 관리 현황을 한눈에 보여주는 핵심 지표입니다.
+            지방재정법 및 행안부 지침에 따라 <strong>분기·연도말 집행 목표율</strong>을 달성해야 하며, 미달 시 다음 연도 예산 삭감 등의 불이익이 있습니다.
+          </p>
+          <p class="text-slate-700 leading-relaxed mb-3">
+            이 도구는 예산 항목별 집행률과 잔액을 자동 계산하고, 현재 시점 기준 <strong>권장 집행률과의 차이</strong>를 바로 알 수 있도록 설계되었습니다.
+            월별 기준 집행률(연간 균등 배분 기준)과 비교하여 집행 속도가 빠른지 느린지 즉시 판단할 수 있습니다.
+          </p>
+          <div class="bg-amber-50 border-l-4 border-amber-500 p-3 rounded-r-lg mt-4">
+            <p class="text-amber-900 text-xs leading-relaxed">
+              <strong>⚠️ 참고:</strong> 권장 집행률은 월별 균등 배분 기준이며, 사업 특성(하반기 집중·계절성 등)에 따라 다를 수 있습니다. 실제 기관의 집행 계획서를 함께 참고하세요.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lg:flex lg:gap-8">
+      <!-- 입력 폼 -->
+      <div class="lg:w-1/2 mb-8 lg:mb-0">
+        <div class="card p-6">
+          <h2 class="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
+            <span class="material-symbols-outlined text-indigo-600">edit</span>
+            예산 정보 입력
+          </h2>
+
+          <!-- 기준 월 -->
+          <div class="mb-5">
+            <label class="block text-sm font-semibold text-slate-700 mb-2">기준 월</label>
+            <select id="base-month" class="form-input w-full" onchange="calculate()">
+              <option value="1">1월</option>
+              <option value="2">2월</option>
+              <option value="3">3월</option>
+              <option value="4">4월</option>
+              <option value="5">5월</option>
+              <option value="6">6월</option>
+              <option value="7">7월</option>
+              <option value="8">8월</option>
+              <option value="9" selected>9월</option>
+              <option value="10">10월</option>
+              <option value="11">11월</option>
+              <option value="12">12월</option>
+            </select>
+            <p class="text-xs text-slate-400 mt-1">현재 기준으로 삼을 월을 선택하세요</p>
+          </div>
+
+          <!-- 예산 항목 입력 -->
+          <div id="items-container">
+            <!-- 항목 1 (기본) -->
+            <div class="budget-item border border-slate-100 rounded-xl p-4 mb-4 bg-slate-50/50">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-sm font-semibold text-slate-600">항목 1</span>
+                <button type="button" onclick="removeItem(this)" class="text-slate-300 hover:text-red-500 transition-colors hidden">
+                  <span class="material-symbols-outlined text-base">close</span>
+                </button>
+              </div>
+              <div class="mb-3">
+                <label class="block text-xs font-medium text-slate-600 mb-1">항목명 (선택)</label>
+                <input type="text" placeholder="예: 도로유지보수비" class="form-input w-full text-sm" oninput="calculate()">
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs font-medium text-slate-600 mb-1">예산액 (천원)</label>
+                  <input type="number" placeholder="예: 50,000" min="0" class="form-input w-full text-sm budget-amount" oninput="calculate()">
+                </div>
+                <div>
+                  <label class="block text-xs font-medium text-slate-600 mb-1">집행액 (천원)</label>
+                  <input type="number" placeholder="예: 28,500" min="0" class="form-input w-full text-sm executed-amount" oninput="calculate()">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 항목 추가 버튼 -->
+          <button type="button" onclick="addItem()" class="w-full py-2.5 border-2 border-dashed border-slate-200 rounded-xl text-sm text-slate-400 hover:border-indigo-300 hover:text-indigo-500 transition-all flex items-center justify-center gap-1 mb-4">
+            <span class="material-symbols-outlined text-base">add</span>
+            항목 추가
+          </button>
+
+          <!-- 계산 버튼 -->
+          <button type="button" onclick="calculate()" class="w-full btn btn-point btn-md">
+            <span class="material-symbols-outlined">calculate</span>
+            집행률 계산
+          </button>
+        </div>
+      </div>
+
+      <!-- 결과 -->
+      <div class="lg:w-1/2">
+        <div class="card p-6 h-full">
+          <h2 class="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
+            <span class="material-symbols-outlined text-indigo-600">analytics</span>
+            집행률 분석 결과
+          </h2>
+
+          <!-- 초기 안내 메시지 -->
+          <div id="empty-state" class="flex flex-col items-center justify-center h-48 text-slate-300">
+            <span class="material-symbols-outlined text-5xl mb-3">bar_chart</span>
+            <p class="text-sm">예산 정보를 입력하면 결과가 표시됩니다</p>
+          </div>
+
+          <!-- 결과 영역 -->
+          <div id="result-area" class="hidden">
+            <!-- 전체 요약 -->
+            <div class="bg-indigo-50 rounded-xl p-4 mb-5">
+              <div class="text-sm text-indigo-600 font-medium mb-1">전체 예산 집행률</div>
+              <div class="flex items-end gap-3">
+                <div id="total-rate" class="text-4xl font-bold text-indigo-700">0%</div>
+                <div id="rate-status" class="text-sm font-semibold pb-1"></div>
+              </div>
+              <!-- 진행바 -->
+              <div class="mt-3 bg-white rounded-full h-3 overflow-hidden">
+                <div id="total-bar" class="h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+              </div>
+              <div class="flex justify-between text-xs text-indigo-400 mt-1">
+                <span>0%</span>
+                <span id="target-rate-label">권장 집행률 0%</span>
+                <span>100%</span>
+              </div>
+            </div>
+
+            <!-- 수치 요약 -->
+            <div class="grid grid-cols-3 gap-3 mb-5">
+              <div class="bg-white border border-slate-100 rounded-xl p-3 text-center">
+                <div class="text-xs text-slate-400 mb-1">총 예산액</div>
+                <div id="total-budget" class="text-base font-bold text-slate-800">-</div>
+                <div class="text-xs text-slate-400">천원</div>
+              </div>
+              <div class="bg-white border border-slate-100 rounded-xl p-3 text-center">
+                <div class="text-xs text-slate-400 mb-1">총 집행액</div>
+                <div id="total-executed" class="text-base font-bold text-green-600">-</div>
+                <div class="text-xs text-slate-400">천원</div>
+              </div>
+              <div class="bg-white border border-slate-100 rounded-xl p-3 text-center">
+                <div class="text-xs text-slate-400 mb-1">미집행 잔액</div>
+                <div id="total-balance" class="text-base font-bold text-amber-600">-</div>
+                <div class="text-xs text-slate-400">천원</div>
+              </div>
+            </div>
+
+            <!-- 항목별 결과 -->
+            <div id="items-result" class="space-y-3">
+            </div>
+
+            <!-- 집행 속도 분석 -->
+            <div id="speed-analysis" class="mt-4 p-4 rounded-xl border text-sm"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 집행률 기준 안내 -->
+    <div class="mt-8 card p-6">
+      <h3 class="text-base font-bold text-slate-900 mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-amber-600">lightbulb</span>
+        예산 집행률 가이드
+      </h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+        <div class="bg-green-50 rounded-xl p-4">
+          <div class="font-semibold text-green-800 mb-2">✅ 양호 집행 기준</div>
+          <ul class="text-green-700 space-y-1 text-xs">
+            <li>• 분기말(3·6·9월): 각 분기 목표율 달성</li>
+            <li>• 연말(12월): 90% 이상 집행 권장</li>
+            <li>• 이월 최소화: 명시이월·사고이월 사유 명확히</li>
+          </ul>
+        </div>
+        <div class="bg-red-50 rounded-xl p-4">
+          <div class="font-semibold text-red-800 mb-2">⚠️ 집행 부진 시 조치</div>
+          <ul class="text-red-700 space-y-1 text-xs">
+            <li>• 집행 부진 원인 분석 및 보고</li>
+            <li>• 불용 예산 예비비 전입 또는 이용·전용 검토</li>
+            <li>• 다음 연도 예산 편성 시 삭감 가능</li>
+          </ul>
+        </div>
+        <div class="bg-blue-50 rounded-xl p-4">
+          <div class="font-semibold text-blue-800 mb-2">📌 집행 서두르면 안 되는 경우</div>
+          <ul class="text-blue-700 space-y-1 text-xs">
+            <li>• 경상 지출(인건비·운영비): 계획대로 집행</li>
+            <li>• 사업비: 사업 진행률에 맞춰 집행</li>
+            <li>• 억지 집행(불필요한 구매 등)은 감사 지적 대상</li>
+          </ul>
+        </div>
+        <div class="bg-purple-50 rounded-xl p-4">
+          <div class="font-semibold text-purple-800 mb-2">📊 집행률 산정 방법</div>
+          <ul class="text-purple-700 space-y-1 text-xs">
+            <li>• 집행률 = 집행액 ÷ 예산액 × 100</li>
+            <li>• 집행액 = 지출액 + 지출원인행위액</li>
+            <li>• 예산액 = 당초예산 + 추가경정예산</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  let itemCount = 1;
+
+  // 페이지 로드 시 현재 월로 기준 월 설정
+  document.addEventListener('DOMContentLoaded', function() {
+    const now = new Date();
+    const month = now.getMonth() + 1;
+    document.getElementById('base-month').value = month;
+  });
+
+  function addItem() {
+    itemCount++;
+    const container = document.getElementById('items-container');
+    const div = document.createElement('div');
+    div.className = 'budget-item border border-slate-100 rounded-xl p-4 mb-4 bg-slate-50/50';
+    div.innerHTML = `
+      <div class="flex items-center justify-between mb-3">
+        <span class="text-sm font-semibold text-slate-600">항목 ${itemCount}</span>
+        <button type="button" onclick="removeItem(this)" class="text-slate-300 hover:text-red-500 transition-colors">
+          <span class="material-symbols-outlined text-base">close</span>
+        </button>
+      </div>
+      <div class="mb-3">
+        <label class="block text-xs font-medium text-slate-600 mb-1">항목명 (선택)</label>
+        <input type="text" placeholder="예: 청사유지보수비" class="form-input w-full text-sm" oninput="calculate()">
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">예산액 (천원)</label>
+          <input type="number" placeholder="0" min="0" class="form-input w-full text-sm budget-amount" oninput="calculate()">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">집행액 (천원)</label>
+          <input type="number" placeholder="0" min="0" class="form-input w-full text-sm executed-amount" oninput="calculate()">
+        </div>
+      </div>
+    `;
+    container.appendChild(div);
+    // 첫 항목 삭제 버튼 표시
+    const firstRemoveBtn = container.querySelector('.budget-item .hidden');
+    if (firstRemoveBtn) firstRemoveBtn.classList.remove('hidden');
+  }
+
+  function removeItem(btn) {
+    const item = btn.closest('.budget-item');
+    item.remove();
+    // 항목이 1개만 남으면 삭제 버튼 숨기기
+    const items = document.querySelectorAll('.budget-item');
+    if (items.length === 1) {
+      const removeBtn = items[0].querySelector('button[onclick="removeItem(this)"]');
+      if (removeBtn) removeBtn.classList.add('hidden');
+    }
+    calculate();
+  }
+
+  function calculate() {
+    const month = parseInt(document.getElementById('base-month').value);
+    const targetRate = (month / 12) * 100;
+
+    const items = document.querySelectorAll('.budget-item');
+    let totalBudget = 0, totalExecuted = 0;
+    const itemResults = [];
+
+    items.forEach((item, idx) => {
+      const nameInput = item.querySelector('input[type="text"]');
+      const budgetInput = item.querySelector('.budget-amount');
+      const executedInput = item.querySelector('.executed-amount');
+
+      const name = nameInput ? nameInput.value.trim() || `항목 ${idx + 1}` : `항목 ${idx + 1}`;
+      const budget = parseFloat(budgetInput?.value) || 0;
+      const executed = parseFloat(executedInput?.value) || 0;
+
+      if (budget > 0) {
+        totalBudget += budget;
+        totalExecuted += executed;
+        const rate = (executed / budget) * 100;
+        itemResults.push({ name, budget, executed, rate });
+      }
+    });
+
+    if (totalBudget === 0) {
+      document.getElementById('empty-state').classList.remove('hidden');
+      document.getElementById('result-area').classList.add('hidden');
+      return;
+    }
+
+    const totalRate = (totalExecuted / totalBudget) * 100;
+    const totalBalance = totalBudget - totalExecuted;
+
+    document.getElementById('empty-state').classList.add('hidden');
+    document.getElementById('result-area').classList.remove('hidden');
+
+    // 전체 집행률
+    document.getElementById('total-rate').textContent = totalRate.toFixed(1) + '%';
+    document.getElementById('target-rate-label').textContent = `권장 집행률 ${targetRate.toFixed(0)}%`;
+
+    // 진행바 색상
+    const bar = document.getElementById('total-bar');
+    if (totalRate >= targetRate) {
+      bar.className = 'h-full rounded-full transition-all duration-500 bg-green-500';
+    } else if (totalRate >= targetRate * 0.8) {
+      bar.className = 'h-full rounded-full transition-all duration-500 bg-amber-400';
+    } else {
+      bar.className = 'h-full rounded-full transition-all duration-500 bg-red-400';
+    }
+    bar.style.width = Math.min(totalRate, 100) + '%';
+
+    // 상태 텍스트
+    const statusEl = document.getElementById('rate-status');
+    const diff = totalRate - targetRate;
+    if (diff >= 5) {
+      statusEl.textContent = '▲ 목표 초과 달성';
+      statusEl.className = 'text-sm font-semibold pb-1 text-green-600';
+    } else if (diff >= 0) {
+      statusEl.textContent = '✅ 목표 달성';
+      statusEl.className = 'text-sm font-semibold pb-1 text-green-600';
+    } else if (diff >= -10) {
+      statusEl.textContent = '⚡ 약간 부진';
+      statusEl.className = 'text-sm font-semibold pb-1 text-amber-600';
+    } else {
+      statusEl.textContent = '⚠️ 집행 부진';
+      statusEl.className = 'text-sm font-semibold pb-1 text-red-600';
+    }
+
+    // 수치
+    document.getElementById('total-budget').textContent = formatNum(totalBudget);
+    document.getElementById('total-executed').textContent = formatNum(totalExecuted);
+    document.getElementById('total-balance').textContent = formatNum(totalBalance);
+
+    // 항목별 결과
+    const itemsResult = document.getElementById('items-result');
+    itemsResult.innerHTML = itemResults.map(item => {
+      const rate = item.rate;
+      let colorClass, bgClass;
+      if (rate >= targetRate) { colorClass = 'text-green-600'; bgClass = 'bg-green-50'; }
+      else if (rate >= targetRate * 0.8) { colorClass = 'text-amber-600'; bgClass = 'bg-amber-50'; }
+      else { colorClass = 'text-red-600'; bgClass = 'bg-red-50'; }
+
+      return `
+        <div class="${bgClass} rounded-xl p-3">
+          <div class="flex justify-between items-center mb-1">
+            <span class="text-sm font-semibold text-slate-700">${item.name}</span>
+            <span class="text-sm font-bold ${colorClass}">${rate.toFixed(1)}%</span>
+          </div>
+          <div class="bg-white/80 rounded-full h-2 overflow-hidden mb-1">
+            <div class="h-full rounded-full ${rate >= targetRate ? 'bg-green-500' : rate >= targetRate * 0.8 ? 'bg-amber-400' : 'bg-red-400'}" style="width: ${Math.min(rate, 100)}%"></div>
+          </div>
+          <div class="flex justify-between text-xs text-slate-500">
+            <span>집행 ${formatNum(item.executed)}천원</span>
+            <span>잔액 ${formatNum(item.budget - item.executed)}천원</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    // 집행 속도 분석
+    const analysis = document.getElementById('speed-analysis');
+    const remainingMonths = 12 - month;
+    const remainingBalance = totalBalance;
+    const monthlyNeeded = remainingMonths > 0 ? remainingBalance / remainingMonths : 0;
+
+    if (diff >= 0) {
+      analysis.className = 'mt-4 p-4 rounded-xl border text-sm bg-green-50 border-green-200 text-green-800';
+      analysis.innerHTML = `
+        <div class="font-semibold mb-1">✅ 집행 현황 양호</div>
+        <div class="text-xs leading-relaxed">
+          현재 집행률이 권장 기준(${targetRate.toFixed(0)}%)을 달성했습니다.
+          ${remainingMonths > 0 ? `남은 ${remainingMonths}개월간 매월 약 <strong>${formatNum(Math.round(monthlyNeeded))}천원</strong> 집행 시 연말 ${((totalExecuted + remainingBalance) / totalBudget * 100).toFixed(0)}% 달성` : '연말 결산을 준비하세요.'}
+        </div>
+      `;
+    } else {
+      analysis.className = 'mt-4 p-4 rounded-xl border text-sm bg-amber-50 border-amber-200 text-amber-800';
+      analysis.innerHTML = `
+        <div class="font-semibold mb-1">⚡ 집행 가속 필요</div>
+        <div class="text-xs leading-relaxed">
+          권장 기준(${targetRate.toFixed(0)}%) 대비 <strong>${Math.abs(diff).toFixed(1)}%p</strong> 부족합니다.
+          ${remainingMonths > 0 ? `남은 ${remainingMonths}개월간 매월 약 <strong>${formatNum(Math.round(monthlyNeeded))}천원</strong> 이상 집행이 필요합니다.` : '연도 마감 전 긴급 집행 방안을 검토하세요.'}
+        </div>
+      `;
+    }
+  }
+
+  function formatNum(n) {
+    return Math.round(n).toLocaleString('ko-KR');
+  }
+</script>

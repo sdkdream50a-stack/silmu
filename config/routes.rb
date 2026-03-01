@@ -157,6 +157,12 @@ Rails.application.routes.draw do
   # 4대보험 정산보험료 계산기
   get "tools/insurance-calculator", to: "insurance_calculators#index", as: :insurance_calculator
 
+  # 예산 집행률 계산기
+  get "tools/budget-execution-rate", to: "tools#budget_execution_rate", as: :budget_execution_rate
+
+  # 예비비 한도 계산기
+  get "tools/contingency-fund", to: "tools#contingency_fund", as: :contingency_fund
+
   # 감사사례
   get "audit-cases", to: "audit_cases#index", as: :audit_cases
   get "audit-cases/:slug", to: "audit_cases#show", as: :audit_case

@@ -36,6 +36,40 @@ class ToolsController < ApplicationController
     )
   end
 
+  def budget_execution_rate
+    description_text = "예산 항목별 집행액을 입력하면 집행률과 잔액을 자동 계산합니다. 월별 권장 집행률과 비교하여 집행 속도를 즉시 파악하고, 연말 집행 목표 달성 여부를 미리 확인하세요."
+
+    set_meta_tags(
+      title: "예산 집행률 계산기 — 예산 집행 현황 즉시 파악",
+      description: description_text,
+      keywords: "예산집행률, 예산집행, 예산잔액, 집행률계산, 예산관리, 지방예산",
+      og: {
+        title: "예산 집행률 계산기 — 실무.kr",
+        description: description_text,
+        url: canonical_url,
+        image: "https://silmu.kr/og-image.png",
+        type: "website"
+      }
+    )
+  end
+
+  def contingency_fund
+    description_text = "예산 총액을 입력하면 지방재정법 제43조에 따른 예비비 법정 한도(1% 이내)와 적정 편성 금액을 자동 계산합니다. 현재 편성액과 비교하여 법적 적정 여부를 즉시 확인하세요."
+
+    set_meta_tags(
+      title: "예비비 한도 계산기 — 지방재정법 예비비 법정 한도 계산",
+      description: description_text,
+      keywords: "예비비, 예비비한도, 지방재정법43조, 예비비편성, 일반예비비, 목적예비비",
+      og: {
+        title: "예비비 한도 계산기 — 실무.kr",
+        description: description_text,
+        url: canonical_url,
+        image: "https://silmu.kr/og-image.png",
+        type: "website"
+      }
+    )
+  end
+
   def travel_calculator
     description_text = "공무원 국내·외 출장 여비를 자동으로 계산합니다. 교통비, 일비, 숙박비, 식비를 한 번에 산출하고, 국내출장과 해외출장을 구분하여 정확한 여비를 계산합니다. 공무원 여비 규정에 따라 자동 계산됩니다."
 
