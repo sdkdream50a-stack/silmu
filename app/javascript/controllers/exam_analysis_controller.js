@@ -2,14 +2,14 @@
 import { Controller } from "@hotwired/stimulus"
 import { getAllProgress, getWrongAnswerCount } from "../exam_progress"
 
+// 3과목 기준 (3과목은 커리큘럼 3권+4권 챕터 합산)
 const SUBJECTS = [
-  { id: "1", title: "공공조달의 이해",    short: "1권", chapters: 7, color: "emerald" },
-  { id: "2", title: "공공조달 계획분석",  short: "2권", chapters: 6, color: "blue" },
-  { id: "3", title: "공공계약관리",       short: "3권", chapters: 6, color: "violet" },
-  { id: "4", title: "공공조달 관리실무",  short: "4권", chapters: 8, color: "rose" }
+  { id: "1", title: "법제도의 이해",        short: "1과목", chapters: 7,  color: "emerald", chapterPrefixes: ["1"] },
+  { id: "2", title: "조달계획 수립 및 분석", short: "2과목", chapters: 6,  color: "blue",    chapterPrefixes: ["2"] },
+  { id: "3", title: "계약 관리",            short: "3과목", chapters: 15, color: "violet",  chapterPrefixes: ["3", "4"] }
 ]
 
-const TOTAL_CHAPTERS = 27
+const TOTAL_CHAPTERS = 28  // 4권 9장 추가 후 합계
 
 const COLORS = {
   emerald: { bar: "bg-emerald-500", text: "text-emerald-600", light: "bg-emerald-50", border: "border-emerald-200", badge: "bg-emerald-100 text-emerald-700" },
@@ -108,7 +108,7 @@ export default class extends Controller {
   // ── 과목별 챕터 진도 + 모의고사 점수 ───────────────
   renderChapterProgress(visitedChapters, quizzes) {
     this.chapterProgressTarget.innerHTML = SUBJECTS.map(s => {
-      const done = visitedChapters.filter(k => k.startsWith(`${s.id}-`)).length
+      const done = visitedChapters.filter(k => s.chapterPrefixes.some(p => k.startsWith(`${p}-`))).length
       const pct = Math.round((done / s.chapters) * 100)
       const c = COLORS[s.color]
       const quiz = quizzes[s.id]
@@ -136,10 +136,9 @@ export default class extends Controller {
   // ── 모의고사 기록 ─────────────────────────────────
   renderQuizHistory(quizzes) {
     const QUIZ_LABELS = {
-      "1": { title: "1권 모의고사", short: "1권", color: "emerald" },
-      "2": { title: "2권 모의고사", short: "2권", color: "blue" },
-      "3": { title: "3권 모의고사", short: "3권", color: "violet" },
-      "4": { title: "4권 모의고사", short: "4권", color: "rose" },
+      "1": { title: "1과목 모의고사", short: "1과목", color: "emerald" },
+      "2": { title: "2과목 모의고사", short: "2과목", color: "blue" },
+      "3": { title: "3과목 모의고사", short: "3과목", color: "violet" },
       "all": { title: "전체 모의고사", short: "전체", color: "blue" },
       "simulation": { title: "실전 시험 모드", short: "실전", color: "violet" }
     }
@@ -333,7 +332,7 @@ export default class extends Controller {
           icon: "timer",
           color: "purple",
           title: "실전 시험 모드 도전",
-          desc: "실제 시험과 동일한 100분 타이머 환경에서 최종 실력을 점검해 보세요.",
+          desc: "실제 시험과 동일한 120분 타이머 환경에서 최종 실력을 점검해 보세요.",
           link: "/quiz/simulation",
           linkText: "실전 시험 시작"
         })
