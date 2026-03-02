@@ -27,6 +27,12 @@ class FaqController < ApplicationController
         title: "수의계약",
         icon: "gavel",
         color: "forest",
+        topic_links: [
+          { slug: "private-contract", label: "수의계약 개요" },
+          { slug: "single-quote", label: "1인 견적" },
+          { slug: "dual-quote", label: "2인 이상 견적" },
+          { slug: "private-contract-justification", label: "수의계약 사유서" }
+        ],
         faqs: [
           { q: "수의계약 금액 기준이 어떻게 되나요?", a: "공사: 종합공사 4억원, 전문공사 2억원, 기타공사 1.6억원 이하\n물품·용역: 기본 2천만원 이하 (청년창업 5천만원, 소기업·여성·장애인·사회적기업 등 1억원)\n\n1인 견적: 일반 2천만원 이하, 특례기업 5천만원 이하\n2인 이상 견적: 위 금액 초과 ~ 수의계약 한도 이하" },
           { q: "1인 견적과 2인 이상 견적의 차이는?", a: "견적서를 받는 업체 수의 차이입니다.\n\n1인 견적: 한 업체에서만 견적서 징구 (2천만원 이하)\n2인 이상 견적: 두 업체 이상에서 견적을 받아 최저가 선정\n\n2인 이상 견적 시에는 동일한 규격·조건으로 견적을 요청해야 합니다." },
@@ -40,6 +46,13 @@ class FaqController < ApplicationController
         title: "입찰·계약",
         icon: "campaign",
         color: "point",
+        topic_links: [
+          { slug: "bidding", label: "입찰 절차" },
+          { slug: "estimated-price", label: "예정가격" },
+          { slug: "multiple-price", label: "복수예비가격" },
+          { slug: "qualification-failure", label: "적격심사 탈락" },
+          { slug: "contract-guarantee-exemption", label: "계약보증금 면제" }
+        ],
         faqs: [
           { q: "입찰공고 기간은 최소 며칠인가요?", a: "추정가격에 따라 다릅니다.\n\n10억원 미만: 7일 이상\n10억~50억원 미만: 15일 이상\n50억원 이상: 40일 이상\n긴급입찰: 5일 (천재지변 등)" },
           { q: "2회 유찰되면 수의계약이 가능한가요?", a: "네, 2회 유찰(재공고 포함) 시 수의계약으로 전환할 수 있습니다.\n\n조건: 최초 입찰에 부친 내용과 동일한 조건\n가격: 예정가격 이내\n근거: 지방계약법 시행령 제25조제1항제2호" },
@@ -57,6 +70,12 @@ class FaqController < ApplicationController
         title: "대금지급·검사",
         icon: "payments",
         color: "warm",
+        topic_links: [
+          { slug: "payment", label: "대금지급" },
+          { slug: "inspection", label: "검사·검수" },
+          { slug: "late-penalty", label: "지체상금" },
+          { slug: "defect-warranty", label: "하자보증" }
+        ],
         faqs: [
           { q: "대금지급 기한이 어떻게 되나요?", a: "검사완료 후 기한 내 지급해야 합니다.\n\n국가기관: 5일 이내\n지방자치단체: 14일 이내\n선금: 청구일로부터 14일 이내\n하도급 대금: 원수급인 수령 후 15일 이내" },
           { q: "기성검사와 준공검사의 차이는?", a: "기성검사: 공사 진행 중 부분완성 부분에 대한 검사 (중간 대금 지급용)\n준공검사: 공사 전체 완료 후 최종 검사 (잔금 지급 전)\n\n기성검사는 공정률에 따라 여러 차례 실시할 수 있습니다." },
@@ -69,6 +88,11 @@ class FaqController < ApplicationController
         title: "나라장터·학교장터",
         icon: "computer",
         color: "navy",
+        topic_links: [
+          { slug: "e-procurement-guide", label: "나라장터 가이드" },
+          { slug: "e-bidding", label: "전자입찰" },
+          { slug: "e-bidding-error-faq", label: "전자입찰 오류 FAQ" }
+        ],
         faqs: [
           { q: "나라장터와 학교장터 중 어디를 사용해야 하나요?", a: "학교(유·초·중·고)는 학교장터(S2B)를 우선 사용하고, 시설공사나 대형 용역은 나라장터(G2B)를 사용합니다.\n\n물품 소액구매: 학교장터(S2B)\n시설공사 입찰: 나라장터(G2B)\n2천만원 이하 소액수의: 오프라인 가능" },
           { q: "전자견적에 업체가 1개만 참여하면?", a: "2인 이상 견적이 필요한 경우 기간을 연장하거나 재공고합니다.\n\n1차: 견적 기간 연장\n2차: 재공고 (규격 완화 검토)\n재공고에도 1인만 참여: 1인 수의계약 가능" },
@@ -80,6 +104,10 @@ class FaqController < ApplicationController
         title: "물품선정위원회",
         icon: "groups",
         color: "forest",
+        topic_links: [
+          { slug: "goods-selection-committee", label: "물품선정위원회" },
+          { slug: "goods-vs-service-contract", label: "물품 vs 용역 계약" }
+        ],
         faqs: [
           { q: "물품선정위원회는 반드시 해야 하나요?", a: "법적 의무는 아니지만, 대부분의 기관에서 500만원 이상 물품 구매 시 내부 규정으로 의무화하고 있습니다.\n\n기관별 내부 규정 확인 필수\n감사 대비 위원회 개최 권장\n규격이 명확한 범용 물품은 생략 가능 (사유 기록)" },
           { q: "위원은 몇 명이 적정한가요?", a: "3~5명이 일반적이며, 홀수로 구성하는 것을 권장합니다.\n\n위원장 1명 (부서장), 업무담당자 1명 (간사), 사용부서 1~2명, 외부 전문가 0~1명 (필요시)" },
@@ -91,6 +119,10 @@ class FaqController < ApplicationController
         title: "예산·회계",
         icon: "account_balance",
         color: "warm",
+        topic_links: [
+          { slug: "budget-carryover", label: "예산 이월" },
+          { slug: "year-end-settlement", label: "연말 결산" }
+        ],
         faqs: [
           { q: "예산 편성 시기는 언제인가요?", a: "지자체 예산 편성은 다음과 같은 일정으로 진행됩니다.\n\n7~8월: 각 부서 예산요구서 제출\n9월: 예산심의 및 조정\n11월: 지방의회 제출 (11월 30일까지)\n12월: 의회 의결\n1월 1일: 회계연도 개시\n\n예산요구서는 5월 말까지 작성하는 경우도 있으므로 기관별 일정을 확인하세요." },
           { q: "명시이월과 사고이월의 차이는?", a: "둘 다 예산을 다음 연도로 넘기는 제도입니다.\n\n명시이월: 연도 내 완료가 불가능한 사업을 미리 명시하여 이월 (의회 승인)\n사고이월: 예상치 못한 사유로 집행 못한 경비를 이월 (장의 승인)\n\n명시이월은 계획적, 사고이월은 불가피한 상황에서 사용합니다. (지방재정법 제42조, 제43조)" },
@@ -103,6 +135,12 @@ class FaqController < ApplicationController
         title: "인사·복무",
         icon: "badge",
         color: "forest",
+        topic_links: [
+          { slug: "official-leave", label: "공가" },
+          { slug: "special-leave", label: "특별휴가" },
+          { slug: "leave-of-absence", label: "휴직" },
+          { slug: "disciplinary-action", label: "징계" }
+        ],
         faqs: [
           { q: "재직기간별 연가 일수가 어떻게 되나요?", a: "국가공무원 복무규정 제15조에 따른 연가 일수입니다.\n\n1년 미만: 11일\n1년 이상~2년 미만: 12일\n2년 이상~3년 미만: 14일\n3년 이상~4년 미만: 15일\n4년 이상~5년 미만: 17일\n5년 이상~6년 미만: 20일\n6년 이상: 21일\n\n육아휴직 복귀 후에는 재직기간에 산입하여 계산합니다." },
           { q: "연가를 쓰지 않으면 수당을 받을 수 있나요?", a: "사용하지 못한 연가에 대해 연가보상비를 받을 수 있습니다.\n\n지급 기준: 연가 잔여일수 × 1일 통상임금\n최대 한도: 20일치 (기관별로 다를 수 있음)\n지급 시기: 연말 또는 퇴직 시\n\n단, 특별한 사유 없이 스스로 사용하지 않은 경우에는 일부 감액될 수 있으며, 연가저축제(최대 10일)를 활용하면 향후 적립하여 사용할 수 있습니다." },
