@@ -140,7 +140,7 @@ class TopicsController < ApplicationController
 
     # 계약 카테고리: 논리적 순서로 정렬 (수의계약 → 입찰 → 계약체결 → 보증금 → 이행 → 변경/종료)
     contract_order = %w[
-      private-contract private-contract-overview private-contract-limit private-contract-amount
+      private-contract private-contract-limit private-contract-amount
       single-quote dual-quote quote-collection-guide private-contract-justification
       price-negotiation emergency-contract small-amount-contract split-contract-prohibition
       bidding bid-announcement e-bidding estimated-price multiple-price
@@ -256,7 +256,7 @@ class TopicsController < ApplicationController
   # 각 그룹: { id:, label:, icon:, desc:, slugs:, topics: }
   CONTRACT_SUBGROUP_DEFS = [
     { id: "private-contract", label: "수의계약",   icon: "handshake",     desc: "수의계약 요건, 한도, 견적 절차",
-      slugs: %w[private-contract private-contract-overview private-contract-limit private-contract-amount
+      slugs: %w[private-contract-limit private-contract-amount
                 single-quote dual-quote quote-collection-guide private-contract-justification
                 price-negotiation emergency-contract small-amount-contract] },
     { id: "bidding",          label: "경쟁입찰",   icon: "gavel",         desc: "입찰공고, 전자입찰, 예정가격, 적격심사",
@@ -281,6 +281,7 @@ class TopicsController < ApplicationController
     return [] if contract_topics.blank?
 
     slug_to_topic = contract_topics.index_by(&:slug)
+    subgroup_id_slugs = CONTRACT_SUBGROUP_DEFS.map { |d| d[:id] }.to_set
 
     CONTRACT_SUBGROUP_DEFS.filter_map do |defn|
       group_topics = defn[:slugs].filter_map { |s| slug_to_topic.delete(s) }
@@ -288,8 +289,8 @@ class TopicsController < ApplicationController
 
       defn.merge(topics: group_topics)
     end.tap do |groups|
-      # 매핑되지 않은 토픽이 있으면 마지막 그룹에 추가
-      remaining = slug_to_topic.values
+      # 매핑되지 않은 토픽 중 서브그룹 개요 토픽(id와 slug가 같은 것)은 제외
+      remaining = slug_to_topic.values.reject { |t| subgroup_id_slugs.include?(t.slug) }
       groups.last[:topics].concat(remaining) if remaining.any? && groups.any?
     end
   end
