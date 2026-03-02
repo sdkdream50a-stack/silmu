@@ -21,8 +21,9 @@
 
 <!-- Hero Section -->
 <div class="relative w-full hero-gradient overflow-hidden pb-12 pt-4 lg:pt-6">
-  <div class="absolute top-0 left-1/4 h-96 w-96 rounded-full bg-indigo-500/20 blur-3xl filter"></div>
-  <div class="absolute bottom-0 right-1/4 h-96 w-96 rounded-full bg-violet-500/10 blur-3xl filter"></div>
+  <%# blur-3xl 제거 → 단순 그라디언트로 대체 (모바일 GPU 병목 해소, LCP 개선) %>
+  <div class="absolute top-0 left-1/4 h-96 w-96 rounded-full bg-indigo-500/15 opacity-60"></div>
+  <div class="absolute bottom-0 right-1/4 h-96 w-96 rounded-full bg-violet-500/10 opacity-40"></div>
   <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div class="flex flex-col items-center text-center">
       <div class="mb-8 inline-flex items-center rounded-full border border-indigo-400/30 bg-indigo-900/30 px-4 py-1.5 backdrop-blur-md shadow-glow">
