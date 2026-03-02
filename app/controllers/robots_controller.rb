@@ -1,7 +1,10 @@
-# robots.txt를 컨트롤러에서 서빙 — 짧은 캐시 TTL 적용 (Cloudflare 캐시 제어)
+# robots.txt를 컨트롤러에서 서빙 — Cloudflare 캐시 우회
 class RobotsController < ApplicationController
   def show
-    expires_in 1.hour, public: true, stale_while_revalidate: 24.hours
+    # no-store: Cloudflare가 캐시하지 않도록 강제
+    response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    response.headers["Surrogate-Control"] = "no-store"
+    response.headers["CDN-Cache-Control"] = "no-store"
 
     render plain: robots_content, content_type: "text/plain"
   end
