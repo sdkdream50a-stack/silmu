@@ -4,7 +4,7 @@
 attrs = {
   slug: "secondment",
   name: "파견",
-  category: "personnel",
+  category: "duty",
   published: true,
   summary: "공무원 파견 제도, 파견 종류(국내·국외·민간파견), 파견 절차, 파견 중 신분과 급여 처리, 복귀 방법 완벽 정리",
   keywords: "파견, 공무원 파견, 국외파견, 민간파견, 파견 급여, 파견 복귀, 파견 기간, 국가공무원법",

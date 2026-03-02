@@ -4,7 +4,7 @@
 attrs = {
   slug: "parental-leave",
   name: "육아휴직",
-  category: "personnel",
+  category: "duty",
   published: true,
   summary: "공무원 육아휴직 신청 자격, 기간, 급여 지급 기준, 복직 방법, 남성 공무원 육아휴직 의무화 내용 완벽 정리",
   keywords: "육아휴직, 공무원 육아휴직, 육아휴직 급여, 육아휴직 기간, 복직, 남성 육아휴직, 공무원 복무",

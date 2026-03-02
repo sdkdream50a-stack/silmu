@@ -4,7 +4,7 @@
 attrs = {
   slug: "official-leave",
   name: "공가",
-  category: "personnel",
+  category: "duty",
   published: true,
   summary: "공무원 공가(공무 관련 특별 허가 결근) 허용 사유, 징집·소집, 예비군훈련, 민방위훈련, 건강검진 등 공가 인정 범위 완벽 정리",
   keywords: "공가, 공무원 공가, 예비군 공가, 민방위 공가, 건강검진 공가, 공가 사유, 복무규정",

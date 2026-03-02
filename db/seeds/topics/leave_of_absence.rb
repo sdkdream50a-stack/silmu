@@ -4,7 +4,7 @@
 attrs = {
   slug: "leave-of-absence",
   name: "휴직",
-  category: "personnel",
+  category: "duty",
   published: true,
   summary: "공무원 휴직 종류(질병·육아·간호·학업·동반·개인사정), 휴직 기간, 급여 지급 기준, 복직 방법 완벽 정리",
   keywords: "휴직, 공무원 휴직, 질병휴직, 육아휴직, 간호휴직, 학업휴직, 동반휴직, 개인사정 휴직, 복직",

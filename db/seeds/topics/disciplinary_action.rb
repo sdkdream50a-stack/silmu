@@ -4,7 +4,7 @@
 attrs = {
   slug: "disciplinary-action",
   name: "징계",
-  category: "personnel",
+  category: "duty",
   published: true,
   summary: "공무원 징계의 종류(파면·해임·강등·정직·감봉·견책), 징계 절차, 징계 처분별 불이익, 소청심사 방법 완벽 정리",
   keywords: "징계, 공무원 징계, 파면, 해임, 강등, 정직, 감봉, 견책, 징계위원회, 소청심사",

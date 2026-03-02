@@ -4,7 +4,7 @@
 attrs = {
   slug: "annual-leave",
   name: "연가",
-  category: "personnel",
+  category: "duty",
   published: true,
   summary: "공무원 연가 종류, 재직기간별 연가일수, 연가 사용 방법, 연가보상비 지급 기준, 미사용 연가 처리 방법 완벽 정리",
   keywords: "연가, 공무원 연가, 연가일수, 연가보상비, 연가 사용, 복무규정, 연차휴가, 잔여연가",

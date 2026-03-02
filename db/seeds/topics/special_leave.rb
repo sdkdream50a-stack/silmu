@@ -4,7 +4,7 @@
 attrs = {
   slug: "special-leave",
   name: "특별휴가",
-  category: "personnel",
+  category: "duty",
   published: true,
   summary: "공무원 특별휴가 종류(경조사, 출산, 포상 등), 허용 일수, 경조사 범위별 특별휴가 일수표 완벽 정리",
   keywords: "특별휴가, 공무원 특별휴가, 경조사 휴가, 출산휴가, 포상휴가, 특별휴가 일수, 복무규정",

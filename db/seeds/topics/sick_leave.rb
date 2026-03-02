@@ -4,7 +4,7 @@
 attrs = {
   slug: "sick-leave",
   name: "병가",
-  category: "personnel",
+  category: "duty",
   published: true,
   summary: "공무원 병가 허용 일수, 일반 병가와 공무상 병가 차이, 진단서 제출 기준, 병가 중 급여 지급 방법 완벽 정리",
   keywords: "병가, 공무원 병가, 공무상 병가, 병가 일수, 진단서, 병가 급여, 복무규정, 질병휴직",
