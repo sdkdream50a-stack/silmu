@@ -11,14 +11,16 @@ attrs = {
   law_content: <<~CONTENT,
     ## 국가공무원법 (특별휴가 위임 근거)
 
-    **국가공무원법 제62조 (근무시간 등)**
+    **국가공무원법 (근무시간·휴가 등)**
 
     <div style="background:#dbeafe;padding:12px;border-radius:8px;margin:8px 0;">
     공무원의 근무시간, 근무일 및 휴가에 관한 사항은 대통령령으로 정한다.
+
+    ※ 복무 위임 조항의 정확한 조문 번호는 법제처 국가법령정보센터에서 현행 국가공무원법을 확인하시기 바랍니다.
     </div>
 
     <div style="background:#eff6ff;padding:12px;border-radius:8px;margin:8px 0;">
-    <strong>위임 체계:</strong> 국가공무원법 제62조 → 국가공무원 복무규정(대통령령) 제20조(특별휴가) → 별표 2(경조사별 휴가일수)로 위임됩니다. 특별휴가의 종류, 일수, 사용 요건 등 구체적 내용은 모두 대통령령인 복무규정에서 규정합니다.
+    <strong>위임 체계:</strong> 국가공무원법(복무 위임 조항) → 국가공무원 복무규정(대통령령) 제20조(특별휴가) → 별표 2(경조사별 휴가일수)로 위임됩니다. 특별휴가의 종류, 일수, 사용 요건 등 구체적 내용은 모두 대통령령인 복무규정에서 규정합니다.
     </div>
 
     <div style="background:#f3f4f6;padding:12px;border-radius:8px;margin:8px 0;">

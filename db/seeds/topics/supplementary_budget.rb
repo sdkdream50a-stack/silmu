@@ -21,6 +21,7 @@ attrs = {
 
     <div style="background:#eff6ff;padding:12px;border-radius:8px;margin:8px 0;">
     📌 <strong>위임 체계</strong>: 지방재정법 제45조(법률)에서 추경 편성 권한과 절차를 규정하고, 구체적인 편성 기준 및 절차는 지방재정법 시행령과 행정안전부의 예산편성 운영기준(훈령)에서 정합니다. 추경안의 의회 심의·의결은 지방자치법 제144조(예산안의 편성 및 의결) 및 제56조(임시회)에 따릅니다.
+    ※ 지방자치법 조문번호는 2022년 전부개정(법률 제17893호) 기준이며, 이후 개정 여부는 법제처 국가법령정보센터에서 확인하시기 바랍니다.
     </div>
 
     <div style="background:#f3f4f6;padding:12px;border-radius:8px;margin:8px 0;">
