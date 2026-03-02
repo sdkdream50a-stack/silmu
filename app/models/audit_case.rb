@@ -4,6 +4,16 @@ class AuditCase < ApplicationRecord
   scope :by_severity, ->(sev) { where(severity: sev) if sev.present? }
   scope :recent, -> { order(created_at: :desc) }
 
+  def self.search_by_query(query, limit: 3)
+    return none if query.blank?
+    sanitized = sanitize_sql_like(query)
+    published
+      .where("title ILIKE ? OR issue ILIKE ? OR category ILIKE ?",
+             "%#{sanitized}%", "%#{sanitized}%", "%#{sanitized}%")
+      .order(view_count: :desc)
+      .limit(limit)
+  end
+
   validates :title, presence: true
   validates :slug, presence: true, uniqueness: true
 

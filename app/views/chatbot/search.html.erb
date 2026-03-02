@@ -1,86 +1,133 @@
 <%= turbo_frame_tag "search-results" do %>
-  <div class="max-w-4xl mx-auto px-4 mt-8">
+  <div class="max-w-4xl mx-auto px-4 mt-6">
     <% if @query.present? %>
-      <!-- 검색 결과 헤더 -->
-      <div class="mb-6">
-        <h2 class="text-lg font-semibold text-gray-800">
-          "<%= @query %>" 검색 결과
-        </h2>
-      </div>
 
-      <!-- 토픽 매칭 결과 (법령 가이드) -->
-      <% if @topic %>
-        <div class="mb-6">
-          <%= link_to topic_path(@topic.slug), class: "block bg-white border-2 border-indigo-500 rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow", data: { turbo_frame: "_top" } do %>
-            <div class="flex items-start justify-between">
-              <div>
-                <div class="flex items-center gap-2 mb-2">
-                  <span class="px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded text-xs font-medium">📚 법령 가이드</span>
-                </div>
-                <h3 class="text-xl font-bold mb-2 text-gray-900"><%= @topic.name %></h3>
-                <p class="text-gray-600 text-sm line-clamp-2"><%= @topic.summary %></p>
-                <div class="mt-3 flex flex-wrap gap-2">
-                  <span class="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">📜 법령 3단 비교</span>
-                  <span class="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">📋 예규/지침</span>
-                  <span class="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">⚖️ 유권해석</span>
-                  <span class="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">⚠️ 실무주의</span>
-                </div>
-              </div>
-              <svg class="w-6 h-6 flex-shrink-0 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-              </svg>
-            </div>
-          <% end %>
-        </div>
-      <% end %>
-
-      <% if @topic && @topic.faq_list.any? %>
-        <!-- 자주 묻는 질문 (아코디언) -->
-        <div class="bg-white rounded-xl shadow p-6">
-          <h3 class="text-lg font-bold mb-4">❓ 자주 묻는 질문</h3>
-          <div class="space-y-2" id="search-faq-accordion">
-            <% @topic.faq_list.first(5).each_with_index do |faq, index| %>
-              <div class="border border-gray-200 rounded-lg overflow-hidden">
-                <button onclick="toggleSearchFaq(<%= index %>)"
-                        class="w-full px-4 py-3 text-left bg-gray-50 hover:bg-gray-100 flex items-center justify-between transition-colors">
-                  <span class="font-medium text-gray-800">Q. <%= faq['question'] %></span>
-                  <svg id="search-faq-icon-<%= index %>" class="w-5 h-5 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                <div id="search-faq-answer-<%= index %>" class="hidden px-4 py-3 bg-white border-t border-gray-200">
-                  <p class="text-gray-700 whitespace-pre-line"><%= faq['answer'] %></p>
-                </div>
-              </div>
+      <%# 결과 없음 %>
+      <% no_results = @topics.blank? && @audit_cases.blank? && @templates.blank? %>
+      <% if no_results %>
+        <div class="bg-white rounded-2xl border border-slate-200 p-10 text-center">
+          <span class="material-symbols-outlined text-slate-300 text-5xl">search_off</span>
+          <h3 class="text-base font-semibold text-slate-700 mt-3 mb-1">"<%= @query %>" 검색 결과가 없습니다</h3>
+          <p class="text-slate-400 text-sm mb-5">다른 키워드로 검색하거나 아래 항목을 확인해보세요</p>
+          <div class="flex flex-wrap gap-2 justify-center">
+            <% ["수의계약", "적격심사", "입찰", "검수", "예산"].each do |kw| %>
+              <button onclick="document.querySelector('[name=q]').value='<%= kw %>'; document.querySelector('[name=q]').closest('form').requestSubmit();"
+                      class="px-3 py-1.5 bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-600 rounded-full text-sm transition-colors">
+                <%= kw %>
+              </button>
             <% end %>
           </div>
-          <% if @topic.faq_list.size > 5 %>
-            <div class="mt-4 text-center">
-              <%= link_to "더 보기 →", topic_path(@topic.slug), class: "text-indigo-600 hover:text-indigo-800 font-medium", data: { turbo_frame: "_top" } %>
+        </div>
+
+      <% else %>
+
+        <%# ── 법령 가이드 결과 ── %>
+        <% if @topics.present? %>
+          <div class="mb-6">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="material-symbols-outlined text-indigo-500 text-lg">menu_book</span>
+              <h3 class="text-sm font-bold text-slate-600">법령 가이드 (<%= @topics.size %>)</h3>
             </div>
+            <div class="space-y-2">
+              <% @topics.each do |topic| %>
+                <%= link_to topic_path(topic.slug),
+                      class: "flex items-start gap-4 bg-white border border-slate-200 hover:border-indigo-300 hover:shadow-sm rounded-xl p-4 transition-all group",
+                      data: { turbo_frame: "_top" } do %>
+                  <div class="w-9 h-9 bg-indigo-50 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span class="material-symbols-outlined text-indigo-500 text-lg">gavel</span>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="text-sm font-semibold text-slate-800 group-hover:text-indigo-700 truncate"><%= topic.name %></div>
+                    <div class="text-xs text-slate-500 mt-0.5 line-clamp-1"><%= topic.summary %></div>
+                  </div>
+                  <span class="material-symbols-outlined text-slate-300 group-hover:text-indigo-400 text-base flex-shrink-0 mt-1">chevron_right</span>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+
+        <%# ── 감사사례 결과 ── %>
+        <% if @audit_cases.present? %>
+          <div class="mb-6">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="material-symbols-outlined text-orange-500 text-lg">policy</span>
+              <h3 class="text-sm font-bold text-slate-600">감사사례 (<%= @audit_cases.size %>)</h3>
+            </div>
+            <div class="space-y-2">
+              <% @audit_cases.each do |ac| %>
+                <% severity_color = ac.severity == "중대" ? "red" : ac.severity == "보통" ? "orange" : "amber" %>
+                <%= link_to audit_case_path(ac.slug),
+                      class: "flex items-start gap-4 bg-white border border-slate-200 hover:border-orange-300 hover:shadow-sm rounded-xl p-4 transition-all group",
+                      data: { turbo_frame: "_top" } do %>
+                  <div class="w-9 h-9 bg-orange-50 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span class="material-symbols-outlined text-orange-500 text-lg">warning</span>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="text-sm font-semibold text-slate-800 group-hover:text-orange-700 truncate"><%= ac.title %></div>
+                    <div class="flex items-center gap-2 mt-0.5">
+                      <span class="text-xs bg-orange-50 text-orange-600 px-2 py-0.5 rounded-full"><%= ac.category %></span>
+                      <span class="text-xs text-slate-400"><%= ac.severity %></span>
+                    </div>
+                  </div>
+                  <span class="material-symbols-outlined text-slate-300 group-hover:text-orange-400 text-base flex-shrink-0 mt-1">chevron_right</span>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+
+        <%# ── 서식 템플릿 결과 ── %>
+        <% if @templates.present? %>
+          <div class="mb-6">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="material-symbols-outlined text-teal-500 text-lg">description</span>
+              <h3 class="text-sm font-bold text-slate-600">서식 템플릿 (<%= @templates.size %>)</h3>
+            </div>
+            <div class="space-y-2">
+              <% @templates.each do |tmpl| %>
+                <%= link_to templates_path,
+                      class: "flex items-start gap-4 bg-white border border-slate-200 hover:border-teal-300 hover:shadow-sm rounded-xl p-4 transition-all group",
+                      data: { turbo_frame: "_top" } do %>
+                  <div class="w-9 h-9 bg-teal-50 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span class="material-symbols-outlined text-teal-500 text-lg">draft</span>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="text-sm font-semibold text-slate-800 group-hover:text-teal-700 truncate"><%= tmpl[:title] %></div>
+                    <div class="flex items-center gap-2 mt-0.5">
+                      <span class="text-xs bg-teal-50 text-teal-600 px-2 py-0.5 rounded-full"><%= tmpl[:category] %></span>
+                      <span class="text-xs text-slate-400"><%= tmpl[:formats].join(" · ") %></span>
+                    </div>
+                  </div>
+                  <span class="material-symbols-outlined text-slate-300 group-hover:text-teal-400 text-base flex-shrink-0 mt-1">chevron_right</span>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+
+        <%# ── 전체 결과 링크 ── %>
+        <div class="border-t border-slate-100 pt-4 flex flex-wrap gap-3">
+          <% if @topics.present? %>
+            <%= link_to topics_path, class: "text-xs text-indigo-600 hover:text-indigo-800 flex items-center gap-1", data: { turbo_frame: "_top" } do %>
+              <span class="material-symbols-outlined text-sm">menu_book</span>
+              법령 가이드 전체 보기
+            <% end %>
+          <% end %>
+          <% if @audit_cases.present? %>
+            <%= link_to audit_cases_path, class: "text-xs text-orange-600 hover:text-orange-800 flex items-center gap-1", data: { turbo_frame: "_top" } do %>
+              <span class="material-symbols-outlined text-sm">policy</span>
+              감사사례 전체 보기
+            <% end %>
+          <% end %>
+          <% if @templates.present? %>
+            <%= link_to templates_path, class: "text-xs text-teal-600 hover:text-teal-800 flex items-center gap-1", data: { turbo_frame: "_top" } do %>
+              <span class="material-symbols-outlined text-sm">description</span>
+              서식 전체 보기
+            <% end %>
           <% end %>
         </div>
 
-        <script>
-        function toggleSearchFaq(index) {
-          const answer = document.getElementById(`search-faq-answer-${index}`);
-          const icon = document.getElementById(`search-faq-icon-${index}`);
-          if (answer.classList.contains('hidden')) {
-            answer.classList.remove('hidden');
-            icon.classList.add('rotate-180');
-          } else {
-            answer.classList.add('hidden');
-            icon.classList.remove('rotate-180');
-          }
-        }
-        </script>
-      <% elsif @topic.nil? %>
-        <!-- 검색 결과 없음 -->
-        <div class="bg-white rounded-xl shadow p-8 text-center">
-          <div class="text-6xl mb-4">🔍</div>
-          <h3 class="text-lg font-medium text-gray-800 mb-2">검색 결과가 없습니다</h3>
-          <p class="text-gray-500 mb-4">다른 키워드로 검색해보세요</p>
-        </div>
       <% end %>
     <% end %>
   </div>

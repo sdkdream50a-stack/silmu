@@ -34,17 +34,16 @@ class ChatbotController < ApplicationController
 
     set_meta_tags(robots: "noindex, follow")
     @query = params[:q].to_s.strip.truncate(200)
-    @board = params[:board].to_s.strip.truncate(50) if params[:board].present?
 
     if @query.present? && @query.length >= 2
-      # 1. 토픽 매칭 시도 (출발 토픽 제외)
-      @topic = Topic.find_by_query(@query, exclude_slug: params[:exclude])
+      # 1. 법령 가이드 (복수 결과)
+      @topics = Topic.search_multiple(@query, limit: 4)
 
-      # 2. 관련 게시글 검색
-      @results = CafeArticle.find_similar(@query, limit: 20)
-      @results = @results.by_board(@board) if @board.present?
-    else
-      @results = CafeArticle.none
+      # 2. 감사사례
+      @audit_cases = AuditCase.search_by_query(@query, limit: 3)
+
+      # 3. 서식 템플릿 (메모리 내 검색)
+      @templates = search_templates(@query)
     end
 
     respond_to do |format|
@@ -54,6 +53,13 @@ class ChatbotController < ApplicationController
   end
 
   private
+
+  def search_templates(query)
+    q = query.downcase
+    TemplatesController::TEMPLATES.select do |t|
+      t[:title].downcase.include?(q) || t[:desc].downcase.include?(q) || t[:category].downcase.include?(q)
+    end.first(3)
+  end
 
   def calculate_contract_method(category, price)
     case category

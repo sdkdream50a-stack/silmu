@@ -27,6 +27,19 @@ class Topic < ApplicationRecord
   before_validation :generate_slug, if: -> { slug.blank? && name.present? }
   after_commit :expire_count_cache
 
+  # 통합 검색: 복수 토픽 반환 (이름·키워드·요약 ILIKE, 없으면 pg_search)
+  def self.search_multiple(query, limit: 4)
+    return none if query.blank?
+    sanitized = sanitize_sql_like(query)
+    matches = published
+                .where("name ILIKE ? OR keywords ILIKE ? OR summary ILIKE ?",
+                       "%#{sanitized}%", "%#{sanitized}%", "%#{sanitized}%")
+                .order(view_count: :desc)
+                .limit(limit)
+    return matches if matches.any?
+    search_by_keyword(query).merge(published).limit(limit)
+  end
+
   # 키워드 매칭으로 토픽 찾기
   def self.find_by_query(query, exclude_slug: nil)
     return none if query.blank?
