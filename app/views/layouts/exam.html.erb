@@ -13,9 +13,9 @@
     <%= yield :head %>
 
     <%# Fonts - 비동기 로딩 %>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-    <link rel="preconnect" href="https://code.iconify.design" crossorigin>
-    <link rel="preconnect" href="https://api.iconify.design" crossorigin>
     <link rel="preload" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" fetchpriority="high">
     <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"></noscript>
 
@@ -24,39 +24,32 @@
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Iconify %>
-    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js" defer></script>
-
-    <script>
-      var _iconConvertTimer = null;
-      function convertMaterialIcons(root) {
-        var container = root || document.body;
-        if (!container) return;
-        var icons = container.querySelectorAll('.material-symbols-outlined:not([data-icon])');
-        if (icons.length === 0) return;
-        icons.forEach(function(icon) {
-          var iconName = icon.textContent.trim();
-          if (iconName) {
-            icon.setAttribute('data-icon', 'material-symbols:' + iconName.replace(/_/g, '-'));
-            icon.textContent = '';
-            icon.classList.add('iconify');
-          }
-        });
-        if (typeof Iconify !== 'undefined' && Iconify.scan) { Iconify.scan(container); }
-      }
-      document.addEventListener('DOMContentLoaded', function() { convertMaterialIcons(); });
-      document.addEventListener('turbo:render', function() { convertMaterialIcons(); });
-    </script>
+    <%# Material Symbols — Google Fonts (아이콘 서브셋, API 호출 없음) %>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=analytics,apps,arrow_back,arrow_forward,arrow_forward_ios,article,assignment,assignment_turned_in,bolt,calendar_month,check_circle,checklist,chevron_right,circle,close,computer,description,dictionary,donut_large,edit_note,emoji_events,error,error_outline,expand_more,fact_check,flag,format_list_numbered,gavel,groups,handshake,info,key,language,lightbulb,list,local_fire_department,mail,manage_accounts,menu,menu_book,open_in_new,paid,percent,person,person_check,pin,play_arrow,psychology,public,quiz,schedule,school,search,search_off,star,summarize,target,timer,tips_and_updates,touch_app,trending_down,trending_flat,trending_up,verified,warning,work" rel="stylesheet">
 
     <style>
       .material-symbols-outlined {
-        display: inline-flex; align-items: center; justify-content: center;
-        vertical-align: middle; width: 1em; height: 1em;
-        min-width: 1em; min-height: 1em; overflow: hidden;
-        font-size: inherit; line-height: 1; color: transparent;
+        font-family: 'Material Symbols Outlined';
+        font-weight: normal;
+        font-style: normal;
+        font-size: inherit;
+        line-height: 1;
+        letter-spacing: normal;
+        text-transform: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        vertical-align: middle;
+        width: 1em;
+        height: 1em;
+        white-space: nowrap;
+        word-wrap: normal;
+        direction: ltr;
+        font-feature-settings: 'liga';
+        -webkit-font-feature-settings: 'liga';
+        -webkit-font-smoothing: antialiased;
+        overflow: hidden;
       }
-      .material-symbols-outlined.iconify, .material-symbols-outlined[data-icon] { color: inherit; }
-      .iconify { width: 1em; height: 1em; }
     </style>
 
     <% if Rails.env.production? && ENV['GA_MEASUREMENT_ID'].present? && !current_user&.admin? %>
