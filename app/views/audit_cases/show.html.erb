@@ -59,6 +59,10 @@
             </span>
           </div>
           <h1 class="text-2xl lg:text-3xl font-bold text-slate-900 mb-2"><%= @audit_case.title %></h1>
+          <%= render 'shared/social_share',
+                title: @audit_case.title,
+                url: audit_case_url(@audit_case.slug),
+                description: @audit_case.issue.truncate(100) %>
         </div>
 
         <!-- 핵심 정보 카드 -->
