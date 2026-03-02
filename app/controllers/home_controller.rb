@@ -4,6 +4,9 @@ class HomeController < ApplicationController
     @guide_count      = Rails.cache.fetch("stats/guide_count", expires_in: 30.minutes) { Guide.published.count }
     @audit_case_count = Rails.cache.fetch("stats/audit_case_count", expires_in: 30.minutes) { AuditCase.published.count }
     @template_count   = TemplatesController::TEMPLATES.count
+    @recent_audit_cases = Rails.cache.fetch("home/recent_audit_cases", expires_in: 1.hour) do
+      AuditCase.published.where(severity: %w[중대 보통]).order(created_at: :desc).limit(3).to_a
+    end
 
     # HTTP 캐싱: 비로그인 사용자는 5분 캐시, 로그인 사용자는 private
     if user_signed_in?

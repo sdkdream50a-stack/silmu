@@ -313,6 +313,45 @@ function bookmarkSite() {
   </div>
 </section>
 
+<!-- 주요 감사사례 -->
+<% if @recent_audit_cases.present? %>
+<section class="bg-white py-16 border-t border-slate-100">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between mb-8">
+      <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+        <span class="material-symbols-outlined text-red-500">policy</span>
+        주요 감사 지적 사례
+      </h2>
+      <%= link_to audit_cases_path, class: "text-sm font-semibold text-slate-500 hover:text-red-600 transition-colors flex items-center gap-1" do %>
+        전체 <%= @audit_case_count %>건 보기 <span class="material-symbols-outlined text-base">arrow_forward</span>
+      <% end %>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <% @recent_audit_cases.each do |ac| %>
+        <% severity_bg = ac.severity == "중대" ? "bg-red-50 border-red-200" : "bg-orange-50 border-orange-200" %>
+        <% severity_text = ac.severity == "중대" ? "text-red-700" : "text-orange-700" %>
+        <% severity_badge = ac.severity == "중대" ? "bg-red-100 text-red-700" : "bg-orange-100 text-orange-700" %>
+        <%= link_to audit_case_path(ac.slug), class: "group flex flex-col gap-3 p-5 rounded-2xl border #{severity_bg} hover:shadow-md transition-all" do %>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold px-2 py-0.5 rounded-full <%= severity_badge %>"><%= ac.severity %></span>
+            <span class="text-xs text-slate-500"><%= ac.category %></span>
+          </div>
+          <h3 class="font-bold text-slate-900 group-hover:<%= ac.severity == '중대' ? 'text-red-700' : 'text-orange-700' %> transition-colors leading-snug line-clamp-2"><%= ac.title %></h3>
+          <p class="text-xs text-slate-500 line-clamp-2 flex-1"><%= ac.issue.truncate(80) %></p>
+          <div class="flex items-center gap-1 <%= severity_text %> text-xs font-semibold group-hover:gap-2 transition-all">
+            사례 보기 <span class="material-symbols-outlined text-sm">arrow_forward</span>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+    <p class="mt-6 text-xs text-slate-400 flex items-center gap-1">
+      <span class="material-symbols-outlined text-sm">info</span>
+      실제 감사 지적 사례를 분석하여 같은 실수를 반복하지 않도록 안내합니다.
+    </p>
+  </div>
+</section>
+<% end %>
+
 <!-- Quick Price Finder -->
 <div class="bg-white py-20 border-y border-slate-100">
   <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
