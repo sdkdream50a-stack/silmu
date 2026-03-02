@@ -23,6 +23,9 @@ Rails.application.routes.draw do
   # Kamal 헬스체크용
   get "up" => "rails/health#show", as: :rails_health_check
 
+  # robots.txt — 컨트롤러에서 서빙 (짧은 TTL로 Cloudflare 캐시 제어)
+  get "robots.txt", to: "robots#show", format: false
+
   # SEO 최적화: 404 방지 리디렉션
   get "favicon.ico", to: redirect("/favicon.svg")
   get "audit_cases", to: redirect("/audit-cases", status: 301), as: :audit_cases_underscore
