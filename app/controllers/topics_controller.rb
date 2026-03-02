@@ -109,6 +109,19 @@ class TopicsController < ApplicationController
     "completion-payment-checklist" => "checklist",
   }.freeze
 
+  CATEGORY_CONFIG = {
+    "contract" => { label: "계약",      color: "indigo",  icon: "gavel",             desc: "수의계약·경쟁입찰·계약체결·대금지급·계약변경" },
+    "budget"   => { label: "예산/결산", color: "blue",    icon: "account_balance",   desc: "예산 편성·집행·이체·결산·추경·예비비" },
+    "expense"  => { label: "지출",      color: "amber",   icon: "receipt_long",      desc: "지출 원인행위·채무부담행위" },
+    "salary"   => { label: "급여/수당", color: "emerald", icon: "payments",          desc: "봉급·수당·성과상여·퇴직수당·복지포인트" },
+    "subsidy"  => { label: "보조금",    color: "violet",  icon: "volunteer_activism", desc: "국고보조금·교부금·정산" },
+    "property" => { label: "공유재산",  color: "teal",    icon: "domain",            desc: "공유재산 취득·관리·처분" },
+    "travel"   => { label: "여비/출장", color: "rose",    icon: "flight_takeoff",    desc: "국내출장·해외출장·여비 정산" },
+    "duty"     => { label: "복무",      color: "orange",  icon: "badge",             desc: "휴가·휴직·파견·징계·육아휴직" },
+    "other"    => { label: "기타",      color: "slate",   icon: "folder_open",       desc: "그 외 공무원 업무 관련 법령" },
+  }.freeze
+  CATEGORY_ORDER = %w[contract budget expense salary subsidy property travel duty other].freeze
+
   TOOL_DEFINITIONS = {
     contract_method:   { icon: "gavel",        title: "계약방식 결정",   desc: "금액 입력 → 방식 바로 확인", color: "emerald" },
     contract_documents:{ icon: "fact_check",   title: "서류 체크리스트", desc: "필요 서류 원클릭 생성",       color: "indigo" },
@@ -125,52 +138,18 @@ class TopicsController < ApplicationController
   }.freeze
 
   def index
-    # 캐시 키에 MAX(updated_at) 대신 count 사용 → DB 쿼리 제거
-    # Topic이 변경되면 after_commit에서 캐시 무효화 처리
     all_topics = Rails.cache.fetch("topics/all_published_v2", expires_in: 30.minutes) do
       Topic.published.to_a
     end
-    @topics_by_category = all_topics.group_by(&:category)
 
-    # 카테고리 표시 순서 정의 (뷰의 category_config와 동일)
-    category_order = %w[contract budget expense salary subsidy property travel duty other]
-    @topics_by_category = @topics_by_category.sort_by do |cat, _|
-      category_order.index(cat) || 999 # 순서에 없는 카테고리는 맨 뒤로
-    end.to_h
-
-    # 계약 카테고리: 논리적 순서로 정렬 (수의계약 → 입찰 → 계약체결 → 보증금 → 이행 → 변경/종료)
-    contract_order = %w[
-      private-contract private-contract-limit private-contract-amount
-      single-quote dual-quote quote-collection-guide private-contract-justification
-      price-negotiation emergency-contract small-amount-contract split-contract-prohibition
-      bidding bid-announcement e-bidding estimated-price multiple-price
-      lowest-bid-rate bid-qualification spec-price-split-bid goods-selection-committee
-      bid-participation-restriction qualification-failure e-bidding-error-faq
-      contract-execution e-procurement-guide unit-price-contract long-term-contract
-      joint-contract subcontract goods-vs-service-contract
-      contract-guarantee-deposit bid-deposit performance-guarantee defect-warranty
-      contract-guarantee-exemption
-      inspection payment advance-payment late-penalty
-      penalty-reduction-procedure completion-payment-checklist
-      design-change price-escalation contract-termination
-      additional-contract-limit contract-period-extension contract-amount-adjustment
-    ]
-
-    if @topics_by_category["contract"]
-      @topics_by_category["contract"] = @topics_by_category["contract"].sort_by do |topic|
-        idx = contract_order.index(topic.slug)
-        idx ? idx : 999 # 순서에 없는 토픽은 맨 뒤로
-      end
+    # 카테고리별 토픽 수 + 대표 토픽 3개 (허브 페이지용)
+    @hub_categories = CATEGORY_ORDER.filter_map do |key|
+      topics = all_topics.select { |t| t.category == key }
+      next if topics.empty?
+      { key: key, cfg: CATEGORY_CONFIG[key], count: topics.size, preview: topics.first(3) }
     end
-
-    # 계약 카테고리 서브그룹 (36개 토픽을 6개 논리 그룹으로 분류)
-    @contract_subgroups = build_contract_subgroups(@topics_by_category["contract"] || [])
-
     @total_count = all_topics.size
-    # 뷰 fragment cache 버전 (토픽 내용 변경 시 increment → 캐시 자동 무효화)
-    @fragment_version = Rails.cache.read("topics/fragment_version") || 0
 
-    # HTTP 캐싱: CDN/브라우저에서 5분간 캐시, stale-while-revalidate로 백그라운드 갱신
     expires_in 5.minutes, public: true, stale_while_revalidate: 1.hour
 
     set_meta_tags(
@@ -180,6 +159,40 @@ class TopicsController < ApplicationController
       og: {
         title: "법령 가이드 | 실무.kr",
         description: "수의계약·경쟁입찰·계약체결 등 주요 법령을 법률→시행령→규칙 체계로 정리",
+        url: canonical_url,
+        image: "https://silmu.kr/og-image.png",
+        type: "website"
+      }
+    )
+  end
+
+  def category
+    @key = params[:key]
+    @cfg = CATEGORY_CONFIG[@key]
+    return redirect_to topics_path, status: :moved_permanently unless @cfg
+
+    all_topics = Rails.cache.fetch("topics/all_published_v2", expires_in: 30.minutes) do
+      Topic.published.to_a
+    end
+    raw_topics = all_topics.select { |t| t.category == @key }
+    @topics = sort_topics_for_category(@key, raw_topics)
+
+    if @key == "contract"
+      @contract_subgroups = build_contract_subgroups(@topics)
+    end
+
+    @fragment_version = Rails.cache.read("topics/fragment_version") || 0
+
+    expires_in 5.minutes, public: true, stale_while_revalidate: 1.hour
+
+    set_meta_tags(
+      title: "#{@cfg[:label]} 법령 가이드 — 실무.kr",
+      description: "#{@cfg[:desc]} 관련 주요 법령을 법률→시행령→규칙 체계로 정리합니다.",
+      keywords: "#{@cfg[:label]}, 법령가이드, #{@cfg[:desc]}",
+      canonical: canonical_url,
+      og: {
+        title: "#{@cfg[:label]} 법령 가이드 | 실무.kr",
+        description: "#{@cfg[:desc]} 관련 주요 법령을 법률→시행령→규칙 체계로 정리합니다.",
         url: canonical_url,
         image: "https://silmu.kr/og-image.png",
         type: "website"
@@ -251,6 +264,29 @@ class TopicsController < ApplicationController
   end
 
   private
+
+  # 카테고리별 토픽 정렬 (계약은 논리적 순서, 나머지는 그대로)
+  def sort_topics_for_category(key, topics)
+    return topics unless key == "contract"
+
+    contract_order = %w[
+      private-contract private-contract-limit private-contract-amount
+      single-quote dual-quote quote-collection-guide private-contract-justification
+      price-negotiation emergency-contract small-amount-contract split-contract-prohibition
+      bidding bid-announcement e-bidding estimated-price multiple-price
+      lowest-bid-rate bid-qualification spec-price-split-bid goods-selection-committee
+      bid-participation-restriction qualification-failure e-bidding-error-faq
+      contract-execution e-procurement-guide unit-price-contract long-term-contract
+      joint-contract subcontract goods-vs-service-contract
+      contract-guarantee-deposit bid-deposit performance-guarantee defect-warranty
+      contract-guarantee-exemption
+      inspection payment advance-payment late-penalty
+      penalty-reduction-procedure completion-payment-checklist
+      design-change price-escalation contract-termination
+      additional-contract-limit contract-period-extension contract-amount-adjustment
+    ]
+    topics.sort_by { |t| contract_order.index(t.slug) || 999 }
+  end
 
   # 계약 카테고리 토픽을 6개 서브그룹으로 분류
   # 각 그룹: { id:, label:, icon:, desc:, slugs:, topics: }

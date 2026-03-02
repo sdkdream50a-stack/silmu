@@ -1,0 +1,183 @@
+<%# Created: 2026-03-02 %>
+<%# 법령 가이드 카테고리 상세 페이지 %>
+
+<%# JSON-LD 구조화 데이터 %>
+<% content_for :head do %>
+  <%= json_ld({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "홈", "item": "https://silmu.kr" },
+      { "@type": "ListItem", "position": 2, "name": "법령가이드", "item": "https://silmu.kr/topics" },
+      { "@type": "ListItem", "position": 3, "name": @cfg[:label], "item": canonical_url }
+    ]
+  }) %>
+<% end %>
+
+<!-- 페이지 헤더 -->
+<section class="gradient-premium text-white py-12 lg:py-16 relative overflow-hidden">
+  <div class="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/3"></div>
+  <div class="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/4"></div>
+  <div class="container-wide relative z-10">
+    <!-- 브레드크럼 -->
+    <div class="flex items-center gap-2 text-slate-300 text-sm mb-6">
+      <%= link_to root_path, class: "hover:text-white transition-colors flex items-center gap-1" do %>
+        <span class="material-symbols-outlined text-sm">home</span>홈
+      <% end %>
+      <span class="material-symbols-outlined text-sm">chevron_right</span>
+      <%= link_to topics_path, class: "hover:text-white transition-colors" do %>법령가이드<% end %>
+      <span class="material-symbols-outlined text-sm">chevron_right</span>
+      <span class="text-white font-medium"><%= @cfg[:label] %></span>
+    </div>
+
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+      <div class="flex items-start gap-5">
+        <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 shadow-lg">
+          <span class="material-symbols-outlined text-4xl text-white"><%= @cfg[:icon] %></span>
+        </div>
+        <div>
+          <h1 class="text-3xl lg:text-4xl font-bold tracking-tight mb-2"><%= @cfg[:label] %> 법령 가이드</h1>
+          <p class="text-white/80 text-lg"><%= @cfg[:desc] %></p>
+        </div>
+      </div>
+      <div class="text-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/15 self-start sm:self-auto">
+        <div class="text-2xl font-bold"><%= @topics.size %></div>
+        <div class="text-xs text-white/70 mt-0.5">법령</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 법령 목록 -->
+<section class="py-10 bg-background-light min-h-screen">
+  <div class="container-wide">
+    <% if @key == "contract" && @contract_subgroups.present? %>
+      <%# 계약 카테고리: 서브그룹 헤더 + 점프 내비게이션 %>
+      <% cache ["topics_contract_subgroups_v6", @topics.size, @fragment_version] do %>
+      <!-- 점프 내비게이션 (서브그룹 칩) -->
+      <nav class="mb-8" aria-label="계약 세부 분류 바로가기">
+        <div class="flex flex-wrap gap-2">
+          <% @contract_subgroups.each do |sg| %>
+            <button
+              type="button"
+              class="subgroup-chip inline-flex items-center gap-1.5 px-4 py-2 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-600 hover:bg-indigo-50 hover:border-indigo-200 hover:text-indigo-700 transition-all shadow-sm"
+              data-target="subgroup-<%= sg[:id] %>"
+              onclick="document.getElementById(this.dataset.target).scrollIntoView({behavior:'smooth',block:'start'});this.blur();"
+            >
+              <span class="material-symbols-outlined text-base"><%= sg[:icon] %></span>
+              <%= sg[:label] %>
+              <span class="text-xs text-slate-400">(<%= sg[:topics].size %>)</span>
+            </button>
+          <% end %>
+        </div>
+      </nav>
+
+      <!-- 서브그룹별 카드 그리드 -->
+      <% color = "indigo" %>
+      <% @contract_subgroups.each_with_index do |sg, idx| %>
+        <div id="subgroup-<%= sg[:id] %>" class="<%= 'mt-10' unless idx == 0 %>" style="scroll-margin-top: 8rem;">
+          <!-- 서브그룹 헤더 -->
+          <div class="flex items-center gap-2.5 mb-4 pb-3 border-b border-slate-100">
+            <div class="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">
+              <span class="material-symbols-outlined text-indigo-500 text-lg"><%= sg[:icon] %></span>
+            </div>
+            <div>
+              <h2 class="text-base font-bold text-slate-800"><%= sg[:label] %></h2>
+              <p class="text-xs text-slate-400 mt-0.5"><%= sg[:desc] %></p>
+            </div>
+            <span class="ml-auto text-xs font-medium text-indigo-500 bg-indigo-50 px-2.5 py-1 rounded-lg"><%= sg[:topics].size %>개</span>
+          </div>
+
+          <!-- 토픽 카드 -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <% sg[:topics].each do |topic| %>
+              <% topic_icon = TopicsController::TOPIC_ICONS[topic.slug] || "gavel" %>
+              <%= link_to topic_path(topic.slug),
+                  class: "group flex items-start gap-4 rounded-2xl bg-white p-5 shadow-sm border border-slate-100 transition-all hover:shadow-lg hover:-translate-y-0.5 hover:border-#{color}-100 cursor-pointer" do %>
+                <div class="shrink-0 flex h-11 w-11 items-center justify-center rounded-xl bg-<%= color %>-50 text-<%= color %>-600 group-hover:bg-<%= color %>-600 group-hover:text-white transition-colors">
+                  <span class="material-symbols-outlined text-xl"><%= topic_icon %></span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <h3 class="font-bold text-base text-slate-900 group-hover:text-<%= color %>-600 transition-colors mb-1"><%= topic.name %></h3>
+                  <% if topic.summary.present? %>
+                    <p class="text-sm text-slate-500 leading-snug line-clamp-2"><%= topic.summary.truncate(60) %></p>
+                  <% end %>
+                </div>
+                <span class="material-symbols-outlined text-slate-300 group-hover:text-<%= color %>-400 transition-colors self-center text-lg">chevron_right</span>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+      <% end %> <%# cache %>
+
+    <% else %>
+      <%# 계약 외 카테고리: 심플 카드 그리드 %>
+      <% cache ["topics_category_v3", @key, @topics.size, @fragment_version] do %>
+      <% color = @cfg[:color] %>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <% @topics.each do |topic| %>
+          <% topic_icon = TopicsController::TOPIC_ICONS[topic.slug] || @cfg[:icon] %>
+          <%= link_to topic_path(topic.slug),
+              class: "group flex items-start gap-4 rounded-2xl bg-white p-5 shadow-sm border border-slate-100 transition-all hover:shadow-lg hover:-translate-y-0.5 hover:border-#{color}-100 cursor-pointer" do %>
+            <div class="shrink-0 flex h-11 w-11 items-center justify-center rounded-xl bg-<%= color %>-50 text-<%= color %>-600 group-hover:bg-<%= color %>-600 group-hover:text-white transition-colors">
+              <span class="material-symbols-outlined text-xl"><%= topic_icon %></span>
+            </div>
+            <div class="flex-1 min-w-0">
+              <h3 class="font-bold text-base text-slate-900 group-hover:text-<%= color %>-600 transition-colors mb-1"><%= topic.name %></h3>
+              <% if topic.summary.present? %>
+                <p class="text-sm text-slate-500 leading-snug line-clamp-2"><%= topic.summary.truncate(60) %></p>
+              <% end %>
+            </div>
+            <span class="material-symbols-outlined text-slate-300 group-hover:text-<%= color %>-400 transition-colors self-center text-lg">chevron_right</span>
+          <% end %>
+        <% end %>
+      </div>
+      <% end %> <%# cache %>
+    <% end %>
+  </div>
+</section>
+
+<% if @key == "contract" %>
+<script>
+  (function() {
+    // 서브그룹 점프 칩: 스크롤 위치에 따라 active 칩 하이라이트
+    const chips = document.querySelectorAll('.subgroup-chip');
+    const subgroups = [];
+    chips.forEach(chip => {
+      const el = document.getElementById(chip.dataset.target);
+      if (el) subgroups.push({ chip, el });
+    });
+
+    if (subgroups.length > 0) {
+      let ticking = false;
+      const updateActiveChip = () => {
+        const scrollY = window.scrollY + 160;
+        let activeIdx = 0;
+        subgroups.forEach((sg, i) => {
+          if (sg.el.offsetTop <= scrollY) activeIdx = i;
+        });
+        chips.forEach((chip, i) => {
+          if (i === activeIdx) {
+            chip.classList.add('bg-indigo-50', 'border-indigo-300', 'text-indigo-700');
+            chip.classList.remove('bg-white', 'border-slate-200', 'text-slate-600');
+          } else {
+            chip.classList.remove('bg-indigo-50', 'border-indigo-300', 'text-indigo-700');
+            chip.classList.add('bg-white', 'border-slate-200', 'text-slate-600');
+          }
+        });
+        ticking = false;
+      };
+
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          requestAnimationFrame(updateActiveChip);
+          ticking = true;
+        }
+      }, { passive: true });
+
+      updateActiveChip();
+    }
+  })();
+</script>
+<% end %>

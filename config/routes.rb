@@ -63,6 +63,10 @@ Rails.application.routes.draw do
 
   # 토픽 (법령 가이드)
   get "topics", to: "topics#index", as: :topics
+  # 카테고리 페이지 (topics/:slug 보다 먼저 위치해야 함)
+  get "topics/:key", to: "topics#category",
+      constraints: { key: /contract|budget|expense|salary|subsidy|property|travel|duty|other/ },
+      as: :topics_category
   get "topics/:slug", to: "topics#show", as: :topic
 
   # 문서 양식

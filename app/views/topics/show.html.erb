@@ -20,8 +20,9 @@
     "@type": "BreadcrumbList",
     "itemListElement": [
       { "@type": "ListItem", "position": 1, "name": "홈", "item": "https://silmu.kr" },
-      { "@type": "ListItem", "position": 2, "name": @topic.category_name, "item": "https://silmu.kr/guides" },
-      { "@type": "ListItem", "position": 3, "name": @topic.name, "item": canonical_url }
+      { "@type": "ListItem", "position": 2, "name": "법령가이드", "item": "https://silmu.kr/topics" },
+      { "@type": "ListItem", "position": 3, "name": @topic.category_name, "item": "https://silmu.kr/topics/#{@topic.category}" },
+      { "@type": "ListItem", "position": 4, "name": @topic.name, "item": canonical_url }
     ]
   }) %>
   <% if @topic.faq_list.present? %>
@@ -45,7 +46,9 @@
         홈
       <% end %>
       <span class="material-symbols-outlined text-sm">chevron_right</span>
-      <span><%= @topic.category_name %></span>
+      <%= link_to topics_path, class: "hover:text-white transition-colors" do %>법령가이드<% end %>
+      <span class="material-symbols-outlined text-sm">chevron_right</span>
+      <%= link_to topics_category_path(key: @topic.category), class: "hover:text-white transition-colors" do %><%= @topic.category_name %><% end %>
       <span class="material-symbols-outlined text-sm">chevron_right</span>
       <span class="text-white font-medium"><%= @topic.name %></span>
     </div>
