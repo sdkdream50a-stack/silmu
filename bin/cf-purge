@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+# Cloudflare 캐시 퍼지 스크립트
+# 사용법: bin/cf-purge [url1] [url2] ...
+# 예시: bin/cf-purge https://silmu.kr/ https://silmu.kr/robots.txt
+# 인자 없이 실행하면 주요 페이지 전체 퍼지
+
+set -e
+
+SECRETS_FILE="$(dirname "$0")/../.kamal/secrets"
+
+if [ ! -f "$SECRETS_FILE" ]; then
+  echo "❌ .kamal/secrets 파일을 찾을 수 없습니다."
+  exit 1
+fi
+
+# secrets 파일에서 Cloudflare 키 읽기
+CF_API_KEY=$(grep "^CF_API_KEY=" "$SECRETS_FILE" | cut -d= -f2-)
+CF_AUTH_EMAIL=$(grep "^CF_AUTH_EMAIL=" "$SECRETS_FILE" | cut -d= -f2-)
+CF_ZONE_ID=$(grep "^CF_ZONE_ID=" "$SECRETS_FILE" | cut -d= -f2-)
+
+if [ -z "$CF_API_KEY" ] || [ -z "$CF_AUTH_EMAIL" ] || [ -z "$CF_ZONE_ID" ]; then
+  echo "❌ .kamal/secrets에 다음 항목을 추가하세요:"
+  echo "   CF_API_KEY=<Global API Key>"
+  echo "   CF_AUTH_EMAIL=<Cloudflare 로그인 이메일>"
+  echo "   CF_ZONE_ID=752603ee4b59465606de8b2e6854357c"
+  exit 1
+fi
+
+# 퍼지할 URL 목록 (인자 없으면 기본값 사용)
+if [ "$#" -gt 0 ]; then
+  URLS=("$@")
+else
+  URLS=(
+    "https://silmu.kr/"
+    "https://silmu.kr/robots.txt"
+    "https://silmu.kr/sitemap.xml"
+    "https://silmu.kr/topics"
+    "https://silmu.kr/guides"
+    "https://silmu.kr/audit-cases"
+    "https://silmu.kr/tools"
+    "https://silmu.kr/faq"
+  )
+fi
+
+# JSON 배열 생성
+JSON_ARRAY=$(printf '%s\n' "${URLS[@]}" | python3 -c "import json,sys; print(json.dumps(sys.stdin.read().splitlines()))")
+
+echo "🔄 Cloudflare 캐시 퍼지 중..."
+echo "   대상: ${#URLS[@]}개 URL"
+
+RESULT=$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/${CF_ZONE_ID}/purge_cache" \
+  -H "X-Auth-Email: ${CF_AUTH_EMAIL}" \
+  -H "X-Auth-Key: ${CF_API_KEY}" \
+  -H "Content-Type: application/json" \
+  --data "{\"files\":${JSON_ARRAY}}")
+
+SUCCESS=$(echo "$RESULT" | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('success', False))")
+
+if [ "$SUCCESS" = "True" ]; then
+  echo "✅ 퍼지 완료!"
+  for url in "${URLS[@]}"; do
+    echo "   - $url"
+  done
+else
+  echo "❌ 퍼지 실패:"
+  echo "$RESULT" | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('errors'))"
+  exit 1
+fi
