@@ -4,7 +4,7 @@
 attrs = {
   slug: "national-subsidy",
   name: "국고보조금 관리",
-  category: "budget",
+  category: "subsidy",
   published: true,
   summary: "중앙정부 보조금을 지방에서 어떻게 받고 집행·정산하는가 — 보조금 신청부터 교부·집행·정산·반환까지 전 과정과 보조율, 자부담 기준, 위반 시 환수 규정",
   keywords: "국고보조금, 보조금 교부, 보조금 정산, 보조율, 자부담, 보조금 반환, 보조금법, 보조사업, 국고보조사업",

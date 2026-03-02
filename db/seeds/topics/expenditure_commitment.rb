@@ -4,7 +4,7 @@
 attrs = {
   slug: "expenditure-commitment",
   name: "지출원인행위",
-  category: "budget",
+  category: "expense",
   published: true,
   summary: "예산 집행의 시작점인 지출원인행위 — 의의, 종류(계약·부담금·보조금 등), 재무관의 역할, 예산 범위 초과 금지 원칙 및 사후 정산의 위험성",
   keywords: "지출원인행위, 재무관, 지출결의, 품의서, 예산 범위, 지방재정법 제38조, 계약 전 품의, 집행 절차",
