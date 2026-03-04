@@ -292,7 +292,7 @@ class TopicsController < ApplicationController
   # 각 그룹: { id:, label:, icon:, desc:, slugs:, topics: }
   CONTRACT_SUBGROUP_DEFS = [
     { id: "private-contract", label: "수의계약",   icon: "handshake",     desc: "수의계약 요건, 한도, 견적 절차",
-      slugs: %w[private-contract-limit private-contract-amount
+      slugs: %w[private-contract private-contract-limit private-contract-amount
                 single-quote dual-quote quote-collection-guide private-contract-justification
                 price-negotiation emergency-contract small-amount-contract] },
     { id: "bidding",          label: "경쟁입찰",   icon: "gavel",         desc: "입찰공고, 전자입찰, 예정가격, 적격심사",
