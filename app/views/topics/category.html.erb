@@ -53,7 +53,7 @@
   <div class="container-wide">
     <% if @key == "contract" && @contract_subgroups.present? %>
       <%# 계약 카테고리: 서브그룹 헤더 + 점프 내비게이션 %>
-      <% cache ["topics_contract_subgroups_v6", @topics.size, @fragment_version] do %>
+      <% cache ["topics_contract_subgroups_v7", ENV["KAMAL_VERSION"], @topics.size, @fragment_version] do %>
       <!-- 점프 내비게이션 (서브그룹 칩) -->
       <nav class="mb-8" aria-label="계약 세부 분류 바로가기">
         <div class="flex flex-wrap gap-2">
@@ -113,7 +113,7 @@
 
     <% else %>
       <%# 계약 외 카테고리: 심플 카드 그리드 %>
-      <% cache ["topics_category_v3", @key, @topics.size, @fragment_version] do %>
+      <% cache ["topics_category_v4", ENV["KAMAL_VERSION"], @key, @topics.size, @fragment_version] do %>
       <% color = @cfg[:color] %>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <% @topics.each do |topic| %>
