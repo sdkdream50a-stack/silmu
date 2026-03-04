@@ -337,7 +337,7 @@ function bookmarkSite() {
             <span class="text-xs font-bold px-2 py-0.5 rounded-full <%= severity_badge %>"><%= ac.severity %></span>
             <span class="text-xs text-slate-500"><%= ac.category %></span>
           </div>
-          <h3 class="font-bold text-slate-900 group-hover:<%= ac.severity == '중대' ? 'text-red-700' : 'text-orange-700' %> transition-colors leading-snug line-clamp-2"><%= ac.title %></h3>
+          <h3 class="font-bold text-lg text-slate-900 group-hover:<%= ac.severity == '중대' ? 'text-red-700' : 'text-orange-700' %> transition-colors leading-snug line-clamp-2"><%= ac.title %></h3>
           <p class="text-xs text-slate-500 line-clamp-2 flex-1"><%= ac.issue.truncate(80) %></p>
           <div class="flex items-center gap-1 <%= severity_text %> text-xs font-semibold group-hover:gap-2 transition-all">
             사례 보기 <span class="material-symbols-outlined text-sm">arrow_forward</span>
