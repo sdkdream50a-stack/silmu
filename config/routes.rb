@@ -162,6 +162,7 @@ Rails.application.routes.draw do
   # 적격심사 자동 채점기
   get "tools/qualification-evaluation", to: "qualification_evaluations#index", as: :qualification_evaluation
   post "qualification-evaluations/evaluate", to: "qualification_evaluations#evaluate"
+  post "qualification-evaluations/comprehensive", to: "qualification_evaluations#comprehensive"
 
   # 4대보험 정산보험료 계산기
   get "tools/insurance-calculator", to: "insurance_calculators#index", as: :insurance_calculator
