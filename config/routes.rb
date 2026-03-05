@@ -53,7 +53,7 @@ Rails.application.routes.draw do
   get "document-analysis/analyze", to: redirect("/tools")
   get "cost-estimates/default-items", to: redirect("/tools/cost-estimate")
 
-  devise_for :users
+  devise_for :users, controllers: { sessions: "users/sessions" }
   root "home#index"
 
   # 챗봇
