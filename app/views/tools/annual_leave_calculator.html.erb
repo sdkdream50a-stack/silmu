@@ -106,8 +106,8 @@
                 <span class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs">원</span>
               </div>
               <p class="text-xs text-slate-400 mt-1">
-                1일 통상임금 = 월 통상임금 ÷ 209
-                <span class="text-blue-500 ml-1">(근로기준법 제60조 제5항)</span>
+                1일 통상임금 = 월 통상임금 ÷ 209 × 8시간
+                <span class="text-blue-500 ml-1">(근로기준법 시행령 제6조)</span>
               </p>
             </div>
           </div>
@@ -123,7 +123,7 @@
                      oninput="calculate()" />
               <span class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">원</span>
             </div>
-            <p class="text-xs text-slate-400 mt-1">월봉급액 ÷ 30으로 산출 가능</p>
+            <p class="text-xs text-slate-400 mt-1">공무원: 월봉급액 × 0.86 ÷ 30 (공무원수당규정 제18조의5)</p>
           </div>
 
           <button onclick="calculate()"
@@ -181,7 +181,7 @@
             <div id="annual-allowance-section" class="hidden bg-blue-50 rounded-xl p-4 mb-5 border border-blue-200">
               <div class="text-xs font-semibold text-blue-700 mb-1 flex items-center gap-1">
                 <span class="material-symbols-outlined text-sm">payments</span>
-                연차수당 (통상임금 기준, 근로기준법 제60조 제5항)
+                연차수당 (1일 통상임금 × 미사용일, 근로기준법 시행령 제6조)
               </div>
               <div class="text-2xl font-bold text-blue-800" id="annual-allowance-pay">-</div>
               <div class="text-xs text-blue-600 mt-1" id="annual-allowance-detail"></div>
@@ -324,14 +324,15 @@
     document.getElementById('remaining-leave').textContent = remaining;
     document.getElementById('leave-rule').textContent = label;
 
-    // 연차수당 (통상임금 기준: 월급 ÷ 209, 근로기준법 제60조 제5항)
+    // 연차수당 (통상임금 기준: 월급 ÷ 209 × 8시간 = 1일 통상임금, 근로기준법 시행령 제6조)
     if (monthlyWage > 0 && remaining > 0) {
-      const dailyOrdinaryWage = monthlyWage / 209;
+      const hourlyOrdinaryWage = monthlyWage / 209;
+      const dailyOrdinaryWage = hourlyOrdinaryWage * 8;
       const allowancePay = dailyOrdinaryWage * remaining;
       document.getElementById('annual-allowance-section').classList.remove('hidden');
       document.getElementById('annual-allowance-pay').textContent = formatKRW(allowancePay);
       document.getElementById('annual-allowance-detail').textContent =
-        '1일 통상임금: ' + formatKRW(dailyOrdinaryWage) + ' (' + monthlyWage.toLocaleString('ko-KR') + '원 ÷ 209시간)' +
+        '1일 통상임금: ' + formatKRW(dailyOrdinaryWage) + ' (' + monthlyWage.toLocaleString('ko-KR') + '원 ÷ 209 × 8시간)' +
         ' × 미사용 ' + remaining + '일';
     } else {
       document.getElementById('annual-allowance-section').classList.add('hidden');
