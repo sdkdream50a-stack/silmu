@@ -1,4 +1,4 @@
-# 계약보증금·하자보증금·인지세 계산기 서비스
+# 계약보증금·하자보증금·인지세·지체상금 계산기 서비스
 class ContractGuaranteeService
   # 계약보증금률 (지방계약법 시행령 제37조)
   CONTRACT_GUARANTEE_RATES = {
@@ -23,6 +23,13 @@ class ContractGuaranteeService
     { id: "plaster", name: "미장·타일공사", rate: 0.01, years: 1, note: "미장, 타일, 돌붙임" }
   ].freeze
 
+  # 지체상금률 (지방계약법 시행령 제88조)
+  DELAY_PENALTY_RATES = {
+    construction: { name: "공사", rate: Rational(1, 1000), rate_str: "1/1000", note: "공사계약의 경우 계약금액의 1/1000" },
+    service:      { name: "용역", rate: Rational(15, 10000), rate_str: "1.5/1000", note: "용역계약의 경우 계약금액의 1.5/1000" },
+    goods:        { name: "물품", rate: Rational(75, 100000), rate_str: "0.75/1000", note: "물품계약의 경우 계약금액의 0.75/1000" }
+  }.freeze
+
   # 인지세 기준 (인지세법 제3조, 시행령 별표)
   STAMP_TAX_TABLE = [
     { min: 0, max: 10_000_000, tax: 0, label: "1천만원 이하" },
@@ -40,6 +47,39 @@ class ContractGuaranteeService
 
     def get_defect_work_types
       DEFECT_GUARANTEE_RATES.map { |item| { id: item[:id], name: item[:name], rate: (item[:rate] * 100).round(0), years: item[:years], note: item[:note] } }
+    end
+
+    def get_delay_penalty_types
+      DELAY_PENALTY_RATES.map { |key, val| { id: key.to_s, name: val[:name], rate_str: val[:rate_str], note: val[:note] } }
+    end
+
+    # 지체상금 계산 (지방계약법 시행령 제88조)
+    def calculate_delay_penalty(params)
+      contract_amount = params[:contract_amount].to_i
+      delay_days      = params[:delay_days].to_i
+      contract_type   = params[:contract_type].to_s.to_sym
+
+      return { success: false, error: "계약금액을 입력해주세요." } if contract_amount <= 0
+      return { success: false, error: "지체일수를 입력해주세요." } if delay_days <= 0
+      return { success: false, error: "계약유형을 선택해주세요." } unless DELAY_PENALTY_RATES.key?(contract_type)
+
+      rate_info = DELAY_PENALTY_RATES[contract_type]
+      daily_penalty = (contract_amount * rate_info[:rate]).to_f.round(0)
+      total_penalty = daily_penalty * delay_days
+
+      {
+        success: true,
+        result: {
+          contract_amount: contract_amount,
+          delay_days: delay_days,
+          contract_type_name: rate_info[:name],
+          rate_str: rate_info[:rate_str],
+          daily_penalty: daily_penalty,
+          total_penalty: total_penalty,
+          note: rate_info[:note],
+          law: "지방계약법 시행령 제88조"
+        }
+      }
     end
 
     def calculate(params)

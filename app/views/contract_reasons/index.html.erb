@@ -158,6 +158,16 @@
 <section class="py-10">
   <div class="container-wide max-w-4xl">
 
+    <!-- 계약방식 결정 도우미 연동 배너 (URL 파라미터 있을 때만 표시) -->
+    <div id="prefill-banner" style="display:none; background:#ecfdf5; border:1px solid #a7f3d0; border-radius:12px; padding:12px 18px; margin-bottom:20px; align-items:center; gap:10px;">
+      <span class="material-symbols-outlined" style="color:#059669;">link</span>
+      <div style="font-size:14px; color:#065f46;">
+        <strong>계약방식 결정 도우미</strong>에서 연동되었습니다.
+        계약구분(<span class="prefill-type" style="font-weight:700;"></span>)과 금액이 자동으로 입력되었습니다.
+        나머지 정보를 확인하고 사유서를 생성하세요.
+      </div>
+    </div>
+
     <!-- 견적서 업로드 자동입력 -->
     <%= render 'shared/quote_upload_zone', tool_id: 'cr' %>
     <script>
@@ -629,6 +639,49 @@ function crReset() {
   document.getElementById('cr-result').classList.remove('active');
   document.getElementById('cr-form-card').scrollIntoView({ behavior:'smooth', block:'start' });
 }
+
+// URL 파라미터 자동 pre-fill (계약방식 결정 도우미에서 연동)
+(function crPrefillFromUrl() {
+  var params = new URLSearchParams(window.location.search);
+  var type = params.get('type');    // 물품, 용역, 공사
+  var reason = params.get('reason'); // 소액, 긴급, 유일품, 특례기업
+  var amount = params.get('amount');
+
+  if (type) {
+    var typeMap = { '물품': 'goods', '용역': 'service', '공사': 'construction' };
+    var typeKey = typeMap[type];
+    if (typeKey) {
+      var typeBtn = document.querySelector('#cr-type-grid .cr-option-btn[data-type="' + typeKey + '"]');
+      if (typeBtn) {
+        crSelectType(typeBtn);
+        // 안내 배너 표시
+        var banner = document.getElementById('prefill-banner');
+        if (banner) { banner.style.display = 'flex'; banner.querySelector('.prefill-type').textContent = type; }
+      }
+    }
+  }
+
+  if (reason) {
+    var reasonMap = { '소액': 'small_amount', '긴급': 'emergency', '유일품': 'sole_source', '특례기업': 'special_enterprise' };
+    var reasonKey = reasonMap[reason];
+    if (reasonKey) {
+      var reasonBtn = document.querySelector('#cr-reason-grid .cr-reason-btn[data-reason="' + reasonKey + '"]');
+      if (reasonBtn) crSelectReason(reasonBtn);
+    }
+  }
+
+  if (amount) {
+    var amountNum = parseInt(amount);
+    if (amountNum > 0) {
+      var budgetInput = document.getElementById('cr-budget');
+      if (budgetInput) {
+        budgetInput.value = amountNum.toLocaleString('ko-KR');
+        var budgetText = document.getElementById('cr-budget-text');
+        if (budgetText) budgetText.textContent = amountNum.toLocaleString('ko-KR') + '원';
+      }
+    }
+  }
+})();
 
 function crShowToast(msg) {
   var toast = document.getElementById('cr-toast');

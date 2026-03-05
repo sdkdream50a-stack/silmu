@@ -157,6 +157,7 @@ Rails.application.routes.draw do
   # 계약보증금 계산기
   get "tools/contract-guarantee", to: "contract_guarantees#index", as: :contract_guarantee
   post "contract-guarantees/calculate", to: "contract_guarantees#calculate"
+  post "contract-guarantees/delay-penalty", to: "contract_guarantees#delay_penalty"
 
   # 적격심사 자동 채점기
   get "tools/qualification-evaluation", to: "qualification_evaluations#index", as: :qualification_evaluation
@@ -176,6 +177,7 @@ Rails.application.routes.draw do
 
   # 연가일수 계산기
   get "tools/annual-leave-calculator", to: "tools#annual_leave_calculator", as: :annual_leave_calculator
+  post "tools/annual-leave/pdf", to: "tools#annual_leave_pdf", as: :annual_leave_pdf
 
   # 퇴직금 계산기
   get "tools/severance-calculator", to: "tools#severance_calculator", as: :severance_calculator

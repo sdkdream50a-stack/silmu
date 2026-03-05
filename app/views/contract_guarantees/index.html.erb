@@ -150,6 +150,20 @@
 <section class="py-10">
   <div class="container-wide max-w-4xl">
 
+    <!-- 탭 선택 -->
+    <div style="display:flex; gap:0; margin-bottom:24px; border:2px solid #e0e7ff; border-radius:14px; overflow:hidden; background:#f8fafc;">
+      <button id="tab-guarantee" onclick="cgSwitchTab('guarantee')"
+              style="flex:1; padding:14px; font-weight:700; font-size:14px; border:none; cursor:pointer; transition:all .2s; background:#6366f1; color:#fff;">
+        <span class="material-symbols-outlined" style="vertical-align:middle; font-size:18px; margin-right:4px;">verified_user</span>
+        계약보증금 계산
+      </button>
+      <button id="tab-delay" onclick="cgSwitchTab('delay')"
+              style="flex:1; padding:14px; font-weight:700; font-size:14px; border:none; cursor:pointer; transition:all .2s; background:transparent; color:#64748b;">
+        <span class="material-symbols-outlined" style="vertical-align:middle; font-size:18px; margin-right:4px;">timer_off</span>
+        지체상금 계산
+      </button>
+    </div>
+
     <!-- 입력 영역 -->
     <div class="cg-card" id="cg-input-section">
       <h2 class="cg-section-title">계약 정보 입력</h2>
@@ -208,6 +222,74 @@
       </div>
     </div>
 
+    <!-- 지체상금 입력 -->
+    <div class="cg-card" id="dp-input-section" style="display:none;">
+      <h2 class="cg-section-title">지체상금 계산</h2>
+      <p class="cg-section-desc">계약금액, 지체일수, 계약유형을 입력하면 지체상금을 자동 계산합니다 <span style="font-size:12px;color:#818cf8;">(지방계약법 시행령 제88조)</span></p>
+
+      <div class="cg-form-group">
+        <label>계약금액</label>
+        <div class="cg-amount-wrap">
+          <input type="text" id="dp-amount" placeholder="0" inputmode="numeric" oninput="dpFormatAmount(this)">
+          <span class="cg-unit">원</span>
+        </div>
+        <div class="cg-amount-hint" id="dp-amount-hint"></div>
+        <div class="cg-quick-btns">
+          <span class="cg-quick-btn" onclick="dpAddAmount(10000000)">+1천만</span>
+          <span class="cg-quick-btn" onclick="dpAddAmount(50000000)">+5천만</span>
+          <span class="cg-quick-btn" onclick="dpAddAmount(100000000)">+1억</span>
+          <span class="cg-quick-btn" onclick="dpAddAmount(500000000)">+5억</span>
+          <span class="cg-quick-btn" onclick="dpResetAmount()" style="background:#fef3c7;border-color:#fcd34d;color:#b45309;">초기화</span>
+        </div>
+      </div>
+
+      <div class="cg-form-group">
+        <label>지체일수</label>
+        <div style="display:flex; align-items:center; gap:8px; max-width:200px;">
+          <input type="number" id="dp-days" placeholder="0" min="1" max="365"
+                 style="width:100%; padding:12px 14px; border:2px solid #e5e7eb; border-radius:10px; font-size:20px; font-weight:700; text-align:right;">
+          <span style="font-size:16px; color:#64748b; white-space:nowrap;">일</span>
+        </div>
+        <div class="cg-quick-btns" style="margin-top:8px;">
+          <span class="cg-quick-btn" onclick="dpAddDays(1)">+1일</span>
+          <span class="cg-quick-btn" onclick="dpAddDays(7)">+7일</span>
+          <span class="cg-quick-btn" onclick="dpAddDays(14)">+14일</span>
+          <span class="cg-quick-btn" onclick="dpAddDays(30)">+30일</span>
+        </div>
+      </div>
+
+      <div class="cg-form-group">
+        <label>계약유형 <span class="cg-sublabel">(지체상금률 결정)</span></label>
+        <div class="cg-type-grid" id="dp-type-grid">
+          <% @delay_penalty_types.each do |type| %>
+            <div class="cg-type-btn" data-type="<%= type[:id] %>" onclick="dpSelectType(this)" style="text-align:left;">
+              <div style="font-weight:700;"><%= type[:name] %></div>
+              <div style="font-size:12px;color:#6366f1;">지체상금률 <%= type[:rate_str] %></div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <div style="text-align:center; margin-top:28px;">
+        <button class="cg-btn cg-btn-primary" onclick="dpCalculate()">
+          <span class="material-symbols-outlined text-lg">calculate</span> 지체상금 계산
+        </button>
+      </div>
+    </div>
+
+    <!-- 지체상금 결과 -->
+    <div class="cg-result" id="dp-result-area">
+      <div id="dp-result-content"></div>
+      <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-top:24px;" class="no-print">
+        <button class="cg-btn" style="background:#f1f5f9; color:#475569;" onclick="document.getElementById('dp-input-section').scrollIntoView({behavior:'smooth'})">
+          <span class="material-symbols-outlined text-lg">arrow_upward</span> 조건 수정
+        </button>
+        <button class="cg-btn" style="background:#6366f1; color:#fff;" onclick="window.print()">
+          <span class="material-symbols-outlined text-lg">print</span> 인쇄
+        </button>
+      </div>
+    </div>
+
     <!-- 결과 영역 -->
     <div class="cg-result" id="cg-result-area">
       <div id="cg-result-content"></div>
@@ -229,6 +311,114 @@
 document.addEventListener('turbo:load', function() {
   var cgInput = document.getElementById('cg-input-section');
   if (!cgInput) return;
+
+  // 탭 전환
+  window.cgSwitchTab = function(tab) {
+    var isGuarantee = (tab === 'guarantee');
+    document.getElementById('cg-input-section').style.display = isGuarantee ? '' : 'none';
+    document.getElementById('cg-result-area').style.display = isGuarantee ? '' : 'none';
+    document.getElementById('dp-input-section').style.display = isGuarantee ? 'none' : '';
+    document.getElementById('dp-result-area').style.display = isGuarantee ? 'none' : '';
+    document.getElementById('tab-guarantee').style.background = isGuarantee ? '#6366f1' : 'transparent';
+    document.getElementById('tab-guarantee').style.color = isGuarantee ? '#fff' : '#64748b';
+    document.getElementById('tab-delay').style.background = isGuarantee ? 'transparent' : '#6366f1';
+    document.getElementById('tab-delay').style.color = isGuarantee ? '#64748b' : '#fff';
+  };
+
+  // 지체상금 계산 로직
+  var dpAmount = 0;
+  var dpSelectedType = 'construction';
+  document.querySelector('#dp-type-grid .cg-type-btn')?.classList.add('selected');
+
+  window.dpFormatAmount = function(input) {
+    var value = input.value.replace(/[^0-9]/g, '');
+    if (value) {
+      dpAmount = parseInt(value);
+      input.value = dpAmount.toLocaleString('ko-KR');
+    } else {
+      dpAmount = 0;
+      input.value = '';
+    }
+    var hint = document.getElementById('dp-amount-hint');
+    if (hint) hint.textContent = dpAmount > 0 ? cgKoreanUnit(dpAmount) : '';
+  };
+
+  window.dpAddAmount = function(n) {
+    dpAmount += n;
+    document.getElementById('dp-amount').value = dpAmount.toLocaleString('ko-KR');
+    var hint = document.getElementById('dp-amount-hint');
+    if (hint) hint.textContent = cgKoreanUnit(dpAmount);
+  };
+
+  window.dpResetAmount = function() {
+    dpAmount = 0;
+    document.getElementById('dp-amount').value = '';
+    var hint = document.getElementById('dp-amount-hint');
+    if (hint) hint.textContent = '';
+  };
+
+  window.dpAddDays = function(n) {
+    var inp = document.getElementById('dp-days');
+    inp.value = (parseInt(inp.value) || 0) + n;
+  };
+
+  window.dpSelectType = function(el) {
+    document.querySelectorAll('#dp-type-grid .cg-type-btn').forEach(function(b) { b.classList.remove('selected'); });
+    el.classList.add('selected');
+    dpSelectedType = el.dataset.type;
+  };
+
+  window.dpCalculate = function() {
+    if (dpAmount <= 0) { alert('계약금액을 입력해주세요.'); return; }
+    var days = parseInt(document.getElementById('dp-days').value) || 0;
+    if (days <= 0) { alert('지체일수를 입력해주세요.'); return; }
+
+    fetch('/contract-guarantees/delay-penalty', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json',
+                 'X-CSRF-Token': document.querySelector('meta[name=csrf-token]').content },
+      body: JSON.stringify({ contract_amount: dpAmount, delay_days: days, contract_type: dpSelectedType })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.success) {
+        dpRenderResult(data.result);
+      } else {
+        alert(data.error);
+      }
+    });
+  };
+
+  function dpRenderResult(r) {
+    var html = '';
+    html += '<div class="cg-result-hero"><div class="cg-hero-label">지체상금 합계</div>';
+    html += '<div class="cg-hero-value" style="color:#dc2626;">' + cgComma(r.total_penalty) + '원</div>';
+    html += '<div class="cg-hero-sub">' + r.delay_days + '일 지체 · ' + cgEsc(r.contract_type_name) + ' 계약</div></div>';
+
+    html += '<div class="cg-result-section"><div class="cg-result-title"><span class="material-symbols-outlined" style="color:#dc2626;">timer_off</span> 지체상금 계산 내역 <span style="font-size:13px;font-weight:400;color:#818cf8;margin-left:4px;">(지방계약법 시행령 제88조)</span></div>';
+    html += '<div class="cg-detail-grid">';
+    html += '<div class="cg-detail-item"><div class="cg-detail-label">계약금액</div><div class="cg-detail-value">' + cgComma(r.contract_amount) + '원</div></div>';
+    html += '<div class="cg-detail-item"><div class="cg-detail-label">지체상금률 <span style="font-size:11px;color:#818cf8;">(§88)</span></div><div class="cg-detail-value">' + cgEsc(r.rate_str) + '/일</div></div>';
+    html += '<div class="cg-detail-item"><div class="cg-detail-label">1일 지체상금</div><div class="cg-detail-value">' + cgComma(r.daily_penalty) + '원</div></div>';
+    html += '<div class="cg-detail-item"><div class="cg-detail-label">지체일수</div><div class="cg-detail-value">' + r.delay_days + '일</div></div>';
+    html += '</div>';
+    html += '<div style="background:#fef2f2;border:1px solid #fca5a5;border-radius:10px;padding:14px 18px;font-size:14px;color:#b91c1c;">';
+    html += '<strong>지체상금 합계:</strong> ' + cgComma(r.contract_amount) + '원 × ' + cgEsc(r.rate_str) + ' × ' + r.delay_days + '일 = <strong>' + cgComma(r.total_penalty) + '원</strong>';
+    html += '</div></div>';
+
+    html += '<div class="cg-result-section"><div class="cg-result-title"><span class="material-symbols-outlined" style="color:#f59e0b;">info</span> 관련 법령</div>';
+    html += '<div class="cg-ref-box">';
+    html += '• 지체상금: 지방계약법 시행령 제88조<br>';
+    html += '• 공사 1/1000, 용역 1.5/1000, 물품 0.75/1000 (계약금액의 일 단위)<br>';
+    html += '• 지체상금 최대한도: 계약금액의 30/100 (동조 제2항)<br>';
+    html += '• 정당한 지체사유(천재지변 등) 해당 시 지체상금 면제 가능';
+    html += '</div></div>';
+
+    document.getElementById('dp-result-content').innerHTML = html;
+    var area = document.getElementById('dp-result-area');
+    area.classList.add('show');
+    area.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 
   var cgAmount = 0;
   var cgSelectedType = 'general';
@@ -338,8 +528,8 @@ document.addEventListener('turbo:load', function() {
     } else {
       html += '<div class="cg-detail-grid">';
       html += '<div class="cg-detail-item"><div class="cg-detail-label">계약 유형</div><div class="cg-detail-value">' + cgEsc(cg.type_name) + '</div></div>';
-      html += '<div class="cg-detail-item"><div class="cg-detail-label">보증금률</div><div class="cg-detail-value">' + cg.rate + '%</div></div>';
-      html += '<div class="cg-detail-item"><div class="cg-detail-label">계약보증금</div><div class="cg-detail-value" style="color:#4338ca;">' + cgComma(cg.amount) + '원</div></div>';
+      html += '<div class="cg-detail-item"><div class="cg-detail-label">보증금률 <span style="font-size:11px;color:#818cf8;">(지방계약법 시행령 제37조 제1항)</span></div><div class="cg-detail-value">' + cg.rate + '%</div></div>';
+      html += '<div class="cg-detail-item"><div class="cg-detail-label">계약보증금 <span style="font-size:11px;color:#818cf8;">(§37①)</span></div><div class="cg-detail-value" style="color:#4338ca;">' + cgComma(cg.amount) + '원</div></div>';
       html += '<div class="cg-detail-item"><div class="cg-detail-label">비고</div><div class="cg-detail-value" style="font-size:14px;">' + cgEsc(cg.note) + '</div></div>';
       html += '</div>';
     }
@@ -347,7 +537,7 @@ document.addEventListener('turbo:load', function() {
 
     // 하자보증금
     if (r.defect_guarantee && r.defect_guarantee.length > 0) {
-      html += '<div class="cg-result-section"><div class="cg-result-title"><span class="material-symbols-outlined" style="color:#6366f1;">shield</span> 하자보수보증금</div>';
+      html += '<div class="cg-result-section"><div class="cg-result-title"><span class="material-symbols-outlined" style="color:#6366f1;">shield</span> 하자보수보증금 <span style="font-size:13px;font-weight:400;color:#818cf8;margin-left:4px;">(지방계약법 시행령 제78조)</span></div>';
       html += '<table class="cg-defect-table"><thead><tr><th>공종</th><th>보증금률</th><th>보증기간</th><th style="text-align:right;">보증금액</th></tr></thead><tbody>';
       var defTotal = 0;
       for (var i = 0; i < r.defect_guarantee.length; i++) {
@@ -360,7 +550,7 @@ document.addEventListener('turbo:load', function() {
     }
 
     // 인지세
-    html += '<div class="cg-result-section"><div class="cg-result-title"><span class="material-symbols-outlined" style="color:#d97706;">receipt</span> 인지세</div>';
+    html += '<div class="cg-result-section"><div class="cg-result-title"><span class="material-symbols-outlined" style="color:#d97706;">receipt</span> 인지세 <span style="font-size:13px;font-weight:400;color:#818cf8;margin-left:4px;">(인지세법 제3조)</span></div>';
     if (st.exempt) {
       html += '<div class="cg-stamp-exempt"><span class="material-symbols-outlined">check_circle</span> 계약금액 1천만원 이하 — 인지세 면제</div>';
     } else {

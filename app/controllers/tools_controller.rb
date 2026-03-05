@@ -138,6 +138,26 @@ class ToolsController < ApplicationController
     )
   end
 
+  # POST /tools/annual-leave/pdf
+  def annual_leave_pdf
+    pdf_data = PdfExportService.annual_leave_pdf(
+      hire_date:    params[:hire_date],
+      ref_year:     params[:ref_year],
+      used_leave:   params[:used_leave],
+      monthly_wage: params[:monthly_wage],
+      daily_wage:   params[:daily_wage]
+    )
+
+    if pdf_data
+      send_data pdf_data,
+        filename: "연가일수_계산결과_#{Time.zone.today.strftime('%Y%m%d')}.pdf",
+        type: "application/pdf",
+        disposition: "attachment"
+    else
+      render json: { success: false, error: "임용일 형식이 올바르지 않습니다." }, status: :unprocessable_entity
+    end
+  end
+
   def travel_calculator
     description_text = "공무원 국내·외 출장 여비를 자동으로 계산합니다. 교통비, 일비, 숙박비, 식비를 한 번에 산출하고, 국내출장과 해외출장을 구분하여 정확한 여비를 계산합니다. 공무원 여비 규정에 따라 자동 계산됩니다."
 
