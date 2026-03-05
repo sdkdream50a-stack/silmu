@@ -109,7 +109,7 @@
               조치내용
             </h2>
             <div class="text-sm text-slate-700 leading-relaxed">
-              <% @audit_case.action_taken.split(',').map(&:strip).each do |action| %>
+              <% @audit_case.action_taken.to_s.split(',').map(&:strip).reject(&:blank?).each do |action| %>
                 <div class="flex items-start gap-2 mb-2">
                   <span class="material-symbols-outlined text-orange-500 text-sm mt-0.5 flex-shrink-0">check_circle</span>
                   <span><%= action %></span>
