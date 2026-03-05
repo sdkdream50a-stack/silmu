@@ -41,6 +41,15 @@ describe('T02: RATES 상수', () => {
   it('RATES[2026].pension.g === 0.0475', () => {
     assert.strictEqual(RATES[2026].pension.g, 0.0475);
   });
+  it('RATES[2025].pension.g === 0.045 (2025년은 9%=4.5%, 9.5% 인상은 2026부터)', () => {
+    assert.strictEqual(RATES[2025].pension.g, 0.045);
+  });
+  it('RATES[2025].pension.ceiling === 6170000', () => {
+    assert.strictEqual(RATES[2025].pension.ceiling, 6_170_000);
+  });
+  it('RATES[2026].pension.ceiling === 6370000', () => {
+    assert.strictEqual(RATES[2026].pension.ceiling, 6_370_000);
+  });
   it('RATES[2025].care.numerator === 0.9182', () => {
     assert.strictEqual(RATES[2025].care.numerator, 0.9182);
   });
@@ -70,9 +79,9 @@ describe('T03: calcPension (연금보험료)', () => {
     // 2026년 p=0.0475, rounddown(74100, -1) = 74100
     assert.strictEqual(calcPension(1_560_000, 2026).monthly.p, 74100);
   });
-  it('2025년 기관: calcPension(2_000_000, 2025).monthly.g === 95000', () => {
-    // rounddown(2_000_000 * 0.0475, -1) = rounddown(95000, -1) = 95000
-    assert.strictEqual(calcPension(2_000_000, 2025).monthly.g, 95000);
+  it('2025년 기관: calcPension(2_000_000, 2025).monthly.g === 90000', () => {
+    // rounddown(2_000_000 * 0.045, -1) = rounddown(90000, -1) = 90000
+    assert.strictEqual(calcPension(2_000_000, 2025).monthly.g, 90_000);
   });
   it('연금은 정산 없음 — settlement 키 없음', () => {
     const result = calcPension(1_560_000, 2025);
@@ -81,6 +90,22 @@ describe('T03: calcPension (연금보험료)', () => {
   it('연금은 정산 없음 — decided 키 없음', () => {
     const result = calcPension(1_560_000, 2025);
     assert.strictEqual('decided' in result, false);
+  });
+  it('상한 초과 시 기준소득월액 상한 적용: calcPension(7_000_000, 2025).monthly.p', () => {
+    const expected = Math.floor(6_170_000 * 0.045 / 10) * 10;
+    assert.strictEqual(calcPension(7_000_000, 2025).monthly.p, expected);
+  });
+  it('상한 초과 시 isOverCeiling === true', () => {
+    assert.strictEqual(calcPension(7_000_000, 2025).isOverCeiling, true);
+  });
+  it('하한 미만 시 isUnderFloor === true', () => {
+    assert.strictEqual(calcPension(300_000, 2025).isUnderFloor, true);
+  });
+  it('정상 범위: cappedWol === bonsuWol, isOverCeiling/isUnderFloor 모두 false', () => {
+    const res = calcPension(2_000_000, 2025);
+    assert.strictEqual(res.cappedWol, 2_000_000);
+    assert.strictEqual(res.isOverCeiling, false);
+    assert.strictEqual(res.isUnderFloor, false);
   });
 });
 

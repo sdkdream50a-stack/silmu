@@ -12,7 +12,7 @@ export default class extends Controller {
     "ginamHealthPYearend", "ginamHealthGYearend",
     "ginamCarePYearend", "ginamCareGYearend",
     "ginamEmployPYearend", "ginamEmployGYearend",
-    "ginamAccidentGYearend",
+    "ginamAccidentGYearend", "employStableRateYearend",
     // 퇴직정산 입력
     "bonsuWolRetire", "bonsuTotalRetire", "geunMonthsRetire",
     "wolIpRetire", "il1MonthRetire", "il1FieldRetire", "accidentRateRetire",
@@ -20,7 +20,7 @@ export default class extends Controller {
     "ginamHealthPRetire", "ginamHealthGRetire",
     "ginamCarePRetire", "ginamCareGRetire",
     "ginamEmployPRetire", "ginamEmployGRetire",
-    "ginamAccidentGRetire",
+    "ginamAccidentGRetire", "employStableRateRetire",
     // 결과
     "resultYearend", "resultRetire",
     "resultTableYearend", "resultTableRetire",
@@ -112,7 +112,8 @@ export default class extends Controller {
         accident_g:  this.parseNum(this[`ginamAccidentG${key}Target`].value),
       },
       year,
-      accidentRate: parseFloat(this[`accidentRate${key}Target`].value) / 100 || RATES[year].accident.g,
+      accidentRate:     parseFloat(this[`accidentRate${key}Target`].value) / 100 || RATES[year].accident.g,
+      employStableRate: parseFloat(this[`employStableRate${key}Target`].value) / 100 || RATES[year].employment.g_stable,
     }
 
     // 입력 검증
@@ -155,19 +156,24 @@ export default class extends Controller {
     }
 
     const r = result
+    const pensionNote = r.pension.isOverCeiling
+      ? ` <span class="text-xs text-orange-500 ml-1">(상한 적용: ${fmt(r.pension.cappedWol)}원)</span>`
+      : r.pension.isUnderFloor
+      ? ` <span class="text-xs text-orange-500 ml-1">(하한 적용: ${fmt(r.pension.cappedWol)}원)</span>`
+      : ''
     let totalGinamP = 0, totalGinamG = 0
     let totalDecidedP = 0, totalDecidedG = 0
     let totalSettleP = 0, totalSettleG = 0
 
     const rows = [
       {
-        label: "국민연금 (개인)", type: "p",
+        label: `국민연금 (개인)${pensionNote}`, type: "p",
         monthly: r.pension.monthly.p,
         ginam: ginam?.pension_p ?? null,
         decided: null, settle: null
       },
       {
-        label: "국민연금 (기관)", type: "g",
+        label: `국민연금 (기관)${pensionNote}`, type: "g",
         monthly: r.pension.monthly.g,
         ginam: ginam?.pension_g ?? null,
         decided: null, settle: null
@@ -345,8 +351,11 @@ export default class extends Controller {
     const panel = this.panelTargets.find(p => p.dataset.panel === tab)
     if (panel) {
       panel.querySelectorAll("input[type=text], input[type=number]").forEach(el => {
-        if (el.dataset.insuranceCalculatorTarget?.includes("accidentRate")) {
+        const t = el.dataset.insuranceCalculatorTarget
+        if (t?.includes("accidentRate")) {
           el.value = "0.786"
+        } else if (t?.includes("employStableRate")) {
+          el.value = "0.85"
         } else {
           el.value = ""
         }
