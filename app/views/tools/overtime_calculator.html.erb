@@ -39,7 +39,7 @@
           <div class="bg-amber-50 border-l-4 border-amber-500 p-3 rounded-r-lg mt-4">
             <p class="text-amber-900 text-xs leading-relaxed">
               <strong>⚠️ 참고:</strong> 기관·직종에 따라 수당 기준이 다를 수 있습니다. 최종 지급액은 소속 기관의 급여 담당자 확인 후 결정하세요.
-              (근거: 공무원수당 등에 관한 규정 제15조, 제16조)
+              (근거: 공무원수당 등에 관한 규정 제15조·제16조·제17조)
             </p>
           </div>
         </div>
@@ -107,15 +107,15 @@
           <!-- 휴일근무 -->
           <div class="mb-5">
             <label class="block text-sm font-semibold text-slate-700 mb-1">
-              휴일근무 시간
+              휴일근무 일수
               <span class="text-xs text-slate-400 font-normal ml-1">(토·일·공휴일)</span>
             </label>
-            <p class="text-xs text-slate-400 mb-2">휴일근무는 시간외·야간 구분 없이 별도 적용</p>
+            <p class="text-xs text-slate-400 mb-2">법령상 1일 단위 지급 (9~18시 근무 기준, 공무원수당 규정 제17조)</p>
             <div class="flex items-center gap-2">
-              <input type="number" id="holiday-hours" class="form-input w-28"
-                     placeholder="0" min="0" step="0.5"
+              <input type="number" id="holiday-days" class="form-input w-28"
+                     placeholder="0" min="0" step="1"
                      oninput="calculate()" />
-              <span class="text-slate-500 text-sm">시간</span>
+              <span class="text-slate-500 text-sm">일</span>
             </div>
           </div>
 
@@ -208,7 +208,7 @@
           <ul class="text-xs text-slate-500 space-y-1.5 leading-relaxed">
             <li>• <strong class="text-slate-600">시간외근무수당</strong> = 월봉급액 ÷ 209 × 시간외근무시간 (월 57시간 한도)</li>
             <li>• <strong class="text-slate-600">야간근무수당</strong> = 시간당 단가 × 야간근무시간 × 0.5 (22:00~06:00)</li>
-            <li>• <strong class="text-slate-600">휴일근무수당</strong> = 시간당 단가 × 휴일근무시간 × 1.5</li>
+            <li>• <strong class="text-slate-600">휴일근무수당</strong> = 월봉급액 ÷ 26 × 휴일근무일수 × 1.5 (1일 단위, 제17조)</li>
             <li>• 시간외·야간·휴일이 중복되는 경우 각각 합산됩니다</li>
           </ul>
         </div>
@@ -237,7 +237,7 @@
     const salary   = parseFloat(document.getElementById('monthly-salary').value) || 0;
     const overtime = parseFloat(document.getElementById('overtime-hours').value)  || 0;
     const night    = parseFloat(document.getElementById('night-hours').value)     || 0;
-    const holiday  = parseFloat(document.getElementById('holiday-hours').value)   || 0;
+    const holiday  = parseFloat(document.getElementById('holiday-days').value)    || 0;
 
     if (salary <= 0) {
       document.getElementById('result-empty').classList.remove('hidden');
@@ -287,12 +287,13 @@
       document.getElementById('row-night').classList.add('hidden');
     }
 
-    // 휴일근무수당 (시간당 단가 × 1.5)
-    const holidayPay = hourlyRate * holiday * 1.5;
+    // 휴일근무수당 (월봉급액 ÷ 26 × 일수 × 1.5, 제17조)
+    const dailyRate = salary / 26;
+    const holidayPay = dailyRate * holiday * 1.5;
     if (holiday > 0) {
       document.getElementById('row-holiday').classList.remove('hidden');
       document.getElementById('holiday-detail').textContent =
-        Math.round(hourlyRate).toLocaleString('ko-KR') + '원 × ' + holiday + '시간 × 1.5';
+        Math.round(dailyRate).toLocaleString('ko-KR') + '원/일 × ' + holiday + '일 × 1.5';
       document.getElementById('holiday-pay').textContent = formatKRW(holidayPay);
       total += holidayPay;
     } else {
