@@ -93,7 +93,7 @@
 
           <% if current_user %>
             <div class="border-t border-gray-200 mt-4 pt-4">
-              <%= button_to destroy_user_session_path, method: :delete, data: { turbo: false }, class: "w-full flex items-center gap-3 px-4 py-3 text-rose-600 hover:bg-rose-50 rounded-xl transition-colors" do %>
+              <%= link_to destroy_user_session_path, data: { turbo_method: :delete }, class: "flex items-center gap-3 px-4 py-3 text-rose-600 hover:bg-rose-50 rounded-xl transition-colors" do %>
                 <span class="material-symbols-outlined">logout</span>
                 로그아웃
               <% end %>
