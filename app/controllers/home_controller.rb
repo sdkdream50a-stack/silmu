@@ -8,9 +8,9 @@ class HomeController < ApplicationController
       AuditCase.published.where(severity: %w[중대 보통]).order(created_at: :desc).limit(3).to_a
     end
 
-    # HTTP 캐싱: nav에 인증 상태(로그인/로그아웃)가 포함되므로 public 캐시 불가
-    # DB 쿼리는 Rails.cache로 별도 캐시됨
-    expires_in 1.minute, public: false
+    # 홈페이지는 nav에 인증 상태 포함 → Cloudflare 포함 모든 캐시 금지
+    # DB 쿼리는 Rails.cache로 별도 캐시됨 (성능 영향 없음)
+    response.headers["Cache-Control"] = "no-store"
 
     description_text = "공무원을 위한 계약·예산 실무 종합 플랫폼. 수의계약, 적격심사, 입찰, 검수, 예산 편성 등 #{@topic_count}개 현행 법령 가이드와 #{ApplicationHelper::ACTIVE_TOOL_COUNT}개 자동화 도구를 무료로 제공합니다. #{@audit_case_count}건 실제 감사사례 분석으로 실수를 예방하고, #{@template_count}종 서식 템플릿으로 업무 시간을 절약하세요."
 
