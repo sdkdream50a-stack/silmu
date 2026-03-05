@@ -64,11 +64,12 @@ class LegalPeriodService
     { id: "interior", name: "실내건축공사", years: 2, note: "바닥재, 벽체, 천장" }
   ].freeze
 
-  # 지체상금 요율 (1일당)
+  # 지체상금 요율 (1일당, 국가계약법 시행규칙 제75조 기준)
+  # 공사 0.5/1,000 / 물품(제조구매) 0.75/1,000 / 용역 1.25/1,000
   LATE_PENALTY_RATES = {
-    construction: { name: "공사", rate: Rational(1, 2000), display: "1/2,000" },
-    goods: { name: "물품", rate: Rational(3, 4000), display: "3/4,000" },
-    service: { name: "용역", rate: Rational(3, 4000), display: "3/4,000" },
+    construction: { name: "공사", rate: Rational(5, 10000), display: "0.5/1,000" },
+    goods: { name: "물품", rate: Rational(75, 100000), display: "0.75/1,000" },
+    service: { name: "용역", rate: Rational(125, 100000), display: "1.25/1,000" },
     lease: { name: "임대차", rate: Rational(1, 1000), display: "1/1,000" }
   }.freeze
 
