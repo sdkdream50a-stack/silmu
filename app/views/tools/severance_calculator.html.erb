@@ -148,15 +148,15 @@
                 </tr>
               </thead>
               <tbody id="rate-table" class="divide-y divide-slate-100">
-                <tr><td class="px-3 py-2 text-slate-600">1년 이상 ~ 5년 미만</td><td class="px-3 py-2 text-right font-bold text-emerald-600">기준소득 × 재직월수 × 6.5%</td></tr>
-                <tr class="bg-slate-50"><td class="px-3 py-2 text-slate-600">5년 이상 ~ 10년 미만</td><td class="px-3 py-2 text-right font-bold text-emerald-600">기준소득 × 재직월수 × 8.5%</td></tr>
-                <tr><td class="px-3 py-2 text-slate-600">10년 이상 ~ 15년 미만</td><td class="px-3 py-2 text-right font-bold text-emerald-600">기준소득 × 재직월수 × 9.0%</td></tr>
-                <tr class="bg-slate-50"><td class="px-3 py-2 text-slate-600">15년 이상 ~ 20년 미만</td><td class="px-3 py-2 text-right font-bold text-emerald-600">기준소득 × 재직월수 × 9.5%</td></tr>
-                <tr><td class="px-3 py-2 text-slate-600">20년 이상</td><td class="px-3 py-2 text-right font-bold text-emerald-600">기준소득 × 재직월수 × 10.0%</td></tr>
+                <tr><td class="px-3 py-2 text-slate-600">1년 이상 ~ 5년 미만</td><td class="px-3 py-2 text-right font-bold text-emerald-600">기준소득 × 재직연수 × 6.5%</td></tr>
+                <tr class="bg-slate-50"><td class="px-3 py-2 text-slate-600">5년 이상 ~ 10년 미만</td><td class="px-3 py-2 text-right font-bold text-emerald-600">기준소득 × 재직연수 × 22.75%</td></tr>
+                <tr><td class="px-3 py-2 text-slate-600">10년 이상 ~ 15년 미만</td><td class="px-3 py-2 text-right font-bold text-emerald-600">기준소득 × 재직연수 × 29.25%</td></tr>
+                <tr class="bg-slate-50"><td class="px-3 py-2 text-slate-600">15년 이상 ~ 20년 미만</td><td class="px-3 py-2 text-right font-bold text-emerald-600">기준소득 × 재직연수 × 32.5%</td></tr>
+                <tr><td class="px-3 py-2 text-slate-600">20년 이상</td><td class="px-3 py-2 text-right font-bold text-emerald-600">기준소득 × 재직연수 × 39%</td></tr>
               </tbody>
             </table>
           </div>
-          <p class="text-xs text-slate-400 mt-3">※ 공무원연금법 시행령 제36조 기준 (2024년 기준)</p>
+          <p class="text-xs text-slate-400 mt-3">※ 공무원연금법 시행령 제58조 기준 (2025년 기준), 계산: 기준소득월액 × 재직연수 × 지급율</p>
         </div>
 
         <!-- 주의사항 -->
@@ -242,31 +242,32 @@
       return;
     }
 
-    // 지급율 결정 (재직기간별)
+    // 지급율 결정 (재직기간별, 공무원연금법 시행령 제58조)
+    // 공식: 기준소득월액 × 재직연수 × 지급율%
     let rate;
     let rateLabel;
     if (totalYears < 5) {
       rate = 0.065;
       rateLabel = '6.5%';
     } else if (totalYears < 10) {
-      rate = 0.085;
-      rateLabel = '8.5%';
+      rate = 0.2275;
+      rateLabel = '22.75%';
     } else if (totalYears < 15) {
-      rate = 0.090;
-      rateLabel = '9.0%';
+      rate = 0.2925;
+      rateLabel = '29.25%';
     } else if (totalYears < 20) {
-      rate = 0.095;
-      rateLabel = '9.5%';
+      rate = 0.325;
+      rateLabel = '32.5%';
     } else {
-      rate = 0.100;
-      rateLabel = '10.0%';
+      rate = 0.39;
+      rateLabel = '39%';
     }
 
-    const amount = income * totalMonths * rate;
+    const amount = income * totalYears * rate;
 
     document.getElementById('severance-amount').textContent = Math.round(amount).toLocaleString('ko-KR') + '원';
     document.getElementById('severance-formula').textContent =
-      `${income.toLocaleString('ko-KR')}원 × ${totalMonths}개월 × ${rateLabel} = ${Math.round(amount).toLocaleString('ko-KR')}원`;
+      `${income.toLocaleString('ko-KR')}원 × ${totalYears.toFixed(2)}년 × ${rateLabel} = ${Math.round(amount).toLocaleString('ko-KR')}원`;
   }
 
   // 초기 계산
