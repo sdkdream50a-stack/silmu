@@ -153,8 +153,8 @@ class EstimatedPriceService
             warnings << { item: "일반관리비", rate: (rate * 100).round(1), max: (limits[:general_admin][:max] * 100).round(0), message: "일반관리비율 #{(rate * 100).round(1)}%가 상한 #{(limits[:general_admin][:max] * 100).round(0)}%를 초과합니다." }
           end
         end
-        # 이윤 검증
-        profit_basis = amounts[:direct_labor] + amounts[:overhead] + amounts[:general_admin]
+        # 이윤 검증: (직접인건비+제경비+직접경비+일반관리비) 기준 (국가계약법 시행규칙 제7조)
+        profit_basis = amounts[:direct_labor] + amounts[:overhead] + amounts[:direct_expense] + amounts[:general_admin]
         if profit_basis > 0 && amounts[:profit] > 0
           rate = amounts[:profit].to_f / profit_basis
           if rate > limits[:profit][:max]
