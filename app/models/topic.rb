@@ -13,6 +13,10 @@ class Topic < ApplicationRecord
       trigram: { threshold: 0.1 }
     }
 
+  # Sector enum (0: common 공통, 1: local_gov 지자체, 2: edu 교육행정)
+  enum :sector, { common: 0, local_gov: 1, edu: 2 }, default: :common
+  scope :for_sector, ->(s) { where(sector: [:common, s]) if s.present? && s != "common" }
+
   # Scopes
   scope :published, -> { where(published: true) }
   scope :by_category, ->(cat) { where(category: cat) if cat.present? }
@@ -108,6 +112,10 @@ class Topic < ApplicationRecord
     end
   end
 
+  # 교차 연결 (topic_slug 기반 Association)
+  has_many :guides,      foreign_key: :topic_slug, primary_key: :slug, dependent: :nullify
+  has_many :audit_cases, foreign_key: :topic_slug, primary_key: :slug
+
   # 관련 감사사례 (DB 기반)
   def related_audit_cases
     AuditCase.published.where(topic_slug: slug).recent
@@ -149,8 +157,10 @@ class Topic < ApplicationRecord
     Rails.cache.delete("topic_related/#{slug}")
     Rails.cache.delete("topic_audit_cases/#{slug}")
     # 뷰 fragment cache 무효화: 토픽 내용 변경 시 버전 증가 → 캐시 키가 달라져 자연 무효화
-    if saved_change_to_name? || saved_change_to_summary? || saved_change_to_published? || saved_change_to_category?
+    if saved_change_to_name? || saved_change_to_summary? || saved_change_to_published? || saved_change_to_category? || saved_change_to_sector?
       Rails.cache.increment("topics/fragment_version")
+      # 홈 큐레이션 캐시 버전 무효화 (sector별 홈화면 캐시)
+      Rails.cache.increment("home/curated_version")
     end
   end
 

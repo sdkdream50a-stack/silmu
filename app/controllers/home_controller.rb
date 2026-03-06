@@ -1,15 +1,103 @@
 class HomeController < ApplicationController
+  # 월별 × sector 큐레이션 매핑
+  # 값: topic slug 배열 (시즌에 맞는 주요 토픽)
+  SEASONAL_TOPICS = {
+    local_gov: {
+      1  => %w[year-end-settlement budget-carryover payment inspection],
+      2  => %w[year-end-settlement budget-carryover private-contract],
+      3  => %w[budget-compilation private-contract bidding contract-execution],
+      4  => %w[bidding contract-execution estimated-price private-contract],
+      5  => %w[inspection payment contract-guarantee-deposit advance-payment],
+      6  => %w[inspection payment design-change late-penalty],
+      7  => %w[budget-carryover inspection bidding],
+      8  => %w[bidding estimated-price contract-execution],
+      9  => %w[bidding contract-execution private-contract],
+      10 => %w[inspection payment late-penalty completion-payment-checklist],
+      11 => %w[budget-compilation year-end-settlement inspection payment],
+      12 => %w[year-end-settlement budget-carryover inspection payment],
+    },
+    edu: {
+      1  => %w[year-end-settlement budget-carryover payment inspection],
+      2  => %w[budget-compilation private-contract bidding],
+      3  => %w[budget-compilation private-contract bidding contract-execution],
+      4  => %w[bidding contract-execution estimated-price goods-selection-committee],
+      5  => %w[inspection payment advance-payment contract-guarantee-deposit],
+      6  => %w[inspection payment design-change],
+      7  => %w[budget-carryover bidding inspection],
+      8  => %w[bidding estimated-price private-contract],
+      9  => %w[bidding contract-execution goods-selection-committee],
+      10 => %w[inspection payment late-penalty],
+      11 => %w[budget-compilation year-end-settlement inspection],
+      12 => %w[year-end-settlement budget-carryover payment],
+    },
+    common: {
+      1  => %w[year-end-settlement budget-carryover payment inspection],
+      2  => %w[private-contract bidding year-end-settlement],
+      3  => %w[private-contract bidding contract-execution estimated-price],
+      4  => %w[bidding contract-execution private-contract estimated-price],
+      5  => %w[inspection payment advance-payment contract-guarantee-deposit],
+      6  => %w[inspection payment design-change late-penalty],
+      7  => %w[budget-carryover bidding inspection],
+      8  => %w[bidding estimated-price private-contract contract-execution],
+      9  => %w[bidding contract-execution private-contract],
+      10 => %w[inspection payment late-penalty completion-payment-checklist],
+      11 => %w[budget-compilation year-end-settlement private-contract],
+      12 => %w[year-end-settlement budget-carryover payment inspection],
+    }
+  }.freeze
+
+  # sector별 서식 (template slug 매핑)
+  SECTOR_TEMPLATES = {
+    "common"    => %w[1 2 3],
+    "local_gov" => %w[1 2 3],
+    "edu"       => %w[1 2 3],
+  }.freeze
+
   def index
+    @sector = resolve_sector
+
+    # 전체 통계 카운트 (sector 무관)
     @topic_count      = Rails.cache.fetch("stats/topic_count", expires_in: 30.minutes) { Topic.published.count }
     @guide_count      = Rails.cache.fetch("stats/guide_count", expires_in: 30.minutes) { Guide.published.count }
     @audit_case_count = Rails.cache.fetch("stats/audit_case_count", expires_in: 30.minutes) { AuditCase.published.count }
     @template_count   = TemplatesController::TEMPLATES.count
-    @recent_audit_cases = Rails.cache.fetch("home/recent_audit_cases", expires_in: 1.hour) do
-      AuditCase.published.where(severity: %w[중대 보통]).order(created_at: :desc).limit(3).to_a
+
+    # sector별 월별 큐레이션 토픽
+    current_month = Time.zone.now.month
+    curated_version = Rails.cache.read("home/curated_version") || 0
+    cache_key = "home/curated/v#{curated_version}/#{@sector}/#{current_month}"
+
+    @curated_topics = Rails.cache.fetch(cache_key, expires_in: 1.hour) do
+      slugs = SEASONAL_TOPICS.dig(@sector.to_sym, current_month) ||
+              SEASONAL_TOPICS.dig(:common, current_month) || []
+      topics = Topic.published.where(slug: slugs).to_a
+      # slug 순서 유지 (큐레이션 의도 반영)
+      ordered = slugs.filter_map { |s| topics.find { |t| t.slug == s } }
+      # 6개 미만이면 sector 인기 토픽으로 보충
+      if ordered.size < 6
+        exclude_ids = ordered.map(&:id)
+        filler = Topic.published
+                      .where(sector: [:common, @sector])
+                      .where.not(id: exclude_ids)
+                      .order(view_count: :desc)
+                      .limit(6 - ordered.size).to_a
+        ordered + filler
+      else
+        ordered.first(6)
+      end
     end
 
+    # sector별 감사사례 (중대/보통 최신 3건)
+    @recent_audit_cases = Rails.cache.fetch("home/audit_cases/v#{curated_version}/#{@sector}", expires_in: 1.hour) do
+      scope = AuditCase.published.where(severity: %w[중대 보통])
+      scope = scope.where(sector: [:common, @sector]) if @sector != "common"
+      scope.order(created_at: :desc).limit(3).to_a
+    end
+
+    # sector 쿠키 저장 (30일)
+    cookies[:sector] = { value: @sector, expires: 30.days, same_site: :lax }
+
     # 홈페이지는 nav에 인증 상태 포함 → Cloudflare 포함 모든 캐시 금지
-    # DB 쿼리는 Rails.cache로 별도 캐시됨 (성능 영향 없음)
     response.headers["Cache-Control"] = "no-store"
 
     description_text = "공무원을 위한 계약·예산 실무 종합 플랫폼. 수의계약, 적격심사, 입찰, 검수, 예산 편성 등 #{@topic_count}개 현행 법령 가이드와 #{ApplicationHelper::ACTIVE_TOOL_COUNT}개 자동화 도구를 무료로 제공합니다. #{@audit_case_count}건 실제 감사사례 분석으로 실수를 예방하고, #{@template_count}종 서식 템플릿으로 업무 시간을 절약하세요."
@@ -95,5 +183,13 @@ class HomeController < ApplicationController
         image: "https://silmu.kr/og-image.png"
       }
     )
+  end
+
+  private
+
+  # sector 결정: URL 파라미터 > 쿠키 > 기본값(common)
+  def resolve_sector
+    s = params[:sector].presence || cookies[:sector].presence || "common"
+    %w[common local_gov edu].include?(s) ? s : "common"
   end
 end

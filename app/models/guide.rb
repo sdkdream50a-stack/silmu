@@ -1,5 +1,12 @@
 # Created: 2026-02-18 00:35
 class Guide < ApplicationRecord
+  # Sector enum (0: common 공통, 1: local_gov 지자체, 2: edu 교육행정)
+  enum :sector, { common: 0, local_gov: 1, edu: 2 }, default: :common
+  scope :for_sector, ->(s) { where(sector: [:common, s]) if s.present? && s != "common" }
+
+  # topic_slug 기반 교차 연결
+  belongs_to :topic, foreign_key: :topic_slug, primary_key: :slug, optional: true
+
   scope :published, -> { where(published: true) }
   scope :ordered,   -> { order(:sort_order) }
 
@@ -39,11 +46,10 @@ class Guide < ApplicationRecord
     Rails.cache.delete("guides/popular")
     Rails.cache.delete("stats/guide_count")
     Rails.cache.delete("guides/related/#{slug}")
-    # external_link가 topic URL인 경우 해당 topic의 캐시도 무효화
-    if external_link&.start_with?("/topics/")
-      topic_slug = external_link.delete_prefix("/topics/")
-      Rails.cache.delete("topic_guide/#{topic_slug}")
-    end
+    # topic_slug 또는 external_link가 topic URL인 경우 해당 topic 캐시 무효화
+    t_slug = topic_slug.presence || (external_link&.start_with?("/topics/") ? external_link.delete_prefix("/topics/") : nil)
+    Rails.cache.delete("topic_guide/#{t_slug}") if t_slug.present?
+    Rails.cache.increment("home/curated_version") if saved_change_to_sector? || saved_change_to_topic_slug?
   end
 
   def generate_slug
