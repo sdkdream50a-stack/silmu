@@ -53,6 +53,9 @@ class HomeController < ApplicationController
     "edu"       => %w[1 2 3],
   }.freeze
 
+  # SEASONAL_TOPICS 변경 시 이 값을 올리면 캐시 자동 무효화
+  CURATION_VERSION = 2
+
   def index
     @sector = resolve_sector
 
@@ -65,7 +68,7 @@ class HomeController < ApplicationController
     # sector별 월별 큐레이션 토픽
     current_month = Time.zone.now.month
     curated_version = Rails.cache.read("home/curated_version") || 0
-    cache_key = "home/curated/v#{curated_version}/#{@sector}/#{current_month}"
+    cache_key = "home/curated/cv#{CURATION_VERSION}/v#{curated_version}/#{@sector}/#{current_month}"
 
     @curated_topics = Rails.cache.fetch(cache_key, expires_in: 1.hour) do
       slugs = SEASONAL_TOPICS.dig(@sector.to_sym, current_month) ||
