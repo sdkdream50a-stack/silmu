@@ -17,17 +17,19 @@ class HomeController < ApplicationController
       12 => %w[year-end-settlement budget-carryover inspection payment],
     },
     edu: {
+      # 학교회계: 회계연도 3.1~다음해 2.28 (초중등교육법 제30조의2)
+      # 교육비특별회계(교육청): 1.1~12.31 — budget-compilation 유지
       1  => %w[year-end-settlement budget-carryover payment inspection],
-      2  => %w[budget-compilation goods-selection-committee private-contract bidding],
-      3  => %w[budget-compilation goods-selection-committee private-contract bidding],
+      2  => %w[school-budget-compilation goods-selection-committee private-contract bidding],
+      3  => %w[school-budget-compilation goods-selection-committee private-contract bidding],
       4  => %w[goods-selection-committee estimated-price bidding contract-execution],
       5  => %w[inspection payment advance-payment contract-guarantee-deposit],
       6  => %w[inspection payment design-change],
       7  => %w[budget-carryover bidding inspection],
       8  => %w[bidding estimated-price private-contract],
-      9  => %w[bidding contract-execution goods-selection-committee],
-      10 => %w[inspection payment late-penalty],
-      11 => %w[budget-compilation year-end-settlement inspection],
+      9  => %w[school-budget-compilation bidding contract-execution goods-selection-committee],
+      10 => %w[school-budget-compilation inspection payment late-penalty],
+      11 => %w[school-budget-compilation year-end-settlement inspection],
       12 => %w[year-end-settlement budget-carryover payment],
     },
     common: {
@@ -47,7 +49,7 @@ class HomeController < ApplicationController
   }.freeze
 
   # SEASONAL_TOPICS 변경 시 이 값을 올리면 캐시 자동 무효화
-  CURATION_VERSION = 2
+  CURATION_VERSION = 3
 
   def index
     @sector = resolve_sector
