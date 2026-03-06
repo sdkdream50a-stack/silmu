@@ -46,13 +46,6 @@ class HomeController < ApplicationController
     }
   }.freeze
 
-  # sector별 서식 (template slug 매핑)
-  SECTOR_TEMPLATES = {
-    "common"    => %w[1 2 3],
-    "local_gov" => %w[1 2 3],
-    "edu"       => %w[1 2 3],
-  }.freeze
-
   # SEASONAL_TOPICS 변경 시 이 값을 올리면 캐시 자동 무효화
   CURATION_VERSION = 2
 
@@ -70,12 +63,13 @@ class HomeController < ApplicationController
     curated_version = Rails.cache.read("home/curated_version") || 0
     cache_key = "home/curated/cv#{CURATION_VERSION}/v#{curated_version}/#{@sector}/#{current_month}"
 
+    sector_sym = @sector.to_sym
     @curated_topics = Rails.cache.fetch(cache_key, expires_in: 1.hour) do
-      slugs = SEASONAL_TOPICS.dig(@sector.to_sym, current_month) ||
+      slugs = SEASONAL_TOPICS.dig(sector_sym, current_month) ||
               SEASONAL_TOPICS.dig(:common, current_month) || []
-      topics = Topic.published.where(slug: slugs).to_a
+      topics = Topic.published.where(slug: slugs).index_by(&:slug)
       # slug 순서 유지 (큐레이션 의도 반영)
-      ordered = slugs.filter_map { |s| topics.find { |t| t.slug == s } }
+      ordered = slugs.filter_map { |s| topics[s] }
       # 6개 미만이면 sector 인기 토픽으로 보충
       if ordered.size < 6
         exclude_ids = ordered.map(&:id)
@@ -123,7 +117,12 @@ class HomeController < ApplicationController
   def about
     expires_in 1.day, public: true, stale_while_revalidate: 7.days
 
-    description_text = "실무(silmu.kr)는 공무원의 계약·예산 업무를 돕는 무료 플랫폼입니다. 법령 가이드 37개, 자동화 도구 18개, 감사사례 55건, 서식 템플릿 23개를 제공하여 복잡한 법령과 절차를 쉽게 이해하고 실무에 바로 적용할 수 있도록 지원합니다."
+    topic_count      = Rails.cache.fetch("stats/topic_count", expires_in: 30.minutes) { Topic.published.count }
+    guide_count      = Rails.cache.fetch("stats/guide_count", expires_in: 30.minutes) { Guide.published.count }
+    audit_case_count = Rails.cache.fetch("stats/audit_case_count", expires_in: 30.minutes) { AuditCase.published.count }
+    template_count   = TemplatesController::TEMPLATES.count
+    tool_count       = ApplicationHelper::ACTIVE_TOOL_COUNT
+    description_text = "실무(silmu.kr)는 공무원의 계약·예산 업무를 돕는 무료 플랫폼입니다. 법령 가이드 #{topic_count}개, 자동화 도구 #{tool_count}개, 감사사례 #{audit_case_count}건, 서식 템플릿 #{template_count}개를 제공하여 복잡한 법령과 절차를 쉽게 이해하고 실무에 바로 적용할 수 있도록 지원합니다."
 
     set_meta_tags(
       title: "서비스 소개 — 공무원 계약·예산 실무 무료 플랫폼",

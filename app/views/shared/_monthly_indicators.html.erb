@@ -1,0 +1,35 @@
+<%# 이달의 계약 실무 지표 위젯 %>
+<% data = MonthlyIndicatorService.current %>
+
+<div class="bg-white rounded-2xl shadow-sm border border-emerald-100 p-6 mb-6">
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+      <span class="material-symbols-outlined text-emerald-600">trending_up</span>
+      이달의 계약 실무 지표
+    </h3>
+    <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-full px-3 py-1">
+      기준: <%= data[:reference_month] %>
+    </span>
+  </div>
+
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+    <% data[:indicators].each do |ind| %>
+      <div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
+        <div class="text-xs text-slate-500 font-medium mb-2 leading-tight"><%= ind[:name] %></div>
+        <div class="text-lg font-extrabold text-slate-800 leading-tight"><%= ind[:value] %></div>
+        <div class="text-xs text-slate-500 mb-2"><%= ind[:unit] %></div>
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold <%= ind[:change_type] == :up ? 'text-rose-600' : 'text-blue-600' %>">
+            <%= ind[:change_type] == :up ? '▲' : '▼' %> <%= ind[:change] %>
+          </span>
+          <span class="text-xs text-slate-400"><%= ind[:source] %></span>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <p class="text-xs text-slate-400 mt-3 flex items-start gap-1">
+    <span class="material-symbols-outlined text-slate-400" style="font-size:14px; margin-top:1px;">info</span>
+    이 지표는 매월 업데이트됩니다. 원가계산 시 참고용으로 활용하세요. 전년 동월 대비 변화율입니다.
+  </p>
+</div>

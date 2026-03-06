@@ -2,6 +2,8 @@
 
 <% content_for :head do %>
   <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+  <%# 보험계산기 Stimulus 컨트롤러 (별도 번들, 이 페이지에서만 로드) %>
+  <%= javascript_include_tag "insurance_controller", type: "module" %>
 <% end %>
 
 <div data-controller="insurance-calculator" class="max-w-5xl mx-auto px-4 py-8">

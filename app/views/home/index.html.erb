@@ -44,18 +44,21 @@
 
       <!-- Search -->
       <div class="w-full max-w-3xl mb-16 relative z-10">
-        <form action="<%= chatbot_path %>" method="get" data-turbo="false" id="search-form">
+        <form action="<%= chatbot_path %>" method="get" data-turbo="false"
+              data-controller="home-search" data-action="submit->home-search#submit">
           <div class="search-glass relative flex items-center rounded-2xl overflow-hidden p-2 transition-all duration-300">
             <div class="flex h-14 w-14 items-center justify-center text-indigo-300 pl-2">
               <span class="material-symbols-outlined text-3xl">search</span>
             </div>
-            <input name="q" id="search-input" class="h-14 w-full border-0 bg-transparent px-4 text-white placeholder:text-slate-400 focus:ring-0 text-lg" placeholder="무엇을 도와드릴까요? (예: 수의계약 한도, 물품구매 절차)" type="text" autocomplete="off"/>
+            <input name="q" data-home-search-target="input"
+                   data-action="input->home-search#inputChanged blur->home-search#blurred"
+                   class="h-14 w-full border-0 bg-transparent px-4 text-white placeholder:text-slate-400 focus:ring-0 text-lg" placeholder="무엇을 도와드릴까요? (예: 수의계약 한도, 물품구매 절차)" type="text" autocomplete="off"/>
             <button type="submit" class="hidden sm:flex h-12 items-center justify-center rounded-xl bg-indigo-600 px-8 text-base font-bold text-white transition-all hover:bg-indigo-500 shadow-lg shadow-indigo-600/30">
               검색
             </button>
           </div>
           <!-- 자동완성 힌트 -->
-          <div id="search-hint" class="hidden mt-2 text-center text-sm text-indigo-300 animate-pulse">
+          <div data-home-search-target="hint" class="hidden mt-2 text-center text-sm text-indigo-300 animate-pulse">
             <span class="material-symbols-outlined text-base align-middle">keyboard_return</span>
             <span class="ml-1">Enter로 검색</span>
           </div>
@@ -68,7 +71,7 @@
             [topic_path("inspection"), "design_services", "검수·검사", "pink"]
           ].each do |path, icon, keyword, color| %>
             <%= link_to path, class: "group inline-flex min-h-[44px] items-center gap-2 rounded-full bg-slate-800/50 px-4 py-2 text-sm font-medium text-slate-300 hover:bg-indigo-600/20 hover:text-white hover:border-indigo-500/50 transition-all backdrop-blur-sm border border-slate-700/50" do %>
-              <span class="material-symbols-outlined text-[16px] text-<%= color %>-400 group-hover:text-<%= color %>-300"><%= icon %></span> <%= keyword %>
+              <span class="material-symbols-outlined text-[16px] <%= tc(color, :hero) %>"><%= icon %></span> <%= keyword %>
             <% end %>
           <% end %>
         </div>
@@ -121,7 +124,7 @@
                 <p class="text-sm text-amber-100">다음 방문 시 빠르게 찾아볼 수 있습니다</p>
               </div>
             </div>
-            <button onclick="bookmarkSite()" class="flex-shrink-0 inline-flex items-center gap-2 px-6 py-3 bg-amber-500 hover:bg-amber-400 text-white font-bold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 whitespace-nowrap">
+            <button data-controller="home-bookmark" data-action="click->home-bookmark#bookmark" class="flex-shrink-0 inline-flex items-center gap-2 px-6 py-3 bg-amber-500 hover:bg-amber-400 text-white font-bold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 whitespace-nowrap">
               <span class="material-symbols-outlined text-xl">star</span>
               <span>북마크 추가</span>
             </button>
@@ -132,30 +135,6 @@
   </div>
 </div>
 
-<script>
-function bookmarkSite() {
-  const url = window.location.href;
-  const title = document.title;
-
-  // Chrome, Edge, Firefox
-  if (window.sidebar && window.sidebar.addPanel) {
-    window.sidebar.addPanel(title, url, '');
-  } else if (window.external && ('AddFavorite' in window.external)) {
-    // IE
-    window.external.AddFavorite(url, title);
-  } else if (window.opera && window.print) {
-    // Opera
-    const elem = document.createElement('a');
-    elem.setAttribute('href', url);
-    elem.setAttribute('title', title);
-    elem.setAttribute('rel', 'sidebar');
-    elem.click();
-  } else {
-    // 기본 안내 (대부분의 최신 브라우저)
-    alert('북마크 추가 방법:\n\nWindows: Ctrl+D\nmacOS: ⌘+D\n모바일: 브라우저 메뉴 > 북마크 추가');
-  }
-}
-</script>
 
 <!-- Sector Tab Bar — 직종별 콘텐츠 스위처 -->
 <div id="sector-tabs" class="bg-white border-b border-slate-200 shadow-sm scroll-mt-16">
@@ -182,6 +161,7 @@ function bookmarkSite() {
 </div>
 
 <!-- Core Tools Section -->
+<% cache "home/core_tools/v1", expires_in: 24.hours do %>
 <section class="bg-background-light py-16 relative">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div class="mb-14 flex items-end justify-between">
@@ -264,6 +244,8 @@ function bookmarkSite() {
   </div>
 </section>
 
+<% end %><%# cache home/core_tools %>
+
 <!-- Topic Guides & Templates -->
 <section class="py-24 bg-background-light">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -308,17 +290,17 @@ function bookmarkSite() {
                       <span class="material-symbols-outlined text-sm">star</span> 이달의 필수
                     </span>
                   </div>
-                  <div class="shrink-0 flex h-14 w-14 items-center justify-center rounded-xl bg-<%= color %>-100 text-<%= color %>-600 group-hover:bg-<%= color %>-600 group-hover:text-white transition-colors">
+                  <div class="shrink-0 flex h-14 w-14 items-center justify-center rounded-xl <%= tc(color, :icon_lg) %> transition-colors">
                     <span class="material-symbols-outlined text-3xl"><%= icon %></span>
                   </div>
                   <div class="pr-24 sm:pr-28">
-                    <h3 class="font-bold text-xl text-slate-900 group-hover:text-<%= color %>-600 transition-colors"><%= topic.name %></h3>
+                    <h3 class="font-bold text-xl text-slate-900 <%= tc(color, :title) %> transition-colors"><%= topic.name %></h3>
                     <p class="mt-1.5 text-sm text-slate-600 leading-relaxed"><%= topic.summary.to_s.truncate(80) %></p>
                     <% keywords = topic.keyword_list.first(3) %>
                     <% if keywords.any? %>
                       <div class="mt-3 flex flex-wrap gap-2">
                         <% keywords.each do |kw| %>
-                          <span class="inline-flex items-center gap-1 text-xs text-<%= color %>-600 bg-<%= color %>-50 border border-<%= color %>-100 rounded-md px-2 py-0.5 font-medium"><%= kw %></span>
+                          <span class="inline-flex items-center gap-1 text-xs <%= tc(color, :badge) %> border rounded-md px-2 py-0.5 font-medium"><%= kw %></span>
                         <% end %>
                       </div>
                     <% end %>
@@ -327,11 +309,11 @@ function bookmarkSite() {
               <% else %>
                 <%# 일반 카드 %>
                 <%= link_to topic_path(topic.slug), class: "group flex items-start gap-4 rounded-2xl bg-white p-6 shadow-sm border border-slate-100 transition-all hover:shadow-lg hover:-translate-y-1 hover:border-indigo-100 cursor-pointer" do %>
-                  <div class="shrink-0 flex h-12 w-12 items-center justify-center rounded-xl bg-<%= color %>-50 text-<%= color %>-600 group-hover:bg-<%= color %>-600 group-hover:text-white transition-colors">
+                  <div class="shrink-0 flex h-12 w-12 items-center justify-center rounded-xl <%= tc(color, :icon_sm) %> transition-colors">
                     <span class="material-symbols-outlined"><%= icon %></span>
                   </div>
                   <div>
-                    <h3 class="font-bold text-lg text-slate-900 group-hover:text-<%= color %>-600 transition-colors"><%= topic.name %></h3>
+                    <h3 class="font-bold text-lg text-slate-900 <%= tc(color, :title) %> transition-colors"><%= topic.name %></h3>
                     <p class="mt-1 text-sm text-slate-500 leading-snug"><%= topic.summary.to_s.truncate(70) %></p>
                   </div>
                 <% end %>
@@ -363,12 +345,12 @@ function bookmarkSite() {
             { title: "착수계 및 완료계 세트", format: "XLSX", color: "emerald" }
           ].each do |tmpl| %>
             <%= link_to templates_path, class: "flex items-center p-4 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-md hover:border-indigo-100 transition-all group" do %>
-              <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-<%= tmpl[:color] %>-50 text-<%= tmpl[:color] %>-600 font-bold text-xs"><%= tmpl[:format] %></div>
+              <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg <%= tc(tmpl[:color], :icon_base) %> font-bold text-xs"><%= tmpl[:format] %></div>
               <div class="ml-4 flex-1">
-                <h4 class="font-bold text-lg text-slate-900 group-hover:text-<%= tmpl[:color] %>-600 transition-colors"><%= tmpl[:title] %></h4>
+                <h4 class="font-bold text-lg text-slate-900 <%= tc(tmpl[:color], :title) %> transition-colors"><%= tmpl[:title] %></h4>
                 <span class="text-xs text-slate-500">최신 개정판</span>
               </div>
-              <span class="material-symbols-outlined text-slate-300 group-hover:text-<%= tmpl[:color] %>-600 transition-colors">download</span>
+              <span class="material-symbols-outlined text-slate-300 <%= tc(tmpl[:color], :title) %> transition-colors">download</span>
             <% end %>
           <% end %>
         </div>
@@ -395,15 +377,17 @@ function bookmarkSite() {
     </div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
       <% @recent_audit_cases.each do |ac| %>
-        <% severity_bg = ac.severity == "중대" ? "bg-red-50 border-red-200" : "bg-orange-50 border-orange-200" %>
-        <% severity_text = ac.severity == "중대" ? "text-red-700" : "text-orange-700" %>
-        <% severity_badge = ac.severity == "중대" ? "bg-red-100 text-red-700" : "bg-orange-100 text-orange-700" %>
+        <% is_critical = ac.severity == "중대" %>
+        <% severity_bg = is_critical ? "bg-red-50 border-red-200" : "bg-orange-50 border-orange-200" %>
+        <% severity_text = is_critical ? "text-red-700" : "text-orange-700" %>
+        <% severity_badge = is_critical ? "bg-red-100 text-red-700" : "bg-orange-100 text-orange-700" %>
+        <% severity_hover = is_critical ? "group-hover:text-red-700" : "group-hover:text-orange-700" %>
         <%= link_to audit_case_path(ac.slug), class: "group flex flex-col gap-3 p-5 rounded-2xl border #{severity_bg} hover:shadow-md transition-all" do %>
           <div class="flex items-center gap-2">
             <span class="text-xs font-bold px-2 py-0.5 rounded-full <%= severity_badge %>"><%= ac.severity %></span>
             <span class="text-xs text-slate-500"><%= ac.category %></span>
           </div>
-          <h3 class="font-bold text-lg text-slate-900 group-hover:<%= ac.severity == '중대' ? 'text-red-700' : 'text-orange-700' %> transition-colors leading-snug line-clamp-2"><%= ac.title %></h3>
+          <h3 class="font-bold text-lg text-slate-900 <%= severity_hover %> transition-colors leading-snug line-clamp-2"><%= ac.title %></h3>
           <p class="text-xs text-slate-500 line-clamp-2 flex-1"><%= ac.issue.truncate(80) %></p>
           <div class="flex items-center gap-1 <%= severity_text %> text-xs font-semibold group-hover:gap-2 transition-all">
             사례 보기 <span class="material-symbols-outlined text-sm">arrow_forward</span>
@@ -423,9 +407,12 @@ function bookmarkSite() {
 <div class="bg-white py-20 border-y border-slate-100">
   <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
     <div class="relative rounded-3xl overflow-hidden bg-slate-900 shadow-2xl">
-      <div class="absolute top-0 right-0 -mt-20 -mr-20 h-64 w-64 rounded-full bg-indigo-500 opacity-20 blur-3xl"></div>
-      <div class="absolute bottom-0 left-0 -mb-20 -ml-20 h-64 w-64 rounded-full bg-emerald-500 opacity-20 blur-3xl"></div>
-      <div class="relative z-10 p-8 md:p-12 flex flex-col lg:flex-row items-center justify-between gap-10">
+      <%# blur-3xl 제거 → 단순 그라디언트로 대체 (모바일 GPU 부하 경감) %>
+      <div class="absolute top-0 right-0 -mt-20 -mr-20 h-64 w-64 rounded-full bg-indigo-500 opacity-10"></div>
+      <div class="absolute bottom-0 left-0 -mb-20 -ml-20 h-64 w-64 rounded-full bg-emerald-500 opacity-10"></div>
+      <div class="relative z-10 p-8 md:p-12 flex flex-col lg:flex-row items-center justify-between gap-10"
+           data-controller="home-price"
+           data-home-price-contract-method-path="<%= contract_method_path %>">
         <div class="flex-1 text-center lg:text-left">
           <div class="inline-flex items-center gap-2 mb-4 px-3 py-1 rounded-full bg-white/10 border border-white/10 backdrop-blur-sm">
             <span class="material-symbols-outlined text-emerald-400 text-sm">payments</span>
@@ -436,27 +423,29 @@ function bookmarkSite() {
         </div>
         <div class="w-full lg:w-auto flex-1 max-w-lg">
           <div class="flex gap-3 mb-3">
-            <select id="price-category" class="flex-shrink-0 w-24 rounded-xl border-0 bg-slate-900 backdrop-blur-md text-white px-3 py-4 text-sm font-bold focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 shadow-lg">
+            <select data-home-price-target="category" data-action="change->home-price#calculate"
+                    class="flex-shrink-0 w-24 rounded-xl border-0 bg-slate-900 backdrop-blur-md text-white px-3 py-4 text-sm font-bold focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 shadow-lg">
               <option value="goods" class="text-slate-900 font-bold">물품</option>
               <option value="service" class="text-slate-900 font-bold">용역</option>
               <option value="construction" class="text-slate-900 font-bold">공사</option>
             </select>
             <div class="flex-1 bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl p-2 flex items-center shadow-lg">
-              <input id="price-input" class="w-full bg-transparent border-0 px-4 py-2 text-2xl font-bold text-white drop-shadow-lg placeholder:text-slate-500 focus:ring-0" placeholder="예: 20,000,000" type="text"/>
+              <input data-home-price-target="input" data-action="input->home-price#format"
+                     class="w-full bg-transparent border-0 px-4 py-2 text-2xl font-bold text-white drop-shadow-lg placeholder:text-slate-500 focus:ring-0" placeholder="예: 20,000,000" type="text"/>
               <span class="text-slate-400 text-lg font-medium mr-4">원</span>
-              <button type="button" onclick="document.getElementById('price-input').dispatchEvent(new Event('input'))" class="shrink-0 rounded-xl bg-indigo-600 px-8 py-4 text-base font-bold text-white shadow-lg shadow-indigo-600/30 hover:bg-indigo-500 transition-all">
+              <button type="button" data-action="click->home-price#calculate" class="shrink-0 rounded-xl bg-indigo-600 px-8 py-4 text-base font-bold text-white shadow-lg shadow-indigo-600/30 hover:bg-indigo-500 transition-all">
                 조회하기
               </button>
             </div>
           </div>
           <div class="flex flex-wrap gap-2 mb-4 justify-center lg:justify-start">
             <% [["1십만원", 100_000], ["1백만원", 1_000_000], ["1천만원", 10_000_000], ["5천만원", 50_000_000], ["1억원", 100_000_000]].each do |label, val| %>
-              <button type="button" class="price-quick-btn px-3 py-1.5 text-xs font-medium bg-white/5 text-slate-400 rounded-lg border border-white/10 hover:bg-indigo-600/20 hover:text-white hover:border-indigo-500/50 transition-all" data-value="<%= val %>"><%= label %></button>
+              <button type="button" data-action="click->home-price#addAmount" data-value="<%= val %>" class="px-3 py-1.5 text-xs font-medium bg-white/5 text-slate-400 rounded-lg border border-white/10 hover:bg-indigo-600/20 hover:text-white hover:border-indigo-500/50 transition-all"><%= label %></button>
             <% end %>
           </div>
           <p class="text-center lg:text-right text-xs text-slate-500">* 부가세 포함 금액 기준</p>
-          <div id="price-result" class="hidden mt-4">
-            <div id="price-result-content" class="p-4 rounded-xl border-2"></div>
+          <div data-home-price-target="result" class="hidden mt-4">
+            <div data-home-price-target="resultContent" class="p-4 rounded-xl border-2"></div>
           </div>
         </div>
       </div>
@@ -467,7 +456,8 @@ function bookmarkSite() {
 <!-- Daily Quiz Section -->
 <section class="relative overflow-hidden py-24 bg-[#0B1120]">
   <div class="absolute inset-0 bg-gradient-to-r from-slate-900 to-indigo-950/40"></div>
-  <div class="absolute right-0 top-0 h-[500px] w-[500px] bg-indigo-600/10 blur-[100px] rounded-full pointer-events-none"></div>
+  <%# blur-[100px] 제거 → 단순 그라디언트 (모바일 GPU 부하 경감) %>
+  <div class="absolute right-0 top-0 h-[500px] w-[500px] bg-indigo-600/5 rounded-full pointer-events-none"></div>
   <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div class="flex flex-col md:flex-row items-center justify-between gap-16">
       <div class="max-w-xl text-white">
@@ -479,26 +469,27 @@ function bookmarkSite() {
         <p class="mt-6 text-xl text-slate-400 font-light leading-relaxed">하루 1분 투자로 헷갈리는 법령과 지침을 마스터할 수 있습니다.<br/>틀려도 괜찮아요, 명쾌한 해설이 있으니까요.</p>
       </div>
       <div class="w-full max-w-md">
-        <div class="glass-dark rounded-3xl p-8 shadow-2xl relative border-t border-white/10">
+        <div class="glass-dark rounded-3xl p-8 shadow-2xl relative border-t border-white/10"
+             data-controller="home-quiz">
           <div class="absolute -top-3 -right-3 h-20 w-20 bg-emerald-500/20 blur-2xl rounded-full"></div>
           <div class="mb-8 flex items-center justify-between">
-            <span id="quiz-progress" class="text-xs font-bold tracking-widest text-slate-400 uppercase">문제 1/5</span>
-            <span id="quiz-category" class="inline-flex items-center rounded-md bg-emerald-400/10 px-2 py-1 text-xs font-bold text-emerald-400 ring-1 ring-inset ring-emerald-400/20">예산회계</span>
+            <span data-home-quiz-target="progress" class="text-xs font-bold tracking-widest text-slate-400 uppercase">문제 1/5</span>
+            <span data-home-quiz-target="category" class="inline-flex items-center rounded-md bg-emerald-400/10 px-2 py-1 text-xs font-bold text-emerald-400 ring-1 ring-inset ring-emerald-400/20">예산회계</span>
           </div>
-          <h3 id="quiz-question" class="mb-10 text-xl font-bold text-white leading-relaxed"></h3>
-          <div class="space-y-3" id="quiz-options"></div>
-          <div id="quiz-result" class="hidden mt-4 p-4 rounded-xl">
-            <p class="font-semibold text-lg" id="result-message"></p>
-            <p class="text-sm mt-2 text-gray-300" id="result-explanation"></p>
+          <h3 data-home-quiz-target="question" class="mb-10 text-xl font-bold text-white leading-relaxed"></h3>
+          <div class="space-y-3" data-home-quiz-target="options"></div>
+          <div data-home-quiz-target="result" class="hidden mt-4 p-4 rounded-xl">
+            <p class="font-semibold text-lg" data-home-quiz-target="resultMessage"></p>
+            <p class="text-sm mt-2 text-gray-300" data-home-quiz-target="resultExplanation"></p>
           </div>
-          <div id="quiz-final" class="hidden text-center py-6">
+          <div data-home-quiz-target="final" class="hidden text-center py-6">
             <div class="text-5xl mb-3">&#127881;</div>
             <h3 class="text-xl font-bold text-white mb-2">퀴즈 완료!</h3>
-            <p class="text-gray-300 mb-2">총 5문제 중 <span id="final-score" class="text-emerald-400 font-bold">0</span>문제 정답</p>
-            <button id="quiz-restart" class="mt-3 px-6 py-2.5 rounded-lg bg-indigo-600 text-white font-bold hover:bg-indigo-500 transition-colors">다시 도전하기</button>
+            <p class="text-gray-300 mb-2">총 5문제 중 <span data-home-quiz-target="finalScore" class="text-emerald-400 font-bold">0</span>문제 정답</p>
+            <button data-action="click->home-quiz#restart" class="mt-3 px-6 py-2.5 rounded-lg bg-indigo-600 text-white font-bold hover:bg-indigo-500 transition-colors">다시 도전하기</button>
           </div>
-          <div id="quiz-footer" class="mt-6 flex justify-end">
-            <button id="quiz-submit" class="px-6 py-2.5 rounded-xl bg-indigo-600 text-white font-bold hover:bg-indigo-500 shadow-lg shadow-indigo-600/30 transition-all disabled:opacity-40 disabled:cursor-not-allowed" disabled>정답 확인</button>
+          <div data-home-quiz-target="footer" class="mt-6 flex justify-end">
+            <button data-action="click->home-quiz#submit" data-home-quiz-target="submit" class="px-6 py-2.5 rounded-xl bg-indigo-600 text-white font-bold hover:bg-indigo-500 shadow-lg shadow-indigo-600/30 transition-all disabled:opacity-40 disabled:cursor-not-allowed" disabled>정답 확인</button>
           </div>
         </div>
       </div>
@@ -507,6 +498,7 @@ function bookmarkSite() {
 </section>
 
 <!-- External Links / Partner Networks -->
+<% cache "home/partners/v1/#{@sector}", expires_in: 24.hours do %>
 <section class="bg-slate-50 py-20 border-t border-slate-200">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <h2 class="mb-10 text-center text-lg font-bold text-slate-400 uppercase tracking-widest">Partner Networks</h2>
@@ -532,7 +524,10 @@ function bookmarkSite() {
   </div>
 </section>
 
+<% end %><%# cache home/partners %>
+
 <!-- Final CTA -->
+<% cache "home/final_cta/v1", expires_in: 24.hours do %>
 <section class="bg-white py-24">
   <div class="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
     <h2 class="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
@@ -552,215 +547,6 @@ function bookmarkSite() {
   </div>
 </section>
 
+<% end %><%# cache home/final_cta %>
+
 </div>
-
-<!-- 금액 계산기 -->
-<script>
-document.addEventListener('turbo:load', function() {
-  const priceInput = document.getElementById('price-input');
-  const priceCategory = document.getElementById('price-category');
-  const priceResult = document.getElementById('price-result');
-  const priceResultContent = document.getElementById('price-result-content');
-  if (!priceInput) return;
-
-  priceInput.addEventListener('input', function() {
-    let val = this.value.replace(/[^0-9]/g, '');
-    if (val) { this.value = Number(val).toLocaleString(); calculateMethod(); }
-    else { this.value = ''; priceResult.classList.add('hidden'); }
-  });
-
-  document.querySelectorAll('.price-quick-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-      // 기존 값 가져오기 (콤마 제거 후 숫자 변환)
-      const currentValue = parseInt(priceInput.value.replace(/,/g, '')) || 0;
-      // 버튼 값과 합산
-      const newValue = currentValue + Number(this.dataset.value);
-      priceInput.value = newValue.toLocaleString();
-      calculateMethod();
-    });
-  });
-
-  function calculateMethod() {
-    const amount = parseInt(priceInput.value.replace(/,/g, ''));
-    const category = priceCategory.value;
-    if (!amount || amount <= 0) { priceResult.classList.add('hidden'); return; }
-    let method, color, icon, desc, checklist;
-    if (category === 'construction') {
-      if (amount <= 20000000) { method='1인 견적 수의계약'; color='emerald'; icon='person'; desc='추정가격 2천만원 이하 공사'; checklist=['견적서 1부 징구','계약서 작성 (간이계약서 가능)','착공신고서','준공검사 및 대가 지급']; }
-      else if (amount <= 200000000) { method='2인 이상 견적 수의계약'; color='indigo'; icon='group'; desc='추정가격 2천만원 초과 ~ 2억원 이하 공사'; checklist=['추정가격 산정','2인 이상 견적서 징구','예정가격 작성','계약서 작성','착공신고서 → 준공검사 → 대가 지급']; }
-      else { method='경쟁입찰'; color='slate'; icon='groups'; desc='추정가격 2억원 초과 공사'; checklist=['추정가격 산정','입찰공고 (7일 이상)','예정가격 작성 (복수예비가격)','적격심사','계약 체결 → 착공 → 준공검사']; }
-    } else {
-      if (amount <= 20000000) { method='1인 견적 수의계약'; color='emerald'; icon='person'; desc=`추정가격 2천만원 이하 ${category==='goods'?'물품':'용역'}`; checklist=['견적서 1부 징구','계약서 작성 (간이계약서 가능)','검수 및 대가 지급']; }
-      else if (amount <= 100000000) { method='2인 이상 견적 수의계약'; color='indigo'; icon='group'; desc=`추정가격 2천만원 초과 ~ 1억원 이하 ${category==='goods'?'물품':'용역'}`; checklist=['추정가격 산정','2인 이상 견적서 징구','예정가격 작성','계약서 작성','검수 및 대가 지급']; }
-      else { method='경쟁입찰'; color='slate'; icon='groups'; desc=`추정가격 1억원 초과 ${category==='goods'?'물품':'용역'}`; checklist=['추정가격 산정','입찰공고 (7일 이상)','예정가격 작성 (복수예비가격)','적격심사 또는 최저가낙찰','계약 체결 → 검수 → 대가 지급']; }
-    }
-    priceResult.classList.remove('hidden');
-    priceResultContent.className = `p-4 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm`;
-    priceResultContent.innerHTML = `
-      <div class="flex items-center gap-3 mb-3">
-        <span class="material-symbols-outlined text-2xl text-${color}-400">${icon}</span>
-        <h3 class="text-lg font-bold text-white">${method}</h3>
-      </div>
-      <p class="text-slate-400 text-sm mb-3">${desc} (추정가격: ${Number(amount).toLocaleString()}원)</p>
-      <div class="space-y-2">
-        ${checklist.map(item => `<div class="flex items-start gap-2"><span class="material-symbols-outlined text-${color}-400 text-lg mt-0.5">check_circle</span><span class="text-slate-300 text-sm">${item}</span></div>`).join('')}
-      </div>
-      <div class="mt-4 pt-3 border-t border-white/10">
-        <a href="${'<%= contract_method_path %>'}" class="inline-flex items-center gap-1 text-indigo-400 hover:text-indigo-300 text-sm font-semibold">상세 분석 바로가기 <span class="material-symbols-outlined text-lg">arrow_forward</span></a>
-      </div>`;
-  }
-  priceCategory.addEventListener('change', function() { if (priceInput.value) calculateMethod(); });
-});
-</script>
-
-<!-- 검색 자동완성 힌트 (P1-2) -->
-<script>
-document.addEventListener('turbo:load', function() {
-  const searchInput = document.getElementById('search-input');
-  const searchHint = document.getElementById('search-hint');
-  const searchForm = document.getElementById('search-form');
-  if (!searchInput) return;
-
-  // 입력 감지 - 3자 이상 입력 시 힌트 표시
-  searchInput.addEventListener('input', function() {
-    const value = this.value.trim();
-    if (value.length >= 3) {
-      searchHint.classList.remove('hidden');
-    } else {
-      searchHint.classList.add('hidden');
-    }
-  });
-
-  // 빈 검색 방지
-  searchForm.addEventListener('submit', function(e) {
-    const value = searchInput.value.trim();
-    if (value.length === 0) {
-      e.preventDefault();
-      searchInput.focus();
-    }
-  });
-
-  // 포커스 잃을 때 힌트 숨김
-  searchInput.addEventListener('blur', function() {
-    setTimeout(() => searchHint.classList.add('hidden'), 200);
-  });
-});
-</script>
-
-<!-- 퀴즈 -->
-<script>
-document.addEventListener('turbo:load', function() {
-  const allQuizData = [
-    { category: "예산회계", question: "다음 중 예산의 이월에 해당하지 않는 것은?", options: ["명시이월", "사고이월", "계속비이월", "예비비이월"], answer: 3, explanation: "예비비이월은 존재하지 않는 개념입니다." },
-    { category: "예산회계", question: "다음 중 세출예산의 이용에 해당하는 것은?", options: ["장 간의 상호융통", "관 간의 상호융통", "항 간의 상호융통", "세항 간의 상호융통"], answer: 2, explanation: "이용은 입법과목인 '항' 간의 상호융통을 말합니다." },
-    { category: "예산회계", question: "예비비 사용 후 국회 승인을 받아야 하는 기한은?", options: ["다음 연도 정기회 개회 전", "다음 연도 정기회 중", "사용 후 3개월 이내", "사용 후 6개월 이내"], answer: 1, explanation: "예비비 사용 후 다음 연도 정기회 중에 국회의 승인을 받아야 합니다." },
-    { category: "예산회계", question: "사고이월의 요건이 아닌 것은?", options: ["연도 내 지출원인행위", "불가피한 사유", "세입세출예산에 명시", "연도 내 지출하지 못한 경비"], answer: 2, explanation: "세입세출예산에 명시하는 것은 명시이월의 요건입니다." },
-    { category: "예산회계", question: "예산의 전용이란?", options: ["회계연도 간 이월", "항 간의 상호융통", "세항·목 간의 상호융통", "예비비 사용"], answer: 2, explanation: "전용은 행정과목인 세항·목 간의 상호융통을 말합니다." },
-    { category: "계약", question: "물품 구매 시 1인 견적 수의계약이 가능한 추정가격(부가세 별도) 기준은?", options: ["1천만원 이하", "2천만원 이하", "3천만원 이하", "5천만원 이하"], answer: 1, explanation: "물품·용역의 경우 추정가격 2천만원 이하일 때 1인 견적 수의계약이 가능합니다." },
-    { category: "계약", question: "나라장터 전자입찰 시 입찰공고 기간은 최소 며칠인가?", options: ["5일", "7일", "10일", "14일"], answer: 1, explanation: "전자입찰의 경우 입찰공고 기간은 최소 7일 이상입니다." },
-    { category: "계약", question: "계약보증금의 원칙적인 비율은?", options: ["계약금액의 5%", "계약금액의 10%", "계약금액의 15%", "계약금액의 20%"], answer: 1, explanation: "계약보증금은 계약금액의 10% 이상으로 납부해야 합니다." },
-    { category: "계약", question: "선금의 지급 한도는?", options: ["계약금액의 50%", "계약금액의 60%", "계약금액의 70%", "계약금액의 80%"], answer: 2, explanation: "선금은 계약금액의 70% 이내에서 지급할 수 있습니다." },
-    { category: "계약", question: "복수예비가격 작성 개수는?", options: ["10개", "15개", "20개", "25개"], answer: 1, explanation: "복수예비가격은 15개를 작성합니다." },
-    { category: "복무", question: "공무원의 병가 일수는 연간 최대 며칠인가?", options: ["30일", "60일", "90일", "120일"], answer: 1, explanation: "공무원의 병가는 연 60일 이내입니다." },
-    { category: "복무", question: "재직기간 1년 미만 공무원의 연가 일수는?", options: ["8일", "11일", "14일", "15일"], answer: 1, explanation: "재직기간 1년 미만 공무원의 연가 일수는 11일입니다." },
-    { category: "복무", question: "배우자 출산휴가 일수는?", options: ["5일", "10일", "15일", "20일"], answer: 3, explanation: "배우자 출산휴가는 20일입니다. (2025년 공무원복무규정 개정)" },
-    { category: "문서", question: "공문서의 보존기간 중 '영구'에 해당하는 것은?", options: ["일반 통계자료", "조례·규칙", "단순 민원서류", "일일업무보고"], answer: 1, explanation: "조례, 규칙 등 법규문서는 영구 보존 대상입니다." },
-    { category: "민원", question: "정보공개 청구에 대한 결정 기한은?", options: ["5일 이내", "7일 이내", "10일 이내", "14일 이내"], answer: 2, explanation: "정보공개 청구를 받은 날부터 10일 이내에 공개 여부를 결정해야 합니다." },
-    { category: "감사", question: "일상감사 대상이 아닌 것은?", options: ["계약", "예산 전용", "국고보조금 교부", "일반 민원처리"], answer: 3, explanation: "일반 민원처리는 일상감사 대상이 아닙니다." },
-    { category: "인사", question: "5급 공무원의 정년은?", options: ["58세", "60세", "62세", "65세"], answer: 1, explanation: "일반직 공무원의 정년은 60세입니다." },
-    { category: "계약", question: "지체상금률의 상한은?", options: ["계약금액의 10%", "계약금액의 15%", "계약금액의 20%", "계약금액의 30%"], answer: 0, explanation: "지체상금은 계약금액의 10%를 초과할 수 없습니다." },
-    { category: "예산회계", question: "지방자치단체의 출납폐쇄일은?", options: ["12월 31일", "다음 연도 1월 31일", "다음 연도 2월 말일", "다음 연도 3월 31일"], answer: 2, explanation: "지방자치단체의 출납폐쇄일은 다음 연도 2월 말일입니다." },
-    { category: "복무", question: "시간외근무수당 지급 단가 산정 시 사용하는 분모는?", options: ["174시간", "209시간", "226시간", "243시간"], answer: 1, explanation: "시간외근무수당은 월 봉급액을 209시간으로 나눈 금액을 기준으로 산정합니다." }
-  ];
-
-  function getDailyQuiz() {
-    const today = new Date();
-    const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
-    const shuffled = [...allQuizData];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor((seed * (i + 1) * 9301 + 49297) % 233280 / 233280 * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled.slice(0, 5);
-  }
-
-  const quizData = getDailyQuiz();
-  let currentQuestion = 0, score = 0, selectedOption = null, answered = false;
-  const progressEl = document.getElementById('quiz-progress');
-  if (!progressEl) return;
-  const categoryEl = document.getElementById('quiz-category');
-  const questionEl = document.getElementById('quiz-question');
-  const optionsEl = document.getElementById('quiz-options');
-  const resultDiv = document.getElementById('quiz-result');
-  const resultMessage = document.getElementById('result-message');
-  const resultExplanation = document.getElementById('result-explanation');
-  const submitBtn = document.getElementById('quiz-submit');
-  const finalDiv = document.getElementById('quiz-final');
-  const finalScore = document.getElementById('final-score');
-  const footerDiv = document.getElementById('quiz-footer');
-  const restartBtn = document.getElementById('quiz-restart');
-
-  function renderQuestion() {
-    const q = quizData[currentQuestion];
-    progressEl.textContent = `문제 ${currentQuestion + 1}/5`;
-    categoryEl.textContent = q.category;
-    questionEl.textContent = q.question;
-    optionsEl.innerHTML = q.options.map((opt, i) => `
-      <button data-index="${i}" class="quiz-option w-full text-left p-4 rounded-xl bg-slate-800/50 hover:bg-slate-700/50 border border-white/5 text-slate-200 text-sm transition-all cursor-pointer flex items-center gap-3">
-        <span class="w-7 h-7 rounded-full border border-white/20 flex items-center justify-center text-xs font-medium shrink-0">${String.fromCharCode(65+i)}</span>
-        <span>${opt}</span>
-      </button>
-    `).join('');
-    document.querySelectorAll('.quiz-option').forEach(o => o.addEventListener('click', handleOptionClick));
-    selectedOption = null; answered = false;
-    resultDiv.classList.add('hidden');
-    resultDiv.classList.remove('bg-emerald-500/20','bg-red-500/20');
-    resultMessage.classList.remove('text-emerald-300','text-red-300');
-    submitBtn.disabled = true;
-    submitBtn.textContent = '정답 확인';
-  }
-
-  function handleOptionClick() {
-    if (answered) return;
-    document.querySelectorAll('.quiz-option').forEach(o => { o.classList.remove('bg-indigo-600/30','border-indigo-400'); o.classList.add('bg-slate-800/50','border-white/5'); });
-    this.classList.remove('bg-slate-800/50','border-white/5');
-    this.classList.add('bg-indigo-600/30','border-indigo-400');
-    selectedOption = this;
-    submitBtn.disabled = false;
-  }
-
-  function handleSubmit() {
-    if (!selectedOption) return;
-    if (!answered) {
-      answered = true;
-      const q = quizData[currentQuestion];
-      const si = parseInt(selectedOption.dataset.index);
-      const correct = si === q.answer;
-      if (correct) score++;
-      document.querySelectorAll('.quiz-option').forEach(o => {
-        o.classList.add('cursor-not-allowed');
-        const idx = parseInt(o.dataset.index);
-        if (idx === q.answer) { o.classList.remove('bg-slate-800/50','bg-indigo-600/30'); o.classList.add('bg-emerald-600/30','border-emerald-400'); }
-        else if (o === selectedOption && !correct) { o.classList.remove('bg-indigo-600/30'); o.classList.add('bg-red-500/30','border-red-400'); }
-      });
-      resultDiv.classList.remove('hidden');
-      if (correct) { resultDiv.classList.add('bg-emerald-500/20'); resultMessage.textContent = '정답입니다!'; resultMessage.classList.add('text-emerald-300'); }
-      else { resultDiv.classList.add('bg-red-500/20'); resultMessage.textContent = '오답입니다.'; resultMessage.classList.add('text-red-300'); }
-      resultExplanation.textContent = q.explanation;
-      submitBtn.textContent = currentQuestion < quizData.length - 1 ? '다음 문제 →' : '결과 보기';
-    } else {
-      if (currentQuestion < quizData.length - 1) { currentQuestion++; renderQuestion(); }
-      else { questionEl.classList.add('hidden'); optionsEl.classList.add('hidden'); resultDiv.classList.add('hidden'); footerDiv.classList.add('hidden'); finalDiv.classList.remove('hidden'); finalScore.textContent = score; }
-    }
-  }
-
-  submitBtn.addEventListener('click', handleSubmit);
-  restartBtn.addEventListener('click', function() {
-    currentQuestion = 0; score = 0;
-    questionEl.classList.remove('hidden'); optionsEl.classList.remove('hidden');
-    footerDiv.classList.remove('hidden'); finalDiv.classList.add('hidden');
-    renderQuestion();
-  });
-  renderQuestion();
-});
-</script>

@@ -1,6 +1,7 @@
 class AuditCase < ApplicationRecord
   # Sector enum (0: common 공통, 1: local_gov 지자체, 2: edu 교육행정)
   enum :sector, { common: 0, local_gov: 1, edu: 2 }, default: :common
+  # "common" 또는 blank 전달 시 전체 반환 (common은 모든 sector에 공유되므로)
   scope :for_sector, ->(s) { where(sector: [:common, s]) if s.present? && s != "common" }
 
   scope :published, -> { where(published: true) }
@@ -75,7 +76,7 @@ class AuditCase < ApplicationRecord
     Rails.cache.delete("audit_case_topic/#{slug}")
     Rails.cache.delete("audit_case_related/#{slug}")
     # 뷰 fragment cache 무효화: 내용 변경 시 버전 증가
-    if saved_change_to_title? || saved_change_to_issue? || saved_change_to_published? || saved_change_to_sector?
+    if saved_change_to_title? || saved_change_to_issue? || saved_change_to_published? || saved_change_to_sector? || saved_change_to_severity?
       Rails.cache.increment("audit_cases/fragment_version")
       Rails.cache.increment("home/curated_version")
     end
