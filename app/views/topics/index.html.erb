@@ -33,7 +33,23 @@
 <!-- 카테고리 카드 그리드 -->
 <section class="py-10 bg-background-light min-h-screen">
   <div class="container-wide">
-    <% cache ["topics_hub_v1", @total_count, @hub_categories.map { |c| c[:count] }.join("-")] do %>
+    <!-- 도구 허브 배너 -->
+    <div class="mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-100 px-5 py-4">
+      <div class="flex items-center gap-3">
+        <div class="shrink-0 w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center">
+          <span class="material-symbols-outlined text-emerald-600 text-xl">calculate</span>
+        </div>
+        <div>
+          <p class="text-sm font-bold text-slate-800">자동화 도구 <%= ApplicationHelper::ACTIVE_TOOL_COUNT %>개 — 법령 가이드와 함께 바로 활용하세요</p>
+          <p class="text-xs text-slate-500 mt-0.5">계약방식 결정, 추정가격 계산, 여비계산 등 실무 도구 모음</p>
+        </div>
+      </div>
+      <%= link_to tools_path, class: "shrink-0 inline-flex items-center gap-1 px-4 py-2 rounded-xl bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700 transition-colors" do %>
+        도구 보기 <span class="material-symbols-outlined text-base">arrow_forward</span>
+      <% end %>
+    </div>
+
+    <% cache ["topics_hub_v2", @total_count, @hub_categories.map { |c| "#{c[:count]}-#{c[:flowchart_count]}-#{c[:tool_count]}" }.join("|")] do %>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       <% @hub_categories.each do |cat| %>
         <% key = cat[:key]; cfg = cat[:cfg]; color = cfg[:color] %>
@@ -49,7 +65,23 @@
           </div>
 
           <!-- 설명 -->
-          <p class="text-sm text-slate-500 leading-relaxed mb-4"><%= cfg[:desc] %></p>
+          <p class="text-sm text-slate-500 leading-relaxed mb-3"><%= cfg[:desc] %></p>
+
+          <!-- 실무 자산 뱃지 -->
+          <% if cat[:flowchart_count] > 0 || cat[:tool_count] > 0 %>
+            <div class="flex flex-wrap gap-1.5 mb-2">
+              <% if cat[:flowchart_count] > 0 %>
+                <span class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-md bg-violet-50 text-violet-600 text-xs font-medium">
+                  <span class="material-symbols-outlined text-sm leading-none">account_tree</span>플로차트 <%= cat[:flowchart_count] %>개
+                </span>
+              <% end %>
+              <% if cat[:tool_count] > 0 %>
+                <span class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-600 text-xs font-medium">
+                  <span class="material-symbols-outlined text-sm leading-none">build</span>도구 <%= cat[:tool_count] %>개 연결
+                </span>
+              <% end %>
+            </div>
+          <% end %>
 
           <!-- 대표 토픽 미리보기 태그 -->
           <div class="flex flex-wrap gap-1.5 mb-5">

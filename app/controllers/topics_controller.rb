@@ -110,15 +110,15 @@ class TopicsController < ApplicationController
   }.freeze
 
   CATEGORY_CONFIG = {
-    "contract" => { label: "계약",      color: "indigo",  icon: "gavel",             desc: "수의계약·경쟁입찰·계약체결·대금지급·계약변경" },
-    "budget"   => { label: "예산/결산", color: "blue",    icon: "account_balance",   desc: "예산 편성·집행·이체·결산·추경·예비비" },
-    "expense"  => { label: "지출",      color: "amber",   icon: "receipt_long",      desc: "지출 원인행위·채무부담행위" },
-    "salary"   => { label: "급여/수당", color: "emerald", icon: "payments",          desc: "봉급·수당·성과상여·퇴직수당·복지포인트" },
-    "subsidy"  => { label: "보조금",    color: "violet",  icon: "volunteer_activism", desc: "국고보조금·교부금·정산" },
-    "property" => { label: "공유재산",  color: "teal",    icon: "domain",            desc: "공유재산 취득·관리·처분" },
-    "travel"   => { label: "여비/출장", color: "rose",    icon: "flight_takeoff",    desc: "국내출장·해외출장·여비 정산" },
-    "duty"     => { label: "복무",      color: "orange",  icon: "badge",             desc: "휴가·휴직·파견·징계·육아휴직" },
-    "other"    => { label: "기타",      color: "slate",   icon: "folder_open",       desc: "그 외 공무원 업무 관련 법령" },
+    "contract" => { label: "계약",      color: "indigo",  icon: "gavel",             desc: "수의계약 요건부터 대금지급까지 — 입찰·계약체결·변경 전 과정을 단계별로 안내합니다" },
+    "budget"   => { label: "예산/결산", color: "blue",    icon: "account_balance",   desc: "예산 편성부터 결산까지 — 이체·추경·예비비 처리를 실무 중심으로 정리합니다" },
+    "expense"  => { label: "지출",      color: "amber",   icon: "receipt_long",      desc: "지출 원인행위·채무부담행위를 올바르게 처리하는 실무 기준을 안내합니다" },
+    "salary"   => { label: "급여/수당", color: "emerald", icon: "payments",          desc: "봉급·수당·성과상여·퇴직수당 계산 기준과 지급 절차를 명확히 안내합니다" },
+    "subsidy"  => { label: "보조금",    color: "violet",  icon: "volunteer_activism", desc: "국고보조금·교부금 집행 기준과 정산 실수를 예방하는 핵심 사항을 정리합니다" },
+    "property" => { label: "공유재산",  color: "teal",    icon: "domain",            desc: "공유재산 취득·관리·처분 시 꼭 확인해야 할 법령 근거와 절차를 안내합니다" },
+    "travel"   => { label: "여비/출장", color: "rose",    icon: "flight_takeoff",    desc: "국내·해외 출장 여비 지급 기준과 정산 방법을 헷갈리지 않게 정리합니다" },
+    "duty"     => { label: "복무",      color: "orange",  icon: "badge",             desc: "휴가·휴직·파견·징계 등 복무 관련 법령 기준과 유의사항을 상세히 안내합니다" },
+    "other"    => { label: "기타",      color: "slate",   icon: "folder_open",       desc: "계약·예산·복무 외 공무원 실무에서 자주 참고하는 법령을 모아 정리합니다" },
   }.freeze
   CATEGORY_ORDER = %w[contract budget expense salary subsidy property travel duty other].freeze
 
@@ -142,11 +142,15 @@ class TopicsController < ApplicationController
       Topic.published.to_a
     end
 
-    # 카테고리별 토픽 수 + 대표 토픽 3개 (허브 페이지용)
+    # 카테고리별 토픽 수 + 대표 토픽 3개 + 실무 자산 집계 (허브 페이지용)
     @hub_categories = CATEGORY_ORDER.filter_map do |key|
       topics = all_topics.select { |t| t.category == key }
       next if topics.empty?
-      { key: key, cfg: CATEGORY_CONFIG[key], count: topics.size, preview: topics.first(3) }
+      slugs = topics.map(&:slug)
+      flowchart_count = slugs.count { |s| FLOWCHART_SLUGS.include?(s) }
+      tool_count = slugs.sum { |s| (TOPIC_TOOLS[s] || []).size }
+      { key: key, cfg: CATEGORY_CONFIG[key], count: topics.size, preview: topics.first(3),
+        flowchart_count: flowchart_count, tool_count: tool_count }
     end
     @total_count = all_topics.size
 

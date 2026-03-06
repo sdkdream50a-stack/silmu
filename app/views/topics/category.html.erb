@@ -53,7 +53,7 @@
   <div class="container-wide">
     <% if @key == "contract" && @contract_subgroups.present? %>
       <%# 계약 카테고리: 서브그룹 헤더 + 점프 내비게이션 %>
-      <% cache ["topics_contract_subgroups_v7", ENV["KAMAL_VERSION"], @topics.size, @fragment_version] do %>
+      <% cache ["topics_contract_subgroups_v8", ENV["KAMAL_VERSION"], @topics.size, @fragment_version] do %>
       <!-- 점프 내비게이션 (서브그룹 칩) -->
       <nav class="mb-8" aria-label="계약 세부 분류 바로가기">
         <div class="flex flex-wrap gap-2">
@@ -102,6 +102,23 @@
                   <% if topic.summary.present? %>
                     <p class="text-sm text-slate-500 leading-snug line-clamp-2"><%= topic.summary.truncate(60) %></p>
                   <% end %>
+                  <%# 실무 자산 뱃지 %>
+                  <% t_has_flow = TopicsController::FLOWCHART_SLUGS.include?(topic.slug) %>
+                  <% t_tool_cnt = (TopicsController::TOPIC_TOOLS[topic.slug] || []).size %>
+                  <% if t_has_flow || t_tool_cnt > 0 %>
+                    <div class="flex flex-wrap gap-1 mt-1.5">
+                      <% if t_has_flow %>
+                        <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-violet-50 text-violet-500 text-xs">
+                          <span class="material-symbols-outlined text-xs leading-none">account_tree</span>플로차트
+                        </span>
+                      <% end %>
+                      <% if t_tool_cnt > 0 %>
+                        <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-600 text-xs">
+                          <span class="material-symbols-outlined text-xs leading-none">build</span>도구 <%= t_tool_cnt %>개
+                        </span>
+                      <% end %>
+                    </div>
+                  <% end %>
                 </div>
                 <span class="material-symbols-outlined text-slate-300 group-hover:text-<%= color %>-400 transition-colors self-center text-lg">chevron_right</span>
               <% end %>
@@ -113,7 +130,7 @@
 
     <% else %>
       <%# 계약 외 카테고리: 심플 카드 그리드 %>
-      <% cache ["topics_category_v4", ENV["KAMAL_VERSION"], @key, @topics.size, @fragment_version] do %>
+      <% cache ["topics_category_v5", ENV["KAMAL_VERSION"], @key, @topics.size, @fragment_version] do %>
       <% color = @cfg[:color] %>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <% @topics.each do |topic| %>
@@ -127,6 +144,23 @@
               <h3 class="font-bold text-base text-slate-900 group-hover:text-<%= color %>-600 transition-colors mb-1"><%= topic.name %></h3>
               <% if topic.summary.present? %>
                 <p class="text-sm text-slate-500 leading-snug line-clamp-2"><%= topic.summary.truncate(60) %></p>
+              <% end %>
+              <%# 실무 자산 뱃지 %>
+              <% t_has_flow = TopicsController::FLOWCHART_SLUGS.include?(topic.slug) %>
+              <% t_tool_cnt = (TopicsController::TOPIC_TOOLS[topic.slug] || []).size %>
+              <% if t_has_flow || t_tool_cnt > 0 %>
+                <div class="flex flex-wrap gap-1 mt-1.5">
+                  <% if t_has_flow %>
+                    <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-violet-50 text-violet-500 text-xs">
+                      <span class="material-symbols-outlined text-xs leading-none">account_tree</span>플로차트
+                    </span>
+                  <% end %>
+                  <% if t_tool_cnt > 0 %>
+                    <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-600 text-xs">
+                      <span class="material-symbols-outlined text-xs leading-none">build</span>도구 <%= t_tool_cnt %>개
+                    </span>
+                  <% end %>
+                </div>
               <% end %>
             </div>
             <span class="material-symbols-outlined text-slate-300 group-hover:text-<%= color %>-400 transition-colors self-center text-lg">chevron_right</span>
