@@ -1,5 +1,73 @@
 <%# Created: 2026-02-22 18:20 %>
 
+<!-- NotebookLM 인포그래픽: 예산 편성 전체 흐름 한눈에 보기 -->
+<div class="bg-gradient-to-br from-indigo-900 to-blue-900 rounded-2xl p-6 mb-8 shadow-xl">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="material-symbols-outlined text-yellow-400 text-2xl">auto_awesome</span>
+    <div>
+      <h2 class="text-xl font-bold text-white">예산 편성 전체 흐름 한눈에 보기</h2>
+      <p class="text-indigo-200 text-sm">Google NotebookLM AI가 생성한 시각화 인포그래픽</p>
+    </div>
+  </div>
+
+  <div class="relative rounded-xl overflow-hidden shadow-lg border-2 border-indigo-400/30 cursor-pointer group"
+       onclick="openInfographic(this)"
+       title="클릭하면 크게 볼 수 있습니다">
+    <%= image_tag "infographics/budget_compilation_process.png",
+        alt: "지방자치단체 예산 편성 6단계 절차 인포그래픽",
+        class: "w-full h-auto group-hover:opacity-90 transition-opacity",
+        loading: "lazy" %>
+    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+      <span class="bg-black/60 text-white px-4 py-2 rounded-lg text-sm font-medium">
+        <span class="material-symbols-outlined text-sm align-middle">zoom_in</span> 크게 보기
+      </span>
+    </div>
+  </div>
+
+  <div class="mt-3 flex items-center justify-between">
+    <p class="text-indigo-300 text-xs flex items-center gap-1">
+      <span class="material-symbols-outlined text-xs">touch_app</span>
+      이미지를 클릭하면 크게 볼 수 있습니다
+    </p>
+    <a href="https://notebooklm.google.com/notebook/8ee9d9a1-2115-4ab7-a692-0dfb1416f8a9"
+       target="_blank" rel="noopener noreferrer"
+       class="text-indigo-300 hover:text-white text-xs flex items-center gap-1 transition-colors">
+      <span class="material-symbols-outlined text-xs">open_in_new</span>
+      NotebookLM에서 보기
+    </a>
+  </div>
+</div>
+
+<!-- 인포그래픽 전체 화면 모달 -->
+<div id="infographicModal"
+     class="hidden fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
+     onclick="closeInfographic()">
+  <div class="relative max-w-6xl w-full">
+    <button onclick="closeInfographic()"
+            class="absolute -top-12 right-0 text-white hover:text-gray-300 flex items-center gap-2 text-sm transition-colors">
+      <span class="material-symbols-outlined">close</span> 닫기
+    </button>
+    <%= image_tag "infographics/budget_compilation_process.png",
+        alt: "지방자치단체 예산 편성 6단계 절차 인포그래픽",
+        class: "w-full h-auto rounded-xl shadow-2xl",
+        id: "infographicModalImage" %>
+  </div>
+</div>
+
+<script>
+function openInfographic(el) {
+  document.getElementById('infographicModal').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+function closeInfographic() {
+  document.getElementById('infographicModal').classList.add('hidden');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeInfographic();
+});
+</script>
+
 <div class="bg-white border-2 border-indigo-200 rounded-lg p-6 mb-8">
   <div class="flex items-start gap-3 mb-4">
     <span class="material-symbols-outlined text-indigo-600 text-3xl">account_balance_wallet</span>
