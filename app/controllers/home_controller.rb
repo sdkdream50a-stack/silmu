@@ -18,9 +18,9 @@ class HomeController < ApplicationController
     },
     edu: {
       1  => %w[year-end-settlement budget-carryover payment inspection],
-      2  => %w[budget-compilation private-contract bidding],
-      3  => %w[budget-compilation private-contract bidding contract-execution],
-      4  => %w[bidding contract-execution estimated-price goods-selection-committee],
+      2  => %w[budget-compilation goods-selection-committee private-contract bidding],
+      3  => %w[budget-compilation goods-selection-committee private-contract bidding],
+      4  => %w[goods-selection-committee estimated-price bidding contract-execution],
       5  => %w[inspection payment advance-payment contract-guarantee-deposit],
       6  => %w[inspection payment design-change],
       7  => %w[budget-carryover bidding inspection],
