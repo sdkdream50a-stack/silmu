@@ -1,111 +1,203 @@
 <%# Created: 2026-02-22 18:20 %>
 
-<!-- 예산 편성 전체 흐름 인포그래픽 -->
-<div class="bg-gradient-to-br from-indigo-900 to-blue-900 rounded-2xl p-6 mb-8 shadow-xl">
-  <div class="flex items-center gap-3 mb-6">
-    <span class="material-symbols-outlined text-yellow-400 text-2xl">account_tree</span>
-    <div>
-      <h2 class="text-xl font-bold text-white">예산 편성 전체 흐름 한눈에 보기</h2>
-      <p class="text-indigo-200 text-sm">지방재정법 제36조~제42조 · 5~12월 6단계</p>
+<!-- NotebookLM 인포그래픽: 한눈에 내년 살림 준비하기 -->
+<div class="rounded-2xl mb-8 shadow-2xl overflow-hidden" style="background: linear-gradient(135deg, #0f1b3d 0%, #1a2d5a 40%, #0d3b5e 70%, #0a4a4a 100%);">
+
+  <!-- 헤더 -->
+  <div class="px-6 pt-6 pb-4 border-b border-white/10">
+    <div class="flex items-center gap-2 mb-1">
+      <span class="text-xs font-bold tracking-widest text-cyan-400 uppercase">NotebookLM AI Generated</span>
     </div>
+    <h2 class="text-2xl font-extrabold text-white leading-tight">한눈에 내년 살림 준비하기</h2>
+    <p class="text-cyan-200 text-sm mt-1">지방자치단체 예산 편성 6단계 가이드 · 지방재정법 제36조~제42조</p>
   </div>
 
-  <!-- 타임라인 인포그래픽 -->
-  <div class="relative">
-    <!-- 연결선 (데스크탑) -->
-    <div class="hidden md:block absolute top-10 left-[8.33%] right-[8.33%] h-0.5 bg-gradient-to-r from-indigo-400 via-blue-400 via-emerald-400 via-amber-400 via-purple-400 to-slate-400 z-0"></div>
+  <div class="p-6">
 
-    <div class="grid grid-cols-2 md:grid-cols-6 gap-3 relative z-10">
+    <!-- S자형 흐름도: 1열 (1~3단계) -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
 
       <!-- STEP 1 -->
-      <div class="flex flex-col items-center text-center">
-        <div class="w-16 h-16 rounded-full bg-indigo-500 border-4 border-indigo-300 flex items-center justify-center mb-2 shadow-lg">
-          <span class="text-white font-bold text-lg">1</span>
+      <div class="relative rounded-2xl p-4 border border-sky-400/40" style="background: linear-gradient(135deg, rgba(14,116,144,0.5) 0%, rgba(8,145,178,0.2) 100%);">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center font-black text-lg shadow-lg flex-shrink-0" style="background: linear-gradient(135deg, #0ea5e9, #0284c7);">
+            <span class="text-white">1</span>
+          </div>
+          <div>
+            <span class="text-xs font-bold text-sky-300 tracking-wide">5~6월</span>
+            <h3 class="text-sm font-bold text-white leading-tight">예산편성지침 수립 및 통보</h3>
+          </div>
         </div>
-        <div class="bg-indigo-800/60 rounded-xl p-3 w-full border border-indigo-500/40">
-          <p class="text-indigo-200 text-xs font-bold mb-1">5~6월</p>
-          <p class="text-white text-xs font-semibold leading-tight">편성지침<br>수립·통보</p>
-          <p class="text-indigo-300 text-xs mt-1">행안부·재정당국</p>
+        <div class="flex items-start gap-2 mb-2">
+          <span class="material-symbols-outlined text-sky-400 text-base mt-0.5 flex-shrink-0">description</span>
+          <p class="text-xs text-sky-100 leading-relaxed">중기재정계획 연계 · 예산 규모·편성 기준·투자심사 기준 수립 후 각 부서 통보</p>
+        </div>
+        <div class="flex items-center gap-1.5 mt-2">
+          <span class="material-symbols-outlined text-sky-400 text-xs">account_balance</span>
+          <span class="text-xs text-sky-300">행안부·재정당국</span>
+          <span class="ml-auto text-xs text-sky-400/70">제36조</span>
         </div>
       </div>
 
-      <!-- STEP 2 -->
-      <div class="flex flex-col items-center text-center">
-        <div class="w-16 h-16 rounded-full bg-amber-500 border-4 border-amber-300 flex items-center justify-center mb-2 shadow-lg">
-          <span class="text-white font-bold text-lg">2</span>
+      <!-- STEP 2 — CRITICAL STEP -->
+      <div class="relative rounded-2xl p-4 border-2 border-orange-400/70 shadow-lg shadow-orange-900/30" style="background: linear-gradient(135deg, rgba(194,65,12,0.55) 0%, rgba(234,88,12,0.3) 100%);">
+        <!-- CRITICAL 배지 -->
+        <div class="absolute -top-3 left-1/2 -translate-x-1/2">
+          <span class="bg-orange-500 text-white text-xs font-black px-3 py-0.5 rounded-full shadow tracking-wider">⭐ CRITICAL STEP</span>
         </div>
-        <div class="bg-amber-800/40 rounded-xl p-3 w-full border border-amber-500/40">
-          <p class="text-amber-200 text-xs font-bold mb-1">7~8월 ⭐</p>
-          <p class="text-white text-xs font-semibold leading-tight">예산요구서<br>작성·제출</p>
-          <p class="text-amber-300 text-xs mt-1">각 부서</p>
+        <div class="flex items-center gap-3 mb-3 mt-1">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center font-black text-lg shadow-lg flex-shrink-0" style="background: linear-gradient(135deg, #f97316, #ea580c);">
+            <span class="text-white">2</span>
+          </div>
+          <div>
+            <span class="text-xs font-bold text-orange-300 tracking-wide">7~8월</span>
+            <h3 class="text-sm font-bold text-white leading-tight">예산요구서 작성 및 제출</h3>
+          </div>
+        </div>
+        <div class="flex items-start gap-2 mb-2">
+          <span class="material-symbols-outlined text-orange-300 text-base mt-0.5 flex-shrink-0">edit_document</span>
+          <p class="text-xs text-orange-100 leading-relaxed">사업계획서·산출 근거(단가×수량) 작성 후 재정과 제출 — 이 시기 준비가 <strong class="text-yellow-300">최종 반영률 결정</strong></p>
+        </div>
+        <div class="flex items-center gap-1.5 mt-2">
+          <span class="material-symbols-outlined text-orange-300 text-xs">groups</span>
+          <span class="text-xs text-orange-200">각 실·국·과</span>
+          <span class="ml-auto text-xs text-orange-300/70">제38조</span>
         </div>
       </div>
 
       <!-- STEP 3 -->
-      <div class="flex flex-col items-center text-center">
-        <div class="w-16 h-16 rounded-full bg-emerald-500 border-4 border-emerald-300 flex items-center justify-center mb-2 shadow-lg">
-          <span class="text-white font-bold text-lg">3</span>
+      <div class="relative rounded-2xl p-4 border border-teal-400/40" style="background: linear-gradient(135deg, rgba(15,118,110,0.5) 0%, rgba(20,184,166,0.2) 100%);">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center font-black text-lg shadow-lg flex-shrink-0" style="background: linear-gradient(135deg, #14b8a6, #0f766e);">
+            <span class="text-white">3</span>
+          </div>
+          <div>
+            <span class="text-xs font-bold text-teal-300 tracking-wide">9월</span>
+            <h3 class="text-sm font-bold text-white leading-tight">예산안 심사 및 조정</h3>
+          </div>
         </div>
-        <div class="bg-emerald-800/40 rounded-xl p-3 w-full border border-emerald-500/40">
-          <p class="text-emerald-200 text-xs font-bold mb-1">9월</p>
-          <p class="text-white text-xs font-semibold leading-tight">예산안<br>심사·조정</p>
-          <p class="text-emerald-300 text-xs mt-1">재정과</p>
+        <div class="flex items-start gap-2 mb-2">
+          <span class="material-symbols-outlined text-teal-400 text-base mt-0.5 flex-shrink-0">balance</span>
+          <p class="text-xs text-teal-100 leading-relaxed">타당성·효과성·집행 실적 검토 후 가용 재원 범위 내 우선순위 결정</p>
+        </div>
+        <div class="flex items-center gap-1.5 mt-2">
+          <span class="material-symbols-outlined text-teal-400 text-xs">manage_accounts</span>
+          <span class="text-xs text-teal-300">재정과·예산담당관</span>
+          <span class="ml-auto text-xs text-teal-400/70">제36조</span>
         </div>
       </div>
+    </div>
 
-      <!-- STEP 4 -->
-      <div class="flex flex-col items-center text-center">
-        <div class="w-16 h-16 rounded-full bg-blue-500 border-4 border-blue-300 flex items-center justify-center mb-2 shadow-lg">
-          <span class="text-white font-bold text-lg">4</span>
+    <!-- S자 연결 화살표 -->
+    <div class="hidden md:flex justify-center items-center my-1">
+      <div class="flex items-center gap-1 text-white/30">
+        <div class="w-1/3 border-b-2 border-dashed border-white/20"></div>
+        <svg width="40" height="24" viewBox="0 0 40 24" class="text-white/40">
+          <path d="M20 0 Q30 0 30 12 Q30 24 20 24 Q10 24 10 12 Q10 0 20 0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4,2"/>
+          <polygon points="20,20 16,14 24,14" fill="currentColor" opacity="0.5"/>
+        </svg>
+        <div class="w-1/3 border-b-2 border-dashed border-white/20"></div>
+      </div>
+    </div>
+
+    <!-- S자형 흐름도: 2열 (4~6단계) — 오른쪽→왼쪽 방향 -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
+
+      <!-- STEP 6 (오른쪽 끝) — md에서는 순서 역전 -->
+      <div class="md:order-3 relative rounded-2xl p-4 border border-slate-400/40" style="background: linear-gradient(135deg, rgba(71,85,105,0.5) 0%, rgba(100,116,139,0.2) 100%);">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center font-black text-lg shadow-lg flex-shrink-0" style="background: linear-gradient(135deg, #64748b, #475569);">
+            <span class="text-white">6</span>
+          </div>
+          <div>
+            <span class="text-xs font-bold text-slate-300 tracking-wide">다음 해 1월~</span>
+            <h3 class="text-sm font-bold text-white leading-tight">예산 확정 및 집행 시작</h3>
+          </div>
         </div>
-        <div class="bg-blue-800/40 rounded-xl p-3 w-full border border-blue-500/40">
-          <p class="text-blue-200 text-xs font-bold mb-1">10월</p>
-          <p class="text-white text-xs font-semibold leading-tight">예산안 편성<br>의회 제출</p>
-          <p class="text-blue-300 text-xs mt-1">단체장 (11/11까지)</p>
+        <div class="flex items-start gap-2 mb-2">
+          <span class="material-symbols-outlined text-slate-300 text-base mt-0.5 flex-shrink-0">play_circle</span>
+          <p class="text-xs text-slate-200 leading-relaxed">의결·공표 후 1월 1일부터 목적 외 사용 금지 원칙에 따라 집행 시작</p>
+        </div>
+        <div class="flex items-center gap-1.5 mt-2">
+          <span class="material-symbols-outlined text-slate-300 text-xs">apartment</span>
+          <span class="text-xs text-slate-300">전 부서</span>
+          <span class="ml-auto text-xs text-slate-400/70">제42조</span>
         </div>
       </div>
 
       <!-- STEP 5 -->
-      <div class="flex flex-col items-center text-center">
-        <div class="w-16 h-16 rounded-full bg-purple-500 border-4 border-purple-300 flex items-center justify-center mb-2 shadow-lg">
-          <span class="text-white font-bold text-lg">5</span>
+      <div class="md:order-2 relative rounded-2xl p-4 border border-violet-400/40" style="background: linear-gradient(135deg, rgba(109,40,217,0.5) 0%, rgba(139,92,246,0.2) 100%);">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center font-black text-lg shadow-lg flex-shrink-0" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9);">
+            <span class="text-white">5</span>
+          </div>
+          <div>
+            <span class="text-xs font-bold text-violet-300 tracking-wide">11~12월</span>
+            <h3 class="text-sm font-bold text-white leading-tight">의회 심의 및 의결</h3>
+          </div>
         </div>
-        <div class="bg-purple-800/40 rounded-xl p-3 w-full border border-purple-500/40">
-          <p class="text-purple-200 text-xs font-bold mb-1">11~12월</p>
-          <p class="text-white text-xs font-semibold leading-tight">의회<br>심의·의결</p>
-          <p class="text-purple-300 text-xs mt-1">지방의회 (12/26까지)</p>
+        <div class="flex items-start gap-2 mb-2">
+          <span class="material-symbols-outlined text-violet-400 text-base mt-0.5 flex-shrink-0">gavel</span>
+          <p class="text-xs text-violet-100 leading-relaxed">상임위 예비 심사 → 예결특위 종합 심사 → 본회의 최종 의결</p>
         </div>
-      </div>
-
-      <!-- STEP 6 -->
-      <div class="flex flex-col items-center text-center">
-        <div class="w-16 h-16 rounded-full bg-slate-400 border-4 border-slate-300 flex items-center justify-center mb-2 shadow-lg">
-          <span class="text-white font-bold text-lg">6</span>
-        </div>
-        <div class="bg-slate-700/60 rounded-xl p-3 w-full border border-slate-500/40">
-          <p class="text-slate-300 text-xs font-bold mb-1">다음 해 1월~</p>
-          <p class="text-white text-xs font-semibold leading-tight">예산 확정<br>집행 시작</p>
-          <p class="text-slate-300 text-xs mt-1">전 부서</p>
+        <div class="flex items-center gap-1.5 mt-2">
+          <span class="material-symbols-outlined text-violet-300 text-xs">account_balance</span>
+          <span class="text-xs text-violet-300">지방의회</span>
+          <span class="ml-auto px-1.5 py-0.5 bg-red-500/70 rounded text-xs text-white font-bold">D-5 : 12/26</span>
         </div>
       </div>
 
-    </div>
-  </div>
+      <!-- STEP 4 -->
+      <div class="md:order-1 relative rounded-2xl p-4 border border-blue-400/40" style="background: linear-gradient(135deg, rgba(29,78,216,0.5) 0%, rgba(59,130,246,0.2) 100%);">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center font-black text-lg shadow-lg flex-shrink-0" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8);">
+            <span class="text-white">4</span>
+          </div>
+          <div>
+            <span class="text-xs font-bold text-blue-300 tracking-wide">10월</span>
+            <h3 class="text-sm font-bold text-white leading-tight">예산안 편성 및 의회 제출</h3>
+          </div>
+        </div>
+        <div class="flex items-start gap-2 mb-2">
+          <span class="material-symbols-outlined text-blue-400 text-base mt-0.5 flex-shrink-0">upload_file</span>
+          <p class="text-xs text-blue-100 leading-relaxed">단체장 최종 승인 후 지방의회에 예산안·사업계획서 제출</p>
+        </div>
+        <div class="flex items-center gap-1.5 mt-2">
+          <span class="material-symbols-outlined text-blue-300 text-xs">person</span>
+          <span class="text-xs text-blue-300">지방자치단체장</span>
+          <span class="ml-auto px-1.5 py-0.5 bg-red-500/70 rounded text-xs text-white font-bold">D-50 : 11/11</span>
+        </div>
+      </div>
 
-  <!-- 핵심 포인트 -->
-  <div class="mt-5 grid grid-cols-1 md:grid-cols-3 gap-3">
-    <div class="bg-white/10 rounded-xl p-3 flex items-start gap-2">
-      <span class="material-symbols-outlined text-yellow-400 text-lg shrink-0">star</span>
-      <p class="text-white text-xs"><strong class="text-yellow-300">7~8월이 핵심</strong> — 예산요구서 작성 기간. 이 시기 준비가 최종 반영률 결정</p>
     </div>
-    <div class="bg-white/10 rounded-xl p-3 flex items-start gap-2">
-      <span class="material-symbols-outlined text-red-400 text-lg shrink-0">warning</span>
-      <p class="text-white text-xs"><strong class="text-red-300">기한 엄수</strong> — 의회 제출 50일 전(11/11), 의결 5일 전(12/26) 법정기한</p>
+
+    <!-- 월별 타임라인 바 -->
+    <div class="mt-5 rounded-xl overflow-hidden border border-white/10" style="background: rgba(255,255,255,0.05)">
+      <div class="px-4 py-2 border-b border-white/10">
+        <span class="text-xs font-bold text-white/60 uppercase tracking-widest">Monthly Timeline</span>
+      </div>
+      <div class="grid grid-cols-8 text-center text-xs">
+        <div class="py-2 border-r border-white/10" style="background:rgba(14,116,144,0.3)"><span class="font-bold text-sky-300">5~6월</span><br><span class="text-white/50 text-xs">지침수립</span></div>
+        <div class="py-2 border-r border-white/10 col-span-2" style="background:rgba(194,65,12,0.4)"><span class="font-bold text-orange-300">7~8월 ⭐</span><br><span class="text-white/50 text-xs">요구서 작성</span></div>
+        <div class="py-2 border-r border-white/10" style="background:rgba(15,118,110,0.3)"><span class="font-bold text-teal-300">9월</span><br><span class="text-white/50 text-xs">심사·조정</span></div>
+        <div class="py-2 border-r border-white/10" style="background:rgba(29,78,216,0.3)"><span class="font-bold text-blue-300">10월</span><br><span class="text-white/50 text-xs">의회제출</span></div>
+        <div class="py-2 border-r border-white/10 col-span-2" style="background:rgba(109,40,217,0.3)"><span class="font-bold text-violet-300">11~12월</span><br><span class="text-white/50 text-xs">심의·의결</span></div>
+        <div class="py-2" style="background:rgba(71,85,105,0.3)"><span class="font-bold text-slate-300">1월~</span><br><span class="text-white/50 text-xs">집행</span></div>
+      </div>
     </div>
-    <div class="bg-white/10 rounded-xl p-3 flex items-start gap-2">
-      <span class="material-symbols-outlined text-green-400 text-lg shrink-0">gavel</span>
-      <p class="text-white text-xs"><strong class="text-green-300">법적 근거</strong> — 지방재정법 제36조~제42조</p>
+
+    <!-- 실무 팁 -->
+    <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+      <div class="rounded-xl p-3 border border-yellow-400/30 flex items-start gap-2" style="background:rgba(234,179,8,0.1)">
+        <span class="material-symbols-outlined text-yellow-400 text-lg flex-shrink-0">tips_and_updates</span>
+        <p class="text-xs text-yellow-100"><strong class="text-yellow-300">팁 1.</strong> 7~8월 요구서 작성이 승패를 결정합니다. 구체적인 산출 근거와 성과 지표 설정이 최종 예산 반영률을 좌우합니다.</p>
+      </div>
+      <div class="rounded-xl p-3 border border-red-400/30 flex items-start gap-2" style="background:rgba(239,68,68,0.1)">
+        <span class="material-symbols-outlined text-red-400 text-lg flex-shrink-0">timer</span>
+        <p class="text-xs text-red-100"><strong class="text-red-300">팁 2.</strong> 기한 엄수 및 상위 계획 부합성을 확인하세요. 제출 기한이 하루만 늦어져도 반영이 불가합니다.</p>
+      </div>
     </div>
+
   </div>
 </div>
 
