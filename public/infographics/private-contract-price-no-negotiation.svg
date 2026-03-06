@@ -1,0 +1,75 @@
+<svg width="800" height="480" viewBox="0 0 800 480" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      text { font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', '맑은 고딕', sans-serif; }
+      .title { font-size: 22px; font-weight: 700; fill: #0f172a; }
+      .label { font-size: 12px; font-weight: 600; fill: white; }
+      .section-title { font-size: 13px; font-weight: 700; fill: #475569; }
+      .body { font-size: 13px; fill: #334155; }
+      .caption { font-size: 11px; fill: #64748b; }
+      .brand { font-size: 13px; font-weight: 700; fill: #ef4444; }
+    </style>
+  </defs>
+
+  <!-- 배경 -->
+  <rect width="800" height="480" rx="16" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+
+  <!-- 헤더 영역 -->
+  <rect x="0" y="0" width="800" height="72" rx="16" fill="#fef3c7" stroke="none"/>
+  <rect x="0" y="56" width="800" height="16" fill="#fef3c7" stroke="none"/>
+
+  <!-- 심각도 배지 -->
+  <rect x="20" y="16" width="48" height="22" rx="11" fill="#d97706"/>
+  <text x="44" y="31" text-anchor="middle" class="label">경미</text>
+
+  <!-- 분야 배지 -->
+  <rect x="76" y="16" width="64" height="22" rx="11" fill="#64748b"/>
+  <text x="108" y="31" text-anchor="middle" class="label">수의계약</text>
+
+  <!-- 제목 -->
+  <text x="20" y="62" class="title">수의시담(가격 협상) 미실시</text>
+
+  <!-- 구분선 -->
+  <line x1="20" y1="84" x2="780" y2="84" stroke="#e2e8f0" stroke-width="1"/>
+
+  <!-- 지적사항 섹션 -->
+  <rect x="20" y="96" width="4" height="16" rx="2" fill="#ef4444"/>
+  <text x="32" y="108" class="section-title">지적사항</text>
+  <text x="20" y="130" class="body">
+    <tspan x="20" dy="0">수의계약 체결 시 업체가 제출한 견적가를 그대로 계약금액으로 확정함. 견적가 2,400만원에 대해</tspan><tspan x="20" dy="18">가격 협상(시담) 없이 전액 계약하여, 예산 ...</tspan>
+  </text>
+
+  <!-- 조치내용 섹션 -->
+  <rect x="20" y="186" width="4" height="16" rx="2" fill="#f59e0b"/>
+  <text x="32" y="198" class="section-title">조치내용</text>
+  <circle cx='28' cy='214' r='4' fill='#f59e0b'/>
+        <text x='40' y='218' class='body'>관련자 주의</text>
+<circle cx='28' cy='238' r='4' fill='#f59e0b'/>
+        <text x='40' y='242' class='body'>수의시담 절차 의무화 지시</text>
+
+  <!-- 교훈 섹션 -->
+  <rect x="20" y="278" width="760" height="70" rx="8" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1"/>
+  <rect x="32" y="291" width="4" height="16" rx="2" fill="#22c55e"/>
+  <text x="44" y="303" class="section-title" fill="#166534">핵심 교훈</text>
+  <text x="32" y="326" class="body" fill="#166534">
+    <tspan x="32" dy="0">실무자가 반드시 알아야 할 3가지
+
+1. 수의계약에도 가격 협상은 필수입니다
+수의계약은 경쟁</tspan><tspan x="32" dy="18">없이 업체를 선...</tspan>
+  </text>
+
+  <!-- 실무 포인트 박스 -->
+  <rect x="20" y="362" width="760" height="50" rx="8" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1"/>
+  <text x="36" y="381" class="section-title" fill="#1e40af">실무 핵심 포인트</text>
+  <text x="36" y="401" class="caption" fill="#1e40af">관련 서류를 사전에 구비하고, 내부 결재 절차를 반드시 준수하세요. 유사 감사 사례를 주기적으로 확인하세요.</text>
+
+  <!-- 하단 -->
+  <line x1="20" y1="424" x2="780" y2="424" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="20" y="446" class="caption">실무.kr 감사사례 | silmu.kr</text>
+  <text x="780" y="446" text-anchor="end" class="brand">silmu.kr</text>
+
+  <!-- 하단 컬러 바 -->
+  <rect x="0" y="460" width="800" height="20" rx="0" fill="#fef3c7"/>
+  <rect x="0" y="460" width="800" height="20" fill="none" stroke="none"/>
+  <rect x="0" y="468" width="800" height="12" rx="8" fill="#d97706" opacity="0.3"/>
+</svg>
