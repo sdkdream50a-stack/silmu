@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_06_141423) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_06_225343) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -21,6 +21,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_06_141423) do
     t.text "checkpoints"
     t.datetime "created_at", null: false
     t.text "detail"
+    t.string "infographic_url"
     t.text "issue"
     t.string "legal_basis"
     t.text "lesson"
@@ -128,6 +129,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_06_141423) do
     t.datetime "created_at", null: false
     t.text "decree_content"
     t.text "faqs"
+    t.text "flowchart_mermaid"
     t.string "flowchart_url"
     t.string "infographic_url"
     t.text "interpretation_content"

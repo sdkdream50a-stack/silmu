@@ -190,109 +190,15 @@
       <!-- 메인 콘텐츠 영역 -->
       <div class="flex-1 min-w-0">
         <!-- 실무흐름도 -->
-        <div class="tab-panel <%= 'active' if @has_flowchart %>" data-tab="flowchart">
-          <% if @topic.slug == 'price-negotiation' %>
-            <%= render 'topics/flowcharts/price_negotiation', topic: @topic %>
-          <% elsif @topic.slug == 'private-contract' %>
-            <%= render 'topics/flowcharts/private_contract', topic: @topic %>
-          <% elsif @topic.slug == 'private-contract-limit' %>
-            <%= render 'topics/flowcharts/private_contract_limit', topic: @topic %>
-          <% elsif @topic.slug == 'private-contract-amount' %>
-            <%= render 'topics/flowcharts/private_contract_amount', topic: @topic %>
-          <% elsif @topic.slug == 'emergency-contract' %>
-            <%= render 'topics/flowcharts/emergency_contract', topic: @topic %>
-          <% elsif @topic.slug == 'dual-quote' %>
-            <%= render 'topics/flowcharts/dual_quote', topic: @topic %>
-          <% elsif @topic.slug == 'single-quote' %>
-            <%= render 'topics/flowcharts/single_quote', topic: @topic %>
-          <% elsif @topic.slug == 'travel-expense' %>
-            <%= render 'topics/flowcharts/travel_expense', topic: @topic %>
-          <% elsif @topic.slug == 'year-end-settlement' %>
-            <%= render 'topics/flowcharts/year_end_settlement', topic: @topic %>
-          <% elsif @topic.slug == 'budget-carryover' %>
-            <%= render 'topics/flowcharts/budget_carryover', topic: @topic %>
-          <% elsif @topic.slug == 'late-penalty' %>
-            <%= render 'topics/flowcharts/late_penalty', topic: @topic %>
-          <% elsif @topic.slug == 'contract-guarantee-deposit' %>
-            <%= render 'topics/flowcharts/contract_guarantee_deposit', topic: @topic %>
-          <% elsif @topic.slug == 'subcontract' %>
-            <%= render 'topics/flowcharts/subcontract', topic: @topic %>
-          <% elsif @topic.slug == 'bid-announcement' %>
-            <%= render 'topics/flowcharts/bid_announcement', topic: @topic %>
-          <% elsif @topic.slug == 'bidding' %>
-            <%= render 'topics/flowcharts/bidding', topic: @topic %>
-          <% elsif @topic.slug == 'bid-qualification' %>
-            <%= render 'topics/flowcharts/bid_qualification', topic: @topic %>
-          <% elsif @topic.slug == 'long-term-contract' %>
-            <%= render 'topics/flowcharts/long_term_contract', topic: @topic %>
-          <% elsif @topic.slug == 'multiple-price' %>
-            <%= render 'topics/flowcharts/multiple_price', topic: @topic %>
-          <% elsif @topic.slug == 'spec-price-split-bid' %>
-            <%= render 'topics/flowcharts/spec_price_split_bid', topic: @topic %>
-          <% elsif @topic.slug == 'advance-payment' %>
-            <%= render 'topics/flowcharts/advance_payment', topic: @topic %>
-          <% elsif @topic.slug == 'unit-price-contract' %>
-            <%= render 'topics/flowcharts/unit_price_contract', topic: @topic %>
-          <% elsif @topic.slug == 'performance-guarantee' %>
-            <%= render 'topics/flowcharts/performance_guarantee', topic: @topic %>
-          <% elsif @topic.slug == 'e-bidding' %>
-            <%= render 'topics/flowcharts/e_bidding', topic: @topic %>
-          <% elsif @topic.slug == 'estimated-price' %>
-            <%= render 'topics/flowcharts/estimated_price', topic: @topic %>
-          <% elsif @topic.slug == 'contract-execution' %>
-            <%= render 'topics/flowcharts/contract_execution', topic: @topic %>
-          <% elsif @topic.slug == 'inspection' %>
-            <%= render 'topics/flowcharts/inspection', topic: @topic %>
-          <% elsif @topic.slug == 'payment' %>
-            <%= render 'topics/flowcharts/payment', topic: @topic %>
-          <% elsif @topic.slug == 'design-change' %>
-            <%= render 'topics/flowcharts/design_change', topic: @topic %>
-          <% elsif @topic.slug == 'price-escalation' %>
-            <%= render 'topics/flowcharts/price_escalation', topic: @topic %>
-          <% elsif @topic.slug == 'contract-termination' %>
-            <%= render 'topics/flowcharts/contract_termination', topic: @topic %>
-          <% elsif @topic.slug == 'joint-contract' %>
-            <%= render 'topics/flowcharts/joint_contract', topic: @topic %>
-          <% elsif @topic.slug == 'defect-warranty' %>
-            <%= render 'topics/flowcharts/defect_warranty', topic: @topic %>
-          <% elsif @topic.slug == 'bid-deposit' %>
-            <%= render 'topics/flowcharts/bid_deposit', topic: @topic %>
-          <% elsif @topic.slug == 'small-amount-contract' %>
-            <%= render 'topics/flowcharts/small_amount_contract', topic: @topic %>
-          <% elsif @topic.slug == 'budget-compilation' %>
-            <%= render 'topics/flowcharts/budget_compilation', topic: @topic %>
-          <% elsif @topic.slug == 'split-contract-prohibition' %>
-            <%= render 'topics/flowcharts/split_contract_prohibition', topic: @topic %>
-          <% elsif @topic.slug == 'quote-collection-guide' %>
-            <%= render 'topics/flowcharts/quote_collection_guide', topic: @topic %>
-          <% elsif @topic.slug == 'lowest-bid-rate' %>
-            <%= render 'topics/flowcharts/lowest_bid_rate', topic: @topic %>
-          <% elsif @topic.slug == 'e-procurement-guide' %>
-            <%= render 'topics/flowcharts/e_procurement_guide', topic: @topic %>
-          <% elsif @topic.slug == 'goods-selection-committee' %>
-            <%= render 'topics/flowcharts/goods_selection_committee', topic: @topic %>
-          <% elsif @topic.slug == 'qualification-failure' %>
-            <%= render 'topics/flowcharts/qualification_failure', topic: @topic %>
-          <% elsif @topic.slug == 'contract-guarantee-exemption' %>
-            <%= render 'topics/flowcharts/contract_guarantee_exemption', topic: @topic %>
-          <% elsif @topic.slug == 'private-contract-justification' %>
-            <%= render 'topics/flowcharts/private_contract_justification', topic: @topic %>
-          <% elsif @topic.slug == 'goods-vs-service-contract' %>
-            <%= render 'topics/flowcharts/goods_vs_service_contract', topic: @topic %>
-          <% elsif @topic.slug == 'bid-participation-restriction' %>
-            <%= render 'topics/flowcharts/bid_participation_restriction', topic: @topic %>
-          <% elsif @topic.slug == 'additional-contract-limit' %>
-            <%= render 'topics/flowcharts/additional_contract_limit', topic: @topic %>
-          <% elsif @topic.slug == 'penalty-reduction-procedure' %>
-            <%= render 'topics/flowcharts/penalty_reduction_procedure', topic: @topic %>
-          <% elsif @topic.slug == 'contract-period-extension' %>
-            <%= render 'topics/flowcharts/contract_period_extension', topic: @topic %>
-          <% elsif @topic.slug == 'e-bidding-error-faq' %>
-            <%= render 'topics/flowcharts/e_bidding_error_faq', topic: @topic %>
-          <% elsif @topic.slug == 'contract-amount-adjustment' %>
-            <%= render 'topics/flowcharts/contract_amount_adjustment', topic: @topic %>
-          <% elsif @topic.slug == 'completion-payment-checklist' %>
-            <%= render 'topics/flowcharts/completion_payment_checklist', topic: @topic %>
+        <div class="tab-panel <%= 'active' if @has_flowchart || @topic.flowchart_mermaid.present? %>" data-tab="flowchart">
+          <% if @topic.flowchart_mermaid.present? %>
+            <%# Mermaid.js 기반 다이어그램 (신규 방식) %>
+            <div class="card p-6" data-controller="mermaid">
+              <pre data-mermaid-target="source" class="text-sm text-slate-700 leading-relaxed"><%= @topic.flowchart_mermaid %></pre>
+            </div>
+          <% elsif @has_flowchart %>
+            <%# 기존 수작업 HTML 흐름도 파티셜 (레거시 유지) %>
+            <%= render "topics/flowcharts/#{@topic.slug.gsub('-', '_')}", topic: @topic %>
           <% else %>
             <div class="card p-16 text-center">
               <span class="material-symbols-outlined text-6xl text-slate-200 mb-4">account_tree</span>
