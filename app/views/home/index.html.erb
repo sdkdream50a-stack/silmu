@@ -247,16 +247,46 @@
 <% end %><%# cache home/core_tools %>
 
 <!-- Topic Guides & Templates -->
+<% if @sector != "common"
+     banner_bg    = @sector == "local_gov" ? "bg-blue-50 border-blue-200"   : "bg-orange-50 border-orange-200"
+     banner_text  = @sector == "local_gov" ? "text-blue-800"                : "text-orange-800"
+     banner_icon  = @sector == "local_gov" ? "account_balance"              : "school"
+     banner_icon_color = @sector == "local_gov" ? "text-blue-600"           : "text-orange-500"
+     banner_name  = @sector == "local_gov" ? "지방자치단체"                 : "교육행정기관"
+   end %>
+<% if @sector != "common" %>
+<div class="border-b <%= banner_bg %> border-t">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-3 flex items-center gap-3">
+    <span class="material-symbols-outlined <%= banner_icon_color %> text-xl"><%= banner_icon %></span>
+    <p class="text-sm font-semibold <%= banner_text %>">
+      <strong><%= banner_name %> 맞춤</strong> 콘텐츠를 표시하고 있습니다 — 법령 가이드·감사사례가 소속 기관에 맞게 조정되었습니다.
+    </p>
+    <%= link_to "전체 보기", root_path(sector: "common", anchor: "sector-tabs"),
+          class: "ml-auto shrink-0 text-xs font-semibold #{@sector == "local_gov" ? "text-blue-600 hover:text-blue-800" : "text-orange-600 hover:text-orange-800"} underline underline-offset-2 transition-colors" %>
+  </div>
+</div>
+<% end %>
 <section class="py-24 bg-background-light">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
       <!-- Topic Guides (sector × month 큐레이션) -->
       <div class="lg:col-span-7">
+        <% sector_label = { "common" => "공통", "local_gov" => "지자체", "edu" => "교육행정" }[@sector]
+           sector_icon  = { "common" => "library_books", "local_gov" => "account_balance", "edu" => "school" }[@sector]
+           sector_color = { "common" => "text-indigo-600", "local_gov" => "text-blue-600", "edu" => "text-orange-500" }[@sector]
+           sector_badge_bg = { "common" => "bg-slate-100 text-slate-500", "local_gov" => "bg-blue-50 text-blue-700 ring-1 ring-blue-200", "edu" => "bg-orange-50 text-orange-700 ring-1 ring-orange-200" }[@sector] %>
         <div class="mb-8 flex items-center justify-between">
           <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
-            <span class="material-symbols-outlined text-indigo-600">library_books</span> 주요 법령 가이드
+            <span class="material-symbols-outlined <%= sector_color %>"><%= sector_icon %></span>
+            <% if @sector == "common" %>
+              주요 법령 가이드
+            <% else %>
+              <span class="<%= sector_color %>"><%= sector_label %></span> 맞춤 가이드
+            <% end %>
           </h2>
-          <span class="text-xs font-semibold text-slate-400 bg-slate-100 px-2.5 py-1 rounded-full"><%= Time.zone.now.month %>월 추천</span>
+          <span class="text-xs font-semibold px-2.5 py-1 rounded-full <%= sector_badge_bg %>">
+            <%= @sector == "common" ? "#{Time.zone.now.month}월 추천" : "#{Time.zone.now.month}월 #{sector_label} 특화" %>
+          </span>
         </div>
 
         <% topic_visual = {
@@ -286,8 +316,10 @@
                 <%# Featured: 첫 번째 토픽 (가로 전폭, 강조 스타일) %>
                 <%= link_to topic_path(topic.slug), class: "group relative sm:col-span-2 flex items-start gap-5 rounded-2xl bg-gradient-to-br from-indigo-50 via-white to-violet-50 p-6 shadow-sm border-2 border-indigo-200 transition-all hover:shadow-lg hover:-translate-y-1 hover:border-indigo-400 cursor-pointer overflow-hidden" do %>
                   <div class="absolute top-3 right-3">
-                    <span class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold bg-indigo-600 text-white rounded-full">
-                      <span class="material-symbols-outlined text-sm">star</span> 이달의 필수
+                    <% badge_bg = { "common" => "bg-indigo-600", "local_gov" => "bg-blue-600", "edu" => "bg-orange-500" }[@sector]
+                       badge_label = { "common" => "이달의 필수", "local_gov" => "🏢 지자체 필수", "edu" => "🏫 교육행정 필수" }[@sector] %>
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold <%= badge_bg %> text-white rounded-full">
+                      <span class="material-symbols-outlined text-sm">star</span> <%= badge_label %>
                     </span>
                   </div>
                   <div class="shrink-0 flex h-14 w-14 items-center justify-center rounded-xl <%= tc(color, :icon_lg) %> transition-colors">
@@ -368,7 +400,10 @@
         <span class="material-symbols-outlined text-red-500">policy</span>
         주요 감사 지적 사례
         <% if @sector != "common" %>
-          <span class="text-sm font-normal text-slate-500">(<%= @sector == "local_gov" ? "지자체" : "교육행정" %> 중심)</span>
+          <% ac_badge_bg = @sector == "local_gov" ? "bg-blue-100 text-blue-700 ring-1 ring-blue-300" : "bg-orange-100 text-orange-700 ring-1 ring-orange-300"
+             ac_badge_icon = @sector == "local_gov" ? "🏢" : "🏫"
+             ac_badge_label = @sector == "local_gov" ? "지자체 맞춤" : "교육행정 맞춤" %>
+          <span class="text-sm font-bold px-2.5 py-1 rounded-full <%= ac_badge_bg %>"><%= ac_badge_icon %> <%= ac_badge_label %></span>
         <% end %>
       </h2>
       <%= link_to audit_cases_path, class: "text-sm font-semibold text-slate-500 hover:text-red-600 transition-colors flex items-center gap-1" do %>
