@@ -170,7 +170,7 @@ Topic.find_or_create_by!(slug: "split-contract") do |t|
 **A:** 단가가 다른 경우에도 **같은 목적의 동일·유사 규격 물품**이라면 합산 대상이 될 수 있습니다. 단가 차이는 분할계약을 정당화하는 사유가 되지 않습니다. 오히려 충분한 경쟁입찰을 통해 최저가를 확보하는 것이 바람직합니다.
   CONTENT
 
-  t.audit_cases = <<~CONTENT
+  t.write_attribute(:audit_cases, <<~CONTENT)
 ## 분할계약 관련 감사사례
 
 ### 사례 1: 사무용품 반복 수의계약

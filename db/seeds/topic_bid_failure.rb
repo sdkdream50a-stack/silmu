@@ -185,7 +185,7 @@ Topic.find_or_create_by!(slug: "bid-failure-negotiation") do |t|
 **A:** 재공고 기간이 아직 진행 중이라면 수의계약으로 전환할 수 없습니다. 재공고 입찰이 마감되고 2차 유찰이 확정된 후에야 수의계약으로 전환할 수 있습니다. 긴급한 경우라도 이 절차를 생략할 수 없으며, 긴급의 경우 별도 요건(시행령 제25조 제1항 제3호)을 검토해야 합니다.
   CONTENT
 
-  t.audit_cases = <<~CONTENT
+  t.write_attribute(:audit_cases, <<~CONTENT)
 ## 유찰 후 수의계약 관련 감사사례
 
 ### 사례 1: 1회 유찰만으로 수의계약 전환
