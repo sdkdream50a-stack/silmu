@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_06_225343) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_07_062750) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -62,6 +62,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_06_225343) do
     t.jsonb "categories", default: {}, null: false
     t.datetime "created_at", null: false
     t.jsonb "custom_tasks", default: [], null: false
+    t.json "deleted_default_tasks"
     t.jsonb "standing_checklist", default: [], null: false
     t.jsonb "task_states", default: {}, null: false
     t.datetime "updated_at", null: false
