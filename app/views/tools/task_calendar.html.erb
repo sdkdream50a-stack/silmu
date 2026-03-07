@@ -282,25 +282,25 @@
 
     <!-- 네비게이션 -->
     <nav class="flex-1 px-2 py-3 space-y-0.5 overflow-y-auto">
-      <button class="nav-item relative w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors" data-view="inbox">
+      <button class="nav-item relative w-full flex items-center gap-2 px-3 py-4 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors" data-view="inbox">
         <div class="nav-indicator hidden absolute left-0 top-1/2 -translate-y-1/2 h-8 w-[3px] bg-indigo-600 rounded-r-full"></div>
         <span class="material-symbols-outlined" style="font-size:20px">inventory_2</span>
         <span class="flex-1 text-left">관리함</span>
         <span class="nav-count text-[10px] font-semibold text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded-full" data-count="inbox"></span>
       </button>
-      <button class="nav-item relative w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors" data-view="today">
+      <button class="nav-item relative w-full flex items-center gap-2 px-3 py-4 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors" data-view="today">
         <div class="nav-indicator hidden absolute left-0 top-1/2 -translate-y-1/2 h-8 w-[3px] bg-indigo-600 rounded-r-full"></div>
         <span class="material-symbols-outlined" style="font-size:20px">calendar_today</span>
         <span class="flex-1 text-left">오늘</span>
         <span class="nav-count text-[10px] font-semibold text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded-full" data-count="today" id="today-count"></span>
       </button>
-      <button class="nav-item relative w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors" data-view="upcoming">
+      <button class="nav-item relative w-full flex items-center gap-2 px-3 py-4 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors" data-view="upcoming">
         <div class="nav-indicator hidden absolute left-0 top-1/2 -translate-y-1/2 h-8 w-[3px] bg-indigo-600 rounded-r-full"></div>
         <span class="material-symbols-outlined" style="font-size:20px">date_range</span>
         <span class="flex-1 text-left">주간</span>
         <span class="nav-count text-[10px] font-semibold text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded-full" id="week-count"></span>
       </button>
-      <button class="nav-item relative w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors" data-view="monthly">
+      <button class="nav-item relative w-full flex items-center gap-2 px-3 py-4 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors" data-view="monthly">
         <div class="nav-indicator hidden absolute left-0 top-1/2 -translate-y-1/2 h-8 w-[3px] bg-indigo-600 rounded-r-full"></div>
         <span class="material-symbols-outlined" style="font-size:20px">calendar_month</span>
         <span class="flex-1 text-left">월간</span>
@@ -377,7 +377,7 @@
   </aside>
 
   <!-- 메인 콘텐츠 -->
-  <main class="flex-1 overflow-y-auto pb-16 lg:pb-0" id="main-content">
+  <main class="flex-1 overflow-y-auto pb-32 lg:pb-0" id="main-content">
 
     <!-- 모바일 헤더 -->
     <div class="lg:hidden flex items-center gap-3 px-4 py-3 bg-white border-b border-slate-200 sticky top-0 z-20">
@@ -708,34 +708,34 @@
 </div>
 
 <!-- 모바일 하단 탭 바 -->
-<nav class="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-slate-200 px-6 pt-2" style="padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 1.5rem))">
-  <ul class="flex justify-between items-center">
+<nav class="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-slate-200 px-2 pt-1" style="padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 1.5rem))">
+  <ul class="flex justify-between items-stretch">
     <li class="flex-1">
-      <button class="mobile-tab-item w-full flex flex-col items-center justify-center gap-1 py-2 text-slate-400 hover:text-slate-600 transition-colors group" data-view="inbox">
-        <span class="material-symbols-outlined group-hover:scale-110 transition-transform text-[26px]">inbox</span>
-        <span class="tab-label text-[10px] font-medium tracking-tight">관리함</span>
-        <span class="tab-dot hidden w-1 h-1 rounded-full bg-indigo-600"></span>
+      <button class="mobile-tab-item w-full flex flex-col items-center justify-center gap-1.5 py-3 text-slate-400 hover:text-slate-600 transition-colors group" data-view="inbox">
+        <span class="material-symbols-outlined group-hover:scale-110 transition-transform" style="font-size:28px">inbox</span>
+        <span class="tab-label text-xs font-semibold tracking-tight">관리함</span>
+        <span class="tab-dot hidden w-1.5 h-1.5 rounded-full bg-indigo-600"></span>
       </button>
     </li>
     <li class="flex-1">
-      <button class="mobile-tab-item w-full flex flex-col items-center justify-center gap-1 py-2 text-slate-400 hover:text-slate-600 transition-colors group" data-view="today">
-        <span class="material-symbols-outlined group-hover:scale-110 transition-transform text-[26px]">today</span>
-        <span class="tab-label text-[10px] font-medium tracking-tight">오늘</span>
-        <span class="tab-dot hidden w-1 h-1 rounded-full bg-indigo-600"></span>
+      <button class="mobile-tab-item w-full flex flex-col items-center justify-center gap-1.5 py-3 text-slate-400 hover:text-slate-600 transition-colors group" data-view="today">
+        <span class="material-symbols-outlined group-hover:scale-110 transition-transform" style="font-size:28px">today</span>
+        <span class="tab-label text-xs font-semibold tracking-tight">오늘</span>
+        <span class="tab-dot hidden w-1.5 h-1.5 rounded-full bg-indigo-600"></span>
       </button>
     </li>
     <li class="flex-1">
-      <button class="mobile-tab-item w-full flex flex-col items-center justify-center gap-1 py-2 text-slate-400 hover:text-slate-600 transition-colors group" data-view="upcoming">
-        <span class="material-symbols-outlined group-hover:scale-110 transition-transform text-[26px]">date_range</span>
-        <span class="tab-label text-[10px] font-medium tracking-tight">주간</span>
-        <span class="tab-dot hidden w-1 h-1 rounded-full bg-indigo-600"></span>
+      <button class="mobile-tab-item w-full flex flex-col items-center justify-center gap-1.5 py-3 text-slate-400 hover:text-slate-600 transition-colors group" data-view="upcoming">
+        <span class="material-symbols-outlined group-hover:scale-110 transition-transform" style="font-size:28px">date_range</span>
+        <span class="tab-label text-xs font-semibold tracking-tight">주간</span>
+        <span class="tab-dot hidden w-1.5 h-1.5 rounded-full bg-indigo-600"></span>
       </button>
     </li>
     <li class="flex-1">
-      <button class="mobile-tab-item w-full flex flex-col items-center justify-center gap-1 py-2 text-slate-400 hover:text-slate-600 transition-colors group" data-view="monthly">
-        <span class="material-symbols-outlined group-hover:scale-110 transition-transform text-[26px]">calendar_month</span>
-        <span class="tab-label text-[10px] font-medium tracking-tight">월간</span>
-        <span class="tab-dot hidden w-1 h-1 rounded-full bg-indigo-600"></span>
+      <button class="mobile-tab-item w-full flex flex-col items-center justify-center gap-1.5 py-3 text-slate-400 hover:text-slate-600 transition-colors group" data-view="monthly">
+        <span class="material-symbols-outlined group-hover:scale-110 transition-transform" style="font-size:28px">calendar_month</span>
+        <span class="tab-label text-xs font-semibold tracking-tight">월간</span>
+        <span class="tab-dot hidden w-1.5 h-1.5 rounded-full bg-indigo-600"></span>
       </button>
     </li>
   </ul>
