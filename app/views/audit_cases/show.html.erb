@@ -73,37 +73,6 @@
           </div>
         </div>
 
-        <!-- 3줄 핵심 요약 카드 -->
-        <div class="guide-meta-box mb-6">
-          <div class="bg-red-500 px-5 py-3 flex items-center gap-2">
-            <span class="material-symbols-outlined text-white text-base">summarize</span>
-            <span class="text-white text-sm font-semibold">3줄 핵심 요약</span>
-          </div>
-          <div class="bg-white divide-y divide-gray-100">
-            <div class="flex gap-3 px-5 py-3">
-              <span class="shrink-0 w-5 h-5 flex items-center justify-center bg-red-500 text-white rounded-full text-xs font-bold mt-0.5">1</span>
-              <div class="text-sm">
-                <span class="font-semibold text-red-700 mr-1">지적사항</span>
-                <span class="text-slate-600"><%= @audit_case.issue.to_s.truncate(100) %></span>
-              </div>
-            </div>
-            <div class="flex gap-3 px-5 py-3">
-              <span class="shrink-0 w-5 h-5 flex items-center justify-center bg-blue-500 text-white rounded-full text-xs font-bold mt-0.5">2</span>
-              <div class="text-sm">
-                <span class="font-semibold text-blue-700 mr-1">관련근거</span>
-                <span class="text-slate-600"><%= @audit_case.legal_basis %></span>
-              </div>
-            </div>
-            <div class="flex gap-3 px-5 py-3">
-              <span class="shrink-0 w-5 h-5 flex items-center justify-center bg-green-500 text-white rounded-full text-xs font-bold mt-0.5">3</span>
-              <div class="text-sm">
-                <span class="font-semibold text-green-700 mr-1">교훈</span>
-                <span class="text-slate-600"><%= @audit_case.lesson.to_s.truncate(100) %></span>
-              </div>
-            </div>
-          </div>
-        </div>
-
         <!-- 핵심 요약 인포그래픽 (헤더 바로 아래) -->
         <% if @audit_case.infographic_url.present? %>
           <div class="mb-6">

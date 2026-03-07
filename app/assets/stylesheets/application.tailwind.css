@@ -567,10 +567,22 @@
   }
 
   /* audit-content 내 마크다운 렌더링 */
-  .audit-content p { @apply mb-3 text-sm leading-relaxed; }
-  .audit-content ul { @apply pl-5 mb-3 space-y-1.5 list-disc; }
-  .audit-content ol { @apply pl-5 mb-3 space-y-1.5 list-decimal; }
-  .audit-content strong { @apply font-semibold text-slate-800; }
+  .audit-content { @apply text-slate-700 leading-relaxed; }
+  .audit-content h1 { @apply text-2xl font-bold text-slate-900 mt-8 mb-3 pb-2 border-b border-gray-200; }
+  .audit-content h2 { @apply text-2xl font-bold text-slate-900 mt-8 mb-3 pb-2 border-b border-gray-200; }
+  .audit-content h3 { @apply text-lg font-bold text-slate-800 mt-6 mb-2; }
+  .audit-content h4 { @apply text-base font-semibold text-slate-800 mt-4 mb-2; }
+  .audit-content p { @apply mb-4 text-base leading-relaxed; }
+  .audit-content ul { @apply pl-6 mb-4 space-y-2 list-disc; }
+  .audit-content ol { @apply pl-6 mb-4 space-y-2 list-decimal; }
+  .audit-content li { @apply text-slate-700 leading-relaxed; }
+  .audit-content strong { @apply font-semibold text-slate-900; }
+  .audit-content table { @apply w-full text-sm mb-6; border-collapse: collapse; }
+  .audit-content table th { @apply px-4 py-3 bg-slate-100 text-slate-800 font-semibold text-left border-b-2 border-slate-200; }
+  .audit-content table td { @apply px-4 py-3 border-b border-gray-100 text-slate-700; }
+  .audit-content table tr:last-child td { @apply border-b-0; }
+  .audit-content table tr:nth-child(even) td { @apply bg-slate-50/60; }
+  .audit-content blockquote { @apply border-l-4 border-red-300 pl-4 py-2 my-4 bg-red-50 rounded-r-xl text-slate-700; }
 
   /* Icon Containers */
   .icon-container {
