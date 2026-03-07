@@ -142,6 +142,7 @@ Rails.application.routes.draw do
   # 공문서 AI 작성 도우미
   get "tools/official-document", to: "official_documents#index", as: :official_document
   post "official-documents/generate", to: "official_documents#generate"
+  post "official-documents/download-hwp", to: "official_documents#download_hwp", as: :official_document_download_hwp
 
   # 수의계약 사유서 생성기
   get "tools/contract-reason", to: "contract_reasons#index", as: :contract_reason
@@ -189,6 +190,7 @@ Rails.application.routes.draw do
   # 감사사례
   get "audit-cases", to: "audit_cases#index", as: :audit_cases
   get "audit-cases/:slug", to: "audit_cases#show", as: :audit_case
+  get "audit-cases/:slug/hwp", to: "audit_cases#download_hwp", as: :audit_case_hwp
 
   # FAQ
   get "faq", to: "faq#index", as: :faq

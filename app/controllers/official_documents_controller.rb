@@ -1,5 +1,5 @@
 class OfficialDocumentsController < ApplicationController
-  before_action :require_login_for_ai, only: [:generate]
+  before_action :require_login_for_ai, only: [:generate, :download_hwp]
 
   # IP당 분당 3회, 일일 30회 제한
   RATE_LIMIT = 3
@@ -33,6 +33,34 @@ class OfficialDocumentsController < ApplicationController
   rescue => e
     Rails.logger.error "OfficialDocumentsController error: #{e.message}"
     render json: { success: false, error: "오류가 발생했습니다. 잠시 후 다시 시도해주세요." }, status: :internal_server_error
+  end
+
+  def download_hwp
+    title = params[:title].to_s.truncate(50, omission: "")
+    doc_type_label = params[:doc_type_label].to_s.truncate(20, omission: "")
+    content = params[:content].to_s
+
+    if content.blank?
+      redirect_to official_document_path, alert: "문서 내용이 없습니다."
+      return
+    end
+
+    binary = HwpxExportService.generate_official_document(
+      title: title,
+      doc_type_label: doc_type_label,
+      content: content
+    )
+
+    if binary
+      safe_title = title.gsub(/[^\w가-힣\s\-]/, "").strip.presence || "공문서"
+      filename = "#{doc_type_label}_#{safe_title}.hwpx"
+      send_data binary,
+                filename: filename,
+                type: "application/octet-stream",
+                disposition: "attachment"
+    else
+      redirect_to official_document_path, alert: "HWP 파일 생성에 실패했습니다. 잠시 후 다시 시도해 주세요."
+    end
   end
 
   private

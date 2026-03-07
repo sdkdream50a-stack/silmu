@@ -59,10 +59,18 @@
             </span>
           </div>
           <h1 class="text-xl lg:text-2xl font-bold text-slate-900 mb-2"><%= @audit_case.title %></h1>
-          <%= render 'shared/social_share',
-                title: @audit_case.title,
-                url: audit_case_url(@audit_case.slug),
-                description: @audit_case.issue.truncate(100) %>
+          <div class="flex items-center gap-3 flex-wrap">
+            <%= render 'shared/social_share',
+                  title: @audit_case.title,
+                  url: audit_case_url(@audit_case.slug),
+                  description: @audit_case.issue.truncate(100) %>
+            <%= link_to audit_case_hwp_path(slug: @audit_case.slug),
+                  class: "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-teal-50 text-teal-700 hover:bg-teal-100 border border-teal-200 transition-colors",
+                  title: "한글(HWP) 파일로 다운로드" do %>
+              <span class="material-symbols-outlined text-sm">download</span>
+              HWP 다운로드
+            <% end %>
+          </div>
         </div>
 
         <!-- 핵심 요약 인포그래픽 (헤더 바로 아래) -->

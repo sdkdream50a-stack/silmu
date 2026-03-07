@@ -35,6 +35,20 @@ class AuditCasesController < ApplicationController
     set_meta_tags(meta)
   end
 
+  def download_hwp
+    @audit_case = AuditCase.published.find_by!(slug: params[:slug])
+    binary = HwpxExportService.generate_audit_case(@audit_case)
+
+    if binary
+      send_data binary,
+                filename: "#{@audit_case.slug}.hwpx",
+                type: "application/octet-stream",
+                disposition: "attachment"
+    else
+      redirect_to audit_case_path(slug: params[:slug]), alert: "HWP 파일 생성에 실패했습니다. 잠시 후 다시 시도해 주세요."
+    end
+  end
+
   def show
     @audit_case = AuditCase.published.find_by!(slug: params[:slug])
     @audit_case.increment_view!

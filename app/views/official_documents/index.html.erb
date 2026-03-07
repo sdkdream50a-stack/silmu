@@ -127,7 +127,7 @@
         </li>
         <li class="flex items-start gap-2">
           <span class="material-symbols-outlined text-indigo-500 text-xl mt-0.5">arrow_right</span>
-          <span>워드 파일(DOCX) 다운로드 → 전자결재 시스템에 바로 첨부 가능</span>
+          <span>한글(HWP) 파일 다운로드 → 전자결재 시스템에 바로 첨부 가능</span>
         </li>
       </ul>
 
@@ -301,8 +301,11 @@
         <button class="od-btn od-btn-secondary" onclick="odCopy()">
           <span class="material-symbols-outlined" style="font-size:18px;">content_copy</span> 복사
         </button>
-        <button class="od-btn od-btn-secondary" onclick="odDownload()">
-          <span class="material-symbols-outlined" style="font-size:18px;">download</span> 다운로드
+        <button class="od-btn od-btn-secondary" onclick="odDownloadHwp()" style="background:#f0fdfa; color:#0f766e; border-color:#99f6e4;">
+          <span class="material-symbols-outlined" style="font-size:18px;">download</span> HWP 다운로드
+        </button>
+        <button class="od-btn od-btn-secondary" onclick="odDownloadTxt()">
+          <span class="material-symbols-outlined" style="font-size:18px;">description</span> TXT 저장
         </button>
         <button class="od-btn od-btn-secondary" onclick="window.print()">
           <span class="material-symbols-outlined" style="font-size:18px;">print</span> 인쇄
@@ -440,7 +443,7 @@ function odCopy() {
   });
 }
 
-function odDownload() {
+function odDownloadTxt() {
   var el = document.getElementById('od-doc-content');
   var text = el.innerText || el.textContent;
   var title = document.getElementById('od-title').value.trim() || '공문서';
@@ -454,7 +457,40 @@ function odDownload() {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
-  odShowToast('파일이 다운로드되었습니다');
+  odShowToast('TXT 파일이 다운로드되었습니다');
+}
+
+function odDownloadHwp() {
+  var el = document.getElementById('od-doc-content');
+  var text = el.innerText || el.textContent;
+  if (!text || !text.trim()) { odShowToast('다운로드할 문서가 없습니다'); return; }
+
+  var title = document.getElementById('od-title').value.trim() || '공문서';
+  var typeLabel = odTypeLabels[odState.type] || '공문서';
+  var csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
+  // 폼 POST로 서버에 전송 → HWPX 파일 다운로드
+  var form = document.createElement('form');
+  form.method = 'POST';
+  form.action = '<%= official_document_download_hwp_path %>';
+
+  var addField = function(name, value) {
+    var input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = name;
+    input.value = value;
+    form.appendChild(input);
+  };
+
+  addField('authenticity_token', csrfToken);
+  addField('title', title);
+  addField('doc_type_label', typeLabel);
+  addField('content', text);
+
+  document.body.appendChild(form);
+  form.submit();
+  document.body.removeChild(form);
+  odShowToast('HWP 파일을 생성하고 있습니다...');
 }
 
 function odReset() {
