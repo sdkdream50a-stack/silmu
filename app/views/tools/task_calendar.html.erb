@@ -261,6 +261,8 @@
 <div class="flex overflow-hidden bg-slate-50"
      data-user-signed-in="<%= user_signed_in? %>"
      id="calendar-root">
+  <!-- 사이드바 딤 오버레이 (모바일) -->
+  <div id="sidebar-backdrop" class="hidden fixed inset-0 z-30 bg-black/40 lg:hidden"></div>
   <!-- 사이드바 -->
   <aside id="sidebar" class="bg-white border-r border-gray-200 flex-shrink-0 flex-col overflow-y-auto hidden lg:flex" style="width:19rem">
     <!-- 작업 추가 버튼 + 검색 -->
@@ -1187,14 +1189,38 @@
   switchView("today");
 
   // --- 사이드바 토글 (모바일) ---
+  const sidebarBackdrop = document.getElementById("sidebar-backdrop");
+
+  function openSidebar() {
+    sidebar.classList.remove("hidden");
+    sidebar.classList.add("flex", "fixed", "inset-y-0", "left-0", "z-40", "shadow-2xl");
+    sidebarBackdrop.classList.remove("hidden");
+    document.body.style.overflow = "hidden"; // 배경 스크롤 방지
+  }
+
+  function closeSidebar() {
+    sidebar.classList.add("hidden");
+    sidebar.classList.remove("flex", "fixed", "inset-y-0", "left-0", "z-40", "shadow-2xl");
+    sidebarBackdrop.classList.add("hidden");
+    document.body.style.overflow = "";
+  }
+
+  function isSidebarOpen() {
+    return sidebar.classList.contains("fixed");
+  }
+
   toggleBtn.addEventListener("click", () => {
-    sidebar.classList.toggle("hidden");
-    sidebar.classList.toggle("flex");
-    sidebar.classList.toggle("fixed");
-    sidebar.classList.toggle("inset-y-0");
-    sidebar.classList.toggle("left-0");
-    sidebar.classList.toggle("z-40");
-    sidebar.classList.toggle("shadow-2xl");
+    isSidebarOpen() ? closeSidebar() : openSidebar();
+  });
+
+  // 딤 영역 터치/클릭으로 닫기
+  sidebarBackdrop.addEventListener("click", closeSidebar);
+
+  // 사이드바 내 nav-item 클릭 시 자동 닫기 (모바일)
+  sidebar.querySelectorAll(".nav-item").forEach(n => {
+    n.addEventListener("click", () => {
+      if (window.innerWidth < 1024) closeSidebar();
+    });
   });
 
   // --- 체크박스 ---
