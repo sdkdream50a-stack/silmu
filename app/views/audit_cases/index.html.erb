@@ -12,7 +12,7 @@
 <% end %>
 
 <!-- 페이지 헤더 -->
-<section class="bg-gradient-to-br from-red-700 via-red-800 to-red-900 text-white py-12 lg:py-16 relative overflow-hidden">
+<section class="bg-gradient-to-br from-red-500 via-red-600 to-red-700 text-white py-12 lg:py-16 relative overflow-hidden">
   <div class="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/3"></div>
   <div class="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/4"></div>
   <div class="container-wide relative z-10">
@@ -22,7 +22,7 @@
           <span class="material-symbols-outlined text-4xl text-white">gavel</span>
         </div>
         <div>
-          <h1 class="text-3xl lg:text-4xl font-bold tracking-tight mb-2">감사사례</h1>
+          <h1 class="text-2xl font-bold tracking-tight mb-2">감사사례</h1>
           <p class="text-red-100 text-lg">계약 실무에서 자주 지적되는 감사 사례와 대응 방법</p>
         </div>
       </div>
@@ -60,9 +60,9 @@
     <!-- 카테고리 탭 & 심각도 필터 -->
     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
       <div class="flex flex-wrap gap-2" id="category-tabs">
-        <%= link_to "전체", audit_cases_path, class: "tab-btn px-5 py-2.5 rounded-xl text-sm font-semibold transition-all #{@category.blank? ? 'bg-red-600 text-white shadow-md' : 'bg-surface-100 text-slate-600 hover:bg-surface-200'}" %>
+        <%= link_to "전체", audit_cases_path, class: "tab-btn px-5 py-2.5 rounded-xl text-sm font-semibold transition-all #{@category.blank? ? 'bg-red-500 text-white shadow-md' : 'bg-surface-100 text-slate-600 hover:bg-surface-200'}" %>
         <% @categories.each do |cat| %>
-          <%= link_to cat, audit_cases_path(category: cat), class: "tab-btn px-5 py-2.5 rounded-xl text-sm font-medium transition-all #{@category == cat ? 'bg-red-600 text-white shadow-md' : 'bg-surface-100 text-slate-600 hover:bg-surface-200'}" %>
+          <%= link_to cat, audit_cases_path(category: cat), class: "tab-btn px-5 py-2.5 rounded-xl text-sm font-medium transition-all #{@category == cat ? 'bg-red-500 text-white shadow-md' : 'bg-surface-100 text-slate-600 hover:bg-surface-200'}" %>
         <% end %>
       </div>
 
@@ -118,7 +118,7 @@
                   </span>
                 </div>
 
-                <h3 class="text-lg font-bold text-slate-900 mb-2 group-hover:text-red-600 transition-colors"><%= audit_case.title %></h3>
+                <h3 class="text-base font-semibold text-slate-900 mb-2 group-hover:text-red-600 transition-colors"><%= audit_case.title %></h3>
 
                 <p class="text-slate-600 text-sm mb-3 leading-relaxed line-clamp-2"><%= audit_case.issue.truncate(120) %></p>
 
@@ -154,7 +154,7 @@
                     <%= audit_case.severity %>
                   </span>
                 </div>
-                <h3 class="text-lg font-bold text-slate-900 mb-2 group-hover:text-red-600 transition-colors"><%= audit_case.title %></h3>
+                <h3 class="text-base font-semibold text-slate-900 mb-2 group-hover:text-red-600 transition-colors"><%= audit_case.title %></h3>
                 <p class="text-slate-600 text-sm mb-3 leading-relaxed line-clamp-2"><%= audit_case.issue.truncate(120) %></p>
                 <div class="flex items-center gap-4 text-xs text-slate-400">
                   <span class="flex items-center gap-1">

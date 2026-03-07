@@ -58,7 +58,7 @@
               <%= @audit_case.severity %>
             </span>
           </div>
-          <h1 class="text-2xl lg:text-3xl font-bold text-slate-900 mb-2"><%= @audit_case.title %></h1>
+          <h1 class="text-xl lg:text-2xl font-bold text-slate-900 mb-2"><%= @audit_case.title %></h1>
           <%= render 'shared/social_share',
                 title: @audit_case.title,
                 url: audit_case_url(@audit_case.slug),
@@ -202,7 +202,7 @@
         <!-- 같은 카테고리 사례 -->
         <% if @related_cases.any? %>
           <div>
-            <h3 class="font-bold text-slate-900 text-lg mb-4 flex items-center gap-2">
+            <h3 class="font-semibold text-slate-900 text-base mb-4 flex items-center gap-2">
               <span class="material-symbols-outlined text-red-500">folder_open</span>
               같은 분야 감사사례
             </h3>
@@ -258,7 +258,7 @@
           </div>
 
           <!-- AI 상담 -->
-          <div class="bg-gradient-to-br from-red-700 to-red-900 rounded-2xl p-6 text-white shadow-strong">
+          <div class="bg-gradient-to-br from-red-600 to-red-800 rounded-2xl p-6 text-white shadow-strong">
             <div class="flex items-center gap-4 mb-4">
               <div class="w-12 h-12 bg-white/10 backdrop-blur rounded-xl flex items-center justify-center">
                 <span class="material-symbols-outlined text-2xl">support_agent</span>

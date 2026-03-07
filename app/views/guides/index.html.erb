@@ -11,8 +11,8 @@
           <span class="material-symbols-outlined text-4xl text-white">menu_book</span>
         </div>
         <div>
-          <h1 class="text-3xl lg:text-4xl font-bold tracking-tight mb-2">실무 가이드</h1>
-          <p class="text-emerald-100 text-lg">공무원 업무 처리에 필요한 단계별 가이드</p>
+          <h1 class="text-2xl font-bold tracking-tight mb-2">실무 가이드</h1>
+          <p class="text-sm text-white/80">공무원 업무 처리에 필요한 단계별 가이드</p>
         </div>
       </div>
       <div class="flex gap-4 lg:gap-6">
@@ -74,11 +74,11 @@
                   <div class="flex items-center gap-2 mb-1.5">
                     <span class="badge badge-emerald text-xs"><%= guide.category %></span>
                     <% if guide.tag.present? %>
-                      <span class="badge <%= guide.tag == '인기' ? 'badge-amber' : 'badge-indigo' %> text-xs"><%= guide.tag %></span>
+                      <span class="badge badge-emerald text-xs"><%= guide.tag %></span>
                     <% end %>
                   </div>
-                  <h3 class="font-bold text-slate-900 group-hover:text-emerald-600 transition-colors"><%= guide.title %></h3>
-                  <p class="text-slate-500 text-sm mt-1 leading-relaxed"><%= guide.summary %></p>
+                  <h3 class="text-base font-semibold text-slate-900 group-hover:text-emerald-600 transition-colors"><%= guide.title %></h3>
+                  <p class="text-sm text-gray-600 mt-1 leading-relaxed"><%= guide.summary %></p>
                 </div>
                 <span class="material-symbols-outlined text-slate-300 group-hover:text-emerald-500 shrink-0 transition-colors">arrow_forward</span>
               </div>
@@ -109,7 +109,7 @@
                     <span class="material-symbols-outlined text-<%= cfg[:color] %>-600" style="font-size:20px"><%= cfg[:icon] %></span>
                   </div>
                   <div>
-                    <h2 class="font-bold text-slate-900"><%= cat %> 가이드</h2>
+                    <h2 class="text-lg font-bold text-gray-800"><%= cat %> 가이드</h2>
                     <p class="text-xs text-slate-500"><%= cfg[:desc] %></p>
                   </div>
                 </div>
@@ -124,7 +124,7 @@
                       <span class="material-symbols-outlined text-<%= cfg[:color] %>-500" style="font-size:18px">menu_book</span>
                     </div>
                     <div class="flex-1 min-w-0">
-                      <h3 class="font-semibold text-slate-900 text-sm group-hover:text-emerald-600 transition-colors leading-snug mb-1"><%= guide.title %></h3>
+                      <h3 class="text-base font-semibold text-slate-900 group-hover:text-emerald-600 transition-colors leading-snug mb-1"><%= guide.title %></h3>
                       <p class="text-xs text-slate-500 leading-relaxed line-clamp-2"><%= guide.summary %></p>
                     </div>
                   <% end %>
@@ -246,7 +246,7 @@
                 <span class="material-symbols-outlined text-2xl">support_agent</span>
               </div>
               <div>
-                <h3 class="font-bold text-lg">가이드가 어려우신가요?</h3>
+                <h3 class="font-bold text-base">가이드가 어려우신가요?</h3>
                 <p class="text-emerald-100 text-sm">AI에게 물어보세요</p>
               </div>
             </div>

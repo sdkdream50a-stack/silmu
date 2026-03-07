@@ -273,7 +273,7 @@
 
   /* === Section === */
   .section {
-    @apply py-20 md:py-28;
+    @apply py-10 md:py-14;
   }
 
   .section-lg {
