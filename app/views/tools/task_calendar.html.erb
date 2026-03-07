@@ -1750,8 +1750,6 @@
     editingIdx = idx;
     renderCategoryButtons();
     modalAdd.classList.remove("hidden");
-    document.querySelector("#modal-add h2").textContent = "업무 수정";
-    document.getElementById("modal-submit").innerHTML = '<span class="material-symbols-outlined" style="font-size:18px">save</span> 저장';
 
     if (task.repeat === "once") {
       document.querySelector('.modal-tab[data-modal-tab="onetime"]').click();
@@ -1794,6 +1792,9 @@
         });
       }, 60);
     }
+    // 탭 클릭이 버튼을 "업무 추가"로 리셋하므로 탭 전환 후 덮어쓰기
+    document.querySelector("#modal-add h2").textContent = "업무 수정";
+    document.getElementById("modal-submit").innerHTML = '<span class="material-symbols-outlined" style="font-size:18px">save</span> 저장';
   }
 
   // 제출 (3탭 분기)
@@ -3342,8 +3343,8 @@
       // 비정기업무 탭으로 전환
       document.querySelector('.modal-tab[data-modal-tab="onetime"]').click();
 
-      // 기존 값으로 채우기
-      taskInput.value = taskTitle;
+      // 기존 값으로 채우기 (onetime-task-input이 올바른 요소)
+      document.getElementById("onetime-task-input").value = taskTitle;
       document.getElementById("onetime-date").value = `<%= year %>-${String(taskMonth).padStart(2, '0')}-${String(taskDay).padStart(2, '0')}`;
       document.getElementById("onetime-time").value = "";
 
@@ -3358,6 +3359,10 @@
       // 기본 업무 수정 플래그 설정 (submit 핸들러에서 처리)
       editingDefaultTaskId = taskId;
       editingDefaultTaskItem = taskItem;
+
+      // 탭 클릭이 버튼을 "업무 추가"로 리셋하므로 덮어쓰기
+      document.querySelector("#modal-add h2").textContent = "업무 수정";
+      document.getElementById("modal-submit").innerHTML = '<span class="material-symbols-outlined" style="font-size:18px">save</span> 저장';
     });
   });
 
