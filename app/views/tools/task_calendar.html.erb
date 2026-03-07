@@ -456,8 +456,11 @@
                     <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-semibold <%= tc[:badge] %> <%= tc[:text] %>"><%= t[:cat] %></span>
                   </div>
                 </div>
-                <!-- 수정/삭제 버튼 -->
+                <!-- AI 가이드 / 수정 / 삭제 버튼 -->
                 <div class="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
+                  <button class="btn-guide flex-shrink-0 w-7 h-7 rounded-lg hover:bg-violet-50 flex items-center justify-center text-slate-400 hover:text-violet-600" title="AI 업무 지원">
+                    <span class="material-symbols-outlined" style="font-size:18px">smart_toy</span>
+                  </button>
                   <button class="btn-edit-default-task flex-shrink-0 w-7 h-7 rounded-lg hover:bg-indigo-50 flex items-center justify-center text-slate-400 hover:text-indigo-600" title="수정" data-task-id="<%= m %>_<%= t[:title] %>">
                     <span class="material-symbols-outlined" style="font-size:18px">edit</span>
                   </button>
@@ -1403,7 +1406,7 @@
           '<div class="flex-shrink-0 w-[22px] h-[22px] rounded-full border-2 ' + borderColor + ' flex items-center justify-center">' +
             '<span class="material-symbols-outlined ' + iconColor + '" style="font-size:12px">' + iconName + '</span></div>' +
           '<div class="flex-1 min-w-0">' +
-            '<p class="text-sm text-slate-800">' + escapeHtml(t.title) + '</p>' +
+            '<p class="task-text text-sm text-slate-800">' + escapeHtml(t.title) + '</p>' +
             '<div class="flex items-center gap-2 mt-1 flex-wrap">' +
               '<span class="text-[11px] text-slate-400 font-medium">' + label + '</span>' +
               '<span class="text-[11px] text-slate-300">' + sublabel + '</span>' +
@@ -1412,6 +1415,8 @@
             '</div>' +
           '</div>' +
           '<div class="hidden group-hover:flex items-center gap-1">' +
+            '<button class="btn-guide w-6 h-6 rounded-full hover:bg-violet-50 flex items-center justify-center flex-shrink-0" title="AI 업무 지원">' +
+              '<span class="material-symbols-outlined text-violet-400" style="font-size:16px">smart_toy</span></button>' +
             '<button class="edit-custom-btn w-6 h-6 rounded-full hover:bg-blue-50 flex items-center justify-center flex-shrink-0" data-idx="' + idx + '">' +
               '<span class="material-symbols-outlined text-blue-400" style="font-size:16px">edit</span></button>' +
             '<button class="del-custom-btn w-6 h-6 rounded-full hover:bg-red-50 flex items-center justify-center flex-shrink-0" data-idx="' + idx + '">' +
@@ -1506,6 +1511,8 @@
             postponeBtn +
           '</div>' +
         '</div>' +
+        '<button class="btn-guide opacity-0 group-hover:opacity-100 transition-opacity w-7 h-7 rounded-full hover:bg-violet-50 flex items-center justify-center flex-shrink-0" title="AI 업무 지원">' +
+          '<span class="material-symbols-outlined text-violet-400" style="font-size:18px">smart_toy</span></button>' +
         '</div>';
     }).join("");
     container.querySelectorAll(".task-cb").forEach(cb => {
@@ -1533,6 +1540,8 @@
         }
       });
     });
+    // AI 가이드 버튼 바인딩
+    attachGuideClick(container);
   }
 
   // 초기 renderCustomTasks()는 monkey-patch 적용 후 3067줄에서 1회만 호출
@@ -2991,20 +3000,15 @@
     }
   });
 
-  // 기본 업무 .task-item 클릭 → 가이드 열기 (체크박스 영역 제외)
+  // .btn-guide 버튼 클릭 → 가이드 열기
   function attachGuideClick(container) {
-    container.querySelectorAll(".task-item").forEach(item => {
-      item.style.cursor = "pointer";
-      item.addEventListener("click", (e) => {
-        // 체크박스 라벨, 삭제/수정 버튼 클릭은 무시
-        if (e.target.closest("label")) return;
-        if (e.target.closest(".del-custom-btn")) return;
-        if (e.target.closest(".edit-custom-btn")) return;
-        if (e.target.closest(".btn-delete-default-task")) return;
-        if (e.target.closest(".btn-edit-default-task")) return;
-        if (e.target.closest(".postpone-btn")) return;
+    container.querySelectorAll(".btn-guide").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const item = btn.closest(".task-item");
+        if (!item) return;
         const textEl = item.querySelector(".task-text");
-        const catEl = item.querySelector("[style*='background']");
+        const catEl = item.querySelector("[style*='background'][style*='color']") || item.querySelector("[style*='background']");
         const title = textEl ? textEl.textContent.trim() : "";
         let category = "";
         if (catEl) category = catEl.textContent.trim();
@@ -3029,23 +3033,12 @@
     attachGuideClick(document.getElementById("monthly-timeline"));
   };
 
-  // 커스텀 업무도 바인딩
+  // 커스텀 업무 AI 가이드 버튼 바인딩
   const origRenderCustomTasks = renderCustomTasks;
   renderCustomTasks = function() {
     origRenderCustomTasks();
     document.querySelectorAll(".custom-tasks-area").forEach(area => {
-      area.querySelectorAll("[class*='group flex']").forEach(row => {
-        row.style.cursor = "pointer";
-        row.addEventListener("click", (e) => {
-          if (e.target.closest(".del-custom-btn")) return;
-          const textEl = row.querySelector("p");
-          const catEl = row.querySelector("[style*='background'][style*='color']");
-          const title = textEl ? textEl.textContent.trim() : "";
-          let category = "";
-          if (catEl) category = catEl.textContent.trim();
-          if (title) openGuide(title, category);
-        });
-      });
+      attachGuideClick(area);
     });
   };
 
