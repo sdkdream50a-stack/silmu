@@ -456,23 +456,6 @@
           <%= link_to "양식", templates_path, class: "category-tab", style: "text-decoration: none;" %>
         </div>
 
-        <!-- NotebookLM AI 탐색 배너 -->
-        <div style="background: linear-gradient(135deg, #1e3a5f 0%, #1d4ed8 100%); border-radius: 16px; padding: 18px 22px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; box-shadow: 0 4px 20px rgba(30,58,95,0.25);">
-          <div style="display: flex; align-items: center; gap: 14px; flex: 1; min-width: 0;">
-            <div style="width: 44px; height: 44px; background: rgba(255,255,255,0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.2);">
-              <span class="material-symbols-outlined" style="color: white; font-size: 22px;">auto_stories</span>
-            </div>
-            <div style="min-width: 0;">
-              <div style="font-size: 15px; font-weight: 700; color: white; margin-bottom: 3px;">공식 매뉴얼 전체를 AI로 탐색하기</div>
-              <div style="font-size: 12px; color: rgba(255,255,255,0.75); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">계약·예산·보수·감사 공식 지침서를 AI에게 바로 질문하세요 (Google NotebookLM)</div>
-            </div>
-          </div>
-          <a href="https://notebooklm.google.com/notebook/3e9fd14b-4f9d-436c-879b-5f965a55b123" target="_blank" rel="noopener" style="flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px; padding: 10px 18px; background: white; color: #1e3a5f; border-radius: 10px; font-size: 14px; font-weight: 700; text-decoration: none; white-space: nowrap; box-shadow: 0 2px 8px rgba(0,0,0,0.15); transition: opacity 0.2s;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
-            <span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span>
-            AI 탐색 열기
-          </a>
-        </div>
-
         <!-- 자료 목록 -->
         <div id="resources-list">
           <% [
@@ -754,19 +737,6 @@
             </a>
           </div>
 
-          <!-- NotebookLM AI 매뉴얼 탐색 -->
-          <div class="sidebar-card" style="background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border-color: #93c5fd;">
-            <h3 style="color: #1e40af;">
-              <span class="material-symbols-outlined" style="color: #3b82f6;">auto_stories</span>
-              AI 매뉴얼 탐색
-            </h3>
-            <p style="font-size: 13px; color: #1e3a8a; margin-bottom: 14px; line-height: 1.6;">공식 매뉴얼 전체를 AI에게 질문하세요. 계약·예산·보수·감사 지침을 한 번에 검색합니다.</p>
-            <a href="https://notebooklm.google.com/notebook/3e9fd14b-4f9d-436c-879b-5f965a55b123" target="_blank" rel="noopener" style="display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 16px; background: #1d4ed8; color: white; border-radius: 10px; font-size: 14px; font-weight: 600; text-decoration: none; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
-              <span class="material-symbols-outlined" style="font-size: 18px;">open_in_new</span>
-              NotebookLM으로 탐색
-            </a>
-            <p style="font-size: 11px; color: #64748b; margin-top: 8px; text-align: center;">Google 계정 로그인 필요</p>
-          </div>
 
           <!-- AI 상담 -->
           <div class="gradient-amber rounded-2xl p-6 text-white shadow-strong">
