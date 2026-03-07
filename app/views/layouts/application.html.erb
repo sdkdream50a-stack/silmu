@@ -246,7 +246,9 @@
 
   <body class="min-h-screen flex flex-col" data-user-signed-in="<%= user_signed_in? %>">
     <!-- Navigation — enhanced glass effect -->
-    <nav class="bg-white/85 backdrop-blur-2xl border-b border-gray-100/60 sticky top-0 z-50 transition-all duration-300" id="main-nav">
+    <% _colored_hero_pages = %w[home#index guides#index audit_cases#index topics#index] %>
+    <% _has_colored_hero = _colored_hero_pages.include?("#{controller_name}##{action_name}") %>
+    <nav class="<%= _has_colored_hero ? 'bg-white/85 backdrop-blur-2xl border-b border-gray-100/60' : 'bg-gray-50 border-b border-gray-200' %> sticky top-0 z-50 transition-all duration-300" id="main-nav">
       <div class="container-wide">
         <div class="flex justify-between h-16 lg:h-[4.5rem]">
           <!-- Logo -->
