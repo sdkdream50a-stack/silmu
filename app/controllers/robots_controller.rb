@@ -19,6 +19,7 @@ class RobotsController < ApplicationController
       Disallow: /mypage
       Disallow: /calendar_data
       Disallow: /task_guides
+      Disallow: /cdn-cgi/
 
       # AI 검색 봇 허용 (트래픽 유입)
       User-agent: OAI-SearchBot
