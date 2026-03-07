@@ -1161,7 +1161,10 @@ A. 2인 이상 견적 대상에서 1인만 수의시담에 응한 경우, 해당
 
 subtopics_data.each do |data|
   topic = Topic.find_or_initialize_by(slug: data[:slug])
+  # audit_cases 컬럼은 has_many :audit_cases 연관관계와 이름 충돌 — write_attribute 사용
+  audit_cases_val = data.delete(:audit_cases)
   topic.assign_attributes(data.merge(parent_id: parent.id))
+  topic.write_attribute(:audit_cases, audit_cases_val) if audit_cases_val
   topic.save!
   puts "✓ 서브토픽 생성/업데이트: #{topic.name}"
 end
