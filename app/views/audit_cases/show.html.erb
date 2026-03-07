@@ -46,17 +46,9 @@
       <div class="lg:w-[70%]">
         <!-- 헤더 -->
         <div class="mb-8">
-          <div class="flex items-center gap-3 mb-4">
-            <span class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-semibold bg-red-50 text-red-700"><%= @audit_case.category %></span>
-            <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium
-              <%= case @audit_case.severity
-                  when '경미' then 'bg-amber-50 text-amber-700'
-                  when '보통' then 'bg-orange-50 text-orange-700'
-                  when '중대' then 'bg-red-100 text-red-800'
-                  else 'bg-gray-50 text-gray-600'
-                  end %>">
-              <%= @audit_case.severity %>
-            </span>
+          <div class="flex items-center gap-2 mb-4">
+            <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-gray-100 text-slate-600"><%= @audit_case.category %></span>
+            <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-gray-100 text-slate-600"><%= @audit_case.severity %></span>
           </div>
           <h1 class="text-xl lg:text-2xl font-bold text-slate-900 mb-2"><%= @audit_case.title %></h1>
           <div class="flex items-center gap-3 flex-wrap">
@@ -83,36 +75,36 @@
         <% end %>
 
         <!-- 핵심 정보 카드 -->
-        <div class="space-y-5 mb-8">
+        <div class="space-y-4 mb-8">
           <!-- 지적사항 -->
-          <div class="card p-5 lg:p-6 border-l-4 border-red-500">
-            <h2 class="text-base font-bold text-red-800 flex items-center gap-2 mb-3">
-              <span class="material-symbols-outlined text-lg">report</span>
+          <div class="bg-white border border-gray-200 rounded-xl p-5 lg:p-6">
+            <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide flex items-center gap-1.5 mb-3">
+              <span class="w-1.5 h-1.5 rounded-full bg-red-400 shrink-0"></span>
               지적사항
             </h2>
             <div class="text-sm text-slate-700 leading-relaxed"><%= simple_format(@audit_case.issue) %></div>
-            <div class="mt-3 flex items-center gap-2 px-3 py-2 bg-red-50 rounded-lg text-xs text-red-700">
-              <span class="material-symbols-outlined text-sm">warning</span>
-              <span>심각도: <strong><%= @audit_case.severity %></strong></span>
-              <span class="mx-1 text-red-300">|</span>
-              <span>분야: <strong><%= @audit_case.category %></strong></span>
+            <div class="mt-3 flex items-center gap-3 text-xs text-slate-500">
+              <span>심각도: <strong class="text-slate-700"><%= @audit_case.severity %></strong></span>
+              <span class="text-gray-300">|</span>
+              <span>분야: <strong class="text-slate-700"><%= @audit_case.category %></strong></span>
             </div>
           </div>
 
           <!-- 관련근거 -->
-          <div class="card p-5 lg:p-6 border-l-4 border-blue-500">
-            <h2 class="text-base font-bold text-blue-800 flex items-center gap-2 mb-3">
-              <span class="material-symbols-outlined text-lg">menu_book</span>
+          <div class="bg-white border border-gray-200 rounded-xl p-5 lg:p-6">
+            <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide flex items-center gap-1.5 mb-3">
+              <span class="w-1.5 h-1.5 rounded-full bg-slate-400 shrink-0"></span>
               관련근거
             </h2>
-            <div class="flex items-start gap-3 p-3 bg-blue-50 rounded-xl">
-              <span class="material-symbols-outlined text-blue-500 mt-0.5 flex-shrink-0">gavel</span>
+            <div class="flex items-start gap-3">
+              <span class="material-symbols-outlined text-slate-400 mt-0.5 flex-shrink-0 text-base">gavel</span>
               <div>
-                <p class="text-sm font-semibold text-blue-900"><%= @audit_case.legal_basis %></p>
+                <p class="text-sm text-slate-700 leading-relaxed"><%= @audit_case.legal_basis %></p>
                 <% if @audit_case.topic_slug.present? && @related_topic %>
-                  <%= link_to topic_path(@related_topic.slug), class: "inline-flex items-center gap-1 mt-2 text-xs text-blue-600 hover:text-blue-800 font-medium" do %>
-                    <span class="material-symbols-outlined text-xs">open_in_new</span>
+                  <%= link_to topic_path(@related_topic.slug), class: "inline-flex items-center gap-1.5 mt-3 px-3 py-1.5 bg-slate-900 hover:bg-slate-700 text-white text-xs font-semibold rounded-lg transition-colors" do %>
+                    <span class="material-symbols-outlined text-xs">menu_book</span>
                     해당 법령 가이드 보기
+                    <span class="material-symbols-outlined text-xs">arrow_forward</span>
                   <% end %>
                 <% end %>
               </div>
@@ -120,15 +112,15 @@
           </div>
 
           <!-- 조치내용 -->
-          <div class="card p-5 lg:p-6 border-l-4 border-orange-500">
-            <h2 class="text-base font-bold text-orange-800 flex items-center gap-2 mb-3">
-              <span class="material-symbols-outlined text-lg">assignment_turned_in</span>
+          <div class="bg-white border border-gray-200 rounded-xl p-5 lg:p-6">
+            <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide flex items-center gap-1.5 mb-3">
+              <span class="w-1.5 h-1.5 rounded-full bg-slate-400 shrink-0"></span>
               조치내용
             </h2>
-            <div class="text-sm text-slate-700 leading-relaxed">
+            <div class="text-sm text-slate-700 leading-relaxed space-y-2">
               <% @audit_case.action_taken.to_s.split(',').map(&:strip).reject(&:blank?).each do |action| %>
-                <div class="flex items-start gap-2 mb-2">
-                  <span class="material-symbols-outlined text-orange-500 text-sm mt-0.5 flex-shrink-0">check_circle</span>
+                <div class="flex items-start gap-2">
+                  <span class="material-symbols-outlined text-slate-400 text-sm mt-0.5 flex-shrink-0">check_circle</span>
                   <span><%= action %></span>
                 </div>
               <% end %>
@@ -136,9 +128,9 @@
           </div>
 
           <!-- 교훈/시사점 -->
-          <div class="card p-5 lg:p-6 border-l-4 border-green-500 bg-green-50/30">
-            <h2 class="text-base font-bold text-green-800 flex items-center gap-2 mb-3">
-              <span class="material-symbols-outlined text-lg">lightbulb</span>
+          <div class="bg-white border border-gray-200 rounded-xl p-5 lg:p-6">
+            <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide flex items-center gap-1.5 mb-3">
+              <span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0"></span>
               교훈 및 시사점
             </h2>
             <div class="text-sm text-slate-700 leading-relaxed audit-content"><%= simple_markdown(@audit_case.lesson) %></div>
@@ -147,24 +139,24 @@
           <!-- 실무 체크포인트 -->
           <% checkpoints = @audit_case.checkpoint_list %>
           <% if checkpoints.any? %>
-            <div class="card p-5 lg:p-6 bg-indigo-50/50 border border-indigo-100">
-              <h2 class="text-base font-bold text-indigo-800 flex items-center gap-2 mb-3">
-                <span class="material-symbols-outlined text-lg">checklist</span>
+            <div class="bg-white border border-gray-200 rounded-xl p-5 lg:p-6">
+              <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide flex items-center gap-1.5 mb-4">
+                <span class="w-1.5 h-1.5 rounded-full bg-slate-400 shrink-0"></span>
                 실무 체크포인트
               </h2>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                 <% checkpoints.each do |cp| %>
                   <% if cp.is_a?(Hash) %>
-                    <div class="flex items-start gap-2 p-3 bg-white rounded-xl text-sm">
-                      <span class="material-symbols-outlined text-indigo-500 text-lg flex-shrink-0"><%= cp["icon"] %></span>
+                    <div class="flex items-start gap-2 p-3 bg-gray-50 rounded-lg text-sm">
+                      <span class="material-symbols-outlined text-slate-400 text-base flex-shrink-0"><%= cp["icon"] %></span>
                       <div>
                         <span class="font-semibold text-slate-800"><%= cp["title"] %></span>
                         <p class="text-xs text-slate-500 mt-0.5"><%= cp["desc"] %></p>
                       </div>
                     </div>
                   <% else %>
-                    <div class="flex items-start gap-2 p-3 bg-white rounded-xl text-sm">
-                      <span class="material-symbols-outlined text-indigo-500 text-lg flex-shrink-0">check_circle</span>
+                    <div class="flex items-start gap-2 p-3 bg-gray-50 rounded-lg text-sm">
+                      <span class="material-symbols-outlined text-slate-400 text-base flex-shrink-0">check_circle</span>
                       <span class="text-slate-700"><%= cp %></span>
                     </div>
                   <% end %>
@@ -175,9 +167,9 @@
 
           <!-- 상세 내용 (있을 경우) -->
           <% if @audit_case.detail.present? %>
-            <div class="card p-5 lg:p-6">
-              <h2 class="text-base font-bold text-slate-900 flex items-center gap-2 mb-4">
-                <span class="material-symbols-outlined text-lg">description</span>
+            <div class="bg-white border border-gray-200 rounded-xl p-5 lg:p-6">
+              <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide flex items-center gap-1.5 mb-4">
+                <span class="w-1.5 h-1.5 rounded-full bg-slate-400 shrink-0"></span>
                 상세 분석
               </h2>
               <div class="text-sm text-slate-700 leading-relaxed audit-content">
@@ -189,22 +181,17 @@
 
         <!-- 관련 토픽 -->
         <% if @related_topic %>
-          <div class="card p-6 bg-blue-50/50 border-blue-100 mb-8">
-            <h3 class="font-bold text-slate-900 flex items-center gap-2 mb-3">
-              <span class="material-symbols-outlined text-blue-600">link</span>
-              관련 법령 가이드
-            </h3>
-            <%= link_to topic_path(@related_topic.slug), class: "flex items-center gap-3 p-4 bg-white rounded-xl hover:shadow-md transition-all group" do %>
-              <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                <span class="material-symbols-outlined text-blue-600">article</span>
-              </div>
-              <div>
-                <span class="font-semibold text-slate-900 group-hover:text-blue-600 transition-colors"><%= @related_topic.name %></span>
-                <p class="text-sm text-slate-500"><%= @related_topic.summary.truncate(80) %></p>
-              </div>
-              <span class="material-symbols-outlined text-slate-300 ml-auto group-hover:translate-x-1 transition-transform">arrow_forward</span>
-            <% end %>
-          </div>
+          <%= link_to topic_path(@related_topic.slug), class: "flex items-center gap-4 bg-white border border-gray-200 hover:border-slate-400 rounded-xl p-5 mb-8 group transition-colors" do %>
+            <div class="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center shrink-0 group-hover:bg-slate-200 transition-colors">
+              <span class="material-symbols-outlined text-slate-600 text-base">menu_book</span>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-xs text-slate-400 mb-0.5">관련 법령 가이드</p>
+              <span class="font-semibold text-slate-900 group-hover:text-slate-700 transition-colors"><%= @related_topic.name %></span>
+              <p class="text-xs text-slate-500 mt-0.5 truncate"><%= @related_topic.summary.truncate(60) %></p>
+            </div>
+            <span class="material-symbols-outlined text-slate-300 shrink-0 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+          <% end %>
         <% end %>
 
         <!-- 같은 카테고리 사례 -->
@@ -266,17 +253,17 @@
           </div>
 
           <!-- AI 상담 -->
-          <div class="bg-gradient-to-br from-red-600 to-red-800 rounded-2xl p-6 text-white shadow-strong">
-            <div class="flex items-center gap-4 mb-4">
-              <div class="w-12 h-12 bg-white/10 backdrop-blur rounded-xl flex items-center justify-center">
-                <span class="material-symbols-outlined text-2xl">support_agent</span>
+          <div class="bg-slate-900 rounded-xl p-5 text-white">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-9 h-9 bg-white/10 rounded-lg flex items-center justify-center">
+                <span class="material-symbols-outlined text-lg">support_agent</span>
               </div>
               <div>
-                <h3 class="font-bold text-lg">감사 대비 상담</h3>
-                <p class="text-red-100 text-sm">AI에게 물어보세요</p>
+                <h3 class="font-semibold text-sm">감사 대비 상담</h3>
+                <p class="text-slate-400 text-xs">AI에게 물어보세요</p>
               </div>
             </div>
-            <%= link_to chatbot_path, class: "block w-full py-3 bg-white text-red-700 rounded-xl font-semibold text-center hover:bg-red-50 transition-colors shadow-soft" do %>
+            <%= link_to chatbot_path, class: "block w-full py-2.5 bg-white text-slate-900 rounded-lg text-sm font-semibold text-center hover:bg-slate-100 transition-colors" do %>
               AI 상담 시작하기
             <% end %>
           </div>
