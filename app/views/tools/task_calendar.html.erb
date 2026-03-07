@@ -5,6 +5,33 @@
   <style>
     #calendar-root { height: calc(100vh - 4rem); height: calc(100dvh - 4rem); }
     @media (min-width: 1024px) { #calendar-root { height: calc(100vh - 4.5rem); height: calc(100dvh - 4.5rem); } }
+
+    /* 애니메이션 keyframes */
+    @keyframes task-check {
+      0%   { transform: scale(1); }
+      40%  { transform: scale(0.92); }
+      70%  { transform: scale(1.06); }
+      100% { transform: scale(1); }
+    }
+    @keyframes view-in {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes task-slide-in {
+      from { opacity: 0; transform: translateX(-8px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes empty-pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.6; }
+    }
+    /* prefers-reduced-motion: 애니메이션 선호하는 경우에만 적용 */
+    @media (prefers-reduced-motion: no-preference) {
+      .task-check-anim { animation: task-check 0.3s ease; }
+      .view-panel:not(.hidden) { animation: view-in 0.2s ease; }
+      .task-new { animation: task-slide-in 0.25s ease; }
+      .empty-pulse { animation: empty-pulse 2s ease-in-out infinite; }
+    }
   </style>
 <% end %>
 
@@ -241,6 +268,7 @@
       <button id="btn-add-task" class="w-full flex items-center justify-center gap-1.5 h-10 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-bold text-sm shadow-md shadow-indigo-500/20 active:scale-[0.98] transition-all">
         <span class="material-symbols-outlined" style="font-size:18px">add_circle</span>
         업무 추가
+        <span class="ml-auto text-[10px] text-indigo-300 font-normal tracking-wide">Q</span>
       </button>
       <div class="relative group">
         <div class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-gray-400 group-focus-within:text-indigo-600 transition-colors">
@@ -389,7 +417,10 @@
           </div>
         </div>
 
-        <p class="text-[11px] text-slate-400 -mt-4 mb-5"><span class="text-indigo-400 font-medium">내보내기</span> 코드를 동료에게 전달하면 <span class="text-emerald-500 font-medium">가져오기</span>로 바로 반영됩니다.</p>
+        <p class="text-[11px] text-slate-400 -mt-4 mb-3"><span class="text-indigo-400 font-medium">내보내기</span> 코드를 동료에게 전달하면 <span class="text-emerald-500 font-medium">가져오기</span>로 바로 반영됩니다.</p>
+
+        <!-- 카테고리 필터 -->
+        <div id="inbox-cat-filter" class="flex items-center gap-1.5 flex-wrap mb-5"></div>
 
         <%# 관리함: 12개월 전체 업무 (월별 페이지) %>
         <% day_labels = %w[일 월 화 수 목 금 토] %>
@@ -525,9 +556,14 @@
               <div class="h-px bg-slate-100 flex-grow ml-4"></div>
             </div>
             <div class="flex flex-col items-center justify-center py-12 px-4 text-center bg-slate-50 rounded-xl border border-dashed border-slate-200">
-              <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-sm mb-4 text-3xl">🎉</div>
-              <h3 class="text-slate-900 font-bold text-lg mb-1">오늘은 여유롭습니다</h3>
-              <p class="text-slate-500 text-sm">마감 업무가 없습니다. 좋은 하루 보내세요!</p>
+              <div class="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center shadow-sm mb-4 empty-pulse">
+                <svg class="w-10 h-10 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+              <h3 class="text-slate-900 font-bold text-lg mb-1">오늘 마감 업무가 없어요</h3>
+              <p class="text-slate-500 text-sm">여유 시간에 처리할 업무를 추가해보세요</p>
+              <button onclick="openAddModal()" class="mt-4 px-4 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700 transition-colors">+ 업무 추가</button>
             </div>
             <div class="py-3 mt-2">
               <button class="btn-inline-add flex items-center gap-2 px-2 py-2.5 text-sm text-slate-400 hover:text-indigo-600 transition-colors w-full rounded-lg hover:bg-indigo-50/50" data-date="<%= today.strftime('%Y-%m-%d') %>">
@@ -803,7 +839,7 @@
           <p class="text-xs text-gray-400">PDF, HWP, HWPX 지원 (최대 10MB)</p>
         </div>
       </div>
-      <input type="file" id="doc-file-input" accept=".pdf,.jpg,.jpeg,.png,.hwp,.hwpx" class="hidden">
+      <input type="file" id="doc-file-input" accept=".pdf,.jpg,.jpeg,.png" class="hidden">
       <div id="doc-file-info" class="hidden flex items-center gap-3 p-3 rounded-lg border border-gray-200 bg-white">
         <div class="size-10 flex items-center justify-center rounded-lg bg-red-50 text-red-500 shrink-0">
           <span class="material-symbols-outlined">picture_as_pdf</span>
@@ -1056,6 +1092,10 @@
         if (data.custom_tasks.length > 0) localStorage.setItem("silmu_custom_tasks", JSON.stringify(data.custom_tasks));
         if (Object.keys(data.categories).length > 0) localStorage.setItem("silmu_task_cats", JSON.stringify(data.categories));
         if ((data.standing_checklist || []).length > 0) localStorage.setItem("silmu_standing_checklist", JSON.stringify(data.standing_checklist));
+        // 서버 데이터로 localStorage를 덮어썼으므로 캐시 무효화
+        _customCache = null;
+        _catsCache = null;
+        _standingCache = null;
       }
     } catch(e) {}
   }
@@ -1071,6 +1111,7 @@
     document.querySelectorAll(".nav-item").forEach(n => {
       const isActive = n.dataset.view === view;
       const indicator = n.querySelector(".nav-indicator");
+      const iconSpan = n.querySelector(".material-symbols-outlined");
       // 활성 상태: Stitch 디자인 — 인디고 배경 + 좌측 인디케이터
       n.classList.toggle("bg-indigo-50", isActive);
       n.classList.toggle("text-indigo-700", isActive);
@@ -1078,6 +1119,10 @@
       n.classList.toggle("text-gray-600", !isActive);
       n.classList.toggle("hover:bg-gray-50", !isActive);
       if (indicator) indicator.classList.toggle("hidden", !isActive);
+      // 아이콘 Fill 전환
+      if (iconSpan) {
+        iconSpan.style.fontVariationSettings = isActive ? "'FILL' 1" : "'FILL' 0";
+      }
       // 활성 카운트 배지 스타일
       const count = n.querySelector(".nav-count");
       if (count) {
@@ -1103,6 +1148,9 @@
         label.classList.toggle("font-bold", isActive);
         label.classList.toggle("font-medium", !isActive);
       }
+      // 모바일 탭 아이콘 Fill 전환
+      const tabIcon = t.querySelector(".material-symbols-outlined");
+      if (tabIcon) tabIcon.style.fontVariationSettings = isActive ? "'FILL' 1" : "'FILL' 0";
     });
     document.getElementById("mobile-title").textContent = views[view];
     // 뷰 진입 시 타임라인 갱신
@@ -1200,7 +1248,7 @@
     const svg = box.querySelector("svg");
     if (checked) {
       box.classList.add("bg-emerald-500", "border-emerald-500");
-      box.classList.remove("border-slate-300");
+      box.classList.remove("border-slate-300", "border-gray-300");
       svg.style.opacity = "1";
       text.style.textDecoration = "line-through";
       text.style.textDecorationColor = "#94a3b8";
@@ -1208,6 +1256,11 @@
       text.classList.add("text-slate-400");
       text.classList.remove("text-slate-800");
       setTimeout(() => { item.style.opacity = "0.6"; }, 200);
+      // bounce 애니메이션
+      item.classList.remove("task-check-anim");
+      void item.offsetWidth; // reflow
+      item.classList.add("task-check-anim");
+      setTimeout(() => item.classList.remove("task-check-anim"), 350);
     } else {
       box.classList.remove("bg-emerald-500", "border-emerald-500");
       box.classList.add("border-slate-300");
@@ -1223,15 +1276,32 @@
 
   // --- 사용자 추가 업무 관리 ---
   const CUSTOM_KEY = "silmu_custom_tasks";
-  function loadCustom() { try { return JSON.parse(localStorage.getItem(CUSTOM_KEY) || "[]"); } catch { return []; } }
-  function saveCustom(arr) { localStorage.setItem(CUSTOM_KEY, JSON.stringify(arr)); syncToServer({ custom_tasks: arr }); checkSyncBanner(); }
+  let _customCache = null;
+  function loadCustom() {
+    if (_customCache !== null) return _customCache;
+    try { _customCache = JSON.parse(localStorage.getItem(CUSTOM_KEY) || "[]"); } catch { _customCache = []; }
+    return _customCache;
+  }
+  function invalidateCustomCache() { _customCache = null; }
+  function saveCustom(arr) {
+    _customCache = arr; // 저장 시 캐시도 갱신
+    localStorage.setItem(CUSTOM_KEY, JSON.stringify(arr));
+    syncToServer({ custom_tasks: arr });
+    checkSyncBanner();
+  }
 
   // 수정 중인 인덱스 (-1 = 신규 추가)
   let editingIdx = -1;
+  // 기본 업무 수정 추적 (onclick 핸들러 덮어쓰기 방지)
+  let editingDefaultTaskId = null;
+  let editingDefaultTaskItem = null;
+
   function resetModalHeader() {
     document.querySelector("#modal-add h2").textContent = "새 업무 추가";
     document.getElementById("modal-submit").innerHTML = '<span class="material-symbols-outlined" style="font-size:18px">add</span> 업무 추가';
     editingIdx = -1;
+    editingDefaultTaskId = null;
+    editingDefaultTaskItem = null;
   }
 
   // 기간 task: 특정 날짜가 범위 안에 있는지 확인
@@ -1264,6 +1334,26 @@
     "복지":{bg:"#cffafe",text:"#0e7490"},
   };
   const dayLabels = ["일","월","화","수","목","금","토"];
+
+  // D-day 배지 HTML 생성 (once 업무의 date 기준)
+  function getDdayBadge(dateStr) {
+    if (!dateStr) return "";
+    // 서버 렌더링된 KST 기준 todayDate 사용 (todayDate는 ~1998번 줄에 정의, 함수는 호출 시점에 참조)
+    const ref = typeof todayDate !== "undefined"
+      ? new Date(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate())
+      : (() => { const d = new Date(); d.setHours(0,0,0,0); return d; })();
+    const today0 = ref;
+    const target = new Date(dateStr + "T00:00:00");
+    target.setHours(0,0,0,0);
+    const diff = Math.round((target - today0) / 86400000);
+    if (diff < 0) return ""; // 지난 날짜
+    let cls = "", label = "";
+    if (diff === 0)      { cls = "bg-red-100 text-red-700";    label = "D-day"; }
+    else if (diff === 1) { cls = "bg-orange-100 text-orange-700"; label = "D-1"; }
+    else if (diff <= 3)  { cls = "bg-yellow-100 text-yellow-700"; label = "D-" + diff; }
+    else return "";
+    return '<span class="inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-bold ' + cls + '">' + label + '</span>';
+  }
 
   function renderCustomTasks() {
     const customs = loadCustom();
@@ -1307,16 +1397,18 @@
         const iconColor = t.repeat === "once" ? "text-amber-400" : "text-indigo-400";
         const borderColor = t.repeat === "once" ? "border-amber-300" : "border-indigo-300";
         const row = document.createElement("div");
-        row.className = "group flex items-center gap-3 px-3 py-3.5 hover:bg-white hover:shadow-sm transition-all border-t border-dashed border-slate-200";
+        row.className = "task-item group flex items-center gap-3 px-3 py-3.5 hover:bg-white hover:shadow-sm transition-all border-t border-dashed border-slate-200";
+        row.dataset.taskCat = t.cat || "서무";
         row.innerHTML =
           '<div class="flex-shrink-0 w-[22px] h-[22px] rounded-full border-2 ' + borderColor + ' flex items-center justify-center">' +
             '<span class="material-symbols-outlined ' + iconColor + '" style="font-size:12px">' + iconName + '</span></div>' +
           '<div class="flex-1 min-w-0">' +
-            '<p class="text-sm text-slate-800">' + t.title + '</p>' +
-            '<div class="flex items-center gap-2 mt-1">' +
+            '<p class="text-sm text-slate-800">' + escapeHtml(t.title) + '</p>' +
+            '<div class="flex items-center gap-2 mt-1 flex-wrap">' +
               '<span class="text-[11px] text-slate-400 font-medium">' + label + '</span>' +
               '<span class="text-[11px] text-slate-300">' + sublabel + '</span>' +
-              '<span class="px-1.5 py-0.5 rounded text-[10px] font-semibold" style="background:' + cc.bg + ';color:' + cc.text + '">' + (t.cat||"서무") + '</span>' +
+              '<span class="px-1.5 py-0.5 rounded text-[10px] font-semibold" style="background:' + cc.bg + ';color:' + cc.text + '">' + escapeHtml(t.cat||"서무") + '</span>' +
+              (t.repeat === "once" ? getDdayBadge(t.date) : "") +
             '</div>' +
           '</div>' +
           '<div class="hidden group-hover:flex items-center gap-1">' +
@@ -1346,9 +1438,20 @@
     });
     // 오늘 뷰 custom_tasks 동기화
     renderTodayCustomTasks();
-    // 현재 주간/월간 뷰이면 재렌더링
-    if (currentView === "upcoming" && typeof renderWeekTimeline === "function") renderWeekTimeline();
-    if (currentView === "monthly" && typeof renderMonthlyTimeline === "function") renderMonthlyTimeline();
+    // 현재 주간/월간 뷰이면 재렌더링 (rAF 디바운싱으로 연쇄 호출 방지)
+    scheduleTimelineRefresh();
+  }
+
+  // rAF 디바운싱: 같은 프레임에서 여러 번 호출해도 1번만 실행
+  let _timelineRefreshScheduled = false;
+  function scheduleTimelineRefresh() {
+    if (_timelineRefreshScheduled) return;
+    _timelineRefreshScheduled = true;
+    requestAnimationFrame(() => {
+      _timelineRefreshScheduled = false;
+      if (currentView === "upcoming" && typeof renderWeekTimeline === "function") renderWeekTimeline();
+      if (currentView === "monthly" && typeof renderMonthlyTimeline === "function") renderMonthlyTimeline();
+    });
   }
 
   // 오늘 뷰에 내 추가 업무 표시
@@ -1357,12 +1460,16 @@
     const parts = todayStr.split("-");
     const ty = parseInt(parts[0]), tm = parseInt(parts[1]), td = parseInt(parts[2]);
     const todayDow = new Date(ty, tm - 1, td).getDay();
-    const customs = loadCustom().filter(t => {
-      if (t.repeat === "monthly") return t.day === td;
-      if (t.repeat === "weekly") return t.weekday === todayDow;
-      if (t.repeat === "once" && t.date) return taskCoversDate(t, todayStr);
-      return false;
-    });
+    // loadCustom() 한 번만 호출 + 원본 인덱스 함께 보존
+    const allCustoms = loadCustom();
+    const customs = allCustoms
+      .map((t, origIdx) => ({ ...t, _origIdx: origIdx }))
+      .filter(t => {
+        if (t.repeat === "monthly") return t.day === td;
+        if (t.repeat === "weekly") return t.weekday === todayDow;
+        if (t.repeat === "once" && t.date) return taskCoversDate(t, todayStr);
+        return false;
+      });
     const section = document.getElementById("today-custom-section");
     const container = document.getElementById("today-custom-tasks");
     const emptyState = document.getElementById("today-empty-state");
@@ -1377,6 +1484,13 @@
     container.innerHTML = customs.map((t, idx) => {
       const cc = catColorMap[t.cat] || {bg:"#f1f5f9",text:"#475569"};
       const key = "custom_today_" + tm + "_" + idx + "_" + t.title;
+      const isOnceToday = (t.repeat === "once" && t.date === todayStr);
+      const origIdx = t._origIdx;
+      const postponeBtn = isOnceToday
+        ? '<button class="postpone-btn text-xs text-slate-400 hover:text-orange-500 transition-colors ml-2 flex items-center gap-0.5" data-orig-idx="' + origIdx + '" title="내일로 미루기">' +
+            '<span class="material-symbols-outlined" style="font-size:14px">schedule_send</span> 내일로 →' +
+          '</button>'
+        : "";
       return '<div class="task-item group flex items-start gap-4 py-5 border-b-2 border-dotted border-slate-100 hover:bg-slate-50 transition-colors rounded-lg px-2 -mx-2">' +
         '<label class="flex-shrink-0 pt-0.5 cursor-pointer">' +
           '<input type="checkbox" class="task-cb sr-only" data-key="' + key + '">' +
@@ -1385,9 +1499,11 @@
           '</span>' +
         '</label>' +
         '<div class="flex flex-col flex-1 gap-1.5 min-w-0">' +
-          '<p class="task-text text-sm font-semibold text-slate-800 leading-tight">' + t.title + '</p>' +
+          '<p class="task-text text-sm font-semibold text-slate-800 leading-tight">' + escapeHtml(t.title) + '</p>' +
           '<div class="flex items-center gap-2 flex-wrap">' +
-            '<span class="inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium ring-1 ring-inset ring-slate-500/10 w-fit" style="background:' + cc.bg + ';color:' + cc.text + '">' + (t.cat || "서무") + '</span>' +
+            '<span class="inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium ring-1 ring-inset ring-slate-500/10 w-fit" style="background:' + cc.bg + ';color:' + cc.text + '">' + escapeHtml(t.cat || "서무") + '</span>' +
+            (t.repeat === "once" ? getDdayBadge(t.date) : "") +
+            postponeBtn +
           '</div>' +
         '</div>' +
         '</div>';
@@ -1401,9 +1517,76 @@
         updateTodayCount();
       });
     });
+    // 연기 버튼 이벤트
+    container.querySelectorAll(".postpone-btn").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const origIdx = parseInt(btn.dataset.origIdx);
+        const arr = loadCustom();
+        if (arr[origIdx] && arr[origIdx].date) {
+          const d = new Date(arr[origIdx].date + "T00:00:00");
+          d.setDate(d.getDate() + 1);
+          arr[origIdx].date = d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+          saveCustom(arr);
+          renderCustomTasks();
+          showToast("내일로 미뤘습니다", "schedule_send");
+        }
+      });
+    });
   }
 
-  renderCustomTasks();
+  // 초기 renderCustomTasks()는 monkey-patch 적용 후 3067줄에서 1회만 호출
+
+  // --- 카테고리 필터 (관리함 뷰) ---
+  let activeInboxFilter = "all";
+
+  function renderInboxFilter() {
+    const filterEl = document.getElementById("inbox-cat-filter");
+    if (!filterEl) return;
+    const catsObj = (typeof loadCats === "function") ? loadCats() : {};
+    const defaultCatNames = ["급여","세무","보험","회계","보고","서무","복지"];
+    const allCats = [...new Set([...defaultCatNames, ...Object.keys(catsObj)])];
+
+    let html = '<button class="inbox-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold transition-all ' +
+      (activeInboxFilter === "all" ? "bg-white shadow ring-1 ring-slate-200 text-slate-700" : "bg-slate-100 text-slate-500 hover:bg-slate-200") +
+      '" data-filter="all">전체</button>';
+
+    allCats.forEach(name => {
+      const cc = catColorMap[name];
+      const dotColor = cc ? cc.text : "#64748b";
+      const isActive = activeInboxFilter === name;
+      html += '<button class="inbox-filter-btn flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold transition-all ' +
+        (isActive ? "bg-white shadow ring-1 ring-slate-200 text-slate-700" : "bg-slate-100 text-slate-500 hover:bg-slate-200") +
+        '" data-filter="' + name + '">' +
+        '<span class="w-1.5 h-1.5 rounded-full flex-shrink-0" style="background:' + dotColor + '"></span>' +
+        name + '</button>';
+    });
+
+    filterEl.innerHTML = html;
+    filterEl.querySelectorAll(".inbox-filter-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        activeInboxFilter = btn.dataset.filter;
+        applyInboxFilter();
+        renderInboxFilter();
+      });
+    });
+  }
+
+  function applyInboxFilter() {
+    const currentPage = (typeof inboxMonth !== "undefined")
+      ? document.querySelector('.inbox-page[data-inbox-month="' + inboxMonth + '"]')
+      : document.querySelector(".inbox-page:not([style*='display: none'])");
+    if (!currentPage) return;
+    currentPage.querySelectorAll(".task-item[data-task-cat]").forEach(item => {
+      if (activeInboxFilter === "all") {
+        item.style.display = "";
+      } else {
+        item.style.display = (item.dataset.taskCat === activeInboxFilter) ? "" : "none";
+      }
+    });
+  }
+
+  // renderInboxFilter()는 loadCats 정의 이후에 호출 (2554번 줄 이후)
 
   // --- 모달: 업무 추가 (3탭) ---
   const modalAdd = document.getElementById("modal-add");
@@ -1635,6 +1818,16 @@
       if (editingIdx >= 0) {
         customs[editingIdx] = newTask;
         showToast("업무가 수정되었습니다", "check_circle");
+      } else if (editingDefaultTaskId) {
+        // 기본 업무 수정: 원본 삭제 후 커스텀으로 추가
+        const deletedList = loadDeletedTasks();
+        if (!deletedList.includes(editingDefaultTaskId)) {
+          deletedList.push(editingDefaultTaskId);
+          saveDeletedTasks(deletedList);
+        }
+        if (editingDefaultTaskItem) editingDefaultTaskItem.style.display = "none";
+        customs.push(newTask);
+        showToast("업무가 수정되었습니다", "check_circle");
       } else {
         customs.push(newTask);
         showToast("비정기 업무가 추가되었습니다", "check_circle");
@@ -1805,8 +1998,8 @@
     searchResults.innerHTML = matched.map(t =>
       '<div class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 cursor-default">' +
         '<span class="material-symbols-outlined text-slate-300" style="font-size:18px">task_alt</span>' +
-        '<div class="flex-1"><p class="text-sm text-slate-700">' + t.title + '</p>' +
-        '<span class="text-[11px] text-slate-400">' + t.month + '/' + t.day + ' · ' + t.cat + '</span></div></div>'
+        '<div class="flex-1"><p class="text-sm text-slate-700">' + escapeHtml(t.title) + '</p>' +
+        '<span class="text-[11px] text-slate-400">' + t.month + '/' + t.day + ' · ' + escapeHtml(t.cat) + '</span></div></div>'
     ).join("");
   });
 
@@ -1836,6 +2029,8 @@
         if (state[key]) { cb.checked = true; applyCheck(cb, true); }
       });
     }
+    // 카테고리 필터 재적용
+    applyInboxFilter();
   }
   document.getElementById("inbox-prev").addEventListener("click", () => {
     showInboxMonth(inboxMonth <= 1 ? 12 : inboxMonth - 1);
@@ -1927,6 +2122,8 @@
   function renderWeekTimeline() {
     const timeline = document.getElementById("upcoming-timeline");
     let html = "";
+    let weekTaskTotal = 0, weekTaskDone = 0; // 데이터 기반 카운트 추적
+    const weekTaskKeys = []; // 렌더링된 task 키 수집
     for (let i = 0; i < 7; i++) {
       const d = new Date(weekStart);
       d.setDate(d.getDate() + i);
@@ -1957,6 +2154,13 @@
 
       // 해당 날짜 업무 필터 (기본 + 내 추가 업무)
       const tasks = [...allTasks.filter(t => t.month === m && t.day === dd), ...getCustomTasksForDate(d.getFullYear(), m, dd)];
+      // 카운트 추적
+      tasks.forEach(t => {
+        const key = m + "_" + t.title;
+        weekTaskTotal++;
+        if (state[key]) weekTaskDone++;
+        weekTaskKeys.push(key);
+      });
 
       // 날짜 라벨
       let dayLabel = dayNamesKo[dow];
@@ -2004,8 +2208,11 @@
                   '</span>' +
                 '</label>' +
                 '<div class="flex flex-col flex-1 gap-1">' +
-                  '<p class="task-text text-sm font-semibold text-slate-800 leading-tight">' + t.title + '</p>' +
-                  '<span class="inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium ring-1 ring-inset ring-slate-500/10 w-fit" style="background:' + cc.bg + ';color:' + cc.text + '">' + t.cat + '</span>' +
+                  '<p class="task-text text-sm font-semibold text-slate-800 leading-tight">' + escapeHtml(t.title) + '</p>' +
+                  '<div class="flex items-center gap-1.5 flex-wrap">' +
+                    '<span class="inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium ring-1 ring-inset ring-slate-500/10 w-fit" style="background:' + cc.bg + ';color:' + cc.text + '">' + escapeHtml(t.cat) + '</span>' +
+                    (t.repeat === "once" ? getDdayBadge(t.date) : "") +
+                  '</div>' +
                 '</div>' +
               '</div>' +
             '</div>' +
@@ -2032,6 +2239,8 @@
         applyCheck(cb, cb.checked);
         updateTodayCount();
         updateProgress();
+        // 체크박스 변경 시 캐시된 카운트 증감
+        if (cb.checked) _weekDone++; else _weekDone--;
         updateWeekCount();
       });
     });
@@ -2041,21 +2250,22 @@
       btn.addEventListener("click", () => openAddModal(btn.dataset.date, null));
     });
 
-    updateWeekCount();
+    updateWeekCount(weekTaskTotal, weekTaskDone);
   }
 
-  function updateWeekCount() {
-    const cbs = document.querySelectorAll("#upcoming-timeline .task-cb");
-    const total = cbs.length;
-    const done = Array.from(cbs).filter(cb => cb.checked).length;
-    const remaining = total - done;
+  // 주간 카운트 캐시 (렌더링 시 계산, 체크박스 변경 시 증감)
+  let _weekTotal = 0, _weekDone = 0;
+
+  function updateWeekCount(total, done) {
+    if (total !== undefined) { _weekTotal = total; _weekDone = done; }
+    const remaining = _weekTotal - _weekDone;
     const el = document.getElementById("week-count");
-    if (total === 0) {
+    if (_weekTotal === 0) {
       el.innerHTML = '';
     } else if (remaining === 0) {
-      el.innerHTML = '<span class="text-emerald-500">' + total + '/' + total + '</span>';
+      el.innerHTML = '<span class="text-emerald-500">' + _weekTotal + '/' + _weekTotal + '</span>';
     } else {
-      el.innerHTML = '<span class="text-indigo-600 font-bold">' + remaining + '</span><span class="text-slate-300">/' + total + '</span>';
+      el.innerHTML = '<span class="text-indigo-600 font-bold">' + remaining + '</span><span class="text-slate-300">/' + _weekTotal + '</span>';
     }
   }
 
@@ -2078,8 +2288,7 @@
     renderWeekBar();
     renderWeekTimeline();
   });
-  renderWeekBar();
-  renderWeekTimeline();
+  renderWeekBar(); // 주간 바만 초기 렌더링 (renderWeekTimeline은 monkey-patch 후 3065줄에서 1회만 호출)
 
   // --- 월간 뷰 ---
   let monthlyYear = todayDate.getFullYear(), monthlyMonth = todayDate.getMonth(); // 0-indexed
@@ -2087,6 +2296,7 @@
   function renderMonthlyTimeline() {
     const timeline = document.getElementById("monthly-timeline");
     const m = monthlyMonth + 1; // 1-indexed
+    let monthTaskTotal = 0, monthTaskDone = 0; // 데이터 기반 카운트 추적
     const daysInMonth = new Date(monthlyYear, monthlyMonth + 1, 0).getDate();
     document.getElementById("monthly-month-label").textContent = monthlyYear + "년 " + m + "월";
 
@@ -2116,7 +2326,11 @@
       week.forEach(date => {
         const dd = date.getDate();
         const tasks = [...allTasks.filter(t => t.month === m && t.day === dd), ...getCustomTasksForDate(monthlyYear, m, dd)];
-        tasks.forEach(t => weekTasks.push({ ...t, date: date }));
+        tasks.forEach(t => {
+          weekTasks.push({ ...t, date: date });
+          monthTaskTotal++;
+          if (state[m + "_" + t.title]) monthTaskDone++;
+        });
       });
 
       html += '<section class="flex flex-col gap-3">';
@@ -2161,12 +2375,16 @@
 
           // 제목
           html += '<div class="flex-1 min-w-0">';
-          html += '<p class="task-text text-sm font-medium text-slate-800 truncate group-hover:text-indigo-600 transition-colors">' + t.title + '</p>';
+          html += '<p class="task-text text-sm font-medium text-slate-800 truncate group-hover:text-indigo-600 transition-colors">' + escapeHtml(t.title) + '</p>';
           html += '</div>';
 
-          // 카테고리 배지 + 날짜
-          html += '<div class="flex items-center gap-3 shrink-0">';
-          html += '<span class="inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium ring-1 ring-inset" style="background:' + cc.bg + ';color:' + cc.text + ';--tw-ring-color:' + cc.text + '20">' + t.cat + '</span>';
+          // 카테고리 배지 + D-day + 날짜
+          html += '<div class="flex items-center gap-2 shrink-0">';
+          html += '<span class="inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium ring-1 ring-inset" style="background:' + cc.bg + ';color:' + cc.text + ';--tw-ring-color:' + cc.text + '20">' + escapeHtml(t.cat) + '</span>';
+          if (t.repeat === "once" && t.date instanceof Date) {
+            const ds = t.date.getFullYear() + "-" + String(t.date.getMonth()+1).padStart(2,"0") + "-" + String(t.date.getDate()).padStart(2,"0");
+            html += getDdayBadge(ds);
+          } else if (t.repeat === "once") { html += getDdayBadge(t.date); }
           html += '<span class="text-xs font-medium ' + dateColor + ' w-12 text-right">' + m + '/' + t.date.getDate() + '</span>';
           html += '</div>';
 
@@ -2192,25 +2410,28 @@
         updateTodayCount();
         updateProgress();
         updateWeekCount();
+        // 체크박스 변경 시 캐시된 카운트 증감
+        if (cb.checked) _monthDone++; else _monthDone--;
         updateMonthCount();
       });
     });
 
-    updateMonthCount();
+    updateMonthCount(monthTaskTotal, monthTaskDone);
   }
 
-  function updateMonthCount() {
-    const cbs = document.querySelectorAll("#monthly-timeline .task-cb");
-    const total = cbs.length;
-    const done = Array.from(cbs).filter(cb => cb.checked).length;
-    const remaining = total - done;
+  // 월간 카운트 캐시 (렌더링 시 계산, 체크박스 변경 시 증감)
+  let _monthTotal = 0, _monthDone = 0;
+
+  function updateMonthCount(total, done) {
+    if (total !== undefined) { _monthTotal = total; _monthDone = done; }
+    const remaining = _monthTotal - _monthDone;
     const el = document.getElementById("month-count");
-    if (total === 0) {
+    if (_monthTotal === 0) {
       el.innerHTML = '';
     } else if (remaining === 0) {
-      el.innerHTML = '<span class="text-emerald-500">' + total + '/' + total + '</span>';
+      el.innerHTML = '<span class="text-emerald-500">' + _monthTotal + '/' + _monthTotal + '</span>';
     } else {
-      el.innerHTML = '<span class="text-indigo-600 font-bold">' + remaining + '</span><span class="text-slate-300">/' + total + '</span>';
+      el.innerHTML = '<span class="text-indigo-600 font-bold">' + remaining + '</span><span class="text-slate-300">/' + _monthTotal + '</span>';
     }
   }
 
@@ -2229,7 +2450,7 @@
     monthlyMonth = todayDate.getMonth();
     renderMonthlyTimeline();
   });
-  renderMonthlyTimeline();
+  // 초기 renderMonthlyTimeline()은 monkey-patch 적용 후 3065줄에서 1회만 호출
 
   // --- 월간 월 선택 드롭다운 ---
   const monthlyCalDrop = document.getElementById("monthly-cal-dropdown");
@@ -2402,15 +2623,21 @@
     "복지": { bg: "#cffafe", text: "#0e7490", dot: "#06b6d4" },
   };
 
+  let _catsCache = null;
   function loadCats() {
-    try { const s = localStorage.getItem(CAT_STORAGE); return s ? JSON.parse(s) : { ...defaultCats }; }
-    catch { return { ...defaultCats }; }
+    if (_catsCache !== null) return _catsCache;
+    try { const s = localStorage.getItem(CAT_STORAGE); _catsCache = s ? JSON.parse(s) : { ...defaultCats }; }
+    catch { _catsCache = { ...defaultCats }; }
+    return _catsCache;
   }
-  function saveCats(c) { localStorage.setItem(CAT_STORAGE, JSON.stringify(c)); syncToServer({ categories: c }); }
+  function saveCats(c) { _catsCache = c; localStorage.setItem(CAT_STORAGE, JSON.stringify(c)); syncToServer({ categories: c }); }
 
   let cats = loadCats();
   let editMode = false;
   const catList = document.getElementById("cat-list");
+
+  // 카테고리 필터 초기 렌더링 (loadCats 정의 이후)
+  renderInboxFilter();
   const catAddRow = document.getElementById("cat-add-row");
   const editBtn = document.getElementById("btn-edit-cats");
 
@@ -2639,8 +2866,8 @@
           html += '<div class="flex items-center gap-2 px-2.5 py-2 rounded-lg bg-emerald-50 mb-1">' +
             '<span class="w-1.5 h-1.5 rounded-full flex-shrink-0" style="background:' + cc.text + '"></span>' +
             '<div class="flex-1 min-w-0">' +
-              '<p class="text-xs text-slate-700 truncate">' + t.title + '</p>' +
-              '<span class="text-[10px] text-slate-400">' + schedule + ' · ' + (t.cat||"서무") + '</span>' +
+              '<p class="text-xs text-slate-700 truncate">' + escapeHtml(t.title) + '</p>' +
+              '<span class="text-[10px] text-slate-400">' + schedule + ' · ' + escapeHtml(t.cat||"서무") + '</span>' +
             '</div></div>';
         });
         importSubmit.disabled = false;
@@ -2769,9 +2996,13 @@
     container.querySelectorAll(".task-item").forEach(item => {
       item.style.cursor = "pointer";
       item.addEventListener("click", (e) => {
-        // 체크박스 라벨 클릭은 무시
+        // 체크박스 라벨, 삭제/수정 버튼 클릭은 무시
         if (e.target.closest("label")) return;
         if (e.target.closest(".del-custom-btn")) return;
+        if (e.target.closest(".edit-custom-btn")) return;
+        if (e.target.closest(".btn-delete-default-task")) return;
+        if (e.target.closest(".btn-edit-default-task")) return;
+        if (e.target.closest(".postpone-btn")) return;
         const textEl = item.querySelector(".task-text");
         const catEl = item.querySelector("[style*='background']");
         const title = textEl ? textEl.textContent.trim() : "";
@@ -2861,11 +3092,15 @@
     { bg: "bg-rose-50", text: "text-rose-700", border: "border-rose-200" }
   ];
 
+  let _standingCache = null;
   function loadStandingChecklist() {
-    return JSON.parse(localStorage.getItem(STANDING_CHECKLIST_KEY) || "[]");
+    if (_standingCache !== null) return _standingCache;
+    try { _standingCache = JSON.parse(localStorage.getItem(STANDING_CHECKLIST_KEY) || "[]"); } catch { _standingCache = []; }
+    return _standingCache;
   }
 
   function saveStandingChecklist(items) {
+    _standingCache = items;
     localStorage.setItem(STANDING_CHECKLIST_KEY, JSON.stringify(items));
     if (isSignedIn) syncToServer({ standing_checklist: items });
   }
@@ -2902,20 +3137,14 @@
     if (isExpanded) {
       // 접기
       wrapper.style.maxHeight = "0px";
-      if (icon) {
-        icon.setAttribute('data-icon', 'material-symbols:chevron-right');
-        if (typeof Iconify !== 'undefined') Iconify.scan();
-      }
+      if (icon) icon.textContent = "chevron_right";
       setStandingExpanded(false);
     } else {
       // 펼치기
       const container = document.getElementById("standing-checklist-container");
       const contentHeight = container.scrollHeight;
       wrapper.style.maxHeight = Math.min(contentHeight + 20, 270) + "px";
-      if (icon) {
-        icon.setAttribute('data-icon', 'material-symbols:expand-more');
-        if (typeof Iconify !== 'undefined') Iconify.scan();
-      }
+      if (icon) icon.textContent = "expand_more";
       setStandingExpanded(true);
     }
   }
@@ -2959,16 +3188,10 @@
     if (isStandingExpanded()) {
       const contentHeight = container.scrollHeight;
       wrapper.style.maxHeight = Math.min(contentHeight + 20, 270) + "px";
-      if (toggleIcon) {
-        toggleIcon.setAttribute('data-icon', 'material-symbols:expand-more');
-        if (typeof Iconify !== 'undefined') Iconify.scan();
-      }
+      if (toggleIcon) toggleIcon.textContent = "expand_more";
     } else {
       wrapper.style.maxHeight = "0px";
-      if (toggleIcon) {
-        toggleIcon.setAttribute('data-icon', 'material-symbols:chevron-right');
-        if (typeof Iconify !== 'undefined') Iconify.scan();
-      }
+      if (toggleIcon) toggleIcon.textContent = "chevron_right";
     }
 
     // 체크박스 이벤트
@@ -2998,10 +3221,10 @@
   // 헤더 클릭 시 토글
   document.getElementById("standing-header")?.addEventListener("click", toggleStandingChecklist);
 
+  const _escapeEl = document.createElement("div");
   function escapeHtml(str) {
-    const div = document.createElement("div");
-    div.textContent = str;
-    return div.innerHTML;
+    _escapeEl.textContent = str;
+    return _escapeEl.innerHTML;
   }
 
   // 상시 체크리스트 추가 버튼
@@ -3055,18 +3278,18 @@
     // === 기본 정기 업무 삭제/수정 기능 ===
     const DELETED_TASKS_KEY = "silmu_deleted_default_tasks";
 
-    // 삭제된 업무 목록 로드
+    // 삭제된 업무 목록 로드 (캐싱)
+    let _deletedCache = null;
     function loadDeletedTasks() {
-      try {
-        return JSON.parse(localStorage.getItem(DELETED_TASKS_KEY) || "[]");
-      } catch {
-        return [];
-      }
+      if (_deletedCache !== null) return _deletedCache;
+      try { _deletedCache = JSON.parse(localStorage.getItem(DELETED_TASKS_KEY) || "[]"); } catch { _deletedCache = []; }
+      return _deletedCache;
     }
 
     // 삭제된 업무 저장
     function saveDeletedTasks(deletedList) {
       try {
+        _deletedCache = deletedList;
         localStorage.setItem(DELETED_TASKS_KEY, JSON.stringify(deletedList));
         syncToServer({ deleted_default_tasks: deletedList });
       } catch (e) {
@@ -3127,7 +3350,7 @@
 
         // 기존 값으로 채우기
         taskInput.value = taskTitle;
-        document.getElementById("onetime-date").value = `2026-${String(taskMonth).padStart(2, '0')}-${String(taskDay).padStart(2, '0')}`;
+        document.getElementById("onetime-date").value = `<%= year %>-${String(taskMonth).padStart(2, '0')}-${String(taskDay).padStart(2, '0')}`;
         document.getElementById("onetime-time").value = "";
 
         // 카테고리 선택
@@ -3138,23 +3361,9 @@
           catBtn.classList.toggle("ring-indigo-600", isSelected);
         });
 
-        // 저장 시 원본 삭제 + 새 업무 추가
-        const submitBtn = document.getElementById("modal-submit");
-        const originalHandler = submitBtn.onclick;
-        submitBtn.onclick = function() {
-          // 원본 업무 삭제
-          const deletedList = loadDeletedTasks();
-          if (!deletedList.includes(taskId)) {
-            deletedList.push(taskId);
-            saveDeletedTasks(deletedList);
-          }
-          taskItem.style.display = "none";
-
-          // 원래 핸들러 실행 (새 업무 추가)
-          if (originalHandler) originalHandler.call(this);
-
-          showToast("업무가 수정되었습니다", "edit");
-        };
+        // 기본 업무 수정 플래그 설정 (submit 핸들러에서 처리)
+        editingDefaultTaskId = taskId;
+        editingDefaultTaskItem = taskItem;
       });
     });
 
@@ -3167,6 +3376,17 @@
       showToast("법정기간이 업무달력에 추가되었습니다", "check_circle");
       // URL 정리 (파라미터 제거)
       window.history.replaceState({}, '', '/tools/task-calendar');
+    }
+
+  });
+
+  // --- 빠른 캡처 단축키 (Q) — 로그인 여부 무관하게 항상 등록 ---
+  document.addEventListener("keydown", (e) => {
+    if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA" || e.target.tagName === "SELECT") return;
+    if (document.querySelector("#modal-add:not(.hidden)") || document.querySelector("#modal-search:not(.hidden)")) return;
+    if (e.key === "q" || e.key === "Q") {
+      e.preventDefault();
+      openAddModal();
     }
   });
 })();
