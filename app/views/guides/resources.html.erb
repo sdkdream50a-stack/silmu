@@ -404,11 +404,11 @@
       <!-- 우측: 자료 통계 -->
       <div class="flex gap-4 lg:gap-6">
         <div class="text-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/15">
-          <div class="text-2xl font-bold">41</div>
+          <div class="text-2xl font-bold">45</div>
           <div class="text-xs text-emerald-100 mt-0.5">전체 자료</div>
         </div>
         <div class="text-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/15">
-          <div class="text-2xl font-bold">14</div>
+          <div class="text-2xl font-bold">17</div>
           <div class="text-xs text-emerald-100 mt-0.5">편람·가이드</div>
         </div>
         <div class="text-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/15">
@@ -452,7 +452,25 @@
           <button class="category-tab" data-category="인사" onclick="filterByCategory('인사')">인사</button>
           <button class="category-tab" data-category="복무" onclick="filterByCategory('복무')">복무</button>
           <button class="category-tab" data-category="편람" onclick="filterByCategory('편람')">편람</button>
+          <button class="category-tab" data-category="감사" onclick="filterByCategory('감사')">감사</button>
           <%= link_to "양식", templates_path, class: "category-tab", style: "text-decoration: none;" %>
+        </div>
+
+        <!-- NotebookLM AI 탐색 배너 -->
+        <div style="background: linear-gradient(135deg, #1e3a5f 0%, #1d4ed8 100%); border-radius: 16px; padding: 18px 22px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; box-shadow: 0 4px 20px rgba(30,58,95,0.25);">
+          <div style="display: flex; align-items: center; gap: 14px; flex: 1; min-width: 0;">
+            <div style="width: 44px; height: 44px; background: rgba(255,255,255,0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.2);">
+              <span class="material-symbols-outlined" style="color: white; font-size: 22px;">auto_stories</span>
+            </div>
+            <div style="min-width: 0;">
+              <div style="font-size: 15px; font-weight: 700; color: white; margin-bottom: 3px;">공식 매뉴얼 전체를 AI로 탐색하기</div>
+              <div style="font-size: 12px; color: rgba(255,255,255,0.75); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">계약·예산·보수·감사 공식 지침서를 AI에게 바로 질문하세요 (Google NotebookLM)</div>
+            </div>
+          </div>
+          <a href="https://notebooklm.google.com/notebook/3e9fd14b-4f9d-436c-879b-5f965a55b123" target="_blank" rel="noopener" style="flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px; padding: 10px 18px; background: white; color: #1e3a5f; border-radius: 10px; font-size: 14px; font-weight: 700; text-decoration: none; white-space: nowrap; box-shadow: 0 2px 8px rgba(0,0,0,0.15); transition: opacity 0.2s;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+            <span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span>
+            AI 탐색 열기
+          </a>
         </div>
 
         <!-- 자료 목록 -->
@@ -516,6 +534,17 @@
 
             # 공지사항
             { title: "2026년 지방계약 한시적 특례 안내", category: "계약", type: "공지사항", org: "자치단체", summary: "행안부 고시 제2025-72호에 따른 지방계약 한시적 특례 사항을 안내합니다.", content: "**2026년 지방계약 한시적 특례 (행안부 고시 제2025-72호)**\n\n지역경제 활력 제고를 위한 한시적 특례가 2026.6.30.까지 연장 적용됩니다.\n\n**1. 보증금 인하 (50% 감면)**\n- 입찰보증금: 5% → 2.5% 이상\n- 계약보증금: 10% → 5% 이상\n- 공사이행보증서: 40% → 20% 이상\n\n**2. 수의계약 절차 완화**\n- 입찰 1회 유찰 시 수의계약 허용 (입찰자 1인인 경우)\n- 기존에는 재공고 후에야 수의계약 가능했던 것을 완화\n\n**3. 검사·대금지급 기간 단축**\n- 검사기간: 14일 → 7일 이내 (연장 시 3일)\n- 대금지급: 5일 → 3일 이내\n\n**참고:** 수의계약 한도액 2배 상향(물품·용역 5천만원, 종합공사 4억원 등)은 2022년 시행령 개정으로 이미 영구 제도화되었으며, 한시적 특례와는 별개입니다.\n\n※ 적용기간: 2026.1.1 ~ 2026.6.30\n\n**관련 근거:** 행안부 고시 제2025-72호 (2025.12.23. 개정, 2026.1.1. 시행)", link: "https://www.mois.go.kr/frt/bbs/type001/commonSelectBoardArticle.do?bbsId=BBSMSTR_000000000016&nttId=122659", link_text: "행정안전부 고시 원문 바로가기" },
+            # 공유재산 분야
+            { title: "공유재산 업무편람 (2024)", category: "예산", type: "편람", org: "자치단체", summary: "행정안전부 발간 공유재산 업무편람입니다. 취득·관리·처분·심의 등 공유재산 업무 전반을 수록합니다.", content: "**공유재산 업무편람 (2024, 행정안전부)**\n\n지방자치단체 공유재산 업무의 종합 지침서입니다.\n\n**주요 내용:**\n1. 공유재산의 종류 (행정재산·일반재산)\n2. 취득: 매입·기부채납·무상귀속, 감정평가 원칙\n3. 관리: 사용허가·대부, 사용료/대부료 산정 (재산가액 × 1~5%)\n4. 처분: 용도폐지 후 매각·교환, 의회 동의 요건\n5. 공유재산심의회 구성 및 운영 (5억원 이상)\n\n**감사 주요 지적사항:**\n- 사용료 면제 시 조례 근거 미확인\n- 대부료 산정 오류 (재산가액 적용 착오)\n- 무단점유 방치 및 변상금 미부과\n- 일반재산 매각 시 의회 동의 누락\n\n**관련 법령:** 공유재산 및 물품 관리법, 동법 시행령", link: "https://www.mois.go.kr/frt/bbs/type001/commonSelectBoardArticle.do?bbsId=BBSMSTR_000000000063&nttId=115064", link_text: "행정안전부 공유재산 업무편람 바로가기" },
+
+            # 인사·보수 공식 지침
+            { title: "공무원 보수등의 업무지침 (2025)", category: "인사", type: "편람", org: "공통", summary: "인사혁신처 발간 2025년 공무원 보수 업무지침입니다. 봉급·수당·성과상여금·시간외수당 지급 기준을 수록합니다.", content: "**공무원 보수등의 업무지침 (2025, 인사혁신처 예규 제192호)**\n\n국가공무원 보수 업무의 종합 지침서입니다. 지방공무원은 행안부 예규 제316호 별도 적용합니다.\n\n**주요 내용:**\n1. 봉급 지급: 봉급표·호봉 획정, 특별승급 요건\n2. 수당:\n   - 정액급식비 월 14만원, 교통보조비 월 6만원(비관사 20만원)\n   - 명절휴가비 봉급의 60% (설·추석)\n   - 가족수당: 배우자 4만원, 셋째 자녀 이후 10만원\n3. 시간외수당: 월 57시간 한도, 단가 = 봉급÷209×1.5\n4. 성과상여금: S 172.5%, A 125%, B 85%, C 미지급 (매년 3월)\n5. 연가보상비: 미사용 연가일수 × 1일 봉급\n6. 4대보험: 건강 7.09%, 국민연금 9%, 고용 0.9%\n\n**관련 법령:** 공무원보수규정, 공무원수당 등에 관한 규정", link: "https://www.data.go.kr/data/15099914/fileData.do", link_text: "공무원 보수등의 업무지침 다운로드 (공공데이터포털)" },
+
+            # 감사 분야
+            { title: "감사원 사전컨설팅 처리사례 (계약·예산·행정)", category: "감사", type: "사례집", org: "공통", summary: "감사원 적극행정지원 사전컨설팅 처리사례입니다. 계약·예산·행정 판단이 어려운 사항에 대해 감사원이 사전에 의견을 제시한 사례 모음입니다.", content: "**감사원 사전컨설팅 처리사례 (bai.go.kr/proactive)**\n\n**사전컨설팅이란?**\n- 업무 처리 전 감사원에 위법·부당 여부를 문의하는 제도\n- 컨설팅 의견대로 업무 처리 시 면책 가능 (고의·중과실 제외)\n\n**주요 사례 분야:**\n- 계약: 수의계약 적정성, 설계변경 허용, 분할발주 가능 여부\n- 예산: 목적 외 집행 여부, 이월 적정성, 보조금 사용\n- 행정: 처분 권한 범위, 법령 해석\n- 보조금: 비목 전용 가능 여부, 잔액 처리 방법\n\n**활용 방법:**\n1. bai.go.kr/proactive 접속\n2. 사전컨설팅 → 처리사례 메뉴\n3. 분야·키워드로 검색\n4. 유사 사례 참고 후 업무 처리\n\n**면책 효과:** 컨설팅 의견대로 처리 시 동일 사항 감사 지적 면책", link: "https://www.bai.go.kr/proactive/consult/bbs/listBoardArticles.do?bbsId=BBSMSTR_100000000063&mdex=proactive034", link_text: "감사원 사전컨설팅 처리사례 바로가기" },
+
+            { title: "공공감사포털 감사사례 DB", category: "감사", type: "사례집", org: "공통", summary: "감사원 운영 공공감사포털에서 지방자치단체·교육청의 자체감사 사례를 분야별로 검색할 수 있습니다.", content: "**공공감사포털 (pap.go.kr)**\n\n감사원에서 운영하는 공공감사 정보 종합 포털입니다.\n\n**주요 기능:**\n- 감사사례 DB 검색 (분야·기관·키워드)\n- 자체감사기구 현황 조회\n- 감사 표준 매뉴얼 다운로드\n\n**자주 검색되는 감사사례 분야:**\n- 계약: 수의계약 위반, 분할계약, 예정가격 조작\n- 예산: 목적 외 집행, 보조금 부당 수령\n- 인사: 성과상여금 부당 지급, 초과 수당\n- 복무: 출장여비 부당 수령, 연가 허위 신청\n\n**ALIO 감사 포인트 (공공기관):**\n- alio.go.kr → 수시공시 → 감사 포인트\n- 공기업·준정부기관 감사 현황 확인 가능", link: "https://www.pap.go.kr/", link_text: "공공감사포털 바로가기" },
+
           ].each do |resource| %>
             <div class="resource-card" data-category="<%= resource[:category] %>" data-org="<%= resource[:org] %>" data-title="<%= resource[:title] %>" onclick="toggleResource(this)">
               <div class="resource-header">
@@ -723,6 +752,20 @@
               <span class="material-symbols-outlined">open_in_new</span>
               건설산업종합정보망
             </a>
+          </div>
+
+          <!-- NotebookLM AI 매뉴얼 탐색 -->
+          <div class="sidebar-card" style="background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border-color: #93c5fd;">
+            <h3 style="color: #1e40af;">
+              <span class="material-symbols-outlined" style="color: #3b82f6;">auto_stories</span>
+              AI 매뉴얼 탐색
+            </h3>
+            <p style="font-size: 13px; color: #1e3a8a; margin-bottom: 14px; line-height: 1.6;">공식 매뉴얼 전체를 AI에게 질문하세요. 계약·예산·보수·감사 지침을 한 번에 검색합니다.</p>
+            <a href="https://notebooklm.google.com/notebook/3e9fd14b-4f9d-436c-879b-5f965a55b123" target="_blank" rel="noopener" style="display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 16px; background: #1d4ed8; color: white; border-radius: 10px; font-size: 14px; font-weight: 600; text-decoration: none; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+              <span class="material-symbols-outlined" style="font-size: 18px;">open_in_new</span>
+              NotebookLM으로 탐색
+            </a>
+            <p style="font-size: 11px; color: #64748b; margin-top: 8px; text-align: center;">Google 계정 로그인 필요</p>
           </div>
 
           <!-- AI 상담 -->
