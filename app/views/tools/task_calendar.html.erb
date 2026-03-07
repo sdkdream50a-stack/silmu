@@ -1083,14 +1083,16 @@
       const serverEmpty = Object.keys(data.task_states || {}).length === 0
                        && (data.custom_tasks || []).length === 0
                        && Object.keys(data.categories || {}).length === 0
-                       && (data.standing_checklist || []).length === 0;
+                       && (data.standing_checklist || []).length === 0
+                       && (data.deleted_default_tasks || []).length === 0;
       if (serverEmpty) {
         // 서버 비어있으면 localStorage → 서버 업로드
         syncToServer({
           task_states: JSON.parse(localStorage.getItem("silmu_task_calendar_2026") || "{}"),
           custom_tasks: JSON.parse(localStorage.getItem("silmu_custom_tasks") || "[]"),
           categories: JSON.parse(localStorage.getItem("silmu_task_cats") || "{}"),
-          standing_checklist: JSON.parse(localStorage.getItem("silmu_standing_checklist") || "[]")
+          standing_checklist: JSON.parse(localStorage.getItem("silmu_standing_checklist") || "[]"),
+          deleted_default_tasks: JSON.parse(localStorage.getItem("silmu_deleted_default_tasks") || "[]")
         });
       } else {
         // 서버 데이터 우선 → localStorage 덮어쓰기
@@ -1098,10 +1100,12 @@
         if (data.custom_tasks.length > 0) localStorage.setItem("silmu_custom_tasks", JSON.stringify(data.custom_tasks));
         if (Object.keys(data.categories).length > 0) localStorage.setItem("silmu_task_cats", JSON.stringify(data.categories));
         if ((data.standing_checklist || []).length > 0) localStorage.setItem("silmu_standing_checklist", JSON.stringify(data.standing_checklist));
+        if ((data.deleted_default_tasks || []).length > 0) localStorage.setItem("silmu_deleted_default_tasks", JSON.stringify(data.deleted_default_tasks));
         // 서버 데이터로 localStorage를 덮어썼으므로 캐시 무효화
         _customCache = null;
         _catsCache = null;
         _standingCache = null;
+        _deletedCache = null;
       }
     } catch(e) {}
   }

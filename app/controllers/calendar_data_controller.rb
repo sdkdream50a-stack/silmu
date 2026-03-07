@@ -9,7 +9,8 @@ class CalendarDataController < ApplicationController
         task_states: datum.task_states,
         custom_tasks: datum.custom_tasks,
         categories: datum.categories,
-        standing_checklist: datum.standing_checklist || []
+        standing_checklist: datum.standing_checklist || [],
+        deleted_default_tasks: datum.deleted_default_tasks || []
       }
     else
       render json: { task_states: {}, custom_tasks: [], categories: {}, standing_checklist: [] }
@@ -25,6 +26,7 @@ class CalendarDataController < ApplicationController
     allowed[:custom_tasks] = body["custom_tasks"] if body.key?("custom_tasks")
     allowed[:categories] = body["categories"] if body.key?("categories")
     allowed[:standing_checklist] = body["standing_checklist"] if body.key?("standing_checklist")
+    allowed[:deleted_default_tasks] = body["deleted_default_tasks"] if body.key?("deleted_default_tasks")
 
     if datum.update(allowed)
       render json: { ok: true }
