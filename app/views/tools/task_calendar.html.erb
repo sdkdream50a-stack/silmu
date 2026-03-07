@@ -379,11 +379,11 @@
 
     <!-- 모바일 헤더 -->
     <div class="lg:hidden flex items-center gap-3 px-4 py-3 bg-white border-b border-slate-200 sticky top-0 z-20">
-      <button id="btn-sidebar-toggle" class="w-9 h-9 rounded-lg hover:bg-slate-100 flex items-center justify-center">
+      <button id="btn-sidebar-toggle" class="w-11 h-11 rounded-lg hover:bg-slate-100 flex items-center justify-center">
         <span class="material-symbols-outlined">menu</span>
       </button>
       <h1 id="mobile-title" class="text-lg font-bold text-slate-900 flex-1"></h1>
-      <button id="btn-add-task-mobile" class="w-9 h-9 rounded-lg bg-indigo-600 text-white flex items-center justify-center shadow-sm">
+      <button id="btn-add-task-mobile" class="w-11 h-11 rounded-lg bg-indigo-600 text-white flex items-center justify-center shadow-sm">
         <span class="material-symbols-outlined text-lg">add</span>
       </button>
     </div>
@@ -669,7 +669,7 @@
         <!-- 헤더: 월/연도 + 네비게이션 -->
         <div class="flex items-center justify-between mb-8">
           <div class="relative">
-            <button id="monthly-month-toggle" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
+            <button id="monthly-month-toggle" class="flex items-center gap-2 hover:opacity-80 transition-opacity min-h-[44px] px-1">
               <span id="monthly-month-label" class="text-xl font-bold text-slate-900"></span>
               <span class="material-symbols-outlined text-slate-400" style="font-size:20px">arrow_drop_down</span>
             </button>
@@ -688,11 +688,11 @@
             </div>
           </div>
           <div class="flex items-center gap-2">
-            <button id="monthly-prev" class="p-1.5 hover:bg-gray-100 rounded-full transition-colors text-slate-400">
+            <button id="monthly-prev" class="w-11 h-11 hover:bg-gray-100 rounded-full transition-colors text-slate-400 flex items-center justify-center">
               <span class="material-symbols-outlined" style="font-size:20px">chevron_left</span>
             </button>
-            <button id="monthly-today-btn" class="px-4 py-1.5 bg-slate-100 text-sm font-medium rounded-lg hover:bg-slate-200 transition-colors">이번 달</button>
-            <button id="monthly-next" class="p-1.5 hover:bg-gray-100 rounded-full transition-colors text-slate-400">
+            <button id="monthly-today-btn" class="px-4 py-2.5 bg-slate-100 text-sm font-medium rounded-lg hover:bg-slate-200 transition-colors min-h-[44px]">이번 달</button>
+            <button id="monthly-next" class="w-11 h-11 hover:bg-gray-100 rounded-full transition-colors text-slate-400 flex items-center justify-center">
               <span class="material-symbols-outlined" style="font-size:20px">chevron_right</span>
             </button>
           </div>
