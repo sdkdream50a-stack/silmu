@@ -1,0 +1,70 @@
+<svg width="800" height="480" viewBox="0 0 800 480" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      text { font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', '맑은 고딕', sans-serif; }
+      .title { font-size: 22px; font-weight: 700; fill: #0f172a; }
+      .label { font-size: 12px; font-weight: 600; fill: white; }
+      .section-title { font-size: 13px; font-weight: 700; fill: #475569; }
+      .body { font-size: 13px; fill: #334155; }
+      .caption { font-size: 11px; fill: #64748b; }
+      .brand { font-size: 13px; font-weight: 700; fill: #ef4444; }
+    </style>
+  </defs>
+
+  <!-- 배경 -->
+  <rect width="800" height="480" rx="16" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+
+  <!-- 헤더 영역 (경미 - 파랑) -->
+  <rect x="0" y="0" width="800" height="72" rx="16" fill="#dbeafe" stroke="none"/>
+  <rect x="0" y="56" width="800" height="16" fill="#dbeafe" stroke="none"/>
+
+  <!-- 심각도 배지 -->
+  <rect x="20" y="16" width="48" height="22" rx="11" fill="#2563eb"/>
+  <text x="44" y="31" text-anchor="middle" class="label">경미</text>
+
+  <!-- 분야 배지 -->
+  <rect x="76" y="16" width="48" height="22" rx="11" fill="#64748b"/>
+  <text x="100" y="31" text-anchor="middle" class="label">예산</text>
+
+  <!-- 제목 -->
+  <text x="20" y="62" class="title">예산 과목 오류 집행 (목 혼용)</text>
+
+  <!-- 구분선 -->
+  <line x1="20" y1="84" x2="780" y2="84" stroke="#e2e8f0" stroke-width="1"/>
+
+  <!-- 지적사항 섹션 -->
+  <rect x="20" y="96" width="4" height="16" rx="2" fill="#2563eb"/>
+  <text x="32" y="108" class="section-title">지적사항</text>
+  <text x="20" y="130" class="body">
+    <tspan x="20" dy="0">운영비를 시설비 과목으로 집행하는 등 예산 과목을 혼용하여 재정 투명성을 저해함.</tspan>
+    <tspan x="20" dy="20">지출 목적과 예산 과목이 불일치하여 감사에서 지적되는 빈번한 위반 사항입니다.</tspan>
+  </text>
+
+  <!-- 핵심 교훈 섹션 -->
+  <rect x="20" y="190" width="760" height="80" rx="8" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1"/>
+  <rect x="32" y="203" width="4" height="16" rx="2" fill="#22c55e"/>
+  <text x="44" y="215" class="section-title" fill="#166534">핵심 교훈</text>
+  <text x="32" y="238" class="body" fill="#166534">
+    <tspan x="32" dy="0">지출 목적에 맞는 정확한 예산 과목을 사용해야 합니다. 과목 혼용은 감사에서</tspan>
+    <tspan x="32" dy="20">반드시 지적되므로 집행 전 과목 적정성을 반드시 확인하세요.</tspan>
+  </text>
+
+  <!-- 예방 포인트 -->
+  <rect x="20" y="286" width="760" height="110" rx="8" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1"/>
+  <text x="36" y="308" class="section-title" fill="#1e40af">예방 핵심 포인트</text>
+  <circle cx="36" cy="328" r="4" fill="#3b82f6"/>
+  <text x="48" y="332" class="body" fill="#1e40af">지출 결의 시 예산 과목 분류 기준을 확인하고 담당자 교육을 강화하세요.</text>
+  <circle cx="36" cy="352" r="4" fill="#3b82f6"/>
+  <text x="48" y="356" class="body" fill="#1e40af">운영비·시설비·업무추진비 등 과목별 집행 기준을 숙지하세요.</text>
+  <circle cx="36" cy="376" r="4" fill="#3b82f6"/>
+  <text x="48" y="380" class="body" fill="#1e40af">관련 서류를 사전에 구비하고 내부 결재 절차를 반드시 준수하세요.</text>
+
+  <!-- 하단 -->
+  <line x1="20" y1="412" x2="780" y2="412" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="20" y="434" class="caption">실무.kr 감사사례 | silmu.kr</text>
+  <text x="780" y="434" text-anchor="end" class="brand">silmu.kr</text>
+
+  <!-- 하단 컬러 바 -->
+  <rect x="0" y="448" width="800" height="32" rx="0" fill="#dbeafe"/>
+  <rect x="0" y="460" width="800" height="20" rx="8" fill="#2563eb" opacity="0.3"/>
+</svg>

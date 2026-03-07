@@ -55,10 +55,11 @@ class GuidesController < ApplicationController
     recent = ([  @guide.slug] + recent).uniq.first(5)
     cookies[:recent_guides] = { value: recent.to_json, expires: 30.days, same_site: :lax }
 
-    # external_link가 topic을 가리키는 경우 관련 Topic 로드
-    if @guide.external_link&.start_with?("/topics/")
-      topic_slug = @guide.external_link.delete_prefix("/topics/")
-      @related_topic = Topic.published.find_by(slug: topic_slug)
+    # topic_slug 필드로 연결된 Topic 우선, 없으면 external_link 기반 폴백
+    @related_topic = if @guide.topic_slug.present?
+      Topic.published.find_by(slug: @guide.topic_slug)
+    elsif @guide.external_link&.start_with?("/topics/")
+      Topic.published.find_by(slug: @guide.external_link.delete_prefix("/topics/"))
     end
 
     @related_guides = Rails.cache.fetch("guides/related/#{@guide.slug}", expires_in: 1.hour) do

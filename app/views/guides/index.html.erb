@@ -21,12 +21,12 @@
           <div class="text-xs text-emerald-100 mt-0.5">전체 가이드</div>
         </div>
         <div class="text-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/15">
-          <div class="text-2xl font-bold"><%= @top_category_count %></div>
-          <div class="text-xs text-emerald-100 mt-0.5"><%= @top_category %> 분야</div>
+          <div class="text-2xl font-bold"><%= @category_count %></div>
+          <div class="text-xs text-emerald-100 mt-0.5">업무 분야</div>
         </div>
         <div class="text-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/15">
-          <div class="text-2xl font-bold"><%= @category_count %></div>
-          <div class="text-xs text-emerald-100 mt-0.5">분야</div>
+          <div class="text-2xl font-bold">단계별</div>
+          <div class="text-xs text-emerald-100 mt-0.5">절차 안내</div>
         </div>
       </div>
     </div>
@@ -59,43 +59,84 @@
     <div class="lg:flex lg:gap-10">
       <!-- 메인 콘텐츠 -->
       <div class="lg:w-[70%]">
+        <!-- 전체 카운트 + 검색 결과 카운트 -->
         <div class="flex items-center justify-between mb-6">
           <p class="text-slate-600">총 <span class="font-bold text-slate-900" id="item-count"><%= @guides.count %></span>개의 가이드</p>
-          <select class="border-gray-200 rounded-xl text-sm focus:ring-emerald-500 focus:border-emerald-500 px-4 py-2">
-            <option>최신순</option>
-            <option>인기순</option>
-          </select>
         </div>
 
-        <% cache ["guides/cards/v2", @guides.size, @guides.last&.updated_at] do %>
-        <div class="space-y-4" id="items-list">
-          <% @guides.each_with_index do |guide, i| %>
+        <!-- 카드 목록 (검색·필터용 숨김 가능한 flat list) -->
+        <div class="space-y-3" id="items-list" style="display:none">
+          <% @guides.each do |guide| %>
             <% guide_link = guide.has_full_content? ? guide_path(guide) : (guide.external_link.present? ? guide.external_link : guide_path(guide)) %>
-            <%= link_to guide_link, class: "block card card-hover p-6 group item-card", style: (i >= 6 ? "display:none" : nil), data: { category: guide.category, title: guide.title } do %>
-              <div class="flex items-start justify-between mb-3">
-                <span class="badge badge-emerald"><%= guide.category %></span>
-                <% if guide.tag.present? %>
-                  <span class="badge <%= guide.tag == '인기' ? 'badge-amber' : guide.tag == '업데이트' ? 'badge-indigo' : 'badge-slate' %>"><%= guide.tag %></span>
-                <% end %>
-              </div>
-              <h3 class="text-lg font-bold text-slate-900 mb-2 group-hover:text-emerald-600 transition-colors"><%= guide.title %></h3>
-              <p class="text-slate-600 text-sm mb-4 leading-relaxed"><%= guide.summary %></p>
-              <div class="flex items-center gap-4 text-xs text-slate-400">
-                <span class="flex items-center gap-1">
-                  <span class="material-symbols-outlined text-sm">category</span>
-                  <%= guide.category %>
-                </span>
+            <%= link_to guide_link, class: "block card card-hover p-5 group item-card", data: { category: guide.category, title: guide.title } do %>
+              <div class="flex items-start justify-between gap-3">
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-2 mb-1.5">
+                    <span class="badge badge-emerald text-xs"><%= guide.category %></span>
+                    <% if guide.tag.present? %>
+                      <span class="badge <%= guide.tag == '인기' ? 'badge-amber' : 'badge-indigo' %> text-xs"><%= guide.tag %></span>
+                    <% end %>
+                  </div>
+                  <h3 class="font-bold text-slate-900 group-hover:text-emerald-600 transition-colors"><%= guide.title %></h3>
+                  <p class="text-slate-500 text-sm mt-1 leading-relaxed"><%= guide.summary %></p>
+                </div>
+                <span class="material-symbols-outlined text-slate-300 group-hover:text-emerald-500 shrink-0 transition-colors">arrow_forward</span>
               </div>
             <% end %>
           <% end %>
         </div>
-        <% end %>
 
-        <!-- 페이지네이션 -->
-        <div class="flex justify-center mt-12" id="pagination-container">
-          <nav class="flex items-center gap-2" id="pagination-nav">
-            <!-- JavaScript로 동적 생성 -->
-          </nav>
+        <!-- 분야별 섹션 (기본 화면) -->
+        <div id="category-sections">
+          <%
+            category_config = {
+              '계약' => { icon: 'gavel',          color: 'emerald', desc: '수의계약·입찰·검수·대금지급 등 계약 전 과정' },
+              '예산' => { icon: 'account_balance', color: 'blue',    desc: '예산 이월·전용·보조금 집행·정산' },
+              '인사' => { icon: 'badge',           color: 'violet',  desc: '임용·승진·휴직·복직 절차' },
+              '복무' => { icon: 'today',           color: 'orange',  desc: '휴가·공가·겸직허가·복무 관리' },
+              '민원' => { icon: 'support_agent',   color: 'rose',    desc: '민원 응대 및 처리 절차' },
+            }
+            grouped = @guides.group_by(&:category)
+          %>
+          <% category_config.each do |cat, cfg| %>
+            <% guides_in_cat = grouped[cat] || [] %>
+            <% next if guides_in_cat.empty? %>
+            <div class="mb-10">
+              <!-- 분야 헤더 -->
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-9 h-9 bg-<%= cfg[:color] %>-100 rounded-xl flex items-center justify-center">
+                    <span class="material-symbols-outlined text-<%= cfg[:color] %>-600" style="font-size:20px"><%= cfg[:icon] %></span>
+                  </div>
+                  <div>
+                    <h2 class="font-bold text-slate-900"><%= cat %> 가이드</h2>
+                    <p class="text-xs text-slate-500"><%= cfg[:desc] %></p>
+                  </div>
+                </div>
+                <span class="text-xs text-slate-400"><%= guides_in_cat.size %>개</span>
+              </div>
+              <!-- 카드 그리드 -->
+              <div class="grid sm:grid-cols-2 gap-3">
+                <% guides_in_cat.each do |guide| %>
+                  <% guide_link = guide.has_full_content? ? guide_path(guide) : (guide.external_link.present? ? guide.external_link : guide_path(guide)) %>
+                  <%= link_to guide_link, class: "card card-hover p-5 group flex items-start gap-3" do %>
+                    <div class="w-8 h-8 bg-<%= cfg[:color] %>-50 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
+                      <span class="material-symbols-outlined text-<%= cfg[:color] %>-500" style="font-size:18px">menu_book</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <h3 class="font-semibold text-slate-900 text-sm group-hover:text-emerald-600 transition-colors leading-snug mb-1"><%= guide.title %></h3>
+                      <p class="text-xs text-slate-500 leading-relaxed line-clamp-2"><%= guide.summary %></p>
+                    </div>
+                  <% end %>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+
+        <!-- 페이지네이션 (검색/필터 시 사용) -->
+        <div class="flex justify-center mt-8" id="pagination-container" style="display:none">
+          <nav class="flex items-center gap-2" id="pagination-nav"></nav>
         </div>
       </div>
 
@@ -227,6 +268,23 @@ document.addEventListener('turbo:load', function() {
   const items = document.querySelectorAll('.item-card');
   const searchInput = document.getElementById('search-input');
   const paginationNav = document.getElementById('pagination-nav');
+  const itemsList = document.getElementById('items-list');
+  const categorySections = document.getElementById('category-sections');
+  const paginationContainer = document.getElementById('pagination-container');
+
+  // 검색/필터 모드 전환
+  function setSearchMode(active) {
+    if (active) {
+      itemsList.style.display = '';
+      categorySections.style.display = 'none';
+      paginationContainer.style.display = '';
+    } else {
+      itemsList.style.display = 'none';
+      categorySections.style.display = '';
+      paginationContainer.style.display = 'none';
+      itemCount.textContent = items.length;
+    }
+  }
 
   // 페이지네이션 설정
   const ITEMS_PER_PAGE = 6;
@@ -363,6 +421,18 @@ document.addEventListener('turbo:load', function() {
   };
 
   function filterAndPaginate() {
+    const activeTab = document.querySelector('#category-tabs .tab-btn.active');
+    const category = activeTab ? activeTab.dataset.category : '전체';
+    const searchTerm = searchInput.value.trim();
+
+    // 전체 카테고리 + 검색어 없음 → 분야별 섹션 표시
+    if (category === '전체' && !searchTerm) {
+      setSearchMode(false);
+      return;
+    }
+
+    // 검색/필터 모드
+    setSearchMode(true);
     filteredItems = getFilteredItems();
     itemCount.textContent = filteredItems.length;
     currentPage = 1;
@@ -371,23 +441,19 @@ document.addEventListener('turbo:load', function() {
 
   tabs.forEach(tab => {
     tab.addEventListener('click', function() {
-      // 모든 탭 비활성화
       tabs.forEach(t => {
         t.classList.remove('active', 'bg-emerald-600', 'text-white', 'shadow-md');
         t.classList.add('bg-surface-100', 'text-slate-600');
       });
-
-      // 클릭된 탭 활성화
       this.classList.add('active', 'bg-emerald-600', 'text-white', 'shadow-md');
       this.classList.remove('bg-surface-100', 'text-slate-600');
-
       filterAndPaginate();
     });
   });
 
   searchInput.addEventListener('input', filterAndPaginate);
 
-  // 초기 필터링 및 페이지네이션 실행
-  filterAndPaginate();
+  // 초기: 분야별 섹션 표시
+  setSearchMode(false);
 });
 </script>

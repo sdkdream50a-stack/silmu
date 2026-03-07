@@ -211,7 +211,8 @@ class TopicsController < ApplicationController
       @topic.related_topics.to_a
     end
     @related_guide = Rails.cache.fetch("topic_guide/#{@topic.slug}", expires_in: 1.hour) do
-      Guide.published.find_by(external_link: "/topics/#{@topic.slug}")
+      Guide.published.find_by(topic_slug: @topic.slug) ||
+        Guide.published.find_by(external_link: "/topics/#{@topic.slug}")
     end
     @related_articles = Rails.cache.fetch("cafe_articles/similar/#{@topic.slug}", expires_in: 6.hours) do
       CafeArticle.find_similar(@topic.name, limit: 10).to_a
