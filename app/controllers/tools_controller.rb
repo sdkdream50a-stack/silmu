@@ -36,6 +36,36 @@ class ToolsController < ApplicationController
     )
   end
 
+  def split_contract_checker
+    set_meta_tags(
+      title: "분할계약 판단 체크리스트 — 수의계약 위험도 즉시 확인",
+      description: "계약 분할이 감사 지적 대상인지 5가지 기준으로 즉시 확인하세요. 추정가격 합산과 분할계약 판단 기준을 자동으로 검토합니다.",
+      keywords: "분할계약,분할계약 판단,수의계약 기준,분할계약 금지,추정가격 합산,감사 지적",
+      og: {
+        title: "분할계약 판단 체크리스트 — 실무.kr",
+        description: "계약 분할이 감사 지적 대상인지 즉시 확인하세요.",
+        url: canonical_url,
+        image: "https://silmu.kr/og-image.png",
+        type: "website"
+      }
+    )
+  end
+
+  def price_adjustment_calculator
+    set_meta_tags(
+      title: "물가변동 계약금액조정 계산기 — ESC 조정금액 자동 계산",
+      description: "지수조정률·품목조정률 방식으로 물가변동 계약금액조정(ESC) 금액을 자동 계산합니다. 선금 공제, 가중평균 등락률, 조정 가능 여부까지 즉시 확인하세요.",
+      keywords: "물가변동조정,ESC,계약금액조정,지수조정률,품목조정률,선금공제,물가변동 계산기",
+      og: {
+        title: "물가변동 계약금액조정 계산기 — 실무.kr",
+        description: "ESC 조정금액을 지수조정률·품목조정률 방식으로 자동 계산합니다.",
+        url: canonical_url,
+        image: "https://silmu.kr/og-image.png",
+        type: "website"
+      }
+    )
+  end
+
   def budget_execution_rate
     description_text = "예산 항목별 집행액을 입력하면 집행률과 잔액을 자동 계산합니다. 월별 권장 집행률과 비교하여 집행 속도를 즉시 파악하고, 연말 집행 목표 달성 여부를 미리 확인하세요."
 

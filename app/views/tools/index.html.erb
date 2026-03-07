@@ -87,6 +87,8 @@
         { title: "연가일수 계산기", desc: "임용일을 입력하면 재직 기간별 부여 연가일수, 잔여 연가, 연가보상비를 자동 계산합니다.", icon: "event_available", color: "emerald", category: "계산기", path: annual_leave_calculator_path },
         { title: "퇴직금 계산기", desc: "재직기간과 기준 소득월액으로 공무원 퇴직수당을 자동 계산합니다. 공무원연금법 제64조 기준 재직기간별 지급율(6.5~10%) 자동 적용.", icon: "savings", color: "emerald", category: "계산기", path: severance_calculator_path, badge: "NEW" },
         { title: "성과상여금 계산기", desc: "성과등급(S·A·B)과 월봉급액으로 성과상여금을 자동 계산합니다. 연간 지급액과 등급별 비교까지 한 번에 확인하세요.", icon: "emoji_events", color: "amber", category: "계산기", path: performance_bonus_calculator_path, badge: "NEW" },
+        { title: "분할계약 판단 체크리스트", desc: "계약 분할이 감사 지적 대상인지 5가지 기준으로 즉시 확인합니다. 추정가격 합산 및 위험도를 자동 분석합니다.", icon: "rule", color: "red", category: "체크리스트", path: split_contract_checker_path, badge: "NEW" },
+        { title: "물가변동 조정금액 계산기", desc: "지수조정률·품목조정률 방식으로 ESC 조정금액을 자동 계산합니다. 선금 공제·가중평균 등락률 포함.", icon: "trending_up", color: "indigo", category: "계산기", path: price_adjustment_calculator_path, badge: "NEW" },
       ].each do |tool| %>
         <%= link_to tool[:path], class: "group card card-interactive card-glow-#{tool[:color]} card-shine p-6 relative overflow-hidden border border-transparent hover:border-#{tool[:color]}-200", data: { category: tool[:category], title: tool[:title] } do %>
           <% if tool[:badge] %>

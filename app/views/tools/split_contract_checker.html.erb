@@ -1,0 +1,293 @@
+<%# 분할계약 판단 체크리스트 %>
+
+<section class="section py-10">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- 뒤로가기 -->
+    <div class="mb-6">
+      <%= link_to tools_path, class: "inline-flex items-center text-slate-600 hover:text-red-600 transition-colors font-medium" do %>
+        <span class="material-symbols-outlined mr-1">arrow_back</span>
+        도구 목록으로
+      <% end %>
+    </div>
+
+    <!-- 페이지 헤더 -->
+    <div class="mb-8">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="icon-container icon-container-lg gradient-rose shadow-lg">
+          <span class="material-symbols-outlined text-3xl text-white">rule</span>
+        </div>
+        <div>
+          <h1 class="text-2xl font-bold text-slate-900">분할계약 판단 체크리스트</h1>
+          <p class="text-slate-500">계약 분할이 감사 지적 대상인지 즉시 확인하세요</p>
+        </div>
+      </div>
+
+      <div class="bg-red-50 border border-red-200 rounded-2xl p-5">
+        <p class="text-red-800 text-sm leading-relaxed">
+          <strong>분할계약이란?</strong> 동일한 목적의 물품·공사·용역을 여러 건으로 나눠 각각 수의계약 기준금액 이하로 계약하는 행위로, 경쟁입찰 회피를 막기 위해 법으로 금지됩니다.
+          (<strong>수의계약 기준:</strong> 물품·용역 2,000만원 이하 / 공사 4,000만원 이하)
+        </p>
+      </div>
+    </div>
+
+    <!-- 계약 정보 입력 -->
+    <div class="card p-6 mb-6">
+      <h2 class="text-lg font-bold text-slate-900 mb-5 flex items-center gap-2">
+        <span class="material-symbols-outlined text-red-600">edit</span>
+        계약 정보 입력
+      </h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6">
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">계약 유형</label>
+          <select id="contract-type" class="form-input w-full" onchange="updateThreshold()">
+            <option value="goods">물품·용역 (수의계약 기준: 2,000만원)</option>
+            <option value="construction">공사 (수의계약 기준: 4,000만원)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">이번 계약 추정가격 (만원)</label>
+          <input type="number" id="current-amount" placeholder="예: 1800" min="0" class="form-input w-full" oninput="calculate()">
+        </div>
+      </div>
+
+      <!-- 최근 유사 계약 입력 -->
+      <div class="mb-4">
+        <div class="flex items-center justify-between mb-3">
+          <label class="text-sm font-semibold text-slate-700">최근 3개월 내 동일·유사 목적 계약 내역</label>
+          <button type="button" onclick="addPrevContract()" class="text-xs text-red-600 hover:text-red-800 font-medium flex items-center gap-1">
+            <span class="material-symbols-outlined text-sm">add</span>
+            계약 추가
+          </button>
+        </div>
+
+        <div id="prev-contracts">
+          <div class="prev-contract-item flex gap-3 mb-3 items-center">
+            <input type="text" placeholder="계약 목적 (예: 사무용품 구매)" class="form-input flex-1 text-sm" oninput="calculate()">
+            <input type="number" placeholder="금액(만원)" min="0" class="form-input w-28 text-sm prev-amount" oninput="calculate()">
+            <button type="button" onclick="removePrevContract(this)" class="text-slate-300 hover:text-red-500 hidden">
+              <span class="material-symbols-outlined text-base">close</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5가지 판단 기준 체크 -->
+      <div class="bg-slate-50 rounded-xl p-5">
+        <h3 class="text-sm font-bold text-slate-700 mb-4">분할계약 판단 기준 (체크하세요)</h3>
+        <div class="space-y-3">
+          <label class="flex items-start gap-3 cursor-pointer group">
+            <input type="checkbox" id="chk-purpose" class="mt-1 w-4 h-4 accent-red-600" onchange="calculate()">
+            <div>
+              <span class="text-sm font-medium text-slate-800 group-hover:text-red-700">동일한 목적·용도</span>
+              <p class="text-xs text-slate-500">이전 계약과 구매 목적이나 사용 용도가 동일하거나 유사한가?</p>
+            </div>
+          </label>
+          <label class="flex items-start gap-3 cursor-pointer group">
+            <input type="checkbox" id="chk-spec" class="mt-1 w-4 h-4 accent-red-600" onchange="calculate()">
+            <div>
+              <span class="text-sm font-medium text-slate-800 group-hover:text-red-700">동일·유사한 규격</span>
+              <p class="text-xs text-slate-500">이전 계약과 물품 규격, 용역 내용이 동일하거나 유사한가?</p>
+            </div>
+          </label>
+          <label class="flex items-start gap-3 cursor-pointer group">
+            <input type="checkbox" id="chk-budget" class="mt-1 w-4 h-4 accent-red-600" onchange="calculate()">
+            <div>
+              <span class="text-sm font-medium text-slate-800 group-hover:text-red-700">동일 예산과목</span>
+              <p class="text-xs text-slate-500">이전 계약과 동일한 예산 세목·비목에서 집행하는가?</p>
+            </div>
+          </label>
+          <label class="flex items-start gap-3 cursor-pointer group">
+            <input type="checkbox" id="chk-timing" class="mt-1 w-4 h-4 accent-red-600" onchange="calculate()">
+            <div>
+              <span class="text-sm font-medium text-slate-800 group-hover:text-red-700">동일 시기·장소 필요</span>
+              <p class="text-xs text-slate-500">이번 계약이 이전 계약과 같은 시기·장소에서 동시에 필요한가?</p>
+            </div>
+          </label>
+          <label class="flex items-start gap-3 cursor-pointer group">
+            <input type="checkbox" id="chk-vendor" class="mt-1 w-4 h-4 accent-red-600" onchange="calculate()">
+            <div>
+              <span class="text-sm font-medium text-slate-800 group-hover:text-red-700">동일 계약상대자</span>
+              <p class="text-xs text-slate-500">이전 계약과 동일한 업체와 반복하여 계약하는가?</p>
+            </div>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- 결과 -->
+    <div id="result-card" class="hidden">
+    </div>
+
+    <!-- 법령 가이드 링크 -->
+    <div class="mt-6 p-5 bg-blue-50 rounded-2xl border border-blue-100">
+      <div class="flex items-start gap-3">
+        <span class="material-symbols-outlined text-blue-600 mt-0.5">menu_book</span>
+        <div>
+          <p class="text-sm font-semibold text-blue-900 mb-1">관련 법령 가이드</p>
+          <p class="text-xs text-blue-700 mb-2">분할계약 금지 원칙의 법적 근거와 감사사례를 확인하세요</p>
+          <%= link_to topic_path("split-contract"), class: "inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-800" do %>
+            <span class="material-symbols-outlined text-xs">open_in_new</span>
+            분할계약 금지 법령 가이드 보기
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  let threshold = 2000; // 물품·용역 기준
+
+  function updateThreshold() {
+    const type = document.getElementById('contract-type').value;
+    threshold = type === 'construction' ? 4000 : 2000;
+    calculate();
+  }
+
+  function addPrevContract() {
+    const container = document.getElementById('prev-contracts');
+    const div = document.createElement('div');
+    div.className = 'prev-contract-item flex gap-3 mb-3 items-center';
+    div.innerHTML = `
+      <input type="text" placeholder="계약 목적" class="form-input flex-1 text-sm" oninput="calculate()">
+      <input type="number" placeholder="금액(만원)" min="0" class="form-input w-28 text-sm prev-amount" oninput="calculate()">
+      <button type="button" onclick="removePrevContract(this)" class="text-slate-300 hover:text-red-500">
+        <span class="material-symbols-outlined text-base">close</span>
+      </button>
+    `;
+    container.appendChild(div);
+    // 첫 항목 삭제 버튼 표시
+    const firstBtn = container.querySelector('.prev-contract-item button.hidden');
+    if (firstBtn) firstBtn.classList.remove('hidden');
+  }
+
+  function removePrevContract(btn) {
+    btn.closest('.prev-contract-item').remove();
+    const items = document.querySelectorAll('.prev-contract-item');
+    if (items.length === 1) {
+      const b = items[0].querySelector('button');
+      if (b) b.classList.add('hidden');
+    }
+    calculate();
+  }
+
+  function calculate() {
+    const currentAmount = parseFloat(document.getElementById('current-amount').value) || 0;
+    const prevAmounts = Array.from(document.querySelectorAll('.prev-amount'))
+      .map(el => parseFloat(el.value) || 0);
+    const totalPrev = prevAmounts.reduce((a, b) => a + b, 0);
+    const totalAmount = currentAmount + totalPrev;
+
+    const checks = {
+      purpose: document.getElementById('chk-purpose').checked,
+      spec: document.getElementById('chk-spec').checked,
+      budget: document.getElementById('chk-budget').checked,
+      timing: document.getElementById('chk-timing').checked,
+      vendor: document.getElementById('chk-vendor').checked
+    };
+    const checkedCount = Object.values(checks).filter(Boolean).length;
+
+    const resultCard = document.getElementById('result-card');
+
+    if (currentAmount === 0 && totalPrev === 0 && checkedCount === 0) {
+      resultCard.classList.add('hidden');
+      return;
+    }
+
+    resultCard.classList.remove('hidden');
+
+    // 위험도 판단
+    const exceedsThreshold = totalAmount > threshold;
+    const highRiskChecks = checkedCount >= 3;
+    const mediumRiskChecks = checkedCount >= 2;
+
+    let riskLevel, riskColor, riskBg, riskTitle, riskDesc, riskAction;
+
+    if (exceedsThreshold && highRiskChecks) {
+      riskLevel = '높음';
+      riskColor = 'red';
+      riskBg = 'bg-red-50 border-red-300';
+      riskTitle = '⚠️ 분할계약 위험 높음 — 즉시 검토 필요';
+      riskDesc = `합산 추정가격(${formatNum(totalAmount)}만원)이 수의계약 기준(${formatNum(threshold)}만원)을 초과하고, 분할계약 판단 기준 ${checkedCount}개가 해당됩니다. 입찰 절차를 검토하세요.`;
+      riskAction = '입찰 절차(경쟁입찰) 검토 필요';
+    } else if (exceedsThreshold && mediumRiskChecks) {
+      riskLevel = '중간';
+      riskColor = 'amber';
+      riskBg = 'bg-amber-50 border-amber-300';
+      riskTitle = '⚡ 분할계약 가능성 있음 — 추가 검토 필요';
+      riskDesc = `합산 추정가격(${formatNum(totalAmount)}만원)이 수의계약 기준(${formatNum(threshold)}만원)을 초과합니다. 분할이 불가피한 정당한 사유를 문서로 명시하거나 통합 발주를 검토하세요.`;
+      riskAction = '정당한 분할 사유 문서화 또는 통합 발주 검토';
+    } else if (exceedsThreshold) {
+      riskLevel = '주의';
+      riskColor = 'amber';
+      riskBg = 'bg-amber-50 border-amber-300';
+      riskTitle = '📌 추정가격 합산 시 기준 초과';
+      riskDesc = `합산 추정가격(${formatNum(totalAmount)}만원)이 수의계약 기준(${formatNum(threshold)}만원)을 초과합니다. 분할계약 판단 기준 항목 해당 여부를 다시 확인하세요.`;
+      riskAction = '계약 목적의 독립성 확인 및 사유 문서화';
+    } else if (highRiskChecks && currentAmount > 0) {
+      riskLevel = '주의';
+      riskColor = 'amber';
+      riskBg = 'bg-amber-50 border-amber-300';
+      riskTitle = '📌 판단 기준 다수 해당 — 주의 필요';
+      riskDesc = `현재 합산 금액(${formatNum(totalAmount)}만원)은 기준 이하이지만, 분할계약 판단 기준 ${checkedCount}개가 해당됩니다. 향후 추가 구매 시 합산하면 기준을 초과할 수 있습니다.`;
+      riskAction = '연간 구매 계획 수립 및 통합 발주 검토';
+    } else {
+      riskLevel = '낮음';
+      riskColor = 'green';
+      riskBg = 'bg-green-50 border-green-300';
+      riskTitle = '✅ 분할계약 위험 낮음';
+      riskDesc = `합산 추정가격(${formatNum(totalAmount)}만원)이 수의계약 기준(${formatNum(threshold)}만원) 이하이고, 분할계약 판단 기준 해당 항목이 적습니다.`;
+      riskAction = '수의계약 가능 — 2인 이상 견적 징구 원칙 준수';
+    }
+
+    resultCard.innerHTML = `
+      <div class="card p-6 border-2 ${riskBg}">
+        <h2 class="text-base font-bold text-${riskColor}-800 mb-4">${riskTitle}</h2>
+
+        <!-- 금액 요약 -->
+        <div class="grid grid-cols-3 gap-3 mb-5">
+          <div class="bg-white rounded-xl p-3 text-center border border-${riskColor}-100">
+            <div class="text-xs text-slate-500 mb-1">이번 계약</div>
+            <div class="text-lg font-bold text-slate-800">${formatNum(currentAmount)}만원</div>
+          </div>
+          <div class="bg-white rounded-xl p-3 text-center border border-${riskColor}-100">
+            <div class="text-xs text-slate-500 mb-1">이전 계약 합산</div>
+            <div class="text-lg font-bold text-slate-600">${formatNum(totalPrev)}만원</div>
+          </div>
+          <div class="bg-white rounded-xl p-3 text-center border border-${riskColor}-100">
+            <div class="text-xs text-slate-500 mb-1">총 합산</div>
+            <div class="text-lg font-bold text-${riskColor}-700">${formatNum(totalAmount)}만원</div>
+            <div class="text-xs text-${riskColor}-600">(기준: ${formatNum(threshold)}만원)</div>
+          </div>
+        </div>
+
+        <!-- 위험도 바 -->
+        <div class="mb-4">
+          <div class="flex justify-between text-xs text-slate-500 mb-1">
+            <span>판단 기준 해당 항목</span>
+            <span>${checkedCount}/5</span>
+          </div>
+          <div class="bg-white rounded-full h-3 border border-${riskColor}-200">
+            <div class="h-full rounded-full bg-${riskColor}-${riskColor === 'green' ? '400' : riskColor === 'amber' ? '400' : '500'} transition-all"
+                 style="width: ${checkedCount / 5 * 100}%"></div>
+          </div>
+        </div>
+
+        <p class="text-sm text-${riskColor}-800 mb-4">${riskDesc}</p>
+
+        <div class="bg-white rounded-xl p-4 border border-${riskColor}-100">
+          <div class="text-xs font-semibold text-slate-500 mb-1">권장 조치</div>
+          <div class="text-sm font-semibold text-${riskColor}-800">${riskAction}</div>
+        </div>
+      </div>
+    `;
+  }
+
+  function formatNum(n) {
+    return Math.round(n).toLocaleString('ko-KR');
+  }
+
+  // 초기 실행
+  document.addEventListener('DOMContentLoaded', calculate);
+</script>

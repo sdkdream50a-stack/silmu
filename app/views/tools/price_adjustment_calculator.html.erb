@@ -1,0 +1,446 @@
+<%# 물가변동 계약금액조정 계산기 %>
+
+<section class="section py-10">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- 뒤로가기 -->
+    <div class="mb-6">
+      <%= link_to tools_path, class: "inline-flex items-center text-slate-600 hover:text-indigo-600 transition-colors font-medium" do %>
+        <span class="material-symbols-outlined mr-1">arrow_back</span>
+        도구 목록으로
+      <% end %>
+    </div>
+
+    <!-- 페이지 헤더 -->
+    <div class="mb-8">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="icon-container icon-container-lg gradient-indigo shadow-lg">
+          <span class="material-symbols-outlined text-3xl text-white">trending_up</span>
+        </div>
+        <div>
+          <h1 class="text-2xl font-bold text-slate-900">물가변동 계약금액조정 계산기</h1>
+          <p class="text-slate-500">지수조정률·품목조정률 방식으로 ESC 조정금액을 계산합니다</p>
+        </div>
+      </div>
+
+      <!-- 요건 안내 -->
+      <div class="bg-indigo-50 border border-indigo-200 rounded-2xl p-5">
+        <h3 class="text-sm font-bold text-indigo-900 mb-2 flex items-center gap-2">
+          <span class="material-symbols-outlined text-sm">info</span>
+          물가변동(ESC) 조정 요건 — 두 가지를 모두 충족해야 합니다
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="flex items-center gap-2 text-sm text-indigo-800">
+            <span class="material-symbols-outlined text-indigo-500">schedule</span>
+            <strong>기간 요건:</strong> 계약체결일(또는 직전 조정기준일)로부터 90일 이상 경과
+          </div>
+          <div class="flex items-center gap-2 text-sm text-indigo-800">
+            <span class="material-symbols-outlined text-indigo-500">percent</span>
+            <strong>등락률 요건:</strong> 등락률 3% 이상 변동
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 조정 방법 선택 -->
+    <div class="card p-6 mb-6">
+      <h2 class="text-base font-bold text-slate-900 mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-indigo-600">tune</span>
+        기본 정보
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">조정 방법</label>
+          <select id="method" class="form-input w-full" onchange="toggleMethod()">
+            <option value="index">지수조정률 (생산자물가지수)</option>
+            <option value="item">품목조정률 (개별 품목 단가)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">계약금액 (만원)</label>
+          <input type="number" id="contract-amount" placeholder="예: 100000" min="0" class="form-input w-full" oninput="calculate()">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">선금 지급 비율 (%)</label>
+          <input type="number" id="advance-rate" placeholder="예: 30 (없으면 0)" min="0" max="100" value="0" class="form-input w-full" oninput="calculate()">
+          <p class="text-xs text-slate-400 mt-1">선금 지급분은 조정 대상 제외</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 지수조정률 입력 -->
+    <div id="index-section" class="card p-6 mb-6">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+          <span class="material-symbols-outlined text-indigo-600">bar_chart</span>
+          비목별 지수 입력
+        </h2>
+        <button type="button" onclick="addIndexItem()" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium flex items-center gap-1">
+          <span class="material-symbols-outlined text-sm">add</span>
+          비목 추가
+        </button>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="text-xs text-slate-500 border-b border-slate-100">
+              <th class="pb-2 text-left font-semibold">비목명</th>
+              <th class="pb-2 text-right font-semibold">계약금액<br><span class="font-normal">(만원)</span></th>
+              <th class="pb-2 text-right font-semibold">입찰일<br>지수</th>
+              <th class="pb-2 text-right font-semibold">조정기준일<br>지수</th>
+              <th class="pb-2 text-right font-semibold text-indigo-600">등락률</th>
+              <th class="pb-2"></th>
+            </tr>
+          </thead>
+          <tbody id="index-items">
+            <tr class="index-row border-b border-slate-50">
+              <td class="py-2 pr-2"><input type="text" value="노무비" class="form-input w-full text-sm item-name" oninput="calculate()"></td>
+              <td class="py-2 px-2"><input type="number" placeholder="0" min="0" class="form-input w-full text-sm text-right item-amount" oninput="calculate()"></td>
+              <td class="py-2 px-2"><input type="number" placeholder="100.0" step="0.1" min="0" class="form-input w-full text-sm text-right item-base-idx" oninput="calculate()"></td>
+              <td class="py-2 px-2"><input type="number" placeholder="104.0" step="0.1" min="0" class="form-input w-full text-sm text-right item-adj-idx" oninput="calculate()"></td>
+              <td class="py-2 pl-2 text-right font-bold item-rate text-slate-400">-</td>
+              <td class="py-2 pl-1"><button type="button" onclick="removeIndexItem(this)" class="text-slate-200 hover:text-red-400 hidden"><span class="material-symbols-outlined text-sm">close</span></button></td>
+            </tr>
+            <tr class="index-row border-b border-slate-50">
+              <td class="py-2 pr-2"><input type="text" value="재료비" class="form-input w-full text-sm item-name" oninput="calculate()"></td>
+              <td class="py-2 px-2"><input type="number" placeholder="0" min="0" class="form-input w-full text-sm text-right item-amount" oninput="calculate()"></td>
+              <td class="py-2 px-2"><input type="number" placeholder="100.0" step="0.1" min="0" class="form-input w-full text-sm text-right item-base-idx" oninput="calculate()"></td>
+              <td class="py-2 px-2"><input type="number" placeholder="106.0" step="0.1" min="0" class="form-input w-full text-sm text-right item-adj-idx" oninput="calculate()"></td>
+              <td class="py-2 pl-2 text-right font-bold item-rate text-slate-400">-</td>
+              <td class="py-2 pl-1"><button type="button" onclick="removeIndexItem(this)" class="text-slate-200 hover:text-red-400 hidden"><span class="material-symbols-outlined text-sm">close</span></button></td>
+            </tr>
+            <tr class="index-row border-b border-slate-50">
+              <td class="py-2 pr-2"><input type="text" value="경비" class="form-input w-full text-sm item-name" oninput="calculate()"></td>
+              <td class="py-2 px-2"><input type="number" placeholder="0" min="0" class="form-input w-full text-sm text-right item-amount" oninput="calculate()"></td>
+              <td class="py-2 px-2"><input type="number" placeholder="100.0" step="0.1" min="0" class="form-input w-full text-sm text-right item-base-idx" oninput="calculate()"></td>
+              <td class="py-2 px-2"><input type="number" placeholder="102.0" step="0.1" min="0" class="form-input w-full text-sm text-right item-adj-idx" oninput="calculate()"></td>
+              <td class="py-2 pl-2 text-right font-bold item-rate text-slate-400">-</td>
+              <td class="py-2 pl-1"><button type="button" onclick="removeIndexItem(this)" class="text-slate-200 hover:text-red-400 hidden"><span class="material-symbols-outlined text-sm">close</span></button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="text-xs text-slate-400 mt-3">* 한국은행 생산자물가지수 기준. 비목별 금액 합산이 계약금액과 일치해야 정확합니다.</p>
+    </div>
+
+    <!-- 품목조정률 입력 -->
+    <div id="item-section" class="card p-6 mb-6 hidden">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+          <span class="material-symbols-outlined text-indigo-600">inventory_2</span>
+          품목별 단가 변동 입력
+        </h2>
+        <button type="button" onclick="addItemRow()" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium flex items-center gap-1">
+          <span class="material-symbols-outlined text-sm">add</span>
+          품목 추가
+        </button>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="text-xs text-slate-500 border-b border-slate-100">
+              <th class="pb-2 text-left font-semibold">품목명</th>
+              <th class="pb-2 text-right font-semibold">수량</th>
+              <th class="pb-2 text-right font-semibold">입찰일<br>단가(원)</th>
+              <th class="pb-2 text-right font-semibold">조정기준일<br>단가(원)</th>
+              <th class="pb-2 text-right font-semibold text-indigo-600">변동액</th>
+              <th class="pb-2"></th>
+            </tr>
+          </thead>
+          <tbody id="item-rows">
+            <tr class="item-row border-b border-slate-50">
+              <td class="py-2 pr-2"><input type="text" placeholder="품목명" class="form-input w-full text-sm" oninput="calculateItem()"></td>
+              <td class="py-2 px-2"><input type="number" placeholder="0" min="0" step="0.001" class="form-input w-full text-sm text-right item-qty" oninput="calculateItem()"></td>
+              <td class="py-2 px-2"><input type="number" placeholder="0" min="0" class="form-input w-full text-sm text-right item-base-price" oninput="calculateItem()"></td>
+              <td class="py-2 px-2"><input type="number" placeholder="0" min="0" class="form-input w-full text-sm text-right item-adj-price" oninput="calculateItem()"></td>
+              <td class="py-2 pl-2 text-right font-bold item-change text-slate-400">-</td>
+              <td class="py-2 pl-1"><button type="button" onclick="removeItemRow(this)" class="text-slate-200 hover:text-red-400 hidden"><span class="material-symbols-outlined text-sm">close</span></button></td>
+            </tr>
+            <tr class="item-row border-b border-slate-50">
+              <td class="py-2 pr-2"><input type="text" placeholder="품목명" class="form-input w-full text-sm" oninput="calculateItem()"></td>
+              <td class="py-2 px-2"><input type="number" placeholder="0" min="0" step="0.001" class="form-input w-full text-sm text-right item-qty" oninput="calculateItem()"></td>
+              <td class="py-2 px-2"><input type="number" placeholder="0" min="0" class="form-input w-full text-sm text-right item-base-price" oninput="calculateItem()"></td>
+              <td class="py-2 px-2"><input type="number" placeholder="0" min="0" class="form-input w-full text-sm text-right item-adj-price" oninput="calculateItem()"></td>
+              <td class="py-2 pl-2 text-right font-bold item-change text-slate-400">-</td>
+              <td class="py-2 pl-1"><button type="button" onclick="removeItemRow(this)" class="text-slate-200 hover:text-red-400 hidden"><span class="material-symbols-outlined text-sm">close</span></button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="text-xs text-slate-400 mt-3">* 거래실례가격 조사 기준. 변동액 = (조정기준일 단가 - 입찰일 단가) × 수량</p>
+    </div>
+
+    <!-- 결과 -->
+    <div id="result-area" class="hidden">
+      <div class="card p-6 border-2 border-indigo-200 bg-indigo-50/30">
+        <h2 class="text-base font-bold text-indigo-900 mb-5 flex items-center gap-2">
+          <span class="material-symbols-outlined text-indigo-600">calculate</span>
+          조정금액 계산 결과
+        </h2>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+          <div class="bg-white rounded-xl p-4 text-center border border-indigo-100">
+            <div class="text-xs text-slate-500 mb-1">계약금액</div>
+            <div id="res-contract" class="text-base font-bold text-slate-800">-</div>
+            <div class="text-xs text-slate-400">만원</div>
+          </div>
+          <div class="bg-white rounded-xl p-4 text-center border border-indigo-100">
+            <div class="text-xs text-slate-500 mb-1">가중평균 등락률</div>
+            <div id="res-rate" class="text-base font-bold text-indigo-700">-</div>
+          </div>
+          <div class="bg-white rounded-xl p-4 text-center border border-indigo-100">
+            <div class="text-xs text-slate-500 mb-1">조정금액</div>
+            <div id="res-adj" class="text-base font-bold text-indigo-700">-</div>
+            <div class="text-xs text-slate-400">만원</div>
+          </div>
+          <div class="bg-white rounded-xl p-4 text-center border border-indigo-100">
+            <div class="text-xs text-slate-500 mb-1">선금공제 후 조정금액</div>
+            <div id="res-final" class="text-xl font-bold text-indigo-800">-</div>
+            <div class="text-xs text-slate-400">만원</div>
+          </div>
+        </div>
+
+        <!-- 조정 가능 여부 -->
+        <div id="res-eligibility" class="mb-4"></div>
+
+        <!-- 계산식 표시 -->
+        <div class="bg-white rounded-xl p-4 border border-indigo-100">
+          <h3 class="text-xs font-bold text-slate-600 mb-2">계산 과정</h3>
+          <div id="res-formula" class="text-xs text-slate-600 space-y-1 font-mono"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 주의사항 -->
+    <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="bg-amber-50 rounded-2xl p-4 border border-amber-100">
+        <h3 class="text-sm font-bold text-amber-800 mb-2 flex items-center gap-1">
+          <span class="material-symbols-outlined text-sm">warning</span>
+          자주 하는 실수
+        </h3>
+        <ul class="text-xs text-amber-700 space-y-1">
+          <li>• 선금 지급분 미공제 → 감사 지적</li>
+          <li>• 90일 미경과 시 조정 → 부당</li>
+          <li>• 2차 조정 시 입찰일 기준 오류 → 직전 조정기준일 기준</li>
+          <li>• 물가 하락 시 감액 미조치 → 과다 지급</li>
+        </ul>
+      </div>
+      <div class="bg-blue-50 rounded-2xl p-4 border border-blue-100">
+        <h3 class="text-sm font-bold text-blue-800 mb-2 flex items-center gap-1">
+          <span class="material-symbols-outlined text-sm">menu_book</span>
+          관련 법령 가이드
+        </h3>
+        <p class="text-xs text-blue-700 mb-2">물가변동 조정 요건·절차 상세 안내</p>
+        <%= link_to topic_path("price-escalation"), class: "inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-800" do %>
+          <span class="material-symbols-outlined text-xs">open_in_new</span>
+          물가변동 법령 가이드 보기
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  function toggleMethod() {
+    const method = document.getElementById('method').value;
+    document.getElementById('index-section').classList.toggle('hidden', method !== 'index');
+    document.getElementById('item-section').classList.toggle('hidden', method !== 'item');
+    calculate();
+  }
+
+  // === 지수조정률 ===
+  function addIndexItem() {
+    const tbody = document.getElementById('index-items');
+    const tr = document.createElement('tr');
+    tr.className = 'index-row border-b border-slate-50';
+    tr.innerHTML = `
+      <td class="py-2 pr-2"><input type="text" placeholder="비목명" class="form-input w-full text-sm item-name" oninput="calculate()"></td>
+      <td class="py-2 px-2"><input type="number" placeholder="0" min="0" class="form-input w-full text-sm text-right item-amount" oninput="calculate()"></td>
+      <td class="py-2 px-2"><input type="number" placeholder="100.0" step="0.1" min="0" class="form-input w-full text-sm text-right item-base-idx" oninput="calculate()"></td>
+      <td class="py-2 px-2"><input type="number" placeholder="100.0" step="0.1" min="0" class="form-input w-full text-sm text-right item-adj-idx" oninput="calculate()"></td>
+      <td class="py-2 pl-2 text-right font-bold item-rate text-slate-400">-</td>
+      <td class="py-2 pl-1"><button type="button" onclick="removeIndexItem(this)" class="text-slate-300 hover:text-red-400"><span class="material-symbols-outlined text-sm">close</span></button></td>
+    `;
+    tbody.appendChild(tr);
+    updateRemoveButtons('index-items', 'index-row');
+  }
+
+  function removeIndexItem(btn) {
+    btn.closest('.index-row').remove();
+    updateRemoveButtons('index-items', 'index-row');
+    calculate();
+  }
+
+  function calculate() {
+    const method = document.getElementById('method').value;
+    if (method === 'index') calculateIndex();
+    else calculateItem();
+  }
+
+  function calculateIndex() {
+    const contractAmount = parseFloat(document.getElementById('contract-amount').value) || 0;
+    const advanceRate = Math.min(parseFloat(document.getElementById('advance-rate').value) || 0, 100) / 100;
+
+    const rows = document.querySelectorAll('#index-items .index-row');
+    let totalAmount = 0;
+    let weightedRate = 0;
+    const details = [];
+
+    rows.forEach(row => {
+      const amount = parseFloat(row.querySelector('.item-amount').value) || 0;
+      const baseIdx = parseFloat(row.querySelector('.item-base-idx').value) || 0;
+      const adjIdx = parseFloat(row.querySelector('.item-adj-idx').value) || 0;
+      const name = row.querySelector('.item-name').value || '비목';
+      const rateEl = row.querySelector('.item-rate');
+
+      if (amount > 0 && baseIdx > 0 && adjIdx > 0) {
+        const rate = (adjIdx - baseIdx) / baseIdx * 100;
+        rateEl.textContent = (rate >= 0 ? '+' : '') + rate.toFixed(2) + '%';
+        rateEl.className = `py-2 pl-2 text-right font-bold item-rate ${rate >= 0 ? 'text-indigo-600' : 'text-red-600'}`;
+        totalAmount += amount;
+        weightedRate += rate * amount;
+        details.push({ name, amount, rate });
+      } else {
+        rateEl.textContent = '-';
+        rateEl.className = 'py-2 pl-2 text-right font-bold item-rate text-slate-400';
+      }
+    });
+
+    const resultArea = document.getElementById('result-area');
+    if (contractAmount === 0 || totalAmount === 0) {
+      resultArea.classList.add('hidden');
+      return;
+    }
+
+    const avgRate = weightedRate / totalAmount;
+    const adjAmount = contractAmount * avgRate / 100;
+    const finalAmount = adjAmount * (1 - advanceRate);
+
+    resultArea.classList.remove('hidden');
+    document.getElementById('res-contract').textContent = formatNum(contractAmount) + '만원';
+    document.getElementById('res-rate').textContent = (avgRate >= 0 ? '+' : '') + avgRate.toFixed(3) + '%';
+    document.getElementById('res-adj').textContent = formatNum(Math.abs(adjAmount)) + '만원 ' + (adjAmount >= 0 ? '증액' : '감액');
+    document.getElementById('res-final').textContent = formatNum(Math.abs(finalAmount)) + '만원 ' + (finalAmount >= 0 ? '증액' : '감액');
+
+    // 조정 가능 여부
+    const eligEl = document.getElementById('res-eligibility');
+    const eligible = Math.abs(avgRate) >= 3;
+    eligEl.className = `mb-4 p-3 rounded-xl text-sm font-semibold ${eligible ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`;
+    eligEl.textContent = eligible
+      ? `✅ 등락률 ${avgRate.toFixed(3)}% — 3% 이상이므로 조정 가능 (기간 요건 90일 별도 확인 필요)`
+      : `❌ 등락률 ${avgRate.toFixed(3)}% — 3% 미만이므로 조정 불가`;
+
+    // 계산 과정
+    const formulas = details.map(d =>
+      `${d.name}: 등락률 ${d.rate.toFixed(3)}% × 금액비중 ${(d.amount / totalAmount * 100).toFixed(1)}% = ${(d.rate * d.amount / totalAmount).toFixed(3)}%p`
+    );
+    formulas.push(`가중평균 등락률 = ${avgRate.toFixed(3)}%`);
+    formulas.push(`조정금액 = ${formatNum(contractAmount)}만원 × ${avgRate.toFixed(3)}% = ${formatNum(adjAmount)}만원`);
+    if (advanceRate > 0) {
+      formulas.push(`선금공제 후 = ${formatNum(adjAmount)}만원 × (1 - ${(advanceRate * 100).toFixed(0)}%) = ${formatNum(finalAmount)}만원`);
+    }
+    document.getElementById('res-formula').innerHTML = formulas.map(f => `<div>${f}</div>`).join('');
+  }
+
+  // === 품목조정률 ===
+  function addItemRow() {
+    const tbody = document.getElementById('item-rows');
+    const tr = document.createElement('tr');
+    tr.className = 'item-row border-b border-slate-50';
+    tr.innerHTML = `
+      <td class="py-2 pr-2"><input type="text" placeholder="품목명" class="form-input w-full text-sm" oninput="calculateItem()"></td>
+      <td class="py-2 px-2"><input type="number" placeholder="0" min="0" step="0.001" class="form-input w-full text-sm text-right item-qty" oninput="calculateItem()"></td>
+      <td class="py-2 px-2"><input type="number" placeholder="0" min="0" class="form-input w-full text-sm text-right item-base-price" oninput="calculateItem()"></td>
+      <td class="py-2 px-2"><input type="number" placeholder="0" min="0" class="form-input w-full text-sm text-right item-adj-price" oninput="calculateItem()"></td>
+      <td class="py-2 pl-2 text-right font-bold item-change text-slate-400">-</td>
+      <td class="py-2 pl-1"><button type="button" onclick="removeItemRow(this)" class="text-slate-300 hover:text-red-400"><span class="material-symbols-outlined text-sm">close</span></button></td>
+    `;
+    tbody.appendChild(tr);
+    updateRemoveButtons('item-rows', 'item-row');
+  }
+
+  function removeItemRow(btn) {
+    btn.closest('.item-row').remove();
+    updateRemoveButtons('item-rows', 'item-row');
+    calculateItem();
+  }
+
+  function calculateItem() {
+    const contractAmount = parseFloat(document.getElementById('contract-amount').value) || 0;
+    const advanceRate = Math.min(parseFloat(document.getElementById('advance-rate').value) || 0, 100) / 100;
+
+    const rows = document.querySelectorAll('#item-rows .item-row');
+    let totalChange = 0;
+
+    rows.forEach(row => {
+      const qty = parseFloat(row.querySelector('.item-qty').value) || 0;
+      const basePrice = parseFloat(row.querySelector('.item-base-price').value) || 0;
+      const adjPrice = parseFloat(row.querySelector('.item-adj-price').value) || 0;
+      const changeEl = row.querySelector('.item-change');
+
+      if (qty > 0 && (basePrice > 0 || adjPrice > 0)) {
+        const change = (adjPrice - basePrice) * qty;
+        totalChange += change;
+        changeEl.textContent = (change >= 0 ? '+' : '') + formatNum(Math.round(change / 10000)) + '만원';
+        changeEl.className = `py-2 pl-2 text-right font-bold item-change ${change >= 0 ? 'text-indigo-600' : 'text-red-600'}`;
+      } else {
+        changeEl.textContent = '-';
+        changeEl.className = 'py-2 pl-2 text-right font-bold item-change text-slate-400';
+      }
+    });
+
+    const resultArea = document.getElementById('result-area');
+    if (contractAmount === 0) {
+      resultArea.classList.add('hidden');
+      return;
+    }
+
+    const changeInWon = totalChange; // 원 단위
+    const changeInMan = changeInWon / 10000; // 만원 단위
+    const rate = contractAmount > 0 ? changeInMan / contractAmount * 100 : 0;
+    const finalAmount = changeInMan * (1 - advanceRate);
+
+    resultArea.classList.remove('hidden');
+    document.getElementById('res-contract').textContent = formatNum(contractAmount) + '만원';
+    document.getElementById('res-rate').textContent = (rate >= 0 ? '+' : '') + rate.toFixed(3) + '%';
+    document.getElementById('res-adj').textContent = formatNum(Math.abs(changeInMan)) + '만원 ' + (changeInMan >= 0 ? '증액' : '감액');
+    document.getElementById('res-final').textContent = formatNum(Math.abs(finalAmount)) + '만원 ' + (finalAmount >= 0 ? '증액' : '감액');
+
+    const eligEl = document.getElementById('res-eligibility');
+    const eligible = Math.abs(rate) >= 3;
+    eligEl.className = `mb-4 p-3 rounded-xl text-sm font-semibold ${eligible ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`;
+    eligEl.textContent = eligible
+      ? `✅ 품목조정률 ${rate.toFixed(3)}% — 3% 이상이므로 조정 가능 (기간 요건 90일 별도 확인 필요)`
+      : `❌ 품목조정률 ${rate.toFixed(3)}% — 3% 미만이므로 조정 불가`;
+
+    const formulas = [
+      `총 품목 변동액 합계 = ${formatNum(Math.round(changeInMan))}만원`,
+      `품목조정률 = ${formatNum(Math.round(changeInMan))}만원 ÷ ${formatNum(contractAmount)}만원 = ${rate.toFixed(3)}%`,
+      `조정금액 = ${formatNum(contractAmount)}만원 × ${rate.toFixed(3)}% = ${formatNum(Math.abs(changeInMan))}만원`
+    ];
+    if (advanceRate > 0) {
+      formulas.push(`선금공제 후 = ${formatNum(Math.abs(changeInMan))}만원 × (1 - ${(advanceRate * 100).toFixed(0)}%) = ${formatNum(Math.abs(finalAmount))}만원`);
+    }
+    document.getElementById('res-formula').innerHTML = formulas.map(f => `<div>${f}</div>`).join('');
+  }
+
+  function updateRemoveButtons(tbodyId, rowClass) {
+    const rows = document.querySelectorAll(`#${tbodyId} .${rowClass}`);
+    rows.forEach((row, i) => {
+      const btn = row.querySelector('button[onclick*="remove"]');
+      if (btn) {
+        if (rows.length > 1) btn.classList.remove('hidden');
+        else btn.classList.add('hidden');
+      }
+    });
+  }
+
+  function formatNum(n) {
+    return Math.round(n).toLocaleString('ko-KR');
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    toggleMethod();
+  });
+</script>

@@ -168,6 +168,12 @@ Rails.application.routes.draw do
   # 4대보험 정산보험료 계산기
   get "tools/insurance-calculator", to: "insurance_calculators#index", as: :insurance_calculator
 
+  # 분할계약 판단 체크리스트
+  get "tools/split-contract-checker", to: "tools#split_contract_checker", as: :split_contract_checker
+
+  # 물가변동 계약금액조정 계산기
+  get "tools/price-adjustment-calculator", to: "tools#price_adjustment_calculator", as: :price_adjustment_calculator
+
   # 예산 집행률 계산기
   get "tools/budget-execution-rate", to: "tools#budget_execution_rate", as: :budget_execution_rate
 

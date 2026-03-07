@@ -1,5 +1,5 @@
 module ApplicationHelper
-  ACTIVE_TOOL_COUNT = 27
+  ACTIVE_TOOL_COUNT = 29
 
   def tool_count
     ACTIVE_TOOL_COUNT
