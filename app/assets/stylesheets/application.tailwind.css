@@ -516,6 +516,62 @@
     @apply mb-2;
   }
 
+  .prose-premium blockquote {
+    @apply border-l-4 border-indigo-400 pl-4 py-2 my-4
+           bg-indigo-50 rounded-r-xl text-slate-700 italic;
+  }
+
+  .prose-premium table {
+    @apply w-full text-sm mb-6;
+    border-collapse: collapse;
+  }
+
+  .prose-premium table th {
+    @apply px-4 py-3 bg-slate-100 text-slate-800 font-semibold
+           text-left border-b-2 border-slate-200;
+  }
+
+  .prose-premium table td {
+    @apply px-4 py-3 border-b border-gray-100 text-slate-700;
+  }
+
+  .prose-premium table tr:last-child td {
+    @apply border-b-0;
+  }
+
+  .prose-premium table tr:nth-child(even) td {
+    @apply bg-slate-50/60;
+  }
+
+  /* 가이드/감사사례 콘텐츠 컴포넌트 */
+  .guide-meta-box {
+    @apply rounded-2xl overflow-hidden border border-emerald-200 shadow-sm mb-10;
+  }
+
+  .guide-tip-box {
+    @apply rounded-xl border border-blue-200 bg-blue-50 p-4 my-5;
+  }
+
+  .guide-tip-box::before {
+    content: '💡 꿀팁';
+    @apply block text-xs font-bold text-blue-700 mb-2 uppercase tracking-wide;
+  }
+
+  .guide-alert-box {
+    @apply rounded-xl border-l-4 border-amber-500 bg-amber-50 p-4 my-5;
+  }
+
+  .guide-alert-box::before {
+    content: '⚠️ 주의사항';
+    @apply block text-xs font-bold text-amber-700 mb-2 uppercase tracking-wide;
+  }
+
+  /* audit-content 내 마크다운 렌더링 */
+  .audit-content p { @apply mb-3 text-sm leading-relaxed; }
+  .audit-content ul { @apply pl-5 mb-3 space-y-1.5 list-disc; }
+  .audit-content ol { @apply pl-5 mb-3 space-y-1.5 list-decimal; }
+  .audit-content strong { @apply font-semibold text-slate-800; }
+
   /* Icon Containers */
   .icon-container {
     @apply flex items-center justify-center rounded-xl
