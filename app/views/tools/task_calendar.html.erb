@@ -3267,6 +3267,101 @@
   }
   checkSyncBanner();
 
+  // === 기본 정기 업무 삭제/수정 기능 (로그인 여부 무관) ===
+  const DELETED_TASKS_KEY = "silmu_deleted_default_tasks";
+
+  // 삭제된 업무 목록 로드 (캐싱)
+  let _deletedCache = null;
+  function loadDeletedTasks() {
+    if (_deletedCache !== null) return _deletedCache;
+    try { _deletedCache = JSON.parse(localStorage.getItem(DELETED_TASKS_KEY) || "[]"); } catch { _deletedCache = []; }
+    return _deletedCache;
+  }
+
+  // 삭제된 업무 저장
+  function saveDeletedTasks(deletedList) {
+    try {
+      _deletedCache = deletedList;
+      localStorage.setItem(DELETED_TASKS_KEY, JSON.stringify(deletedList));
+      syncToServer({ deleted_default_tasks: deletedList });
+    } catch (e) {
+      console.error("삭제 목록 저장 실패:", e);
+    }
+  }
+
+  // 삭제된 업무 숨김 처리
+  function hideDeletedTasks() {
+    const deletedList = loadDeletedTasks();
+    deletedList.forEach(taskId => {
+      const taskItem = document.querySelector(`.task-item[data-task-id="${taskId}"]`);
+      if (taskItem) {
+        taskItem.style.display = "none";
+      }
+    });
+  }
+
+  // 삭제 버튼 이벤트
+  document.querySelectorAll(".btn-delete-default-task").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const taskId = btn.dataset.taskId;
+      const taskItem = btn.closest(".task-item");
+      const taskTitle = taskItem.querySelector(".task-text").textContent;
+
+      if (!confirm(`"${taskTitle}" 업무를 삭제하시겠습니까?\n\n삭제된 업무는 다시 복구할 수 없습니다.`)) {
+        return;
+      }
+
+      const deletedList = loadDeletedTasks();
+      if (!deletedList.includes(taskId)) {
+        deletedList.push(taskId);
+        saveDeletedTasks(deletedList);
+      }
+
+      taskItem.style.display = "none";
+      showToast("업무가 삭제되었습니다", "delete");
+    });
+  });
+
+  // 수정 버튼 이벤트
+  document.querySelectorAll(".btn-edit-default-task").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const taskId = btn.dataset.taskId;
+      const taskItem = btn.closest(".task-item");
+      const taskTitle = taskItem.querySelector(".task-text").textContent;
+      const taskMonth = taskItem.dataset.taskMonth;
+      const taskDay = taskItem.dataset.taskDay;
+      const taskCat = taskItem.dataset.taskCat;
+
+      // 업무 추가 모달 열기
+      modalAdd.classList.remove("hidden");
+
+      // 비정기업무 탭으로 전환
+      document.querySelector('.modal-tab[data-modal-tab="onetime"]').click();
+
+      // 기존 값으로 채우기
+      taskInput.value = taskTitle;
+      document.getElementById("onetime-date").value = `<%= year %>-${String(taskMonth).padStart(2, '0')}-${String(taskDay).padStart(2, '0')}`;
+      document.getElementById("onetime-time").value = "";
+
+      // 카테고리 선택
+      selectedOnetimeCat = taskCat;
+      document.querySelectorAll("#onetime-cat-container .cat-btn").forEach(catBtn => {
+        const isSelected = catBtn.textContent.trim() === taskCat;
+        catBtn.classList.toggle("ring-2", isSelected);
+        catBtn.classList.toggle("ring-indigo-600", isSelected);
+      });
+
+      // 기본 업무 수정 플래그 설정 (submit 핸들러에서 처리)
+      editingDefaultTaskId = taskId;
+      editingDefaultTaskItem = taskItem;
+    });
+  });
+
+  // 초기 실행: 삭제된 업무 숨김
+  hideDeletedTasks();
+
   // --- 서버에서 데이터 로드 (로그인 시) ---
   loadFromServer().then(() => {
     if (!isSignedIn) return;
@@ -3284,99 +3379,8 @@
     updateTodayCount();
     updateProgress();
 
-    // === 기본 정기 업무 삭제/수정 기능 ===
-    const DELETED_TASKS_KEY = "silmu_deleted_default_tasks";
-
-    // 삭제된 업무 목록 로드 (캐싱)
-    let _deletedCache = null;
-    function loadDeletedTasks() {
-      if (_deletedCache !== null) return _deletedCache;
-      try { _deletedCache = JSON.parse(localStorage.getItem(DELETED_TASKS_KEY) || "[]"); } catch { _deletedCache = []; }
-      return _deletedCache;
-    }
-
-    // 삭제된 업무 저장
-    function saveDeletedTasks(deletedList) {
-      try {
-        _deletedCache = deletedList;
-        localStorage.setItem(DELETED_TASKS_KEY, JSON.stringify(deletedList));
-        syncToServer({ deleted_default_tasks: deletedList });
-      } catch (e) {
-        console.error("삭제 목록 저장 실패:", e);
-      }
-    }
-
-    // 페이지 로드 시 삭제된 업무 숨김
-    function hideDeletedTasks() {
-      const deletedList = loadDeletedTasks();
-      deletedList.forEach(taskId => {
-        const taskItem = document.querySelector(`.task-item[data-task-id="${taskId}"]`);
-        if (taskItem) {
-          taskItem.style.display = "none";
-        }
-      });
-    }
-
-    // 삭제 버튼 이벤트
-    document.querySelectorAll(".btn-delete-default-task").forEach(btn => {
-      btn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        const taskId = btn.dataset.taskId;
-        const taskItem = btn.closest(".task-item");
-        const taskTitle = taskItem.querySelector(".task-text").textContent;
-
-        if (!confirm(`"${taskTitle}" 업무를 삭제하시겠습니까?\n\n삭제된 업무는 다시 복구할 수 없습니다.`)) {
-          return;
-        }
-
-        const deletedList = loadDeletedTasks();
-        if (!deletedList.includes(taskId)) {
-          deletedList.push(taskId);
-          saveDeletedTasks(deletedList);
-        }
-
-        taskItem.style.display = "none";
-        showToast("업무가 삭제되었습니다", "delete");
-      });
-    });
-
-    // 수정 버튼 이벤트
-    document.querySelectorAll(".btn-edit-default-task").forEach(btn => {
-      btn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        const taskId = btn.dataset.taskId;
-        const taskItem = btn.closest(".task-item");
-        const taskTitle = taskItem.querySelector(".task-text").textContent;
-        const taskMonth = taskItem.dataset.taskMonth;
-        const taskDay = taskItem.dataset.taskDay;
-        const taskCat = taskItem.dataset.taskCat;
-
-        // 업무 추가 모달 열기
-        modalAdd.classList.remove("hidden");
-
-        // 비정기업무 탭으로 전환
-        document.querySelector('.modal-tab[data-modal-tab="onetime"]').click();
-
-        // 기존 값으로 채우기
-        taskInput.value = taskTitle;
-        document.getElementById("onetime-date").value = `<%= year %>-${String(taskMonth).padStart(2, '0')}-${String(taskDay).padStart(2, '0')}`;
-        document.getElementById("onetime-time").value = "";
-
-        // 카테고리 선택
-        selectedOnetimeCat = taskCat;
-        document.querySelectorAll("#onetime-cat-container .cat-btn").forEach(catBtn => {
-          const isSelected = catBtn.textContent.trim() === taskCat;
-          catBtn.classList.toggle("ring-2", isSelected);
-          catBtn.classList.toggle("ring-indigo-600", isSelected);
-        });
-
-        // 기본 업무 수정 플래그 설정 (submit 핸들러에서 처리)
-        editingDefaultTaskId = taskId;
-        editingDefaultTaskItem = taskItem;
-      });
-    });
-
-    // 초기 실행: 삭제된 업무 숨김
+    // 서버 데이터 로드 후 삭제 목록 재적용 (캐시 무효화 후 재실행)
+    _deletedCache = null;
     hideDeletedTasks();
 
     // 법정기간 계산기에서 추가된 경우 토스트 표시
