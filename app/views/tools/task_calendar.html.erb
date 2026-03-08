@@ -786,6 +786,20 @@
           <% end %>
         </div>
       </div>
+      <!-- 시간 선택 -->
+      <div class="space-y-2">
+        <label class="block text-sm font-bold text-gray-900">시간 <span class="text-xs font-normal text-gray-400 ml-1">(선택사항)</span></label>
+        <div class="flex gap-2 flex-wrap">
+          <% [["09:00","오전9"], ["10:00","오전10"], ["14:00","오후2"], ["15:00","오후3"], ["17:00","오후5"]] .each do |val, label| %>
+            <button type="button" class="regular-time-preset px-3 h-9 rounded-xl text-xs font-semibold border border-gray-200 text-gray-500 hover:border-indigo-400 hover:text-indigo-600 transition-colors" data-time="<%= val %>"><%= label %>시</button>
+          <% end %>
+          <button type="button" id="regular-time-clear" class="px-3 h-9 rounded-xl text-xs font-semibold border border-gray-200 text-gray-400 hover:border-red-300 hover:text-red-400 transition-colors">없음</button>
+        </div>
+        <div class="relative mt-1">
+          <input type="time" id="new-task-time" class="w-full h-11 rounded-xl border border-gray-200 bg-white text-sm text-gray-800 px-4 pr-10 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
+          <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" style="font-size:20px">schedule</span>
+        </div>
+      </div>
       <div class="space-y-2">
         <label class="block text-sm font-bold text-gray-900">카테고리</label>
         <div id="regular-cat-container" class="flex flex-wrap gap-2">
@@ -1402,11 +1416,11 @@
         let sublabel = "";
         if (t.repeat === "monthly" && t.day) {
           show = true;
-          label = m + "/" + t.day;
+          label = m + "/" + t.day + (t.time ? " " + t.time : "");
           sublabel = "매월";
         } else if (t.repeat === "weekly" && t.weekday !== undefined) {
           show = true;
-          label = "매주 " + dayLabels[t.weekday];
+          label = "매주 " + dayLabels[t.weekday] + (t.time ? " " + t.time : "");
           sublabel = "매주";
         } else if (t.repeat === "once" && t.date) {
           const yearHint = parseInt(area.dataset.year || new Date().getFullYear());
@@ -1754,9 +1768,40 @@
     } else {
       document.querySelector('.modal-tab[data-modal-tab="regular"]').click();
       taskInput.value = "";
+      document.getElementById("new-task-time").value = "";
+      syncRegularTimePresets(null);
       setTimeout(() => taskInput.focus(), 100);
     }
   }
+
+  // 정기업무 시간 프리셋 버튼 동기화
+  function syncRegularTimePresets(timeVal) {
+    document.querySelectorAll(".regular-time-preset").forEach(b => {
+      const active = b.dataset.time === timeVal;
+      b.classList.toggle("bg-indigo-600", active);
+      b.classList.toggle("text-white", active);
+      b.classList.toggle("border-indigo-600", active);
+      b.classList.toggle("border-gray-200", !active);
+      b.classList.toggle("text-gray-500", !active);
+    });
+    const clearBtn = document.getElementById("regular-time-clear");
+    clearBtn.classList.toggle("bg-red-50", !timeVal);
+    clearBtn.classList.toggle("text-red-400", !timeVal);
+  }
+
+  document.querySelectorAll(".regular-time-preset").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.getElementById("new-task-time").value = btn.dataset.time;
+      syncRegularTimePresets(btn.dataset.time);
+    });
+  });
+  document.getElementById("regular-time-clear").addEventListener("click", () => {
+    document.getElementById("new-task-time").value = "";
+    syncRegularTimePresets(null);
+  });
+  document.getElementById("new-task-time").addEventListener("change", function() {
+    syncRegularTimePresets(this.value || null);
+  });
 
   ["btn-add-task", "btn-add-task-mobile"].forEach(id => {
     document.getElementById(id).addEventListener("click", () => openAddModal(null, null));
@@ -1809,6 +1854,8 @@
           b.classList.toggle("text-slate-500", !active);
         });
       }
+      document.getElementById("new-task-time").value = task.time || "";
+      syncRegularTimePresets(task.time || null);
       selectedCat = task.cat || "서무";
       setTimeout(() => {
         document.querySelectorAll(".cat-select-btn").forEach(b => {
@@ -1831,11 +1878,12 @@
       const customs = loadCustom();
       const rep = repeatSelect.value;
       let newTask;
+      const timeVal = document.getElementById("new-task-time").value || null;
       if (rep === "monthly") {
-        newTask = { title: val, repeat: "monthly", day: parseInt(document.getElementById("new-task-day").value), cat: selectedCat };
+        newTask = { title: val, repeat: "monthly", day: parseInt(document.getElementById("new-task-day").value), time: timeVal, cat: selectedCat };
       } else {
         if (selectedWeekday === null) { alert("요일을 선택하세요"); return; }
-        newTask = { title: val, repeat: "weekly", weekday: selectedWeekday, cat: selectedCat };
+        newTask = { title: val, repeat: "weekly", weekday: selectedWeekday, time: timeVal, cat: selectedCat };
       }
       if (editingIdx >= 0) {
         customs[editingIdx] = newTask;
