@@ -1555,6 +1555,7 @@
         '<div class="flex flex-col flex-1 gap-1.5 min-w-0">' +
           '<p class="task-text text-sm font-semibold text-slate-800 leading-tight">' + escapeHtml(t.title) + '</p>' +
           '<div class="flex items-center gap-2 flex-wrap">' +
+            (t.time ? '<span class="inline-flex items-center gap-0.5 text-xs text-slate-400"><span class="material-symbols-outlined" style="font-size:13px">schedule</span>' + t.time + '</span>' : '') +
             '<span class="inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium ring-1 ring-inset ring-slate-500/10 w-fit" style="background:' + cc.bg + ';color:' + cc.text + '">' + escapeHtml(t.cat || "서무") + '</span>' +
             (t.repeat === "once" ? getDdayBadge(t.date) : "") +
             postponeBtn +
