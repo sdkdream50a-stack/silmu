@@ -1250,8 +1250,10 @@
   <% end %>
 
   function updateTodayCount() {
-    const total = todayTaskKeys.length;
-    const done = todayTaskKeys.filter(k => state[k]).length;
+    // 오늘 뷰의 모든 체크박스를 동적으로 집계 (기본 업무 + 추가 업무)
+    const cbs = document.querySelectorAll('#view-today .task-cb');
+    const total = cbs.length;
+    const done = Array.from(cbs).filter(cb => cb.checked).length;
     const remaining = total - done;
     const el = document.getElementById("today-count");
     if (remaining === 0 && total > 0) {
@@ -1589,6 +1591,8 @@
     });
     // AI 가이드 버튼 바인딩
     attachGuideClick(container);
+    // 카운트 갱신 (추가 업무 반영)
+    updateTodayCount();
   }
 
   // 초기 renderCustomTasks()는 monkey-patch 적용 후 3067줄에서 1회만 호출
