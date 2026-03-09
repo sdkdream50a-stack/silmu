@@ -1896,6 +1896,7 @@
       modalAdd.classList.add("hidden");
       resetModalHeader();
       renderCustomTasks();
+      renderTodayCustomTasks();
 
     } else if (activeModalTab === "onetime") {
       const val = document.getElementById("onetime-task-input").value.trim();
@@ -1927,6 +1928,7 @@
       modalAdd.classList.add("hidden");
       resetModalHeader();
       renderCustomTasks();
+      renderTodayCustomTasks();
 
     } else if (activeModalTab === "document") {
       const cbs = document.querySelectorAll("#doc-extracted-tasks input[type=checkbox].doc-task-cb:checked");
@@ -1936,6 +1938,7 @@
       saveCustom(customs);
       modalAdd.classList.add("hidden");
       renderCustomTasks();
+      renderTodayCustomTasks();
       showToast(cbs.length + "개 업무가 추가되었습니다", "check_circle");
     }
   });
