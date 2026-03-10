@@ -1,6 +1,8 @@
 class ToolsController < ApplicationController
   # 모든 도구 페이지는 JS 기반 계산기 (서버 측 동적 데이터 없음)
   before_action -> { expires_in 1.hour, public: true, stale_while_revalidate: 1.day }
+  # 업무달력은 today를 서버 렌더링하므로 캐시 금지 (자정 이후 날짜 오차 방지)
+  before_action -> { response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate" }, only: :task_calendar
 
   def index
     description_text = "계약방식 결정, 예정가격 계산, 계약보증금 계산, 여비계산, 법정기간 산출 등 공무원 업무를 자동화하는 #{ApplicationHelper::ACTIVE_TOOL_COUNT}개 실무 도구. 복잡한 법령과 절차를 원클릭으로 해결하고, 업무 시간을 단축하세요."
