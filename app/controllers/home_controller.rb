@@ -175,6 +175,22 @@ class HomeController < ApplicationController
     )
   end
 
+  def contact
+    expires_in 1.day, public: true, stale_while_revalidate: 7.days
+
+    set_meta_tags(
+      title: "문의하기 — 궁금한 점을 남겨주세요",
+      description: "실무.kr 운영팀에 문의하세요. 콘텐츠 오류 제보, 기능 건의, 기타 문의사항은 hello@silmu.kr로 보내주시면 2 영업일 내 답변 드립니다.",
+      og: {
+        title: "문의하기 — 실무.kr",
+        url: canonical_url,
+        image: "https://silmu.kr/og-image.png",
+        type: "website"
+      },
+      canonical: canonical_url
+    )
+  end
+
   def updates
     expires_in 1.hour, public: true, stale_while_revalidate: 1.day
 

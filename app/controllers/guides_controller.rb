@@ -23,12 +23,14 @@ class GuidesController < ApplicationController
     expires_in 5.minutes, public: true, stale_while_revalidate: 1.hour
 
     canonical_url = request.original_url.split("?").first
+    description_text = "물품 구매·수의계약·적격심사·검수·예정가격·여비 등 공무원 계약·예산 업무를 법령 기준으로 단계별 안내합니다. 체크리스트·서식 템플릿·자동화 계산기와 함께 업무 정확도를 높이고 감사 지적 위험을 줄이세요. 지자체·교육청 담당자를 위한 실무 가이드 모음."
     meta = {
-      title: "업무 가이드",
-      description: "공무원 계약·검수·예산 업무를 단계별로 안내하는 실무 가이드. 물품 구매, 수의계약, 검수조서, 예정가격 작성 등.",
+      title: "공무원 계약·예산 업무 가이드 — 물품구매·검수·여비 단계별 안내",
+      description: description_text,
       keywords: "업무 가이드, 물품 구매, 검수조서, 예정가격, 수의계약, 여비, 연가",
       og: {
         title: "업무 가이드 — 실무.kr",
+        description: description_text,
         url: canonical_url,
         image: "https://silmu.kr/og-image.png"
       },

@@ -5,7 +5,7 @@ class ToolsController < ApplicationController
   before_action -> { response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate" }, only: :task_calendar
 
   def index
-    description_text = "계약방식 결정, 예정가격 계산, 계약보증금 계산, 여비계산, 법정기간 산출 등 공무원 업무를 자동화하는 #{ApplicationHelper::ACTIVE_TOOL_COUNT}개 실무 도구. 복잡한 법령과 절차를 원클릭으로 해결하고, 업무 시간을 단축하세요."
+    description_text = "계약방식 결정·예정가격 계산·계약보증금·여비계산·법정기간 산출 등 공무원 업무를 자동화하는 #{ApplicationHelper::ACTIVE_TOOL_COUNT}개 실무 도구. 법령 기준으로 복잡한 계산을 원클릭으로 해결합니다. 수의계약 분할 판단·물가변동 조정·적격심사 채점까지 업무 시간을 대폭 단축하세요."
 
     set_meta_tags(
       title: "실무 도구 — 계약·예산 자동화 계산기 모음",

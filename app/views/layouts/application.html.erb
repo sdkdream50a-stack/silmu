@@ -11,7 +11,6 @@
     <meta name="theme-color" content="#0F172A">
     <meta name="google-site-verification" content="4f2zo86zRxW5JBhdwgpDx16xvZKaC_QBDsBXvcb8xRc" />
     <meta name="naver-site-verification" content="35e0ac97eb0b5463fb23f269f08bbcc729e81d77" />
-    <meta name="naver-site-verification" content="2e7d4f27cf2dab03686045f2006d4888a3f77dfc" />
     <%# 인증 상태가 nav에 반영되므로 Turbo 페이지 캐시 비활성화 (stale nav 방지) %>
     <meta name="turbo-cache-control" content="no-store">
     <%= csrf_meta_tags %>
@@ -566,6 +565,7 @@
             <div class="flex gap-6 text-sm">
               <%= link_to "이용약관", terms_path, class: "text-slate-400 hover:text-white transition-colors" %>
               <%= link_to "개인정보처리방침", privacy_path, class: "text-slate-400 hover:text-white transition-colors" %>
+              <%= link_to "문의하기", contact_path, class: "text-slate-400 hover:text-white transition-colors" %>
             </div>
           </div>
         </div>

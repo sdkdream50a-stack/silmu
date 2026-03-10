@@ -221,6 +221,9 @@ Rails.application.routes.draw do
   get "privacy", to: "home#privacy", as: :privacy
   get "terms", to: "home#terms", as: :terms
 
+  # 문의하기
+  get "contact", to: "home#contact", as: :contact
+
   # 관리자
   namespace :admin do
     resources :newsletters, only: [:new, :create]
