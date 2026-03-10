@@ -232,4 +232,11 @@ Rails.application.routes.draw do
 
   # RSS 피드 (백링크·구독자 확보용)
   get "feed.rss", to: "feed#index", defaults: { format: :rss }, as: :feed
+
+  # 내부 API (blog_autopilot 전용)
+  namespace :api do
+    namespace :v1 do
+      post "legal_verify", to: "legal_verify#verify"
+    end
+  end
 end
