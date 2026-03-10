@@ -540,7 +540,7 @@
               <h3 class="resource-title"><%= resource[:title] %></h3>
               <p class="resource-summary" style="font-size: 14px; color: #64748b; margin-bottom: 12px; line-height: 1.6;"><%= resource[:summary] %></p>
               <div class="resource-content" style="display: none; padding-top: 16px; border-top: 1px solid #e2e8f0; margin-top: 12px;">
-                <div class="resource-content-body"><%= resource[:content].gsub(/\*\*(.+?)\*\*/, '<strong>\1</strong>').gsub(/^(\d+)\. (.+)$/, '<div class="rc-list-item"><span class="rc-num">\1.</span> \2</div>').gsub(/^- (.+)$/, '<div class="rc-list-item"><span class="rc-bullet"></span> \1</div>').html_safe %></div>
+                <div class="resource-content-body"><%= sanitize(resource[:content].gsub(/\*\*(.+?)\*\*/, '<strong>\1</strong>').gsub(/^(\d+)\. (.+)$/, '<div class="rc-list-item"><span class="rc-num">\1.</span> \2</div>').gsub(/^- (.+)$/, '<div class="rc-list-item"><span class="rc-bullet"></span> \1</div>'), tags: %w[strong div span], attributes: %w[class]) %></div>
                 <% if resource[:link].present? %>
                   <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 16px;">
                     <a href="<%= resource[:link] %>" target="_blank" onclick="event.stopPropagation();" style="display: inline-flex; align-items: center; gap: 6px; padding: 12px 20px; background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%); color: white; border-radius: 10px; font-size: 14px; font-weight: 600; text-decoration: none; transition: all 0.2s; box-shadow: 0 2px 8px rgba(30, 58, 95, 0.3);">
