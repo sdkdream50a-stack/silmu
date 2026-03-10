@@ -36,6 +36,7 @@ class AuditCasesController < ApplicationController
   end
 
   def download_hwp
+    response.headers["X-Robots-Tag"] = "noindex"
     @audit_case = AuditCase.published.find_by!(slug: params[:slug])
     binary = HwpxExportService.generate_audit_case(@audit_case)
 
