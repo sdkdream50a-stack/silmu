@@ -6,7 +6,15 @@
     "@type": "FAQPage",
     "mainEntity": @categories.flat_map { |cat|
       cat[:faqs].map { |faq|
-        { "@type": "Question", "name": faq[:q], "acceptedAnswer": { "@type": "Answer", "text": faq[:a] } }
+        {
+          "@type": "Question",
+          "name": faq[:q],
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": faq[:a],
+            "author": { "@type": "Organization", "name": "실무.kr", "url": "https://silmu.kr" }
+          }
+        }
       }
     }
   }) %>

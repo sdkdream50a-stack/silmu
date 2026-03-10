@@ -14,14 +14,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
-  <%# 카테고리 페이지 %>
-  <% %w[contract budget expense salary subsidy property travel duty other].each do |key| %>
-  <url>
-    <loc>https://silmu.kr/topics/<%= key %></loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <% end %>
+  <%# 카테고리 페이지는 noindex이므로 사이트맵 제외 %>
   <% @topics.each do |topic| %>
   <url>
     <loc>https://silmu.kr/topics/<%= topic.slug %></loc>

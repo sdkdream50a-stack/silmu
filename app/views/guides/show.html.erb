@@ -7,9 +7,10 @@
     "name": @guide.title,
     "description": @guide.description,
     "inLanguage": "ko",
-    "datePublished": @guide.published_on&.iso8601,
+    "image": "https://silmu.kr/og-image.png",
+    "datePublished": (@guide.published_on&.iso8601 || @guide.created_at.iso8601),
     "dateModified": @guide.updated_at.iso8601,
-    "author": { "@type": "Organization", "name": "실무.kr" },
+    "author": { "@type": "Organization", "name": "실무.kr", "url": "https://silmu.kr" },
     "step": (@guide.sections ? [
       @guide.sections[:step1],
       @guide.sections[:step2],

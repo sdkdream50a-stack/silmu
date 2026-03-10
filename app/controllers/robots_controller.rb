@@ -22,7 +22,7 @@ class RobotsController < ApplicationController
       Disallow: /cdn-cgi/
       Disallow: /audit-cases/*/hwp
 
-      # AI 검색 봇 허용 (트래픽 유입)
+      # AI 검색/크롤 봇 명시적 허용 (GEO 최적화)
       User-agent: OAI-SearchBot
       Allow: /
 
@@ -30,6 +30,21 @@ class RobotsController < ApplicationController
       Allow: /
 
       User-agent: PerplexityBot
+      Allow: /
+
+      User-agent: Google-Extended
+      Allow: /
+
+      User-agent: anthropic-ai
+      Allow: /
+
+      User-agent: Claude-Web
+      Allow: /
+
+      User-agent: CCBot
+      Allow: /
+
+      User-agent: Bytespider
       Allow: /
 
       Sitemap: https://silmu.kr/sitemap.xml
