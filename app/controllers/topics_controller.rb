@@ -193,6 +193,7 @@ class TopicsController < ApplicationController
       title: "#{@cfg[:label]} 법령 가이드 — 실무.kr",
       description: "#{@cfg[:desc]} 관련 주요 법령을 법률→시행령→규칙 체계로 정리합니다.",
       keywords: "#{@cfg[:label]}, 법령가이드, #{@cfg[:desc]}",
+      robots: "noindex, follow",
       canonical: canonical_url,
       og: {
         title: "#{@cfg[:label]} 법령 가이드 | 실무.kr",
