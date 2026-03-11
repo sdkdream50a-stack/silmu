@@ -67,6 +67,7 @@ group :test do
 end
 
 # ========== silmu 추가 ==========
+gem "rack-attack"
 gem "devise", "~> 4.9"
 gem "omniauth-kakao"
 gem "omniauth-naver"
