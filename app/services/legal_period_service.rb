@@ -251,7 +251,7 @@ class LegalPeriodService
           delay_days: delay_days,
           penalty_amount: penalty_amount,
           capped: capped,
-          note: "지체상금 (국가계약법 시행령 제74조, 지방계약법 시행령 제80조)"
+          note: "지체상금 (국가계약법 시행령 제74조, 지방계약법 시행령 제90조·시행규칙 제75조)"
         }
       }
     end

@@ -26,13 +26,13 @@ topics = [
       </div>
 
       <div style="background:#f3f4f6;padding:12px;border-radius:8px;margin:8px 0;">
-      ※ 관련 법령: 지방계약법 시행령 제63조~제65조, 시행규칙 제56조~제58조
+      ※ 관련 법령: 지방계약법 제17조, 지방자치단체 선금지급요령 (행정안전부 행정규칙)
       </div>
     CONTENT
     decree_content: <<~CONTENT,
-      ## 지방계약법 시행령 제63조~제65조 (선금 지급 기준)
+      ## 지방자치단체 선금지급요령 (행정안전부 행정규칙)
 
-      **지방계약법 시행령 제63조 (선금 지급 비율)**
+      **선금지급요령 제4조 (선금 지급 비율)**
 
       <div style="background:#dcfce7;padding:12px;border-radius:8px;margin:8px 0;">
       ① 선금 지급 비율 (계약금액 대비)
@@ -47,7 +47,7 @@ topics = [
       ② 선금 지급은 계약담당자가 계약상대자의 신청에 의하여 지급하며, 계약상대자는 선금보증서를 제출하여야 한다.
       </div>
 
-      **지방계약법 시행령 제64조 (선금 사용 제한)**
+      **선금지급요령 제5조 (선금 사용 제한)**
 
       <div style="background:#dcfce7;padding:12px;border-radius:8px;margin:8px 0;">
       선금은 해당 계약의 이행에만 사용하여야 하며, 다음 각 호의 용도에 우선 사용하여야 한다.
@@ -57,7 +57,7 @@ topics = [
       4. 그 밖에 계약 이행에 직접 필요한 경비
       </div>
 
-      **지방계약법 시행령 제65조 (선금 정산)**
+      **선금지급요령 제6조 (선금 정산)**
 
       <div style="background:#dcfce7;padding:12px;border-radius:8px;margin:8px 0;">
       ① 선금은 기성금(기성대가) 지급 시 정산하되, 정산 비율은 지급된 선금 비율 이상으로 한다.
@@ -277,13 +277,13 @@ topics = [
       </div>
 
       <div style="background:#f3f4f6;padding:12px;border-radius:8px;margin:8px 0;">
-      ※ 관련 법령: 지방계약법 시행령 제34조~제37조
+      ※ 관련 법령: 지방계약법 시행령 제37조 (입찰보증금), 제38조 (세입조치)
       </div>
     CONTENT
     decree_content: <<~CONTENT,
-      ## 지방계약법 시행령 제34조~제37조 (입찰보증금)
+      ## 지방계약법 시행령 제37조~제38조 (입찰보증금)
 
-      **지방계약법 시행령 제34조 (입찰보증금 납부)**
+      **지방계약법 시행령 제37조 (입찰보증금 납부)**
 
       <div style="background:#dcfce7;padding:12px;border-radius:8px;margin:8px 0;">
       ① 입찰보증금은 입찰금액의 **5% 이상**을 납부하여야 한다.
@@ -294,7 +294,7 @@ topics = [
       - 보험증권
       </div>
 
-      **지방계약법 시행령 제35조 (입찰보증금 면제)**
+      **지방계약법 시행령 제37조의2 (입찰보증금 면제)**
 
       <div style="background:#dcfce7;padding:12px;border-radius:8px;margin:8px 0;">
       다음의 경우 입찰보증금을 면제할 수 있다.
@@ -387,13 +387,13 @@ topics = [
       </div>
 
       <div style="background:#f3f4f6;padding:12px;border-radius:8px;margin:8px 0;">
-      ※ 관련 법령: 지방계약법 시행령 제65조~제67조
+      ※ 관련 법령: 지방계약법 시행령 제78조 (장기계속계약과 계속비계약)
       </div>
     CONTENT
     decree_content: <<~CONTENT,
-      ## 지방계약법 시행령 제65조~제67조 (장기계속계약)
+      ## 지방계약법 시행령 제78조 (장기계속계약과 계속비계약)
 
-      **지방계약법 시행령 제65조 (장기계속계약)**
+      **지방계약법 시행령 제78조 (장기계속계약)**
 
       <div style="background:#dcfce7;padding:12px;border-radius:8px;margin:8px 0;">
       ① 장기계속계약을 체결할 때에는 계약서에 다음 사항을 명시하여야 한다.
@@ -405,7 +405,7 @@ topics = [
       ③ 장기계속계약의 차년도 계약은 전년도 계약 이행 상황을 확인한 후 체결한다.
       </div>
 
-      **지방계약법 시행령 제66조 (계속비계약)**
+      **지방계약법 시행령 제78조의2 (계속비계약)**
 
       <div style="background:#dcfce7;padding:12px;border-radius:8px;margin:8px 0;">
       계속비계약은 지방의회의 의결을 거친 계속비 예산이 확보된 경우에 총 공사금액과 총 이행기간을 1개의 계약으로 체결한다.
@@ -494,13 +494,13 @@ topics = [
       </div>
 
       <div style="background:#f3f4f6;padding:12px;border-radius:8px;margin:8px 0;">
-      ※ 관련 법령: 지방계약법 시행령 제69조~제71조
+      ※ 관련 법령: 지방계약법 시행령 제79조 (단가계약)
       </div>
     CONTENT
     decree_content: <<~CONTENT,
-      ## 지방계약법 시행령 제69조~제71조 (단가계약)
+      ## 지방계약법 시행령 제79조 (단가계약)
 
-      **지방계약법 시행령 제69조 (단가계약 체결)**
+      **지방계약법 시행령 제79조 (단가계약 체결)**
 
       <div style="background:#dcfce7;padding:12px;border-radius:8px;margin:8px 0;">
       ① 단가계약은 다음 각 호의 경우에 체결할 수 있다.
@@ -511,7 +511,7 @@ topics = [
       ② 단가계약 기간은 **1년 이내**를 원칙으로 하되, 부득이한 경우 2년 이내로 할 수 있다.
       </div>
 
-      **지방계약법 시행령 제70조 (이행 요청)**
+      **지방계약법 시행령 제79조의2 (이행 요청)**
 
       <div style="background:#dcfce7;padding:12px;border-radius:8px;margin:8px 0;">
       ① 수요기관은 단가계약에 따른 납품(이행)을 요청할 때에는 발주서를 발행하여야 한다.
@@ -698,13 +698,13 @@ topics = [
       </div>
 
       <div style="background:#f3f4f6;padding:12px;border-radius:8px;margin:8px 0;">
-      ※ 관련 법령: 지방계약법 시행령 제50조~제53조
+      ※ 관련 법령: 지방계약법 시행령 제51조~제53조 (계약의 이행보증, 납부방법, 면제)
       </div>
     CONTENT
     decree_content: <<~CONTENT,
-      ## 지방계약법 시행령 제50조~제53조 (계약보증금)
+      ## 지방계약법 시행령 제51조~제53조 (계약보증금)
 
-      **지방계약법 시행령 제50조 (계약보증금 납부)**
+      **지방계약법 시행령 제51조 (계약의 이행보증)**
 
       <div style="background:#dcfce7;padding:12px;border-radius:8px;margin:8px 0;">
       ① 계약보증금 납부 비율
@@ -718,7 +718,7 @@ topics = [
       ② 납부 방법: 현금, 보증서(서울보증보험·공제조합), 국채·공채
       </div>
 
-      **지방계약법 시행령 제51조 (계약보증금 면제)**
+      **지방계약법 시행령 제53조 (계약보증금 면제)**
 
       <div style="background:#dcfce7;padding:12px;border-radius:8px;margin:8px 0;">
       다음의 경우 계약보증금 전부 또는 일부를 면제할 수 있다.
@@ -728,7 +728,7 @@ topics = [
       4. 단가계약에서 1회 발주금액이 소액인 경우
       </div>
 
-      **지방계약법 시행령 제52조 (보증금 귀속)**
+      **지방계약법 시행령 제52조 (계약보증금 납부방법)**
 
       <div style="background:#dcfce7;padding:12px;border-radius:8px;margin:8px 0;">
       계약상대자가 계약을 이행하지 아니한 때에는 계약보증금을 지방자치단체에 귀속시킨다. 다만, 천재지변 등 불가피한 사유가 있는 경우에는 그러하지 아니하다.

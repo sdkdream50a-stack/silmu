@@ -23,12 +23,12 @@ class ContractGuaranteeService
     { id: "plaster", name: "미장·타일공사", rate: 0.01, years: 1, note: "미장, 타일, 돌붙임" }
   ].freeze
 
-  # 지체상금률 (지방계약법 시행령 제88조)
-  # 공사 0.5/1,000 / 용역(수리가공) 1.3/1,000 / 물품(제조구매) 0.8/1,000
+  # 지연배상금률 (지방계약법 시행령 제90조, 시행규칙 제75조)
+  # 공사 0.5/1,000 / 용역(수리가공·대여) 1.3/1,000 / 물품(제조구매) 0.8/1,000
   DELAY_PENALTY_RATES = {
-    construction: { name: "공사", rate: Rational(5, 10000), rate_str: "0.5/1000", note: "공사계약의 경우 계약금액의 0.5/1000 (지방계약법 시행령 제88조)" },
-    service:      { name: "용역", rate: Rational(13, 10000), rate_str: "1.3/1000", note: "용역계약의 경우 계약금액의 1.3/1000 (지방계약법 시행령 제88조)" },
-    goods:        { name: "물품", rate: Rational(8, 10000), rate_str: "0.8/1000", note: "물품계약의 경우 계약금액의 0.8/1000 (지방계약법 시행령 제88조)" }
+    construction: { name: "공사", rate: Rational(5, 10000), rate_str: "0.5/1000", note: "공사계약의 경우 계약금액의 0.5/1000 (지방계약법 시행령 제90조, 시행규칙 제75조)" },
+    service:      { name: "용역", rate: Rational(13, 10000), rate_str: "1.3/1000", note: "용역계약의 경우 계약금액의 1.3/1000 (지방계약법 시행령 제90조, 시행규칙 제75조)" },
+    goods:        { name: "물품", rate: Rational(8, 10000), rate_str: "0.8/1000", note: "물품계약의 경우 계약금액의 0.8/1000 (지방계약법 시행령 제90조, 시행규칙 제75조)" }
   }.freeze
 
   # 인지세 기준 (인지세법 제3조, 시행령 별표)
@@ -54,7 +54,7 @@ class ContractGuaranteeService
       DELAY_PENALTY_RATES.map { |key, val| { id: key.to_s, name: val[:name], rate_str: val[:rate_str], note: val[:note] } }
     end
 
-    # 지체상금 계산 (지방계약법 시행령 제88조)
+    # 지연배상금 계산 (지방계약법 시행령 제90조, 시행규칙 제75조)
     def calculate_delay_penalty(params)
       contract_amount = params[:contract_amount].to_i
       delay_days      = params[:delay_days].to_i
@@ -78,7 +78,7 @@ class ContractGuaranteeService
           daily_penalty: daily_penalty,
           total_penalty: total_penalty,
           note: rate_info[:note],
-          law: "지방계약법 시행령 제88조"
+          law: "지방계약법 시행령 제90조, 시행규칙 제75조"
         }
       }
     end
