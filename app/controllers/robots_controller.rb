@@ -22,6 +22,13 @@ class RobotsController < ApplicationController
       Disallow: /cdn-cgi/
       Disallow: /audit-cases/*/hwp
 
+      # 쿼리 파라미터 필터 페이지 — 크롤 예산 절약 (canonical로 처리 중)
+      Disallow: /audit-cases?
+      Disallow: /guides?
+      Disallow: /chatbot/search?
+      Disallow: /tools/official-document?
+      Disallow: /?sector=
+
       # AI 검색/크롤 봇 명시적 허용 (GEO 최적화)
       User-agent: OAI-SearchBot
       Allow: /
