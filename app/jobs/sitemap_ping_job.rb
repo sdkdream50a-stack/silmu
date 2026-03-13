@@ -21,9 +21,12 @@ class SitemapPingJob < ApplicationJob
     urls = collect_urls
     Rails.logger.info "[SitemapPing] #{urls.size}개 URL 제출 시작"
 
+    # Bing 권장: 배치 모드 대신 URL별 개별 제출
     INDEXNOW_ENGINES.each do |engine|
-      status = submit_indexnow(engine, urls)
-      Rails.logger.info "[SitemapPing] #{engine}: #{status}"
+      urls.each do |url|
+        status = submit_indexnow(engine, url)
+        Rails.logger.info "[SitemapPing] #{engine} #{url}: #{status}"
+      end
     end
   end
 
@@ -45,25 +48,19 @@ class SitemapPingJob < ApplicationJob
     urls.uniq
   end
 
-  def submit_indexnow(engine, urls)
+  def submit_indexnow(engine, url)
     uri = URI("https://#{engine}/indexnow")
-
-    body = {
-      host: HOST,
-      key: INDEXNOW_KEY,
-      keyLocation: INDEXNOW_KEY_LOCATION,
-      urlList: urls
-    }.to_json
+    uri.query = URI.encode_www_form(
+      url: url,
+      key: INDEXNOW_KEY
+    )
 
     http = Net::HTTP.new(uri.host, 443)
     http.use_ssl = true
     http.open_timeout = 10
     http.read_timeout = 10
 
-    request = Net::HTTP::Post.new(uri.path)
-    request["Content-Type"] = "application/json"
-    request.body = body
-
+    request = Net::HTTP::Get.new(uri.request_uri)
     response = http.request(request)
     response.code.to_i < 400 ? :ok : :"error_#{response.code}"
   rescue => e
