@@ -16,7 +16,8 @@ export default class extends Controller {
   static values = {
     subjectId: Number,
     chapterNum: Number,
-    total: Number
+    total: Number,
+    signedIn: { type: Boolean, default: false }
   }
   static targets = ["badge", "progressBar", "progressText", "scoreArea", "statsArea", "wrongCountArea", "streakArea"]
 
@@ -38,9 +39,10 @@ export default class extends Controller {
     if (this.hasScoreAreaTarget) {
       this.displayQuizScores()
     }
-    // 홈 페이지: 전체 통계
+    // 홈 페이지: 전체 통계 (localStorage 먼저 표시, 로그인 시 서버 데이터 병합 후 재렌더)
     if (this.hasStatsAreaTarget) {
       this.displayHomeStats()
+      if (this.signedInValue) this.syncFromServer()
     }
     // 모의고사 선택 페이지: 오답 노트 카드
     if (this.hasWrongCountAreaTarget) {
@@ -280,6 +282,42 @@ export default class extends Controller {
         ${dotsHtml}
       </div>
     `
+  }
+
+  // ── 서버 진도 동기화 (로그인 시 홈에서 호출) ──────────────
+  async syncFromServer() {
+    try {
+      const res = await fetch('/sync', { headers: { 'Accept': 'application/json' } })
+      const data = await res.json()
+      if (!data.signed_in) return
+
+      // 서버 데이터를 로컬스토리지에 병합
+      const local = JSON.parse(localStorage.getItem('exam_progress') || '{}')
+      const merged = {
+        chapters: { ...(data.chapters || {}), ...(local.chapters || {}) },
+        quizzes: { ...(local.quizzes || {}) },
+        chapterQuizzes: { ...(data.chapter_quizzes || {}), ...(local.chapterQuizzes || {}) }
+      }
+      // 퀴즈: 최고점 유지
+      Object.entries(data.quizzes || {}).forEach(([k, v]) => {
+        const localQ = merged.quizzes[k]
+        if (!localQ || v.pct >= localQ.pct) merged.quizzes[k] = v
+      })
+      localStorage.setItem('exam_progress', JSON.stringify(merged))
+
+      // 오답/북마크도 병합
+      const localWrong = JSON.parse(localStorage.getItem('exam_wrong_answers') || '[]')
+      const mergedWrong = [...new Set([...(data.wrong_answers || []), ...localWrong])]
+      localStorage.setItem('exam_wrong_answers', JSON.stringify(mergedWrong))
+
+      const localBookmarks = JSON.parse(localStorage.getItem('exam_bookmarks') || '[]')
+      const mergedBookmarks = [...new Set([...(data.bookmarks || []), ...localBookmarks])]
+      localStorage.setItem('exam_bookmarks', JSON.stringify(mergedBookmarks))
+
+      // 서버 데이터 병합 후 재렌더
+      this.displayHomeStats()
+      if (this.hasStreakAreaTarget) this.displayStreak()
+    } catch(e) { /* 무시 */ }
   }
 
   // ── 홈 전체 통계 ────────────────────────────────

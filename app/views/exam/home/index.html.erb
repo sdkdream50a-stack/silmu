@@ -2,7 +2,8 @@
 
 <!-- 1. Hero Section -->
 <section class="bg-gradient-to-br from-blue-700 via-blue-600 to-indigo-700 text-white py-20 px-4"
-         data-controller="exam-progress">
+         data-controller="exam-progress"
+         data-exam-progress-signed-in-value="<%= user_signed_in? %>">
   <div class="max-w-4xl mx-auto text-center">
     <!-- 배지 -->
     <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white text-sm font-semibold px-4 py-2 rounded-full mb-6">
