@@ -22,7 +22,7 @@ export default class extends Controller {
   static targets = [
     "emptyState", "dashContent",
     "summaryCards", "chapterProgress", "quizHistory",
-    "wrongAnalysis", "recommendations"
+    "wrongAnalysis", "recommendations", "subjectComparison"
   ]
 
   connect() {
@@ -41,6 +41,7 @@ export default class extends Controller {
     this.renderSummaryCards(visitedChapters.length, quizzes, wrongCount)
     this.renderChapterProgress(visitedChapters, quizzes)
     this.renderQuizHistory(quizzes)
+    this.renderSubjectComparison(visitedChapters, quizzes)
     this.renderWrongAnalysis(quizzes, wrongCount)
     this.renderRecommendations(visitedChapters, quizzes, wrongCount)
   }
@@ -174,6 +175,70 @@ export default class extends Controller {
           </div>
         </div>
       `
+    }).join("")
+  }
+
+  // ── 4권별 학습 현황 비교 카드 ─────────────────────
+  renderSubjectComparison(visitedChapters, quizzes) {
+    if (!this.hasSubjectComparisonTarget) return
+
+    const BOOKS = [
+      { id: "1", title: "공공조달의 이해",   short: "1권", chapters: 7, color: "emerald", quizKey: "1" },
+      { id: "2", title: "공공조달 계획분석", short: "2권", chapters: 6, color: "blue",    quizKey: "2" },
+      { id: "3", title: "공공계약관리",      short: "3권", chapters: 6, color: "violet",  quizKey: "3" },
+      { id: "4", title: "공공조달 관리실무", short: "4권", chapters: 8, color: "rose",    quizKey: "4" }
+    ]
+
+    this.subjectComparisonTarget.innerHTML = BOOKS.map(book => {
+      const done = visitedChapters.filter(k => k.startsWith(`${book.id}-`)).length
+      const chapPct = Math.round((done / book.chapters) * 100)
+      const quiz = quizzes[book.quizKey]
+      const quizPct = quiz ? quiz.pct : null
+
+      const c = COLORS[book.color]
+
+      // 종합 상태 판단
+      let status, statusColor
+      if (done === 0 && !quiz) {
+        status = "미시작"; statusColor = "bg-slate-100 text-slate-500"
+      } else if ((quizPct ?? chapPct) >= 80) {
+        status = "강점"; statusColor = "bg-green-100 text-green-700"
+      } else if ((quizPct ?? chapPct) >= 60) {
+        status = "보통"; statusColor = "bg-amber-100 text-amber-700"
+      } else {
+        status = "취약"; statusColor = "bg-red-100 text-red-700"
+      }
+
+      // 원형 진도 표시 (SVG stroke-dasharray)
+      const circumference = 2 * Math.PI * 20  // r=20
+      const dashOffset = circumference - (chapPct / 100) * circumference
+
+      return `
+        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 flex flex-col items-center text-center">
+          <div class="relative w-16 h-16 mb-3">
+            <svg viewBox="0 0 50 50" class="w-16 h-16 -rotate-90">
+              <circle cx="25" cy="25" r="20" fill="none" stroke="#e2e8f0" stroke-width="4"/>
+              <circle cx="25" cy="25" r="20" fill="none" stroke="currentColor"
+                      stroke-width="4" stroke-linecap="round"
+                      stroke-dasharray="${circumference.toFixed(1)}"
+                      stroke-dashoffset="${dashOffset.toFixed(1)}"
+                      class="${c.text}"/>
+            </svg>
+            <div class="absolute inset-0 flex items-center justify-center">
+              <span class="text-sm font-extrabold ${c.text}">${chapPct}%</span>
+            </div>
+          </div>
+          <div class="font-bold text-slate-800 text-sm mb-0.5">${book.short}</div>
+          <div class="text-xs text-slate-400 mb-2 leading-tight">${done}/${book.chapters} 챕터</div>
+          ${quizPct !== null ? `
+            <div class="text-xs ${c.badge} px-2 py-0.5 rounded-full font-semibold mb-2">
+              모의고사 ${quizPct}%
+            </div>` : `
+            <div class="text-xs bg-slate-100 text-slate-400 px-2 py-0.5 rounded-full mb-2">
+              미응시
+            </div>`}
+          <span class="text-xs ${statusColor} px-2 py-0.5 rounded-full font-semibold">${status}</span>
+        </div>`
     }).join("")
   }
 
