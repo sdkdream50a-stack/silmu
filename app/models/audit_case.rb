@@ -25,6 +25,7 @@ class AuditCase < ApplicationRecord
 
   before_validation :generate_slug, if: -> { slug.blank? && title.present? }
   after_commit :expire_count_cache
+  after_commit :notify_indexnow, if: -> { saved_change_to_published? && published? }
 
   # 카테고리 목록
   CATEGORIES = {
@@ -70,6 +71,10 @@ class AuditCase < ApplicationRecord
   end
 
   private
+
+  def notify_indexnow
+    SitemapPingJob.perform_later(["https://#{SitemapPingJob::HOST}/audit-cases/#{slug}"])
+  end
 
   def expire_count_cache
     Rails.cache.delete("stats/audit_case_count")

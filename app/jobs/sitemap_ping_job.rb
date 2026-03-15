@@ -14,11 +14,11 @@ class SitemapPingJob < ApplicationJob
     yandex.com
   ].freeze
 
-  def perform
+  # urls: nil이면 최근 변경분 전체 수집, Array이면 해당 URL만 즉시 제출
+  def perform(urls = nil)
     require "net/http"
-    require "json"
 
-    urls = collect_urls
+    urls = urls ? Array(urls) : collect_urls
     Rails.logger.info "[SitemapPing] #{urls.size}개 URL 제출 시작"
 
     # Bing 권장: 배치 모드 대신 URL별 개별 제출
@@ -43,6 +43,11 @@ class SitemapPingJob < ApplicationJob
     # 최근 7일간 업데이트된 감사사례
     AuditCase.published.where("updated_at > ?", 7.days.ago).find_each do |ac|
       urls << "https://#{HOST}/audit-cases/#{ac.slug}"
+    end
+
+    # 최근 7일간 업데이트된 가이드
+    Guide.published.where("updated_at > ?", 7.days.ago).find_each do |guide|
+      urls << "https://#{HOST}/guides/#{guide.slug}"
     end
 
     urls.uniq

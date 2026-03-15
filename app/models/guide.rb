@@ -17,6 +17,7 @@ class Guide < ApplicationRecord
   before_validation :generate_slug, if: -> { slug.blank? && title.present? }
 
   after_commit :expire_cache
+  after_commit :notify_indexnow, if: -> { saved_change_to_published? && published? }
 
   # guide_path(guide) → /guides/purchase-and-inspection
   def to_param
@@ -41,6 +42,10 @@ class Guide < ApplicationRecord
   end
 
   private
+
+  def notify_indexnow
+    SitemapPingJob.perform_later(["https://#{SitemapPingJob::HOST}/guides/#{slug}"])
+  end
 
   def expire_cache
     Rails.cache.delete("guides/all/v2")

@@ -31,6 +31,7 @@ class Topic < ApplicationRecord
   # Callbacks
   before_validation :generate_slug, if: -> { slug.blank? && name.present? }
   after_commit :expire_count_cache
+  after_commit :notify_indexnow, if: -> { saved_change_to_published? && published? }
 
   # 통합 검색: 복수 토픽 반환 (이름·키워드·요약 ILIKE, 없으면 pg_search)
   def self.search_multiple(query, limit: 4)
@@ -151,6 +152,10 @@ class Topic < ApplicationRecord
   end
 
   private
+
+  def notify_indexnow
+    SitemapPingJob.perform_later(["https://#{SitemapPingJob::HOST}/topics/#{slug}"])
+  end
 
   def expire_count_cache
     Rails.cache.delete("stats/topic_count")
