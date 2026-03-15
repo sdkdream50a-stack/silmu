@@ -210,6 +210,52 @@
       </div>
     </div>
 
+    <%# 챕터 미니 퀴즈 %>
+    <% if @mini_questions.any? %>
+      <div class="bg-white rounded-2xl border border-indigo-200 overflow-hidden"
+           data-controller="exam-quiz"
+           data-exam-quiz-questions-value="<%= @mini_questions.to_json %>"
+           data-exam-quiz-chapter-map-value="<%= @chapter_map.to_json.html_safe %>"
+           data-exam-quiz-back-path-value="<%= exam_subject_chapter_path(@subject[:id], @chapter[:number]) %>">
+        <!-- 헤더 -->
+        <div class="bg-indigo-50 px-6 py-4 flex items-center gap-3 border-b border-indigo-200">
+          <span class="material-symbols-outlined text-indigo-600">quiz</span>
+          <h2 class="font-bold text-slate-900">이 챕터 핵심 문제 (<%= @mini_questions.size %>문항)</h2>
+          <span class="text-xs text-indigo-500 ml-auto">학습 직후 풀어보세요</span>
+        </div>
+        <!-- 진행바 -->
+        <div class="px-6 pt-4" data-exam-quiz-target="progressArea">
+          <div class="flex items-center justify-between text-xs text-slate-500 mb-2">
+            <span>문제 <strong data-exam-quiz-target="currentNum">1</strong> / <strong><%= @mini_questions.size %></strong></span>
+            <span>점수: <strong data-exam-quiz-target="scoreDisplay">0</strong></span>
+          </div>
+          <div class="w-full bg-slate-100 rounded-full h-1.5">
+            <div class="bg-indigo-500 h-1.5 rounded-full transition-all" style="width:0%" data-exam-quiz-target="progressBar"></div>
+          </div>
+        </div>
+        <!-- 문제 영역 -->
+        <div class="px-6 py-4" data-exam-quiz-target="questionArea">
+          <div class="flex items-center gap-2 flex-wrap mb-3" data-exam-quiz-target="questionBadge"></div>
+          <p class="text-slate-800 font-medium text-base leading-relaxed mb-4" data-exam-quiz-target="questionText"></p>
+          <div class="space-y-2" data-exam-quiz-target="optionsArea"></div>
+          <div class="mt-4 hidden" data-exam-quiz-target="feedbackArea"></div>
+          <div class="mt-4 hidden" data-exam-quiz-target="nextArea">
+            <button data-action="click->exam-quiz#nextQuestion" data-exam-quiz-target="nextBtn"
+                    class="w-full inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-3 rounded-xl transition-colors">
+              다음 문제 <span class="material-symbols-outlined">arrow_forward</span>
+            </button>
+          </div>
+        </div>
+        <!-- 빈 상태 -->
+        <div class="hidden px-6 py-10 text-center" data-exam-quiz-target="emptyArea">
+          <span class="material-symbols-outlined text-slate-300 text-4xl">quiz</span>
+          <p class="text-slate-500 mt-2">문제가 없습니다</p>
+        </div>
+        <!-- 결과 화면 -->
+        <div class="hidden px-6 pb-6" data-exam-quiz-target="resultArea"></div>
+      </div>
+    <% end %>
+
     <%# 챕터 문제 풀기 버튼 %>
     <% chapter_q_count = ExamQuestions.by_chapter(@subject[:id], @chapter[:number]).size %>
     <a href="<%= exam_quiz_chapter_path(subject_id: @subject[:id], chapter_num: @chapter[:number]) %>"

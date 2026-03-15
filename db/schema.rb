@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_15_051027) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_15_132805) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -69,6 +69,36 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_15_051027) do
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_calendar_data_on_user_id", unique: true
+  end
+
+  create_table "exam_progresses", force: :cascade do |t|
+    t.text "bookmarks", default: "[]"
+    t.text "chapter_quizzes", default: "{}"
+    t.text "chapters", default: "{}"
+    t.datetime "created_at", null: false
+    t.string "display_name"
+    t.text "quizzes", default: "{}"
+    t.integer "streak_count", default: 0
+    t.text "streak_history", default: "[]"
+    t.string "streak_last_date"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.integer "weekly_quiz_count", default: 0
+    t.string "weekly_reset_date"
+    t.text "wrong_answers", default: "[]"
+    t.index ["user_id"], name: "index_exam_progresses_on_user_id"
+  end
+
+  create_table "exam_question_comments", force: :cascade do |t|
+    t.string "author_name"
+    t.text "body", null: false
+    t.datetime "created_at", null: false
+    t.integer "likes_count", default: 0
+    t.integer "question_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["question_id"], name: "index_exam_question_comments_on_question_id"
+    t.index ["user_id"], name: "index_exam_question_comments_on_user_id"
   end
 
   create_table "guides", force: :cascade do |t|
@@ -175,4 +205,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_15_051027) do
   end
 
   add_foreign_key "calendar_data", "users"
+  add_foreign_key "exam_progresses", "users"
+  add_foreign_key "exam_question_comments", "users"
 end

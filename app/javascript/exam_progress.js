@@ -148,18 +148,73 @@ export function saveStreakToday() {
   try { localStorage.setItem(STREAK_KEY, JSON.stringify(updated)) } catch { /* 무시 */ }
 }
 
+// ─── 스트릭 Freeze (7일 연속 시 1회 보호) ─────────────────────
+const FREEZE_KEY = 'exam_streak_freeze'
+
+export function hasStreakFreeze() {
+  try { return JSON.parse(localStorage.getItem(FREEZE_KEY)) === true } catch { return false }
+}
+
+export function addStreakFreeze() {
+  try { localStorage.setItem(FREEZE_KEY, 'true') } catch {}
+}
+
+function twoDaysAgoStr() {
+  const d = new Date()
+  d.setDate(d.getDate() - 2)
+  return d.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' })
+    .replace(/\. /g, '-').replace('.', '')
+}
+
 export function getStreak() {
   const streak = loadStreak()
   const today = todayStr()
-  // 어제 또는 오늘 마지막 학습일이 아니면 스트릭 소멸
-  if (streak.lastDate !== today && streak.lastDate !== yesterday()) {
-    return { count: 0, lastDate: null, history: [] }
+  if (streak.lastDate === today || streak.lastDate === yesterday()) {
+    return streak
   }
-  return streak
+  // freeze 체크: 그제가 lastDate이면 freeze로 구제
+  if (streak.lastDate === twoDaysAgoStr() && hasStreakFreeze()) {
+    try { localStorage.removeItem(FREEZE_KEY) } catch {}
+    const updated = { ...streak, lastDate: yesterday() }
+    try { localStorage.setItem(STREAK_KEY, JSON.stringify(updated)) } catch {}
+    return updated
+  }
+  return { count: 0, lastDate: null, history: [] }
 }
 
 export function getStreakCount() {
   return getStreak().count
+}
+
+// ─── 문제 북마크 ─────────────────────────────────────────────
+const BOOKMARK_KEY = 'exam_bookmarks'
+
+function loadBookmarks() {
+  try { return JSON.parse(localStorage.getItem(BOOKMARK_KEY)) || [] } catch { return [] }
+}
+
+export function toggleBookmark(questionId) {
+  const ids = loadBookmarks()
+  const idx = ids.indexOf(questionId)
+  if (idx === -1) {
+    ids.push(questionId)
+  } else {
+    ids.splice(idx, 1)
+  }
+  try { localStorage.setItem(BOOKMARK_KEY, JSON.stringify(ids)) } catch {}
+  return idx === -1  // true = 추가됨, false = 제거됨
+}
+
+export function isBookmarked(questionId) {
+  return loadBookmarks().includes(questionId)
+}
+
+export function getBookmarkIds() {
+  return loadBookmarks()
+}
+
+export function getBookmarkCount() {
+  return loadBookmarks().length
 }
 
 // 전체 통계

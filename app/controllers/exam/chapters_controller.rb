@@ -10,6 +10,13 @@ class Exam::ChaptersController < ApplicationController
 
     @colors = ExamCurriculum.colors(@subject[:color])
 
+    # 챕터 미니 퀴즈 (최대 5문제)
+    raw_mini = ExamQuestions.by_chapter(@subject[:id], @chapter[:number])
+                            .first(5)
+                            .map { |q| q.slice(:id, :question, :options, :correct, :explanation, :difficulty, :subject_id, :chapter_num) }
+    @mini_questions = ExamQuestions.with_difficulty(raw_mini)
+    @chapter_map = ExamCurriculum.chapter_map
+
     # 정적 콘텐츠이므로 HTTP 캐싱
     expires_in 1.hour, public: true, stale_while_revalidate: 1.day
 

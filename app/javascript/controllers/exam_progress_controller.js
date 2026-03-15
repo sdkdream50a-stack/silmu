@@ -1,7 +1,7 @@
 // exam.silmu.kr — 학습 진도 추적 Stimulus 컨트롤러
 // 챕터 방문 기록, 과목 진도바, 모의고사 점수 표시
 import { Controller } from "@hotwired/stimulus"
-import { markChapterVisited, getVisitedChapters, getChapterQuizDones, getAllProgress, getStats, getWrongAnswerCount, getStreak } from "../exam_progress"
+import { markChapterVisited, getVisitedChapters, getChapterQuizDones, getAllProgress, getStats, getWrongAnswerCount, getStreak, hasStreakFreeze, addStreakFreeze, getBookmarkCount, saveStreakToday } from "../exam_progress"
 
 // 과목별 고정 색상 (Tailwind safelist에 포함된 클래스만 사용)
 const SUBJECT_STYLE = {
@@ -55,6 +55,7 @@ export default class extends Controller {
   // ── 챕터 방문 기록 ──────────────────────────────
   trackChapter() {
     markChapterVisited(this.subjectIdValue, this.chapterNumValue)
+    saveStreakToday()
     if (this.hasBadgeTarget) {
       this.badgeTarget.innerHTML = `
         <div class="inline-flex items-center gap-1.5 bg-green-50 border border-green-200 text-green-700 text-sm font-semibold px-3 py-1.5 rounded-full">
@@ -208,6 +209,35 @@ export default class extends Controller {
     const streak = getStreak()
     const count = streak.count || 0
 
+    // 7일 달성 시 freeze 자동 부여 (아직 없을 때만)
+    if (count >= 7 && !hasStreakFreeze()) {
+      addStreakFreeze()
+    }
+
+    const freeze = hasStreakFreeze()
+    const history = streak.history || []
+
+    // 최근 7일 도트 생성 (오늘 기준 6일 전 ~ 오늘)
+    const dots = []
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date()
+      d.setDate(d.getDate() - i)
+      const dateStr = d.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' })
+        .replace(/\. /g, '-').replace('.', '')
+      const studied = history.includes(dateStr)
+      const isToday = i === 0
+      const dayLabel = ['일', '월', '화', '수', '목', '금', '토'][d.getDay()]
+      dots.push(`
+        <div class="flex flex-col items-center gap-0.5">
+          <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs ${studied ? 'bg-white/40' : 'bg-white/15'} ${isToday ? 'ring-2 ring-white/60' : ''}">
+            ${studied ? '🔥' : '<span style="color:rgba(255,255,255,0.4)">○</span>'}
+          </div>
+          <span style="font-size:10px;color:rgba(255,255,255,0.5)">${dayLabel}</span>
+        </div>
+      `)
+    }
+    const dotsHtml = `<div class="flex gap-1 mt-3">${dots.join('')}</div>`
+
     if (count === 0) {
       this.streakAreaTarget.innerHTML = `
         <div class="flex items-center justify-between bg-white border border-slate-200 rounded-2xl px-5 py-4">
@@ -226,9 +256,11 @@ export default class extends Controller {
       return
     }
 
-    const flameCls = count >= 7 ? "text-red-500" : count >= 3 ? "text-orange-500" : "text-amber-400"
     const bgCls = count >= 7 ? "from-red-500 to-orange-500" : count >= 3 ? "from-orange-400 to-amber-500" : "from-amber-300 to-yellow-400"
     const label = count >= 30 ? "전설" : count >= 14 ? "대단해요!" : count >= 7 ? "불꽃 학습자" : count >= 3 ? "꾸준해요!" : "시작이 좋아요"
+    const freezeBadge = freeze
+      ? `<span class="inline-flex items-center gap-1 bg-white/20 text-white text-xs font-bold px-2 py-0.5 rounded-full mt-1">🛡️ freeze 보유</span>`
+      : ""
 
     this.streakAreaTarget.innerHTML = `
       <div class="bg-gradient-to-r ${bgCls} rounded-2xl px-5 py-4 shadow-md">
@@ -240,10 +272,12 @@ export default class extends Controller {
             <div>
               <div class="text-white font-bold">연속 학습 ${count}일째!</div>
               <div class="text-white/80 text-sm">${label} · 오늘도 학습을 완료하세요</div>
+              ${freezeBadge}
             </div>
           </div>
           <div class="text-white text-3xl font-extrabold">${count}<span class="text-white/70 text-base font-normal">일</span></div>
         </div>
+        ${dotsHtml}
       </div>
     `
   }

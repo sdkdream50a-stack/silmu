@@ -33,6 +33,10 @@ class Exam::KeywordsController < ApplicationController
 
     @total_count = @all_keywords.size
 
+    # 플래시카드 모드용: definition이 있는 키워드만 추출
+    @flashcard_keywords = @all_keywords.select { |k| k[:definition].present? }
+                                       .map { |k| k.slice(:keyword, :definition, :example, :chapter_title, :subject_id) }
+
     # 정적 콘텐츠이므로 HTTP 캐싱 (필터/검색 파라미터가 있어도 동일 데이터)
     expires_in 1.hour, public: true, stale_while_revalidate: 1.day
 

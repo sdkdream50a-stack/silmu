@@ -1,0 +1,158 @@
+<div class="max-w-3xl mx-auto px-4 py-8">
+  <!-- 헤더 -->
+  <div class="mb-8">
+    <div class="flex items-center gap-3 mb-4">
+      <div class="w-12 h-12 bg-violet-100 rounded-2xl flex items-center justify-center">
+        <span class="material-symbols-outlined text-violet-600 text-2xl">edit_note</span>
+      </div>
+      <div>
+        <h1 class="text-2xl font-extrabold text-slate-900">실기 대비 — 필답형 예상문제</h1>
+        <p class="text-slate-500 text-sm">PBT 필답형 150분 · 총 5문제 · 모범 답안 제공</p>
+      </div>
+    </div>
+
+    <div class="bg-violet-50 border border-violet-200 rounded-xl p-4 text-sm text-violet-800">
+      <p class="font-semibold mb-1 flex items-center gap-2">
+        <span class="material-symbols-outlined text-base">info</span>
+        실기 시험 안내
+      </p>
+      <ul class="space-y-1 text-violet-700 text-xs">
+        <li>• 시험 형식: 필답형(PBT) — 서술식 답안 작성</li>
+        <li>• 시험 시간: 150분</li>
+        <li>• 합격 기준: 총점의 60% 이상 (과락 없음)</li>
+        <li>• 학습 방법: 키워드 힌트로 답안 구조를 파악한 후 모범 답안과 비교하세요.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 총점 안내 -->
+  <div class="flex items-center justify-between mb-6 bg-white rounded-xl border border-slate-200 p-4">
+    <span class="text-sm text-slate-600 font-medium">총 5문제</span>
+    <span class="text-sm font-bold text-slate-800">
+      총 배점: <span class="text-violet-600"><%= @questions.sum { |q| q[:point] }점</span>
+    </span>
+  </div>
+
+  <!-- 문제 목록 -->
+  <div class="space-y-6">
+    <% @questions.each do |q| %>
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden"
+           data-practical-id="<%= q[:id] %>">
+        <!-- 문제 헤더 -->
+        <div class="flex items-start gap-4 p-6 border-b border-slate-100">
+          <div class="flex-shrink-0">
+            <div class="w-10 h-10 bg-violet-600 rounded-xl flex items-center justify-center">
+              <span class="text-white font-extrabold text-sm"><%= q[:id] %></span>
+            </div>
+          </div>
+          <div class="flex-1">
+            <div class="flex flex-wrap items-center gap-2 mb-3">
+              <span class="bg-violet-100 text-violet-700 text-xs font-bold px-2.5 py-1 rounded-full"><%= q[:category] %></span>
+              <span class="bg-slate-100 text-slate-600 text-xs font-bold px-2.5 py-1 rounded-full"><%= q[:point] %>점</span>
+              <!-- 자기 채점 체크박스 -->
+              <label class="flex items-center gap-1.5 cursor-pointer ml-auto">
+                <input type="checkbox"
+                       class="practical-done-check w-4 h-4 accent-violet-600 cursor-pointer"
+                       data-question-id="<%= q[:id] %>"
+                       onchange="savePracticalDone(this)">
+                <span class="text-xs text-slate-500 font-medium">학습 완료</span>
+              </label>
+            </div>
+            <p class="text-slate-800 font-medium leading-relaxed"><%= q[:question] %></p>
+          </div>
+        </div>
+
+        <!-- 키워드 힌트 -->
+        <div class="border-b border-slate-100">
+          <button class="w-full flex items-center justify-between px-6 py-3.5 text-left hover:bg-slate-50 transition-colors"
+                  onclick="toggleSection(this, 'hint-<%= q[:id] %>')">
+            <span class="flex items-center gap-2 text-sm font-semibold text-amber-700">
+              <span class="material-symbols-outlined text-base">tips_and_updates</span>
+              핵심 키워드 힌트
+            </span>
+            <span class="material-symbols-outlined text-slate-400 expand-icon">expand_more</span>
+          </button>
+          <div id="hint-<%= q[:id] %>" class="hidden px-6 pb-4">
+            <div class="flex flex-wrap gap-2">
+              <% q[:keywords].each do |kw| %>
+                <span class="bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold px-3 py-1.5 rounded-lg"><%= kw %></span>
+              <% end %>
+            </div>
+            <p class="text-xs text-slate-500 mt-2"><%= q[:answer_hint] %></p>
+          </div>
+        </div>
+
+        <!-- 모범 답안 -->
+        <div>
+          <button class="w-full flex items-center justify-between px-6 py-3.5 text-left hover:bg-slate-50 transition-colors"
+                  onclick="toggleSection(this, 'answer-<%= q[:id] %>')">
+            <span class="flex items-center gap-2 text-sm font-semibold text-emerald-700">
+              <span class="material-symbols-outlined text-base">assignment_turned_in</span>
+              모범 답안 보기
+            </span>
+            <span class="material-symbols-outlined text-slate-400 expand-icon">expand_more</span>
+          </button>
+          <div id="answer-<%= q[:id] %>" class="hidden px-6 pb-5">
+            <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
+              <pre class="text-sm text-slate-700 leading-relaxed whitespace-pre-wrap font-sans"><%= q[:model_answer] %></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- 이동 버튼 -->
+  <div class="mt-8 flex gap-3">
+    <a href="<%= exam_quiz_simulation_path %>" class="flex-1 inline-flex items-center justify-center gap-2 bg-blue-600 text-white font-bold px-4 py-3 rounded-xl hover:bg-blue-700 transition-colors text-sm">
+      <span class="material-symbols-outlined text-base">timer</span>
+      실전 모의고사
+    </a>
+    <a href="<%= exam_subjects_path %>" class="flex-1 inline-flex items-center justify-center gap-2 bg-white border-2 border-slate-200 text-slate-700 font-bold px-4 py-3 rounded-xl hover:border-blue-400 transition-colors text-sm">
+      <span class="material-symbols-outlined text-base">school</span>
+      이론 학습
+    </a>
+  </div>
+</div>
+
+<script>
+// 섹션 토글 (힌트/모범 답안)
+function toggleSection(btn, sectionId) {
+  const section = document.getElementById(sectionId)
+  const icon = btn.querySelector('.expand-icon')
+  if (!section) return
+  const isHidden = section.classList.contains('hidden')
+  section.classList.toggle('hidden', !isHidden)
+  if (icon) icon.textContent = isHidden ? 'expand_less' : 'expand_more'
+}
+
+// 자기 채점 체크박스 저장 (localStorage)
+function savePracticalDone(checkbox) {
+  const qId = checkbox.dataset.questionId
+  const done = JSON.parse(localStorage.getItem('exam_practical_done') || '[]')
+  if (checkbox.checked) {
+    if (!done.includes(qId)) done.push(qId)
+  } else {
+    const idx = done.indexOf(qId)
+    if (idx > -1) done.splice(idx, 1)
+  }
+  localStorage.setItem('exam_practical_done', JSON.stringify(done))
+}
+
+// 페이지 로드 시 체크박스 상태 복원
+document.addEventListener('DOMContentLoaded', function() {
+  const done = JSON.parse(localStorage.getItem('exam_practical_done') || '[]')
+  document.querySelectorAll('.practical-done-check').forEach(function(cb) {
+    if (done.includes(cb.dataset.questionId)) {
+      cb.checked = true
+      const card = cb.closest('[data-practical-id]')
+      if (card) card.classList.add('ring-2', 'ring-violet-300')
+    }
+    cb.addEventListener('change', function() {
+      const card = cb.closest('[data-practical-id]')
+      if (card) card.classList.toggle('ring-2', cb.checked)
+      if (card) card.classList.toggle('ring-violet-300', cb.checked)
+    })
+  })
+})
+</script>

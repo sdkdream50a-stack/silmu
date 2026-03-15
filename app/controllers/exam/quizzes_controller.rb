@@ -59,6 +59,21 @@ module Exam
       )
     end
 
+    # GET /quiz/bookmarks — 북마크 문제 (모든 문제를 내려보내고 클라이언트에서 필터)
+    def bookmarks
+      raw = ExamQuestions.all.map { |q| q.slice(*QUESTION_FIELDS) }
+      @all_questions = ExamQuestions.with_difficulty(raw)
+      @chapter_map = ExamCurriculum.chapter_map
+
+      expires_in 1.hour, public: true, stale_while_revalidate: 1.day
+
+      set_meta_tags(
+        title: "북마크 문제",
+        description: "별표로 저장한 문제만 모아서 풀어보는 북마크 노트. 중요 문제를 반복 학습하여 완벽하게 정복하세요.",
+        keywords: "공공조달관리사 북마크, 문제 저장, 중요 문제 복습"
+      )
+    end
+
     # GET /quiz/wrong — 오답 노트 재풀이 (모든 문제를 내려보내고 클라이언트에서 필터)
     def wrong
       raw = ExamQuestions.all.map { |q| q.slice(*QUESTION_FIELDS) }

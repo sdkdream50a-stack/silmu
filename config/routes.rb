@@ -10,6 +10,7 @@ Rails.application.routes.draw do
       get 'quiz', to: 'quizzes#index', as: :quiz_index
       get 'quiz/subject/:subject_id/chapter/:chapter_num', to: 'quizzes#chapter', as: :quiz_chapter
       get 'quiz/mini', to: 'quizzes#mini', as: :quiz_mini
+      get 'quiz/bookmarks', to: 'quizzes#bookmarks', as: :quiz_bookmarks
       get 'quiz/wrong', to: 'quizzes#wrong', as: :quiz_wrong
       get 'quiz/simulation', to: 'quizzes#simulation', as: :quiz_simulation
       get 'quiz/analysis', to: 'quizzes#analysis', as: :quiz_analysis
@@ -17,6 +18,24 @@ Rails.application.routes.draw do
       get 'exam-info', to: 'exam_info#index', as: :exam_info
       get 'exam-strategy', to: 'strategy#index', as: :exam_strategy
       get 'sitemap.xml', to: 'sitemap#index', defaults: { format: :xml }
+
+      # #6 서버 기반 진도 저장 동기화
+      get 'sync', to: 'sync#show', as: :sync
+      post 'sync', to: 'sync#create'
+
+      # #7 AI 해설
+      post 'quiz/explain', to: 'explanations#create', as: :quiz_explain
+
+      # #8 주간 랭킹
+      get 'rankings', to: 'rankings#index', as: :rankings
+
+      # #9 실기 대비
+      get 'practical', to: 'practical#index', as: :practical
+
+      # #10 Q&A 커뮤니티 (문제별 댓글) — scope module:'exam' 안이므로 module 재지정 불필요
+      resources :questions, only: [] do
+        resources :comments, controller: 'question_comments', only: [ :index, :create ]
+      end
     end
   end
 

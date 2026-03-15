@@ -5,6 +5,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   has_one :calendar_datum, dependent: :destroy
+  has_one :exam_progress, dependent: :destroy
+  has_many :exam_question_comments, dependent: :destroy
 
   after_create_commit :send_welcome_email
 
