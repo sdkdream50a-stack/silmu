@@ -29,7 +29,7 @@
   <div class="flex items-center justify-between mb-6 bg-white rounded-xl border border-slate-200 p-4">
     <span class="text-sm text-slate-600 font-medium">총 5문제</span>
     <span class="text-sm font-bold text-slate-800">
-      총 배점: <span class="text-violet-600"><%= @questions.sum { |q| q[:point] }점</span>
+      총 배점: <span class="text-violet-600"><%= @questions.sum { |q| q[:point] } %>점</span>
     </span>
   </div>
 
