@@ -10,6 +10,10 @@ class User < ApplicationRecord
 
   after_create_commit :send_welcome_email
 
+  def admin?
+    email == "admin@silmu.kr"
+  end
+
   private
 
   def send_welcome_email

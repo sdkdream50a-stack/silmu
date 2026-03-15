@@ -254,6 +254,13 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :newsletters, only: [:new, :create]
     get "analytics", to: "analytics#index", as: :analytics
+    resources :exam_dashboard, only: [:index] do
+      collection do
+        patch :restore_comment
+        delete :delete_comment
+        delete :delete_report
+      end
+    end
   end
 
   # 사이트맵
