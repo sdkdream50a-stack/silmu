@@ -19,7 +19,7 @@ export default class extends Controller {
     total: Number,
     signedIn: { type: Boolean, default: false }
   }
-  static targets = ["badge", "progressBar", "progressText", "scoreArea", "statsArea", "wrongCountArea", "streakArea"]
+  static targets = ["badge", "progressBar", "progressText", "scoreArea", "statsArea", "wrongCountArea", "streakArea", "goalArea"]
 
   connect() {
     // 챕터 페이지: subjectId + chapterNum 값이 있으면 방문 기록
@@ -51,6 +51,10 @@ export default class extends Controller {
     // 스트릭 카드
     if (this.hasStreakAreaTarget) {
       this.displayStreak()
+    }
+    // 일일 학습 목표
+    if (this.hasGoalAreaTarget) {
+      this.displayGoal()
     }
   }
 
@@ -282,6 +286,78 @@ export default class extends Controller {
         ${dotsHtml}
       </div>
     `
+  }
+
+  // ── 일일 학습 목표 ────────────────────────────────
+  displayGoal() {
+    const goal = this._loadGoal()
+    const today = new Date().toLocaleDateString('ko-KR', {year:'numeric',month:'2-digit',day:'2-digit'}).replace(/\. /g,'-').replace('.','')
+
+    // 오늘의 실적 계산
+    const progress = JSON.parse(localStorage.getItem('exam_progress') || '{}')
+    const quizzes = progress.quizzes || {}
+    const todayQuizDone = Object.values(quizzes).filter(q => q.date === today).length
+
+    if (!goal || goal.date !== today) {
+      // 목표 미설정: 설정 UI 표시
+      this.goalAreaTarget.innerHTML = `
+        <div class="bg-white/10 backdrop-blur-sm rounded-2xl px-5 py-4 border border-white/20 mt-4">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="material-symbols-outlined text-yellow-300 text-base">target</span>
+            <span class="text-white/90 text-sm font-semibold">오늘의 학습 목표 설정</span>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            ${[5, 10, 20, 30].map(n => `
+              <button onclick="examSetGoal(${n})"
+                      class="text-xs font-bold bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-lg transition-colors">
+                문제 ${n}개
+              </button>
+            `).join('')}
+            <button onclick="examSetGoal(0)"
+                    class="text-xs font-semibold bg-white/10 text-white/60 hover:text-white/80 px-3 py-1.5 rounded-lg transition-colors">
+              건너뛰기
+            </button>
+          </div>
+        </div>
+      `
+      // 전역 함수 등록
+      window.examSetGoal = (count) => {
+        if (count === 0) { this.goalAreaTarget.innerHTML = ''; return }
+        const today = new Date().toLocaleDateString('ko-KR', {year:'numeric',month:'2-digit',day:'2-digit'}).replace(/\. /g,'-').replace('.','')
+        localStorage.setItem('exam_daily_goal', JSON.stringify({ count, date: today }))
+        this.displayGoal()
+      }
+    } else {
+      // 목표 설정됨: 달성 현황 표시
+      const done = todayQuizDone
+      const target = goal.count
+      const pct = Math.min(100, Math.round((done / target) * 100))
+      const achieved = done >= target
+
+      this.goalAreaTarget.innerHTML = `
+        <div class="bg-white/10 backdrop-blur-sm rounded-2xl px-5 py-4 border border-white/20 mt-4">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-yellow-300 text-base">target</span>
+              <span class="text-white/90 text-sm font-semibold">오늘의 목표</span>
+            </div>
+            ${achieved
+              ? '<span class="text-xs font-bold bg-yellow-400 text-slate-900 px-2 py-0.5 rounded-full animate-pulse">🎉 달성!</span>'
+              : `<span class="text-white/60 text-xs">${done}/${target}회 완료</span>`
+            }
+          </div>
+          <div class="w-full bg-white/20 rounded-full h-2">
+            <div class="${achieved ? 'bg-yellow-300' : 'bg-white/70'} h-2 rounded-full transition-all duration-500" style="width:${pct}%"></div>
+          </div>
+          ${achieved ? '<p class="text-yellow-200 text-xs mt-2 font-semibold">오늘 목표를 달성했어요! 🏆 내일도 화이팅!</p>' : ''}
+          <button onclick="localStorage.removeItem('exam_daily_goal');location.reload()" class="mt-2 text-xs text-white/40 hover:text-white/70 transition-colors">목표 변경</button>
+        </div>
+      `
+    }
+  }
+
+  _loadGoal() {
+    try { return JSON.parse(localStorage.getItem('exam_daily_goal')) } catch { return null }
   }
 
   // ── 서버 진도 동기화 (로그인 시 홈에서 호출) ──────────────

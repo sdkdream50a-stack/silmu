@@ -93,14 +93,24 @@ export default class extends Controller {
       .sort((a, b) => b.count - a.count)
       .slice(0, 5)
 
-    const rows = sorted.map(c => `
-      <div class="flex items-center justify-between py-2 border-b border-slate-100 last:border-0">
-        <div class="flex-1 min-w-0">
-          <span class="text-xs font-bold text-slate-400 mr-1">${c.subjectNumber}</span>
-          <span class="text-sm font-medium text-slate-700">${c.title}</span>
-        </div>
-        <span class="text-xs font-bold bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full flex-shrink-0 ml-3">${c.count}문제</span>
-      </div>`).join("")
+    const rows = sorted.map(c => {
+      const [subId, chapNum] = c.key.split("-")
+      const chapterUrl = `/subjects/${subId}/chapters/${chapNum}`
+      return `
+        <div class="flex items-center justify-between py-2 border-b border-slate-100 last:border-0">
+          <div class="flex-1 min-w-0">
+            <span class="text-xs font-bold text-slate-400 mr-1">${c.subjectNumber}</span>
+            <span class="text-sm font-medium text-slate-700">${c.title}</span>
+          </div>
+          <div class="flex items-center gap-1.5 flex-shrink-0 ml-3">
+            <span class="text-xs font-bold bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full">${c.count}문제</span>
+            <a href="${chapterUrl}"
+               class="text-xs font-bold bg-blue-600 text-white px-2 py-0.5 rounded-full hover:bg-blue-700 transition-colors">
+              학습 →
+            </a>
+          </div>
+        </div>`
+    }).join("")
 
     return `
       <div class="bg-orange-50 border border-orange-200 rounded-2xl p-5">
@@ -608,6 +618,8 @@ export default class extends Controller {
       const badgeColor = c.pct >= 60
         ? "text-red-700 bg-red-50 border border-red-200"
         : "text-orange-700 bg-orange-50 border border-orange-200"
+      const [subId, chapNum] = c.key.split("-")
+      const chapterUrl = `/subjects/${subId}/chapters/${chapNum}`
       return `
         <div class="flex items-center justify-between py-2.5 border-b border-slate-100 last:border-0">
           <div class="flex-1 min-w-0">
@@ -617,6 +629,10 @@ export default class extends Controller {
           <div class="flex items-center gap-2 flex-shrink-0 ml-3">
             <span class="text-xs text-slate-400">${c.wrongCount}/${c.total}</span>
             <span class="text-xs font-bold ${badgeColor} px-2 py-0.5 rounded-full">${c.pct}% 오답</span>
+            <a href="${chapterUrl}"
+               class="text-xs font-bold bg-blue-600 text-white px-2 py-0.5 rounded-full hover:bg-blue-700 transition-colors whitespace-nowrap">
+              복습 →
+            </a>
           </div>
         </div>`
     }).join("")
