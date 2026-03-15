@@ -42,6 +42,32 @@ export default class extends Controller {
       document.body.style.overflow = "hidden"
     }
     this.showFront()
+
+    // 키보드 단축키 등록
+    this._fcKeyHandler = this._handleFlashcardKey.bind(this)
+    document.addEventListener('keydown', this._fcKeyHandler)
+
+    // 터치 이벤트 등록
+    const cardArea = this.element.querySelector('[data-card-area]')
+    if (cardArea) {
+      this._touchStartX = 0
+      this._touchStartY = 0
+      this._touchHandler = (e) => {
+        this._touchStartX = e.touches[0].clientX
+        this._touchStartY = e.touches[0].clientY
+      }
+      this._touchEndHandler = (e) => {
+        const dx = e.changedTouches[0].clientX - this._touchStartX
+        const dy = e.changedTouches[0].clientY - this._touchStartY
+        if (Math.abs(dy) > Math.abs(dx)) return  // 수직 스와이프 무시
+        if (Math.abs(dx) < 30) { this.flip(); return }  // 탭 → flip
+        if (dx > 50) this.knew()
+        else if (dx < -50) this.didntKnow()
+      }
+      cardArea.addEventListener('touchstart', this._touchHandler, { passive: true })
+      cardArea.addEventListener('touchend', this._touchEndHandler, { passive: true })
+      this._cardArea = cardArea
+    }
   }
 
   // 닫기
@@ -49,6 +75,36 @@ export default class extends Controller {
     if (this.hasOverlayTarget) {
       this.overlayTarget.classList.add("hidden")
       document.body.style.overflow = ""
+    }
+
+    // 키보드 단축키 해제
+    if (this._fcKeyHandler) {
+      document.removeEventListener('keydown', this._fcKeyHandler)
+      this._fcKeyHandler = null
+    }
+
+    // 터치 이벤트 해제
+    if (this._cardArea) {
+      this._cardArea.removeEventListener('touchstart', this._touchHandler)
+      this._cardArea.removeEventListener('touchend', this._touchEndHandler)
+      this._cardArea = null
+    }
+  }
+
+  // 키보드 단축키 핸들러
+  _handleFlashcardKey(e) {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return
+    if (e.key === ' ' || e.key === 'Enter') {
+      e.preventDefault()
+      this.flip()
+    } else if (e.key === 'ArrowRight') {
+      e.preventDefault()
+      this.knew()
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault()
+      this.didntKnow()
+    } else if (e.key === 'Escape') {
+      this.close()
     }
   }
 
