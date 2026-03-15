@@ -30,6 +30,11 @@ class RobotsController < ApplicationController
       Disallow: /?sector=
 
       # AI 검색/크롤 봇 명시적 허용 (GEO 최적화)
+      # 주의: Cloudflare "Managed robots.txt" 설정이 활성화된 경우 이 규칙보다
+      # Cloudflare 블록이 우선 적용됨 → Cloudflare 대시보드에서 비활성화 필요
+      User-agent: GPTBot
+      Allow: /
+
       User-agent: OAI-SearchBot
       Allow: /
 
@@ -42,10 +47,16 @@ class RobotsController < ApplicationController
       User-agent: Google-Extended
       Allow: /
 
+      User-agent: ClaudeBot
+      Allow: /
+
       User-agent: anthropic-ai
       Allow: /
 
       User-agent: Claude-Web
+      Allow: /
+
+      User-agent: Bingbot
       Allow: /
 
       User-agent: CCBot
