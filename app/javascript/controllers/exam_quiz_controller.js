@@ -27,6 +27,10 @@ export default class extends Controller {
     // 난이도별 통계 초기화
     this.diffStats = { basic: { total: 0, wrong: 0 }, advanced: { total: 0, wrong: 0 } }
 
+    // 키보드 단축키 등록
+    this._keyHandler = this._handleKeydown.bind(this)
+    document.addEventListener('keydown', this._keyHandler)
+
     if (this.wrongModeValue) {
       const wrongIds = getWrongAnswerIds()
       if (wrongIds.length === 0) {
@@ -107,6 +111,28 @@ export default class extends Controller {
         <p class="text-orange-600 text-xs mb-3">오답이 많은 챕터부터 집중 복습하세요.</p>
         ${rows}
       </div>`
+  }
+
+  disconnect() {
+    document.removeEventListener('keydown', this._keyHandler)
+  }
+
+  _handleKeydown(e) {
+    // 입력 필드에 포커스 있으면 무시
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return
+
+    if (['1','2','3','4'].includes(e.key) && !this.answeredValue) {
+      const idx = parseInt(e.key) - 1
+      const btn = this.optionsAreaTarget.querySelectorAll('.option-btn')[idx]
+      if (btn) btn.click()
+    } else if ((e.key === 'Enter' || e.key === ' ') && !this.nextAreaTarget.classList.contains('hidden')) {
+      e.preventDefault()
+      this.nextQuestion()
+    } else if (e.key === 'b' || e.key === 'B') {
+      // 현재 문제 북마크 토글
+      const bBtn = this.questionBadgeTarget.querySelector('[data-action*="bookmarkQuestion"]')
+      if (bBtn) bBtn.click()
+    }
   }
 
   // 오답 없음 상태 표시
@@ -389,6 +415,14 @@ export default class extends Controller {
     // 문제 영역 숨기기
     this.questionAreaTarget.classList.add("hidden")
 
+    // 다음 챕터 URL 계산
+    const chapterNum = parseInt(this.element.dataset.examQuizChapterNumValue || "0")
+    const subjectId = this.element.dataset.examQuizSubjectIdValue || ""
+    const SUBJECT_CHAPTERS = { "1": 7, "2": 6, "3": 6, "4": 8 }
+    const maxChapters = SUBJECT_CHAPTERS[subjectId] || 0
+    const hasNextChapter = chapterNum > 0 && subjectId && chapterNum < maxChapters
+    const nextChapterUrl = hasNextChapter ? `/subjects/${subjectId}/chapters/${chapterNum + 1}` : null
+
     // 오답 모드 결과 vs 일반 모드 결과
     const wrongRemaining = getWrongAnswerIds().length
     const actionButtons = this.bookmarkModeValue
@@ -428,7 +462,14 @@ export default class extends Controller {
            class="flex-1 inline-flex items-center justify-center gap-2 bg-white border-2 border-slate-200 hover:border-blue-400 text-slate-700 font-bold px-6 py-3.5 rounded-xl transition-colors">
           <span class="material-symbols-outlined">arrow_back</span>
           챕터로 돌아가기
-        </a>` : wrongRemaining > 0 ? `
+        </a>
+        ${nextChapterUrl ? `
+        <a href="${nextChapterUrl}"
+           class="flex-1 inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-3.5 rounded-xl transition-colors">
+          <span class="material-symbols-outlined">arrow_forward</span>
+          다음 챕터 학습
+        </a>` : ''}
+        ` : wrongRemaining > 0 ? `
         <a href="/quiz/wrong"
            class="flex-1 inline-flex items-center justify-center gap-2 bg-orange-50 border-2 border-orange-300 hover:border-orange-400 text-orange-700 font-bold px-6 py-3.5 rounded-xl transition-colors">
           <span class="material-symbols-outlined">error_outline</span>
@@ -654,6 +695,17 @@ export default class extends Controller {
 
   // #10 댓글 HTML 렌더링 헬퍼
   renderComment(c) {
+    if (c.pending_review) {
+      return `
+        <div class="bg-amber-50 border border-amber-200 rounded-lg p-3" data-comment-id="${c.id}">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="text-xs font-bold text-amber-700">내 댓글</span>
+            <span class="text-xs bg-amber-200 text-amber-800 px-2 py-0.5 rounded-full font-semibold">AI 검토 중</span>
+          </div>
+          <p class="text-sm text-amber-700 break-words opacity-75">${this.escapeHtml(c.body)}</p>
+          <p class="text-xs text-amber-500 mt-1">잠시 후 게시되거나 가이드라인 검토 후 숨겨질 수 있습니다.</p>
+        </div>`
+    }
     const likedKey = `qa_liked_${c.id}`
     const reportedKey = `qa_reported_${c.id}`
     const liked = localStorage.getItem(likedKey) === '1'

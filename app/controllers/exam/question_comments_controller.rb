@@ -15,6 +15,27 @@ module Exam
           mine: user_signed_in? && c.user_id == current_user.id
         }
       end
+
+      # 로그인 유저의 숨겨진 댓글(AI 검토 중) 포함
+      if user_signed_in?
+        hidden_mine = ExamQuestionComment
+          .where(question_id: params[:question_id], user_id: current_user.id, hidden: true)
+          .order(created_at: :desc)
+          .limit(5)
+          .map do |c|
+            {
+              id: c.id,
+              body: c.body,
+              author: c.author_display_name,
+              created_at: c.created_at.strftime("%Y.%m.%d"),
+              likes_count: c.likes_count,
+              mine: true,
+              pending_review: true
+            }
+          end
+        comments = hidden_mine + comments
+      end
+
       render json: comments
     end
 
