@@ -15,7 +15,8 @@ class GuidesController < ApplicationController
 
     # 뷰 헤더용 통계: 캐시된 @guides에서 계산 (DB 쿼리 없음)
     grouped = @guides.group_by(&:category)
-    @top_category, @top_category_count = grouped.max_by { |_, v| v.size }.then { |k, v| [k, v.size] }
+    top = grouped.max_by { |_, v| v.size }
+    @top_category, @top_category_count = top ? [top[0], top[1].size] : [nil, 0]
     @category_count = grouped.keys.size
     @guide_categories = grouped.keys
 
