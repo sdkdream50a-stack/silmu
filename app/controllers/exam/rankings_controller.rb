@@ -32,7 +32,9 @@ module Exam
       set_meta_tags(
         title: "주간 랭킹 — 이번 주 학습 리더보드",
         description: "공공조달관리사 시험 대비 주간 학습 랭킹. 이번 주 모의고사 응시 횟수 기준으로 실력을 겨루세요.",
-        keywords: "공공조달관리사 랭킹, 학습 리더보드, 모의고사 순위"
+        keywords: "공공조달관리사 랭킹, 학습 리더보드, 모의고사 순위",
+        og: { image: "https://exam.silmu.kr/icon.png" },
+        twitter: { card: "summary" }
       )
     end
 

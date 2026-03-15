@@ -14,7 +14,14 @@ class Exam::HomeController < ApplicationController
         title: "공공조달관리사 시험 대비 | 실무.kr",
         description: "2026년 신설 공공조달관리사 국가기술자격 시험 대비. 법령 핵심 정리, 감사사례, 실무 도구 제공.",
         url: "https://exam.silmu.kr",
-        type: "website"
+        type: "website",
+        image: "https://exam.silmu.kr/icon.png"
+      },
+      twitter: {
+        card: "summary",
+        title: "공공조달관리사 시험 대비 | 실무.kr",
+        description: "2026년 신설 공공조달관리사 국가기술자격 시험 대비. 법령 핵심 정리, 감사사례, 실무 도구 제공.",
+        image: "https://exam.silmu.kr/icon.png"
       }
     )
   end

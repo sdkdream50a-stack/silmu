@@ -30,7 +30,13 @@ class Exam::ChaptersController < ApplicationController
       title: "#{@subject[:number]} 제#{@chapter[:number]}장: #{@chapter[:title]}",
       description: "공공조달관리사 #{@subject[:number]} #{@subject[:title]} — 제#{@chapter[:number]}장 #{@chapter[:title]}. 학습목표·핵심키워드·시험 출제 포인트 완벽 정리.",
       keywords: "공공조달관리사 #{@chapter[:title]}, #{@chapter[:keywords].first(4).join(', ')}",
-      canonical: "https://exam.silmu.kr/subjects/#{@subject[:id]}/chapters/#{@chapter[:number]}"
+      canonical: "https://exam.silmu.kr/subjects/#{@subject[:id]}/chapters/#{@chapter[:number]}",
+      og: {
+        title: "#{@subject[:number]} 제#{@chapter[:number]}장: #{@chapter[:title]} | 공공조달관리사",
+        description: "공공조달관리사 #{@subject[:number]} #{@subject[:title]} — 제#{@chapter[:number]}장 #{@chapter[:title]}. 학습목표·핵심키워드·시험 출제 포인트 완벽 정리.",
+        image: "https://exam.silmu.kr/icon.png"
+      },
+      twitter: { card: "summary" }
     )
   end
 end

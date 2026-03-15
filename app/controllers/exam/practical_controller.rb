@@ -56,7 +56,9 @@ module Exam
       set_meta_tags(
         title: "실기 대비 — 필답형 예상문제",
         description: "공공조달관리사 실기 시험(PBT 필답형 150분) 예상문제 5선 + 모범 답안. 서술형 답안 작성 능력을 키우세요.",
-        keywords: "공공조달관리사 실기, 필답형 시험, 공공조달 서술형"
+        keywords: "공공조달관리사 실기, 필답형 시험, 공공조달 서술형",
+        og: { image: "https://exam.silmu.kr/icon.png" },
+        twitter: { card: "summary" }
       )
     end
   end

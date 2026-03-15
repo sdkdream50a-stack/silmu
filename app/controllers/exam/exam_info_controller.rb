@@ -13,8 +13,10 @@ module Exam
         og: {
           title: '공공조달관리사 시험 정보',
           description: '2026년 첫 시험 — 응시자격·일정·과목·합격기준 완벽 정리',
-          url: 'https://exam.silmu.kr/exam-info'
+          url: 'https://exam.silmu.kr/exam-info',
+          image: 'https://exam.silmu.kr/icon.png'
         },
+        twitter: { card: 'summary' },
         canonical: 'https://exam.silmu.kr/exam-info'
       )
     end

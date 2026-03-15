@@ -12,7 +12,9 @@ module Exam
       set_meta_tags(
         title: "미니 퀴즈 — 랜덤 10문제",
         description: "공공조달관리사 랜덤 10문제 미니 퀴즈. 빈 시간에 짧게 실력을 점검하세요. 즉시 채점·상세 해설 제공.",
-        keywords: "공공조달관리사 미니 퀴즈, 랜덤 문제, 빠른 복습"
+        keywords: "공공조달관리사 미니 퀴즈, 랜덤 문제, 빠른 복습",
+        og: { image: "https://exam.silmu.kr/icon.png" },
+        twitter: { card: "summary" }
       )
     end
 
@@ -27,7 +29,9 @@ module Exam
       set_meta_tags(
         title: "모의고사",
         description: "공공조달관리사 4지선다 모의고사. 3과목별·전체 #{ExamQuestions.count}문제, 즉시 채점·상세 해설 제공.",
-        keywords: "공공조달관리사 모의고사, 공공조달 시험 문제, 국가기술자격 모의고사"
+        keywords: "공공조달관리사 모의고사, 공공조달 시험 문제, 국가기술자격 모의고사",
+        og: { image: "https://exam.silmu.kr/icon.png" },
+        twitter: { card: "summary" }
       )
     end
 
@@ -43,7 +47,9 @@ module Exam
       set_meta_tags(
         title: "실전 시험 모드",
         description: "공공조달관리사 실전 시험 모드 — 3과목 80문제 120분 타이머. 실제 시험과 동일한 환경으로 도전하세요.",
-        keywords: "공공조달관리사 실전 시험, 공공조달 모의고사 타이머"
+        keywords: "공공조달관리사 실전 시험, 공공조달 모의고사 타이머",
+        og: { image: "https://exam.silmu.kr/icon.png" },
+        twitter: { card: "summary" }
       )
     end
 
@@ -55,7 +61,9 @@ module Exam
       set_meta_tags(
         title: "학습 분석 대시보드",
         description: "과목별 챕터 진도, 모의고사 점수, 오답 분포를 한눈에 확인하세요. 공공조달관리사 합격을 위한 맞춤 학습 추천.",
-        keywords: "공공조달관리사 학습 분석, 공공조달 오답 분석, 시험 대비 학습 추적"
+        keywords: "공공조달관리사 학습 분석, 공공조달 오답 분석, 시험 대비 학습 추적",
+        og: { image: "https://exam.silmu.kr/icon.png" },
+        twitter: { card: "summary" }
       )
     end
 
@@ -70,7 +78,9 @@ module Exam
       set_meta_tags(
         title: "북마크 문제",
         description: "별표로 저장한 문제만 모아서 풀어보는 북마크 노트. 중요 문제를 반복 학습하여 완벽하게 정복하세요.",
-        keywords: "공공조달관리사 북마크, 문제 저장, 중요 문제 복습"
+        keywords: "공공조달관리사 북마크, 문제 저장, 중요 문제 복습",
+        og: { image: "https://exam.silmu.kr/icon.png" },
+        twitter: { card: "summary" }
       )
     end
 
@@ -86,7 +96,9 @@ module Exam
       set_meta_tags(
         title: "오답 노트",
         description: "틀렸던 문제만 다시 풀어보는 오답 노트. 공공조달관리사 모의고사 오답을 반복 학습하여 완벽하게 정복하세요.",
-        keywords: "공공조달관리사 오답노트, 오답 복습, 공공조달 시험"
+        keywords: "공공조달관리사 오답노트, 오답 복습, 공공조달 시험",
+        og: { image: "https://exam.silmu.kr/icon.png" },
+        twitter: { card: "summary" }
       )
     end
 
@@ -118,8 +130,10 @@ module Exam
           title: "#{@subject[:number]} 제#{@chapter_num}장 #{@chapter[:title]} 문제 | 공공조달관리사",
           description: "공공조달관리사 #{@subject[:number]} 제#{@chapter_num}장 #{@chapter[:title]} #{@questions.size}문제. 즉시 채점과 상세 해설로 실력을 확인하세요.",
           url: "https://exam.silmu.kr/quiz/subject/#{@subject[:id]}/chapter/#{@chapter_num}",
-          type: "website"
-        }
+          type: "website",
+          image: "https://exam.silmu.kr/icon.png"
+        },
+        twitter: { card: "summary" }
       )
 
       render :show
@@ -158,8 +172,10 @@ module Exam
           title: "#{@quiz_title} | 공공조달관리사 모의고사",
           description: "공공조달관리사 #{@quiz_title} #{@questions.size}문제. 즉시 채점과 상세 해설로 실전 감각을 키우세요.",
           url: "https://exam.silmu.kr/quiz/#{@subject_id}",
-          type: "website"
-        }
+          type: "website",
+          image: "https://exam.silmu.kr/icon.png"
+        },
+        twitter: { card: "summary" }
       )
     end
   end
