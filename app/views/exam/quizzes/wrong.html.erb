@@ -29,7 +29,7 @@
        data-exam-quiz-questions-value="<%= @all_questions.to_json %>"
        data-exam-quiz-wrong-mode-value="true"
        data-exam-quiz-subject-id-value="wrong"
-       data-exam-quiz-chapter-map-value="<%= @chapter_map.to_json.html_safe %>">
+       data-exam-quiz-chapter-map-value="<%= @chapter_map.to_json %>">
 
     <!-- 취약 챕터 요약 (JS에서 렌더링) -->
     <div data-exam-quiz-target="chapterSummaryArea" class="mb-5"></div>
@@ -62,7 +62,7 @@
       <div class="flex items-center justify-between text-sm text-slate-500 mb-2">
         <span>
           <span class="inline-flex items-center gap-1 bg-orange-100 text-orange-700 text-xs font-bold px-2 py-0.5 rounded-full mr-2">오답 노트</span>
-          문제 <strong data-exam-quiz-target="currentNum" class="text-slate-800">1</strong> / <strong>?</strong>
+          문제 <strong data-exam-quiz-target="currentNum" class="text-slate-800">1</strong> / <strong data-exam-quiz-target="totalNum" class="text-slate-800">...</strong>
         </span>
         <span>맞힌 수: <strong data-exam-quiz-target="scoreDisplay" class="text-green-600">0</strong></span>
       </div>
@@ -101,16 +101,14 @@
       <div data-exam-quiz-target="feedbackArea" class="hidden mt-6">
       </div>
 
-      <!-- 다음 버튼 -->
+      <!-- 다음 버튼 — 전체 너비로 모바일 엄지 도달 최적화 -->
       <div data-exam-quiz-target="nextArea" class="hidden mt-6">
-        <div class="flex justify-end">
-          <button data-action="click->exam-quiz#nextQuestion"
-                  data-exam-quiz-target="nextBtn"
-                  class="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold px-6 py-3 rounded-xl transition-colors">
-            다음 문제
-            <span class="material-symbols-outlined">arrow_forward</span>
-          </button>
-        </div>
+        <button data-action="click->exam-quiz#nextQuestion"
+                data-exam-quiz-target="nextBtn"
+                class="w-full inline-flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-bold px-6 py-4 rounded-xl transition-colors text-base">
+          다음 문제
+          <span class="material-symbols-outlined">arrow_forward</span>
+        </button>
       </div>
     </div>
 

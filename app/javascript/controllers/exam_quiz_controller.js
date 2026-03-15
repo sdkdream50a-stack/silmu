@@ -1,10 +1,11 @@
 // exam.silmu.kr — 모의고사 문제풀이 Stimulus 컨트롤러
 import { Controller } from "@hotwired/stimulus"
 import { saveQuizScore, saveChapterQuizDone, saveWrongAnswer, removeWrongAnswer, getWrongAnswerIds, saveStreakToday, toggleBookmark, isBookmarked, getBookmarkIds } from "../exam_progress"
+import { escapeHtml, getCsrfToken } from "../exam_utils"
 
 export default class extends Controller {
   static targets = [
-    "progressArea", "progressBar", "currentNum", "scoreDisplay",
+    "progressArea", "progressBar", "currentNum", "totalNum", "scoreDisplay",
     "questionArea", "questionBadge", "questionText", "optionsArea",
     "feedbackArea", "nextArea", "nextBtn", "resultArea", "emptyArea",
     "chapterSummaryArea"
@@ -44,7 +45,7 @@ export default class extends Controller {
         return
       }
       // 진행바 total 업데이트
-      this.progressAreaTarget.querySelector("strong:last-of-type").textContent = this.questionsValue.length
+      if (this.hasTotalNumTarget) this.totalNumTarget.textContent = this.questionsValue.length
       // 취약 챕터 요약 렌더링
       if (this.hasChapterSummaryAreaTarget) {
         this.chapterSummaryAreaTarget.innerHTML = this.buildWrongChapterSummary()
@@ -62,7 +63,7 @@ export default class extends Controller {
         return
       }
       // 진행바 total 업데이트
-      this.progressAreaTarget.querySelector("strong:last-of-type").textContent = this.questionsValue.length
+      if (this.hasTotalNumTarget) this.totalNumTarget.textContent = this.questionsValue.length
     }
     this.showQuestion()
   }
@@ -220,10 +221,11 @@ export default class extends Controller {
     const labels = ["①", "②", "③", "④"]
     this.optionsAreaTarget.innerHTML = q.options.map((opt, i) => `
       <button
-        class="option-btn w-full text-left px-5 py-3.5 rounded-xl border-2 border-slate-200 hover:border-blue-400 hover:bg-blue-50 transition-all text-slate-700 text-sm font-medium"
+        class="option-btn w-full flex items-center gap-2 text-left px-5 py-3.5 rounded-xl border-2 border-slate-200 hover:border-blue-400 hover:bg-blue-50 transition-all text-slate-700 text-sm font-medium"
         data-index="${i}"
         data-action="click->exam-quiz#selectAnswer">
-        <span class="font-bold text-slate-400 mr-2 text-base">${labels[i]}</span>${opt}
+        <span class="font-bold text-slate-400 mr-1 text-base flex-shrink-0">${labels[i]}</span>
+        <span class="flex-1">${this.escapeHtml(opt)}</span>
       </button>
     `).join("")
 
@@ -242,7 +244,7 @@ export default class extends Controller {
       const bookmarks = JSON.parse(localStorage.getItem('exam_bookmarks') || '[]')
       const streak = JSON.parse(localStorage.getItem('exam_streak') || '{}')
 
-      const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content
+      const csrfToken = getCsrfToken()
       if (!csrfToken) return
 
       await fetch('/sync', {
@@ -298,14 +300,24 @@ export default class extends Controller {
       saveWrongAnswer(q.id)    // 틀리면 오답 노트에 추가
     }
 
-    // 선택지 색상 업데이트
+    // 선택지 색상 + 아이콘 업데이트 (색각 이상 접근성 — 색상 + 아이콘 이중 표현)
     this.optionsAreaTarget.querySelectorAll(".option-btn").forEach((btn, i) => {
       btn.disabled = true
       btn.classList.remove("hover:border-blue-400", "hover:bg-blue-50")
+      // 기존 결과 아이콘 제거
+      btn.querySelector('.result-icon')?.remove()
+      const icon = document.createElement('span')
+      icon.className = 'material-symbols-outlined result-icon text-base ml-auto flex-shrink-0'
       if (i === correct) {
         btn.classList.add("border-green-500", "bg-green-50", "text-green-800")
+        icon.textContent = 'check_circle'
+        icon.classList.add('text-green-600')
+        btn.appendChild(icon)
       } else if (i === selected) {
         btn.classList.add("border-red-400", "bg-red-50", "text-red-700")
+        icon.textContent = 'cancel'
+        icon.classList.add('text-red-500')
+        btn.appendChild(icon)
       } else {
         btn.classList.add("opacity-50")
       }
@@ -416,7 +428,7 @@ export default class extends Controller {
             <p class="font-bold ${isCorrect ? "text-green-700" : "text-red-600"} mb-1">
               ${isCorrect ? "정답입니다!" : "오답입니다"}
             </p>
-            <p class="text-slate-600 text-sm leading-relaxed">${q.explanation}</p>
+            <p class="text-slate-600 text-sm leading-relaxed">${this.escapeHtml(q.explanation)}</p>
             ${aiBtn}
             ${relatedLawHtml}
           </div>
@@ -755,15 +767,15 @@ export default class extends Controller {
     const area = btn.nextElementSibling
 
     btn.disabled = true
-    btn.innerHTML = '<span class="material-symbols-outlined text-sm" style="animation:spin 1s linear infinite">refresh</span> AI 분석 중...'
+    btn.innerHTML = '<span class="material-symbols-outlined text-sm animate-spin inline-block">refresh</span> AI 분석 중...'
 
     try {
-      const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content
+      const csrfToken = getCsrfToken()
       const res = await fetch('/quiz/explain', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-CSRF-Token': csrfToken || ''
+          'X-CSRF-Token': csrfToken
         },
         body: JSON.stringify({ question_id: questionId, selected_index: selectedIndex })
       })
@@ -774,7 +786,7 @@ export default class extends Controller {
       }
       btn.classList.add('hidden')
     } catch(e) {
-      btn.textContent = '오류가 발생했습니다'
+      btn.innerHTML = '<span class="material-symbols-outlined text-sm">error</span> 잠시 후 다시 시도해 주세요'
       btn.disabled = false
     }
   }
@@ -824,8 +836,38 @@ export default class extends Controller {
       </div>`
   }
 
-  escapeHtml(str) {
-    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+  escapeHtml(str) { return escapeHtml(str) }
+
+  // 인라인 토스트 알림 — alert() 대체 (학습 흐름을 끊지 않음)
+  showToast(message, type = 'error') {
+    const existing = document.getElementById('exam-quiz-toast')
+    if (existing) existing.remove()
+
+    const colors = {
+      error:   'bg-red-600 text-white',
+      success: 'bg-green-600 text-white',
+      info:    'bg-blue-600 text-white',
+      warning: 'bg-amber-500 text-white'
+    }
+    const icons = {
+      error: 'error', success: 'check_circle', info: 'info', warning: 'warning'
+    }
+
+    const toast = document.createElement('div')
+    toast.id = 'exam-quiz-toast'
+    toast.className = `fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999] flex items-center gap-3 px-5 py-3 rounded-2xl shadow-xl text-sm font-semibold max-w-xs w-max transition-all duration-300 ${colors[type] || colors.error}`
+    toast.innerHTML = `
+      <span class="material-symbols-outlined text-base flex-shrink-0">${icons[type] || 'error'}</span>
+      <span>${this.escapeHtml(message)}</span>
+    `
+    document.body.appendChild(toast)
+
+    // 3초 후 자동 제거
+    setTimeout(() => {
+      toast.style.opacity = '0'
+      toast.style.transform = 'translateX(-50%) translateY(8px)'
+      setTimeout(() => toast.remove(), 300)
+    }, 3000)
   }
 
   // #10 Q&A 토글 + 댓글 로드
@@ -869,27 +911,28 @@ export default class extends Controller {
     const submitBtn = form.querySelector('[type="submit"]')
     const body = bodyInput?.value?.trim()
     if (!body || body.length < 5) {
-      alert('댓글은 5자 이상 입력해주세요.')
+      this.showToast('5자 이상 입력해 주세요.', 'warning')
+      bodyInput?.focus()
       return
     }
 
     if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'AI 검토 중...' }
 
     try {
-      const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content
+      const csrfToken = getCsrfToken()
       const res = await fetch(`/questions/${questionId}/comments`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrfToken || '' },
+        headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrfToken },
         body: JSON.stringify({ body, question_text: questionText })
       })
       const data = await res.json()
 
       if (data.login_required) {
-        alert('댓글 작성은 로그인이 필요합니다.')
+        this.showToast('댓글 작성은 로그인이 필요합니다.', 'info')
         return
       }
       if (data.error) {
-        alert(data.error)
+        this.showToast(data.error, 'error')
         return
       }
 
@@ -903,7 +946,7 @@ export default class extends Controller {
       }
       if (bodyInput) bodyInput.value = ''
     } catch(e) {
-      alert('댓글 등록에 실패했습니다.')
+      this.showToast('잠시 후 다시 시도해 주세요.', 'error')
     } finally {
       if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = '등록' }
     }
@@ -928,21 +971,21 @@ export default class extends Controller {
     const questionId = btn.dataset.questionId
     const area = btn.closest('.report-area')
     const body = area?.querySelector('.report-body')?.value?.trim()
-    if (!body || body.length < 5) { alert('5자 이상 입력해주세요.'); return }
+    if (!body || body.length < 5) { this.showToast('오류 내용을 5자 이상 설명해 주세요.', 'warning'); return }
     try {
-      const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content
+      const csrfToken = getCsrfToken()
       const res = await fetch(`/questions/${questionId}/reports`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrfToken || '' },
+        headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrfToken },
         body: JSON.stringify({ body })
       })
       const data = await res.json()
       if (data.success) {
         if (area) area.innerHTML = '<p class="text-xs text-orange-700 font-semibold py-1">✓ 제보해 주셔서 감사합니다!</p>'
       } else {
-        alert(data.error || '제보에 실패했습니다.')
+        this.showToast(data.error || '제보에 실패했습니다. 잠시 후 다시 시도해 주세요.', 'error')
       }
-    } catch(e) { alert('오류가 발생했습니다.') }
+    } catch(e) { this.showToast('잠시 후 다시 시도해 주세요.', 'error') }
   }
 
   // 결과 공유

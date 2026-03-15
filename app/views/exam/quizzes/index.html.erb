@@ -21,7 +21,7 @@
     <!-- 통계 -->
     <div class="flex flex-wrap gap-8 mt-8 pt-6 border-t border-white/20">
       <div class="text-center">
-        <div class="text-2xl font-bold text-yellow-300"><%= ExamQuestions.count %>문제</div>
+        <div class="text-2xl font-bold text-yellow-300"><%= @total_count %>문제</div>
         <div class="text-blue-300 text-sm">전체 문항</div>
       </div>
       <div class="text-center">
@@ -104,7 +104,7 @@
           <div>
             <div class="text-white/80 text-sm font-medium mb-1">종합 실력 점검</div>
             <h2 class="text-white text-2xl font-bold">전체 모의고사</h2>
-            <p class="text-white/70 text-sm mt-1">3과목 전체 — <%= ExamQuestions.count %>문제 · 약 <%= (ExamQuestions.count * 1.5).ceil %>분</p>
+            <p class="text-white/70 text-sm mt-1">3과목 전체 — <%= @total_count %>문제 · 약 <%= (@total_count * 1.5).ceil %>분</p>
           </div>
         </div>
         <div class="flex items-center gap-2 bg-white/20 text-white font-bold px-5 py-2.5 rounded-xl group-hover:bg-white/30 transition-colors">
@@ -119,7 +119,7 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
       <% @exam_subjects.each do |subject| %>
         <% colors = ExamCurriculum.colors(subject[:color]) %>
-        <% q_count = ExamQuestions.count_by_exam_subject(subject[:id]) %>
+        <% q_count = @total_count_by_exam_subject(subject[:id]) %>
         <a href="<%= exam_quiz_path(subject[:id]) %>"
            class="group bg-white rounded-2xl border <%= colors[:border] %> <%= colors[:hover_border] %> hover:shadow-lg transition-all overflow-hidden">
 

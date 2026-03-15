@@ -27,7 +27,7 @@
        data-exam-quiz-questions-value="<%= @questions.to_json %>"
        data-exam-quiz-subject-id-value="<%= @subject_id %>"
        data-exam-quiz-back-path-value="<%= @back_path %>"
-       data-exam-quiz-chapter-map-value="<%= (@chapter_map || {}).to_json.html_safe %>"
+       data-exam-quiz-chapter-map-value="<%= (@chapter_map || {}).to_json %>"
        data-exam-quiz-chapter-num-value="<%= @chapter_num || 0 %>">
 
     <!-- 진행 상태 바 -->
@@ -71,16 +71,14 @@
       <div data-exam-quiz-target="feedbackArea" class="hidden mt-6">
       </div>
 
-      <!-- 다음 버튼 -->
+      <!-- 다음 버튼 — 전체 너비로 모바일 엄지 도달 최적화 -->
       <div data-exam-quiz-target="nextArea" class="hidden mt-6">
-        <div class="flex justify-end">
-          <button data-action="click->exam-quiz#nextQuestion"
-                  data-exam-quiz-target="nextBtn"
-                  class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-xl transition-colors">
-            다음 문제
-            <span class="material-symbols-outlined">arrow_forward</span>
-          </button>
-        </div>
+        <button data-action="click->exam-quiz#nextQuestion"
+                data-exam-quiz-target="nextBtn"
+                class="w-full inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold px-6 py-4 rounded-xl transition-colors text-base">
+          다음 문제
+          <span class="material-symbols-outlined">arrow_forward</span>
+        </button>
       </div>
     </div>
 

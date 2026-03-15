@@ -147,7 +147,7 @@
                  target="_blank"
                  class="flex items-center gap-2 bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-700 text-sm font-semibold px-4 py-2.5 rounded-xl transition-colors">
                 <span class="material-symbols-outlined text-base">open_in_new</span>
-                <%= slug.gsub('-', ' ').split.map(&:capitalize).join(' ') %>
+                <%= topic_slug_label(slug) %>
               </a>
             <% end %>
           </div>
@@ -215,7 +215,7 @@
       <div class="bg-white rounded-2xl border border-indigo-200 overflow-hidden"
            data-controller="exam-quiz"
            data-exam-quiz-questions-value="<%= @mini_questions.to_json %>"
-           data-exam-quiz-chapter-map-value="<%= @chapter_map.to_json.html_safe %>"
+           data-exam-quiz-chapter-map-value="<%= @chapter_map.to_json %>"
            data-exam-quiz-back-path-value="<%= exam_subject_chapter_path(@subject[:id], @chapter[:number]) %>">
         <!-- 헤더 -->
         <div class="bg-indigo-50 px-6 py-4 flex items-center gap-3 border-b border-indigo-200">

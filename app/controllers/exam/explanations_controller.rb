@@ -8,7 +8,7 @@ module Exam
       question_id = params[:question_id].to_i
       selected_index = params[:selected_index].to_i
 
-      q = ExamQuestions.all.find { |question| question[:id] == question_id }
+      q = ExamQuestions.find_by_id(question_id)
       return render json: { error: "문제를 찾을 수 없습니다." }, status: :not_found unless q
 
       cache_key = "exam_ai_explanation_v1_q#{question_id}_s#{selected_index}"

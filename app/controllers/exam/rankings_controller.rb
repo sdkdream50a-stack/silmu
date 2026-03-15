@@ -3,11 +3,12 @@ module Exam
     layout "exam"
 
     def index
-      # 상위 20명 (주간 퀴즈 횟수 기준)
+      # 상위 20명 (주간 퀴즈 횟수 기준) — 필요한 컬럼만 SELECT
       @rankings = ExamProgress
         .where("weekly_quiz_count > 0")
         .order(weekly_quiz_count: :desc)
         .limit(20)
+        .select(:user_id, :display_name, :weekly_quiz_count, :streak_count)
         .map.with_index(1) do |p, rank|
           {
             rank: rank,
@@ -20,9 +21,9 @@ module Exam
       # 현재 사용자 순위
       if user_signed_in?
         my_progress = ExamProgress.for_user(current_user)
-        my_rank_record = ExamProgress.where("weekly_quiz_count > ?", my_progress.weekly_quiz_count || 0).count
-        @my_rank = my_rank_record + 1
         @my_quiz_count = my_progress.weekly_quiz_count || 0
+        # 단일 COUNT 쿼리로 순위 계산
+        @my_rank = ExamProgress.where("weekly_quiz_count > ?", @my_quiz_count).count + 1
         @my_display_name = my_progress.display_name.presence || ""
       end
 

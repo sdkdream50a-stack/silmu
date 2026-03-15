@@ -11904,6 +11904,13 @@ module ExamQuestions
     },
   ].freeze
 
+  # ID별 문제 인덱스 — O(1) 조회 (ExplanationsController 등에서 사용)
+  QUESTIONS_BY_ID = QUESTIONS.index_by { |q| q[:id] }.freeze
+
+  def self.find_by_id(id)
+    QUESTIONS_BY_ID[id.to_i]
+  end
+
   # 과목별 문제 인덱스 (메모이제이션: by_subject 호출마다 400문제 순회 방지)
   # { subject_id => [question, ...] }
   QUESTIONS_BY_SUBJECT = QUESTIONS.group_by { |q| q[:subject_id] }.freeze
@@ -12018,5 +12025,47 @@ module ExamQuestions
     questions.map do |q|
       q.merge(difficulty: DIFFICULTY_MAP[q[:id]] || "basic")
     end
+  end
+
+  # ── 사전 슬라이싱된 문제 데이터 (뷰 전송용) ──────────────────
+  # 매 요청마다 .map { |q| q.slice(...) } 반복 제거 (~400문제 * 7필드)
+  QUIZ_FIELDS = %i[id question options correct explanation subject_id chapter_num].freeze
+
+  # 전체 문제 슬라이싱 + 난이도 포함 (bookmarks, wrong, show("all") 공용)
+  ALL_SLICED_WITH_DIFFICULTY = QUESTIONS.map { |q|
+    q.slice(*QUIZ_FIELDS).merge(difficulty: DIFFICULTY_MAP[q[:id]] || "basic")
+  }.freeze
+
+  def self.all_sliced_with_difficulty
+    ALL_SLICED_WITH_DIFFICULTY
+  end
+
+  # 과목별 슬라이싱 + 난이도 포함 { subject_id => [sliced_questions] }
+  SLICED_BY_SUBJECT = begin
+    result = {}
+    ALL_SLICED_WITH_DIFFICULTY.each do |q|
+      (result[q[:subject_id]] ||= []) << q
+    end
+    result.each_value(&:freeze)
+    result.freeze
+  end
+
+  def self.sliced_by_subject(subject_id)
+    SLICED_BY_SUBJECT[subject_id.to_i] || []
+  end
+
+  # 챕터별 슬라이싱 + 난이도 포함 { "subject_id-chapter_num" => [sliced_questions] }
+  SLICED_BY_CHAPTER = begin
+    result = {}
+    ALL_SLICED_WITH_DIFFICULTY.each do |q|
+      key = "#{q[:subject_id]}-#{q[:chapter_num]}"
+      (result[key] ||= []) << q
+    end
+    result.each_value(&:freeze)
+    result.freeze
+  end
+
+  def self.sliced_by_chapter(subject_id, chapter_num)
+    SLICED_BY_CHAPTER["#{subject_id.to_i}-#{chapter_num.to_i}"] || []
   end
 end

@@ -2,6 +2,7 @@
 // 120분 타이머 + 3과목 80문제 + 마지막에 일괄 채점
 import { Controller } from "@hotwired/stimulus"
 import { saveQuizScore, saveWrongAnswer, removeWrongAnswer } from "../exam_progress"
+import { escapeHtml } from "../exam_utils"
 
 const EXAM_DURATION = 120 * 60  // 120분 (초 단위)
 
@@ -11,7 +12,7 @@ export default class extends Controller {
     "timer", "timerBar", "currentNum", "totalNum", "progressBar",
     "questionBadge", "questionText", "optionsArea",
     "prevBtn", "nextBtn", "submitBtn",
-    "navGrid"
+    "navGrid", "navGridMobile"
   ]
   static values = {
     questions: Array,
@@ -19,8 +20,12 @@ export default class extends Controller {
   }
 
   connect() {
-    // 랜덤 순서로 섞기
-    this.questions = [...this.questionsValue].sort(() => Math.random() - 0.5)
+    // Fisher-Yates 셔플 — 균등한 랜덤 순서 보장
+    this.questions = [...this.questionsValue]
+    for (let i = this.questions.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [this.questions[i], this.questions[j]] = [this.questions[j], this.questions[i]]
+    }
     this.answers = new Array(this.questions.length).fill(null)  // null = 미답
     this.timerInterval = null
     this.remainingSeconds = EXAM_DURATION
@@ -63,22 +68,16 @@ export default class extends Controller {
   updateTimerDisplay() {
     const m = Math.floor(this.remainingSeconds / 60)
     const s = this.remainingSeconds % 60
-    const text = `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`
-    this.timerTarget.textContent = text
+    this.timerTarget.textContent = `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`
 
-    // 타이머 색상 (10분 이하: 빨간색)
-    if (this.remainingSeconds <= 600) {
+    // 타이머 바 업데이트
+    this.timerBarTarget.style.width = `${(this.remainingSeconds / EXAM_DURATION) * 100}%`
+
+    // 10분 이하: 빨간색 전환 (한 번만 실행)
+    if (this.remainingSeconds <= 600 && !this._timerRed) {
+      this._timerRed = true
       this.timerTarget.classList.add("text-red-500", "font-extrabold")
       this.timerTarget.classList.remove("text-white")
-    } else {
-      this.timerTarget.classList.remove("text-red-500", "font-extrabold")
-      this.timerTarget.classList.add("text-white")
-    }
-
-    // 타이머 바
-    const pct = (this.remainingSeconds / EXAM_DURATION) * 100
-    this.timerBarTarget.style.width = `${pct}%`
-    if (this.remainingSeconds <= 600) {
       this.timerBarTarget.classList.add("bg-red-400")
       this.timerBarTarget.classList.remove("bg-yellow-300")
     }
@@ -111,7 +110,7 @@ export default class extends Controller {
           class="sim-option w-full text-left px-5 py-3.5 rounded-xl border-2 ${selectedCls} transition-all text-slate-700 text-sm font-medium"
           data-index="${i}"
           data-action="click->exam-simulation#selectAnswer">
-          <span class="font-bold text-slate-400 mr-2 text-base">${labels[i]}</span>${opt}
+          <span class="font-bold text-slate-400 mr-2 text-base">${labels[i]}</span>${this.escapeHtml(opt)}
         </button>
       `
     }).join("")
@@ -163,8 +162,7 @@ export default class extends Controller {
 
   // ── 문제 번호 네비게이션 ──
   renderNavGrid() {
-    if (!this.hasNavGridTarget) return
-    this.navGridTarget.innerHTML = this.questions.map((_, i) => `
+    const html = this.questions.map((_, i) => `
       <button
         class="nav-num w-8 h-8 rounded-lg text-xs font-bold border-2 border-slate-200 text-slate-500 hover:border-blue-400 transition-colors"
         data-index="${i}"
@@ -172,22 +170,38 @@ export default class extends Controller {
         ${i + 1}
       </button>
     `).join("")
+    if (this.hasNavGridTarget) this.navGridTarget.innerHTML = html
+    if (this.hasNavGridMobileTarget) this.navGridMobileTarget.innerHTML = html
   }
 
+  // 네비게이션 그리드 — 변경된 셀만 업데이트 (80문제 x 2벌 = 160 DOM 조작 -> 최대 4~6개)
   updateNavGrid() {
-    if (!this.hasNavGridTarget) return
-    this.navGridTarget.querySelectorAll(".nav-num").forEach((btn, i) => {
-      btn.classList.remove("border-blue-500", "bg-blue-500", "text-white",
-        "border-green-400", "bg-green-50", "text-green-700",
-        "border-slate-200", "text-slate-500")
-      if (i === this.currentValue) {
-        btn.classList.add("border-blue-500", "bg-blue-500", "text-white")
-      } else if (this.answers[i] !== null) {
-        btn.classList.add("border-green-400", "bg-green-50", "text-green-700")
-      } else {
-        btn.classList.add("border-slate-200", "text-slate-500")
-      }
-    })
+    const prev = this._prevNavIdx ?? -1
+    const curr = this.currentValue
+    // 업데이트가 필요한 인덱스만 수집 (이전 위치, 현재 위치, 방금 답한 문제)
+    const toUpdate = new Set([prev, curr])
+
+    const update = (container) => {
+      if (!container) return
+      const buttons = container.querySelectorAll(".nav-num")
+      toUpdate.forEach(i => {
+        if (i < 0 || i >= buttons.length) return
+        const btn = buttons[i]
+        btn.classList.remove("border-blue-500", "bg-blue-500", "text-white",
+          "border-green-400", "bg-green-50", "text-green-700",
+          "border-slate-200", "text-slate-500")
+        if (i === curr) {
+          btn.classList.add("border-blue-500", "bg-blue-500", "text-white")
+        } else if (this.answers[i] !== null) {
+          btn.classList.add("border-green-400", "bg-green-50", "text-green-700")
+        } else {
+          btn.classList.add("border-slate-200", "text-slate-500")
+        }
+      })
+    }
+    if (this.hasNavGridTarget) update(this.navGridTarget)
+    if (this.hasNavGridMobileTarget) update(this.navGridMobileTarget)
+    this._prevNavIdx = curr
   }
 
   jumpTo(event) {
@@ -197,15 +211,57 @@ export default class extends Controller {
 
   // ── 시험 제출 ──
   submitExam(timeUp = false) {
-    // 미답 확인 (시간 초과 아닌 경우)
     if (!timeUp) {
       const unanswered = this.answers.filter(a => a === null).length
       if (unanswered > 0) {
-        const confirmed = confirm(`아직 ${unanswered}문제가 미응답입니다. 제출하시겠습니까?`)
-        if (!confirmed) return
+        // 네이티브 confirm 대신 인라인 확인 UI 표시
+        this._showSubmitConfirm(unanswered)
+        return
       }
     }
+    this._doSubmit(timeUp)
+  }
 
+  _showSubmitConfirm(unansweredCount) {
+    // 기존 확인창 제거
+    document.getElementById('sim-submit-confirm')?.remove()
+
+    const modal = document.createElement('div')
+    modal.id = 'sim-submit-confirm'
+    modal.className = 'fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 px-4'
+    modal.innerHTML = `
+      <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 text-center">
+        <div class="w-14 h-14 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <span class="material-symbols-outlined text-amber-500 text-3xl">warning</span>
+        </div>
+        <h3 class="text-lg font-bold text-slate-800 mb-2">미응답 문제가 있습니다</h3>
+        <p class="text-slate-500 text-sm mb-6">
+          아직 <strong class="text-amber-600">${unansweredCount}문제</strong>에 답하지 않았습니다.<br>
+          미응답 문제는 <strong>0점</strong> 처리됩니다.
+        </p>
+        <div class="flex gap-3">
+          <button id="sim-confirm-cancel"
+                  class="flex-1 px-4 py-3 border-2 border-slate-200 text-slate-600 font-semibold rounded-xl hover:bg-slate-50 transition-colors text-sm">
+            계속 풀기
+          </button>
+          <button id="sim-confirm-submit"
+                  class="flex-1 px-4 py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl transition-colors text-sm">
+            그래도 제출
+          </button>
+        </div>
+      </div>
+    `
+    document.body.appendChild(modal)
+
+    document.getElementById('sim-confirm-cancel').addEventListener('click', () => modal.remove())
+    document.getElementById('sim-confirm-submit').addEventListener('click', () => {
+      modal.remove()
+      this._doSubmit(false)
+    })
+    modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove() })
+  }
+
+  _doSubmit(timeUp = false) {
     this.stopTimer()
     this.showResults(timeUp)
   }
@@ -260,17 +316,18 @@ export default class extends Controller {
     })
 
     const subjectNames = { 1: "법제도의 이해", 2: "조달계획 수립 및 분석", 3: "계약 관리" }
-    const subjectColors = { 1: "emerald", 2: "blue", 3: "violet" }
+    // Tailwind 동적 보간 방지 — 전체 클래스 문자열 사용
+    const subjectTextColors = { 1: "text-emerald-600", 2: "text-blue-600", 3: "text-violet-600" }
+    const subjectBgColors = { 1: "bg-emerald-500", 2: "bg-blue-500", 3: "bg-violet-500" }
 
     const subjectRows = [1, 2, 3].filter(esid => examSubjectStats[esid]).map(esid => {
       const stat = examSubjectStats[esid]
       const spct = Math.round((stat.correct / stat.total) * 100)
-      const c = subjectColors[esid]
       return `
         <div class="flex items-center gap-3">
-          <div class="text-xs text-${c}-600 font-bold w-16 flex-shrink-0">${esid}과목</div>
+          <div class="text-xs ${subjectTextColors[esid]} font-bold w-16 flex-shrink-0">${esid}과목</div>
           <div class="flex-1 bg-slate-100 rounded-full h-2">
-            <div class="bg-${c}-500 h-2 rounded-full" style="width:${spct}%"></div>
+            <div class="${subjectBgColors[esid]} h-2 rounded-full" style="width:${spct}%"></div>
           </div>
           <div class="text-xs font-bold text-slate-700 w-20 text-right">${stat.correct}/${stat.total} (${spct}%)</div>
         </div>
@@ -286,13 +343,13 @@ export default class extends Controller {
             <div class="border border-red-100 rounded-xl p-4 bg-red-50">
               <div class="flex items-start gap-2 mb-2">
                 <span class="material-symbols-outlined text-red-400 text-base flex-shrink-0 mt-0.5">cancel</span>
-                <p class="text-slate-700 text-sm font-medium leading-snug">${r.q.question}</p>
+                <p class="text-slate-700 text-sm font-medium leading-snug">${this.escapeHtml(r.q.question)}</p>
               </div>
               <div class="text-xs text-slate-500 mb-1">
-                내 답: <span class="text-red-600 font-semibold">${r.selected !== null ? labels[r.selected] + " " + r.q.options[r.selected] : "미응답"}</span>
-                &nbsp;→&nbsp; 정답: <span class="text-green-600 font-semibold">${labels[r.q.correct]} ${r.q.options[r.q.correct]}</span>
+                내 답: <span class="text-red-600 font-semibold">${r.selected !== null ? labels[r.selected] + " " + this.escapeHtml(r.q.options[r.selected]) : "미응답"}</span>
+                &nbsp;→&nbsp; 정답: <span class="text-green-600 font-semibold">${labels[r.q.correct]} ${this.escapeHtml(r.q.options[r.q.correct])}</span>
               </div>
-              <p class="text-xs text-slate-500 leading-relaxed">${r.q.explanation}</p>
+              <p class="text-xs text-slate-500 leading-relaxed">${this.escapeHtml(r.q.explanation)}</p>
             </div>
           `
         }).join("") + (wrongItems.length > 10 ? `<p class="text-center text-slate-400 text-sm py-2">... 외 ${wrongItems.length - 10}문제 (오답 노트에서 확인)</p>` : "")
@@ -352,4 +409,6 @@ export default class extends Controller {
     `
     this.resultAreaTarget.classList.remove("hidden")
   }
+
+  escapeHtml(str) { return escapeHtml(str) }
 }

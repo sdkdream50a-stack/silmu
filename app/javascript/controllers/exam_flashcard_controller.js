@@ -1,5 +1,6 @@
 // exam.silmu.kr — 용어집 플래시카드 모드 Stimulus 컨트롤러
 import { Controller } from "@hotwired/stimulus"
+import { escapeHtml } from "../exam_utils"
 
 const DONE_KEY = 'exam_flashcard_done'
 
@@ -25,6 +26,10 @@ export default class extends Controller {
 
   connect() {
     // 초기 상태 — 오버레이 숨김
+  }
+
+  disconnect() {
+    this.close()
   }
 
   // 플래시카드 모드 시작
@@ -180,11 +185,13 @@ export default class extends Controller {
       this.resultTarget.classList.remove("hidden")
       this.resultTarget.innerHTML = `
         <div class="text-center py-8">
-          <div class="text-6xl mb-4">🎉</div>
-          <div class="text-2xl font-bold text-slate-900 mb-2">완주!</div>
-          <p class="text-slate-600 text-sm mb-6">총 ${this.total}개 용어를 모두 학습했습니다.</p>
+          <div class="w-20 h-20 bg-yellow-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="material-symbols-outlined text-yellow-300 text-4xl">workspace_premium</span>
+          </div>
+          <div class="text-2xl font-bold text-white mb-2">완주!</div>
+          <p class="text-white/70 text-sm mb-6">총 ${this.total}개 용어를 모두 학습했습니다.</p>
           <button data-action="click->exam-flashcard#restart"
-                  class="inline-flex items-center gap-2 bg-indigo-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-indigo-700 transition-colors">
+                  class="inline-flex items-center gap-2 bg-indigo-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-indigo-400 transition-colors">
             <span class="material-symbols-outlined">refresh</span>
             다시 하기
           </button>
@@ -217,11 +224,5 @@ export default class extends Controller {
     }
   }
 
-  escapeHtml(str) {
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-  }
+  escapeHtml(str) { return escapeHtml(str) }
 }

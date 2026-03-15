@@ -2,14 +2,8 @@ class Exam::KeywordsController < ApplicationController
   layout 'exam'
 
   def index
-    @all_keywords = ExamCurriculum.all_keywords.map do |kw|
-      detail = ExamKeywordDetails.find(kw[:keyword])
-      kw.merge(
-        definition: detail&.dig(:definition),
-        example: detail&.dig(:example),
-        quiz_ids: detail&.dig(:quiz_ids) || []
-      )
-    end
+    # 메모이제이션된 키워드+상세 통합 데이터 사용 (매 요청마다 ~100회 merge 제거)
+    @all_keywords = ExamCurriculum.all_keywords_with_details
     @subjects = ExamCurriculum::SUBJECTS
     @detail_count = ExamKeywordDetails.count
 

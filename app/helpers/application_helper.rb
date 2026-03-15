@@ -1,6 +1,47 @@
 module ApplicationHelper
   ACTIVE_TOOL_COUNT = 29
 
+  # exam.silmu.kr — 법령 가이드 slug → 한국어 레이블 맵
+  # chapters/show.html.erb에서 related_topic_slugs 렌더링 시 사용
+  TOPIC_SLUG_LABELS = {
+    "public-procurement-overview"   => "공공조달 개요",
+    "private-contract"              => "수의계약",
+    "bidding"                       => "입찰 절차",
+    "bid-qualification"             => "입찰참가자격",
+    "e-procurement-guide"           => "전자조달(나라장터)",
+    "e-bidding"                     => "전자입찰",
+    "mas-contract"                  => "다수공급자계약(MAS)",
+    "national-vs-local-contract-law" => "국가·지방계약법 비교",
+    "bid-participation-restriction" => "입찰참가자격 제한",
+    "estimated-price"               => "예정가격 산정",
+    "dual-quote"                    => "2인 견적",
+    "qualification-failure"         => "낙찰 실패 처리",
+    "price-negotiation"             => "가격협상",
+    "contract-guarantee-deposit"    => "계약보증금",
+    "lowest-bid-rate"               => "낙찰하한율",
+    "contract"                      => "계약 실무",
+    "goods-vs-service-contract"     => "물품·용역 계약 구분",
+    "goods-selection-committee"     => "물품선정위원회",
+    "inspection"                    => "검수·검사",
+    "late-penalty"                  => "지체상금",
+    "payment"                       => "대금 지급",
+    "design-change"                 => "설계변경",
+    "contract-termination"          => "계약 해지·해제",
+    "unit-price-contract"           => "단가계약",
+    "subcontract"                   => "하도급",
+    "price-escalation"              => "물가변동(ESC)",
+    "defect-warranty"               => "하자보수",
+    "budget"                        => "예산 편성",
+    "expense"                       => "원가·비용 계산",
+    "national-contract-act"         => "국가계약법",
+    "contract-management"           => "계약이행 관리"
+  }.freeze
+
+  # slug → 한국어 레이블 반환 (없으면 slug 그대로)
+  def topic_slug_label(slug)
+    TOPIC_SLUG_LABELS[slug] || slug.gsub('-', ' ')
+  end
+
   def tool_count
     ACTIVE_TOOL_COUNT
   end

@@ -23,14 +23,42 @@
       주관: 조달청·기재부 | 시행: 한국산업인력공단(Q-NET) | 자격 종류: 국가기술자격
     </p>
 
+    <!-- 권장 학습 경로 — 첫 방문자 온보딩 -->
+    <div class="bg-white/10 backdrop-blur-sm rounded-2xl px-5 py-5 mb-6 max-w-2xl mx-auto text-left">
+      <p class="text-blue-200 text-xs font-semibold uppercase tracking-wider mb-3 text-center">처음 오셨나요? 이 순서로 시작하세요</p>
+      <div class="grid grid-cols-3 gap-3">
+        <a href="<%= exam_subjects_path %>" class="group flex flex-col items-center gap-2 bg-white/10 hover:bg-white/20 rounded-xl px-3 py-3 transition-colors text-center">
+          <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-black text-sm flex-shrink-0">1</div>
+          <div>
+            <div class="text-white font-bold text-sm">커리큘럼</div>
+            <div class="text-blue-200 text-xs mt-0.5">4권 구조 파악</div>
+          </div>
+        </a>
+        <a href="<%= exam_keywords_path %>" class="group flex flex-col items-center gap-2 bg-white/10 hover:bg-white/20 rounded-xl px-3 py-3 transition-colors text-center">
+          <div class="w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center text-slate-900 font-black text-sm flex-shrink-0">2</div>
+          <div>
+            <div class="text-white font-bold text-sm">용어집</div>
+            <div class="text-blue-200 text-xs mt-0.5">핵심 키워드 암기</div>
+          </div>
+        </a>
+        <a href="<%= exam_quiz_index_path %>" class="group flex flex-col items-center gap-2 bg-white/10 hover:bg-white/20 rounded-xl px-3 py-3 transition-colors text-center">
+          <div class="w-8 h-8 bg-emerald-400 rounded-full flex items-center justify-center text-slate-900 font-black text-sm flex-shrink-0">3</div>
+          <div>
+            <div class="text-white font-bold text-sm">모의고사</div>
+            <div class="text-blue-200 text-xs mt-0.5">실전 점수 확인</div>
+          </div>
+        </a>
+      </div>
+    </div>
+
     <div class="flex flex-col sm:flex-row gap-4 justify-center">
       <a href="<%= exam_subjects_path %>" class="inline-flex items-center gap-2 bg-white text-blue-700 font-bold px-8 py-4 rounded-xl hover:bg-blue-50 transition-colors shadow-lg text-lg">
         <span class="material-symbols-outlined">school</span>
-        4권 커리큘럼 학습 시작 →
+        1단계: 커리큘럼 시작 →
       </a>
       <a href="<%= exam_quiz_index_path %>" class="inline-flex items-center gap-2 bg-yellow-400 text-slate-900 font-bold px-8 py-4 rounded-xl hover:bg-yellow-300 transition-colors shadow-lg text-lg">
         <span class="material-symbols-outlined">quiz</span>
-        모의고사 풀기
+        바로 모의고사 풀기
       </a>
     </div>
 
@@ -579,16 +607,21 @@
 <section class="py-16 px-4 bg-blue-600">
   <div class="max-w-2xl mx-auto text-center text-white">
     <h2 class="text-2xl font-bold mb-4">지금 바로 시작하세요</h2>
-    <p class="text-blue-100 mb-8 text-lg">68개 법령 가이드와 100건 감사사례, 모두 무료입니다.<br>공공조달관리사 시험의 핵심을 지금 바로 준비하세요.</p>
-    <div class="flex flex-col sm:flex-row gap-4 justify-center">
-      <a href="https://silmu.kr/topics" class="inline-flex items-center gap-2 bg-white text-blue-700 font-bold px-8 py-4 rounded-xl hover:bg-blue-50 transition-colors shadow-lg text-lg">
-        <span class="material-symbols-outlined">menu_book</span>
-        법령 가이드 68개 →
+    <p class="text-blue-100 mb-8 text-lg">커리큘럼·모의고사·용어집 모두 무료입니다.<br>체계적으로 학습하고 첫 시험에서 합격하세요.</p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center mb-6">
+      <a href="<%= exam_subjects_path %>" class="inline-flex items-center gap-2 bg-white text-blue-700 font-bold px-8 py-4 rounded-xl hover:bg-blue-50 transition-colors shadow-lg text-lg">
+        <span class="material-symbols-outlined">school</span>
+        커리큘럼 학습 시작 →
       </a>
-      <a href="https://silmu.kr/audit-cases" class="inline-flex items-center gap-2 bg-blue-500 border-2 border-white/30 text-white font-semibold px-8 py-4 rounded-xl hover:bg-blue-400 transition-colors text-lg">
-        <span class="material-symbols-outlined">gavel</span>
-        감사사례 100건 →
+      <a href="<%= exam_quiz_index_path %>" class="inline-flex items-center gap-2 bg-blue-500 border-2 border-white/30 text-white font-semibold px-8 py-4 rounded-xl hover:bg-blue-400 transition-colors text-lg">
+        <span class="material-symbols-outlined">quiz</span>
+        모의고사 바로 풀기
       </a>
     </div>
+    <!-- 실무.kr 자료는 보조 링크로 -->
+    <p class="text-blue-200 text-sm">
+      법령 조문·실무 해설은
+      <a href="https://silmu.kr/topics" class="underline hover:text-white transition-colors">실무.kr 법령 가이드</a>에서 확인하세요.
+    </p>
   </div>
 </section>

@@ -1018,6 +1018,20 @@ module ExamCurriculum
     ALL_KEYWORDS
   end
 
+  # 키워드 + ExamKeywordDetails 통합 데이터 (메모이제이션: 매 요청마다 merge 제거)
+  ALL_KEYWORDS_WITH_DETAILS = ALL_KEYWORDS.map do |kw|
+    detail = ExamKeywordDetails.find(kw[:keyword])
+    kw.merge(
+      definition: detail&.dig(:definition),
+      example: detail&.dig(:example),
+      quiz_ids: detail&.dig(:quiz_ids) || []
+    )
+  end.freeze
+
+  def self.all_keywords_with_details
+    ALL_KEYWORDS_WITH_DETAILS
+  end
+
   # 과목별 색상 Tailwind 클래스
   SUBJECT_COLORS = {
     "emerald" => {

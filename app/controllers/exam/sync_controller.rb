@@ -29,7 +29,12 @@ module Exam
       end
 
       progress = ExamProgress.for_user(current_user)
-      data = params.permit!.to_h
+      # Strong Parameters 적용 (permit! 보안 위험 제거)
+      data = params.permit(
+        :quiz_completed, :streak_count, :streak_last_date,
+        chapters: {}, quizzes: {}, chapter_quizzes: {},
+        wrong_answers: [], bookmarks: [], streak_history: []
+      ).to_h
 
       # 챕터: 서버와 로컬의 합집합 (더 많이 방문한 쪽 유지)
       merged_chapters = (progress.chapters || {}).merge(data["chapters"] || {})

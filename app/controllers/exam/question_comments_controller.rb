@@ -84,16 +84,18 @@ module Exam
     end
 
     # POST /questions/:question_id/comments/:id/like
+    # update_counters 사용: updated_at 불필요 갱신 방지 + 단일 UPDATE 쿼리
     def like
-      @comment.increment!(:likes_count)
-      render json: { likes_count: @comment.likes_count }
+      ExamQuestionComment.update_counters(@comment.id, likes_count: 1)
+      render json: { likes_count: @comment.likes_count + 1 }
     end
 
     # POST /questions/:question_id/comments/:id/report
     def report
-      @comment.increment!(:reported_count)
+      ExamQuestionComment.update_counters(@comment.id, reported_count: 1)
+      new_count = @comment.reported_count + 1
       # 3회 이상 신고 시 자동 숨김 + AI 재검토
-      if @comment.reported_count >= 3 && !@comment.hidden?
+      if new_count >= 3 && !@comment.hidden?
         @comment.update!(hidden: true)
         Rails.logger.info "[CommentModeration] 댓글 #{@comment.id} 신고 3회로 자동 숨김"
       end

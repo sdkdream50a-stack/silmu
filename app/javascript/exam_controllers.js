@@ -10,3 +10,6 @@ application.register("exam-simulation", ExamSimulationController)
 
 import ExamAnalysisController from "./controllers/exam_analysis_controller"
 application.register("exam-analysis", ExamAnalysisController)
+
+import ExamFlashcardController from "./controllers/exam_flashcard_controller"
+application.register("exam-flashcard", ExamFlashcardController)

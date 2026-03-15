@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_15_151855) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_15_155657) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -87,6 +87,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_15_151855) do
     t.string "weekly_reset_date"
     t.text "wrong_answers", default: "[]"
     t.index ["user_id"], name: "index_exam_progresses_on_user_id"
+    t.index ["weekly_quiz_count"], name: "idx_exam_progresses_on_weekly_quiz_count"
   end
 
   create_table "exam_question_comments", force: :cascade do |t|
@@ -99,6 +100,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_15_151855) do
     t.integer "reported_count", default: 0, null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
+    t.index ["question_id", "hidden", "likes_count"], name: "idx_exam_comments_on_qid_hidden_likes"
     t.index ["question_id"], name: "index_exam_question_comments_on_question_id"
     t.index ["user_id"], name: "index_exam_question_comments_on_user_id"
   end
@@ -109,6 +111,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_15_151855) do
     t.integer "question_id", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id"
+    t.index ["question_id"], name: "idx_exam_question_reports_on_qid"
   end
 
   create_table "guides", force: :cascade do |t|
