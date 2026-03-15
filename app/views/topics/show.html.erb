@@ -135,6 +135,20 @@
 </section>
 <% end %>
 
+<!-- 핵심 요약 인포그래픽 (헤더 바로 아래) -->
+<% if @topic.infographic_url.present? %>
+<section class="section py-6">
+  <div class="container-wide">
+    <img src="<%= @topic.infographic_url %>"
+         alt="<%= @topic.name %> 핵심 요약 인포그래픽"
+         width="1376"
+         height="768"
+         loading="lazy"
+         class="w-full rounded-2xl shadow-md border border-slate-100">
+  </div>
+</section>
+<% end %>
+
 <!-- 탭 네비게이션 -->
 <section class="bg-white/80 backdrop-blur-xl border-b border-gray-100 sticky top-16 z-40 shadow-soft">
   <div class="container-wide">
@@ -186,13 +200,6 @@
         <span class="material-symbols-outlined" style="font-size:18px">draft</span>
         서식/양식
       </button>
-      <% if @topic.infographic_url.present? %>
-      <button onclick="showTab('infographic')" data-tab="infographic"
-              class="tab-btn px-3 py-2 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-lg text-sm font-medium whitespace-nowrap flex items-center gap-1.5 transition-all duration-200">
-        <span class="material-symbols-outlined" style="font-size:18px">auto_awesome</span>
-        핵심요약
-      </button>
-      <% end %>
     </nav>
   </div>
 </section>
@@ -550,25 +557,6 @@
         </div>
         <% end %>
 
-        <!-- 핵심요약 인포그래픽 -->
-        <% if @topic.infographic_url.present? %>
-        <div class="tab-panel" data-tab="infographic">
-          <div class="card p-6 lg:p-8">
-            <div class="flex items-center gap-3 mb-5">
-              <div class="icon-container icon-container-sm bg-purple-100">
-                <span class="material-symbols-outlined text-purple-600">auto_awesome</span>
-              </div>
-              <h3 class="text-lg font-bold text-slate-900">핵심 요약 인포그래픽</h3>
-            </div>
-            <img src="<%= @topic.infographic_url %>"
-                 alt="<%= @topic.name %> 핵심 요약 인포그래픽"
-                 width="1376"
-                 height="768"
-                 loading="lazy"
-                 class="w-full rounded-2xl shadow-md border border-slate-100">
-          </div>
-        </div>
-        <% end %>
 
         <!-- 서식/양식 -->
         <div class="tab-panel" data-tab="forms">
