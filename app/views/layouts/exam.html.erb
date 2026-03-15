@@ -25,7 +25,7 @@
     <link rel="apple-touch-icon" href="/icon.png">
 
     <%# Material Symbols — Google Fonts (아이콘 서브셋, API 호출 없음) %>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=analytics,apps,arrow_back,arrow_forward,arrow_forward_ios,article,assignment,assignment_turned_in,bolt,calendar_month,cancel,chat_bubble_outline,check_circle,checklist,chevron_right,circle,close,computer,description,dictionary,donut_large,edit_note,emoji_events,error,error_outline,expand_less,expand_more,fact_check,flag,format_list_numbered,gavel,groups,handshake,info,key,language,leaderboard,lightbulb,list,local_fire_department,mail,manage_accounts,menu,menu_book,open_in_new,paid,percent,person,person_check,pin,play_arrow,psychology,public,quiz,schedule,school,search,search_off,star,summarize,target,thumb_up,timer,tips_and_updates,touch_app,trending_down,trending_flat,trending_up,verified,warning,work" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=analytics,apps,arrow_back,arrow_forward,arrow_forward_ios,article,assignment,assignment_turned_in,bolt,calendar_month,cancel,chat_bubble_outline,check_circle,checklist,chevron_right,circle,close,computer,description,dictionary,donut_large,edit_note,emoji_events,error,error_outline,expand_less,expand_more,fact_check,flag,format_list_numbered,gavel,groups,handshake,info,key,language,leaderboard,lightbulb,list,local_fire_department,logout,mail,manage_accounts,menu,menu_book,open_in_new,paid,percent,person,person_check,pin,play_arrow,psychology,public,quiz,schedule,school,search,search_off,star,summarize,sync,target,thumb_up,timer,tips_and_updates,touch_app,trending_down,trending_flat,trending_up,verified,warning,work" rel="stylesheet">
 
     <style>
       .material-symbols-outlined {
@@ -215,12 +215,44 @@
             </a>
           </div>
 
-          <!-- CTA -->
+          <!-- CTA + 로그인 -->
           <div class="flex items-center gap-2">
             <a href="<%= exam_subjects_path %>" class="hidden md:flex items-center gap-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors">
               <span class="material-symbols-outlined text-base">school</span>
               학습 시작
             </a>
+
+            <% if user_signed_in? %>
+              <!-- 로그인 상태: 유저 드롭다운 -->
+              <div class="relative hidden md:block" id="user-menu-wrapper">
+                <button id="user-menu-btn" class="flex items-center gap-1.5 px-3 py-2 rounded-lg hover:bg-slate-50 text-slate-600 text-sm font-medium transition-colors">
+                  <span class="material-symbols-outlined text-base">person_check</span>
+                  <span class="max-w-[80px] truncate"><%= current_user.email.split('@').first %></span>
+                  <span class="material-symbols-outlined text-sm text-slate-400">expand_more</span>
+                </button>
+                <div id="user-menu-dropdown" class="hidden absolute right-0 top-full pt-1 w-44 z-50">
+                  <div class="bg-white border border-slate-200 rounded-xl shadow-lg py-1">
+                    <a href="<%= exam_rankings_path %>" class="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">
+                      <span class="material-symbols-outlined text-amber-500 text-base">leaderboard</span>내 랭킹
+                    </a>
+                    <a href="<%= exam_sync_path %>" class="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">
+                      <span class="material-symbols-outlined text-blue-500 text-base">sync</span>학습 동기화
+                    </a>
+                    <hr class="border-slate-100 my-1">
+                    <%= link_to destroy_user_session_path, data: { turbo_method: :delete }, class: "flex items-center gap-2 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 w-full" do %>
+                      <span class="material-symbols-outlined text-base">logout</span>로그아웃
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            <% else %>
+              <!-- 미로그인 상태: 로그인 버튼 -->
+              <a href="<%= new_user_session_path %>" class="hidden md:flex items-center gap-1 text-slate-600 hover:text-blue-700 font-medium text-sm px-3 py-2 rounded-lg hover:bg-slate-50 transition-colors border border-slate-200">
+                <span class="material-symbols-outlined text-base">person</span>
+                로그인
+              </a>
+            <% end %>
+
             <!-- 모바일 메뉴 버튼 -->
             <button id="mobile-menu-btn" class="md:hidden p-3 min-w-[44px] min-h-[44px] flex items-center justify-center text-slate-600 hover:text-blue-700 rounded-lg hover:bg-slate-50" aria-label="메뉴 열기">
               <span class="material-symbols-outlined">menu</span>
@@ -364,11 +396,24 @@
             감사사례
           </a>
         </nav>
-        <div class="p-4 border-t border-slate-200">
+        <div class="p-4 border-t border-slate-200 space-y-2">
           <a href="<%= exam_subjects_path %>" class="flex items-center justify-center gap-2 bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 transition-colors">
             <span class="material-symbols-outlined text-base">school</span>
             학습 시작하기
           </a>
+          <% if user_signed_in? %>
+            <div class="flex items-center justify-between px-3 py-2 bg-slate-50 rounded-xl">
+              <span class="text-sm text-slate-600 font-medium truncate"><%= current_user.email.split('@').first %></span>
+              <%= link_to destroy_user_session_path, data: { turbo_method: :delete }, class: "text-xs text-red-500 font-semibold hover:text-red-700 flex-shrink-0" do %>
+                로그아웃
+              <% end %>
+            </div>
+          <% else %>
+            <a href="<%= new_user_session_path %>" class="flex items-center justify-center gap-2 border border-slate-200 text-slate-700 font-semibold py-3 rounded-xl hover:bg-slate-50 transition-colors text-sm">
+              <span class="material-symbols-outlined text-base">person</span>
+              로그인 / 회원가입
+            </a>
+          <% end %>
         </div>
       </div>
     </div>
@@ -437,6 +482,17 @@
           if (e.target === menu) closeMenu();
         });
         document.addEventListener('turbo:load', function() { closeMenu(); });
+
+      // 유저 드롭다운
+      var userBtn = document.getElementById('user-menu-btn');
+      var userDropdown = document.getElementById('user-menu-dropdown');
+      if (userBtn && userDropdown) {
+        userBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          userDropdown.classList.toggle('hidden');
+        });
+        document.addEventListener('click', function() { userDropdown.classList.add('hidden'); });
+      }
       })();
     </script>
 
