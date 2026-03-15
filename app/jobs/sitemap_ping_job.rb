@@ -3,6 +3,7 @@ class SitemapPingJob < ApplicationJob
   queue_as :default
 
   HOST = "silmu.kr"
+  EXAM_HOST = "exam.silmu.kr"
   INDEXNOW_KEY = "5ae9664d75415a43ef8341b00b97a941"
   INDEXNOW_KEY_LOCATION = "https://#{HOST}/#{INDEXNOW_KEY}.txt"
 
@@ -33,7 +34,10 @@ class SitemapPingJob < ApplicationJob
   private
 
   def collect_urls
-    urls = ["https://#{HOST}/", "https://#{HOST}/sitemap.xml"]
+    urls = [
+      "https://#{HOST}/", "https://#{HOST}/sitemap.xml",
+      "https://#{EXAM_HOST}/", "https://#{EXAM_HOST}/sitemap.xml"
+    ]
 
     # 최근 7일간 업데이트된 토픽
     Topic.published.where("updated_at > ?", 7.days.ago).find_each do |topic|

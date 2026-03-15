@@ -18,7 +18,7 @@
 
   <!-- 내 순위 (로그인 시) -->
   <% if user_signed_in? %>
-    <div class="bg-blue-50 border border-blue-200 rounded-2xl p-5 mb-6 flex items-center justify-between">
+    <div class="bg-blue-50 border border-blue-200 rounded-2xl p-5 mb-4 flex items-center justify-between">
       <div class="flex items-center gap-3">
         <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center">
           <span class="material-symbols-outlined text-white text-lg">person</span>
@@ -32,6 +32,22 @@
         <p class="text-2xl font-extrabold text-blue-700"><%= @my_quiz_count %></p>
         <p class="text-xs text-slate-500">이번 주 응시</p>
       </div>
+    </div>
+
+    <!-- 닉네임 설정 -->
+    <div class="bg-white border border-slate-200 rounded-2xl p-4 mb-6">
+      <p class="text-xs text-slate-500 font-semibold mb-2 flex items-center gap-1">
+        <span class="material-symbols-outlined text-sm">badge</span>
+        랭킹 닉네임 (2~12자)
+      </p>
+      <div class="flex gap-2">
+        <input type="text" id="nickname-input" maxlength="12"
+               value="<%= @my_display_name %>"
+               placeholder="조달수험생#{current_user.id}"
+               class="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <button onclick="saveNickname()" class="bg-blue-600 text-white text-sm font-bold px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors whitespace-nowrap">저장</button>
+      </div>
+      <p id="nickname-msg" class="text-xs mt-1.5 hidden"></p>
     </div>
   <% else %>
     <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 mb-6 text-center">
@@ -105,8 +121,42 @@
   <div class="mt-6 bg-slate-50 rounded-xl p-4 text-xs text-slate-500 space-y-1">
     <p>• 랭킹은 이번 주 월요일 00:00부터 집계됩니다.</p>
     <p>• 모의고사(과목별, 챕터별, 전체 시험) 완료 시 1회로 카운트됩니다.</p>
-    <p>• 닉네임은 로그인 후 프로필에서 변경할 수 있습니다.</p>
+    <p>• 닉네임은 로그인 후 위 입력창에서 변경할 수 있습니다.</p>
   </div>
+
+<script>
+async function saveNickname() {
+  const input = document.getElementById('nickname-input')
+  const msg = document.getElementById('nickname-msg')
+  const name = input.value.trim()
+
+  if (name.length < 2 || name.length > 12) {
+    msg.textContent = '닉네임은 2~12자여야 합니다.'
+    msg.className = 'text-xs mt-1.5 text-red-500'
+    return
+  }
+
+  try {
+    const res = await fetch('<%= exam_rankings_nickname_path %>', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content },
+      body: JSON.stringify({ display_name: name })
+    })
+    const data = await res.json()
+    if (data.success) {
+      msg.textContent = '닉네임이 저장되었습니다!'
+      msg.className = 'text-xs mt-1.5 text-emerald-600'
+    } else {
+      msg.textContent = data.error || '저장 실패'
+      msg.className = 'text-xs mt-1.5 text-red-500'
+    }
+  } catch {
+    msg.textContent = '네트워크 오류가 발생했습니다.'
+    msg.className = 'text-xs mt-1.5 text-red-500'
+  }
+  msg.classList.remove('hidden')
+}
+</script>
 
   <!-- 이동 버튼 -->
   <div class="mt-6 flex gap-3">

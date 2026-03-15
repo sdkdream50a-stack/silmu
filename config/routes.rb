@@ -28,6 +28,7 @@ Rails.application.routes.draw do
 
       # #8 주간 랭킹
       get 'rankings', to: 'rankings#index', as: :rankings
+      patch 'rankings/nickname', to: 'rankings#update_nickname', as: :rankings_nickname
 
       # #9 실기 대비
       get 'practical', to: 'practical#index', as: :practical

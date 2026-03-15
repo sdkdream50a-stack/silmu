@@ -23,6 +23,7 @@ module Exam
         my_rank_record = ExamProgress.where("weekly_quiz_count > ?", my_progress.weekly_quiz_count || 0).count
         @my_rank = my_rank_record + 1
         @my_quiz_count = my_progress.weekly_quiz_count || 0
+        @my_display_name = my_progress.display_name.presence || ""
       end
 
       # 다음 월요일까지 남은 일수
@@ -33,6 +34,21 @@ module Exam
         description: "공공조달관리사 시험 대비 주간 학습 랭킹. 이번 주 모의고사 응시 횟수 기준으로 실력을 겨루세요.",
         keywords: "공공조달관리사 랭킹, 학습 리더보드, 모의고사 순위"
       )
+    end
+
+    def update_nickname
+      unless user_signed_in?
+        return render json: { error: "로그인이 필요합니다." }, status: :unauthorized
+      end
+
+      name = params[:display_name].to_s.strip
+      if name.length < 2 || name.length > 12
+        return render json: { error: "닉네임은 2~12자여야 합니다." }, status: :unprocessable_entity
+      end
+
+      progress = ExamProgress.for_user(current_user)
+      progress.update!(display_name: name)
+      render json: { success: true, display_name: name }
     end
   end
 end
