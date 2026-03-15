@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+</head>
+<body style="margin:0;padding:0;background:#f0f7ff;font-family:'Apple SD Gothic Neo',sans-serif;">
+  <div style="max-width:560px;margin:0 auto;padding:24px 16px;">
+    <!-- 헤더 -->
+    <div style="background:#1d4ed8;border-radius:16px 16px 0 0;padding:32px 24px;text-align:center;">
+      <div style="font-size:32px;margin-bottom:8px;">📚</div>
+      <h1 style="color:#fff;font-size:22px;font-weight:800;margin:0 0 8px;">공부하러 돌아오세요!</h1>
+      <p style="color:#bfdbfe;font-size:14px;margin:0;">공공조달관리사 시험까지 <strong style="color:#fde68a;">D-<%= days_until_exam %></strong>일 남았어요</p>
+    </div>
+
+    <!-- 본문 -->
+    <div style="background:#fff;border-radius:0 0 16px 16px;padding:28px 24px;">
+      <p style="color:#334155;font-size:15px;margin:0 0 20px;">
+        <strong><%= @user.email.split('@').first %>님</strong>, <%= @days_absent %>일 동안 학습을 쉬셨네요.<br>
+        오늘 잠깐이라도 공부하고 학습 스트릭을 이어가세요! 🔥
+      </p>
+
+      <!-- 내 현황 -->
+      <div style="background:#f8fafc;border-radius:12px;padding:16px;margin-bottom:20px;">
+        <p style="color:#64748b;font-size:12px;font-weight:700;margin:0 0 12px;text-transform:uppercase;letter-spacing:1px;">내 학습 현황</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <div style="flex:1;min-width:100px;text-align:center;background:#fff;border-radius:8px;padding:12px 8px;border:1px solid #e2e8f0;">
+            <div style="font-size:24px;font-weight:800;color:#1d4ed8;"><%= @streak_count %></div>
+            <div style="font-size:11px;color:#64748b;">연속 학습일</div>
+          </div>
+          <% if @wrong_count > 0 %>
+          <div style="flex:1;min-width:100px;text-align:center;background:#fff;border-radius:8px;padding:12px 8px;border:1px solid #e2e8f0;">
+            <div style="font-size:24px;font-weight:800;color:#f97316;"><%= @wrong_count %></div>
+            <div style="font-size:11px;color:#64748b;">오답 대기 중</div>
+          </div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- CTA 버튼 -->
+      <div style="text-align:center;margin-bottom:20px;">
+        <a href="https://exam.silmu.kr/quiz/wrong"
+           style="display:inline-block;background:#f97316;color:#fff;font-weight:800;font-size:15px;padding:14px 28px;border-radius:12px;text-decoration:none;margin-bottom:8px;">
+          <%= @wrong_count > 0 ? "오답 노트 복습하기 #{@wrong_count}개 →" : "오늘의 모의고사 풀기 →" %>
+        </a>
+        <br>
+        <a href="https://exam.silmu.kr/subjects/1"
+           style="display:inline-block;color:#1d4ed8;font-size:13px;text-decoration:underline;margin-top:8px;">
+          커리큘럼 이어서 학습하기
+        </a>
+      </div>
+
+      <!-- 수신거부 -->
+      <p style="color:#94a3b8;font-size:11px;text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid #f1f5f9;">
+        이 메일은 실무.kr 회원에게 발송됩니다.<br>
+        <a href="https://silmu.kr/mypage" style="color:#94a3b8;">수신 설정 변경</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>

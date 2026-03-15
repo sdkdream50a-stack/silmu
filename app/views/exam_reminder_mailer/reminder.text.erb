@@ -1,0 +1,14 @@
+공부하러 돌아오세요! — 공공조달관리사
+
+<%= @user.email.split('@').first %>님, <%= @days_absent %>일 동안 학습을 쉬셨어요.
+시험까지 D-<%= days_until_exam %>일 남았습니다.
+
+내 현황:
+- 연속 학습일: <%= @streak_count %>일
+<% if @wrong_count > 0 %>- 오답 대기: <%= @wrong_count %>개<% end %>
+
+지금 바로 학습하기: https://exam.silmu.kr
+오답 복습: https://exam.silmu.kr/quiz/wrong
+
+---
+실무.kr | 수신 설정: https://silmu.kr/mypage
