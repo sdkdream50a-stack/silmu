@@ -146,6 +146,12 @@
 
           <!-- Nav Links -->
           <div class="hidden md:flex items-center gap-1">
+            <a href="<%= exam_exam_info_path %>" class="px-3 py-2 text-slate-600 hover:text-blue-700 font-medium transition-colors text-sm rounded-lg hover:bg-slate-50">시험 정보</a>
+            <a href="<%= exam_exam_strategy_path %>" class="flex items-center gap-1 px-3 py-2 text-slate-600 hover:text-amber-600 font-medium transition-colors text-sm rounded-lg hover:bg-amber-50">
+              <span class="material-symbols-outlined text-base">emoji_events</span>
+              합격 전략
+            </a>
+
             <!-- 커리큘럼 드롭다운 -->
             <div class="relative group">
               <button class="flex items-center gap-1 px-3 py-2 text-slate-600 hover:text-blue-700 font-medium transition-colors text-sm rounded-lg hover:bg-slate-50">
@@ -199,11 +205,6 @@
             <a href="<%= exam_quiz_index_path %>" class="flex items-center gap-1 px-3 py-2 text-slate-600 hover:text-blue-700 font-medium transition-colors text-sm rounded-lg hover:bg-slate-50">
               <span class="material-symbols-outlined text-base">quiz</span>
               모의고사
-            </a>
-            <a href="<%= exam_exam_info_path %>" class="px-3 py-2 text-slate-600 hover:text-blue-700 font-medium transition-colors text-sm rounded-lg hover:bg-slate-50">시험 정보</a>
-            <a href="<%= exam_exam_strategy_path %>" class="flex items-center gap-1 px-3 py-2 text-slate-600 hover:text-amber-600 font-medium transition-colors text-sm rounded-lg hover:bg-amber-50">
-              <span class="material-symbols-outlined text-base">emoji_events</span>
-              합격 전략
             </a>
             <a href="<%= exam_practical_path %>" class="flex items-center gap-1 px-3 py-2 text-slate-600 hover:text-violet-700 font-medium transition-colors text-sm rounded-lg hover:bg-violet-50">
               <span class="material-symbols-outlined text-base">edit_note</span>
@@ -395,6 +396,15 @@
           </button>
         </div>
         <nav class="flex-1 overflow-y-auto p-4 space-y-1">
+          <a href="<%= exam_exam_info_path %>" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-50 text-slate-700 font-medium">
+            <span class="material-symbols-outlined text-slate-500 text-base">info</span>
+            시험 정보
+          </a>
+          <a href="<%= exam_exam_strategy_path %>" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-amber-50 text-slate-700 font-medium">
+            <span class="material-symbols-outlined text-amber-500 text-base">emoji_events</span>
+            합격 전략
+          </a>
+          <hr class="border-slate-200 my-2">
           <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider px-3 pt-2 pb-1">커리큘럼</p>
           <a href="<%= exam_subjects_path %>" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-50 text-slate-700 font-medium">
             <span class="material-symbols-outlined text-slate-500 text-base">format_list_numbered</span>
@@ -419,21 +429,11 @@
             <span class="material-symbols-outlined text-blue-500 text-base">quiz</span>
             모의고사
           </a>
-          <hr class="border-slate-200 my-2">
-          <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider px-3 pt-2 pb-1">더보기</p>
-          <a href="<%= exam_exam_info_path %>" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-50 text-slate-700">
-            <span class="material-symbols-outlined text-slate-500 text-base">info</span>
-            시험 정보
-          </a>
-          <a href="<%= exam_exam_strategy_path %>" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-amber-50 text-slate-700">
-            <span class="material-symbols-outlined text-amber-500 text-base">emoji_events</span>
-            합격 전략
-          </a>
-          <a href="<%= exam_practical_path %>" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-violet-50 text-slate-700">
+          <a href="<%= exam_practical_path %>" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-violet-50 text-slate-700 font-medium">
             <span class="material-symbols-outlined text-violet-500 text-base">edit_note</span>
             실기 대비
           </a>
-          <a href="<%= exam_rankings_path %>" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-amber-50 text-slate-700">
+          <a href="<%= exam_rankings_path %>" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-amber-50 text-slate-700 font-medium">
             <span class="material-symbols-outlined text-amber-500 text-base">leaderboard</span>
             주간 랭킹
           </a>
