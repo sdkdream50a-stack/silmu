@@ -33,9 +33,14 @@ Rails.application.routes.draw do
       # #9 실기 대비
       get 'practical', to: 'practical#index', as: :practical
 
-      # #10 Q&A 커뮤니티 (문제별 댓글) — scope module:'exam' 안이므로 module 재지정 불필요
+      # #10 Q&A 커뮤니티 (문제별 댓글)
       resources :questions, only: [] do
-        resources :comments, controller: 'question_comments', only: [ :index, :create ]
+        resources :comments, controller: 'question_comments', only: [ :index, :create, :destroy ] do
+          member do
+            post :like
+            post :report
+          end
+        end
       end
     end
   end

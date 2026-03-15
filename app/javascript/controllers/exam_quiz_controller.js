@@ -296,18 +296,21 @@ export default class extends Controller {
     const qaBtn = `
       <button data-action="click->exam-quiz#toggleQA"
               data-question-id="${q.id}"
+              data-question-text="${(q.question || '').replace(/"/g, '&quot;')}"
               class="mt-3 inline-flex items-center gap-2 text-slate-500 text-xs hover:text-slate-700 transition-colors">
         <span class="material-symbols-outlined text-sm">chat_bubble_outline</span>
         이 문제 토론 보기
       </button>
       <div class="qa-area hidden mt-3 bg-slate-50 rounded-xl border border-slate-200 p-4 space-y-3">
         <div class="qa-comments space-y-2 text-sm text-slate-500">불러오는 중...</div>
-        <form class="qa-form flex gap-2" data-action="submit->exam-quiz#submitComment">
+        <form class="qa-form flex gap-2 mt-2" data-action="submit->exam-quiz#submitComment">
           <input type="hidden" name="question_id" value="${q.id}">
-          <input type="text" name="body" placeholder="질문이나 의견을 남겨보세요..."
+          <input type="hidden" name="question_text" value="${(q.question || '').replace(/"/g, '&quot;')}">
+          <input type="text" name="body" placeholder="5자 이상 질문이나 의견을 남겨보세요..."
                  class="flex-1 text-sm border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-          <button type="submit" class="bg-blue-600 text-white text-xs font-bold px-3 py-2 rounded-lg hover:bg-blue-700">등록</button>
+          <button type="submit" class="bg-blue-600 text-white text-xs font-bold px-3 py-2 rounded-lg hover:bg-blue-700 whitespace-nowrap">등록</button>
         </form>
+        <p class="text-xs text-slate-400">AI가 댓글 품질을 자동으로 검토합니다.</p>
       </div>
     `
 
@@ -649,6 +652,44 @@ export default class extends Controller {
     }
   }
 
+  // #10 댓글 HTML 렌더링 헬퍼
+  renderComment(c) {
+    const likedKey = `qa_liked_${c.id}`
+    const reportedKey = `qa_reported_${c.id}`
+    const liked = localStorage.getItem(likedKey) === '1'
+    const reported = localStorage.getItem(reportedKey) === '1'
+    const deleteBtn = c.mine
+      ? `<button onclick="examQuizDeleteComment(${c.id}, this)" class="text-xs text-red-400 hover:text-red-600 transition-colors ml-1">삭제</button>`
+      : ''
+    const reportBtn = !c.mine && !reported
+      ? `<button onclick="examQuizReportComment(${c.id}, this)" class="text-xs text-slate-300 hover:text-orange-400 transition-colors ml-1">신고</button>`
+      : ''
+    return `
+      <div class="bg-white border border-slate-200 rounded-lg p-3" data-comment-id="${c.id}">
+        <div class="flex items-start justify-between gap-2">
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 mb-1 flex-wrap">
+              <span class="text-xs font-bold text-slate-700">${this.escapeHtml(c.author)}</span>
+              <span class="text-xs text-slate-400">${c.created_at}</span>
+            </div>
+            <p class="text-sm text-slate-600 break-words">${this.escapeHtml(c.body)}</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3 mt-2">
+          <button onclick="examQuizLikeComment(${c.id}, this)"
+                  class="flex items-center gap-1 text-xs ${liked ? 'text-blue-500 font-semibold' : 'text-slate-400 hover:text-blue-500'} transition-colors">
+            <span class="material-symbols-outlined text-sm">${liked ? 'thumb_up' : 'thumb_up'}</span>
+            <span class="like-count">${c.likes_count}</span>
+          </button>
+          ${deleteBtn}${reportBtn}
+        </div>
+      </div>`
+  }
+
+  escapeHtml(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+  }
+
   // #10 Q&A 토글 + 댓글 로드
   async toggleQA(event) {
     const btn = event.currentTarget
@@ -672,15 +713,7 @@ export default class extends Controller {
       if (comments.length === 0) {
         commentsArea.innerHTML = '<p class="text-slate-400 text-xs">아직 댓글이 없습니다. 첫 번째 댓글을 남겨보세요!</p>'
       } else {
-        commentsArea.innerHTML = comments.map(c => `
-          <div class="bg-white border border-slate-200 rounded-lg p-3">
-            <div class="flex items-center gap-2 mb-1">
-              <span class="text-xs font-bold text-slate-700">${c.author}</span>
-              <span class="text-xs text-slate-400">${c.created_at}</span>
-            </div>
-            <p class="text-sm text-slate-600">${c.body}</p>
-          </div>
-        `).join('')
+        commentsArea.innerHTML = comments.map(c => this.renderComment(c)).join('')
       }
     } catch(e) {
       const commentsArea = qaArea.querySelector('.qa-comments')
@@ -688,24 +721,28 @@ export default class extends Controller {
     }
   }
 
-  // #10 댓글 등록
+  // #10 댓글 등록 (AI 모더레이션 포함)
   async submitComment(event) {
     event.preventDefault()
     const form = event.currentTarget
     const questionId = form.querySelector('[name="question_id"]')?.value
+    const questionText = form.querySelector('[name="question_text"]')?.value || ''
     const bodyInput = form.querySelector('[name="body"]')
+    const submitBtn = form.querySelector('[type="submit"]')
     const body = bodyInput?.value?.trim()
-    if (!body) return
+    if (!body || body.length < 5) {
+      alert('댓글은 5자 이상 입력해주세요.')
+      return
+    }
+
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'AI 검토 중...' }
 
     try {
       const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content
       const res = await fetch(`/questions/${questionId}/comments`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-Token': csrfToken || ''
-        },
-        body: JSON.stringify({ body: body })
+        headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrfToken || '' },
+        body: JSON.stringify({ body, question_text: questionText })
       })
       const data = await res.json()
 
@@ -718,24 +755,19 @@ export default class extends Controller {
         return
       }
 
-      // 댓글 추가
+      // 새 댓글 추가
       const commentsArea = form.closest('.qa-area')?.querySelector('.qa-comments')
       if (commentsArea) {
-        const newComment = document.createElement('div')
-        newComment.className = 'bg-white border border-slate-200 rounded-lg p-3'
-        newComment.innerHTML = `
-          <div class="flex items-center gap-2 mb-1">
-            <span class="text-xs font-bold text-slate-700">${data.author}</span>
-            <span class="text-xs text-slate-400">${data.created_at}</span>
-          </div>
-          <p class="text-sm text-slate-600">${data.body}</p>
-        `
-        commentsArea.querySelector('p')?.remove() // "아직 댓글이 없습니다" 제거
-        commentsArea.prepend(newComment)
+        commentsArea.querySelector('p.text-slate-400')?.remove()
+        const el = document.createElement('div')
+        el.innerHTML = this.renderComment(data)
+        commentsArea.prepend(el.firstElementChild)
       }
       if (bodyInput) bodyInput.value = ''
     } catch(e) {
       alert('댓글 등록에 실패했습니다.')
+    } finally {
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = '등록' }
     }
   }
 

@@ -25,7 +25,7 @@
     <link rel="apple-touch-icon" href="/icon.png">
 
     <%# Material Symbols — Google Fonts (아이콘 서브셋, API 호출 없음) %>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=analytics,apps,arrow_back,arrow_forward,arrow_forward_ios,article,assignment,assignment_turned_in,bolt,calendar_month,cancel,chat_bubble_outline,check_circle,checklist,chevron_right,circle,close,computer,description,dictionary,donut_large,edit_note,emoji_events,error,error_outline,expand_less,expand_more,fact_check,flag,format_list_numbered,gavel,groups,handshake,info,key,language,leaderboard,lightbulb,list,local_fire_department,mail,manage_accounts,menu,menu_book,open_in_new,paid,percent,person,person_check,pin,play_arrow,psychology,public,quiz,schedule,school,search,search_off,star,summarize,target,timer,tips_and_updates,touch_app,trending_down,trending_flat,trending_up,verified,warning,work" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=analytics,apps,arrow_back,arrow_forward,arrow_forward_ios,article,assignment,assignment_turned_in,bolt,calendar_month,cancel,chat_bubble_outline,check_circle,checklist,chevron_right,circle,close,computer,description,dictionary,donut_large,edit_note,emoji_events,error,error_outline,expand_less,expand_more,fact_check,flag,format_list_numbered,gavel,groups,handshake,info,key,language,leaderboard,lightbulb,list,local_fire_department,mail,manage_accounts,menu,menu_book,open_in_new,paid,percent,person,person_check,pin,play_arrow,psychology,public,quiz,schedule,school,search,search_off,star,summarize,target,thumb_up,timer,tips_and_updates,touch_app,trending_down,trending_flat,trending_up,verified,warning,work" rel="stylesheet">
 
     <style>
       .material-symbols-outlined {
@@ -438,6 +438,65 @@
         });
         document.addEventListener('turbo:load', function() { closeMenu(); });
       })();
+    </script>
+
+    <script>
+    // Q&A 댓글 좋아요
+    async function examQuizLikeComment(commentId, btn) {
+      const key = 'qa_liked_' + commentId
+      if (localStorage.getItem(key) === '1') return
+      try {
+        const csrf = document.querySelector('meta[name="csrf-token"]')?.content
+        const pathParts = window.location.pathname.split('/')
+        const questionId = btn.closest('[data-comment-id]')?.closest('.qa-area')?.previousElementSibling?.dataset?.questionId
+        const res = await fetch('/questions/' + questionId + '/comments/' + commentId + '/like', {
+          method: 'POST', headers: { 'X-CSRF-Token': csrf || '', 'Content-Type': 'application/json' }
+        })
+        const data = await res.json()
+        if (data.likes_count !== undefined) {
+          btn.querySelector('.like-count').textContent = data.likes_count
+          btn.classList.remove('text-slate-400')
+          btn.classList.add('text-blue-500', 'font-semibold')
+          localStorage.setItem(key, '1')
+        }
+      } catch(e) {}
+    }
+
+    // Q&A 댓글 신고
+    async function examQuizReportComment(commentId, btn) {
+      const key = 'qa_reported_' + commentId
+      if (localStorage.getItem(key) === '1') return
+      if (!confirm('이 댓글을 신고하시겠습니까?')) return
+      try {
+        const csrf = document.querySelector('meta[name="csrf-token"]')?.content
+        const qaBtn = btn.closest('.qa-area')?.previousElementSibling
+        const questionId = qaBtn?.dataset?.questionId
+        await fetch('/questions/' + questionId + '/comments/' + commentId + '/report', {
+          method: 'POST', headers: { 'X-CSRF-Token': csrf || '', 'Content-Type': 'application/json' }
+        })
+        localStorage.setItem(key, '1')
+        btn.textContent = '신고됨'
+        btn.disabled = true
+        btn.className = 'text-xs text-slate-300 ml-1'
+      } catch(e) {}
+    }
+
+    // Q&A 댓글 삭제
+    async function examQuizDeleteComment(commentId, btn) {
+      if (!confirm('댓글을 삭제하시겠습니까?')) return
+      try {
+        const csrf = document.querySelector('meta[name="csrf-token"]')?.content
+        const qaBtn = btn.closest('.qa-area')?.previousElementSibling
+        const questionId = qaBtn?.dataset?.questionId
+        const res = await fetch('/questions/' + questionId + '/comments/' + commentId, {
+          method: 'DELETE', headers: { 'X-CSRF-Token': csrf || '', 'Content-Type': 'application/json' }
+        })
+        const data = await res.json()
+        if (data.success) {
+          btn.closest('[data-comment-id]')?.remove()
+        }
+      } catch(e) { alert('삭제에 실패했습니다.') }
+    }
     </script>
   </body>
 </html>
