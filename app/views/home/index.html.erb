@@ -31,7 +31,7 @@
           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
           <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
         </span>
-        <span class="text-xs font-semibold text-indigo-100 tracking-wide uppercase">Premium Government Solution</span>
+        <span class="text-xs font-semibold text-indigo-100 tracking-wide">공무원 계약 실무 전문 가이드</span>
       </div>
       <h1 class="mb-8 w-full text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl leading-[1.15]">
         몰라서 실수했다는 말,<br/>
@@ -63,17 +63,25 @@
             <span class="ml-1">Enter로 검색</span>
           </div>
         </form>
-        <div class="mt-6 flex flex-wrap justify-center gap-3">
-          <% [
-            [topic_path("private-contract"), "gavel", "수의계약", "indigo"],
-            [topic_path("bidding"), "shopping_bag", "입찰", "emerald"],
-            [topic_path("contract-execution"), "engineering", "계약체결", "amber"],
-            [topic_path("inspection"), "design_services", "검수·검사", "pink"]
-          ].each do |path, icon, keyword, color| %>
-            <%= link_to path, class: "group inline-flex min-h-[44px] items-center gap-2 rounded-full bg-slate-800/50 px-4 py-2 text-sm font-medium text-slate-300 hover:bg-indigo-600/20 hover:text-white hover:border-indigo-500/50 transition-all backdrop-blur-sm border border-slate-700/50" do %>
-              <span class="material-symbols-outlined text-[16px] <%= tc(color, :hero) %>"><%= icon %></span> <%= keyword %>
+        <!-- 지금 어느 단계세요? — 단계별 빠른 진입 -->
+        <div class="mt-6 w-full">
+          <p class="text-center text-xs font-semibold text-indigo-300 uppercase tracking-wider mb-3">지금 어느 단계에 있으세요?</p>
+          <div class="flex flex-wrap justify-center gap-2">
+            <% [
+              [contract_method_path,                                                           "lightbulb",      "1. 계획·방식 결정"],
+              [topics_category_path(key: "contract") + "?subgroup=수의계약",                  "gavel",          "2. 견적·입찰"],
+              [topic_path("contract-execution"),                                               "handshake",      "3. 계약체결"],
+              [topic_path("inspection"),                                                       "fact_check",     "4. 검수·대금지급"]
+            ].each_with_index do |(path, icon, label), idx| %>
+              <%= link_to path, class: "group inline-flex min-h-[44px] items-center gap-2 rounded-xl bg-slate-800/60 px-4 py-2.5 text-sm font-semibold text-slate-200 hover:bg-indigo-600/30 hover:text-white hover:border-indigo-400/60 transition-all backdrop-blur-sm border border-slate-600/50" do %>
+                <span class="material-symbols-outlined text-[16px] text-indigo-300 group-hover:text-indigo-200"><%= icon %></span>
+                <span><%= label %></span>
+              <% end %>
             <% end %>
-          <% end %>
+            <%= link_to contract_flow_path, class: "inline-flex min-h-[44px] items-center gap-1.5 px-4 py-2.5 text-sm font-semibold text-slate-400 hover:text-white transition-colors border border-dashed border-slate-600/50 rounded-xl hover:border-slate-400/60" do %>
+              <span class="material-symbols-outlined text-[16px]">account_tree</span>전체 흐름도
+            <% end %>
+          </div>
         </div>
       </div>
 
@@ -162,6 +170,63 @@
   </div>
 </div>
 
+<!-- 계약단계 네비게이션 섹션 — 도구보다 먼저: 흐름을 알아야 도구를 쓸 수 있다 -->
+<section class="bg-white py-12 border-t border-slate-100">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="mb-6">
+      <h2 class="text-xl font-bold text-slate-900 tracking-tight mb-1">계약업무 10단계</h2>
+      <p class="text-sm text-slate-500">내가 지금 어느 단계인지 클릭하면 관련 정보를 바로 확인할 수 있습니다</p>
+    </div>
+    <div class="relative">
+      <div class="overflow-x-auto pb-3 -mx-4 px-4">
+        <div class="flex gap-3 min-w-max pr-4">
+          <%
+            contract_steps = [
+              { step: 1,  label: "사업계획",      icon: "lightbulb",        color: "indigo",   path: contract_method_path },
+              { step: 2,  label: "사전절차",       icon: "checklist",        color: "indigo",   path: contract_method_path },
+              { step: 3,  label: "품의·기안",      icon: "edit_note",        color: "violet",   path: topics_category_path(key: "contract") + "?subgroup=수의계약" },
+              { step: 4,  label: "사전규격공개",   icon: "preview",          color: "violet",   path: topics_category_path(key: "contract") + "?subgroup=수의계약" },
+              { step: 5,  label: "공고·입찰",      icon: "campaign",         color: "amber",    path: contract_flow_path },
+              { step: 6,  label: "계약체결",       icon: "handshake",        color: "amber",    path: contract_flow_path },
+              { step: 7,  label: "계약서류",       icon: "description",      color: "emerald",  path: topics_category_path(key: "contract") + "?subgroup=계약체결" },
+              { step: 8,  label: "선금·중도금",    icon: "wallet",           color: "emerald",  path: topics_category_path(key: "contract") + "?subgroup=계약체결" },
+              { step: 9,  label: "계약변경",       icon: "sync_alt",         color: "rose",     path: topics_category_path(key: "contract") + "?subgroup=변경종료" },
+              { step: 10, label: "준공·대금지급",  icon: "task_alt",         color: "blue",     path: topics_category_path(key: "contract") + "?subgroup=계약이행" },
+            ]
+          %>
+          <% contract_steps.each_with_index do |s, i| %>
+            <div class="flex items-center gap-3">
+              <%= link_to s[:path], class: "group flex flex-col items-center gap-2 w-[88px] shrink-0 rounded-2xl bg-white border border-slate-200 p-3 shadow-sm hover:border-#{s[:color]}-300 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200" do %>
+                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-<%= s[:color] %>-50 text-<%= s[:color] %>-600 group-hover:bg-<%= s[:color] %>-600 group-hover:text-white transition-colors duration-200">
+                  <span class="material-symbols-outlined text-xl"><%= s[:icon] %></span>
+                </div>
+                <div class="text-center">
+                  <div class="text-xs font-bold text-<%= s[:color] %>-700 mb-0.5"><%= s[:step] %>단계</div>
+                  <div class="text-xs font-semibold text-slate-700 leading-tight text-center"><%= s[:label] %></div>
+                </div>
+              <% end %>
+              <% unless i == contract_steps.size - 1 %>
+                <span class="material-symbols-outlined text-slate-300 shrink-0 text-xl">arrow_forward</span>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+      <%# 모바일 스크롤 힌트: 오른쪽 끝이 잘렸음을 알려주는 페이드 그라디언트 %>
+      <div class="pointer-events-none absolute top-0 right-0 h-full w-12 bg-gradient-to-l from-white to-transparent sm:hidden"></div>
+    </div>
+    <div class="mt-4 flex items-center gap-4">
+      <%= link_to contract_flow_path, class: "inline-flex items-center gap-1.5 text-sm font-bold text-indigo-600 hover:text-indigo-700 transition-colors" do %>
+        <span class="material-symbols-outlined text-base">account_tree</span>전체 흐름도 보기
+      <% end %>
+      <span class="text-slate-300">|</span>
+      <%= link_to pre_contract_checklist_path, class: "inline-flex items-center gap-1.5 text-sm font-semibold text-slate-500 hover:text-slate-700 transition-colors" do %>
+        <span class="material-symbols-outlined text-base">checklist_rtl</span>사전 체크리스트
+      <% end %>
+    </div>
+  </div>
+</section>
+
 <!-- Core Tools Section -->
 <% cache "home/core_tools/v1", expires_in: 24.hours do %>
 <section class="bg-background-light py-16 relative">
@@ -247,59 +312,6 @@
 </section>
 
 <% end %><%# cache home/core_tools %>
-
-<!-- 계약단계 네비게이션 섹션 -->
-<section class="bg-white py-12 border-t border-slate-100">
-  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <div class="mb-6">
-      <h2 class="text-xl font-bold text-slate-900 tracking-tight mb-1">계약업무 10단계</h2>
-      <p class="text-sm text-slate-500">내가 지금 어느 단계인지 클릭하면 관련 정보를 바로 확인할 수 있습니다</p>
-    </div>
-    <div class="overflow-x-auto pb-2 -mx-4 px-4">
-      <div class="flex gap-3 min-w-max">
-        <%
-          contract_steps = [
-            { step: 1,  label: "사업계획",      icon: "lightbulb",        color: "indigo",   path: contract_method_path },
-            { step: 2,  label: "사전절차",       icon: "checklist",        color: "indigo",   path: contract_method_path },
-            { step: 3,  label: "품의·기안",      icon: "edit_note",        color: "violet",   path: topics_category_path(key: "contract") + "?subgroup=수의계약" },
-            { step: 4,  label: "사전규격공개",   icon: "preview",          color: "violet",   path: topics_category_path(key: "contract") + "?subgroup=수의계약" },
-            { step: 5,  label: "공고·입찰",      icon: "campaign",         color: "amber",    path: contract_flow_path },
-            { step: 6,  label: "계약체결",       icon: "handshake",        color: "amber",    path: contract_flow_path },
-            { step: 7,  label: "계약서류",       icon: "description",      color: "emerald",  path: topics_category_path(key: "contract") + "?subgroup=계약체결" },
-            { step: 8,  label: "선금·중도금",    icon: "wallet",           color: "emerald",  path: topics_category_path(key: "contract") + "?subgroup=계약체결" },
-            { step: 9,  label: "계약변경",       icon: "sync_alt",         color: "rose",     path: topics_category_path(key: "contract") + "?subgroup=변경종료" },
-            { step: 10, label: "준공·대금지급",  icon: "task_alt",         color: "blue",     path: topics_category_path(key: "contract") + "?subgroup=계약이행" },
-          ]
-        %>
-        <% contract_steps.each_with_index do |s, i| %>
-          <div class="flex items-center gap-3">
-            <%= link_to s[:path], class: "group flex flex-col items-center gap-2 w-[88px] shrink-0 rounded-2xl bg-white border border-slate-200 p-3 shadow-sm hover:border-#{s[:color]}-300 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200" do %>
-              <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-<%= s[:color] %>-50 text-<%= s[:color] %>-600 group-hover:bg-<%= s[:color] %>-600 group-hover:text-white transition-colors duration-200">
-                <span class="material-symbols-outlined text-xl"><%= s[:icon] %></span>
-              </div>
-              <div class="text-center">
-                <div class="text-xs font-bold text-<%= s[:color] %>-700 mb-0.5"><%= s[:step] %>단계</div>
-                <div class="text-xs font-semibold text-slate-700 leading-tight text-center"><%= s[:label] %></div>
-              </div>
-            <% end %>
-            <% unless i == contract_steps.size - 1 %>
-              <span class="material-symbols-outlined text-slate-300 shrink-0 text-xl">arrow_forward</span>
-            <% end %>
-          </div>
-        <% end %>
-      </div>
-    </div>
-    <div class="mt-4 flex items-center gap-4">
-      <%= link_to contract_flow_path, class: "inline-flex items-center gap-1.5 text-sm font-bold text-indigo-600 hover:text-indigo-700 transition-colors" do %>
-        <span class="material-symbols-outlined text-base">account_tree</span>전체 흐름도 보기
-      <% end %>
-      <span class="text-slate-300">|</span>
-      <%= link_to pre_contract_checklist_path, class: "inline-flex items-center gap-1.5 text-sm font-semibold text-slate-500 hover:text-slate-700 transition-colors" do %>
-        <span class="material-symbols-outlined text-base">checklist_rtl</span>사전 체크리스트
-      <% end %>
-    </div>
-  </div>
-</section>
 
 <!-- Topic Guides & Templates -->
 <% if @sector != "common"

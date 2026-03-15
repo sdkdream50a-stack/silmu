@@ -33,6 +33,22 @@
 <!-- 카테고리 카드 그리드 -->
 <section class="py-10 bg-background-light min-h-screen">
   <div class="container-wide">
+    <!-- 처음 오셨나요? 시작 안내 배너 -->
+    <div class="mb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-2xl bg-gradient-to-r from-indigo-50 to-violet-50 border border-indigo-100 px-5 py-4">
+      <div class="flex items-center gap-3">
+        <div class="shrink-0 w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center">
+          <span class="material-symbols-outlined text-indigo-600 text-xl">route</span>
+        </div>
+        <div>
+          <p class="text-sm font-bold text-slate-800">계약업무가 처음이라면 — 전체 흐름부터 확인하세요</p>
+          <p class="text-xs text-slate-500 mt-0.5">사업계획 → 견적·입찰 → 계약체결 → 검수 → 대금지급 순서로 이루어집니다</p>
+        </div>
+      </div>
+      <%= link_to contract_flow_path, class: "shrink-0 inline-flex items-center gap-1 px-4 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition-colors" do %>
+        계약 흐름도 보기 <span class="material-symbols-outlined text-base">arrow_forward</span>
+      <% end %>
+    </div>
+
     <!-- 도구 허브 배너 -->
     <div class="mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-100 px-5 py-4">
       <div class="flex items-center gap-3">
