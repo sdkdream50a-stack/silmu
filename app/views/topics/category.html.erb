@@ -52,6 +52,36 @@
 <section class="py-10 bg-background-light min-h-screen">
   <div class="container-wide">
     <% if @key == "contract" && @contract_subgroups.present? %>
+      <%# 계약 카테고리: 계약단계 흐름 미니 배너 %>
+      <div class="mb-8 rounded-2xl bg-gradient-to-r from-indigo-50 to-violet-50 border border-indigo-100 p-4">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="material-symbols-outlined text-indigo-500 text-lg">route</span>
+          <span class="text-sm font-bold text-indigo-800">계약업무 단계별 보기</span>
+        </div>
+        <div class="overflow-x-auto pb-1 -mx-1 px-1">
+          <div class="flex items-center gap-2 min-w-max">
+            <% step_groups = [
+              { label: "①~② 사전",    subgroup: nil,       path: contract_method_path,     active: false },
+              { label: "③~④ 품의",    subgroup: "수의계약", path: nil,                       active: @current_subgroup == "수의계약" },
+              { label: "⑤~⑥ 공고",   subgroup: nil,        path: contract_flow_path,        active: false },
+              { label: "⑦~⑧ 계약서", subgroup: "계약체결", path: nil,                        active: @current_subgroup == "계약체결" },
+              { label: "⑨ 변경",       subgroup: "변경종료", path: nil,                       active: @current_subgroup == "변경종료" },
+              { label: "⑩ 준공",       subgroup: "계약이행", path: nil,                       active: @current_subgroup == "계약이행" },
+            ] %>
+            <% step_groups.each_with_index do |sg, i| %>
+              <% link_url = sg[:path] || (topics_category_path(key: "contract") + "?subgroup=#{CGI.escape(sg[:subgroup].to_s)}") %>
+              <% active_cls = sg[:active] ? "bg-indigo-600 text-white border-indigo-600" : "bg-white text-slate-600 border-slate-200 hover:border-indigo-300 hover:text-indigo-600" %>
+              <%= link_to link_url, class: "shrink-0 inline-flex items-center px-3 py-1.5 rounded-lg border text-xs font-semibold transition-all #{active_cls}" do %>
+                <%= sg[:label] %>
+              <% end %>
+              <% unless i == step_groups.size - 1 %>
+                <span class="text-slate-300 text-xs shrink-0">›</span>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
       <%# 계약 카테고리: 서브그룹 헤더 + 점프 내비게이션 %>
       <% cache ["topics_contract_subgroups_v8", ENV["KAMAL_VERSION"], @topics.size, @fragment_version] do %>
       <!-- 점프 내비게이션 (서브그룹 칩) -->

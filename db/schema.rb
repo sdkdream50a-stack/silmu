@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_07_062750) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_15_051027) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -26,6 +26,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_07_062750) do
     t.string "legal_basis"
     t.text "lesson"
     t.boolean "published", default: true
+    t.boolean "repeated_issue", default: false
     t.integer "sector", default: 0, null: false
     t.string "severity"
     t.string "slug"

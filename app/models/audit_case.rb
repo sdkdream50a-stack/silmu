@@ -8,6 +8,7 @@ class AuditCase < ApplicationRecord
   scope :by_category, ->(cat) { where(category: cat) if cat.present? }
   scope :by_severity, ->(sev) { where(severity: sev) if sev.present? }
   scope :recent, -> { order(created_at: :desc) }
+  scope :repeated, -> { where(repeated_issue: true) }
 
   def self.search_by_query(query, limit: 3)
     return none if query.blank?
@@ -76,7 +77,7 @@ class AuditCase < ApplicationRecord
     Rails.cache.delete("audit_case_topic/#{slug}")
     Rails.cache.delete("audit_case_related/#{slug}")
     # 뷰 fragment cache 무효화: 내용 변경 시 버전 증가
-    if saved_change_to_title? || saved_change_to_issue? || saved_change_to_published? || saved_change_to_sector? || saved_change_to_severity?
+    if saved_change_to_title? || saved_change_to_issue? || saved_change_to_published? || saved_change_to_sector? || saved_change_to_severity? || saved_change_to_repeated_issue?
       Rails.cache.increment("audit_cases/fragment_version")
       Rails.cache.increment("home/curated_version")
     end

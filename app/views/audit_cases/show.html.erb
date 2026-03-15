@@ -46,9 +46,14 @@
       <div class="lg:w-[70%]">
         <!-- 헤더 -->
         <div class="mb-8">
-          <div class="flex items-center gap-2 mb-4">
+          <div class="flex items-center gap-2 mb-4 flex-wrap">
             <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-gray-100 text-slate-600"><%= @audit_case.category %></span>
             <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-gray-100 text-slate-600"><%= @audit_case.severity %></span>
+            <% if @audit_case.repeated_issue? %>
+              <span class="inline-flex items-center gap-0.5 px-2.5 py-1 rounded-md text-xs font-bold bg-red-600 text-white">
+                <span class="material-symbols-outlined text-xs leading-none">loop</span>반복 지적 사례
+              </span>
+            <% end %>
           </div>
           <h1 class="text-xl lg:text-2xl font-bold text-slate-900 mb-2"><%= @audit_case.title %></h1>
           <div class="flex items-center gap-3 flex-wrap">

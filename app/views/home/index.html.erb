@@ -248,6 +248,59 @@
 
 <% end %><%# cache home/core_tools %>
 
+<!-- 계약단계 네비게이션 섹션 -->
+<section class="bg-white py-12 border-t border-slate-100">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="mb-6">
+      <h2 class="text-xl font-bold text-slate-900 tracking-tight mb-1">계약업무 10단계</h2>
+      <p class="text-sm text-slate-500">내가 지금 어느 단계인지 클릭하면 관련 정보를 바로 확인할 수 있습니다</p>
+    </div>
+    <div class="overflow-x-auto pb-2 -mx-4 px-4">
+      <div class="flex gap-3 min-w-max">
+        <%
+          contract_steps = [
+            { step: 1,  label: "사업계획",      icon: "lightbulb",        color: "indigo",   path: contract_method_path },
+            { step: 2,  label: "사전절차",       icon: "checklist",        color: "indigo",   path: contract_method_path },
+            { step: 3,  label: "품의·기안",      icon: "edit_note",        color: "violet",   path: topics_category_path(key: "contract") + "?subgroup=수의계약" },
+            { step: 4,  label: "사전규격공개",   icon: "preview",          color: "violet",   path: topics_category_path(key: "contract") + "?subgroup=수의계약" },
+            { step: 5,  label: "공고·입찰",      icon: "campaign",         color: "amber",    path: contract_flow_path },
+            { step: 6,  label: "계약체결",       icon: "handshake",        color: "amber",    path: contract_flow_path },
+            { step: 7,  label: "계약서류",       icon: "description",      color: "emerald",  path: topics_category_path(key: "contract") + "?subgroup=계약체결" },
+            { step: 8,  label: "선금·중도금",    icon: "wallet",           color: "emerald",  path: topics_category_path(key: "contract") + "?subgroup=계약체결" },
+            { step: 9,  label: "계약변경",       icon: "sync_alt",         color: "rose",     path: topics_category_path(key: "contract") + "?subgroup=변경종료" },
+            { step: 10, label: "준공·대금지급",  icon: "task_alt",         color: "blue",     path: topics_category_path(key: "contract") + "?subgroup=계약이행" },
+          ]
+        %>
+        <% contract_steps.each_with_index do |s, i| %>
+          <div class="flex items-center gap-3">
+            <%= link_to s[:path], class: "group flex flex-col items-center gap-2 w-[88px] shrink-0 rounded-2xl bg-white border border-slate-200 p-3 shadow-sm hover:border-#{s[:color]}-300 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200" do %>
+              <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-<%= s[:color] %>-50 text-<%= s[:color] %>-600 group-hover:bg-<%= s[:color] %>-600 group-hover:text-white transition-colors duration-200">
+                <span class="material-symbols-outlined text-xl"><%= s[:icon] %></span>
+              </div>
+              <div class="text-center">
+                <div class="text-xs font-bold text-<%= s[:color] %>-700 mb-0.5"><%= s[:step] %>단계</div>
+                <div class="text-xs font-semibold text-slate-700 leading-tight text-center"><%= s[:label] %></div>
+              </div>
+            <% end %>
+            <% unless i == contract_steps.size - 1 %>
+              <span class="material-symbols-outlined text-slate-300 shrink-0 text-xl">arrow_forward</span>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <div class="mt-4 flex items-center gap-4">
+      <%= link_to contract_flow_path, class: "inline-flex items-center gap-1.5 text-sm font-bold text-indigo-600 hover:text-indigo-700 transition-colors" do %>
+        <span class="material-symbols-outlined text-base">account_tree</span>전체 흐름도 보기
+      <% end %>
+      <span class="text-slate-300">|</span>
+      <%= link_to pre_contract_checklist_path, class: "inline-flex items-center gap-1.5 text-sm font-semibold text-slate-500 hover:text-slate-700 transition-colors" do %>
+        <span class="material-symbols-outlined text-base">checklist_rtl</span>사전 체크리스트
+      <% end %>
+    </div>
+  </div>
+</section>
+
 <!-- Topic Guides & Templates -->
 <% if @sector != "common"
      banner_bg    = @sector == "local_gov" ? "bg-blue-50 border-blue-200"   : "bg-orange-50 border-orange-200"
@@ -420,9 +473,14 @@
         <% severity_badge = is_critical ? "bg-red-100 text-red-700" : "bg-orange-100 text-orange-700" %>
         <% severity_hover = is_critical ? "group-hover:text-red-700" : "group-hover:text-orange-700" %>
         <%= link_to audit_case_path(ac.slug), class: "group flex flex-col gap-3 p-5 rounded-2xl border #{severity_bg} hover:shadow-md transition-all" do %>
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-2 flex-wrap">
             <span class="text-xs font-bold px-2 py-0.5 rounded-full <%= severity_badge %>"><%= ac.severity %></span>
             <span class="text-xs text-slate-500"><%= ac.category %></span>
+            <% if ac.repeated_issue? %>
+              <span class="inline-flex items-center gap-0.5 text-xs font-bold px-1.5 py-0.5 rounded-full bg-red-600 text-white">
+                <span class="material-symbols-outlined text-[10px] leading-none">loop</span>반복
+              </span>
+            <% end %>
           </div>
           <h3 class="font-bold text-lg text-slate-900 <%= severity_hover %> transition-colors leading-snug line-clamp-2"><%= ac.title %></h3>
           <p class="text-xs text-slate-500 line-clamp-2 flex-1"><%= ac.issue.truncate(80) %></p>

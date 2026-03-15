@@ -183,6 +183,7 @@ class TopicsController < ApplicationController
 
     if @key == "contract"
       @contract_subgroups = build_contract_subgroups(@topics)
+      @current_subgroup = params[:subgroup].presence
     end
 
     @fragment_version = Rails.cache.read("topics/fragment_version") || 0
