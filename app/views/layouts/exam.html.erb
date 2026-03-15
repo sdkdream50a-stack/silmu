@@ -246,7 +246,10 @@
                 </div>
               </div>
             <% else %>
-              <!-- 미로그인 상태: 로그인 버튼 -->
+              <!-- 미로그인 상태: 회원가입 + 로그인 버튼 -->
+              <a href="<%= new_user_registration_path %>" class="hidden md:flex items-center gap-1 bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold text-sm px-3 py-2 rounded-lg transition-colors border border-blue-200">
+                무료 가입
+              </a>
               <a href="<%= new_user_session_path %>" class="hidden md:flex items-center gap-1 text-slate-600 hover:text-blue-700 font-medium text-sm px-3 py-2 rounded-lg hover:bg-slate-50 transition-colors border border-slate-200">
                 <span class="material-symbols-outlined text-base">person</span>
                 로그인
@@ -278,6 +281,53 @@
           <p class="text-red-800 font-medium"><%= alert %></p>
         </div>
       </div>
+    <% end %>
+
+    <!-- 미로그인 유도 배너 -->
+    <% unless user_signed_in? %>
+      <div id="exam-login-banner" class="bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-200 px-4 py-3">
+        <div class="max-w-5xl mx-auto flex items-center justify-between gap-3">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <span class="material-symbols-outlined text-blue-600 text-xl flex-shrink-0">sync</span>
+            <span class="text-sm text-slate-700 min-w-0">
+              <strong class="text-blue-700">로그인</strong>하면 학습 진도·오답노트·북마크가 서버에 저장되어 어디서든 이어 공부할 수 있어요.
+            </span>
+          </div>
+          <div class="flex items-center gap-2 flex-shrink-0">
+            <a href="<%= new_user_session_path %>" class="text-xs font-bold bg-blue-600 text-white px-3 py-1.5 rounded-lg hover:bg-blue-700 transition-colors whitespace-nowrap">
+              로그인
+            </a>
+            <a href="<%= new_user_registration_path %>" class="text-xs font-semibold text-blue-700 border border-blue-300 bg-white px-3 py-1.5 rounded-lg hover:bg-blue-50 transition-colors whitespace-nowrap hidden sm:block">
+              무료 가입
+            </a>
+            <button type="button" onclick="dismissExamLoginBanner()" aria-label="닫기"
+                    class="text-slate-400 hover:text-slate-600 transition-colors p-1 rounded flex-shrink-0">
+              <span class="material-symbols-outlined text-base">close</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <script>
+        (function() {
+          if (localStorage.getItem('exam_login_banner_v1') === 'dismissed') {
+            var el = document.getElementById('exam-login-banner');
+            if (el) el.style.display = 'none';
+          }
+          window.dismissExamLoginBanner = function() {
+            localStorage.setItem('exam_login_banner_v1', 'dismissed');
+            var el = document.getElementById('exam-login-banner');
+            if (el) {
+              el.style.height = el.offsetHeight + 'px';
+              el.style.overflow = 'hidden';
+              el.style.transition = 'height 0.2s';
+              requestAnimationFrame(function() {
+                el.style.height = '0';
+                setTimeout(function() { el.style.display = 'none'; }, 200);
+              });
+            }
+          };
+        })();
+      </script>
     <% end %>
 
     <!-- Main Content -->

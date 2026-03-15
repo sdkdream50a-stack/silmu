@@ -29,20 +29,15 @@ module Exam
         return render json: { error: "댓글은 5자 이상 입력해주세요." }, status: :unprocessable_entity
       end
 
-      # AI 자동 모더레이션
       question_text = params[:question_text].to_s
-      moderation = ExamQuestionComment.moderate_with_ai(body, question_text)
-      unless moderation["approved"]
-        reason = moderation["reason"].presence || "커뮤니티 가이드라인에 맞지 않는 댓글입니다."
-        return render json: { error: "댓글이 게시되지 않았습니다: #{reason}" }, status: :unprocessable_entity
-      end
-
       comment = ExamQuestionComment.create!(
         question_id: params[:question_id].to_i,
         user: current_user,
         body: body,
         author_name: params[:author_name].to_s.strip.first(20).presence
       )
+      # AI 모더레이션 비동기 처리 (응답 지연 없음)
+      ExamCommentModerationJob.perform_later(comment.id, question_text)
       render json: {
         id: comment.id,
         body: comment.body,
