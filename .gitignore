@@ -43,3 +43,7 @@
 
 /node_modules
 .kamal/secrets
+.DS_Store
+blog_topics.csv
+generate_taxonomy.py
+upload_to_sheets.py
