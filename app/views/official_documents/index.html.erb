@@ -88,12 +88,14 @@
 <!-- 도구 설명 섹션 -->
 <section class="py-8 bg-gradient-to-b from-indigo-50 to-white">
   <div class="container-wide max-w-4xl">
-    <div class="bg-white rounded-2xl shadow-sm border border-indigo-100 p-8">
-      <h2 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
-        <span class="material-symbols-outlined text-indigo-600">info</span>
-        이 도구를 사용하는 이유
-      </h2>
-      <div class="text-slate-700 leading-relaxed space-y-4 mb-6">
+    <details class="bg-white rounded-2xl shadow-sm border border-indigo-100">
+      <summary class="px-8 py-4 cursor-pointer hover:bg-slate-50 transition-colors flex items-center gap-2 [list-style:none] [&::-webkit-details-marker]:hidden">
+        <span class="material-symbols-outlined text-indigo-600 text-[20px]">info</span>
+        <span class="text-sm font-semibold text-slate-700">이 도구를 사용하는 이유</span>
+        <span class="ml-auto text-xs text-slate-400">펼치기 ▾</span>
+      </summary>
+      <div class="px-8 pb-8">
+        <div class="text-slate-700 leading-relaxed space-y-4 mb-6">
         <p>
           공무원이 업무 중 가장 많이 작성하는 문서는 기안문, 협조문, 보고문, 회신문 등 공문서이지만,
           문서 작성에 익숙하지 않은 경우 적절한 표현을 찾거나 형식을 맞추는 데 시간이 오래 걸립니다.
@@ -143,7 +145,8 @@
           본 도구는 회원 전용 기능입니다.
         </p>
       </div>
-    </div>
+      </div>
+    </details>
   </div>
 </section>
 

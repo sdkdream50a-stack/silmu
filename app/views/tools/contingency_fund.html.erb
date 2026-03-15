@@ -22,12 +22,13 @@
         </div>
       </div>
 
-      <div class="bg-white rounded-2xl shadow-sm border border-indigo-100 p-6 mt-6">
-        <h2 class="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
-          <span class="material-symbols-outlined text-indigo-600">info</span>
-          이 도구를 사용하는 이유
-        </h2>
-        <div class="prose prose-slate prose-sm max-w-none">
+      <details class="bg-white rounded-2xl shadow-sm border border-indigo-100 mt-6">
+        <summary class="px-6 py-4 cursor-pointer hover:bg-slate-50 transition-colors flex items-center gap-2 [list-style:none] [&::-webkit-details-marker]:hidden">
+          <span class="material-symbols-outlined text-indigo-600 text-[20px]">info</span>
+          <span class="text-sm font-semibold text-slate-700">이 도구를 사용하는 이유</span>
+          <span class="ml-auto text-xs text-slate-400">펼치기 ▾</span>
+        </summary>
+        <div class="px-6 pb-6 prose prose-slate prose-sm max-w-none">
           <p class="text-slate-700 leading-relaxed mb-3">
             예비비는 예측하기 어려운 지출에 대비하여 편성하는 예산으로, <strong>지방재정법 제43조</strong>에 따라 일반예비비는 일반회계 예산 총액의
             <strong>1% 이내</strong>로 편성하도록 규정되어 있습니다. 목적예비비(재난·재해 대응 등)는 별도 편성 가능합니다.
@@ -42,7 +43,7 @@
             </p>
           </div>
         </div>
-      </div>
+      </details>
     </div>
 
     <div class="lg:flex lg:gap-8">

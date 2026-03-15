@@ -130,12 +130,14 @@
 <!-- 도구 설명 섹션 -->
 <section class="py-8 bg-gradient-to-b from-purple-50 to-white">
   <div class="container-wide max-w-4xl">
-    <div class="bg-white rounded-2xl shadow-sm border border-purple-100 p-8">
-      <h2 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
-        <span class="material-symbols-outlined text-purple-600">info</span>
-        이 도구를 사용하는 이유
-      </h2>
-      <div class="text-slate-700 leading-relaxed space-y-4 mb-6">
+    <details class="bg-white rounded-2xl shadow-sm border border-purple-100">
+      <summary class="px-8 py-4 cursor-pointer hover:bg-slate-50 transition-colors flex items-center gap-2 [list-style:none] [&::-webkit-details-marker]:hidden">
+        <span class="material-symbols-outlined text-purple-600 text-[20px]">info</span>
+        <span class="text-sm font-semibold text-slate-700">이 도구를 사용하는 이유</span>
+        <span class="ml-auto text-xs text-slate-400">펼치기 ▾</span>
+      </summary>
+      <div class="px-8 pb-8">
+        <div class="text-slate-700 leading-relaxed space-y-4 mb-6">
         <p>
           용역계약에서 원가계산서는 예정가격 결정의 핵심 근거자료이며, 지방계약법 시행령 제11조 및 예정가격작성기준에 따라
           직접비(직접인건비, 직접경비), 간접비(제경비), 기술료 등 항목별 산출 근거를 명확히 검토해야 합니다.
@@ -185,7 +187,8 @@
           지방계약법 시행령 제11조 및 예정가격작성기준에 따른 원가계산서 작성 요건은 담당 기관 또는 전문가 상담을 통해 확인하시기 바랍니다.
         </p>
       </div>
-    </div>
+      </div>
+    </details>
   </div>
 </section>
 

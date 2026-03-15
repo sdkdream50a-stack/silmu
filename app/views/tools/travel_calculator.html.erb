@@ -23,12 +23,13 @@
       </div>
 
       <!-- 도구 설명 -->
-      <div class="bg-white rounded-2xl shadow-sm border border-indigo-100 p-6 mt-6">
-        <h2 class="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
-          <span class="material-symbols-outlined text-indigo-600">info</span>
-          이 도구를 사용하는 이유
-        </h2>
-        <div class="prose prose-slate prose-sm max-w-none">
+      <details class="bg-white rounded-2xl shadow-sm border border-indigo-100 mt-6">
+        <summary class="px-6 py-4 cursor-pointer hover:bg-slate-50 transition-colors flex items-center gap-2 [list-style:none] [&::-webkit-details-marker]:hidden">
+          <span class="material-symbols-outlined text-indigo-600 text-[20px]">info</span>
+          <span class="text-sm font-semibold text-slate-700">이 도구를 사용하는 이유</span>
+          <span class="ml-auto text-xs text-slate-400">펼치기 ▾</span>
+        </summary>
+        <div class="px-6 pb-6 prose prose-slate prose-sm max-w-none">
           <p class="text-slate-700 leading-relaxed mb-3">
             공무원 출장 시 여비는 공무원여비규정에 따라 운임·숙박비·식비·일비를 합산하여 지급됩니다. 하지만 출발지와 목적지에 따라 교통수단별 운임이 다르고, 지역에 따라 숙박비 기준액도 달라지므로 매번 수기로 계산하면 시간이 오래 걸리고 실수하기 쉽습니다. 이 도구는 <strong>출장 정보만 입력하면 공무원여비규정에 따라 여비를 자동 계산</strong>하여, 출장 품의 작성이나 여비 청구 시 바로 활용할 수 있습니다.
           </p>
@@ -51,7 +52,7 @@
             </p>
           </div>
         </div>
-      </div>
+      </details>
     </div>
 
     <div class="lg:flex lg:gap-8">

@@ -588,12 +588,14 @@
 <!-- 도구 설명 섹션 -->
 <section class="py-8 bg-gradient-to-b from-slate-50 to-white">
   <div class="container-wide max-w-4xl">
-    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-8">
-      <h2 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
-        <span class="material-symbols-outlined text-slate-600">info</span>
-        이 도구를 사용하는 이유
-      </h2>
-      <div class="text-slate-700 leading-relaxed space-y-4 mb-6">
+    <details class="bg-white rounded-2xl shadow-sm border border-slate-100">
+      <summary class="px-8 py-4 cursor-pointer hover:bg-slate-50 transition-colors flex items-center gap-2 [list-style:none] [&::-webkit-details-marker]:hidden">
+        <span class="material-symbols-outlined text-slate-600 text-[20px]">info</span>
+        <span class="text-sm font-semibold text-slate-700">이 도구를 사용하는 이유</span>
+        <span class="ml-auto text-xs text-slate-400">펼치기 ▾</span>
+      </summary>
+      <div class="px-8 pb-8">
+        <div class="text-slate-700 leading-relaxed space-y-4 mb-6">
         <p>
           계약 유형(물품, 용역, 공사)별로 준비해야 할 계약서류는 지방계약법 시행규칙 및 입찰 및 계약집행기준에 규정되어 있지만,
           실무에서는 필요한 서류를 정확히 파악하지 못해 계약 체결이 지연되거나 감사 지적을 받는 경우가 많습니다.
@@ -643,7 +645,8 @@
           지방계약법 시행규칙 및 입찰 및 계약집행기준에 따른 서류 제출 요건은 담당 기관 또는 조달청 유권해석을 참고하여 최종 확인하시기 바랍니다.
         </p>
       </div>
-    </div>
+      </div>
+    </details>
   </div>
 </section>
 

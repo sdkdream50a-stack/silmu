@@ -62,12 +62,14 @@
 <!-- 도구 설명 섹션 -->
 <section class="py-8 bg-gradient-to-b from-indigo-50 to-white">
   <div class="container-wide max-w-4xl">
-    <div class="bg-white rounded-2xl shadow-sm border border-indigo-100 p-8">
-      <h2 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
-        <span class="material-symbols-outlined text-indigo-600">info</span>
-        이 도구를 사용하는 이유
-      </h2>
-      <div class="text-slate-700 leading-relaxed space-y-4 mb-6">
+    <details class="bg-white rounded-2xl shadow-sm border border-indigo-100">
+      <summary class="px-8 py-4 cursor-pointer hover:bg-slate-50 transition-colors flex items-center gap-2 [list-style:none] [&::-webkit-details-marker]:hidden">
+        <span class="material-symbols-outlined text-indigo-600 text-[20px]">info</span>
+        <span class="text-sm font-semibold text-slate-700">이 도구를 사용하는 이유</span>
+        <span class="ml-auto text-xs text-slate-400">펼치기 ▾</span>
+      </summary>
+      <div class="px-8 pb-8">
+        <div class="text-slate-700 leading-relaxed space-y-4 mb-6">
         <p>
           예산 집행 전 사업계획서 작성은 필수이지만, 매번 양식을 찾아 작성하는 것은 시간이 많이 걸립니다.
           특히 사업 필요성, 현황 분석, 예산 산출 근거 등을 체계적으로 정리하지 않으면 결재 과정에서 반려되거나
@@ -116,7 +118,8 @@
           예산 과목 및 회계연도 적정성은 예산 담당 부서와 협의하여 최종 확인하시기 바랍니다.
         </p>
       </div>
-    </div>
+      </div>
+    </details>
   </div>
 </section>
 

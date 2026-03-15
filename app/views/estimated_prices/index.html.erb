@@ -107,12 +107,14 @@
 <!-- 도구 설명 섹션 -->
 <section class="py-8 bg-gradient-to-b from-emerald-50 to-white">
   <div class="container-wide max-w-4xl">
-    <div class="bg-white rounded-2xl shadow-sm border border-emerald-100 p-8">
-      <h2 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
-        <span class="material-symbols-outlined text-emerald-600">info</span>
-        이 도구를 사용하는 이유
-      </h2>
-      <div class="text-slate-700 leading-relaxed space-y-4 mb-6">
+    <details class="bg-white rounded-2xl shadow-sm border border-emerald-100">
+      <summary class="px-8 py-4 cursor-pointer hover:bg-slate-50 transition-colors flex items-center gap-2 [list-style:none] [&::-webkit-details-marker]:hidden">
+        <span class="material-symbols-outlined text-emerald-600 text-[20px]">info</span>
+        <span class="text-sm font-semibold text-slate-700">이 도구를 사용하는 이유</span>
+        <span class="ml-auto text-xs text-slate-400">펼치기 ▾</span>
+      </summary>
+      <div class="px-8 pb-8">
+        <div class="text-slate-700 leading-relaxed space-y-4 mb-6">
         <p>
           계약 체결 전 추정가격 산정은 지방계약법 시행령 제7조~제9조에 따라 반드시 실시해야 하며,
           추정가격이 부적정하면 예산 낭비나 계약 부적정 지적을 받을 수 있습니다.
@@ -162,7 +164,8 @@
           지방계약법 시행령 제7조~제9조 및 예정가격작성기준에 따른 추정가격 산정 요건은 담당 기관 또는 조달청 유권해석을 참고하여 확인하시기 바랍니다.
         </p>
       </div>
-    </div>
+      </div>
+    </details>
   </div>
 </section>
 

@@ -109,12 +109,14 @@
 <!-- 도구 설명 섹션 -->
 <section class="py-8 bg-gradient-to-b from-indigo-50 to-white">
   <div class="container-wide max-w-4xl">
-    <div class="bg-white rounded-2xl shadow-sm border border-indigo-100 p-8">
-      <h2 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
-        <span class="material-symbols-outlined text-indigo-600">info</span>
-        이 도구를 사용하는 이유
-      </h2>
-      <div class="prose prose-slate max-w-none">
+    <details class="bg-white rounded-2xl shadow-sm border border-indigo-100">
+      <summary class="px-8 py-4 cursor-pointer hover:bg-slate-50 transition-colors flex items-center gap-2 [list-style:none] [&::-webkit-details-marker]:hidden">
+        <span class="material-symbols-outlined text-indigo-600 text-[20px]">info</span>
+        <span class="text-sm font-semibold text-slate-700">이 도구를 사용하는 이유</span>
+        <span class="ml-auto text-xs text-slate-400">펼치기 ▾</span>
+      </summary>
+      <div class="px-8 pb-8">
+        <div class="prose prose-slate max-w-none">
         <p class="text-slate-700 leading-relaxed mb-4">
           공공계약 체결 시 계약자는 계약이행을 보증하기 위해 <strong>계약보증금</strong>을 납부해야 하며, 공사의 경우 하자보수 이행을 보증하기 위해 <strong>하자보수보증금</strong>도 별도로 납부해야 합니다. 또한 계약서 작성 시에는 <strong>인지세</strong>를 첨부해야 하는데, 계약금액에 따라 인지세 금액이 달라집니다. 이러한 보증금과 세금은 계약금액·계약유형·공사 공종에 따라 각각 다른 요율이 적용되므로, 매번 계산하기 번거롭고 실수하기 쉽습니다.
         </p>
@@ -143,7 +145,8 @@
           </ul>
         </div>
       </div>
-    </div>
+      </div>
+    </details>
   </div>
 </section>
 

@@ -120,12 +120,14 @@
 <!-- 도구 설명 섹션 -->
 <section class="py-8 bg-gradient-to-b from-indigo-50 to-white">
   <div class="container-wide max-w-5xl">
-    <div class="bg-white rounded-2xl shadow-sm border border-indigo-100 p-8">
-      <h2 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
-        <span class="material-symbols-outlined text-indigo-600">info</span>
-        이 도구를 사용하는 이유
-      </h2>
-      <div class="text-slate-700 leading-relaxed space-y-4 mb-6">
+    <details class="bg-white rounded-2xl shadow-sm border border-indigo-100">
+      <summary class="px-8 py-4 cursor-pointer hover:bg-slate-50 transition-colors flex items-center gap-2 [list-style:none] [&::-webkit-details-marker]:hidden">
+        <span class="material-symbols-outlined text-indigo-600 text-[20px]">info</span>
+        <span class="text-sm font-semibold text-slate-700">이 도구를 사용하는 이유</span>
+        <span class="ml-auto text-xs text-slate-400">펼치기 ▾</span>
+      </summary>
+      <div class="px-8 pb-8">
+        <div class="text-slate-700 leading-relaxed space-y-4 mb-6">
         <p>
           수의계약 체결 시 수의계약 사유서, 추정가격 조서, 계약서, 세금계산서 등 여러 문서를 작성해야 하는데,
           매번 견적서 내용을 복사하여 각 문서에 입력하는 것은 번거롭고 오타가 발생하기 쉽습니다.
@@ -176,7 +178,8 @@
           수의계약 요건 충족 여부 및 법령 준수는 담당자가 최종 확인하시기 바랍니다.
         </p>
       </div>
-    </div>
+      </div>
+    </details>
   </div>
 </section>
 

@@ -652,12 +652,14 @@
 <!-- 도구 설명 섹션 -->
 <section class="py-8 bg-gradient-to-b from-emerald-50 to-white">
   <div class="container-wide max-w-4xl">
-    <div class="bg-white rounded-2xl shadow-sm border border-emerald-100 p-8">
-      <h2 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
-        <span class="material-symbols-outlined text-emerald-600">info</span>
-        이 도구를 사용하는 이유
-      </h2>
-      <div class="prose prose-slate max-w-none">
+    <details class="bg-white rounded-2xl shadow-sm border border-emerald-100">
+      <summary class="px-8 py-4 cursor-pointer hover:bg-slate-50 transition-colors flex items-center gap-2 [list-style:none] [&::-webkit-details-marker]:hidden">
+        <span class="material-symbols-outlined text-emerald-600 text-[20px]">info</span>
+        <span class="text-sm font-semibold text-slate-700">이 도구를 사용하는 이유</span>
+        <span class="ml-auto text-xs text-slate-400">펼치기 ▾</span>
+      </summary>
+      <div class="px-8 pb-8">
+        <div class="prose prose-slate max-w-none">
         <p class="text-slate-700 leading-relaxed mb-4">
           공공계약에서 가장 먼저 결정해야 할 사항은 "어떤 계약방식을 적용할 것인가"입니다. 지방계약법령은 추정가격과 계약유형(물품·용역·공사)에 따라 입찰, 수의계약(2인 이상 견적), 소액수의계약(1인 견적) 등으로 계약방식을 구분하고 있습니다. 잘못된 계약방식을 선택하면 감사 지적이나 계약 무효 사유가 될 수 있으므로, 계약 착수 전 반드시 적법한 계약방식을 확인해야 합니다.
         </p>
@@ -686,7 +688,8 @@
           </ul>
         </div>
       </div>
-    </div>
+      </div>
+    </details>
   </div>
 </section>
 
