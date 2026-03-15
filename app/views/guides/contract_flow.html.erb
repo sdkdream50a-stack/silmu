@@ -991,4 +991,9 @@
       c.innerHTML = '';
     });
   }
+
+  // Turbo 캐시 저장 전 선택 상태 초기화 — 뒤로가기 시 깨진 UI 방지
+  document.addEventListener('turbo:before-cache', function() {
+    closeStepDetail();
+  });
 </script>
