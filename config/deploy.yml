@@ -23,12 +23,12 @@ servers:
 proxy:
   ssl: true
   host: silmu.kr,exam.silmu.kr
+  healthcheck:
+    path: /up
+    interval: 3
+    timeout: 60
 
-healthcheck:
-  path: /up
-  port: 3000
-  max_attempts: 12
-  interval: 5
+deploy_timeout: 60
 
 # Where you keep your container images.
 registry:
