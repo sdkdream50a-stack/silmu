@@ -439,6 +439,288 @@
   </div>
 </section>
 
+<!-- 조달 수명주기 시각화 -->
+<section class="py-10 px-4 bg-white border-t border-slate-100">
+  <div class="max-w-5xl mx-auto">
+    <h2 class="text-xl font-bold text-slate-800 mb-2 flex items-center gap-2">
+      <span class="material-symbols-outlined text-teal-500">cycle</span>
+      조달 수명주기(Life Cycle) — 흐름으로 이해하기
+    </h2>
+    <p class="text-slate-500 text-sm mb-6">각 단계를 따로 외우지 말고 <strong>하나의 흐름</strong>으로 이해하세요. 과목 간 유기적 연결이 보입니다.</p>
+
+    <!-- 6단계 플로우 -->
+    <div class="grid grid-cols-2 md:grid-cols-6 gap-3 mb-6">
+      <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-center">
+        <div class="w-10 h-10 bg-emerald-600 rounded-full flex items-center justify-center mx-auto mb-2">
+          <span class="text-white font-bold text-sm">1</span>
+        </div>
+        <div class="font-bold text-slate-800 text-sm">조달 계획</div>
+        <div class="text-emerald-600 text-xs mt-1">수요 분석<br>예산 편성</div>
+        <div class="text-slate-400 text-xs mt-2">← 2권 중심</div>
+      </div>
+      <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 text-center">
+        <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-2">
+          <span class="text-white font-bold text-sm">2</span>
+        </div>
+        <div class="font-bold text-slate-800 text-sm">시장 조사</div>
+        <div class="text-blue-600 text-xs mt-1">공급자 분석<br>예정가격 산정</div>
+        <div class="text-slate-400 text-xs mt-2">← 2권 중심</div>
+      </div>
+      <div class="bg-indigo-50 border border-indigo-200 rounded-xl p-4 text-center">
+        <div class="w-10 h-10 bg-indigo-600 rounded-full flex items-center justify-center mx-auto mb-2">
+          <span class="text-white font-bold text-sm">3</span>
+        </div>
+        <div class="font-bold text-slate-800 text-sm">입찰</div>
+        <div class="text-indigo-600 text-xs mt-1">공고·참가자격<br>입찰 절차</div>
+        <div class="text-slate-400 text-xs mt-2">← 1·3권</div>
+      </div>
+      <div class="bg-violet-50 border border-violet-200 rounded-xl p-4 text-center">
+        <div class="w-10 h-10 bg-violet-600 rounded-full flex items-center justify-center mx-auto mb-2">
+          <span class="text-white font-bold text-sm">4</span>
+        </div>
+        <div class="font-bold text-slate-800 text-sm">낙찰·계약</div>
+        <div class="text-violet-600 text-xs mt-1">낙찰하한율<br>계약 체결</div>
+        <div class="text-slate-400 text-xs mt-2">← 3권 중심</div>
+      </div>
+      <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-center">
+        <div class="w-10 h-10 bg-amber-600 rounded-full flex items-center justify-center mx-auto mb-2">
+          <span class="text-white font-bold text-sm">5</span>
+        </div>
+        <div class="font-bold text-slate-800 text-sm">계약 관리</div>
+        <div class="text-amber-600 text-xs mt-1">이행·보증금<br>설계변경</div>
+        <div class="text-slate-400 text-xs mt-2">← 3·4권</div>
+      </div>
+      <div class="bg-rose-50 border border-rose-200 rounded-xl p-4 text-center">
+        <div class="w-10 h-10 bg-rose-600 rounded-full flex items-center justify-center mx-auto mb-2">
+          <span class="text-white font-bold text-sm">6</span>
+        </div>
+        <div class="font-bold text-slate-800 text-sm">완료·종결</div>
+        <div class="text-rose-600 text-xs mt-1">검수·대금지급<br>하자 관리</div>
+        <div class="text-slate-400 text-xs mt-2">← 3·4권</div>
+      </div>
+    </div>
+
+    <!-- 계약 생애주기 (실기 핵심) -->
+    <div class="bg-slate-800 rounded-2xl p-5 text-white">
+      <div class="flex items-center gap-2 mb-4">
+        <span class="material-symbols-outlined text-yellow-300">star</span>
+        <span class="font-bold">실기 핵심: 계약 생애주기</span>
+        <span class="bg-rose-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">실기 출제 비중 높음</span>
+      </div>
+      <div class="flex flex-col sm:flex-row items-center gap-2">
+        <div class="flex-1 bg-white/10 rounded-lg px-4 py-3 text-center w-full">
+          <div class="text-yellow-300 font-bold text-sm">성립</div>
+          <div class="text-slate-300 text-xs mt-1">계약 체결<br>보증금 납부</div>
+        </div>
+        <span class="material-symbols-outlined text-slate-400 rotate-90 sm:rotate-0">arrow_forward</span>
+        <div class="flex-1 bg-white/10 rounded-lg px-4 py-3 text-center w-full">
+          <div class="text-yellow-300 font-bold text-sm">진행</div>
+          <div class="text-slate-300 text-xs mt-1">이행 관리<br>기성·선금</div>
+        </div>
+        <span class="material-symbols-outlined text-slate-400 rotate-90 sm:rotate-0">arrow_forward</span>
+        <div class="flex-1 bg-white/10 rounded-lg px-4 py-3 text-center w-full">
+          <div class="text-yellow-300 font-bold text-sm">변수 관리</div>
+          <div class="text-slate-300 text-xs mt-1">설계변경<br>물가변동·지체</div>
+        </div>
+        <span class="material-symbols-outlined text-slate-400 rotate-90 sm:rotate-0">arrow_forward</span>
+        <div class="flex-1 bg-white/10 rounded-lg px-4 py-3 text-center w-full">
+          <div class="text-yellow-300 font-bold text-sm">종결</div>
+          <div class="text-slate-300 text-xs mt-1">검사·준공<br>대금지급·하자</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 출제기준 핵심 전략 -->
+<section class="py-10 px-4 bg-slate-50 border-t border-slate-100">
+  <div class="max-w-5xl mx-auto">
+    <h2 class="text-xl font-bold text-slate-800 mb-2 flex items-center gap-2">
+      <span class="material-symbols-outlined text-orange-500">tips_and_updates</span>
+      출제기준 중심 학습 전략
+    </h2>
+    <p class="text-slate-500 text-sm mb-6">표준교재(권당 400쪽)와 출제기준이 불일치합니다. <strong>출제기준에 없는 내용은 과감히 버리세요.</strong></p>
+
+    <!-- 핵심 경고 카드 -->
+    <div class="bg-orange-50 border border-orange-200 rounded-2xl p-5 mb-6 flex items-start gap-4">
+      <div class="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center flex-shrink-0">
+        <span class="material-symbols-outlined text-orange-600 text-xl">warning</span>
+      </div>
+      <div>
+        <h3 class="font-bold text-slate-900 mb-1">표준교재 ≠ 출제기준</h3>
+        <p class="text-slate-600 text-sm">표준교재 1,000페이지 전체를 공부할 필요가 없습니다. 출제기준표에 명시된 내용만 학습하면 합격 가능합니다. 1회차 시험이므로 법령 조문 중심 출제가 확실합니다.</p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+      <!-- 예시 출제 문제 -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-5">
+        <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined text-blue-500 text-lg">quiz</span>
+          실제 출제 예시 유형
+        </h3>
+        <div class="space-y-3">
+          <div class="bg-blue-50 border border-blue-100 rounded-xl p-4">
+            <div class="text-xs font-semibold text-blue-600 mb-1">예시 문제 1 — 국가계약법 시행령 제36조</div>
+            <p class="text-sm text-slate-700">"국가계약법 시행령상 입찰공고에 반드시 명시해야 하는 사항이 <strong>아닌</strong> 것은?"</p>
+            <p class="text-slate-400 text-xs mt-2">→ 법령 조문을 그대로 묻는 유형. 조문 암기 필수.</p>
+          </div>
+          <div class="bg-violet-50 border border-violet-100 rounded-xl p-4">
+            <div class="text-xs font-semibold text-violet-600 mb-1">예시 문제 2 — 협상에 의한 계약 체결 기준 제15조</div>
+            <p class="text-sm text-slate-700">"협상 성립 후 담당 공무원은 며칠 이내에 계약을 체결해야 하는가?"</p>
+            <p class="text-slate-400 text-xs mt-2">→ 기간·숫자를 직접 묻는 유형. 조문 숫자 암기 핵심.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 버릴 것 vs 집중할 것 -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-5">
+        <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined text-emerald-500 text-lg">filter_alt</span>
+          선택과 집중 전략
+        </h3>
+        <div class="space-y-3">
+          <div>
+            <div class="flex items-center gap-2 mb-2">
+              <span class="w-5 h-5 bg-red-100 rounded flex items-center justify-center">
+                <span class="material-symbols-outlined text-red-500 text-sm">close</span>
+              </span>
+              <span class="font-semibold text-slate-700 text-sm">버릴 것</span>
+            </div>
+            <ul class="space-y-1 pl-7 text-sm text-slate-500">
+              <li>출제기준표에 없는 표준교재 내용</li>
+              <li>실무에서만 쓰이는 세부 하위 규정</li>
+              <li>예정가격 계산식 (복잡한 공식 연산)</li>
+            </ul>
+          </div>
+          <div class="border-t border-slate-100 pt-3">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="w-5 h-5 bg-emerald-100 rounded flex items-center justify-center">
+                <span class="material-symbols-outlined text-emerald-500 text-sm">check</span>
+              </span>
+              <span class="font-semibold text-slate-700 text-sm">집중할 것</span>
+            </div>
+            <ul class="space-y-1 pl-7 text-sm text-slate-600">
+              <li>국가계약법·지방계약법 주요 조문 숫자</li>
+              <li>조달청 공시 핵심 용어 정의</li>
+              <li>각 법령별 적용 범위·기준 금액</li>
+              <li>입찰→낙찰→계약→이행 전체 흐름</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- 실기 시험 완벽 전략 -->
+<section class="py-10 px-4 bg-white border-t border-slate-100">
+  <div class="max-w-5xl mx-auto">
+    <h2 class="text-xl font-bold text-slate-800 mb-2 flex items-center gap-2">
+      <span class="material-symbols-outlined text-rose-500">edit_note</span>
+      실기 시험 완벽 전략 <span class="bg-rose-100 text-rose-700 text-sm font-semibold px-2 py-0.5 rounded-full ml-1">PBT 필답형</span>
+    </h2>
+    <p class="text-slate-500 text-sm mb-6">실기는 필기와 전혀 다른 전략이 필요합니다. <strong>20문항 × 7분 30초</strong> 안에 손으로 직접 작성합니다.</p>
+
+    <!-- 시간 배분 핵심 카드 -->
+    <div class="bg-rose-50 border border-rose-200 rounded-2xl p-6 mb-6">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+        <div>
+          <div class="text-4xl font-extrabold text-rose-600">20</div>
+          <div class="text-slate-600 text-sm mt-1">문항 수</div>
+        </div>
+        <div>
+          <div class="text-4xl font-extrabold text-rose-600">7분30초</div>
+          <div class="text-slate-600 text-sm mt-1">문항당 배정 시간</div>
+        </div>
+        <div>
+          <div class="text-4xl font-extrabold text-rose-600">약 7줄</div>
+          <div class="text-slate-600 text-sm mt-1">문항당 작성 분량</div>
+        </div>
+      </div>
+      <div class="mt-4 pt-4 border-t border-rose-200 text-center">
+        <p class="text-rose-800 text-sm"><strong>계산:</strong> 150분 ÷ 20문항 = 7분 30초 / 손글씨 속도 기준 1분당 약 1줄 → 문항당 최대 7줄</p>
+      </div>
+    </div>
+
+    <!-- 3가지 핵심 전략 -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+
+      <div class="bg-white border border-slate-200 rounded-2xl p-5">
+        <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center mb-3">
+          <span class="material-symbols-outlined text-blue-600 text-xl">key</span>
+        </div>
+        <h3 class="font-bold text-slate-800 mb-2">전략 1: 키워드 중심 작성</h3>
+        <p class="text-slate-500 text-sm mb-3">긴 문장보다 법령 핵심 용어를 정확하게 쓰는 게 유리합니다. 채점관은 키워드 존재 여부로 점수를 부여합니다.</p>
+        <div class="bg-blue-50 rounded-lg px-3 py-2 text-xs text-blue-800">
+          예: "중소기업기본법에 따른 중소기업" → <strong>"중소기업"</strong>만 써도 키워드 인정
+        </div>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-2xl p-5">
+        <div class="w-10 h-10 bg-violet-100 rounded-xl flex items-center justify-center mb-3">
+          <span class="material-symbols-outlined text-violet-600 text-xl">skip_next</span>
+        </div>
+        <h3 class="font-bold text-slate-800 mb-2">전략 2: 빈 줄 전략</h3>
+        <p class="text-slate-500 text-sm mb-3">모르는 문항은 10줄 공백을 남기고 다음 문항으로 넘어가세요. 나중에 떠오르면 채워 넣을 수 있습니다.</p>
+        <div class="bg-violet-50 rounded-lg px-3 py-2 text-xs text-violet-800">
+          아는 것 먼저 써서 점수 확보 → 남은 시간에 빈칸 보완
+        </div>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-2xl p-5">
+        <div class="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center mb-3">
+          <span class="material-symbols-outlined text-emerald-600 text-xl">psychology</span>
+        </div>
+        <h3 class="font-bold text-slate-800 mb-2">전략 3: 아는 척 작전</h3>
+        <p class="text-slate-500 text-sm mb-3">완전히 모르는 문제도 관련 개념, 법령 이름, 용어 정의를 아는 만큼 쓰세요. 부분 점수를 받을 수 있습니다.</p>
+        <div class="bg-emerald-50 rounded-lg px-3 py-2 text-xs text-emerald-800">
+          "조달사업법에 의거하여..." 로 시작만 해도 최소 1~2점 확보 가능
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 조달청 핵심 용어 200선 -->
+    <div class="bg-slate-800 text-white rounded-2xl p-6">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 bg-yellow-400/20 rounded-xl flex items-center justify-center">
+          <span class="material-symbols-outlined text-yellow-300 text-xl">dictionary</span>
+        </div>
+        <div>
+          <h3 class="font-bold">조달청 공시 핵심 용어 200선 암기</h3>
+          <p class="text-slate-300 text-sm">조달청이 공시한 용어 정의 = 채점 기준. 이 용어를 쓰면 이의 제기도 불가능합니다.</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
+        <div class="bg-white/10 rounded-lg px-3 py-2 text-sm text-center">공공조달</div>
+        <div class="bg-white/10 rounded-lg px-3 py-2 text-sm text-center">예정가격</div>
+        <div class="bg-white/10 rounded-lg px-3 py-2 text-sm text-center">수의계약</div>
+        <div class="bg-white/10 rounded-lg px-3 py-2 text-sm text-center">적격심사</div>
+        <div class="bg-white/10 rounded-lg px-3 py-2 text-sm text-center">계약보증금</div>
+        <div class="bg-white/10 rounded-lg px-3 py-2 text-sm text-center">지체상금</div>
+        <div class="bg-white/10 rounded-lg px-3 py-2 text-sm text-center">다수공급자</div>
+        <div class="bg-white/10 rounded-lg px-3 py-2 text-sm text-center">하자보증금</div>
+      </div>
+      <a href="<%= exam_keywords_path %>" class="inline-flex items-center gap-2 bg-yellow-400 text-slate-900 font-bold px-5 py-2.5 rounded-xl hover:bg-yellow-300 transition-colors text-sm">
+        <span class="material-symbols-outlined text-base">open_in_new</span>
+        전체 핵심 용어집 보기
+      </a>
+    </div>
+
+    <!-- 손목 강화 팁 -->
+    <div class="mt-4 bg-amber-50 border border-amber-200 rounded-xl px-5 py-4 flex items-start gap-3">
+      <span class="material-symbols-outlined text-amber-500 text-lg flex-shrink-0 mt-0.5">fitness_center</span>
+      <p class="text-amber-800 text-sm">
+        <strong>실전 팁:</strong> 150분 동안 손으로 계속 써야 합니다. 사전 연습 없이 시험장에 가면 손목 피로로 집중력이 떨어집니다.
+        시험 2달 전부터 답안지 형식으로 손글씨 쓰기 연습을 꾸준히 하세요.
+      </p>
+    </div>
+  </div>
+</section>
+
 <!-- 합격을 위한 학습 루틴 -->
 <section class="py-10 px-4 bg-white border-t border-slate-100">
   <div class="max-w-5xl mx-auto">
