@@ -207,7 +207,8 @@ class TopicsController < ApplicationController
   end
 
   def show
-    @topic = Topic.find_by!(slug: params[:slug])
+    # parent를 미리 로드하여 @topic.parent 접근 시 추가 쿼리 방지
+    @topic = Topic.includes(:parent).find_by!(slug: params[:slug])
     @topic.increment_view!
     @related_topics = Rails.cache.fetch("topic_related/#{@topic.slug}", expires_in: 1.hour) do
       @topic.related_topics.to_a
@@ -237,8 +238,14 @@ class TopicsController < ApplicationController
     # 플로차트 존재 여부 (P1-1: 플로차트 없으면 기본 탭을 '법령 내용'으로 변경)
     @has_flowchart = FLOWCHART_SLUGS.include?(@topic.slug)
 
-    # 부모 토픽인 경우 키워드별 매칭 토픽을 미리 조회 (N+1 방지)
-    @keyword_topic_map = @topic.parent_id.nil? ? @topic.keyword_topic_map : {}
+    # 부모 토픽인 경우 키워드별 매칭 토픽을 미리 조회 (캐시로 2쿼리 제거)
+    @keyword_topic_map = if @topic.parent_id.nil?
+      Rails.cache.fetch("topic_keyword_map/#{@topic.slug}", expires_in: 1.hour) do
+        @topic.keyword_topic_map
+      end
+    else
+      {}
+    end
 
     # 서브토픽인 경우: 부모와 형제 토픽을 미리 로드 (뷰에서 DB 쿼리 방지)
     if @topic.parent_id.present?
@@ -253,6 +260,9 @@ class TopicsController < ApplicationController
     tool_keys = TOPIC_TOOLS[@topic.slug] || [:contract_method, :contract_documents]
     @related_tools = tool_keys.map { |k| TOOL_DEFINITIONS[k]&.merge(key: k) }.compact
     @page_rendered_at = Time.current
+
+    # HTTP 캐싱: 토픽 상세 페이지 (view_count 업데이트는 DB만 영향, 응답 캐시 가능)
+    expires_in 5.minutes, public: true, stale_while_revalidate: 1.hour
 
     # SEO 메타 태그
     set_meta_tags(

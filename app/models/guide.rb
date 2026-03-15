@@ -43,10 +43,11 @@ class Guide < ApplicationRecord
   private
 
   def expire_cache
-    Rails.cache.delete("guides/all")
+    Rails.cache.delete("guides/all/v2")
     Rails.cache.delete("guides/popular")
     Rails.cache.delete("stats/guide_count")
     Rails.cache.delete("guides/related/#{slug}")
+    Rails.cache.delete("guide_topic/#{slug}")
     # topic_slug 또는 external_link가 topic URL인 경우 해당 topic 캐시 무효화
     t_slug = topic_slug.presence || (external_link&.start_with?("/topics/") ? external_link.delete_prefix("/topics/") : nil)
     Rails.cache.delete("topic_guide/#{t_slug}") if t_slug.present?

@@ -157,6 +157,9 @@ class Topic < ApplicationRecord
     Rails.cache.delete("topics/all_published_v2")
     Rails.cache.delete("topic_related/#{slug}")
     Rails.cache.delete("topic_audit_cases/#{slug}")
+    Rails.cache.delete("topic_keyword_map/#{slug}")
+    # 부모 토픽의 keyword_map도 무효화 (서브토픽 변경 시 부모 키워드 매핑에 영향)
+    Rails.cache.delete("topic_keyword_map/#{parent&.slug}") if parent_id.present?
     # 뷰 fragment cache 무효화: 토픽 내용 변경 시 버전 증가 → 캐시 키가 달라져 자연 무효화
     if saved_change_to_name? || saved_change_to_summary? || saved_change_to_published? || saved_change_to_category? || saved_change_to_sector?
       Rails.cache.increment("topics/fragment_version")

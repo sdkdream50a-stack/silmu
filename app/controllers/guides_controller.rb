@@ -57,11 +57,13 @@ class GuidesController < ApplicationController
     recent = ([  @guide.slug] + recent).uniq.first(5)
     cookies[:recent_guides] = { value: recent.to_json, expires: 30.days, same_site: :lax }
 
-    # topic_slug 필드로 연결된 Topic 우선, 없으면 external_link 기반 폴백
-    @related_topic = if @guide.topic_slug.present?
-      Topic.published.find_by(slug: @guide.topic_slug)
-    elsif @guide.external_link&.start_with?("/topics/")
-      Topic.published.find_by(slug: @guide.external_link.delete_prefix("/topics/"))
+    # topic_slug 필드로 연결된 Topic 우선, 없으면 external_link 기반 폴백 (캐시로 DB 쿼리 제거)
+    @related_topic = Rails.cache.fetch("guide_topic/#{@guide.slug}", expires_in: 1.hour) do
+      if @guide.topic_slug.present?
+        Topic.published.find_by(slug: @guide.topic_slug)
+      elsif @guide.external_link&.start_with?("/topics/")
+        Topic.published.find_by(slug: @guide.external_link.delete_prefix("/topics/"))
+      end
     end
 
     @related_guides = Rails.cache.fetch("guides/related/#{@guide.slug}", expires_in: 1.hour) do
@@ -70,6 +72,9 @@ class GuidesController < ApplicationController
       others   = fill > 0 ? Guide.published.where.not(category: @guide.category).where.not(id: @guide.id).ordered.limit(fill).to_a : []
       same_cat + others
     end
+
+    # HTTP 캐싱: 가이드 상세 (view_count 업데이트는 DB만 영향)
+    expires_in 5.minutes, public: true, stale_while_revalidate: 1.hour
 
     canonical_url = request.original_url.split("?").first
     set_meta_tags(

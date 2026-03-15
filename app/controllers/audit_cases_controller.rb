@@ -64,6 +64,9 @@ class AuditCasesController < ApplicationController
                .to_a
     end
 
+    # HTTP 캐싱: 감사사례 상세 (view_count 업데이트는 DB만 영향)
+    expires_in 5.minutes, public: true, stale_while_revalidate: 1.hour
+
     set_meta_tags(
       title: "#{@audit_case.title} — 실제 감사 지적 사례와 대응 방법",
       description: "#{@audit_case.issue.truncate(150)}",
