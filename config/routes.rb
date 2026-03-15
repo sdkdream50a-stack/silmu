@@ -41,6 +41,7 @@ Rails.application.routes.draw do
             post :report
           end
         end
+        resources :reports, controller: 'question_reports', only: [ :create ]
       end
     end
   end

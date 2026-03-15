@@ -340,6 +340,64 @@ export default class extends Controller {
       </div>
     `
 
+    // #오류신고 버튼 (항상 표시)
+    const reportBtn = `
+      <button data-action="click->exam-quiz#toggleReport"
+              data-question-id="${q.id}"
+              class="mt-2 inline-flex items-center gap-1 text-slate-400 hover:text-orange-500 text-xs transition-colors">
+        <span class="material-symbols-outlined text-sm">flag</span>
+        문제 오류 신고
+      </button>
+      <div class="report-area hidden mt-2 bg-orange-50 border border-orange-200 rounded-xl p-3">
+        <p class="text-xs text-orange-700 font-semibold mb-2">어떤 오류가 있나요?</p>
+        <textarea class="report-body w-full text-sm border border-orange-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-400 resize-none" rows="2" placeholder="오류 내용을 5자 이상 설명해주세요..."></textarea>
+        <div class="flex justify-end gap-2 mt-2">
+          <button class="text-xs text-slate-500 hover:text-slate-700 px-2 py-1" data-action="click->exam-quiz#closeReport">취소</button>
+          <button class="text-xs font-bold bg-orange-500 text-white px-3 py-1 rounded-lg hover:bg-orange-600" data-action="click->exam-quiz#submitReport" data-question-id="${q.id}">제보하기</button>
+        </div>
+      </div>
+    `
+
+    // 과목별 관련 법령 가이드 링크 (silmu.kr 연결)
+    const SUBJECT_TOPICS = {
+      1: [
+        { title: "국가계약법 가이드", url: "https://silmu.kr/topics/national-contract-act" },
+        { title: "공공조달 제도 개요", url: "https://silmu.kr/topics/contract" }
+      ],
+      2: [
+        { title: "예산편성 실무", url: "https://silmu.kr/topics/budget" },
+        { title: "원가계산 기준", url: "https://silmu.kr/topics/expense" }
+      ],
+      3: [
+        { title: "계약체결 실무", url: "https://silmu.kr/topics/contract" },
+        { title: "입찰 및 낙찰 가이드", url: "https://silmu.kr/topics/contract" }
+      ],
+      4: [
+        { title: "대가지급 실무", url: "https://silmu.kr/topics/expense" },
+        { title: "계약이행 관리", url: "https://silmu.kr/topics/contract" }
+      ]
+    }
+
+    const subjectId = q.subject_id || 1
+    const relatedTopics = SUBJECT_TOPICS[subjectId] || SUBJECT_TOPICS[1]
+    const relatedLawHtml = `
+      <div class="mt-3 pt-3 border-t border-slate-100">
+        <p class="text-xs text-slate-400 font-semibold mb-2 flex items-center gap-1">
+          <span class="material-symbols-outlined text-sm">menu_book</span>
+          관련 법령 가이드 (실무.kr)
+        </p>
+        <div class="flex flex-wrap gap-2">
+          ${relatedTopics.map(t => `
+            <a href="${t.url}" target="_blank" rel="noopener"
+               class="inline-flex items-center gap-1 text-xs text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 px-2.5 py-1 rounded-full transition-colors">
+              <span class="material-symbols-outlined text-xs">open_in_new</span>
+              ${t.title}
+            </a>
+          `).join('')}
+        </div>
+      </div>
+    `
+
     this.feedbackAreaTarget.innerHTML = `
       <div class="${isCorrect ? "bg-green-50 border-green-200" : "bg-red-50 border-red-200"} border rounded-xl p-4">
         <div class="flex items-start gap-3">
@@ -350,10 +408,12 @@ export default class extends Controller {
             </p>
             <p class="text-slate-600 text-sm leading-relaxed">${q.explanation}</p>
             ${aiBtn}
+            ${relatedLawHtml}
           </div>
         </div>
       </div>
       ${qaBtn}
+      ${reportBtn}
     `
     this.feedbackAreaTarget.classList.remove("hidden")
 
@@ -507,6 +567,16 @@ export default class extends Controller {
       <!-- 액션 버튼 -->
       <div class="flex flex-col sm:flex-row gap-3 mt-6">
         ${actionButtons}
+      </div>
+
+      <!-- 결과 공유 -->
+      <div class="mt-4 flex justify-center">
+        <button data-action="click->exam-quiz#shareResult"
+                data-pct="${pct}" data-score="${score}" data-total="${total}"
+                class="inline-flex items-center gap-2 text-slate-500 hover:text-slate-700 text-sm border border-slate-200 rounded-lg px-4 py-2 hover:bg-slate-50 transition-colors">
+          <span class="material-symbols-outlined text-base">open_in_new</span>
+          결과 공유하기
+        </button>
       </div>
     `
     this.resultAreaTarget.classList.remove("hidden")
@@ -820,6 +890,70 @@ export default class extends Controller {
       alert('댓글 등록에 실패했습니다.')
     } finally {
       if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = '등록' }
+    }
+  }
+
+  // 오류 신고 토글
+  toggleReport(event) {
+    const btn = event.currentTarget
+    const area = btn.nextElementSibling
+    if (area) area.classList.toggle('hidden')
+  }
+
+  // 오류 신고 닫기
+  closeReport(event) {
+    const area = event.currentTarget.closest('.report-area')
+    if (area) area.classList.add('hidden')
+  }
+
+  // 오류 신고 제출
+  async submitReport(event) {
+    const btn = event.currentTarget
+    const questionId = btn.dataset.questionId
+    const area = btn.closest('.report-area')
+    const body = area?.querySelector('.report-body')?.value?.trim()
+    if (!body || body.length < 5) { alert('5자 이상 입력해주세요.'); return }
+    try {
+      const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content
+      const res = await fetch(`/questions/${questionId}/reports`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrfToken || '' },
+        body: JSON.stringify({ body })
+      })
+      const data = await res.json()
+      if (data.success) {
+        if (area) area.innerHTML = '<p class="text-xs text-orange-700 font-semibold py-1">✓ 제보해 주셔서 감사합니다!</p>'
+      } else {
+        alert(data.error || '제보에 실패했습니다.')
+      }
+    } catch(e) { alert('오류가 발생했습니다.') }
+  }
+
+  // 결과 공유
+  async shareResult(event) {
+    const btn = event.currentTarget
+    const pct = btn.dataset.pct
+    const score = btn.dataset.score
+    const total = btn.dataset.total
+    const text = `공공조달관리사 모의고사에서 ${pct}% 달성했어요! (${score}/${total}문제) 함께 준비해요 🏆`
+    const url = 'https://exam.silmu.kr'
+
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: '공공조달관리사 모의고사 결과', text, url })
+      } catch(e) {}
+    } else {
+      // 클립보드 복사 fallback
+      try {
+        await navigator.clipboard.writeText(`${text}\n${url}`)
+        btn.innerHTML = '<span class="material-symbols-outlined text-base text-green-500">check_circle</span> 복사됨!'
+        setTimeout(() => {
+          btn.innerHTML = '<span class="material-symbols-outlined text-base">open_in_new</span> 결과 공유하기'
+        }, 2000)
+      } catch(e) {
+        // 수동 트위터 공유
+        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text + '\n' + url)}`, '_blank')
+      }
     }
   }
 

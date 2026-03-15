@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_15_142542) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_15_151855) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -101,6 +101,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_15_142542) do
     t.bigint "user_id", null: false
     t.index ["question_id"], name: "index_exam_question_comments_on_question_id"
     t.index ["user_id"], name: "index_exam_question_comments_on_user_id"
+  end
+
+  create_table "exam_question_reports", force: :cascade do |t|
+    t.text "body", null: false
+    t.datetime "created_at", null: false
+    t.integer "question_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id"
   end
 
   create_table "guides", force: :cascade do |t|
