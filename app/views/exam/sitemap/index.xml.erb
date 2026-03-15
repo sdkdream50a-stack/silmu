@@ -108,6 +108,22 @@
     <priority>0.8</priority>
   </url>
 
+  <%# 실기 대비 필답형 예상문제 %>
+  <url>
+    <loc>https://exam.silmu.kr/practical</loc>
+    <lastmod><%= @today %></lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <%# 학습 랭킹 %>
+  <url>
+    <loc>https://exam.silmu.kr/rankings</loc>
+    <lastmod><%= @today %></lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
   <%# 챕터별 문제 풀기 %>
   <% @subjects.each do |subject| %>
   <% subject[:chapters].each do |chapter| %>

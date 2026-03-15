@@ -36,6 +36,8 @@ module Silmu
     config.time_zone = "Seoul"
     # 서브도메인 파싱: "silmu.kr" → tld=1 (exam.silmu.kr 지원)
     config.action_dispatch.tld_length = 1
+    # 세션 쿠키를 .silmu.kr 전체에서 공유 (silmu.kr ↔ exam.silmu.kr 로그인 공유)
+    config.session_store :cookie_store, key: "_silmu_session", domain: ".silmu.kr", same_site: :lax
     # Rate Limiting
     config.middleware.use Rack::Attack
     # config.eager_load_paths << Rails.root.join("extras")
