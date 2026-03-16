@@ -50,10 +50,10 @@
             </div>
             <div class="flex flex-col gap-2 flex-shrink-0">
               <% if c.hidden? %>
-                <%= button_to "복구", restore_comment_admin_exam_dashboard_index_path(id: c.id),
+                <%= button_to "복구", restore_comment_analyics_exam_dashboard_index_path(id: c.id),
                     method: :patch, class: "text-xs bg-green-500 text-white px-3 py-1.5 rounded-lg hover:bg-green-600" %>
               <% end %>
-              <%= button_to "삭제", delete_comment_admin_exam_dashboard_index_path(id: c.id),
+              <%= button_to "삭제", delete_comment_analyics_exam_dashboard_index_path(id: c.id),
                   method: :delete, data: { turbo_confirm: "댓글을 삭제하시겠습니까?" },
                   class: "text-xs bg-red-500 text-white px-3 py-1.5 rounded-lg hover:bg-red-600" %>
             </div>
@@ -89,7 +89,7 @@
               <p class="text-xs text-slate-400 mt-1"><%= r.created_at.strftime("%Y.%m.%d %H:%M") %></p>
             </div>
             <div class="flex-shrink-0">
-              <%= button_to "삭제", delete_report_admin_exam_dashboard_index_path(id: r.id),
+              <%= button_to "삭제", delete_report_analyics_exam_dashboard_index_path(id: r.id),
                   method: :delete, data: { turbo_confirm: "제보를 삭제하시겠습니까?" },
                   class: "text-xs bg-slate-500 text-white px-3 py-1.5 rounded-lg hover:bg-slate-600" %>
             </div>

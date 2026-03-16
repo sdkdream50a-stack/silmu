@@ -12,10 +12,10 @@
 
     <%# 기간 선택 %>
     <div class="flex gap-2">
-      <%= link_to "1일", admin_analytics_path(days: 1), class: "px-4 py-2 rounded-lg transition-colors #{@days == 1 ? 'bg-slate-900 text-white' : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50'}" %>
-      <%= link_to "7일", admin_analytics_path(days: 7), class: "px-4 py-2 rounded-lg transition-colors #{@days == 7 ? 'bg-slate-900 text-white' : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50'}" %>
-      <%= link_to "14일", admin_analytics_path(days: 14), class: "px-4 py-2 rounded-lg transition-colors #{@days == 14 ? 'bg-slate-900 text-white' : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50'}" %>
-      <%= link_to "30일", admin_analytics_path(days: 30), class: "px-4 py-2 rounded-lg transition-colors #{@days == 30 ? 'bg-slate-900 text-white' : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50'}" %>
+      <%= link_to "1일", analyics_analytics_path(days: 1), class: "px-4 py-2 rounded-lg transition-colors #{@days == 1 ? 'bg-slate-900 text-white' : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50'}" %>
+      <%= link_to "7일", analyics_analytics_path(days: 7), class: "px-4 py-2 rounded-lg transition-colors #{@days == 7 ? 'bg-slate-900 text-white' : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50'}" %>
+      <%= link_to "14일", analyics_analytics_path(days: 14), class: "px-4 py-2 rounded-lg transition-colors #{@days == 14 ? 'bg-slate-900 text-white' : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50'}" %>
+      <%= link_to "30일", analyics_analytics_path(days: 30), class: "px-4 py-2 rounded-lg transition-colors #{@days == 30 ? 'bg-slate-900 text-white' : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50'}" %>
     </div>
   </div>
 

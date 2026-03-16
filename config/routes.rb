@@ -251,7 +251,7 @@ Rails.application.routes.draw do
   get "contact", to: "home#contact", as: :contact
 
   # 관리자
-  namespace :admin do
+  namespace :analyics, module: :admin do
     resources :newsletters, only: [:new, :create]
     get "analytics", to: "analytics#index", as: :analytics
     resources :exam_dashboard, only: [:index] do
