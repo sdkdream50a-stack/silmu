@@ -54,7 +54,7 @@ env:
     RAILS_MAX_THREADS: 10
     GA_MEASUREMENT_ID: G-DGH1M308BH
     ADSENSE_CLIENT_ID: ca-pub-6241798439911569
-    ADMIN_EMAIL: hello@silmu.kr
+    ADMIN_EMAIL: sdkdream50a@gmail.com
     DB_HOST: 172.18.0.1
 
     # Set number of processes dedicated to Solid Queue (default: 1)
