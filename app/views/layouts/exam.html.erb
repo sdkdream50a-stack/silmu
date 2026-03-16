@@ -240,7 +240,7 @@
                       <span class="material-symbols-outlined text-blue-500 text-base">sync</span>학습 동기화
                     </a>
                     <hr class="border-slate-100 my-1">
-                    <%= link_to destroy_user_session_path, data: { turbo_method: :delete }, class: "flex items-center gap-2 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 w-full" do %>
+                    <%= button_to destroy_user_session_path, method: :delete, class: "flex items-center gap-2 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 w-full text-left" do %>
                       <span class="material-symbols-outlined text-base">logout</span>로그아웃
                     <% end %>
                   </div>
@@ -454,7 +454,7 @@
           <% if user_signed_in? %>
             <div class="flex items-center justify-between px-3 py-2 bg-slate-50 rounded-xl">
               <span class="text-sm text-slate-600 font-medium truncate"><%= current_user.email.split('@').first %></span>
-              <%= link_to destroy_user_session_path, data: { turbo_method: :delete }, class: "text-xs text-red-500 font-semibold hover:text-red-700 flex-shrink-0" do %>
+              <%= button_to destroy_user_session_path, method: :delete, class: "text-xs text-red-500 font-semibold hover:text-red-700 flex-shrink-0" do %>
                 로그아웃
               <% end %>
             </div>
