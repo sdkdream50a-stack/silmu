@@ -1,4 +1,4 @@
-<%= link_to audit_case_path(slug: audit_case.slug), class: "block card card-hover p-6 group case-item", data: { title: audit_case.title.downcase, issue: audit_case.issue.truncate(100).downcase, severity: audit_case.severity } do %>
+<%= link_to audit_case_path(slug: audit_case.slug), class: "block card card-hover p-6 group case-item", style: "content-visibility:auto; contain-intrinsic-size:auto 180px", data: { title: audit_case.title.downcase, issue: audit_case.issue.truncate(100).downcase, severity: audit_case.severity } do %>
   <div class="flex items-start justify-between mb-3">
     <span class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-semibold bg-red-50 text-red-700"><%= audit_case.category %></span>
     <div class="flex items-center gap-1.5">

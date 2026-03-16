@@ -1,6 +1,10 @@
 <%# 감사사례 상세 페이지 %>
 
 <%= content_for :head do %>
+  <%# 인포그래픽 이미지 preload — LCP 요소 조기 로드 %>
+  <% if @audit_case.infographic_url.present? %>
+    <link rel="preload" href="<%= @audit_case.infographic_url %>" as="image" fetchpriority="high">
+  <% end %>
   <%= json_ld({
     "@context": "https://schema.org",
     "@type": "Article",
@@ -70,18 +74,21 @@
           </div>
         </div>
 
-        <!-- 핵심 요약 인포그래픽 (헤더 바로 아래) -->
+        <!-- 핵심 요약 인포그래픽 (LCP 후보 — eager 로딩 + fetchpriority) -->
         <% if @audit_case.infographic_url.present? %>
           <div class="mb-6">
             <img src="<%= @audit_case.infographic_url %>"
                  alt="<%= @audit_case.title %> 핵심 요약 인포그래픽"
                  width="800" height="600"
-                 loading="lazy"
+                 loading="eager"
+                 fetchpriority="high"
+                 decoding="async"
                  class="w-full rounded-2xl shadow-md border border-slate-100">
           </div>
         <% end %>
 
-        <!-- 핵심 정보 카드 -->
+        <!-- 핵심 정보 카드 (fragment cache — 콘텐츠 변경 시 updated_at으로 자동 무효화) -->
+        <% cache ["audit_case/content/v1", @audit_case.id, @audit_case.updated_at, @related_topic&.id], expires_in: 1.hour do %>
         <div class="space-y-4 mb-8">
           <!-- 지적사항 -->
           <div class="bg-white border border-gray-200 rounded-xl p-5 lg:p-6">
@@ -185,6 +192,7 @@
             </div>
           <% end %>
         </div>
+        <% end %>
 
         <!-- 관련 토픽 -->
         <% if @related_topic %>
