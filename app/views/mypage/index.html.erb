@@ -94,15 +94,15 @@
           <% if current_user&.admin? %>
             <div class="border-t border-gray-200 mt-4 pt-4">
               <p class="text-xs font-semibold text-slate-400 uppercase px-4 mb-2">관리자</p>
-              <%= link_to analyics_analytics_path, class: "flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-surface-100 rounded-xl transition-colors" do %>
+              <%= link_to admin_analytics_path, class: "flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-surface-100 rounded-xl transition-colors" do %>
                 <span class="material-symbols-outlined">analytics</span>
                 GA4 분석
               <% end %>
-              <%= link_to analyics_exam_dashboard_index_path, class: "flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-surface-100 rounded-xl transition-colors" do %>
+              <%= link_to admin_exam_dashboard_index_path, class: "flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-surface-100 rounded-xl transition-colors" do %>
                 <span class="material-symbols-outlined">fact_check</span>
                 시험 관리
               <% end %>
-              <%= link_to new_analyics_newsletter_path, class: "flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-surface-100 rounded-xl transition-colors" do %>
+              <%= link_to new_admin_newsletter_path, class: "flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-surface-100 rounded-xl transition-colors" do %>
                 <span class="material-symbols-outlined">mail</span>
                 뉴스레터 발송
               <% end %>
