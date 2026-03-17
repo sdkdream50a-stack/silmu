@@ -41,8 +41,12 @@ class LawSyncJob < ApplicationJob
       Rails.logger.error "[LawSyncJob] 오류 (#{law_name}): #{e.class} #{e.message}"
     end
 
-    # 토픽 법령 참조 캐시도 초기화 (다음 요청에서 새 MST로 재조회)
-    # Solid Cache는 delete_matched 미지원 — 패턴 대신 버전 기반 무효화
+    # 토픽 법령 참조 캐시 명시적 삭제 (law_refs_version 증가와 함께 실제 키도 제거)
+    # Solid Cache는 delete_matched 미지원 — 토픽 slug별로 직접 삭제
+    LawContentFetcher::TOPIC_LAW_MAP.each_key do |slug|
+      Rails.cache.delete("topic_law_refs/v1/#{slug}")
+      Rails.cache.delete("law_ref_warming/#{slug}")
+    end
     Rails.cache.increment("law_refs_version")
 
     Rails.logger.info "[LawSyncJob] 완료 (#{success_count}/#{TARGET_LAWS.size})"

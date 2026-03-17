@@ -227,9 +227,13 @@ class TopicsController < ApplicationController
 
     # 법제처 API — 토픽별 법령 원문 참조 링크 (7일 캐시)
     # [LCP 최적화] 캐시 miss 시 API를 동기 호출하지 않고 백그라운드 워밍 → 페이지 렌더 블로킹 방지
+    # [중복 방지] unless_exist: true로 동시 요청 시 job 하나만 enqueue
     cached_refs = Rails.cache.read("topic_law_refs/v1/#{@topic.slug}")
     if cached_refs.nil?
-      LawReferenceWarmJob.perform_later(@topic.slug) rescue nil
+      flag_key = "law_ref_warming/#{@topic.slug}"
+      if Rails.cache.write(flag_key, true, expires_in: 5.minutes, unless_exist: true)
+        LawReferenceWarmJob.perform_later(@topic.slug)
+      end
       @law_references = {}
     else
       @law_references = cached_refs

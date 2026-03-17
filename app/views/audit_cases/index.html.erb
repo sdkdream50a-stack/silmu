@@ -334,6 +334,13 @@ function clearFilters() {
   filterCases();
 }
 
+// Turbo Frame lazy loading으로 새 카드가 추가되면 현재 필터 재적용
+document.addEventListener('turbo:frame-load', function(event) {
+  if (event.target.id === 'audit-cases-page') {
+    filterCases();
+  }
+});
+
 // Turbo 캐시 복원 시 필터 상태 초기화 (C-1 fix)
 document.addEventListener('turbo:before-cache', function() {
   var container = document.getElementById('cases-container');
