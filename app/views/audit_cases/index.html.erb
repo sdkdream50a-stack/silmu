@@ -104,8 +104,8 @@
         <% if @audit_cases.any? %>
           <%# 초기 로드 시 PER_PAGE개만 렌더링 + Turbo Frame lazy loading으로 나머지 로드 %>
           <div class="space-y-4" id="cases-container">
-            <% @audit_cases.each do |audit_case| %>
-              <%= render "case_card", audit_case: audit_case %>
+            <% @audit_cases.each_with_index do |audit_case, idx| %>
+              <%= render "case_card", audit_case: audit_case, above_fold: idx < 4 %>
             <% end %>
           </div>
 

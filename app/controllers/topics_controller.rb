@@ -225,14 +225,14 @@ class TopicsController < ApplicationController
     end
     @audit_case_total = Rails.cache.fetch("stats/audit_case_count", expires_in: 30.minutes) { AuditCase.published.count }
 
-    # 법제처 API — 토픽별 법령 원문 참조 링크 (7일 캐시, API 장애 시 빈 해시)
-    @law_references = Rails.cache.fetch("topic_law_refs/v1/#{@topic.slug}",
-                                        expires_in: 7.days,
-                                        race_condition_ttl: 30) do
-      LawContentFetcher.new.fetch_for_topic(@topic.slug)
-    rescue => e
-      Rails.logger.warn "[Topics] 법령 API 실패 (#{@topic.slug}): #{e.message}"
-      {}
+    # 법제처 API — 토픽별 법령 원문 참조 링크 (7일 캐시)
+    # [LCP 최적화] 캐시 miss 시 API를 동기 호출하지 않고 백그라운드 워밍 → 페이지 렌더 블로킹 방지
+    cached_refs = Rails.cache.read("topic_law_refs/v1/#{@topic.slug}")
+    if cached_refs.nil?
+      LawReferenceWarmJob.perform_later(@topic.slug) rescue nil
+      @law_references = {}
+    else
+      @law_references = cached_refs
     end
 
     # 플로차트 존재 여부 (P1-1: 플로차트 없으면 기본 탭을 '법령 내용'으로 변경)
