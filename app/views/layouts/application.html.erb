@@ -19,7 +19,7 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%# [LCP 최적화] 메인 CSS를 head 최상단에 배치 — 파서가 인라인 스크립트를 만나기 전에 CSS 다운로드 시작 %>
+    <%# [LCP 최적화] 메인 CSS를 head 최상단에 배치 %>
     <%# preconnect for CDN fonts %>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload", fetchpriority: "high" %>
@@ -58,14 +58,11 @@
     }) %>
 
     <%# Fonts - 비동기 로딩으로 렌더 블로킹 제거 %>
-    <%# Iconify CDN preconnect — defer 스크립트 로드 및 아이콘 API 조기 연결 %>
-    <link rel="preconnect" href="https://code.iconify.design" crossorigin>
-    <link rel="preconnect" href="https://api.iconify.design" crossorigin>
+    <%# Iconify preconnect 제거 — requestIdleCallback으로 지연 로딩되므로 초기 대역폭 경합 방지 %>
     <%# Pretendard: preload→비동기 stylesheet (fetchpriority 제거 — LCP 경합 방지) %>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"></noscript>
-    <%# Tossface: 이모지 폰트 — 필요 시만 로드 %>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/toss/tossface/dist/tossface.css" media="print" onload="this.media='all'">
+    <%# Tossface 이모지 폰트 제거 — 실제 사용처 없음, 불필요한 네트워크 요청 제거 %>
 
     <%# Icons %>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -416,37 +413,37 @@
     <div class="fixed bottom-6 right-6 z-50<%= ' hidden' if content_for?(:hide_quick_menu) %>" id="quick-menu">
       <!-- 펼쳐진 메뉴 — glass panel style -->
       <div class="hidden mb-3 space-y-1.5" id="quick-menu-items">
-        <%= link_to contract_method_path, class: "flex items-center gap-3 px-4 py-3 bg-white/95 backdrop-blur-lg rounded-xl shadow-medium border border-gray-100/50 hover:shadow-strong hover:-translate-x-1 transition-all group", title: "계약방식 결정" do %>
+        <%= link_to contract_method_path, class: "flex items-center gap-3 px-4 py-3 bg-white rounded-xl shadow-medium border border-gray-100/50 hover:shadow-strong hover:-translate-x-1 transition-all group", title: "계약방식 결정" do %>
           <span class="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center group-hover:bg-emerald-500 transition-all duration-200">
             <span class="material-symbols-outlined text-emerald-600 group-hover:text-white transition-colors">gavel</span>
           </span>
           <span class="text-sm font-semibold text-slate-800">계약방식 결정</span>
         <% end %>
-        <%= link_to contract_documents_path, class: "flex items-center gap-3 px-4 py-3 bg-white/95 backdrop-blur-lg rounded-xl shadow-medium border border-gray-100/50 hover:shadow-strong hover:-translate-x-1 transition-all group", title: "서류 생성기" do %>
+        <%= link_to contract_documents_path, class: "flex items-center gap-3 px-4 py-3 bg-white rounded-xl shadow-medium border border-gray-100/50 hover:shadow-strong hover:-translate-x-1 transition-all group", title: "서류 생성기" do %>
           <span class="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center group-hover:bg-slate-600 transition-all duration-200">
             <span class="material-symbols-outlined text-slate-600 group-hover:text-white transition-colors">fact_check</span>
           </span>
           <span class="text-sm font-semibold text-slate-800">서류 생성기</span>
         <% end %>
-        <a href="/tools/quote-review" class="flex items-center gap-3 px-4 py-3 bg-white/95 backdrop-blur-lg rounded-xl shadow-medium border border-gray-100/50 hover:shadow-strong hover:-translate-x-1 transition-all group" title="견적서 검토">
+        <a href="/tools/quote-review" class="flex items-center gap-3 px-4 py-3 bg-white rounded-xl shadow-medium border border-gray-100/50 hover:shadow-strong hover:-translate-x-1 transition-all group" title="견적서 검토">
           <span class="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center group-hover:bg-indigo-500 transition-all duration-200">
             <span class="material-symbols-outlined text-indigo-600 group-hover:text-white transition-colors">fact_check</span>
           </span>
           <span class="text-sm font-semibold text-slate-800">견적서 검토</span>
         </a>
-        <%= link_to estimated_price_path, class: "flex items-center gap-3 px-4 py-3 bg-white/95 backdrop-blur-lg rounded-xl shadow-medium border border-gray-100/50 hover:shadow-strong hover:-translate-x-1 transition-all group", title: "추정가격 계산기" do %>
+        <%= link_to estimated_price_path, class: "flex items-center gap-3 px-4 py-3 bg-white rounded-xl shadow-medium border border-gray-100/50 hover:shadow-strong hover:-translate-x-1 transition-all group", title: "추정가격 계산기" do %>
           <span class="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center group-hover:bg-emerald-500 transition-all duration-200">
             <span class="material-symbols-outlined text-emerald-600 group-hover:text-white transition-colors">calculate</span>
           </span>
           <span class="text-sm font-semibold text-slate-800">추정가격 계산기</span>
         <% end %>
-        <%= link_to travel_calculator_path, class: "flex items-center gap-3 px-4 py-3 bg-white/95 backdrop-blur-lg rounded-xl shadow-medium border border-gray-100/50 hover:shadow-strong hover:-translate-x-1 transition-all group", title: "여비계산기" do %>
+        <%= link_to travel_calculator_path, class: "flex items-center gap-3 px-4 py-3 bg-white rounded-xl shadow-medium border border-gray-100/50 hover:shadow-strong hover:-translate-x-1 transition-all group", title: "여비계산기" do %>
           <span class="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center group-hover:bg-amber-500 transition-all duration-200">
             <span class="material-symbols-outlined text-amber-600 group-hover:text-white transition-colors">directions_car</span>
           </span>
           <span class="text-sm font-semibold text-slate-800">여비계산기</span>
         <% end %>
-        <%= link_to tools_path, class: "flex items-center gap-3 px-4 py-3 bg-emerald-50 backdrop-blur-lg rounded-xl shadow-medium border border-emerald-200/50 hover:shadow-strong hover:-translate-x-1 transition-all group", title: "전체 도구" do %>
+        <%= link_to tools_path, class: "flex items-center gap-3 px-4 py-3 bg-emerald-50 rounded-xl shadow-medium border border-emerald-200/50 hover:shadow-strong hover:-translate-x-1 transition-all group", title: "전체 도구" do %>
           <span class="w-10 h-10 bg-emerald-500 rounded-lg flex items-center justify-center">
             <span class="material-symbols-outlined text-white">apps</span>
           </span>

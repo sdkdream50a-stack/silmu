@@ -1,7 +1,9 @@
 class AuditCasesController < ApplicationController
+  PER_PAGE = 20
   def index
     @category = params[:category]
     @severity = params[:severity]
+    @page = [ (params[:page].to_i), 1 ].max
 
     # 전체를 캐싱 후 Ruby에서 필터링 → DB 쿼리 0 (캐시 히트 시)
     all_cases = Rails.cache.fetch("audit_cases/all_published", expires_in: 30.minutes) do
@@ -10,11 +12,25 @@ class AuditCasesController < ApplicationController
     @categories  = all_cases.map(&:category).compact.uniq.sort
     @total_count = all_cases.size
 
-    @audit_cases = all_cases
-    @audit_cases = @audit_cases.select { |ac| ac.category == @category } if @category.present?
-    @audit_cases = @audit_cases.select { |ac| ac.severity == @severity } if @severity.present?
+    filtered = all_cases
+    filtered = filtered.select { |ac| ac.category == @category } if @category.present?
+    filtered = filtered.select { |ac| ac.severity == @severity } if @severity.present?
+    @filtered_count = filtered.size
+
+    # 페이지네이션: 초기 로드 시 PER_PAGE개만 렌더링 (HTML 크기 ~75% 감소)
+    offset = (@page - 1) * PER_PAGE
+    @audit_cases = filtered.slice(offset, PER_PAGE) || []
+    @has_more = (offset + PER_PAGE) < filtered.size
+    @next_page = @page + 1
+
     # 뷰 fragment cache 버전
     @fragment_version = Rails.cache.read("audit_cases/fragment_version") || 0
+
+    # Turbo Frame "더보기" 요청 시 카드만 반환 (레이아웃 제외)
+    if turbo_frame_request_id == "audit-cases-page"
+      render partial: "audit_cases/page_frame", layout: false
+      return
+    end
 
     # HTTP 캐싱: 5분간 캐시
     expires_in 5.minutes, public: true, stale_while_revalidate: 1.hour

@@ -1,0 +1,18 @@
+<turbo-frame id="audit-cases-page">
+  <% @audit_cases.each do |audit_case| %>
+    <%= render "case_card", audit_case: audit_case %>
+  <% end %>
+
+  <% if @has_more %>
+    <%= turbo_frame_tag "audit-cases-page",
+        src: audit_cases_path(page: @next_page, category: @category, severity: @severity),
+        loading: :lazy do %>
+      <div class="flex justify-center py-8">
+        <div class="flex items-center gap-2 px-6 py-3 bg-white border border-gray-200 rounded-xl text-sm text-slate-500">
+          <span class="material-symbols-outlined animate-spin text-base">progress_activity</span>
+          더 많은 사례 로딩 중...
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+</turbo-frame>

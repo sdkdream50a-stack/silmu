@@ -96,26 +96,31 @@
             <% if @category.present? %>
               <span class="font-bold text-slate-900"><%= @category %></span> 분야
             <% end %>
-            총 <span class="font-bold text-slate-900" id="case-count"><%= @audit_cases.count %></span>개 사례
+            총 <span class="font-bold text-slate-900" id="case-count"><%= @filtered_count %></span>개 사례
             <span id="filtered-info" class="text-sm text-red-600 ml-2" style="display:none;"></span>
           </p>
         </div>
 
         <% if @audit_cases.any? %>
-          <% if @category.present? || @severity.present? %>
+          <%# 초기 로드 시 PER_PAGE개만 렌더링 + Turbo Frame lazy loading으로 나머지 로드 %>
           <div class="space-y-4" id="cases-container">
             <% @audit_cases.each do |audit_case| %>
               <%= render "case_card", audit_case: audit_case %>
             <% end %>
           </div>
-          <% else %>
-          <% cache ["audit_cases/cards/v5", @audit_cases.size, @fragment_version], expires_in: 30.minutes do %>
-          <div class="space-y-4" id="cases-container">
-            <% @audit_cases.each do |audit_case| %>
-              <%= render "case_card", audit_case: audit_case %>
+
+          <%# 다음 페이지 Turbo Frame — 뷰포트 진입 시 자동 로드 (lazy) %>
+          <% if @has_more %>
+            <%= turbo_frame_tag "audit-cases-page",
+                src: audit_cases_path(page: @next_page, category: @category, severity: @severity),
+                loading: :lazy do %>
+              <div class="flex justify-center py-8">
+                <div class="flex items-center gap-2 px-6 py-3 bg-white border border-gray-200 rounded-xl text-sm text-slate-500">
+                  <span class="material-symbols-outlined animate-spin text-base">progress_activity</span>
+                  더 많은 사례 로딩 중...
+                </div>
+              </div>
             <% end %>
-          </div>
-          <% end %>
           <% end %>
 
           <!-- 검색 결과 없음 메시지 -->
