@@ -29,6 +29,12 @@ application.register("home-quiz", HomeQuizController)
 import MermaidController from "./mermaid_controller"
 application.register("mermaid", MermaidController)
 
+import TravelCalculatorController from "./travel_calculator_controller"
+application.register("travel-calculator", TravelCalculatorController)
+
+import ContractFlowController from "./contract_flow_controller"
+application.register("contract-flow", ContractFlowController)
+
 // --- 무거운 컨트롤러는 별도 entrypoint로 분리 ---
 // exam_controllers.js → 모의고사 페이지에서 javascript_include_tag "exam_controllers"
 // insurance_controller.js → 보험계산기 페이지에서 javascript_include_tag "insurance_controller"

@@ -1,6 +1,6 @@
 <%# 여비계산기 페이지 - 프리미엄 디자인 시스템 %>
 
-<section class="section py-10">
+<section class="section py-10" data-controller="travel-calculator">
   <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- 뒤로가기 -->
     <div class="mb-6">
@@ -41,7 +41,7 @@
           <ul class="list-disc list-inside space-y-1 text-slate-700 mb-3 text-sm">
             <li>국내 주요 도시 간 KTX·고속버스·항공 운임 자동 계산 (왕복 기준)</li>
             <li>자차 이용 시 거리 기반 유류비·통행료 자동 산정</li>
-            <li>지역별 숙박비 정액 적용 (서울 100,000원, 광역시·세종 80,000원, 기타 70,000원)</li>
+            <li>지역별 숙박비 정액 적용 (서울 70,000원, 광역시·세종 60,000원, 기타 50,000원) — 2026.01.02 시행 기준</li>
             <li>식비·일비 자동 계산 (각 25,000원/일)</li>
             <li>출장 기간 자동 계산 및 항목별 세부 내역 제공</li>
           </ul>
@@ -64,17 +64,17 @@
             출장 정보 입력
           </h2>
 
-          <form id="travel-form" class="space-y-6">
+          <form data-travel-calculator-target="form" data-action="submit->travel-calculator#calculate" class="space-y-6">
             <!-- 출장 유형 -->
             <div>
               <label class="block text-sm font-semibold text-slate-700 mb-3">출장 유형</label>
               <div class="flex gap-6">
                 <label class="flex items-center cursor-pointer group">
-                  <input type="radio" name="trip_type" value="domestic" checked class="text-indigo-600 focus:ring-indigo-500 w-4 h-4">
+                  <input type="radio" name="trip_type" value="domestic" checked class="text-indigo-600 focus:ring-indigo-500 w-4 h-4" data-action="change->travel-calculator#toggleTripType">
                   <span class="ml-2 text-slate-700 group-hover:text-slate-900 transition-colors">국내 출장</span>
                 </label>
                 <label class="flex items-center cursor-pointer group">
-                  <input type="radio" name="trip_type" value="international" class="text-indigo-600 focus:ring-indigo-500 w-4 h-4">
+                  <input type="radio" name="trip_type" value="international" class="text-indigo-600 focus:ring-indigo-500 w-4 h-4" data-action="change->travel-calculator#toggleTripType">
                   <span class="ml-2 text-slate-700 group-hover:text-slate-900 transition-colors">국외 출장</span>
                 </label>
               </div>
@@ -84,11 +84,11 @@
             <div class="grid grid-cols-2 gap-4">
               <div>
                 <label class="block text-sm font-semibold text-slate-700 mb-2">출발지</label>
-                <input type="text" id="departure" list="city-list" placeholder="예: 서울" class="input" required>
+                <input type="text" id="departure" data-travel-calculator-target="departure" list="city-list" placeholder="예: 서울" class="input" required>
               </div>
               <div>
                 <label class="block text-sm font-semibold text-slate-700 mb-2">목적지</label>
-                <input type="text" id="destination" list="city-list" placeholder="예: 부산" class="input" required>
+                <input type="text" id="destination" data-travel-calculator-target="destination" list="city-list" placeholder="예: 부산" class="input" required>
               </div>
             </div>
             <datalist id="city-list">
@@ -106,59 +106,41 @@
             <div class="grid grid-cols-2 gap-4">
               <div>
                 <label class="block text-sm font-semibold text-slate-700 mb-2">출발일</label>
-                <input type="date" id="start_date" class="input" required>
+                <input type="date" id="start_date" data-travel-calculator-target="startDate" class="input" required>
               </div>
               <div>
                 <label class="block text-sm font-semibold text-slate-700 mb-2">도착일</label>
-                <input type="date" id="end_date" class="input" required>
+                <input type="date" id="end_date" data-travel-calculator-target="endDate" class="input" required>
               </div>
             </div>
-            <p id="date-error" class="hidden text-red-600 text-sm mt-1 font-medium"></p>
-
-            <!-- 직급 -->
-            <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-2">직급</label>
-              <p class="text-xs text-slate-400 mb-2">※ 현행 여비규정상 식비·일비는 직급 무관 동일 적용</p>
-              <select id="grade" class="input" required>
-                <option value="">직급을 선택하세요</option>
-                <option value="1">1급 이상</option>
-                <option value="2">2급</option>
-                <option value="3">3급</option>
-                <option value="4">4급</option>
-                <option value="5" selected>5급</option>
-                <option value="6">6급</option>
-                <option value="7">7급</option>
-                <option value="8">8급</option>
-                <option value="9">9급</option>
-              </select>
-            </div>
+            <p id="date-error" data-travel-calculator-target="dateError" class="hidden text-red-600 text-sm mt-1 font-medium" role="alert"></p>
 
             <!-- 교통수단 -->
             <div>
               <label class="block text-sm font-semibold text-slate-700 mb-3">교통수단</label>
               <div class="grid grid-cols-2 sm:grid-cols-4 gap-3" id="transport-options">
-                <label class="transport-label flex items-center justify-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-indigo-300 transition-all group">
+                <label class="transport-label flex items-center justify-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-indigo-300 transition-all group" data-action="click->travel-calculator#selectTransport">
                   <input type="radio" name="transport" value="train" class="sr-only" checked>
                   <div class="text-center">
                     <span class="material-symbols-outlined text-2xl text-slate-400 group-hover:text-indigo-500 transition-colors transport-icon">train</span>
                     <p class="text-sm mt-1 font-medium text-slate-600">기차</p>
                   </div>
                 </label>
-                <label class="transport-label flex items-center justify-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-indigo-300 transition-all group">
+                <label class="transport-label flex items-center justify-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-indigo-300 transition-all group" data-action="click->travel-calculator#selectTransport">
                   <input type="radio" name="transport" value="bus" class="sr-only">
                   <div class="text-center">
                     <span class="material-symbols-outlined text-2xl text-slate-400 group-hover:text-indigo-500 transition-colors transport-icon">directions_bus</span>
                     <p class="text-sm mt-1 font-medium text-slate-600">버스</p>
                   </div>
                 </label>
-                <label class="transport-label flex items-center justify-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-indigo-300 transition-all group">
+                <label class="transport-label flex items-center justify-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-indigo-300 transition-all group" data-action="click->travel-calculator#selectTransport">
                   <input type="radio" name="transport" value="car" class="sr-only">
                   <div class="text-center">
                     <span class="material-symbols-outlined text-2xl text-slate-400 group-hover:text-indigo-500 transition-colors transport-icon">directions_car</span>
                     <p class="text-sm mt-1 font-medium text-slate-600">자차</p>
                   </div>
                 </label>
-                <label class="transport-label flex items-center justify-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-indigo-300 transition-all group">
+                <label class="transport-label flex items-center justify-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-indigo-300 transition-all group" data-action="click->travel-calculator#selectTransport">
                   <input type="radio" name="transport" value="flight" class="sr-only">
                   <div class="text-center">
                     <span class="material-symbols-outlined text-2xl text-slate-400 group-hover:text-indigo-500 transition-colors transport-icon">flight</span>
@@ -171,7 +153,7 @@
             <!-- 숙박 여부 -->
             <div>
               <label class="flex items-center cursor-pointer group">
-                <input type="checkbox" id="accommodation" name="accommodation" checked class="text-indigo-600 focus:ring-indigo-500 rounded w-5 h-5">
+                <input type="checkbox" id="accommodation" name="accommodation" data-travel-calculator-target="accommodation" checked class="text-indigo-600 focus:ring-indigo-500 rounded w-5 h-5">
                 <span class="ml-3 text-slate-700 font-medium group-hover:text-slate-900 transition-colors">숙박 필요</span>
               </label>
             </div>
@@ -194,25 +176,26 @@
           </h2>
 
           <!-- 초기 안내 메시지 -->
-          <div id="result-placeholder" class="text-center py-12">
+          <div id="result-placeholder" data-travel-calculator-target="resultPlaceholder" class="text-center py-12">
             <span class="material-symbols-outlined text-6xl text-slate-200 mb-4">calculate</span>
             <p class="text-slate-500">출장 정보를 입력하고<br>계산하기 버튼을 눌러주세요</p>
           </div>
 
           <!-- 계산 결과 (초기에는 숨김) -->
-          <div id="result-content" class="hidden">
+          <div id="result-content" data-travel-calculator-target="resultContent" class="hidden">
             <!-- 총액 -->
             <div class="gradient-indigo rounded-2xl p-6 text-white mb-6 shadow-lg">
               <p class="text-indigo-100 text-sm mb-1">총 여비</p>
-              <p class="text-4xl font-bold" id="total-amount">₩ 0</p>
+              <p class="text-4xl font-bold" id="total-amount" data-travel-calculator-target="totalAmount">₩ 0</p>
+              <p class="text-indigo-200 text-xs mt-2">2026.01.02 시행 여비규정 기준</p>
             </div>
 
             <!-- 출장 정보 요약 -->
             <div class="bg-surface-100 rounded-xl p-4 mb-6">
               <p class="text-sm text-slate-600">
-                <span id="summary-route">서울 → 부산</span> ·
-                <span id="summary-days">2박 3일</span> ·
-                <span id="summary-transport">KTX</span>
+                <span id="summary-route" data-travel-calculator-target="summaryRoute">서울 → 부산</span> ·
+                <span id="summary-days" data-travel-calculator-target="summaryDays">2박 3일</span> ·
+                <span id="summary-transport" data-travel-calculator-target="summaryTransport">KTX</span>
               </p>
             </div>
 
@@ -221,42 +204,38 @@
               <div class="flex justify-between items-center py-3 border-b border-gray-100">
                 <div>
                   <p class="font-semibold text-slate-900">운임</p>
-                  <p class="text-xs text-slate-500" id="fare-desc">KTX 왕복</p>
+                  <p class="text-xs text-slate-500" id="fare-desc" data-travel-calculator-target="fareDesc">KTX 왕복</p>
                 </div>
-                <p class="font-bold text-slate-900" id="fare-amount">₩ 0</p>
+                <p class="font-bold text-slate-900" id="fare-amount" data-travel-calculator-target="fareAmount">₩ 0</p>
               </div>
-              <div id="accommodation-row" class="flex justify-between items-center py-3 border-b border-gray-100">
+              <div id="accommodation-row" data-travel-calculator-target="accommodationRow" class="flex justify-between items-center py-3 border-b border-gray-100">
                 <div>
                   <p class="font-semibold text-slate-900">숙박비</p>
-                  <p class="text-xs text-slate-500" id="accommodation-desc">0원 × 0박</p>
+                  <p class="text-xs text-slate-500" id="accommodation-desc" data-travel-calculator-target="accommodationDesc">0원 × 0박</p>
                 </div>
-                <p class="font-bold text-slate-900" id="accommodation-amount">₩ 0</p>
+                <p class="font-bold text-slate-900" id="accommodation-amount" data-travel-calculator-target="accommodationAmount">₩ 0</p>
               </div>
               <div class="flex justify-between items-center py-3 border-b border-gray-100">
                 <div>
                   <p class="font-semibold text-slate-900">식비</p>
-                  <p class="text-xs text-slate-500" id="meal-desc">0원 × 0일</p>
+                  <p class="text-xs text-slate-500" id="meal-desc" data-travel-calculator-target="mealDesc">0원 × 0일</p>
                 </div>
-                <p class="font-bold text-slate-900" id="meal-amount">₩ 0</p>
+                <p class="font-bold text-slate-900" id="meal-amount" data-travel-calculator-target="mealAmount">₩ 0</p>
               </div>
               <div class="flex justify-between items-center py-3">
                 <div>
                   <p class="font-semibold text-slate-900">일비</p>
-                  <p class="text-xs text-slate-500" id="daily-desc">0원 × 0일</p>
+                  <p class="text-xs text-slate-500" id="daily-desc" data-travel-calculator-target="dailyDesc">0원 × 0일</p>
                 </div>
-                <p class="font-bold text-slate-900" id="daily-amount">₩ 0</p>
+                <p class="font-bold text-slate-900" id="daily-amount" data-travel-calculator-target="dailyAmount">₩ 0</p>
               </div>
             </div>
 
             <!-- 버튼 -->
             <div class="flex gap-3 mt-6">
-              <button onclick="window.print()" class="flex-1 btn btn-ghost btn-md">
+              <button onclick="window.print()" class="w-full btn btn-ghost btn-md">
                 <span class="material-symbols-outlined">print</span>
-                인쇄
-              </button>
-              <button class="flex-1 btn btn-ghost btn-md">
-                <span class="material-symbols-outlined">picture_as_pdf</span>
-                PDF 저장
+                인쇄 / PDF 저장
               </button>
             </div>
 
@@ -274,243 +253,3 @@
   </div>
 </section>
 
-<script>
-document.addEventListener('turbo:load', function() {
-  const startDate = document.getElementById('start_date');
-  if (!startDate) return;
-
-  // 오늘 날짜 설정
-  const today = new Date().toISOString().split('T')[0];
-  startDate.value = today;
-
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  document.getElementById('end_date').value = tomorrow.toISOString().split('T')[0];
-
-  // 교통수단 선택 UI
-  const transportLabels = document.querySelectorAll('.transport-label');
-  transportLabels.forEach(label => {
-    const radio = label.querySelector('input[type="radio"]');
-    if (radio.checked) {
-      label.classList.add('border-indigo-500', 'bg-indigo-50');
-      label.querySelector('.transport-icon').classList.add('text-indigo-500');
-    }
-
-    label.addEventListener('click', function() {
-      transportLabels.forEach(l => {
-        l.classList.remove('border-indigo-500', 'bg-indigo-50');
-        l.querySelector('.transport-icon').classList.remove('text-indigo-500');
-        l.querySelector('.transport-icon').classList.add('text-slate-400');
-      });
-      this.classList.add('border-indigo-500', 'bg-indigo-50');
-      this.querySelector('.transport-icon').classList.remove('text-slate-400');
-      this.querySelector('.transport-icon').classList.add('text-indigo-500');
-    });
-  });
-
-  // ── 도시 좌표 데이터 ──
-  const cities = {
-    '서울':[37.5665,126.978],'부산':[35.1796,129.0756],'대구':[35.8714,128.6014],
-    '인천':[37.4563,126.7052],'광주':[35.1595,126.8526],'대전':[36.3504,127.3845],
-    '울산':[35.5384,129.3114],'세종':[36.48,127.26],'수원':[37.2636,127.0286],
-    '창원':[35.228,128.6811],'전주':[35.8242,127.148],'청주':[36.6424,127.489],
-    '춘천':[37.8813,127.7298],'강릉':[37.7519,128.8761],'제주':[33.4996,126.5312],
-    '여수':[34.7604,127.6622],'포항':[36.019,129.3435],'목포':[34.8118,126.3922],
-    '진주':[35.1802,128.1076],'원주':[37.3422,127.9202],'천안':[36.8151,127.1139],
-    '안동':[36.5684,128.7294],'경주':[35.8562,129.2247],'속초':[38.207,128.5918],
-    '평택':[36.992,127.089],'구미':[36.1197,128.3444],'충주':[36.991,127.9259],
-    '군산':[35.9676,126.7369],'익산':[35.9483,126.9577],'순천':[34.9506,127.4874],
-    '김포':[37.6152,126.7156]
-  };
-
-  // ── KTX/SRT 편도 일반실 (원) ──
-  const trainFares = {
-    '서울-부산':59800,'서울-대전':23700,'서울-대구':43500,'서울-울산':55500,
-    '서울-광주':41500,'서울-목포':48200,'서울-여수':51900,'서울-강릉':27600,
-    '서울-포항':48200,'서울-경주':52000,'서울-창원':52000,'서울-진주':48000,
-    '서울-천안':14800,'서울-전주':32000,'서울-청주':16000,'서울-원주':16000,
-    '서울-안동':32000,'서울-순천':46000,
-    '대전-부산':36800,'대전-대구':21000,'대전-광주':22000,'대전-전주':13000,
-    '대구-부산':16200,'대구-울산':14000,'대구-포항':14000,'대구-경주':12000,
-    '부산-울산':8200
-  };
-
-  // ── 고속/시외버스 편도 일반 (원) ──
-  const busFares = {
-    '서울-부산':23800,'서울-대전':9400,'서울-대구':18500,'서울-광주':18700,
-    '서울-울산':25000,'서울-전주':13000,'서울-강릉':17500,'서울-춘천':6800,
-    '서울-목포':24300,'서울-여수':23900,'서울-진주':22700,'서울-포항':22800,
-    '서울-창원':24500,'서울-천안':5500,'서울-청주':8000,'서울-원주':8300,
-    '서울-안동':17600,'서울-속초':16500,'서울-경주':22100,'서울-인천':2500,
-    '서울-세종':10200,'서울-수원':3000,'서울-평택':5500,'서울-충주':10000,
-    '서울-군산':14500,'서울-익산':13500,'서울-순천':22000,'서울-구미':16000,
-    '서울-김포':2000,
-    '대전-부산':17000,'대전-대구':10500,'대전-광주':12000,'대전-전주':6500,
-    '대전-청주':3000,'대전-세종':2500,'대전-천안':4000,
-    '대구-부산':8500,'대구-울산':7000,'대구-포항':6500,'대구-경주':4500,
-    '대구-안동':7500,'대구-구미':4000,
-    '부산-울산':5500,'부산-경주':7000,'부산-창원':4500,'부산-진주':9000,
-    '광주-전주':7000,'광주-목포':6500,'광주-여수':12000,'광주-순천':9000
-  };
-
-  // ── 항공 왕복 이코노미 평균 (원, 이미 왕복) ──
-  const flightFares = {
-    '서울-제주':130000,'서울-부산':110000,'서울-울산':120000,'서울-광주':100000,
-    '서울-여수':120000,'서울-포항':110000,'부산-제주':100000,'대구-제주':110000,
-    '청주-제주':100000,'광주-제주':90000,'여수-제주':80000,'울산-제주':100000,
-    '인천-제주':130000
-  };
-
-  // ── 여비 정액 (공무원여비규정 별표2, 2025.01.01 시행 기준) ──
-  // 서울 100,000 / 광역시·세종 80,000 / 기타 70,000원
-  const accommodationByRegion = { seoul: 100000, metro: 80000, other: 70000 };
-  const mealRate = 25000;
-  const dailyRate = 25000;
-
-  // ── 유틸리티 함수 ──
-  function haversine(lat1, lon1, lat2, lon2) {
-    const R = 6371, rad = Math.PI / 180;
-    const dLat = (lat2-lat1)*rad, dLon = (lon2-lon1)*rad;
-    const a = Math.sin(dLat/2)**2 + Math.cos(lat1*rad)*Math.cos(lat2*rad)*Math.sin(dLon/2)**2;
-    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-  }
-
-  function getRoadDist(c1, c2) {
-    const p1 = cities[c1], p2 = cities[c2];
-    if (!p1 || !p2) return null;
-    return Math.round(haversine(p1[0],p1[1],p2[0],p2[1]) * 1.3);
-  }
-
-  function matchCity(input) {
-    input = input.trim();
-    if (!input) return null;
-    if (cities[input]) return input;
-    for (const c of Object.keys(cities)) { if (input.startsWith(c)) return c; }
-    for (const c of Object.keys(cities)) { if (c.startsWith(input)) return c; }
-    for (const c of Object.keys(cities)) { if (input.includes(c) || c.includes(input)) return c; }
-    return null;
-  }
-
-  function lookupFare(table, c1, c2) {
-    return table[c1+'-'+c2] || table[c2+'-'+c1] || null;
-  }
-
-  function getRegionType(dest) {
-    const metro = ['부산','대구','인천','광주','대전','울산'];
-    if (dest.includes('서울')) return 'seoul';
-    for (const city of metro) { if (dest.includes(city)) return 'metro'; }
-    return 'other';
-  }
-
-  function calcFare(transport, c1, c2) {
-    const dist = getRoadDist(c1, c2);
-    if (!dist || dist < 1) return { fare: 0, estimated: true, desc: '동일 지역' };
-    const isIsland = (c1 === '제주' || c2 === '제주');
-    let fare, estimated = false, desc;
-
-    if (transport === 'train') {
-      if (isIsland) return { fare: 0, desc: '제주는 철도 노선이 없습니다', unavailable: true };
-      const known = lookupFare(trainFares, c1, c2);
-      if (known) { fare = known * 2; desc = 'KTX 왕복 일반실'; }
-      else { fare = Math.round(dist*140/100)*100*2; estimated = true; desc = 'KTX 추정 왕복'; }
-    } else if (transport === 'bus') {
-      if (isIsland) return { fare: 0, desc: '제주는 시외버스 노선이 없습니다', unavailable: true };
-      const known = lookupFare(busFares, c1, c2);
-      if (known) { fare = known * 2; desc = '고속버스 왕복 일반'; }
-      else { fare = Math.round(dist*57/100)*100*2; estimated = true; desc = '고속버스 추정 왕복'; }
-    } else if (transport === 'car') {
-      if (isIsland) return { fare: 0, desc: '제주는 자차 이동 불가', unavailable: true };
-      fare = Math.round(dist*2*177/1000)*1000;
-      estimated = true;
-      desc = '자차 왕복 약 '+(dist*2).toLocaleString()+'km (유류비+통행료)';
-    } else if (transport === 'flight') {
-      const known = lookupFare(flightFares, c1, c2);
-      if (known) { fare = known; desc = '항공 왕복 이코노미'; }
-      else if (isIsland) { fare = 120000; estimated = true; desc = '제주 항공 추정 왕복'; }
-      else { fare = Math.min(200000, Math.max(80000, Math.round(dist*300/1000)*1000)); estimated = true; desc = '항공 추정 왕복'; }
-    }
-    return { fare: fare||0, estimated, desc };
-  }
-
-  const transportNames = { train: 'KTX', bus: '고속버스', car: '자차', flight: '항공' };
-
-  // 폼 제출 처리
-  document.getElementById('travel-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    const departure = document.getElementById('departure').value;
-    const destination = document.getElementById('destination').value;
-    const startDate = new Date(document.getElementById('start_date').value);
-    const endDate = new Date(document.getElementById('end_date').value);
-    const transport = document.querySelector('input[name="transport"]:checked').value;
-    const needAccommodation = document.getElementById('accommodation').checked;
-
-    const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
-    const nights = days - 1;
-
-    if (days < 1) {
-      const errorEl = document.getElementById('date-error');
-      if (errorEl) {
-        errorEl.textContent = '도착일은 출발일 이후여야 합니다.';
-        errorEl.classList.remove('hidden');
-        setTimeout(function(){ errorEl.classList.add('hidden'); }, 3000);
-      }
-      return;
-    }
-
-    // 도시 매칭 및 운임 계산
-    const c1 = matchCity(departure);
-    const c2 = matchCity(destination);
-    let fareResult;
-    if (c1 && c2) {
-      fareResult = calcFare(transport, c1, c2);
-    } else {
-      fareResult = { fare: 0, estimated: true, desc: '목록에서 도시를 선택해주세요', unavailable: true };
-    }
-
-    // 숙박/식비/일비
-    const regionType = getRegionType(destination);
-    const accRate = accommodationByRegion[regionType];
-    const accAmount = needAccommodation ? accRate * nights : 0;
-    const mealAmount = mealRate * days;
-    const dailyAmount = dailyRate * days;
-    const totalAmount = fareResult.fare + accAmount + mealAmount + dailyAmount;
-
-    // 결과 표시
-    document.getElementById('result-placeholder').classList.add('hidden');
-    document.getElementById('result-content').classList.remove('hidden');
-
-    document.getElementById('total-amount').textContent = '₩ ' + totalAmount.toLocaleString();
-    document.getElementById('summary-route').textContent = departure + ' → ' + destination;
-    document.getElementById('summary-days').textContent = nights > 0 ? nights + '박 ' + days + '일' : '당일';
-    document.getElementById('summary-transport').textContent = transportNames[transport];
-
-    // 운임
-    let fareDesc = fareResult.desc + ' (' + departure + ' ↔ ' + destination + ')';
-    if (fareResult.estimated && !fareResult.unavailable) fareDesc = '≈ ' + fareDesc;
-    if (fareResult.unavailable) fareDesc = fareResult.desc;
-    document.getElementById('fare-desc').textContent = fareDesc;
-    document.getElementById('fare-amount').textContent = fareResult.unavailable ? '-' : '₩ ' + fareResult.fare.toLocaleString();
-
-    // 숙박비
-    const regionNames = { seoul: '서울', metro: '광역시', other: '기타지역' };
-    if (needAccommodation && nights > 0) {
-      document.getElementById('accommodation-row').classList.remove('hidden');
-      document.getElementById('accommodation-desc').textContent = accRate.toLocaleString() + '원(' + regionNames[regionType] + ') × ' + nights + '박';
-      document.getElementById('accommodation-amount').textContent = '₩ ' + accAmount.toLocaleString();
-    } else {
-      document.getElementById('accommodation-row').classList.add('hidden');
-    }
-
-    // 식비/일비
-    document.getElementById('meal-desc').textContent = mealRate.toLocaleString() + '원 × ' + days + '일';
-    document.getElementById('meal-amount').textContent = '₩ ' + mealAmount.toLocaleString();
-    document.getElementById('daily-desc').textContent = dailyRate.toLocaleString() + '원 × ' + days + '일';
-    document.getElementById('daily-amount').textContent = '₩ ' + dailyAmount.toLocaleString();
-
-    if (window.innerWidth < 1024) {
-      document.getElementById('result-content').scrollIntoView({ behavior: 'smooth' });
-    }
-  });
-});
-</script>
