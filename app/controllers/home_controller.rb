@@ -129,6 +129,7 @@ class HomeController < ApplicationController
     set_meta_tags(
       title: "서비스 소개 — 공무원 계약·예산 실무 무료 플랫폼",
       description: description_text,
+      canonical: canonical_url,
       og: {
         title: "실무.kr 서비스 소개",
         description: description_text,
@@ -147,6 +148,7 @@ class HomeController < ApplicationController
     set_meta_tags(
       title: "개인정보처리방침",
       description: description_text,
+      canonical: canonical_url,
       og: {
         title: "실무.kr 개인정보처리방침",
         description: description_text,
@@ -165,6 +167,7 @@ class HomeController < ApplicationController
     set_meta_tags(
       title: "이용약관",
       description: description_text,
+      canonical: canonical_url,
       og: {
         title: "실무.kr 이용약관",
         description: description_text,
@@ -197,6 +200,7 @@ class HomeController < ApplicationController
     set_meta_tags(
       title: "업데이트 소식 — 최신 기능·법령 가이드·감사사례 안내",
       description: "실무.kr의 최신 기능 추가, 콘텐츠 업데이트, 개선 사항을 확인하세요.",
+      canonical: canonical_url,
       og: {
         title: "업데이트 소식 — 실무.kr",
         url: canonical_url,

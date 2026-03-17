@@ -64,13 +64,13 @@ class LegalPeriodService
     { id: "interior", name: "실내건축공사", years: 2, note: "바닥재, 벽체, 천장" }
   ].freeze
 
-  # 지체상금 요율 (1일당, 국가계약법 시행규칙 제75조 기준)
-  # 공사 0.5/1,000 / 물품(제조구매) 0.75/1,000 / 용역 1.25/1,000
+  # 지체상금 요율 (1일당, 지방계약법 시행규칙 제75조 기준)
+  # 공사 0.5/1,000 / 물품(제조구매) 0.8/1,000 / 용역·물품수리가공 1.3/1,000
   LATE_PENALTY_RATES = {
     construction: { name: "공사", rate: Rational(5, 10000), display: "0.5/1,000" },
-    goods: { name: "물품", rate: Rational(75, 100000), display: "0.75/1,000" },
-    service: { name: "용역", rate: Rational(125, 100000), display: "1.25/1,000" },
-    lease: { name: "임대차", rate: Rational(1, 1000), display: "1/1,000" }
+    goods: { name: "물품", rate: Rational(8, 10000), display: "0.8/1,000" },
+    service: { name: "용역", rate: Rational(13, 10000), display: "1.3/1,000" },
+    transport: { name: "운송·보관", rate: Rational(25, 10000), display: "2.5/1,000" }
   }.freeze
 
   WEEKDAY_NAMES = %w[일요일 월요일 화요일 수요일 목요일 금요일 토요일].freeze
@@ -233,9 +233,10 @@ class LegalPeriodService
       rate_info = LATE_PENALTY_RATES[penalty_type]
       penalty_amount = (contract_amount * rate_info[:rate] * delay_days).to_i
 
-      # 지체상금은 계약금액을 초과할 수 없음
-      capped = penalty_amount > contract_amount
-      penalty_amount = [penalty_amount, contract_amount].min
+      # 지체상금 최고 한도: 계약금액의 30% (시행령 제90조 제2항)
+      max_penalty = (contract_amount * 0.3).to_i
+      capped = penalty_amount > max_penalty
+      penalty_amount = [penalty_amount, max_penalty].min
 
       {
         success: true,

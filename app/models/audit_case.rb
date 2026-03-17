@@ -78,7 +78,7 @@ class AuditCase < ApplicationRecord
 
   def expire_count_cache
     Rails.cache.delete("stats/audit_case_count")
-    Rails.cache.delete("audit_cases/all_published")
+    Rails.cache.delete("audit_cases/all_published_v2")
     Rails.cache.delete("audit_case_topic/#{slug}")
     Rails.cache.delete("audit_case_related/#{slug}")
     # 뷰 fragment cache 무효화: 내용 변경 시 버전 증가

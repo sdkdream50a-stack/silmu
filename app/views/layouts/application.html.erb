@@ -12,8 +12,7 @@
     <meta name="google-site-verification" content="4f2zo86zRxW5JBhdwgpDx16xvZKaC_QBDsBXvcb8xRc" />
     <meta name="naver-site-verification" content="35e0ac97eb0b5463fb23f269f08bbcc729e81d77" />
     <meta name="ai-content-description" content="공무원을 위한 계약·예산·인사 실무 가이드, 자동화 도구, 법령 해설, 감사사례 분석">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@silmu_kr">
+    <%# twitter:card / twitter:site는 meta-tags gem이 display_meta_tags에서 출력 — 중복 방지로 여기서 제거 %>
     <%# 인증 상태가 nav에 반영되므로 Turbo 페이지 캐시 비활성화 (stale nav 방지) %>
     <meta name="turbo-cache-control" content="no-store">
     <%= csrf_meta_tags %>
@@ -37,7 +36,10 @@
       "inLanguage": "ko",
       "potentialAction": {
         "@type": "SearchAction",
-        "target": "https://silmu.kr/chatbot?q={search_term}",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://silmu.kr/chatbot?q={search_term}"
+        },
         "query-input": "required name=search_term"
       }
     }) %>
@@ -188,23 +190,9 @@
     <% end %>
 
     <% if Rails.env.production? && ENV['ADSENSE_CLIENT_ID'].present? %>
-      <!-- Google AdSense - 지연 로딩으로 LCP 개선 -->
-      <script>
-        function loadAdSense() {
-          const script = document.createElement('script');
-          script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=<%= ENV['ADSENSE_CLIENT_ID'] %>';
-          script.async = true;
-          script.crossOrigin = 'anonymous';
-          document.head.appendChild(script);
-        }
-
-        // requestIdleCallback 사용 (유휴 시간에 로드) 또는 2초 후
-        if ('requestIdleCallback' in window) {
-          requestIdleCallback(loadAdSense, { timeout: 2000 });
-        } else {
-          setTimeout(loadAdSense, 2000);
-        }
-      </script>
+      <!-- Google AdSense - async 직접 삽입 (Google 크롤러 감지 보장) -->
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=<%= ENV['ADSENSE_CLIENT_ID'] %>"
+              crossorigin="anonymous"></script>
 
       <!-- AdSense 광고 중앙 집중 초기화 (Turbo 캐시 중복 방지) -->
       <script>

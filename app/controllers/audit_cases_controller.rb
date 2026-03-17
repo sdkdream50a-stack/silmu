@@ -3,19 +3,30 @@ class AuditCasesController < ApplicationController
   def index
     @category = params[:category]
     @severity = params[:severity]
+    @search   = params[:q].to_s.strip
     @page = [ (params[:page].to_i), 1 ].max
 
     # 전체를 캐싱 후 Ruby에서 필터링 → DB 쿼리 0 (캐시 히트 시)
-    all_cases = Rails.cache.fetch("audit_cases/all_published", expires_in: 30.minutes) do
-      AuditCase.published.recent.to_a
+    # v2: 카테고리 목록도 함께 캐싱 (매 요청마다 map/uniq/sort 불필요)
+    all_cases, @categories = Rails.cache.fetch("audit_cases/all_published_v2", expires_in: 30.minutes) do
+      cases = AuditCase.published.recent.to_a
+      cats  = cases.map(&:category).compact.uniq.sort
+      [cases, cats]
     end
-    @categories  = all_cases.map(&:category).compact.uniq.sort
     @total_count = all_cases.size
 
     filtered = all_cases
     filtered = filtered.select { |ac| ac.category == @category } if @category.present?
     filtered = filtered.select { |ac| ac.severity == @severity } if @severity.present?
+    if @search.present?
+      q = @search.downcase
+      filtered = filtered.select { |ac| ac.title.downcase.include?(q) || ac.issue.downcase.include?(q) }
+    end
     @filtered_count = filtered.size
+
+    # 페이지 범위 보정: 필터 결과가 줄어도 유효 범위 유지
+    total_pages = [(@filtered_count.to_f / PER_PAGE).ceil, 1].max
+    @page = [[@page, total_pages].min, 1].max
 
     # 페이지네이션: 초기 로드 시 PER_PAGE개만 렌더링 (HTML 크기 ~75% 감소)
     offset = (@page - 1) * PER_PAGE
@@ -42,12 +53,12 @@ class AuditCasesController < ApplicationController
       canonical: canonical_url,
       og: {
         title: "감사사례 모음 — 계약 실무 감사 지적 사례",
-        description: "공공계약 감사에서 자주 지적되는 사례를 분야별로 정리했습니다.",
+        description: "공공계약 감사에서 자주 지적되는 사례를 카테고리별로 정리했습니다. 수의계약, 입찰, 계약이행, 대금지급 등 분야별 감사 지적사항과 대응 방법을 확인하세요.",
         url: canonical_url,
         image: "https://silmu.kr/og-image.png"
       }
     }
-    meta[:robots] = "noindex, follow" if @category.present? || @severity.present?
+    meta[:robots] = "noindex, follow" if @category.present? || @severity.present? || @search.present?
     set_meta_tags(meta)
   end
 

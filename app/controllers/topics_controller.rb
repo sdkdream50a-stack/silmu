@@ -166,7 +166,8 @@ class TopicsController < ApplicationController
         url: canonical_url,
         image: "https://silmu.kr/og-image.png",
         type: "website"
-      }
+      },
+      canonical: canonical_url
     )
   end
 

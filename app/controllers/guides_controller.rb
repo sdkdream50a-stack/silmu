@@ -98,12 +98,14 @@ class GuidesController < ApplicationController
   def contract_flow
     canonical_url = request.original_url.split("?").first
     set_meta_tags(
-      title: "계약 흐름도",
-      description: "공무원 계약 업무의 전체 프로세스를 시각적 흐름도로 한눈에 파악할 수 있습니다.",
+      title: "계약 흐름도 — 공무원 계약 업무 전 과정 시각화",
+      description: "계획 수립부터 대금 지급까지 공무원 계약 업무의 전체 프로세스를 단계별 흐름도로 한눈에 파악하세요. 수의계약·경쟁입찰·협상계약 등 계약 방식별 절차와 핵심 체크포인트를 시각적으로 정리했습니다.",
       og: {
-        title: "계약 흐름도 — 실무.kr",
+        title: "계약 흐름도 — 공무원 계약 업무 전 과정 시각화",
+        description: "계획 수립부터 대금 지급까지 공무원 계약 업무의 전체 프로세스를 단계별 흐름도로 한눈에 파악하세요. 수의계약·경쟁입찰·협상계약 등 계약 방식별 절차와 핵심 체크포인트를 시각적으로 정리했습니다.",
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png"
+        image: "https://silmu.kr/og-image.png",
+        type: "website"
       },
       canonical: canonical_url
     )
