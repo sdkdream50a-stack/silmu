@@ -79,7 +79,8 @@
       </script>
     <% end %>
 
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application.tailwind", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
     <%# 모의고사 컨트롤러 (exam-quiz, exam-simulation, exam-analysis) 별도 번들 %>
     <%= javascript_include_tag "exam_controllers", "data-turbo-track": "reload", type: "module" %>

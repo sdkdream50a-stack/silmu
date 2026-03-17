@@ -21,7 +21,9 @@
     <%# [LCP 최적화] 메인 CSS를 head 최상단에 배치 %>
     <%# preconnect for CDN fonts %>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload", fetchpriority: "high" %>
+    <%# contract_flow.css는 해당 뷰(content_for :head)에서만 로드 — 전역 제외 %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload", fetchpriority: "high" %>
+    <%= stylesheet_link_tag "application.tailwind", "data-turbo-track": "reload", fetchpriority: "high" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module", defer: true %>
 
     <%= yield :head %>
@@ -48,7 +50,7 @@
       "@type": "Organization",
       "name": "실무.kr",
       "url": "https://silmu.kr",
-      "logo": "https://silmu.kr/icon.png",
+      "logo": { "@type": "ImageObject", "url": "https://silmu.kr/icon.png", "width": 512, "height": 512 },
       "email": "hello@silmu.kr",
       "description": "공무원을 위한 계약 실무 가이드, 자동화 도구, 법령 해설",
       "contactPoint": {
@@ -569,6 +571,7 @@
               </p>
             </div>
             <div class="flex gap-6 text-sm">
+              <%= link_to "서비스 소개", about_path, class: "text-slate-400 hover:text-white transition-colors" %>
               <%= link_to "이용약관", terms_path, class: "text-slate-400 hover:text-white transition-colors" %>
               <%= link_to "개인정보처리방침", privacy_path, class: "text-slate-400 hover:text-white transition-colors" %>
               <%= link_to "문의하기", contact_path, class: "text-slate-400 hover:text-white transition-colors" %>
