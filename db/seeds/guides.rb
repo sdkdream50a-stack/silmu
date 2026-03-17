@@ -8,7 +8,7 @@ guides_data = [
     title: "물품 구매 및 검수 절차 가이드",
     category: "계약", category_color: "emerald", badge: nil, tag: "신규",
     summary: "물품 구매부터 검수, 대금 지급까지 전체 절차를 단계별로 설명합니다.",
-    description: "본 가이드는 공무원이 물품을 구매하고 검수하는 전체 절차를 단계별로 설명합니다.",
+    description: "물품 구매 요청부터 견적 수집, 계약 체결, 납품 검수, 대금 지급까지 전체 절차를 단계별로 안내합니다. 계약 방법 결정 기준, 중소기업 제품 확인, 검수조서 작성 요령을 포함합니다. 지자체·교육청 계약 담당자 필수 실무 가이드.",
     author: "실무팀", published_on: Date.new(2026, 2, 1), view_count: 42,
     sections: {
       requirements: [
@@ -35,7 +35,7 @@ guides_data = [
     title: "검수조서 작성 가이드",
     category: "계약", category_color: "emerald", badge: nil, tag: nil,
     summary: "물품 납품 후 검수조서를 정확하게 작성하는 방법 안내",
-    description: "물품 납품 후 검수조서를 정확하게 작성하는 방법을 안내합니다.",
+    description: "물품 납품 후 합격·불합격 판정 기준, 검수조서 작성 항목, 서명자 지정 방법을 안내합니다. 규격 미달 시 처리 절차와 재납품 요구 기한, 감사 지적 예방을 위한 증빙 서류 준비 요령까지 실무 중심으로 정리했습니다.",
     author: "실무팀", published_on: Date.new(2026, 1, 28), view_count: 35,
     sections: {
       requirements: [
@@ -87,7 +87,7 @@ guides_data = [
     title: "수의계약 체결 실무 가이드",
     category: "계약", category_color: "emerald", badge: "인기", tag: "신규",
     summary: "수의계약의 요건, 절차, 주의사항을 상세히 안내합니다.",
-    description: "수의계약의 요건, 절차, 주의사항을 상세히 안내합니다.",
+    description: "수의계약의 법적 요건, 계약 방식 선택 기준, 체결 절차, 필수 서류를 상세히 안내합니다. 금액 기준 초과 여부 판단부터 계약서 작성, 청렴서약서 징구, 감사 대비 유의사항까지 단계별로 정리한 계약 담당자용 실무 가이드.",
     author: "실무팀", published_on: Date.new(2026, 1, 28), view_count: 38,
     external_link: "/topics/private-contract",
     sections: {
@@ -114,7 +114,7 @@ guides_data = [
     title: "출장 여비 청구 가이드",
     category: "예산", category_color: "amber", badge: nil, tag: "업데이트",
     summary: "국내/국외 출장 시 일비·숙박비·식비 지급 기준과 청구 방법",
-    description: "국내/국외 출장 시 여비 청구 방법과 증빙 서류를 안내합니다.",
+    description: "국내·국외 출장 여비 청구 방법, 일비·숙박비·교통비 지급 기준, 증빙 서류 작성 요령을 안내합니다. 여비 지급 등급별 한도액과 초과 출장 예외 기준, 출장 복명서 작성 방법부터 정산 절차까지 단계별로 설명합니다.",
     author: "실무팀", published_on: Date.new(2026, 1, 25), view_count: 35,
     sections: {
       requirements: [
@@ -140,7 +140,7 @@ guides_data = [
     title: "연가 사용 및 관리 가이드",
     category: "복무", category_color: "blue", badge: nil, tag: nil,
     summary: "연가일수 계산, 사용 절차, 미사용 연가 보상 처리 방법",
-    description: "연가일수 계산, 사용 절차, 미사용 연가 처리 방법을 안내합니다.",
+    description: "재직 기간별 연가일수 계산 방법, 연가 신청 및 승인 절차, 미사용 연가 보상·이월 처리 방법을 안내합니다. 병가·공가와의 차이, 연가 선사용 요건, 연가 사용 촉진 의무까지 공무원 연가 제도를 실무 중심으로 정리했습니다.",
     author: "실무팀", published_on: Date.new(2026, 1, 22), view_count: 38,
     sections: {
       requirements: [
@@ -166,7 +166,7 @@ guides_data = [
     title: "민원 응대 매뉴얼",
     category: "민원", category_color: "violet", badge: nil, tag: nil,
     summary: "민원인 응대 시 주의사항 및 처리 절차 안내",
-    description: "민원인 응대 시 주의사항 및 처리 절차를 안내합니다.",
+    description: "민원인 응대 시 주의사항, 폭언·고성 대응 방법, 민원 유형별 처리 절차와 기한을 안내합니다. 반복 민원 처리 원칙, 부당 민원 차단 절차, 민원 담당자 보호 제도까지 공무원 민원 응대를 실무 중심으로 정리했습니다.",
     author: "실무팀", published_on: Date.new(2026, 1, 20), view_count: 15,
     sections: {
       requirements: [
@@ -192,7 +192,7 @@ guides_data = [
     title: "예산 이월 실무 가이드",
     category: "예산", category_color: "amber", badge: nil, tag: nil,
     summary: "명시이월, 사고이월, 계속비이월의 요건과 절차 비교",
-    description: "명시이월, 사고이월, 계속비이월의 요건과 절차를 안내합니다.",
+    description: "명시이월·사고이월·계속비이월의 법적 요건과 차이점, 이월 신청 절차, 결산 반영 방법을 안내합니다. 이월 사유별 승인 기준과 불승인 시 대응 방법, 감사 대비 증빙 서류 준비 요령을 포함한 예산 이월 실무 가이드.",
     author: "실무팀", published_on: Date.new(2026, 1, 18), view_count: 28,
     external_link: "/topics/budget-carryover",
     sections: {
@@ -219,7 +219,7 @@ guides_data = [
     title: "입찰 실무 가이드",
     category: "계약", category_color: "emerald", badge: "필수", tag: "신규",
     summary: "경쟁입찰(일반·제한·지명)의 요건, 공고기간, 낙찰자 결정 절차를 단계별로 안내합니다.",
-    description: "경쟁입찰(일반경쟁·제한경쟁·지명경쟁)의 요건, 절차, 낙찰자 결정 방법을 단계별로 안내합니다.",
+    description: "경쟁입찰(일반경쟁·제한경쟁·지명경쟁)의 요건, 절차, 낙찰자 결정 방법을 단계별로 안내합니다. 입찰 공고 기준, 입찰 참가자격 확인, 적격심사·최저가 낙찰제 선택 기준, 유찰 시 처리 방법까지 입찰 실무 전반을 정리했습니다.",
     author: "실무팀", published_on: Date.new(2026, 2, 11), view_count: 0,
     external_link: "/topics/bidding",
     sections: {
@@ -328,7 +328,7 @@ guides_data = [
     title: "수의계약 한도액 가이드",
     category: "계약", category_color: "emerald", badge: nil, tag: nil,
     summary: "수의계약 연간 한도액 산정기준과 초과 시 처리방법을 안내합니다.",
-    description: "동일 업체와의 수의계약 시 적용되는 연간 한도액 규정과 한도 초과 방지, 초과 시 대응 방법을 안내합니다.",
+    description: "동일 업체와의 수의계약 시 적용되는 연간 한도액 규정과 초과 방지 방법을 안내합니다. 한도액 산정 기준, 한도 초과 시 경쟁입찰 전환 절차, 소기업·소상공인 특례 적용 가능 여부 판단 방법을 실무 중심으로 정리했습니다.",
     author: "실무팀", published_on: Date.new(2026, 1, 18), view_count: 28,
     external_link: "/topics/private-contract-limit",
     sections: {
@@ -354,7 +354,7 @@ guides_data = [
     title: "1인견적 수의계약 가이드",
     category: "계약", category_color: "emerald", badge: nil, tag: nil,
     summary: "1인견적 가능 금액기준, 절차, 주의사항을 안내합니다.",
-    description: "추정가격 2천만원 이하 소액 수의계약에서 허용되는 1인 견적 수의계약의 절차와 주의사항을 안내합니다.",
+    description: "추정가격 2천만원 이하 소액 수의계약에서 허용되는 1인 견적 수의계약의 절차와 주의사항을 안내합니다. 분할계약 금지 기준, 동일 업체 반복 계약 제한, 견적서 징구 방법과 감사 지적 예방 요령을 포함합니다.",
     author: "실무팀", published_on: Date.new(2026, 1, 16), view_count: 32,
     external_link: "/topics/single-quote",
     sections: {
