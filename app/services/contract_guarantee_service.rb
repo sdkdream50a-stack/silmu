@@ -1,6 +1,6 @@
 # 계약보증금·하자보증금·인지세·지체상금 계산기 서비스
 class ContractGuaranteeService
-  # 계약보증금률 (지방계약법 시행령 제37조)
+  # 계약보증금률 (지방계약법 시행령 제51조, 법 제15조)
   CONTRACT_GUARANTEE_RATES = {
     general: { name: "일반 계약", rate: 0.10, note: "계약금액의 10% 이상" },
     construction: { name: "공사 계약", rate: 0.10, note: "계약금액의 10% 이상 (이행보증서 제출 가능)" },
@@ -9,7 +9,7 @@ class ContractGuaranteeService
     small_private: { name: "소액수의계약 (3천만원 이하)", rate: 0.0, note: "면제 가능 (지방계약법 시행규칙 제39조)" }
   }.freeze
 
-  # 하자보수보증금률 (지방계약법 시행령 제78조)
+  # 하자보수보증금률 (지방계약법 시행령 제69조~제73조)
   DEFECT_GUARANTEE_RATES = [
     { id: "structure", name: "구조체 공사", rate: 0.05, years: 5, note: "철근콘크리트·철골 구조" },
     { id: "roof_waterproof", name: "지붕·방수공사", rate: 0.03, years: 3, note: "지붕, 방수" },
