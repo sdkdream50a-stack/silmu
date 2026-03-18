@@ -80,6 +80,7 @@ Rails.application.routes.draw do
   get "cost-estimates/default-items", to: redirect("/tools/cost-estimate")
 
   devise_for :users, controllers: { sessions: "users/sessions" }
+  get "/login", to: redirect("/users/sign_in")
   root "home#index"
 
   # 챗봇
