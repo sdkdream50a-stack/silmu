@@ -418,8 +418,8 @@ document.addEventListener('turbo:load', function() {
     // 스크롤하여 필드 표시
     field.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-    // Iconify 스캔
-    if (typeof Iconify !== 'undefined') Iconify.scan();
+    // [INP 최적화] 추가된 에러 아이콘만 스캔 (전체 DOM 스캔 방지)
+    if (typeof Iconify !== 'undefined') Iconify.scan(errorDiv);
   }
 
   function lpClearFieldError(fieldId) {

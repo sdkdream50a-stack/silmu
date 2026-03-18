@@ -71,13 +71,13 @@
           <% if @parent_topic.present? %>
             <%# 서브토픽인 경우: 부모 토픽과 형제 토픽들 표시 %>
             <%= link_to topic_path(@parent_topic.slug),
-                class: "px-4 py-2 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-full text-sm text-white font-medium transition-all duration-200 flex items-center gap-1.5 border border-white/20" do %>
+                class: "px-4 py-2 bg-white/20 hover:bg-white/30 rounded-full text-sm text-white font-medium transition-all duration-200 flex items-center gap-1.5 border border-white/20" do %>
               <span class="material-symbols-outlined text-sm">arrow_back</span>
               <%= @parent_topic.name %>
             <% end %>
             <% @sibling_topics.each do |sibling| %>
               <%= link_to topic_path(sibling.slug),
-                  class: "px-4 py-2 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-sm text-white transition-all duration-200 flex items-center gap-1.5 border border-white/10 hover:border-white/20" do %>
+                  class: "px-4 py-2 bg-white/10 hover:bg-white/20 rounded-full text-sm text-white transition-all duration-200 flex items-center gap-1.5 border border-white/10 hover:border-white/20" do %>
                 <span class="material-symbols-outlined text-sm">tag</span>
                 <%= sibling.name %>
               <% end %>
@@ -87,7 +87,7 @@
             <% @keyword_topic_map.each do |keyword, matching_topic| %>
               <% if matching_topic %>
                 <%= link_to topic_path(matching_topic.slug),
-                    class: "px-4 py-2 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-sm text-white transition-all duration-200 flex items-center gap-1.5 border border-white/10 hover:border-white/20" do %>
+                    class: "px-4 py-2 bg-white/10 hover:bg-white/20 rounded-full text-sm text-white transition-all duration-200 flex items-center gap-1.5 border border-white/10 hover:border-white/20" do %>
                   <span class="material-symbols-outlined text-sm">tag</span>
                   <%= keyword %>
                 <% end %>
@@ -348,6 +348,7 @@
         <% end %>
 
         <!-- 예규/지침 -->
+        <% cache [@topic, "regulation_tab", @topic.updated_at.to_i] do %>
         <div class="tab-panel" data-tab="regulation" id="panel-regulation">
           <% if @topic.regulation_content.present? %>
             <div class="card p-6 lg:p-8">
@@ -362,8 +363,10 @@
             </div>
           <% end %>
         </div>
+        <% end %>
 
         <!-- 유권해석 -->
+        <% cache [@topic, "interpretation_tab", @topic.updated_at.to_i] do %>
         <div class="tab-panel" data-tab="interpretation" id="panel-interpretation">
           <% if @topic.interpretation_content.present? %>
             <div class="card p-6 lg:p-8">
@@ -378,6 +381,7 @@
             </div>
           <% end %>
         </div>
+        <% end %>
 
         <!-- 감사사례 -->
         <div class="tab-panel" data-tab="audit" id="panel-audit">
@@ -433,6 +437,7 @@
         </div>
 
         <!-- 질의답변 -->
+        <% cache [@topic, "qa_tab", @topic.updated_at.to_i] do %>
         <div class="tab-panel" data-tab="qa" id="panel-qa">
           <% if @topic.qa_content.present? %>
             <div class="card p-6 lg:p-8">
@@ -447,8 +452,10 @@
             </div>
           <% end %>
         </div>
+        <% end %>
 
         <!-- 실무주의 -->
+        <% cache [@topic, "tips_tab", @topic.updated_at.to_i] do %>
         <div class="tab-panel" data-tab="tips">
           <% if @topic.practical_tips.present? %>
             <div class="card p-6 lg:p-8">
@@ -463,6 +470,7 @@
             </div>
           <% end %>
         </div>
+        <% end %>
 
         <!-- 실무절차 (연결된 Guide의 Step 섹션 렌더링) -->
         <% if @related_guide.present? && @related_guide.sections.present? %>
@@ -973,6 +981,7 @@
 
         <!-- 실무자 해설 (탭 밖, 항상 표시) -->
         <% if @topic.commentary.present? %>
+          <% cache [@topic, "commentary", @topic.updated_at.to_i] do %>
           <div class="mt-16" id="commentary">
             <!-- 섹션 구분선 + 타이틀 -->
             <div class="flex items-center gap-4 mb-8">
@@ -1008,6 +1017,7 @@
               </div>
             </div>
           </div>
+          <% end %>
         <% end %>
 
         <!-- 자주 묻는 질문 -->
@@ -1511,12 +1521,11 @@ function initLawCards() {
   expandedCard = 'law';
 }
 
-// 페이지 로드 시 초기화
-document.addEventListener('DOMContentLoaded', initLawCards);
-
-// Turbo 페이지 전환 시에도 초기화
-document.addEventListener('turbo:load', initLawCards);
+// [LCP 최적화] turbo:render만 사용 — DOMContentLoaded + turbo:load 중복 제거
+// turbo:render는 첫 페이지 로드와 Turbo 내비게이션 모두 커버
 document.addEventListener('turbo:render', initLawCards);
+// 초기 로드 시 즉시 실행 (스크립트가 DOM 아래에 있으므로 DOMContentLoaded 불필요)
+initLawCards();
 
 function expandLawCard(cardType) {
   // 이미 펼쳐진 카드를 다시 클릭하면 무시
@@ -1543,53 +1552,70 @@ function toggleFaq(index) {
     answer.classList.remove('hidden');
     if (icon) {
       icon.setAttribute('data-icon', 'material-symbols:expand-less');
-      if (typeof Iconify !== 'undefined') Iconify.scan();
+      // [INP 최적화] icon 요소만 스캔 (Iconify.scan() 인수 없이 호출 시 전체 DOM 스캔 → INP 100K ms 유발)
+      if (typeof Iconify !== 'undefined') Iconify.scan(icon);
     }
     icon.style.transform = 'rotate(180deg)';
   } else {
     answer.classList.add('hidden');
     if (icon) {
       icon.setAttribute('data-icon', 'material-symbols:expand-more');
-      if (typeof Iconify !== 'undefined') Iconify.scan();
+      // [INP 최적화] icon 요소만 스캔
+      if (typeof Iconify !== 'undefined') Iconify.scan(icon);
     }
     icon.style.transform = 'rotate(0deg)';
   }
 }
 
-function showTab(tabName) {
-  // 모든 탭 패널 찾기
-  var allPanels = document.querySelectorAll('.tab-panel');
+// [INP 최적화] DOM 요소 캐싱 — 매 탭 전환 시 querySelectorAll 재실행 방지
+var _cachedPanels = null;
+var _cachedBtns = null;
+var _activeTabName = null;
 
-  // 모든 패널에서 active 클래스 제거, 선택된 탭에만 추가
-  for (var i = 0; i < allPanels.length; i++) {
-    var panel = allPanels[i];
-    var panelTab = panel.getAttribute('data-tab');
-    if (panelTab === tabName) {
-      panel.classList.add('active');
-    } else {
-      panel.classList.remove('active');
-    }
-  }
-
-  // 모든 탭 버튼 스타일 초기화
-  var allBtns = document.querySelectorAll('.tab-btn');
-  for (var j = 0; j < allBtns.length; j++) {
-    allBtns[j].classList.remove('bg-slate-800', 'text-white', 'shadow-md');
-    allBtns[j].classList.add('bg-surface-100', 'text-slate-600', 'hover:bg-surface-200');
-  }
-
-  // 선택된 탭 버튼 스타일 적용
-  var activeBtn = document.querySelector('.tab-btn[data-tab="' + tabName + '"]');
-  if (activeBtn) {
-    activeBtn.classList.remove('bg-surface-100', 'text-slate-600', 'hover:bg-surface-200');
-    activeBtn.classList.add('bg-slate-800', 'text-white', 'shadow-md');
-  }
+function _getTabElements() {
+  if (!_cachedPanels) _cachedPanels = document.querySelectorAll('.tab-panel');
+  if (!_cachedBtns) _cachedBtns = document.querySelectorAll('.tab-btn');
 }
 
-// 탭 초기화
+function showTab(tabName) {
+  // 이미 활성화된 탭이면 무시 (불필요한 reflow 방지)
+  if (_activeTabName === tabName) return;
+
+  _getTabElements();
+
+  // [INP 최적화] classList 조작을 requestAnimationFrame으로 배치 처리 (reflow 1회로 통합)
+  requestAnimationFrame(function() {
+    // 패널 전환
+    for (var i = 0; i < _cachedPanels.length; i++) {
+      var panel = _cachedPanels[i];
+      if (panel.getAttribute('data-tab') === tabName) {
+        panel.classList.add('active');
+      } else {
+        panel.classList.remove('active');
+      }
+    }
+
+    // 버튼 스타일 전환
+    for (var j = 0; j < _cachedBtns.length; j++) {
+      var btn = _cachedBtns[j];
+      if (btn.getAttribute('data-tab') === tabName) {
+        btn.classList.remove('bg-surface-100', 'text-slate-600', 'hover:bg-surface-200', 'bg-emerald-600');
+        btn.classList.add('bg-slate-800', 'text-white', 'shadow-md');
+      } else {
+        btn.classList.remove('bg-slate-800', 'text-white', 'shadow-md');
+        btn.classList.add('bg-surface-100', 'text-slate-600', 'hover:bg-surface-200');
+      }
+    }
+  });
+
+  _activeTabName = tabName;
+}
+
+// 탭 초기화: DOM 캐시 리셋 (Turbo 내비게이션 후 DOM이 교체되므로)
 function initTabs() {
-  // 탭 버튼에 이미 onclick이 있으므로 추가 설정 불필요
-  // 초기 상태는 CSS와 HTML의 active 클래스로 처리됨
+  _cachedPanels = null;
+  _cachedBtns = null;
+  _activeTabName = null;
 }
 
 // 즉시 실행

@@ -218,9 +218,7 @@ class TopicsController < ApplicationController
       Guide.published.find_by(topic_slug: @topic.slug) ||
         Guide.published.find_by(external_link: "/topics/#{@topic.slug}")
     end
-    @related_articles = Rails.cache.fetch("cafe_articles/similar/#{@topic.slug}", expires_in: 6.hours) do
-      CafeArticle.find_similar(@topic.name, limit: 10).to_a
-    end
+    # [LCP 최적화] @related_articles 제거 — 뷰에서 미사용 (불필요한 DB 쿼리 + 캐시 제거)
     @related_audit_cases = Rails.cache.fetch("topic_audit_cases/#{@topic.slug}", expires_in: 1.hour) do
       @topic.related_audit_cases.to_a
     end

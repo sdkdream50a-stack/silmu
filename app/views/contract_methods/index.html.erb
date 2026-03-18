@@ -1127,7 +1127,8 @@
       btn.disabled = true;
       if (icon) {
         icon.setAttribute('data-icon', 'material-symbols:hourglass-empty');
-        if (typeof Iconify !== 'undefined') Iconify.scan();
+        // [INP 최적화] icon 요소만 스캔
+        if (typeof Iconify !== 'undefined') Iconify.scan(icon);
       }
       icon.classList.add('animate-spin');
       text.textContent = '확인 중...';
@@ -1135,7 +1136,8 @@
       btn.disabled = !(selectedType && estimatedPrice > 0);
       if (icon) {
         icon.setAttribute('data-icon', 'material-symbols:search');
-        if (typeof Iconify !== 'undefined') Iconify.scan();
+        // [INP 최적화] icon 요소만 스캔
+        if (typeof Iconify !== 'undefined') Iconify.scan(icon);
       }
       icon.classList.remove('animate-spin');
       text.textContent = '계약방식 확인하기';
@@ -1159,7 +1161,8 @@
     if (hintEl) {
       hintEl.style.color = '#dc2626';
       hintEl.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;vertical-align:middle;margin-right:4px;" data-icon="material-symbols:error">error</span>' + message;
-      if (typeof Iconify !== 'undefined') Iconify.scan();
+      // [INP 최적화] hintEl 내부만 스캔
+      if (typeof Iconify !== 'undefined') Iconify.scan(hintEl);
     }
 
     // 스크롤하여 필드 표시
@@ -1343,7 +1346,8 @@
       item.appendChild(document.createTextNode(doc));
       docList.appendChild(item);
     });
-    if (typeof Iconify !== 'undefined') Iconify.scan();
+    // [INP 최적화] docList 컨테이너만 스캔 (전체 DOM 스캔 방지)
+    if (typeof Iconify !== 'undefined') Iconify.scan(docList);
 
     // 팁 (안전한 DOM 조작)
     const tipsContainer = document.getElementById('tips-container');
