@@ -61,7 +61,7 @@
       <div class="lg:w-[70%]">
         <!-- 전체 카운트 + 검색 결과 카운트 -->
         <div class="flex items-center justify-between mb-6">
-          <p class="text-slate-600">총 <span class="font-bold text-slate-900" id="item-count"><%= @guides.count %></span>개의 가이드</p>
+          <p class="text-slate-600">총 <span class="font-bold text-slate-900" id="item-count"><%= @guides.size %></span>개의 가이드</p>
         </div>
 
         <!-- 카드 목록 (검색·필터용 숨김 가능한 flat list) -->
@@ -351,7 +351,7 @@ document.addEventListener('turbo:load', function() {
 
     // 이전 버튼
     html += `
-      <button onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}
+      <button onclick="guideGoToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}
         class="w-10 h-10 flex items-center justify-center rounded-xl ${currentPage === 1 ? 'text-slate-300 cursor-not-allowed' : 'text-slate-500 hover:bg-surface-100'} transition-colors">
         <span class="material-symbols-outlined">chevron_left</span>
       </button>
@@ -370,7 +370,7 @@ document.addEventListener('turbo:load', function() {
     // 첫 페이지와 ... 표시
     if (startPage > 1) {
       html += `
-        <button onclick="goToPage(1)" class="w-10 h-10 flex items-center justify-center rounded-xl text-slate-600 hover:bg-surface-100 font-medium transition-colors">1</button>
+        <button onclick="guideGoToPage(1)" class="w-10 h-10 flex items-center justify-center rounded-xl text-slate-600 hover:bg-surface-100 font-medium transition-colors">1</button>
       `;
       if (startPage > 2) {
         html += `<span class="w-10 h-10 flex items-center justify-center text-slate-400">...</span>`;
@@ -385,7 +385,7 @@ document.addEventListener('turbo:load', function() {
         `;
       } else {
         html += `
-          <button onclick="goToPage(${i})" class="w-10 h-10 flex items-center justify-center rounded-xl text-slate-600 hover:bg-surface-100 font-medium transition-colors">${i}</button>
+          <button onclick="guideGoToPage(${i})" class="w-10 h-10 flex items-center justify-center rounded-xl text-slate-600 hover:bg-surface-100 font-medium transition-colors">${i}</button>
         `;
       }
     }
@@ -396,13 +396,13 @@ document.addEventListener('turbo:load', function() {
         html += `<span class="w-10 h-10 flex items-center justify-center text-slate-400">...</span>`;
       }
       html += `
-        <button onclick="goToPage(${totalPages})" class="w-10 h-10 flex items-center justify-center rounded-xl text-slate-600 hover:bg-surface-100 font-medium transition-colors">${totalPages}</button>
+        <button onclick="guideGoToPage(${totalPages})" class="w-10 h-10 flex items-center justify-center rounded-xl text-slate-600 hover:bg-surface-100 font-medium transition-colors">${totalPages}</button>
       `;
     }
 
     // 다음 버튼
     html += `
-      <button onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}
+      <button onclick="guideGoToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}
         class="w-10 h-10 flex items-center justify-center rounded-xl ${currentPage === totalPages ? 'text-slate-300 cursor-not-allowed' : 'text-slate-500 hover:bg-surface-100'} transition-colors">
         <span class="material-symbols-outlined">chevron_right</span>
       </button>
@@ -411,8 +411,8 @@ document.addEventListener('turbo:load', function() {
     paginationNav.innerHTML = html;
   }
 
-  // 전역 함수로 노출
-  window.goToPage = function(page) {
+  // 페이지 이동 (renderPagination 내부 onclick에서 호출)
+  window.guideGoToPage = function(page) {
     const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE);
     if (page < 1 || page > totalPages) return;
     displayPage(page);
@@ -455,5 +455,39 @@ document.addEventListener('turbo:load', function() {
 
   // 초기: 분야별 섹션 표시
   setSearchMode(false);
+});
+
+// C-2 fix: Turbo 캐시 복원 시 필터 상태 초기화 (뒤로가기 시 카드 사라짐 방지)
+document.addEventListener('turbo:before-cache', function() {
+  const itemsList = document.getElementById('items-list');
+  if (!itemsList) return;
+
+  // 분야별 섹션 복원
+  itemsList.style.display = 'none';
+  const categorySections = document.getElementById('category-sections');
+  if (categorySections) categorySections.style.display = '';
+  const paginationContainer = document.getElementById('pagination-container');
+  if (paginationContainer) paginationContainer.style.display = 'none';
+
+  // 모든 카드 표시
+  document.querySelectorAll('.item-card').forEach(function(c) { c.style.display = ''; });
+
+  // 탭 초기화 (전체 탭 활성)
+  document.querySelectorAll('#category-tabs .tab-btn').forEach(function(btn) {
+    if (btn.dataset.category === '전체') {
+      btn.classList.add('active', 'bg-emerald-600', 'text-white', 'shadow-md');
+      btn.classList.remove('bg-surface-100', 'text-slate-600');
+    } else {
+      btn.classList.remove('active', 'bg-emerald-600', 'text-white', 'shadow-md');
+      btn.classList.add('bg-surface-100', 'text-slate-600');
+    }
+  });
+
+  // 검색어 초기화
+  const searchInput = document.getElementById('search-input');
+  if (searchInput) searchInput.value = '';
+
+  // W-1 fix: 전역 함수 정리
+  delete window.guideGoToPage;
 });
 </script>

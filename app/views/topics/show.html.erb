@@ -569,10 +569,10 @@
 
               <div class="grid sm:grid-cols-2 gap-4">
                 <% [
-                  { title: "출장명령서", desc: "출장 전 결재용 필수 서류", badge: "출장 전 필수", color: "point" },
-                  { title: "출장 복명서", desc: "출장 결과 보고 서류", badge: "출장 후 7일 이내", color: "forest" },
-                  { title: "여비 정산서", desc: "여비 청구 및 정산 서류", badge: "증빙 첨부", color: "warm" },
-                  { title: "여비 개산급 신청서", desc: "여비 선지급 신청 서류", badge: "선택사항", color: "navy" }
+                  { title: "출장명령서", desc: "출장 전 결재용 필수 서류", badge: "출장 전 필수", color: "indigo" },
+                  { title: "출장 복명서", desc: "출장 결과 보고 서류", badge: "출장 후 7일 이내", color: "emerald" },
+                  { title: "여비 정산서", desc: "여비 청구 및 정산 서류", badge: "증빙 첨부", color: "amber" },
+                  { title: "여비 개산급 신청서", desc: "여비 선지급 신청 서류", badge: "선택사항", color: "blue" }
                 ].each do |form| %>
                   <div class="group card card-interactive p-5">
                     <div class="flex items-start gap-4">
@@ -633,9 +633,9 @@
 
               <div class="bg-surface-100 rounded-2xl p-4 space-y-3">
                 <% [
-                  { title: "국가법령정보센터", desc: "지방공무원 여비 규정 전문", icon: "balance", color: "point", url: "https://www.law.go.kr/법령/지방공무원여비규정" },
-                  { title: "행정안전부", desc: "공무원 여비 업무 처리 지침", icon: "apartment", color: "forest", url: "https://www.mois.go.kr" },
-                  { title: "기획재정부", desc: "공무원 국외여비 지급 규정", icon: "public", color: "navy", url: "https://www.moef.go.kr" }
+                  { title: "국가법령정보센터", desc: "지방공무원 여비 규정 전문", icon: "balance", color: "indigo", url: "https://www.law.go.kr/법령/지방공무원여비규정" },
+                  { title: "행정안전부", desc: "공무원 여비 업무 처리 지침", icon: "apartment", color: "emerald", url: "https://www.mois.go.kr" },
+                  { title: "기획재정부", desc: "공무원 국외여비 지급 규정", icon: "public", color: "blue", url: "https://www.moef.go.kr" }
                 ].each do |link| %>
                   <a href="<%= link[:url] %>" target="_blank" rel="noopener"
                      class="flex items-center gap-4 p-4 bg-white rounded-xl border border-gray-100 hover:border-<%= link[:color] %>-300 hover:shadow-medium transition-all duration-200">
@@ -697,10 +697,10 @@
 
               <div class="grid sm:grid-cols-2 gap-4">
                 <% [
-                  { title: "소득·세액공제 신고서", desc: "근로자가 작성하는 기본 신고서", badge: "필수", color: "point" },
-                  { title: "부양가족 변동신고서", desc: "부양가족 추가/변경 시 제출", badge: "변동 시", color: "forest" },
-                  { title: "주택자금 공제신청서", desc: "주택청약, 주택임차 공제 신청", badge: "해당자", color: "warm" },
-                  { title: "원천징수영수증", desc: "연말정산 결과 확인서", badge: "결과", color: "navy" }
+                  { title: "소득·세액공제 신고서", desc: "근로자가 작성하는 기본 신고서", badge: "필수", color: "indigo" },
+                  { title: "부양가족 변동신고서", desc: "부양가족 추가/변경 시 제출", badge: "변동 시", color: "emerald" },
+                  { title: "주택자금 공제신청서", desc: "주택청약, 주택임차 공제 신청", badge: "해당자", color: "amber" },
+                  { title: "원천징수영수증", desc: "연말정산 결과 확인서", badge: "결과", color: "blue" }
                 ].each do |form| %>
                   <div class="group card card-interactive p-5">
                     <div class="flex items-start gap-4">
@@ -729,9 +729,9 @@
 
               <div class="bg-surface-100 rounded-2xl p-4 space-y-3">
                 <% [
-                  { title: "국세청 홈택스", desc: "연말정산 간소화 서비스", icon: "balance", color: "point", url: "https://www.hometax.go.kr" },
-                  { title: "국세청 연말정산 안내", desc: "연말정산 종합 안내 페이지", icon: "info", color: "forest", url: "https://www.nts.go.kr/nts/cm/cntnts/cntntsView.do?mi=2304&cntntsId=238938" },
-                  { title: "국가법령정보센터", desc: "소득세법 및 시행령", icon: "gavel", color: "navy", url: "https://www.law.go.kr/법령/소득세법" }
+                  { title: "국세청 홈택스", desc: "연말정산 간소화 서비스", icon: "balance", color: "indigo", url: "https://www.hometax.go.kr" },
+                  { title: "국세청 연말정산 안내", desc: "연말정산 종합 안내 페이지", icon: "info", color: "emerald", url: "https://www.nts.go.kr/nts/cm/cntnts/cntntsView.do?mi=2304&cntntsId=238938" },
+                  { title: "국가법령정보센터", desc: "소득세법 및 시행령", icon: "gavel", color: "blue", url: "https://www.law.go.kr/법령/소득세법" }
                 ].each do |link| %>
                   <a href="<%= link[:url] %>" target="_blank" rel="noopener"
                      class="flex items-center gap-4 p-4 bg-white rounded-xl border border-gray-100 hover:border-<%= link[:color] %>-300 hover:shadow-medium transition-all duration-200">
@@ -762,10 +762,10 @@
 
               <div class="grid sm:grid-cols-2 gap-4">
                 <% [
-                  { title: "이월 사유서", desc: "사고이월 사유 및 증빙 자료", badge: "사고이월 필수", color: "point" },
-                  { title: "이월예산 조서", desc: "이월 금액 내역 및 산출 근거", badge: "금액 산출", color: "forest" },
-                  { title: "이월예산 집행계획서", desc: "다음연도 집행 계획", badge: "계획", color: "warm" },
-                  { title: "예산집행 현황표", desc: "당해연도 예산 집행 현황", badge: "현황", color: "navy" }
+                  { title: "이월 사유서", desc: "사고이월 사유 및 증빙 자료", badge: "사고이월 필수", color: "indigo" },
+                  { title: "이월예산 조서", desc: "이월 금액 내역 및 산출 근거", badge: "금액 산출", color: "emerald" },
+                  { title: "이월예산 집행계획서", desc: "다음연도 집행 계획", badge: "계획", color: "amber" },
+                  { title: "예산집행 현황표", desc: "당해연도 예산 집행 현황", badge: "현황", color: "blue" }
                 ].each do |form| %>
                   <div class="group card card-interactive p-5">
                     <div class="flex items-start gap-4">
@@ -794,9 +794,9 @@
 
               <div class="bg-surface-100 rounded-2xl p-4 space-y-3">
                 <% [
-                  { title: "국가법령정보센터", desc: "지방재정법 및 시행령", icon: "balance", color: "point", url: "https://www.law.go.kr/법령/지방재정법" },
-                  { title: "행정안전부", desc: "지방재정 운영 매뉴얼", icon: "apartment", color: "forest", url: "https://www.mois.go.kr" },
-                  { title: "지방재정365", desc: "지방재정 통합공개시스템", icon: "public", color: "navy", url: "https://lofin.mois.go.kr" }
+                  { title: "국가법령정보센터", desc: "지방재정법 및 시행령", icon: "balance", color: "indigo", url: "https://www.law.go.kr/법령/지방재정법" },
+                  { title: "행정안전부", desc: "지방재정 운영 매뉴얼", icon: "apartment", color: "emerald", url: "https://www.mois.go.kr" },
+                  { title: "지방재정365", desc: "지방재정 통합공개시스템", icon: "public", color: "blue", url: "https://lofin.mois.go.kr" }
                 ].each do |link| %>
                   <a href="<%= link[:url] %>" target="_blank" rel="noopener"
                      class="flex items-center gap-4 p-4 bg-white rounded-xl border border-gray-100 hover:border-<%= link[:color] %>-300 hover:shadow-medium transition-all duration-200">
@@ -831,10 +831,10 @@
 
               <div class="grid sm:grid-cols-2 gap-4">
                 <% [
-                  { title: "수의계약 사유서", desc: "수의계약 체결 사유를 명시하는 필수 서류", badge: "별지 제5호 서식", color: "point", path: "/forms/수의계약사유서.html" },
-                  { title: "견적서", desc: "업체로부터 징구하는 가격 견적서", badge: "1인/2인 이상 견적용", color: "forest", path: "/forms/견적서.html" },
-                  { title: "예정가격 조서", desc: "예정가격 산출 근거 문서", badge: "거래실례가격/원가계산", color: "warm", path: "/forms/예정가격조서.html" },
-                  { title: "검수조서", desc: "납품/용역 완료 검수 확인서", badge: "대금지급 전 필수", color: "navy", path: "/forms/검수조서.html" }
+                  { title: "수의계약 사유서", desc: "수의계약 체결 사유를 명시하는 필수 서류", badge: "별지 제5호 서식", color: "indigo", path: "/forms/수의계약사유서.html" },
+                  { title: "견적서", desc: "업체로부터 징구하는 가격 견적서", badge: "1인/2인 이상 견적용", color: "emerald", path: "/forms/견적서.html" },
+                  { title: "예정가격 조서", desc: "예정가격 산출 근거 문서", badge: "거래실례가격/원가계산", color: "amber", path: "/forms/예정가격조서.html" },
+                  { title: "검수조서", desc: "납품/용역 완료 검수 확인서", badge: "대금지급 전 필수", color: "blue", path: "/forms/검수조서.html" }
                 ].each do |form| %>
                   <a href="<%= form[:path] %>" target="_blank"
                      class="group card card-interactive p-5">
@@ -897,9 +897,9 @@
 
               <div class="bg-surface-100 rounded-2xl p-4 space-y-3">
                 <% [
-                  { title: "국가법령정보센터", desc: "지방자치단체 입찰 및 계약집행기준 (별지 서식 포함)", icon: "balance", color: "point", url: "https://www.law.go.kr/행정규칙/지방자치단체입찰및계약집행기준" },
-                  { title: "행정안전부 지방계약 예규", desc: "계약일반조건, 입찰집행기준 등 HWP 다운로드", icon: "apartment", color: "forest", url: "https://www.mois.go.kr/frt/bbs/type001/commonSelectBoardList.do?bbsId=BBSMSTR_000000000061" },
-                  { title: "나라장터 (G2B)", desc: "조달청 수의계약 매뉴얼 및 서식", icon: "public", color: "navy", url: "https://www.g2b.go.kr" }
+                  { title: "국가법령정보센터", desc: "지방자치단체 입찰 및 계약집행기준 (별지 서식 포함)", icon: "balance", color: "indigo", url: "https://www.law.go.kr/행정규칙/지방자치단체입찰및계약집행기준" },
+                  { title: "행정안전부 지방계약 예규", desc: "계약일반조건, 입찰집행기준 등 HWP 다운로드", icon: "apartment", color: "emerald", url: "https://www.mois.go.kr/frt/bbs/type001/commonSelectBoardList.do?bbsId=BBSMSTR_000000000061" },
+                  { title: "나라장터 (G2B)", desc: "조달청 수의계약 매뉴얼 및 서식", icon: "public", color: "blue", url: "https://www.g2b.go.kr" }
                 ].each do |link| %>
                   <a href="<%= link[:url] %>" target="_blank" rel="noopener"
                      class="flex items-center gap-4 p-4 bg-white rounded-xl border border-gray-100 hover:border-<%= link[:color] %>-300 hover:shadow-medium transition-all duration-200">
@@ -1550,20 +1550,10 @@ function toggleFaq(index) {
 
   if (answer.classList.contains('hidden')) {
     answer.classList.remove('hidden');
-    if (icon) {
-      icon.setAttribute('data-icon', 'material-symbols:expand-less');
-      // [INP 최적화] icon 요소만 스캔 (Iconify.scan() 인수 없이 호출 시 전체 DOM 스캔 → INP 100K ms 유발)
-      if (typeof Iconify !== 'undefined') Iconify.scan(icon);
-    }
-    icon.style.transform = 'rotate(180deg)';
+    if (icon) icon.style.transform = 'rotate(180deg)';
   } else {
     answer.classList.add('hidden');
-    if (icon) {
-      icon.setAttribute('data-icon', 'material-symbols:expand-more');
-      // [INP 최적화] icon 요소만 스캔
-      if (typeof Iconify !== 'undefined') Iconify.scan(icon);
-    }
-    icon.style.transform = 'rotate(0deg)';
+    if (icon) icon.style.transform = 'rotate(0deg)';
   }
 }
 

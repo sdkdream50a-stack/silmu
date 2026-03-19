@@ -1,5 +1,16 @@
 @import "tailwindcss";
 
+/* ===========================================
+   Dynamic Tailwind class safelist
+   뷰에서 Ruby 보간으로 생성되는 클래스 강제 포함
+   =========================================== */
+@source inline("bg-{emerald,blue,violet,orange,rose,indigo,amber,red}-{50,100,600}");
+@source inline("text-{emerald,blue,violet,orange,rose,indigo,amber,red}-{500,600,700}");
+@source inline("border-{emerald,blue,violet,orange,rose,indigo,amber,red}-{100,300}");
+@source inline("hover:border-{emerald,blue,violet,orange,rose,indigo,amber,red}-200");
+@source inline("group-hover:bg-{emerald,blue,violet,orange,rose,indigo,amber,red}-600");
+@source inline("group-hover:text-{emerald,blue,violet,orange,rose,indigo,amber,red}-600");
+
 /* ============================================
    SILMU Design System v3.0
    Stitch v2 — Indigo/Violet Premium Theme
@@ -244,6 +255,11 @@
   .badge-emerald { @apply bg-emerald-100 text-emerald-700; }
   .badge-indigo { @apply bg-indigo-100 text-indigo-700; }
   .badge-amber { @apply bg-amber-100 text-amber-700; }
+  .badge-blue { @apply bg-blue-100 text-blue-700; }
+  .badge-violet { @apply bg-violet-100 text-violet-700; }
+  .badge-orange { @apply bg-orange-100 text-orange-700; }
+  .badge-rose { @apply bg-rose-100 text-rose-700; }
+  .badge-red { @apply bg-red-100 text-red-700; }
 
   /* === Navigation === */
   .nav-link {
