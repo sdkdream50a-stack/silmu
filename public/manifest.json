@@ -1,0 +1,20 @@
+{
+  "name": "실무.kr — 공무원 계약·예산 실무 가이드",
+  "short_name": "실무.kr",
+  "description": "공무원 계약·예산 업무 법령 가이드, 계산기, 감사사례",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4f46e5",
+  "orientation": "portrait-primary",
+  "lang": "ko",
+  "icons": [
+    { "src": "/icon.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon.png", "sizes": "512x512", "type": "image/png" }
+  ],
+  "shortcuts": [
+    { "name": "계약방식 결정", "url": "/tools/contract-method", "description": "계약방식 결정 도우미" },
+    { "name": "감사사례 검색", "url": "/audit-cases", "description": "실제 감사 지적사례 검색" }
+  ],
+  "categories": ["government", "productivity", "utilities"]
+}

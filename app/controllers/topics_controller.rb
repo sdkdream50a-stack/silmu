@@ -211,8 +211,13 @@ class TopicsController < ApplicationController
     # parent를 미리 로드하여 @topic.parent 접근 시 추가 쿼리 방지
     @topic = Topic.includes(:parent).find_by!(slug: params[:slug])
     @topic.increment_view!
-    @related_topics = Rails.cache.fetch("topic_related/#{@topic.slug}", expires_in: 1.hour) do
-      @topic.related_topics.to_a
+    # 같은 카테고리의 다른 토픽 (현재 토픽 제외, 최대 6개)
+    @related_topics = Rails.cache.fetch("topic_related_list/#{@topic.slug}", expires_in: 1.hour) do
+      Topic.published
+           .where(category: @topic.category)
+           .where.not(slug: @topic.slug)
+           .limit(6)
+           .to_a
     end
     @related_guide = Rails.cache.fetch("topic_guide/#{@topic.slug}", expires_in: 1.hour) do
       Guide.published.find_by(topic_slug: @topic.slug) ||

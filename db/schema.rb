@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_15_155657) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_19_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -39,6 +39,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_15_155657) do
     t.index ["published", "sector"], name: "index_audit_cases_on_published_and_sector"
     t.index ["slug"], name: "index_audit_cases_on_slug", unique: true
     t.index ["topic_slug"], name: "index_audit_cases_on_topic_slug"
+  end
+
+  create_table "bookmarks", force: :cascade do |t|
+    t.bigint "bookmarkable_id", null: false
+    t.string "bookmarkable_type", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["bookmarkable_type", "bookmarkable_id"], name: "index_bookmarks_on_bookmarkable"
+    t.index ["user_id", "bookmarkable_type", "bookmarkable_id"], name: "index_bookmarks_on_user_and_bookmarkable", unique: true
+    t.index ["user_id"], name: "index_bookmarks_on_user_id"
   end
 
   create_table "cafe_articles", force: :cascade do |t|
@@ -217,6 +228,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_15_155657) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "bookmarks", "users"
   add_foreign_key "calendar_data", "users"
   add_foreign_key "exam_progresses", "users"
   add_foreign_key "exam_question_comments", "users"

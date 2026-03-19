@@ -235,6 +235,9 @@ Rails.application.routes.draw do
   get "feedback", to: "feedback#index", as: :feedback
   post "feedback", to: "feedback#create"
 
+  # 북마크
+  resources :bookmarks, only: [:create, :destroy, :index]
+
   # 마이페이지
   get "mypage", to: "mypage#index", as: :mypage
 

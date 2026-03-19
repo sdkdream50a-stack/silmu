@@ -1,0 +1,8 @@
+<%# 최근 본 항목 기록 — 로컬스토리지에 현재 페이지 저장 %>
+<div data-controller="recent-items"
+     data-action="turbo:load@window->recent-items#record"
+     data-recent-items-title-param="<%= local_assigns[:title] %>"
+     data-recent-items-url-param="<%= local_assigns[:url] %>"
+     data-recent-items-type-param="<%= local_assigns[:type] || 'topic' %>"
+     style="display:none">
+</div>

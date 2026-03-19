@@ -1,0 +1,131 @@
+<%# 북마크 목록 페이지 (마이페이지에서 링크 제공 예정) %>
+<% content_for :title, "내 북마크 | 실무.kr" %>
+
+<section class="section py-10">
+  <div class="container-wide">
+    <div class="max-w-3xl mx-auto">
+
+      <!-- 헤더 -->
+      <div class="mb-8">
+        <%= link_to mypage_path, class: "inline-flex items-center gap-1 text-sm text-slate-500 hover:text-slate-700 mb-4 transition-colors" do %>
+          <span class="material-symbols-outlined text-base">chevron_left</span>
+          마이페이지
+        <% end %>
+        <h1 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+          <span class="material-symbols-outlined text-amber-500">bookmarks</span>
+          내 북마크
+        </h1>
+        <p class="text-slate-500 text-sm mt-1">저장한 토픽, 가이드, 감사사례를 모아볼 수 있습니다.</p>
+      </div>
+
+      <% total_count = @topics.size + @guides.size + @audit_cases.size %>
+
+      <% if total_count == 0 %>
+        <!-- 북마크 없음 -->
+        <div class="card p-12 text-center">
+          <span class="material-symbols-outlined text-5xl text-slate-300 block mb-4">bookmark_border</span>
+          <p class="text-slate-500 font-medium mb-2">아직 북마크한 항목이 없습니다</p>
+          <p class="text-slate-400 text-sm mb-6">토픽, 가이드, 감사사례 페이지에서 북마크 버튼을 눌러 저장해보세요.</p>
+          <div class="flex justify-center gap-3 flex-wrap">
+            <%= link_to topics_path, class: "btn btn-secondary btn-sm" do %>
+              <span class="material-symbols-outlined text-base">gavel</span>
+              토픽 보러가기
+            <% end %>
+            <%= link_to guides_path, class: "btn btn-secondary btn-sm" do %>
+              <span class="material-symbols-outlined text-base">menu_book</span>
+              가이드 보러가기
+            <% end %>
+          </div>
+        </div>
+
+      <% else %>
+
+        <!-- 토픽 북마크 -->
+        <% if @topics.any? %>
+          <div class="card p-6 mb-6">
+            <h2 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+              <span class="material-symbols-outlined text-indigo-500">gavel</span>
+              토픽
+              <span class="ml-auto text-xs font-normal text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full"><%= @topics.size %>개</span>
+            </h2>
+            <ul class="divide-y divide-slate-100">
+              <% @topics.each do |topic| %>
+                <% bookmark = current_user.bookmarks.find_by(bookmarkable_type: "Topic", bookmarkable_id: topic.id) %>
+                <li class="py-3 flex items-center gap-3">
+                  <%= link_to topic_path(topic.slug), class: "flex-1 flex items-center gap-3 group min-w-0" do %>
+                    <span class="material-symbols-outlined text-indigo-400 shrink-0">gavel</span>
+                    <span class="text-sm font-medium text-slate-700 group-hover:text-indigo-600 transition-colors truncate"><%= topic.name %></span>
+                    <% if topic.category.present? %>
+                      <span class="ml-auto shrink-0 text-xs text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full"><%= topic.category %></span>
+                    <% end %>
+                  <% end %>
+                  <div id="bookmark_Topic_<%= topic.id %>">
+                    <%= render "bookmarks/button", resource: topic, bookmark: bookmark, bookmarked: bookmark.present? %>
+                  </div>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <!-- 가이드 북마크 -->
+        <% if @guides.any? %>
+          <div class="card p-6 mb-6">
+            <h2 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+              <span class="material-symbols-outlined text-emerald-500">menu_book</span>
+              업무 가이드
+              <span class="ml-auto text-xs font-normal text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full"><%= @guides.size %>개</span>
+            </h2>
+            <ul class="divide-y divide-slate-100">
+              <% @guides.each do |guide| %>
+                <% bookmark = current_user.bookmarks.find_by(bookmarkable_type: "Guide", bookmarkable_id: guide.id) %>
+                <% link_target = guide.has_full_content? ? guide_path(guide.slug) : (guide.external_link.presence || guide_path(guide.slug)) %>
+                <li class="py-3 flex items-center gap-3">
+                  <%= link_to link_target, class: "flex-1 flex items-center gap-3 group min-w-0" do %>
+                    <span class="material-symbols-outlined text-emerald-400 shrink-0">menu_book</span>
+                    <span class="text-sm font-medium text-slate-700 group-hover:text-emerald-600 transition-colors truncate"><%= guide.title %></span>
+                    <% if guide.category.present? %>
+                      <span class="ml-auto shrink-0 text-xs text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full"><%= guide.category %></span>
+                    <% end %>
+                  <% end %>
+                  <div id="bookmark_Guide_<%= guide.id %>">
+                    <%= render "bookmarks/button", resource: guide, bookmark: bookmark, bookmarked: bookmark.present? %>
+                  </div>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <!-- 감사사례 북마크 -->
+        <% if @audit_cases.any? %>
+          <div class="card p-6 mb-6">
+            <h2 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+              <span class="material-symbols-outlined text-rose-500">policy</span>
+              감사사례
+              <span class="ml-auto text-xs font-normal text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full"><%= @audit_cases.size %>개</span>
+            </h2>
+            <ul class="divide-y divide-slate-100">
+              <% @audit_cases.each do |audit_case| %>
+                <% bookmark = current_user.bookmarks.find_by(bookmarkable_type: "AuditCase", bookmarkable_id: audit_case.id) %>
+                <li class="py-3 flex items-center gap-3">
+                  <%= link_to audit_case_path(audit_case.slug), class: "flex-1 flex items-center gap-3 group min-w-0" do %>
+                    <span class="material-symbols-outlined text-rose-400 shrink-0">policy</span>
+                    <span class="text-sm font-medium text-slate-700 group-hover:text-rose-600 transition-colors truncate"><%= audit_case.title %></span>
+                    <% if audit_case.category.present? %>
+                      <span class="ml-auto shrink-0 text-xs text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full"><%= audit_case.category %></span>
+                    <% end %>
+                  <% end %>
+                  <div id="bookmark_AuditCase_<%= audit_case.id %>">
+                    <%= render "bookmarks/button", resource: audit_case, bookmark: bookmark, bookmarked: bookmark.present? %>
+                  </div>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+      <% end %>
+    </div>
+  </div>
+</section>
