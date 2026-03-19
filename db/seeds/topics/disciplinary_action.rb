@@ -9,9 +9,9 @@ attrs = {
   summary: "공무원 징계의 종류(파면·해임·강등·정직·감봉·견책), 징계 절차, 징계 처분별 불이익, 소청심사 방법 완벽 정리",
   keywords: "징계, 공무원 징계, 파면, 해임, 강등, 정직, 감봉, 견책, 징계위원회, 소청심사",
   law_content: <<~CONTENT,
-    ## 국가공무원법 제79조의2 (징계의 종류)
+    ## 국가공무원법 제79조 (징계의 종류)
 
-    **국가공무원법 제79조의2 (징계의 종류)**
+    **국가공무원법 제79조 (징계의 종류)**
 
     <div style="background:#dbeafe;padding:12px;border-radius:8px;margin:8px 0;">
     징계는 중징계(파면·해임·강등·정직)와 경징계(감봉·견책)로 구분합니다:
@@ -27,11 +27,11 @@ attrs = {
     </div>
 
     <div style="background:#eff6ff;padding:12px;border-radius:8px;margin:8px 0;">
-    📌 <strong>위임 체계:</strong> 징계의 종류는 국가공무원법 제79조의2에서 규정하고, 구체적인 징계 절차와 징계위원회 운영은 <strong>공무원 징계령</strong>(대통령령)에서, 세부 양정 기준은 <strong>공무원 비위사건 처리규정</strong>(대통령령) 및 <strong>징계업무편람</strong>(예규)에서 정합니다. 징계 사유는 제78조에서 별도로 규정합니다.
+    📌 <strong>위임 체계:</strong> 징계의 종류는 국가공무원법 제79조에서 규정하고, 구체적인 징계 절차와 징계위원회 운영은 <strong>공무원 징계령</strong>(대통령령)에서, 세부 양정 기준은 <strong>공무원 비위사건 처리규정</strong>(대통령령) 및 <strong>징계업무편람</strong>(예규)에서 정합니다. 징계 사유는 제78조, 징계부가금은 제78조의2에서 별도로 규정합니다.
     </div>
 
     <div style="background:#f3f4f6;padding:12px;border-radius:8px;margin:8px 0;">
-    ⚖️ <strong>관련 법령:</strong> 국가공무원법 제78조(징계 사유), 제79조(징계 및 징계부가금), 제79조의2(징계의 종류), 공무원 징계령, 공무원 비위사건 처리규정
+    ⚖️ <strong>관련 법령:</strong> 국가공무원법 제78조(징계 사유), 제78조의2(징계부가금), 제79조(징계의 종류), 공무원 징계령, 공무원 비위사건 처리규정
     </div>
   CONTENT
   decree_content: <<~CONTENT,
