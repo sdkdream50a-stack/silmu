@@ -24,7 +24,7 @@ class GuidesController < ApplicationController
     expires_in 5.minutes, public: true, stale_while_revalidate: 1.hour
 
     canonical_url = request.original_url.split("?").first
-    description_text = "물품 구매·수의계약·적격심사·검수·예정가격·여비 등 공무원 계약·예산 업무를 법령 기준으로 단계별 안내합니다. 체크리스트·서식 템플릿·자동화 계산기와 함께 업무 정확도를 높이고 감사 지적 위험을 줄이세요. 지자체·교육청 담당자를 위한 실무 가이드 모음."
+    description_text = "물품 구매·수의계약·적격심사·검수·예정가격·여비 등 공무원 계약·예산 업무를 현행 법령 기준으로 단계별 안내합니다. 체크리스트·서식 템플릿·자동화 계산기와 함께 업무 정확도를 높이고 감사 지적 위험을 줄이세요. 지자체·교육청 계약 담당자를 위한 무료 실무 가이드 모음입니다."
     meta = {
       title: "공무원 계약·예산 업무 가이드 — 물품구매·검수·여비 단계별 안내",
       description: description_text,

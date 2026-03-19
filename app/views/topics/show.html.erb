@@ -63,6 +63,10 @@
           <div>
             <h1 class="text-3xl lg:text-4xl font-bold tracking-tight"><%= @topic.name %></h1>
             <p class="text-slate-200 mt-2 text-lg"><%= @topic.summary %></p>
+            <p class="mt-2 text-xs text-white/60 flex items-center gap-1">
+              <span class="material-symbols-outlined" style="font-size:14px">update</span>
+              마지막 업데이트: <%= @topic.updated_at.strftime("%Y년 %-m월 %-d일") %>
+            </p>
           </div>
         </div>
 

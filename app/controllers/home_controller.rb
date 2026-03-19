@@ -102,7 +102,7 @@ class HomeController < ApplicationController
     description_text = "공무원을 위한 계약·예산 실무 종합 플랫폼. 수의계약, 적격심사, 입찰, 검수, 예산 편성 등 #{@topic_count}개 현행 법령 가이드와 #{ApplicationHelper::ACTIVE_TOOL_COUNT}개 자동화 도구를 무료로 제공합니다. #{@audit_case_count}건 실제 감사사례 분석으로 실수를 예방하고, #{@template_count}종 서식 템플릿으로 업무 시간을 절약하세요."
 
     set_meta_tags(
-      title: "계약 실무, 이제 혼자 고민하지 마세요",
+      title: "공무원 계약·예산 실무 가이드 — 수의계약·입찰·여비 법령 안내",
       description: description_text,
       keywords: "공무원, 계약 실무, 수의계약, 입찰, 검수, 예산, 실무 도구",
       canonical: canonical_url,

@@ -66,6 +66,7 @@
     <%# Pretendard: preload→비동기 stylesheet (fetchpriority 제거 — LCP 경합 방지) %>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"></noscript>
+    <style>@font-face { font-family: 'Pretendard Variable'; font-display: swap; }</style>
     <%# Tossface 이모지 폰트 제거 — 실제 사용처 없음, 불필요한 네트워크 요청 제거 %>
 
     <%# Icons %>
@@ -262,7 +263,7 @@
           <div class="flex items-center">
             <%= link_to root_path, class: "group flex items-center gap-3 transition-all duration-200 hover:scale-[1.02]" do %>
               <div class="w-9 h-9 flex items-center justify-center drop-shadow-md group-hover:drop-shadow-lg transition-all">
-                <svg width="36" height="36" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg width="36" height="36" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="실무.kr 로고" role="img">
                   <defs>
                     <linearGradient id="logo_grad_header" gradientUnits="userSpaceOnUse" x1="20" y1="20" x2="180" y2="180">
                       <stop stop-color="#137fec"/>
@@ -486,7 +487,7 @@
           <div class="lg:col-span-2">
             <div class="flex items-center gap-3 mb-6">
               <div class="w-10 h-10 flex items-center justify-center">
-                <svg width="40" height="40" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg width="40" height="40" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="실무.kr 로고" role="img">
                   <defs>
                     <linearGradient id="logo_grad_footer" gradientUnits="userSpaceOnUse" x1="20" y1="20" x2="180" y2="180">
                       <stop stop-color="#137fec"/>
