@@ -107,6 +107,7 @@
                 <span class="material-symbols-outlined text-lg">print</span>
                 인쇄
               </button>
+              <%= bookmark_button(@guide) %>
             </div>
           </div>
 
@@ -317,3 +318,8 @@
     </div>
   </div>
 </section>
+
+<%= render 'shared/recent_items',
+      title: @guide.title,
+      url: guide_path(@guide),
+      type: 'guide' %>

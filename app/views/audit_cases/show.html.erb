@@ -65,6 +65,7 @@
                   title: @audit_case.title,
                   url: audit_case_url(@audit_case.slug),
                   description: @audit_case.issue.truncate(100) %>
+            <%= bookmark_button(@audit_case) %>
             <%= link_to audit_case_hwp_path(slug: @audit_case.slug),
                   class: "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-teal-50 text-teal-700 hover:bg-teal-100 border border-teal-200 transition-colors",
                   title: "한글(HWP) 파일로 다운로드" do %>
@@ -291,3 +292,8 @@
     </div>
   </div>
 </section>
+
+<%= render 'shared/recent_items',
+      title: @audit_case.title,
+      url: audit_case_path(@audit_case.slug),
+      type: 'audit_case' %>

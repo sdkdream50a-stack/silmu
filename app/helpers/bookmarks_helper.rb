@@ -10,12 +10,7 @@ module BookmarksHelper
     )
     bookmarked = bookmark.present?
 
-    # Turbo 교체 대상 DOM ID
-    dom_id = "bookmark_#{resource.class.name}_#{resource.id}"
-
-    content_tag(:div, id: dom_id) do
-      render partial: "bookmarks/button",
-             locals: { resource: resource, bookmark: bookmark, bookmarked: bookmarked }
-    end
+    render partial: "bookmarks/button",
+           locals: { resource: resource, bookmark: bookmark, bookmarked: bookmarked }
   end
 end

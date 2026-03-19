@@ -106,13 +106,14 @@
         </div>
       </div>
 
-      <!-- 소셜 공유 버튼 -->
-      <div class="mt-6 lg:mt-0">
+      <!-- 소셜 공유 + 북마크 버튼 -->
+      <div class="mt-6 lg:mt-0 flex items-start gap-3 flex-wrap">
         <%= render 'shared/social_share',
                    title: "#{@topic.name} — 실무.kr",
                    description: @topic.summary,
                    url: canonical_url,
                    class: "flex-wrap lg:flex-nowrap" %>
+        <%= bookmark_button(@topic) %>
       </div>
     </div>
   </div>
@@ -1623,3 +1624,8 @@ initTabs();
 document.addEventListener('turbo:load', initTabs);
 document.addEventListener('turbo:render', initTabs);
 </script>
+
+<%= render 'shared/recent_items',
+      title: @topic.name,
+      url: topic_path(@topic.slug),
+      type: 'topic' %>

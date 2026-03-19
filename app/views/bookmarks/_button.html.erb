@@ -1,23 +1,26 @@
-<%# 북마크 버튼 파셜 — bookmark_button(resource) 헬퍼에서 호출 %>
+<%# 북마크 버튼 파셜 — bookmark_button(resource) 헬퍼 또는 Turbo Stream에서 호출 %>
 <%# locals: resource(Topic/Guide/AuditCase), bookmark(Bookmark 또는 nil), bookmarked(Boolean) %>
+<%# Turbo Stream 재교체 시에도 ID가 유지되도록 파셜 자체가 래퍼 div를 포함 %>
 
-<% if bookmarked && bookmark %>
-  <%# 북마크 해제 버튼 %>
-  <%= button_to bookmark_path(bookmark),
-        method: :delete,
-        data: { turbo_stream: true },
-        class: "inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-amber-600 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-lg transition-colors" do %>
-    <span class="material-symbols-outlined text-base" style="font-size: 1.1rem;">bookmark</span>
-    북마크됨
+<div id="bookmark_<%= resource.class.name %>_<%= resource.id %>">
+  <% if bookmarked && bookmark %>
+    <%# 북마크 해제 버튼 %>
+    <%= button_to bookmark_path(bookmark),
+          method: :delete,
+          data: { turbo_stream: true },
+          class: "inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-amber-600 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-lg transition-colors" do %>
+      <span class="material-symbols-outlined text-base" style="font-size: 1.1rem;">bookmark</span>
+      북마크됨
+    <% end %>
+  <% else %>
+    <%# 북마크 추가 버튼 %>
+    <%= button_to bookmarks_path,
+          params: { bookmark: { bookmarkable_type: resource.class.name, bookmarkable_id: resource.id } },
+          method: :post,
+          data: { turbo_stream: true },
+          class: "inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-slate-500 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg transition-colors" do %>
+      <span class="material-symbols-outlined text-base" style="font-size: 1.1rem;">bookmark_border</span>
+      북마크
+    <% end %>
   <% end %>
-<% else %>
-  <%# 북마크 추가 버튼 %>
-  <%= button_to bookmarks_path,
-        params: { bookmark: { bookmarkable_type: resource.class.name, bookmarkable_id: resource.id } },
-        method: :post,
-        data: { turbo_stream: true },
-        class: "inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-slate-500 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg transition-colors" do %>
-    <span class="material-symbols-outlined text-base" style="font-size: 1.1rem;">bookmark_border</span>
-    북마크
-  <% end %>
-<% end %>
+</div>
