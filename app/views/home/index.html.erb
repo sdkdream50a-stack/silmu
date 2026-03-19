@@ -171,11 +171,11 @@
 </div>
 
 <!-- 계약단계 네비게이션 섹션 — 도구보다 먼저: 흐름을 알아야 도구를 쓸 수 있다 -->
-<section class="bg-white py-12 border-t border-slate-100">
+<section class="bg-white py-10 border-t border-slate-100">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div class="mb-6">
-      <h2 class="text-xl font-bold text-slate-900 tracking-tight mb-1">계약업무 10단계</h2>
-      <p class="text-sm text-slate-500">내가 지금 어느 단계인지 클릭하면 관련 정보를 바로 확인할 수 있습니다</p>
+      <h2 class="text-2xl font-bold text-slate-900 tracking-tight mb-1">계약업무 10단계</h2>
+      <p class="text-sm text-slate-500">지금 어느 단계에 있는지 클릭하면 해당 단계의 법령·절차·서식을 바로 확인할 수 있습니다</p>
     </div>
     <div class="relative">
       <div class="overflow-x-auto pb-3 -mx-4 px-4">
@@ -183,11 +183,11 @@
           <%
             contract_steps = [
               { step: 1,  label: "사업계획",      icon: "lightbulb",        color: "indigo",   path: contract_method_path },
-              { step: 2,  label: "사전절차",       icon: "checklist",        color: "indigo",   path: contract_method_path },
+              { step: 2,  label: "사전절차",       icon: "checklist",        color: "indigo",   path: pre_contract_checklist_path },
               { step: 3,  label: "품의·기안",      icon: "edit_note",        color: "violet",   path: topics_category_path(key: "contract") + "?subgroup=수의계약" },
               { step: 4,  label: "사전규격공개",   icon: "preview",          color: "violet",   path: topics_category_path(key: "contract") + "?subgroup=수의계약" },
-              { step: 5,  label: "공고·입찰",      icon: "campaign",         color: "amber",    path: contract_flow_path },
-              { step: 6,  label: "계약체결",       icon: "handshake",        color: "amber",    path: contract_flow_path },
+              { step: 5,  label: "공고·입찰",      icon: "campaign",         color: "amber",    path: topic_path("bidding") },
+              { step: 6,  label: "계약체결",       icon: "handshake",        color: "amber",    path: topic_path("contract-execution") },
               { step: 7,  label: "계약서류",       icon: "description",      color: "emerald",  path: topics_category_path(key: "contract") + "?subgroup=계약체결" },
               { step: 8,  label: "선금·중도금",    icon: "wallet",           color: "emerald",  path: topics_category_path(key: "contract") + "?subgroup=계약체결" },
               { step: 9,  label: "계약변경",       icon: "sync_alt",         color: "rose",     path: topics_category_path(key: "contract") + "?subgroup=변경종료" },
@@ -228,13 +228,13 @@
 </section>
 
 <!-- Core Tools Section -->
-<% cache "home/core_tools/v1", expires_in: 24.hours do %>
+<% cache "home/core_tools/v2", expires_in: 24.hours do %>
 <section class="bg-background-light py-16 relative">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div class="mb-14 flex items-end justify-between">
       <div>
-        <h2 class="text-xl font-bold text-slate-900 tracking-tight mb-4">핵심 실무 도구</h2>
-        <p class="text-xl text-slate-600 font-medium">복잡한 업무를 <strong class="text-indigo-700 font-bold">클릭 몇 번</strong>으로 해결하는 프리미엄 툴킷</p>
+        <h2 class="text-2xl font-bold text-slate-900 tracking-tight mb-4">핵심 실무 도구</h2>
+        <p class="text-xl text-slate-600 font-medium">복잡한 계산과 서류 작성을 <strong class="text-indigo-700 font-bold">클릭 몇 번</strong>으로 처리하세요</p>
       </div>
       <%= link_to tools_path, class: "group flex items-center gap-2 px-5 py-3 text-base font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-lg hover:shadow-xl transition-all" do %>
         전체 도구 보기
@@ -605,10 +605,10 @@
 </section>
 
 <!-- External Links / Partner Networks -->
-<% cache "home/partners/v1/#{@sector}", expires_in: 24.hours do %>
+<% cache "home/partners/v2/#{@sector}", expires_in: 24.hours do %>
 <section class="bg-slate-50 py-20 border-t border-slate-200">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <h2 class="mb-10 text-center text-lg font-bold text-slate-400 uppercase tracking-widest">Partner Networks</h2>
+    <h2 class="mb-10 text-center text-lg font-bold text-slate-400 tracking-wider">자주 사용하는 정부 시스템</h2>
     <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
       <% [
         { url: "https://www.g2b.go.kr", abbr: "G2B",    name: "나라장터",     color: "text-blue-900",   highlight: @sector == "local_gov" },
