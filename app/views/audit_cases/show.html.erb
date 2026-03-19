@@ -76,14 +76,18 @@
 
         <!-- 핵심 요약 인포그래픽 (LCP 후보 — eager 로딩 + fetchpriority) -->
         <% if @audit_case.infographic_url.present? %>
+          <% webp_url = @audit_case.infographic_url.sub(/\.png$/, '.webp') %>
           <div class="mb-6">
-            <img src="<%= @audit_case.infographic_url %>"
-                 alt="<%= @audit_case.title %> 핵심 요약 인포그래픽"
-                 width="800" height="600"
-                 loading="eager"
-                 fetchpriority="high"
-                 decoding="async"
-                 class="w-full rounded-2xl shadow-md border border-slate-100">
+            <picture>
+              <source srcset="<%= webp_url %>" type="image/webp">
+              <img src="<%= @audit_case.infographic_url %>"
+                   alt="<%= @audit_case.title %> 핵심 요약 인포그래픽"
+                   width="800" height="600"
+                   loading="eager"
+                   fetchpriority="high"
+                   decoding="async"
+                   class="w-full rounded-2xl shadow-md border border-slate-100">
+            </picture>
           </div>
         <% end %>
 
