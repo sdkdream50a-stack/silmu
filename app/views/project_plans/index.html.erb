@@ -230,7 +230,10 @@
           <span class="material-symbols-outlined" style="font-size:18px;">content_copy</span> 복사
         </button>
         <button class="pp-btn pp-btn-secondary" onclick="ppDownload()">
-          <span class="material-symbols-outlined" style="font-size:18px;">download</span> 다운로드
+          <span class="material-symbols-outlined" style="font-size:18px;">download</span> TXT
+        </button>
+        <button class="pp-btn pp-btn-secondary" onclick="ppDownloadHwpx()" style="background:#eef2ff; color:#3730a3; border:1px solid #a5b4fc;">
+          <span class="material-symbols-outlined" style="font-size:18px;">description</span> 한글(hwpx)
         </button>
         <button class="pp-btn pp-btn-secondary" onclick="window.print()">
           <span class="material-symbols-outlined" style="font-size:18px;">print</span> 인쇄
@@ -241,6 +244,22 @@
       </div>
       <div id="pp-doc-content"></div>
     </div>
+
+    <!-- HWPX 다운로드용 hidden form -->
+    <%= form_with url: project_plan_download_hwpx_path, method: :post, id: "pp-hwpx-form", local: true do |f| %>
+      <%= hidden_field_tag :project_name, "", id: "pp-hwpx-project-name" %>
+      <%= hidden_field_tag :department, "", id: "pp-hwpx-department" %>
+      <%= hidden_field_tag :manager, "", id: "pp-hwpx-manager" %>
+      <%= hidden_field_tag :contact, "", id: "pp-hwpx-contact" %>
+      <%= hidden_field_tag :necessity, "", id: "pp-hwpx-necessity" %>
+      <%= hidden_field_tag :current_status, "", id: "pp-hwpx-current-status" %>
+      <%= hidden_field_tag :content, "", id: "pp-hwpx-content" %>
+      <%= hidden_field_tag :schedule, "", id: "pp-hwpx-schedule" %>
+      <%= hidden_field_tag :budget, "", id: "pp-hwpx-budget" %>
+      <%= hidden_field_tag :budget_korean, "", id: "pp-hwpx-budget-korean" %>
+      <%= hidden_field_tag :budget_item, "", id: "pp-hwpx-budget-item" %>
+      <%= hidden_field_tag :effect, "", id: "pp-hwpx-effect" %>
+    <% end %>
 
   </div>
 </section>
@@ -437,6 +456,28 @@ function ppDownload() {
 function ppReset() {
   document.getElementById('pp-result').classList.remove('active');
   document.getElementById('pp-form-card').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+function ppDownloadHwpx() {
+  const name = document.getElementById('pp-project-name').value.trim();
+  if (!name) { ppShowToast('먼저 사업계획서를 생성해 주세요'); return; }
+
+  const budgetRaw = document.getElementById('pp-budget').value.replace(/[^\d]/g, '');
+  document.getElementById('pp-hwpx-project-name').value   = name;
+  document.getElementById('pp-hwpx-department').value     = document.getElementById('pp-department').value.trim();
+  document.getElementById('pp-hwpx-manager').value        = document.getElementById('pp-manager').value.trim();
+  document.getElementById('pp-hwpx-contact').value        = document.getElementById('pp-contact').value.trim();
+  document.getElementById('pp-hwpx-necessity').value      = document.getElementById('pp-necessity').value.trim();
+  document.getElementById('pp-hwpx-current-status').value = document.getElementById('pp-current-status').value.trim();
+  document.getElementById('pp-hwpx-content').value        = document.getElementById('pp-content').value.trim();
+  document.getElementById('pp-hwpx-schedule').value       = document.getElementById('pp-schedule').value.trim();
+  document.getElementById('pp-hwpx-budget').value         = document.getElementById('pp-budget').value.trim();
+  document.getElementById('pp-hwpx-budget-korean').value  = budgetRaw ? ppNumberToKorean(Number(budgetRaw)) : '';
+  document.getElementById('pp-hwpx-budget-item').value    = document.getElementById('pp-budget-item').value.trim();
+  document.getElementById('pp-hwpx-effect').value         = document.getElementById('pp-effect').value.trim();
+
+  ppShowToast('한글 파일 생성 중...');
+  document.getElementById('pp-hwpx-form').submit();
 }
 
 function ppShowToast(msg) {

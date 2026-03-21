@@ -342,7 +342,10 @@
           <span class="material-symbols-outlined" style="font-size:18px;">content_copy</span> 복사
         </button>
         <button class="cr-btn cr-btn-secondary" onclick="crDownload()">
-          <span class="material-symbols-outlined" style="font-size:18px;">download</span> 다운로드
+          <span class="material-symbols-outlined" style="font-size:18px;">download</span> TXT
+        </button>
+        <button class="cr-btn cr-btn-secondary" onclick="crDownloadHwpx()" style="background:#ecfdf5; color:#065f46; border:1px solid #6ee7b7;">
+          <span class="material-symbols-outlined" style="font-size:18px;">description</span> 한글(hwpx)
         </button>
         <button class="cr-btn cr-btn-secondary" onclick="window.print()">
           <span class="material-symbols-outlined" style="font-size:18px;">print</span> 인쇄
@@ -353,6 +356,24 @@
       </div>
       <div id="cr-doc-content"></div>
     </div>
+
+    <!-- HWPX 다운로드용 hidden form -->
+    <%= form_with url: contract_reason_download_hwpx_path, method: :post, id: "cr-hwpx-form", local: true do |f| %>
+      <%= hidden_field_tag :contract_name, "", id: "cr-hwpx-contract-name" %>
+      <%= hidden_field_tag :type_label, "", id: "cr-hwpx-type-label" %>
+      <%= hidden_field_tag :budget, "", id: "cr-hwpx-budget" %>
+      <%= hidden_field_tag :budget_korean, "", id: "cr-hwpx-budget-korean" %>
+      <%= hidden_field_tag :vat_label, "", id: "cr-hwpx-vat-label" %>
+      <%= hidden_field_tag :company, "", id: "cr-hwpx-company" %>
+      <%= hidden_field_tag :business_no, "", id: "cr-hwpx-business-no" %>
+      <%= hidden_field_tag :delivery, "", id: "cr-hwpx-delivery" %>
+      <%= hidden_field_tag :reason_detail, "", id: "cr-hwpx-reason-detail" %>
+      <%= hidden_field_tag :reason_law, "", id: "cr-hwpx-reason-law" %>
+      <%= hidden_field_tag :reason_law_text, "", id: "cr-hwpx-reason-law-text" %>
+      <%= hidden_field_tag :background, "", id: "cr-hwpx-background" %>
+      <%= hidden_field_tag :dept, "", id: "cr-hwpx-dept" %>
+      <%= hidden_field_tag :manager, "", id: "cr-hwpx-manager" %>
+    <% end %>
 
   </div>
 </section>
@@ -641,6 +662,32 @@ function crDownload() {
 function crReset() {
   document.getElementById('cr-result').classList.remove('active');
   document.getElementById('cr-form-card').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+function crDownloadHwpx() {
+  if (!crState.type || !crState.reason) { crShowToast('먼저 사유서를 생성해 주세요'); return; }
+  var data = crReasonData[crState.reason];
+  var typeLabel = crTypeLabels[crState.type];
+  var vat = document.getElementById('cr-vat').value;
+  var vatLabel = vat === 'included' ? 'VAT 포함' : 'VAT 별도';
+
+  document.getElementById('cr-hwpx-contract-name').value  = document.getElementById('cr-contract-name').value.trim();
+  document.getElementById('cr-hwpx-type-label').value     = typeLabel;
+  document.getElementById('cr-hwpx-budget').value         = document.getElementById('cr-budget').value.trim();
+  document.getElementById('cr-hwpx-budget-korean').value  = crNumberToKorean(Number(document.getElementById('cr-budget').value.replace(/[^\d]/g, '')));
+  document.getElementById('cr-hwpx-vat-label').value      = vatLabel;
+  document.getElementById('cr-hwpx-company').value        = document.getElementById('cr-company').value.trim();
+  document.getElementById('cr-hwpx-business-no').value    = document.getElementById('cr-business-no').value.trim();
+  document.getElementById('cr-hwpx-delivery').value       = document.getElementById('cr-delivery').value.trim();
+  document.getElementById('cr-hwpx-reason-detail').value  = document.getElementById('cr-reason-detail').value.trim();
+  document.getElementById('cr-hwpx-reason-law').value     = data ? data.law : '';
+  document.getElementById('cr-hwpx-reason-law-text').value = data ? data.lawText : '';
+  document.getElementById('cr-hwpx-background').value     = document.getElementById('cr-background').value.trim();
+  document.getElementById('cr-hwpx-dept').value           = document.getElementById('cr-department').value.trim();
+  document.getElementById('cr-hwpx-manager').value        = document.getElementById('cr-manager').value.trim();
+
+  crShowToast('한글 파일 생성 중...');
+  document.getElementById('cr-hwpx-form').submit();
 }
 
 // URL 파라미터 자동 pre-fill (계약방식 결정 도우미에서 연동)

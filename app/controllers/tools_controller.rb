@@ -190,6 +190,26 @@ class ToolsController < ApplicationController
     end
   end
 
+  def annual_leave_hwpx
+    binary = HwpxExportService.generate_annual_leave(
+      params.permit(
+        :hire_date, :ref_year, :service_period,
+        :granted_leave, :used_leave, :remaining_leave,
+        :annual_allowance_pay, :annual_allowance_detail,
+        :compensation_pay, :compensation_detail
+      )
+    )
+
+    if binary
+      send_data binary,
+                filename: "연가일수_계산결과_#{Time.zone.today.strftime('%Y%m%d')}.hwpx",
+                type: "application/octet-stream",
+                disposition: "attachment"
+    else
+      render json: { success: false, error: "HWPX 파일 생성에 실패했습니다." }, status: :unprocessable_entity
+    end
+  end
+
   def travel_calculator
     description_text = "공무원 국내·외 출장 여비를 자동으로 계산합니다. 교통비, 일비, 숙박비, 식비를 한 번에 산출하고, 국내출장과 해외출장을 구분하여 정확한 여비를 계산합니다. 공무원 여비 규정에 따라 자동 계산됩니다."
 

@@ -201,15 +201,34 @@
               <div id="leave-rule" class="text-sm text-slate-700"></div>
             </div>
 
-            <!-- PDF 다운로드 버튼 -->
-            <div class="mt-4 pt-4 border-t border-slate-100">
+            <!-- 다운로드 버튼 -->
+            <div class="mt-4 pt-4 border-t border-slate-100 flex flex-col gap-2">
               <button onclick="downloadPdf()" id="pdf-btn"
                       class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition-colors">
                 <span class="material-symbols-outlined text-lg">picture_as_pdf</span>
                 PDF로 저장
               </button>
-              <p class="text-xs text-slate-400 mt-1 text-center">연가 계산 결과를 PDF로 저장합니다</p>
+              <button onclick="downloadHwpx()" id="hwpx-btn"
+                      class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-xl transition-colors">
+                <span class="material-symbols-outlined text-lg">description</span>
+                한글(hwpx)로 저장
+              </button>
+              <p class="text-xs text-slate-400 mt-0.5 text-center">계산 결과를 파일로 저장합니다</p>
             </div>
+
+            <!-- HWPX 다운로드용 hidden form -->
+            <%= form_with url: annual_leave_hwpx_path, method: :post, id: "al-hwpx-form", local: true do |f| %>
+              <%= hidden_field_tag :hire_date, "", id: "al-hwpx-hire-date" %>
+              <%= hidden_field_tag :ref_year, "", id: "al-hwpx-ref-year" %>
+              <%= hidden_field_tag :service_period, "", id: "al-hwpx-service-period" %>
+              <%= hidden_field_tag :granted_leave, "", id: "al-hwpx-granted-leave" %>
+              <%= hidden_field_tag :used_leave, "", id: "al-hwpx-used-leave" %>
+              <%= hidden_field_tag :remaining_leave, "", id: "al-hwpx-remaining-leave" %>
+              <%= hidden_field_tag :annual_allowance_pay, "", id: "al-hwpx-allowance-pay" %>
+              <%= hidden_field_tag :annual_allowance_detail, "", id: "al-hwpx-allowance-detail" %>
+              <%= hidden_field_tag :compensation_pay, "", id: "al-hwpx-compensation-pay" %>
+              <%= hidden_field_tag :compensation_detail, "", id: "al-hwpx-compensation-detail" %>
+            <% end %>
 
           </div>
         </div>
@@ -353,6 +372,42 @@
 
     document.getElementById('result-empty').classList.add('hidden');
     document.getElementById('result-content').classList.remove('hidden');
+
+    // HWPX hidden form 동기화
+    document.getElementById('al-hwpx-hire-date').value      = hireDateVal;
+    document.getElementById('al-hwpx-ref-year').value       = refYear;
+    document.getElementById('al-hwpx-service-period').value = periodText;
+    document.getElementById('al-hwpx-granted-leave').value  = grantedLeave;
+    document.getElementById('al-hwpx-used-leave').value     = usedLeave;
+    document.getElementById('al-hwpx-remaining-leave').value = remaining;
+    if (monthlyWage > 0 && remaining > 0) {
+      const hourlyOrdinaryWage = monthlyWage / 209;
+      const dailyOrdinaryWage = hourlyOrdinaryWage * 8;
+      const allowancePay = dailyOrdinaryWage * remaining;
+      document.getElementById('al-hwpx-allowance-pay').value    = Math.round(allowancePay).toLocaleString('ko-KR') + '원';
+      document.getElementById('al-hwpx-allowance-detail').value =
+        '1일 통상임금: ' + Math.round(dailyOrdinaryWage).toLocaleString('ko-KR') + '원 × 미사용 ' + remaining + '일';
+    }
+    if (dailyWage > 0) {
+      const compensationDays = Math.min(remaining, 20);
+      const compensationPay = dailyWage * compensationDays;
+      document.getElementById('al-hwpx-compensation-pay').value    = Math.round(compensationPay).toLocaleString('ko-KR') + '원';
+      document.getElementById('al-hwpx-compensation-detail').value =
+        '잔여 ' + remaining + '일 중 최대 20일 한도 → ' + compensationDays + '일 × ' + dailyWage.toLocaleString('ko-KR') + '원';
+    }
+  }
+
+  function downloadHwpx() {
+    const hireDateVal = document.getElementById('hire-date').value;
+    if (!hireDateVal) { alert('임용일을 먼저 입력해주세요.'); return; }
+    const btn = document.getElementById('hwpx-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="material-symbols-outlined text-lg animate-spin">progress_activity</span> 생성 중...';
+    document.getElementById('al-hwpx-form').submit();
+    setTimeout(function() {
+      btn.disabled = false;
+      btn.innerHTML = '<span class="material-symbols-outlined text-lg">description</span> 한글(hwpx)로 저장';
+    }, 3000);
   }
 
   function downloadPdf() {

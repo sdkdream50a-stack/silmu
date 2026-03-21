@@ -72,6 +72,9 @@ Rails.application.routes.draw do
   get "quote-reviews/analyze", to: redirect("/tools/quote-review")
   get "cost-calculations/review", to: redirect("/tools/cost-calculation")
   get "official-documents/generate", to: redirect("/tools/official-document")
+  get "contract-reasons/download-hwpx", to: redirect("/tools/contract-reason")
+  get "project-plans/download-hwpx", to: redirect("/tools/project-plan")
+  get "tools/annual-leave/hwpx", to: redirect("/tools/annual-leave-calculator")
   get "estimated-prices/calculate", to: redirect("/tools/estimated-price")
   get "legal-periods/calculate", to: redirect("/tools/legal-period")
   get "contract-guarantees/calculate", to: redirect("/tools/contract-guarantee")
@@ -165,6 +168,7 @@ Rails.application.routes.draw do
 
   # 사업계획서 생성기
   get "tools/project-plan", to: "project_plans#index", as: :project_plan
+  post "project-plans/download-hwpx", to: "project_plans#download_hwpx", as: :project_plan_download_hwpx
 
   # 공문서 AI 작성 도우미
   get "tools/official-document", to: "official_documents#index", as: :official_document
@@ -173,6 +177,7 @@ Rails.application.routes.draw do
 
   # 수의계약 사유서 생성기
   get "tools/contract-reason", to: "contract_reasons#index", as: :contract_reason
+  post "contract-reasons/download-hwpx", to: "contract_reasons#download_hwpx", as: :contract_reason_download_hwpx
 
   # 예정가격 계산기
   get "tools/estimated-price", to: "estimated_prices#index", as: :estimated_price
@@ -213,6 +218,7 @@ Rails.application.routes.draw do
   # 연가일수 계산기
   get "tools/annual-leave-calculator", to: "tools#annual_leave_calculator", as: :annual_leave_calculator
   post "tools/annual-leave/pdf", to: "tools#annual_leave_pdf", as: :annual_leave_pdf
+  post "tools/annual-leave/hwpx", to: "tools#annual_leave_hwpx", as: :annual_leave_hwpx
 
   # 퇴직금 계산기
   get "tools/severance-calculator", to: "tools#severance_calculator", as: :severance_calculator

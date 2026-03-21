@@ -7,4 +7,28 @@ class ProjectPlansController < ApplicationController
       og: { title: "사업계획서 생성기 — 실무.kr", url: canonical_url }
     )
   end
+
+  def download_hwpx
+    binary = HwpxExportService.generate_project_plan(download_params)
+
+    if binary
+      project_name = download_params[:project_name].to_s.gsub(/[^\w가-힣\s\-]/, "").strip.presence || "사업계획서"
+      send_data binary,
+                filename: "사업계획서_#{project_name}.hwpx",
+                type: "application/octet-stream",
+                disposition: "attachment"
+    else
+      redirect_to project_plan_path, alert: "HWPX 파일 생성에 실패했습니다. 잠시 후 다시 시도해 주세요."
+    end
+  end
+
+  private
+
+  def download_params
+    params.permit(
+      :project_name, :department, :manager, :contact,
+      :necessity, :current_status, :content, :schedule,
+      :budget, :budget_korean, :budget_item, :effect
+    )
+  end
 end

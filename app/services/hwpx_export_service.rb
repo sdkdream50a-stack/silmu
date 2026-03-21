@@ -45,6 +45,66 @@ class HwpxExportService
     call_generator(data)
   end
 
+  # 수의계약 사유서 HWPX 생성
+  def self.generate_contract_reason(params)
+    call_generator(
+      mode:            "contract_reason",
+      contract_name:   params[:contract_name].to_s.truncate(100, omission: ""),
+      type_label:      params[:type_label].to_s,
+      budget:          params[:budget].to_s,
+      budget_korean:   params[:budget_korean].to_s,
+      vat_label:       params[:vat_label].to_s,
+      company:         params[:company].to_s,
+      business_no:     params[:business_no].to_s,
+      delivery:        params[:delivery].to_s,
+      reason_detail:   params[:reason_detail].to_s,
+      reason_law:      params[:reason_law].to_s,
+      reason_law_text: params[:reason_law_text].to_s,
+      background:      params[:background].to_s,
+      dept:            params[:dept].to_s.presence || "○○과",
+      manager:         params[:manager].to_s,
+      date_str:        Time.zone.today.strftime("%Y. %-m. %-d.")
+    )
+  end
+
+  # 사업계획서 HWPX 생성
+  def self.generate_project_plan(params)
+    call_generator(
+      mode:           "project_plan",
+      project_name:   params[:project_name].to_s.truncate(100, omission: ""),
+      department:     params[:department].to_s.presence || "○○과",
+      manager:        params[:manager].to_s,
+      contact:        params[:contact].to_s,
+      necessity:      params[:necessity].to_s,
+      current_status: params[:current_status].to_s,
+      content:        params[:content].to_s,
+      schedule:       params[:schedule].to_s,
+      budget:         params[:budget].to_s,
+      budget_korean:  params[:budget_korean].to_s,
+      budget_item:    params[:budget_item].to_s,
+      effect:         params[:effect].to_s,
+      date_str:       Time.zone.today.strftime("%Y. %-m. %-d.")
+    )
+  end
+
+  # 연가 계산 결과 HWPX 생성
+  def self.generate_annual_leave(params)
+    call_generator(
+      mode:                    "annual_leave",
+      hire_date:               params[:hire_date].to_s,
+      ref_year:                params[:ref_year].to_s,
+      service_period:          params[:service_period].to_s,
+      granted_leave:           params[:granted_leave].to_s,
+      used_leave:              params[:used_leave].to_s,
+      remaining_leave:         params[:remaining_leave].to_s,
+      annual_allowance_pay:    params[:annual_allowance_pay].to_s,
+      annual_allowance_detail: params[:annual_allowance_detail].to_s,
+      compensation_pay:        params[:compensation_pay].to_s,
+      compensation_detail:     params[:compensation_detail].to_s,
+      date_str:                Time.zone.today.strftime("%Y. %-m. %-d.")
+    )
+  end
+
   private
 
   def self.call_generator(data)
