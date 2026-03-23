@@ -508,6 +508,7 @@ export default class extends Controller {
       }
       // 학습 스트릭 업데이트
       saveStreakToday()
+      this._updateNavStreakBadge()
       // #6 서버 동기화 (quiz_completed=true)
       this.syncToServer(true)
     }
@@ -1114,5 +1115,18 @@ export default class extends Controller {
     this.resultAreaTarget.classList.add("hidden")
     this.questionAreaTarget.classList.remove("hidden")
     this.showQuestion()
+  }
+
+  // nav 스트릭 배지 즉시 갱신
+  _updateNavStreakBadge() {
+    try {
+      const streak = JSON.parse(localStorage.getItem('exam_streak')) || {}
+      const badge = document.getElementById('nav-streak-badge')
+      const countEl = document.getElementById('nav-streak-count')
+      if (badge && countEl && streak.count > 0) {
+        countEl.textContent = streak.count
+        badge.classList.remove('hidden')
+      }
+    } catch { /* 무시 */ }
   }
 }

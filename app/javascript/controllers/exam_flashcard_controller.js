@@ -1,6 +1,7 @@
 // exam.silmu.kr — 용어집 플래시카드 모드 Stimulus 컨트롤러
 import { Controller } from "@hotwired/stimulus"
 import { escapeHtml } from "../exam_utils"
+import { saveStreakToday } from "../exam_progress"
 
 const DONE_KEY = 'exam_flashcard_done'
 
@@ -282,6 +283,11 @@ export default class extends Controller {
 
   // 완주 화면 — 성취 축하 오버레이
   showResult() {
+    // 플래시카드 덱 완주 시 학습 스트릭 갱신
+    saveStreakToday()
+    // nav 배지 즉시 갱신
+    this._updateNavStreakBadge()
+
     if (this.hasCardTarget) {
       this.cardTarget.closest('[data-card-area]')?.classList.add("hidden")
     }
@@ -362,4 +368,17 @@ export default class extends Controller {
   }
 
   escapeHtml(str) { return escapeHtml(str) }
+
+  // nav 스트릭 배지 즉시 갱신
+  _updateNavStreakBadge() {
+    try {
+      const streak = JSON.parse(localStorage.getItem('exam_streak')) || {}
+      const badge = document.getElementById('nav-streak-badge')
+      const countEl = document.getElementById('nav-streak-count')
+      if (badge && countEl && streak.count > 0) {
+        countEl.textContent = streak.count
+        badge.classList.remove('hidden')
+      }
+    } catch { /* 무시 */ }
+  }
 }
