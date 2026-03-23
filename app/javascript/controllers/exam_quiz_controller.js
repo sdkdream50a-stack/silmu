@@ -185,7 +185,7 @@ export default class extends Controller {
     const total = this.questionsValue.length
     const idx = this.currentValue
 
-    // 진행바 업데이트
+    // 진행바 업데이트 (트랜지션은 CSS .exam-progress-bar로 처리)
     this.progressBarTarget.style.width = `${(idx / total) * 100}%`
     this.currentNumTarget.textContent = idx + 1
 
@@ -315,11 +315,15 @@ export default class extends Controller {
         icon.textContent = 'check_circle'
         icon.classList.add('text-green-600')
         btn.appendChild(icon)
+        // 정답 버튼 pulse 애니메이션
+        btn.classList.add('exam-answer-correct')
       } else if (i === selected) {
         btn.classList.add("border-red-400", "bg-red-50", "text-red-700")
         icon.textContent = 'cancel'
         icon.classList.add('text-red-500')
         btn.appendChild(icon)
+        // 오답 버튼 shake 애니메이션
+        btn.classList.add('exam-answer-wrong')
       } else {
         btn.classList.add("opacity-50")
       }

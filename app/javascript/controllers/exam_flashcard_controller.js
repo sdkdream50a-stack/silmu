@@ -280,25 +280,55 @@ export default class extends Controller {
     this.showFront()
   }
 
-  // 완주 화면
+  // 완주 화면 — 성취 축하 오버레이
   showResult() {
     if (this.hasCardTarget) {
       this.cardTarget.closest('[data-card-area]')?.classList.add("hidden")
     }
     if (this.hasResultTarget) {
       this.resultTarget.classList.remove("hidden")
+      const learnedPct = this.total > 0 ? Math.round((this.learned / this.total) * 100) : 100
+      const perfectRun = learnedPct >= 90
       this.resultTarget.innerHTML = `
-        <div class="text-center py-8">
-          <div class="w-20 h-20 bg-yellow-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-            <span class="material-symbols-outlined text-yellow-300 text-4xl">workspace_premium</span>
+        <div class="exam-celebration-card text-center py-10 px-6">
+          <!-- 이모지 성취 배지 -->
+          <div class="relative inline-flex items-center justify-center mb-5">
+            <div class="w-24 h-24 rounded-full flex items-center justify-center
+                        ${perfectRun ? 'bg-yellow-400/30' : 'bg-indigo-400/20'}">
+              <span class="material-symbols-outlined text-5xl ${perfectRun ? 'text-yellow-300' : 'text-indigo-300'}">
+                ${perfectRun ? 'emoji_events' : 'workspace_premium'}
+              </span>
+            </div>
           </div>
-          <div class="text-2xl font-bold text-white mb-2">완주!</div>
-          <p class="text-white/70 text-sm mb-6">총 ${this.total}개 용어를 모두 학습했습니다.</p>
-          <button data-action="click->exam-flashcard#restart"
-                  class="inline-flex items-center gap-2 bg-indigo-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-indigo-400 transition-colors">
-            <span class="material-symbols-outlined">refresh</span>
-            다시 하기
-          </button>
+
+          <!-- 성취 메시지 -->
+          <div class="text-3xl font-bold text-white mb-2">
+            ${perfectRun ? '완벽 완주!' : '완주!'}
+          </div>
+          <p class="text-white/70 text-sm mb-1">
+            총 <strong class="text-white">${this.total}개</strong> 용어를 모두 학습했습니다.
+          </p>
+          ${perfectRun
+            ? '<p class="text-yellow-300 text-xs font-semibold mb-6">90% 이상 알고 있어요. 정말 잘했습니다!</p>'
+            : `<p class="text-white/50 text-xs mb-6">${learnedPct}% 습득 — 모르는 카드를 다시 복습해보세요.</p>`
+          }
+
+          <!-- 다음 행동 버튼 -->
+          <div class="flex flex-col gap-3">
+            <button data-action="click->exam-flashcard#restart"
+                    class="inline-flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-400
+                           text-white font-bold px-8 py-3.5 rounded-xl transition-all duration-200
+                           hover:-translate-y-0.5 hover:shadow-lg">
+              <span class="material-symbols-outlined">refresh</span>
+              다시 하기
+            </button>
+            <a href="/quiz" class="inline-flex items-center justify-center gap-2
+                                   bg-white/10 hover:bg-white/20 text-white/80 hover:text-white
+                                   font-semibold px-8 py-3 rounded-xl transition-colors text-sm">
+              <span class="material-symbols-outlined text-base">quiz</span>
+              모의고사로 확인하기
+            </a>
+          </div>
         </div>
       `
     }
@@ -317,7 +347,7 @@ export default class extends Controller {
     this.showFront()
   }
 
-  // 진도 업데이트
+  // 진도 업데이트 (진행바 트랜지션은 CSS .exam-progress-bar transition으로 처리)
   updateProgress() {
     const remaining = this.queue.length
     if (this.hasLearnedCountTarget) this.learnedCountTarget.textContent = this.learned
