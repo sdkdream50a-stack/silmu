@@ -52,15 +52,16 @@
       }
     </style>
 
-    <% if Rails.env.production? && ENV['GA_MEASUREMENT_ID'].present? && !current_user&.admin? %>
+    <% exam_ga_id = ENV['EXAM_GA_MEASUREMENT_ID'].presence || ENV['GA_MEASUREMENT_ID'] %>
+    <% if Rails.env.production? && exam_ga_id.present? && !current_user&.admin? %>
       <script>
         function loadGoogleAnalytics() {
           const script = document.createElement('script');
-          script.src = 'https://www.googletagmanager.com/gtag/js?id=<%= ENV['GA_MEASUREMENT_ID'] %>';
+          script.src = 'https://www.googletagmanager.com/gtag/js?id=<%= exam_ga_id %>';
           script.async = true; document.head.appendChild(script);
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date()); gtag('config', '<%= ENV['GA_MEASUREMENT_ID'] %>');
+          gtag('js', new Date()); gtag('config', '<%= exam_ga_id %>');
         }
         if ('requestIdleCallback' in window) { requestIdleCallback(loadGoogleAnalytics, { timeout: 3000 }); }
         else { setTimeout(loadGoogleAnalytics, 3000); }
