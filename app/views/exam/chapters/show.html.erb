@@ -122,6 +122,68 @@
         </div>
       </div>
 
+      <!-- 절별 이론 내용 (theory_content 있을 경우) -->
+      <% if @chapter[:theory_content].present? %>
+        <% @chapter[:theory_content].each_with_index do |sec, sec_idx| %>
+          <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+            <div class="bg-slate-700 px-6 py-4 flex items-center gap-3">
+              <div class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center font-bold text-white text-sm flex-shrink-0">
+                <%= sec_idx + 1 %>
+              </div>
+              <h2 class="font-bold text-white text-sm">제<%= sec_idx + 1 %>절 <%= sec[:section] %></h2>
+            </div>
+            <div class="divide-y divide-slate-100">
+              <% sec[:subsections].each do |sub| %>
+                <div class="px-6 py-5">
+                  <h3 class="font-bold text-slate-800 text-sm mb-2"><%= sub[:title] %></h3>
+                  <% if sub[:content].present? %>
+                    <p class="text-slate-600 text-sm leading-relaxed mb-3"><%= sub[:content] %></p>
+                  <% end %>
+                  <% if sub[:highlight].present? %>
+                    <div class="<%= colors[:bg] %> border <%= colors[:border] %> rounded-xl px-4 py-2.5 mb-3">
+                      <p class="<%= colors[:text_dark] %> text-sm font-semibold"><%= sub[:highlight] %></p>
+                    </div>
+                  <% end %>
+                  <% if sub[:points].present? %>
+                    <ul class="space-y-1.5">
+                      <% sub[:points].each do |pt| %>
+                        <li class="flex items-start gap-2 text-sm text-slate-700">
+                          <span class="<%= colors[:text_dark] %> font-bold flex-shrink-0 mt-0.5">▸</span>
+                          <span><%= pt %></span>
+                        </li>
+                      <% end %>
+                    </ul>
+                  <% end %>
+                  <% if sub[:table].present? %>
+                    <p class="text-xs font-semibold text-slate-500 mt-4 mb-1.5"><%= sub[:table][:caption] %></p>
+                    <div class="overflow-x-auto rounded-xl border border-slate-200">
+                      <table class="w-full text-xs">
+                        <thead class="bg-slate-50">
+                          <tr>
+                            <% sub[:table][:headers].each do |h| %>
+                              <th class="px-3 py-2 text-left font-semibold text-slate-600 whitespace-nowrap"><%= h %></th>
+                            <% end %>
+                          </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                          <% sub[:table][:rows].each do |row| %>
+                            <tr class="hover:bg-slate-50">
+                              <% row.each_with_index do |cell, ci| %>
+                                <td class="px-3 py-2 <%= ci == 0 ? 'font-semibold text-slate-800' : 'text-slate-600' %>"><%= cell %></td>
+                              <% end %>
+                            </tr>
+                          <% end %>
+                        </tbody>
+                      </table>
+                    </div>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+
       <!-- 학습목표 체크리스트 -->
       <div class="bg-white rounded-2xl border <%= colors[:border] %> overflow-hidden">
         <div class="<%= colors[:bg] %> px-6 py-4 flex items-center gap-3 border-b <%= colors[:border] %>">
