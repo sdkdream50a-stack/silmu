@@ -8,7 +8,10 @@ class Ga4Service
   PROPERTY_ID = "524141122"
   CACHE_TTL = 5.minutes
 
-  def initialize
+  # hostname: nil = 전체, "silmu.kr" = 메인, "exam.silmu.kr" = 시험
+  def initialize(hostname: nil)
+    @hostname = hostname
+    @cache_key_prefix = hostname ? "ga4/#{hostname.gsub('.', '_')}" : "ga4"
     @client = Google::Analytics::Data::V1beta::AnalyticsData::Client.new do |config|
       config.credentials = credentials_hash
     end
@@ -16,7 +19,7 @@ class Ga4Service
 
   # 실시간 활성 사용자
   def real_time_users
-    Rails.cache.fetch("ga4/real_time_users", expires_in: 1.minute) do
+    Rails.cache.fetch("#{@cache_key_prefix}/real_time_users", expires_in: 1.minute) do
       request = Google::Analytics::Data::V1beta::RunRealtimeReportRequest.new(
         property: "properties/#{PROPERTY_ID}",
         metrics: [{ name: "activeUsers" }]
@@ -32,13 +35,14 @@ class Ga4Service
 
   # 일별 활성 사용자 (DAU) - 최근 30일
   def daily_active_users(days: 30)
-    Rails.cache.fetch("ga4/daily_active_users_#{days}d", expires_in: CACHE_TTL) do
+    Rails.cache.fetch("#{@cache_key_prefix}/daily_active_users_#{days}d", expires_in: CACHE_TTL) do
       request = Google::Analytics::Data::V1beta::RunReportRequest.new(
         property: "properties/#{PROPERTY_ID}",
         date_ranges: [{ start_date: "#{days}daysAgo", end_date: "today" }],
         dimensions: [{ name: "date" }],
         metrics: [{ name: "activeUsers" }],
-        order_bys: [{ dimension: { dimension_name: "date" }, desc: false }]
+        order_bys: [{ dimension: { dimension_name: "date" }, desc: false }],
+        dimension_filter: hostname_filter
       )
 
       response = @client.run_report(request)
@@ -56,21 +60,10 @@ class Ga4Service
 
   # 주별/월별 활성 사용자 (WAU/MAU)
   def weekly_monthly_users
-    Rails.cache.fetch("ga4/weekly_monthly_users", expires_in: CACHE_TTL) do
-      request = Google::Analytics::Data::V1beta::RunReportRequest.new(
-        property: "properties/#{PROPERTY_ID}",
-        date_ranges: [
-          { start_date: "7daysAgo", end_date: "today" },
-          { start_date: "30daysAgo", end_date: "today" }
-        ],
-        metrics: [{ name: "activeUsers" }]
-      )
-
-      response = @client.run_report(request)
-      {
-        wau: response.rows[0]&.metric_values&.first&.value&.to_i || 0,
-        mau: response.rows[0]&.metric_values&.last&.value&.to_i || 0
-      }
+    Rails.cache.fetch("#{@cache_key_prefix}/weekly_monthly_users", expires_in: CACHE_TTL) do
+      wau = fetch_active_users(days: 7)
+      mau = fetch_active_users(days: 30)
+      { wau: wau, mau: mau }
     end
   rescue => e
     Rails.logger.error "GA4 weekly_monthly_users error: #{e.message}"
@@ -79,14 +72,15 @@ class Ga4Service
 
   # 페이지뷰 (전체 및 페이지별 Top 10)
   def page_views(days: 7)
-    Rails.cache.fetch("ga4/page_views_#{days}d", expires_in: CACHE_TTL) do
+    Rails.cache.fetch("#{@cache_key_prefix}/page_views_#{days}d", expires_in: CACHE_TTL) do
       request = Google::Analytics::Data::V1beta::RunReportRequest.new(
         property: "properties/#{PROPERTY_ID}",
         date_ranges: [{ start_date: "#{days}daysAgo", end_date: "today" }],
         dimensions: [{ name: "pagePath" }, { name: "pageTitle" }],
         metrics: [{ name: "screenPageViews" }],
         order_bys: [{ metric: { metric_name: "screenPageViews" }, desc: true }],
-        limit: 10
+        limit: 10,
+        dimension_filter: hostname_filter
       )
 
       response = @client.run_report(request)
@@ -108,7 +102,7 @@ class Ga4Service
 
   # 유입 경로 (Google/Naver/Direct/Social)
   def traffic_sources(days: 7)
-    Rails.cache.fetch("ga4/traffic_sources_#{days}d", expires_in: CACHE_TTL) do
+    Rails.cache.fetch("#{@cache_key_prefix}/traffic_sources_#{days}d", expires_in: CACHE_TTL) do
       request = Google::Analytics::Data::V1beta::RunReportRequest.new(
         property: "properties/#{PROPERTY_ID}",
         date_ranges: [{ start_date: "#{days}daysAgo", end_date: "today" }],
@@ -121,7 +115,8 @@ class Ga4Service
           { name: "activeUsers" }
         ],
         order_bys: [{ metric: { metric_name: "sessions" }, desc: true }],
-        limit: 10
+        limit: 10,
+        dimension_filter: hostname_filter
       )
 
       response = @client.run_report(request)
@@ -141,7 +136,7 @@ class Ga4Service
 
   # 인기 페이지 Top 10
   def top_pages(days: 7)
-    Rails.cache.fetch("ga4/top_pages_#{days}d", expires_in: CACHE_TTL) do
+    Rails.cache.fetch("#{@cache_key_prefix}/top_pages_#{days}d", expires_in: CACHE_TTL) do
       request = Google::Analytics::Data::V1beta::RunReportRequest.new(
         property: "properties/#{PROPERTY_ID}",
         date_ranges: [{ start_date: "#{days}daysAgo", end_date: "today" }],
@@ -151,7 +146,8 @@ class Ga4Service
           { name: "activeUsers" }
         ],
         order_bys: [{ metric: { metric_name: "screenPageViews" }, desc: true }],
-        limit: 10
+        limit: 10,
+        dimension_filter: hostname_filter
       )
 
       response = @client.run_report(request)
@@ -171,12 +167,13 @@ class Ga4Service
 
   # 신규 vs 재방문 사용자
   def new_vs_returning(days: 7)
-    Rails.cache.fetch("ga4/new_vs_returning_#{days}d", expires_in: CACHE_TTL) do
+    Rails.cache.fetch("#{@cache_key_prefix}/new_vs_returning_#{days}d", expires_in: CACHE_TTL) do
       request = Google::Analytics::Data::V1beta::RunReportRequest.new(
         property: "properties/#{PROPERTY_ID}",
         date_ranges: [{ start_date: "#{days}daysAgo", end_date: "today" }],
         dimensions: [{ name: "newVsReturning" }],
-        metrics: [{ name: "activeUsers" }]
+        metrics: [{ name: "activeUsers" }],
+        dimension_filter: hostname_filter
       )
 
       response = @client.run_report(request)
@@ -202,7 +199,7 @@ class Ga4Service
 
   # 참여도 지표 (평균 체류 시간, 이탈률)
   def engagement_metrics(days: 7)
-    Rails.cache.fetch("ga4/engagement_metrics_#{days}d", expires_in: CACHE_TTL) do
+    Rails.cache.fetch("#{@cache_key_prefix}/engagement_metrics_#{days}d", expires_in: CACHE_TTL) do
       request = Google::Analytics::Data::V1beta::RunReportRequest.new(
         property: "properties/#{PROPERTY_ID}",
         date_ranges: [{ start_date: "#{days}daysAgo", end_date: "today" }],
@@ -210,7 +207,8 @@ class Ga4Service
           { name: "averageSessionDuration" },
           { name: "bounceRate" },
           { name: "engagementRate" }
-        ]
+        ],
+        dimension_filter: hostname_filter
       )
 
       response = @client.run_report(request)
@@ -243,6 +241,32 @@ class Ga4Service
   end
 
   private
+
+  def fetch_active_users(days:)
+    request = Google::Analytics::Data::V1beta::RunReportRequest.new(
+      property: "properties/#{PROPERTY_ID}",
+      date_ranges: [{ start_date: "#{days}daysAgo", end_date: "today" }],
+      metrics: [{ name: "activeUsers" }],
+      dimension_filter: hostname_filter
+    )
+    response = @client.run_report(request)
+    response.rows.first&.metric_values&.first&.value&.to_i || 0
+  end
+
+  def hostname_filter
+    return nil unless @hostname
+
+    filter_expr = {
+      filter: {
+        field_name: "hostName",
+        string_filter: {
+          match_type: :EXACT,
+          value: @hostname
+        }
+      }
+    }
+    Google::Analytics::Data::V1beta::FilterExpression.new(filter_expr)
+  end
 
   def credentials_hash
     creds = Rails.application.credentials.google_analytics[:credentials]
