@@ -969,6 +969,23 @@ module ExamCurriculum
     CHAPTER_MAP
   end
 
+  # 챕터별 관련 토픽 슬러그 맵 { "subject_id-chapter_num" => ["slug1", "slug2"] }
+  CHAPTER_TOPIC_SLUGS = begin
+    result = {}
+    SUBJECTS.each do |s|
+      s[:chapters].each do |c|
+        slugs = c[:related_topic_slugs]
+        next if slugs.nil? || slugs.empty?
+        result["#{s[:id]}-#{c[:number]}"] = slugs
+      end
+    end
+    result.freeze
+  end
+
+  def self.chapter_topic_slugs
+    CHAPTER_TOPIC_SLUGS
+  end
+
   # 과목 인덱스 (메모이제이션: find 호출마다 배열 순회 방지)
   SUBJECTS_BY_ID = SUBJECTS.index_by { |s| s[:id] }.freeze
 

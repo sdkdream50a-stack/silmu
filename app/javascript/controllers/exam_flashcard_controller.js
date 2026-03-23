@@ -24,17 +24,54 @@ export default class extends Controller {
     "result", "flipHint"
   ]
 
+  // 3대 핵심 법령 slug 키워드 필터 (국가계약법·시행령·조달사업법 관련)
+  static CORE_LAW_KEYWORDS = [
+    '국가계약법', '국계법', '시행령', '조달사업법', '지방계약법',
+    '입찰', '낙찰', '계약보증금', '이행보증금', '지체상금',
+    '수의계약', '다수공급자', '단가계약', '장기계속계약', '예정가격',
+    '적격심사', '원가계산', '협상에 의한 계약', '설계변경', '물가변동'
+  ]
+
   connect() {
     // 초기 상태 — 오버레이 숨김
+    this.typingMode = false
   }
 
   disconnect() {
     this.close()
   }
 
+  // 3대 법령 필수 덱 시작
+  startMandatoryDeck() {
+    const coreKeywords = this.constructor.CORE_LAW_KEYWORDS
+    const filtered = this.cardsValue.filter(card =>
+      coreKeywords.some(kw => (card.keyword || '').includes(kw) || (card.definition || '').includes(kw))
+    )
+    if (filtered.length === 0) {
+      this.start()  // 필터 결과 없으면 전체로 대체
+      return
+    }
+    this.typingMode = false
+    this._startWithCards(filtered)
+  }
+
+  // 타이핑 모드 시작 (실기 대비)
+  startTyping() {
+    const all = this.cardsValue.filter(c => c.definition)
+    if (all.length === 0) return
+    this.typingMode = true
+    this._startWithCards(all)
+  }
+
   // 플래시카드 모드 시작
   start() {
-    const all = this.cardsValue
+    this.typingMode = false
+    this._startWithCards(this.cardsValue)
+  }
+
+  // 내부 시작 헬퍼
+  _startWithCards(cards) {
+    const all = cards
     if (all.length === 0) return
     this.queue = [...all]
     this.learned = 0
@@ -125,30 +162,97 @@ export default class extends Controller {
     if (this.hasCardTarget) {
       this.cardTarget.style.transform = "rotateY(0deg)"
     }
-    if (this.hasFrontTarget) {
-      this.frontTarget.innerHTML = `
-        <div class="text-center">
-          <div class="text-xs text-slate-400 mb-3 font-semibold tracking-wide uppercase">용어</div>
-          <div class="text-2xl font-bold text-slate-900 leading-snug">${this.escapeHtml(card.keyword)}</div>
-          <div class="text-xs text-slate-400 mt-3">${this.escapeHtml(card.chapter_title || '')}</div>
-        </div>
-      `
-    }
-    if (this.hasBackTarget) {
-      this.backTarget.innerHTML = `
-        <div>
-          <div class="text-xs text-slate-400 mb-2 font-semibold tracking-wide uppercase">정의</div>
-          <p class="text-slate-800 text-base leading-relaxed mb-4">${this.escapeHtml(card.definition || '')}</p>
-          <div class="text-xs text-slate-400 mb-1 font-semibold">실무 예시</div>
-          <p class="text-slate-600 text-sm italic leading-relaxed bg-blue-50 rounded-lg px-3 py-2 border-l-2 border-blue-300">"${this.escapeHtml(card.example || '')}"</p>
-        </div>
-      `
+
+    if (this.typingMode) {
+      // 타이핑 모드: 앞면에 용어 + 입력란
+      if (this.hasFrontTarget) {
+        this.frontTarget.innerHTML = `
+          <div class="w-full">
+            <div class="text-xs text-indigo-500 mb-2 font-semibold tracking-wide uppercase text-center">실기 대비 — 정의를 입력하세요</div>
+            <div class="text-xl font-bold text-slate-900 leading-snug text-center mb-4">${this.escapeHtml(card.keyword)}</div>
+            <div class="text-xs text-slate-400 text-center mb-3">${this.escapeHtml(card.chapter_title || '')}</div>
+            <textarea id="fc-typing-input"
+                      class="w-full border-2 border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-700 focus:outline-none focus:border-indigo-400 resize-none"
+                      rows="3" placeholder="정의를 직접 입력해보세요..."></textarea>
+            <button onclick="this.closest('[data-controller]')?.['exam-flashcard']?.checkTyping?.()"
+                    data-action="click->exam-flashcard#checkTyping"
+                    class="mt-3 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl text-sm transition-colors">
+              채점하기
+            </button>
+          </div>
+        `
+      }
+      if (this.hasBackTarget) {
+        this.backTarget.innerHTML = ''
+      }
+    } else {
+      // 일반 플립 모드
+      if (this.hasFrontTarget) {
+        this.frontTarget.innerHTML = `
+          <div class="text-center">
+            <div class="text-xs text-slate-400 mb-3 font-semibold tracking-wide uppercase">용어</div>
+            <div class="text-2xl font-bold text-slate-900 leading-snug">${this.escapeHtml(card.keyword)}</div>
+            <div class="text-xs text-slate-400 mt-3">${this.escapeHtml(card.chapter_title || '')}</div>
+          </div>
+        `
+      }
+      if (this.hasBackTarget) {
+        this.backTarget.innerHTML = `
+          <div>
+            <div class="text-xs text-slate-400 mb-2 font-semibold tracking-wide uppercase">정의</div>
+            <p class="text-slate-800 text-base leading-relaxed mb-4">${this.escapeHtml(card.definition || '')}</p>
+            <div class="text-xs text-slate-400 mb-1 font-semibold">실무 예시</div>
+            <p class="text-slate-600 text-sm italic leading-relaxed bg-blue-50 rounded-lg px-3 py-2 border-l-2 border-blue-300">"${this.escapeHtml(card.example || '')}"</p>
+          </div>
+        `
+      }
     }
     this.updateProgress()
   }
 
-  // 카드 뒤집기
+  // 타이핑 채점
+  checkTyping() {
+    const card = this.queue[0]
+    if (!card) return
+    const input = this.hasFrontTarget && this.frontTarget.querySelector('#fc-typing-input')
+    if (!input) return
+    const userAnswer = input.value.trim()
+    if (!userAnswer) { input.focus(); return }
+
+    const definition = (card.definition || '').trim()
+    // 간단 채점: 정의의 핵심 명사(3글자 이상)가 몇 개 포함됐는지
+    const keywords = definition.split(/[\s,·\.\(\)]+/).filter(w => w.length >= 3)
+    const matchCount = keywords.filter(kw => userAnswer.includes(kw)).length
+    const score = keywords.length > 0 ? Math.round((matchCount / keywords.length) * 100) : 0
+
+    if (this.hasFrontTarget) {
+      const scoreColor = score >= 60 ? 'text-green-600' : score >= 30 ? 'text-amber-600' : 'text-red-600'
+      const scoreLabel = score >= 60 ? '잘 썼어요!' : score >= 30 ? '부분 일치' : '다시 봐요'
+      this.frontTarget.innerHTML += `
+        <div class="mt-4 p-4 bg-white rounded-xl border-2 ${score >= 60 ? 'border-green-300' : 'border-amber-300'}">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-sm font-bold ${scoreColor}">${scoreLabel} (${score}%)</span>
+          </div>
+          <div class="text-xs text-slate-500 mb-1 font-semibold">정답 정의</div>
+          <p class="text-sm text-slate-700 leading-relaxed">${this.escapeHtml(definition)}</p>
+          <div class="flex gap-2 mt-3">
+            <button data-action="click->exam-flashcard#knew"
+                    class="flex-1 bg-green-500 text-white text-sm font-bold py-2 rounded-lg hover:bg-green-600 transition-colors">알았어</button>
+            <button data-action="click->exam-flashcard#didntKnow"
+                    class="flex-1 bg-red-500 text-white text-sm font-bold py-2 rounded-lg hover:bg-red-600 transition-colors">다시</button>
+          </div>
+        </div>
+      `
+      // 채점 후 채점 버튼 제거
+      const checkBtn = this.frontTarget.querySelector('[data-action="click->exam-flashcard#checkTyping"]')
+      if (checkBtn) checkBtn.remove()
+      if (input) input.disabled = true
+    }
+  }
+
+  // 카드 뒤집기 (타이핑 모드에서는 비활성)
   flip() {
+    if (this.typingMode) return
     if (this.flipped) return
     this.flipped = true
     if (this.hasCardTarget) {
@@ -161,7 +265,7 @@ export default class extends Controller {
 
   // 알았어 — 큐에서 제거
   knew() {
-    if (!this.flipped) { this.flip(); return }
+    if (!this.typingMode && !this.flipped) { this.flip(); return }
     const card = this.queue.shift()
     saveDone(card.keyword)
     this.learned++
@@ -170,7 +274,7 @@ export default class extends Controller {
 
   // 몰랐어 — 큐 끝에 다시 추가
   didntKnow() {
-    if (!this.flipped) { this.flip(); return }
+    if (!this.typingMode && !this.flipped) { this.flip(); return }
     const card = this.queue.shift()
     this.queue.push(card)
     this.showFront()
@@ -200,14 +304,17 @@ export default class extends Controller {
     }
   }
 
-  // 다시 하기
+  // 다시 하기 (현재 모드 유지)
   restart() {
-    this.start()
+    const wasTypingMode = this.typingMode
+    this._startWithCards(this.queue.length > 0 ? [...this.queue, ...Array.from({length: this.learned})] : this.cardsValue)
+    this.typingMode = wasTypingMode
     if (this.hasResultTarget) {
       this.resultTarget.classList.add("hidden")
     }
     const cardArea = this.hasCardTarget && this.cardTarget.closest('[data-card-area]')
     if (cardArea) cardArea.classList.remove("hidden")
+    this.showFront()
   }
 
   // 진도 업데이트
@@ -220,7 +327,7 @@ export default class extends Controller {
       this.progressTarget.style.width = `${pct}%`
     }
     if (this.hasFlipHintTarget) {
-      this.flipHintTarget.classList.remove("hidden")
+      this.flipHintTarget.classList.toggle("hidden", this.typingMode)
     }
   }
 

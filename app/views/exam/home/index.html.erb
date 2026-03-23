@@ -137,6 +137,25 @@
   <%= render 'shared/ad_slot', position: 'home-top' %>
 </div>
 
+<!-- 표준교재 PDF 다운로드 배너 -->
+<section class="px-4 py-3 bg-indigo-50 border-y border-indigo-200">
+  <div class="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+    <div class="flex items-center gap-3">
+      <span class="material-symbols-outlined text-indigo-600 text-2xl flex-shrink-0">menu_book</span>
+      <div>
+        <div class="font-bold text-indigo-900 text-sm">표준교재 4권 무료 PDF</div>
+        <div class="text-indigo-600 text-xs">공공조달역량개발원 공식 발간 — 지금 바로 다운로드</div>
+      </div>
+    </div>
+    <a href="https://www.pps.go.kr/kor/bbs/list.do?bbsSn=1044"
+       target="_blank" rel="noopener"
+       class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-colors whitespace-nowrap flex-shrink-0">
+      <span class="material-symbols-outlined text-base">download</span>
+      무료 PDF 받기
+    </a>
+  </div>
+</section>
+
 <!-- 2. 시험 정보 -->
 <section id="exam-info" class="py-16 px-4 bg-white">
   <div class="max-w-4xl mx-auto">

@@ -6,6 +6,8 @@ module Exam
     def mini
       @questions = ExamQuestions.all_sliced_with_difficulty.sample(10)
       @chapter_map = ExamCurriculum.chapter_map
+      @topic_map = ExamCurriculum.chapter_topic_slugs
+      @signed_in = user_signed_in?
       set_meta_tags(
         title: "미니 퀴즈 — 랜덤 10문제",
         description: "공공조달관리사 랜덤 10문제 미니 퀴즈. 빈 시간에 짧게 실력을 점검하세요. 즉시 채점·상세 해설 제공.",
@@ -116,6 +118,8 @@ module Exam
       @estimated_minutes = (@questions.size * 1.5).ceil
       @back_path = exam_subject_chapter_path(@subject[:id], @chapter_num)
       @chapter_map = ExamCurriculum.chapter_map
+      @topic_map = ExamCurriculum.chapter_topic_slugs
+      @signed_in = user_signed_in?
 
       set_meta_tags(
         title: "#{@subject[:number]} 제#{@chapter_num}장 — #{@chapter[:title]} 문제",
@@ -158,6 +162,8 @@ module Exam
 
       @estimated_minutes = (@questions.size * 1.5).ceil
       @chapter_map = ExamCurriculum.chapter_map
+      @topic_map = ExamCurriculum.chapter_topic_slugs
+      @signed_in = user_signed_in?
       set_meta_tags(
         title: @quiz_title,
         description: "공공조달관리사 #{@quiz_title} — #{@questions.size}문제 4지선다. 즉시 채점과 상세 해설로 실전 감각을 키우세요.",

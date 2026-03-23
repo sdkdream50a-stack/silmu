@@ -18,7 +18,9 @@ export default class extends Controller {
     wrongMode: { type: Boolean, default: false },
     bookmarkMode: { type: Boolean, default: false },
     backPath: { type: String, default: "" },
-    chapterMap: { type: Object, default: {} }
+    chapterMap: { type: Object, default: {} },
+    topicMap: { type: Object, default: {} },
+    signedIn: { type: Boolean, default: false }
   }
 
   connect() {
@@ -340,25 +342,32 @@ export default class extends Controller {
       <div class="ai-explanation-area hidden mt-3 text-sm text-slate-700 bg-indigo-50 rounded-lg p-3 leading-relaxed border-l-2 border-indigo-400"></div>
     ` : ''
 
-    // #10 Q&A 버튼
-    const qaBtn = `
-      <button data-action="click->exam-quiz#toggleQA"
-              data-question-id="${q.id}"
-              data-question-text="${(q.question || '').replace(/"/g, '&quot;')}"
-              class="mt-3 inline-flex items-center gap-2 text-slate-500 text-xs hover:text-slate-700 transition-colors">
-        <span class="material-symbols-outlined text-sm">chat_bubble_outline</span>
-        이 문제 토론 보기
-      </button>
-      <div class="qa-area hidden mt-3 bg-slate-50 rounded-xl border border-slate-200 p-4 space-y-3">
-        <div class="qa-comments space-y-2 text-sm text-slate-500">불러오는 중...</div>
-        <form class="qa-form flex gap-2 mt-2" data-action="submit->exam-quiz#submitComment">
+    // #10 Q&A 영역 (자동 펼침)
+    const commentForm = this.signedInValue
+      ? `<form class="qa-form flex gap-2 mt-2" data-action="submit->exam-quiz#submitComment">
           <input type="hidden" name="question_id" value="${q.id}">
           <input type="hidden" name="question_text" value="${(q.question || '').replace(/"/g, '&quot;')}">
           <input type="text" name="body" placeholder="5자 이상 질문이나 의견을 남겨보세요..."
                  class="flex-1 text-sm border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
           <button type="submit" class="bg-blue-600 text-white text-xs font-bold px-3 py-2 rounded-lg hover:bg-blue-700 whitespace-nowrap">등록</button>
         </form>
-        <p class="text-xs text-slate-400">AI가 댓글 품질을 자동으로 검토합니다.</p>
+        <p class="text-xs text-slate-400">AI가 댓글 품질을 자동으로 검토합니다.</p>`
+      : `<div class="bg-blue-50 border border-blue-200 rounded-lg px-4 py-3 text-sm text-blue-700 flex items-center gap-2 mt-2">
+          <span class="material-symbols-outlined text-base">login</span>
+          <span><a href="/users/sign_in" class="font-bold underline hover:no-underline">로그인</a>하면 댓글을 남길 수 있습니다.</span>
+        </div>`
+    const qaBtn = `
+      <button data-action="click->exam-quiz#toggleQA"
+              data-question-id="${q.id}"
+              data-question-text="${(q.question || '').replace(/"/g, '&quot;')}"
+              class="mt-3 inline-flex items-center gap-2 text-slate-500 text-xs hover:text-slate-700 transition-colors">
+        <span class="material-symbols-outlined text-sm">chat_bubble_outline</span>
+        이 문제 토론
+        <span class="material-symbols-outlined text-sm qa-toggle-icon">expand_less</span>
+      </button>
+      <div class="qa-area mt-3 bg-slate-50 rounded-xl border border-slate-200 p-4 space-y-3">
+        <div class="qa-comments space-y-2 text-sm text-slate-500">불러오는 중...</div>
+        ${commentForm}
       </div>
     `
 
@@ -380,29 +389,46 @@ export default class extends Controller {
       </div>
     `
 
-    // 과목별 관련 법령 가이드 링크 (silmu.kr 연결)
-    const SUBJECT_TOPICS = {
-      1: [
-        { title: "국가계약법 가이드", url: "https://silmu.kr/topics/national-contract-act" },
-        { title: "공공조달 제도 개요", url: "https://silmu.kr/topics/contract" }
-      ],
-      2: [
-        { title: "예산편성 실무", url: "https://silmu.kr/topics/budget" },
-        { title: "원가계산 기준", url: "https://silmu.kr/topics/expense" }
-      ],
-      3: [
-        { title: "계약체결 실무", url: "https://silmu.kr/topics/contract" },
-        { title: "입찰 및 낙찰 가이드", url: "https://silmu.kr/topics/contract" }
-      ],
-      4: [
-        { title: "대가지급 실무", url: "https://silmu.kr/topics/expense" },
-        { title: "계약이행 관리", url: "https://silmu.kr/topics/contract" }
-      ]
+    // 챕터별 관련 법령 가이드 링크 (silmu.kr 연결) — topicMapValue에서 챕터별 slug 조회
+    const SLUG_TITLES = {
+      'public-procurement-overview': '공공조달 개요',
+      'private-contract': '수의계약',
+      'bidding': '입찰 가이드',
+      'bid-qualification': '입찰 참가자격',
+      'e-procurement-guide': '전자조달 가이드',
+      'e-bidding': '전자입찰',
+      'mas-contract': '다수공급자계약',
+      'national-vs-local-contract-law': '국가·지방계약법',
+      'bid-participation-restriction': '입찰 참가제한',
+      'estimated-price': '예정가격',
+      'dual-quote': '이중입찰',
+      'qualification-failure': '적격심사',
+      'price-negotiation': '가격협상',
+      'contract-guarantee-deposit': '계약보증금',
+      'lowest-bid-rate': '최저가 낙찰률',
+      'late-penalty': '지체상금',
+      'payment': '대가지급',
+      'design-change': '설계변경',
+      'contract-termination': '계약해지',
+      'goods-vs-service-contract': '물품·용역 계약',
+      'goods-selection-committee': '물품선정위원회',
+      'inspection': '검사·검수',
+      'unit-price-contract': '단가계약',
+      'subcontract': '하도급',
+      'price-escalation': '물가변동',
+      'defect-warranty': '하자담보',
+      'cost-calculation-guide': '원가계산 가이드',
+      'contract': '계약 실무',
+      'budget': '예산 편성',
+      'expense': '지출 실무'
     }
-
-    const subjectId = q.subject_id || 1
-    const relatedTopics = SUBJECT_TOPICS[subjectId] || SUBJECT_TOPICS[1]
-    const relatedLawHtml = `
+    const topicChapterKey = q.subject_id && q.chapter_num ? `${q.subject_id}-${q.chapter_num}` : null
+    const slugs = topicChapterKey ? (this.topicMapValue[topicChapterKey] || []) : []
+    const relatedTopics = slugs.map(slug => ({
+      title: SLUG_TITLES[slug] || slug,
+      url: `https://silmu.kr/topics/${slug}`
+    }))
+    const relatedLawHtml = relatedTopics.length > 0 ? `
       <div class="mt-3 pt-3 border-t border-slate-100">
         <p class="text-xs text-slate-400 font-semibold mb-2 flex items-center gap-1">
           <span class="material-symbols-outlined text-sm">menu_book</span>
@@ -418,7 +444,7 @@ export default class extends Controller {
           `).join('')}
         </div>
       </div>
-    `
+    ` : ''
 
     this.feedbackAreaTarget.innerHTML = `
       <div class="${isCorrect ? "bg-green-50 border-green-200" : "bg-red-50 border-red-200"} border rounded-xl p-4">
@@ -438,6 +464,10 @@ export default class extends Controller {
       ${reportBtn}
     `
     this.feedbackAreaTarget.classList.remove("hidden")
+
+    // QA 댓글 자동 로드
+    const qaArea = this.feedbackAreaTarget.querySelector('.qa-area')
+    if (qaArea) this.loadComments(q.id, qaArea)
 
     // 다음 버튼 텍스트 설정
     const isLast = this.currentValue === this.questionsValue.length - 1
@@ -602,6 +632,54 @@ export default class extends Controller {
       </div>
     `
     this.resultAreaTarget.classList.remove("hidden")
+
+    // 60점 이상 시 실기 대비 전환 팝업
+    if (pct >= 60 && !this.wrongModeValue && !this.bookmarkModeValue) {
+      this.showPracticalTransitionPopup(pct)
+    }
+  }
+
+  // 실기 대비 전환 팝업 (60점+ 달성 시)
+  showPracticalTransitionPopup(pct) {
+    const existing = document.getElementById('practical-transition-popup')
+    if (existing) return
+
+    const overlay = document.createElement('div')
+    overlay.id = 'practical-transition-popup'
+    overlay.className = 'fixed inset-0 z-[9998] flex items-end sm:items-center justify-center p-4'
+    overlay.style.background = 'rgba(0,0,0,0.5)'
+    overlay.innerHTML = `
+      <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 animate-[slideUp_0.3s_ease]">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-12 h-12 bg-indigo-100 rounded-2xl flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-indigo-600 text-2xl">edit_note</span>
+          </div>
+          <div>
+            <div class="font-bold text-slate-800 text-base">${pct}% — 필기 합격권 달성!</div>
+            <div class="text-slate-500 text-xs mt-0.5">실기 대비도 지금 시작하세요</div>
+          </div>
+        </div>
+        <p class="text-slate-600 text-sm mb-5 leading-relaxed">
+          필기 합격 후 <strong class="text-red-600">단 32일</strong> 안에 실기(필답형)가 있습니다.
+          플래시카드 <strong>타이핑 모드</strong>로 지금 바로 실기 대비를 시작하세요.
+        </p>
+        <div class="flex gap-2">
+          <a href="/keywords"
+             class="flex-1 inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition-colors">
+            <span class="material-symbols-outlined text-base">edit_note</span>
+            실기 대비 시작
+          </a>
+          <button onclick="document.getElementById('practical-transition-popup').remove()"
+                  class="px-4 py-2.5 text-slate-500 hover:text-slate-700 text-sm font-medium transition-colors rounded-xl hover:bg-slate-50">
+            나중에
+          </button>
+        </div>
+      </div>
+    `
+    document.body.appendChild(overlay)
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) overlay.remove()
+    })
   }
 
   // 챕터별 취약 분석 빌드
@@ -870,18 +948,8 @@ export default class extends Controller {
     }, 3000)
   }
 
-  // #10 Q&A 토글 + 댓글 로드
-  async toggleQA(event) {
-    const btn = event.currentTarget
-    const questionId = btn.dataset.questionId
-    const qaArea = btn.nextElementSibling
-    if (!qaArea) return
-
-    const isHidden = qaArea.classList.contains('hidden')
-    qaArea.classList.toggle('hidden', !isHidden)
-    if (!isHidden) return
-
-    // 댓글 로드
+  // 댓글 로드 헬퍼
+  async loadComments(questionId, qaArea) {
     try {
       const res = await fetch(`/questions/${questionId}/comments`, {
         headers: { 'Accept': 'application/json' }
@@ -899,6 +967,20 @@ export default class extends Controller {
       const commentsArea = qaArea.querySelector('.qa-comments')
       if (commentsArea) commentsArea.innerHTML = '<p class="text-red-400 text-xs">댓글을 불러오지 못했습니다.</p>'
     }
+  }
+
+  // #10 Q&A 토글 (댓글은 이미 자동 로드됨)
+  toggleQA(event) {
+    const btn = event.currentTarget
+    const qaArea = btn.nextElementSibling
+    if (!qaArea) return
+
+    const isHidden = qaArea.classList.contains('hidden')
+    qaArea.classList.toggle('hidden', !isHidden)
+
+    // 아이콘 방향 전환
+    const icon = btn.querySelector('.qa-toggle-icon')
+    if (icon) icon.textContent = isHidden ? 'expand_less' : 'expand_more'
   }
 
   // #10 댓글 등록 (AI 모더레이션 포함)

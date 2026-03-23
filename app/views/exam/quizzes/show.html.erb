@@ -28,7 +28,9 @@
        data-exam-quiz-subject-id-value="<%= @subject_id %>"
        data-exam-quiz-back-path-value="<%= @back_path %>"
        data-exam-quiz-chapter-map-value="<%= (@chapter_map || {}).to_json %>"
-       data-exam-quiz-chapter-num-value="<%= @chapter_num || 0 %>">
+       data-exam-quiz-chapter-num-value="<%= @chapter_num || 0 %>"
+       data-exam-quiz-topic-map-value="<%= (@topic_map || {}).to_json %>"
+       data-exam-quiz-signed-in-value="<%= @signed_in ? 'true' : 'false' %>">
 
     <!-- 진행 상태 바 -->
     <div data-exam-quiz-target="progressArea" class="mb-6">

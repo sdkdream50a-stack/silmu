@@ -20,11 +20,23 @@
       <div class="flex-1">
         <h1 class="text-3xl md:text-4xl font-bold leading-tight mb-2">핵심 용어집</h1>
         <p class="text-slate-300">4권 교재 전체 <strong class="text-yellow-300"><%= @total_count %>개</strong> 키워드 — 정의·예시·모의고사 문제 연결</p>
-        <button data-action="click->exam-flashcard#start"
-                class="mt-4 inline-flex items-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-slate-900 font-bold px-4 py-2.5 rounded-xl transition-colors text-sm">
-          <span class="material-symbols-outlined text-lg">style</span>
-          플래시카드 모드 (<%= @flashcard_keywords.size %>개)
-        </button>
+        <div class="flex flex-wrap gap-2 mt-4">
+          <button data-action="click->exam-flashcard#start"
+                  class="inline-flex items-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-slate-900 font-bold px-4 py-2.5 rounded-xl transition-colors text-sm">
+            <span class="material-symbols-outlined text-lg">style</span>
+            플래시카드 (<%= @flashcard_keywords.size %>개)
+          </button>
+          <button data-action="click->exam-flashcard#startMandatoryDeck"
+                  class="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-4 py-2.5 rounded-xl transition-colors text-sm">
+            <span class="material-symbols-outlined text-lg">verified</span>
+            필수 덱 (3대 법령)
+          </button>
+          <button data-action="click->exam-flashcard#startTyping"
+                  class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-4 py-2.5 rounded-xl transition-colors text-sm">
+            <span class="material-symbols-outlined text-lg">edit_note</span>
+            타이핑 모드 (실기 대비)
+          </button>
+        </div>
       </div>
 
       <!-- 플래시카드 오버레이 -->
