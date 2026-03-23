@@ -9,7 +9,7 @@ class ContractGuaranteeService
     small_private: { name: "소액수의계약 (3천만원 이하)", rate: 0.0, note: "면제 가능 (지방계약법 시행규칙 제39조)" }
   }.freeze
 
-  # 하자보수보증금률 (지방계약법 시행령 제69조~제73조)
+  # 하자보수보증금률 (지방계약법 시행규칙 제70조)
   DEFECT_GUARANTEE_RATES = [
     { id: "structure", name: "구조체 공사", rate: 0.05, years: 5, note: "철근콘크리트·철골 구조" },
     { id: "roof_waterproof", name: "지붕·방수공사", rate: 0.03, years: 3, note: "지붕, 방수" },
@@ -17,7 +17,7 @@ class ContractGuaranteeService
     { id: "civil", name: "토목공사", rate: 0.03, years: 3, note: "토공, 배수, 옹벽" },
     { id: "metal_window", name: "창호공사", rate: 0.02, years: 2, note: "금속·목재 창호" },
     { id: "electrical", name: "전기·설비공사", rate: 0.02, years: 2, note: "전기, 기계설비, 소방" },
-    { id: "landscaping", name: "조경공사", rate: 0.02, years: 2, note: "조경식재, 시설물" },
+    { id: "landscaping", name: "조경공사", rate: 0.05, years: 2, note: "조경식재, 시설물 (시행규칙 제70조 제1호)" },
     { id: "interior", name: "실내건축공사", rate: 0.02, years: 2, note: "바닥재, 벽체, 천장" },
     { id: "painting", name: "도장공사", rate: 0.02, years: 1, note: "내·외부 도장" },
     { id: "plaster", name: "미장·타일공사", rate: 0.02, years: 1, note: "미장, 타일, 돌붙임" }

@@ -25,7 +25,7 @@
       <div class="bg-red-50 border border-red-200 rounded-2xl p-5">
         <p class="text-red-800 text-sm leading-relaxed">
           <strong>분할계약이란?</strong> 동일한 목적의 물품·공사·용역을 여러 건으로 나눠 각각 수의계약 기준금액 이하로 계약하는 행위로, 경쟁입찰 회피를 막기 위해 법으로 금지됩니다.
-          (<strong>수의계약 기준:</strong> 물품·용역 2,000만원 이하, 공사 종합 4억원/전문 2억원/기타 1.6억원 이하 — 지방계약법 시행령 제25조 제1항)
+          (<strong>1인 수의계약 기준:</strong> 물품·용역 2,000만원 이하, 공사 종합 4억원/전문 2억원/기타 1.6억원 이하 — 지방계약법 시행령 제25조 제1항. 분할계약 금지 근거: 시행령 제77조)
         </p>
       </div>
     </div>
@@ -41,7 +41,7 @@
         <div>
           <label class="block text-sm font-semibold text-slate-700 mb-2">계약 유형</label>
           <select id="contract-type" class="form-input w-full" onchange="updateThreshold()">
-            <option value="goods">물품·용역 (수의계약 기준: 2,000만원)</option>
+            <option value="goods">물품·용역 (1인 수의계약 기준: 2,000만원)</option>
             <option value="construction_general">공사·종합공사 (수의계약 기준: 4억원)</option>
             <option value="construction_special">공사·전문공사 (수의계약 기준: 2억원)</option>
             <option value="construction_other">공사·기타공사 (수의계약 기준: 1.6억원)</option>
