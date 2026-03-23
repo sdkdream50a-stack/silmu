@@ -45,7 +45,7 @@ class LegalPeriodService
   # 대금지급 기한 (일)
   PAYMENT_DEADLINES = {
     national: { name: "국가기관", days: 5, note: "검사완료 후 5일 이내 (국가계약법 시행령 제58조)" },
-    local: { name: "지방자치단체", days: 14, note: "검사완료 후 14일 이내 (지방계약법 시행령 제69조)" },
+    local: { name: "지방자치단체", days: 5, note: "청구일로부터 5일 이내 (지방계약법 제17조, 시행령 제67조)" },
     advance: { name: "선금 지급", days: 14, note: "청구일로부터 14일 이내" },
     subcontract: { name: "하도급 대금", days: 15, note: "원수급인 대금 수령 후 15일 이내 (하도급법 제13조)" }
   }.freeze

@@ -19,8 +19,8 @@ class ContractGuaranteeService
     { id: "electrical", name: "전기·설비공사", rate: 0.02, years: 2, note: "전기, 기계설비, 소방" },
     { id: "landscaping", name: "조경공사", rate: 0.02, years: 2, note: "조경식재, 시설물" },
     { id: "interior", name: "실내건축공사", rate: 0.02, years: 2, note: "바닥재, 벽체, 천장" },
-    { id: "painting", name: "도장공사", rate: 0.01, years: 1, note: "내·외부 도장" },
-    { id: "plaster", name: "미장·타일공사", rate: 0.01, years: 1, note: "미장, 타일, 돌붙임" }
+    { id: "painting", name: "도장공사", rate: 0.02, years: 1, note: "내·외부 도장" },
+    { id: "plaster", name: "미장·타일공사", rate: 0.02, years: 1, note: "미장, 타일, 돌붙임" }
   ].freeze
 
   # 지연배상금률 (지방계약법 시행령 제90조, 시행규칙 제75조)
