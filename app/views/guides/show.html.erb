@@ -41,10 +41,64 @@
       <% end %>
     </div>
 
+    <%# ── 시리즈 진행 배너 ── %>
+    <% if @series_guides.present? %>
+    <div class="mb-6 bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 rounded-2xl px-5 py-4">
+      <div class="flex items-center justify-between flex-wrap gap-3">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-emerald-600">menu_book</span>
+          <span class="text-sm font-bold text-emerald-800"><%= @guide.series %></span>
+          <span class="text-xs text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded-full font-medium">
+            <%= @series_guides.size %>편 시리즈
+          </span>
+        </div>
+        <div class="flex items-center gap-1 overflow-x-auto max-w-full">
+          <% @series_guides.each_with_index do |sg, i| %>
+            <% is_current = sg.id == @guide.id %>
+            <%= link_to guide_path(sg),
+                  class: "shrink-0 flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold transition-colors
+                    #{is_current ? 'bg-emerald-600 text-white ring-2 ring-emerald-400 ring-offset-1' : 'bg-white border border-emerald-200 text-emerald-600 hover:bg-emerald-100'}" do %>
+              <%= i + 1 %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+      <p class="mt-2 text-xs text-emerald-700">
+        현재 <strong><%= @guide.series_order %>편</strong>을 읽고 있습니다.
+        <% if @next_guide %>
+          다음: <%= link_to @next_guide.title.truncate(30), guide_path(@next_guide), class: "underline hover:text-emerald-900 font-medium" %>
+        <% end %>
+      </p>
+    </div>
+    <% end %>
+
     <div class="lg:flex lg:gap-8">
       <!-- 목차 사이드바 (왼쪽) -->
       <div class="hidden lg:block lg:w-[250px] shrink-0">
         <div class="sticky top-24 bg-white rounded-xl border border-gray-200 p-6">
+          <%# 시리즈 사이드바 목록 %>
+          <% if @series_guides.present? %>
+          <div class="mb-5 pb-5 border-b border-gray-100">
+            <h3 class="font-bold text-gray-900 mb-3 flex items-center gap-1.5 text-sm">
+              <span class="material-symbols-outlined text-emerald-500 text-base">menu_book</span>
+              시리즈 전편
+            </h3>
+            <nav class="space-y-1 text-xs">
+              <% @series_guides.each_with_index do |sg, i| %>
+                <% is_current = sg.id == @guide.id %>
+                <%= link_to guide_path(sg),
+                      class: "flex items-center gap-2 py-1.5 px-2 rounded-lg transition-colors
+                        #{is_current ? 'bg-emerald-50 text-emerald-700 font-semibold' : 'text-gray-600 hover:bg-gray-50'}" do %>
+                  <span class="shrink-0 w-5 h-5 flex items-center justify-center rounded-full text-xs font-bold
+                    <%= is_current ? 'bg-emerald-600 text-white' : 'bg-gray-100 text-gray-500' %>">
+                    <%= i + 1 %>
+                  </span>
+                  <span class="truncate"><%= sg.title.gsub(/^.*?완전정복\s*\d*편?\s*[—\-:]?\s*/, '') %></span>
+                <% end %>
+              <% end %>
+            </nav>
+          </div>
+          <% end %>
           <h3 class="font-bold text-gray-900 mb-4">목차</h3>
           <nav class="space-y-2 text-sm">
             <% toc_num = 1 %>
@@ -296,6 +350,48 @@
                 <span class="material-symbols-outlined text-lg">arrow_forward</span>
               <% end %>
             </div>
+          </div>
+        </section>
+        <% end %>
+
+        <%# ── 시리즈 이전/다음 편 네비게이션 ── %>
+        <% if @series_guides.present? && (@prev_guide || @next_guide) %>
+        <section class="mt-8">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <% if @prev_guide %>
+                <%= link_to guide_path(@prev_guide),
+                      class: "group flex flex-col gap-1 p-4 bg-white border border-gray-200 rounded-xl hover:border-emerald-300 hover:shadow-md transition-all h-full" do %>
+                  <span class="text-xs text-gray-400 flex items-center gap-1">
+                    <span class="material-symbols-outlined text-sm">arrow_back</span>
+                    이전 편
+                  </span>
+                  <span class="text-sm font-semibold text-gray-800 group-hover:text-emerald-700 leading-snug line-clamp-2 transition-colors">
+                    <%= @prev_guide.title %>
+                  </span>
+                <% end %>
+              <% end %>
+            </div>
+            <div>
+              <% if @next_guide %>
+                <%= link_to guide_path(@next_guide),
+                      class: "group flex flex-col gap-1 p-4 bg-white border border-gray-200 rounded-xl hover:border-emerald-300 hover:shadow-md transition-all h-full text-right" do %>
+                  <span class="text-xs text-gray-400 flex items-center justify-end gap-1">
+                    다음 편
+                    <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                  </span>
+                  <span class="text-sm font-semibold text-gray-800 group-hover:text-emerald-700 leading-snug line-clamp-2 transition-colors">
+                    <%= @next_guide.title %>
+                  </span>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+          <div class="mt-3 text-center">
+            <%= link_to guides_path(category: @guide.series),
+                  class: "text-xs text-emerald-600 hover:text-emerald-800 underline transition-colors" do %>
+              <%= @guide.series %> 전편 보기
+            <% end %>
           </div>
         </section>
         <% end %>

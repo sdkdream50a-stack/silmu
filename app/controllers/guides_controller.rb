@@ -67,6 +67,16 @@ class GuidesController < ApplicationController
       end
     end
 
+    # 시리즈 네비게이션 (series 설정된 가이드만)
+    if @guide.series.present?
+      @series_guides = Rails.cache.fetch("guides/series/#{@guide.series}", expires_in: 1.hour) do
+        Guide.published.where(series: @guide.series).order(series_order: :asc).to_a
+      end
+      current_idx = @series_guides.index { |g| g.id == @guide.id }
+      @prev_guide = current_idx&.> (0) ? @series_guides[current_idx - 1] : nil
+      @next_guide = current_idx ? @series_guides[current_idx + 1] : nil
+    end
+
     @related_guides = Rails.cache.fetch("guides/related/#{@guide.slug}", expires_in: 1.hour) do
       same_cat = Guide.published.where(category: @guide.category).where.not(id: @guide.id).ordered.limit(2).to_a
       fill     = [3 - same_cat.size, 0].max
