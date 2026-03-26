@@ -47,3 +47,5 @@
 blog_topics.csv
 generate_taxonomy.py
 upload_to_sheets.py
+db/development.sqlite3
+docs/*.md
