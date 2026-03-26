@@ -96,7 +96,7 @@
         <% cache ["audit_case/content/v1", @audit_case.id, @audit_case.updated_at, @related_topic&.id], expires_in: 1.hour do %>
         <div class="space-y-4 mb-8">
           <!-- 지적사항 -->
-          <div class="bg-white border border-gray-200 rounded-xl p-5 lg:p-6">
+          <div id="section-finding" class="bg-white border border-gray-200 rounded-xl p-5 lg:p-6">
             <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide flex items-center gap-1.5 mb-3">
               <span class="w-1.5 h-1.5 rounded-full bg-red-400 shrink-0"></span>
               지적사항
@@ -110,7 +110,7 @@
           </div>
 
           <!-- 관련근거 -->
-          <div class="bg-white border border-gray-200 rounded-xl p-5 lg:p-6">
+          <div id="section-law" class="bg-white border border-gray-200 rounded-xl p-5 lg:p-6">
             <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide flex items-center gap-1.5 mb-3">
               <span class="w-1.5 h-1.5 rounded-full bg-slate-400 shrink-0"></span>
               관련근거
@@ -131,7 +131,7 @@
           </div>
 
           <!-- 조치내용 -->
-          <div class="bg-white border border-gray-200 rounded-xl p-5 lg:p-6">
+          <div id="section-improvement" class="bg-white border border-gray-200 rounded-xl p-5 lg:p-6">
             <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide flex items-center gap-1.5 mb-3">
               <span class="w-1.5 h-1.5 rounded-full bg-slate-400 shrink-0"></span>
               조치내용
@@ -147,7 +147,7 @@
           </div>
 
           <!-- 교훈/시사점 -->
-          <div class="bg-white border border-gray-200 rounded-xl p-5 lg:p-6">
+          <div id="section-lesson" class="bg-white border border-gray-200 rounded-xl p-5 lg:p-6">
             <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide flex items-center gap-1.5 mb-3">
               <span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0"></span>
               교훈 및 시사점
@@ -158,7 +158,7 @@
           <!-- 실무 체크포인트 -->
           <% checkpoints = @audit_case.checkpoint_list %>
           <% if checkpoints.any? %>
-            <div class="bg-white border border-gray-200 rounded-xl p-5 lg:p-6">
+            <div id="section-checkpoint" class="bg-white border border-gray-200 rounded-xl p-5 lg:p-6">
               <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide flex items-center gap-1.5 mb-4">
                 <span class="w-1.5 h-1.5 rounded-full bg-slate-400 shrink-0"></span>
                 실무 체크포인트
@@ -186,7 +186,7 @@
 
           <!-- 상세 내용 (있을 경우) -->
           <% if @audit_case.detail.present? %>
-            <div class="bg-white border border-gray-200 rounded-xl p-5 lg:p-6">
+            <div id="section-detail" class="bg-white border border-gray-200 rounded-xl p-5 lg:p-6">
               <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide flex items-center gap-1.5 mb-4">
                 <span class="w-1.5 h-1.5 rounded-full bg-slate-400 shrink-0"></span>
                 상세 분석
@@ -214,41 +214,67 @@
           <% end %>
         <% end %>
 
-        <!-- 같은 카테고리 사례 -->
-        <% if @related_cases.any? %>
-          <div>
-            <h3 class="font-semibold text-slate-900 text-base mb-4 flex items-center gap-2">
-              <span class="material-symbols-outlined text-red-500">folder_open</span>
-              같은 분야 감사사례
-            </h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <% @related_cases.each do |related| %>
-                <%= link_to audit_case_path(slug: related.slug), class: "card card-hover p-5 group" do %>
-                  <div class="flex items-center gap-2 mb-2">
-                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium
-                      <%= case related.severity
-                          when '경미' then 'bg-amber-50 text-amber-700'
-                          when '보통' then 'bg-orange-50 text-orange-700'
-                          when '중대' then 'bg-red-100 text-red-800'
-                          else 'bg-gray-50 text-gray-600'
-                          end %>">
-                      <%= related.severity %>
-                    </span>
+        <!-- 유사 감사사례 추천 -->
+        <% if @related_cases.present? && @related_cases.length > 0 %>
+          <div class="mt-10 pt-8 border-t border-gray-200">
+            <h2 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+              <span class="material-symbols-outlined text-indigo-600">auto_awesome</span>
+              유사 감사사례
+            </h2>
+            <div class="grid gap-4 sm:grid-cols-2">
+              <% @related_cases.first(4).each do |ac| %>
+                <%= link_to audit_case_path(slug: ac.slug), class: "group block p-4 bg-white rounded-xl border border-gray-200 hover:border-indigo-300 hover:shadow-md transition-all" do %>
+                  <div class="flex items-start gap-3">
+                    <div class="shrink-0 w-8 h-8 bg-red-50 rounded-lg flex items-center justify-center">
+                      <span class="material-symbols-outlined text-sm text-red-500">gavel</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <p class="font-semibold text-slate-800 text-sm leading-snug group-hover:text-indigo-700 transition-colors line-clamp-2"><%= ac.title %></p>
+                      <div class="flex items-center gap-2 mt-1.5 flex-wrap">
+                        <span class="text-xs text-slate-400"><%= ac.category %></span>
+                        <% if ac.severity.present? %>
+                          <span class="text-xs px-1.5 py-0.5 bg-red-50 text-red-600 rounded"><%= ac.severity %></span>
+                        <% end %>
+                      </div>
+                    </div>
                   </div>
-                  <h4 class="font-semibold text-slate-900 text-sm group-hover:text-red-600 transition-colors"><%= related.title %></h4>
-                  <p class="text-xs text-slate-500 mt-1"><%= related.legal_basis %></p>
                 <% end %>
               <% end %>
             </div>
+
+            <%= link_to audit_cases_path(category: @audit_case.category), class: "mt-4 inline-flex items-center gap-1.5 text-sm text-indigo-600 hover:text-indigo-800 font-medium transition-colors" do %>
+              <%= @audit_case.category %> 카테고리 전체 보기
+              <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            <% end %>
           </div>
         <% end %>
       </div>
 
       <!-- 사이드바 -->
       <div class="lg:w-[30%] mt-10 lg:mt-0">
-        <div class="sticky top-20 space-y-6">
+        <div class="sticky top-24 space-y-6">
+          <!-- 목차 (TOC) -->
+          <div class="bg-white rounded-xl border border-gray-200 p-5">
+            <h3 class="font-bold text-gray-900 mb-3 text-sm flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-sm text-indigo-600">list</span>
+              목차
+            </h3>
+            <nav class="space-y-0.5 text-sm" id="toc-nav">
+              <a href="#section-finding" class="toc-link block py-1.5 px-2 rounded-lg text-gray-600 hover:bg-indigo-50 hover:text-indigo-700 transition-colors">지적사항</a>
+              <a href="#section-law" class="toc-link block py-1.5 px-2 rounded-lg text-gray-600 hover:bg-indigo-50 hover:text-indigo-700 transition-colors">관련근거</a>
+              <a href="#section-improvement" class="toc-link block py-1.5 px-2 rounded-lg text-gray-600 hover:bg-indigo-50 hover:text-indigo-700 transition-colors">조치내용</a>
+              <a href="#section-lesson" class="toc-link block py-1.5 px-2 rounded-lg text-gray-600 hover:bg-indigo-50 hover:text-indigo-700 transition-colors">교훈 및 시사점</a>
+              <% if @audit_case.checkpoint_list.any? %>
+                <a href="#section-checkpoint" class="toc-link block py-1.5 px-2 rounded-lg text-gray-600 hover:bg-indigo-50 hover:text-indigo-700 transition-colors">실무 체크포인트</a>
+              <% end %>
+              <% if @audit_case.detail.present? %>
+                <a href="#section-detail" class="toc-link block py-1.5 px-2 rounded-lg text-gray-600 hover:bg-indigo-50 hover:text-indigo-700 transition-colors">상세 분석</a>
+              <% end %>
+            </nav>
+          </div>
+
           <!-- 돌아가기 -->
-          <%= link_to audit_cases_path, class: "flex items-center gap-2 text-slate-600 hover:text-slate-900 font-medium transition-colors mb-4" do %>
+          <%= link_to audit_cases_path, class: "flex items-center gap-2 text-slate-600 hover:text-slate-900 font-medium transition-colors" do %>
             <span class="material-symbols-outlined text-lg">arrow_back</span>
             감사사례 목록으로
           <% end %>
@@ -297,3 +323,29 @@
       title: @audit_case.title,
       url: audit_case_path(@audit_case.slug),
       type: 'audit_case' %>
+
+<script>
+  (function() {
+    // 스크롤 위치에 따른 TOC 활성 항목 하이라이트
+    const sections = document.querySelectorAll('[id^="section-"]');
+    const tocLinks = document.querySelectorAll('.toc-link');
+
+    if (!sections.length || !tocLinks.length) return;
+
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          tocLinks.forEach(function(link) {
+            link.classList.remove('bg-indigo-50', 'text-indigo-700', 'font-medium');
+          });
+          const activeLink = document.querySelector('.toc-link[href="#' + entry.target.id + '"]');
+          if (activeLink) {
+            activeLink.classList.add('bg-indigo-50', 'text-indigo-700', 'font-medium');
+          }
+        }
+      });
+    }, { rootMargin: '-20% 0px -60% 0px' });
+
+    sections.forEach(function(s) { observer.observe(s); });
+  })();
+</script>

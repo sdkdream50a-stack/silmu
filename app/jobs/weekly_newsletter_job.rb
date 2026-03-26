@@ -1,0 +1,173 @@
+class WeeklyNewsletterJob < ApplicationJob
+  queue_as :default
+
+  def perform
+    users = User.where(newsletter_agreed: true)
+    return if users.none?
+
+    subject = "📋 이번 주 계약 실무 체크포인트 — #{Time.zone.today.strftime("%m월 %d일")}주차"
+    body = build_body
+
+    users.find_each do |user|
+      NewsletterMailer.send_newsletter(user, subject, body).deliver_later
+    end
+  end
+
+  private
+
+  def build_body
+    month = Time.zone.today.month
+    checkpoints = monthly_checkpoints(month)
+
+    items_html = checkpoints.map do |item|
+      "<li style='margin-bottom: 10px;'>#{item}</li>"
+    end.join("\n")
+
+    <<~HTML
+      <h2 style="font-size: 20px; font-weight: 700; color: #1e3a5f; margin-bottom: 16px;">
+        #{Time.zone.today.strftime("%m월 %d일")}주차 업무 체크포인트
+      </h2>
+
+      <p style="color: #374151; margin-bottom: 20px;">
+        안녕하세요, 공무원 계약실무 가이드 <strong>실무.kr</strong>입니다.<br>
+        이번 주 놓치지 말아야 할 계약 실무 핵심 체크포인트를 정리했습니다.
+      </p>
+
+      <div style="background: #f0f4ff; border-left: 4px solid #2563eb; padding: 20px; border-radius: 8px; margin-bottom: 24px;">
+        <h3 style="font-size: 16px; font-weight: 700; color: #1e40af; margin: 0 0 12px;">📌 이번 주 핵심 체크리스트</h3>
+        <ul style="color: #1f2937; padding-left: 20px; margin: 0; line-height: 1.8;">
+          #{items_html}
+        </ul>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px;">
+        <a href="https://silmu.kr/tools/task-calendar"
+           style="display: inline-block; background: #2563eb; color: #ffffff; text-decoration: none; padding: 12px 20px; border-radius: 8px; font-weight: 600; font-size: 15px; text-align: center;">
+          📅 업무달력 바로가기
+        </a>
+        <a href="https://silmu.kr/audit-cases"
+           style="display: inline-block; background: #059669; color: #ffffff; text-decoration: none; padding: 12px 20px; border-radius: 8px; font-weight: 600; font-size: 15px; text-align: center;">
+          🔍 감사사례 보기
+        </a>
+        <a href="https://silmu.kr/chatbot"
+           style="display: inline-block; background: #d97706; color: #ffffff; text-decoration: none; padding: 12px 20px; border-radius: 8px; font-weight: 600; font-size: 15px; text-align: center;">
+          🤖 AI챗봇으로 질문하기
+        </a>
+      </div>
+
+      <p style="color: #6b7280; font-size: 13px; border-top: 1px solid #e5e7eb; padding-top: 16px;">
+        뉴스레터 수신을 원하지 않으시면
+        <a href="https://silmu.kr/mypage" style="color: #2563eb;">마이페이지</a>에서 수신 해제하실 수 있습니다.
+      </p>
+    HTML
+  end
+
+  def monthly_checkpoints(month)
+    case month
+    when 1
+      [
+        "<strong>연간 구매계획 수립:</strong> 올해 계약·구매 일정을 수립하고 부서별 검토를 완료하세요.",
+        "<strong>전년도 계약 정산 마감:</strong> 이월 예산 및 전년도 미결 계약 정산 여부를 점검하세요.",
+        "<strong>수의계약 한도 초기화 확인:</strong> 연간 수의계약 누적 한도가 리셋되었는지 확인하세요.",
+        "<strong>감사원 최신 지적사례 확인:</strong> 전년도 감사원 처분 결과 및 올해 적용 지침을 확인하세요.",
+        "<strong>실무.kr 1월 신규 가이드 안내:</strong> 새해 업무 준비에 필요한 가이드가 업데이트되었습니다."
+      ]
+    when 2
+      [
+        "<strong>1분기 발주 계획 최종 확정:</strong> 1~3월 계약 건 발주 일정을 확정하고 예산 집행 계획을 점검하세요.",
+        "<strong>입찰 공고 준비:</strong> 3월 이전 착공이 필요한 공사·용역의 입찰 공고 일정을 확인하세요.",
+        "<strong>원가계산서 작성 기준 확인:</strong> 당해 연도 노임단가·재료비 기준이 반영되었는지 확인하세요.",
+        "<strong>수의계약 한도 관리:</strong> 누계 금액이 한도에 근접한 건이 있는지 조기 점검하세요.",
+        "<strong>실무.kr 2월 신규 가이드 안내:</strong> 발주 준비 시즌에 맞춘 실전 가이드를 확인하세요."
+      ]
+    when 3
+      [
+        "<strong>상반기 발주 현황 점검:</strong> 연간 구매계획 대비 상반기 발주 달성률을 확인하세요.",
+        "<strong>계약 체결 지연 건 조치:</strong> 1분기 내 체결 예정이었으나 지연된 계약 건을 조기 처리하세요.",
+        "<strong>수의계약 한도 관리:</strong> 3월 말까지 누적 수의계약 금액을 점검하고 한도 초과 위험을 예방하세요.",
+        "<strong>감사원 최신 지적사례 확인:</strong> 봄 감사 시즌 대비 최신 지적사례를 검토하세요.",
+        "<strong>실무.kr 3월 신규 가이드 안내:</strong> 상반기 발주 관련 실무 가이드가 업데이트되었습니다."
+      ]
+    when 4
+      [
+        "<strong>상반기 계약 중간 점검:</strong> 4~6월 예정 계약 건의 준비 상태를 점검하세요.",
+        "<strong>하자보수보증금 만료 현황 확인:</strong> 이달 만료 예정 하자보수보증금을 반환 또는 연장 처리하세요.",
+        "<strong>계약 이행 실적 점검:</strong> 진행 중인 계약의 이행률이 계획 대비 적정한지 확인하세요.",
+        "<strong>수의계약 한도 관리:</strong> 상반기 한도 관리를 위해 누적 금액을 재확인하세요.",
+        "<strong>실무.kr 4월 신규 가이드 안내:</strong> 계약 이행 관리 관련 가이드를 확인하세요."
+      ]
+    when 5
+      [
+        "<strong>상반기 예산 집행률 점검:</strong> 5월 기준 예산 집행률이 목표치에 도달하고 있는지 확인하세요.",
+        "<strong>계약 변경 적정성 검토:</strong> 계약 금액 증감 요인이 있는 건은 적기에 변경 절차를 진행하세요.",
+        "<strong>하자보수보증금 만료 현황 확인:</strong> 5~6월 만료 예정 건을 미리 처리하세요.",
+        "<strong>물가변동 조정 여부 검토:</strong> 장기계속계약 중 물가 변동 요건 충족 여부를 확인하세요.",
+        "<strong>실무.kr 5월 신규 가이드 안내:</strong> 계약 변경·물가변동 실무 가이드를 확인하세요."
+      ]
+    when 6
+      [
+        "<strong>상반기 마감 점검:</strong> 상반기 계획 대비 실적을 총결산하고 미집행 예산 원인을 분석하세요.",
+        "<strong>하반기 발주 계획 수립:</strong> 7~12월 발주 일정을 확정하고 예산 배분 계획을 수립하세요.",
+        "<strong>계약 이행 완료 건 정산:</strong> 6월 말 준공·납품 완료 예정 계약의 검수 및 대금 지급을 진행하세요.",
+        "<strong>감사원 최신 지적사례 확인:</strong> 상반기 감사 결과를 바탕으로 주요 지적사례를 검토하세요.",
+        "<strong>실무.kr 6월 신규 가이드 안내:</strong> 상반기 마감 및 하반기 준비를 위한 가이드를 확인하세요."
+      ]
+    when 7
+      [
+        "<strong>하반기 발주 착수:</strong> 하반기 발주 1순위 건의 입찰 공고 또는 수의계약을 진행하세요.",
+        "<strong>연간 구매계획 상반기 이행률 보고:</strong> 내부 보고용 상반기 구매계획 이행 실적을 정리하세요.",
+        "<strong>수의계약 한도 하반기 재점검:</strong> 하반기 누적 한도 관리 계획을 수립하세요.",
+        "<strong>하자보수보증금 만료 현황 확인:</strong> 7~8월 만료 예정 건을 선제적으로 처리하세요.",
+        "<strong>실무.kr 7월 신규 가이드 안내:</strong> 하반기 발주 관련 실무 가이드를 확인하세요."
+      ]
+    when 8
+      [
+        "<strong>하반기 발주 중간 점검:</strong> 8월 현재 하반기 발주 계획 대비 진행률을 점검하세요.",
+        "<strong>예산 이월 방지 계획 수립:</strong> 연말 불용 예산 발생을 방지하기 위한 집행 계획을 세우세요.",
+        "<strong>계약 이행 지연 건 독려:</strong> 납기·준공 지연 우려가 있는 계약 건에 대한 독려 조치를 취하세요.",
+        "<strong>물가변동 조정 여부 재검토:</strong> 8월 기준 물가변동 요건 충족 건이 있는지 확인하세요.",
+        "<strong>실무.kr 8월 신규 가이드 안내:</strong> 예산 집행 관리 및 계약 이행 관련 가이드를 확인하세요."
+      ]
+    when 9
+      [
+        "<strong>연말 대비 계약 발주 마감 점검:</strong> 연내 착공·납품이 필요한 계약 건의 발주를 서두르세요.",
+        "<strong>3분기 계약 실적 정리:</strong> 9월 말 기준 누적 계약 체결 실적을 정리하세요.",
+        "<strong>예산 집행률 90% 목표 점검:</strong> 연말 불용 방지를 위해 집행률을 확인하고 집중 발주하세요.",
+        "<strong>감사원 최신 지적사례 확인:</strong> 하반기 정기감사 대비 최신 지적사례를 검토하세요.",
+        "<strong>실무.kr 9월 신규 가이드 안내:</strong> 연말 계약 집중 발주 관련 실무 가이드를 확인하세요."
+      ]
+    when 10
+      [
+        "<strong>연말 계약 발주 마감 데드라인 확인:</strong> 연내 계약 체결이 필요한 모든 건의 발주 데드라인을 확인하세요.",
+        "<strong>수의계약 연간 한도 최종 점검:</strong> 연간 수의계약 누적 금액이 한도를 초과하지 않는지 확인하세요.",
+        "<strong>계약 이행 완료 독려:</strong> 연내 납품·준공이 필요한 계약의 이행 현황을 집중 관리하세요.",
+        "<strong>내년도 예산 반영 요구:</strong> 내년 계약·구매 소요 예산을 예산 편성 부서에 제출하세요.",
+        "<strong>실무.kr 10월 신규 가이드 안내:</strong> 연말 계약 마감 실무 가이드를 확인하세요."
+      ]
+    when 11
+      [
+        "<strong>연내 계약 최종 마감:</strong> 11월 말까지 연내 체결이 필요한 계약을 모두 완료하세요.",
+        "<strong>예산 집행 마감 일정 확인:</strong> 회계 마감 일정에 맞춰 대금 지급을 완료하세요.",
+        "<strong>이월 예산 사전 승인 절차:</strong> 불가피하게 이월이 필요한 경우 사전 승인 절차를 진행하세요.",
+        "<strong>내년도 구매계획 초안 작성:</strong> 내년 연간 구매계획 초안을 작성하고 내부 협의를 시작하세요.",
+        "<strong>실무.kr 11월 신규 가이드 안내:</strong> 연말 정산 및 회계 마감 관련 가이드를 확인하세요."
+      ]
+    when 12
+      [
+        "<strong>연도말 계약 정산 마감:</strong> 모든 계약의 준공검사, 대금 지급, 보증금 반환을 완료하세요.",
+        "<strong>불용 예산 최소화:</strong> 잔여 예산의 집행 가능 여부를 최종 점검하고 불용을 최소화하세요.",
+        "<strong>차년도 구매계획 최종 확정:</strong> 내년 연간 구매계획을 최종 확정하고 부서별 통보 준비를 하세요.",
+        "<strong>감사원 최신 지적사례 확인:</strong> 연간 지적사례를 총정리하고 차년도 개선 방향을 수립하세요.",
+        "<strong>실무.kr 12월 신규 가이드 안내:</strong> 연말 마감 및 차년도 준비 가이드를 확인하세요."
+      ]
+    else
+      [
+        "<strong>연간 구매계획 이행 점검:</strong> 현재까지 발주 달성률이 계획 대비 적정한지 확인하세요.",
+        "<strong>수의계약 한도 관리:</strong> 누적 수의계약 금액이 법적 한도 내에 있는지 점검하세요.",
+        "<strong>감사원 최신 지적사례 확인:</strong> 최근 감사원 처분 결과를 검토하고 유사 사례를 예방하세요.",
+        "<strong>계약 이행 현황 점검:</strong> 진행 중인 계약의 납기·품질 이행 상태를 확인하세요.",
+        "<strong>실무.kr 신규 가이드 안내:</strong> 이번 달 업데이트된 실무 가이드를 확인하세요."
+      ]
+    end
+  end
+end

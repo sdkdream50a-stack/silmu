@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_19_000001) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_26_132721) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -155,6 +155,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_19_000001) do
     t.index ["topic_slug"], name: "index_guides_on_topic_slug"
   end
 
+  create_table "law_change_subscriptions", force: :cascade do |t|
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.string "email", null: false
+    t.string "topic_name"
+    t.string "topic_slug", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.index ["email", "topic_slug"], name: "index_law_change_subscriptions_on_email_and_topic_slug", unique: true
+    t.index ["topic_slug"], name: "index_law_change_subscriptions_on_topic_slug"
+    t.index ["user_id"], name: "index_law_change_subscriptions_on_user_id"
+  end
+
   create_table "laws", force: :cascade do |t|
     t.text "content"
     t.datetime "created_at", null: false
@@ -232,4 +245,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_19_000001) do
   add_foreign_key "calendar_data", "users"
   add_foreign_key "exam_progresses", "users"
   add_foreign_key "exam_question_comments", "users"
+  add_foreign_key "law_change_subscriptions", "users"
 end

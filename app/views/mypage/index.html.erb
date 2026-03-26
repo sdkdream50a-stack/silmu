@@ -61,6 +61,37 @@
       </div>
       <% end %>
 
+      <!-- 뉴스레터 수신 설정 -->
+      <% if current_user %>
+      <div class="card p-6 mb-6">
+        <h2 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined text-indigo-500">mail</span>
+          뉴스레터 설정
+        </h2>
+        <%= form_with url: mypage_newsletter_path, method: :patch, data: { turbo: false } do |f| %>
+          <div class="flex items-start gap-4 px-4 py-4 bg-indigo-50 rounded-xl">
+            <div class="flex-1">
+              <p class="text-sm font-semibold text-slate-800">주간 업무 체크포인트 뉴스레터</p>
+              <p class="text-xs text-slate-500 mt-0.5">매주 월요일 오전 9시, 이번 주 계약 실무 핵심 체크포인트를 이메일로 보내드립니다.</p>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer shrink-0 mt-0.5">
+              <%= f.check_box :newsletter_agreed,
+                    { checked: current_user.newsletter_agreed,
+                      id: "newsletter_toggle",
+                      class: "sr-only peer",
+                      onchange: "this.form.submit()" },
+                    "1", "0" %>
+              <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer
+                          peer-checked:after:translate-x-full peer-checked:after:border-white
+                          after:content-[''] after:absolute after:top-[2px] after:left-[2px]
+                          after:bg-white after:border-slate-300 after:border after:rounded-full
+                          after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+            </label>
+          </div>
+        <% end %>
+      </div>
+      <% end %>
+
       <!-- 계정 관리 -->
       <div class="card p-6">
         <h2 class="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">

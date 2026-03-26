@@ -1160,6 +1160,36 @@
           </div>
           <% end %>
 
+          <!-- 법령 개정 알림 구독 -->
+          <div id="law-subscription-<%= @topic.slug %>" class="mt-6 p-4 bg-indigo-50 border border-indigo-200 rounded-xl">
+            <div class="flex items-start gap-3">
+              <span class="material-symbols-outlined text-indigo-600 mt-0.5">notifications</span>
+              <div class="flex-1">
+                <p class="font-semibold text-slate-800 text-sm">법령 개정 알림 받기</p>
+                <p class="text-xs text-slate-500 mt-0.5 mb-3"><%= @topic.name %> 관련 법령이 개정되면 이메일로 알려드립니다.</p>
+                <% if current_user %>
+                  <%= button_to law_change_subscriptions_path,
+                        method: :post,
+                        params: { topic_slug: @topic.slug, topic_name: @topic.name },
+                        class: "inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-lg transition-colors" do %>
+                    <span class="material-symbols-outlined text-sm">add_alert</span>
+                    알림 구독하기
+                  <% end %>
+                <% else %>
+                  <%= form_with url: law_change_subscriptions_path, method: :post, class: "flex gap-2" do |f| %>
+                    <%= f.hidden_field :topic_slug, value: @topic.slug %>
+                    <%= f.hidden_field :topic_name, value: @topic.name %>
+                    <%= f.email_field :email, placeholder: "이메일 주소 입력",
+                          class: "flex-1 px-3 py-1.5 text-xs border border-indigo-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400",
+                          required: true %>
+                    <%= f.submit "구독",
+                          class: "px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-lg cursor-pointer transition-colors" %>
+                  <% end %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+
           <!-- 문의하기 -->
           <div class="gradient-slate rounded-2xl p-6 text-white shadow-strong">
             <div class="flex items-center gap-4 mb-4">

@@ -10,4 +10,12 @@ class MypageController < ApplicationController
       robots: "noindex"
     )
   end
+
+  def update_newsletter
+    agreed = params[:newsletter_agreed] == "1"
+    current_user.update!(newsletter_agreed: agreed)
+
+    message = agreed ? "뉴스레터 수신이 등록되었습니다." : "뉴스레터 수신이 해제되었습니다."
+    redirect_to mypage_path, notice: message
+  end
 end

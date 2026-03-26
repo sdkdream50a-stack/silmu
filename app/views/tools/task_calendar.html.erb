@@ -208,6 +208,25 @@
 
 <% content_for :hide_quick_menu, true %>
 
+<!-- 캘린더 구독 버튼 -->
+<div class="bg-white border-b border-slate-100 px-4 py-3 flex flex-wrap items-center gap-3">
+  <span class="text-xs font-medium text-slate-500">외부 캘린더에 추가:</span>
+  <a href="https://www.google.com/calendar/render?cid=webcal://silmu.kr/tools/task-calendar.ics"
+     target="_blank"
+     rel="noopener noreferrer"
+     class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 text-white text-xs font-medium hover:bg-blue-700 transition-colors">
+    <span class="material-symbols-outlined" style="font-size:16px">event</span>
+    Google Calendar에 추가
+  </a>
+  <a href="/tools/task-calendar.ics"
+     download
+     class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-100 text-slate-700 text-xs font-medium hover:bg-slate-200 transition-colors border border-slate-200">
+    <span class="material-symbols-outlined" style="font-size:16px">download</span>
+    ICS 다운로드
+  </a>
+  <span class="text-xs text-slate-400 hidden sm:inline">Outlook, Apple Calendar 등 ICS 지원 앱에서 사용 가능</span>
+</div>
+
 <!-- 도구 설명 섹션 (접을 수 있음) -->
 <details class="bg-gradient-to-b from-indigo-50 to-white border-b border-indigo-100">
   <summary class="px-6 py-4 cursor-pointer hover:bg-indigo-50/50 transition-colors flex items-center justify-between">

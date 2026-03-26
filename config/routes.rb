@@ -117,6 +117,7 @@ Rails.application.routes.draw do
   # 실무 도구
   get "tools", to: "tools#index", as: :tools
   get "tools/travel-calculator", to: "tools#travel_calculator", as: :travel_calculator
+  get "tools/task-calendar.ics", to: "tools#task_calendar_ics", as: :task_calendar_ics
   get "tools/task-calendar", to: "tools#task_calendar", as: :task_calendar
 
   # PDF 도구
@@ -244,8 +245,12 @@ Rails.application.routes.draw do
   # 북마크
   resources :bookmarks, only: [:create, :destroy, :index]
 
+  # 법령 개정 알림 구독
+  resources :law_change_subscriptions, only: [:create]
+
   # 마이페이지
   get "mypage", to: "mypage#index", as: :mypage
+  patch "mypage/newsletter", to: "mypage#update_newsletter", as: :mypage_newsletter
 
   # 서비스 소개
   get "about", to: "home#about", as: :about
