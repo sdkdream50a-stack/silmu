@@ -1,7 +1,7 @@
 공부하러 돌아오세요! — 공공조달관리사
 
 <%= @user.email.split('@').first %>님, <%= @days_absent %>일 동안 학습을 쉬셨어요.
-시험까지 D-<%= days_until_exam %>일 남았습니다.
+시험까지 D-<%= @days_until_exam %>일 남았습니다.
 
 내 현황:
 - 연속 학습일: <%= @streak_count %>일

@@ -6,6 +6,7 @@ class ExamReminderMailer < ApplicationMailer
     @streak_count = progress.streak_count
     # wrong_answers는 JSON serialize 적용되어 있으므로 Array로 이미 역직렬화됨
     @wrong_count = Array(progress.wrong_answers).size
+    @days_until_exam = days_until_exam
 
     mail(
       to: @user.email,
