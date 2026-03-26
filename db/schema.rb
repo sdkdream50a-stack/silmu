@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_26_213552) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_26_215327) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -135,6 +135,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_26_213552) do
     t.string "external_link"
     t.boolean "published", default: true, null: false
     t.date "published_on"
+    t.jsonb "rich_media", default: {}
     t.jsonb "sections"
     t.integer "sector", default: 0, null: false
     t.string "series"
@@ -152,6 +153,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_26_213552) do
     t.index ["published", "sort_order"], name: "index_guides_on_published_and_sort_order"
     t.index ["published", "view_count"], name: "index_guides_on_published_and_view_count"
     t.index ["published"], name: "index_guides_on_published"
+    t.index ["rich_media"], name: "index_guides_on_rich_media", using: :gin
     t.index ["series", "series_order"], name: "index_guides_on_series_and_series_order", where: "(series IS NOT NULL)"
     t.index ["slug"], name: "index_guides_on_slug", unique: true
     t.index ["sort_order"], name: "index_guides_on_sort_order"

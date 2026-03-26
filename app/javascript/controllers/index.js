@@ -29,6 +29,15 @@ application.register("home-quiz", HomeQuizController)
 import MermaidController from "./mermaid_controller"
 application.register("mermaid", MermaidController)
 
+import GuideAudioController from "./guide_audio_controller"
+application.register("guide-audio", GuideAudioController)
+
+import GuideFlashcardController from "./guide_flashcard_controller"
+application.register("guide-flashcard", GuideFlashcardController)
+
+import GuideComicController from "./guide_comic_controller"
+application.register("guide-comic", GuideComicController)
+
 import TravelCalculatorController from "./travel_calculator_controller"
 application.register("travel-calculator", TravelCalculatorController)
 
