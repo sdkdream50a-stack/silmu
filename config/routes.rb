@@ -288,6 +288,8 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       post "legal_verify", to: "legal_verify#verify"
+      post   "topics",          to: "topics#create"
+      patch  "topics/:slug",    to: "topics#update", constraints: { slug: /[^\/]+/ }
     end
   end
 end
