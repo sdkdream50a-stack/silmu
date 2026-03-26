@@ -39,7 +39,7 @@ class Exam::SubjectsController < ApplicationController
       canonical: "https://exam.silmu.kr/subjects/#{@subject[:id]}",
       og: {
         title: "#{@subject[:number]}: #{@subject[:title]} | 공공조달관리사",
-        description: "공공조달관리사 #{@subject[:number]} #{@subject[:title]} — #{@subject[:total_chapters]}개 챕터 학습.",
+        description: "공공조달관리사 #{@subject[:number]} #{@subject[:title]}(#{@subject[:subtitle]}) — #{@subject[:total_chapters]}개 챕터 학습목표·핵심키워드·시험 포인트 정리.",
         image: "https://exam.silmu.kr/icon.png"
       },
       twitter: { card: "summary" }
