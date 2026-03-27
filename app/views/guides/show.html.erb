@@ -30,7 +30,7 @@
     ]
   }) %>
   <%# FAQPage JSON-LD: flashcards(앞/뒤) → FAQ 스키마 — AEO/GEO 최적화 %>
-  <% faq_items = @guide.rich_media&.dig(:flashcards).presence %>
+  <% faq_items = @guide.rich_media&.with_indifferent_access&.dig(:flashcards).presence %>
   <% if faq_items.present? %>
     <%= json_ld({
       "@context": "https://schema.org",
