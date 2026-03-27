@@ -13,8 +13,13 @@ class GuidesController < ApplicationController
       @recent_guides = []
     end
 
-    # 뷰 헤더용 통계: 캐시된 @guides에서 계산 (DB 쿼리 없음)
-    grouped = @guides.group_by(&:category)
+    # 시리즈 그룹핑 (series 있는 가이드만)
+    series_guides = @guides.select { |g| g.series.present? }
+    @series_groups = series_guides.group_by(&:series).transform_values { |gs| gs.sort_by(&:series_order) }
+
+    # 뷰 헤더용 통계: 시리즈 제외한 일반 가이드만 카테고리 분류
+    non_series = @guides.reject { |g| g.series.present? }
+    grouped = non_series.group_by(&:category)
     top = grouped.max_by { |_, v| v.size }
     @top_category, @top_category_count = top ? [top[0], top[1].size] : [nil, 0]
     @category_count = grouped.keys.size

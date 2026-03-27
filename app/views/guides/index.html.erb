@@ -88,6 +88,48 @@
 
         <!-- 분야별 섹션 (기본 화면) -->
         <div id="category-sections">
+
+          <%# ── 완전정복 시리즈 섹션 ── %>
+          <% if @series_groups.any? %>
+            <div class="mb-10">
+              <div class="flex items-center gap-3 mb-4">
+                <div class="w-9 h-9 bg-amber-100 rounded-xl flex items-center justify-center">
+                  <span class="material-symbols-outlined text-amber-600" style="font-size:20px">auto_stories</span>
+                </div>
+                <div>
+                  <h2 class="text-lg font-bold text-gray-800">완전정복 시리즈</h2>
+                  <p class="text-xs text-slate-500">핵심 주제를 편별로 나눠 마인드맵·플래시카드와 함께 완전 마스터</p>
+                </div>
+                <span class="text-xs text-slate-400 ml-auto"><%= @series_groups.size %>개 시리즈</span>
+              </div>
+              <% @series_groups.each do |series_name, episodes| %>
+                <div class="card p-5 mb-4">
+                  <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center gap-2">
+                      <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-amber-100 text-amber-700 text-xs font-bold rounded-lg">
+                        <span class="material-symbols-outlined" style="font-size:14px">bookmark</span>
+                        시리즈
+                      </span>
+                      <h3 class="text-base font-bold text-slate-900"><%= series_name.tr('_', ' ') %></h3>
+                    </div>
+                    <span class="text-xs text-slate-400"><%= episodes.size %>편</span>
+                  </div>
+                  <div class="grid sm:grid-cols-2 gap-2">
+                    <% episodes.each do |ep| %>
+                      <%= link_to guide_path(ep), class: "flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-amber-50 group transition-colors border border-transparent hover:border-amber-200" do %>
+                        <span class="w-6 h-6 flex items-center justify-center rounded-full bg-amber-100 text-amber-700 text-xs font-bold shrink-0 group-hover:bg-amber-200"><%= ep.series_order %></span>
+                        <span class="text-sm text-slate-700 group-hover:text-amber-700 font-medium leading-snug truncate">
+                          <%= ep.title.gsub(/^.*?완전정복 \d+편 — /, '') %>
+                        </span>
+                      <% end %>
+                    <% end %>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+
+          <%# ── 분야별 일반 가이드 ── %>
           <%
             category_config = {
               '계약' => { icon: 'gavel',          color: 'emerald', desc: '수의계약·입찰·검수·대금지급 등 계약 전 과정' },
@@ -96,7 +138,8 @@
               '복무' => { icon: 'today',           color: 'orange',  desc: '휴가·공가·겸직허가·복무 관리' },
               '민원' => { icon: 'support_agent',   color: 'rose',    desc: '민원 응대 및 처리 절차' },
             }
-            grouped = @guides.group_by(&:category)
+            non_series_guides = @guides.reject { |g| g.series.present? }
+            grouped = non_series_guides.group_by(&:category)
           %>
           <% category_config.each do |cat, cfg| %>
             <% guides_in_cat = grouped[cat] || [] %>
