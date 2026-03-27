@@ -12,6 +12,6 @@ class AdsTxtController < ApplicationController
   private
 
   def ads_txt_content
-    "google.com, ca-pub-6241798439911569, DIRECT, f08c47fec0942fa0\n"
+    "google.com, pub-6241798439911569, DIRECT, f08c47fec0942fa0\n"
   end
 end
