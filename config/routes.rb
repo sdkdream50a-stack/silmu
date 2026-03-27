@@ -52,6 +52,9 @@ Rails.application.routes.draw do
   # robots.txt — 컨트롤러에서 서빙 (짧은 TTL로 Cloudflare 캐시 제어)
   get "robots.txt", to: "robots#show", format: false
 
+  # ads.txt — 컨트롤러에서 서빙 (1일 TTL, Cloudflare 1년 캐시 우회)
+  get "ads.txt", to: "ads_txt#show", format: false
+
   # SEO 최적화: 404 방지 리디렉션
   get "favicon.ico", to: redirect("/favicon.svg")
   get "audit_cases", to: redirect("/audit-cases", status: 301), as: :audit_cases_underscore
