@@ -38,6 +38,96 @@ class ToolsController < ApplicationController
     )
   end
 
+  def subsidy_settlement_checker
+    set_meta_tags(
+      title: "보조금 정산 체크리스트 — e나라도움 정산 전 자가점검",
+      description: "국고·지방보조금 정산 전 반드시 확인해야 할 항목을 자동으로 점검합니다. 보조금 유형별 필수 증빙서류, 집행 적정성, 잔액 처리 방법까지 감사 빈출 지적 기준으로 즉시 확인하세요.",
+      keywords: "보조금 정산,보조금 체크리스트,e나라도움,국고보조금,지방보조금,보조금 정산 서류,보조금 감사",
+      og: {
+        title: "보조금 정산 체크리스트 — 실무.kr",
+        description: "보조금 정산 전 자가점검 도구. 감사 빈출 지적 기준으로 즉시 확인하세요.",
+        url: canonical_url,
+        image: "https://silmu.kr/og-image.png",
+        type: "website"
+      }
+    )
+  end
+
+  def budget_category_finder
+    set_meta_tags(
+      title: "예산 과목 분류 도우미 — 세출예산 목·세목 자동 추천",
+      description: "지출 내용을 입력하면 적합한 세출예산 과목(목·세목)을 자동으로 추천합니다. 예산회계 담당자가 가장 많이 틀리는 과목 분류를 즉시 확인하세요. 지방자치단체 예산편성 운영기준 기반.",
+      keywords: "예산 과목,세출예산 과목,예산 목 세목,예산 분류,세출예산 편성,예산 담당자",
+      og: {
+        title: "예산 과목 분류 도우미 — 실무.kr",
+        description: "지출 내용 입력 → 적합한 세출예산 과목(목·세목) 즉시 추천",
+        url: canonical_url,
+        image: "https://silmu.kr/og-image.png",
+        type: "website"
+      }
+    )
+  end
+
+  def contract_legality_check
+    set_meta_tags(
+      title: "계약 적법성 자가진단 — 단계별 감사 지적 사전 예방",
+      description: "계약 단계별(입찰공고→낙찰→계약체결→이행→준공) 감사원 빈출 지적사항을 체크리스트로 즉시 점검합니다. 계약담당자 필수 자가진단 도구.",
+      keywords: "계약 적법성,계약 감사,계약 체크리스트,감사 지적,계약 자가진단,공공계약 감사",
+      og: {
+        title: "계약 적법성 자가진단 — 실무.kr",
+        description: "계약 단계별 감사 빈출 지적사항을 체크리스트로 즉시 점검하세요.",
+        url: canonical_url,
+        image: "https://silmu.kr/og-image.png",
+        type: "website"
+      }
+    )
+  end
+
+  def budget_transfer_checker
+    set_meta_tags(
+      title: "이월·전용 적법성 판단기 — 예산 이월·전용 요건 즉시 확인",
+      description: "명시이월·사고이월·계속비이월의 요건과 절차를 즉시 확인합니다. 예산전용 가능 여부와 사전 승인 필요 여부를 법령 기준으로 자동 판단하세요. 지방재정법 기반.",
+      keywords: "예산 이월,명시이월,사고이월,계속비이월,예산 전용,이월 요건,예산 담당자",
+      og: {
+        title: "이월·전용 적법성 판단기 — 실무.kr",
+        description: "예산 이월·전용 요건과 절차를 법령 기준으로 즉시 확인하세요.",
+        url: canonical_url,
+        image: "https://silmu.kr/og-image.png",
+        type: "website"
+      }
+    )
+  end
+
+  def allowance_calculator
+    set_meta_tags(
+      title: "공무원 수당 계산기 — 정근수당·가족수당·명절휴가비 자동 계산",
+      description: "정근수당(가산금 포함), 가족수당, 명절휴가비, 직급보조비를 공무원수당 등에 관한 규정 기준으로 자동 계산합니다. 급수·호봉·재직기간·가족 수를 입력하면 즉시 산출됩니다.",
+      keywords: "공무원 수당 계산기,정근수당,가족수당,명절휴가비,직급보조비,공무원수당규정,수당 계산",
+      og: {
+        title: "공무원 수당 계산기 — 실무.kr",
+        description: "정근수당·가족수당·명절휴가비를 공무원수당 규정 기준으로 자동 계산합니다.",
+        url: canonical_url,
+        image: "https://silmu.kr/og-image.png",
+        type: "website"
+      }
+    )
+  end
+
+  def audit_readiness_checker
+    set_meta_tags(
+      title: "부서별 감사 대비 체크리스트 — 계약·예산·인사·보조금 자가점검",
+      description: "담당 업무 유형(계약·예산·인사·보조금)을 선택하면 감사 빈출 지적사항 기반 자가점검 체크리스트를 즉시 생성합니다. 감사 전 5분 만에 완성하는 자가진단 도구.",
+      keywords: "감사 대비,감사 체크리스트,계약 감사,예산 감사,인사 감사,보조금 감사,자가점검",
+      og: {
+        title: "부서별 감사 대비 체크리스트 — 실무.kr",
+        description: "담당 업무 유형별 감사 빈출 지적 기반 자가점검 체크리스트를 즉시 생성하세요.",
+        url: canonical_url,
+        image: "https://silmu.kr/og-image.png",
+        type: "website"
+      }
+    )
+  end
+
   def split_contract_checker
     set_meta_tags(
       title: "분할계약 판단 체크리스트 — 수의계약 위험도 즉시 확인",

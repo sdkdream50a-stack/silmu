@@ -1,0 +1,40 @@
+<%# 감사 빈출 지적 항목 partial
+    locals: number, severity, title, law, issue, prevention, tool_label, tool_path
+%>
+<% severity_config = {
+  "critical" => { bg: "bg-red-50 border-red-200", badge: "bg-red-600 text-white", label: "매우 빈번" },
+  "high"     => { bg: "bg-amber-50 border-amber-200", badge: "bg-amber-500 text-white", label: "빈번" },
+  "medium"   => { bg: "bg-slate-50 border-slate-200", badge: "bg-slate-400 text-white", label: "보통" }
+}[severity] || { bg: "bg-slate-50 border-slate-200", badge: "bg-slate-400 text-white", label: "보통" } %>
+
+<div class="rounded-2xl border p-5 <%= severity_config[:bg] %>">
+  <div class="flex items-start gap-3 mb-3">
+    <span class="w-7 h-7 rounded-full bg-white border border-slate-200 flex items-center justify-center text-xs font-bold text-slate-500 flex-shrink-0 mt-0.5"><%= number %></span>
+    <div class="flex-1">
+      <div class="flex items-center gap-2 flex-wrap mb-1">
+        <h3 class="text-sm font-bold text-slate-900"><%= title %></h3>
+        <span class="text-xs px-2 py-0.5 rounded-full font-semibold <%= severity_config[:badge] %>"><%= severity_config[:label] %></span>
+      </div>
+      <p class="text-xs text-slate-500"><strong class="text-slate-600">근거:</strong> <%= law %></p>
+    </div>
+  </div>
+
+  <div class="ml-10 space-y-2">
+    <div class="p-3 bg-white/70 rounded-xl">
+      <p class="text-xs font-semibold text-slate-500 mb-1">주요 지적 유형</p>
+      <p class="text-sm text-slate-700 leading-relaxed"><%= issue %></p>
+    </div>
+    <div class="p-3 bg-white/70 rounded-xl">
+      <p class="text-xs font-semibold text-emerald-600 mb-1">예방 조치</p>
+      <p class="text-sm text-slate-700 leading-relaxed"><%= prevention %></p>
+    </div>
+    <% if tool_label && tool_path %>
+      <div class="flex">
+        <%= link_to send(tool_path), class: "inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors" do %>
+          <span class="material-symbols-outlined text-xs">build</span>
+          <%= tool_label %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -106,6 +106,12 @@ Rails.application.routes.draw do
   resources :templates, only: [:index, :show]
 
   # 업무 가이드
+  # 감사 빈출 지적 TOP 30 가이드
+  get "guides/audit-frequent-issues", to: "guides#audit_frequent_issues", as: :audit_frequent_issues
+
+  # 국가계약 vs 지방계약 비교 가이드
+  get "guides/national-vs-local-contract", to: "guides#national_vs_local_contract", as: :national_vs_local_contract_guide
+
   get "guides/contract-flow", to: "guides#contract_flow", as: :contract_flow
   get "guides/pre-contract-checklist", to: "guides#pre_contract_checklist", as: :pre_contract_checklist
   get "guides/resources", to: "guides#resources", as: :guide_resources
@@ -206,6 +212,24 @@ Rails.application.routes.draw do
 
   # 분할계약 판단 체크리스트
   get "tools/split-contract-checker", to: "tools#split_contract_checker", as: :split_contract_checker
+
+  # 보조금 정산 체크리스트
+  get "tools/subsidy-settlement-checker", to: "tools#subsidy_settlement_checker", as: :subsidy_settlement_checker
+
+  # 예산 과목 분류 도우미
+  get "tools/budget-category-finder", to: "tools#budget_category_finder", as: :budget_category_finder
+
+  # 계약 적법성 자가진단 체크리스트
+  get "tools/contract-legality-check", to: "tools#contract_legality_check", as: :contract_legality_check
+
+  # 이월/전용 적법성 판단기
+  get "tools/budget-transfer-checker", to: "tools#budget_transfer_checker", as: :budget_transfer_checker
+
+  # 수당 개별 계산기
+  get "tools/allowance-calculator", to: "tools#allowance_calculator", as: :allowance_calculator
+
+  # 부서별 감사 대비 체크리스트
+  get "tools/audit-readiness-checker", to: "tools#audit_readiness_checker", as: :audit_readiness_checker
 
   # 물가변동 계약금액조정 계산기
   get "tools/price-adjustment-calculator", to: "tools#price_adjustment_calculator", as: :price_adjustment_calculator

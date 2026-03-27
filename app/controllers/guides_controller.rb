@@ -117,6 +117,42 @@ class GuidesController < ApplicationController
     redirect_to guides_path, alert: "가이드를 찾을 수 없습니다."
   end
 
+  # 감사 빈출 지적 TOP 30 가이드
+  def audit_frequent_issues
+    canonical_url = request.original_url.split("?").first
+    set_meta_tags(
+      title: "감사 빈출 지적 TOP 30 — 계약·예산·인사·보조금 분야별 정리",
+      description: "감사원·지자체 감사에서 가장 자주 지적되는 사항 30가지를 분야별로 정리했습니다. 계약·예산·인사·보조금 담당자가 실수하기 쉬운 항목과 예방법을 한 페이지에서 확인하세요.",
+      keywords: "감사 빈출 지적,감사원 지적,계약 감사,예산 감사,보조금 감사,감사 대비,공무원 감사",
+      og: {
+        title: "감사 빈출 지적 TOP 30 — 실무.kr",
+        description: "계약·예산·인사·보조금 분야 감사 빈출 지적사항 30가지와 예방법을 한 페이지에서 확인하세요.",
+        url: canonical_url,
+        image: "https://silmu.kr/og-image.png",
+        type: "website"
+      },
+      canonical: canonical_url
+    )
+  end
+
+  # 국가계약 vs 지방계약 비교 가이드
+  def national_vs_local_contract
+    canonical_url = request.original_url.split("?").first
+    set_meta_tags(
+      title: "국가계약 vs 지방계약 비교 — 핵심 차이점 한눈에 보기",
+      description: "국가계약법과 지방계약법의 핵심 차이를 15개 항목별로 비교 정리했습니다. 수의계약 한도, 입찰 절차, 계약보증금, 지체상금 등 담당자가 혼동하기 쉬운 부분을 명확히 구분하세요.",
+      keywords: "국가계약법,지방계약법,국가계약 지방계약 차이,계약법 비교,지방자치단체 계약,국가기관 계약",
+      og: {
+        title: "국가계약 vs 지방계약 비교 — 실무.kr",
+        description: "국가계약법·지방계약법 핵심 차이 15개 항목 비교. 수의계약 한도·입찰·보증금·지체상금 구분.",
+        url: canonical_url,
+        image: "https://silmu.kr/og-image.png",
+        type: "website"
+      },
+      canonical: canonical_url
+    )
+  end
+
   # 계약 흐름도 페이지
   def contract_flow
     canonical_url = request.original_url.split("?").first

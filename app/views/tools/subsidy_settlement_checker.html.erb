@@ -1,0 +1,397 @@
+<%# 보조금 정산 체크리스트 %>
+
+<section class="section py-10">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- 뒤로가기 -->
+    <div class="mb-6">
+      <%= link_to tools_path, class: "inline-flex items-center text-slate-600 hover:text-indigo-600 transition-colors font-medium" do %>
+        <span class="material-symbols-outlined mr-1">arrow_back</span>
+        도구 목록으로
+      <% end %>
+    </div>
+
+    <!-- 헤더 -->
+    <div class="mb-8">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="icon-container icon-container-lg gradient-indigo shadow-lg">
+          <span class="material-symbols-outlined text-3xl text-white">fact_check</span>
+        </div>
+        <div>
+          <h1 class="text-2xl font-bold text-slate-900">보조금 정산 체크리스트</h1>
+          <p class="text-slate-500">e나라도움 정산 제출 전 자가점검 도구</p>
+        </div>
+      </div>
+      <div class="bg-indigo-50 border border-indigo-200 rounded-2xl p-5">
+        <p class="text-indigo-800 text-sm leading-relaxed">
+          <strong>사용 방법:</strong> 보조금 유형과 사업 정보를 입력하면 정산 전 반드시 확인해야 할 항목이 자동으로 생성됩니다.
+          감사원 및 지자체 감사에서 <strong>2순위로 빈번하게 지적되는 보조금 분야</strong> 핵심 항목을 포함합니다.
+          (<strong>근거:</strong> 보조금 관리에 관한 법률, 지방재정법 제17조, 지방보조금 관리 기준)
+        </p>
+      </div>
+    </div>
+
+    <!-- 입력 영역 -->
+    <div class="card p-6 mb-6">
+      <h2 class="text-lg font-bold text-slate-900 mb-5 flex items-center gap-2">
+        <span class="material-symbols-outlined text-indigo-600">edit_note</span>
+        사업 기본 정보
+      </h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">보조금 유형</label>
+          <select id="subsidy-type" class="form-input w-full" onchange="generateChecklist()">
+            <option value="">선택하세요</option>
+            <option value="national">국고보조금 (보조금법 적용)</option>
+            <option value="local">지방보조금 (지방보조금 관리기준 적용)</option>
+            <option value="fund">기금 (각 기금법 적용)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">보조금 총액 (만원)</label>
+          <input type="number" id="subsidy-amount" placeholder="예: 5000" min="0" class="form-input w-full" oninput="generateChecklist()">
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">집행 완료액 (만원)</label>
+          <input type="number" id="executed-amount" placeholder="예: 4800" min="0" class="form-input w-full" oninput="generateChecklist()">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">자부담 포함 여부</label>
+          <select id="self-funding" class="form-input w-full" onchange="generateChecklist()">
+            <option value="yes">있음 (자부담 있는 보조사업)</option>
+            <option value="no">없음 (전액 보조)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="mb-5">
+        <p class="text-sm font-semibold text-slate-700 mb-3">해당하는 집행 유형 (복수 선택 가능)</p>
+        <div class="grid grid-cols-2 gap-3">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" class="exec-type w-4 h-4 accent-indigo-600" value="construction" onchange="generateChecklist()">
+            <span class="text-sm text-slate-700">공사·시설사업 포함</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" class="exec-type w-4 h-4 accent-indigo-600" value="equipment" onchange="generateChecklist()">
+            <span class="text-sm text-slate-700">물품·장비 구매 포함</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" class="exec-type w-4 h-4 accent-indigo-600" value="personnel" onchange="generateChecklist()">
+            <span class="text-sm text-slate-700">인건비 집행 포함</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" class="exec-type w-4 h-4 accent-indigo-600" value="transfer" onchange="generateChecklist()">
+            <span class="text-sm text-slate-700">재보조 (재교부) 포함</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- 결과 체크리스트 -->
+    <div id="checklist-result" class="hidden">
+      <!-- JS로 생성 -->
+    </div>
+
+    <!-- 관련 법령 가이드 링크 -->
+    <div class="mt-6 p-5 bg-blue-50 rounded-2xl border border-blue-100">
+      <div class="flex items-start gap-3">
+        <span class="material-symbols-outlined text-blue-600 mt-0.5">menu_book</span>
+        <div>
+          <p class="text-sm font-semibold text-blue-900 mb-1">관련 법령 가이드</p>
+          <p class="text-xs text-blue-700 mb-2">보조금 관리 법령 해설과 감사사례를 확인하세요</p>
+          <div class="flex flex-wrap gap-3">
+            <%= link_to topic_path("subsidy-management"), class: "inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-800" do %>
+              <span class="material-symbols-outlined text-xs">open_in_new</span>
+              보조금 관리 법령 가이드
+            <% end %>
+            <%= link_to audit_readiness_checker_path, class: "inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-800" do %>
+              <span class="material-symbols-outlined text-xs">checklist</span>
+              보조금 감사 대비 체크리스트
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const CHECKLIST_ITEMS = {
+    common: [
+      {
+        category: "집행 적정성",
+        icon: "paid",
+        color: "indigo",
+        items: [
+          { text: "보조금 교부목적 외 사용 여부 확인 (보조금법 제22조)", critical: true },
+          { text: "집행잔액이 발생한 경우 반납 계획 수립 여부 확인", critical: true },
+          { text: "보조금 집행 내역이 교부결정서의 사업계획과 일치 여부 확인", critical: true },
+          { text: "단가·수량 등 집행 세부내역의 적정성 검토 완료", critical: false },
+          { text: "현금 지출 원칙 준수 여부 (계좌이체 증빙 구비)", critical: false }
+        ]
+      },
+      {
+        category: "증빙서류",
+        icon: "description",
+        color: "slate",
+        items: [
+          { text: "세금계산서 또는 계산서 원본 구비 (공급가액·세액 확인)", critical: true },
+          { text: "영수증·간이영수증의 경우 지출결의서와 일치 여부 확인", critical: false },
+          { text: "계좌이체 증빙(통장사본 또는 이체확인증) 구비", critical: true },
+          { text: "계약서 또는 견적서 구비 (계약 기준금액 이상인 경우)", critical: false },
+          { text: "검수확인서 또는 납품확인서 구비", critical: false }
+        ]
+      },
+      {
+        category: "정산보고서",
+        icon: "summarize",
+        color: "blue",
+        items: [
+          { text: "e나라도움 정산보고서 작성 완료 및 제출 기한 확인", critical: true },
+          { text: "수입·지출 결산서와 집행내역서 일치 여부 확인", critical: true },
+          { text: "집행잔액 명세서 작성 (잔액 발생 시)", critical: false },
+          { text: "정산 검토의견서 첨부 (보조사업자가 작성)", critical: false }
+        ]
+      }
+    ],
+    national: [
+      {
+        category: "국고보조금 특이사항",
+        icon: "account_balance",
+        color: "amber",
+        items: [
+          { text: "국고보조금 통합관리시스템(e나라도움)을 통한 집행 여부 확인", critical: true },
+          { text: "중앙관서의 장의 용도외사용 승인 없이 전용 여부 확인", critical: true },
+          { text: "국고보조금법 제30조: 정산보고 제출 기한(사업종료 후 2개월) 준수", critical: true },
+          { text: "성과목표 달성 현황 작성 (성과관리 대상사업인 경우)", critical: false }
+        ]
+      }
+    ],
+    local: [
+      {
+        category: "지방보조금 특이사항",
+        icon: "location_city",
+        color: "green",
+        items: [
+          { text: "지방보조금 관리기준에 따른 정산보고서 양식 사용 여부 확인", critical: true },
+          { text: "자부담 비율 충족 여부 확인 (교부결정서 기준 자부담액 이상 집행)", critical: true },
+          { text: "지방보조금심의위원회 심의 결과와 집행 내용 일치 여부", critical: false },
+          { text: "지방재정법 시행령 제28조: 보조금 집행잔액 반납 의무 이행 여부", critical: true }
+        ]
+      }
+    ],
+    fund: [
+      {
+        category: "기금 특이사항",
+        icon: "savings",
+        color: "purple",
+        items: [
+          { text: "해당 기금 운용계획서와 집행 내용 일치 여부 확인", critical: true },
+          { text: "기금 운용·관리에 관한 법률 및 기금관리기본법 준수 여부", critical: false },
+          { text: "기금수탁기관의 집행 내역 검증 완료 (위탁 집행인 경우)", critical: false }
+        ]
+      }
+    ],
+    construction: [
+      {
+        category: "공사·시설사업 추가 확인",
+        icon: "construction",
+        color: "orange",
+        items: [
+          { text: "준공검사 완료 및 준공검사조서 구비", critical: true },
+          { text: "사진 대장 작성 (착공 전·중·후 비교 사진)", critical: false },
+          { text: "설계변경이 있는 경우 변경교부결정 승인 여부 확인", critical: true },
+          { text: "하자보증금 납부 또는 하자이행보증보험증권 구비", critical: false }
+        ]
+      }
+    ],
+    equipment: [
+      {
+        category: "물품·장비 추가 확인",
+        icon: "inventory_2",
+        color: "teal",
+        items: [
+          { text: "납품확인서 및 검수조서 구비", critical: true },
+          { text: "국유재산 또는 공유재산 취득 시 재산 등록 여부 확인", critical: true },
+          { text: "물품 사진 및 시리얼번호 등 식별 정보 기록 완료", critical: false }
+        ]
+      }
+    ],
+    personnel: [
+      {
+        category: "인건비 추가 확인",
+        icon: "person",
+        color: "pink",
+        items: [
+          { text: "급여 지급 계좌이체 증빙 구비 (개인별 이체확인증)", critical: true },
+          { text: "근무시간·출근부 등 근무 사실 증빙 구비", critical: true },
+          { text: "4대보험 납부 영수증 구비 (보조금 지원 인건비에 한함)", critical: false },
+          { text: "인건비 지급기준이 교부결정서 또는 내부 기준과 일치 여부", critical: true }
+        ]
+      }
+    ],
+    transfer: [
+      {
+        category: "재보조(재교부) 추가 확인",
+        icon: "sync_alt",
+        color: "red",
+        items: [
+          { text: "재보조 대상 기관의 정산보고서 징구 완료", critical: true },
+          { text: "재보조 기관의 집행내역 검증 완료 (현장 확인 또는 서류 검증)", critical: true },
+          { text: "재보조 승인 여부 확인 (교부결정서에 재보조 허용 여부 명시)", critical: true }
+        ]
+      }
+    ]
+  };
+
+  function generateChecklist() {
+    const type = document.getElementById('subsidy-type').value;
+    const amount = parseFloat(document.getElementById('subsidy-amount').value) || 0;
+    const executed = parseFloat(document.getElementById('executed-amount').value) || 0;
+    const selfFunding = document.getElementById('self-funding').value;
+    const execTypes = Array.from(document.querySelectorAll('.exec-type:checked')).map(el => el.value);
+
+    const result = document.getElementById('checklist-result');
+
+    if (!type) {
+      result.classList.add('hidden');
+      return;
+    }
+
+    result.classList.remove('hidden');
+
+    // 잔액 계산
+    const remainder = amount - executed;
+    const executionRate = amount > 0 ? (executed / amount * 100).toFixed(1) : 0;
+
+    // 수집할 섹션 결정
+    const sections = [...CHECKLIST_ITEMS.common];
+    if (CHECKLIST_ITEMS[type]) sections.push(...CHECKLIST_ITEMS[type]);
+    execTypes.forEach(t => { if (CHECKLIST_ITEMS[t]) sections.push(...CHECKLIST_ITEMS[t]); });
+
+    // 자부담 있는 경우 추가 항목
+    const selfFundingItems = selfFunding === 'yes' ? [{
+      category: "자부담 확인",
+      icon: "account_balance_wallet",
+      color: "amber",
+      items: [
+        { text: "자부담 집행 증빙 구비 (교부결정서상 자부담액 이상 집행 확인)", critical: true },
+        { text: "자부담 재원 출처 확인 (타 보조금 자부담 전용 금지)", critical: true }
+      ]
+    }] : [];
+    sections.push(...selfFundingItems);
+
+    // 통계
+    const totalItems = sections.reduce((s, sec) => s + sec.items.length, 0);
+    const criticalItems = sections.reduce((s, sec) => s + sec.items.filter(i => i.critical).length, 0);
+
+    const colorMap = {
+      indigo: "bg-indigo-50 border-indigo-200 text-indigo-700",
+      slate: "bg-slate-50 border-slate-200 text-slate-700",
+      blue: "bg-blue-50 border-blue-200 text-blue-700",
+      amber: "bg-amber-50 border-amber-200 text-amber-800",
+      green: "bg-green-50 border-green-200 text-green-700",
+      purple: "bg-purple-50 border-purple-200 text-purple-700",
+      orange: "bg-orange-50 border-orange-200 text-orange-700",
+      teal: "bg-teal-50 border-teal-200 text-teal-700",
+      pink: "bg-pink-50 border-pink-200 text-pink-700",
+      red: "bg-red-50 border-red-200 text-red-700"
+    };
+
+    let html = `
+      <!-- 요약 -->
+      <div class="card p-5 mb-5 bg-gradient-to-r from-indigo-50 to-blue-50 border border-indigo-100">
+        <h2 class="text-base font-bold text-indigo-900 mb-3 flex items-center gap-2">
+          <span class="material-symbols-outlined text-indigo-600">analytics</span>
+          정산 현황 요약
+        </h2>
+        <div class="grid grid-cols-3 gap-3">
+          <div class="bg-white rounded-xl p-3 text-center border border-indigo-100">
+            <div class="text-xs text-slate-500 mb-1">집행률</div>
+            <div class="text-xl font-bold ${executionRate >= 95 ? 'text-green-600' : executionRate >= 80 ? 'text-amber-600' : 'text-red-600'}">${executionRate}%</div>
+          </div>
+          <div class="bg-white rounded-xl p-3 text-center border border-indigo-100">
+            <div class="text-xs text-slate-500 mb-1">잔액</div>
+            <div class="text-xl font-bold ${remainder > 0 ? 'text-amber-600' : 'text-green-600'}">${formatNum(remainder)}만원</div>
+            ${remainder > 0 ? '<div class="text-xs text-amber-600">반납 필요</div>' : ''}
+          </div>
+          <div class="bg-white rounded-xl p-3 text-center border border-indigo-100">
+            <div class="text-xs text-slate-500 mb-1">점검 항목</div>
+            <div class="text-xl font-bold text-indigo-700">${totalItems}개</div>
+            <div class="text-xs text-red-500">필수 ${criticalItems}개</div>
+          </div>
+        </div>
+        ${remainder > 0 ? `<div class="mt-3 p-3 bg-amber-50 rounded-lg border border-amber-200 text-xs text-amber-800">
+          ⚠️ <strong>잔액 ${formatNum(remainder)}만원 발생:</strong> 정산보고 후 반납 의무가 있습니다. 반납 계획을 수립하고 집행잔액 명세서를 작성하세요.
+        </div>` : ''}
+      </div>
+
+      <!-- 체크리스트 -->
+      <div class="space-y-4">
+    `;
+
+    sections.forEach(section => {
+      const colorClass = colorMap[section.color] || colorMap.slate;
+      html += `
+        <div class="card p-5 border ${colorClass.split(' ')[1]}">
+          <h3 class="text-sm font-bold mb-3 flex items-center gap-2 ${colorClass.split(' ')[2]}">
+            <span class="material-symbols-outlined text-base">${section.icon}</span>
+            ${section.category}
+          </h3>
+          <div class="space-y-2">
+      `;
+      section.items.forEach((item, idx) => {
+        html += `
+          <label class="flex items-start gap-3 cursor-pointer group p-2 rounded-lg hover:bg-white/60 transition-colors">
+            <input type="checkbox" class="checklist-item mt-0.5 w-4 h-4 accent-indigo-600 flex-shrink-0" onchange="updateProgress()">
+            <div class="flex-1">
+              <span class="text-sm text-slate-700 group-hover:text-slate-900 leading-relaxed">${item.text}</span>
+              ${item.critical ? '<span class="ml-1 text-xs font-semibold text-red-500 bg-red-50 px-1.5 py-0.5 rounded">필수</span>' : ''}
+            </div>
+          </label>
+        `;
+      });
+      html += `</div></div>`;
+    });
+
+    html += `
+      </div>
+
+      <!-- 진행률 -->
+      <div class="card p-5 mt-5" id="progress-card">
+        <div class="flex justify-between text-sm font-semibold text-slate-700 mb-2">
+          <span>점검 진행률</span>
+          <span id="progress-text">0 / ${totalItems} 완료</span>
+        </div>
+        <div class="bg-slate-100 rounded-full h-3">
+          <div id="progress-bar" class="h-full rounded-full bg-indigo-500 transition-all duration-300" style="width: 0%"></div>
+        </div>
+        <p class="text-xs text-slate-500 mt-2">모든 항목을 점검한 후 e나라도움에 정산보고서를 제출하세요.</p>
+      </div>
+    `;
+
+    result.innerHTML = html;
+  }
+
+  function updateProgress() {
+    const total = document.querySelectorAll('.checklist-item').length;
+    const checked = document.querySelectorAll('.checklist-item:checked').length;
+    const pct = total > 0 ? (checked / total * 100) : 0;
+    document.getElementById('progress-text').textContent = `${checked} / ${total} 완료`;
+    document.getElementById('progress-bar').style.width = pct + '%';
+    if (pct === 100) {
+      document.getElementById('progress-bar').classList.replace('bg-indigo-500', 'bg-green-500');
+    } else {
+      if (document.getElementById('progress-bar').classList.contains('bg-green-500')) {
+        document.getElementById('progress-bar').classList.replace('bg-green-500', 'bg-indigo-500');
+      }
+    }
+  }
+
+  function formatNum(n) {
+    return Math.round(n).toLocaleString('ko-KR');
+  }
+</script>

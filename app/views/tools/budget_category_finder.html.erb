@@ -1,0 +1,260 @@
+<%# 예산 과목 분류 도우미 %>
+
+<section class="section py-10">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- 뒤로가기 -->
+    <div class="mb-6">
+      <%= link_to tools_path, class: "inline-flex items-center text-slate-600 hover:text-emerald-600 transition-colors font-medium" do %>
+        <span class="material-symbols-outlined mr-1">arrow_back</span>
+        도구 목록으로
+      <% end %>
+    </div>
+
+    <!-- 헤더 -->
+    <div class="mb-8">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="icon-container icon-container-lg gradient-emerald shadow-lg">
+          <span class="material-symbols-outlined text-3xl text-white">category</span>
+        </div>
+        <div>
+          <h1 class="text-2xl font-bold text-slate-900">예산 과목 분류 도우미</h1>
+          <p class="text-slate-500">지출 내용 입력 → 세출예산 과목(목·세목) 즉시 추천</p>
+        </div>
+      </div>
+      <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-5">
+        <p class="text-emerald-800 text-sm leading-relaxed">
+          <strong>사용 방법:</strong> 지출 내용 또는 키워드를 입력하거나 카테고리를 선택하면 적합한 세출예산 과목을 추천합니다.
+          <strong>근거:</strong> 행안부 「지방자치단체 예산편성 운영기준」 및 「지방자치단체 세출예산 집행기준」
+        </p>
+      </div>
+    </div>
+
+    <!-- 검색 입력 -->
+    <div class="card p-6 mb-6">
+      <h2 class="text-lg font-bold text-slate-900 mb-5 flex items-center gap-2">
+        <span class="material-symbols-outlined text-emerald-600">search</span>
+        지출 내용 검색
+      </h2>
+      <div class="relative mb-5">
+        <input type="text" id="search-input" placeholder="예: 복사용지, 출장비, 강사비, 시설보수, 차량연료비..."
+               class="form-input w-full pl-10 text-base" oninput="searchCategory()" autocomplete="off">
+        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+      </div>
+
+      <!-- 빠른 선택 태그 -->
+      <div>
+        <p class="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wide">자주 찾는 항목</p>
+        <div class="flex flex-wrap gap-2">
+          <% [
+            "복사용지", "소모품", "출장비", "강사비", "시설보수",
+            "차량유류비", "회의비", "교육훈련비", "청소용역", "수선비"
+          ].each do |tag| %>
+            <button type="button" onclick="quickSearch('<%= tag %>')"
+                    class="px-3 py-1.5 text-xs font-medium bg-slate-100 hover:bg-emerald-100 hover:text-emerald-700 text-slate-600 rounded-full transition-colors">
+              <%= tag %>
+            </button>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <!-- 카테고리별 탐색 -->
+    <div class="card p-6 mb-6">
+      <h2 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-emerald-600">folder_open</span>
+        분야별 탐색
+      </h2>
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+        <button type="button" onclick="filterCategory('물건비')" class="cat-btn p-3 bg-slate-50 hover:bg-emerald-50 rounded-xl border border-slate-200 hover:border-emerald-300 text-left transition-colors">
+          <span class="material-symbols-outlined text-slate-500 text-lg mb-1 block">inventory_2</span>
+          <span class="text-sm font-semibold text-slate-700">물건비</span>
+          <p class="text-xs text-slate-500">소모품, 비품, 연료 등</p>
+        </button>
+        <button type="button" onclick="filterCategory('인건비')" class="cat-btn p-3 bg-slate-50 hover:bg-emerald-50 rounded-xl border border-slate-200 hover:border-emerald-300 text-left transition-colors">
+          <span class="material-symbols-outlined text-slate-500 text-lg mb-1 block">person</span>
+          <span class="text-sm font-semibold text-slate-700">인건비</span>
+          <p class="text-xs text-slate-500">보수, 수당, 일용인부 등</p>
+        </button>
+        <button type="button" onclick="filterCategory('경상이전')" class="cat-btn p-3 bg-slate-50 hover:bg-emerald-50 rounded-xl border border-slate-200 hover:border-emerald-300 text-left transition-colors">
+          <span class="material-symbols-outlined text-slate-500 text-lg mb-1 block">sync_alt</span>
+          <span class="text-sm font-semibold text-slate-700">경상이전</span>
+          <p class="text-xs text-slate-500">보조금, 민간이전 등</p>
+        </button>
+        <button type="button" onclick="filterCategory('시설비')" class="cat-btn p-3 bg-slate-50 hover:bg-emerald-50 rounded-xl border border-slate-200 hover:border-emerald-300 text-left transition-colors">
+          <span class="material-symbols-outlined text-slate-500 text-lg mb-1 block">construction</span>
+          <span class="text-sm font-semibold text-slate-700">시설비</span>
+          <p class="text-xs text-slate-500">공사, 시설장비 등</p>
+        </button>
+        <button type="button" onclick="filterCategory('업무추진비')" class="cat-btn p-3 bg-slate-50 hover:bg-emerald-50 rounded-xl border border-slate-200 hover:border-emerald-300 text-left transition-colors">
+          <span class="material-symbols-outlined text-slate-500 text-lg mb-1 block">work</span>
+          <span class="text-sm font-semibold text-slate-700">업무추진비</span>
+          <p class="text-xs text-slate-500">기관운영비, 시책추진비</p>
+        </button>
+        <button type="button" onclick="filterCategory('여비')" class="cat-btn p-3 bg-slate-50 hover:bg-emerald-50 rounded-xl border border-slate-200 hover:border-emerald-300 text-left transition-colors">
+          <span class="material-symbols-outlined text-slate-500 text-lg mb-1 block">flight_takeoff</span>
+          <span class="text-sm font-semibold text-slate-700">여비</span>
+          <p class="text-xs text-slate-500">국내여비, 국외여비</p>
+        </button>
+      </div>
+    </div>
+
+    <!-- 검색 결과 -->
+    <div id="search-results">
+      <!-- 전체 목록 기본 표시 -->
+    </div>
+  </div>
+</section>
+
+<script>
+  const BUDGET_CATEGORIES = [
+    // 인건비
+    { keywords: ["보수","월급","급여","봉급","인건비","임금"], category: "인건비", sub: "보수", code: "100", note: "정규직 공무원 보수" },
+    { keywords: ["수당","시간외","야간","휴일","초과근무","특수업무"], category: "인건비", sub: "직책급여·수당", code: "110", note: "각종 법정 수당" },
+    { keywords: ["일용","임시직","기간제","아르바이트","파트타임"], category: "인건비", sub: "일용직인건비", code: "120", note: "일용직·기간제 근로자 보수" },
+    { keywords: ["강사","강의료","강사비","강사료","외부강사"], category: "인건비", sub: "일용직인건비", code: "120", note: "강사료는 일용직인건비(간이지급명세서 제출 필요)" },
+    { keywords: ["청소원","경비원","용역직","공무직"], category: "인건비", sub: "공무직등보수", code: "130", note: "공무직·계약직 근로자 보수" },
+
+    // 물건비
+    { keywords: ["복사지","복사용지","A4","프린터용지","인쇄용지"], category: "물건비", sub: "사무관리비", code: "210", note: "사무용품·인쇄물 구입" },
+    { keywords: ["소모품","사무용품","볼펜","문구","스테이플러"], category: "물건비", sub: "사무관리비", code: "210", note: "사무용 소모품" },
+    { keywords: ["인쇄","출력","현수막","홍보물","유인물"], category: "물건비", sub: "사무관리비", code: "210", note: "인쇄·홍보물 제작" },
+    { keywords: ["유류","연료","경유","휘발유","가스","LPG","CNG"], category: "물건비", sub: "연료비", code: "220", note: "차량·기계 연료비" },
+    { keywords: ["전기","전력","전기요금","전기세","한전"], category: "물건비", sub: "광열수도비", code: "230", note: "전기·가스·수도 사용료" },
+    { keywords: ["수도","상수도","하수도","수도세"], category: "물건비", sub: "광열수도비", code: "230", note: "수도 사용료" },
+    { keywords: ["가스","도시가스","LNG","난방비"], category: "물건비", sub: "광열수도비", code: "230", note: "가스 사용료" },
+    { keywords: ["비품","가구","책상","의자","컴퓨터","PC","노트북","프린터"], category: "물건비", sub: "비품 및 집기류", code: "240", note: "내용연수 1년 이상, 취득가액 100만원 미만 비품" },
+    { keywords: ["의약품","약품","응급","의료용품"], category: "물건비", sub: "재료비", code: "250", note: "사업 수행에 필요한 재료·자재" },
+    { keywords: ["식비","급식비","식대","점심","조식","석식","급식"], category: "물건비", sub: "급식비", code: "260", note: "급식 운영 관련 식재료비 등" },
+    { keywords: ["피복","유니폼","작업복","제복","점퍼"], category: "물건비", sub: "피복 및 침구류", code: "270", note: "피복·유니폼 구매" },
+
+    // 여비
+    { keywords: ["출장","국내출장","국내여비","출장비","교통비","숙박비","일비","식비"], category: "여비", sub: "국내여비", code: "310", note: "공무원여비규정 기준 국내 출장비" },
+    { keywords: ["해외출장","국외여비","국외출장","해외연수","외국"], category: "여비", sub: "국외여비", code: "320", note: "공무원여비규정 기준 해외 출장비" },
+
+    // 업무추진비
+    { keywords: ["기관운영","회의비","직원식비","격려금","행사","간담회"], category: "업무추진비", sub: "기관운영업무추진비", code: "410", note: "기관장 등이 사용하는 업무추진비. 건당·월간 한도 준수 필수" },
+    { keywords: ["시책추진","행사비","홍보","캠페인","시민참여"], category: "업무추진비", sub: "시책추진업무추진비", code: "420", note: "특정 시책·사업 추진을 위한 업무추진비" },
+    { keywords: ["부서운영","팀운영","부서활동","회식"], category: "업무추진비", sub: "부서운영업무추진비", code: "430", note: "부서 단위 운영 업무추진비" },
+
+    // 직무수행경비
+    { keywords: ["교통카드","교통비","차량유지","주차비","통행료"], category: "직무수행경비", sub: "직무수행경비", code: "500", note: "직무 수행에 필요한 실비 보상" },
+
+    // 연구개발비
+    { keywords: ["연구","용역","연구용역","학술","연구비","분석"], category: "연구개발비", sub: "연구용역비", code: "610", note: "외부 기관 위탁 연구·조사비" },
+
+    // 교육훈련비
+    { keywords: ["교육","훈련","직무교육","연수","세미나","워크숍","강좌"], category: "민간이전 > 교육훈련비", sub: "교육훈련비", code: "620", note: "직원 교육·훈련비" },
+
+    // 일반 용역
+    { keywords: ["용역","위탁","청소용역","경비용역","시설관리","외주","대행"], category: "물건비", sub: "용역비", code: "280", note: "청소·경비·시설관리 등 용역 계약" },
+
+    // 시설비
+    { keywords: ["공사","신축","증축","개축","보수","수선","리모델링","도로포장","배관","전기공사"], category: "시설비", sub: "시설비", code: "700", note: "건축·토목·설비 공사비" },
+    { keywords: ["시설장비","기계장비","중장비","대형기기"], category: "시설비", sub: "시설장비유지비", code: "710", note: "시설 내 장비·기계 구입 및 유지" },
+
+    // 경상이전
+    { keywords: ["보조금","지방보조금","민간보조","국고보조","지원금","교부금"], category: "경상이전", sub: "민간이전", code: "800", note: "민간단체·사업자 보조금" },
+    { keywords: ["사회단체","비영리","단체지원","협회","복지관"], category: "경상이전", sub: "민간이전", code: "800", note: "사회단체 등 지원금" },
+    { keywords: ["노인","장애인","기초수급","복지급여","급여지급"], category: "경상이전", sub: "사회보장이전", code: "810", note: "사회보장급여 지급" },
+
+    // 자본지출
+    { keywords: ["토지","건물매입","부동산취득","자산취득"], category: "자본지출", sub: "자산취득비", code: "900", note: "토지·건물 등 고정자산 취득" },
+  ];
+
+  let currentFilter = null;
+
+  function searchCategory() {
+    const query = document.getElementById('search-input').value.trim().toLowerCase();
+    currentFilter = null;
+    if (!query) { renderAll(); return; }
+    renderResults(BUDGET_CATEGORIES.filter(item =>
+      item.keywords.some(k => k.includes(query) || query.includes(k)) ||
+      item.sub.toLowerCase().includes(query) ||
+      item.category.toLowerCase().includes(query) ||
+      item.note.toLowerCase().includes(query)
+    ), query);
+  }
+
+  function quickSearch(term) {
+    document.getElementById('search-input').value = term;
+    searchCategory();
+  }
+
+  function filterCategory(cat) {
+    currentFilter = cat;
+    document.getElementById('search-input').value = '';
+    renderResults(BUDGET_CATEGORIES.filter(item => item.category === cat || item.category.includes(cat)), null, cat);
+  }
+
+  function renderResults(items, query, catLabel) {
+    const container = document.getElementById('search-results');
+    if (!items.length) {
+      container.innerHTML = `
+        <div class="card p-8 text-center">
+          <span class="material-symbols-outlined text-4xl text-slate-300 mb-3 block">search_off</span>
+          <p class="text-slate-500 font-medium">검색 결과가 없습니다</p>
+          <p class="text-sm text-slate-400 mt-1">다른 키워드로 검색하거나 분야별 탐색을 이용하세요</p>
+        </div>`;
+      return;
+    }
+
+    const title = query ? `"${query}" 검색 결과 (${items.length}건)` : `${catLabel} 과목 목록 (${items.length}건)`;
+    let html = `<div class="card p-5"><h2 class="text-sm font-bold text-slate-700 mb-4">${title}</h2><div class="space-y-3">`;
+
+    items.forEach(item => {
+      html += `
+        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 hover:border-emerald-300 hover:bg-emerald-50 transition-colors">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex-1">
+              <div class="flex items-center gap-2 flex-wrap mb-1">
+                <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">${item.category}</span>
+                <span class="text-sm font-bold text-slate-900">${item.sub}</span>
+                <span class="text-xs text-slate-400">편성목 ${item.code}번</span>
+              </div>
+              <p class="text-xs text-slate-600 leading-relaxed">${item.note}</p>
+              <div class="mt-2 flex flex-wrap gap-1">
+                ${item.keywords.slice(0, 5).map(k => `<span class="text-xs text-slate-400 bg-white border border-slate-200 px-2 py-0.5 rounded-full">${k}</span>`).join('')}
+              </div>
+            </div>
+          </div>
+        </div>`;
+    });
+
+    html += `</div></div>`;
+    container.innerHTML = html;
+  }
+
+  function renderAll() {
+    const grouped = {};
+    BUDGET_CATEGORIES.forEach(item => {
+      if (!grouped[item.category]) grouped[item.category] = [];
+      grouped[item.category].push(item);
+    });
+
+    const container = document.getElementById('search-results');
+    let html = `<div class="space-y-4">`;
+    Object.entries(grouped).forEach(([cat, items]) => {
+      html += `
+        <details class="card overflow-hidden">
+          <summary class="p-4 cursor-pointer font-semibold text-slate-800 flex items-center justify-between hover:bg-slate-50">
+            <span>${cat} <span class="text-xs font-normal text-slate-400">(${items.length}개 항목)</span></span>
+            <span class="material-symbols-outlined text-slate-400 text-base">expand_more</span>
+          </summary>
+          <div class="px-4 pb-4 space-y-2">
+            ${items.map(item => `
+              <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="text-sm font-bold text-slate-800">${item.sub}</span>
+                  <span class="text-xs text-slate-400">편성목 ${item.code}번</span>
+                </div>
+                <p class="text-xs text-slate-500">${item.note}</p>
+              </div>`).join('')}
+          </div>
+        </details>`;
+    });
+    html += `</div>`;
+    container.innerHTML = html;
+  }
+
+  document.addEventListener('DOMContentLoaded', renderAll);
+</script>

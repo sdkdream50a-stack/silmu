@@ -1,0 +1,346 @@
+<%# 부서별 감사 대비 체크리스트 %>
+
+<section class="section py-10">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- 뒤로가기 -->
+    <div class="mb-6">
+      <%= link_to tools_path, class: "inline-flex items-center text-slate-600 hover:text-slate-800 transition-colors font-medium" do %>
+        <span class="material-symbols-outlined mr-1">arrow_back</span>
+        도구 목록으로
+      <% end %>
+    </div>
+
+    <!-- 헤더 -->
+    <div class="mb-8">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="icon-container icon-container-lg gradient-slate shadow-lg">
+          <span class="material-symbols-outlined text-3xl text-white">shield</span>
+        </div>
+        <div>
+          <h1 class="text-2xl font-bold text-slate-900">부서별 감사 대비 체크리스트</h1>
+          <p class="text-slate-500">담당 업무 선택 → 감사 빈출 지적 기반 자가점검 즉시 생성</p>
+        </div>
+      </div>
+      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5">
+        <p class="text-slate-700 text-sm leading-relaxed">
+          <strong>사용 방법:</strong> 담당하는 업무 유형을 선택하면 감사원·지자체 감사에서 가장 자주 지적되는 항목을 기반으로 한 자가점검 체크리스트가 생성됩니다.
+          <strong>감사 전 5분 자가진단</strong>으로 취약 항목을 미리 확인하세요.
+        </p>
+      </div>
+    </div>
+
+    <!-- 담당 업무 선택 -->
+    <div class="card p-6 mb-6">
+      <h2 class="text-lg font-bold text-slate-900 mb-5 flex items-center gap-2">
+        <span class="material-symbols-outlined text-slate-600">work</span>
+        담당 업무 선택 (복수 선택 가능)
+      </h2>
+      <div class="grid grid-cols-2 gap-3 mb-5">
+        <label class="dept-card p-4 border-2 border-slate-200 rounded-xl cursor-pointer hover:border-red-400 transition-colors has-[:checked]:border-red-500 has-[:checked]:bg-red-50">
+          <input type="checkbox" class="dept-check hidden" value="contract" onchange="generateAuditChecklist()">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="material-symbols-outlined text-red-500">gavel</span>
+            <span class="font-bold text-slate-800">계약 담당</span>
+          </div>
+          <p class="text-xs text-slate-500">계약 체결·이행·보증금·검수</p>
+        </label>
+        <label class="dept-card p-4 border-2 border-slate-200 rounded-xl cursor-pointer hover:border-amber-400 transition-colors has-[:checked]:border-amber-500 has-[:checked]:bg-amber-50">
+          <input type="checkbox" class="dept-check hidden" value="budget" onchange="generateAuditChecklist()">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="material-symbols-outlined text-amber-500">account_balance</span>
+            <span class="font-bold text-slate-800">예산 담당</span>
+          </div>
+          <p class="text-xs text-slate-500">예산 편성·집행·이월·전용</p>
+        </label>
+        <label class="dept-card p-4 border-2 border-slate-200 rounded-xl cursor-pointer hover:border-blue-400 transition-colors has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50">
+          <input type="checkbox" class="dept-check hidden" value="personnel" onchange="generateAuditChecklist()">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="material-symbols-outlined text-blue-500">person</span>
+            <span class="font-bold text-slate-800">인사 담당</span>
+          </div>
+          <p class="text-xs text-slate-500">임용·수당·휴직·복무</p>
+        </label>
+        <label class="dept-card p-4 border-2 border-slate-200 rounded-xl cursor-pointer hover:border-green-400 transition-colors has-[:checked]:border-green-500 has-[:checked]:bg-green-50">
+          <input type="checkbox" class="dept-check hidden" value="subsidy" onchange="generateAuditChecklist()">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="material-symbols-outlined text-green-500">volunteer_activism</span>
+            <span class="font-bold text-slate-800">보조금 담당</span>
+          </div>
+          <p class="text-xs text-slate-500">보조금 집행·정산·반납</p>
+        </label>
+      </div>
+      <div class="flex gap-3">
+        <button onclick="selectAll()" class="text-sm text-slate-600 hover:text-slate-800 font-medium px-3 py-1.5 bg-slate-100 rounded-lg">전체 선택</button>
+        <button onclick="clearAll()" class="text-sm text-slate-400 hover:text-slate-600 font-medium px-3 py-1.5 bg-slate-100 rounded-lg">선택 해제</button>
+      </div>
+    </div>
+
+    <!-- 체크리스트 결과 -->
+    <div id="audit-checklist-result" class="hidden space-y-5">
+      <!-- JS로 생성 -->
+    </div>
+
+    <!-- 비어있을 때 안내 -->
+    <div id="audit-empty" class="card p-10 text-center">
+      <span class="material-symbols-outlined text-5xl text-slate-200 mb-3 block">checklist</span>
+      <p class="text-slate-400 font-medium">담당 업무를 선택하면 체크리스트가 생성됩니다</p>
+    </div>
+
+    <!-- 관련 도구 -->
+    <div class="mt-6 p-5 bg-blue-50 rounded-2xl border border-blue-100">
+      <p class="text-sm font-semibold text-blue-900 mb-3">분야별 심화 도구</p>
+      <div class="flex flex-wrap gap-3">
+        <%= link_to contract_legality_check_path, class: "inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-800" do %>
+          <span class="material-symbols-outlined text-xs">policy</span> 계약 적법성 자가진단
+        <% end %>
+        <%= link_to subsidy_settlement_checker_path, class: "inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-800" do %>
+          <span class="material-symbols-outlined text-xs">fact_check</span> 보조금 정산 체크리스트
+        <% end %>
+        <%= link_to budget_transfer_checker_path, class: "inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-800" do %>
+          <span class="material-symbols-outlined text-xs">swap_horiz</span> 이월·전용 판단기
+        <% end %>
+        <%= link_to audit_frequent_issues_path, class: "inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-800" do %>
+          <span class="material-symbols-outlined text-xs">gavel</span> 감사 빈출 지적 TOP 30
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const AUDIT_ITEMS = {
+    contract: {
+      label: "계약 담당 자가점검",
+      icon: "gavel",
+      color: "red",
+      categories: [
+        {
+          title: "수의계약 관련",
+          items: [
+            { text: "지난 3개월 내 동일 업체와 동일 목적 계약 합산이 수의계약 한도 이하인지 확인 (분할계약 위험)", critical: true },
+            { text: "수의계약 사유서가 법령 조문에 근거하여 작성되었는지 확인", critical: true },
+            { text: "2인 이상 견적 징구 원칙 준수 여부 (예외 사유 문서화)", critical: true },
+            { text: "계약 체결 후 수의계약 결과 공개 이행 여부", critical: false },
+          ]
+        },
+        {
+          title: "계약 보증금·지체상금",
+          items: [
+            { text: "계약보증금 납부 또는 이행보증보험증권 수취 완료 (면제 요건 해당 시 근거 문서)", critical: true },
+            { text: "준공·납품 기한 경과 시 지체상금 산정 및 부과 여부 확인", critical: true },
+            { text: "지체상금 면제 사유 있는 경우 공식 면제 절차 이행 여부", critical: false },
+          ]
+        },
+        {
+          title: "검수·대금지급",
+          items: [
+            { text: "검수·준공검사 완료 후 5일 이내 대금 지급 여부 확인", critical: true },
+            { text: "검수조서 또는 준공검사조서 작성·보관 여부", critical: true },
+            { text: "물품 납품확인서 및 세금계산서 수취·보관 여부", critical: false },
+          ]
+        },
+        {
+          title: "서류 보존",
+          items: [
+            { text: "계약 관련 서류 일체 편철 및 5년 보존 계획 수립", critical: false },
+            { text: "예정가격 봉투·복수 예비가격 산출 서류 보관 여부", critical: false },
+          ]
+        }
+      ]
+    },
+    budget: {
+      label: "예산 담당 자가점검",
+      icon: "account_balance",
+      color: "amber",
+      categories: [
+        {
+          title: "예산 집행 적정성",
+          items: [
+            { text: "모든 지출이 예산 편성 목적(과목)에 맞게 집행되었는지 확인", critical: true },
+            { text: "업무추진비 집행이 건당·월간 한도를 준수하였는지 확인", critical: true },
+            { text: "예산 과목 오류(물건비/자본지출 혼동 등)가 없는지 점검", critical: false },
+          ]
+        },
+        {
+          title: "이월·전용",
+          items: [
+            { text: "연말 미집행 예산 중 사고이월 가능 요건(지출 원인 행위 완료) 충족 여부 확인", critical: true },
+            { text: "예산 전용 시 인건비→물건비 등 금지된 전용에 해당하지 않는지 확인", critical: true },
+            { text: "전용·이월 처리 후 재정정보시스템(e호조) 반영 여부", critical: true },
+          ]
+        },
+        {
+          title: "예비비·세입",
+          items: [
+            { text: "예비비 집행이 예측불가한 사유에 해당하는지 소명 자료 준비", critical: false },
+            { text: "각종 사용료·수수료 등 세입 미징수 건 없는지 점검", critical: false },
+            { text: "체납 세입 중 소멸시효(5년) 임박 건 우선 처리 계획 수립", critical: false },
+          ]
+        }
+      ]
+    },
+    personnel: {
+      label: "인사 담당 자가점검",
+      icon: "person",
+      color: "blue",
+      categories: [
+        {
+          title: "수당 지급 적정성",
+          items: [
+            { text: "가족수당 지급 대상자의 부양 사실을 최근 1년 이내 확인하였는지 점검", critical: true },
+            { text: "정근수당 재직기간별 지급률 적용의 정확성 확인", critical: true },
+            { text: "특수업무수당 지급 대상자의 요건 충족 여부 확인", critical: false },
+          ]
+        },
+        {
+          title: "인사위원회·절차",
+          items: [
+            { text: "승진 임용 시 인사위원회 심의를 거쳤는지 확인", critical: true },
+            { text: "인사위원회 위원 구성 적정성(위원 수·자격) 확인", critical: false },
+            { text: "회의록 작성·보존 여부 확인", critical: false },
+          ]
+        },
+        {
+          title: "휴직·복직·복무",
+          items: [
+            { text: "휴직 기간 만료 예정자에 대한 복직 명령 처리 일정 확인", critical: true },
+            { text: "연가 부여일수가 재직기간 기준으로 정확히 산정되었는지 확인", critical: false },
+            { text: "병가 일수 및 급여 지급률(공무상/일반 병가 구분)이 올바르게 적용되었는지 확인", critical: false },
+          ]
+        }
+      ]
+    },
+    subsidy: {
+      label: "보조금 담당 자가점검",
+      icon: "volunteer_activism",
+      color: "green",
+      categories: [
+        {
+          title: "집행 적정성",
+          items: [
+            { text: "보조금이 교부결정서의 사업계획과 용도에 맞게 집행되었는지 확인", critical: true },
+            { text: "자부담 비율이 교부결정서 기준 이상으로 집행되었는지 확인", critical: true },
+            { text: "집행 내역서와 증빙서류(세금계산서·영수증·계좌이체 확인증)가 일치하는지 확인", critical: true },
+          ]
+        },
+        {
+          title: "정산·반납",
+          items: [
+            { text: "정산보고서를 사업 종료 후 2개월(국고보조금 기준) 이내 제출하였는지 확인", critical: true },
+            { text: "집행잔액 반납 계획 수립 및 이행 여부 확인", critical: true },
+            { text: "e나라도움 정산보고서 작성 완료 및 모든 증빙 첨부 여부 확인", critical: true },
+          ]
+        },
+        {
+          title: "재보조·관리",
+          items: [
+            { text: "재보조 기관의 집행내역 검증 완료 여부 (재보조 포함 사업인 경우)", critical: false },
+            { text: "보조사업 결과물(시설·장비 등)의 목적 외 사용·처분 여부 확인", critical: false },
+          ]
+        }
+      ]
+    }
+  };
+
+  function generateAuditChecklist() {
+    const selected = Array.from(document.querySelectorAll('.dept-check:checked')).map(el => el.value);
+    const result = document.getElementById('audit-checklist-result');
+    const empty = document.getElementById('audit-empty');
+
+    if (!selected.length) {
+      result.classList.add('hidden');
+      empty.classList.remove('hidden');
+      return;
+    }
+
+    result.classList.remove('hidden');
+    empty.classList.add('hidden');
+
+    const colorMap = {
+      red: { border: 'border-red-200', bg: 'bg-red-50', text: 'text-red-700', accent: 'accent-red-500' },
+      amber: { border: 'border-amber-200', bg: 'bg-amber-50', text: 'text-amber-700', accent: 'accent-amber-500' },
+      blue: { border: 'border-blue-200', bg: 'bg-blue-50', text: 'text-blue-700', accent: 'accent-blue-500' },
+      green: { border: 'border-green-200', bg: 'bg-green-50', text: 'text-green-700', accent: 'accent-green-500' },
+    };
+
+    let totalItems = 0;
+    let totalCritical = 0;
+    let html = '';
+
+    selected.forEach(dept => {
+      const data = AUDIT_ITEMS[dept];
+      if (!data) return;
+      const c = colorMap[data.color];
+
+      data.categories.forEach(cat => {
+        totalItems += cat.items.length;
+        totalCritical += cat.items.filter(i => i.critical).length;
+      });
+
+      html += `
+        <div class="card p-5 border-2 ${c.border}">
+          <h2 class="text-base font-bold ${c.text} mb-4 flex items-center gap-2">
+            <span class="material-symbols-outlined">${data.icon}</span>
+            ${data.label}
+          </h2>
+          <div class="space-y-5">`;
+
+      data.categories.forEach(cat => {
+        html += `
+          <div>
+            <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">${cat.title}</h3>
+            <div class="space-y-2">`;
+        cat.items.forEach(item => {
+          html += `
+            <label class="flex items-start gap-3 cursor-pointer group p-2 rounded-lg hover:${c.bg} transition-colors">
+              <input type="checkbox" class="audit-item mt-0.5 w-4 h-4 ${c.accent} flex-shrink-0" onchange="updateAuditProgress()">
+              <div class="flex-1">
+                <span class="text-sm text-slate-700 leading-relaxed">${item.text}</span>
+                ${item.critical ? '<span class="ml-1 text-xs font-semibold text-red-500 bg-red-50 px-1.5 py-0.5 rounded">필수</span>' : ''}
+              </div>
+            </label>`;
+        });
+        html += `</div></div>`;
+      });
+
+      html += `</div></div>`;
+    });
+
+    // 진행률 카드
+    html += `
+      <div class="card p-5">
+        <div class="flex justify-between text-sm font-semibold text-slate-700 mb-2">
+          <span>전체 점검 진행률</span>
+          <span id="audit-progress-text">0 / ${totalItems}개 완료</span>
+        </div>
+        <div class="bg-slate-100 rounded-full h-3 mb-2">
+          <div id="audit-progress-bar" class="h-full rounded-full bg-slate-500 transition-all duration-300" style="width: 0%"></div>
+        </div>
+        <p class="text-xs text-slate-500">필수 항목 ${totalCritical}개를 포함한 총 ${totalItems}개 항목</p>
+      </div>`;
+
+    result.innerHTML = html;
+  }
+
+  function updateAuditProgress() {
+    const total = document.querySelectorAll('.audit-item').length;
+    const checked = document.querySelectorAll('.audit-item:checked').length;
+    const pct = total > 0 ? (checked / total * 100) : 0;
+    const bar = document.getElementById('audit-progress-bar');
+    const txt = document.getElementById('audit-progress-text');
+    if (!bar) return;
+    bar.style.width = pct + '%';
+    if (pct === 100) { bar.classList.replace('bg-slate-500', 'bg-green-500'); }
+    if (txt) txt.textContent = `${checked} / ${total}개 완료`;
+  }
+
+  function selectAll() {
+    document.querySelectorAll('.dept-check').forEach(el => el.checked = true);
+    generateAuditChecklist();
+  }
+
+  function clearAll() {
+    document.querySelectorAll('.dept-check').forEach(el => el.checked = false);
+    generateAuditChecklist();
+  }
+</script>

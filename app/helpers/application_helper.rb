@@ -1,5 +1,5 @@
 module ApplicationHelper
-  ACTIVE_TOOL_COUNT = 29
+  ACTIVE_TOOL_COUNT = 35
 
   # exam.silmu.kr — 법령 가이드 slug → 한국어 레이블 맵
   # chapters/show.html.erb에서 related_topic_slugs 렌더링 시 사용

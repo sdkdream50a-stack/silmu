@@ -1,0 +1,423 @@
+<%# 공무원 수당 개별 계산기 %>
+
+<section class="section py-10">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- 뒤로가기 -->
+    <div class="mb-6">
+      <%= link_to tools_path, class: "inline-flex items-center text-slate-600 hover:text-violet-600 transition-colors font-medium" do %>
+        <span class="material-symbols-outlined mr-1">arrow_back</span>
+        도구 목록으로
+      <% end %>
+    </div>
+
+    <!-- 헤더 -->
+    <div class="mb-8">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="icon-container icon-container-lg gradient-violet shadow-lg">
+          <span class="material-symbols-outlined text-3xl text-white">payments</span>
+        </div>
+        <div>
+          <h1 class="text-2xl font-bold text-slate-900">공무원 수당 계산기</h1>
+          <p class="text-slate-500">정근수당·가족수당·명절휴가비·직급보조비 자동 계산</p>
+        </div>
+      </div>
+      <div class="bg-violet-50 border border-violet-200 rounded-2xl p-5">
+        <p class="text-violet-800 text-sm leading-relaxed">
+          <strong>근거:</strong> 공무원수당 등에 관한 규정(대통령령), 공무원보수규정(대통령령). 2026년 보수업무 처리지침 기준.
+          각 수당의 지급 요건과 계산 방법을 개별적으로 확인할 수 있습니다.
+        </p>
+      </div>
+    </div>
+
+    <!-- 공통 입력 -->
+    <div class="card p-6 mb-6">
+      <h2 class="text-lg font-bold text-slate-900 mb-5 flex items-center gap-2">
+        <span class="material-symbols-outlined text-violet-600">person</span>
+        기본 정보
+      </h2>
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">직급</label>
+          <select id="grade" class="form-input w-full" onchange="updateSalary()">
+            <option value="">선택</option>
+            <option value="1">1급</option>
+            <option value="2">2급</option>
+            <option value="3">3급</option>
+            <option value="4">4급</option>
+            <option value="5">5급</option>
+            <option value="6">6급</option>
+            <option value="7">7급</option>
+            <option value="8">8급</option>
+            <option value="9">9급</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">호봉</label>
+          <select id="step" class="form-input w-full" onchange="updateSalary()">
+            <option value="">선택</option>
+            <% (1..40).each do |i| %>
+              <option value="<%= i %>"><%= i %>호봉</option>
+            <% end %>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">월 봉급액 (원)</label>
+          <input type="number" id="monthly-salary" placeholder="직접 입력" class="form-input w-full" oninput="calculateAll()">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">재직기간 (년)</label>
+          <input type="number" id="service-years" placeholder="예: 5" min="0" max="40" class="form-input w-full" oninput="calculateAll()">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">부양가족 수</label>
+          <input type="number" id="dependents" placeholder="배우자+자녀 등" min="0" max="10" class="form-input w-full" oninput="calculateAll()">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">배우자 있음</label>
+          <select id="has-spouse" class="form-input w-full" onchange="calculateAll()">
+            <option value="yes">있음</option>
+            <option value="no">없음</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- 수당 탭 -->
+    <div class="flex gap-2 overflow-x-auto pb-2 mb-6">
+      <% [
+        ["jeongeun", "정근수당"],
+        ["family", "가족수당"],
+        ["holiday", "명절휴가비"],
+        ["rank", "직급보조비"],
+        ["all", "전체 요약"]
+      ].each_with_index do |(id, label), idx| %>
+        <button onclick="showAllowance('<%= id %>')" id="tab-<%= id %>"
+                class="allowance-tab px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all <%= idx == 0 ? 'bg-violet-500 text-white' : 'bg-slate-100 text-slate-600' %>">
+          <%= label %>
+        </button>
+      <% end %>
+    </div>
+
+    <!-- 정근수당 -->
+    <div id="section-jeongeun" class="allowance-section">
+      <div class="card p-6">
+        <h2 class="text-lg font-bold text-slate-900 mb-4">정근수당 계산</h2>
+        <div class="bg-violet-50 rounded-xl p-4 mb-5 text-sm text-violet-800">
+          <strong>지급 기준:</strong> 1월(상반기)·7월(하반기) 각 1회 지급. 재직기간에 따라 월봉급액의 0~50% 지급.
+          재직기간 2년 미만은 미지급.
+        </div>
+        <div class="overflow-x-auto mb-4">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-slate-50">
+                <th class="text-left p-3 font-semibold text-slate-600">재직기간</th>
+                <th class="text-right p-3 font-semibold text-slate-600">지급률</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              <% [
+                ["2년 이상 ~ 3년 미만", "5%"],
+                ["3년 이상 ~ 4년 미만", "10%"],
+                ["4년 이상 ~ 5년 미만", "15%"],
+                ["5년 이상 ~ 6년 미만", "20%"],
+                ["6년 이상 ~ 7년 미만", "25%"],
+                ["7년 이상 ~ 8년 미만", "30%"],
+                ["8년 이상 ~ 9년 미만", "35%"],
+                ["9년 이상 ~ 10년 미만", "40%"],
+                ["10년 이상", "50%"]
+              ].each do |period, rate| %>
+                <tr class="hover:bg-slate-50">
+                  <td class="p-3 text-slate-700"><%= period %></td>
+                  <td class="p-3 text-right font-semibold text-violet-700"><%= rate %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+        <div id="result-jeongeun" class="hidden p-4 bg-violet-50 rounded-xl border border-violet-200">
+          <p class="text-xs text-violet-600 mb-1">정근수당 (1회 지급액)</p>
+          <p id="val-jeongeun" class="text-2xl font-bold text-violet-700"></p>
+          <p id="note-jeongeun" class="text-xs text-violet-600 mt-1"></p>
+        </div>
+        <p id="note-jeongeun-empty" class="text-sm text-slate-400 text-center py-4">봉급액과 재직기간을 입력하면 자동 계산됩니다</p>
+      </div>
+    </div>
+
+    <!-- 가족수당 -->
+    <div id="section-family" class="allowance-section hidden">
+      <div class="card p-6">
+        <h2 class="text-lg font-bold text-slate-900 mb-4">가족수당 계산</h2>
+        <div class="bg-violet-50 rounded-xl p-4 mb-5 text-sm text-violet-800">
+          <strong>지급 기준:</strong> 부양 가족에 대해 월 정액 지급. 배우자 4만원, 자녀·부모 등 2만원(첫째 2만원, 둘째 이상 5만원).
+          부양의무가 있고 실제 부양하는 경우에만 지급.
+        </div>
+        <div class="overflow-x-auto mb-5">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-slate-50">
+                <th class="text-left p-3 font-semibold text-slate-600">대상</th>
+                <th class="text-right p-3 font-semibold text-slate-600">월 지급액</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              <tr class="hover:bg-slate-50"><td class="p-3">배우자</td><td class="p-3 text-right font-semibold text-violet-700">40,000원</td></tr>
+              <tr class="hover:bg-slate-50"><td class="p-3">자녀 첫째</td><td class="p-3 text-right font-semibold text-violet-700">20,000원</td></tr>
+              <tr class="hover:bg-slate-50"><td class="p-3">자녀 둘째 이상</td><td class="p-3 text-right font-semibold text-violet-700">50,000원</td></tr>
+              <tr class="hover:bg-slate-50"><td class="p-3">부모·조부모 등</td><td class="p-3 text-right font-semibold text-violet-700">20,000원</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mb-5">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-2">자녀 수</label>
+            <input type="number" id="children-count" placeholder="0" min="0" max="10" class="form-input w-full" oninput="calculateFamily()">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-2">부모·기타 부양가족 수</label>
+            <input type="number" id="others-count" placeholder="0" min="0" max="5" class="form-input w-full" oninput="calculateFamily()">
+          </div>
+        </div>
+        <div id="result-family" class="p-4 bg-violet-50 rounded-xl border border-violet-200">
+          <p class="text-xs text-violet-600 mb-1">월 가족수당</p>
+          <p id="val-family" class="text-2xl font-bold text-violet-700">— 원</p>
+          <div id="detail-family" class="text-xs text-violet-600 mt-2"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 명절휴가비 -->
+    <div id="section-holiday" class="allowance-section hidden">
+      <div class="card p-6">
+        <h2 class="text-lg font-bold text-slate-900 mb-4">명절휴가비 계산</h2>
+        <div class="bg-violet-50 rounded-xl p-4 mb-5 text-sm text-violet-800">
+          <strong>지급 기준:</strong> 설날·추석 각 1회. 월봉급액의 60% 지급. 지급일 현재 재직 중인 공무원에게 지급
+          (명절 전월 말일 또는 명절 당일 기준일).
+        </div>
+        <div id="result-holiday" class="p-5 bg-violet-50 rounded-xl border border-violet-200">
+          <div class="grid grid-cols-2 gap-4">
+            <div class="bg-white rounded-xl p-4 text-center border border-violet-100">
+              <p class="text-xs text-violet-600 mb-1">설날 명절휴가비</p>
+              <p id="val-holiday-lunar" class="text-2xl font-bold text-violet-700">— 원</p>
+            </div>
+            <div class="bg-white rounded-xl p-4 text-center border border-violet-100">
+              <p class="text-xs text-violet-600 mb-1">추석 명절휴가비</p>
+              <p id="val-holiday-chuseok" class="text-2xl font-bold text-violet-700">— 원</p>
+            </div>
+          </div>
+          <p id="val-holiday-annual" class="text-center text-sm text-violet-700 mt-3 font-semibold"></p>
+        </div>
+        <p class="text-xs text-slate-400 mt-2 text-center">봉급액을 입력하면 자동 계산됩니다 (월봉급액 × 60%)</p>
+      </div>
+    </div>
+
+    <!-- 직급보조비 -->
+    <div id="section-rank" class="allowance-section hidden">
+      <div class="card p-6">
+        <h2 class="text-lg font-bold text-slate-900 mb-4">직급보조비 조회</h2>
+        <div class="bg-violet-50 rounded-xl p-4 mb-5 text-sm text-violet-800">
+          <strong>지급 기준:</strong> 직급에 따라 매월 정액 지급. 직무의 곤란성 및 책임의 정도에 따라 지급.
+          (2026년 기준, 공무원수당 등에 관한 규정 별표 12)
+        </div>
+        <div class="overflow-x-auto mb-4">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-slate-50">
+                <th class="text-left p-3 font-semibold text-slate-600">직급</th>
+                <th class="text-right p-3 font-semibold text-slate-600">월 지급액</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100" id="rank-table">
+              <!-- JS로 생성 -->
+            </tbody>
+          </table>
+        </div>
+        <div id="result-rank" class="hidden p-4 bg-violet-50 rounded-xl border border-violet-200">
+          <p class="text-xs text-violet-600 mb-1">해당 직급 직급보조비 (월)</p>
+          <p id="val-rank" class="text-2xl font-bold text-violet-700"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 전체 요약 -->
+    <div id="section-all" class="allowance-section hidden">
+      <div class="card p-6">
+        <h2 class="text-lg font-bold text-slate-900 mb-4">수당 전체 요약</h2>
+        <div id="result-all-empty" class="text-center py-8 text-slate-400">
+          <span class="material-symbols-outlined text-4xl mb-2 block">calculate</span>
+          <p>봉급액, 재직기간, 가족 정보를 입력하면 수당 합계를 표시합니다</p>
+        </div>
+        <div id="result-all" class="hidden space-y-3">
+          <!-- JS로 생성 -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // 2026년 직급별 직급보조비 (공무원수당 등에 관한 규정 별표 12, 단위: 원)
+  const RANK_ALLOWANCE = {
+    1: 900000, 2: 800000, 3: 700000, 4: 600000, 5: 500000,
+    6: 400000, 7: 350000, 8: 300000, 9: 250000
+  };
+
+  // 2026년 봉급표 샘플 (실제는 인사혁신처 고시 기준, 주요 직급·호봉만)
+  const SALARY_TABLE = {
+    9: { 1: 1884600, 2: 1939400, 3: 1995000, 4: 2051500, 5: 2108900, 6: 2167700, 7: 2228100, 8: 2289600, 9: 2352200, 10: 2415600, 11: 2480400, 12: 2546300, 13: 2613600, 14: 2681700, 15: 2751200, 16: 2821600, 17: 2893200, 18: 2965900, 19: 3039700, 20: 3114600 },
+    8: { 1: 2012100, 2: 2072300, 3: 2133700, 4: 2196400, 5: 2261000, 6: 2326100, 7: 2393300, 8: 2461300, 9: 2530700, 10: 2601000, 11: 2672400, 12: 2745100, 13: 2819000, 14: 2894200, 15: 2970700, 16: 3048400, 17: 3127300, 18: 3207500, 19: 3289100, 20: 3371800 },
+    7: { 1: 2199400, 2: 2265900, 3: 2334000, 4: 2403200, 5: 2473600, 6: 2545400, 7: 2618800, 8: 2693600, 9: 2769800, 10: 2847500, 11: 2926900, 12: 3007900, 13: 3090200, 14: 3174100, 15: 3259300, 16: 3346100, 17: 3434300, 18: 3524100, 19: 3615600, 20: 3708500 },
+    6: { 1: 2508500, 2: 2582700, 3: 2659500, 4: 2738300, 5: 2818300, 6: 2900700, 7: 2984900, 8: 3070700, 9: 3158400, 10: 3247500, 11: 3338600, 12: 3431400, 13: 3525800, 14: 3622100, 15: 3720200, 16: 3820100, 17: 3921800, 18: 4025200, 19: 4130500, 20: 4237500 },
+    5: { 1: 2966500, 2: 3056800, 3: 3149200, 4: 3243600, 5: 3340300, 6: 3438800, 7: 3539500, 8: 3642300, 9: 3747300, 10: 3854400, 11: 3963800, 12: 4075300, 13: 4189100, 14: 4304900, 15: 4422800, 16: 4543100, 17: 4665500, 18: 4790300, 19: 4917100, 20: 5046200 }
+  };
+
+  function updateSalary() {
+    const grade = parseInt(document.getElementById('grade').value);
+    const step = parseInt(document.getElementById('step').value);
+    if (grade && step && SALARY_TABLE[grade] && SALARY_TABLE[grade][step]) {
+      document.getElementById('monthly-salary').value = SALARY_TABLE[grade][step];
+    }
+    calculateAll();
+  }
+
+  function calculateAll() {
+    calculateJeongeun();
+    calculateFamily();
+    calculateHoliday();
+    calculateRank();
+    calculateSummary();
+  }
+
+  function calculateJeongeun() {
+    const salary = parseInt(document.getElementById('monthly-salary').value) || 0;
+    const years = parseInt(document.getElementById('service-years').value) || 0;
+    const result = document.getElementById('result-jeongeun');
+    const empty = document.getElementById('note-jeongeun-empty');
+
+    if (!salary || years < 2) {
+      result.classList.add('hidden');
+      empty.textContent = years < 2 && years > 0 ? '재직기간 2년 미만은 정근수당 미지급' : '봉급액과 재직기간을 입력하면 자동 계산됩니다';
+      return;
+    }
+
+    const rates = [0, 0, 5, 10, 15, 20, 25, 30, 35, 40, 50];
+    const rate = years >= 10 ? 50 : (rates[Math.min(years, 10)] || 0);
+    const amount = Math.floor(salary * rate / 100);
+
+    result.classList.remove('hidden');
+    empty.textContent = '';
+    document.getElementById('val-jeongeun').textContent = amount.toLocaleString('ko-KR') + ' 원';
+    document.getElementById('note-jeongeun').textContent = `월봉급액 ${salary.toLocaleString()} × ${rate}% | 연간 지급: ${(amount * 2).toLocaleString()} 원 (1월 + 7월)`;
+  }
+
+  function calculateFamily() {
+    const hasSpouse = document.getElementById('has-spouse').value === 'yes';
+    const children = parseInt(document.getElementById('children-count')?.value) || 0;
+    const others = parseInt(document.getElementById('others-count')?.value) || 0;
+
+    let total = 0;
+    let details = [];
+    if (hasSpouse) { total += 40000; details.push('배우자 40,000원'); }
+    if (children >= 1) { total += 20000; details.push('첫째 20,000원'); }
+    if (children >= 2) { const add = (children - 1) * 50000; total += add; details.push(`둘째 이상 ${add.toLocaleString()}원`); }
+    if (others > 0) { const add = others * 20000; total += add; details.push(`기타 부양가족 ${add.toLocaleString()}원`); }
+
+    document.getElementById('val-family').textContent = total.toLocaleString('ko-KR') + ' 원';
+    document.getElementById('detail-family').textContent = details.join(' + ') || '부양가족 정보를 입력하세요';
+  }
+
+  function calculateHoliday() {
+    const salary = parseInt(document.getElementById('monthly-salary').value) || 0;
+    const amount = Math.floor(salary * 0.6);
+    const fmt = amount > 0 ? amount.toLocaleString('ko-KR') + ' 원' : '— 원';
+    document.getElementById('val-holiday-lunar').textContent = fmt;
+    document.getElementById('val-holiday-chuseok').textContent = fmt;
+    document.getElementById('val-holiday-annual').textContent = amount > 0 ? `연간 합계: ${(amount * 2).toLocaleString()} 원 (설 + 추석)` : '';
+  }
+
+  function calculateRank() {
+    const grade = parseInt(document.getElementById('grade').value);
+    const tbody = document.getElementById('rank-table');
+    const result = document.getElementById('result-rank');
+
+    tbody.innerHTML = Object.entries(RANK_ALLOWANCE).map(([g, amt]) => `
+      <tr class="${parseInt(g) === grade ? 'bg-violet-50 font-bold' : 'hover:bg-slate-50'}">
+        <td class="p-3">${g}급</td>
+        <td class="p-3 text-right ${parseInt(g) === grade ? 'text-violet-700 font-bold' : ''}">${amt.toLocaleString()} 원</td>
+      </tr>`).join('');
+
+    if (grade && RANK_ALLOWANCE[grade]) {
+      result.classList.remove('hidden');
+      document.getElementById('val-rank').textContent = RANK_ALLOWANCE[grade].toLocaleString() + ' 원 / 월';
+    } else {
+      result.classList.add('hidden');
+    }
+  }
+
+  function calculateSummary() {
+    const salary = parseInt(document.getElementById('monthly-salary').value) || 0;
+    const years = parseInt(document.getElementById('service-years').value) || 0;
+    const grade = parseInt(document.getElementById('grade').value);
+    const hasSpouse = document.getElementById('has-spouse').value === 'yes';
+    const children = parseInt(document.getElementById('children-count')?.value) || 0;
+    const others = parseInt(document.getElementById('others-count')?.value) || 0;
+
+    const empty = document.getElementById('result-all-empty');
+    const result = document.getElementById('result-all');
+
+    if (!salary && !grade) { empty.classList.remove('hidden'); result.classList.add('hidden'); return; }
+    empty.classList.add('hidden'); result.classList.remove('hidden');
+
+    const rates = [0, 0, 5, 10, 15, 20, 25, 30, 35, 40, 50];
+    const rate = years >= 10 ? 50 : (rates[Math.min(years, 10)] || 0);
+    const jeongeun = years >= 2 ? Math.floor(salary * rate / 100) : 0;
+    let family = (hasSpouse ? 40000 : 0) + (children >= 1 ? 20000 : 0) + (children >= 2 ? (children - 1) * 50000 : 0) + (others * 20000);
+    const holiday = Math.floor(salary * 0.6);
+    const rank = (grade && RANK_ALLOWANCE[grade]) ? RANK_ALLOWANCE[grade] : 0;
+
+    const items = [
+      { label: "월 봉급액", amount: salary, sub: "", monthly: true },
+      { label: "정근수당", amount: jeongeun, sub: `(${rate}%, 연 2회)`, monthly: false },
+      { label: "가족수당", amount: family, sub: "(월)", monthly: true },
+      { label: "명절휴가비", amount: holiday, sub: "(연 2회, 설+추석)", monthly: false },
+      { label: "직급보조비", amount: rank, sub: "(월)", monthly: true },
+    ];
+
+    const monthlyTotal = salary + family + rank;
+    const annualBonus = jeongeun * 2 + holiday * 2;
+
+    result.innerHTML = items.map(item => `
+      <div class="flex justify-between items-center p-3 bg-slate-50 rounded-xl">
+        <div>
+          <span class="text-sm font-semibold text-slate-700">${item.label}</span>
+          <span class="text-xs text-slate-400 ml-1">${item.sub}</span>
+        </div>
+        <span class="text-sm font-bold text-violet-700">${item.amount > 0 ? item.amount.toLocaleString() + ' 원' : '—'}</span>
+      </div>`).join('') + `
+      <div class="mt-4 p-4 bg-violet-50 rounded-xl border border-violet-200">
+        <div class="flex justify-between mb-2">
+          <span class="text-sm font-semibold text-violet-700">월 수령액 합계 (고정)</span>
+          <span class="text-lg font-bold text-violet-800">${monthlyTotal.toLocaleString()} 원</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-sm text-violet-600">연간 추가 수당 (정근+명절)</span>
+          <span class="text-sm font-semibold text-violet-700">${annualBonus.toLocaleString()} 원</span>
+        </div>
+      </div>`;
+  }
+
+  function showAllowance(id) {
+    document.querySelectorAll('.allowance-section').forEach(el => el.classList.add('hidden'));
+    document.querySelectorAll('.allowance-tab').forEach(btn => {
+      btn.className = btn.className.replace('bg-violet-500 text-white', 'bg-slate-100 text-slate-600');
+    });
+    document.getElementById('section-' + id).classList.remove('hidden');
+    document.getElementById('tab-' + id).className = document.getElementById('tab-' + id).className
+      .replace('bg-slate-100 text-slate-600', 'bg-violet-500 text-white');
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    calculateRank();
+    calculateFamily();
+    calculateHoliday();
+  });
+</script>

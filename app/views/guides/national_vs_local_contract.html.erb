@@ -1,0 +1,268 @@
+<%# 국가계약 vs 지방계약 비교 가이드 %>
+
+<section class="section py-10">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- 뒤로가기 -->
+    <div class="mb-6">
+      <%= link_to guides_path, class: "inline-flex items-center text-slate-600 hover:text-blue-600 transition-colors font-medium" do %>
+        <span class="material-symbols-outlined mr-1">arrow_back</span>
+        가이드 목록으로
+      <% end %>
+    </div>
+
+    <!-- 헤더 -->
+    <div class="mb-10">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="icon-container icon-container-lg gradient-blue shadow-lg">
+          <span class="material-symbols-outlined text-3xl text-white">balance</span>
+        </div>
+        <div>
+          <h1 class="text-2xl font-bold text-slate-900">국가계약 vs 지방계약 비교</h1>
+          <p class="text-slate-500">핵심 차이 15개 항목 — 담당자가 자주 혼동하는 부분 명확히 정리</p>
+        </div>
+      </div>
+      <div class="bg-blue-50 border border-blue-200 rounded-2xl p-5">
+        <p class="text-blue-800 text-sm leading-relaxed">
+          <strong>주의:</strong> 감사원도 "국가계약법령과 지방계약법령의 차이가 상당하여 혼동에 의한 감사 지적이 빈번하다"고 지적합니다.
+          국가기관 담당자는 <strong>국가계약법</strong>, 지방자치단체·교육청 담당자는 <strong>지방계약법</strong>을 기준으로 적용하세요.
+        </p>
+      </div>
+    </div>
+
+    <!-- 헤더 고정 비교 표 -->
+    <div class="card overflow-hidden mb-8">
+      <div class="grid grid-cols-3 bg-slate-800 text-white">
+        <div class="p-4 text-sm font-bold">비교 항목</div>
+        <div class="p-4 text-sm font-bold text-center bg-blue-900">🏛 국가계약법<br><span class="text-xs font-normal text-blue-200">국가기관·공공기관 적용</span></div>
+        <div class="p-4 text-sm font-bold text-center bg-emerald-900">🏙 지방계약법<br><span class="text-xs font-normal text-emerald-200">지자체·교육청 적용</span></div>
+      </div>
+
+      <% [
+        {
+          category: "기본 적용 대상",
+          items: [
+            {
+              title: "적용 기관",
+              national: "중앙행정기관, 공공기관 (국가재정법 적용 기관)",
+              local: "지방자치단체, 지방교육청, 지방공기업",
+              diff: true
+            },
+            {
+              title: "적용 법령",
+              national: "국가계약법 + 국가계약법 시행령·시행규칙 + 계약예규",
+              local: "지방계약법 + 지방계약법 시행령·시행규칙 + 지방계약 관련 행안부 고시",
+              diff: true
+            }
+          ]
+        },
+        {
+          category: "수의계약 한도",
+          items: [
+            {
+              title: "물품·용역 1인 수의계약",
+              national: "추정가격 5,000만원 이하 (부가세 제외)",
+              local: "추정가격 2,000만원 이하",
+              diff: true,
+              highlight: true
+            },
+            {
+              title: "공사 수의계약 (종합)",
+              national: "추정가격 2억원 이하",
+              local: "추정가격 4억원 이하",
+              diff: true,
+              highlight: true
+            },
+            {
+              title: "공사 수의계약 (전문)",
+              national: "추정가격 1억원 이하",
+              local: "추정가격 2억원 이하",
+              diff: true,
+              highlight: true
+            }
+          ]
+        },
+        {
+          category: "입찰·낙찰 기준",
+          items: [
+            {
+              title: "예정가격 결정 방식",
+              national: "복수 예비가격 추첨 또는 원가계산 방식",
+              local: "국가계약법과 동일 (지방계약법 시행령 제7조 준용)",
+              diff: false
+            },
+            {
+              title: "낙찰하한율 (공사)",
+              national: "예정가격의 87.745% (추정가격 10억 이상)<br>지역제한 입찰 별도 기준",
+              local: "예정가격의 87.745% (원칙적으로 동일)<br>단, 지자체별 조례로 달리 정할 수 있음",
+              diff: false
+            },
+            {
+              title: "최저가 낙찰 적용 범위",
+              national: "추정가격 300억원 이상 공사에 최저가 낙찰 적용",
+              local: "지자체 재량에 따라 적용 범위 다를 수 있음",
+              diff: true
+            }
+          ]
+        },
+        {
+          category: "계약보증금·지체상금",
+          items: [
+            {
+              title: "계약보증금률",
+              national: "계약금액의 10% 이상 (면제 요건 동일)",
+              local: "계약금액의 10% 이상 (동일)",
+              diff: false
+            },
+            {
+              title: "지체상금률 (공사)",
+              national: "1일당 계약금액의 0.5/1000 ~ 1.0/1000",
+              local: "동일 (지방계약법 시행규칙 준용)",
+              diff: false
+            },
+            {
+              title: "지체상금 상한",
+              national: "계약금액의 10%",
+              local: "계약금액의 10% (동일)",
+              diff: false
+            }
+          ]
+        },
+        {
+          category: "계약이행·변경",
+          items: [
+            {
+              title: "설계변경 계약금액 조정",
+              national: "국가계약법 시행령 제65조 (원칙: 새 단가 적용 원칙)",
+              local: "지방계약법 시행령 제74조 (동일한 원칙 적용)  단, 지자체 자체 기준이 추가될 수 있음",
+              diff: false
+            },
+            {
+              title: "물가변동 조정 기준일",
+              national: "계약체결일로부터 90일 이상 경과 + 등락률 ±3% 이상",
+              local: "동일한 기준 적용",
+              diff: false
+            },
+            {
+              title: "하도급 통보 의무",
+              national: "수급인이 발주기관에 통보 의무 있음",
+              local: "동일",
+              diff: false
+            }
+          ]
+        },
+        {
+          category: "감독·검사·대금지급",
+          items: [
+            {
+              title: "대금 지급 기한",
+              national: "검사 완료 후 5일 이내 (국가계약법 시행령 제57조)",
+              local: "검사 완료 후 5일 이내 (동일)",
+              diff: false
+            },
+            {
+              title: "기성검사 의무",
+              national: "계속적 공급계약 또는 장기 공사 시 기성 지급 가능",
+              local: "동일",
+              diff: false
+            }
+          ]
+        },
+        {
+          category: "서류 보존·공시",
+          items: [
+            {
+              title: "계약 관련 서류 보존기간",
+              national: "5년 (국가계약법 시행규칙 제82조)",
+              local: "5년 (지방계약법 시행규칙 제106조, 동일)",
+              diff: false
+            },
+            {
+              title: "수의계약 결과 공개",
+              national: "2,000만원 이상 수의계약 결과 공개 의무",
+              local: "지자체 조례에 따름 (대부분 유사 의무)",
+              diff: true
+            }
+          ]
+        }
+      ].each do |section| %>
+        <div class="border-t border-slate-100">
+          <div class="bg-slate-50 px-4 py-2">
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wide"><%= section[:category] %></span>
+          </div>
+          <% section[:items].each do |item| %>
+            <div class="grid grid-cols-3 border-t border-slate-100 <%= item[:highlight] ? 'bg-amber-50' : '' %>">
+              <div class="p-4 border-r border-slate-100">
+                <p class="text-sm font-semibold text-slate-700"><%= item[:title] %></p>
+                <% if item[:diff] %>
+                  <span class="text-xs font-bold text-orange-500 bg-orange-50 px-1.5 py-0.5 rounded mt-1 inline-block">차이 있음</span>
+                <% else %>
+                  <span class="text-xs text-slate-400 mt-1 inline-block">동일</span>
+                <% end %>
+              </div>
+              <div class="p-4 border-r border-slate-100 text-sm text-slate-700 leading-relaxed <%= item[:diff] ? 'text-blue-800 bg-blue-50/30' : '' %>">
+                <%= item[:national].html_safe %>
+              </div>
+              <div class="p-4 text-sm text-slate-700 leading-relaxed <%= item[:diff] ? 'text-emerald-800 bg-emerald-50/30' : '' %>">
+                <%= item[:local].html_safe %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- 핵심 요약 -->
+    <div class="card p-6 mb-8 bg-amber-50 border border-amber-200">
+      <h2 class="text-lg font-bold text-amber-900 mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-amber-600">star</span>
+        가장 중요한 차이 3가지
+      </h2>
+      <div class="space-y-4">
+        <div class="flex gap-3">
+          <span class="w-8 h-8 bg-amber-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">1</span>
+          <div>
+            <p class="font-bold text-amber-900">물품·용역 1인 수의계약 한도: 국가 5,000만원 vs 지방 2,000만원</p>
+            <p class="text-sm text-amber-700">지자체 담당자가 국가계약 기준(5,000만원)을 적용하면 감사 지적 대상. 반드시 2,000만원 기준 적용 필요.</p>
+          </div>
+        </div>
+        <div class="flex gap-3">
+          <span class="w-8 h-8 bg-amber-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">2</span>
+          <div>
+            <p class="font-bold text-amber-900">공사 수의계약 한도: 국가 종합 2억원 vs 지방 4억원</p>
+            <p class="text-sm text-amber-700">지방계약법이 공사 수의계약 한도가 더 높음. 이를 반대로 혼동하는 경우 주의.</p>
+          </div>
+        </div>
+        <div class="flex gap-3">
+          <span class="w-8 h-8 bg-amber-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">3</span>
+          <div>
+            <p class="font-bold text-amber-900">계약예규 vs 행안부 고시: 적용 지침 출처 다름</p>
+            <p class="text-sm text-amber-700">국가계약은 기재부 계약예규, 지방계약은 행안부 고시가 기준. 같은 사안도 출처가 다를 수 있음.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 관련 도구 -->
+    <div class="card p-6 bg-gradient-to-r from-slate-50 to-blue-50 border border-slate-200">
+      <h2 class="text-base font-bold text-slate-900 mb-4">관련 실무 도구</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+        <%= link_to contract_reason_path, class: "p-3 bg-white rounded-xl border border-slate-200 hover:border-blue-300 hover:shadow-sm transition-all" do %>
+          <span class="material-symbols-outlined text-blue-500 text-lg block mb-1">description</span>
+          <span class="text-xs font-semibold text-slate-700">수의계약 사유서<br>생성기</span>
+        <% end %>
+        <%= link_to contract_method_path, class: "p-3 bg-white rounded-xl border border-slate-200 hover:border-blue-300 hover:shadow-sm transition-all" do %>
+          <span class="material-symbols-outlined text-blue-500 text-lg block mb-1">fork_right</span>
+          <span class="text-xs font-semibold text-slate-700">계약방식 결정<br>도구</span>
+        <% end %>
+        <%= link_to split_contract_checker_path, class: "p-3 bg-white rounded-xl border border-slate-200 hover:border-blue-300 hover:shadow-sm transition-all" do %>
+          <span class="material-symbols-outlined text-blue-500 text-lg block mb-1">rule</span>
+          <span class="text-xs font-semibold text-slate-700">분할계약<br>판단기</span>
+        <% end %>
+        <%= link_to audit_frequent_issues_path, class: "p-3 bg-white rounded-xl border border-slate-200 hover:border-blue-300 hover:shadow-sm transition-all" do %>
+          <span class="material-symbols-outlined text-blue-500 text-lg block mb-1">gavel</span>
+          <span class="text-xs font-semibold text-slate-700">감사 빈출 지적<br>TOP 30</span>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>

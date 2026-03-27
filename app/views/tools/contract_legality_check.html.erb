@@ -1,0 +1,276 @@
+<%# 계약 적법성 자가진단 체크리스트 %>
+
+<section class="section py-10">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- 뒤로가기 -->
+    <div class="mb-6">
+      <%= link_to tools_path, class: "inline-flex items-center text-slate-600 hover:text-red-600 transition-colors font-medium" do %>
+        <span class="material-symbols-outlined mr-1">arrow_back</span>
+        도구 목록으로
+      <% end %>
+    </div>
+
+    <!-- 헤더 -->
+    <div class="mb-8">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="icon-container icon-container-lg gradient-rose shadow-lg">
+          <span class="material-symbols-outlined text-3xl text-white">policy</span>
+        </div>
+        <div>
+          <h1 class="text-2xl font-bold text-slate-900">계약 적법성 자가진단</h1>
+          <p class="text-slate-500">계약 단계별 감사 빈출 지적사항 사전 점검</p>
+        </div>
+      </div>
+      <div class="bg-red-50 border border-red-200 rounded-2xl p-5">
+        <p class="text-red-800 text-sm leading-relaxed">
+          <strong>사용 방법:</strong> 계약 유형과 현재 단계를 선택하면 해당 단계에서 감사원이 가장 자주 지적하는 항목을 체크리스트로 제공합니다.
+          <strong>근거:</strong> 감사원 「공공계약 실무가이드」, 「계약업무 길라잡이」, 지자체 계약심사사례집
+        </p>
+      </div>
+    </div>
+
+    <!-- 설정 -->
+    <div class="card p-6 mb-6">
+      <h2 class="text-lg font-bold text-slate-900 mb-5 flex items-center gap-2">
+        <span class="material-symbols-outlined text-red-600">tune</span>
+        계약 유형 및 단계 선택
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">계약 유형</label>
+          <select id="contract-type" class="form-input w-full" onchange="renderChecklist()">
+            <option value="goods_service">물품·용역 계약</option>
+            <option value="construction">공사 계약</option>
+            <option value="private">수의계약 (공통)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">현재 진행 단계</label>
+          <select id="contract-stage" class="form-input w-full" onchange="renderChecklist()">
+            <option value="pre">계획·사전 단계</option>
+            <option value="bidding">입찰·견적 단계</option>
+            <option value="award">낙찰·계약 체결 단계</option>
+            <option value="execution">계약 이행 단계</option>
+            <option value="completion">준공·완료 단계</option>
+            <option value="all">전 단계 통합 점검</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- 체크리스트 결과 -->
+    <div id="checklist-container">
+      <!-- JS로 생성 -->
+    </div>
+
+    <!-- 관련 도구 -->
+    <div class="mt-6 p-5 bg-blue-50 rounded-2xl border border-blue-100">
+      <div class="flex items-start gap-3">
+        <span class="material-symbols-outlined text-blue-600 mt-0.5">build</span>
+        <div>
+          <p class="text-sm font-semibold text-blue-900 mb-2">관련 실무 도구</p>
+          <div class="flex flex-wrap gap-3">
+            <%= link_to split_contract_checker_path, class: "inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-800" do %>
+              <span class="material-symbols-outlined text-xs">rule</span> 분할계약 판단
+            <% end %>
+            <%= link_to contract_guarantee_path, class: "inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-800" do %>
+              <span class="material-symbols-outlined text-xs">security</span> 계약보증금 계산
+            <% end %>
+            <%= link_to estimated_price_path, class: "inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-800" do %>
+              <span class="material-symbols-outlined text-xs">calculate</span> 예정가격 계산
+            <% end %>
+            <%= link_to qualification_evaluation_path, class: "inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-800" do %>
+              <span class="material-symbols-outlined text-xs">grade</span> 적격심사 채점
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const CHECKLIST_DATA = {
+    pre: {
+      label: "계획·사전 단계",
+      icon: "edit_note",
+      common: [
+        { text: "예산 과목 및 예산액 확인 완료 (예산 범위 내 집행 여부)", critical: true },
+        { text: "계약의 목적·내용이 법령상 허용 범위 내에 있는지 검토", critical: true },
+        { text: "분할계약 해당 여부 사전 검토 (추정가격 합산 기준)", critical: true },
+        { text: "수의계약 가능 여부 검토 (금액·요건 충족 여부)", critical: false },
+        { text: "내부 결재·위임전결 기준 확인 (전결 규정 준수)", critical: false },
+      ],
+      goods_service: [
+        { text: "물품·용역 구분 확인 (계약 방식 차이 존재)", critical: false },
+        { text: "추정가격 산정 기준 확인 (부가세 제외 금액)", critical: true },
+      ],
+      construction: [
+        { text: "설계도면·시방서 준비 완료 여부 확인", critical: true },
+        { text: "건설업 면허 필요 여부 확인 (종합/전문/기타 구분)", critical: true },
+        { text: "안전관리비·환경관리비 등 법정비용 반영 여부", critical: false },
+      ],
+      private: [
+        { text: "수의계약 사유가 법령에 열거된 항목에 해당하는지 확인", critical: true },
+        { text: "수의계약 금액 기준(물품·용역 2,000만원, 공사 4억원) 이하 여부 확인", critical: true },
+      ]
+    },
+    bidding: {
+      label: "입찰·견적 단계",
+      icon: "gavel",
+      common: [
+        { text: "입찰공고 게재 기간 준수 (일반입찰 7일 이상, 긴급입찰 5일 이상)", critical: true },
+        { text: "예정가격 작성 및 봉인 완료 (개찰 전까지 비공개)", critical: true },
+        { text: "입찰 참가자격 제한 기준의 적정성 확인", critical: false },
+        { text: "나라장터(G2B) 공고 등록 여부 확인 (추정가격 1억원 이상)", critical: true },
+      ],
+      goods_service: [
+        { text: "2인 이상 견적 징구 (2,000만원 이하 수의계약 시)", critical: true },
+        { text: "규격서 또는 과업지시서 작성 완료", critical: false },
+      ],
+      construction: [
+        { text: "예정가격 결정조서 작성 (복수 기초금액 15개 이상)", critical: true },
+        { text: "적격심사 대상 여부 확인 (추정가격 기준)", critical: false },
+        { text: "현장설명 실시 여부 및 기록 완료", critical: false },
+      ],
+      private: [
+        { text: "2인 이상 견적 징구 원칙 준수 (예외 사유 문서화)", critical: true },
+        { text: "견적서 원본 수취 및 보관", critical: true },
+      ]
+    },
+    award: {
+      label: "낙찰·계약 체결 단계",
+      icon: "handshake",
+      common: [
+        { text: "낙찰 통보 후 5일(수의계약 10일) 이내 계약 체결 완료", critical: true },
+        { text: "계약서 작성 및 쌍방 서명 완료", critical: true },
+        { text: "계약보증금 납부 또는 이행보증보험증권 수취 완료", critical: true },
+        { text: "계약보증금 면제 요건 해당 여부 확인", critical: false },
+      ],
+      goods_service: [
+        { text: "납품기한·납품장소 등 계약 조건 명시 여부 확인", critical: false },
+        { text: "단가계약의 경우 1회 주문 최대 수량 명시 여부", critical: false },
+      ],
+      construction: [
+        { text: "적격심사 결과 검토 및 낙찰 하한율 적용 여부 확인", critical: true },
+        { text: "착공신고서 제출 기한 명시 및 확인", critical: false },
+        { text: "하도급 제한 비율 및 의무 통보 조항 계약서 명시 여부", critical: false },
+      ],
+      private: [
+        { text: "수의계약 사유서 작성 및 내부 결재 완료", critical: true },
+        { text: "수의계약 결과 공개 의무(조달청 시스템) 이행 여부", critical: false },
+      ]
+    },
+    execution: {
+      label: "계약 이행 단계",
+      icon: "engineering",
+      common: [
+        { text: "계약 이행 현황 정기 점검 및 기록 유지", critical: false },
+        { text: "설계변경 발생 시 즉시 기록 및 변경계약 체결 절차 개시", critical: true },
+        { text: "물가변동(ESC) 요건 충족 여부 모니터링 (90일 이상, ±3% 이상)", critical: false },
+        { text: "계약 이행 지연 발생 시 지체일수 산정 및 지체상금 예고", critical: true },
+      ],
+      goods_service: [
+        { text: "납품 예정일 관리 및 지연 시 대응 방안 수립", critical: false },
+      ],
+      construction: [
+        { text: "기성검사 실시 및 기성검사조서 작성", critical: true },
+        { text: "안전관리 계획 이행 여부 현장 확인", critical: false },
+        { text: "하도급 통보 수령 및 하도급 대금 지급 확인", critical: false },
+      ],
+      private: []
+    },
+    completion: {
+      label: "준공·완료 단계",
+      icon: "task_alt",
+      common: [
+        { text: "검수·준공검사 완료 및 검사조서 작성", critical: true },
+        { text: "지체일수 최종 산정 및 지체상금 부과 여부 확인", critical: true },
+        { text: "대금 지급 기한 준수 (검사 완료 후 5일 이내)", critical: true },
+        { text: "계약 관련 서류 일체 편철 및 보존 (5년)", critical: false },
+      ],
+      goods_service: [
+        { text: "납품확인서 또는 검수조서 원본 보관", critical: true },
+        { text: "세금계산서 수취 및 회계처리 완료", critical: true },
+      ],
+      construction: [
+        { text: "준공검사조서 및 준공사진 대장 구비", critical: true },
+        { text: "하자보수보증금 납부 또는 하자이행보증보험증권 수취", critical: true },
+        { text: "준공 후 사용승인(건축) 또는 사용전검사 필요 여부 확인", critical: false },
+      ],
+      private: []
+    }
+  };
+
+  function renderChecklist() {
+    const type = document.getElementById('contract-type').value;
+    const stage = document.getElementById('contract-stage').value;
+    const container = document.getElementById('checklist-container');
+
+    const stagesToShow = stage === 'all' ? ['pre', 'bidding', 'award', 'execution', 'completion'] : [stage];
+    let html = '<div class="space-y-5">';
+    let totalItems = 0;
+    let criticalItems = 0;
+
+    stagesToShow.forEach(s => {
+      const data = CHECKLIST_DATA[s];
+      if (!data) return;
+      const items = [...(data.common || []), ...(data[type] || [])];
+      totalItems += items.length;
+      criticalItems += items.filter(i => i.critical).length;
+
+      html += `
+        <div class="card p-5">
+          <h2 class="text-base font-bold text-slate-900 mb-4 flex items-center gap-2">
+            <span class="material-symbols-outlined text-red-600">${data.icon}</span>
+            ${data.label}
+            <span class="text-xs font-normal text-slate-400">(${items.length}개 항목)</span>
+          </h2>
+          <div class="space-y-2">
+      `;
+      items.forEach(item => {
+        html += `
+          <label class="flex items-start gap-3 cursor-pointer group p-2 rounded-lg hover:bg-slate-50 transition-colors">
+            <input type="checkbox" class="check-item mt-0.5 w-4 h-4 accent-red-600 flex-shrink-0" onchange="updateProgress()">
+            <div class="flex-1">
+              <span class="text-sm text-slate-700 leading-relaxed">${item.text}</span>
+              ${item.critical ? '<span class="ml-1 text-xs font-semibold text-red-500 bg-red-50 px-1.5 py-0.5 rounded">필수</span>' : ''}
+            </div>
+          </label>`;
+      });
+      html += `</div></div>`;
+    });
+
+    // 진행률
+    html += `
+      <div class="card p-5">
+        <div class="flex justify-between text-sm font-semibold text-slate-700 mb-2">
+          <span>점검 진행률</span>
+          <span id="progress-text">0 / ${totalItems} 완료 (필수 ${criticalItems}개)</span>
+        </div>
+        <div class="bg-slate-100 rounded-full h-3">
+          <div id="progress-bar" class="h-full rounded-full bg-red-500 transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </div>
+    `;
+
+    html += '</div>';
+    container.innerHTML = html;
+  }
+
+  function updateProgress() {
+    const total = document.querySelectorAll('.check-item').length;
+    const checked = document.querySelectorAll('.check-item:checked').length;
+    const pct = total > 0 ? (checked / total * 100) : 0;
+    const bar = document.getElementById('progress-bar');
+    if (!bar) return;
+    bar.style.width = pct + '%';
+    if (pct === 100) {
+      bar.classList.replace('bg-red-500', 'bg-green-500');
+    }
+    const txt = document.getElementById('progress-text');
+    if (txt) txt.textContent = txt.textContent.replace(/^\d+/, checked);
+  }
+
+  document.addEventListener('DOMContentLoaded', renderChecklist);
+</script>
