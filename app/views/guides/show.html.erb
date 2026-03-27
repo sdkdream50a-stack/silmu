@@ -215,6 +215,28 @@
               </div>
             </div>
 
+            <%# ── Hook: 시나리오 도입부 ── %>
+            <% if @guide.sections&.dig(:hook).present? %>
+            <div class="mb-8 bg-gradient-to-r from-amber-50 to-yellow-50 border-l-4 border-amber-400 rounded-r-2xl p-5">
+              <div class="flex items-center gap-2 mb-3">
+                <span class="material-symbols-outlined text-amber-500">lightbulb</span>
+                <span class="text-sm font-bold text-amber-800">이런 상황, 낯설지 않으신가요?</span>
+              </div>
+              <p class="text-slate-700 leading-relaxed text-sm whitespace-pre-line"><%= @guide.sections[:hook] %></p>
+            </div>
+            <% end %>
+
+            <%# ── Why It Matters ── %>
+            <% if @guide.sections&.dig(:why_it_matters).present? %>
+            <div class="mb-8 bg-red-50 border border-red-200 rounded-2xl p-5">
+              <div class="flex items-center gap-2 mb-3">
+                <span class="material-symbols-outlined text-red-500">error</span>
+                <span class="text-sm font-bold text-red-800">왜 반드시 알아야 하나요?</span>
+              </div>
+              <p class="text-slate-700 leading-relaxed text-sm whitespace-pre-line"><%= @guide.sections[:why_it_matters] %></p>
+            </div>
+            <% end %>
+
             <section id="overview" class="mb-12">
               <h2 class="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
                 <span class="w-8 h-8 flex items-center justify-center bg-emerald-500 text-white rounded-lg text-sm font-bold"><%= sec_num %></span>
@@ -279,6 +301,58 @@
                     </li>
                   <% end %>
                 </ul>
+              </div>
+            </section>
+            <% end %>
+
+            <%# ── 실제 감사 지적 사례 ── %>
+            <% if @guide.sections&.dig(:real_case).present? %>
+            <section class="mb-10">
+              <div class="bg-orange-50 border border-orange-200 rounded-2xl overflow-hidden">
+                <div class="bg-orange-100 px-5 py-3 flex items-center gap-2 border-b border-orange-200">
+                  <span class="material-symbols-outlined text-orange-600">gavel</span>
+                  <span class="text-sm font-bold text-orange-800">실제 감사 지적 사례</span>
+                </div>
+                <div class="p-5">
+                  <p class="text-slate-700 text-sm leading-relaxed whitespace-pre-line"><%= @guide.sections[:real_case] %></p>
+                </div>
+              </div>
+            </section>
+            <% end %>
+
+            <%# ── 선배 꿀팁 ── %>
+            <% if @guide.sections&.dig(:tip_box).present? %>
+            <section class="mb-10">
+              <div class="bg-blue-50 border border-blue-200 rounded-2xl overflow-hidden">
+                <div class="bg-blue-100 px-5 py-3 flex items-center gap-2 border-b border-blue-200">
+                  <span class="material-symbols-outlined text-blue-600">record_voice_over</span>
+                  <span class="text-sm font-bold text-blue-800">선배가 알려주는 꿀팁</span>
+                </div>
+                <div class="p-5">
+                  <p class="text-slate-700 text-sm leading-relaxed whitespace-pre-line"><%= @guide.sections[:tip_box] %></p>
+                </div>
+              </div>
+            </section>
+            <% end %>
+
+            <%# ── 오늘 당장 해야 할 것 ── %>
+            <% if @guide.sections&.dig(:today_checklist)&.any? %>
+            <section class="mb-10">
+              <div class="bg-emerald-50 border border-emerald-200 rounded-2xl overflow-hidden">
+                <div class="bg-emerald-100 px-5 py-3 flex items-center gap-2 border-b border-emerald-200">
+                  <span class="material-symbols-outlined text-emerald-700">checklist</span>
+                  <span class="text-sm font-bold text-emerald-800">오늘 당장 해야 할 것</span>
+                </div>
+                <div class="p-5">
+                  <ul class="space-y-3">
+                    <% @guide.sections[:today_checklist].each do |item| %>
+                      <li class="flex items-start gap-3 text-sm text-slate-700">
+                        <span class="w-5 h-5 border-2 border-emerald-400 rounded mt-0.5 flex-shrink-0"></span>
+                        <%= item %>
+                      </li>
+                    <% end %>
+                  </ul>
+                </div>
               </div>
             </section>
             <% end %>
@@ -378,13 +452,28 @@
           </section>
           <% end %>
 
-          <%# ── 3. 마인드맵 (Mermaid mindmap) ── %>
-          <% if rm[:mindmap].present? %>
+          <%# ── 3. 플로우차트 (Mermaid flowchart — 마인드맵보다 명확) ── %>
+          <% if rm[:flowchart].present? %>
+          <section class="mt-8" data-controller="mermaid">
+            <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden">
+              <div class="px-5 py-3 border-b bg-blue-50 flex items-center gap-2">
+                <span class="material-symbols-outlined text-blue-500">account_tree</span>
+                <span class="text-sm font-bold text-slate-700">단계별 흐름도</span>
+              </div>
+              <div class="p-4 overflow-x-auto">
+                <pre data-mermaid-target="source" class="text-xs"><%= rm[:flowchart] %></pre>
+              </div>
+            </div>
+          </section>
+          <% end %>
+
+          <%# ── 마인드맵 (flowchart 없을 때만 표시) ── %>
+          <% if rm[:mindmap].present? && rm[:flowchart].blank? %>
           <section class="mt-8" data-controller="mermaid">
             <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden">
               <div class="px-5 py-3 border-b bg-slate-50 flex items-center gap-2">
                 <span class="material-symbols-outlined text-blue-500">account_tree</span>
-                <span class="text-sm font-bold text-slate-700">마인드맵으로 전체 구조 파악</span>
+                <span class="text-sm font-bold text-slate-700">전체 구조 파악</span>
               </div>
               <div class="p-4 overflow-x-auto">
                 <pre data-mermaid-target="source" class="text-xs"><%= rm[:mindmap] %></pre>
@@ -451,7 +540,7 @@
           <% if rm[:flashcards].present? && rm[:flashcards].any? %>
           <section class="mt-8"
                    data-controller="guide-flashcard"
-                   data-guide-flashcard-cards-value="<%= rm[:flashcards].to_json.gsub('"', '&quot;') %>">
+                   data-guide-flashcard-cards-value="<%= rm[:flashcards].to_json %>">
             <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden">
               <div class="px-5 py-3 border-b bg-emerald-50 border-emerald-100 flex items-center justify-between">
                 <div class="flex items-center gap-2">
