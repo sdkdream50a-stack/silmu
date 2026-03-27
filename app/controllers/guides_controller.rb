@@ -73,7 +73,7 @@ class GuidesController < ApplicationController
         Guide.published.where(series: @guide.series).order(series_order: :asc).to_a
       end
       current_idx = @series_guides.index { |g| g.id == @guide.id }
-      @prev_guide = current_idx&.> (0) ? @series_guides[current_idx - 1] : nil
+      @prev_guide = (current_idx && current_idx > 0) ? @series_guides[current_idx - 1] : nil
       @next_guide = current_idx ? @series_guides[current_idx + 1] : nil
     end
 
