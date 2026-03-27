@@ -67,6 +67,9 @@ class RobotsController < ApplicationController
 
       Sitemap: https://silmu.kr/sitemap.xml
       Sitemap: https://exam.silmu.kr/sitemap.xml
+
+      # IndexNow 키 파일 허용
+      Allow: /af70a5ade3fa44588a1e92879ecbe8d5.txt
     ROBOTS
   end
 end

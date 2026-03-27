@@ -93,13 +93,21 @@ class GuidesController < ApplicationController
     expires_in 5.minutes, public: true, stale_while_revalidate: 1.hour
 
     canonical_url = request.original_url.split("?").first
+    # description 보강: guide.description + sections[:why_it_matters] 조합으로 120자+ 달성
+    desc_parts = [ @guide.description.to_s ]
+    if @guide.sections.present?
+      why = @guide.sections[:why_it_matters].to_s.presence
+      desc_parts << why if why
+    end
+    rich_desc = desc_parts.join(" ").truncate(155)
+
     set_meta_tags(
       title: @guide.title,
-      description: @guide.description.to_s.truncate(155),
+      description: rich_desc,
       keywords: "#{@guide.category}, #{@guide.title}, 공무원 실무",
       og: {
         title: @guide.title,
-        description: @guide.description.to_s.truncate(200),
+        description: rich_desc,
         url: canonical_url,
         image: "https://silmu.kr/og-image.png"
       },
