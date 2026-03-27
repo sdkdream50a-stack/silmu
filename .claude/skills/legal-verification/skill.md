@@ -1,6 +1,6 @@
 # Legal Verification Team (법령검증팀)
 
-이 스킬은 실무.kr의 법령 콘텐츠(토픽 37개) + 실무 도구(19개) + 확장 파일을 정부 공식 출처 기반으로 전수 검증하는 팀을 생성하고 운영합니다.
+이 스킬은 실무.kr의 법령 콘텐츠(토픽 37개) + 실무 도구(19개) + 완전정복 시리즈 + 확장 파일을 정부 공식 출처 기반으로 전수 검증하는 팀을 생성하고 운영합니다.
 
 ## 검증 범위
 
@@ -10,6 +10,16 @@
   - `topic_late_penalty.rb` (지체상금)
   - `topics_contract_additional.rb` (선금·장기계속·단가·입찰보증금·이행보증 등)
   - 기타 `topic_*.rb` 파일 전체
+- **완전정복 시리즈 파일** (⚠️ 2026-03-28 추가 — 기존 검증 누락 범위)
+  - `db/seeds/construction_contract_part1.rb` (공사계약 완전정복 1~5편)
+  - `db/seeds/construction_contract_part2.rb` (공사계약 완전정복 6~10편)
+  - `db/seeds/budget_planning_series.rb` (예산편성 완전정복)
+  - `db/seeds/budget_execution_series.rb` (예산집행 완전정복)
+  - `db/seeds/budget_execution_part2.rb`
+  - `db/seeds/local_subsidy_series.rb` (지방보조금 시리즈)
+  - `db/seeds/hr_welfare_series.rb` (인사복지 시리즈)
+  - `db/seeds/travel_expense_series.rb` (출장여비 시리즈)
+  - 향후 추가되는 `db/seeds/*_series.rb`, `db/seeds/*_part*.rb` 파일 전체
 - **감사사례** (`db/seeds/audit_cases.rb` — 법령 조문·금액·요율 인용)
 - **플로우차트 파셜** (`app/views/topics/flowcharts/*.html.erb` — 조문 번호·요율 표시)
 - **가이드 뷰** (`app/views/guides/*.html.erb` — contract_flow, pre_contract_checklist 등)
@@ -17,6 +27,7 @@
 - **AI 학습 파일** (`public/llms.txt` — 법령 기준 요약)
 
 > ⚠️ **2026-03-11 교훈**: topics.rb만 검증하면 동일 조문을 참조하는 시드·서비스·뷰 파일의 오류가 누락됨. 반드시 전체 범위 검증.
+> ⚠️ **2026-03-28 교훈**: 새 시리즈 파일(construction_contract_part1.rb 등)이 검증 범위에 없어 수의계약 한도 오류, 건설산업기본법 개정 미반영 등 중대 오류가 배포됨. 새 시드 파일 생성 시 즉시 이 목록에 추가할 것.
 
 ## 실행 순서
 
@@ -48,7 +59,7 @@
    8. "도구 #16-19 법령 검증" (verifier-D)
    ```
 
-4. **확장 파일 검증 태스크 생성** (2개 — 2026-03-11 추가)
+4. **확장 파일 검증 태스크 생성** (3개 — 2026-03-11 추가, 2026-03-28 확장)
    ```
    TaskCreate:
    9. "개별 토픽 시드 + 감사사례 법령 검증" (verifier-A)
@@ -61,6 +72,16 @@
        - app/services/legal_period_service.rb
        - app/services/contract_guarantee_service.rb
        - public/llms.txt
+   11. "완전정복 시리즈 법령 검증" (verifier-C) — 2026-03-28 추가
+       - db/seeds/construction_contract_part1.rb (공사계약 1~5편)
+       - db/seeds/construction_contract_part2.rb (공사계약 6~10편)
+       - db/seeds/budget_planning_series.rb
+       - db/seeds/budget_execution_series.rb
+       - db/seeds/budget_execution_part2.rb
+       - db/seeds/local_subsidy_series.rb
+       - db/seeds/hr_welfare_series.rb
+       - db/seeds/travel_expense_series.rb
+       ⚠️ 건설산업기본법 체크리스트(C-2) 중점 적용
    ```
 
 ### 2단계: 검증자 스폰 및 검증 지시
@@ -106,6 +127,21 @@
   - 분할계약 금지: 시행령 제77조
   - 입찰보증금: 시행령 제12조 (❌ 제9조 아님)
   - 지체상금/지연배상금: 시행령 제90조 (❌ 제74조 아님)
+
+**C-2. 건설산업기본법 검증 (CRITICAL — 2026-03-28 추가)**
+- [ ] 공사 유형 구분 관련 조문이 정확한가?
+  - 종합공사·전문공사 정의: 건설산업기본법 **제2조 제5·6호**
+  - 건설업 업종 구분: 건설산업기본법 **제8조** + 시행령 별표 1
+  - 상호시장 진출 허용: 건설산업기본법 **제16조 제1항** (2021년 개정)
+- [ ] "종합공사를 전문업체에 발주하면 위법"이라는 표현이 있는가?
+  - ❌ 현행법 기준 오류 — 건설산업기본법 개정으로 상호시장 진출 허용
+  - ✅ 올바른 표현: "요건을 갖춘 전문업체는 종합공사 수주 가능. 단, 등록기준·직접시공 의무 등 리스크 검토 필요"
+- [ ] 전기공사를 건설산업기본법상 전문공사로 분류하는가?
+  - ❌ 오류 — 전기공사는 **전기공사업법** 별도 적용, 건설산업기본법 업종에 미포함
+  - ✅ 전문공사 예시는 도장공사·실내건축공사·조경공사 등으로
+- [ ] 소규모공사 기준이 정확한가?
+  - 연면적 200㎡: 건설산업기본법 **제41조** — 건설사업자 시공 의무 기준 (종합·전문 구분 기준이 아님)
+  - "공사금액 1억 5천만 원 미만" 표현은 현행 법령 근거 불명확 → 사용 시 출처 명기 또는 삭제
 
 **D. 조항명 검증**
 - [ ] 조항명이 원문과 일치하는가?
