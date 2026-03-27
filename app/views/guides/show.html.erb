@@ -374,13 +374,23 @@
                 <ul class="space-y-3 text-sm">
                   <% @guide.sections[:laws].each do |law| %>
                     <li>
+                      <% if law.is_a?(Hash)
+                           law_name = law[:name] || law[:label]
+                           law_text = law[:text]
+                         end %>
                       <% if law.is_a?(Hash) && law[:url] %>
                         <a href="<%= law[:url] %>" target="_blank" class="text-blue-600 hover:underline flex items-center gap-1">
-                          <%= law[:name] %>
+                          <%= law_name %>
                           <span class="material-symbols-outlined text-xs">open_in_new</span>
                         </a>
+                        <% if law_text.present? %>
+                          <p class="text-gray-500 text-xs mt-0.5 ml-0"><%= law_text %></p>
+                        <% end %>
                       <% elsif law.is_a?(Hash) %>
-                        <span class="text-gray-600"><%= law[:name] %></span>
+                        <span class="font-medium text-gray-800"><%= law_name %></span>
+                        <% if law_text.present? %>
+                          <p class="text-gray-500 text-xs mt-0.5"><%= law_text %></p>
+                        <% end %>
                       <% else %>
                         <span class="text-gray-600"><%= law %></span>
                       <% end %>
