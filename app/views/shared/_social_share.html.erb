@@ -41,6 +41,12 @@
   </button>
 </div>
 
+<%# 복사 완료 토스트 %>
+<div id="copy-toast" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-5 py-3 bg-slate-900 text-white text-sm font-medium rounded-xl shadow-lg flex items-center gap-2 transition-opacity duration-300">
+  <span class="material-symbols-outlined text-emerald-400 text-lg">check_circle</span>
+  링크가 복사되었습니다
+</div>
+
 <script>
 // 카카오톡 공유 (지연 로딩 지원)
 function shareKakao(title, url, description) {
@@ -72,12 +78,25 @@ function _doKakaoShare(title, url, description) {
   });
 }
 
+// 토스트 표시 헬퍼
+function showCopyToast() {
+  var toast = document.getElementById('copy-toast');
+  if (!toast) return;
+  toast.classList.remove('hidden');
+  toast.style.opacity = '1';
+  clearTimeout(toast._timer);
+  toast._timer = setTimeout(function() {
+    toast.style.opacity = '0';
+    setTimeout(function() { toast.classList.add('hidden'); toast.style.opacity = '1'; }, 300);
+  }, 2000);
+}
+
 // URL 복사
 function copyToClipboard(text) {
   if (navigator.clipboard) {
-    navigator.clipboard.writeText(text).then(() => {
-      alert('링크가 클립보드에 복사되었습니다!');
-    }).catch(() => {
+    navigator.clipboard.writeText(text).then(function() {
+      showCopyToast();
+    }).catch(function() {
       fallbackCopy(text);
     });
   } else {
@@ -86,7 +105,7 @@ function copyToClipboard(text) {
 }
 
 function fallbackCopy(text) {
-  const textarea = document.createElement('textarea');
+  var textarea = document.createElement('textarea');
   textarea.value = text;
   textarea.style.position = 'fixed';
   textarea.style.opacity = '0';
@@ -94,9 +113,10 @@ function fallbackCopy(text) {
   textarea.select();
   try {
     document.execCommand('copy');
-    alert('링크가 클립보드에 복사되었습니다!');
+    showCopyToast();
   } catch (err) {
-    alert('복사에 실패했습니다. 수동으로 복사해주세요: ' + text);
+    // 복사 실패 시에만 alert 사용 (대안 없음)
+    alert('복사에 실패했습니다. 주소를 직접 복사해 주세요.');
   }
   document.body.removeChild(textarea);
 }

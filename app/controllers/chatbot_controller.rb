@@ -5,10 +5,18 @@ class ChatbotController < ApplicationController
       description: "공무원 계약·예산 실무 질문을 AI에게 바로 물어보세요. 수의계약, 입찰, 검수 등 실무 궁금증을 해결합니다.",
       og: { title: "실무.kr AI 상담", url: canonical_url }
     )
-    @boards = CafeArticle.board_list.first(20)
-    @total_count = CafeArticle.count
-    @recent_popular = CafeArticle.popular.where.not("title LIKE ?", "%SOS!%").limit(10)
-    @topics = Topic.published.popular.limit(10)
+    @boards = Rails.cache.fetch("chatbot_cafe_articles", expires_in: 1.hour) do
+      CafeArticle.board_list.first(20)
+    end
+    @total_count = Rails.cache.fetch("chatbot_cafe_total_count", expires_in: 1.hour) do
+      CafeArticle.count
+    end
+    @recent_popular = Rails.cache.fetch("chatbot_recent_popular", expires_in: 30.minutes) do
+      CafeArticle.popular.where.not("title LIKE ?", "%SOS!%").limit(10).to_a
+    end
+    @topics = Rails.cache.fetch("chatbot_popular_topics", expires_in: 30.minutes) do
+      Topic.published.popular.limit(10).to_a
+    end
   end
 
   def price_guide
@@ -42,7 +50,10 @@ class ChatbotController < ApplicationController
       # 2. 감사사례
       @audit_cases = AuditCase.search_by_query(@query, limit: 3)
 
-      # 3. 서식 템플릿 (메모리 내 검색)
+      # 3. 실무 가이드
+      @guides = Guide.published.search_by_keyword(@query).limit(3)
+
+      # 4. 서식 템플릿 (메모리 내 검색)
       @templates = search_templates(@query)
     end
 

@@ -1,5 +1,15 @@
 # Created: 2026-02-18 00:35
 class Guide < ApplicationRecord
+  include PgSearch::Model
+
+  # 검색 설정
+  pg_search_scope :search_by_keyword,
+    against: [:title],
+    using: {
+      tsearch: { prefix: true, dictionary: "simple" },
+      trigram: { threshold: 0.1 }
+    }
+
   # Sector enum (0: common 공통, 1: local_gov 지자체, 2: edu 교육행정)
   enum :sector, { common: 0, local_gov: 1, edu: 2 }, default: :common
   # "common" 또는 blank 전달 시 전체 반환 (common은 모든 sector에 공유되므로)

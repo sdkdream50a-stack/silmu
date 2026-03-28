@@ -49,7 +49,12 @@ class ToolsController < ApplicationController
         url: canonical_url,
         image: "https://silmu.kr/og-image.png",
         type: "website"
-      }
+      },
+      json_ld: tool_json_ld(
+        tool_name: "보조금 정산 체크리스트",
+        description: "국고·지방보조금 정산 전 자가점검 도구. 감사 빈출 지적 기준으로 즉시 확인하세요.",
+        url: subsidy_settlement_checker_url
+      )
     )
   end
 
@@ -64,7 +69,12 @@ class ToolsController < ApplicationController
         url: canonical_url,
         image: "https://silmu.kr/og-image.png",
         type: "website"
-      }
+      },
+      json_ld: tool_json_ld(
+        tool_name: "예산 과목 분류 도우미",
+        description: "지출 내용을 입력하면 적합한 세출예산 과목(목·세목)을 자동으로 추천하는 무료 도구",
+        url: budget_category_finder_url
+      )
     )
   end
 
@@ -79,7 +89,12 @@ class ToolsController < ApplicationController
         url: canonical_url,
         image: "https://silmu.kr/og-image.png",
         type: "website"
-      }
+      },
+      json_ld: tool_json_ld(
+        tool_name: "계약 적법성 자가진단",
+        description: "계약 단계별 감사원 빈출 지적사항을 체크리스트로 즉시 점검하는 무료 도구",
+        url: contract_legality_check_url
+      )
     )
   end
 
@@ -94,7 +109,12 @@ class ToolsController < ApplicationController
         url: canonical_url,
         image: "https://silmu.kr/og-image.png",
         type: "website"
-      }
+      },
+      json_ld: tool_json_ld(
+        tool_name: "이월·전용 적법성 판단기",
+        description: "예산 이월·전용 요건과 절차를 법령 기준으로 자동 판단하는 무료 도구",
+        url: budget_transfer_checker_url
+      )
     )
   end
 
@@ -109,7 +129,12 @@ class ToolsController < ApplicationController
         url: canonical_url,
         image: "https://silmu.kr/og-image.png",
         type: "website"
-      }
+      },
+      json_ld: tool_json_ld(
+        tool_name: "공무원 수당 계산기",
+        description: "정근수당·가족수당·명절휴가비·직급보조비를 공무원수당 규정 기준으로 자동 계산하는 무료 도구",
+        url: allowance_calculator_url
+      )
     )
   end
 
@@ -124,7 +149,12 @@ class ToolsController < ApplicationController
         url: canonical_url,
         image: "https://silmu.kr/og-image.png",
         type: "website"
-      }
+      },
+      json_ld: tool_json_ld(
+        tool_name: "부서별 감사 대비 체크리스트",
+        description: "담당 업무 유형별 감사 빈출 지적 기반 자가점검 체크리스트를 즉시 생성하는 무료 도구",
+        url: audit_readiness_checker_url
+      )
     )
   end
 
@@ -139,7 +169,12 @@ class ToolsController < ApplicationController
         url: canonical_url,
         image: "https://silmu.kr/og-image.png",
         type: "website"
-      }
+      },
+      json_ld: tool_json_ld(
+        tool_name: "분할계약 판단 체크리스트",
+        description: "계약 분할이 감사 지적 대상인지 5가지 기준으로 즉시 확인하는 무료 도구",
+        url: split_contract_checker_url
+      )
     )
   end
 
@@ -154,7 +189,12 @@ class ToolsController < ApplicationController
         url: canonical_url,
         image: "https://silmu.kr/og-image.png",
         type: "website"
-      }
+      },
+      json_ld: tool_json_ld(
+        tool_name: "물가변동 계약금액조정 계산기",
+        description: "지수조정률·품목조정률 방식으로 물가변동 계약금액조정(ESC) 금액을 자동 계산하는 무료 도구",
+        url: price_adjustment_calculator_url
+      )
     )
   end
 
@@ -222,7 +262,12 @@ class ToolsController < ApplicationController
         url: canonical_url,
         image: "https://silmu.kr/og-image.png",
         type: "website"
-      }
+      },
+      json_ld: tool_json_ld(
+        tool_name: "연가일수 계산기",
+        description: "공무원 재직 기간별 연가일수와 연가보상비를 자동 계산하는 무료 도구",
+        url: annual_leave_calculator_url
+      )
     )
   end
 
@@ -321,7 +366,12 @@ class ToolsController < ApplicationController
         url: canonical_url,
         image: "https://silmu.kr/og-image.png",
         type: "website"
-      }
+      },
+      json_ld: tool_json_ld(
+        tool_name: "여비계산기",
+        description: "공무원 국내·외 출장 여비(교통비·숙박비·일비·식비)를 자동 계산하는 무료 도구",
+        url: travel_calculator_url
+      )
     )
   end
 
@@ -349,7 +399,7 @@ class ToolsController < ApplicationController
       {
         uid: "procurement-plan-mar@silmu.kr",
         dtstart: "20260301",
-        dtend: "20260332",
+        dtend: "20260401",
         summary: "상반기 발주계획 검토",
         description: "상반기 계약·발주 계획을 검토하고 확정하는 기간입니다. 예산 집행 계획과 연계하여 발주 일정을 수립하세요. 실무.kr 상세 가이드: https://silmu.kr/guides",
         rrule: "RRULE:FREQ=YEARLY;BYMONTH=3"
@@ -389,7 +439,7 @@ class ToolsController < ApplicationController
       {
         uid: "year-end-budget-dec@silmu.kr",
         dtstart: "20261201",
-        dtend: "20261232",
+        dtend: "20270101",
         summary: "연말 예산 집행 마감 / 불용 처리",
         description: "12월은 연말 예산 집행 마감 기간입니다. 미집행 예산의 불용 처리 계획을 수립하고, 계약 및 지출 결의를 12월 말 전에 완료하세요. 실무.kr 상세 가이드: https://silmu.kr/guides",
         rrule: "RRULE:FREQ=YEARLY;BYMONTH=12"

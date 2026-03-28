@@ -21,7 +21,7 @@ class SeoReportJob < ApplicationJob
 
     # 로그에 기록
     Rails.logger.info "=" * 60
-    Rails.logger.info "SEO 주간 리포트 (#{Date.today})"
+    Rails.logger.info "SEO 주간 리포트 (#{Time.zone.today})"
     Rails.logger.info "=" * 60
     Rails.logger.info "토픽: #{report[:content][:topics_count]}개"
     Rails.logger.info "감사사례: #{report[:content][:audit_cases_count]}개"
@@ -38,7 +38,7 @@ class SeoReportJob < ApplicationJob
     report = SeoMonitor.check_page_speed
 
     Rails.logger.info "=" * 60
-    Rails.logger.info "PageSpeed 월간 리포트 (#{Date.today})"
+    Rails.logger.info "PageSpeed 월간 리포트 (#{Time.zone.today})"
     Rails.logger.info "Performance Score: #{report[:performance_score]}/100"
     Rails.logger.info "=" * 60
 

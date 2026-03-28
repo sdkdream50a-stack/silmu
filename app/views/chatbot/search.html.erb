@@ -3,7 +3,7 @@
     <% if @query.present? %>
 
       <%# 결과 없음 %>
-      <% no_results = @topics.blank? && @audit_cases.blank? && @templates.blank? %>
+      <% no_results = @topics.blank? && @audit_cases.blank? && @guides.blank? && @templates.blank? %>
       <% if no_results %>
         <div class="bg-white rounded-2xl border border-slate-200 p-10 text-center">
           <span class="material-symbols-outlined text-slate-300 text-5xl">search_off</span>
@@ -77,6 +77,35 @@
           </div>
         <% end %>
 
+        <%# ── 실무 가이드 결과 ── %>
+        <% if @guides.present? %>
+          <div class="mb-6">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="material-symbols-outlined text-emerald-500 text-lg">auto_stories</span>
+              <h3 class="text-sm font-bold text-slate-600">실무 가이드 (<%= @guides.size %>)</h3>
+            </div>
+            <div class="space-y-2">
+              <% @guides.each do |guide| %>
+                <%= link_to guide_path(guide),
+                      class: "flex items-start gap-4 bg-white border border-slate-200 hover:border-emerald-300 hover:shadow-sm rounded-xl p-4 transition-all group",
+                      data: { turbo_frame: "_top" } do %>
+                  <div class="w-9 h-9 bg-emerald-50 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span class="material-symbols-outlined text-emerald-500 text-lg">auto_stories</span>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="text-sm font-semibold text-slate-800 group-hover:text-emerald-700 truncate"><%= guide.title %></div>
+                    <div class="flex items-center gap-2 mt-0.5">
+                      <% sector_label = { "common" => "공통", "local_gov" => "지자체", "edu" => "교육행정" }[guide.sector] || guide.sector %>
+                      <span class="text-xs bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-full"><%= sector_label %></span>
+                    </div>
+                  </div>
+                  <span class="material-symbols-outlined text-slate-300 group-hover:text-emerald-400 text-base flex-shrink-0 mt-1">chevron_right</span>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+
         <%# ── 서식 템플릿 결과 ── %>
         <% if @templates.present? %>
           <div class="mb-6">
@@ -118,6 +147,12 @@
             <%= link_to audit_cases_path, class: "text-xs text-orange-600 hover:text-orange-800 flex items-center gap-1", data: { turbo_frame: "_top" } do %>
               <span class="material-symbols-outlined text-sm">policy</span>
               감사사례 전체 보기
+            <% end %>
+          <% end %>
+          <% if @guides.present? %>
+            <%= link_to guides_path, class: "text-xs text-emerald-600 hover:text-emerald-800 flex items-center gap-1", data: { turbo_frame: "_top" } do %>
+              <span class="material-symbols-outlined text-sm">auto_stories</span>
+              실무 가이드 전체 보기
             <% end %>
           <% end %>
           <% if @templates.present? %>

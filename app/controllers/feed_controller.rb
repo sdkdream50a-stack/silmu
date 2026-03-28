@@ -6,10 +6,10 @@ class FeedController < ApplicationController
   # GET /feed.rss
   def index
     # 최신 토픽 20개
-    @topics = Topic.order(updated_at: :desc).limit(20)
+    @topics = Topic.published.order(updated_at: :desc).limit(20)
 
     # 최신 감사사례 10개
-    @audit_cases = AuditCase.order(created_at: :desc).limit(10)
+    @audit_cases = AuditCase.published.order(created_at: :desc).limit(10)
 
     @updated_at = [@topics.maximum(:updated_at), @audit_cases.maximum(:created_at)].compact.max
 

@@ -3,7 +3,8 @@ class MypageController < ApplicationController
 
   def index
     recent_slugs  = JSON.parse(cookies[:recent_guides] || "[]") rescue []
-    @recent_guides = recent_slugs.filter_map { |slug| Guide.published.find_by(slug: slug) }
+    guides = Guide.published.where(slug: recent_slugs).index_by(&:slug)
+    @recent_guides = recent_slugs.filter_map { |slug| guides[slug] }
 
     set_meta_tags(
       title: "마이페이지",

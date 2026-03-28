@@ -85,14 +85,28 @@ module Exam
 
     # POST /questions/:question_id/comments/:id/like
     # update_counters 사용: updated_at 불필요 갱신 방지 + 단일 UPDATE 쿼리
+    # 세션 기반 중복 방지: 같은 세션에서 같은 댓글에 중복 좋아요 차단
     def like
+      session_key = "liked_comment_#{@comment.id}"
+      if session[session_key]
+        return render json: { error: "이미 좋아요를 눌렀습니다" }, status: :unprocessable_entity
+      end
+
       ExamQuestionComment.update_counters(@comment.id, likes_count: 1)
+      session[session_key] = true
       render json: { likes_count: @comment.likes_count + 1 }
     end
 
     # POST /questions/:question_id/comments/:id/report
+    # 세션 기반 중복 방지: 같은 세션에서 같은 댓글에 중복 신고 차단
     def report
+      session_key = "reported_comment_#{@comment.id}"
+      if session[session_key]
+        return render json: { error: "이미 신고한 댓글입니다" }, status: :unprocessable_entity
+      end
+
       ExamQuestionComment.update_counters(@comment.id, reported_count: 1)
+      session[session_key] = true
       new_count = @comment.reported_count + 1
       # 3회 이상 신고 시 자동 숨김 + AI 재검토
       if new_count >= 3 && !@comment.hidden?

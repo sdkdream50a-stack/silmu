@@ -145,40 +145,11 @@
 <section class="bg-white border-b border-gray-100 sticky top-16 z-40 shadow-soft">
   <div class="container-wide">
     <nav class="flex gap-1 overflow-x-auto py-3 -mx-4 px-4 scrollbar-hide" id="topic-tabs">
+      <%# 실무 그룹: 실무흐름도 + 실무주의 + 실무절차 → "실무 가이드" %>
       <button onclick="showTab('flowchart')" data-tab="flowchart"
               class="tab-btn px-3 py-2 <%= (@has_flowchart && @related_guide.blank?) ? 'bg-slate-800 text-white shadow-md font-semibold' : 'bg-surface-100 text-slate-600 hover:bg-surface-200 font-medium' %> rounded-lg text-sm whitespace-nowrap flex items-center gap-1.5 transition-all duration-200">
         <span class="material-symbols-outlined" style="font-size:18px">account_tree</span>
         실무흐름도
-      </button>
-      <button onclick="showTab('law')" data-tab="law"
-              class="tab-btn px-3 py-2 <%= (@has_flowchart || @related_guide.present?) ? 'bg-surface-100 text-slate-600 hover:bg-surface-200 font-medium' : 'bg-slate-800 text-white shadow-md font-semibold' %> rounded-lg text-sm whitespace-nowrap flex items-center gap-1.5 transition-all duration-200">
-        <span class="material-symbols-outlined" style="font-size:18px">balance</span>
-        법령 3단 비교
-      </button>
-      <button onclick="showTab('regulation')" data-tab="regulation"
-              class="tab-btn px-3 py-2 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-lg text-sm font-medium whitespace-nowrap flex items-center gap-1.5 transition-all duration-200">
-        <span class="material-symbols-outlined" style="font-size:18px">description</span>
-        예규/지침
-      </button>
-      <button onclick="showTab('interpretation')" data-tab="interpretation"
-              class="tab-btn px-3 py-2 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-lg text-sm font-medium whitespace-nowrap flex items-center gap-1.5 transition-all duration-200">
-        <span class="material-symbols-outlined" style="font-size:18px">policy</span>
-        유권해석
-      </button>
-      <button onclick="showTab('audit')" data-tab="audit"
-              class="tab-btn px-3 py-2 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-lg text-sm font-medium whitespace-nowrap flex items-center gap-1.5 transition-all duration-200">
-        <span class="material-symbols-outlined" style="font-size:18px">search</span>
-        감사사례
-      </button>
-      <button onclick="showTab('qa')" data-tab="qa"
-              class="tab-btn px-3 py-2 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-lg text-sm font-medium whitespace-nowrap flex items-center gap-1.5 transition-all duration-200">
-        <span class="material-symbols-outlined" style="font-size:18px">forum</span>
-        질의답변
-      </button>
-      <button onclick="showTab('tips')" data-tab="tips"
-              class="tab-btn px-3 py-2 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-lg text-sm font-medium whitespace-nowrap flex items-center gap-1.5 transition-all duration-200">
-        <span class="material-symbols-outlined" style="font-size:18px">lightbulb</span>
-        실무주의
       </button>
       <% if @related_guide.present? %>
       <button onclick="showTab('procedure')" data-tab="procedure"
@@ -187,14 +158,76 @@
         실무절차
       </button>
       <% end %>
+      <%# 법령 그룹 %>
+      <button onclick="showTab('law')" data-tab="law"
+              class="tab-btn px-3 py-2 <%= (@has_flowchart || @related_guide.present?) ? 'bg-surface-100 text-slate-600 hover:bg-surface-200 font-medium' : 'bg-slate-800 text-white shadow-md font-semibold' %> rounded-lg text-sm whitespace-nowrap flex items-center gap-1.5 transition-all duration-200">
+        <span class="material-symbols-outlined" style="font-size:18px">balance</span>
+        법령 비교
+      </button>
+      <%# 사례/해석 그룹 %>
+      <button onclick="showTab('audit')" data-tab="audit"
+              class="tab-btn px-3 py-2 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-lg text-sm font-medium whitespace-nowrap flex items-center gap-1.5 transition-all duration-200">
+        <span class="material-symbols-outlined" style="font-size:18px">search</span>
+        감사사례
+      </button>
       <button onclick="showTab('forms')" data-tab="forms"
               class="tab-btn px-3 py-2 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-lg text-sm font-medium whitespace-nowrap flex items-center gap-1.5 transition-all duration-200">
         <span class="material-symbols-outlined" style="font-size:18px">draft</span>
         서식/양식
       </button>
+      <%# 더보기 드롭다운 %>
+      <div class="relative" id="more-tabs-wrapper">
+        <button type="button" onclick="toggleMoreTabs()" class="tab-btn px-3 py-2 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-lg text-sm font-medium whitespace-nowrap flex items-center gap-1.5 transition-all duration-200" id="more-tabs-btn">
+          <span class="material-symbols-outlined" style="font-size:18px">more_horiz</span>
+          더보기
+          <span class="material-symbols-outlined text-xs transition-transform" id="more-tabs-arrow">expand_more</span>
+        </button>
+        <div id="more-tabs-dropdown" class="hidden absolute top-full left-0 mt-1 bg-white rounded-xl shadow-lg border border-gray-200 py-1.5 min-w-[160px] z-50">
+          <button onclick="showTab('regulation'); closeMoreTabs();" data-tab="regulation"
+                  class="tab-btn more-tab-item w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 flex items-center gap-2 transition-colors">
+            <span class="material-symbols-outlined" style="font-size:16px">description</span>
+            예규/지침
+          </button>
+          <button onclick="showTab('interpretation'); closeMoreTabs();" data-tab="interpretation"
+                  class="tab-btn more-tab-item w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 flex items-center gap-2 transition-colors">
+            <span class="material-symbols-outlined" style="font-size:16px">policy</span>
+            유권해석
+          </button>
+          <button onclick="showTab('qa'); closeMoreTabs();" data-tab="qa"
+                  class="tab-btn more-tab-item w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 flex items-center gap-2 transition-colors">
+            <span class="material-symbols-outlined" style="font-size:16px">forum</span>
+            질의답변
+          </button>
+          <button onclick="showTab('tips'); closeMoreTabs();" data-tab="tips"
+                  class="tab-btn more-tab-item w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 flex items-center gap-2 transition-colors">
+            <span class="material-symbols-outlined" style="font-size:16px">lightbulb</span>
+            실무주의
+          </button>
+        </div>
+      </div>
     </nav>
   </div>
 </section>
+
+<script>
+function toggleMoreTabs() {
+  var dd = document.getElementById('more-tabs-dropdown');
+  var arrow = document.getElementById('more-tabs-arrow');
+  dd.classList.toggle('hidden');
+  arrow.style.transform = dd.classList.contains('hidden') ? '' : 'rotate(180deg)';
+}
+function closeMoreTabs() {
+  var dd = document.getElementById('more-tabs-dropdown');
+  var arrow = document.getElementById('more-tabs-arrow');
+  dd.classList.add('hidden');
+  arrow.style.transform = '';
+}
+// 외부 클릭 시 닫기
+document.addEventListener('click', function(e) {
+  var wrapper = document.getElementById('more-tabs-wrapper');
+  if (wrapper && !wrapper.contains(e.target)) closeMoreTabs();
+});
+</script>
 
 <!-- 법령 면책 배너 -->
 <div class="bg-amber-50 border-b border-amber-200">

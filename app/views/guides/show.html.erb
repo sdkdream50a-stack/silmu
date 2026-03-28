@@ -46,15 +46,21 @@
   <% end %>
 <% end %>
 
+<!-- 브레드크럼 -->
+<div class="bg-surface-50 border-b border-gray-100">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+    <nav class="flex items-center gap-2 text-sm text-slate-500" aria-label="breadcrumb">
+      <%= link_to "홈", root_path, class: "hover:text-slate-800 transition-colors" %>
+      <span class="material-symbols-outlined text-sm">chevron_right</span>
+      <%= link_to "실무가이드", guides_path, class: "hover:text-slate-800 transition-colors" %>
+      <span class="material-symbols-outlined text-sm">chevron_right</span>
+      <span class="text-slate-800 font-medium truncate"><%= @guide.title %></span>
+    </nav>
+  </div>
+</div>
+
 <section class="py-8">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <!-- 뒤로가기 -->
-    <div class="mb-6">
-      <%= link_to guides_path, class: "inline-flex items-center text-gray-600 hover:text-emerald-600 transition-colors" do %>
-        <span class="material-symbols-outlined mr-1">arrow_back</span>
-        가이드 목록으로
-      <% end %>
-    </div>
 
     <%# ── 시리즈 진행 배너 ── %>
     <% if @series_guides.present? %>
