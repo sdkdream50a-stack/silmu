@@ -1,5 +1,5 @@
 <%# Created: 2026-03-02 %>
-<%# 법령 가이드 허브 페이지 — 9개 카테고리 카드 %>
+<%# 법령 가이드 허브 페이지 — 9개 카테고리 아코디언 카드 %>
 
 <!-- 페이지 헤더 -->
 <section class="gradient-premium text-white py-12 lg:py-16 relative overflow-hidden">
@@ -30,7 +30,7 @@
   </div>
 </section>
 
-<!-- 카테고리 카드 그리드 -->
+<!-- 카테고리 아코디언 그리드 -->
 <section class="py-10 bg-background-light min-h-screen">
   <div class="container-wide">
     <!-- 처음 오셨나요? 시작 안내 배너 -->
@@ -65,58 +65,127 @@
       <% end %>
     </div>
 
-    <% cache ["topics_hub_v2", @total_count, @hub_categories.map { |c| "#{c[:count]}-#{c[:flowchart_count]}-#{c[:tool_count]}" }.join("|")] do %>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       <% @hub_categories.each do |cat| %>
         <% key = cat[:key]; cfg = cat[:cfg]; color = cfg[:color] %>
-        <%= link_to topics_category_path(key: key),
-            class: "group flex flex-col rounded-2xl bg-white p-6 shadow-sm border border-slate-100 transition-all hover:shadow-lg hover:-translate-y-0.5 #{tc(color, :hub_border)} cursor-pointer" do %>
-          <!-- 아이콘 + 카테고리명 + 뱃지 -->
-          <div class="flex items-center gap-3 mb-3">
-            <div class="shrink-0 w-11 h-11 rounded-xl flex items-center justify-center transition-colors <%= tc(color, :icon_sm) %>">
-              <span class="material-symbols-outlined text-xl"><%= cfg[:icon] %></span>
+        <div class="flex flex-col rounded-2xl bg-white shadow-sm border border-slate-100 transition-shadow hover:shadow-lg <%= tc(color, :hub_border) %>"
+             data-accordion="<%= key %>">
+
+          <!-- 카드 헤더 (클릭으로 펼치기/접기) -->
+          <button type="button"
+                  class="flex flex-col p-6 text-left w-full"
+                  aria-expanded="false"
+                  onclick="silmuToggle('<%= key %>')">
+
+            <!-- 아이콘 + 카테고리명 + 뱃지 -->
+            <div class="flex items-center gap-3 mb-3 w-full">
+              <div class="shrink-0 w-11 h-11 rounded-xl flex items-center justify-center transition-colors <%= tc(color, :icon_sm) %>">
+                <span class="material-symbols-outlined text-xl"><%= cfg[:icon] %></span>
+              </div>
+              <h2 class="text-lg font-bold text-slate-900 transition-colors <%= tc(color, :hub_title) %>"><%= cfg[:label] %></h2>
+              <span class="ml-auto text-xs font-semibold px-2.5 py-1 rounded-full <%= tc(color, :hub_count) %>"><%= cat[:count] %>개</span>
             </div>
-            <h2 class="text-lg font-bold text-slate-900 transition-colors <%= tc(color, :hub_title) %>"><%= cfg[:label] %></h2>
-            <span class="ml-auto text-xs font-semibold px-2.5 py-1 rounded-full <%= tc(color, :hub_count) %>"><%= cat[:count] %>개</span>
-          </div>
 
-          <!-- 설명 -->
-          <p class="text-sm text-slate-500 leading-relaxed mb-3"><%= cfg[:desc] %></p>
+            <!-- 설명 -->
+            <p class="text-sm text-slate-500 leading-relaxed mb-3 text-left"><%= cfg[:desc] %></p>
 
-          <!-- 실무 자산 뱃지 -->
-          <% if cat[:flowchart_count] > 0 || cat[:tool_count] > 0 %>
-            <div class="flex flex-wrap gap-1.5 mb-2">
-              <% if cat[:flowchart_count] > 0 %>
-                <span class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-md bg-violet-50 text-violet-600 text-xs font-medium">
-                  <span class="material-symbols-outlined text-sm leading-none">account_tree</span>플로차트 <%= cat[:flowchart_count] %>개
-                </span>
+            <!-- 실무 자산 뱃지 -->
+            <% if cat[:flowchart_count] > 0 || cat[:tool_count] > 0 %>
+              <div class="flex flex-wrap gap-1.5 mb-2">
+                <% if cat[:flowchart_count] > 0 %>
+                  <span class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-md bg-violet-50 text-violet-600 text-xs font-medium">
+                    <span class="material-symbols-outlined text-sm leading-none">account_tree</span>플로차트 <%= cat[:flowchart_count] %>개
+                  </span>
+                <% end %>
+                <% if cat[:tool_count] > 0 %>
+                  <span class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-600 text-xs font-medium">
+                    <span class="material-symbols-outlined text-sm leading-none">build</span>도구 <%= cat[:tool_count] %>개 연결
+                  </span>
+                <% end %>
+              </div>
+            <% end %>
+
+            <!-- 대표 토픽 미리보기 태그 -->
+            <div class="flex flex-wrap gap-1.5 mb-4">
+              <% cat[:preview].each do |topic| %>
+                <span class="px-2.5 py-1 bg-slate-50 border border-slate-100 rounded-lg text-xs text-slate-500 leading-none"><%= topic.name %></span>
               <% end %>
-              <% if cat[:tool_count] > 0 %>
-                <span class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-600 text-xs font-medium">
-                  <span class="material-symbols-outlined text-sm leading-none">build</span>도구 <%= cat[:tool_count] %>개 연결
-                </span>
+              <% if cat[:count] > 3 %>
+                <span class="px-2.5 py-1 bg-slate-50 border border-slate-100 rounded-lg text-xs text-slate-400 leading-none">+<%= cat[:count] - 3 %>개 더</span>
               <% end %>
             </div>
-          <% end %>
 
-          <!-- 대표 토픽 미리보기 태그 -->
-          <div class="flex flex-wrap gap-1.5 mb-5">
-            <% cat[:preview].each do |topic| %>
-              <span class="px-2.5 py-1 bg-slate-50 border border-slate-100 rounded-lg text-xs text-slate-500 leading-none"><%= topic.name %></span>
-            <% end %>
-            <% if cat[:count] > 3 %>
-              <span class="px-2.5 py-1 bg-slate-50 border border-slate-100 rounded-lg text-xs text-slate-400 leading-none">+<%= cat[:count] - 3 %>개 더</span>
-            <% end %>
+            <!-- 펼치기 버튼 -->
+            <div class="mt-auto flex items-center justify-between w-full">
+              <span class="text-sm font-medium transition-colors <%= tc(color, :hub_link) %>"
+                    data-label="<%= key %>">목록 펼치기</span>
+              <span class="material-symbols-outlined text-lg transition-transform duration-200 <%= tc(color, :hub_arrow) %>"
+                    data-chevron="<%= key %>">expand_more</span>
+            </div>
+          </button>
+
+          <!-- 펼쳐지는 토픽 목록 패널 -->
+          <div id="panel-<%= key %>"
+               class="hidden border-t border-slate-100 px-4 pb-4">
+            <div class="pt-3 flex flex-col gap-1">
+              <% cat[:topics].each do |topic| %>
+                <% topic_icon = TopicsController::TOPIC_ICONS[topic.slug] || cfg[:icon] %>
+                <% t_has_flow = TopicsController::FLOWCHART_SLUGS.include?(topic.slug) %>
+                <% t_tool_cnt = (TopicsController::TOPIC_TOOLS[topic.slug] || []).size %>
+                <%= link_to topic_path(topic.slug),
+                    class: "group flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition-colors" do %>
+                  <div class="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center <%= tc(color, :icon_sm) %> opacity-80 group-hover:opacity-100 transition-opacity">
+                    <span class="material-symbols-outlined text-base"><%= topic_icon %></span>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900 leading-snug"><%= topic.name %></span>
+                    <% if t_has_flow || t_tool_cnt > 0 %>
+                      <div class="flex gap-1 mt-0.5">
+                        <% if t_has_flow %>
+                          <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-violet-50 text-violet-500 text-xs">
+                            <span class="material-symbols-outlined text-xs leading-none">account_tree</span>플로차트
+                          </span>
+                        <% end %>
+                        <% if t_tool_cnt > 0 %>
+                          <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-600 text-xs">
+                            <span class="material-symbols-outlined text-xs leading-none">build</span>도구
+                          </span>
+                        <% end %>
+                      </div>
+                    <% end %>
+                  </div>
+                  <span class="material-symbols-outlined text-slate-300 group-hover:text-slate-500 text-base shrink-0">chevron_right</span>
+                <% end %>
+              <% end %>
+            </div>
           </div>
 
-          <!-- 보러가기 버튼 -->
-          <div class="mt-auto flex items-center justify-between">
-            <span class="text-sm font-medium transition-colors <%= tc(color, :hub_link) %>">모두 보기</span>
-            <span class="material-symbols-outlined text-lg transition-colors group-hover:translate-x-0.5 <%= tc(color, :hub_arrow) %>">arrow_forward</span>
-          </div>
-        <% end %>
+        </div>
       <% end %>
     </div>
-    <% end %> <%# cache %>
   </div>
 </section>
+
+<script>
+  function silmuToggle(key) {
+    var panel = document.getElementById('panel-' + key);
+    var chevron = document.querySelector('[data-chevron="' + key + '"]');
+    var label = document.querySelector('[data-label="' + key + '"]');
+    var btn = document.querySelector('[data-accordion="' + key + '"] button');
+    var isOpen = btn.getAttribute('aria-expanded') === 'true';
+
+    if (isOpen) {
+      btn.setAttribute('aria-expanded', 'false');
+      panel.classList.add('hidden');
+      chevron.style.transform = '';
+      label.textContent = '목록 펼치기';
+    } else {
+      btn.setAttribute('aria-expanded', 'true');
+      panel.classList.remove('hidden');
+      chevron.style.transform = 'rotate(180deg)';
+      label.textContent = '접기';
+    }
+  }
+
+  // Turbo 내비게이션 후에도 스크립트 재등록 불필요 (인라인 onclick)
+</script>

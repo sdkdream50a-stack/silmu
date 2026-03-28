@@ -26,7 +26,7 @@ class TopicsController < ApplicationController
       flowchart_count = slugs.count { |s| FLOWCHART_SLUGS.include?(s) }
       tool_count = slugs.sum { |s| (TOPIC_TOOLS[s] || []).size }
       { key: key, cfg: CATEGORY_CONFIG[key], count: topics.size, preview: topics.first(3),
-        flowchart_count: flowchart_count, tool_count: tool_count }
+        flowchart_count: flowchart_count, tool_count: tool_count, topics: topics }
     end
     @total_count = all_topics.size
 
