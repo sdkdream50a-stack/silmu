@@ -45,13 +45,13 @@ class ChatbotController < ApplicationController
 
     if @query.present? && @query.length >= 2
       # 1. 법령 가이드 (복수 결과)
-      @topics = Topic.search_multiple(@query, limit: 4)
+      @topics = Topic.search_multiple(@query, limit: 6)
 
       # 2. 감사사례
-      @audit_cases = AuditCase.search_by_query(@query, limit: 3)
+      @audit_cases = AuditCase.search_by_query(@query, limit: 5)
 
       # 3. 실무 가이드
-      @guides = Guide.published.search_by_keyword(@query).limit(3)
+      @guides = Guide.published.search_by_keyword(@query).limit(5)
 
       # 4. 서식 템플릿 (메모리 내 검색)
       @templates = search_templates(@query)
