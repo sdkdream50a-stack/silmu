@@ -320,6 +320,12 @@ Rails.application.routes.draw do
         delete :delete_report
       end
     end
+    resources :topic_comments, only: [:index, :destroy] do
+      member do
+        patch :hide
+        patch :unhide
+      end
+    end
   end
 
   # 사이트맵

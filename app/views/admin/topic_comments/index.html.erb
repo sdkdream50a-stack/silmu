@@ -1,0 +1,110 @@
+<div class="max-w-6xl mx-auto px-4 py-8">
+  <div class="flex items-center justify-between mb-8">
+    <h1 class="text-2xl font-bold text-slate-900">실무 Q&A 관리</h1>
+  </div>
+
+  <!-- 요약 통계 -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+    <div class="bg-white rounded-xl border border-slate-200 p-4 text-center">
+      <div class="text-3xl font-bold text-slate-800"><%= @stats[:total] %></div>
+      <div class="text-sm text-slate-500 mt-1">전체</div>
+    </div>
+    <div class="bg-white rounded-xl border border-amber-200 p-4 text-center">
+      <div class="text-3xl font-bold text-amber-600"><%= @stats[:questions] %></div>
+      <div class="text-sm text-slate-500 mt-1">질문</div>
+    </div>
+    <div class="bg-white rounded-xl border border-red-200 p-4 text-center">
+      <div class="text-3xl font-bold text-red-500"><%= @stats[:unanswered] %></div>
+      <div class="text-sm text-slate-500 mt-1">미답변 토픽</div>
+    </div>
+    <div class="bg-white rounded-xl border border-slate-200 p-4 text-center">
+      <div class="text-3xl font-bold text-slate-400"><%= @stats[:hidden] %></div>
+      <div class="text-sm text-slate-500 mt-1">숨김</div>
+    </div>
+  </div>
+
+  <!-- 필터 -->
+  <div class="flex gap-2 mb-4 flex-wrap">
+    <%= link_to "전체", admin_topic_comments_path,
+          class: "px-3 py-1.5 rounded-lg text-sm font-medium #{params[:comment_type].blank? ? 'bg-indigo-600 text-white' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'}" %>
+    <%= link_to "질문만", admin_topic_comments_path(comment_type: "question"),
+          class: "px-3 py-1.5 rounded-lg text-sm font-medium #{params[:comment_type] == 'question' ? 'bg-amber-500 text-white' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'}" %>
+    <%= link_to "답변만", admin_topic_comments_path(comment_type: "answer"),
+          class: "px-3 py-1.5 rounded-lg text-sm font-medium #{params[:comment_type] == 'answer' ? 'bg-emerald-500 text-white' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'}" %>
+    <%= link_to "숨김만", admin_topic_comments_path(hidden: "true"),
+          class: "px-3 py-1.5 rounded-lg text-sm font-medium #{params[:hidden] == 'true' ? 'bg-red-500 text-white' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'}" %>
+  </div>
+
+  <!-- 목록 -->
+  <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+    <% if @comments.empty? %>
+      <div class="px-6 py-16 text-center text-slate-400">
+        <span class="material-symbols-outlined text-4xl mb-2 block">forum</span>
+        아직 Q&A가 없습니다
+      </div>
+    <% else %>
+      <table class="w-full text-sm">
+        <thead class="bg-slate-50 border-b border-slate-200">
+          <tr>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 w-16">유형</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500">내용</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 w-32">토픽</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 w-24">작성자</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 w-32">등록일</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 w-28">관리</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+          <% @comments.each do |comment| %>
+            <tr class="<%= comment.hidden? ? 'bg-red-50 opacity-60' : 'hover:bg-slate-50' %>">
+              <td class="px-4 py-3">
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium
+                  <%= comment.question? ? 'bg-amber-100 text-amber-700' : comment.answer? ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600' %>">
+                  <%= { "question" => "질문", "answer" => "답변", "comment" => "댓글" }[comment.comment_type] %>
+                </span>
+              </td>
+              <td class="px-4 py-3 text-slate-700 max-w-xs">
+                <p class="truncate"><%= comment.body %></p>
+                <% if comment.hidden? %>
+                  <span class="text-xs text-red-500">숨김 처리됨</span>
+                <% end %>
+              </td>
+              <td class="px-4 py-3">
+                <%= link_to comment.topic_slug,
+                      topic_path(comment.topic_slug) + "#comment-#{comment.id}",
+                      class: "text-indigo-600 hover:underline text-xs truncate block",
+                      target: "_blank" %>
+              </td>
+              <td class="px-4 py-3 text-slate-500 text-xs"><%= comment.author_name %></td>
+              <td class="px-4 py-3 text-slate-400 text-xs"><%= comment.created_at.strftime("%m.%d %H:%M") %></td>
+              <td class="px-4 py-3">
+                <div class="flex gap-1">
+                  <% if comment.hidden? %>
+                    <%= button_to "공개", unhide_admin_topic_comment_path(comment),
+                          method: :patch,
+                          class: "px-2 py-1 text-xs rounded bg-emerald-100 text-emerald-700 hover:bg-emerald-200" %>
+                  <% else %>
+                    <%= button_to "숨김", hide_admin_topic_comment_path(comment),
+                          method: :patch,
+                          class: "px-2 py-1 text-xs rounded bg-amber-100 text-amber-700 hover:bg-amber-200" %>
+                  <% end %>
+                  <%= button_to "삭제", admin_topic_comment_path(comment),
+                        method: :delete,
+                        data: { turbo_confirm: "삭제하시겠습니까?" },
+                        class: "px-2 py-1 text-xs rounded bg-red-100 text-red-700 hover:bg-red-200" %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+      <!-- 페이지네이션 -->
+      <% if @pagy.pages > 1 %>
+        <div class="px-6 py-4 border-t border-slate-200 flex justify-center">
+          <%== pagy_nav(@pagy) %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>
