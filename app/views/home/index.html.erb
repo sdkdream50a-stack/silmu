@@ -184,14 +184,14 @@
             contract_steps = [
               { step: 1,  label: "사업계획",      icon: "lightbulb",        color: "indigo",   path: contract_method_path },
               { step: 2,  label: "사전절차",       icon: "checklist",        color: "indigo",   path: pre_contract_checklist_path },
-              { step: 3,  label: "품의·기안",      icon: "edit_note",        color: "violet",   path: topics_category_path(key: "contract") + "?subgroup=수의계약" },
-              { step: 4,  label: "사전규격공개",   icon: "preview",          color: "violet",   path: topics_category_path(key: "contract") + "?subgroup=수의계약" },
+              { step: 3,  label: "품의·기안",      icon: "edit_note",        color: "slate",    path: topics_category_path(key: "contract") + "?subgroup=수의계약" },
+              { step: 4,  label: "사전규격공개",   icon: "preview",          color: "slate",    path: topics_category_path(key: "contract") + "?subgroup=수의계약" },
               { step: 5,  label: "공고·입찰",      icon: "campaign",         color: "amber",    path: topic_path("bidding") },
               { step: 6,  label: "계약체결",       icon: "handshake",        color: "amber",    path: topic_path("contract-execution") },
               { step: 7,  label: "계약서류",       icon: "description",      color: "emerald",  path: topics_category_path(key: "contract") + "?subgroup=계약체결" },
               { step: 8,  label: "선금·중도금",    icon: "wallet",           color: "emerald",  path: topics_category_path(key: "contract") + "?subgroup=계약체결" },
               { step: 9,  label: "계약변경",       icon: "sync_alt",         color: "rose",     path: topics_category_path(key: "contract") + "?subgroup=변경종료" },
-              { step: 10, label: "준공·대금지급",  icon: "task_alt",         color: "blue",     path: topics_category_path(key: "contract") + "?subgroup=계약이행" },
+              { step: 10, label: "준공·대금지급",  icon: "task_alt",         color: "emerald",  path: topics_category_path(key: "contract") + "?subgroup=계약이행" },
             ]
           %>
           <% contract_steps.each_with_index do |s, i| %>

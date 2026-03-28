@@ -40,7 +40,7 @@
   /* Stitch v2 Glass Shadows */
   --shadow-glass: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
   --shadow-glass-hover: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-  --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.3);
+  --shadow-glow: 0 0 20px rgba(15, 23, 42, 0.15);
   --shadow-glow-slate: 0 0 40px rgba(15, 23, 42, 0.15);
   --shadow-glow-emerald: 0 0 40px rgba(16, 185, 129, 0.15);
   --shadow-glow-indigo: 0 0 40px rgba(99, 102, 241, 0.2);
@@ -114,7 +114,7 @@
 
   /* Selection */
   ::selection {
-    @apply bg-indigo-200 text-indigo-900;
+    @apply bg-slate-200 text-slate-900;
   }
 
   /* Focus */
@@ -141,10 +141,10 @@
   .btn-lg { @apply px-8 py-4 text-lg; }
 
   .btn-primary {
-    @apply bg-indigo-600 text-white
-           hover:bg-indigo-700 hover:shadow-lg hover:-translate-y-0.5
+    @apply bg-indigo-700 text-white
+           hover:bg-indigo-800 hover:shadow-lg hover:-translate-y-0.5
            active:translate-y-0 active:shadow-md
-           focus:ring-indigo-500;
+           focus:ring-indigo-600;
   }
 
   .btn-accent {
@@ -155,10 +155,10 @@
   }
 
   .btn-point {
-    @apply bg-indigo-600 text-white
-           hover:bg-indigo-700 hover:shadow-lg hover:-translate-y-0.5
+    @apply bg-indigo-700 text-white
+           hover:bg-indigo-800 hover:shadow-lg hover:-translate-y-0.5
            active:translate-y-0 active:shadow-md
-           focus:ring-indigo-500;
+           focus:ring-indigo-600;
   }
 
   .btn-ghost {
@@ -381,7 +381,7 @@
 
   /* Stitch v2 Hero Gradient */
   .hero-gradient {
-    background: radial-gradient(circle at 50% 0%, #312e81 0%, #0f172a 60%, #020617 100%);
+    background: radial-gradient(circle at 50% 0%, #1e293b 0%, #0f172a 60%, #020617 100%);
   }
 
   /* Text Gradients */
@@ -520,7 +520,7 @@
   }
 
   .prose-premium code {
-    @apply text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded-md text-sm;
+    @apply text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded-md text-sm;
   }
 
   .prose-premium ul,
@@ -533,8 +533,8 @@
   }
 
   .prose-premium blockquote {
-    @apply border-l-4 border-indigo-400 pl-4 py-2 my-4
-           bg-indigo-50 rounded-r-xl text-slate-700 italic;
+    @apply border-l-4 border-slate-300 pl-4 py-2 my-4
+           bg-slate-50 rounded-r-xl text-slate-700 italic;
   }
 
   .prose-premium table {
@@ -565,12 +565,12 @@
   }
 
   .guide-tip-box {
-    @apply rounded-xl border border-blue-200 bg-blue-50 p-4 my-5;
+    @apply rounded-xl border border-amber-200 bg-amber-50 p-4 my-5;
   }
 
   .guide-tip-box::before {
     content: '💡 꿀팁';
-    @apply block text-xs font-bold text-blue-700 mb-2 uppercase tracking-wide;
+    @apply block text-xs font-bold text-amber-800 mb-2 uppercase tracking-wide;
   }
 
   .guide-alert-box {
