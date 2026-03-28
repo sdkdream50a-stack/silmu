@@ -35,7 +35,7 @@
           </p>
           <div class="bg-slate-50 rounded-lg p-4 text-sm space-y-2">
             <p><strong>기준소득월액</strong> = 재직 기간 중 기준소득월액의 평균 (최근 3년 기준소득월액 반영)</p>
-            <p><strong>2016년 이후 임용자</strong>: 연금 = 기준소득월액 × 재직년수 × <strong>1.7%</strong></p>
+            <p><strong>2016년 이후 임용자</strong>: 연금 = 기준소득월액 × 재직년수 × <strong>1.7%</strong> (2035년 최종 목표, 현재 단계적 인하 중)</p>
             <p><strong>2015년 이전 임용자</strong>: 구간별 차등 적용 (단순화하여 평균 <strong>1.9%</strong> 적용)</p>
             <p><strong>2026년 인상률</strong>: 2025년 물가상승률 2.1% 반영 자동 계산</p>
           </div>
@@ -103,7 +103,7 @@
               <span class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">원</span>
             </div>
             <p class="text-xs text-slate-400 mt-1">
-              2025년 공무원 전체 평균 기준소득월액: 약 <strong>5,675,969원</strong> (A값, 2026년 기준)
+              2025년 공무원 전체 평균 기준소득월액: 약 <strong>5,710,000원</strong> (A값, 2025.5.1~2026.4.30 적용)
             </p>
           </div>
 
@@ -259,7 +259,7 @@ function selectEra(era) {
   document.getElementById('era-desc').textContent =
     era === 'before'
       ? '지급율 평균 1.9% 적용 (구간별 차등)'
-      : '지급율 1.7% 적용 (2016년 공무원연금법 개정)';
+      : '지급율 1.7% 적용 (2035년 최종 목표, 현재 단계적 인하 중)';
   calculate();
 }
 

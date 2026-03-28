@@ -59,9 +59,9 @@ g.update!(rich_media: (g.rich_media || {}).merge({
       { label: "KTX 왕복 운임",  formula: "부산↔서울 약 59,800원 × 왕복", amount: "119,600원" },
       { label: "일비 (2일)",     formula: "20,000원 × 2일",              amount: "40,000원"  },
       { label: "식비 (2일)",     formula: "20,000원 × 2일",              amount: "40,000원"  },
-      { label: "숙박비 (1박)",   formula: "실비 정산 (상한 60,000원)",     amount: "최대 60,000원" }
+      { label: "숙박비 (1박)",   formula: "실비 정산 (상한 70,000원)",     amount: "최대 70,000원" }
     ],
-    total: "최대 259,600원",
+    total: "최대 269,600원",
     notes: [
       "KTX 운임은 구입한 승차권 영수증 첨부 필수 (실비 지급)",
       "숙박비는 숙박영수증 첨부 시 실비 지급 (상한 이내), 미제출 시 20,000원 정액",
@@ -395,7 +395,7 @@ g.update!(rich_media: (g.rich_media || {}).merge({
       { label: "교부 조건 위반",       values: ["일부 환수 + 향후 교부 제한",       "위반 내용에 따라 적용"],                highlight: false },
       { label: "정산보고 미제출",      values: ["교부금 전액 환수 가능",             "해당 없음 (과태료 가능)"],              highlight: false },
       { label: "서류 보관 의무 위반",  values: ["시정 명령 + 향후 제한",            "해당 없음"],                            highlight: false },
-      { label: "중대 부정수급",        values: ["전액 환수 + 5배 + 향후 5년 제한",  "10년 이하 징역"],                       highlight: true }
+      { label: "중대 부정수급",        values: ["전액 환수 + 5배 + 향후 5년 제한",  "5년 이하 징역 또는 5천만원 이하 벌금"],  highlight: true }
     ],
     footnote: "※ 제재부가금은 부정수급액 기준 1~5배 내에서 위반 경중에 따라 결정. 담당 공무원도 관리 소홀 시 징계·변상 책임 적용."
   }
