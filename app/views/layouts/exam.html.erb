@@ -181,16 +181,25 @@
           </div>
 
           <!-- Nav Links -->
+          <%
+            _ctrl = params[:controller].to_s
+            _on_info      = _ctrl == 'exam/exam_info'
+            _on_strategy  = _ctrl == 'exam/strategy'
+            _on_curriculum = %w[exam/subjects exam/keywords].include?(_ctrl)
+            _on_quiz      = _ctrl.start_with?('exam/quiz')
+            _on_practical = _ctrl == 'exam/practical'
+            _on_rankings  = _ctrl == 'exam/rankings'
+          %>
           <div class="hidden md:flex items-center gap-1">
-            <a href="<%= exam_exam_info_path %>" class="px-3 py-2 text-slate-600 hover:text-blue-700 font-medium transition-colors text-sm rounded-lg hover:bg-slate-50">시험 정보</a>
-            <a href="<%= exam_exam_strategy_path %>" class="flex items-center gap-1 px-3 py-2 text-slate-600 hover:text-amber-600 font-medium transition-colors text-sm rounded-lg hover:bg-amber-50">
+            <a href="<%= exam_exam_info_path %>" class="px-3 py-2 font-medium transition-colors text-sm rounded-lg <%= _on_info ? 'text-blue-700 bg-slate-50' : 'text-slate-600 hover:text-blue-700 hover:bg-slate-50' %>">시험 정보</a>
+            <a href="<%= exam_exam_strategy_path %>" class="flex items-center gap-1 px-3 py-2 font-medium transition-colors text-sm rounded-lg <%= _on_strategy ? 'text-amber-600 bg-amber-50' : 'text-slate-600 hover:text-amber-600 hover:bg-amber-50' %>">
               <span class="material-symbols-outlined text-base">emoji_events</span>
               합격 전략
             </a>
 
             <!-- 커리큘럼 드롭다운 -->
             <div class="relative group">
-              <button class="flex items-center gap-1 px-3 py-2 text-slate-600 hover:text-blue-700 font-medium transition-colors text-sm rounded-lg hover:bg-slate-50">
+              <button class="flex items-center gap-1 px-3 py-2 font-medium transition-colors text-sm rounded-lg <%= _on_curriculum ? 'text-blue-700 bg-slate-50' : 'text-slate-600 hover:text-blue-700 hover:bg-slate-50' %>">
                 <span class="material-symbols-outlined text-base">school</span>
                 커리큘럼
                 <span class="material-symbols-outlined text-sm">expand_more</span>
@@ -238,15 +247,15 @@
               </div>
             </div>
 
-            <a href="<%= exam_quiz_index_path %>" class="flex items-center gap-1 px-3 py-2 text-slate-600 hover:text-blue-700 font-medium transition-colors text-sm rounded-lg hover:bg-slate-50">
+            <a href="<%= exam_quiz_index_path %>" class="flex items-center gap-1 px-3 py-2 font-medium transition-colors text-sm rounded-lg <%= _on_quiz ? 'text-blue-700 bg-slate-50' : 'text-slate-600 hover:text-blue-700 hover:bg-slate-50' %>">
               <span class="material-symbols-outlined text-base">quiz</span>
               모의고사
             </a>
-            <a href="<%= exam_practical_path %>" class="flex items-center gap-1 px-3 py-2 text-slate-600 hover:text-violet-700 font-medium transition-colors text-sm rounded-lg hover:bg-violet-50">
+            <a href="<%= exam_practical_path %>" class="flex items-center gap-1 px-3 py-2 font-medium transition-colors text-sm rounded-lg <%= _on_practical ? 'text-violet-700 bg-violet-50' : 'text-slate-600 hover:text-violet-700 hover:bg-violet-50' %>">
               <span class="material-symbols-outlined text-base">edit_note</span>
               실기 대비
             </a>
-            <a href="<%= exam_rankings_path %>" class="flex items-center gap-1 px-3 py-2 text-slate-600 hover:text-amber-600 font-medium transition-colors text-sm rounded-lg hover:bg-amber-50">
+            <a href="<%= exam_rankings_path %>" class="flex items-center gap-1 px-3 py-2 font-medium transition-colors text-sm rounded-lg <%= _on_rankings ? 'text-amber-600 bg-amber-50' : 'text-slate-600 hover:text-amber-600 hover:bg-amber-50' %>">
               <span class="material-symbols-outlined text-base">leaderboard</span>
               랭킹
             </a>
@@ -254,12 +263,19 @@
 
           <!-- CTA + 로그인 -->
           <div class="flex items-center gap-2">
-            <%# 홈 페이지에서는 히어로 CTA와 중복되므로 숨김 %>
-            <% unless params[:controller] == 'exam/home' %>
-              <a href="<%= exam_subjects_path %>" class="hidden md:flex items-center gap-1 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-all duration-200 hover:opacity-90 hover:shadow-md" style="background:linear-gradient(135deg,#002b57,#174174)">
-                <span class="material-symbols-outlined text-base">school</span>
-                학습 시작
-              </a>
+            <%# 홈 페이지에서는 히어로 CTA와 중복되므로 숨김. 커리큘럼 페이지에서는 active(dark filled), 나머지는 outline %>
+            <% unless _ctrl == 'exam/home' %>
+              <% if _on_curriculum %>
+                <a href="<%= exam_subjects_path %>" class="hidden md:flex items-center gap-1 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-all duration-200 hover:opacity-90 hover:shadow-md" style="background:linear-gradient(135deg,#002b57,#174174)">
+                  <span class="material-symbols-outlined text-base">school</span>
+                  학습 시작
+                </a>
+              <% else %>
+                <a href="<%= exam_subjects_path %>" class="hidden md:flex items-center gap-1 text-slate-600 text-sm font-semibold px-4 py-2 rounded-lg border border-slate-200 hover:border-slate-300 hover:bg-slate-50 transition-all duration-200">
+                  <span class="material-symbols-outlined text-base">school</span>
+                  학습 시작
+                </a>
+              <% end %>
             <% end %>
 
             <% if user_signed_in? %>
@@ -562,10 +578,17 @@
           </a>
         </nav>
         <div class="p-4 border-t border-slate-200 space-y-2">
-          <a href="<%= exam_subjects_path %>" class="flex items-center justify-center gap-2 bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 transition-colors">
-            <span class="material-symbols-outlined text-base">school</span>
-            학습 시작하기
-          </a>
+          <% if _on_curriculum %>
+            <a href="<%= exam_subjects_path %>" class="flex items-center justify-center gap-2 text-white font-bold py-3 rounded-xl hover:opacity-90 transition-colors" style="background:linear-gradient(135deg,#002b57,#174174)">
+              <span class="material-symbols-outlined text-base">school</span>
+              학습 시작하기
+            </a>
+          <% else %>
+            <a href="<%= exam_subjects_path %>" class="flex items-center justify-center gap-2 bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 transition-colors">
+              <span class="material-symbols-outlined text-base">school</span>
+              학습 시작하기
+            </a>
+          <% end %>
           <% if user_signed_in? %>
             <div class="flex items-center justify-between px-3 py-2 bg-slate-50 rounded-xl">
               <span class="text-sm text-slate-600 font-medium truncate"><%= current_user.email.split('@').first %></span>
