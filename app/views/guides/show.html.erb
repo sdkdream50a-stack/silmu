@@ -108,7 +108,7 @@
                     <%= is_current ? 'bg-emerald-600 text-white' : 'bg-gray-100 text-gray-500' %>">
                     <%= i + 1 %>
                   </span>
-                  <span class="truncate"><%= sg.title.gsub(/^.*?완전정복\s*\d*편?\s*[—\-:]?\s*/, '') %></span>
+                  <span class="truncate"><%= sg.title.split(/\s*[—\-]\s*/).first %></span>
                 <% end %>
               <% end %>
             </nav>
