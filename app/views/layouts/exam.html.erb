@@ -16,6 +16,7 @@
     <%# Fonts - 비동기 로딩 %>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="preload" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" fetchpriority="high">
     <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"></noscript>
@@ -94,7 +95,7 @@
       notice_bar_hidden = %w[exam/quizzes exam/keywords exam/practical exam/subjects exam/chapters].any? { |c| params[:controller] == c }
     %>
     <% unless notice_bar_hidden %>
-    <div id="exam-notice-bar" class="bg-blue-700 text-white text-sm py-2">
+    <div id="exam-notice-bar" class="text-white text-sm py-2" style="background:#002b57">
       <div class="max-w-5xl mx-auto px-4 flex items-center justify-between gap-3">
         <span class="flex items-center gap-2 min-w-0">
           <span class="material-symbols-outlined text-base flex-shrink-0">school</span>
@@ -163,18 +164,18 @@
     <% end %>
 
     <!-- Navigation -->
-    <nav class="bg-white border-b border-blue-100 sticky top-0 z-50 shadow-sm">
+    <nav class="bg-white/85 backdrop-blur-xl sticky top-0 z-50" style="box-shadow:0px 4px 24px rgba(0,43,87,0.07)">
       <div class="max-w-5xl mx-auto px-4">
         <div class="flex justify-between h-16">
           <!-- Logo -->
           <div class="flex items-center">
             <a href="https://exam.silmu.kr" class="flex items-center gap-3">
-              <div class="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center">
+              <div class="w-9 h-9 rounded-xl flex items-center justify-center" style="background:#002b57">
                 <span class="material-symbols-outlined text-white text-xl">school</span>
               </div>
               <div>
-                <span class="text-lg font-bold text-slate-900">공공조달관리사</span>
-                <span class="text-xs text-blue-600 font-medium block leading-none">by 실무.kr</span>
+                <span class="text-lg font-bold text-slate-900" style="font-family:'Manrope',sans-serif">공공조달관리사</span>
+                <span class="text-xs font-medium block leading-none" style="color:#002b57">by 실무.kr</span>
               </div>
             </a>
           </div>
@@ -255,7 +256,7 @@
           <div class="flex items-center gap-2">
             <%# 홈 페이지에서는 히어로 CTA와 중복되므로 숨김 %>
             <% unless params[:controller] == 'exam/home' %>
-              <a href="<%= exam_subjects_path %>" class="hidden md:flex items-center gap-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-all duration-200 hover:shadow-md">
+              <a href="<%= exam_subjects_path %>" class="hidden md:flex items-center gap-1 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-all duration-200 hover:opacity-90 hover:shadow-md" style="background:linear-gradient(135deg,#002b57,#174174)">
                 <span class="material-symbols-outlined text-base">school</span>
                 학습 시작
               </a>

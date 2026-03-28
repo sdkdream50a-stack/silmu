@@ -20,6 +20,14 @@
    1. THEME CONFIGURATION
    =========================================== */
 @theme {
+  /* Stitch "The Academic Authority" — Primary Navy Tokens */
+  --color-primary-navy: #002b57;
+  --color-primary-navy-light: #174174;
+  --color-primary-fixed: #d5e3ff;
+  --color-surface-container-low: #f3f4f5;
+  --color-surface-container-lowest: #ffffff;
+  --color-on-surface-muted: #424750;
+
   /* Stitch v2 Custom Tokens */
   --color-background-light: #F8FAFC;
   --color-background-dark: #0B1120;
