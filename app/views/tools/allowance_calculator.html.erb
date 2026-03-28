@@ -148,8 +148,8 @@
       <div class="card p-6">
         <h2 class="text-lg font-bold text-slate-900 mb-4">가족수당 계산</h2>
         <div class="bg-violet-50 rounded-xl p-4 mb-5 text-sm text-violet-800">
-          <strong>지급 기준:</strong> 부양 가족에 대해 월 정액 지급. 배우자 4만원, 자녀·부모 등 2만원(첫째 2만원, 둘째 이상 5만원).
-          부양의무가 있고 실제 부양하는 경우에만 지급.
+          <strong>지급 기준:</strong> 부양 가족에 대해 월 정액 지급. 배우자 4만원, 자녀 첫째 5만원·둘째 8만원·셋째 이상 12만원, 부모 등 2만원.
+          부양의무가 있고 실제 부양하는 경우에만 지급. (공무원수당규정 별표5, 2025.01.03. 시행)
         </div>
         <div class="overflow-x-auto mb-5">
           <table class="w-full text-sm">
@@ -161,8 +161,9 @@
             </thead>
             <tbody class="divide-y divide-slate-100">
               <tr class="hover:bg-slate-50"><td class="p-3">배우자</td><td class="p-3 text-right font-semibold text-violet-700">40,000원</td></tr>
-              <tr class="hover:bg-slate-50"><td class="p-3">자녀 첫째</td><td class="p-3 text-right font-semibold text-violet-700">20,000원</td></tr>
-              <tr class="hover:bg-slate-50"><td class="p-3">자녀 둘째 이상</td><td class="p-3 text-right font-semibold text-violet-700">50,000원</td></tr>
+              <tr class="hover:bg-slate-50"><td class="p-3">자녀 첫째</td><td class="p-3 text-right font-semibold text-violet-700">50,000원</td></tr>
+              <tr class="hover:bg-slate-50"><td class="p-3">자녀 둘째</td><td class="p-3 text-right font-semibold text-violet-700">80,000원</td></tr>
+              <tr class="hover:bg-slate-50"><td class="p-3">자녀 셋째 이상 (1인당)</td><td class="p-3 text-right font-semibold text-violet-700">120,000원</td></tr>
               <tr class="hover:bg-slate-50"><td class="p-3">부모·조부모 등</td><td class="p-3 text-right font-semibold text-violet-700">20,000원</td></tr>
             </tbody>
           </table>
@@ -317,8 +318,9 @@
     let total = 0;
     let details = [];
     if (hasSpouse) { total += 40000; details.push('배우자 40,000원'); }
-    if (children >= 1) { total += 20000; details.push('첫째 20,000원'); }
-    if (children >= 2) { const add = (children - 1) * 50000; total += add; details.push(`둘째 이상 ${add.toLocaleString()}원`); }
+    if (children >= 1) { total += 50000; details.push('첫째 50,000원'); }
+    if (children >= 2) { total += 80000; details.push('둘째 80,000원'); }
+    if (children >= 3) { const add = (children - 2) * 120000; total += add; details.push(`셋째 이상 ${add.toLocaleString()}원`); }
     if (others > 0) { const add = others * 20000; total += add; details.push(`기타 부양가족 ${add.toLocaleString()}원`); }
 
     document.getElementById('val-family').textContent = total.toLocaleString('ko-KR') + ' 원';
@@ -370,7 +372,7 @@
     const rates = [0, 0, 5, 10, 15, 20, 25, 30, 35, 40, 50];
     const rate = years >= 10 ? 50 : (rates[Math.min(years, 10)] || 0);
     const jeongeun = years >= 2 ? Math.floor(salary * rate / 100) : 0;
-    let family = (hasSpouse ? 40000 : 0) + (children >= 1 ? 20000 : 0) + (children >= 2 ? (children - 1) * 50000 : 0) + (others * 20000);
+    let family = (hasSpouse ? 40000 : 0) + (children >= 1 ? 50000 : 0) + (children >= 2 ? 80000 : 0) + (children >= 3 ? (children - 2) * 120000 : 0) + (others * 20000);
     const holiday = Math.floor(salary * 0.6);
     const rank = (grade && RANK_ALLOWANCE[grade]) ? RANK_ALLOWANCE[grade] : 0;
 

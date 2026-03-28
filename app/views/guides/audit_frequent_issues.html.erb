@@ -48,7 +48,7 @@
         <%= render "guides/audit_item", number: 1, severity: "critical", title: "수의계약 요건 미충족 체결",
             law: "국가계약법 시행령 제26조, 지방계약법 시행령 제25조",
             issue: "법령에 규정된 수의계약 사유에 해당하지 않음에도 수의계약을 체결하거나, 사유서 없이 수의계약을 진행하는 경우",
-            prevention: "수의계약 전 해당 근거 조문 명시, 사유서 작성 필수. 금액 기준(물품·용역 2,000만원, 공사 종합 4억원) 확인",
+            prevention: "수의계약 전 해당 근거 조문 명시, 사유서 작성 필수. 금액 기준(물품·용역 2,000만원, 종합공사 4억원·전문공사 2억원·기타공사 1억 6천만원) 확인",
             tool_label: "수의계약 사유서 생성기", tool_path: :contract_reason_path %>
 
         <%= render "guides/audit_item", number: 2, severity: "critical", title: "분할계약을 통한 경쟁입찰 회피",
@@ -144,7 +144,7 @@
             tool_label: "이월·전용 적법성 판단기", tool_path: :budget_transfer_checker_path %>
 
         <%= render "guides/audit_item", number: 16, severity: "high", title: "사고이월 요건 미충족 이월",
-            law: "지방재정법 제50조, 국가재정법 제48조",
+            law: "지방재정법 제48조, 국가재정법 제48조",
             issue: "사고이월 요건(공사 착수 후 불가피한 사유, 법령 규정 지출 의무 부담 등) 미충족에도 이월 처리",
             prevention: "이월 전 적법 요건 충족 여부 검토. 사고이월 사유서 구체적으로 작성. 의회 승인 필요 여부 확인",
             tool_label: "이월·전용 적법성 판단기", tool_path: :budget_transfer_checker_path %>
