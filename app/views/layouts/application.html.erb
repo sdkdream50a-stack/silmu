@@ -195,29 +195,7 @@
       </script>
     <% end %>
 
-    <% if Rails.env.production? && ENV['ADSENSE_CLIENT_ID'].present? %>
-      <!-- Google AdSense - async 직접 삽입 (Google 크롤러 감지 보장) -->
-      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=<%= ENV['ADSENSE_CLIENT_ID'] %>"
-              crossorigin="anonymous"></script>
-
-      <!-- AdSense 광고 중앙 집중 초기화 (Turbo 캐시 중복 방지) -->
-      <script>
-        function initAdSlots() {
-          document.querySelectorAll('.ad-slot[data-ad-status="pending"]').forEach(function(slot) {
-            var ins = slot.querySelector('ins.adsbygoogle');
-            if (ins && !ins.dataset.adsbygoogleStatus) {
-              try {
-                (adsbygoogle = window.adsbygoogle || []).push({});
-              } catch (e) {}
-            }
-            slot.dataset.adStatus = 'processed';
-          });
-        }
-
-        // turbo:load는 첫 페이지 + Turbo 내비게이션 모두 커버 (DOMContentLoaded 중복 제거)
-        document.addEventListener('turbo:load', initAdSlots);
-      </script>
-    <% end %>
+    <%# AdSense 비활성화 — 공무원 실무 특화 사이트로 광고 없이 운영 %>
 
     <% if Rails.env.production? && Rails.application.credentials.clarity_project_id.present? %>
       <!-- Microsoft Clarity - 지연 로딩 -->
