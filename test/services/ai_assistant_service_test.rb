@@ -58,10 +58,12 @@ class AiAssistantServiceTest < ActiveSupport::TestCase
 
     original_new = Anthropic::Client.method(:new)
     Anthropic::Client.define_singleton_method(:new) { |**_| stub_client }
-    result = @service_guest.answer("수의계약이란?")
-    Anthropic::Client.define_singleton_method(:new, original_new)
-
-    assert result[:text].present?
+    begin
+      result = @service_guest.answer("수의계약이란?")
+      assert result[:text].present?
+    ensure
+      Anthropic::Client.define_singleton_method(:new, original_new)
+    end
   end
 
   test "answer API 오류 시 error 반환" do
@@ -70,9 +72,11 @@ class AiAssistantServiceTest < ActiveSupport::TestCase
 
     original_new = Anthropic::Client.method(:new)
     Anthropic::Client.define_singleton_method(:new) { |**_| error_client }
-    result = @service_guest.answer("테스트 질문")
-    Anthropic::Client.define_singleton_method(:new, original_new)
-
-    assert result[:error].present?
+    begin
+      result = @service_guest.answer("테스트 질문")
+      assert result[:error].present?
+    ensure
+      Anthropic::Client.define_singleton_method(:new, original_new)
+    end
   end
 end

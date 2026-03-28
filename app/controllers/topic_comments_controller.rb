@@ -1,5 +1,5 @@
 class TopicCommentsController < ApplicationController
-  before_action :authenticate_user!, only: [:create]
+  before_action :authenticate_user!, only: [:create, :like]
 
   def create
     @topic = Topic.find_by!(slug: params[:topic_slug], published: true)

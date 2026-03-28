@@ -11,7 +11,5 @@ class TopicCommentModerationJob < ApplicationJob
       comment.update!(hidden: true)
       Rails.logger.info "[TopicCommentModeration] 댓글 #{comment_id} AI 거부: #{reason}"
     end
-  rescue ActiveRecord::RecordNotFound
-    Rails.logger.warn "[TopicCommentModeration] 댓글 #{comment_id} 없음 (이미 삭제됨)"
   end
 end

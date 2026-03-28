@@ -195,10 +195,12 @@ class Topic < ApplicationRecord
     Guide.where(topic_slug: old_slug).update_all(topic_slug: new_slug)
     AuditCase.where(topic_slug: old_slug).update_all(topic_slug: new_slug)
     TopicComment.where(topic_slug: old_slug).update_all(topic_slug: new_slug)
-    # 구 slug 기반 캐시 무효화
+    # 구 slug 기반 캐시 무효화 (update_all은 콜백을 건너뛰므로 수동 처리)
     Rails.cache.delete("topic_related/#{old_slug}")
     Rails.cache.delete("topic_audit_cases/#{old_slug}")
     Rails.cache.delete("topic_keyword_map/#{old_slug}")
+    Rails.cache.delete("audit_cases/all_published_v2")
+    Rails.cache.delete("guides/all")
     Rails.logger.info "[Topic] slug 변경: #{old_slug} → #{new_slug} (연쇄 업데이트 완료)"
   end
 end
