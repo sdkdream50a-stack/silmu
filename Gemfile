@@ -77,6 +77,9 @@ gem "meta-tags", "~> 2.18"
 gem "dotenv-rails", groups: [:development, :test]
 gem "heroicon", "~> 1.0"
 
+# ========== AI 기능 ==========
+gem "anthropic"  # Claude API (AI 어시스턴트, 모더레이션)
+
 # ========== 챗봇 기능 ==========
 gem "pg_search"  # PostgreSQL 전문검색
 

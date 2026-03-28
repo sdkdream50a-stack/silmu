@@ -2,6 +2,12 @@
 
 one:
   email: test1@example.com
+  admin: false
 
 two:
   email: test2@example.com
+  admin: false
+
+admin_user:
+  email: admin@silmu.kr
+  admin: true

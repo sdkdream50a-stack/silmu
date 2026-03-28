@@ -33,6 +33,7 @@ class Topic < ApplicationRecord
   before_save :update_law_verified_at, if: -> { law_content_changed? || decree_content_changed? || rule_content_changed? }
   after_commit :expire_count_cache
   after_commit :notify_indexnow, if: -> { saved_change_to_published? && published? }
+  before_update :cascade_slug_change, if: :slug_changed?
 
   # 통합 검색: 복수 토픽 반환 (이름·키워드·요약 ILIKE, 없으면 pg_search)
   def self.search_multiple(query, limit: 4)
@@ -117,7 +118,7 @@ class Topic < ApplicationRecord
 
   # 교차 연결 (topic_slug 기반 Association)
   has_many :guides,      foreign_key: :topic_slug, primary_key: :slug, dependent: :nullify
-  has_many :audit_cases, foreign_key: :topic_slug, primary_key: :slug
+  has_many :audit_cases, foreign_key: :topic_slug, primary_key: :slug, dependent: :nullify
 
   # 관련 감사사례 (DB 기반)
   def related_audit_cases
@@ -185,5 +186,19 @@ class Topic < ApplicationRecord
 
   def generate_slug
     self.slug = name.parameterize.presence || "topic-#{SecureRandom.hex(4)}"
+  end
+
+  # slug 변경 시 연관 레코드의 topic_slug를 일괄 업데이트 (orphan 방지)
+  def cascade_slug_change
+    old_slug = slug_was
+    new_slug = slug
+    Guide.where(topic_slug: old_slug).update_all(topic_slug: new_slug)
+    AuditCase.where(topic_slug: old_slug).update_all(topic_slug: new_slug)
+    TopicComment.where(topic_slug: old_slug).update_all(topic_slug: new_slug)
+    # 구 slug 기반 캐시 무효화
+    Rails.cache.delete("topic_related/#{old_slug}")
+    Rails.cache.delete("topic_audit_cases/#{old_slug}")
+    Rails.cache.delete("topic_keyword_map/#{old_slug}")
+    Rails.logger.info "[Topic] slug 변경: #{old_slug} → #{new_slug} (연쇄 업데이트 완료)"
   end
 end

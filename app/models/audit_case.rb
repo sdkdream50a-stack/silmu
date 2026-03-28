@@ -1,4 +1,6 @@
 class AuditCase < ApplicationRecord
+  belongs_to :topic, foreign_key: :topic_slug, primary_key: :slug, optional: true
+
   # Sector enum (0: common 공통, 1: local_gov 지자체, 2: edu 교육행정)
   enum :sector, { common: 0, local_gov: 1, edu: 2 }, default: :common
   # "common" 또는 blank 전달 시 전체 반환 (common은 모든 sector에 공유되므로)

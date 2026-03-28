@@ -7,23 +7,8 @@ class TopicCommentsController < ApplicationController
     @comment.user = current_user
     @comment.topic_slug = @topic.slug
 
-    # AI 모더레이션
-    moderation = TopicComment.moderate_with_ai(@comment.body)
-    if moderation["approved"] == false
-      respond_to do |format|
-        format.html { redirect_back fallback_location: topic_path(@topic.slug), alert: "댓글이 등록 기준에 맞지 않습니다: #{moderation['reason']}" }
-        format.turbo_stream {
-          render turbo_stream: turbo_stream.replace(
-            "comment-form-#{@topic.slug}",
-            partial: "topic_comments/form",
-            locals: { topic: @topic, comment: @comment, error: moderation["reason"] }
-          )
-        }
-      end
-      return
-    end
-
     if @comment.save
+      TopicCommentModerationJob.perform_later(@comment.id)
       respond_to do |format|
         format.html { redirect_back fallback_location: topic_path(@topic.slug), notice: "댓글이 등록되었습니다." }
         format.turbo_stream {
