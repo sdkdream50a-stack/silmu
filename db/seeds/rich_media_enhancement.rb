@@ -173,7 +173,29 @@ g = Guide.find_by!(slug: "budget-execution-complete-1")
 g.update!(rich_media: (g.rich_media || {}).merge({
   role_diagram: {
     title: "지출관·재무관·출납원 역할 분리도",
-    mermaid: "flowchart LR\n    subgraph 지출관[\"🏛️ 지출관 — 과장급 이상\"]\n      A[지출원인행위]\n      B[지출결의]\n    end\n    subgraph 재무관[\"🔍 재무관 — 견제·검토\"]\n      C[예산 확인]\n      D[적법성 검토]\n    end\n    subgraph 출납원[\"💳 출납원 — 자금 집행\"]\n      E[자금 이체]\n      F[영수증 보관]\n    end\n    A --> C\n    B --> D\n    D -->|승인| E\n    E --> F\n    style 지출관 fill:#eff6ff,stroke:#3b82f6\n    style 재무관 fill:#fdf4ff,stroke:#a855f7\n    style 출납원 fill:#f0fdf4,stroke:#22c55e"
+    roles: [
+      {
+        name: "🏛️ 지출관",
+        subtitle: "과장급 이상 / 최종 법적 책임",
+        color: "blue",
+        duties: ["지출원인행위", "지출결의"],
+        desc: "계약·발주 결정. 지출결의서 서명."
+      },
+      {
+        name: "🔍 재무관",
+        subtitle: "독립적 견제·검토",
+        color: "violet",
+        duties: ["예산 확인", "적법성 검토"],
+        desc: "예산 가용 여부 확인. 지출 적법성 심사."
+      },
+      {
+        name: "💳 출납원",
+        subtitle: "자금 집행",
+        color: "emerald",
+        duties: ["자금 이체", "영수증 보관"],
+        desc: "실제 계좌이체. 지출 장부 기록."
+      }
+    ]
   },
   timeline: {
     title: "돈이 지급되기까지의 여정 — 지출 6단계",

@@ -705,15 +705,44 @@
           <%# ── 9. 역할 분리도 (role_diagram) ── %>
           <% if rm[:role_diagram].present? %>
           <% rd = rm[:role_diagram].with_indifferent_access %>
-          <section class="mt-8" id="rm-role-diagram" data-controller="mermaid">
+          <section class="mt-8" id="rm-role-diagram">
             <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden">
               <div class="px-5 py-3 border-b bg-violet-50 flex items-center gap-2">
                 <span class="material-symbols-outlined text-violet-500">groups</span>
                 <span class="text-sm font-bold text-slate-700"><%= rd[:title] %></span>
               </div>
-              <div class="p-4 overflow-x-auto">
+              <% if rd[:roles].present? %>
+              <div class="p-5">
+                <div class="flex flex-col sm:flex-row items-stretch gap-0">
+                  <% rd[:roles].each_with_index do |role, idx| %>
+                  <% r = role.with_indifferent_access %>
+                  <% colors = { "blue" => ["bg-blue-50","border-blue-300","text-blue-700","bg-blue-100","text-blue-800"],
+                                "violet" => ["bg-violet-50","border-violet-300","text-violet-700","bg-violet-100","text-violet-800"],
+                                "emerald" => ["bg-emerald-50","border-emerald-300","text-emerald-700","bg-emerald-100","text-emerald-800"] } %>
+                  <% c = colors[r[:color].to_s] || colors["blue"] %>
+                  <div class="flex sm:flex-col items-center">
+                    <div class="flex-1 border-2 rounded-xl p-4 <%= c[0] %> <%= c[1] %>">
+                      <p class="font-bold text-sm <%= c[2] %>"><%= r[:name] %></p>
+                      <p class="text-xs text-slate-500 mb-3"><%= r[:subtitle] %></p>
+                      <% Array(r[:duties]).each do |duty| %>
+                        <div class="<%= c[3] %> rounded-lg px-3 py-1.5 text-xs font-medium <%= c[4] %> mb-1.5"><%= duty %></div>
+                      <% end %>
+                      <% if r[:desc].present? %>
+                        <p class="text-xs text-slate-500 mt-2 leading-relaxed"><%= r[:desc] %></p>
+                      <% end %>
+                    </div>
+                    <% if idx < rd[:roles].size - 1 %>
+                    <div class="flex items-center justify-center px-2 py-2 sm:px-0 sm:py-2 text-slate-400 font-bold text-lg flex-shrink-0">→</div>
+                    <% end %>
+                  </div>
+                  <% end %>
+                </div>
+              </div>
+              <% else %>
+              <div class="p-4 overflow-x-auto" data-controller="mermaid">
                 <pre data-mermaid-target="source" class="text-xs"><%= rd[:mermaid] %></pre>
               </div>
+              <% end %>
             </div>
           </section>
           <% end %>
