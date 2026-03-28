@@ -3,19 +3,22 @@
 <div class="font-sans text-slate-800 antialiased selection:bg-indigo-500/30 selection:text-indigo-600">
 
 <!-- 공지사항 배너 (2주 경과 시 자동 숨김) -->
-<% notice_date = Date.new(2026, 3, 1) %>
+<% notice_date = Date.new(2026, 3, 27) %>
 <% if (Time.zone.today - notice_date) <= 14 %>
-<div class="bg-gradient-to-r from-indigo-600 to-violet-600 text-white">
+<div class="bg-gradient-to-r from-amber-500 to-orange-500 text-white">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-3">
-    <div class="flex items-center justify-center gap-3 text-sm">
-      <span class="material-symbols-outlined text-lg animate-pulse">campaign</span>
-      <span class="font-medium">
-        <span class="hidden sm:inline">새로운 소식:</span>
-        <strong class="ml-1">인사·복무 가이드 8개 신설 + FAQ 40개</strong> 달성 (<%= notice_date.strftime("%Y-%m-%d") %>)
-        <span class="hidden md:inline ml-2 opacity-90">| 감사사례 <%= @audit_case_count %>건 · 모의고사 400문제</span>
+    <div class="flex items-center justify-center gap-3 text-sm flex-wrap">
+      <span class="material-symbols-outlined text-lg animate-pulse shrink-0">auto_stories</span>
+      <span class="font-medium text-center sm:text-left">
+        <strong>완전정복 시리즈 7개·61편 완성</strong>
+        <span class="mx-1.5 opacity-60">|</span>
+        <span class="hidden sm:inline">공사계약·수의계약·예산집행·출장여비·인사복무·예산편성·지방보조금</span>
+        <span class="sm:hidden">공사계약 10편 신규 추가</span>
+        <span class="mx-1.5 opacity-60 hidden md:inline">|</span>
+        <span class="hidden md:inline">복무·인사·예산 실무 가이드 신규 추가</span>
       </span>
-      <%= link_to updates_path, class: "ml-3 px-3 py-1 bg-white/20 hover:bg-white/30 rounded-lg text-white font-semibold transition-colors whitespace-nowrap" do %>
-        자세히 보기 →
+      <%= link_to guides_path, class: "shrink-0 px-3 py-1 bg-white/20 hover:bg-white/30 rounded-lg text-white font-semibold transition-colors whitespace-nowrap" do %>
+        가이드 보기 →
       <% end %>
     </div>
   </div>
