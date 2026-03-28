@@ -31,11 +31,11 @@
           </div>
           <p class="text-slate-900 text-sm font-semibold">문서 양식</p>
         <% end %>
-        <%= link_to chatbot_path, class: "card p-5 text-center hover-lift group" do %>
+        <%= link_to silmu_search_path, class: "card p-5 text-center hover-lift group" do %>
           <div class="icon-container icon-container-md bg-amber-100 group-hover:bg-amber-600 mx-auto mb-3 transition-colors">
-            <span class="material-symbols-outlined text-2xl text-amber-600 group-hover:text-white transition-colors">smart_toy</span>
+            <span class="material-symbols-outlined text-2xl text-amber-600 group-hover:text-white transition-colors">search</span>
           </div>
-          <p class="text-slate-900 text-sm font-semibold">AI 상담</p>
+          <p class="text-slate-900 text-sm font-semibold">실무 검색</p>
         <% end %>
       </div>
 
@@ -89,6 +89,32 @@
             </label>
           </div>
         <% end %>
+      </div>
+      <% end %>
+
+      <!-- 법령 개정 알림 구독 목록 -->
+      <% if current_user && @law_subscriptions.any? %>
+      <div class="card p-6 mb-6">
+        <h2 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined text-amber-500">notifications_active</span>
+          법령 개정 알림 구독
+        </h2>
+        <ul class="space-y-2">
+          <% @law_subscriptions.each do |sub| %>
+            <li id="subscription-<%= sub.id %>" class="flex items-center justify-between px-4 py-3 bg-amber-50 border border-amber-100 rounded-xl">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-amber-500 text-base">gavel</span>
+                <span class="text-sm font-medium text-slate-700"><%= sub.topic_name %></span>
+              </div>
+              <%= button_to law_change_subscription_path(sub), method: :delete,
+                    data: { turbo_stream: true, confirm: "「#{sub.topic_name}」 알림 구독을 해지하시겠습니까?" },
+                    class: "text-xs text-slate-400 hover:text-red-500 transition-colors px-2 py-1 rounded" do %>
+                해지
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+        <p class="mt-3 text-xs text-slate-400">법령 개정 시 이메일(<%= current_user.email %>)로 알림이 발송됩니다.</p>
       </div>
       <% end %>
 

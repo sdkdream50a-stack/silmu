@@ -6,6 +6,10 @@ class MypageController < ApplicationController
     guides = Guide.published.where(slug: recent_slugs).index_by(&:slug)
     @recent_guides = recent_slugs.filter_map { |slug| guides[slug] }
 
+    @law_subscriptions = LawChangeSubscription.where(
+      email: current_user.email, active: true
+    ).order(created_at: :desc)
+
     set_meta_tags(
       title: "마이페이지",
       robots: "noindex"

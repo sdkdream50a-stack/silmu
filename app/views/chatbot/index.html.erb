@@ -1,4 +1,4 @@
-<%# 챗봇 페이지 - 프리미엄 디자인 시스템 %>
+<%# 실무 검색 페이지 %>
 
 <div class="min-h-screen bg-surface-50">
   <!-- 헤더 -->
@@ -7,7 +7,7 @@
       <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 shadow-lg mx-auto mb-4">
         <span class="material-symbols-outlined text-4xl text-white">support_agent</span>
       </div>
-      <h1 class="text-3xl font-bold mb-2 text-white">공무원 업무 도우미</h1>
+      <h1 class="text-3xl font-bold mb-2 text-white">실무 검색</h1>
       <p class="text-slate-200">법령 · 예규 · 유권해석 · 실무 가이드</p>
     </div>
   </div>
@@ -15,7 +15,7 @@
   <!-- 검색 영역 -->
   <div class="max-w-4xl mx-auto px-4 -mt-8">
     <div class="card p-6 shadow-strong">
-      <%= form_with url: chatbot_search_path, method: :get, data: { turbo_frame: "search-results" } do |f| %>
+      <%= form_with url: silmu_search_search_path, method: :get, data: { turbo_frame: "search-results" } do |f| %>
         <div class="flex gap-3">
           <div class="flex-1">
             <%= f.text_field :q,
@@ -34,7 +34,7 @@
       <div class="mt-4 flex flex-wrap gap-2 items-center">
         <span class="text-sm text-slate-500 font-medium">인기 검색어:</span>
         <% %w[수의계약 연말정산 출장비 이월 기간제 보조금정산 겸직 일상경비].each do |keyword| %>
-          <%= link_to keyword, chatbot_search_path(q: keyword),
+          <%= link_to keyword, silmu_search_search_path(q: keyword),
               class: "px-3 py-1.5 bg-surface-100 text-slate-700 rounded-full text-sm font-medium hover:bg-indigo-100 hover:text-indigo-700 transition-all",
               data: { turbo: false } %>
         <% end %>
@@ -170,7 +170,7 @@
 </div>
 
 <script>
-// /chatbot/search?q=xxx 직접 접근 시 자동 검색
+// /silmu-search/search?q=xxx 직접 접근 시 자동 검색
 document.addEventListener('DOMContentLoaded', function() {
   const urlParams = new URLSearchParams(window.location.search);
   const q = urlParams.get('q');

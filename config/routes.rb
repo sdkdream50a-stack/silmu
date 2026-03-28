@@ -92,10 +92,18 @@ Rails.application.routes.draw do
   get "/login", to: redirect("/users/sign_in")
   root "home#index"
 
-  # 챗봇
-  get "chatbot", to: "chatbot#index", as: :chatbot
-  get "chatbot/search", to: "chatbot#search", as: :chatbot_search
-  get "chatbot/price", to: "chatbot#price_guide", as: :chatbot_price
+  # 실무 검색 (구 챗봇)
+  get "silmu-search",        to: "chatbot#index",       as: :silmu_search
+  get "silmu-search/search", to: "chatbot#search",      as: :silmu_search_search
+  get "silmu-search/price",  to: "chatbot#price_guide", as: :silmu_search_price
+
+  # SEO 301 리디렉션 (기존 chatbot URL 보존)
+  get "chatbot",        to: redirect("/silmu-search", status: 301)
+  get "chatbot/search", to: redirect("/silmu-search/search", status: 301)
+  get "chatbot/price",  to: redirect("/silmu-search/price", status: 301)
+
+  # AI 실무 어시스턴트
+  get "ai-assistant", to: "ai_assistant#index", as: :ai_assistant
 
   # 토픽 (법령 가이드)
   get "topics", to: "topics#index", as: :topics
@@ -276,7 +284,13 @@ Rails.application.routes.draw do
   resources :bookmarks, only: [:create, :destroy, :index]
 
   # 법령 개정 알림 구독
-  resources :law_change_subscriptions, only: [:create]
+  resources :law_change_subscriptions, only: [:create, :destroy]
+
+  # 토픽 Q&A 댓글
+  scope "/topics/:topic_slug" do
+    resources :comments, controller: :topic_comments, only: [:create], as: :topic_comments
+    post "/comments/:id/like", to: "topic_comments#like", as: :topic_comment_like
+  end
 
   # 마이페이지
   get "mypage", to: "mypage#index", as: :mypage

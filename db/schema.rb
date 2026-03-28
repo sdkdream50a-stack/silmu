@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_28_000010) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_28_000012) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -196,6 +196,23 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_28_000010) do
     t.index ["task_title"], name: "index_task_guides_on_task_title", unique: true
   end
 
+  create_table "topic_comments", force: :cascade do |t|
+    t.text "body", null: false
+    t.integer "comment_type", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.boolean "hidden", default: false, null: false
+    t.boolean "is_official", default: false, null: false
+    t.integer "likes_count", default: 0, null: false
+    t.integer "parent_id"
+    t.string "topic_slug", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.index ["parent_id"], name: "index_topic_comments_on_parent_id"
+    t.index ["topic_slug", "hidden", "created_at"], name: "index_topic_comments_on_topic_slug_and_hidden_and_created_at"
+    t.index ["topic_slug"], name: "index_topic_comments_on_topic_slug"
+    t.index ["user_id"], name: "index_topic_comments_on_user_id"
+  end
+
   create_table "topics", force: :cascade do |t|
     t.text "audit_cases"
     t.string "category"
@@ -208,7 +225,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_28_000010) do
     t.string "infographic_url"
     t.text "interpretation_content"
     t.text "keywords"
+    t.string "law_base_date"
     t.text "law_content"
+    t.datetime "law_verified_at"
     t.string "name", null: false
     t.integer "parent_id"
     t.text "practical_tips"
@@ -256,4 +275,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_28_000010) do
   add_foreign_key "exam_progresses", "users"
   add_foreign_key "exam_question_comments", "users"
   add_foreign_key "law_change_subscriptions", "users"
+  add_foreign_key "topic_comments", "users"
 end

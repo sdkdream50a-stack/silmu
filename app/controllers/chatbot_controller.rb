@@ -37,7 +37,7 @@ class ChatbotController < ApplicationController
   def search
     # 직접 URL 접근 시 chatbot 인덱스로 리다이렉트
     unless turbo_frame_request?
-      redirect_to chatbot_path(q: params[:q].presence), status: :moved_permanently and return
+      redirect_to silmu_search_path(q: params[:q].presence), status: :moved_permanently and return
     end
 
     set_meta_tags(robots: "noindex, follow")

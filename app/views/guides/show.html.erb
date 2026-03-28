@@ -164,6 +164,10 @@
                 <%= @guide.published_on&.strftime("%Y.%m.%d") %>
               </span>
               <span class="flex items-center gap-1">
+                <span class="material-symbols-outlined text-lg">verified</span>
+                <%= (@guide.published_on || @guide.updated_at.to_date).strftime("%Y.%m.%d") %> 기준 법령 반영
+              </span>
+              <span class="flex items-center gap-1">
                 <span class="material-symbols-outlined text-lg">visibility</span>
                 <%= @guide.view_count %>회
               </span>

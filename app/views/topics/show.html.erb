@@ -64,8 +64,8 @@
             <h1 class="text-3xl lg:text-4xl font-bold tracking-tight"><%= @topic.name %></h1>
             <p class="text-slate-200 mt-2 text-lg"><%= @topic.summary %></p>
             <p class="mt-2 text-xs text-white/60 flex items-center gap-1">
-              <span class="material-symbols-outlined" style="font-size:14px">update</span>
-              마지막 업데이트: <%= @topic.updated_at.strftime("%Y년 %-m월 %-d일") %>
+              <span class="material-symbols-outlined" style="font-size:14px">verified</span>
+              <%= (@topic.law_base_date || @topic.updated_at.strftime("%Y.%m.%d")) %> 기준 법령 반영
             </p>
           </div>
         </div>
@@ -1234,9 +1234,9 @@ document.addEventListener('click', function(e) {
                 <p class="text-slate-200 text-sm">궁금한 점을 물어보세요</p>
               </div>
             </div>
-            <%= link_to chatbot_path,
+            <%= link_to silmu_search_path,
                 class: "block w-full py-3 bg-white text-slate-800 rounded-xl font-semibold text-center hover:bg-slate-50 transition-colors shadow-soft" do %>
-              AI 상담 시작하기
+              실무 검색으로 찾기
             <% end %>
           </div>
         </div>
@@ -1692,3 +1692,23 @@ document.addEventListener('turbo:render', initTabs);
       title: @topic.name,
       url: topic_path(@topic.slug),
       type: 'topic' %>
+
+<!-- Q&A 커뮤니티 섹션 -->
+<section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+  <div class="card p-6">
+    <h2 class="text-xl font-bold text-slate-900 mb-1 flex items-center gap-2">
+      <span class="material-symbols-outlined text-indigo-500">forum</span>
+      실무 Q&A
+    </h2>
+    <p class="text-sm text-slate-500 mb-6">이 법령에 관한 질문이나 실무 경험을 공유해주세요</p>
+
+    <%= render partial: "topic_comments/form",
+               locals: { topic: @topic, comment: TopicComment.new, error: nil } %>
+
+    <div id="topic-comments-<%= @topic.slug %>" class="mt-6 divide-y divide-slate-100">
+      <% TopicComment.by_topic(@topic.slug).limit(20).each do |comment| %>
+        <%= render partial: "topic_comments/comment", locals: { comment: comment } %>
+      <% end %>
+    </div>
+  </div>
+</section>

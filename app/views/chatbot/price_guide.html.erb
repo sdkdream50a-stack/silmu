@@ -19,7 +19,7 @@
     <div class="card p-8">
       <h2 class="text-xl font-bold text-slate-900 mb-6">계약 정보 입력</h2>
 
-      <%= form_with url: chatbot_price_path, method: :get, data: { turbo_frame: "price_result" }, class: "space-y-6" do |f| %>
+      <%= form_with url: silmu_search_price_path, method: :get, data: { turbo_frame: "price_result" }, class: "space-y-6" do |f| %>
         <div>
           <label class="block text-sm font-medium text-slate-700 mb-2">계약 유형</label>
           <div class="grid grid-cols-3 gap-4">

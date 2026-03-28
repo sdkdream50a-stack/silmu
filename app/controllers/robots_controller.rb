@@ -25,7 +25,7 @@ class RobotsController < ApplicationController
       # 쿼리 파라미터 필터 페이지 — 크롤 예산 절약 (canonical로 처리 중)
       Disallow: /audit-cases?
       Disallow: /guides?
-      Disallow: /chatbot/search?
+      Disallow: /silmu-search/search?
       Disallow: /tools/official-document?
       Disallow: /?sector=
 

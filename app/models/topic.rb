@@ -30,6 +30,7 @@ class Topic < ApplicationRecord
 
   # Callbacks
   before_validation :generate_slug, if: -> { slug.blank? && name.present? }
+  before_save :update_law_verified_at, if: -> { law_content_changed? || decree_content_changed? || rule_content_changed? }
   after_commit :expire_count_cache
   after_commit :notify_indexnow, if: -> { saved_change_to_published? && published? }
 
@@ -155,6 +156,11 @@ class Topic < ApplicationRecord
   end
 
   private
+
+  def update_law_verified_at
+    self.law_verified_at = Time.current
+    self.law_base_date = Time.zone.today.strftime("%Y.%m.%d")
+  end
 
   def notify_indexnow
     SitemapPingJob.perform_later(["https://#{SitemapPingJob::HOST}/topics/#{slug}"])

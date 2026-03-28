@@ -43,7 +43,7 @@
         "@type": "SearchAction",
         "target": {
           "@type": "EntryPoint",
-          "urlTemplate": "https://silmu.kr/chatbot?q={search_term}"
+          "urlTemplate": "https://silmu.kr/silmu-search?q={search_term}"
         },
         "query-input": "required name=search_term"
       }
@@ -272,6 +272,9 @@
               업무달력
             <% end %>
             <%= link_to "자료실", guide_resources_path, class: nav_class(:resources) %>
+            <%= link_to ai_assistant_path, class: "inline-flex items-center gap-1 px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-lg transition-colors" do %>
+              <span class="material-symbols-outlined text-sm">psychology</span>AI
+            <% end %>
             <%= link_to "의견보내기", feedback_path, class: nav_class(:feedback) %>
           </div>
 
@@ -539,6 +542,26 @@
                 </a>
               </li>
             </ul>
+          </div>
+        </div>
+
+        <!-- 정부 시스템 링크 -->
+        <div class="border-t border-slate-800 mt-10 pt-8">
+          <h3 class="text-xs font-semibold text-slate-500 mb-4 uppercase tracking-wider">자주 사용하는 정부 시스템</h3>
+          <div class="flex flex-wrap gap-3">
+            <% [
+              { url: "https://www.g2b.go.kr",        name: "나라장터(G2B)" },
+              { url: "https://www.s2b.kr",            name: "학교장터(S2B)" },
+              { url: "https://www.onbid.co.kr",       name: "온비드" },
+              { url: "https://www.lofin365.go.kr",    name: "지방재정(e-호조)" },
+              { url: "https://eduinfo.go.kr",         name: "지방교육재정" },
+              { url: "https://www.law.go.kr",         name: "국가법령센터" }
+            ].each do |p| %>
+              <a href="<%= p[:url] %>" target="_blank" rel="noopener"
+                 class="px-3 py-1.5 text-xs text-slate-400 hover:text-white border border-slate-700 hover:border-slate-500 rounded-lg transition-colors">
+                <%= p[:name] %>
+              </a>
+            <% end %>
           </div>
         </div>
 

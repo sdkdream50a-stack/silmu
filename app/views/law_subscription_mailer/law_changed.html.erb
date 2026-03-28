@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>법령 개정 알림</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Malgun Gothic', sans-serif; background: #f8fafc; margin: 0; padding: 0; }
+    .container { max-width: 600px; margin: 40px auto; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+    .header { background: linear-gradient(135deg, #d97706 0%, #b45309 100%); padding: 48px 40px; text-align: center; }
+    .header h1 { color: #ffffff; font-size: 24px; font-weight: 700; margin: 0 0 8px; }
+    .header p { color: rgba(255,255,255,0.85); font-size: 15px; margin: 0; }
+    .body { padding: 40px; }
+    .alert-box { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 12px; padding: 20px 24px; margin-bottom: 28px; }
+    .alert-box p { margin: 0; font-size: 15px; color: #92400e; line-height: 1.7; }
+    .cta { text-align: center; margin-bottom: 28px; }
+    .cta-btn { display: inline-block; background: linear-gradient(135deg, #d97706, #b45309); color: #ffffff; text-decoration: none; padding: 14px 36px; border-radius: 10px; font-size: 15px; font-weight: 700; }
+    .footer { border-top: 1px solid #e2e8f0; padding: 24px 40px; text-align: center; }
+    .footer p { font-size: 12px; color: #94a3b8; margin: 0; line-height: 1.8; }
+    .footer a { color: #6366f1; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>📋 법령 개정 알림</h1>
+      <p>실무.kr — 공무원 계약·예산 실무 가이드</p>
+    </div>
+
+    <div class="body">
+      <p style="font-size:16px; color:#1e293b; margin-bottom:20px; line-height:1.7;">
+        안녕하세요,<br>
+        구독하신 <strong>「<%= @topic_name %>」</strong> 관련 법령이 개정되었습니다.
+      </p>
+
+      <div class="alert-box">
+        <p>
+          ⚠️ 개정 법령: <strong><%= @changed_law_name %></strong><br>
+          최신 내용을 확인하고 업무에 반영하세요.
+        </p>
+      </div>
+
+      <div class="cta">
+        <a href="<%= @topic_url %>" class="cta-btn">
+          최신 법령 가이드 확인하기
+        </a>
+      </div>
+
+      <p style="font-size:13px; color:#94a3b8; text-align:center; line-height:1.8;">
+        구독을 해지하려면 <a href="<%= @unsubscribe_url %>" style="color:#6366f1;" data-method="delete">여기를 클릭</a>하세요.
+      </p>
+    </div>
+
+    <div class="footer">
+      <p>
+        실무.kr · <a href="https://silmu.kr/privacy">개인정보처리방침</a> · <a href="https://silmu.kr/terms">이용약관</a><br>
+        본 메일은 법령 개정 알림 구독자에게만 발송됩니다.
+      </p>
+    </div>
+  </div>
+</body>
+</html>

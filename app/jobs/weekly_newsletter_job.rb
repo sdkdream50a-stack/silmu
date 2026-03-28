@@ -55,9 +55,9 @@ class WeeklyNewsletterJob < ApplicationJob
            style="display: inline-block; background: #059669; color: #ffffff; text-decoration: none; padding: 12px 20px; border-radius: 8px; font-weight: 600; font-size: 15px; text-align: center;">
           🔍 감사사례 보기
         </a>
-        <a href="https://silmu.kr/chatbot"
+        <a href="https://silmu.kr/silmu-search"
            style="display: inline-block; background: #d97706; color: #ffffff; text-decoration: none; padding: 12px 20px; border-radius: 8px; font-weight: 600; font-size: 15px; text-align: center;">
-          🤖 AI챗봇으로 질문하기
+          🔍 실무 검색하기
         </a>
       </div>
 

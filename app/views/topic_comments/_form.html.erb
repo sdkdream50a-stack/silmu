@@ -1,0 +1,30 @@
+<%# 댓글 입력 폼 partial %>
+<div id="comment-form-<%= topic.slug %>">
+  <% if error.present? %>
+    <div class="mb-3 px-4 py-2 bg-red-50 border border-red-100 rounded-lg text-sm text-red-700">
+      <%= error %>
+    </div>
+  <% end %>
+
+  <% if current_user %>
+    <%= form_with model: comment,
+                  url: topic_comments_path(topic_slug: topic.slug),
+                  data: { turbo_stream: true } do |f| %>
+      <div class="flex gap-3">
+        <%= f.select :comment_type,
+              [["질문", "question"], ["답변", "answer"], ["댓글", "comment"]],
+              {},
+              class: "input w-24 text-sm" %>
+        <%= f.text_field :body,
+              placeholder: "실무 질문이나 경험을 공유해주세요 (5~800자)",
+              class: "input flex-1 text-sm",
+              minlength: 5, maxlength: 800 %>
+        <%= f.submit "등록", class: "btn btn-primary text-sm px-4" %>
+      </div>
+    <% end %>
+  <% else %>
+    <p class="text-sm text-slate-500 text-center py-3">
+      <%= link_to "로그인", new_user_session_path, class: "text-indigo-600 hover:underline font-medium" %>하시면 Q&A에 참여할 수 있습니다.
+    </p>
+  <% end %>
+</div>
