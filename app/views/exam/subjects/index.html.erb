@@ -1,167 +1,191 @@
-<%# 4과목 커리큘럼 목록 페이지 %>
+<%# 4과목 커리큘럼 목록 페이지 — Stitch 'The Curated Scholar' 디자인 적용 %>
 
-<!-- 헤더 -->
-<section class="bg-gradient-to-br from-slate-900 via-blue-900 to-blue-800 text-white py-16 px-4">
+<!-- 페이지 헤더 — 에디토리얼 화이트 스타일 -->
+<section class="bg-white pt-14 pb-10 px-4 border-b border-slate-100">
   <div class="max-w-5xl mx-auto">
-    <div class="flex items-center gap-2 text-blue-300 text-sm mb-4">
-      <a href="https://exam.silmu.kr" class="hover:text-white transition-colors">홈</a>
+    <!-- 브레드크럼 -->
+    <div class="flex items-center gap-1.5 text-slate-400 text-sm mb-8">
+      <a href="https://exam.silmu.kr" class="hover:text-slate-600 transition-colors">홈</a>
       <span class="material-symbols-outlined text-sm">chevron_right</span>
-      <span>커리큘럼</span>
+      <span class="text-slate-600 font-medium">커리큘럼</span>
     </div>
-    <h1 class="text-3xl md:text-4xl font-bold mb-4">4권 완전 커리큘럼</h1>
-    <p class="text-blue-200 text-lg max-w-2xl">
-      공공조달관리사 표준교재 4권·27장을 체계적으로 학습하세요.<br>
-      각 챕터별 학습목표·핵심키워드·시험 출제 포인트를 제공합니다.
-    </p>
 
-    <!-- 통계 -->
-    <div class="flex flex-wrap gap-6 mt-8 pt-6 border-t border-white/20">
-      <div class="text-center">
-        <div class="text-2xl font-bold text-yellow-300">4권</div>
-        <div class="text-blue-300 text-sm">표준교재</div>
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-8">
+      <div class="max-w-2xl">
+        <span class="text-emerald-700 font-bold tracking-widest uppercase text-xs mb-3 block">Academic Path</span>
+        <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
+          표준교재 4권<br class="hidden md:block"> 커리큘럼
+        </h1>
+        <p class="mt-4 text-slate-500 text-base leading-relaxed max-w-xl">
+          공공조달관리사 표준교재 4권·27장을 체계적으로 학습하세요.<br>
+          각 챕터별 학습목표·핵심키워드·시험 출제 포인트를 제공합니다.
+        </p>
       </div>
-      <div class="text-center">
-        <div class="text-2xl font-bold text-yellow-300">27장</div>
-        <div class="text-blue-300 text-sm">전체 챕터</div>
-      </div>
-      <div class="text-center">
-        <div class="text-2xl font-bold text-yellow-300"><%= ExamCurriculum.all_keywords.size %>개</div>
-        <div class="text-blue-300 text-sm">핵심 키워드</div>
+
+      <!-- 통계 -->
+      <div class="flex gap-8 flex-shrink-0">
+        <div class="text-center">
+          <div class="text-3xl font-extrabold text-slate-900">4</div>
+          <div class="text-slate-400 text-xs mt-0.5 font-medium uppercase tracking-wide">권</div>
+        </div>
+        <div class="w-px bg-slate-100"></div>
+        <div class="text-center">
+          <div class="text-3xl font-extrabold text-slate-900">27</div>
+          <div class="text-slate-400 text-xs mt-0.5 font-medium uppercase tracking-wide">챕터</div>
+        </div>
+        <div class="w-px bg-slate-100"></div>
+        <div class="text-center">
+          <div class="text-3xl font-extrabold text-slate-900"><%= ExamCurriculum.all_keywords.size %></div>
+          <div class="text-slate-400 text-xs mt-0.5 font-medium uppercase tracking-wide">키워드</div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 권장 학습 순서 배너 -->
-<section class="py-8 px-4 bg-white border-t border-slate-100">
+<!-- 권장 학습 순서 — 토널 배경 전환 (테두리 없음) -->
+<section class="py-8 px-4 bg-slate-50">
   <div class="max-w-5xl mx-auto">
-    <div class="bg-blue-50 border border-blue-200 rounded-2xl p-5">
-      <div class="flex items-center gap-2 mb-4">
-        <span class="material-symbols-outlined text-blue-600 text-xl">route</span>
-        <h2 class="font-bold text-slate-900">권장 학습 순서</h2>
-        <span class="bg-blue-100 text-blue-700 text-xs font-semibold px-2 py-0.5 rounded-full">1→2→3→4권 순서로 학습하면 3회독 효과</span>
+    <div class="bg-white rounded-2xl p-6 shadow-[0_4px_24px_rgba(18,28,40,0.06)]">
+      <div class="flex items-center gap-2 mb-5">
+        <span class="material-symbols-outlined text-emerald-600">route</span>
+        <h2 class="font-bold text-slate-800 text-sm">권장 학습 순서</h2>
+        <span class="bg-emerald-50 text-emerald-700 text-xs font-semibold px-2.5 py-1 rounded-full">순서대로 학습하면 3회독 효과</span>
       </div>
-      <div class="flex flex-col md:flex-row items-center gap-2">
+      <div class="flex flex-col md:flex-row items-stretch gap-3">
 
-        <div class="flex-1 bg-white border border-emerald-200 rounded-xl p-4 text-center w-full">
-          <div class="w-8 h-8 bg-emerald-600 text-white rounded-lg flex items-center justify-center mx-auto mb-2 text-sm font-bold">1</div>
+        <div class="flex-1 bg-emerald-50 rounded-xl p-4 text-center">
+          <div class="w-7 h-7 bg-emerald-600 text-white rounded-lg flex items-center justify-center mx-auto mb-2 text-xs font-bold">1</div>
           <div class="font-bold text-slate-800 text-sm">공공조달의 이해</div>
           <div class="text-slate-500 text-xs mt-1">법령 체계·개요 → 전체 틀 잡기</div>
         </div>
 
-        <span class="material-symbols-outlined text-blue-400 text-2xl rotate-90 md:rotate-0">arrow_forward</span>
+        <div class="flex items-center justify-center text-slate-300">
+          <span class="material-symbols-outlined rotate-90 md:rotate-0">arrow_forward</span>
+        </div>
 
-        <div class="flex-1 bg-white border border-blue-200 rounded-xl p-4 text-center w-full">
-          <div class="w-8 h-8 bg-blue-600 text-white rounded-lg flex items-center justify-center mx-auto mb-2 text-sm font-bold">2</div>
+        <div class="flex-1 bg-blue-50 rounded-xl p-4 text-center">
+          <div class="w-7 h-7 bg-blue-600 text-white rounded-lg flex items-center justify-center mx-auto mb-2 text-xs font-bold">2</div>
           <div class="font-bold text-slate-800 text-sm">조달계획 수립·분석</div>
           <div class="text-slate-500 text-xs mt-1">입찰 공고·조달 계획 → 흐름 이해</div>
         </div>
 
-        <span class="material-symbols-outlined text-blue-400 text-2xl rotate-90 md:rotate-0">arrow_forward</span>
+        <div class="flex items-center justify-center text-slate-300">
+          <span class="material-symbols-outlined rotate-90 md:rotate-0">arrow_forward</span>
+        </div>
 
-        <div class="flex-1 bg-white border border-violet-200 rounded-xl p-4 text-center w-full">
-          <div class="w-8 h-8 bg-violet-600 text-white rounded-lg flex items-center justify-center mx-auto mb-2 text-sm font-bold">3</div>
+        <div class="flex-1 bg-violet-50 rounded-xl p-4 text-center">
+          <div class="w-7 h-7 bg-violet-600 text-white rounded-lg flex items-center justify-center mx-auto mb-2 text-xs font-bold">3</div>
           <div class="font-bold text-slate-800 text-sm">공공계약관리</div>
           <div class="text-slate-500 text-xs mt-1">계약 이후 관리 → 실무 핵심</div>
         </div>
 
-        <span class="material-symbols-outlined text-blue-400 text-2xl rotate-90 md:rotate-0">arrow_forward</span>
+        <div class="flex items-center justify-center text-slate-300">
+          <span class="material-symbols-outlined rotate-90 md:rotate-0">arrow_forward</span>
+        </div>
 
-        <div class="flex-1 bg-white border border-rose-200 rounded-xl p-4 text-center w-full">
-          <div class="w-8 h-8 bg-rose-600 text-white rounded-lg flex items-center justify-center mx-auto mb-2 text-sm font-bold">4</div>
+        <div class="flex-1 bg-rose-50 rounded-xl p-4 text-center">
+          <div class="w-7 h-7 bg-rose-600 text-white rounded-lg flex items-center justify-center mx-auto mb-2 text-xs font-bold">4</div>
           <div class="font-bold text-slate-800 text-sm">조달 관리실무</div>
           <div class="text-slate-500 text-xs mt-1">나라장터·전자조달 → 실전 완성</div>
         </div>
 
       </div>
-      <p class="text-slate-500 text-xs mt-4 flex items-center gap-1">
-        <span class="material-symbols-outlined text-slate-400 text-sm">info</span>
+      <p class="text-slate-400 text-xs mt-4 flex items-center gap-1.5">
+        <span class="material-symbols-outlined text-slate-300">info</span>
         1→2→3권이 유기적으로 연결되어 있어 순서대로 학습하면 자연스럽게 반복 효과가 생깁니다. 4권 학습 완료 후 실기 준비에 유리합니다.
       </p>
     </div>
   </div>
 </section>
 
-<!-- 4과목 카드 목록 -->
-<section class="py-12 px-4 bg-slate-50"
+<!-- 4과목 카드 그리드 — Stitch 에디토리얼 카드 -->
+<section class="py-14 px-4 bg-slate-50"
          data-controller="exam-progress">
   <div class="max-w-5xl mx-auto">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <% @subjects.each do |subject| %>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <% @subjects.each_with_index do |subject, index| %>
         <% colors = ExamCurriculum.colors(subject[:color]) %>
         <a href="<%= exam_subject_path(subject[:id]) %>"
-           class="group bg-white rounded-2xl border <%= colors[:border] %> <%= colors[:hover_border] %> hover:shadow-lg transition-all overflow-hidden"
+           class="group relative bg-white rounded-2xl overflow-hidden border-l-[6px] <%= colors[:accent_border] %> hover:-translate-y-1.5 transition-all duration-300 shadow-[0_2px_16px_rgba(18,28,40,0.05)] hover:shadow-[0_8px_32px_rgba(18,28,40,0.10)] <%= index.odd? ? 'md:mt-6' : '' %>"
            data-subject-progress
            data-subject-id="<%= subject[:id] %>"
            data-subject-total="<%= subject[:total_chapters] %>">
 
-          <!-- 과목 헤더 -->
-          <div class="<%= colors[:bg] %> px-6 py-5 flex items-start gap-4">
-            <div class="w-12 h-12 <%= colors[:bg_dark] %> rounded-xl flex items-center justify-center flex-shrink-0">
-              <span class="material-symbols-outlined text-white text-2xl"><%= subject[:icon] %></span>
-            </div>
-            <div class="flex-1 min-w-0">
-              <div class="flex items-center gap-2 mb-1">
-                <span class="text-xs font-bold <%= colors[:badge] %> px-2 py-0.5 rounded-full"><%= subject[:number] %></span>
-                <span class="text-xs text-slate-500"><%= subject[:total_chapters] %>장</span>
-              </div>
-              <h2 class="text-lg font-bold text-slate-900 leading-tight"><%= subject[:title] %></h2>
-              <p class="text-sm text-slate-500 mt-0.5"><%= subject[:subtitle] %></p>
-            </div>
+          <!-- 고스트 배경 아이콘 -->
+          <div class="absolute top-0 right-0 p-6 opacity-[0.07] group-hover:opacity-[0.12] transition-opacity pointer-events-none">
+            <span class="material-symbols-outlined text-8xl <%= colors[:text] %>"><%= subject[:icon] %></span>
           </div>
 
-          <!-- 챕터 미리보기 -->
-          <div class="px-6 py-4">
-            <p class="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-3">수록 챕터</p>
-            <ul class="space-y-1.5">
+          <div class="relative z-10 p-8">
+            <!-- 뱃지 + 챕터 수 -->
+            <div class="flex items-center gap-2 mb-5">
+              <span class="inline-block px-3 py-1 rounded-full <%= colors[:badge] %> font-bold text-xs tracking-wide">
+                <%= subject[:number] %>
+              </span>
+              <span class="text-slate-400 text-xs font-medium"><%= subject[:total_chapters] %>장</span>
+            </div>
+
+            <!-- 제목·부제목 -->
+            <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight leading-snug mb-1">
+              <%= subject[:title] %>
+            </h2>
+            <p class="text-slate-400 text-sm mb-6"><%= subject[:subtitle] %></p>
+
+            <!-- 챕터 미리보기 -->
+            <ul class="space-y-2 mb-7">
               <% subject[:chapters].first(4).each do |chapter| %>
-                <li class="flex items-center gap-2 text-sm text-slate-700">
+                <li class="flex items-center gap-2.5 text-sm text-slate-600">
                   <span class="w-5 h-5 rounded-full <%= colors[:bg] %> <%= colors[:text] %> flex items-center justify-center text-xs font-bold flex-shrink-0"><%= chapter[:number] %></span>
-                  <%= chapter[:title] %>
+                  <span class="truncate"><%= chapter[:title] %></span>
                 </li>
               <% end %>
               <% if subject[:chapters].size > 4 %>
-                <li class="text-sm text-slate-400 pl-7">외 <%= subject[:chapters].size - 4 %>개 챕터...</li>
+                <li class="text-xs text-slate-400 pl-7">외 <%= subject[:chapters].size - 4 %>개 챕터...</li>
               <% end %>
             </ul>
-          </div>
 
-          <!-- 진도 바 (Stimulus가 채움) -->
-          <div class="px-6 pb-4">
-            <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
-              <span data-progress-text class="<%= colors[:text_dark] %> font-medium"></span>
+            <!-- 진도 바 -->
+            <div class="mb-6">
+              <div class="flex items-center justify-between text-xs mb-1.5">
+                <span data-progress-text class="<%= colors[:text_dark] %> font-semibold"></span>
+              </div>
+              <div class="w-full bg-slate-100 rounded-full h-2">
+                <div data-progress-bar class="<%= colors[:progress] %> h-2 rounded-full transition-all duration-500" style="width:0%"></div>
+              </div>
             </div>
-            <div class="w-full bg-slate-100 rounded-full h-1.5">
-              <div data-progress-bar class="<%= colors[:progress] %> h-1.5 rounded-full transition-all duration-500" style="width:0%"></div>
-            </div>
-          </div>
 
-          <!-- CTA -->
-          <div class="px-6 pb-5">
-            <div class="flex items-center gap-1 <%= colors[:text_dark] %> font-semibold text-sm group-hover:gap-2 transition-all">
-              <span class="material-symbols-outlined text-base">school</span>
-              학습 시작하기
-              <span class="material-symbols-outlined text-base">arrow_forward</span>
+            <!-- CTA 버튼 -->
+            <div class="flex items-center justify-between">
+              <span class="text-xs text-slate-400 font-medium">챕터별 미니 퀴즈 포함</span>
+              <span class="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-gradient-to-br <%= colors[:btn_gradient] %> text-white text-sm font-bold shadow-lg <%= colors[:shadow_color] %> group-hover:shadow-xl transition-all">
+                학습하기
+                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+              </span>
             </div>
           </div>
         </a>
       <% end %>
     </div>
 
-    <!-- 용어집 CTA -->
-    <div class="mt-8 bg-gradient-to-r from-slate-800 to-slate-700 rounded-2xl p-6 text-white flex flex-col sm:flex-row items-center justify-between gap-4">
-      <div class="flex items-center gap-4">
-        <div class="w-12 h-12 bg-yellow-400/20 rounded-xl flex items-center justify-center">
+    <!-- 용어집 CTA — 에디토리얼 배너 -->
+    <div class="mt-12 relative overflow-hidden bg-slate-900 rounded-2xl p-7 flex flex-col sm:flex-row items-center justify-between gap-5">
+      <!-- 배경 장식 -->
+      <div class="absolute right-0 top-0 h-full w-48 bg-gradient-to-l from-emerald-900/30 to-transparent pointer-events-none"></div>
+
+      <div class="relative flex items-center gap-4">
+        <div class="w-12 h-12 bg-yellow-400/15 rounded-xl flex items-center justify-center flex-shrink-0">
           <span class="material-symbols-outlined text-yellow-300 text-2xl">dictionary</span>
         </div>
         <div>
-          <h3 class="font-bold text-lg">핵심 용어집</h3>
-          <p class="text-slate-300 text-sm">4권 교재 전체 키워드 <%= ExamCurriculum.all_keywords.size %>개 한눈에 보기</p>
+          <h3 class="font-bold text-white text-lg tracking-tight">핵심 용어집</h3>
+          <p class="text-slate-400 text-sm">4권 교재 전체 키워드 <%= ExamCurriculum.all_keywords.size %>개 한눈에 보기</p>
         </div>
       </div>
       <a href="<%= exam_keywords_path %>"
-         class="flex-shrink-0 bg-yellow-400 text-slate-900 font-bold px-6 py-3 rounded-xl hover:bg-yellow-300 transition-colors">
-        용어집 보기 →
+         class="relative flex-shrink-0 inline-flex items-center gap-1.5 bg-yellow-400 hover:bg-yellow-300 text-slate-900 font-bold px-6 py-3 rounded-full transition-colors text-sm">
+        용어집 보기
+        <span class="material-symbols-outlined text-sm">arrow_forward</span>
       </a>
     </div>
   </div>

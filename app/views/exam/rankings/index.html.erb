@@ -1,128 +1,197 @@
 <% content_for :head do %>
   <meta name="robots" content="noindex">
 <% end %>
+<%# 주간 학습 랭킹 — Stitch 'The Elite Ledger' 디자인 적용 %>
 
-<div class="max-w-2xl mx-auto px-4 py-8">
-  <!-- 헤더 -->
-  <div class="text-center mb-8">
-    <div class="w-16 h-16 bg-amber-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-      <span class="material-symbols-outlined text-amber-500 text-3xl">emoji_events</span>
+<!-- 페이지 헤더 — 에디토리얼 화이트 -->
+<section class="bg-white border-b border-[#eef1f3] py-10 px-4">
+  <div class="max-w-2xl mx-auto">
+    <div class="flex items-center gap-1.5 text-[#595c5e] text-xs mb-6">
+      <a href="https://exam.silmu.kr" class="hover:text-[#0050d4] transition-colors">홈</a>
+      <span class="material-symbols-outlined text-sm">chevron_right</span>
+      <span class="text-[#2c2f31] font-medium">주간 랭킹</span>
     </div>
-    <h1 class="text-2xl font-extrabold text-slate-900 mb-2">주간 학습 랭킹</h1>
-    <p class="text-slate-500 text-sm">이번 주 모의고사 응시 횟수 기준 • 매주 월요일 초기화</p>
-    <div class="inline-flex items-center gap-2 mt-3 bg-amber-50 border border-amber-200 text-amber-700 text-xs font-semibold px-3 py-1.5 rounded-full">
-      <span class="material-symbols-outlined text-sm">schedule</span>
-      리셋까지 <strong><%= @days_until_reset %>일</strong> 남음
+    <div class="flex items-end justify-between gap-6">
+      <div>
+        <span class="text-[#0050d4] font-bold tracking-widest uppercase text-xs mb-2 block">Elite Ledger</span>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-[#2c2f31] tracking-tight leading-tight">주간 학습 랭킹</h1>
+        <p class="text-[#595c5e] text-sm mt-2">이번 주 모의고사 응시 횟수 기준 · 매주 월요일 초기화</p>
+      </div>
+      <div class="hidden md:flex items-center gap-2 bg-[#eef1f3] px-4 py-2 rounded-full flex-shrink-0">
+        <span class="material-symbols-outlined text-[#0050d4] text-sm">emoji_events</span>
+        <span class="text-xs font-bold text-[#595c5e] uppercase tracking-widest">Weekly Board</span>
+      </div>
     </div>
   </div>
+</section>
 
-  <!-- 내 순위 (로그인 시) -->
-  <% if user_signed_in? %>
-    <div class="bg-blue-50 border border-blue-200 rounded-2xl p-5 mb-4 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center">
-          <span class="material-symbols-outlined text-white text-lg">person</span>
+<!-- 본문 -->
+<section class="py-8 px-4 bg-[#f5f7f9] min-h-[60vh]">
+  <div class="max-w-2xl mx-auto">
+
+    <!-- 카운트다운 타이머 -->
+    <div class="text-center mb-8">
+      <p class="text-[10px] font-bold text-[#595c5e] uppercase tracking-widest mb-3">Weekly Reset In</p>
+      <div class="inline-flex items-center gap-3 bg-white rounded-2xl shadow-[0_12px_40px_rgba(0,80,212,0.06)] px-8 py-4">
+        <div class="flex flex-col items-center">
+          <span class="text-4xl font-extrabold text-[#0050d4] tabular-nums"><%= @days_until_reset.to_s.rjust(2, '0') %></span>
+          <span class="text-[10px] font-bold text-[#595c5e] uppercase mt-0.5">Days</span>
         </div>
-        <div>
-          <p class="text-xs text-blue-600 font-semibold">내 순위</p>
-          <p class="text-slate-800 font-bold">전체 <strong class="text-blue-700"><%= @my_rank %>위</strong></p>
+        <span class="text-2xl font-bold text-[#abadaf] pb-4">:</span>
+        <div class="flex flex-col items-center">
+          <span class="text-4xl font-extrabold text-[#0050d4] tabular-nums">--</span>
+          <span class="text-[10px] font-bold text-[#595c5e] uppercase mt-0.5">Hrs</span>
+        </div>
+        <span class="text-2xl font-bold text-[#abadaf] pb-4">:</span>
+        <div class="flex flex-col items-center">
+          <span class="text-4xl font-extrabold text-[#0050d4] tabular-nums">--</span>
+          <span class="text-[10px] font-bold text-[#595c5e] uppercase mt-0.5">Min</span>
         </div>
       </div>
-      <div class="text-right">
-        <p class="text-2xl font-extrabold text-blue-700"><%= @my_quiz_count %></p>
-        <p class="text-xs text-slate-500">이번 주 응시</p>
+    </div>
+
+    <!-- 내 순위 (로그인 시) -->
+    <% if user_signed_in? %>
+      <div class="bg-[#7b9cff]/15 rounded-2xl p-5 mb-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-[#0050d4] rounded-xl flex items-center justify-center">
+            <span class="material-symbols-outlined text-white text-lg">person</span>
+          </div>
+          <div>
+            <p class="text-xs text-[#0050d4] font-bold uppercase tracking-widest">내 순위</p>
+            <p class="text-[#2c2f31] font-bold">전체 <strong class="text-[#0050d4]"><%= @my_rank %>위</strong></p>
+          </div>
+        </div>
+        <div class="text-right">
+          <p class="text-2xl font-extrabold text-[#0050d4]"><%= @my_quiz_count %></p>
+          <p class="text-xs text-[#595c5e]">이번 주 응시</p>
+        </div>
       </div>
-    </div>
 
-    <!-- 닉네임 설정 -->
-    <div class="bg-white border border-slate-200 rounded-2xl p-4 mb-6">
-      <p class="text-xs text-slate-500 font-semibold mb-2 flex items-center gap-1">
-        <span class="material-symbols-outlined text-sm">badge</span>
-        랭킹 닉네임 (2~12자)
-      </p>
-      <div class="flex gap-2">
-        <input type="text" id="nickname-input" maxlength="12"
-               value="<%= @my_display_name %>"
-               placeholder="조달수험생#{current_user.id}"
-               class="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
-        <button onclick="saveNickname()" class="bg-blue-600 text-white text-sm font-bold px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors whitespace-nowrap">저장</button>
-      </div>
-      <p id="nickname-msg" class="text-xs mt-1.5 hidden"></p>
-    </div>
-  <% else %>
-    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 mb-6 text-center">
-      <p class="text-slate-600 text-sm mb-3">로그인하면 내 순위를 확인하고 서버에 학습 데이터가 저장됩니다.</p>
-      <a href="<%= new_user_session_path %>" class="inline-flex items-center gap-2 bg-blue-600 text-white text-sm font-bold px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-        <span class="material-symbols-outlined text-base">person</span>
-        로그인
-      </a>
-    </div>
-  <% end %>
-
-  <!-- 리더보드 -->
-  <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-    <div class="px-5 py-4 border-b border-slate-100">
-      <h2 class="font-bold text-slate-800 flex items-center gap-2">
-        <span class="material-symbols-outlined text-amber-500">star</span>
-        이번 주 Top 20
-      </h2>
-    </div>
-
-    <% if @rankings.empty? %>
-      <div class="p-12 text-center">
-        <span class="material-symbols-outlined text-slate-300 text-5xl block mb-3">search_off</span>
-        <p class="text-slate-400 text-sm">아직 이번 주 학습 기록이 없습니다.</p>
-        <p class="text-slate-400 text-xs mt-1">모의고사를 풀면 랭킹에 등재됩니다!</p>
-        <a href="<%= exam_quiz_index_path %>" class="mt-4 inline-flex items-center gap-2 bg-blue-600 text-white text-sm font-bold px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-          <span class="material-symbols-outlined text-base">quiz</span>
-          모의고사 바로 가기
-        </a>
+      <!-- 닉네임 설정 -->
+      <div class="bg-white rounded-2xl shadow-[0_12px_40px_rgba(0,80,212,0.06)] p-4 mb-6">
+        <p class="text-xs text-[#595c5e] font-semibold mb-2 flex items-center gap-1">
+          <span class="material-symbols-outlined text-sm text-[#0050d4]">badge</span>
+          랭킹 닉네임 (2~12자)
+        </p>
+        <div class="flex gap-2">
+          <input type="text" id="nickname-input" maxlength="12"
+                 value="<%= @my_display_name %>"
+                 placeholder="조달수험생<%= current_user.id %>"
+                 class="flex-1 bg-[#eef1f3] border-none rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0050d4]/30 text-[#2c2f31] placeholder:text-[#595c5e]/50">
+          <button onclick="saveNickname()" class="bg-[#0050d4] hover:bg-[#0046bb] text-white text-sm font-bold px-4 py-2 rounded-full transition-colors whitespace-nowrap">저장</button>
+        </div>
+        <p id="nickname-msg" class="text-xs mt-1.5 hidden"></p>
       </div>
     <% else %>
-      <div class="divide-y divide-slate-100">
-        <% @rankings.each do |entry| %>
-          <div class="flex items-center gap-4 px-5 py-4 <%= entry[:rank] <= 3 ? 'bg-amber-50/50' : '' %>">
-            <!-- 순위 -->
-            <div class="w-8 flex-shrink-0 text-center">
-              <% if entry[:rank] == 1 %>
-                <span class="text-2xl">🥇</span>
-              <% elsif entry[:rank] == 2 %>
-                <span class="text-2xl">🥈</span>
-              <% elsif entry[:rank] == 3 %>
-                <span class="text-2xl">🥉</span>
-              <% else %>
-                <span class="text-slate-400 font-bold text-sm"><%= entry[:rank] %></span>
-              <% end %>
-            </div>
-
-            <!-- 닉네임 + 스트릭 -->
-            <div class="flex-1 min-w-0">
-              <p class="font-semibold text-slate-800 truncate text-sm"><%= entry[:name] %></p>
-              <% if entry[:streak] > 0 %>
-                <p class="text-xs text-orange-500 flex items-center gap-1">
-                  <span class="material-symbols-outlined text-xs">local_fire_department</span>
-                  <%= entry[:streak] %>일 연속 학습 중
-                </p>
-              <% end %>
-            </div>
-
-            <!-- 응시 횟수 -->
-            <div class="text-right flex-shrink-0">
-              <p class="font-extrabold text-slate-800"><%= entry[:quiz_count] %></p>
-              <p class="text-xs text-slate-400">회 응시</p>
-            </div>
-          </div>
-        <% end %>
+      <div class="bg-[#eef1f3] rounded-2xl p-5 mb-6 text-center">
+        <p class="text-[#595c5e] text-sm mb-3">로그인하면 내 순위를 확인하고 서버에 학습 데이터가 저장됩니다.</p>
+        <a href="<%= new_user_session_path %>" class="inline-flex items-center gap-2 bg-[#0050d4] hover:bg-[#0046bb] text-white text-sm font-bold px-5 py-2.5 rounded-full transition-colors">
+          <span class="material-symbols-outlined text-base">person</span>
+          로그인
+        </a>
       </div>
     <% end %>
-  </div>
 
-  <!-- 안내 -->
-  <div class="mt-6 bg-slate-50 rounded-xl p-4 text-xs text-slate-500 space-y-1">
-    <p>• 랭킹은 이번 주 월요일 00:00부터 집계됩니다.</p>
-    <p>• 모의고사(과목별, 챕터별, 전체 시험) 완료 시 1회로 카운트됩니다.</p>
-    <p>• 닉네임은 로그인 후 위 입력창에서 변경할 수 있습니다.</p>
+    <!-- 리더보드 -->
+    <div class="bg-white rounded-2xl shadow-[0_12px_40px_rgba(0,80,212,0.06)] overflow-hidden">
+      <!-- 헤더 -->
+      <div class="px-5 py-4 bg-[#eef1f3]">
+        <h2 class="font-bold text-[#2c2f31] flex items-center gap-2 text-sm uppercase tracking-widest">
+          <span class="material-symbols-outlined text-[#f5ce53]" style="font-variation-settings:'FILL' 1">star</span>
+          이번 주 Top 20
+        </h2>
+      </div>
+
+      <% if @rankings.empty? %>
+        <div class="p-12 text-center">
+          <span class="material-symbols-outlined text-[#d9dde0] text-5xl block mb-3">search_off</span>
+          <p class="text-[#595c5e] text-sm">아직 이번 주 학습 기록이 없습니다.</p>
+          <p class="text-[#595c5e] text-xs mt-1">모의고사를 풀면 랭킹에 등재됩니다!</p>
+          <a href="<%= exam_quiz_index_path %>" class="mt-4 inline-flex items-center gap-2 bg-[#0050d4] text-white text-sm font-bold px-5 py-2.5 rounded-full hover:bg-[#0046bb] transition-colors">
+            <span class="material-symbols-outlined text-base">quiz</span>
+            모의고사 바로 가기
+          </a>
+        </div>
+      <% else %>
+        <div>
+          <% @rankings.each_with_index do |entry, idx| %>
+            <%
+              row_bg = case entry[:rank]
+                when 1 then "bg-gradient-to-r from-[#f5ce53]/20 to-[#e6c047]/10"
+                when 2 then "bg-[#d0d5d8]/20"
+                when 3 then "bg-[#ffa857]/15"
+                else idx.even? ? "bg-[#eef1f3]/50" : ""
+              end
+              is_me = user_signed_in? && entry[:is_me]
+              row_bg = "bg-[#7b9cff]/15" if is_me
+            %>
+            <div class="flex items-center gap-4 px-5 py-4 <%= row_bg %> transition-colors">
+              <!-- 순위 -->
+              <div class="w-9 flex-shrink-0 text-center">
+                <% if entry[:rank] == 1 %>
+                  <div class="w-9 h-9 rounded-full bg-[#f5ce53] flex items-center justify-center">
+                    <span class="material-symbols-outlined text-[#584500] text-lg" style="font-variation-settings:'FILL' 1">workspace_premium</span>
+                  </div>
+                <% elsif entry[:rank] == 2 %>
+                  <div class="w-9 h-9 rounded-full bg-[#d0d5d8] flex items-center justify-center">
+                    <span class="material-symbols-outlined text-[#747779] text-lg" style="font-variation-settings:'FILL' 1">workspace_premium</span>
+                  </div>
+                <% elsif entry[:rank] == 3 %>
+                  <div class="w-9 h-9 rounded-full bg-[#ffa857] flex items-center justify-center">
+                    <span class="material-symbols-outlined text-[#8a4c00] text-lg" style="font-variation-settings:'FILL' 1">workspace_premium</span>
+                  </div>
+                <% else %>
+                  <span class="text-[#595c5e] font-bold text-sm"><%= entry[:rank] %></span>
+                <% end %>
+              </div>
+
+              <!-- 닉네임 + 스트릭 -->
+              <div class="flex-1 min-w-0">
+                <p class="font-semibold text-[#2c2f31] truncate text-sm">
+                  <%= entry[:name] %>
+                  <% if is_me %><span class="text-[10px] text-[#0050d4] font-bold ml-1 bg-[#7b9cff]/30 px-1.5 py-0.5 rounded-full">나</span><% end %>
+                </p>
+                <% if entry[:streak] > 0 %>
+                  <p class="text-xs text-orange-500 flex items-center gap-1 mt-0.5">
+                    <span class="material-symbols-outlined text-xs">local_fire_department</span>
+                    <%= entry[:streak] %>일 연속 학습 중
+                  </p>
+                <% end %>
+              </div>
+
+              <!-- 응시 횟수 -->
+              <div class="text-right flex-shrink-0">
+                <p class="font-extrabold text-[#2c2f31]"><%= entry[:quiz_count] %></p>
+                <p class="text-xs text-[#595c5e]">회 응시</p>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- 안내 -->
+    <div class="mt-5 bg-[#eef1f3] rounded-xl px-5 py-4 text-xs text-[#595c5e] space-y-1.5">
+      <p>• 랭킹은 이번 주 월요일 00:00부터 집계됩니다.</p>
+      <p>• 모의고사(과목별, 챕터별, 전체 시험) 완료 시 1회로 카운트됩니다.</p>
+      <p>• 닉네임은 로그인 후 위 입력창에서 변경할 수 있습니다.</p>
+    </div>
+
+    <!-- 이동 버튼 -->
+    <div class="mt-6 flex gap-3">
+      <a href="<%= exam_quiz_index_path %>" class="flex-1 inline-flex items-center justify-center gap-2 bg-gradient-to-br from-[#0050d4] to-[#0046bb] hover:opacity-90 text-white font-bold px-4 py-3 rounded-full transition-all text-sm shadow-[0_4px_16px_rgba(0,80,212,0.25)]">
+        <span class="material-symbols-outlined text-base">quiz</span>
+        모의고사 도전
+      </a>
+      <a href="<%= exam_root_path %>" class="flex-1 inline-flex items-center justify-center gap-2 bg-[#eef1f3] hover:bg-[#dfe3e6] text-[#2c2f31] font-bold px-4 py-3 rounded-full transition-colors text-sm">
+        <span class="material-symbols-outlined text-base">home</span>
+        홈으로
+      </a>
+    </div>
+
   </div>
+</section>
 
 <script>
 async function saveNickname() {
@@ -133,6 +202,7 @@ async function saveNickname() {
   if (name.length < 2 || name.length > 12) {
     msg.textContent = '닉네임은 2~12자여야 합니다.'
     msg.className = 'text-xs mt-1.5 text-red-500'
+    msg.classList.remove('hidden')
     return
   }
 
@@ -157,16 +227,3 @@ async function saveNickname() {
   msg.classList.remove('hidden')
 }
 </script>
-
-  <!-- 이동 버튼 -->
-  <div class="mt-6 flex gap-3">
-    <a href="<%= exam_quiz_index_path %>" class="flex-1 inline-flex items-center justify-center gap-2 bg-blue-600 text-white font-bold px-4 py-3 rounded-xl hover:bg-blue-700 transition-colors text-sm">
-      <span class="material-symbols-outlined text-base">quiz</span>
-      모의고사 도전
-    </a>
-    <a href="<%= exam_root_path %>" class="flex-1 inline-flex items-center justify-center gap-2 bg-white border-2 border-slate-200 text-slate-700 font-bold px-4 py-3 rounded-xl hover:border-blue-400 transition-colors text-sm">
-      <span class="material-symbols-outlined text-base">home</span>
-      홈으로
-    </a>
-  </div>
-</div>

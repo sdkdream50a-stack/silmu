@@ -3301,7 +3301,10 @@ module ExamCurriculum
       badge: "bg-emerald-100 text-emerald-800",
       hover_border: "hover:border-emerald-400",
       icon_bg: "bg-emerald-100",
-      progress: "bg-emerald-500"
+      progress: "bg-emerald-500",
+      accent_border: "border-emerald-600",
+      btn_gradient: "from-emerald-700 to-emerald-500",
+      shadow_color: "shadow-emerald-600/20"
     },
     "blue" => {
       bg: "bg-blue-50",
@@ -3312,7 +3315,10 @@ module ExamCurriculum
       badge: "bg-blue-100 text-blue-800",
       hover_border: "hover:border-blue-400",
       icon_bg: "bg-blue-100",
-      progress: "bg-blue-500"
+      progress: "bg-blue-500",
+      accent_border: "border-blue-600",
+      btn_gradient: "from-blue-700 to-blue-500",
+      shadow_color: "shadow-blue-600/20"
     },
     "violet" => {
       bg: "bg-violet-50",
@@ -3323,7 +3329,10 @@ module ExamCurriculum
       badge: "bg-violet-100 text-violet-800",
       hover_border: "hover:border-violet-400",
       icon_bg: "bg-violet-100",
-      progress: "bg-violet-500"
+      progress: "bg-violet-500",
+      accent_border: "border-violet-600",
+      btn_gradient: "from-violet-700 to-violet-500",
+      shadow_color: "shadow-violet-600/20"
     },
     "rose" => {
       bg: "bg-rose-50",
@@ -3334,7 +3343,10 @@ module ExamCurriculum
       badge: "bg-rose-100 text-rose-800",
       hover_border: "hover:border-rose-400",
       icon_bg: "bg-rose-100",
-      progress: "bg-rose-500"
+      progress: "bg-rose-500",
+      accent_border: "border-rose-600",
+      btn_gradient: "from-rose-700 to-rose-500",
+      shadow_color: "shadow-rose-600/20"
     }
   }.freeze
 

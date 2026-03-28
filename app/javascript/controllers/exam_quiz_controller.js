@@ -108,7 +108,7 @@ export default class extends Controller {
           <div class="flex items-center gap-1.5 flex-shrink-0 ml-3">
             <span class="text-xs font-bold bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full">${c.count}문제</span>
             <a href="${chapterUrl}"
-               class="text-xs font-bold bg-blue-600 text-white px-2 py-0.5 rounded-full hover:bg-blue-700 transition-colors">
+               class="text-xs font-bold bg-[#00464a] text-white px-2 py-0.5 rounded-full hover:bg-[#005558] transition-colors">
               학습 →
             </a>
           </div>
@@ -216,14 +216,14 @@ export default class extends Controller {
         <span class="material-symbols-outlined bookmark-icon text-xl" style="color:${bookmarked ? '#64748b' : '#cbd5e1'}">${bookmarked ? 'bookmark' : 'bookmark_border'}</span>
       </button>
     `
-    this.questionBadgeTarget.innerHTML = `<span class="inline-flex items-center gap-1 bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full">문제 ${idx + 1}</span>${chapterBadgeHtml}${diffBadgeHtml}${rateBadgeHtml}${bookmarkBtnHtml}`
+    this.questionBadgeTarget.innerHTML = `<span class="inline-flex items-center gap-1 bg-[#d9f4f5] text-[#00464a] text-xs font-bold px-3 py-1 rounded-full">문제 ${idx + 1}</span>${chapterBadgeHtml}${diffBadgeHtml}${rateBadgeHtml}${bookmarkBtnHtml}`
     this.questionTextTarget.textContent = q.question
 
     // 선택지 렌더링
     const labels = ["①", "②", "③", "④"]
     this.optionsAreaTarget.innerHTML = q.options.map((opt, i) => `
       <button
-        class="option-btn w-full flex items-center gap-2 text-left px-5 py-3.5 rounded-xl border-2 border-slate-200 hover:border-blue-400 hover:bg-blue-50 transition-all text-slate-700 text-sm font-medium"
+        class="option-btn w-full flex items-center gap-2 text-left px-5 py-3.5 rounded-xl bg-[#f2f4f4] hover:bg-[#eceeee] transition-all text-slate-700 text-sm font-medium"
         data-index="${i}"
         data-action="click->exam-quiz#selectAnswer">
         <span class="font-bold text-slate-400 mr-1 text-base flex-shrink-0">${labels[i]}</span>
@@ -305,7 +305,7 @@ export default class extends Controller {
     // 선택지 색상 + 아이콘 업데이트 (색각 이상 접근성 — 색상 + 아이콘 이중 표현)
     this.optionsAreaTarget.querySelectorAll(".option-btn").forEach((btn, i) => {
       btn.disabled = true
-      btn.classList.remove("hover:border-blue-400", "hover:bg-blue-50")
+      btn.classList.remove("hover:bg-[#eceeee]")
       // 기존 결과 아이콘 제거
       btn.querySelector('.result-icon')?.remove()
       const icon = document.createElement('span')
@@ -353,10 +353,10 @@ export default class extends Controller {
           <input type="hidden" name="question_text" value="${(q.question || '').replace(/"/g, '&quot;')}">
           <input type="text" name="body" placeholder="5자 이상 질문이나 의견을 남겨보세요..."
                  class="flex-1 text-sm border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-          <button type="submit" class="bg-blue-600 text-white text-xs font-bold px-3 py-2 rounded-lg hover:bg-blue-700 whitespace-nowrap">등록</button>
+          <button type="submit" class="bg-[#00464a] text-white text-xs font-bold px-3 py-2 rounded-lg hover:bg-[#005558] whitespace-nowrap">등록</button>
         </form>
         <p class="text-xs text-slate-400">AI가 댓글 품질을 자동으로 검토합니다.</p>`
-      : `<div class="bg-blue-50 border border-blue-200 rounded-lg px-4 py-3 text-sm text-blue-700 flex items-center gap-2 mt-2">
+      : `<div class="bg-[#d9f4f5] border border-[#a6eff3] rounded-lg px-4 py-3 text-sm text-[#00464a] flex items-center gap-2 mt-2">
           <span class="material-symbols-outlined text-base">login</span>
           <span><a href="/users/sign_in" class="font-bold underline hover:no-underline">로그인</a>하면 댓글을 남길 수 있습니다.</span>
         </div>`
@@ -441,7 +441,7 @@ export default class extends Controller {
         <div class="flex flex-wrap gap-2">
           ${relatedTopics.map(t => `
             <a href="${t.url}" target="_blank" rel="noopener"
-               class="inline-flex items-center gap-1 text-xs text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 px-2.5 py-1 rounded-full transition-colors">
+               class="inline-flex items-center gap-1 text-xs text-[#00464a] bg-[#d9f4f5] hover:bg-[#a6eff3]/30 border border-[#a6eff3] px-2.5 py-1 rounded-full transition-colors">
               <span class="material-symbols-outlined text-xs">open_in_new</span>
               ${t.title}
             </a>
@@ -520,7 +520,7 @@ export default class extends Controller {
     } else if (pct >= 80) {
       grade = "우수"; gradeColor = "text-green-600"; gradeIcon = "emoji_events"; gradeBg = "bg-green-50 border-green-200"
     } else if (pct >= 60) {
-      grade = "합격권"; gradeColor = "text-blue-600"; gradeIcon = "thumb_up"; gradeBg = "bg-blue-50 border-blue-200"
+      grade = "합격권"; gradeColor = "text-[#00464a]"; gradeIcon = "thumb_up"; gradeBg = "bg-[#d9f4f5] border-[#a6eff3]"
     } else {
       grade = "추가 학습 필요"; gradeColor = "text-slate-600"; gradeIcon = "school"; gradeBg = "bg-slate-50 border-slate-200"
     }
@@ -563,20 +563,20 @@ export default class extends Controller {
           오답 다시 풀기 ${wrongRemaining > 0 ? `<span class="bg-white/30 text-white text-xs font-bold px-2 py-0.5 rounded-full ml-1">${wrongRemaining}</span>` : ""}
         </a>
         <a href="/quiz"
-           class="flex-1 inline-flex items-center justify-center gap-2 bg-white border-2 border-slate-200 hover:border-blue-400 text-slate-700 font-bold px-6 py-3.5 rounded-xl transition-colors">
+           class="flex-1 inline-flex items-center justify-center gap-2 bg-white border-2 border-slate-200 hover:border-[#a6eff3] text-slate-700 font-bold px-6 py-3.5 rounded-xl transition-colors">
           <span class="material-symbols-outlined">apps</span>
           모의고사 선택
         </a>
       `
       : `
         <button data-action="click->exam-quiz#retryQuiz"
-                class="flex-1 inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3.5 rounded-xl transition-colors">
+                class="flex-1 inline-flex items-center justify-center gap-2 bg-[#00464a] hover:bg-[#005558] text-white font-bold px-6 py-3.5 rounded-xl transition-colors">
           <span class="material-symbols-outlined">refresh</span>
           다시 풀기
         </button>
         ${this.backPathValue ? `
         <a href="${this.backPathValue}"
-           class="flex-1 inline-flex items-center justify-center gap-2 bg-white border-2 border-slate-200 hover:border-blue-400 text-slate-700 font-bold px-6 py-3.5 rounded-xl transition-colors">
+           class="flex-1 inline-flex items-center justify-center gap-2 bg-white border-2 border-slate-200 hover:border-[#a6eff3] text-slate-700 font-bold px-6 py-3.5 rounded-xl transition-colors">
           <span class="material-symbols-outlined">arrow_back</span>
           챕터로 돌아가기
         </a>
@@ -593,7 +593,7 @@ export default class extends Controller {
           오답 노트 <span class="bg-orange-500 text-white text-xs font-bold px-2 py-0.5 rounded-full ml-1">${wrongRemaining}</span>
         </a>` : `
         <a href="/quiz"
-           class="flex-1 inline-flex items-center justify-center gap-2 bg-white border-2 border-slate-200 hover:border-blue-400 text-slate-700 font-bold px-6 py-3.5 rounded-xl transition-colors">
+           class="flex-1 inline-flex items-center justify-center gap-2 bg-white border-2 border-slate-200 hover:border-[#a6eff3] text-slate-700 font-bold px-6 py-3.5 rounded-xl transition-colors">
           <span class="material-symbols-outlined">apps</span>
           다른 과목 선택
         </a>`}
@@ -725,7 +725,7 @@ export default class extends Controller {
             <span class="text-xs text-slate-400">${c.wrongCount}/${c.total}</span>
             <span class="text-xs font-bold ${badgeColor} px-2 py-0.5 rounded-full">${c.pct}% 오답</span>
             <a href="${chapterUrl}"
-               class="text-xs font-bold bg-blue-600 text-white px-2 py-0.5 rounded-full hover:bg-blue-700 transition-colors whitespace-nowrap">
+               class="text-xs font-bold bg-[#00464a] text-white px-2 py-0.5 rounded-full hover:bg-[#005558] transition-colors whitespace-nowrap">
               복습 →
             </a>
           </div>
@@ -802,7 +802,7 @@ export default class extends Controller {
     return `
       <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
         <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
-          <span class="material-symbols-outlined text-blue-500">checklist</span>
+          <span class="material-symbols-outlined text-[#00464a]">checklist</span>
           학습 가이드
         </h3>
         <p class="text-slate-600 text-sm mb-4">

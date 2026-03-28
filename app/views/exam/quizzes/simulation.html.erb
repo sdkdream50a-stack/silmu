@@ -1,59 +1,46 @@
-<%# 실전 시험 모드 — 100분 타이머 + 랜덤 순서 + 일괄 채점 %>
+<%# 실전 시험 모드 — Stitch 'The Focused Scholar' 디자인 적용 %>
 
-<!-- 헤더 -->
-<section class="bg-gradient-to-br from-slate-900 via-purple-900 to-purple-800 text-white py-10 px-4">
-  <div class="max-w-4xl mx-auto">
-    <div class="flex items-center gap-2 text-purple-300 text-sm mb-4">
-      <a href="https://exam.silmu.kr" class="hover:text-white transition-colors">홈</a>
-      <span class="material-symbols-outlined text-sm">chevron_right</span>
-      <a href="<%= exam_quiz_index_path %>" class="hover:text-white transition-colors">모의고사</a>
-      <span class="material-symbols-outlined text-sm">chevron_right</span>
-      <span>실전 시험 모드</span>
-    </div>
-    <div class="flex items-center gap-4">
-      <div class="w-14 h-14 bg-purple-400/20 rounded-2xl flex items-center justify-center flex-shrink-0">
-        <span class="material-symbols-outlined text-purple-300 text-3xl">timer</span>
-      </div>
-      <div>
-        <h1 class="text-2xl md:text-3xl font-bold">실전 시험 모드</h1>
-        <p class="text-purple-200 mt-1">120분 타이머 · 3과목 80문제 · 마지막에 일괄 채점</p>
-      </div>
-    </div>
-  </div>
-</section>
+<!-- 배경 장식 블롭 -->
+<div class="fixed top-0 left-0 w-full h-screen pointer-events-none -z-10 overflow-hidden">
+  <div class="absolute top-[15%] -left-[8%] w-[35%] h-[35%] bg-[#dbe1ff]/30 blur-[120px] rounded-full"></div>
+  <div class="absolute bottom-[10%] -right-[5%] w-[25%] h-[25%] bg-[#7ffc97]/10 blur-[100px] rounded-full"></div>
+</div>
 
 <!-- 메인 -->
-<section class="py-8 px-4 bg-slate-50 min-h-[60vh]">
+<section class="py-8 px-4 bg-[#f8f9ff] min-h-screen">
   <div class="max-w-4xl mx-auto"
        data-controller="exam-simulation"
        data-exam-simulation-questions-value="<%= @questions.to_json %>">
 
     <!-- 시작 화면 -->
-    <div data-exam-simulation-target="startArea" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 text-center">
-      <div class="w-20 h-20 bg-purple-50 rounded-full flex items-center justify-center mx-auto mb-5">
-        <span class="material-symbols-outlined text-purple-500 text-4xl">timer</span>
+    <div data-exam-simulation-target="startArea" class="bg-white rounded-2xl shadow-[0_10px_30px_-5px_rgba(13,28,47,0.05)] p-8 text-center max-w-lg mx-auto">
+      <!-- 아이콘 -->
+      <div class="w-20 h-20 bg-[#dbe1ff] rounded-2xl flex items-center justify-center mx-auto mb-6">
+        <span class="material-symbols-outlined text-[#004ac6] text-4xl">timer</span>
       </div>
-      <h2 class="text-2xl font-bold text-slate-800 mb-2">실전 시험 모드</h2>
-      <p class="text-slate-500 mb-6">실제 시험과 동일한 환경에서 연습하세요</p>
+
+      <span class="text-[#004ac6] font-bold tracking-widest uppercase text-xs mb-2 block">Exam Simulation</span>
+      <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight mb-2">실전 시험 모드</h2>
+      <p class="text-slate-400 text-sm mb-8">실제 시험과 동일한 환경에서 연습하세요</p>
 
       <!-- 시험 정보 -->
-      <div class="grid grid-cols-3 gap-4 mb-8 max-w-sm mx-auto">
-        <div class="bg-purple-50 rounded-xl p-4">
-          <div class="text-2xl font-extrabold text-purple-600"><%= @questions.size %></div>
+      <div class="grid grid-cols-3 gap-3 mb-8 max-w-sm mx-auto">
+        <div class="bg-[#eff4ff] rounded-xl p-4">
+          <div class="text-2xl font-extrabold text-[#004ac6]"><%= @questions.size %></div>
           <div class="text-slate-500 text-xs mt-0.5">문항 수</div>
         </div>
-        <div class="bg-blue-50 rounded-xl p-4">
-          <div class="text-2xl font-extrabold text-blue-600">120</div>
+        <div class="bg-[#eff4ff] rounded-xl p-4">
+          <div class="text-2xl font-extrabold text-[#004ac6]">120</div>
           <div class="text-slate-500 text-xs mt-0.5">분</div>
         </div>
-        <div class="bg-green-50 rounded-xl p-4">
-          <div class="text-2xl font-extrabold text-green-600">60</div>
+        <div class="bg-[#e8fbee] rounded-xl p-4">
+          <div class="text-2xl font-extrabold text-[#006329]">60</div>
           <div class="text-slate-500 text-xs mt-0.5">점 합격</div>
         </div>
       </div>
 
       <!-- 주의사항 -->
-      <div class="text-left bg-amber-50 border border-amber-200 rounded-xl p-4 mb-8 max-w-md mx-auto">
+      <div class="text-left bg-amber-50 border border-amber-200 rounded-xl p-4 mb-8">
         <div class="flex items-center gap-2 text-amber-700 font-bold text-sm mb-2">
           <span class="material-symbols-outlined text-base">warning</span>
           시험 시작 전 확인하세요
@@ -67,7 +54,7 @@
       </div>
 
       <button data-action="click->exam-simulation#startExam"
-              class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white font-bold px-8 py-4 rounded-xl transition-colors text-lg shadow-lg hover:shadow-xl">
+              class="inline-flex items-center gap-2 bg-gradient-to-br from-[#004ac6] to-[#2563eb] hover:opacity-90 text-white font-bold px-8 py-4 rounded-full transition-all text-base shadow-[0_8px_24px_rgba(0,74,198,0.25)] hover:shadow-[0_12px_32px_rgba(0,74,198,0.35)] active:scale-95">
         <span class="material-symbols-outlined">play_arrow</span>
         시험 시작
       </button>
@@ -75,32 +62,32 @@
 
     <!-- 시험 화면 (hidden) -->
     <div data-exam-simulation-target="examArea" class="hidden">
-      <!-- 상단 고정 바 -->
-      <div class="bg-slate-800 rounded-2xl px-5 py-3 mb-5 flex items-center gap-4">
+      <!-- 글래스모피즘 타이머 바 -->
+      <div class="bg-white/90 backdrop-blur-md rounded-2xl shadow-[0_2px_16px_rgba(13,28,47,0.06)] px-5 py-3 mb-6 flex items-center gap-4">
         <!-- 타이머 -->
         <div class="flex items-center gap-2 flex-shrink-0">
-          <span class="material-symbols-outlined text-purple-300 text-lg">timer</span>
+          <span class="material-symbols-outlined text-[#004ac6] text-lg">timer</span>
           <span data-exam-simulation-target="timer"
-                class="font-mono text-xl font-extrabold text-white tabular-nums">
+                class="font-mono text-xl font-extrabold text-[#004ac6] tabular-nums tracking-tight">
             120:00
           </span>
         </div>
         <!-- 타이머 바 -->
-        <div class="flex-1 bg-slate-600 rounded-full h-2">
+        <div class="flex-1 bg-[#e6eeff] rounded-full h-2">
           <div data-exam-simulation-target="timerBar"
-               class="bg-yellow-300 h-2 rounded-full transition-all duration-1000"
+               class="bg-gradient-to-r from-[#004ac6] to-[#2563eb] h-2 rounded-full transition-all duration-1000"
                style="width: 100%"></div>
         </div>
         <!-- 진행 + 모바일 문제 목록 버튼 -->
         <div class="flex items-center gap-3 flex-shrink-0">
-          <div class="text-white/80 text-sm">
-            <span data-exam-simulation-target="currentNum" class="font-bold text-white">1</span>
+          <div class="text-slate-500 text-sm">
+            <span data-exam-simulation-target="currentNum" class="font-bold text-slate-800">1</span>
             / <span data-exam-simulation-target="totalNum"></span>
           </div>
           <!-- 모바일 전용: 문제 목록 토글 버튼 -->
           <button type="button"
                   onclick="this.closest('[data-exam-simulation-target=examArea]').querySelector('#mobile-nav-panel').classList.toggle('hidden')"
-                  class="lg:hidden flex items-center gap-1 bg-white/10 hover:bg-white/20 text-white text-xs font-semibold px-2.5 py-1.5 rounded-lg transition-colors">
+                  class="lg:hidden flex items-center gap-1 bg-[#eff4ff] hover:bg-[#dde9ff] text-[#004ac6] text-xs font-semibold px-2.5 py-1.5 rounded-lg transition-colors">
             <span class="material-symbols-outlined text-sm">apps</span>
             목록
           </button>
@@ -108,17 +95,17 @@
       </div>
 
       <!-- 모바일 문제 번호 패널 (접이식) -->
-      <div id="mobile-nav-panel" class="hidden lg:hidden bg-white rounded-2xl border border-slate-200 p-4 mb-4">
+      <div id="mobile-nav-panel" class="hidden lg:hidden bg-white rounded-2xl shadow-[0_2px_12px_rgba(13,28,47,0.05)] p-4 mb-4">
         <div class="flex items-center justify-between mb-3">
-          <span class="text-xs font-bold text-slate-500">문제 이동</span>
-          <div class="flex items-center gap-3 text-xs text-slate-500">
-            <span class="flex items-center gap-1"><span class="w-3 h-3 bg-green-50 border-2 border-green-400 rounded inline-block"></span>완료</span>
-            <span class="flex items-center gap-1"><span class="w-3 h-3 bg-white border-2 border-slate-200 rounded inline-block"></span>미응답</span>
+          <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">문제 이동</span>
+          <div class="flex items-center gap-3 text-xs text-slate-400">
+            <span class="flex items-center gap-1.5"><span class="w-3 h-3 bg-[#62df7d]/30 border border-[#62df7d] rounded inline-block"></span>완료</span>
+            <span class="flex items-center gap-1.5"><span class="w-3 h-3 bg-white border border-[#c3c6d7] rounded inline-block"></span>미응답</span>
           </div>
         </div>
         <div data-exam-simulation-target="navGridMobile" class="grid grid-cols-10 gap-1.5 mb-3"></div>
         <button data-action="click->exam-simulation#submitExam"
-                class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-2.5 rounded-xl transition-colors text-sm">
+                class="w-full bg-gradient-to-br from-[#004ac6] to-[#2563eb] text-white font-bold py-2.5 rounded-xl transition-all text-sm shadow-sm">
           제출하기
         </button>
       </div>
@@ -127,49 +114,52 @@
         <!-- 왼쪽: 문제 영역 -->
         <div class="lg:col-span-3">
           <!-- 진행 바 -->
-          <div class="w-full bg-slate-200 rounded-full h-1.5 mb-5">
+          <div class="w-full bg-[#e6eeff] rounded-full h-1 mb-6">
             <div data-exam-simulation-target="progressBar"
-                 class="bg-purple-500 h-1.5 rounded-full transition-all duration-300"
+                 class="bg-[#004ac6] h-1 rounded-full transition-all duration-300"
                  style="width: 0%"></div>
           </div>
 
-          <!-- 문제 카드 -->
-          <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8">
+          <!-- 문제 카드 — No-Line, ambient shadow -->
+          <div class="bg-white rounded-2xl shadow-[0_10px_30px_-5px_rgba(13,28,47,0.05)] p-6 md:p-8 relative overflow-hidden">
+            <!-- 서브틀 배경 장식 -->
+            <div class="absolute top-0 right-0 w-32 h-32 bg-[#004ac6]/5 rounded-full -mr-16 -mt-16 pointer-events-none"></div>
+
             <!-- 문제 배지 -->
-            <div class="mb-5">
+            <div class="mb-5 relative z-10">
               <span data-exam-simulation-target="questionBadge"
-                    class="inline-flex items-center gap-1 bg-purple-100 text-purple-700 text-xs font-bold px-3 py-1 rounded-full">
+                    class="inline-flex items-center gap-1 bg-[#dbe1ff] text-[#004ac6] text-xs font-bold px-3 py-1 rounded-full">
                 문제 1
               </span>
             </div>
 
             <!-- 문제 텍스트 -->
             <p data-exam-simulation-target="questionText"
-               class="text-slate-800 text-lg font-semibold leading-relaxed mb-6">
+               class="text-slate-800 text-lg font-semibold leading-relaxed mb-6 relative z-10">
             </p>
 
             <!-- 선택지 -->
-            <div data-exam-simulation-target="optionsArea" class="space-y-3">
+            <div data-exam-simulation-target="optionsArea" class="space-y-3 relative z-10">
             </div>
 
             <!-- 이전/다음 버튼 -->
-            <div class="flex justify-between items-center mt-6 pt-4 border-t border-slate-100">
+            <div class="flex justify-between items-center mt-8 pt-5 border-t border-[#eff4ff]">
               <button data-action="click->exam-simulation#prevQuestion"
                       data-exam-simulation-target="prevBtn"
-                      class="inline-flex items-center gap-2 px-4 py-2 text-slate-500 hover:text-slate-700 font-semibold text-sm transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
-                <span class="material-symbols-outlined text-base">arrow_back</span>
+                      class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-semibold text-sm text-slate-500 bg-[#eff4ff] hover:bg-[#dde9ff] transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
+                <span class="material-symbols-outlined text-base">chevron_left</span>
                 이전
               </button>
               <div class="flex gap-3">
                 <button data-action="click->exam-simulation#nextQuestion"
                         data-exam-simulation-target="nextBtn"
-                        class="inline-flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-5 py-2.5 rounded-xl transition-colors text-sm">
+                        class="inline-flex items-center gap-2 bg-[#004ac6] hover:bg-[#2563eb] text-white font-bold px-6 py-2.5 rounded-full transition-colors text-sm shadow-sm">
                   다음
-                  <span class="material-symbols-outlined text-base">arrow_forward</span>
+                  <span class="material-symbols-outlined text-base">chevron_right</span>
                 </button>
                 <button data-action="click->exam-simulation#submitExam"
                         data-exam-simulation-target="submitBtn"
-                        class="hidden inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white font-bold px-5 py-2.5 rounded-xl transition-colors text-sm">
+                        class="hidden inline-flex items-center gap-2 bg-gradient-to-br from-[#004ac6] to-[#2563eb] text-white font-bold px-6 py-2.5 rounded-full transition-all text-sm shadow-md">
                   <span class="material-symbols-outlined text-base">check_circle</span>
                   제출하기
                 </button>
@@ -180,27 +170,28 @@
 
         <!-- 오른쪽: 문제 번호 네비게이션 -->
         <div class="hidden lg:block">
-          <div class="bg-white rounded-2xl border border-slate-200 p-4 sticky top-4">
-            <div class="text-xs font-bold text-slate-500 mb-3">문제 이동</div>
+          <div class="bg-[#eff4ff] rounded-2xl p-4 sticky top-4">
+            <div class="text-xs font-bold text-[#004ac6] uppercase tracking-widest mb-3">Navigation</div>
             <div data-exam-simulation-target="navGrid"
-                 class="grid grid-cols-5 gap-1.5">
+                 class="grid grid-cols-5 gap-1.5 mb-4">
             </div>
-            <div class="mt-4 pt-3 border-t border-slate-100 space-y-1.5">
+            <!-- 범례 -->
+            <div class="space-y-1.5 mb-4 pt-3 border-t border-[#c3c6d7]/30">
               <div class="flex items-center gap-2 text-xs text-slate-500">
-                <div class="w-4 h-4 bg-green-50 border-2 border-green-400 rounded-md"></div>
+                <div class="w-4 h-4 bg-[#62df7d]/30 border border-[#62df7d] rounded"></div>
                 답변 완료
               </div>
               <div class="flex items-center gap-2 text-xs text-slate-500">
-                <div class="w-4 h-4 bg-blue-500 border-2 border-blue-500 rounded-md"></div>
+                <div class="w-4 h-4 bg-[#004ac6] rounded"></div>
                 현재 문제
               </div>
               <div class="flex items-center gap-2 text-xs text-slate-500">
-                <div class="w-4 h-4 bg-white border-2 border-slate-200 rounded-md"></div>
+                <div class="w-4 h-4 bg-white border border-[#c3c6d7] rounded"></div>
                 미응답
               </div>
             </div>
             <button data-action="click->exam-simulation#submitExam"
-                    class="w-full mt-4 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2.5 rounded-xl transition-colors text-sm">
+                    class="w-full bg-gradient-to-br from-[#004ac6] to-[#2563eb] hover:opacity-90 text-white font-bold py-2.5 rounded-xl transition-all text-sm shadow-sm">
               제출하기
             </button>
           </div>
@@ -216,12 +207,12 @@
 </section>
 
 <!-- 안내 -->
-<section class="py-6 px-4 bg-white border-t border-slate-100">
+<section class="py-6 px-4 bg-white border-t border-[#e6eeff]">
   <div class="max-w-4xl mx-auto">
-    <div class="flex items-start gap-3 bg-purple-50 border border-purple-200 rounded-xl px-4 py-3">
-      <span class="material-symbols-outlined text-purple-500 text-lg flex-shrink-0 mt-0.5">info</span>
-      <p class="text-purple-800 text-sm">
-        <strong>실전 시험 모드:</strong> 3과목 80문제(1과목 30·2과목 20·3과목 30)를 120분 안에 풀고 일괄 채점합니다. 문제 이동이 자유로우며, 답변을 언제든 변경할 수 있습니다. 제출 후에는 과목별 성취도와 오답 해설을 확인할 수 있습니다.
+    <div class="flex items-start gap-3 bg-[#eff4ff] rounded-xl px-4 py-3">
+      <span class="material-symbols-outlined text-[#004ac6] text-lg flex-shrink-0 mt-0.5">info</span>
+      <p class="text-[#004ac6]/80 text-sm">
+        <strong class="text-[#004ac6]">실전 시험 모드:</strong> 3과목 80문제(1과목 30·2과목 20·3과목 30)를 120분 안에 풀고 일괄 채점합니다. 문제 이동이 자유로우며, 답변을 언제든 변경할 수 있습니다. 제출 후에는 과목별 성취도와 오답 해설을 확인할 수 있습니다.
       </p>
     </div>
   </div>

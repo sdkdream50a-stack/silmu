@@ -86,22 +86,24 @@ export default class extends Controller {
     ]
 
     const colorMap = {
-      teal:   "text-teal-600 bg-teal-50",
-      blue:   "text-blue-600 bg-blue-50",
-      violet: "text-violet-600 bg-violet-50",
-      rose:   "text-rose-600 bg-rose-50"
+      teal:   "text-[#0040a1] bg-[#dae2ff]",
+      blue:   "text-[#0040a1] bg-[#dae2ff]",
+      violet: "text-[#5c4300] bg-[#ffdfa0]/50",
+      rose:   "text-[#ba1a1a] bg-[#ffdad6]/60"
     }
 
     this.summaryCardsTarget.innerHTML = cards.map(c => `
-      <div class="bg-white rounded-2xl border border-slate-200 p-5">
-        <div class="flex items-center gap-2 mb-3">
-          <div class="w-8 h-8 ${colorMap[c.color]} rounded-lg flex items-center justify-center">
+      <div class="bg-white rounded-xl shadow-[0_40px_40px_-40px_rgba(26,28,30,0.04)] p-6 flex flex-col justify-between">
+        <div class="flex justify-between items-start mb-4">
+          <span class="text-[#424654] text-[0.65rem] font-bold uppercase tracking-widest leading-tight">${c.label}</span>
+          <div class="w-8 h-8 ${colorMap[c.color]} rounded-lg flex items-center justify-center flex-shrink-0">
             <span class="material-symbols-outlined text-base">${c.icon}</span>
           </div>
-          <span class="text-slate-500 text-xs font-medium">${c.label}</span>
         </div>
-        <div class="text-3xl font-extrabold text-slate-800 mb-1">${c.value}</div>
-        <div class="text-slate-400 text-xs">${c.sub}</div>
+        <div>
+          <div class="text-3xl font-extrabold text-slate-900 tracking-tight mb-1">${c.value}</div>
+          <div class="text-[#424654] text-xs">${c.sub}</div>
+        </div>
       </div>
     `).join("")
   }
@@ -126,8 +128,8 @@ export default class extends Controller {
               <span class="text-xs text-slate-500">${done}/${s.chapters}</span>
             </div>
           </div>
-          <div class="w-full bg-slate-100 rounded-full h-2">
-            <div class="${c.bar} h-2 rounded-full transition-all duration-500" style="width: ${pct}%"></div>
+          <div class="w-full bg-[#e2e2e5] rounded-full h-1.5">
+            <div class="${c.bar} h-1.5 rounded-full transition-all duration-500" style="width: ${pct}%"></div>
           </div>
         </div>
       `
@@ -161,13 +163,13 @@ export default class extends Controller {
       const grade = q.pct >= 90 ? "최우수" : q.pct >= 80 ? "우수" : q.pct >= 60 ? "합격권" : "미달"
       const gradeColor = q.pct >= 60 ? "text-green-600 bg-green-50" : "text-red-600 bg-red-50"
       return `
-        <div class="flex items-center gap-3 ${c.light} border ${c.border} rounded-xl px-4 py-3">
-          <div class="flex-shrink-0">
-            <span class="text-xs font-bold ${c.text} block">${label.short}</span>
+        <div class="flex items-center gap-3 bg-[#f3f3f6] hover:bg-[#e8e8ea] rounded-xl px-4 py-3 transition-colors">
+          <div class="w-8 h-8 ${c.light} rounded-lg flex items-center justify-center flex-shrink-0">
+            <span class="text-xs font-black ${c.text}">${label.short}</span>
           </div>
           <div class="flex-1 min-w-0">
-            <div class="text-sm font-semibold text-slate-700">${label.title}</div>
-            <div class="text-xs text-slate-400">${q.date} · ${q.score}/${q.total}문제</div>
+            <div class="text-sm font-semibold text-slate-800">${label.title}</div>
+            <div class="text-xs text-[#424654]">${q.date} · ${q.score}/${q.total}문제</div>
           </div>
           <div class="flex items-center gap-2">
             <span class="text-xs ${gradeColor} px-2 py-0.5 rounded-full font-semibold">${grade}</span>
@@ -214,7 +216,7 @@ export default class extends Controller {
       const dashOffset = circumference - (chapPct / 100) * circumference
 
       return `
-        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 flex flex-col items-center text-center">
+        <div class="bg-[#f3f3f6] hover:bg-[#e8e8ea] rounded-xl p-4 flex flex-col items-center text-center transition-colors">
           <div class="relative w-16 h-16 mb-3">
             <svg viewBox="0 0 50 50" class="w-16 h-16 -rotate-90">
               <circle cx="25" cy="25" r="20" fill="none" stroke="#e2e8f0" stroke-width="4"/>
@@ -302,8 +304,8 @@ export default class extends Controller {
               </div>
               <span class="text-sm font-bold text-slate-700">${pct}%</span>
             </div>
-            <div class="w-full bg-slate-100 rounded-full h-2.5">
-              <div class="${barColor} h-2.5 rounded-full transition-all duration-500" style="width: ${pct}%"></div>
+            <div class="w-full bg-[#e2e2e5] rounded-full h-1.5">
+              <div class="${barColor} h-1.5 rounded-full transition-all duration-500" style="width: ${pct}%"></div>
             </div>
           </div>
         `
@@ -405,18 +407,18 @@ export default class extends Controller {
     }
 
     const colorMap = {
-      rose:   "text-rose-600 bg-rose-50",
-      blue:   "text-blue-600 bg-blue-50",
-      amber:  "text-amber-600 bg-amber-50",
-      teal:   "text-teal-600 bg-teal-50",
-      purple: "text-purple-600 bg-purple-50"
+      rose:   "text-[#ba1a1a] bg-[#ffdad6]/60",
+      blue:   "text-[#0040a1] bg-[#dae2ff]",
+      amber:  "text-[#5c4300] bg-[#ffdfa0]/50",
+      teal:   "text-[#0040a1] bg-[#dae2ff]",
+      purple: "text-[#5c4300] bg-[#ffdfa0]/50"
     }
     const linkColorMap = {
-      rose:   "bg-rose-500 hover:bg-rose-600",
-      blue:   "bg-blue-500 hover:bg-blue-600",
-      amber:  "bg-amber-500 hover:bg-amber-600",
-      teal:   "bg-teal-500 hover:bg-teal-600",
-      purple: "bg-purple-500 hover:bg-purple-600"
+      rose:   "bg-[#ba1a1a] hover:bg-[#93000a]",
+      blue:   "bg-[#0040a1] hover:bg-[#0056d2]",
+      amber:  "bg-[#5c4300] hover:bg-[#795900]",
+      teal:   "bg-[#0040a1] hover:bg-[#0056d2]",
+      purple: "bg-[#0040a1] hover:bg-[#0056d2]"
     }
 
     if (recs.length === 0) {
@@ -433,16 +435,16 @@ export default class extends Controller {
     }
 
     this.recommendationsTarget.innerHTML = recs.slice(0, 3).map(r => `
-      <div class="flex items-start gap-4 bg-slate-50 border border-slate-200 rounded-xl px-4 py-4">
-        <div class="w-9 h-9 ${colorMap[r.color]} rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5">
-          <span class="material-symbols-outlined text-base">${r.icon}</span>
+      <div class="bg-[#f3f3f6] rounded-xl p-4">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-8 h-8 ${colorMap[r.color]} rounded-lg flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-base">${r.icon}</span>
+          </div>
+          <div class="font-bold text-slate-900 text-sm">${r.title}</div>
         </div>
-        <div class="flex-1 min-w-0">
-          <div class="font-semibold text-slate-800 text-sm mb-0.5">${r.title}</div>
-          <div class="text-slate-500 text-xs leading-relaxed">${r.desc}</div>
-        </div>
+        <p class="text-[#424654] text-xs leading-relaxed mb-3">${r.desc}</p>
         <a href="${r.link}"
-           class="flex-shrink-0 inline-flex items-center gap-1 ${linkColorMap[r.color]} text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-colors mt-0.5">
+           class="inline-flex items-center gap-1 ${linkColorMap[r.color]} text-white text-xs font-bold px-3 py-1.5 rounded-full transition-colors">
           ${r.linkText}
           <span class="material-symbols-outlined text-sm">arrow_forward</span>
         </a>

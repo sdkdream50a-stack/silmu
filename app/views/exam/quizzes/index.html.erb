@@ -1,295 +1,289 @@
-<%# 모의고사 선택 페이지 %>
+<%# 모의고사 선택 페이지 — Stitch 'The Academic Atelier' 디자인 적용 %>
 
-<!-- 헤더 -->
-<section class="bg-gradient-to-br from-slate-900 via-blue-900 to-blue-800 text-white py-16 px-4">
+<!-- 페이지 헤더 -->
+<section class="bg-white border-b border-slate-100 pt-10 pb-8 px-4">
   <div class="max-w-5xl mx-auto">
-    <div class="flex items-center gap-2 text-blue-300 text-sm mb-4">
-      <a href="https://exam.silmu.kr" class="hover:text-white transition-colors">홈</a>
+    <div class="flex items-center gap-1.5 text-slate-400 text-sm mb-6">
+      <a href="https://exam.silmu.kr" class="hover:text-slate-600 transition-colors">홈</a>
       <span class="material-symbols-outlined text-sm">chevron_right</span>
-      <span>모의고사</span>
+      <span class="text-slate-600 font-medium">모의고사 / 문제풀기</span>
     </div>
-    <div class="flex items-center gap-4 mb-4">
-      <div class="w-14 h-14 bg-yellow-400 rounded-2xl flex items-center justify-center">
-        <span class="material-symbols-outlined text-slate-900 text-3xl">quiz</span>
-      </div>
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
       <div>
-        <h1 class="text-3xl md:text-4xl font-bold">모의고사</h1>
-        <p class="text-blue-200 mt-1">실전 감각을 키우는 4지선다 문제풀이</p>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-2">모의고사</h1>
+        <p class="text-slate-400">실전 감각을 키우는 4지선다 문제풀이 · 즉시 채점 + 해설</p>
       </div>
-    </div>
-
-    <!-- 통계 -->
-    <div class="flex flex-wrap gap-8 mt-8 pt-6 border-t border-white/20">
-      <div class="text-center">
-        <div class="text-2xl font-bold text-yellow-300"><%= @total_count %>문제</div>
-        <div class="text-blue-300 text-sm">전체 문항</div>
-      </div>
-      <div class="text-center">
-        <div class="text-2xl font-bold text-yellow-300">3과목</div>
-        <div class="text-blue-300 text-sm">과목별 출제</div>
-      </div>
-      <div class="text-center">
-        <div class="text-2xl font-bold text-yellow-300">즉시</div>
-        <div class="text-blue-300 text-sm">채점 + 해설</div>
+      <div class="flex gap-6 flex-shrink-0">
+        <div class="text-center">
+          <div class="text-2xl font-extrabold text-slate-900"><%= @total_count %></div>
+          <div class="text-slate-400 text-xs font-medium uppercase tracking-wide mt-0.5">전체 문항</div>
+        </div>
+        <div class="w-px bg-slate-100"></div>
+        <div class="text-center">
+          <div class="text-2xl font-extrabold text-slate-900">3</div>
+          <div class="text-slate-400 text-xs font-medium uppercase tracking-wide mt-0.5">과목</div>
+        </div>
+        <div class="w-px bg-slate-100"></div>
+        <div class="text-center">
+          <div class="text-2xl font-extrabold text-slate-900">즉시</div>
+          <div class="text-slate-400 text-xs font-medium uppercase tracking-wide mt-0.5">채점</div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 전체 모의고사 -->
-<section class="py-10 px-4 bg-slate-50">
-  <div class="max-w-5xl mx-auto">
-    <!-- 미니 퀴즈 + 스트릭 -->
-    <div class="flex flex-col sm:flex-row gap-4 mb-4" data-controller="exam-progress">
-      <!-- 미니 퀴즈 -->
-      <a href="<%= exam_quiz_mini_path %>"
-         class="group flex-1 flex items-center gap-4 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-2xl px-5 py-4 hover:from-emerald-600 hover:to-teal-600 transition-all shadow-md hover:shadow-lg">
-        <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
-          <span class="material-symbols-outlined text-white text-2xl">bolt</span>
-        </div>
-        <div class="flex-1 min-w-0">
-          <div class="text-emerald-100 text-xs font-medium mb-0.5">빠른 복습</div>
-          <div class="text-white font-bold">미니 퀴즈</div>
-          <div class="text-emerald-100 text-xs">랜덤 10문제 · 약 15분</div>
-        </div>
-        <span class="material-symbols-outlined text-white/70 group-hover:text-white transition-colors">arrow_forward</span>
-      </a>
+<div class="bg-slate-50 min-h-screen py-12 px-4">
+  <div class="max-w-5xl mx-auto space-y-14">
 
-      <!-- 스트릭 영역 -->
-      <div class="flex-1" data-exam-progress-target="streakArea">
-        <!-- JS로 채워짐 -->
-        <div class="h-full flex items-center justify-between bg-white border border-slate-200 rounded-2xl px-5 py-4">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center">
-              <span class="material-symbols-outlined text-slate-300 text-2xl">local_fire_department</span>
+    <!-- ① 과목별 모의고사 — 다크 tall 카드 (Stitch) -->
+    <section>
+      <div class="flex items-baseline justify-between mb-6">
+        <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">과목별 모의고사</h2>
+        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Main Subjects</span>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <% @exam_subjects.each do |subject| %>
+          <% colors = ExamCurriculum.colors(subject[:color]) %>
+          <% q_count = @total_count_by_exam_subject(subject[:id]) %>
+          <a href="<%= exam_quiz_path(subject[:id]) %>"
+             class="group relative overflow-hidden rounded-2xl bg-slate-800 p-8 h-56 flex flex-col justify-between shadow-lg hover:scale-[1.02] transition-all duration-300">
+            <!-- 컬러 그래디언트 오버레이 -->
+            <div class="absolute inset-0 bg-gradient-to-br <%= colors[:btn_gradient] %> opacity-80 pointer-events-none"></div>
+            <!-- 노이즈 텍스처 효과 (pseudo via opacity pattern) -->
+            <div class="absolute inset-0 opacity-[0.04] pointer-events-none"
+                 style="background-image:url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")"></div>
+
+            <div class="relative z-10 flex justify-between items-start">
+              <span class="material-symbols-outlined text-white/50 text-4xl"><%= subject[:icon] %></span>
+              <% if subject[:id] == 1 %>
+                <span class="bg-white/15 backdrop-blur text-white px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-tight">시험 1과목</span>
+              <% elsif subject[:id] == 2 %>
+                <span class="bg-white/15 backdrop-blur text-white px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-tight">시험 2과목</span>
+              <% else %>
+                <span class="bg-yellow-400/90 text-slate-900 px-3 py-1 rounded-full text-[10px] font-bold">인기과목</span>
+              <% end %>
             </div>
-            <div>
-              <div class="text-slate-700 font-semibold text-sm">학습 스트릭</div>
-              <div class="text-slate-400 text-xs">모의고사 완료 후 기록</div>
+            <div class="relative z-10">
+              <h3 class="text-2xl font-extrabold text-white leading-tight mb-1"><%= subject[:title] %></h3>
+              <p class="text-white/70 text-sm"><%= q_count %>문제 · 약 <%= (q_count * 1.5).ceil %>분</p>
+            </div>
+          </a>
+        <% end %>
+      </div>
+    </section>
+
+    <!-- ② 4권 챕터별 문제풀기 — 북 스타일 카드 (Stitch) -->
+    <section>
+      <div class="flex items-baseline justify-between mb-6">
+        <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">4권 챕터별 문제풀기</h2>
+        <a href="<%= exam_subjects_path %>" class="text-sm font-semibold text-slate-500 flex items-center gap-1 hover:text-slate-800 transition-colors">
+          커리큘럼 보기 <span class="material-symbols-outlined text-base">arrow_forward</span>
+        </a>
+      </div>
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <% @curriculum_subjects.each do |subject| %>
+          <% colors = ExamCurriculum.colors(subject[:color]) %>
+          <div class="bg-white rounded-2xl shadow-[0_2px_12px_rgba(18,28,40,0.06)] border-l-4 <%= colors[:accent_border] %> hover:shadow-[0_6px_24px_rgba(18,28,40,0.10)] transition-all overflow-hidden">
+            <!-- 북 커버 영역 -->
+            <div class="aspect-[3/4] <%= colors[:bg] %> flex flex-col items-center justify-center p-4 relative overflow-hidden">
+              <!-- 고스트 아이콘 -->
+              <div class="absolute inset-0 flex items-center justify-center opacity-10">
+                <span class="material-symbols-outlined text-8xl <%= colors[:text] %>"><%= subject[:icon] %></span>
+              </div>
+              <span class="relative z-10 <%= colors[:badge] %> text-[10px] font-bold px-2.5 py-1 rounded-full mb-3"><%= subject[:number] %></span>
+              <p class="relative z-10 text-center text-xs font-semibold text-slate-600 leading-snug">
+                <%= subject[:chapters].size %>개 챕터
+              </p>
+            </div>
+            <!-- 권 정보 -->
+            <div class="p-4">
+              <h4 class="font-extrabold text-slate-900 text-sm truncate mb-1"><%= subject[:title] %></h4>
+              <p class="text-xs text-slate-400 mb-3"><%= subject[:subtitle] %></p>
+              <!-- 챕터 드롭다운 목록 -->
+              <details class="group">
+                <summary class="list-none cursor-pointer text-xs font-bold <%= colors[:text_dark] %> flex items-center gap-1">
+                  챕터 선택
+                  <span class="material-symbols-outlined text-xs group-open:rotate-90 transition-transform">chevron_right</span>
+                </summary>
+                <ul class="mt-2 space-y-1">
+                  <% subject[:chapters].each do |chapter| %>
+                    <% ch_count = ExamQuestions.by_chapter(subject[:id], chapter[:number]).size %>
+                    <% next if ch_count == 0 %>
+                    <li>
+                      <a href="<%= exam_quiz_chapter_path(subject_id: subject[:id], chapter_num: chapter[:number]) %>"
+                         class="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:<%= colors[:bg] %> transition-colors group/ch">
+                        <span class="w-5 h-5 rounded-md <%= colors[:bg_dark] %> text-white flex items-center justify-center text-[10px] font-bold flex-shrink-0"><%= chapter[:number] %></span>
+                        <span class="text-xs text-slate-600 flex-1 truncate group-hover/ch:<%= colors[:text_dark] %> transition-colors"><%= chapter[:title] %></span>
+                        <span class="text-[10px] text-slate-400"><%= ch_count %>문</span>
+                      </a>
+                    </li>
+                  <% end %>
+                </ul>
+              </details>
             </div>
           </div>
-          <span class="text-slate-300 text-xs">0일</span>
-        </div>
+        <% end %>
       </div>
-    </div>
+    </section>
 
-    <!-- 실전 시험 모드 배너 -->
-    <a href="<%= exam_quiz_simulation_path %>"
-       class="group block bg-gradient-to-r from-purple-700 to-indigo-700 rounded-2xl p-6 hover:from-purple-800 hover:to-indigo-800 transition-all shadow-lg hover:shadow-xl mb-4">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-4">
-          <div class="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center">
-            <span class="material-symbols-outlined text-white text-3xl">timer</span>
+    <!-- ③ 특별 학습 모드 (Stitch 4-button) -->
+    <section>
+      <h2 class="text-xl font-extrabold text-slate-900 tracking-tight mb-6">특별 학습 모드</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
+        <!-- 미니 퀴즈 (tonal) -->
+        <a href="<%= exam_quiz_mini_path %>"
+           class="group flex items-center gap-4 p-5 bg-white rounded-2xl hover:bg-slate-50 transition-colors shadow-[0_2px_12px_rgba(18,28,40,0.05)]">
+          <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-slate-100 shadow-sm group-hover:scale-110 transition-transform flex-shrink-0">
+            <span class="material-symbols-outlined text-slate-700">bolt</span>
           </div>
           <div>
-            <div class="text-purple-200 text-sm font-medium mb-1">실전 환경 완벽 재현</div>
-            <h2 class="text-white text-2xl font-bold">실전 시험 모드</h2>
-            <p class="text-purple-200 text-sm mt-1">120분 타이머 · 3과목 80문제 · 종료 후 일괄 채점</p>
-          </div>
-        </div>
-        <div class="flex items-center gap-2 bg-white/20 text-white font-bold px-5 py-2.5 rounded-xl group-hover:bg-white/30 transition-colors">
-          <span>도전</span>
-          <span class="material-symbols-outlined">arrow_forward</span>
-        </div>
-      </div>
-    </a>
-
-    <a href="<%= exam_quiz_path('all') %>"
-       class="group block bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-6 hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl mb-8">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-4">
-          <div class="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center">
-            <span class="material-symbols-outlined text-white text-3xl">fact_check</span>
-          </div>
-          <div>
-            <div class="text-white/80 text-sm font-medium mb-1">종합 실력 점검</div>
-            <h2 class="text-white text-2xl font-bold">전체 모의고사</h2>
-            <p class="text-white/70 text-sm mt-1">3과목 전체 — <%= @total_count %>문제 · 약 <%= (@total_count * 1.5).ceil %>분</p>
-          </div>
-        </div>
-        <div class="flex items-center gap-2 bg-white/20 text-white font-bold px-5 py-2.5 rounded-xl group-hover:bg-white/30 transition-colors">
-          <span>시작하기</span>
-          <span class="material-symbols-outlined">arrow_forward</span>
-        </div>
-      </div>
-    </a>
-
-    <!-- 과목별 모의고사 (3과목 기준) -->
-    <h2 class="text-xl font-bold text-slate-800 mb-5">과목별 모의고사</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-      <% @exam_subjects.each do |subject| %>
-        <% colors = ExamCurriculum.colors(subject[:color]) %>
-        <% q_count = @total_count_by_exam_subject(subject[:id]) %>
-        <a href="<%= exam_quiz_path(subject[:id]) %>"
-           class="group bg-white rounded-2xl border <%= colors[:border] %> <%= colors[:hover_border] %> hover:shadow-lg transition-all overflow-hidden">
-
-          <div class="<%= colors[:bg] %> px-5 py-4 flex items-center gap-4">
-            <div class="w-12 h-12 <%= colors[:bg_dark] %> rounded-xl flex items-center justify-center flex-shrink-0">
-              <span class="material-symbols-outlined text-white text-2xl"><%= subject[:icon] %></span>
-            </div>
-            <div class="flex-1 min-w-0">
-              <div class="<%= colors[:text] %> text-xs font-bold mb-0.5"><%= subject[:number] %></div>
-              <h3 class="text-slate-800 font-bold text-lg truncate"><%= subject[:title] %></h3>
-              <p class="text-slate-500 text-sm"><%= subject[:subtitle] %></p>
-            </div>
-          </div>
-
-          <div class="px-5 py-4 flex items-center justify-between">
-            <div class="flex items-center gap-4 text-sm text-slate-500">
-              <span class="flex items-center gap-1">
-                <span class="material-symbols-outlined text-base">quiz</span>
-                <%= q_count %>문제
-              </span>
-              <span class="flex items-center gap-1">
-                <span class="material-symbols-outlined text-base">schedule</span>
-                약 <%= (q_count * 1.5).ceil %>분
-              </span>
-            </div>
-            <span class="flex items-center gap-1 <%= colors[:text] %> font-semibold text-sm group-hover:gap-2 transition-all">
-              시작
-              <span class="material-symbols-outlined text-base">arrow_forward</span>
-            </span>
+            <span class="block text-sm font-bold text-slate-900">미니 퀴즈</span>
+            <span class="block text-[11px] text-slate-400 mt-0.5">랜덤 10문제</span>
           </div>
         </a>
-      <% end %>
-    </div>
 
-    <!-- 챕터별 문제 풀기 (4권 커리큘럼 기준 유지) -->
-    <h2 class="text-xl font-bold text-slate-800 mb-5 mt-10">챕터별 문제 풀기</h2>
-    <div class="space-y-4">
-      <% @curriculum_subjects.each do |subject| %>
-        <% colors = ExamCurriculum.colors(subject[:color]) %>
-        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
-          <!-- 과목 헤더 -->
-          <div class="<%= colors[:bg] %> px-5 py-3 flex items-center gap-3 border-b <%= colors[:border] %>">
-            <span class="<%= colors[:badge] %> text-xs font-bold px-2.5 py-1 rounded-full"><%= subject[:number] %></span>
-            <span class="font-bold text-slate-800"><%= subject[:title] %></span>
-          </div>
-          <!-- 챕터 목록 -->
-          <div class="p-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <% subject[:chapters].each do |chapter| %>
-              <% ch_count = ExamQuestions.by_chapter(subject[:id], chapter[:number]).size %>
-              <a href="<%= exam_quiz_chapter_path(subject_id: subject[:id], chapter_num: chapter[:number]) %>"
-                 class="group flex items-center gap-3 px-4 py-3 rounded-xl border border-slate-100 hover:<%= colors[:bg] %> hover:<%= colors[:border] %> transition-all">
-                <span class="w-7 h-7 rounded-lg <%= colors[:bg_dark] %> flex items-center justify-center flex-shrink-0 text-white text-xs font-bold">
-                  <%= chapter[:number] %>
-                </span>
-                <div class="flex-1 min-w-0">
-                  <div class="text-slate-700 text-sm font-medium truncate"><%= chapter[:title] %></div>
-                  <div class="text-slate-400 text-xs"><%= ch_count %>문제</div>
-                </div>
-                <span class="material-symbols-outlined text-slate-300 group-hover:<%= colors[:text] %> text-base transition-colors">arrow_forward</span>
-              </a>
-            <% end %>
-          </div>
-        </div>
-      <% end %>
-    </div>
-
-    <!-- 학습 분석 링크 -->
-    <a href="<%= exam_quiz_analysis_path %>"
-       class="group flex items-center justify-between bg-white border border-teal-200 hover:border-teal-400 rounded-2xl px-5 py-4 mt-5 hover:shadow-md transition-all">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 bg-teal-50 rounded-xl flex items-center justify-center flex-shrink-0">
-          <span class="material-symbols-outlined text-teal-500 text-2xl">analytics</span>
-        </div>
-        <div>
-          <div class="text-slate-800 font-semibold text-sm">학습 분석 대시보드</div>
-          <div class="text-slate-400 text-xs">과목별 진도 · 점수 추이 · 취약 분야 분석</div>
-        </div>
-      </div>
-      <span class="flex items-center gap-1 text-teal-600 font-semibold text-sm group-hover:gap-2 transition-all">
-        보기
-        <span class="material-symbols-outlined text-base">arrow_forward</span>
-      </span>
-    </a>
-
-    <!-- 오답 노트 카드 (JS에서 wrong count 기반으로 렌더링) -->
-    <div class="mt-5" data-controller="exam-progress">
-      <div data-exam-progress-target="wrongCountArea"></div>
-    </div>
-
-    <!-- 북마크 카드 (JS에서 bookmark count 기반으로 렌더링) -->
-    <div class="mt-4" id="bookmark-card-area">
-      <!-- 초기 플레이스홀더 (JS가 로드되기 전) -->
-      <a href="/quiz/bookmarks"
-         class="group flex items-center justify-between bg-white border-2 border-dashed border-indigo-200 rounded-2xl px-5 py-4 hover:border-indigo-400 transition-all">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center flex-shrink-0">
-            <span class="material-symbols-outlined text-indigo-400 text-2xl">bookmark_border</span>
+        <!-- 실전 시험 (featured 그래디언트) -->
+        <a href="<%= exam_quiz_simulation_path %>"
+           class="group flex items-center gap-4 p-5 bg-gradient-to-br from-slate-800 to-slate-700 rounded-2xl hover:opacity-90 transition-all shadow-lg shadow-slate-800/20">
+          <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-white/10 backdrop-blur group-hover:scale-110 transition-transform flex-shrink-0">
+            <span class="material-symbols-outlined text-white">timer</span>
           </div>
           <div>
-            <div class="text-slate-700 font-semibold text-sm">북마크 문제</div>
-            <div class="text-slate-400 text-xs">문제 풀이 중 별표를 누르면 중요 문제가 저장됩니다</div>
+            <span class="block text-sm font-bold text-white">실전 시험</span>
+            <span class="block text-[11px] text-white/60 mt-0.5">80문제 · 120분</span>
+          </div>
+        </a>
+
+        <!-- 북마크 (tonal) -->
+        <div id="bookmark-card-area">
+          <a href="<%= exam_quiz_bookmarks_path %>"
+             class="group flex items-center gap-4 p-5 bg-white rounded-2xl hover:bg-slate-50 transition-colors shadow-[0_2px_12px_rgba(18,28,40,0.05)]">
+            <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-slate-100 shadow-sm group-hover:scale-110 transition-transform flex-shrink-0">
+              <span class="material-symbols-outlined text-slate-700">star</span>
+            </div>
+            <div>
+              <span class="block text-sm font-bold text-slate-900">북마크 문제</span>
+              <span class="block text-[11px] text-slate-400 mt-0.5">모아보기</span>
+            </div>
+          </a>
+        </div>
+
+        <!-- 오답 노트 (tonal) -->
+        <a href="<%= exam_quiz_wrong_path %>"
+           class="group flex items-center gap-4 p-5 bg-white rounded-2xl hover:bg-slate-50 transition-colors shadow-[0_2px_12px_rgba(18,28,40,0.05)]">
+          <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-slate-100 shadow-sm group-hover:scale-110 transition-transform flex-shrink-0">
+            <span class="material-symbols-outlined text-slate-700">edit_note</span>
+          </div>
+          <div>
+            <span class="block text-sm font-bold text-slate-900">오답 노트</span>
+            <span class="block text-[11px] text-slate-400 mt-0.5">오답 정복</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- ④ 학습 분석 + 스트릭 행 -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 gap-4" data-controller="exam-progress">
+      <!-- 스트릭 -->
+      <div data-exam-progress-target="streakArea">
+        <div class="flex items-center gap-4 bg-white rounded-2xl px-5 py-4 shadow-[0_2px_12px_rgba(18,28,40,0.05)]">
+          <div class="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-slate-300 text-2xl">local_fire_department</span>
+          </div>
+          <div>
+            <div class="text-slate-700 font-bold text-sm">학습 스트릭</div>
+            <div class="text-slate-400 text-xs">모의고사 완료 후 기록</div>
+          </div>
+          <span class="text-slate-300 text-xs ml-auto">0일</span>
+        </div>
+      </div>
+
+      <!-- 학습 분석 -->
+      <a href="<%= exam_quiz_analysis_path %>"
+         class="group flex items-center justify-between bg-white rounded-2xl px-5 py-4 shadow-[0_2px_12px_rgba(18,28,40,0.05)] hover:shadow-md transition-all">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-teal-50 rounded-xl flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-teal-500">analytics</span>
+          </div>
+          <div>
+            <div class="text-slate-800 font-bold text-sm">학습 분석 대시보드</div>
+            <div class="text-slate-400 text-xs">과목별 진도 · 점수 추이 · 취약 분야</div>
           </div>
         </div>
-        <span class="text-slate-300 text-xs font-medium">비어있음</span>
+        <span class="flex items-center gap-1 text-teal-600 font-bold text-sm group-hover:gap-2 transition-all">
+          보기 <span class="material-symbols-outlined text-base">arrow_forward</span>
+        </span>
       </a>
-    </div>
-    <script>
-      (function() {
-        try {
-          var ids = JSON.parse(localStorage.getItem('exam_bookmarks')) || []
-          var count = ids.length
-          var area = document.getElementById('bookmark-card-area')
-          if (!area) return
-          if (count > 0) {
-            area.innerHTML = '<a href="/quiz/bookmarks" class="group flex items-center justify-between bg-gradient-to-r from-indigo-500 to-violet-500 rounded-2xl px-5 py-4 hover:from-indigo-600 hover:to-violet-600 transition-all shadow-md hover:shadow-lg"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-white text-2xl">bookmark</span></div><div><div class="text-white font-bold">북마크 문제</div><div class="text-indigo-100 text-sm">저장된 문제 ' + count + '개 · 지금 바로 복습하기</div></div></div><div class="flex items-center gap-2 bg-white/20 text-white font-bold px-4 py-2 rounded-xl group-hover:bg-white/30 transition-colors"><span class="bg-white text-indigo-500 text-xs font-extrabold px-2 py-0.5 rounded-full">' + count + '</span><span class="material-symbols-outlined text-base">arrow_forward</span></div></a>'
-          }
-        } catch(e) {}
-      })()
-    </script>
-  </div>
-</section>
+    </section>
 
-<!-- 나의 기록 -->
-<section class="py-8 px-4 bg-white border-t border-slate-100"
-         data-controller="exam-progress">
-  <div class="max-w-5xl mx-auto">
-    <h2 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
-      <span class="material-symbols-outlined text-blue-500">emoji_events</span>
-      나의 풀이 기록
-    </h2>
-    <div data-exam-progress-target="scoreArea" class="space-y-3">
-      <p class="text-slate-400 text-sm text-center py-6 flex items-center justify-center gap-2">
-        <span class="material-symbols-outlined text-slate-300">quiz</span>
-        아직 풀이 기록이 없습니다. 모의고사를 풀어보세요!
-      </p>
-    </div>
-  </div>
-</section>
+    <!-- ⑤ 나의 풀이 기록 -->
+    <section class="bg-white rounded-2xl shadow-[0_2px_12px_rgba(18,28,40,0.05)] p-7"
+             data-controller="exam-progress">
+      <h2 class="text-lg font-extrabold text-slate-900 mb-5 flex items-center gap-2">
+        <span class="material-symbols-outlined text-amber-500">emoji_events</span>
+        나의 풀이 기록
+      </h2>
+      <div data-exam-progress-target="scoreArea">
+        <p class="text-slate-400 text-sm text-center py-6 flex items-center justify-center gap-2">
+          <span class="material-symbols-outlined text-slate-300">quiz</span>
+          아직 풀이 기록이 없습니다. 모의고사를 풀어보세요!
+        </p>
+      </div>
+      <div data-exam-progress-target="wrongCountArea" class="mt-3"></div>
+    </section>
 
-<%# 광고 — 나의 기록 하단 %>
-<div class="py-4 px-4 bg-white flex justify-center border-t border-slate-100">
-  <%= render 'shared/ad_slot', position: 'quiz-index-bottom' %>
+    <!-- 광고 -->
+    <div class="flex justify-center">
+      <%= render 'shared/ad_slot', position: 'quiz-index-bottom' %>
+    </div>
+
+    <!-- ⑥ 모의고사 안내 (벤토 3카드) -->
+    <section>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="bg-white rounded-2xl p-6 shadow-[0_2px_12px_rgba(18,28,40,0.05)] flex items-start gap-3">
+          <div class="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-blue-500">touch_app</span>
+          </div>
+          <div>
+            <div class="font-bold text-slate-800 text-sm mb-1">즉시 채점</div>
+            <div class="text-slate-400 text-xs leading-relaxed">선택 즉시 정답/오답 확인 및 해설 제공</div>
+          </div>
+        </div>
+        <div class="bg-white rounded-2xl p-6 shadow-[0_2px_12px_rgba(18,28,40,0.05)] flex items-start gap-3">
+          <div class="w-10 h-10 bg-amber-50 rounded-xl flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-amber-500">lightbulb</span>
+          </div>
+          <div>
+            <div class="font-bold text-slate-800 text-sm mb-1">상세 해설</div>
+            <div class="text-slate-400 text-xs leading-relaxed">모든 문제에 해설 + AI 추가 해설 제공</div>
+          </div>
+        </div>
+        <div class="bg-white rounded-2xl p-6 shadow-[0_2px_12px_rgba(18,28,40,0.05)] flex items-start gap-3">
+          <div class="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-emerald-500">emoji_events</span>
+          </div>
+          <div>
+            <div class="font-bold text-slate-800 text-sm mb-1">결과 분석</div>
+            <div class="text-slate-400 text-xs leading-relaxed">점수·등급·오답 리뷰·취약 챕터 분석</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
 </div>
 
-<!-- 안내 -->
-<section class="py-8 px-4 bg-slate-50 border-t border-slate-100">
-  <div class="max-w-5xl mx-auto">
-    <h3 class="text-base font-bold text-slate-700 mb-4">모의고사 안내</h3>
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-      <div class="flex items-start gap-3 p-4 bg-slate-50 rounded-xl">
-        <span class="material-symbols-outlined text-blue-500 mt-0.5">touch_app</span>
-        <div>
-          <div class="font-semibold text-slate-800 text-sm">즉시 채점</div>
-          <div class="text-slate-500 text-xs mt-0.5">선택 즉시 정답/오답 확인</div>
-        </div>
-      </div>
-      <div class="flex items-start gap-3 p-4 bg-slate-50 rounded-xl">
-        <span class="material-symbols-outlined text-blue-500 mt-0.5">lightbulb</span>
-        <div>
-          <div class="font-semibold text-slate-800 text-sm">상세 해설</div>
-          <div class="text-slate-500 text-xs mt-0.5">모든 문제에 해설 제공</div>
-        </div>
-      </div>
-      <div class="flex items-start gap-3 p-4 bg-slate-50 rounded-xl">
-        <span class="material-symbols-outlined text-blue-500 mt-0.5">emoji_events</span>
-        <div>
-          <div class="font-semibold text-slate-800 text-sm">결과 분석</div>
-          <div class="text-slate-500 text-xs mt-0.5">점수·등급·오답 리뷰 제공</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+<!-- 북마크 JS (기존 유지) -->
+<script>
+  (function() {
+    try {
+      var ids = JSON.parse(localStorage.getItem('exam_bookmarks')) || []
+      var count = ids.length
+      var area = document.getElementById('bookmark-card-area')
+      if (!area || count === 0) return
+      area.innerHTML = '<a href="/quiz/bookmarks" class="group flex items-center gap-4 p-5 bg-gradient-to-br from-indigo-600 to-violet-600 rounded-2xl hover:opacity-90 transition-all shadow-lg"><div class="w-12 h-12 flex items-center justify-center rounded-xl bg-white/10 group-hover:scale-110 transition-transform flex-shrink-0"><span class="material-symbols-outlined text-white">star</span></div><div><span class="block text-sm font-bold text-white">북마크 문제</span><span class="block text-[11px] text-white/70 mt-0.5">저장된 ' + count + '개 · 지금 복습</span></div><span class="bg-white text-indigo-500 text-xs font-extrabold px-2.5 py-1 rounded-full ml-auto">' + count + '</span></a>'
+    } catch(e) {}
+  })()
+</script>

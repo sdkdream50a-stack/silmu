@@ -103,11 +103,12 @@ export default class extends Controller {
     this.optionsAreaTarget.innerHTML = q.options.map((opt, i) => {
       const isSelected = currentAnswer === i
       const selectedCls = isSelected
-        ? "border-blue-500 bg-blue-50 text-blue-800"
-        : "border-slate-200 hover:border-blue-400 hover:bg-blue-50"
+        ? "border-[#004ac6] bg-[#dbe1ff]/40 text-[#004ac6] font-semibold"
+        : "bg-[#eff4ff] hover:bg-[#dde9ff]"
+      const borderCls = isSelected ? "border-2" : ""
       return `
         <button
-          class="sim-option w-full text-left px-5 py-3.5 rounded-xl border-2 ${selectedCls} transition-all text-slate-700 text-sm font-medium"
+          class="sim-option w-full text-left px-5 py-3.5 rounded-xl ${borderCls} ${selectedCls} transition-all text-slate-700 text-sm font-medium"
           data-index="${i}"
           data-action="click->exam-simulation#selectAnswer">
           <span class="font-bold text-slate-400 mr-2 text-base">${labels[i]}</span>${this.escapeHtml(opt)}
@@ -136,12 +137,14 @@ export default class extends Controller {
 
     // 선택 UI 업데이트
     this.optionsAreaTarget.querySelectorAll(".sim-option").forEach((btn, i) => {
-      btn.classList.remove("border-blue-500", "bg-blue-50", "text-blue-800",
-        "border-slate-200", "hover:border-blue-400", "hover:bg-blue-50")
+      btn.classList.remove(
+        "border-2", "border-[#004ac6]", "bg-[#dbe1ff]/40", "text-[#004ac6]", "font-semibold",
+        "bg-[#eff4ff]", "hover:bg-[#dde9ff]"
+      )
       if (i === selected) {
-        btn.classList.add("border-blue-500", "bg-blue-50", "text-blue-800")
+        btn.classList.add("border-2", "border-[#004ac6]", "bg-[#dbe1ff]/40", "text-[#004ac6]", "font-semibold")
       } else {
-        btn.classList.add("border-slate-200", "hover:border-blue-400", "hover:bg-blue-50")
+        btn.classList.add("bg-[#eff4ff]", "hover:bg-[#dde9ff]")
       }
     })
 
@@ -164,7 +167,7 @@ export default class extends Controller {
   renderNavGrid() {
     const html = this.questions.map((_, i) => `
       <button
-        class="nav-num w-8 h-8 rounded-lg text-xs font-bold border-2 border-slate-200 text-slate-500 hover:border-blue-400 transition-colors"
+        class="nav-num w-8 h-8 rounded-lg text-xs font-bold border border-[#c3c6d7] bg-white text-slate-500 hover:border-[#004ac6] hover:text-[#004ac6] transition-colors"
         data-index="${i}"
         data-action="click->exam-simulation#jumpTo">
         ${i + 1}
@@ -187,15 +190,17 @@ export default class extends Controller {
       toUpdate.forEach(i => {
         if (i < 0 || i >= buttons.length) return
         const btn = buttons[i]
-        btn.classList.remove("border-blue-500", "bg-blue-500", "text-white",
-          "border-green-400", "bg-green-50", "text-green-700",
-          "border-slate-200", "text-slate-500")
+        btn.classList.remove(
+          "border-[#004ac6]", "bg-[#004ac6]", "text-white",
+          "border-[#62df7d]", "bg-[#62df7d]/20", "text-[#005320]",
+          "border-[#c3c6d7]", "bg-white", "text-slate-500"
+        )
         if (i === curr) {
-          btn.classList.add("border-blue-500", "bg-blue-500", "text-white")
+          btn.classList.add("border-[#004ac6]", "bg-[#004ac6]", "text-white")
         } else if (this.answers[i] !== null) {
-          btn.classList.add("border-green-400", "bg-green-50", "text-green-700")
+          btn.classList.add("border-[#62df7d]", "bg-[#62df7d]/20", "text-[#005320]")
         } else {
-          btn.classList.add("border-slate-200", "text-slate-500")
+          btn.classList.add("border-[#c3c6d7]", "bg-white", "text-slate-500")
         }
       })
     }
@@ -245,7 +250,7 @@ export default class extends Controller {
             계속 풀기
           </button>
           <button id="sim-confirm-submit"
-                  class="flex-1 px-4 py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl transition-colors text-sm">
+                  class="flex-1 px-4 py-3 bg-gradient-to-br from-[#004ac6] to-[#2563eb] text-white font-bold rounded-xl transition-all text-sm shadow-sm">
             그래도 제출
           </button>
         </div>
@@ -391,7 +396,7 @@ export default class extends Controller {
       <!-- 액션 버튼 -->
       <div class="flex flex-col sm:flex-row gap-3">
         <button onclick="location.reload()"
-                class="flex-1 inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3.5 rounded-xl transition-colors">
+                class="flex-1 inline-flex items-center justify-center gap-2 bg-gradient-to-br from-[#004ac6] to-[#2563eb] hover:opacity-90 text-white font-bold px-6 py-3.5 rounded-xl transition-all shadow-sm">
           <span class="material-symbols-outlined">refresh</span>
           다시 시험 보기
         </button>

@@ -1,119 +1,136 @@
-<div class="max-w-3xl mx-auto px-4 py-8">
-  <!-- 헤더 -->
-  <div class="mb-8">
-    <div class="flex items-center gap-3 mb-4">
-      <div class="w-12 h-12 bg-violet-100 rounded-2xl flex items-center justify-center">
-        <span class="material-symbols-outlined text-violet-600 text-2xl">edit_note</span>
-      </div>
+<%# 실기 대비 — Stitch 'The Intellectual Sanctuary' 디자인 적용 %>
+
+<!-- 페이지 헤더 — 에디토리얼 화이트 -->
+<section class="bg-white border-b border-[#eff4ff] py-10 px-4">
+  <div class="max-w-3xl mx-auto">
+    <div class="flex items-center gap-1.5 text-[#3d618c] text-xs mb-6">
+      <a href="https://exam.silmu.kr" class="hover:text-[#006499] transition-colors">홈</a>
+      <span class="material-symbols-outlined text-sm">chevron_right</span>
+      <span class="text-[#05345c] font-medium">실기 대비</span>
+    </div>
+    <div class="flex items-end justify-between gap-6">
       <div>
-        <h1 class="text-2xl font-extrabold text-slate-900">실기 대비 — 필답형 예상문제</h1>
-        <p class="text-slate-500 text-sm">PBT 필답형 150분 · 총 5문제 · 모범 답안 제공</p>
+        <span class="text-[#006499] font-bold tracking-widest uppercase text-xs mb-2 block">Practical Preparation</span>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-[#05345c] tracking-tight leading-tight">실기 대비 — 필답형 예상문제</h1>
+        <p class="text-[#3d618c] text-sm mt-2">PBT 필답형 150분 · 총 5문제 · 모범 답안 제공</p>
+      </div>
+      <div class="hidden md:flex items-center gap-2 bg-[#eff4ff] px-4 py-2 rounded-full flex-shrink-0">
+        <span class="material-symbols-outlined text-[#006499] text-sm">edit_note</span>
+        <span class="text-xs font-bold text-[#445362] uppercase tracking-widest">Intellectual Sanctuary</span>
       </div>
     </div>
+  </div>
+</section>
 
-    <div class="bg-violet-50 border border-violet-200 rounded-xl p-4 text-sm text-violet-800">
-      <p class="font-semibold mb-1 flex items-center gap-2">
-        <span class="material-symbols-outlined text-base">info</span>
+<!-- 본문 -->
+<section class="py-8 px-4 bg-[#f8f9ff] min-h-[60vh]">
+  <div class="max-w-3xl mx-auto">
+
+    <!-- 실기 시험 안내 -->
+    <div class="bg-[#eff4ff] rounded-2xl p-5 mb-6">
+      <p class="font-bold text-[#05345c] mb-2 flex items-center gap-2 text-sm">
+        <span class="material-symbols-outlined text-[#006499] text-base">info</span>
         실기 시험 안내
       </p>
-      <ul class="space-y-1 text-violet-700 text-xs">
+      <ul class="space-y-1 text-[#3d618c] text-xs">
         <li>• 시험 형식: 필답형(PBT) — 서술식 답안 작성</li>
         <li>• 시험 시간: 150분</li>
         <li>• 합격 기준: 총점의 60% 이상 (과락 없음)</li>
         <li>• 학습 방법: 키워드 힌트로 답안 구조를 파악한 후 모범 답안과 비교하세요.</li>
       </ul>
     </div>
-  </div>
 
-  <!-- 총점 안내 -->
-  <div class="flex items-center justify-between mb-6 bg-white rounded-xl border border-slate-200 p-4">
-    <span class="text-sm text-slate-600 font-medium">총 5문제</span>
-    <span class="text-sm font-bold text-slate-800">
-      총 배점: <span class="text-violet-600"><%= @questions.sum { |q| q[:point] } %>점</span>
-    </span>
-  </div>
+    <!-- 총점 안내 -->
+    <div class="flex items-center justify-between mb-6 bg-white rounded-xl shadow-[0_12px_40px_rgba(5,52,92,0.06)] px-5 py-4">
+      <span class="text-sm text-[#3d618c] font-medium">총 5문제</span>
+      <span class="text-sm font-bold text-[#05345c]">
+        총 배점: <span class="text-[#006499]"><%= @questions.sum { |q| q[:point] } %>점</span>
+      </span>
+    </div>
 
-  <!-- 문제 목록 -->
-  <div class="space-y-6">
-    <% @questions.each do |q| %>
-      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden"
-           data-practical-id="<%= q[:id] %>">
-        <!-- 문제 헤더 -->
-        <div class="flex items-start gap-4 p-6 border-b border-slate-100">
-          <div class="flex-shrink-0">
-            <div class="w-10 h-10 bg-violet-600 rounded-xl flex items-center justify-center">
-              <span class="text-white font-extrabold text-sm"><%= q[:id] %></span>
+    <!-- 문제 목록 -->
+    <div class="space-y-6">
+      <% @questions.each do |q| %>
+        <div class="bg-white rounded-2xl shadow-[0_12px_40px_rgba(5,52,92,0.06)] overflow-hidden hover:shadow-[0_16px_48px_rgba(5,52,92,0.1)] transition-shadow"
+             data-practical-id="<%= q[:id] %>">
+          <!-- 문제 헤더 -->
+          <div class="flex items-start gap-4 p-6">
+            <div class="flex-shrink-0">
+              <div class="w-10 h-10 bg-[#006499] rounded-xl flex items-center justify-center">
+                <span class="text-white font-extrabold text-sm"><%= q[:id] %></span>
+              </div>
+            </div>
+            <div class="flex-1">
+              <div class="flex flex-wrap items-center gap-2 mb-3">
+                <span class="bg-[#d4e4f6] text-[#445362] text-[11px] font-bold tracking-widest uppercase px-3 py-1 rounded-full"><%= q[:category] %></span>
+                <span class="bg-[#eff4ff] text-[#3d618c] text-xs font-bold px-2.5 py-1 rounded-full"><%= q[:point] %>점</span>
+                <!-- 자기 채점 체크박스 -->
+                <label class="flex items-center gap-1.5 cursor-pointer ml-auto">
+                  <input type="checkbox"
+                         class="practical-done-check w-4 h-4 accent-[#006499] cursor-pointer"
+                         data-question-id="<%= q[:id] %>"
+                         onchange="savePracticalDone(this)">
+                  <span class="text-xs text-[#3d618c] font-medium">학습 완료</span>
+                </label>
+              </div>
+              <p class="text-[#05345c] font-semibold leading-relaxed"><%= q[:question] %></p>
             </div>
           </div>
-          <div class="flex-1">
-            <div class="flex flex-wrap items-center gap-2 mb-3">
-              <span class="bg-violet-100 text-violet-700 text-xs font-bold px-2.5 py-1 rounded-full"><%= q[:category] %></span>
-              <span class="bg-slate-100 text-slate-600 text-xs font-bold px-2.5 py-1 rounded-full"><%= q[:point] %>점</span>
-              <!-- 자기 채점 체크박스 -->
-              <label class="flex items-center gap-1.5 cursor-pointer ml-auto">
-                <input type="checkbox"
-                       class="practical-done-check w-4 h-4 accent-violet-600 cursor-pointer"
-                       data-question-id="<%= q[:id] %>"
-                       onchange="savePracticalDone(this)">
-                <span class="text-xs text-slate-500 font-medium">학습 완료</span>
-              </label>
+
+          <!-- 키워드 힌트 -->
+          <div class="border-t border-[#eff4ff]">
+            <button class="w-full flex items-center justify-between px-6 py-3.5 text-left hover:bg-[#f8f9ff] transition-colors"
+                    onclick="toggleSection(this, 'hint-<%= q[:id] %>')">
+              <span class="flex items-center gap-2 text-sm font-semibold text-amber-700">
+                <span class="material-symbols-outlined text-base">tips_and_updates</span>
+                핵심 키워드 힌트
+              </span>
+              <span class="material-symbols-outlined text-[#3d618c] expand-icon">expand_more</span>
+            </button>
+            <div id="hint-<%= q[:id] %>" class="hidden px-6 pb-4">
+              <div class="flex flex-wrap gap-2">
+                <% q[:keywords].each do |kw| %>
+                  <span class="bg-amber-50 text-amber-800 text-xs font-semibold px-3 py-1.5 rounded-full"><%= kw %></span>
+                <% end %>
+              </div>
+              <p class="text-xs text-[#3d618c] mt-2"><%= q[:answer_hint] %></p>
             </div>
-            <p class="text-slate-800 font-medium leading-relaxed"><%= q[:question] %></p>
+          </div>
+
+          <!-- 모범 답안 -->
+          <div class="border-t border-[#eff4ff]">
+            <button class="w-full flex items-center justify-between px-6 py-3.5 text-left hover:bg-[#f8f9ff] transition-colors"
+                    onclick="toggleSection(this, 'answer-<%= q[:id] %>')">
+              <span class="flex items-center gap-2 text-sm font-bold text-[#006499]">
+                <span class="material-symbols-outlined text-base">assignment_turned_in</span>
+                모범 답안 보기
+              </span>
+              <span class="material-symbols-outlined text-[#3d618c] expand-icon">expand_more</span>
+            </button>
+            <div id="answer-<%= q[:id] %>" class="hidden px-6 pb-5">
+              <div class="bg-[#eff4ff] rounded-xl p-4">
+                <pre class="text-sm text-[#05345c] leading-relaxed whitespace-pre-wrap font-sans"><%= q[:model_answer] %></pre>
+              </div>
+            </div>
           </div>
         </div>
+      <% end %>
+    </div>
 
-        <!-- 키워드 힌트 -->
-        <div class="border-b border-slate-100">
-          <button class="w-full flex items-center justify-between px-6 py-3.5 text-left hover:bg-slate-50 transition-colors"
-                  onclick="toggleSection(this, 'hint-<%= q[:id] %>')">
-            <span class="flex items-center gap-2 text-sm font-semibold text-amber-700">
-              <span class="material-symbols-outlined text-base">tips_and_updates</span>
-              핵심 키워드 힌트
-            </span>
-            <span class="material-symbols-outlined text-slate-400 expand-icon">expand_more</span>
-          </button>
-          <div id="hint-<%= q[:id] %>" class="hidden px-6 pb-4">
-            <div class="flex flex-wrap gap-2">
-              <% q[:keywords].each do |kw| %>
-                <span class="bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold px-3 py-1.5 rounded-lg"><%= kw %></span>
-              <% end %>
-            </div>
-            <p class="text-xs text-slate-500 mt-2"><%= q[:answer_hint] %></p>
-          </div>
-        </div>
+    <!-- 이동 버튼 -->
+    <div class="mt-8 flex gap-3">
+      <a href="<%= exam_quiz_simulation_path %>" class="flex-1 inline-flex items-center justify-center gap-2 bg-gradient-to-br from-[#006499] to-[#005886] hover:opacity-90 text-white font-bold px-4 py-3 rounded-full transition-all text-sm shadow-[0_4px_16px_rgba(0,100,153,0.25)]">
+        <span class="material-symbols-outlined text-base">timer</span>
+        실전 모의고사
+      </a>
+      <a href="<%= exam_subjects_path %>" class="flex-1 inline-flex items-center justify-center gap-2 bg-[#eff4ff] hover:bg-[#dce9ff] text-[#006499] font-bold px-4 py-3 rounded-full transition-colors text-sm">
+        <span class="material-symbols-outlined text-base">school</span>
+        이론 학습
+      </a>
+    </div>
 
-        <!-- 모범 답안 -->
-        <div>
-          <button class="w-full flex items-center justify-between px-6 py-3.5 text-left hover:bg-slate-50 transition-colors"
-                  onclick="toggleSection(this, 'answer-<%= q[:id] %>')">
-            <span class="flex items-center gap-2 text-sm font-semibold text-emerald-700">
-              <span class="material-symbols-outlined text-base">assignment_turned_in</span>
-              모범 답안 보기
-            </span>
-            <span class="material-symbols-outlined text-slate-400 expand-icon">expand_more</span>
-          </button>
-          <div id="answer-<%= q[:id] %>" class="hidden px-6 pb-5">
-            <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
-              <pre class="text-sm text-slate-700 leading-relaxed whitespace-pre-wrap font-sans"><%= q[:model_answer] %></pre>
-            </div>
-          </div>
-        </div>
-      </div>
-    <% end %>
   </div>
-
-  <!-- 이동 버튼 -->
-  <div class="mt-8 flex gap-3">
-    <a href="<%= exam_quiz_simulation_path %>" class="flex-1 inline-flex items-center justify-center gap-2 bg-blue-600 text-white font-bold px-4 py-3 rounded-xl hover:bg-blue-700 transition-colors text-sm">
-      <span class="material-symbols-outlined text-base">timer</span>
-      실전 모의고사
-    </a>
-    <a href="<%= exam_subjects_path %>" class="flex-1 inline-flex items-center justify-center gap-2 bg-white border-2 border-slate-200 text-slate-700 font-bold px-4 py-3 rounded-xl hover:border-blue-400 transition-colors text-sm">
-      <span class="material-symbols-outlined text-base">school</span>
-      이론 학습
-    </a>
-  </div>
-</div>
+</section>
 
 <script>
 // 섹션 토글 (힌트/모범 답안)
@@ -146,12 +163,12 @@ document.addEventListener('DOMContentLoaded', function() {
     if (done.includes(cb.dataset.questionId)) {
       cb.checked = true
       const card = cb.closest('[data-practical-id]')
-      if (card) card.classList.add('ring-2', 'ring-violet-300')
+      if (card) card.classList.add('ring-2', 'ring-[#51b0f6]')
     }
     cb.addEventListener('change', function() {
       const card = cb.closest('[data-practical-id]')
       if (card) card.classList.toggle('ring-2', cb.checked)
-      if (card) card.classList.toggle('ring-violet-300', cb.checked)
+      if (card) card.classList.toggle('ring-[#51b0f6]', cb.checked)
     })
   })
 })
