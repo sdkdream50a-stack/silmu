@@ -46,6 +46,7 @@ class AuditCasesController < ApplicationController
     # HTTP 캐싱: 5분간 캐시
     expires_in 5.minutes, public: true, stale_while_revalidate: 1.hour
 
+    set_og_image(category: "audit")
     meta = {
       title: "감사사례 모음 — 계약 실무 감사 지적 사례",
       description: "공공계약 감사에서 자주 지적되는 사례를 카테고리별로 정리했습니다. 수의계약, 입찰, 계약이행, 대금지급 등 분야별 감사 지적사항과 대응 방법을 확인하세요.",
@@ -54,8 +55,7 @@ class AuditCasesController < ApplicationController
       og: {
         title: "감사사례 모음 — 계약 실무 감사 지적 사례",
         description: "공공계약 감사에서 자주 지적되는 사례를 카테고리별로 정리했습니다. 수의계약, 입찰, 계약이행, 대금지급 등 분야별 감사 지적사항과 대응 방법을 확인하세요.",
-        url: canonical_url,
-        image: "https://silmu.kr/og-image.png"
+        url: canonical_url
       }
     }
     meta[:robots] = "noindex, follow" if @category.present? || @severity.present? || @search.present?
@@ -94,6 +94,7 @@ class AuditCasesController < ApplicationController
     # HTTP 캐싱: 감사사례 상세 (view_count 업데이트는 DB만 영향)
     expires_in 5.minutes, public: true, stale_while_revalidate: 1.hour
 
+    set_og_image(category: "audit")
     set_meta_tags(
       title: "#{@audit_case.title} — 실제 감사 지적 사례와 대응 방법",
       description: "#{@audit_case.issue.truncate(150)}",
@@ -103,7 +104,6 @@ class AuditCasesController < ApplicationController
         title: "#{@audit_case.title} — 감사사례",
         description: @audit_case.issue.truncate(200),
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png",
         type: "article"
       }
     )

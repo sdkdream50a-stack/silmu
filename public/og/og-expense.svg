@@ -1,0 +1,17 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#78350f;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="1100" cy="80" r="180" fill="#f59e0b" fill-opacity="0.15"/>
+  <circle cx="950" cy="550" r="120" fill="#b45309" fill-opacity="0.2"/>
+  <rect x="60" y="240" width="80" height="6" rx="3" fill="#fcd34d"/>
+  <text x="60" y="160" font-family="sans-serif" font-size="80" font-weight="bold" fill="white">실무.kr</text>
+  <text x="60" y="310" font-family="sans-serif" font-size="52" font-weight="bold" fill="#fde68a">지출 실무 가이드</text>
+  <text x="60" y="390" font-family="sans-serif" font-size="34" fill="#fef3c7">지출원인행위 · 지출 결의 · 세출예산 집행</text>
+  <text x="60" y="450" font-family="sans-serif" font-size="30" fill="#fde68a">채권·채무 · 선금급 · 개산급 · 반납</text>
+  <text x="60" y="570" font-family="sans-serif" font-size="26" fill="#fffbeb">공무원을 위한 지방재정법 지출 편람</text>
+</svg>

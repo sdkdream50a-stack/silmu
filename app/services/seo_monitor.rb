@@ -12,8 +12,7 @@ class SeoMonitor
 
   def self.check_page_speed
     # PageSpeed Insights API 사용 (실제 구현 시 API 키 필요)
-    # 여기서는 더미 데이터 반환
-    {
+    raw = {
       performance_score: check_performance_score,
       fcp: measure_fcp,
       lcp: measure_lcp,
@@ -21,6 +20,8 @@ class SeoMonitor
       cls: measure_cls,
       opportunities: performance_opportunities
     }
+    # nil 값 필터링 (미구현 지표 제외)
+    raw.reject { |_k, v| v.nil? }
   end
 
   def self.check_broken_links
@@ -76,7 +77,8 @@ class SeoMonitor
     {
       sitemap_urls: count_sitemap_urls,
       avg_meta_length: calculate_avg_meta_length,
-      topics_with_structured_data: Topic.published.count,
+      topics_with_article_jsonld: Topic.published.count,  # 모든 토픽에 Article JSON-LD 출력
+      topics_with_faq_jsonld: Topic.published.where.not(faqs: [nil, "", "[]"]).count,  # FAQPage JSON-LD 포함 토픽
       canonical_issues: 0 # 모두 수정됨
     }
   end
@@ -136,34 +138,28 @@ class SeoMonitor
   end
 
   def self.measure_fcp
-    # First Contentful Paint (초)
-    0.6 # 더미 데이터
+    # TODO: PageSpeed Insights API 연동 필요 (현재 미구현)
+    nil
   end
 
   def self.measure_lcp
-    # Largest Contentful Paint (초)
-    1.2 # 더미 데이터
+    # TODO: PageSpeed Insights API 연동 필요 (현재 미구현)
+    nil
   end
 
   def self.measure_tbt
-    # Total Blocking Time (ms)
-    150 # 더미 데이터
+    # TODO: PageSpeed Insights API 연동 필요 (현재 미구현)
+    nil
   end
 
   def self.measure_cls
-    # Cumulative Layout Shift
-    0.05 # 더미 데이터
+    # TODO: PageSpeed Insights API 연동 필요 (현재 미구현)
+    nil
   end
 
   def self.performance_opportunities
-    opportunities = []
-
-    # 실제로는 PageSpeed API에서 가져옴
-    opportunities << "이미지 최적화: WebP 포맷 사용 권장"
-    opportunities << "CSS 최소화: 사용하지 않는 CSS 제거"
-    opportunities << "JavaScript 지연 로딩 고려"
-
-    opportunities
+    # TODO: PageSpeed Insights API 연동 필요 (현재 미구현)
+    []
   end
 
   def self.check_page_links(page, broken)

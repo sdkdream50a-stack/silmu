@@ -205,6 +205,13 @@ module ApplicationHelper
     html
   end
 
+  # 페이지 타입별 OG 이미지 URL 반환
+  # 컨트롤러에서 set_og_image(category:)로 @og_image_path가 설정되면 해당 이미지 사용
+  # 없으면 기본 이미지 사용
+  def og_image_url_for_page
+    @og_image_path.presence || "https://silmu.kr/og-image.png"
+  end
+
   # 간단한 Markdown 변환 (일반 콘텐츠용)
   def simple_markdown(content)
     return '' if content.blank?

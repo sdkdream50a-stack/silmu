@@ -49,12 +49,17 @@ class AuditCase < ApplicationRecord
 
   def checkpoint_list
     return [] if checkpoints.blank?
-    JSON.parse(checkpoints) rescue []
+    JSON.parse(checkpoints)
+  rescue JSON::ParserError => e
+    Rails.logger.warn "[AuditCase#checkpoint_list] JSON 파싱 실패 (id=#{id}): #{e.message}"
+    []
   end
 
   def related_topic
     return nil if topic_slug.blank?
-    Topic.published.find_by(slug: topic_slug)
+    Rails.cache.fetch("audit_case_topic/#{slug}", expires_in: 1.hour) do
+      Topic.published.find_by(slug: topic_slug)
+    end
   end
 
   def severity_color

@@ -126,7 +126,10 @@ class Topic < ApplicationRecord
   # FAQ 배열로 반환 (JSON 파싱)
   def faq_list
     return [] if faqs.blank?
-    JSON.parse(faqs) rescue []
+    JSON.parse(faqs)
+  rescue JSON::ParserError => e
+    Rails.logger.warn "[Topic#faq_list] JSON 파싱 실패 (id=#{id}): #{e.message}"
+    []
   end
 
   # 법령 3단 데이터가 있는지

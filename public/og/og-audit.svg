@@ -1,0 +1,17 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#7f1d1d;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#dc2626;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="1100" cy="80" r="180" fill="#ef4444" fill-opacity="0.15"/>
+  <circle cx="950" cy="550" r="120" fill="#b91c1c" fill-opacity="0.2"/>
+  <rect x="60" y="240" width="80" height="6" rx="3" fill="#f87171"/>
+  <text x="60" y="160" font-family="sans-serif" font-size="80" font-weight="bold" fill="white">실무.kr</text>
+  <text x="60" y="310" font-family="sans-serif" font-size="52" font-weight="bold" fill="#fca5a5">감사사례 분석</text>
+  <text x="60" y="390" font-family="sans-serif" font-size="34" fill="#fecaca">실제 감사 지적사례 · 위반 유형 분석</text>
+  <text x="60" y="450" font-family="sans-serif" font-size="30" fill="#fca5a5">주의 · 경고 · 징계 · 환수 사례 정리</text>
+  <text x="60" y="570" font-family="sans-serif" font-size="26" fill="#fee2e2">감사원·자체감사 지적사례 완전정리</text>
+</svg>

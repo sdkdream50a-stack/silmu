@@ -1,0 +1,17 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4a1d96;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="1100" cy="80" r="180" fill="#8b5cf6" fill-opacity="0.15"/>
+  <circle cx="950" cy="550" r="120" fill="#6d28d9" fill-opacity="0.2"/>
+  <rect x="60" y="240" width="80" height="6" rx="3" fill="#a78bfa"/>
+  <text x="60" y="160" font-family="sans-serif" font-size="80" font-weight="bold" fill="white">실무.kr</text>
+  <text x="60" y="310" font-family="sans-serif" font-size="52" font-weight="bold" fill="#c4b5fd">보조금 실무 가이드</text>
+  <text x="60" y="390" font-family="sans-serif" font-size="34" fill="#ddd6fe">국고보조금 · 지방보조금 · 보조금 정산</text>
+  <text x="60" y="450" font-family="sans-serif" font-size="30" fill="#c4b5fd">보조금 교부 · 정산 · 반환 · 제재</text>
+  <text x="60" y="570" font-family="sans-serif" font-size="26" fill="#ede9fe">공무원을 위한 보조금 관리 완전정리</text>
+</svg>

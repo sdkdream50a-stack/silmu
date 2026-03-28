@@ -4,7 +4,7 @@ class SitemapPingJob < ApplicationJob
 
   HOST = "silmu.kr"
   EXAM_HOST = "exam.silmu.kr"
-  INDEXNOW_KEY = "5ae9664d75415a43ef8341b00b97a941"
+  INDEXNOW_KEY = Rails.application.credentials.dig(:indexnow, :key) || "5ae9664d75415a43ef8341b00b97a941"
   INDEXNOW_KEY_LOCATION = "https://#{HOST}/#{INDEXNOW_KEY}.txt"
 
   # IndexNow 지원 검색엔진 (Bing, Naver, Yandex, Seznam 등)
@@ -17,17 +17,11 @@ class SitemapPingJob < ApplicationJob
 
   # urls: nil이면 최근 변경분 전체 수집, Array이면 해당 URL만 즉시 제출
   def perform(urls = nil)
-    require "net/http"
-
     urls = urls ? Array(urls) : collect_urls
-    Rails.logger.info "[SitemapPing] #{urls.size}개 URL 제출 시작"
+    Rails.logger.info "[SitemapPing] #{urls.size}개 URL 제출 시작 (#{INDEXNOW_ENGINES.size}개 엔진 병렬)"
 
-    # Bing 권장: 배치 모드 대신 URL별 개별 제출
     INDEXNOW_ENGINES.each do |engine|
-      urls.each do |url|
-        status = submit_indexnow(engine, url)
-        Rails.logger.info "[SitemapPing] #{engine} #{url}: #{status}"
-      end
+      SitemapPingEngineJob.perform_later(engine, urls)
     end
   end
 
@@ -57,23 +51,4 @@ class SitemapPingJob < ApplicationJob
     urls.uniq
   end
 
-  def submit_indexnow(engine, url)
-    uri = URI("https://#{engine}/indexnow")
-    uri.query = URI.encode_www_form(
-      url: url,
-      key: INDEXNOW_KEY
-    )
-
-    http = Net::HTTP.new(uri.host, 443)
-    http.use_ssl = true
-    http.open_timeout = 10
-    http.read_timeout = 10
-
-    request = Net::HTTP::Get.new(uri.request_uri)
-    response = http.request(request)
-    response.code.to_i < 400 ? :ok : :"error_#{response.code}"
-  rescue => e
-    Rails.logger.error "[SitemapPing] #{engine} 실패: #{e.message}"
-    :error
-  end
 end

@@ -1,4 +1,17 @@
 class GuidesController < ApplicationController
+  # 가이드 카테고리 → OG 이미지 카테고리 매핑
+  GUIDE_OG_CATEGORY_MAP = {
+    "contract"  => "contract",
+    "budget"    => "budget",
+    "expense"   => "expense",
+    "salary"    => "salary",
+    "subsidy"   => "subsidy",
+    "property"  => "property",
+    "travel"    => "travel",
+    "duty"      => "duty",
+    "audit"     => "audit",
+    "tools"     => "tools"
+  }.freeze
   def index
     @guides            = Rails.cache.fetch("guides/all/v2", expires_in: 1.hour) { Guide.published.ordered.to_a }
     @popular_guides    = Rails.cache.fetch("guides/popular", expires_in: 1.hour) { Guide.published.order(view_count: :desc).limit(5).to_a }
@@ -101,6 +114,7 @@ class GuidesController < ApplicationController
     end
     rich_desc = desc_parts.join(" ").truncate(155)
 
+    set_og_image(category: GUIDE_OG_CATEGORY_MAP[@guide.category])
     set_meta_tags(
       title: @guide.title,
       description: rich_desc,
@@ -108,8 +122,7 @@ class GuidesController < ApplicationController
       og: {
         title: @guide.title,
         description: rich_desc,
-        url: canonical_url,
-        image: "https://silmu.kr/og-image.png"
+        url: canonical_url
       },
       canonical: canonical_url
     )

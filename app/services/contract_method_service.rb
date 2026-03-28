@@ -2,292 +2,34 @@
 # 추정가격과 계약유형에 따라 적정 계약방식을 판단하고 관련 정보를 제공
 
 class ContractMethodService
+  # YAML 데이터 로드 (앱 시작 시 1회)
+  CONFIG = YAML.load_file(
+    Rails.root.join("config", "contract_thresholds.yml"),
+    permitted_classes: [ Symbol ],
+    symbolize_names: false
+  ).freeze
+
   # 계약방식 기준 (지방계약법 시행령 기준)
-  CONTRACT_THRESHOLDS = {
-    goods: {
-      name: "물품",
-      icon: "inventory_2",
-      thresholds: [
-        {
-          max: 2_000_000,
-          method: "소액수의계약",
-          method_detail: "견적서 생략 또는 1인 견적",
-          basis: "지방계약법 시행령 제25조제1항제5호 나목, 제30조제2항",
-          note: "추정가격 200만원 이하 (200만원 미만은 견적서 생략 가능)",
-          documents: %w[체결제한확인서 견적서 물품규격서 사업자등록증사본]
-        },
-        {
-          max: 20_000_000,
-          method: "수의계약",
-          method_detail: "1인 견적 수의계약",
-          basis: "지방계약법 시행령 제25조제1항제5호 나목",
-          note: "추정가격 2천만원 이하 (예정가격 작성 생략 가능 — 시행령 제9조)",
-          documents: %w[체결제한확인서 견적서 물품규격서 사업자등록증사본 청렴서약서]
-        },
-        {
-          max: 50_000_000,
-          method: "수의계약",
-          method_detail: "2인 이상 견적 수의계약",
-          basis: "지방계약법 시행령 제25조제1항제5호 라목·마목",
-          note: "추정가격 5천만원 이하 (학술연구 등 특수분야 또는 여성·장애인·사회적기업 등 해당 시). G2B 전자견적 필수",
-          special_condition: "일반 업체와의 계약은 2천만원 초과 시 경쟁입찰 대상. 특례기업은 5천만원까지 1인 견적 가능",
-          documents: %w[체결제한확인서 견적서(2인이상) 견적비교표 물품규격서 예정가격조서 사업자등록증사본 청렴서약서 수의계약사유서]
-        },
-        {
-          max: 100_000_000,
-          method: "수의계약",
-          method_detail: "2인 이상 견적 수의계약 (특례기업)",
-          basis: "지방계약법 시행령 제25조제1항제5호 다목~마목",
-          note: "추정가격 1억원 이하 (소기업·소상공인·여성·장애인·사회적기업 등과의 계약에 한정). G2B 전자견적 필수",
-          special_condition: "해당 기업 확인서 필수 (중소기업확인서·여성기업확인서 등). 중소기업자간 경쟁제품 해당 여부 확인 필요",
-          documents: %w[체결제한확인서 견적서(2인이상) 견적비교표 물품규격서 예정가격조서 사업자등록증사본 청렴서약서 수의계약사유서 중소기업확인서]
-        },
-        {
-          max: Float::INFINITY,
-          method: "입찰",
-          method_detail: "일반/제한경쟁입찰",
-          basis: "지방계약법 제9조, 시행령 제13조",
-          note: "추정가격 1억원 초과 (특례기업 외 일반 업체는 2천만원 초과 시 입찰)",
-          special_condition: "나라장터(G2B) 또는 학교장터(S2B) 전자입찰 필수",
-          documents: %w[입찰공고문 설계서 예정가격조서 입찰참가자격요건 계약서 계약보증금]
-        }
-      ]
-    },
-    service: {
-      name: "용역",
-      icon: "support_agent",
-      thresholds: [
-        {
-          max: 2_000_000,
-          method: "소액수의계약",
-          method_detail: "견적서 생략 또는 1인 견적",
-          basis: "지방계약법 시행령 제25조제1항제5호 나목, 제30조제2항",
-          note: "추정가격 200만원 이하 (200만원 미만은 견적서 생략 가능)",
-          documents: %w[체결제한확인서 견적서 사업자등록증사본]
-        },
-        {
-          max: 20_000_000,
-          method: "수의계약",
-          method_detail: "1인 견적 수의계약",
-          basis: "지방계약법 시행령 제25조제1항제5호 나목",
-          note: "추정가격 2천만원 이하 (예정가격 작성 생략 가능 — 시행령 제9조)",
-          documents: %w[체결제한확인서 견적서 사업자등록증사본 청렴서약서 과업내용서]
-        },
-        {
-          max: 50_000_000,
-          method: "수의계약",
-          method_detail: "2인 이상 견적 수의계약",
-          basis: "지방계약법 시행령 제25조제1항제5호 라목·마목",
-          note: "추정가격 5천만원 이하 (학술연구 등 특수분야 또는 여성·장애인·사회적기업 등 해당 시). G2B 전자견적 필수",
-          special_condition: "일반 업체와의 계약은 2천만원 초과 시 경쟁입찰 대상. 특례기업은 5천만원까지 1인 견적 가능",
-          documents: %w[체결제한확인서 견적서(2인이상) 견적비교표 과업내용서 예정가격조서 사업자등록증사본 청렴서약서 수의계약사유서]
-        },
-        {
-          max: 100_000_000,
-          method: "수의계약",
-          method_detail: "2인 이상 견적 수의계약 (특례기업)",
-          basis: "지방계약법 시행령 제25조제1항제5호 다목~마목",
-          note: "추정가격 1억원 이하 (소기업·소상공인·여성·장애인·사회적기업 등과의 계약에 한정). G2B 전자견적 필수",
-          special_condition: "해당 기업 확인서 필수 (중소기업확인서·여성기업확인서 등). 용역의 특성상 특정인 수의계약 가능 여부 검토 (제25조제1항제4호)",
-          documents: %w[체결제한확인서 견적서(2인이상) 견적비교표 과업내용서 예정가격조서 사업자등록증사본 청렴서약서 수의계약사유서 중소기업확인서]
-        },
-        {
-          max: Float::INFINITY,
-          method: "입찰",
-          method_detail: "일반/제한경쟁입찰 또는 협상에의한계약",
-          basis: "지방계약법 제9조, 시행령 제13조, 제43조",
-          note: "추정가격 1억원 초과 (특례기업 외 일반 업체는 2천만원 초과 시 입찰)",
-          special_condition: "기술제안서 평가 등 협상에의한계약 적용 가능",
-          documents: %w[입찰공고문 과업내용서 예정가격조서 평가기준 계약서 계약이행보증서]
-        }
-      ]
-    },
-    construction_general: {
-      name: "종합공사",
-      icon: "domain",
-      thresholds: [
-        {
-          max: 2_000_000,
-          method: "소액수의계약",
-          method_detail: "견적서 생략 또는 1인 견적",
-          basis: "지방계약법 시행령 제25조제1항제5호 가목, 제30조제2항",
-          note: "추정가격 200만원 이하 (200만원 미만은 견적서 생략 가능)",
-          type_display_name: "경미한 건설공사",
-          documents: %w[체결제한확인서 견적서 사업자등록증사본]
-        },
-        {
-          max: 20_000_000,
-          method: "수의계약",
-          method_detail: "1인 견적 수의계약",
-          basis: "지방계약법 시행령 제25조제1항제5호 가목",
-          note: "추정가격 2천만원 이하 (경미한 건설공사, 건설업 등록 불필요). 예정가격 작성 생략 가능 (시행령 제9조)",
-          type_display_name: "경미한 건설공사",
-          documents: %w[체결제한확인서 견적서 사업자등록증사본]
-        },
-        {
-          max: 50_000_000,
-          method: "수의계약",
-          method_detail: "2인 이상 견적 수의계약",
-          basis: "지방계약법 시행령 제25조제1항제5호 가목, 건설산업기본법 시행령 제8조",
-          note: "추정가격 5천만원 이하 (경미한 건설공사). G2B 전자견적 필수",
-          type_display_name: "경미한 건설공사",
-          special_condition: "공사예정금액 5천만원 미만 시 건설업 등록 없이 시공 가능 (건설산업기본법 시행령 제8조)",
-          documents: %w[체결제한확인서 견적서(2인이상) 견적비교표 설계서 예정가격조서 사업자등록증사본 청렴서약서 수의계약사유서]
-        },
-        {
-          max: 400_000_000,
-          method: "수의계약",
-          method_detail: "2인 이상 견적 수의계약",
-          basis: "지방계약법 시행령 제25조제1항제5호 가목",
-          note: "추정가격 4억원 이하 (2022.9 개정 반영). G2B 전자견적 필수",
-          special_condition: "건설업 등록업체만 참여 가능",
-          documents: %w[체결제한확인서 견적서(2인이상) 견적비교표 설계서 예정가격조서 건설업등록증 사업자등록증사본 청렴서약서 수의계약사유서]
-        },
-        {
-          max: Float::INFINITY,
-          method: "입찰",
-          method_detail: "일반/제한경쟁입찰",
-          basis: "지방계약법 제9조, 건설산업기본법",
-          note: "추정가격 4억원 초과",
-          special_condition: "전자입찰 필수, PQ(사전심사) 또는 적격심사",
-          documents: %w[입찰공고문 설계서 예정가격조서 입찰참가자격요건 계약서 계약보증금 이행보증서 하자보증서 산업재해보험가입증명]
-        }
-      ]
-    },
-    construction_special: {
-      name: "전문공사",
-      icon: "engineering",
-      thresholds: [
-        {
-          max: 2_000_000,
-          method: "소액수의계약",
-          method_detail: "견적서 생략 또는 1인 견적",
-          basis: "지방계약법 시행령 제25조제1항제5호 가목, 제30조제2항",
-          note: "추정가격 200만원 이하 (200만원 미만은 견적서 생략 가능)",
-          type_display_name: "경미한 건설공사",
-          documents: %w[체결제한확인서 견적서 사업자등록증사본]
-        },
-        {
-          max: 20_000_000,
-          method: "수의계약",
-          method_detail: "1인 견적 수의계약",
-          basis: "지방계약법 시행령 제25조제1항제5호 가목",
-          note: "추정가격 2천만원 이하 (경미한 건설공사). 예정가격 작성 생략 가능 (시행령 제9조)",
-          type_display_name: "경미한 건설공사",
-          special_condition: "공사예정금액 1,500만원 미만은 경미한 건설공사로 전문공사업 등록 불필요 (건설산업기본법 시행령 제8조)",
-          documents: %w[체결제한확인서 견적서 사업자등록증사본]
-        },
-        {
-          max: 200_000_000,
-          method: "수의계약",
-          method_detail: "2인 이상 견적 수의계약",
-          basis: "지방계약법 시행령 제25조제1항제5호 가목",
-          note: "추정가격 2억원 이하 (2022.9 개정 반영). G2B 전자견적 필수",
-          special_condition: "해당 전문공사업 등록업체만 참여",
-          documents: %w[체결제한확인서 견적서(2인이상) 견적비교표 설계서 예정가격조서 건설업등록증 사업자등록증사본 청렴서약서 수의계약사유서]
-        },
-        {
-          max: Float::INFINITY,
-          method: "입찰",
-          method_detail: "일반/제한경쟁입찰",
-          basis: "지방계약법 제9조, 건설산업기본법",
-          note: "추정가격 2억원 초과",
-          special_condition: "전자입찰 필수",
-          documents: %w[입찰공고문 설계서 예정가격조서 입찰참가자격요건 계약서 계약보증금 이행보증서 하자보증서]
-        }
-      ]
-    },
-    construction_etc: {
-      name: "전기/소방/정보통신공사",
-      icon: "electrical_services",
-      thresholds: [
-        {
-          max: 2_000_000,
-          method: "소액수의계약",
-          method_detail: "견적서 생략 또는 1인 견적",
-          basis: "지방계약법 시행령 제25조제1항제5호 가목, 제30조제2항",
-          note: "추정가격 200만원 이하 (200만원 미만은 견적서 생략 가능)",
-          type_display_name: "경미한 건설공사",
-          documents: %w[체결제한확인서 견적서 사업자등록증사본]
-        },
-        {
-          max: 20_000_000,
-          method: "수의계약",
-          method_detail: "1인 견적 수의계약",
-          basis: "지방계약법 시행령 제25조제1항제5호 가목",
-          note: "추정가격 2천만원 이하 (경미한 건설공사). 예정가격 작성 생략 가능 (시행령 제9조)",
-          type_display_name: "경미한 건설공사",
-          documents: %w[체결제한확인서 견적서 사업자등록증사본]
-        },
-        {
-          max: 50_000_000,
-          method: "수의계약",
-          method_detail: "2인 이상 견적 수의계약",
-          basis: "지방계약법 시행령 제25조제1항제5호 가목, 각 개별법령(전기공사업법 등)",
-          note: "추정가격 5천만원 이하. G2B 전자견적 필수",
-          type_display_name: "경미한 건설공사",
-          special_condition: "각 개별법령에서 정한 경미한 공사 범위 내 시 해당 공사업 등록 없이 가능",
-          documents: %w[체결제한확인서 견적서(2인이상) 견적비교표 설계서 예정가격조서 사업자등록증사본 청렴서약서 수의계약사유서]
-        },
-        {
-          max: 160_000_000,
-          method: "수의계약",
-          method_detail: "2인 이상 견적 수의계약",
-          basis: "지방계약법 시행령 제25조제1항제5호 가목",
-          note: "추정가격 1억6천만원 이하 (2022.9 개정 반영). G2B 전자견적 필수",
-          special_condition: "해당 공사업 등록업체만 참여 (전기공사업, 소방시설업, 정보통신공사업)",
-          documents: %w[체결제한확인서 견적서(2인이상) 견적비교표 설계서 예정가격조서 공사업등록증 사업자등록증사본 청렴서약서 수의계약사유서]
-        },
-        {
-          max: Float::INFINITY,
-          method: "입찰",
-          method_detail: "일반/제한경쟁입찰",
-          basis: "지방계약법 제9조, 각 개별법령",
-          note: "추정가격 1억6천만원 초과",
-          special_condition: "전자입찰 필수",
-          documents: %w[입찰공고문 설계서 예정가격조서 입찰참가자격요건 계약서 계약보증금 이행보증서 하자보증서]
-        }
-      ]
-    }
-  }.freeze
+  CONTRACT_THRESHOLDS = CONFIG["contract_thresholds"].transform_keys(&:to_sym).transform_values do |v|
+    v.merge(
+      "thresholds" => v["thresholds"].map { |t| t.transform_keys(&:to_sym) }
+    ).transform_keys(&:to_sym)
+  end.freeze
 
   # 특례 조건 (여성기업, 장애인기업, 사회적기업 등)
-  SPECIAL_ENTERPRISES = {
-    women: { name: "여성기업", threshold: 50_000_000, basis: "여성기업지원에 관한 법률" },
-    disabled: { name: "장애인기업", threshold: 50_000_000, basis: "장애인기업활동 촉진법" },
-    social: { name: "사회적기업", threshold: 50_000_000, basis: "사회적기업 육성법" },
-    cooperative: { name: "협동조합", threshold: 50_000_000, basis: "협동조합 기본법" },
-    village: { name: "마을기업", threshold: 50_000_000, basis: "도시재생법" },
-    self_support: { name: "자활기업", threshold: 50_000_000, basis: "국민기초생활보장법" },
-    social_cooperative: { name: "사회적협동조합", threshold: 50_000_000, basis: "협동조합 기본법" }
-  }.freeze
+  SPECIAL_ENTERPRISES = CONFIG["special_enterprises"].transform_keys(&:to_sym).transform_values do |v|
+    v.transform_keys(&:to_sym)
+  end.freeze
 
   # 낙찰하한율 기준 (지방계약법 시행령 제42조, 지방계약법 시행규칙 별표2)
-  LOWEST_BID_RATES = {
-    construction: {
-      name: "공사",
-      rates: [
-        { min: 100_000_000_000, max: Float::INFINITY, rate: "87.745% ~ 89.745%", detail: "1,000억원 이상" },
-        { min: 30_000_000_000, max: 100_000_000_000, rate: "87.495% ~ 89.495%", detail: "300억원 이상 ~ 1,000억원 미만" },
-        { min: 0, max: 30_000_000_000, rate: "87.745% ~ 89.745%", detail: "300억원 미만" }
-      ]
-    },
-    goods_service: {
-      name: "물품·용역",
-      rates: [
-        { min: 20_000_001, max: Float::INFINITY, rate: "88.0%", detail: "2천만원 초과" },
-        { min: 0, max: 20_000_000, rate: "90.0%", detail: "2천만원 이하" }
-      ]
-    }
-  }.freeze
+  LOWEST_BID_RATES = CONFIG["lowest_bid_rates"].transform_keys(&:to_sym).transform_values do |v|
+    v.merge(
+      "rates" => v["rates"].map { |r| r.transform_keys(&:to_sym) }
+    ).transform_keys(&:to_sym)
+  end.freeze
 
   # 관련 법령 정보
-  RELATED_LAWS = {
-    "지방계약법" => "https://www.law.go.kr/법령/지방자치단체를당사자로하는계약에관한법률",
-    "지방계약법 시행령" => "https://www.law.go.kr/법령/지방자치단체를당사자로하는계약에관한법률시행령",
-    "건설산업기본법" => "https://www.law.go.kr/법령/건설산업기본법",
-    "중소기업제품 구매촉진법" => "https://www.law.go.kr/법령/중소기업제품구매촉진및판로지원에관한법률"
-  }.freeze
+  RELATED_LAWS = CONFIG["related_laws"].freeze
 
   class << self
     # 계약방식 결정

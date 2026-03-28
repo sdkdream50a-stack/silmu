@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_26_215327) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_28_000010) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -18,7 +18,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_26_215327) do
   create_table "audit_cases", force: :cascade do |t|
     t.text "action_taken"
     t.string "category"
-    t.text "checkpoints"
+    t.jsonb "checkpoints", default: []
     t.datetime "created_at", null: false
     t.text "detail"
     t.string "infographic_url"
@@ -83,20 +83,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_26_215327) do
   end
 
   create_table "exam_progresses", force: :cascade do |t|
-    t.text "bookmarks", default: "[]"
-    t.text "chapter_quizzes", default: "{}"
-    t.text "chapters", default: "{}"
+    t.jsonb "bookmarks", default: []
+    t.jsonb "chapter_quizzes", default: {}
+    t.jsonb "chapters", default: {}
     t.datetime "created_at", null: false
     t.string "display_name"
-    t.text "quizzes", default: "{}"
+    t.jsonb "quizzes", default: {}
     t.integer "streak_count", default: 0
-    t.text "streak_history", default: "[]"
+    t.jsonb "streak_history", default: []
     t.string "streak_last_date"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.integer "weekly_quiz_count", default: 0
     t.string "weekly_reset_date"
-    t.text "wrong_answers", default: "[]"
+    t.jsonb "wrong_answers", default: []
     t.index ["user_id"], name: "index_exam_progresses_on_user_id"
     t.index ["weekly_quiz_count"], name: "idx_exam_progresses_on_weekly_quiz_count"
   end
@@ -202,7 +202,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_26_215327) do
     t.text "commentary"
     t.datetime "created_at", null: false
     t.text "decree_content"
-    t.text "faqs"
+    t.jsonb "faqs", default: []
     t.text "flowchart_mermaid"
     t.string "flowchart_url"
     t.string "infographic_url"
@@ -223,6 +223,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_26_215327) do
     t.string "video_url"
     t.integer "view_count", default: 0
     t.index ["category"], name: "index_topics_on_category"
+    t.index ["faqs"], name: "index_topics_on_faqs_jsonb", where: "(faqs <> '[]'::jsonb)", using: :gin
     t.index ["parent_id"], name: "index_topics_on_parent_id"
     t.index ["published", "category"], name: "index_topics_on_published_and_category"
     t.index ["published", "sector", "category"], name: "index_topics_on_pub_sector_cat"
@@ -237,12 +238,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_26_215327) do
     t.datetime "created_at", null: false
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
+    t.string "name"
     t.boolean "newsletter_agreed", default: false, null: false
+    t.string "provider"
     t.datetime "remember_created_at"
     t.datetime "reset_password_sent_at"
     t.string "reset_password_token"
+    t.string "uid"
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["provider", "uid"], name: "index_users_on_provider_and_uid", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 

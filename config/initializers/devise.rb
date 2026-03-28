@@ -273,6 +273,18 @@ Devise.setup do |config|
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
 
+  # 카카오 로그인 (credentials 설정 시에만 활성화)
+  if Rails.application.credentials.dig(:kakao, :client_id).present?
+    config.omniauth :kakao, Rails.application.credentials.dig(:kakao, :client_id),
+                    client_secret: Rails.application.credentials.dig(:kakao, :client_secret)
+  end
+
+  # 네이버 로그인 (credentials 설정 시에만 활성화)
+  if Rails.application.credentials.dig(:naver, :client_id).present?
+    config.omniauth :naver, Rails.application.credentials.dig(:naver, :client_id),
+                    client_secret: Rails.application.credentials.dig(:naver, :client_secret)
+  end
+
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
   # change the failure app, you can configure them inside the config.warden block.

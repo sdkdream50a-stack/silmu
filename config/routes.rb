@@ -85,7 +85,10 @@ Rails.application.routes.draw do
   get "document-analysis/analyze", to: redirect("/tools")
   get "cost-estimates/default-items", to: redirect("/tools/cost-estimate")
 
-  devise_for :users, controllers: { sessions: "users/sessions" }
+  devise_for :users, controllers: {
+    sessions: "users/sessions",
+    omniauth_callbacks: "users/omniauth_callbacks"
+  }
   get "/login", to: redirect("/users/sign_in")
   root "home#index"
 
