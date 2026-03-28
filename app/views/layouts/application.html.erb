@@ -195,7 +195,10 @@
       </script>
     <% end %>
 
-    <%# AdSense 비활성화 — 공무원 실무 특화 사이트로 광고 없이 운영 %>
+    <%# AdSense — guides, tools 페이지에만 조건부 로드 %>
+    <% if Rails.env.production? && %w[guides tools].include?(params[:controller]) %>
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6241798439911569" crossorigin="anonymous"></script>
+    <% end %>
 
     <% if Rails.env.production? && Rails.application.credentials.clarity_project_id.present? %>
       <!-- Microsoft Clarity - 지연 로딩 -->

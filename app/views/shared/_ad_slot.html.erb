@@ -1,1 +1,17 @@
-<%# 광고 비활성화 — 공무원 실무 특화 사이트로 광고 없이 운영 %>
+<%# 광고 단위 — guides, tools 페이지 하단에만 표시 (운영 환경 한정) %>
+<%
+  show_ad = Rails.env.production? &&
+            position.to_s == 'bottom' &&
+            %w[guides tools].include?(params[:controller])
+%>
+<% if show_ad %>
+<div class="max-w-4xl mx-auto px-4 py-6">
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-6241798439911569"
+       data-ad-slot="2611873628"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+<% end %>
