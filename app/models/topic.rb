@@ -124,9 +124,10 @@ class Topic < ApplicationRecord
     AuditCase.published.where(topic_slug: slug).recent
   end
 
-  # FAQ 배열로 반환 (JSON 파싱)
+  # FAQ 배열로 반환 (jsonb는 이미 Array, 레거시 String은 JSON.parse)
   def faq_list
     return [] if faqs.blank?
+    return faqs if faqs.is_a?(Array)
     JSON.parse(faqs)
   rescue JSON::ParserError => e
     Rails.logger.warn "[Topic#faq_list] JSON 파싱 실패 (id=#{id}): #{e.message}"
