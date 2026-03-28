@@ -136,6 +136,8 @@ Rails.application.routes.draw do
 
   # 실무 도구
   get "tools", to: "tools#index", as: :tools
+  get "tools/salary-calculator", to: "tools#salary_calculator", as: :salary_calculator
+  get "tools/pension-calculator", to: "tools#pension_calculator", as: :pension_calculator
   get "tools/travel-calculator", to: "tools#travel_calculator", as: :travel_calculator
   get "tools/task-calendar.ics", to: "tools#task_calendar_ics", as: :task_calendar_ics
   get "tools/task-calendar", to: "tools#task_calendar", as: :task_calendar

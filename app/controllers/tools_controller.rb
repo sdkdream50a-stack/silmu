@@ -38,6 +38,36 @@ class ToolsController < ApplicationController
     )
   end
 
+  def salary_calculator
+    set_meta_tags(
+      title: "공무원 봉급 실수령액 계산기 2025 — 직급·호봉별 세후 월급",
+      description: "2025년 공무원 봉급표 기준 직급·호봉별 실수령액 자동 계산. 공무원연금기여금·건강보험·장기요양보험·소득세 공제 후 실수령액을 즉시 확인하세요.",
+      keywords: "공무원봉급계산기,공무원실수령액,공무원월급계산,2025공무원봉급표,직급호봉봉급",
+      og: {
+        title: "공무원 봉급 실수령액 계산기 — 실무.kr",
+        description: "2025년 직급·호봉별 공무원 실수령액 즉시 계산",
+        url: canonical_url,
+        image: "https://silmu.kr/og-image.png",
+        type: "website"
+      }
+    )
+  end
+
+  def pension_calculator
+    set_meta_tags(
+      title: "공무원연금 예상 수령액 계산기 — 재직년수별 월 연금액",
+      description: "재직년수와 기준소득월액을 입력하면 예상 공무원연금 수령액을 자동 계산합니다. 2026년 인상률 2.1% 반영. 2016년 전후 임용자 구분 적용.",
+      keywords: "공무원연금계산기,공무원연금수령액,공무원연금예상,재직년수연금,2026공무원연금",
+      og: {
+        title: "공무원연금 예상 수령액 계산기 — 실무.kr",
+        description: "재직년수·기준소득월액으로 공무원연금 수령액 즉시 계산. 2026년 2.1% 인상 반영.",
+        url: canonical_url,
+        image: "https://silmu.kr/og-image.png",
+        type: "website"
+      }
+    )
+  end
+
   def subsidy_settlement_checker
     set_meta_tags(
       title: "보조금 정산 체크리스트 — e나라도움 정산 전 자가점검",

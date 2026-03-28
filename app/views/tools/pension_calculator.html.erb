@@ -1,0 +1,324 @@
+<%# 공무원연금 예상 수령액 계산기 %>
+
+<section class="section py-10">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- 뒤로가기 -->
+    <div class="mb-6">
+      <%= link_to tools_path, class: "inline-flex items-center text-slate-600 hover:text-indigo-600 transition-colors font-medium" do %>
+        <span class="material-symbols-outlined mr-1">arrow_back</span>
+        도구 목록으로
+      <% end %>
+    </div>
+
+    <!-- 페이지 헤더 -->
+    <div class="mb-8">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="icon-container icon-container-lg shadow-lg" style="background: linear-gradient(135deg, #7c3aed, #4f46e5)">
+          <span class="material-symbols-outlined text-3xl text-white">savings</span>
+        </div>
+        <div>
+          <h1 class="text-2xl font-bold text-slate-900">공무원연금 예상 수령액 계산기</h1>
+          <p class="text-slate-500">재직년수와 기준소득월액으로 예상 연금액을 즉시 계산합니다</p>
+        </div>
+      </div>
+
+      <details class="bg-white rounded-2xl shadow-sm border border-violet-100 mt-6">
+        <summary class="px-6 py-4 cursor-pointer hover:bg-slate-50 transition-colors flex items-center gap-2 [list-style:none] [&::-webkit-details-marker]:hidden">
+          <span class="material-symbols-outlined text-violet-600 text-[20px]">info</span>
+          <span class="text-sm font-semibold text-slate-700">계산 기준 및 법령 근거</span>
+          <span class="ml-auto text-xs text-slate-400">펼치기 ▾</span>
+        </summary>
+        <div class="px-6 pb-6 prose prose-slate prose-sm max-w-none">
+          <p class="text-slate-700 leading-relaxed mb-3">
+            공무원연금 수령액은 <strong>공무원연금법 제43조</strong>에 따라 산정됩니다.
+            2015년 개혁으로 연금지급률이 변경되어 임용 시기에 따라 다르게 적용됩니다.
+          </p>
+          <div class="bg-slate-50 rounded-lg p-4 text-sm space-y-2">
+            <p><strong>기준소득월액</strong> = 재직 기간 중 기준소득월액의 평균 (최근 3년 기준소득월액 반영)</p>
+            <p><strong>2016년 이후 임용자</strong>: 연금 = 기준소득월액 × 재직년수 × <strong>1.7%</strong></p>
+            <p><strong>2015년 이전 임용자</strong>: 구간별 차등 적용 (단순화하여 평균 <strong>1.9%</strong> 적용)</p>
+            <p><strong>2026년 인상률</strong>: 2025년 물가상승률 2.1% 반영 자동 계산</p>
+          </div>
+          <div class="bg-amber-50 border-l-4 border-amber-500 p-3 rounded-r-lg mt-4">
+            <p class="text-amber-900 text-xs leading-relaxed">
+              <strong>⚠️ 참고:</strong> 이 계산기는 단순 추정값입니다.
+              실제 수령액은 재직 기간 전체의 기준소득월액 평균, 기여금 납부 내역 등에 따라 달라집니다.
+              정확한 수령액은 공무원연금공단(1588-4321)에 문의하세요.
+            </p>
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <div class="lg:flex lg:gap-8">
+      <!-- 입력 폼 -->
+      <div class="lg:w-1/2 mb-8 lg:mb-0">
+        <div class="card p-6">
+          <h2 class="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
+            <span class="material-symbols-outlined text-violet-600">edit</span>
+            재직 정보 입력
+          </h2>
+
+          <!-- 임용 시기 선택 -->
+          <div class="mb-6">
+            <label class="block text-sm font-semibold text-slate-700 mb-3">임용 시기</label>
+            <div class="grid grid-cols-2 gap-3">
+              <button type="button" onclick="selectEra('before')"
+                      class="era-btn py-3 rounded-xl border-2 text-sm font-semibold transition-all border-violet-500 bg-violet-50 text-violet-700"
+                      data-era="before">2015년 이전 임용</button>
+              <button type="button" onclick="selectEra('after')"
+                      class="era-btn py-3 rounded-xl border-2 text-sm font-semibold transition-all border-slate-200 text-slate-500 hover:border-violet-300"
+                      data-era="after">2016년 이후 임용</button>
+            </div>
+            <p class="text-xs text-slate-400 mt-2" id="era-desc">지급율 평균 1.9% 적용 (구간별 차등)</p>
+          </div>
+
+          <!-- 재직년수 슬라이더 -->
+          <div class="mb-6">
+            <label class="block text-sm font-semibold text-slate-700 mb-2">
+              예상 재직년수
+              <span class="text-violet-600 font-bold ml-2" id="tenure-display">20년</span>
+            </label>
+            <input type="range" id="tenure-slider" min="5" max="36" value="20" step="1"
+                   oninput="updateTenure(this.value); calculate()"
+                   class="w-full h-2 bg-violet-100 rounded-lg appearance-none cursor-pointer accent-violet-600">
+            <div class="flex justify-between text-xs text-slate-400 mt-1">
+              <span>최소 5년</span>
+              <span>최대 36년</span>
+            </div>
+          </div>
+
+          <!-- 기준소득월액 입력 -->
+          <div class="mb-6">
+            <label class="block text-sm font-semibold text-slate-700 mb-2">
+              기준소득월액
+              <span class="text-xs text-slate-400 font-normal ml-1">(현재 또는 예상 봉급 기준)</span>
+            </label>
+            <div class="relative">
+              <input type="number" id="income-input"
+                     placeholder="예: 4500000"
+                     min="1000000" max="15000000" step="100000"
+                     oninput="calculate()"
+                     class="form-input w-full pr-8">
+              <span class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">원</span>
+            </div>
+            <p class="text-xs text-slate-400 mt-1">
+              2025년 공무원 전체 평균 기준소득월액: 약 <strong>5,675,969원</strong> (A값, 2026년 기준)
+            </p>
+          </div>
+
+          <!-- 빠른 선택 버튼 -->
+          <div class="mb-2">
+            <p class="text-xs text-slate-500 mb-2">빠른 선택 (직급별 평균)</p>
+            <div class="flex flex-wrap gap-2">
+              <% [[9, 2300000, "9급"], [7, 3200000, "7급"], [6, 4200000, "6급"], [5, 5000000, "5급"], [4, 6000000, "4급"]].each do |grade, income, label| %>
+                <button type="button" onclick="setIncome(<%= income %>)"
+                        class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-violet-50 text-violet-700 hover:bg-violet-100 transition-colors">
+                  <%= label %> 평균
+                </button>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 결과 패널 -->
+      <div class="lg:w-1/2">
+        <div class="card p-6">
+          <h2 class="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
+            <span class="material-symbols-outlined text-violet-600">account_balance</span>
+            예상 연금 수령액
+          </h2>
+
+          <!-- 주요 결과 강조 -->
+          <div class="bg-gradient-to-br from-violet-50 to-indigo-50 border border-violet-100 rounded-2xl p-6 mb-6 text-center">
+            <p class="text-sm text-slate-500 mb-1">월 예상 연금액 (2025년 기준)</p>
+            <div class="text-3xl font-bold text-violet-700" id="result-pension-monthly">정보를 입력하세요</div>
+            <p class="text-sm text-slate-500 mt-3 mb-1">2026년 2.1% 인상 후</p>
+            <div class="text-2xl font-bold text-violet-500" id="result-pension-2026">—</div>
+          </div>
+
+          <!-- 상세 결과 -->
+          <div id="result-detail" class="hidden">
+            <h3 class="text-sm font-semibold text-slate-700 mb-3">계산 상세</h3>
+            <div class="space-y-2.5 text-sm">
+              <div class="flex justify-between py-2 border-b border-slate-100">
+                <span class="text-slate-600">기준소득월액</span>
+                <span class="font-semibold text-slate-900" id="d-income"></span>
+              </div>
+              <div class="flex justify-between py-2 border-b border-slate-100">
+                <span class="text-slate-600">재직년수</span>
+                <span class="font-semibold text-slate-900" id="d-tenure"></span>
+              </div>
+              <div class="flex justify-between py-2 border-b border-slate-100">
+                <span class="text-slate-600">연금지급율</span>
+                <span class="font-semibold text-slate-900" id="d-rate"></span>
+              </div>
+              <div class="flex justify-between py-2 border-b border-slate-100">
+                <span class="text-slate-600">계산식</span>
+                <span class="font-semibold text-slate-900 text-xs" id="d-formula"></span>
+              </div>
+              <div class="flex justify-between py-2 border-b border-violet-100 bg-violet-50 px-2 rounded-lg">
+                <span class="font-semibold text-violet-700">월 예상 연금</span>
+                <span class="font-bold text-violet-700" id="d-monthly"></span>
+              </div>
+              <div class="flex justify-between py-2 border-b border-slate-100">
+                <span class="text-slate-600">연간 수령액</span>
+                <span class="font-semibold text-slate-900" id="d-annual"></span>
+              </div>
+            </div>
+
+            <!-- 노후 생활비 비교 -->
+            <div class="mt-5 p-4 bg-slate-50 rounded-xl">
+              <p class="text-xs font-semibold text-slate-600 mb-3">노후 생활비 비교 (60대 부부 기준)</p>
+              <div class="space-y-2">
+                <div>
+                  <div class="flex justify-between text-xs mb-1">
+                    <span class="text-slate-600">예상 연금</span>
+                    <span class="font-semibold" id="compare-pension">—</span>
+                  </div>
+                  <div class="h-3 bg-violet-100 rounded-full overflow-hidden">
+                    <div class="h-full bg-violet-500 rounded-full transition-all duration-500" id="bar-pension" style="width: 0%"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between text-xs mb-1">
+                    <span class="text-slate-600">노후 최소 생활비</span>
+                    <span class="font-semibold text-slate-500">2,369,000원</span>
+                  </div>
+                  <div class="h-3 bg-slate-200 rounded-full overflow-hidden">
+                    <div class="h-full bg-slate-400 rounded-full" style="width: 82%"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between text-xs mb-1">
+                    <span class="text-slate-600">노후 적정 생활비</span>
+                    <span class="font-semibold text-slate-500">2,888,000원</span>
+                  </div>
+                  <div class="h-3 bg-slate-200 rounded-full overflow-hidden">
+                    <div class="h-full bg-slate-400 rounded-full" style="width: 100%"></div>
+                  </div>
+                </div>
+              </div>
+              <p class="text-xs text-slate-400 mt-3" id="compare-comment"></p>
+            </div>
+          </div>
+
+          <!-- 초기 안내 -->
+          <div id="result-placeholder-pension" class="text-center py-8 text-slate-400">
+            <span class="material-symbols-outlined text-4xl mb-2 block">touch_app</span>
+            <p class="text-sm">임용 시기, 재직년수, 기준소득월액을<br>입력하면 예상 연금액이 계산됩니다</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 관련 도구 -->
+    <div class="mt-10 pt-8 border-t border-slate-100">
+      <h3 class="text-base font-bold text-slate-700 mb-4">함께 사용하면 좋은 도구</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <%= link_to salary_calculator_path, class: "card p-4 flex items-center gap-3 hover:border-blue-200 border border-transparent transition-all" do %>
+          <span class="material-symbols-outlined text-blue-600 text-2xl">payments</span>
+          <div>
+            <p class="text-sm font-semibold text-slate-900">봉급 실수령액 계산기</p>
+            <p class="text-xs text-slate-500">직급·호봉별 세후 월급</p>
+          </div>
+        <% end %>
+        <%= link_to severance_calculator_path, class: "card p-4 flex items-center gap-3 hover:border-emerald-200 border border-transparent transition-all" do %>
+          <span class="material-symbols-outlined text-emerald-600 text-2xl">savings</span>
+          <div>
+            <p class="text-sm font-semibold text-slate-900">퇴직수당 계산기</p>
+            <p class="text-xs text-slate-500">재직기간별 퇴직수당</p>
+          </div>
+        <% end %>
+        <%= link_to performance_bonus_calculator_path, class: "card p-4 flex items-center gap-3 hover:border-amber-200 border border-transparent transition-all" do %>
+          <span class="material-symbols-outlined text-amber-600 text-2xl">emoji_events</span>
+          <div>
+            <p class="text-sm font-semibold text-slate-900">성과상여금 계산기</p>
+            <p class="text-xs text-slate-500">S·A·B 등급별 계산</p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+let selectedEra = 'before'; // 'before' or 'after'
+
+function selectEra(era) {
+  selectedEra = era;
+  document.querySelectorAll('.era-btn').forEach(function(btn) {
+    const isSelected = btn.dataset.era === era;
+    btn.classList.toggle('border-violet-500', isSelected);
+    btn.classList.toggle('bg-violet-50', isSelected);
+    btn.classList.toggle('text-violet-700', isSelected);
+    btn.classList.toggle('border-slate-200', !isSelected);
+    btn.classList.toggle('text-slate-500', !isSelected);
+  });
+  document.getElementById('era-desc').textContent =
+    era === 'before'
+      ? '지급율 평균 1.9% 적용 (구간별 차등)'
+      : '지급율 1.7% 적용 (2016년 공무원연금법 개정)';
+  calculate();
+}
+
+function updateTenure(val) {
+  document.getElementById('tenure-display').textContent = val + '년';
+}
+
+function setIncome(amount) {
+  document.getElementById('income-input').value = amount;
+  calculate();
+}
+
+function calculate() {
+  const tenure = parseInt(document.getElementById('tenure-slider').value) || 20;
+  const income = parseInt(document.getElementById('income-input').value) || 0;
+  if (!income) return;
+
+  const rate = selectedEra === 'before' ? 0.019 : 0.017;
+  const monthlyPension = Math.round(income * tenure * rate);
+  const monthlyPension2026 = Math.round(monthlyPension * 1.021);
+  const annualPension = monthlyPension * 12;
+
+  // 결과 표시
+  document.getElementById('result-pension-monthly').textContent = monthlyPension.toLocaleString('ko-KR') + '원';
+  document.getElementById('result-pension-2026').textContent = monthlyPension2026.toLocaleString('ko-KR') + '원';
+
+  document.getElementById('d-income').textContent = income.toLocaleString('ko-KR') + '원';
+  document.getElementById('d-tenure').textContent = tenure + '년';
+  document.getElementById('d-rate').textContent = (rate * 100).toFixed(1) + '% × 재직년수';
+  document.getElementById('d-formula').textContent =
+    income.toLocaleString('ko-KR') + '원 × ' + tenure + '년 × ' + (rate * 100).toFixed(1) + '%';
+  document.getElementById('d-monthly').textContent = monthlyPension.toLocaleString('ko-KR') + '원';
+  document.getElementById('d-annual').textContent = annualPension.toLocaleString('ko-KR') + '원';
+
+  // 노후 생활비 비교
+  const adequateLifeCost = 2888000;
+  const ratio = Math.min(Math.round((monthlyPension / adequateLifeCost) * 100), 150);
+  document.getElementById('bar-pension').style.width = ratio + '%';
+  document.getElementById('compare-pension').textContent = monthlyPension.toLocaleString('ko-KR') + '원';
+
+  let comment = '';
+  if (monthlyPension >= adequateLifeCost) {
+    comment = '✅ 연금만으로 부부 적정 생활비를 충당할 수 있습니다.';
+  } else if (monthlyPension >= 2369000) {
+    comment = '⚠️ 최소 생활비는 충당 가능하나 적정 생활비에는 ' +
+      (adequateLifeCost - monthlyPension).toLocaleString('ko-KR') + '원 부족합니다.';
+  } else {
+    comment = '❗ 연금만으로는 최소 생활비도 부족합니다. 추가 노후 준비가 필요합니다.';
+  }
+  document.getElementById('compare-comment').textContent = comment;
+
+  document.getElementById('result-detail').classList.remove('hidden');
+  document.getElementById('result-placeholder-pension').classList.add('hidden');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  updateTenure(20);
+});
+document.addEventListener('turbo:load', function() {
+  updateTenure(parseInt(document.getElementById('tenure-slider').value) || 20);
+});
+</script>

@@ -1,0 +1,375 @@
+<%# 공무원 봉급 실수령액 계산기 — 2025년 봉급표 기준 %>
+
+<section class="section py-10">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- 뒤로가기 -->
+    <div class="mb-6">
+      <%= link_to tools_path, class: "inline-flex items-center text-slate-600 hover:text-indigo-600 transition-colors font-medium" do %>
+        <span class="material-symbols-outlined mr-1">arrow_back</span>
+        도구 목록으로
+      <% end %>
+    </div>
+
+    <!-- 페이지 헤더 -->
+    <div class="mb-8">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="icon-container icon-container-lg gradient-indigo shadow-lg">
+          <span class="material-symbols-outlined text-3xl text-white">payments</span>
+        </div>
+        <div>
+          <h1 class="text-2xl font-bold text-slate-900">공무원 봉급 실수령액 계산기</h1>
+          <p class="text-slate-500">2025년 봉급표 기준 직급·호봉별 세후 실수령액을 즉시 계산합니다</p>
+        </div>
+      </div>
+
+      <details class="bg-white rounded-2xl shadow-sm border border-indigo-100 mt-6">
+        <summary class="px-6 py-4 cursor-pointer hover:bg-slate-50 transition-colors flex items-center gap-2 [list-style:none] [&::-webkit-details-marker]:hidden">
+          <span class="material-symbols-outlined text-indigo-600 text-[20px]">info</span>
+          <span class="text-sm font-semibold text-slate-700">계산 기준 및 법령 근거</span>
+          <span class="ml-auto text-xs text-slate-400">펼치기 ▾</span>
+        </summary>
+        <div class="px-6 pb-6 prose prose-slate prose-sm max-w-none">
+          <p class="text-slate-700 leading-relaxed mb-3">
+            2025년 공무원 봉급표는 <strong>공무원보수규정 별표 3</strong>에 따릅니다.
+            전체 평균 3% 인상되었으며, 9급 1·2호봉은 6% 인상되어 최저임금 수준을 반영합니다.
+          </p>
+          <ul class="text-slate-700 text-sm space-y-1">
+            <li><strong>공무원연금기여금</strong>: 기준소득월액의 9% (공무원연금법 제67조)</li>
+            <li><strong>건강보험료</strong>: 봉급의 3.545% 본인 부담 (건강보험료율 7.09% × 1/2)</li>
+            <li><strong>장기요양보험료</strong>: 건강보험료의 12.81%</li>
+            <li><strong>소득세·지방소득세</strong>: 근로소득 간이세액표 추정값 (월 공제 합계 기준)</li>
+          </ul>
+          <div class="bg-amber-50 border-l-4 border-amber-500 p-3 rounded-r-lg mt-4">
+            <p class="text-amber-900 text-xs leading-relaxed">
+              <strong>⚠️ 참고:</strong> 수당(가족수당·정근수당 등)은 별도 가산이며, 기관별 차이가 있을 수 있습니다.
+              최종 실수령액은 소속 기관 급여 담당자 확인 후 결정하세요.
+            </p>
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <div class="lg:flex lg:gap-8">
+      <!-- 입력 폼 -->
+      <div class="lg:w-1/2 mb-8 lg:mb-0">
+        <div class="card p-6">
+          <h2 class="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
+            <span class="material-symbols-outlined text-indigo-600">edit</span>
+            기본 정보 입력
+          </h2>
+
+          <!-- 직급 선택 -->
+          <div class="mb-5">
+            <label class="block text-sm font-semibold text-slate-700 mb-2">직급</label>
+            <div class="grid grid-cols-5 gap-2" id="grade-selector">
+              <% [9, 8, 7, 6, 5, 4, 3, 2, 1].each do |g| %>
+                <button type="button" onclick="selectGrade(<%= g %>)"
+                        class="grade-btn py-2.5 rounded-xl border-2 text-sm font-bold transition-all <%= g == 9 ? 'border-blue-500 bg-blue-50 text-blue-700' : 'border-slate-200 text-slate-500 hover:border-blue-300' %>"
+                        data-grade="<%= g %>"><%= g %>급</button>
+              <% end %>
+            </div>
+          </div>
+
+          <!-- 호봉 선택 -->
+          <div class="mb-5">
+            <label class="block text-sm font-semibold text-slate-700 mb-2">
+              호봉
+              <span class="text-xs text-slate-400 font-normal ml-1" id="salary-preview"></span>
+            </label>
+            <select id="hobon-select" onchange="calculate()"
+                    class="form-input w-full bg-white">
+            </select>
+            <p class="text-xs text-slate-400 mt-1">호봉 선택 시 기본 봉급액이 자동 표시됩니다</p>
+          </div>
+
+          <hr class="border-slate-100 my-5" />
+
+          <!-- 가족수당 -->
+          <div class="mb-5">
+            <label class="block text-sm font-semibold text-slate-700 mb-3">
+              가족수당
+              <span class="text-xs text-slate-400 font-normal ml-1">(해당 시 선택)</span>
+            </label>
+            <div class="space-y-2">
+              <label class="flex items-center gap-3 cursor-pointer">
+                <input type="checkbox" id="allowance-spouse" onchange="calculate()" class="w-4 h-4 rounded text-blue-600">
+                <span class="text-sm text-slate-700">배우자 <span class="text-slate-400 text-xs">+40,000원</span></span>
+              </label>
+              <label class="flex items-center gap-3 cursor-pointer">
+                <input type="checkbox" id="allowance-child1" onchange="calculate()" class="w-4 h-4 rounded text-blue-600">
+                <span class="text-sm text-slate-700">첫째 자녀 <span class="text-slate-400 text-xs">+50,000원</span></span>
+              </label>
+              <label class="flex items-center gap-3 cursor-pointer">
+                <input type="checkbox" id="allowance-child2" onchange="calculate()" class="w-4 h-4 rounded text-blue-600">
+                <span class="text-sm text-slate-700">둘째 자녀 <span class="text-slate-400 text-xs">+80,000원</span></span>
+              </label>
+              <label class="flex items-center gap-3 cursor-pointer">
+                <input type="checkbox" id="allowance-child3" onchange="calculate()" class="w-4 h-4 rounded text-blue-600">
+                <span class="text-sm text-slate-700">셋째 이상 자녀 <span class="text-slate-400 text-xs">+120,000원</span></span>
+              </label>
+            </div>
+          </div>
+
+          <hr class="border-slate-100 my-5" />
+
+          <!-- 정근수당 가산금 포함 여부 -->
+          <div class="mb-2">
+            <label class="block text-sm font-semibold text-slate-700 mb-2">
+              재직기간
+              <span class="text-xs text-slate-400 font-normal ml-1">(정근수당 가산금 반영)</span>
+            </label>
+            <select id="tenure-select" onchange="calculate()" class="form-input w-full bg-white">
+              <option value="0">1년 미만</option>
+              <option value="50000">1년 이상 5년 미만 (+50,000원)</option>
+              <option value="80000">5년 이상 10년 미만 (+80,000원)</option>
+              <option value="110000">10년 이상 15년 미만 (+110,000원)</option>
+              <option value="130000">15년 이상 20년 미만 (+130,000원)</option>
+              <option value="150000">20년 이상 (+150,000원)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- 결과 패널 -->
+      <div class="lg:w-1/2">
+        <div class="card p-6">
+          <h2 class="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
+            <span class="material-symbols-outlined text-blue-600">account_balance_wallet</span>
+            계산 결과
+          </h2>
+
+          <!-- 실수령액 강조 -->
+          <div class="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 rounded-2xl p-6 mb-6 text-center">
+            <p class="text-sm text-slate-500 mb-1">월 실수령액 (추정)</p>
+            <div class="text-3xl font-bold text-blue-700" id="result-net">직급과 호봉을 선택하세요</div>
+            <p class="text-xs text-slate-400 mt-2" id="result-grade-label"></p>
+          </div>
+
+          <!-- 공제 내역표 -->
+          <div id="result-table" class="hidden">
+            <h3 class="text-sm font-semibold text-slate-700 mb-3">급여 내역</h3>
+            <div class="space-y-2.5 text-sm">
+              <div class="flex justify-between py-2 border-b border-slate-100">
+                <span class="text-slate-600">기본 봉급</span>
+                <span class="font-semibold text-slate-900" id="r-base"></span>
+              </div>
+              <div class="flex justify-between py-2 border-b border-slate-100">
+                <span class="text-slate-600">가족수당</span>
+                <span class="font-semibold text-slate-700" id="r-family"></span>
+              </div>
+              <div class="flex justify-between py-2 border-b border-slate-100">
+                <span class="text-slate-600">정근수당 가산금</span>
+                <span class="font-semibold text-slate-700" id="r-tenure"></span>
+              </div>
+              <div class="flex justify-between py-2 border-b border-blue-100 bg-blue-50 px-2 rounded-lg">
+                <span class="font-semibold text-blue-700">총 급여액</span>
+                <span class="font-bold text-blue-700" id="r-gross"></span>
+              </div>
+              <div class="flex justify-between py-2 border-b border-slate-100">
+                <span class="text-slate-600">공무원연금기여금 (9%)</span>
+                <span class="font-semibold text-rose-600" id="r-pension"></span>
+              </div>
+              <div class="flex justify-between py-2 border-b border-slate-100">
+                <span class="text-slate-600">건강보험료 (3.545%)</span>
+                <span class="font-semibold text-rose-600" id="r-health"></span>
+              </div>
+              <div class="flex justify-between py-2 border-b border-slate-100">
+                <span class="text-slate-600">장기요양보험료</span>
+                <span class="font-semibold text-rose-600" id="r-care"></span>
+              </div>
+              <div class="flex justify-between py-2 border-b border-slate-100">
+                <span class="text-slate-600">소득세·지방소득세 (추정)</span>
+                <span class="font-semibold text-rose-600" id="r-tax"></span>
+              </div>
+              <div class="flex justify-between py-2 border-b border-rose-100 bg-rose-50 px-2 rounded-lg">
+                <span class="font-semibold text-rose-700">총 공제액</span>
+                <span class="font-bold text-rose-700" id="r-total-deduction"></span>
+              </div>
+            </div>
+
+            <div class="mt-4 p-4 bg-blue-600 rounded-xl text-white text-center">
+              <p class="text-xs text-white/70 mb-1">월 실수령액</p>
+              <p class="text-2xl font-bold" id="r-net-final"></p>
+            </div>
+          </div>
+
+          <!-- 초기 안내 -->
+          <div id="result-placeholder" class="text-center py-8 text-slate-400">
+            <span class="material-symbols-outlined text-4xl mb-2 block">touch_app</span>
+            <p class="text-sm">직급과 호봉을 선택하면<br>실수령액이 자동으로 계산됩니다</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 관련 도구 -->
+    <div class="mt-10 pt-8 border-t border-slate-100">
+      <h3 class="text-base font-bold text-slate-700 mb-4">함께 사용하면 좋은 도구</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <%= link_to pension_calculator_path, class: "card p-4 flex items-center gap-3 hover:border-violet-200 border border-transparent transition-all" do %>
+          <span class="material-symbols-outlined text-violet-600 text-2xl">savings</span>
+          <div>
+            <p class="text-sm font-semibold text-slate-900">공무원연금 계산기</p>
+            <p class="text-xs text-slate-500">예상 연금액 계산</p>
+          </div>
+        <% end %>
+        <%= link_to overtime_calculator_path, class: "card p-4 flex items-center gap-3 hover:border-indigo-200 border border-transparent transition-all" do %>
+          <span class="material-symbols-outlined text-indigo-600 text-2xl">schedule</span>
+          <div>
+            <p class="text-sm font-semibold text-slate-900">초과근무수당 계산기</p>
+            <p class="text-xs text-slate-500">시간외·야간·휴일 수당</p>
+          </div>
+        <% end %>
+        <%= link_to annual_leave_calculator_path, class: "card p-4 flex items-center gap-3 hover:border-emerald-200 border border-transparent transition-all" do %>
+          <span class="material-symbols-outlined text-emerald-600 text-2xl">event_available</span>
+          <div>
+            <p class="text-sm font-semibold text-slate-900">연가일수 계산기</p>
+            <p class="text-xs text-slate-500">재직기간별 연가 계산</p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+// 2025년 공무원 봉급표 (일반직 기준, 단위: 원)
+// 출처: 공무원보수규정 별표 3 (2025년 기준)
+const SALARY_TABLE = {
+  9: [0, 1989600, 2054900, 2120700, 2188100, 2257300, 2328400, 2401700, 2477300, 2555200,
+      2635400, 2718000, 2803100, 2890700, 2981000, 3074100, 3170000, 3268900, 3371000, 3476300,
+      3584800, 3696600, 3811800, 3930600, 4052900, 4178700, 4307900, 4440400, 4576500, 4715900,
+      4858500, 5004200, 5153000, 5304800, 5459500, 5617100],
+  8: [0, 2198700, 2269100, 2341700, 2416600, 2493800, 2573500, 2655700, 2740600, 2827900,
+      2917700, 3010200, 3105500, 3203500, 3304500, 3408400, 3515300, 3625300, 3738600, 3855000,
+      3974800, 4097900, 4224400, 4354400, 4487800, 4624700, 4765000, 4908800, 5055900, 5206400,
+      5360200, 5517300, 5677700, 5841400, 5996900, 6151800],
+  7: [0, 2474800, 2554000, 2635600, 2719600, 2806100, 2895300, 2987300, 3082100, 3179800,
+      3280500, 3384300, 3491300, 3601600, 3715300, 3832600, 3953500, 4078000, 4206200, 4338200,
+      4474000, 4613700, 4757300, 4904900, 5056500, 5212100, 5371800, 5535600, 5703400, 5875400,
+      6051500, 6231800, 6416200, 6604700, 6756500, 6906100],
+  6: [0, 2758800, 2846300, 2936400, 3029100, 3124600, 3223000, 3324400, 3429000, 3536900,
+      3648200, 3762900, 3881200, 4003100, 4128700, 4258100, 4391500, 4528900, 4670500, 4816300,
+      4966500, 5121200, 5280500, 5444500, 5613300, 5787000, 5965700, 6149500, 6338400, 6532600,
+      6732100, 6936900, 7147100, 7362700, 7541800, 7717700],
+  5: [0, 3140500, 3240500, 3343800, 3450600, 3560900, 3674900, 3792700, 3914500, 4040400,
+      4170500, 4304900, 4443700, 4587100, 4734900, 4887500, 5044700, 5206800, 5373900, 5546200,
+      5723900, 5907200, 6096300, 6291400, 6492700, 6700400, 6914700, 7135800, 7364000, 7599700,
+      7843100, 8094700, 8241300, 8387200, 8532500, 8677300],
+  4: [0, 3609300, 3724100, 3842600, 3964800, 4091100, 4221500, 4356300, 4495700, 4639800,
+      4788900, 4943200, 5102900, 5268100, 5438800, 5615500, 5798400, 5987800, 6183900, 6386900,
+      6597100, 6814800, 7040400, 7274200, 7516700, 7768400, 8029600, 8300800, 8528500, 8755100,
+      8980400, 9204500, 9427200, 9648600, 9807400, 9965500],
+  3: [0, 4233800, 4368200, 4507000, 4650400, 4798600, 4952000, 5110700, 5275000, 5445100,
+      5621500, 5804400, 5994100, 6190900, 6395100, 6606900, 6826600, 7054600, 7291200, 7536900,
+      7791900, 8056700, 8331800, 8617800, 8915300, 9224900, 9547400, 9883500, 10174900, 10465200,
+      10754200, 11042000, 11241000, 11438900, 11635600, 11831200],
+  2: [0, 5155100, 5321400, 5493200, 5671000, 5855000, 6046100, 6244600, 6450900, 6665400,
+      6888300, 7119900, 7361000, 7611900, 7872700, 8144400, 8427500, 8723000, 9030600, 9351300,
+      9686200, 10036300, 10402600, 10785100, 11185200, 11603900, 12042100, 12500900, 12898200, 13294100,
+      13688700, 14082000, 14381700, 14679300, 14975700, 15271000],
+  1: [0, 6295200, 6499500, 6710200, 6927900, 7153300, 7386800, 7628700, 7879400, 8139400,
+      8409100, 8689100, 8980000, 9282600, 9597700, 9925600, 10267200, 10623600, 10995100, 11382900,
+      11787900, 12211300, 12653800, 13116400, 13600500, 14107000, 14637500, 15193000, 15680600, 16166700,
+      16651000, 17133900, 17521400, 17906600, 18289800, 18671100]
+};
+
+// 직급별 최대 호봉
+const MAX_HOBON = {9:35, 8:35, 7:35, 6:35, 5:35, 4:35, 3:35, 2:35, 1:35};
+
+let selectedGrade = 9;
+
+function selectGrade(grade) {
+  selectedGrade = grade;
+  document.querySelectorAll('.grade-btn').forEach(function(btn) {
+    const isSelected = parseInt(btn.dataset.grade) === grade;
+    btn.classList.toggle('border-blue-500', isSelected);
+    btn.classList.toggle('bg-blue-50', isSelected);
+    btn.classList.toggle('text-blue-700', isSelected);
+    btn.classList.toggle('border-slate-200', !isSelected);
+    btn.classList.toggle('text-slate-500', !isSelected);
+  });
+  updateHobonOptions();
+  calculate();
+}
+
+function updateHobonOptions() {
+  const select = document.getElementById('hobon-select');
+  select.innerHTML = '';
+  const max = MAX_HOBON[selectedGrade] || 35;
+  const table = SALARY_TABLE[selectedGrade] || [];
+  for (let i = 1; i <= max; i++) {
+    const salary = table[i] || 0;
+    const option = document.createElement('option');
+    option.value = i;
+    option.textContent = i + '호봉' + (salary ? ' — ' + salary.toLocaleString('ko-KR') + '원' : '');
+    select.appendChild(option);
+  }
+}
+
+function calculate() {
+  const hobon = parseInt(document.getElementById('hobon-select').value) || 1;
+  const table = SALARY_TABLE[selectedGrade] || [];
+  const baseSalary = table[hobon] || 0;
+  if (!baseSalary) return;
+
+  // 수당 계산
+  const familyAllowance =
+    (document.getElementById('allowance-spouse').checked ? 40000 : 0) +
+    (document.getElementById('allowance-child1').checked ? 50000 : 0) +
+    (document.getElementById('allowance-child2').checked ? 80000 : 0) +
+    (document.getElementById('allowance-child3').checked ? 120000 : 0);
+  const tenureAllowance = parseInt(document.getElementById('tenure-select').value) || 0;
+
+  const grossSalary = baseSalary + familyAllowance + tenureAllowance;
+
+  // 공제 계산
+  const pensionContrib = Math.round(baseSalary * 0.09);          // 공무원연금기여금 9% (봉급 기준)
+  const healthInsurance = Math.round(baseSalary * 0.03545);       // 건강보험 3.545%
+  const careInsurance = Math.round(healthInsurance * 0.1281);     // 장기요양 12.81%
+  const incomeTax = estimateIncomeTax(grossSalary);               // 소득세 추정
+  const localTax = Math.round(incomeTax * 0.1);                   // 지방소득세 10%
+  const totalTax = incomeTax + localTax;
+
+  const totalDeduction = pensionContrib + healthInsurance + careInsurance + totalTax;
+  const netSalary = grossSalary - totalDeduction;
+
+  // 결과 표시
+  document.getElementById('result-net').textContent = netSalary.toLocaleString('ko-KR') + '원';
+  document.getElementById('result-grade-label').textContent =
+    selectedGrade + '급 ' + hobon + '호봉 기준';
+  document.getElementById('r-base').textContent = baseSalary.toLocaleString('ko-KR') + '원';
+  document.getElementById('r-family').textContent = familyAllowance > 0 ? '+' + familyAllowance.toLocaleString('ko-KR') + '원' : '0원';
+  document.getElementById('r-tenure').textContent = tenureAllowance > 0 ? '+' + tenureAllowance.toLocaleString('ko-KR') + '원' : '0원';
+  document.getElementById('r-gross').textContent = grossSalary.toLocaleString('ko-KR') + '원';
+  document.getElementById('r-pension').textContent = '-' + pensionContrib.toLocaleString('ko-KR') + '원';
+  document.getElementById('r-health').textContent = '-' + healthInsurance.toLocaleString('ko-KR') + '원';
+  document.getElementById('r-care').textContent = '-' + careInsurance.toLocaleString('ko-KR') + '원';
+  document.getElementById('r-tax').textContent = '-' + totalTax.toLocaleString('ko-KR') + '원';
+  document.getElementById('r-total-deduction').textContent = '-' + totalDeduction.toLocaleString('ko-KR') + '원';
+  document.getElementById('r-net-final').textContent = netSalary.toLocaleString('ko-KR') + '원';
+
+  document.getElementById('result-table').classList.remove('hidden');
+  document.getElementById('result-placeholder').classList.add('hidden');
+}
+
+// 소득세 간이세액 추정 (단순화된 계산, 공제 전 월급여 기준)
+function estimateIncomeTax(grossMonthly) {
+  const annual = grossMonthly * 12;
+  // 근로소득공제 + 기본공제 반영한 근사 추정
+  let tax = 0;
+  if (annual <= 14000000) tax = 0;
+  else if (annual <= 50000000) tax = (annual - 14000000) * 0.15 - 1080000;
+  else if (annual <= 88000000) tax = (annual - 50000000) * 0.24 + 4260000;
+  else tax = (annual - 88000000) * 0.35 + 13380000;
+  return Math.max(0, Math.round(tax / 12));
+}
+
+// 페이지 초기화
+document.addEventListener('DOMContentLoaded', function() {
+  updateHobonOptions();
+});
+document.addEventListener('turbo:load', function() {
+  updateHobonOptions();
+});
+</script>
