@@ -642,6 +642,230 @@
           </section>
           <% end %>
 
+          <%# ── 7. 타임라인 (연간 일정 캘린더) ── %>
+          <% if rm[:timeline].present? %>
+          <% tl = rm[:timeline].with_indifferent_access %>
+          <section class="mt-8" id="rm-timeline">
+            <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden">
+              <div class="px-5 py-3 border-b bg-sky-50 flex items-center gap-2">
+                <span class="material-symbols-outlined text-sky-500">calendar_month</span>
+                <span class="text-sm font-bold text-slate-700"><%= tl[:title] %></span>
+              </div>
+              <div class="p-5">
+                <div class="relative">
+                  <div class="absolute left-5 top-0 bottom-0 w-0.5 bg-slate-200"></div>
+                  <div class="space-y-5">
+                    <% tl[:events].each do |ev| %>
+                    <% ev = ev.with_indifferent_access %>
+                    <% dot_color = { "blue" => "bg-blue-500", "emerald" => "bg-emerald-500", "amber" => "bg-amber-500", "red" => "bg-red-500", "violet" => "bg-violet-500", "slate" => "bg-slate-400" }[ev[:color]] || "bg-slate-400" %>
+                    <% border_color = { "blue" => "border-blue-200 bg-blue-50", "emerald" => "border-emerald-200 bg-emerald-50", "amber" => "border-amber-200 bg-amber-50", "red" => "border-red-200 bg-red-50", "violet" => "border-violet-200 bg-violet-50", "slate" => "border-slate-200 bg-slate-50" }[ev[:color]] || "border-slate-200 bg-slate-50" %>
+                    <div class="flex items-start gap-4 relative">
+                      <div class="w-10 h-10 rounded-full <%= dot_color %> flex items-center justify-center shrink-0 z-10 shadow-sm">
+                        <span class="text-white text-xs font-bold leading-tight text-center px-1"><%= ev[:month] %></span>
+                      </div>
+                      <div class="flex-1 border <%= border_color %> rounded-xl p-3 mt-1">
+                        <p class="text-sm font-bold text-slate-800"><%= ev[:label] %></p>
+                        <p class="text-xs text-slate-500 mt-0.5"><%= ev[:desc] %></p>
+                      </div>
+                    </div>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <% end %>
+
+          <%# ── 8. 의사결정 트리 (decision_tree) ── %>
+          <% if rm[:decision_tree].present? %>
+          <% dt = rm[:decision_tree].with_indifferent_access %>
+          <section class="mt-8" id="rm-decision-tree" data-controller="mermaid">
+            <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden">
+              <div class="px-5 py-3 border-b bg-orange-50 flex items-center gap-2">
+                <span class="material-symbols-outlined text-orange-500">fork_right</span>
+                <span class="text-sm font-bold text-slate-700"><%= dt[:title] %></span>
+              </div>
+              <div class="p-4 overflow-x-auto">
+                <pre data-mermaid-target="source" class="text-xs"><%= dt[:mermaid] %></pre>
+              </div>
+              <% if dt[:summary_steps].present? %>
+              <div class="px-5 pb-4 space-y-1.5">
+                <% dt[:summary_steps].each_with_index do |step, i| %>
+                <div class="flex items-start gap-2 text-sm text-slate-600">
+                  <span class="w-5 h-5 rounded-full bg-orange-100 text-orange-600 text-xs font-bold flex items-center justify-center shrink-0 mt-0.5"><%= i + 1 %></span>
+                  <span><%= step %></span>
+                </div>
+                <% end %>
+              </div>
+              <% end %>
+            </div>
+          </section>
+          <% end %>
+
+          <%# ── 9. 역할 분리도 (role_diagram) ── %>
+          <% if rm[:role_diagram].present? %>
+          <% rd = rm[:role_diagram].with_indifferent_access %>
+          <section class="mt-8" id="rm-role-diagram" data-controller="mermaid">
+            <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden">
+              <div class="px-5 py-3 border-b bg-violet-50 flex items-center gap-2">
+                <span class="material-symbols-outlined text-violet-500">groups</span>
+                <span class="text-sm font-bold text-slate-700"><%= rd[:title] %></span>
+              </div>
+              <div class="p-4 overflow-x-auto">
+                <pre data-mermaid-target="source" class="text-xs"><%= rd[:mermaid] %></pre>
+              </div>
+            </div>
+          </section>
+          <% end %>
+
+          <%# ── 10. 비교표 (comparison_table) ── %>
+          <% if rm[:comparison_table].present? %>
+          <% ct = rm[:comparison_table].with_indifferent_access %>
+          <section class="mt-8" id="rm-comparison-table">
+            <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden">
+              <div class="px-5 py-3 border-b bg-indigo-50 flex items-center gap-2">
+                <span class="material-symbols-outlined text-indigo-500">table_chart</span>
+                <span class="text-sm font-bold text-slate-700"><%= ct[:title] %></span>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                  <thead>
+                    <tr class="bg-slate-50">
+                      <% ct[:headers].each_with_index do |h, i| %>
+                      <th class="px-4 py-3 text-left text-xs font-bold text-slate-600 border-b border-slate-200 <%= i == 0 ? 'w-28' : '' %>"><%= h %></th>
+                      <% end %>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% ct[:rows].each_with_index do |row, ri| %>
+                    <% row_arr = row.is_a?(Array) ? row : row.with_indifferent_access.values_at(:label, *Array(row.with_indifferent_access[:values])).flatten.compact %>
+                    <tr class="<%= ri.even? ? 'bg-white' : 'bg-slate-50/50' %> border-b border-slate-100">
+                      <% if row.is_a?(Hash) && row.with_indifferent_access[:label].present? %>
+                        <td class="px-4 py-3 font-semibold text-slate-700 text-xs"><%= row.with_indifferent_access[:label] %></td>
+                        <% Array(row.with_indifferent_access[:values]).each do |v| %>
+                        <td class="px-4 py-3 text-slate-600"><%= v %></td>
+                        <% end %>
+                      <% else %>
+                        <% Array(row).each_with_index do |cell, ci| %>
+                        <td class="px-4 py-3 <%= ci == 0 ? 'font-semibold text-slate-700 text-xs' : 'text-slate-600' %>"><%= cell %></td>
+                        <% end %>
+                      <% end %>
+                    </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+              <% if ct[:footnote].present? %>
+              <p class="px-5 py-3 text-xs text-slate-400 border-t border-slate-100"><%= ct[:footnote] %></p>
+              <% end %>
+            </div>
+          </section>
+          <% end %>
+
+          <%# ── 11. 단가표 (rate_table) ── %>
+          <% if rm[:rate_table].present? %>
+          <% rt = rm[:rate_table].with_indifferent_access %>
+          <section class="mt-8" id="rm-rate-table">
+            <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden">
+              <div class="px-5 py-3 border-b bg-amber-50 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-amber-500">payments</span>
+                  <div>
+                    <span class="text-sm font-bold text-slate-700"><%= rt[:title] %></span>
+                    <% if rt[:subtitle].present? %>
+                    <span class="text-xs text-slate-400 ml-2"><%= rt[:subtitle] %></span>
+                    <% end %>
+                  </div>
+                </div>
+                <% if rt[:effective_date].present? %>
+                <span class="text-xs text-amber-700 bg-amber-100 px-2.5 py-1 rounded-full font-semibold"><%= rt[:effective_date] %> 기준</span>
+                <% end %>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                  <thead>
+                    <tr class="bg-slate-50">
+                      <% rt[:headers].each_with_index do |h, i| %>
+                      <th class="px-4 py-3 text-left text-xs font-bold text-slate-600 border-b border-slate-200 <%= i == 0 ? 'w-32' : '' %>"><%= h %></th>
+                      <% end %>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% rt[:rows].each_with_index do |row, ri| %>
+                    <% row = row.with_indifferent_access %>
+                    <% is_highlight = row[:highlight].present? && row[:highlight] != false %>
+                    <tr class="border-b border-slate-100 <%= is_highlight ? 'bg-amber-50' : (ri.even? ? 'bg-white' : 'bg-slate-50/30') %>">
+                      <td class="px-4 py-3 font-semibold text-slate-700 text-xs flex items-center gap-1.5">
+                        <%= row[:label] %>
+                        <% if is_highlight %>
+                        <span class="text-xs text-amber-600 bg-amber-100 px-1.5 py-0.5 rounded-full">내 직급</span>
+                        <% end %>
+                      </td>
+                      <% Array(row[:values]).each do |v| %>
+                      <td class="px-4 py-3 text-slate-700 font-medium"><%= v %></td>
+                      <% end %>
+                    </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+              <% if rt[:footnote].present? %>
+              <p class="px-5 py-3 text-xs text-slate-400 border-t border-slate-100"><%= rt[:footnote] %></p>
+              <% end %>
+            </div>
+          </section>
+          <% end %>
+
+          <%# ── 12. 계산 예시 (calculator_example) ── %>
+          <% if rm[:calculator_example].present? %>
+          <% ce = rm[:calculator_example].with_indifferent_access %>
+          <section class="mt-8" id="rm-calculator">
+            <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden">
+              <div class="px-5 py-3 border-b bg-emerald-50 flex items-center gap-2">
+                <span class="material-symbols-outlined text-emerald-500">calculate</span>
+                <span class="text-sm font-bold text-slate-700"><%= ce[:title] %></span>
+              </div>
+              <div class="p-5">
+                <% if ce[:scenario].present? %>
+                <div class="bg-emerald-50 border border-emerald-100 rounded-xl px-4 py-2.5 mb-4 text-sm text-emerald-800 font-medium">
+                  📋 상황: <%= ce[:scenario] %>
+                </div>
+                <% end %>
+                <div class="space-y-2">
+                  <% Array(ce[:items]).each do |item| %>
+                  <% item = item.with_indifferent_access %>
+                  <div class="flex items-center justify-between py-2.5 border-b border-slate-100">
+                    <div>
+                      <span class="text-sm font-semibold text-slate-700"><%= item[:label] %></span>
+                      <% if item[:formula].present? %>
+                      <span class="text-xs text-slate-400 ml-2">(<%= item[:formula] %>)</span>
+                      <% end %>
+                    </div>
+                    <span class="text-sm font-bold text-slate-800"><%= item[:amount] %></span>
+                  </div>
+                  <% end %>
+                  <% if ce[:total].present? %>
+                  <div class="flex items-center justify-between pt-3">
+                    <span class="text-base font-extrabold text-emerald-700">합계</span>
+                    <span class="text-xl font-extrabold text-emerald-700"><%= ce[:total] %></span>
+                  </div>
+                  <% end %>
+                </div>
+                <% if ce[:notes].present? && ce[:notes].any? %>
+                <div class="mt-4 space-y-1">
+                  <% Array(ce[:notes]).each do |note| %>
+                  <p class="text-xs text-slate-400 flex items-start gap-1">
+                    <span class="mt-0.5 shrink-0">※</span>
+                    <span><%= note %></span>
+                  </p>
+                  <% end %>
+                </div>
+                <% end %>
+              </div>
+            </div>
+          </section>
+          <% end %>
+
         <% end %>
         <%# ═══ /Rich Media 섹션 ═══ %>
 
