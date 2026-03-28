@@ -2,6 +2,60 @@
 <% colors = @colors %>
 <% chapter_id = "#{@subject[:id]}-#{@chapter[:number]}" %>
 
+<% content_for :head do %>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "LearningResource",
+      "@id": "https://exam.silmu.kr/subjects/<%= @subject[:id] %>/chapters/<%= @chapter[:number] %>#resource",
+      "name": "<%= @subject[:number] %> 제<%= @chapter[:number] %>장: <%= @chapter[:title] %>",
+      "description": "공공조달관리사 <%= @subject[:number] %> <%= @subject[:title] %> — 제<%= @chapter[:number] %>장 <%= @chapter[:title] %>. 학습목표·핵심키워드·시험 출제 포인트 완벽 정리.",
+      "url": "https://exam.silmu.kr/subjects/<%= @subject[:id] %>/chapters/<%= @chapter[:number] %>",
+      "inLanguage": "ko",
+      "isAccessibleForFree": true,
+      "educationalLevel": "전문",
+      "teaches": <%= @chapter[:keywords].first(5).to_json %>,
+      "isPartOf": {
+        "@type": "Course",
+        "name": "공공조달관리사 시험 대비 완전 커리큘럼",
+        "url": "https://exam.silmu.kr"
+      },
+      "provider": {
+        "@type": "Organization",
+        "name": "실무.kr",
+        "url": "https://silmu.kr"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "공공조달관리사 시험 대비",
+          "item": "https://exam.silmu.kr"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "<%= @subject[:number] %>: <%= @subject[:title] %>",
+          "item": "https://exam.silmu.kr/subjects/<%= @subject[:id] %>"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "제<%= @chapter[:number] %>장: <%= @chapter[:title] %>",
+          "item": "https://exam.silmu.kr/subjects/<%= @subject[:id] %>/chapters/<%= @chapter[:number] %>"
+        }
+      ]
+    }
+  ]
+}
+</script>
+<% end %>
+
 <div data-controller="exam-progress"
      data-exam-progress-subject-id-value="<%= @subject[:id] %>"
      data-exam-progress-chapter-num-value="<%= @chapter[:number] %>">
