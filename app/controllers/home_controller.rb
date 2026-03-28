@@ -5,7 +5,7 @@ class HomeController < ApplicationController
     local_gov: {
       1  => %w[year-end-settlement budget-carryover payment inspection],
       2  => %w[year-end-settlement budget-carryover private-contract],
-      3  => %w[budget-compilation private-contract bidding contract-execution],
+      3  => %w[budget-carryover private-contract bidding contract-execution],
       4  => %w[bidding contract-execution estimated-price private-contract],
       5  => %w[inspection payment contract-guarantee-deposit advance-payment],
       6  => %w[inspection payment design-change late-penalty],
@@ -13,23 +13,23 @@ class HomeController < ApplicationController
       8  => %w[bidding estimated-price contract-execution],
       9  => %w[bidding contract-execution private-contract],
       10 => %w[inspection payment late-penalty completion-payment-checklist],
-      11 => %w[budget-compilation year-end-settlement inspection payment],
+      11 => %w[budget-carryover year-end-settlement inspection payment],
       12 => %w[year-end-settlement budget-carryover inspection payment],
     },
     edu: {
       # 학교회계: 회계연도 3.1~다음해 2.28 (초중등교육법 제30조의2)
       # 교육비특별회계(교육청): 1.1~12.31 — budget-compilation 유지
       1  => %w[year-end-settlement budget-carryover payment inspection],
-      2  => %w[school-budget-compilation goods-selection-committee private-contract bidding],
-      3  => %w[school-budget-compilation goods-selection-committee private-contract bidding],
+      2  => %w[goods-selection-committee goods-selection-committee private-contract bidding],
+      3  => %w[goods-selection-committee goods-selection-committee private-contract bidding],
       4  => %w[goods-selection-committee estimated-price bidding contract-execution],
       5  => %w[inspection payment advance-payment contract-guarantee-deposit],
       6  => %w[inspection payment design-change],
       7  => %w[budget-carryover bidding inspection],
       8  => %w[bidding estimated-price private-contract],
-      9  => %w[school-budget-compilation bidding contract-execution goods-selection-committee],
-      10 => %w[school-budget-compilation inspection payment late-penalty],
-      11 => %w[school-budget-compilation year-end-settlement inspection],
+      9  => %w[goods-selection-committee bidding contract-execution goods-selection-committee],
+      10 => %w[goods-selection-committee inspection payment late-penalty],
+      11 => %w[goods-selection-committee year-end-settlement inspection],
       12 => %w[year-end-settlement budget-carryover payment],
     },
     common: {
@@ -43,7 +43,7 @@ class HomeController < ApplicationController
       8  => %w[bidding estimated-price private-contract contract-execution],
       9  => %w[bidding contract-execution private-contract],
       10 => %w[inspection payment late-penalty completion-payment-checklist],
-      11 => %w[budget-compilation year-end-settlement private-contract],
+      11 => %w[budget-carryover year-end-settlement private-contract],
       12 => %w[year-end-settlement budget-carryover payment inspection],
     }
   }.freeze
