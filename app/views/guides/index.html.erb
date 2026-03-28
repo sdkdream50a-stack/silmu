@@ -141,37 +141,47 @@
             non_series_guides = @guides.reject { |g| g.series.present? }
             grouped = non_series_guides.group_by(&:category)
           %>
-          <% category_config.each do |cat, cfg| %>
+          <% category_config.each_with_index do |(cat, cfg), idx| %>
             <% guides_in_cat = grouped[cat] || [] %>
             <% next if guides_in_cat.empty? %>
-            <div class="mb-10">
-              <!-- 분야 헤더 -->
-              <div class="flex items-center justify-between mb-4">
+            <% acc_id = "guide-cat-#{cat}" %>
+            <div class="mb-4 card overflow-hidden">
+              <!-- 분야 헤더 (클릭으로 펼치기/접기) -->
+              <button type="button"
+                      class="w-full flex items-center justify-between p-5 text-left"
+                      aria-expanded="false"
+                      onclick="guideToggle('<%= acc_id %>')">
                 <div class="flex items-center gap-3">
-                  <div class="w-9 h-9 bg-<%= cfg[:color] %>-100 rounded-xl flex items-center justify-center">
+                  <div class="w-9 h-9 bg-<%= cfg[:color] %>-100 rounded-xl flex items-center justify-center shrink-0">
                     <span class="material-symbols-outlined text-<%= cfg[:color] %>-600" style="font-size:20px"><%= cfg[:icon] %></span>
                   </div>
                   <div>
-                    <h2 class="text-lg font-bold text-gray-800"><%= cat %> 가이드</h2>
+                    <h2 class="text-base font-bold text-gray-800"><%= cat %> 가이드</h2>
                     <p class="text-xs text-slate-500"><%= cfg[:desc] %></p>
                   </div>
                 </div>
-                <span class="text-xs text-slate-400"><%= guides_in_cat.size %>개</span>
-              </div>
-              <!-- 카드 그리드 -->
-              <div class="grid sm:grid-cols-2 gap-3">
-                <% guides_in_cat.each do |guide| %>
-                  <% guide_link = guide.has_full_content? ? guide_path(guide) : (guide.external_link.present? ? guide.external_link : guide_path(guide)) %>
-                  <%= link_to guide_link, class: "card card-hover p-5 group flex items-start gap-3" do %>
-                    <div class="w-8 h-8 bg-<%= cfg[:color] %>-50 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
-                      <span class="material-symbols-outlined text-<%= cfg[:color] %>-500" style="font-size:18px">menu_book</span>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                      <h3 class="text-base font-semibold text-slate-900 group-hover:text-emerald-600 transition-colors leading-snug mb-1"><%= guide.title %></h3>
-                      <p class="text-xs text-slate-500 leading-relaxed line-clamp-2"><%= guide.summary %></p>
-                    </div>
+                <div class="flex items-center gap-2 shrink-0 ml-3">
+                  <span class="text-xs text-slate-400"><%= guides_in_cat.size %>개</span>
+                  <span class="material-symbols-outlined text-slate-400 transition-transform duration-200"
+                        data-guide-chevron="<%= acc_id %>">expand_more</span>
+                </div>
+              </button>
+              <!-- 카드 그리드 (기본 접힘) -->
+              <div id="<%= acc_id %>" class="hidden border-t border-slate-100 px-5 pb-5">
+                <div class="grid sm:grid-cols-2 gap-3 pt-4">
+                  <% guides_in_cat.each do |guide| %>
+                    <% guide_link = guide.has_full_content? ? guide_path(guide) : (guide.external_link.present? ? guide.external_link : guide_path(guide)) %>
+                    <%= link_to guide_link, class: "card card-hover p-4 group flex items-start gap-3" do %>
+                      <div class="w-8 h-8 bg-<%= cfg[:color] %>-50 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
+                        <span class="material-symbols-outlined text-<%= cfg[:color] %>-500" style="font-size:18px">menu_book</span>
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <h3 class="text-sm font-semibold text-slate-900 group-hover:text-emerald-600 transition-colors leading-snug mb-1"><%= guide.title %></h3>
+                        <p class="text-xs text-slate-500 leading-relaxed line-clamp-2"><%= guide.summary %></p>
+                      </div>
+                    <% end %>
                   <% end %>
-                <% end %>
+                </div>
               </div>
             </div>
           <% end %>
@@ -304,6 +314,23 @@
 </section>
 
 <script>
+function guideToggle(id) {
+  var panel = document.getElementById(id);
+  var chevron = document.querySelector('[data-guide-chevron="' + id + '"]');
+  var btn = chevron ? chevron.closest('button') : null;
+  if (!panel) return;
+  var isOpen = !panel.classList.contains('hidden');
+  if (isOpen) {
+    panel.classList.add('hidden');
+    chevron.style.transform = '';
+    if (btn) btn.setAttribute('aria-expanded', 'false');
+  } else {
+    panel.classList.remove('hidden');
+    chevron.style.transform = 'rotate(180deg)';
+    if (btn) btn.setAttribute('aria-expanded', 'true');
+  }
+}
+
 document.addEventListener('turbo:load', function() {
   const itemCount = document.getElementById('item-count');
   if (!itemCount) return;
