@@ -1,29 +1,31 @@
-<%# 오답 노트 재풀이 페이지 — localStorage에서 오답 ID 읽어 필터링 %>
+<%# 오답 노트 재풀이 페이지 — Stitch 'The Error Eliminator' 디자인 적용 %>
 
-<!-- 헤더 -->
-<section class="bg-gradient-to-br from-slate-900 via-orange-900 to-orange-800 text-white py-10 px-4">
+<!-- 페이지 헤더 — 에디토리얼 화이트 -->
+<section class="bg-white border-b border-[#f0e8e0] py-10 px-4">
   <div class="max-w-3xl mx-auto">
-    <div class="flex items-center gap-2 text-orange-300 text-sm mb-4">
-      <a href="https://exam.silmu.kr" class="hover:text-white transition-colors">홈</a>
+    <div class="flex items-center gap-1.5 text-[#8a5a3a] text-xs mb-6">
+      <a href="https://exam.silmu.kr" class="hover:text-[#9c3404] transition-colors">홈</a>
       <span class="material-symbols-outlined text-sm">chevron_right</span>
-      <a href="<%= exam_quiz_index_path %>" class="hover:text-white transition-colors">모의고사</a>
+      <a href="<%= exam_quiz_index_path %>" class="hover:text-[#9c3404] transition-colors">모의고사</a>
       <span class="material-symbols-outlined text-sm">chevron_right</span>
-      <span>오답 노트</span>
+      <span class="text-[#2c2f31] font-medium">오답 노트</span>
     </div>
-    <div class="flex items-center gap-4">
-      <div class="w-14 h-14 bg-orange-400/20 rounded-2xl flex items-center justify-center flex-shrink-0">
-        <span class="material-symbols-outlined text-orange-300 text-3xl">error_outline</span>
-      </div>
+    <div class="flex items-end justify-between gap-6">
       <div>
-        <h1 class="text-2xl md:text-3xl font-bold">오답 노트</h1>
-        <p class="text-orange-200 mt-1">틀린 문제만 골라서 다시 풀기 · 맞히면 자동으로 제거</p>
+        <span class="text-[#9c3404] font-bold tracking-widest uppercase text-xs mb-2 block">The Error Eliminator</span>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-[#2c2f31] tracking-tight leading-tight">오답 노트</h1>
+        <p class="text-[#595c5e] text-sm mt-2">틀린 문제만 골라서 다시 풀기 · 맞히면 자동으로 제거</p>
+      </div>
+      <div class="hidden md:flex items-center gap-2 bg-[#f0e8e0] px-4 py-2 rounded-full flex-shrink-0">
+        <span class="material-symbols-outlined text-[#9c3404] text-sm">error_outline</span>
+        <span class="text-xs font-bold text-[#8a5a3a] uppercase tracking-widest">Weakness Fix</span>
       </div>
     </div>
   </div>
 </section>
 
 <!-- 퀴즈 메인 (Stimulus — wrong mode) -->
-<section class="py-8 px-4 bg-slate-50 min-h-[60vh]">
+<section class="py-8 px-4 bg-[#fafaf5] min-h-[60vh]">
   <div class="max-w-3xl mx-auto"
        data-controller="exam-quiz"
        data-exam-quiz-questions-value="<%= @all_questions.to_json %>"
@@ -36,21 +38,22 @@
 
     <!-- 오답 없음 (초기에는 hidden, JS에서 제어) -->
     <div data-exam-quiz-target="emptyArea" class="hidden">
-      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-12 text-center">
-        <div class="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-5">
-          <span class="material-symbols-outlined text-green-500 text-4xl">check_circle</span>
+      <div class="bg-white rounded-2xl shadow-[0_12px_40px_rgba(156,52,4,0.06)] p-12 text-center">
+        <div class="w-20 h-20 bg-[#d0f0e0] rounded-2xl flex items-center justify-center mx-auto mb-5">
+          <span class="material-symbols-outlined text-emerald-600 text-4xl">check_circle</span>
         </div>
-        <h2 class="text-xl font-bold text-slate-800 mb-2">오답 노트가 비어있습니다!</h2>
-        <p class="text-slate-500 text-sm mb-6">모의고사를 풀면 틀린 문제가 여기에 자동으로 쌓입니다.</p>
+        <span class="text-[#595c5e] text-xs font-bold tracking-widest uppercase block mb-3">All Clear!</span>
+        <h2 class="text-xl font-extrabold text-[#2c2f31] tracking-tight mb-2">오답 노트가 비어있습니다!</h2>
+        <p class="text-[#595c5e] text-sm mb-8 leading-relaxed">모의고사를 풀면 틀린 문제가 여기에 자동으로 쌓입니다.</p>
         <div class="flex flex-col sm:flex-row gap-3 justify-center">
           <a href="<%= exam_quiz_path('all') %>"
-             class="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-xl transition-colors">
-            <span class="material-symbols-outlined">quiz</span>
+             class="inline-flex items-center justify-center gap-2 bg-[#004c8c] hover:bg-[#003d72] text-white font-bold px-6 py-3 rounded-full transition-colors shadow-[0_4px_16px_rgba(0,76,140,0.25)]">
+            <span class="material-symbols-outlined text-base">quiz</span>
             전체 모의고사 풀기
           </a>
           <a href="<%= exam_quiz_index_path %>"
-             class="inline-flex items-center justify-center gap-2 bg-white border-2 border-slate-200 hover:border-blue-400 text-slate-700 font-bold px-6 py-3 rounded-xl transition-colors">
-            <span class="material-symbols-outlined">apps</span>
+             class="inline-flex items-center justify-center gap-2 bg-[#eef1f3] hover:bg-[#dfe3e6] text-[#2c2f31] font-bold px-6 py-3 rounded-full transition-colors">
+            <span class="material-symbols-outlined text-base">apps</span>
             과목 선택
           </a>
         </div>
@@ -59,41 +62,41 @@
 
     <!-- 진행 상태 바 -->
     <div data-exam-quiz-target="progressArea" class="mb-6">
-      <div class="flex items-center justify-between text-sm text-slate-500 mb-2">
+      <div class="flex items-center justify-between text-sm text-[#595c5e] mb-2">
         <span>
-          <span class="inline-flex items-center gap-1 bg-orange-100 text-orange-700 text-xs font-bold px-2 py-0.5 rounded-full mr-2">오답 노트</span>
-          문제 <strong data-exam-quiz-target="currentNum" class="text-slate-800">1</strong> / <strong data-exam-quiz-target="totalNum" class="text-slate-800">...</strong>
+          <span class="inline-flex items-center gap-1 bg-[#fde8d5] text-[#9c3404] text-xs font-bold px-2 py-0.5 rounded-full mr-2">오답 노트</span>
+          문제 <strong data-exam-quiz-target="currentNum" class="text-[#2c2f31]">1</strong> / <strong data-exam-quiz-target="totalNum" class="text-[#2c2f31]">...</strong>
         </span>
-        <span>맞힌 수: <strong data-exam-quiz-target="scoreDisplay" class="text-green-600">0</strong></span>
+        <span>맞힌 수: <strong data-exam-quiz-target="scoreDisplay" class="text-emerald-600">0</strong></span>
       </div>
-      <div class="w-full bg-slate-200 rounded-full h-2.5">
+      <div class="w-full bg-[#f0ddd5] rounded-full h-2">
         <div data-exam-quiz-target="progressBar"
-             class="bg-orange-500 h-2.5 rounded-full transition-all duration-500 ease-out"
+             class="bg-[#9c3404] h-2 rounded-full transition-all duration-500 ease-out"
              style="width: 0%"></div>
       </div>
     </div>
 
     <!-- 문제 영역 -->
-    <div data-exam-quiz-target="questionArea" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8">
+    <div data-exam-quiz-target="questionArea" class="bg-white rounded-2xl shadow-[0_12px_40px_rgba(156,52,4,0.06)] p-6 md:p-8">
       <!-- 문제 번호 배지 -->
       <div class="flex items-center gap-2 mb-5">
         <span data-exam-quiz-target="questionBadge"
-              class="inline-flex items-center gap-1 bg-orange-100 text-orange-700 text-xs font-bold px-3 py-1 rounded-full">
+              class="inline-flex items-center gap-1 bg-[#fde8d5] text-[#9c3404] text-xs font-bold px-3 py-1 rounded-full">
           문제 1
         </span>
       </div>
 
       <!-- 문제 텍스트 -->
       <p data-exam-quiz-target="questionText"
-         class="text-slate-800 text-lg font-semibold leading-relaxed mb-6">
-        <span class="block bg-slate-200 rounded animate-pulse h-5 w-full mb-2"></span>
-        <span class="block bg-slate-200 rounded animate-pulse h-5 w-4/5"></span>
+         class="text-[#2c2f31] text-lg font-semibold leading-relaxed mb-6">
+        <span class="block bg-[#eef1f3] rounded animate-pulse h-5 w-full mb-2"></span>
+        <span class="block bg-[#eef1f3] rounded animate-pulse h-5 w-4/5"></span>
       </p>
 
       <!-- 선택지 -->
       <div data-exam-quiz-target="optionsArea" class="space-y-3">
         <% 4.times do %>
-          <div class="bg-slate-100 rounded-xl h-14 animate-pulse"></div>
+          <div class="bg-[#eef1f3] rounded-xl h-14 animate-pulse"></div>
         <% end %>
       </div>
 
@@ -105,7 +108,7 @@
       <div data-exam-quiz-target="nextArea" class="hidden mt-6">
         <button data-action="click->exam-quiz#nextQuestion"
                 data-exam-quiz-target="nextBtn"
-                class="w-full inline-flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-bold px-6 py-4 rounded-xl transition-colors text-base">
+                class="w-full inline-flex items-center justify-center gap-2 bg-[#9c3404] hover:bg-[#852d03] active:bg-[#6e2503] text-white font-bold px-6 py-4 rounded-xl transition-colors text-base">
           다음 문제
           <span class="material-symbols-outlined">arrow_forward</span>
         </button>
@@ -119,12 +122,12 @@
 </section>
 
 <!-- 안내 -->
-<section class="py-6 px-4 bg-white border-t border-slate-100">
+<section class="py-6 px-4 bg-white border-t border-[#f0e8e0]">
   <div class="max-w-3xl mx-auto">
-    <div class="flex items-start gap-3 bg-orange-50 border border-orange-200 rounded-xl px-4 py-3">
-      <span class="material-symbols-outlined text-orange-500 text-lg flex-shrink-0 mt-0.5">info</span>
-      <p class="text-orange-800 text-sm">
-        <strong>오답 노트 사용법:</strong> 모의고사를 풀 때 틀린 문제가 자동 저장됩니다. 맞히면 오답 노트에서 제거되어, 진짜 취약한 문제만 남습니다.
+    <div class="flex items-start gap-3 bg-[#fde8d5] rounded-xl px-4 py-3">
+      <span class="material-symbols-outlined text-[#9c3404] text-lg flex-shrink-0 mt-0.5">info</span>
+      <p class="text-[#9c3404]/80 text-sm">
+        <strong class="text-[#9c3404]">오답 노트 사용법:</strong> 모의고사를 풀 때 틀린 문제가 자동 저장됩니다. 맞히면 오답 노트에서 제거되어, 진짜 취약한 문제만 남습니다.
       </p>
     </div>
   </div>

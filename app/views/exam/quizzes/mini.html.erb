@@ -1,30 +1,31 @@
-<%# exam.silmu.kr — 미니 퀴즈 (랜덤 10문제) %>
+<%# exam.silmu.kr — 미니 퀴즈 (랜덤 10문제) — Stitch 'The Quick Sprint' 디자인 적용 %>
 
-<!-- 헤더 -->
-<section class="bg-gradient-to-br from-emerald-800 via-teal-700 to-cyan-700 text-white py-10 px-4">
+<!-- 페이지 헤더 — 에디토리얼 화이트 -->
+<section class="bg-white border-b border-[#e0f0eb] py-10 px-4">
   <div class="max-w-3xl mx-auto">
-    <div class="flex items-center gap-2 text-emerald-200 text-sm mb-4">
-      <a href="https://exam.silmu.kr" class="hover:text-white transition-colors">홈</a>
+    <div class="flex items-center gap-1.5 text-[#3d7a6a] text-xs mb-6">
+      <a href="https://exam.silmu.kr" class="hover:text-[#006e5a] transition-colors">홈</a>
       <span class="material-symbols-outlined text-sm">chevron_right</span>
-      <a href="<%= exam_quiz_index_path %>" class="hover:text-white transition-colors">모의고사</a>
+      <a href="<%= exam_quiz_index_path %>" class="hover:text-[#006e5a] transition-colors">모의고사</a>
       <span class="material-symbols-outlined text-sm">chevron_right</span>
-      <span>미니 퀴즈</span>
+      <span class="text-[#2c2f31] font-medium">미니 퀴즈</span>
     </div>
-    <div class="flex items-center gap-4">
-      <div class="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center flex-shrink-0">
-        <span class="material-symbols-outlined text-white text-3xl">bolt</span>
-      </div>
+    <div class="flex items-end justify-between gap-6">
       <div>
-        <div class="text-emerald-200 text-sm font-medium mb-1">빠른 실력 점검</div>
-        <h1 class="text-2xl md:text-3xl font-bold">미니 퀴즈</h1>
-        <p class="text-emerald-200 mt-1">랜덤 10문제 · 즉시 채점 · 약 15분</p>
+        <span class="text-[#006e5a] font-bold tracking-widest uppercase text-xs mb-2 block">The Quick Sprint</span>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-[#2c2f31] tracking-tight leading-tight">미니 퀴즈</h1>
+        <p class="text-[#595c5e] text-sm mt-2">랜덤 10문제 · 즉시 채점 · 약 15분</p>
+      </div>
+      <div class="hidden md:flex items-center gap-2 bg-[#d0ede7] px-4 py-2 rounded-full flex-shrink-0">
+        <span class="material-symbols-outlined text-[#006e5a] text-sm">bolt</span>
+        <span class="text-xs font-bold text-[#3d7a6a] uppercase tracking-widest">Quick Check</span>
       </div>
     </div>
   </div>
 </section>
 
 <!-- 퀴즈 메인 (Stimulus) -->
-<section class="py-8 px-4 bg-slate-50 min-h-[60vh]">
+<section class="py-8 px-4 bg-[#f5faf8] min-h-[60vh]">
   <div class="max-w-3xl mx-auto"
        data-controller="exam-quiz"
        data-exam-quiz-questions-value="<%= @questions.to_json %>"
@@ -35,38 +36,38 @@
 
     <!-- 진행 상태 바 -->
     <div data-exam-quiz-target="progressArea" class="mb-6">
-      <div class="flex items-center justify-between text-sm text-slate-500 mb-2">
-        <span>문제 <strong data-exam-quiz-target="currentNum" class="text-slate-800">1</strong> / <strong><%= @questions.size %></strong></span>
-        <span>점수: <strong data-exam-quiz-target="scoreDisplay" class="text-emerald-600">0</strong>점</span>
+      <div class="flex items-center justify-between text-sm text-[#595c5e] mb-2">
+        <span>문제 <strong data-exam-quiz-target="currentNum" class="text-[#2c2f31]">1</strong> / <strong><%= @questions.size %></strong></span>
+        <span>점수: <strong data-exam-quiz-target="scoreDisplay" class="text-[#006e5a]">0</strong>점</span>
       </div>
-      <div class="w-full bg-slate-200 rounded-full h-2.5">
+      <div class="w-full bg-[#b8e0d8] rounded-full h-2">
         <div data-exam-quiz-target="progressBar"
-             class="bg-emerald-500 h-2.5 rounded-full transition-all duration-500 ease-out"
+             class="bg-[#006e5a] h-2 rounded-full transition-all duration-500 ease-out"
              style="width: 0%"></div>
       </div>
     </div>
 
     <!-- 문제 영역 -->
-    <div data-exam-quiz-target="questionArea" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8">
+    <div data-exam-quiz-target="questionArea" class="bg-white rounded-2xl shadow-[0_12px_40px_rgba(0,110,90,0.06)] p-6 md:p-8">
       <!-- 문제 번호 배지 -->
       <div class="flex items-center gap-2 mb-5">
         <span data-exam-quiz-target="questionBadge"
-              class="inline-flex items-center gap-1 bg-emerald-100 text-emerald-700 text-xs font-bold px-3 py-1 rounded-full">
+              class="inline-flex items-center gap-1 bg-[#d0ede7] text-[#006e5a] text-xs font-bold px-3 py-1 rounded-full">
           문제 1
         </span>
       </div>
 
       <!-- 문제 텍스트 -->
       <p data-exam-quiz-target="questionText"
-         class="text-slate-800 text-lg font-semibold leading-relaxed mb-6">
-        <span class="block bg-slate-200 rounded animate-pulse h-5 w-full mb-2"></span>
-        <span class="block bg-slate-200 rounded animate-pulse h-5 w-4/5"></span>
+         class="text-[#2c2f31] text-lg font-semibold leading-relaxed mb-6">
+        <span class="block bg-[#eef1f3] rounded animate-pulse h-5 w-full mb-2"></span>
+        <span class="block bg-[#eef1f3] rounded animate-pulse h-5 w-4/5"></span>
       </p>
 
       <!-- 선택지 -->
       <div data-exam-quiz-target="optionsArea" class="space-y-3">
         <% 4.times do %>
-          <div class="bg-slate-100 rounded-xl h-14 animate-pulse"></div>
+          <div class="bg-[#eef1f3] rounded-xl h-14 animate-pulse"></div>
         <% end %>
       </div>
 
@@ -79,7 +80,7 @@
         <div class="flex justify-end">
           <button data-action="click->exam-quiz#nextQuestion"
                   data-exam-quiz-target="nextBtn"
-                  class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-3 rounded-xl transition-colors">
+                  class="inline-flex items-center gap-2 bg-[#006e5a] hover:bg-[#005e4d] text-white font-bold px-6 py-3 rounded-full transition-colors">
             다음 문제
             <span class="material-symbols-outlined">arrow_forward</span>
           </button>

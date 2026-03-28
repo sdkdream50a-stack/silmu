@@ -1,29 +1,31 @@
-<%# 북마크 문제 재풀이 페이지 — localStorage에서 북마크 ID 읽어 필터링 %>
+<%# 북마크 문제 재풀이 페이지 — Stitch 'The Marked Collection' 디자인 적용 %>
 
-<!-- 헤더 -->
-<section class="bg-gradient-to-br from-slate-900 via-indigo-900 to-indigo-800 text-white py-10 px-4">
+<!-- 페이지 헤더 — 에디토리얼 화이트 -->
+<section class="bg-white border-b border-[#e8eef5] py-10 px-4">
   <div class="max-w-3xl mx-auto">
-    <div class="flex items-center gap-2 text-indigo-300 text-sm mb-4">
-      <a href="https://exam.silmu.kr" class="hover:text-white transition-colors">홈</a>
+    <div class="flex items-center gap-1.5 text-[#5a7a9a] text-xs mb-6">
+      <a href="https://exam.silmu.kr" class="hover:text-[#004c8c] transition-colors">홈</a>
       <span class="material-symbols-outlined text-sm">chevron_right</span>
-      <a href="<%= exam_quiz_index_path %>" class="hover:text-white transition-colors">모의고사</a>
+      <a href="<%= exam_quiz_index_path %>" class="hover:text-[#004c8c] transition-colors">모의고사</a>
       <span class="material-symbols-outlined text-sm">chevron_right</span>
-      <span>북마크 문제</span>
+      <span class="text-[#2c2f31] font-medium">북마크 문제</span>
     </div>
-    <div class="flex items-center gap-4">
-      <div class="w-14 h-14 bg-indigo-400/20 rounded-2xl flex items-center justify-center flex-shrink-0">
-        <span class="material-symbols-outlined text-indigo-300 text-3xl">bookmark</span>
-      </div>
+    <div class="flex items-end justify-between gap-6">
       <div>
-        <h1 class="text-2xl md:text-3xl font-bold">북마크 문제</h1>
-        <p class="text-indigo-200 mt-1">별표 저장한 중요 문제만 모아서 반복 학습</p>
+        <span class="text-[#004c8c] font-bold tracking-widest uppercase text-xs mb-2 block">The Marked Collection</span>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-[#2c2f31] tracking-tight leading-tight">북마크 문제</h1>
+        <p class="text-[#595c5e] text-sm mt-2">별표 저장한 중요 문제만 모아서 반복 학습</p>
+      </div>
+      <div class="hidden md:flex items-center gap-2 bg-[#e8eef5] px-4 py-2 rounded-full flex-shrink-0">
+        <span class="material-symbols-outlined text-[#004c8c] text-sm" style="font-variation-settings:'FILL' 1">bookmark</span>
+        <span class="text-xs font-bold text-[#5a7a9a] uppercase tracking-widest">Saved Questions</span>
       </div>
     </div>
   </div>
 </section>
 
 <!-- 퀴즈 메인 (Stimulus — bookmark mode) -->
-<section class="py-8 px-4 bg-slate-50 min-h-[60vh]">
+<section class="py-8 px-4 bg-[#f5f7fb] min-h-[60vh]">
   <div class="max-w-3xl mx-auto"
        data-controller="exam-quiz"
        data-exam-quiz-questions-value="<%= @all_questions.to_json %>"
@@ -33,21 +35,22 @@
 
     <!-- 북마크 없음 (초기에는 hidden, JS에서 제어) -->
     <div data-exam-quiz-target="emptyArea" class="hidden">
-      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-12 text-center">
-        <div class="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-5">
-          <span class="material-symbols-outlined text-indigo-400 text-4xl">bookmark_border</span>
+      <div class="bg-white rounded-2xl shadow-[0_12px_40px_rgba(0,76,140,0.06)] p-12 text-center">
+        <div class="w-20 h-20 bg-[#e8eef5] rounded-2xl flex items-center justify-center mx-auto mb-5">
+          <span class="material-symbols-outlined text-[#004c8c] text-4xl">bookmark_border</span>
         </div>
-        <h2 class="text-xl font-bold text-slate-800 mb-2">북마크한 문제가 없습니다</h2>
-        <p class="text-slate-500 text-sm mb-6">모의고사 풀이 중 문제 우측 상단의 북마크 버튼을 눌러 중요 문제를 저장하세요.</p>
+        <span class="text-[#5a7a9a] text-xs font-bold tracking-widest uppercase block mb-3">No Bookmarks Yet</span>
+        <h2 class="text-xl font-extrabold text-[#2c2f31] tracking-tight mb-2">북마크한 문제가 없습니다</h2>
+        <p class="text-[#595c5e] text-sm mb-8 leading-relaxed">모의고사 풀이 중 문제 우측 상단의 북마크 버튼을 눌러<br>중요 문제를 저장하세요.</p>
         <div class="flex flex-col sm:flex-row gap-3 justify-center">
           <a href="<%= exam_quiz_path('all') %>"
-             class="inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-3 rounded-xl transition-colors">
-            <span class="material-symbols-outlined">quiz</span>
+             class="inline-flex items-center justify-center gap-2 bg-[#004c8c] hover:bg-[#003d72] text-white font-bold px-6 py-3 rounded-full transition-colors shadow-[0_4px_16px_rgba(0,76,140,0.25)]">
+            <span class="material-symbols-outlined text-base">quiz</span>
             전체 모의고사 풀기
           </a>
           <a href="<%= exam_quiz_index_path %>"
-             class="inline-flex items-center justify-center gap-2 bg-white border-2 border-slate-200 hover:border-indigo-400 text-slate-700 font-bold px-6 py-3 rounded-xl transition-colors">
-            <span class="material-symbols-outlined">apps</span>
+             class="inline-flex items-center justify-center gap-2 bg-[#e8eef5] hover:bg-[#d5e2ef] text-[#2c2f31] font-bold px-6 py-3 rounded-full transition-colors">
+            <span class="material-symbols-outlined text-base">apps</span>
             과목 선택
           </a>
         </div>
@@ -56,40 +59,40 @@
 
     <!-- 진행 상태 바 -->
     <div data-exam-quiz-target="progressArea" class="mb-6">
-      <div class="flex items-center justify-between text-sm text-slate-500 mb-2">
+      <div class="flex items-center justify-between text-sm text-[#595c5e] mb-2">
         <span>
-          <span class="inline-flex items-center gap-1 bg-indigo-100 text-indigo-700 text-xs font-bold px-2 py-0.5 rounded-full mr-2">북마크</span>
-          문제 <strong data-exam-quiz-target="currentNum" class="text-slate-800">1</strong> / <strong>?</strong>
+          <span class="inline-flex items-center gap-1 bg-[#d5e6f5] text-[#004c8c] text-xs font-bold px-2 py-0.5 rounded-full mr-2">북마크</span>
+          문제 <strong data-exam-quiz-target="currentNum" class="text-[#2c2f31]">1</strong> / <strong>?</strong>
         </span>
-        <span>맞힌 수: <strong data-exam-quiz-target="scoreDisplay" class="text-green-600">0</strong></span>
+        <span>맞힌 수: <strong data-exam-quiz-target="scoreDisplay" class="text-emerald-600">0</strong></span>
       </div>
-      <div class="w-full bg-slate-200 rounded-full h-2.5">
+      <div class="w-full bg-[#dde5ef] rounded-full h-2">
         <div data-exam-quiz-target="progressBar"
-             class="bg-indigo-500 h-2.5 rounded-full transition-all duration-500 ease-out"
+             class="bg-[#004c8c] h-2 rounded-full transition-all duration-500 ease-out"
              style="width: 0%"></div>
       </div>
     </div>
 
     <!-- 문제 영역 -->
-    <div data-exam-quiz-target="questionArea" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8">
+    <div data-exam-quiz-target="questionArea" class="bg-white rounded-2xl shadow-[0_12px_40px_rgba(0,76,140,0.06)] p-6 md:p-8">
       <!-- 문제 번호 배지 -->
       <div class="flex items-center gap-2 flex-wrap mb-5" data-exam-quiz-target="questionBadge">
-        <span class="inline-flex items-center gap-1 bg-indigo-100 text-indigo-700 text-xs font-bold px-3 py-1 rounded-full">
+        <span class="inline-flex items-center gap-1 bg-[#d5e6f5] text-[#004c8c] text-xs font-bold px-3 py-1 rounded-full">
           문제 1
         </span>
       </div>
 
       <!-- 문제 텍스트 -->
       <p data-exam-quiz-target="questionText"
-         class="text-slate-800 text-lg font-semibold leading-relaxed mb-6">
-        <span class="block bg-slate-200 rounded animate-pulse h-5 w-full mb-2"></span>
-        <span class="block bg-slate-200 rounded animate-pulse h-5 w-4/5"></span>
+         class="text-[#2c2f31] text-lg font-semibold leading-relaxed mb-6">
+        <span class="block bg-[#eef1f3] rounded animate-pulse h-5 w-full mb-2"></span>
+        <span class="block bg-[#eef1f3] rounded animate-pulse h-5 w-4/5"></span>
       </p>
 
       <!-- 선택지 -->
       <div data-exam-quiz-target="optionsArea" class="space-y-3">
         <% 4.times do %>
-          <div class="bg-slate-100 rounded-xl h-14 animate-pulse"></div>
+          <div class="bg-[#eef1f3] rounded-xl h-14 animate-pulse"></div>
         <% end %>
       </div>
 
@@ -102,15 +105,13 @@
         <div class="flex justify-end">
           <button data-action="click->exam-quiz#nextQuestion"
                   data-exam-quiz-target="nextBtn"
-                  class="inline-flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white font-bold px-6 py-3 rounded-xl transition-colors">
+                  class="inline-flex items-center gap-2 bg-[#004c8c] hover:bg-[#003d72] text-white font-bold px-6 py-3 rounded-full transition-colors">
             다음 문제
             <span class="material-symbols-outlined">arrow_forward</span>
           </button>
         </div>
       </div>
     </div>
-
-    <!-- 오답 없음 상태 (emptyArea와 별도 — target 재사용) -->
 
     <!-- 결과 화면 (hidden → Stimulus에서 표시) -->
     <div data-exam-quiz-target="resultArea" class="hidden">
@@ -119,12 +120,12 @@
 </section>
 
 <!-- 안내 -->
-<section class="py-6 px-4 bg-white border-t border-slate-100">
+<section class="py-6 px-4 bg-white border-t border-[#eef1f3]">
   <div class="max-w-3xl mx-auto">
-    <div class="flex items-start gap-3 bg-indigo-50 border border-indigo-200 rounded-xl px-4 py-3">
-      <span class="material-symbols-outlined text-indigo-500 text-lg flex-shrink-0 mt-0.5">info</span>
-      <p class="text-indigo-800 text-sm">
-        <strong>북마크 사용법:</strong> 모의고사 풀이 중 문제 우측 상단의 <span class="material-symbols-outlined text-xs align-middle">bookmark_border</span> 버튼을 클릭하면 중요 문제를 저장할 수 있습니다. 저장된 문제는 이 페이지에서 반복 학습할 수 있습니다.
+    <div class="flex items-start gap-3 bg-[#d5e6f5] rounded-xl px-4 py-3">
+      <span class="material-symbols-outlined text-[#004c8c] text-lg flex-shrink-0 mt-0.5">info</span>
+      <p class="text-[#004c8c]/80 text-sm">
+        <strong class="text-[#004c8c]">북마크 사용법:</strong> 모의고사 풀이 중 문제 우측 상단의 <span class="material-symbols-outlined text-xs align-middle">bookmark_border</span> 버튼을 클릭하면 중요 문제를 저장할 수 있습니다. 저장된 문제는 이 페이지에서 반복 학습할 수 있습니다.
       </p>
     </div>
   </div>
