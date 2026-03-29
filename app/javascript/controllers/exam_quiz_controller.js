@@ -20,10 +20,11 @@ export default class extends Controller {
     backPath: { type: String, default: "" },
     chapterMap: { type: Object, default: {} },
     topicMap: { type: Object, default: {} },
-    signedIn: { type: Boolean, default: false }
+    signedIn: { type: Boolean, default: false },
+    questionsApiUrl: { type: String, default: "" }
   }
 
-  connect() {
+  async connect() {
     // 챕터별 통계 초기화
     this.wrongByChapter = {}
     this.totalByChapter = {}
@@ -40,11 +41,14 @@ export default class extends Controller {
         this.showEmpty()
         return
       }
-      // 오답 ID에 해당하는 문제만 필터링
-      this.questionsValue = this.questionsValue.filter(q => wrongIds.includes(q.id))
-      if (this.questionsValue.length === 0) {
-        this.showEmpty()
-        return
+      // API 기반 fetch (P0-2 최적화) 또는 pre-loaded 문제 필터링 (legacy fallback)
+      if (this.questionsApiUrlValue) {
+        const fetched = await this._fetchQuestionsByIds(wrongIds)
+        if (fetched.length === 0) { this.showEmpty(); return }
+        this.questionsValue = fetched
+      } else {
+        this.questionsValue = this.questionsValue.filter(q => wrongIds.includes(q.id))
+        if (this.questionsValue.length === 0) { this.showEmpty(); return }
       }
       // 진행바 total 업데이트
       if (this.hasTotalNumTarget) this.totalNumTarget.textContent = this.questionsValue.length
@@ -58,16 +62,34 @@ export default class extends Controller {
         this.showEmpty()
         return
       }
-      // 북마크 ID에 해당하는 문제만 필터링
-      this.questionsValue = this.questionsValue.filter(q => bookmarkIds.includes(q.id))
-      if (this.questionsValue.length === 0) {
-        this.showEmpty()
-        return
+      // API 기반 fetch (P0-2 최적화) 또는 pre-loaded 문제 필터링 (legacy fallback)
+      if (this.questionsApiUrlValue) {
+        const fetched = await this._fetchQuestionsByIds(bookmarkIds)
+        if (fetched.length === 0) { this.showEmpty(); return }
+        this.questionsValue = fetched
+      } else {
+        this.questionsValue = this.questionsValue.filter(q => bookmarkIds.includes(q.id))
+        if (this.questionsValue.length === 0) { this.showEmpty(); return }
       }
       // 진행바 total 업데이트
       if (this.hasTotalNumTarget) this.totalNumTarget.textContent = this.questionsValue.length
     }
     this.showQuestion()
+  }
+
+  // ID 배열로 서버에서 문제 fetch
+  async _fetchQuestionsByIds(ids) {
+    try {
+      const url = new URL(this.questionsApiUrlValue, window.location.origin)
+      ids.forEach(id => url.searchParams.append('ids[]', id))
+      const res = await fetch(url, { headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' } })
+      if (!res.ok) return []
+      const data = await res.json()
+      return data.questions || []
+    } catch (e) {
+      console.error('문제 fetch 오류:', e)
+      return []
+    }
   }
 
   // 오답 노트 취약 챕터 요약 (진입 시 표시)

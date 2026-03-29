@@ -33,6 +33,9 @@ Rails.application.routes.draw do
       # #9 실기 대비
       get 'practical', to: 'practical#index', as: :practical
 
+      # 문제 ID 배열로 조회 (bookmark/wrong 최적화용 API)
+      get 'quiz/questions', to: 'quizzes#questions_by_ids', as: :quiz_questions_api
+
       # #10 Q&A 커뮤니티 (문제별 댓글)
       resources :questions, only: [] do
         resources :comments, controller: 'question_comments', only: [ :index, :create, :destroy ] do

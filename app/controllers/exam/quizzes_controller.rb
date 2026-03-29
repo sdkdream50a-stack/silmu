@@ -67,12 +67,12 @@ module Exam
       )
     end
 
-    # GET /quiz/bookmarks — 북마크 문제 (모든 문제를 내려보내고 클라이언트에서 필터)
+    # GET /quiz/bookmarks — 북마크 문제
+    # 변경: 전체 문제 JSON 대신 API URL만 전달하여 초기 HTML 크기 대폭 축소
     def bookmarks
-      @all_questions = ExamQuestions.all_sliced_with_difficulty
       @chapter_map = ExamCurriculum.chapter_map
-
-      expires_in 1.hour, public: true, stale_while_revalidate: 1.day
+      # 사용자별 북마크가 다르므로 캐시 비활성화
+      expires_in 0, public: false
 
       set_meta_tags(
         title: "북마크 문제",
@@ -83,13 +83,12 @@ module Exam
       )
     end
 
-    # GET /quiz/wrong — 오답 노트 재풀이 (모든 문제를 내려보내고 클라이언트에서 필터)
+    # GET /quiz/wrong — 오답 노트 재풀이
+    # 변경: 전체 문제 JSON 대신 API URL만 전달하여 초기 HTML 크기 대폭 축소
     def wrong
-      @all_questions = ExamQuestions.all_sliced_with_difficulty
       @chapter_map = ExamCurriculum.chapter_map
-
-      # 문제 데이터가 변경되지 않으므로 HTTP 캐싱
-      expires_in 1.hour, public: true, stale_while_revalidate: 1.day
+      # 사용자별 오답이 다르므로 캐시 비활성화
+      expires_in 0, public: false
 
       set_meta_tags(
         title: "오답 노트",
@@ -98,6 +97,16 @@ module Exam
         og: { image: "https://exam.silmu.kr/icon.png" },
         twitter: { card: "summary" }
       )
+    end
+
+    # GET /quiz/questions?ids[]=1&ids[]=5&ids[]=12
+    # bookmark/wrong 페이지에서 필요한 문제만 가져오는 API 엔드포인트
+    def questions_by_ids
+      ids = Array(params[:ids]).map(&:to_i).uniq.first(300) # 최대 300개 제한
+      questions = ExamQuestion.by_ids(ids)
+
+      expires_in 1.hour, public: false
+      render json: { questions: questions }
     end
 
     # GET /quiz/subject/:subject_id/chapter/:chapter_num — 챕터별 문제 풀기

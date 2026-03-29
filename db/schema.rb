@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_28_000012) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_29_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -123,6 +123,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_28_000012) do
     t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.index ["question_id"], name: "idx_exam_question_reports_on_qid"
+  end
+
+  create_table "exam_questions", force: :cascade do |t|
+    t.integer "chapter_num", null: false
+    t.integer "correct", null: false
+    t.datetime "created_at", null: false
+    t.string "difficulty", default: "basic", null: false
+    t.text "explanation"
+    t.text "options", default: "[]", null: false
+    t.boolean "published", default: true, null: false
+    t.text "question", null: false
+    t.integer "subject_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["published"], name: "index_exam_questions_on_published"
+    t.index ["subject_id", "chapter_num"], name: "index_exam_questions_on_subject_id_and_chapter_num"
+    t.index ["subject_id"], name: "index_exam_questions_on_subject_id"
   end
 
   create_table "guides", force: :cascade do |t|

@@ -25,10 +25,10 @@
 <section class="py-8 px-4 bg-[#f5f7fb] min-h-[60vh]">
   <div class="max-w-3xl mx-auto"
        data-controller="exam-quiz"
-       data-exam-quiz-questions-value="<%= @all_questions.to_json %>"
        data-exam-quiz-bookmark-mode-value="true"
        data-exam-quiz-subject-id-value="bookmarks"
-       data-exam-quiz-chapter-map-value="<%= @chapter_map.to_json.html_safe %>">
+       data-exam-quiz-chapter-map-value="<%= @chapter_map.to_json.html_safe %>"
+       data-exam-quiz-questions-api-url-value="<%= exam_quiz_questions_api_path %>">
 
     <!-- 북마크 없음 (초기에는 hidden, JS에서 제어) -->
     <div data-exam-quiz-target="emptyArea" class="hidden">
