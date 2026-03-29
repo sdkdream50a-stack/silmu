@@ -14,6 +14,8 @@ Rails.application.routes.draw do
       get 'quiz/wrong', to: 'quizzes#wrong', as: :quiz_wrong
       get 'quiz/simulation', to: 'quizzes#simulation', as: :quiz_simulation
       get 'quiz/analysis', to: 'quizzes#analysis', as: :quiz_analysis
+      # quiz/questions는 quiz/:id 와일드카드보다 반드시 앞에 위치해야 함
+      get 'quiz/questions', to: 'quizzes#questions_by_ids', as: :quiz_questions_api
       get 'quiz/:id', to: 'quizzes#show', as: :quiz
       get 'exam-info', to: 'exam_info#index', as: :exam_info
       get 'exam-strategy', to: 'strategy#index', as: :exam_strategy
@@ -32,9 +34,6 @@ Rails.application.routes.draw do
 
       # #9 실기 대비
       get 'practical', to: 'practical#index', as: :practical
-
-      # 문제 ID 배열로 조회 (bookmark/wrong 최적화용 API)
-      get 'quiz/questions', to: 'quizzes#questions_by_ids', as: :quiz_questions_api
 
       # #10 Q&A 커뮤니티 (문제별 댓글)
       resources :questions, only: [] do
