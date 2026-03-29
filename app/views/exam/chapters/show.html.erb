@@ -45,46 +45,54 @@
      data-exam-progress-subject-id-value="<%= @subject[:id] %>"
      data-exam-progress-chapter-num-value="<%= @chapter[:number] %>">
 
-<!-- 챕터 헤더 — 에디토리얼 화이트 -->
-<section class="relative bg-white pt-12 pb-10 px-4 border-b border-slate-100 overflow-hidden">
-  <!-- 고스트 장식 (상단 우측) -->
-  <div class="hidden lg:block absolute -top-8 -right-8 w-60 h-60 opacity-[0.06] pointer-events-none">
-    <span class="material-symbols-outlined text-slate-900" style="font-size: 15rem; line-height:1;"><%= @subject[:icon] %></span>
+<!-- 챕터 히어로 — subject gradient -->
+<% hero_from, hero_to = {
+  "emerald" => ["#1a4d38", "#166534"],
+  "blue"    => ["#1e3a6e", "#1e3a8a"],
+  "violet"  => ["#3b1f6e", "#4c1d95"],
+  "rose"    => ["#6e1e2a", "#881337"]
+}[@subject[:color]] || ["#465f88", "#3a537c"] %>
+<section class="text-white py-12 px-4 relative overflow-hidden"
+         style="background: linear-gradient(135deg, <%= hero_from %>, <%= hero_to %>);">
+  <div class="absolute top-0 right-0 w-72 h-72 bg-white/5 rounded-full -mr-36 -mt-36 pointer-events-none"></div>
+  <!-- 고스트 아이콘 장식 -->
+  <div class="hidden lg:block absolute -bottom-6 -right-6 opacity-[0.06] pointer-events-none">
+    <span class="material-symbols-outlined text-white" style="font-size: 16rem; line-height:1;"><%= @subject[:icon] %></span>
   </div>
 
   <div class="max-w-5xl mx-auto relative z-10">
     <!-- 브레드크럼 -->
-    <div class="flex items-center gap-1.5 text-slate-400 text-sm mb-8 flex-wrap">
-      <a href="https://exam.silmu.kr" class="hover:text-slate-600 transition-colors">홈</a>
+    <div class="flex items-center gap-1.5 text-white/50 text-xs mb-5 flex-wrap">
+      <a href="https://exam.silmu.kr" class="hover:text-white/80 transition-colors">홈</a>
       <span class="material-symbols-outlined text-sm">chevron_right</span>
-      <a href="<%= exam_subjects_path %>" class="hover:text-slate-600 transition-colors">커리큘럼</a>
+      <a href="<%= exam_subjects_path %>" class="hover:text-white/80 transition-colors">커리큘럼</a>
       <span class="material-symbols-outlined text-sm">chevron_right</span>
-      <a href="<%= exam_subject_path(@subject[:id]) %>" class="hover:text-slate-600 transition-colors"><%= @subject[:number] %> <%= @subject[:title] %></a>
+      <a href="<%= exam_subject_path(@subject[:id]) %>" class="hover:text-white/80 transition-colors"><%= @subject[:number] %></a>
       <span class="material-symbols-outlined text-sm">chevron_right</span>
-      <span class="text-slate-600 font-medium">제<%= @chapter[:number] %>장</span>
+      <span class="text-white/80 font-medium">제<%= @chapter[:number] %>장</span>
     </div>
 
-    <!-- 과목 배지 -->
-    <span class="inline-block px-4 py-1.5 rounded-full <%= colors[:badge] %> text-xs font-bold tracking-widest uppercase mb-4">
-      <%= @subject[:number] %> · <%= @subject[:title] %>
-    </span>
+    <!-- 뱃지 -->
+    <div class="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5 mb-4">
+      <span class="material-symbols-outlined text-[#ffd166] text-sm"><%= @subject[:icon] %></span>
+      <span class="text-white/90 text-xs font-semibold"><%= @subject[:number] %> · <%= @subject[:title] %></span>
+    </div>
 
     <!-- 챕터 번호 + 제목 -->
-    <h2 class="text-lg font-extrabold <%= colors[:text_dark] %> tracking-tight opacity-80 mb-2">제<%= @chapter[:number] %>장</h2>
-    <h1 class="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tighter leading-tight max-w-3xl">
+    <div class="text-white/60 text-sm font-bold tracking-wide mb-2">제<%= @chapter[:number] %>장</div>
+    <h1 class="text-3xl md:text-4xl font-extrabold text-[#f6f7ff] tracking-tight leading-tight max-w-3xl mb-6">
       <%= @chapter[:title] %>
     </h1>
 
-    <!-- 구분선 + 학습 정보 칩 -->
-    <div class="mt-8 h-1 w-16 <%= colors[:progress] %> rounded-full mb-5"></div>
+    <!-- 학습 정보 칩 -->
     <div class="flex flex-wrap gap-2">
-      <span class="flex items-center gap-1 bg-slate-100 text-slate-600 text-xs font-semibold px-3 py-1.5 rounded-full">
+      <span class="flex items-center gap-1 bg-white/15 text-white/80 text-xs font-semibold px-3 py-1.5 rounded-full">
         <span class="material-symbols-outlined text-xs">list</span><%= @chapter[:sections].size %>개 절
       </span>
-      <span class="flex items-center gap-1 bg-slate-100 text-slate-600 text-xs font-semibold px-3 py-1.5 rounded-full">
+      <span class="flex items-center gap-1 bg-white/15 text-white/80 text-xs font-semibold px-3 py-1.5 rounded-full">
         <span class="material-symbols-outlined text-xs">key</span>키워드 <%= @chapter[:keywords].size %>개
       </span>
-      <span class="flex items-center gap-1 bg-amber-50 text-amber-700 text-xs font-semibold px-3 py-1.5 rounded-full">
+      <span class="flex items-center gap-1 bg-[#ffd166]/20 text-[#ffd166] text-xs font-semibold px-3 py-1.5 rounded-full">
         <span class="material-symbols-outlined text-xs">bolt</span>출제포인트 <%= @chapter[:exam_points].size %>개
       </span>
       <div data-exam-progress-target="badge"></div>

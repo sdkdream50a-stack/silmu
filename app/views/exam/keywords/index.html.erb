@@ -4,29 +4,44 @@
 <div data-controller="exam-flashcard"
      data-exam-flashcard-cards-value="<%= @flashcard_keywords.to_json.html_safe %>">
 
-<!-- 헤더 — 에디토리얼 화이트 + 좌측 액센트 보더 -->
-<section class="bg-white pt-14 pb-10 px-4 border-b border-slate-100">
-  <div class="max-w-6xl mx-auto">
+<!-- 히어로 — navy gradient -->
+<section class="bg-gradient-to-br from-[#465f88] to-[#3a537c] text-white py-14 px-4 relative overflow-hidden">
+  <div class="absolute top-0 right-0 w-72 h-72 bg-white/5 rounded-full -mr-36 -mt-36 pointer-events-none"></div>
+  <div class="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full -ml-24 -mb-24 pointer-events-none"></div>
+  <div class="max-w-6xl mx-auto relative z-10">
     <!-- 브레드크럼 -->
-    <div class="flex items-center gap-1.5 text-slate-400 text-sm mb-10 flex-wrap">
-      <a href="https://exam.silmu.kr" class="hover:text-slate-600 transition-colors">홈</a>
+    <div class="flex items-center gap-1.5 text-white/50 text-xs mb-5 flex-wrap">
+      <a href="https://exam.silmu.kr" class="hover:text-white/80 transition-colors">홈</a>
       <span class="material-symbols-outlined text-sm">chevron_right</span>
-      <a href="<%= exam_subjects_path %>" class="hover:text-slate-600 transition-colors">커리큘럼</a>
+      <a href="<%= exam_subjects_path %>" class="hover:text-white/80 transition-colors">커리큘럼</a>
       <span class="material-symbols-outlined text-sm">chevron_right</span>
-      <span class="text-slate-600 font-medium">핵심 용어집</span>
+      <span class="text-white/80 font-medium">핵심 용어집</span>
     </div>
-
-    <!-- 에디토리얼 타이틀 (좌측 4px 액센트 보더) -->
-    <div class="border-l-4 border-slate-800 pl-8 py-3 mb-10">
-      <h1 class="text-5xl md:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight mb-4">
-        핵심 용어집
-      </h1>
-      <p class="text-slate-400 max-w-2xl leading-relaxed">
-        4권 교재 전체 <strong class="text-slate-700"><%= @total_count %>개</strong> 키워드 — 정의·예시·모의고사 문제 연결.<br>
-        공공조달관리사 시험에서 반드시 알아야 할 핵심 개념을 정리했습니다.
-      </p>
+    <!-- 뱃지 -->
+    <div class="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5 mb-5">
+      <span class="material-symbols-outlined text-[#ffd166] text-base" style="font-variation-settings:'FILL' 1">auto_stories</span>
+      <span class="text-white/90 text-xs font-semibold">4권 핵심 용어 완전 정리</span>
     </div>
+    <h1 class="text-3xl md:text-4xl font-extrabold leading-snug mb-3 tracking-tight text-[#f6f7ff]">핵심 용어집</h1>
+    <p class="text-[#c8d6f5] text-base mb-6 max-w-2xl">
+      4권 교재 전체 <strong class="text-[#ffd166]"><%= @total_count %>개</strong> 키워드 — 정의·예시·모의고사 문제 연결.<br>
+      공공조달관리사 시험에서 반드시 알아야 할 핵심 개념을 정리했습니다.
+    </p>
+    <!-- 퀵 링크 -->
+    <div class="flex flex-wrap gap-3">
+      <a href="<%= exam_keywords_path %>" class="inline-flex items-center gap-1.5 bg-white text-[#465f88] font-bold px-5 py-2.5 rounded-full hover:bg-[#f6f7ff] transition-colors text-sm shadow-lg">
+        <span class="material-symbols-outlined text-base">format_list_bulleted</span>전체
+      </a>
+      <% [[1,"1권"],[2,"2권"],[3,"3권"],[4,"4권"]].each do |id, label| %>
+        <a href="<%= exam_keywords_path(subject_id: id) %>" class="inline-flex items-center gap-1.5 bg-white/15 backdrop-blur-sm border border-white/30 text-white font-semibold px-5 py-2.5 rounded-full hover:bg-white/25 transition-colors text-sm"><%= label %></a>
+      <% end %>
+    </div>
+  </div>
+</section>
 
+<!-- 필터 + 검색 바 -->
+<section class="bg-white border-b border-slate-100 px-4 py-5">
+  <div class="max-w-6xl mx-auto">
     <!-- 필터 + 플래시카드 컨트롤 바 -->
     <div class="bg-slate-50 rounded-2xl p-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-5">
       <!-- 과목 필터 pill 버튼 -->

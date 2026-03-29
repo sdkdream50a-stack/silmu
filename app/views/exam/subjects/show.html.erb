@@ -52,44 +52,49 @@
      data-exam-progress-subject-id-value="<%= @subject[:id] %>"
      data-exam-progress-total-value="<%= @subject[:chapters].size %>">
 
-<!-- 과목 헤더 — 에디토리얼 화이트 -->
-<section class="bg-white pt-12 pb-10 px-4 border-b border-slate-100">
-  <div class="max-w-5xl mx-auto">
+<!-- 히어로 — subject gradient -->
+<% hero_from, hero_to = {
+  "emerald" => ["#1a4d38", "#166534"],
+  "blue"    => ["#1e3a6e", "#1e3a8a"],
+  "violet"  => ["#3b1f6e", "#4c1d95"],
+  "rose"    => ["#6e1e2a", "#881337"]
+}[@subject[:color]] || ["#465f88", "#3a537c"] %>
+<section class="text-white py-14 px-4 relative overflow-hidden"
+         style="background: linear-gradient(135deg, <%= hero_from %>, <%= hero_to %>);">
+  <div class="absolute top-0 right-0 w-72 h-72 bg-white/5 rounded-full -mr-36 -mt-36 pointer-events-none"></div>
+  <div class="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full -ml-24 -mb-24 pointer-events-none"></div>
+  <!-- 고스트 아이콘 장식 -->
+  <div class="hidden lg:block absolute -bottom-4 -right-4 opacity-[0.06] pointer-events-none">
+    <span class="material-symbols-outlined text-white" style="font-size: 18rem; line-height:1;"><%= @subject[:icon] %></span>
+  </div>
+  <div class="max-w-5xl mx-auto relative z-10">
     <!-- 브레드크럼 -->
-    <div class="flex items-center gap-1.5 text-slate-400 text-sm mb-8">
-      <a href="https://exam.silmu.kr" class="hover:text-slate-600 transition-colors">홈</a>
+    <div class="flex items-center gap-1.5 text-white/50 text-xs mb-5 flex-wrap">
+      <a href="https://exam.silmu.kr" class="hover:text-white/80 transition-colors">홈</a>
       <span class="material-symbols-outlined text-sm">chevron_right</span>
-      <a href="<%= exam_subjects_path %>" class="hover:text-slate-600 transition-colors">커리큘럼</a>
+      <a href="<%= exam_subjects_path %>" class="hover:text-white/80 transition-colors">커리큘럼</a>
       <span class="material-symbols-outlined text-sm">chevron_right</span>
-      <span class="text-slate-600 font-medium"><%= @subject[:number] %></span>
+      <span class="text-white/80 font-medium"><%= @subject[:number] %></span>
     </div>
-
-    <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
-      <div class="flex-1">
-        <!-- 과목 색상 배지 -->
-        <span class="inline-flex items-center gap-1.5 px-3 py-1 <%= colors[:badge] %> rounded-full text-xs font-bold tracking-widest uppercase mb-4">
-          <span class="material-symbols-outlined text-sm"><%= @subject[:icon] %></span>
-          <%= @subject[:number] %> · <%= @subject[:subtitle] %>
+    <!-- 뱃지 -->
+    <div class="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5 mb-5">
+      <span class="material-symbols-outlined text-[#ffd166] text-base"><%= @subject[:icon] %></span>
+      <span class="text-white/90 text-xs font-semibold"><%= @subject[:number] %> · <%= @subject[:subtitle] %></span>
+    </div>
+    <h1 class="text-3xl md:text-4xl font-extrabold leading-snug mb-3 tracking-tight text-[#f6f7ff]">
+      <%= @subject[:title] %>
+    </h1>
+    <p class="text-white/70 text-base mb-6">총 <%= @subject[:total_chapters] %>개 챕터 · 학습목표·핵심키워드·시험 출제 포인트 수록</p>
+    <!-- 진행률 인라인 -->
+    <div class="flex flex-wrap items-center gap-6">
+      <div class="flex items-center gap-3 bg-white/10 rounded-xl px-4 py-2.5">
+        <span class="text-xs text-white/60 font-medium uppercase tracking-wider">학습 진도</span>
+        <span data-exam-progress-target="progressText" class="text-sm font-bold text-[#ffd166]">
+          0/<%= @subject[:chapters].size %> 완료
         </span>
-        <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight mb-4">
-          <%= @subject[:title] %>
-        </h1>
-        <p class="text-slate-400 text-base leading-relaxed max-w-xl">
-          총 <%= @subject[:total_chapters] %>개 챕터 · 학습목표·핵심키워드·시험 출제 포인트 수록
-        </p>
-      </div>
-
-      <!-- 진행률 카드 -->
-      <div class="lg:w-64 bg-slate-50 p-5 rounded-2xl shadow-[0_4px_24px_rgba(18,28,40,0.05)] flex-shrink-0">
-        <div class="flex justify-between items-center mb-2">
-          <span class="text-xs font-bold uppercase text-slate-400 tracking-wider">학습 진도</span>
-          <span data-exam-progress-target="progressText" class="text-sm font-bold <%= colors[:text_dark] %>">
-            0/<%= @subject[:chapters].size %> 완료
-          </span>
-        </div>
-        <div class="w-full bg-slate-200 rounded-full h-2">
+        <div class="w-24 bg-white/20 rounded-full h-1.5">
           <div data-exam-progress-target="progressBar"
-               class="<%= colors[:progress] %> h-2 rounded-full transition-all duration-500"
+               class="bg-[#ffd166] h-1.5 rounded-full transition-all duration-500"
                style="width: 0%"></div>
         </div>
       </div>

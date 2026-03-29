@@ -1,26 +1,23 @@
 <%# 학습 분석 대시보드 — Stitch 'Editorial Intelligence' 디자인 적용 %>
 
-<!-- 페이지 헤더 — 에디토리얼 화이트 -->
-<section class="bg-white border-b border-[#f3f3f6] py-10 px-4">
-  <div class="max-w-5xl mx-auto">
-    <div class="flex items-center gap-1.5 text-slate-400 text-xs mb-6">
-      <a href="https://exam.silmu.kr" class="hover:text-slate-600 transition-colors">홈</a>
+<!-- 히어로 — navy gradient -->
+<section class="bg-gradient-to-br from-[#465f88] to-[#3a537c] text-white py-14 px-4 relative overflow-hidden">
+  <div class="absolute top-0 right-0 w-72 h-72 bg-white/5 rounded-full -mr-36 -mt-36 pointer-events-none"></div>
+  <div class="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full -ml-24 -mb-24 pointer-events-none"></div>
+  <div class="max-w-5xl mx-auto relative z-10">
+    <div class="flex items-center gap-1.5 text-white/50 text-xs mb-5 flex-wrap">
+      <a href="https://exam.silmu.kr" class="hover:text-white/80 transition-colors">홈</a>
       <span class="material-symbols-outlined text-sm">chevron_right</span>
-      <a href="<%= exam_quiz_index_path %>" class="hover:text-slate-600 transition-colors">모의고사</a>
+      <a href="<%= exam_quiz_index_path %>" class="hover:text-white/80 transition-colors">모의고사</a>
       <span class="material-symbols-outlined text-sm">chevron_right</span>
-      <span class="text-slate-600 font-medium">학습 분석</span>
+      <span class="text-white/80 font-medium">학습 분석</span>
     </div>
-    <div class="flex items-end justify-between gap-6">
-      <div>
-        <span class="text-[#0040a1] font-bold tracking-widest uppercase text-xs mb-2 block">Editorial Intelligence</span>
-        <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">학습 분석 대시보드</h1>
-        <p class="text-slate-400 text-sm mt-2">챕터 진도 · 과목별 오답 분석 · 학습 패턴</p>
-      </div>
-      <div class="hidden md:flex items-center gap-2 bg-[#f3f3f6] px-4 py-2 rounded-full flex-shrink-0">
-        <span class="material-symbols-outlined text-[#0040a1] text-sm">insights</span>
-        <span class="text-xs font-bold text-[#424654] uppercase tracking-widest">Data Curator</span>
-      </div>
+    <div class="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5 mb-5">
+      <span class="material-symbols-outlined text-[#ffd166] text-base">insights</span>
+      <span class="text-white/90 text-xs font-semibold">학습 패턴 분석</span>
     </div>
+    <h1 class="text-3xl md:text-4xl font-extrabold leading-snug mb-3 tracking-tight text-[#f6f7ff]">학습 분석 대시보드</h1>
+    <p class="text-[#c8d6f5] text-base max-w-2xl">챕터 진도 · 과목별 오답 분석 · 학습 패턴</p>
   </div>
 </section>
 

@@ -1,44 +1,52 @@
 <%# 4과목 커리큘럼 목록 페이지 — Stitch 'The Curated Scholar' 디자인 적용 %>
 
-<!-- 페이지 헤더 — 에디토리얼 화이트 스타일 -->
-<section class="bg-white pt-14 pb-10 px-4 border-b border-slate-100">
-  <div class="max-w-5xl mx-auto">
+<!-- 히어로 — navy gradient -->
+<section class="bg-gradient-to-br from-[#465f88] to-[#3a537c] text-white py-14 px-4 relative overflow-hidden">
+  <div class="absolute top-0 right-0 w-72 h-72 bg-white/5 rounded-full -mr-36 -mt-36 pointer-events-none"></div>
+  <div class="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full -ml-24 -mb-24 pointer-events-none"></div>
+  <div class="max-w-5xl mx-auto relative z-10">
     <!-- 브레드크럼 -->
-    <div class="flex items-center gap-1.5 text-slate-400 text-sm mb-8">
-      <a href="https://exam.silmu.kr" class="hover:text-slate-600 transition-colors">홈</a>
+    <div class="flex items-center gap-1.5 text-white/50 text-xs mb-5 flex-wrap">
+      <a href="https://exam.silmu.kr" class="hover:text-white/80 transition-colors">홈</a>
       <span class="material-symbols-outlined text-sm">chevron_right</span>
-      <span class="text-slate-600 font-medium">커리큘럼</span>
+      <span class="text-white/80 font-medium">커리큘럼</span>
     </div>
-
-    <div class="flex flex-col md:flex-row md:items-end justify-between gap-8">
-      <div class="max-w-2xl">
-        <span class="text-emerald-700 font-bold tracking-widest uppercase text-xs mb-3 block">Academic Path</span>
-        <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
-          표준교재 4권<br class="hidden md:block"> 커리큘럼
-        </h1>
-        <p class="mt-4 text-slate-500 text-base leading-relaxed max-w-xl">
-          공공조달관리사 표준교재 4권·27장을 체계적으로 학습하세요.<br>
-          각 챕터별 학습목표·핵심키워드·시험 출제 포인트를 제공합니다.
-        </p>
+    <!-- 뱃지 -->
+    <div class="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5 mb-5">
+      <span class="material-symbols-outlined text-[#ffd166] text-base" style="font-variation-settings:'FILL' 1">menu_book</span>
+      <span class="text-white/90 text-xs font-semibold">표준교재 4권 완전 커리큘럼</span>
+    </div>
+    <h1 class="text-3xl md:text-4xl font-extrabold leading-snug mb-3 tracking-tight text-[#f6f7ff]">
+      표준교재 4권 커리큘럼
+    </h1>
+    <p class="text-[#c8d6f5] text-base mb-6 max-w-2xl">
+      공공조달관리사 표준교재 4권·27장을 체계적으로 학습하세요.<br>
+      각 챕터별 학습목표·핵심키워드·시험 출제 포인트를 제공합니다.
+    </p>
+    <!-- 요약 지표 -->
+    <div class="flex flex-wrap gap-6 mb-7 py-4 border-t border-b border-white/15">
+      <div class="text-center">
+        <div class="text-2xl font-extrabold text-[#ffd166]">4</div>
+        <div class="text-white/60 text-xs mt-0.5">권</div>
       </div>
-
-      <!-- 통계 -->
-      <div class="flex gap-8 flex-shrink-0">
-        <div class="text-center">
-          <div class="text-3xl font-extrabold text-slate-900">4</div>
-          <div class="text-slate-400 text-xs mt-0.5 font-medium uppercase tracking-wide">권</div>
-        </div>
-        <div class="w-px bg-slate-100"></div>
-        <div class="text-center">
-          <div class="text-3xl font-extrabold text-slate-900">27</div>
-          <div class="text-slate-400 text-xs mt-0.5 font-medium uppercase tracking-wide">챕터</div>
-        </div>
-        <div class="w-px bg-slate-100"></div>
-        <div class="text-center">
-          <div class="text-3xl font-extrabold text-slate-900"><%= ExamCurriculum.all_keywords.size %></div>
-          <div class="text-slate-400 text-xs mt-0.5 font-medium uppercase tracking-wide">키워드</div>
-        </div>
+      <div class="text-center">
+        <div class="text-2xl font-extrabold text-[#ffd166]">27</div>
+        <div class="text-white/60 text-xs mt-0.5">챕터</div>
       </div>
+      <div class="text-center">
+        <div class="text-2xl font-extrabold text-[#ffd166]"><%= ExamCurriculum.all_keywords.size %></div>
+        <div class="text-white/60 text-xs mt-0.5">키워드</div>
+      </div>
+    </div>
+    <!-- 퀵 링크 -->
+    <div class="flex flex-wrap gap-3">
+      <% [["1권", 1], ["2권", 2], ["3권", 3], ["4권", 4]].each_with_index do |(label, id), i| %>
+        <% if i == 0 %>
+          <a href="<%= exam_subject_path(id) %>" class="inline-flex items-center gap-1.5 bg-white text-[#465f88] font-bold px-5 py-2.5 rounded-full hover:bg-[#f6f7ff] transition-colors text-sm shadow-lg"><%= label %></a>
+        <% else %>
+          <a href="<%= exam_subject_path(id) %>" class="inline-flex items-center gap-1.5 bg-white/15 backdrop-blur-sm border border-white/30 text-white font-semibold px-5 py-2.5 rounded-full hover:bg-white/25 transition-colors text-sm"><%= label %></a>
+        <% end %>
+      <% end %>
     </div>
   </div>
 </section>

@@ -1,43 +1,53 @@
 <%# 공공조달관리사 합격 전략 — Stitch 'The Strategic Compass' 디자인 적용 %>
 
-<!-- 페이지 헤더 — 에디토리얼 화이트 -->
-<section class="bg-white border-b border-[#f0e8d5] py-10 px-4">
-  <div class="max-w-5xl mx-auto">
-    <div class="flex items-center gap-1.5 text-[#8a7a60] text-xs mb-6">
-      <a href="https://exam.silmu.kr" class="hover:text-[#a16207] transition-colors">홈</a>
+<!-- 히어로 — navy gradient -->
+<section class="bg-gradient-to-br from-[#465f88] to-[#3a537c] text-white py-14 px-4 relative overflow-hidden">
+  <div class="absolute top-0 right-0 w-72 h-72 bg-white/5 rounded-full -mr-36 -mt-36 pointer-events-none"></div>
+  <div class="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full -ml-24 -mb-24 pointer-events-none"></div>
+  <div class="max-w-5xl mx-auto relative z-10">
+    <!-- 브레드크럼 -->
+    <div class="flex items-center gap-1.5 text-white/50 text-xs mb-5 flex-wrap">
+      <a href="https://exam.silmu.kr" class="hover:text-white/80 transition-colors">홈</a>
       <span class="material-symbols-outlined text-sm">chevron_right</span>
-      <span class="text-[#2c2f31] font-medium">합격 전략</span>
+      <span class="text-white/80 font-medium">합격 전략</span>
     </div>
-    <div class="flex items-end justify-between gap-6">
-      <div>
-        <span class="text-[#a16207] font-bold tracking-widest uppercase text-xs mb-2 block">The Strategic Compass</span>
-        <h1 class="text-3xl md:text-4xl font-extrabold text-[#2c2f31] tracking-tight leading-tight">합격 전략 가이드</h1>
-        <p class="text-[#595c5e] text-sm mt-2">과목별 핵심 학습법 · 출제 유형 분석 · 추천 학습 루틴</p>
-      </div>
-      <div class="hidden md:flex items-center gap-2 bg-[#f5f0e8] px-4 py-2 rounded-full flex-shrink-0">
-        <span class="material-symbols-outlined text-[#a16207] text-sm" style="font-variation-settings:'FILL' 1">emoji_events</span>
-        <span class="text-xs font-bold text-[#8a7a60] uppercase tracking-widest">Pass Strategy</span>
-      </div>
+    <!-- 뱃지 -->
+    <div class="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5 mb-5">
+      <span class="material-symbols-outlined text-[#ffd166] text-base" style="font-variation-settings:'FILL' 1">emoji_events</span>
+      <span class="text-white/90 text-xs font-semibold">합격 전략 완벽 가이드</span>
     </div>
-
+    <h1 class="text-3xl md:text-4xl font-extrabold leading-snug mb-3 tracking-tight text-[#f6f7ff]">합격 전략 가이드</h1>
+    <p class="text-[#c8d6f5] text-base mb-6 max-w-2xl">과목별 핵심 학습법 · 출제 유형 분석 · 추천 학습 루틴</p>
     <!-- 요약 지표 -->
-    <div class="flex flex-wrap gap-8 mt-8 pt-6 border-t border-[#f0e8d5]">
+    <div class="flex flex-wrap gap-6 mb-7 py-4 border-t border-b border-white/15">
       <div class="text-center">
-        <div class="text-2xl font-extrabold text-[#a16207]">60점</div>
-        <div class="text-[#8a7a60] text-xs mt-0.5">합격 기준</div>
+        <div class="text-2xl font-extrabold text-[#ffd166]">60점</div>
+        <div class="text-white/60 text-xs mt-0.5">합격 기준</div>
       </div>
       <div class="text-center">
-        <div class="text-2xl font-extrabold text-[#a16207]">3과목</div>
-        <div class="text-[#8a7a60] text-xs mt-0.5">필기 시험 범위</div>
+        <div class="text-2xl font-extrabold text-[#ffd166]">3과목</div>
+        <div class="text-white/60 text-xs mt-0.5">필기 시험 범위</div>
       </div>
       <div class="text-center">
-        <div class="text-2xl font-extrabold text-[#a16207]">120분</div>
-        <div class="text-[#8a7a60] text-xs mt-0.5">필기 시험 시간</div>
+        <div class="text-2xl font-extrabold text-[#ffd166]">120분</div>
+        <div class="text-white/60 text-xs mt-0.5">필기 시험 시간</div>
       </div>
       <div class="text-center">
-        <div class="text-2xl font-extrabold text-[#a16207]">CBT</div>
-        <div class="text-[#8a7a60] text-xs mt-0.5">필기 시험 방식</div>
+        <div class="text-2xl font-extrabold text-[#ffd166]">CBT</div>
+        <div class="text-white/60 text-xs mt-0.5">필기 시험 방식</div>
       </div>
+    </div>
+    <!-- 퀵 링크 -->
+    <div class="flex flex-wrap gap-3">
+      <a href="#key-numbers" class="inline-flex items-center gap-1.5 bg-white text-[#465f88] font-bold px-5 py-2.5 rounded-full hover:bg-[#f6f7ff] transition-colors text-sm shadow-lg">
+        <span class="material-symbols-outlined text-base">pin</span>핵심 암기 숫자
+      </a>
+      <a href="#study-routine" class="inline-flex items-center gap-1.5 bg-white/15 backdrop-blur-sm border border-white/30 text-white font-semibold px-5 py-2.5 rounded-full hover:bg-white/25 transition-colors text-sm">
+        <span class="material-symbols-outlined text-base">calendar_today</span>학습 루틴
+      </a>
+      <a href="#practical-strategy" class="inline-flex items-center gap-1.5 bg-white/15 backdrop-blur-sm border border-white/30 text-white font-semibold px-5 py-2.5 rounded-full hover:bg-white/25 transition-colors text-sm">
+        <span class="material-symbols-outlined text-base">edit_note</span>실기 전략
+      </a>
     </div>
   </div>
 </section>
@@ -285,7 +295,7 @@
 </section>
 
 <!-- 시험 필수 암기 숫자 -->
-<section class="py-10 px-4 bg-[#fafaf5]">
+<section id="key-numbers" class="py-10 px-4 bg-[#fafaf5]">
   <div class="max-w-5xl mx-auto">
     <h2 class="text-xl font-extrabold text-[#2c2f31] tracking-tight mb-1 flex items-center gap-2">
       <span class="material-symbols-outlined text-[#a16207]">pin</span>
@@ -618,7 +628,7 @@
 </section>
 
 <!-- 실기 시험 완벽 전략 -->
-<section class="py-10 px-4 bg-[#fafaf5]">
+<section id="practical-strategy" class="py-10 px-4 bg-[#fafaf5]">
   <div class="max-w-5xl mx-auto">
     <h2 class="text-xl font-extrabold text-[#2c2f31] tracking-tight mb-1 flex items-center gap-2">
       <span class="material-symbols-outlined text-rose-500">edit_note</span>
@@ -725,7 +735,7 @@
 </section>
 
 <!-- 합격을 위한 학습 루틴 -->
-<section class="py-10 px-4 bg-white">
+<section id="study-routine" class="py-10 px-4 bg-white">
   <div class="max-w-5xl mx-auto">
     <h2 class="text-xl font-extrabold text-[#2c2f31] tracking-tight mb-1 flex items-center gap-2">
       <span class="material-symbols-outlined text-teal-500">calendar_month</span>

@@ -1,34 +1,49 @@
 <%# 모의고사 선택 페이지 — Stitch 'The Academic Atelier' 디자인 적용 %>
 
-<!-- 페이지 헤더 -->
-<section class="bg-white border-b border-slate-100 pt-10 pb-8 px-4">
-  <div class="max-w-5xl mx-auto">
-    <div class="flex items-center gap-1.5 text-slate-400 text-sm mb-6">
-      <a href="https://exam.silmu.kr" class="hover:text-slate-600 transition-colors">홈</a>
+<!-- 히어로 — navy gradient -->
+<section class="bg-gradient-to-br from-[#465f88] to-[#3a537c] text-white py-14 px-4 relative overflow-hidden">
+  <div class="absolute top-0 right-0 w-72 h-72 bg-white/5 rounded-full -mr-36 -mt-36 pointer-events-none"></div>
+  <div class="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full -ml-24 -mb-24 pointer-events-none"></div>
+  <div class="max-w-5xl mx-auto relative z-10">
+    <!-- 브레드크럼 -->
+    <div class="flex items-center gap-1.5 text-white/50 text-xs mb-5 flex-wrap">
+      <a href="https://exam.silmu.kr" class="hover:text-white/80 transition-colors">홈</a>
       <span class="material-symbols-outlined text-sm">chevron_right</span>
-      <span class="text-slate-600 font-medium">모의고사 / 문제풀기</span>
+      <span class="text-white/80 font-medium">모의고사</span>
     </div>
-    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
-      <div>
-        <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-2">모의고사</h1>
-        <p class="text-slate-400">실전 감각을 키우는 4지선다 문제풀이 · 즉시 채점 + 해설</p>
+    <!-- 뱃지 -->
+    <div class="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5 mb-5">
+      <span class="material-symbols-outlined text-[#ffd166] text-base" style="font-variation-settings:'FILL' 1">quiz</span>
+      <span class="text-white/90 text-xs font-semibold">모의고사 문제풀이</span>
+    </div>
+    <h1 class="text-3xl md:text-4xl font-extrabold leading-snug mb-3 tracking-tight text-[#f6f7ff]">모의고사</h1>
+    <p class="text-[#c8d6f5] text-base mb-6 max-w-2xl">실전 감각을 키우는 4지선다 문제풀이 · 즉시 채점 + 해설</p>
+    <!-- 요약 지표 -->
+    <div class="flex flex-wrap gap-6 mb-7 py-4 border-t border-b border-white/15">
+      <div class="text-center">
+        <div class="text-2xl font-extrabold text-[#ffd166]"><%= @total_count %></div>
+        <div class="text-white/60 text-xs mt-0.5">전체 문항</div>
       </div>
-      <div class="flex gap-6 flex-shrink-0">
-        <div class="text-center">
-          <div class="text-2xl font-extrabold text-slate-900"><%= @total_count %></div>
-          <div class="text-slate-400 text-xs font-medium uppercase tracking-wide mt-0.5">전체 문항</div>
-        </div>
-        <div class="w-px bg-slate-100"></div>
-        <div class="text-center">
-          <div class="text-2xl font-extrabold text-slate-900">3</div>
-          <div class="text-slate-400 text-xs font-medium uppercase tracking-wide mt-0.5">과목</div>
-        </div>
-        <div class="w-px bg-slate-100"></div>
-        <div class="text-center">
-          <div class="text-2xl font-extrabold text-slate-900">즉시</div>
-          <div class="text-slate-400 text-xs font-medium uppercase tracking-wide mt-0.5">채점</div>
-        </div>
+      <div class="text-center">
+        <div class="text-2xl font-extrabold text-[#ffd166]">3</div>
+        <div class="text-white/60 text-xs mt-0.5">과목</div>
       </div>
+      <div class="text-center">
+        <div class="text-2xl font-extrabold text-[#ffd166]">즉시</div>
+        <div class="text-white/60 text-xs mt-0.5">채점</div>
+      </div>
+    </div>
+    <!-- 퀵 링크 -->
+    <div class="flex flex-wrap gap-3">
+      <a href="<%= exam_quiz_path(1) %>" class="inline-flex items-center gap-1.5 bg-white text-[#465f88] font-bold px-5 py-2.5 rounded-full hover:bg-[#f6f7ff] transition-colors text-sm shadow-lg">
+        <span class="material-symbols-outlined text-base">quiz</span>과목별 모의고사
+      </a>
+      <a href="<%= exam_quiz_mini_path %>" class="inline-flex items-center gap-1.5 bg-white/15 backdrop-blur-sm border border-white/30 text-white font-semibold px-5 py-2.5 rounded-full hover:bg-white/25 transition-colors text-sm">
+        <span class="material-symbols-outlined text-base">bolt</span>미니 퀴즈
+      </a>
+      <a href="<%= exam_quiz_wrong_path %>" class="inline-flex items-center gap-1.5 bg-white/15 backdrop-blur-sm border border-white/30 text-white font-semibold px-5 py-2.5 rounded-full hover:bg-white/25 transition-colors text-sm">
+        <span class="material-symbols-outlined text-base">error_outline</span>오답 노트
+      </a>
     </div>
   </div>
 </section>
