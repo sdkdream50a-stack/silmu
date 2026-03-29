@@ -14,8 +14,8 @@
       <span class="material-symbols-outlined text-[#ffd166] text-base">edit_note</span>
       <span class="text-white/90 text-xs font-semibold">실기 필답형 예상문제</span>
     </div>
-    <h1 class="text-3xl md:text-4xl font-extrabold leading-snug mb-3 tracking-tight text-[#f6f7ff]">실기 대비 — 필답형 예상문제</h1>
-    <p class="text-[#c8d6f5] text-base max-w-2xl">PBT 필답형 150분 · 총 5문제 · 모범 답안 제공</p>
+    <h1 class="text-3xl md:text-4xl font-extrabold leading-snug mb-3 tracking-tight text-[#f6f7ff]">실기 대비 — 필답형 예상문제 30선</h1>
+    <p class="text-[#c8d6f5] text-base max-w-2xl">PBT 필답형 150분 · 총 <%= @questions.size %>문제 · 카테고리별 분류 · 모범 답안 제공</p>
   </div>
 </section>
 
@@ -37,19 +37,35 @@
       </ul>
     </div>
 
-    <!-- 총점 안내 -->
-    <div class="flex items-center justify-between mb-6 bg-white rounded-xl shadow-[0_12px_40px_rgba(5,52,92,0.06)] px-5 py-4">
-      <span class="text-sm text-[#3d618c] font-medium">총 5문제</span>
+    <!-- 총점 안내 + 진행도 -->
+    <div class="flex items-center justify-between mb-5 bg-white rounded-xl shadow-[0_12px_40px_rgba(5,52,92,0.06)] px-5 py-4">
+      <span class="text-sm text-[#3d618c] font-medium">총 <strong class="text-[#05345c]"><%= @questions.size %></strong>문제</span>
       <span class="text-sm font-bold text-[#05345c]">
-        총 배점: <span class="text-[#006499]"><%= @questions.sum { |q| q[:point] } %>점</span>
+        학습 완료: <span id="done-count" class="text-[#006499]">0</span> / <%= @questions.size %>
       </span>
     </div>
 
+    <!-- 카테고리 필터 탭 -->
+    <div class="flex flex-wrap gap-2 mb-6" id="category-tabs">
+      <button class="category-tab active px-3.5 py-1.5 rounded-full text-xs font-bold transition-all bg-[#006499] text-white shadow-sm"
+              data-category="all" onclick="filterCategory('all', this)">
+        전체 (<%= @questions.size %>)
+      </button>
+      <% @categories.each do |cat| %>
+        <% count = @questions.count { |q| q[:category] == cat } %>
+        <button class="category-tab px-3.5 py-1.5 rounded-full text-xs font-bold transition-all bg-white text-[#3d618c] border border-[#dce9ff] hover:bg-[#eff4ff]"
+                data-category="<%= cat %>" onclick="filterCategory('<%= cat %>', this)">
+          <%= cat %> (<%= count %>)
+        </button>
+      <% end %>
+    </div>
+
     <!-- 문제 목록 -->
-    <div class="space-y-6">
+    <div class="space-y-5" id="questions-container">
       <% @questions.each do |q| %>
-        <div class="bg-white rounded-2xl shadow-[0_12px_40px_rgba(5,52,92,0.06)] overflow-hidden hover:shadow-[0_16px_48px_rgba(5,52,92,0.1)] transition-shadow"
-             data-practical-id="<%= q[:id] %>">
+        <div class="practical-card bg-white rounded-2xl shadow-[0_12px_40px_rgba(5,52,92,0.06)] overflow-hidden hover:shadow-[0_16px_48px_rgba(5,52,92,0.1)] transition-shadow"
+             data-practical-id="<%= q[:id] %>"
+             data-category="<%= q[:category] %>">
           <!-- 문제 헤더 -->
           <div class="flex items-start gap-4 p-6">
             <div class="flex-shrink-0">
@@ -114,6 +130,11 @@
       <% end %>
     </div>
 
+    <!-- 전체 없음 메시지 -->
+    <div id="no-results" class="hidden text-center py-12 text-[#3d618c] text-sm">
+      선택한 카테고리에 문제가 없습니다.
+    </div>
+
     <!-- 이동 버튼 -->
     <div class="mt-8 flex gap-3">
       <a href="<%= exam_quiz_simulation_path %>" class="flex-1 inline-flex items-center justify-center gap-2 bg-gradient-to-br from-[#006499] to-[#005886] hover:opacity-90 text-white font-bold px-4 py-3 rounded-full transition-all text-sm shadow-[0_4px_16px_rgba(0,100,153,0.25)]">
@@ -140,6 +161,26 @@ function toggleSection(btn, sectionId) {
   if (icon) icon.textContent = isHidden ? 'expand_less' : 'expand_more'
 }
 
+// 카테고리 필터
+function filterCategory(cat, btn) {
+  // 탭 스타일 전환
+  document.querySelectorAll('.category-tab').forEach(function(tab) {
+    tab.classList.remove('active', 'bg-[#006499]', 'text-white', 'shadow-sm')
+    tab.classList.add('bg-white', 'text-[#3d618c]', 'border', 'border-[#dce9ff]')
+  })
+  btn.classList.add('active', 'bg-[#006499]', 'text-white', 'shadow-sm')
+  btn.classList.remove('bg-white', 'text-[#3d618c]', 'border', 'border-[#dce9ff]')
+
+  // 카드 필터링
+  let visible = 0
+  document.querySelectorAll('.practical-card').forEach(function(card) {
+    const show = cat === 'all' || card.dataset.category === cat
+    card.classList.toggle('hidden', !show)
+    if (show) visible++
+  })
+  document.getElementById('no-results').classList.toggle('hidden', visible > 0)
+}
+
 // 자기 채점 체크박스 저장 (localStorage)
 function savePracticalDone(checkbox) {
   const qId = checkbox.dataset.questionId
@@ -151,6 +192,13 @@ function savePracticalDone(checkbox) {
     if (idx > -1) done.splice(idx, 1)
   }
   localStorage.setItem('exam_practical_done', JSON.stringify(done))
+  updateDoneCount()
+}
+
+function updateDoneCount() {
+  const done = JSON.parse(localStorage.getItem('exam_practical_done') || '[]')
+  const el = document.getElementById('done-count')
+  if (el) el.textContent = done.length
 }
 
 // 페이지 로드 시 체크박스 상태 복원
@@ -168,5 +216,6 @@ document.addEventListener('DOMContentLoaded', function() {
       if (card) card.classList.toggle('ring-[#51b0f6]', cb.checked)
     })
   })
+  updateDoneCount()
 })
 </script>
