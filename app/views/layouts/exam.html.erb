@@ -300,9 +300,10 @@
                     <a href="<%= exam_rankings_path %>" class="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">
                       <span class="material-symbols-outlined text-amber-500 text-base">leaderboard</span>내 랭킹
                     </a>
-                    <a href="<%= exam_sync_path %>" class="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">
-                      <span class="material-symbols-outlined text-blue-500 text-base">sync</span>학습 동기화
-                    </a>
+                    <button onclick="manualSync(this)" class="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 w-full text-left">
+                      <span class="material-symbols-outlined text-blue-500 text-base sync-icon">sync</span>
+                      <span class="sync-label">학습 동기화</span>
+                    </button>
                     <hr class="border-slate-100 my-1">
                     <%= button_to destroy_user_session_path, method: :delete, form: { data: { turbo: false } }, class: "flex items-center gap-2 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 w-full text-left" do %>
                       <span class="material-symbols-outlined text-base">logout</span>로그아웃
@@ -452,13 +453,12 @@
         </a>
         <!-- 내정보 -->
         <% if user_signed_in? %>
-          <a href="<%= exam_sync_path %>"
-             aria-label="내 정보"
-             <%= 'aria-current="page"'.html_safe if tab_me %>
-             class="flex flex-col items-center justify-center gap-0.5 transition-colors <%= tab_me ? 'text-blue-600' : 'text-slate-400 hover:text-slate-600' %>">
-            <span class="material-symbols-outlined text-2xl">person</span>
-            <span class="text-[10px] font-medium">내정보</span>
-          </a>
+          <button onclick="manualSync(this)"
+             aria-label="학습 동기화"
+             class="flex flex-col items-center justify-center gap-0.5 transition-colors text-slate-400 hover:text-slate-600">
+            <span class="material-symbols-outlined text-2xl sync-icon">sync</span>
+            <span class="text-[10px] font-medium">동기화</span>
+          </button>
         <% else %>
           <a href="<%= new_user_session_path %>"
              aria-label="로그인"
@@ -658,6 +658,72 @@
         return result
       }
     })()
+    </script>
+
+    <script>
+    // 수동 동기화 (드롭다운/모바일 버튼에서 호출)
+    async function manualSync(btn) {
+      const icon = btn && btn.querySelector('.sync-icon')
+      const label = btn && btn.querySelector('.sync-label')
+      if (icon) icon.classList.add('animate-spin')
+      if (label) label.textContent = '동기화 중...'
+
+      try {
+        const progress = JSON.parse(localStorage.getItem('exam_progress') || '{}')
+        const wrongAnswers = JSON.parse(localStorage.getItem('exam_wrong_answers') || '[]')
+        const bookmarks = JSON.parse(localStorage.getItem('exam_bookmarks') || '[]')
+        const streak = JSON.parse(localStorage.getItem('exam_streak') || '{}')
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content
+        if (!csrfToken) throw new Error('CSRF 토큰 없음')
+
+        const res = await fetch('/sync', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrfToken, 'X-Requested-With': 'XMLHttpRequest' },
+          body: JSON.stringify({
+            chapters: progress.chapters || {},
+            quizzes: progress.quizzes || {},
+            chapter_quizzes: progress.chapterQuizzes || {},
+            wrong_answers: wrongAnswers,
+            bookmarks: bookmarks,
+            streak_count: streak.count || 0,
+            streak_last_date: streak.lastDate || null,
+            streak_history: streak.history || []
+          })
+        })
+        const data = await res.json()
+        if (data.success) {
+          showSyncToast('✅ 학습 데이터가 저장되었습니다.', 'success')
+        } else {
+          throw new Error(data.error || '서버 오류')
+        }
+      } catch(e) {
+        showSyncToast('❌ 동기화 실패: ' + e.message, 'error')
+      } finally {
+        if (icon) icon.classList.remove('animate-spin')
+        if (label) label.textContent = '학습 동기화'
+        // 드롭다운 닫기
+        document.getElementById('user-menu-dropdown')?.classList.add('hidden')
+      }
+    }
+
+    function showSyncToast(message, type) {
+      const existing = document.getElementById('sync-toast')
+      if (existing) existing.remove()
+
+      const toast = document.createElement('div')
+      toast.id = 'sync-toast'
+      toast.className = `fixed bottom-24 left-1/2 -translate-x-1/2 z-[9999] px-5 py-3 rounded-full text-sm font-semibold shadow-lg transition-all duration-300 opacity-0 ${
+        type === 'success' ? 'bg-emerald-600 text-white' : 'bg-red-600 text-white'
+      }`
+      toast.textContent = message
+      document.body.appendChild(toast)
+
+      requestAnimationFrame(() => { toast.style.opacity = '1' })
+      setTimeout(() => {
+        toast.style.opacity = '0'
+        setTimeout(() => toast.remove(), 300)
+      }, 3000)
+    }
     </script>
 
     <script>
