@@ -2,23 +2,16 @@
 
 <% content_for :head do %>
 <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "ItemList",
-  "name": "<%= @series_name %>",
-  "description": "<%= @series_name %> <%= @episodes.size %>편 시리즈 — 공무원 실무 법령 완전정복",
-  "numberOfItems": <%= @episodes.size %>,
-  "itemListElement": [
-    <% @episodes.each_with_index do |ep, i| %>
-    {
-      "@type": "ListItem",
-      "position": <%= i + 1 %>,
-      "name": "<%= j ep.title %>",
-      "url": "https://silmu.kr/guides/<%= ep.slug %>"
-    }<%= i < @episodes.size - 1 ? "," : "" %>
-    <% end %>
-  ]
-}
+<%= {
+  "@context" => "https://schema.org",
+  "@type" => "ItemList",
+  "name" => @series_name,
+  "description" => "#{@series_name} #{@episodes.size}편 시리즈 — 공무원 실무 법령 완전정복",
+  "numberOfItems" => @episodes.size,
+  "itemListElement" => @episodes.each_with_index.map { |ep, i|
+    { "@type" => "ListItem", "position" => i + 1, "name" => ep.title, "url" => "https://silmu.kr/guides/#{ep.slug}" }
+  }
+}.to_json.html_safe %>
 </script>
 <% end %>
 
@@ -131,7 +124,7 @@
               <% @sample_flashcards.each do |card| %>
                 <div class="bg-white rounded-xl px-4 py-3 border border-violet-100">
                   <div class="text-xs text-violet-500 font-medium mb-1">Q</div>
-                  <div class="text-sm font-semibold text-slate-800"><%= card["q"] || card[:q] %></div>
+                  <div class="text-sm font-semibold text-slate-800"><%= card["q"] %></div>
                 </div>
               <% end %>
             </div>

@@ -99,6 +99,7 @@ class Guide < ApplicationRecord
     Rails.cache.delete("guides/related/#{slug}")
     Rails.cache.delete("guide_topic/#{slug}")
     Rails.cache.delete("guides/series/#{series}") if series.present?
+    Rails.cache.delete("guides/series/#{series_before_last_save}") if saved_change_to_series? && series_before_last_save.present?
     # topic_slug 또는 external_link가 topic URL인 경우 해당 topic 캐시 무효화
     t_slug = topic_slug.presence || (external_link&.start_with?("/topics/") ? external_link.delete_prefix("/topics/") : nil)
     Rails.cache.delete("topic_guide/#{t_slug}") if t_slug.present?

@@ -24,14 +24,19 @@ class SeriesController < ApplicationController
       keywords: "#{@series_name}, 공무원 실무, 완전정복 시리즈, 법령 가이드",
       og: {
         title: "#{@series_name} #{@episodes.size}편 완전정복 — 실무.kr",
-        description: "마인드맵·플래시카드와 함께 #{@series_name}을 단계별로 완전 마스터. 공무원 법령 실무 가이드.",
+        description: "#{@series_name} 시리즈 #{@episodes.size}편. 마인드맵·플래시카드와 함께 단계별로 완전 마스터. 공무원 법령 실무 가이드.",
         url: canonical_url,
         image: "https://silmu.kr/og-image.png",
         type: "website"
       },
-      canonical: canonical_url
+      canonical: canonical_url,
+      twitter: {
+        card: "summary_large_image",
+        title: "#{@series_name} #{@episodes.size}편 완전정복 — 실무.kr",
+        description: "#{@series_name} 시리즈 #{@episodes.size}편. 마인드맵·플래시카드와 함께 단계별로 완전 마스터."
+      }
     )
   rescue ActionController::RoutingError
-    redirect_to guides_path, status: :moved_permanently
+    render file: Rails.root.join("public/404.html"), status: :not_found, layout: false
   end
 end
