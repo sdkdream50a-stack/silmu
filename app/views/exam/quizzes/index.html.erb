@@ -60,7 +60,7 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
         <% @exam_subjects.each do |subject| %>
           <% colors = ExamCurriculum.colors(subject[:color]) %>
-          <% q_count = @total_count_by_exam_subject(subject[:id]) %>
+          <% q_count = subject[:subject_ids].flat_map { |sid| ExamQuestions.sliced_by_subject(sid) }.size %>
           <a href="<%= exam_quiz_path(subject[:id]) %>"
              class="group relative overflow-hidden rounded-2xl bg-slate-800 p-8 h-56 flex flex-col justify-between shadow-lg hover:scale-[1.02] transition-all duration-300">
             <!-- 컬러 그래디언트 오버레이 -->
