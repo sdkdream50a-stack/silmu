@@ -51,9 +51,10 @@ class AuditCase < ApplicationRecord
 
   def checkpoint_list
     return [] if checkpoints.blank?
+    return checkpoints if checkpoints.is_a?(Array)
     JSON.parse(checkpoints)
-  rescue JSON::ParserError => e
-    Rails.logger.warn "[AuditCase#checkpoint_list] JSON 파싱 실패 (id=#{id}): #{e.message}"
+  rescue JSON::ParserError, TypeError => e
+    Rails.logger.warn "[AuditCase#checkpoint_list] 파싱 실패 (id=#{id}): #{e.message}"
     []
   end
 
