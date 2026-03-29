@@ -119,13 +119,20 @@
                     </span>
                     <!-- 시리즈명 -->
                     <h3 class="flex-1 text-base font-bold text-slate-900 leading-snug"><%= series_name.tr('_', ' ') %></h3>
-                    <!-- 편수 뱃지 + 펼치기 힌트 -->
+                    <!-- 편수 뱃지 + 랜딩 링크 + 펼치기 힌트 -->
                     <div class="flex items-center gap-2 shrink-0">
                       <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-amber-500 text-white text-xs font-bold rounded-lg">
                         <span class="material-symbols-outlined" style="font-size:13px">format_list_numbered</span>
                         <%= episodes.size %>편
                       </span>
-                      <span class="text-xs text-amber-600 font-medium hidden sm:block" data-series-label="<%= sid %>">눌러서 펼치기</span>
+                      <% if (s_slug = Guide.series_slug(series_name)) %>
+                        <%= link_to series_path(s_slug),
+                            class: "hidden sm:inline-flex items-center gap-1 px-2.5 py-1 bg-white border border-amber-300 text-amber-700 text-xs font-semibold rounded-lg hover:bg-amber-50 transition-colors",
+                            onclick: "event.stopPropagation()" do %>
+                          <span class="material-symbols-outlined" style="font-size:12px">open_in_new</span>시리즈 보기
+                        <% end %>
+                      <% end %>
+                      <span class="text-xs text-amber-600 font-medium hidden lg:block" data-series-label="<%= sid %>">눌러서 펼치기</span>
                       <span class="material-symbols-outlined text-amber-400 transition-transform duration-200"
                             data-series-chevron="<%= sid %>">expand_more</span>
                     </div>

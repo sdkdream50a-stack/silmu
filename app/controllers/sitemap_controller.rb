@@ -4,6 +4,7 @@ class SitemapController < ApplicationController
     @audit_cases = AuditCase.published.select(:slug, :updated_at)
     @guides = Guide.published.select(:slug, :updated_at)
     @templates = TemplatesController::TEMPLATES
+    @series_slugs = Guide::SERIES_SLUG_MAP.values
 
     expires_in 10.minutes, public: true
 

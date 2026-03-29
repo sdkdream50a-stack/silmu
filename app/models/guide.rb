@@ -23,6 +23,27 @@ class Guide < ApplicationRecord
   scope :series_guides, -> { where.not(series: nil) }
   scope :for_series,    ->(s) { where(series: s).order(:series_order) }
 
+  # 한글 series 식별자 ↔ 영문 URL slug 매핑
+  SERIES_SLUG_MAP = {
+    "지방보조금_완전정복"  => "subsidy-complete",
+    "수의계약_완전정복"    => "contract-complete",
+    "예산편성_완전정복"    => "budget-planning-complete",
+    "예산집행_완전정복"    => "budget-execution-complete",
+    "출장여비_완전정복"    => "travel-complete",
+    "인사복무_완전정복"    => "hr-complete",
+    "공사계약_완전정복"    => "construction-complete",
+    "입찰_완전정복"        => "bid-complete"
+  }.freeze
+  SERIES_SLUG_MAP_INVERSE = SERIES_SLUG_MAP.invert.freeze
+
+  def self.series_slug(korean_name)
+    SERIES_SLUG_MAP[korean_name]
+  end
+
+  def self.series_by_slug(slug)
+    SERIES_SLUG_MAP_INVERSE[slug]
+  end
+
   validates :title,        presence: true
   validates :slug,         presence: true, uniqueness: true
   validates :series_order, uniqueness: { scope: :series }, allow_nil: true
@@ -77,6 +98,7 @@ class Guide < ApplicationRecord
     Rails.cache.delete("stats/guide_count")
     Rails.cache.delete("guides/related/#{slug}")
     Rails.cache.delete("guide_topic/#{slug}")
+    Rails.cache.delete("guides/series/#{series}") if series.present?
     # topic_slug 또는 external_link가 topic URL인 경우 해당 topic 캐시 무효화
     t_slug = topic_slug.presence || (external_link&.start_with?("/topics/") ? external_link.delete_prefix("/topics/") : nil)
     Rails.cache.delete("topic_guide/#{t_slug}") if t_slug.present?

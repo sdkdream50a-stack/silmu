@@ -66,12 +66,18 @@
     <% if @series_guides.present? %>
     <div class="mb-6 bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 rounded-2xl px-5 py-4">
       <div class="flex items-center justify-between flex-wrap gap-3">
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2 flex-wrap">
           <span class="material-symbols-outlined text-emerald-600">menu_book</span>
-          <span class="text-sm font-bold text-emerald-800"><%= @guide.series %></span>
+          <span class="text-sm font-bold text-emerald-800"><%= @guide.series.tr("_", " ") %></span>
           <span class="text-xs text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded-full font-medium">
             <%= @series_guides.size %>편 시리즈
           </span>
+          <% if (s_slug = Guide.series_slug(@guide.series)) %>
+            <%= link_to series_path(s_slug),
+                class: "inline-flex items-center gap-1 text-xs text-emerald-700 font-semibold border border-emerald-300 bg-white px-2 py-0.5 rounded-full hover:bg-emerald-50 transition-colors" do %>
+              <span class="material-symbols-outlined" style="font-size:12px">list</span>목차 보기
+            <% end %>
+          <% end %>
         </div>
         <div class="flex items-center gap-1 overflow-x-auto max-w-full">
           <% @series_guides.each_with_index do |sg, i| %>

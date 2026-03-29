@@ -1,0 +1,173 @@
+<%# 완전정복 시리즈 랜딩 페이지 %>
+
+<% content_for :head do %>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "<%= @series_name %>",
+  "description": "<%= @series_name %> <%= @episodes.size %>편 시리즈 — 공무원 실무 법령 완전정복",
+  "numberOfItems": <%= @episodes.size %>,
+  "itemListElement": [
+    <% @episodes.each_with_index do |ep, i| %>
+    {
+      "@type": "ListItem",
+      "position": <%= i + 1 %>,
+      "name": "<%= j ep.title %>",
+      "url": "https://silmu.kr/guides/<%= ep.slug %>"
+    }<%= i < @episodes.size - 1 ? "," : "" %>
+    <% end %>
+  ]
+}
+</script>
+<% end %>
+
+<!-- 히어로 헤더 -->
+<section class="gradient-emerald text-white py-12 lg:py-16 relative overflow-hidden">
+  <div class="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/3"></div>
+  <div class="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/4"></div>
+  <div class="container-wide relative z-10">
+    <!-- 브레드크럼 -->
+    <nav class="flex items-center gap-2 text-sm text-white/60 mb-6">
+      <%= link_to "실무.kr", root_path, class: "hover:text-white transition-colors" %>
+      <span class="material-symbols-outlined text-xs">chevron_right</span>
+      <%= link_to "실무 가이드", guides_path, class: "hover:text-white transition-colors" %>
+      <span class="material-symbols-outlined text-xs">chevron_right</span>
+      <span class="text-white/80"><%= @series_name %></span>
+    </nav>
+
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+      <div class="flex items-start gap-5">
+        <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 shadow-lg shrink-0">
+          <span class="material-symbols-outlined text-4xl text-white">auto_stories</span>
+        </div>
+        <div>
+          <div class="flex items-center gap-2 mb-2">
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-amber-400/30 text-amber-200 text-xs font-bold rounded-lg">
+              <span class="material-symbols-outlined text-xs">bookmark</span>완전정복 시리즈
+            </span>
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-white/10 text-white/80 text-xs font-medium rounded-lg">
+              <span class="material-symbols-outlined text-xs">schedule</span>
+              약 <%= @episodes.size * 5 %>분
+            </span>
+          </div>
+          <h1 class="text-2xl lg:text-3xl font-bold tracking-tight mb-2"><%= @series_name %></h1>
+          <p class="text-white/75 text-sm lg:text-base">총 <%= @episodes.size %>편 · 마인드맵·플래시카드와 함께 단계별 완전 마스터</p>
+        </div>
+      </div>
+
+      <% if @first_episode %>
+        <%= link_to guide_path(@first_episode),
+            class: "shrink-0 inline-flex items-center gap-2 bg-white text-emerald-700 font-bold px-6 py-3.5 rounded-xl hover:bg-emerald-50 transition-all shadow-lg text-sm lg:text-base" do %>
+          <span class="material-symbols-outlined">play_circle</span>
+          1편부터 시작하기
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<!-- 메인 콘텐츠 -->
+<section class="section py-10">
+  <div class="container-wide">
+    <div class="lg:flex lg:gap-10">
+
+      <!-- 목차 (메인) -->
+      <div class="lg:flex-1">
+        <div class="flex items-center gap-3 mb-5">
+          <h2 class="text-lg font-bold text-slate-900">전체 목차</h2>
+          <span class="text-xs font-medium text-amber-600 bg-amber-50 px-2.5 py-1 rounded-lg"><%= @episodes.size %>편</span>
+        </div>
+
+        <div class="space-y-2.5">
+          <% @episodes.each do |ep| %>
+            <%= link_to guide_path(ep),
+                class: "flex items-center gap-4 p-4 bg-white rounded-2xl border border-slate-100 hover:border-emerald-300 hover:shadow-md group transition-all" do %>
+              <!-- 편 번호 -->
+              <span class="w-9 h-9 flex items-center justify-center rounded-full bg-amber-100 text-amber-700 text-sm font-bold shrink-0 group-hover:bg-amber-500 group-hover:text-white transition-colors">
+                <%= ep.series_order %>
+              </span>
+
+              <!-- 제목 + 설명 -->
+              <div class="flex-1 min-w-0">
+                <div class="text-sm font-semibold text-slate-900 group-hover:text-emerald-700 transition-colors leading-snug">
+                  <%= ep.series_episode_title %>
+                </div>
+                <% if ep.description.present? %>
+                  <div class="text-xs text-slate-500 mt-0.5 truncate"><%= ep.description %></div>
+                <% end %>
+              </div>
+
+              <!-- 학습 도구 뱃지 -->
+              <div class="flex items-center gap-1 shrink-0">
+                <% if ep.rich_media&.dig("mindmap").present? %>
+                  <span class="px-1.5 py-0.5 bg-blue-50 text-blue-600 text-xs rounded-md font-medium">마인드맵</span>
+                <% end %>
+                <% if ep.rich_media&.dig("flashcards").present? %>
+                  <span class="px-1.5 py-0.5 bg-violet-50 text-violet-600 text-xs rounded-md font-medium">플래시카드</span>
+                <% end %>
+                <span class="material-symbols-outlined text-slate-300 group-hover:text-emerald-400 text-base ml-1">chevron_right</span>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+
+        <!-- 플래시카드 미리보기 -->
+        <% if @sample_flashcards.any? %>
+          <div class="mt-8 p-5 bg-violet-50 rounded-2xl border border-violet-100">
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-violet-600">style</span>
+                <h3 class="font-bold text-slate-900">1편 플래시카드 미리보기</h3>
+              </div>
+              <% if @first_episode %>
+                <%= link_to guide_path(@first_episode),
+                    class: "text-xs text-violet-600 font-semibold hover:underline flex items-center gap-1" do %>
+                  전체 보기 <span class="material-symbols-outlined text-xs">arrow_forward</span>
+                <% end %>
+              <% end %>
+            </div>
+            <div class="space-y-2">
+              <% @sample_flashcards.each do |card| %>
+                <div class="bg-white rounded-xl px-4 py-3 border border-violet-100">
+                  <div class="text-xs text-violet-500 font-medium mb-1">Q</div>
+                  <div class="text-sm font-semibold text-slate-800"><%= card["q"] || card[:q] %></div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <!-- 사이드바: 다른 시리즈 -->
+      <div class="lg:w-64 mt-8 lg:mt-0">
+        <h3 class="text-sm font-bold text-slate-700 mb-3 flex items-center gap-2">
+          <span class="material-symbols-outlined text-amber-500 text-base">auto_stories</span>
+          다른 완전정복 시리즈
+        </h3>
+        <div class="space-y-2">
+          <% @other_series.each do |korean_name, slug| %>
+            <%= link_to series_path(slug),
+                class: "flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-100 hover:border-amber-300 hover:shadow-sm group transition-all" do %>
+              <span class="w-8 h-8 bg-amber-50 rounded-lg flex items-center justify-center shrink-0 group-hover:bg-amber-100 transition-colors">
+                <span class="material-symbols-outlined text-amber-600 text-base">bookmark</span>
+              </span>
+              <span class="text-sm font-medium text-slate-700 group-hover:text-amber-700 transition-colors leading-snug">
+                <%= korean_name.tr("_", " ") %>
+              </span>
+            <% end %>
+          <% end %>
+        </div>
+
+        <!-- 가이드 전체 목록 링크 -->
+        <div class="mt-4 pt-4 border-t border-slate-100">
+          <%= link_to guides_path, class: "flex items-center gap-2 text-sm text-emerald-600 font-semibold hover:underline" do %>
+            <span class="material-symbols-outlined text-base">menu_book</span>
+            일반 가이드 전체 보기
+          <% end %>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>

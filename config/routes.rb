@@ -118,6 +118,9 @@ Rails.application.routes.draw do
   # 문서 양식
   resources :templates, only: [:index, :show]
 
+  # 완전정복 시리즈 랜딩 페이지
+  get "series/:slug", to: "series#show", as: :series, constraints: { slug: /[a-z][a-z0-9-]+/ }
+
   # 업무 가이드
   # 감사 빈출 지적 TOP 30 가이드
   get "guides/audit-frequent-issues", to: "guides#audit_frequent_issues", as: :audit_frequent_issues

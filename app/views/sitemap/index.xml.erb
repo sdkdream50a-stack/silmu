@@ -25,6 +25,16 @@
   </url>
   <% end %>
 
+  <%# 완전정복 시리즈 랜딩 페이지 %>
+  <% @series_slugs.each do |slug| %>
+  <url>
+    <loc>https://silmu.kr/series/<%= slug %></loc>
+    <lastmod><%= Time.zone.today.strftime('%Y-%m-%d') %></lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <% end %>
+
   <%# 실무 가이드 %>
   <url>
     <loc>https://silmu.kr/guides</loc>
