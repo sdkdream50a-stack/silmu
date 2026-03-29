@@ -1,0 +1,51 @@
+<% content_for :head do %>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://exam.silmu.kr/#website",
+      "url": "https://exam.silmu.kr",
+      "name": "공공조달관리사 시험 대비 | 실무.kr",
+      "description": "2026년 신설 공공조달관리사 국가기술자격시험 대비 무료 학습 플랫폼",
+      "inLanguage": "ko",
+      "publisher": {
+        "@type": "Organization",
+        "name": "실무.kr",
+        "url": "https://silmu.kr"
+      }
+    },
+    {
+      "@type": "Course",
+      "@id": "https://exam.silmu.kr/#course",
+      "name": "공공조달관리사 시험 대비 완전 커리큘럼",
+      "description": "2026년 신설 공공조달관리사 국가기술자격시험을 위한 표준교재 4권 27장 전 범위 학습 과정. 법령 해설, 감사사례 분석, 모의고사를 무료 제공합니다.",
+      "url": "https://exam.silmu.kr",
+      "provider": {
+        "@type": "Organization",
+        "name": "실무.kr",
+        "url": "https://silmu.kr"
+      },
+      "educationalLevel": "전문",
+      "inLanguage": "ko",
+      "isAccessibleForFree": true,
+      "courseMode": "online",
+      "hasCourseInstance": {
+        "@type": "CourseInstance",
+        "name": "2026년 공공조달관리사 1회 시험 대비",
+        "courseMode": "online",
+        "startDate": "2026-01-01",
+        "endDate": "2026-12-31"
+      },
+      "teaches": [
+        "공공조달의 이해와 법령 체계",
+        "조달 계획 수립 및 예정가격 산정",
+        "입찰·계약 체결 및 이행 관리",
+        "검수·대금지급·위반·제재 실무"
+      ]
+    }
+  ]
+}
+</script>
+<% end %>

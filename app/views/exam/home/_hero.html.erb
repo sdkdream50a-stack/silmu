@@ -1,0 +1,143 @@
+<!-- 1. Hero Section — The Academic Authority -->
+<section class="relative overflow-hidden text-white"
+         style="background:linear-gradient(135deg,#002b57 0%,#174174 100%)"
+         data-controller="exam-progress"
+         data-exam-progress-signed-in-value="<%= user_signed_in? %>">
+  <div class="max-w-6xl mx-auto px-6 py-20 md:py-28 grid grid-cols-1 md:grid-cols-12 gap-10 items-center">
+
+    <!-- 컨텐츠 영역 (8/12 col) -->
+    <div class="md:col-span-8">
+
+      <!-- 배지 -->
+      <span class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-white text-xs font-bold px-4 py-1.5 rounded-full mb-6 border border-white/20 tracking-widest uppercase">
+        <span class="material-symbols-outlined text-yellow-300 text-sm">star</span>
+        2026 Official Prep — 첫 시험 준비 중
+      </span>
+
+      <!-- 헤드라인 -->
+      <h1 class="text-4xl md:text-6xl font-extrabold leading-[1.1] tracking-tight mb-6" style="font-family:'Manrope','Pretendard Variable',sans-serif">
+        공공조달관리사<br>
+        <span style="color:#d5e3ff">2026 첫 시험</span> 완벽 대비
+      </h1>
+
+      <p class="text-lg md:text-xl mb-3 max-w-2xl leading-relaxed" style="color:rgba(213,227,255,0.85)">
+        공공조달 분야 최초 국가기술자격 시험.<br>
+        4권·28장 커리큘럼 + 법령 가이드 + 감사사례로 체계적으로 준비하세요.
+      </p>
+      <p class="text-xs mb-8 tracking-wide" style="color:rgba(213,227,255,0.55)">
+        주관: 조달청·기재부 &nbsp;|&nbsp; 시행: 한국산업인력공단(Q-NET) &nbsp;|&nbsp; 자격 종류: 국가기술자격
+      </p>
+
+      <!-- CTA 버튼 -->
+      <div class="flex flex-col sm:flex-row gap-3 mb-8">
+        <a href="<%= exam_subjects_path %>" class="inline-flex items-center justify-center gap-2 bg-white font-bold px-8 py-4 rounded-xl text-lg transition-all hover:opacity-90 hover:-translate-y-0.5 shadow-lg" style="color:#002b57">
+          <span class="material-symbols-outlined">school</span>
+          커리큘럼 시작하기
+        </a>
+        <a href="<%= exam_quiz_index_path %>" class="inline-flex items-center justify-center gap-2 border border-white/30 text-white font-bold px-8 py-4 rounded-xl text-lg hover:bg-white/10 transition-all hover:-translate-y-0.5">
+          <span class="material-symbols-outlined">quiz</span>
+          모의고사 풀기
+        </a>
+      </div>
+
+      <!-- 권장 학습 경로 -->
+      <div class="bg-white/8 backdrop-blur-sm rounded-2xl px-5 py-4 max-w-xl">
+        <p class="text-xs font-bold uppercase tracking-widest mb-3" style="color:rgba(213,227,255,0.6)">처음 오셨나요? 이 순서로 시작하세요</p>
+        <div class="grid grid-cols-3 gap-3">
+          <a href="<%= exam_subjects_path %>" class="group flex flex-col items-center gap-2 bg-white/10 hover:bg-white/20 rounded-xl px-3 py-3 transition-colors text-center">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center text-white font-black text-sm" style="background:#002b57">1</div>
+            <div>
+              <div class="text-white font-bold text-sm">커리큘럼</div>
+              <div class="text-xs mt-0.5" style="color:rgba(213,227,255,0.6)">4권 구조 파악</div>
+            </div>
+          </a>
+          <a href="<%= exam_keywords_path %>" class="group flex flex-col items-center gap-2 bg-white/10 hover:bg-white/20 rounded-xl px-3 py-3 transition-colors text-center">
+            <div class="w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center text-slate-900 font-black text-sm">2</div>
+            <div>
+              <div class="text-white font-bold text-sm">용어집</div>
+              <div class="text-xs mt-0.5" style="color:rgba(213,227,255,0.6)">핵심 키워드 암기</div>
+            </div>
+          </a>
+          <a href="<%= exam_quiz_index_path %>" class="group flex flex-col items-center gap-2 bg-white/10 hover:bg-white/20 rounded-xl px-3 py-3 transition-colors text-center">
+            <div class="w-8 h-8 bg-emerald-400 rounded-full flex items-center justify-center text-slate-900 font-black text-sm">3</div>
+            <div>
+              <div class="text-white font-bold text-sm">모의고사</div>
+              <div class="text-xs mt-0.5" style="color:rgba(213,227,255,0.6)">실전 점수 확인</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- 나의 학습 현황 (Stimulus가 진도 있을 때만 표시) -->
+      <div data-exam-progress-target="statsArea" class="hidden mt-6"></div>
+      <!-- 스트릭 -->
+      <div data-exam-progress-target="streakArea" class="mt-4 max-w-sm"></div>
+      <!-- 일일 학습 목표 -->
+      <div data-exam-progress-target="goalArea" class="max-w-sm"></div>
+    </div>
+
+    <!-- 우측 D-day + 통계 (4/12 col) -->
+    <div class="md:col-span-4 flex flex-col items-center md:items-end gap-6">
+      <!-- D-day 카드 -->
+      <div id="dday-wrapper" class="bg-white/10 backdrop-blur-sm rounded-2xl px-6 py-5 text-center w-full max-w-xs border border-white/15">
+        <div class="flex items-center justify-center gap-2 mb-3">
+          <span class="material-symbols-outlined text-yellow-300 text-xl">calendar_month</span>
+          <div class="text-left">
+            <div class="text-xs" style="color:rgba(213,227,255,0.6)">공공조달관리사 1회 시험</div>
+            <div class="text-white font-semibold text-xs">2026.10.17 예정</div>
+          </div>
+        </div>
+        <div class="flex items-baseline justify-center gap-1">
+          <span class="font-black text-5xl text-yellow-300" id="dday-count">D-</span>
+          <span id="dday-num" class="font-black text-5xl text-yellow-300">...</span>
+        </div>
+      </div>
+
+      <!-- 통계 4개 -->
+      <div class="grid grid-cols-2 gap-3 w-full max-w-xs">
+        <div class="bg-white/8 rounded-xl py-4 text-center border border-white/10">
+          <div class="text-2xl font-extrabold text-yellow-300" style="font-family:'Manrope',sans-serif">4권</div>
+          <div class="text-xs mt-1" style="color:rgba(213,227,255,0.6)">표준교재</div>
+        </div>
+        <div class="bg-white/8 rounded-xl py-4 text-center border border-white/10">
+          <div class="text-2xl font-extrabold text-yellow-300" style="font-family:'Manrope',sans-serif">28장</div>
+          <div class="text-xs mt-1" style="color:rgba(213,227,255,0.6)">전체 챕터</div>
+        </div>
+        <div class="bg-white/8 rounded-xl py-4 text-center border border-white/10">
+          <div class="text-2xl font-extrabold text-yellow-300" style="font-family:'Manrope',sans-serif">68개</div>
+          <div class="text-xs mt-1" style="color:rgba(213,227,255,0.6)">법령 가이드</div>
+        </div>
+        <div class="bg-white/8 rounded-xl py-4 text-center border border-white/10">
+          <div class="text-2xl font-extrabold text-yellow-300" style="font-family:'Manrope',sans-serif">100건</div>
+          <div class="text-xs mt-1" style="color:rgba(213,227,255,0.6)">감사사례</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 배경 장식 원 -->
+  <div class="absolute top-0 right-0 w-96 h-96 rounded-full blur-3xl pointer-events-none" style="background:rgba(163,190,255,0.07);transform:translate(30%,-30%)"></div>
+  <div class="absolute bottom-0 left-0 w-64 h-64 rounded-full blur-3xl pointer-events-none" style="background:rgba(163,190,255,0.05);transform:translate(-30%,30%)"></div>
+
+  <script>
+  (function() {
+    var target = new Date('2026-10-17T09:00:00+09:00')
+    var now = new Date()
+    var diff = Math.ceil((target - now) / (1000 * 60 * 60 * 24))
+    var countEl = document.getElementById('dday-count')
+    var numEl = document.getElementById('dday-num')
+    if (countEl && numEl) {
+      if (diff > 0) {
+        countEl.textContent = 'D-'
+        numEl.textContent = diff
+      } else if (diff === 0) {
+        countEl.textContent = 'D-Day'
+        numEl.textContent = ''
+      } else {
+        countEl.textContent = 'D+'
+        numEl.textContent = Math.abs(diff)
+      }
+    }
+  })()
+  </script>
+</section>
