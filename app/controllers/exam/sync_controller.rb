@@ -31,7 +31,8 @@ module Exam
       progress = ExamProgress.for_user(current_user)
       # Strong Parameters 적용 (permit! 보안 위험 제거)
       data = params.permit(
-        :quiz_completed, :streak_count, :streak_last_date,
+        :quiz_completed, :quiz_score, :quiz_total,
+        :streak_count, :streak_last_date,
         chapters: {}, quizzes: {}, chapter_quizzes: {},
         wrong_answers: [], bookmarks: [], streak_history: []
       ).to_h
@@ -75,6 +76,8 @@ module Exam
       end
       if data["quiz_completed"].present?
         progress.weekly_quiz_count = (progress.weekly_quiz_count || 0) + 1
+        progress.weekly_score = (progress.weekly_score || 0) + data["quiz_score"].to_i
+        progress.weekly_total = (progress.weekly_total || 0) + data["quiz_total"].to_i
       end
 
       progress.update!(

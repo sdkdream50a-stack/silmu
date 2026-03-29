@@ -18,7 +18,7 @@
       <span class="text-white/90 text-xs font-semibold">주간 학습 경쟁</span>
     </div>
     <h1 class="text-3xl md:text-4xl font-extrabold leading-snug mb-3 tracking-tight text-[#f6f7ff]">주간 학습 랭킹</h1>
-    <p class="text-[#c8d6f5] text-base max-w-xl">이번 주 모의고사 응시 횟수 기준 · 매주 월요일 초기화</p>
+    <p class="text-[#c8d6f5] text-base max-w-xl">정답 수 + 스트릭 보너스 복합 점수 기준 · 매주 월요일 초기화</p>
   </div>
 </section>
 
@@ -60,8 +60,11 @@
           </div>
         </div>
         <div class="text-right">
-          <p class="text-2xl font-extrabold text-[#0050d4]"><%= @my_quiz_count %></p>
-          <p class="text-xs text-[#595c5e]">이번 주 응시</p>
+          <p class="text-2xl font-extrabold text-[#0050d4]"><%= @my_composite %></p>
+          <p class="text-xs text-[#595c5e]">복합 점수</p>
+          <% if @my_avg_pct %>
+            <p class="text-xs text-[#595c5e]">평균 정답률 <strong><%= @my_avg_pct %>%</strong></p>
+          <% end %>
         </div>
       </div>
 
@@ -157,10 +160,13 @@
                 <% end %>
               </div>
 
-              <!-- 응시 횟수 -->
+              <!-- 복합 점수 -->
               <div class="text-right flex-shrink-0">
-                <p class="font-extrabold text-[#2c2f31]"><%= entry[:quiz_count] %></p>
-                <p class="text-xs text-[#595c5e]">회 응시</p>
+                <p class="font-extrabold text-[#2c2f31]"><%= entry[:composite_score] %></p>
+                <p class="text-xs text-[#595c5e]">복합 점수</p>
+                <% if entry[:avg_pct] %>
+                  <p class="text-xs text-[#595c5e]"><%= entry[:avg_pct] %>% 정답</p>
+                <% end %>
               </div>
             </div>
           <% end %>
@@ -171,7 +177,8 @@
     <!-- 안내 -->
     <div class="mt-5 bg-[#eef1f3] rounded-xl px-5 py-4 text-xs text-[#595c5e] space-y-1.5">
       <p>• 랭킹은 이번 주 월요일 00:00부터 집계됩니다.</p>
-      <p>• 모의고사(과목별, 챕터별, 전체 시험) 완료 시 1회로 카운트됩니다.</p>
+      <p>• 복합 점수 = 주간 정답 수 + 스트릭 일수 × 5점 보너스</p>
+      <p>• 모의고사(과목별, 챕터별, 전체 시험) 완료 시 정답 수가 누적됩니다.</p>
       <p>• 닉네임은 로그인 후 위 입력창에서 변경할 수 있습니다.</p>
     </div>
 

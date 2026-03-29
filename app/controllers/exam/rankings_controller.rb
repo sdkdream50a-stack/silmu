@@ -3,18 +3,23 @@ module Exam
     layout "exam"
 
     def index
-      # 상위 20명 (주간 퀴즈 횟수 기준) — 필요한 컬럼만 SELECT
+      # 상위 20명 — 복합 점수 기준 (주간 정답수 + 스트릭 보너스)
+      # composite_score = weekly_score + streak_count * 5
       @rankings = ExamProgress
         .where("weekly_quiz_count > 0")
-        .order(weekly_quiz_count: :desc)
+        .select("*, (COALESCE(weekly_score, 0) + streak_count * 5) AS composite_score")
+        .order("composite_score DESC, weekly_quiz_count DESC")
         .limit(20)
-        .select(:user_id, :display_name, :weekly_quiz_count, :streak_count)
         .map.with_index(1) do |p, rank|
+          avg_pct = p.weekly_total.to_i > 0 ? (p.weekly_score.to_f / p.weekly_total * 100).round : nil
           {
             rank: rank,
             name: p.display_name.presence || "조달수험생#{p.user_id}",
             quiz_count: p.weekly_quiz_count,
-            streak: p.streak_count
+            streak: p.streak_count,
+            weekly_score: p.weekly_score || 0,
+            avg_pct: avg_pct,
+            composite_score: p.composite_score.to_i
           }
         end
 
@@ -22,9 +27,14 @@ module Exam
       if user_signed_in?
         my_progress = ExamProgress.for_user(current_user)
         @my_quiz_count = my_progress.weekly_quiz_count || 0
-        # 단일 COUNT 쿼리로 순위 계산
-        @my_rank = ExamProgress.where("weekly_quiz_count > ?", @my_quiz_count).count + 1
+        @my_weekly_score = my_progress.weekly_score || 0
+        @my_composite = @my_weekly_score + (my_progress.streak_count || 0) * 5
+        # 단일 COUNT 쿼리로 순위 계산 (복합 점수 기준)
+        @my_rank = ExamProgress.where(
+          "COALESCE(weekly_score, 0) + streak_count * 5 > ?", @my_composite
+        ).count + 1
         @my_display_name = my_progress.display_name.presence || ""
+        @my_avg_pct = my_progress.weekly_total.to_i > 0 ? (my_progress.weekly_score.to_f / my_progress.weekly_total * 100).round : nil
       end
 
       # 다음 월요일까지 남은 일수

@@ -261,7 +261,7 @@ export default class extends Controller {
   }
 
   // #6 서버 동기화
-  async syncToServer(quizCompleted = false) {
+  async syncToServer(quizCompleted = false, quizScore = 0, quizTotal = 0) {
     try {
       const progress = JSON.parse(localStorage.getItem('exam_progress') || '{}')
       const wrongAnswers = JSON.parse(localStorage.getItem('exam_wrong_answers') || '[]')
@@ -287,7 +287,9 @@ export default class extends Controller {
           streak_count: streak.count || 0,
           streak_last_date: streak.lastDate || null,
           streak_history: streak.history || [],
-          quiz_completed: quizCompleted ? "1" : ""
+          quiz_completed: quizCompleted ? "1" : "",
+          quiz_score: quizCompleted ? quizScore : 0,
+          quiz_total: quizCompleted ? quizTotal : 0
         })
       })
     } catch(e) {}
@@ -531,8 +533,8 @@ export default class extends Controller {
       // 학습 스트릭 업데이트
       saveStreakToday()
       this._updateNavStreakBadge()
-      // #6 서버 동기화 (quiz_completed=true)
-      this.syncToServer(true)
+      // #6 서버 동기화 (quiz_completed=true, 정답수·전체수 전송)
+      this.syncToServer(true, score, total)
     }
 
     // 등급 결정
