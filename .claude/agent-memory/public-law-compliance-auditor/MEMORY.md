@@ -122,3 +122,12 @@
   - 수정2A: 계약보증금 면제 기준 통일 — 기본3천만원+한시적특례5천만원 병기 (contract-guarantee-exemption, 전 섹션)
   - 수정2B: contract-amount-adjustment 계층 확인 — 현재 올바르게 배치, 추가수정 불필요
   - 수정2C: 공사계약1편 일반경쟁입찰 원칙 반영 — "제한/지명경쟁" -> "일반경쟁 원칙, 예외적 제한/지명" (step4+flowchart)
+- **2026-03-28 (13차)**: rich_media_enhancement.rb 17개 가이드 시각화 자료 검증
+  - **중대 2건**: 출장여비4편 숙박비 3편/4편 불일치(70,000 vs 60,000), 지방보조금8편 "10년 이하 징역" 근거 없음
+  - 주의 13건: 여비 금액 현행 확인(4), 인사복무 기준 확인(5), 예산 법령근거/기한(2), 공사계약 트리+조문(2)
+  - 경미 8건: 시리즈 내 모순(식비 차등 footnote), 기타공사 트리 누락, 자산취득 기준금액 등
+  - 신규 반복 이슈: **시리즈 내 수치 불일치** (같은 시리즈 다른 편에서 동일 항목 다른 금액)
+  - 연가보상비 상한 20일: 최근 축소 개정 가능성 높음, 잠재적 중대 오류
+
+## 신규 시드 파일
+- `db/seeds/rich_media_enhancement.rb` (17개 가이드 rich_media: rate_table, calculator_example, decision_tree, timeline, role_diagram, comparison_table)
