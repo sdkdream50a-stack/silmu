@@ -18,11 +18,14 @@ class Guide < ApplicationRecord
   # topic_slug 기반 교차 연결
   belongs_to :topic, foreign_key: :topic_slug, primary_key: :slug, optional: true
 
-  scope :published, -> { where(published: true) }
-  scope :ordered,   -> { order(:sort_order) }
+  scope :published,     -> { where(published: true) }
+  scope :ordered,       -> { order(:sort_order) }
+  scope :series_guides, -> { where.not(series: nil) }
+  scope :for_series,    ->(s) { where(series: s).order(:series_order) }
 
-  validates :title, presence: true
-  validates :slug,  presence: true, uniqueness: true
+  validates :title,        presence: true
+  validates :slug,         presence: true, uniqueness: true
+  validates :series_order, uniqueness: { scope: :series }, allow_nil: true
 
   before_validation :generate_slug, if: -> { slug.blank? && title.present? }
 
@@ -32,6 +35,17 @@ class Guide < ApplicationRecord
   # guide_path(guide) → /guides/purchase-and-inspection
   def to_param
     slug
+  end
+
+  # 시리즈 인덱스 표시용: "주제" 부분만 추출
+  # Format A: "주제 — 완전정복 N편"  →  "주제"
+  # Format B: "완전정복 N편 — 주제"  →  "주제"
+  def series_episode_title
+    return title unless series.present?
+    t = title
+    t = t.gsub(/ [—–\-] .*?완전정복 \d+편\s*$/, "")  # Format A 제거
+    t = t.gsub(/^.*?완전정복 \d+편 [—–\-] /, "")      # Format B 제거
+    t.strip
   end
 
   # sections JSONB를 HashWithIndifferentAccess로 반환 (기존 뷰의 심볼 키 호환)

@@ -138,7 +138,7 @@
                         <%= link_to guide_path(ep), class: "flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-white hover:bg-amber-50 group transition-colors border border-amber-100 hover:border-amber-300 shadow-sm" do %>
                           <span class="w-7 h-7 flex items-center justify-center rounded-full bg-amber-100 text-amber-700 text-xs font-bold shrink-0 group-hover:bg-amber-500 group-hover:text-white transition-colors"><%= ep.series_order %></span>
                           <span class="text-sm text-slate-700 group-hover:text-amber-700 font-medium leading-snug">
-                            <%= ep.title.gsub(/^.*?완전정복 \d+편 — /, '') %>
+                            <%= ep.series_episode_title %>
                           </span>
                           <span class="material-symbols-outlined text-slate-300 group-hover:text-amber-400 text-base ml-auto shrink-0">chevron_right</span>
                         <% end %>
