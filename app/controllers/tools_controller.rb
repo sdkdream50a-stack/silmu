@@ -1,4 +1,6 @@
 class ToolsController < ApplicationController
+  include SeoHelper
+
   # 모든 도구 페이지는 JS 기반 계산기 (서버 측 동적 데이터 없음)
   before_action -> { expires_in 1.hour, public: true, stale_while_revalidate: 1.day }
   # 업무달력은 today를 서버 렌더링하므로 캐시 금지 (자정 이후 날짜 오차 방지)
