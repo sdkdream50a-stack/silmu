@@ -26,6 +26,7 @@ namespace :legal do
     'app/services/**/*.rb',
     'app/views/**/*.erb',
     'app/views/**/*.html.erb',
+    'app/javascript/**/*.js',
     'db/seeds/**/*.rb',
     'lib/**/*.rb',
     'config/locales/**/*.yml'
@@ -48,16 +49,21 @@ namespace :legal do
   ].freeze
 
   # 잘못된 금액 패턴 (자동 감지 및 수정)
+  # line_exemptions: 해당 키워드가 같은 줄에 있으면 교육용 예시로 판단하여 오류에서 제외
   WRONG_AMOUNT_PATTERNS = [
-    # 수의계약 금액 오류
+    # 수의계약 금액 오류 (숫자 표기)
     { pattern: /2[,_]?200[,_]?000(?!\d)/, correct: '20_000_000', desc: '2천만원 (오류: 2,200만원)' },
     { pattern: /22[,_]?000[,_]?000(?!\d)/, correct: '20_000_000', desc: '2천만원 (오류: 2,200만원)' },
     { pattern: /5[,_]?500[,_]?000(?!\d)/, correct: '50_000_000', desc: '5천만원 (오류: 5,500만원)' },
     { pattern: /55[,_]?000[,_]?000(?!\d)/, correct: '50_000_000', desc: '5천만원 (오류: 5,500만원)' },
     # 텍스트 오류
-    { pattern: /2,?200만원/, correct: '2천만원', desc: '2천만원 (오류: 2,200만원)' },
+    # line_exemptions: "부가세", "공급가", "최종 계약금액", "추가계약" 등 맥락어가 같은 줄에 있으면
+    # 교육용 예시(VAT 설명, 추가계약 계산 예시)이므로 오류로 처리하지 않음
+    { pattern: /2,?200만원/, correct: '2천만원', desc: '2천만원 (오류: 2,200만원)',
+      line_exemptions: %w[부가세 공급가 VAT 합계 추정가격 계약금액] },
     { pattern: /2천2백만원/, correct: '2천만원', desc: '2천만원 (오류: 2천2백만원)' },
-    { pattern: /5,?500만원/, correct: '5천만원', desc: '5천만원 (오류: 5,500만원)' },
+    { pattern: /5,?500만원/, correct: '5천만원', desc: '5천만원 (오류: 5,500만원)',
+      line_exemptions: ['부가세 포함', '최종 계약금액', '추가계약', '최대 5,500만원', '5,500만원.*최대'] },
     # 여비 금액 오류 (구 기준)
     { pattern: /숙박비[^0-9]*80[,_]?000(?!\d).*서울/m, correct: nil, desc: '서울 숙박비 확인 필요 (현행: 10만원)', warning_only: true },
   ].freeze
@@ -289,26 +295,40 @@ namespace :legal do
   # 잘못된 금액 패턴 검사
   def validate_wrong_patterns(content, file_path, results)
     WRONG_AMOUNT_PATTERNS.each do |wp|
-      if content.match?(wp[:pattern])
-        if wp[:warning_only]
-          results[:warnings] << {
-            file: file_path,
-            message: wp[:desc]
-          }
-        else
-          results[:errors] << {
-            file: file_path,
-            message: "잘못된 금액 발견: #{wp[:desc]}",
-            pattern: wp[:pattern],
-            correct: wp[:correct]
-          }
+      next unless content.match?(wp[:pattern])
+
+      # line_exemptions가 있으면 줄별로 문맥 확인
+      # 패턴 매칭 줄에 맥락어(부가세, 교육 예시 등)가 있으면 오류에서 제외
+      if wp[:line_exemptions].present?
+        has_real_error = content.each_line.any? do |line|
+          line.match?(wp[:pattern]) &&
+            wp[:line_exemptions].none? { |ex| line.include?(ex) }
         end
+        next unless has_real_error
+      end
+
+      if wp[:warning_only]
+        results[:warnings] << {
+          file: file_path,
+          message: wp[:desc]
+        }
+      else
+        results[:errors] << {
+          file: file_path,
+          message: "잘못된 금액 발견: #{wp[:desc]}",
+          pattern: wp[:pattern],
+          correct: wp[:correct]
+        }
       end
     end
   end
 
   # 계약 서비스 파일 검증
   def validate_contract_service(content, file_path, standards, results)
+    # contract_method_service.rb는 YAML(contract_thresholds.yml)에서 금액을 로드하므로
+    # 파일 내 금액 하드코딩이 불필요 → 패턴 검증 스킵
+    return if file_path.match?(/contract_method_service\.rb/)
+
     contract = standards['contract']
 
     # 주요 금액 확인
@@ -348,6 +368,9 @@ namespace :legal do
 
   # 출장비 계산기 검증
   def validate_travel_calculator(content, file_path, standards, results)
+    # ERB 뷰 파일은 금액을 직접 정의하지 않으므로 스킵 (JS 컨트롤러에서 정의)
+    return if file_path.end_with?('.erb')
+
     travel = standards['travel_expense']
 
     # 숙박비 확인
@@ -384,25 +407,31 @@ namespace :legal do
 
   # 시드 파일 검증
   def validate_seed_file(content, file_path, standards, results)
-    # 텍스트 금액 표기 검증
-    if content.include?('억원') || content.include?('천만원')
-      # 종합공사 4억원
-      unless content.include?('4억원') || content.include?('4억')
-        if content.include?('종합공사') || content.include?('종합')
+    # 수의계약 금액 한도표를 직접 나열하는 파일만 검증
+    # (입찰, 하자, 공동계약, 연간한도액 등 다른 주제에서 종합공사를 언급해도 금액 검증 불필요)
+    is_private_contract_amount_topic =
+      file_path.match?(/private.contract|topics\.rb$|topics\/private/i) ||
+      content.match?(/수의계약 기준금액.*종합공사|종합공사.*수의계약.*기준금액/)
+
+    if is_private_contract_amount_topic
+      if content.include?('종합공사') || content.include?('종합')
+        unless content.include?('4억원') || content.include?('4억')
           results[:warnings] << {
             file: file_path,
             message: "종합공사 수의계약 한도 (4억원) 확인 필요"
           }
         end
       end
+    end
 
-      # 1인 견적 2천만원
-      if content.include?('1인 견적') && !content.include?('2천만원')
-        results[:warnings] << {
-          file: file_path,
-          message: "1인 견적 기준 (2천만원) 확인 필요"
-        }
-      end
+    # 1인 견적 기준: 금액 기준표를 나열하는 맥락에서만 검사
+    # (업체가 1인뿐인 경우 등 다른 맥락의 "1인 견적"은 제외)
+    if content.match?(/1인 견적.*2[,_]?000만원|1인 견적.*금액|금액.*1인 견적/) &&
+        !content.include?('2천만원')
+      results[:warnings] << {
+        file: file_path,
+        message: "1인 견적 기준 (2천만원) 확인 필요"
+      }
     end
   end
 

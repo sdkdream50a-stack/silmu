@@ -15,7 +15,7 @@ on:
 
 env:
   RAILS_ENV: production
-  RUBY_VERSION: '3.3.6'
+  RUBY_VERSION: '3.4.8'
 
 jobs:
   verify:

@@ -183,10 +183,19 @@ class PdfProcessorService
       # 위치 계산
       x, y = calculate_position(position, page_width, page_height, font_size)
 
+      # 한글 포함 여부 확인
+      has_korean = number_text =~ /[가-힣]/
+      nanum_font_path = Rails.root.join("vendor", "fonts", "NanumGothic.ttf").to_s
+
       Prawn::Document.new(
         page_size: [page_width, page_height],
         margin: 0
       ) do |pdf|
+        if has_korean && File.exist?(nanum_font_path)
+          pdf.font_families.update("NanumGothic" => { normal: nanum_font_path })
+          pdf.font "NanumGothic"
+        end
+
         pdf.font_size(font_size)
         pdf.fill_color "000000"
 

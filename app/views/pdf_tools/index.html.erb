@@ -139,7 +139,7 @@
             <p class="text-sm text-slate-500 mt-2">쉼표로 구분하여 여러 범위 지정 가능</p>
           </div>
 
-          <button class="btn btn-lg btn-forest w-full" onclick="processSplit()">
+          <button type="button" class="btn btn-lg btn-forest w-full" onclick="processSplit()">
             <span class="material-symbols-outlined">content_cut</span>
             PDF 분할하기
           </button>
@@ -168,14 +168,20 @@
         <div class="file-list hidden" id="merge-file-list">
           <div class="flex items-center justify-between mb-4">
             <h4 class="font-semibold text-slate-900">업로드된 파일 (<span id="merge-count">0</span>개)</h4>
-            <button class="text-sm text-slate-500 hover:text-red-500" onclick="clearAllMergeFiles()">전체 삭제</button>
+            <div class="flex items-center gap-3">
+              <button type="button" class="text-sm text-emerald-600 hover:text-emerald-700 font-medium flex items-center gap-1" onclick="document.getElementById('merge-files').click()">
+                <span class="material-symbols-outlined text-base">add</span>
+                파일 추가
+              </button>
+              <button type="button" class="text-sm text-slate-500 hover:text-red-500" onclick="clearAllMergeFiles()">전체 삭제</button>
+            </div>
           </div>
           <ul class="space-y-2 mb-6" id="merge-items"></ul>
           <p class="text-sm text-slate-500 mb-4">
             <span class="material-symbols-outlined align-middle text-sm">info</span>
             드래그하여 순서 변경 가능
           </p>
-          <button class="btn btn-lg btn-forest w-full" onclick="processMerge()">
+          <button type="button" class="btn btn-lg btn-forest w-full" onclick="processMerge()">
             <span class="material-symbols-outlined">merge</span>
             PDF 합치기
           </button>
@@ -263,7 +269,7 @@
             <span class="text-slate-700">첫 페이지 번호 생략 (표지 등)</span>
           </label>
 
-          <button class="btn btn-lg btn-forest w-full" onclick="processNumbering()">
+          <button type="button" class="btn btn-lg btn-forest w-full" onclick="processNumbering()">
             <span class="material-symbols-outlined">format_list_numbered</span>
             쪽번호 추가하기
           </button>
@@ -378,6 +384,10 @@
 </style>
 
 <script>
+// 페이지 전체 드래그 기본 동작 방지 (파일 드롭 시 브라우저 이동 방지)
+document.addEventListener('dragover', (e) => e.preventDefault());
+document.addEventListener('drop', (e) => e.preventDefault());
+
 document.addEventListener('turbo:load', function() {
   // 탭 전환
   const tabs = document.querySelectorAll('.tab-btn');
