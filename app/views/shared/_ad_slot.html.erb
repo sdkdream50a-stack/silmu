@@ -1,8 +1,11 @@
-<%# 광고 단위 — guides, tools 페이지 하단에만 표시 (운영 환경 한정) %>
+<%# 광고 단위 (운영 환경 한정)
+  - guides: 페이지 하단 (position: 'bottom')
+  - tools: 결과 영역 근처 (position: 'tool-result') %>
 <%
-  show_ad = Rails.env.production? &&
-            position.to_s == 'bottom' &&
-            %w[guides tools].include?(params[:controller])
+  show_ad = Rails.env.production? && (
+    (position.to_s == 'bottom'       && params[:controller] == 'guides') ||
+    (position.to_s == 'tool-result'  && params[:controller] == 'tools')
+  )
 %>
 <% if show_ad %>
 <div class="max-w-4xl mx-auto px-4 pt-4 pb-1">
