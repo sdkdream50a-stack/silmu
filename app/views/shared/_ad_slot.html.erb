@@ -1,12 +1,13 @@
 <%# 광고 단위 (운영 환경 한정)
   - guides / topics / audit_cases: 페이지 맨 하단 (position: 'bottom')
   - tools: 결과 영역 근처 (position: 'tool-result')
-  - exam: 각 섹션 하단 (position: 'chapter-bottom' / 'subject-bottom' / 'quiz-index-bottom') %>
+  - exam: 각 섹션 하단 (position: 'home-top' / 'home-mid' / 'chapter-bottom' / 'chapter-memory' /
+          'subject-bottom' / 'quiz-index-bottom' / 'practical-bottom' / 'strategy-bottom' / 'keywords-bottom') %>
 <%
   show_ad = Rails.env.production? && (
     (position.to_s == 'bottom'      && %w[guides topics audit_cases].include?(params[:controller])) ||
     (position.to_s == 'tool-result' && params[:controller] == 'tools') ||
-    (%w[chapter-bottom subject-bottom quiz-index-bottom].include?(position.to_s) && params[:controller].start_with?('exam/'))
+    (%w[home-top home-mid chapter-bottom chapter-memory subject-bottom quiz-index-bottom practical-bottom strategy-bottom keywords-bottom].include?(position.to_s) && params[:controller].start_with?('exam/'))
   )
 %>
 <% if show_ad %>
