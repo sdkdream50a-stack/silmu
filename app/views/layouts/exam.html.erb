@@ -73,11 +73,11 @@
       </script>
     <% end %>
 
-    <% if Rails.env.production? && ENV['ADSENSE_CLIENT_ID'].present? %>
+    <% if Rails.env.production? %>
       <script>
         function loadAdSense() {
           const script = document.createElement('script');
-          script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=<%= ENV['ADSENSE_CLIENT_ID'] %>';
+          script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6241798439911569';
           script.async = true; script.crossOrigin = 'anonymous'; document.head.appendChild(script);
         }
         if ('requestIdleCallback' in window) { requestIdleCallback(loadAdSense, { timeout: 2000 }); }
