@@ -51,13 +51,13 @@
                   aria-hidden="true">expand_more</span>
           </button>
 
-          <div class="hidden absolute left-0 top-full pt-1 z-50 w-[480px]"
+          <div class="hidden absolute left-0 top-full pt-1 z-50 w-[min(480px,calc(100vw-2rem))]"
                data-dropdown-nav-target="panel"
                data-dropdown-key="topics"
                data-action="mouseenter->dropdown-nav#panelEnter mouseleave->dropdown-nav#hoverClose"
                aria-hidden="true">
             <div class="bg-white rounded-2xl shadow-xl border border-slate-100 p-4">
-              <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 px-1">분야별 법령 가이드</p>
+              <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 px-1">분야별 법령 가이드</p>
               <div class="grid grid-cols-3 gap-1">
                 <% TopicsController::CATEGORY_CONFIG.each do |key, cfg| %>
                   <%= link_to topics_category_path(key),
@@ -94,13 +94,13 @@
                   aria-hidden="true">expand_more</span>
           </button>
 
-          <div class="hidden absolute left-0 top-full pt-1 z-50 w-[320px]"
+          <div class="hidden absolute left-0 top-full pt-1 z-50 w-[min(320px,calc(100vw-2rem))]"
                data-dropdown-nav-target="panel"
                data-dropdown-key="guides"
                data-action="mouseenter->dropdown-nav#panelEnter mouseleave->dropdown-nav#hoverClose"
                aria-hidden="true">
             <div class="bg-white rounded-2xl shadow-xl border border-slate-100 p-4">
-              <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 px-1">완전정복 시리즈</p>
+              <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 px-1">완전정복 시리즈</p>
               <div class="grid grid-cols-2 gap-1">
                 <% [
                   ["공사계약",   "construction",    "blue",   "공사계약_완전정복"],
@@ -160,7 +160,7 @@
                data-action="mouseenter->dropdown-nav#panelEnter mouseleave->dropdown-nav#hoverClose"
                aria-hidden="true">
             <div class="bg-white rounded-2xl shadow-xl border border-slate-100 p-3">
-              <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 px-1">인기 도구</p>
+              <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 px-1">인기 도구</p>
               <% [
                 { icon: "gavel",          title: "계약방식 결정기",  path: :contract_method_path,      color: "emerald" },
                 { icon: "calculate",      title: "추정가격 계산기",  path: :estimated_price_path,       color: "indigo" },
@@ -207,7 +207,7 @@
                data-action="mouseenter->dropdown-nav#panelEnter mouseleave->dropdown-nav#hoverClose"
                aria-hidden="true">
             <div class="bg-white rounded-2xl shadow-xl border border-slate-100 p-3">
-              <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 px-1">분야별 조회</p>
+              <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 px-1">분야별 조회</p>
               <% [
                 ["수의계약", "gavel",          "indigo"],
                 ["입찰",     "campaign",       "violet"],
