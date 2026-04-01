@@ -2,6 +2,9 @@
 <html lang="ko" class="scroll-smooth" style="background-color:#fafbfc;color:#0f172a;">
   <head>
     <%= display_meta_tags %>
+    <% if defined?(@meta_robots) && @meta_robots.present? %>
+      <meta name="robots" content="<%= @meta_robots %>">
+    <% end %>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="turbo-prefetch" content="true">
     <meta name="color-scheme" content="light only">

@@ -69,6 +69,9 @@ class TopicsController < ApplicationController
     # 카테고리별 fragment cache 키로 활용 가능한 버전 힌트
     @fragment_version = Rails.cache.read("topics/fragment_version") || 0
 
+    # 서브그룹 필터 URL은 중복 색인 방지
+    @meta_robots = params[:subgroup].present? ? "noindex, follow" : nil
+
     expires_in 5.minutes, public: true, stale_while_revalidate: 1.hour
 
     set_og_image(category: OG_CATEGORY_MAP[@key])
