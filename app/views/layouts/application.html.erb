@@ -503,24 +503,6 @@
 
     <script>
       (function() {
-        // Mobile Menu Toggle
-        var mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        var mobileMenu = document.getElementById('mobile-menu');
-        if (mobileMenuBtn && mobileMenu) {
-          mobileMenuBtn.addEventListener('click', function() {
-            mobileMenu.classList.toggle('hidden');
-            var icon = mobileMenuBtn.querySelector('.material-symbols-outlined');
-            if (icon) {
-              var iconName = mobileMenu.classList.contains('hidden') ? 'menu' : 'close';
-              icon.setAttribute('data-icon', 'material-symbols:' + iconName);
-              // 전체 문서 대신 해당 아이콘만 스캔 (INP 개선)
-              if (typeof Iconify !== 'undefined') {
-                Iconify.scan(icon);
-              }
-            }
-          });
-        }
-
         // Navbar scroll effect (passive + rAF throttle)
         var nav = document.getElementById('main-nav');
         if (nav) {
