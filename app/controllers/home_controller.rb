@@ -96,8 +96,13 @@ class HomeController < ApplicationController
     # sector 쿠키 저장 (30일)
     cookies[:sector] = { value: @sector, expires: 30.days, same_site: :lax }
 
-    # 홈페이지는 nav에 인증 상태 포함 → Cloudflare 포함 모든 캐시 금지
-    response.headers["Cache-Control"] = "no-store"
+    # 비로그인: public 60초 캐시 (Cloudflare Edge + 브라우저 캐시, TTFB 개선)
+    # 로그인: no-store (nav에 인증 상태 포함 → 캐시 금지)
+    if user_signed_in?
+      response.headers["Cache-Control"] = "no-store"
+    else
+      response.headers["Cache-Control"] = "public, max-age=60, stale-while-revalidate=300"
+    end
 
     description_text = "공무원을 위한 계약·예산 실무 종합 플랫폼. 수의계약, 적격심사, 입찰, 검수, 예산 편성 등 #{@topic_count}개 현행 법령 가이드와 #{ApplicationHelper::ACTIVE_TOOL_COUNT}개 자동화 도구를 무료로 제공합니다. #{@audit_case_count}건 실제 감사사례 분석으로 실수를 예방하고, #{@template_count}종 서식 템플릿으로 업무 시간을 절약하고 안전한 공무를 실현하세요."
 
@@ -110,7 +115,7 @@ class HomeController < ApplicationController
         title: "실무.kr — 공무원 계약 실무 가이드",
         description: description_text,
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png",
+        image: "https://silmu.kr/og-image.webp",
         type: "website"
       }
     )
@@ -134,7 +139,7 @@ class HomeController < ApplicationController
         title: "실무.kr 서비스 소개",
         description: description_text,
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png",
+        image: "https://silmu.kr/og-image.webp",
         type: "website"
       }
     )
@@ -153,7 +158,7 @@ class HomeController < ApplicationController
         title: "실무.kr 개인정보처리방침",
         description: description_text,
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png",
+        image: "https://silmu.kr/og-image.webp",
         type: "website"
       }
     )
@@ -172,7 +177,7 @@ class HomeController < ApplicationController
         title: "실무.kr 이용약관",
         description: description_text,
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png",
+        image: "https://silmu.kr/og-image.webp",
         type: "website"
       }
     )
@@ -187,7 +192,7 @@ class HomeController < ApplicationController
       og: {
         title: "문의하기 — 실무.kr",
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png",
+        image: "https://silmu.kr/og-image.webp",
         type: "website"
       },
       canonical: canonical_url
@@ -204,7 +209,7 @@ class HomeController < ApplicationController
       og: {
         title: "업데이트 소식 — 실무.kr",
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png"
+        image: "https://silmu.kr/og-image.webp"
       }
     )
   end

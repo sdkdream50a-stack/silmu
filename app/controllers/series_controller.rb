@@ -26,7 +26,7 @@ class SeriesController < ApplicationController
         title: "#{@series_name} #{@episodes.size}편 완전정복 — 실무.kr",
         description: "#{@series_name} 시리즈 #{@episodes.size}편. 마인드맵·플래시카드와 함께 단계별로 완전 마스터. 공무원 법령 실무 가이드.",
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png",
+        image: "https://silmu.kr/og-image.webp",
         type: "website"
       },
       canonical: canonical_url,

@@ -19,6 +19,14 @@ class ToolsController < ApplicationController
         description: description_text,
         url: canonical_url,
         type: "website"
+      },
+      json_ld: {
+        "@context" => "https://schema.org",
+        "@type" => "BreadcrumbList",
+        "itemListElement" => [
+          { "@type" => "ListItem", "position" => 1, "name" => "홈", "item" => root_url },
+          { "@type" => "ListItem", "position" => 2, "name" => "실무 도구", "item" => tools_url }
+        ]
       }
     )
   end
@@ -34,9 +42,14 @@ class ToolsController < ApplicationController
         title: "업무 할일 달력 — 실무.kr",
         description: description_text,
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png",
+        image: "https://silmu.kr/og-image.webp",
         type: "website"
-      }
+      },
+      json_ld: tool_json_ld(
+        tool_name: "업무 할일 달력",
+        description: "공무원 월별 반복업무 일정을 관리하는 무료 업무달력. Google Calendar·Outlook 연동 가능.",
+        url: task_calendar_url
+      )
     )
   end
 
@@ -49,9 +62,14 @@ class ToolsController < ApplicationController
         title: "공무원 봉급 실수령액 계산기 — 실무.kr",
         description: "2025년 직급·호봉별 공무원 실수령액 즉시 계산",
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png",
+        image: "https://silmu.kr/og-image.webp",
         type: "website"
-      }
+      },
+      json_ld: tool_json_ld(
+        tool_name: "공무원 봉급 실수령액 계산기",
+        description: "2025년 공무원 봉급표 기준 직급·호봉별 실수령액을 자동 계산하는 무료 도구",
+        url: salary_calculator_url
+      )
     )
   end
 
@@ -64,9 +82,14 @@ class ToolsController < ApplicationController
         title: "공무원연금 예상 수령액 계산기 — 실무.kr",
         description: "재직년수·기준소득월액으로 공무원연금 수령액 즉시 계산. 2026년 2.1% 인상 반영.",
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png",
+        image: "https://silmu.kr/og-image.webp",
         type: "website"
-      }
+      },
+      json_ld: tool_json_ld(
+        tool_name: "공무원연금 예상 수령액 계산기",
+        description: "재직년수와 기준소득월액으로 공무원연금 수령액을 자동 계산하는 무료 도구. 2026년 인상률 반영.",
+        url: pension_calculator_url
+      )
     )
   end
 
@@ -79,7 +102,7 @@ class ToolsController < ApplicationController
         title: "보조금 정산 체크리스트 — 실무.kr",
         description: "보조금 정산 전 자가점검 도구. 감사 빈출 지적 기준으로 즉시 확인하세요.",
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png",
+        image: "https://silmu.kr/og-image.webp",
         type: "website"
       },
       json_ld: tool_json_ld(
@@ -99,7 +122,7 @@ class ToolsController < ApplicationController
         title: "예산 과목 분류 도우미 — 실무.kr",
         description: "지출 내용 입력 → 적합한 세출예산 과목(목·세목) 즉시 추천",
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png",
+        image: "https://silmu.kr/og-image.webp",
         type: "website"
       },
       json_ld: tool_json_ld(
@@ -119,7 +142,7 @@ class ToolsController < ApplicationController
         title: "계약 적법성 자가진단 — 실무.kr",
         description: "계약 단계별 감사 빈출 지적사항을 체크리스트로 즉시 점검하세요.",
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png",
+        image: "https://silmu.kr/og-image.webp",
         type: "website"
       },
       json_ld: tool_json_ld(
@@ -139,7 +162,7 @@ class ToolsController < ApplicationController
         title: "이월·전용 적법성 판단기 — 실무.kr",
         description: "예산 이월·전용 요건과 절차를 법령 기준으로 즉시 확인하세요.",
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png",
+        image: "https://silmu.kr/og-image.webp",
         type: "website"
       },
       json_ld: tool_json_ld(
@@ -159,7 +182,7 @@ class ToolsController < ApplicationController
         title: "공무원 수당 계산기 — 실무.kr",
         description: "정근수당·가족수당·명절휴가비를 공무원수당 규정 기준으로 자동 계산합니다.",
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png",
+        image: "https://silmu.kr/og-image.webp",
         type: "website"
       },
       json_ld: tool_json_ld(
@@ -179,7 +202,7 @@ class ToolsController < ApplicationController
         title: "부서별 감사 대비 체크리스트 — 실무.kr",
         description: "담당 업무 유형별 감사 빈출 지적 기반 자가점검 체크리스트를 즉시 생성하세요.",
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png",
+        image: "https://silmu.kr/og-image.webp",
         type: "website"
       },
       json_ld: tool_json_ld(
@@ -199,7 +222,7 @@ class ToolsController < ApplicationController
         title: "분할계약 판단 체크리스트 — 실무.kr",
         description: "계약 분할이 감사 지적 대상인지 즉시 확인하세요.",
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png",
+        image: "https://silmu.kr/og-image.webp",
         type: "website"
       },
       json_ld: tool_json_ld(
@@ -219,7 +242,7 @@ class ToolsController < ApplicationController
         title: "물가변동 계약금액조정 계산기 — 실무.kr",
         description: "ESC 조정금액을 지수조정률·품목조정률 방식으로 자동 계산합니다.",
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png",
+        image: "https://silmu.kr/og-image.webp",
         type: "website"
       },
       json_ld: tool_json_ld(
@@ -241,9 +264,14 @@ class ToolsController < ApplicationController
         title: "예산 집행률 계산기 — 실무.kr",
         description: description_text,
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png",
+        image: "https://silmu.kr/og-image.webp",
         type: "website"
-      }
+      },
+      json_ld: tool_json_ld(
+        tool_name: "예산 집행률 계산기",
+        description: "예산 항목별 집행률과 잔액을 자동 계산하고 월별 권장 집행률과 비교하는 무료 도구",
+        url: budget_execution_rate_url
+      )
     )
   end
 
@@ -258,9 +286,14 @@ class ToolsController < ApplicationController
         title: "예비비 한도 계산기 — 실무.kr",
         description: description_text,
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png",
+        image: "https://silmu.kr/og-image.webp",
         type: "website"
-      }
+      },
+      json_ld: tool_json_ld(
+        tool_name: "예비비 한도 계산기",
+        description: "지방재정법 제43조에 따른 예비비 법정 한도와 적정 편성 금액을 자동 계산하는 무료 도구",
+        url: contingency_fund_url
+      )
     )
   end
 
@@ -275,9 +308,14 @@ class ToolsController < ApplicationController
         title: "초과근무수당 계산기 — 실무.kr",
         description: description_text,
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png",
+        image: "https://silmu.kr/og-image.webp",
         type: "website"
-      }
+      },
+      json_ld: tool_json_ld(
+        tool_name: "초과근무수당 계산기",
+        description: "공무원 시간외·야간·휴일 초과근무수당을 공무원수당 규정에 따라 자동 계산하는 무료 도구",
+        url: overtime_calculator_url
+      )
     )
   end
 
@@ -292,7 +330,7 @@ class ToolsController < ApplicationController
         title: "연가일수 계산기 — 실무.kr",
         description: description_text,
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png",
+        image: "https://silmu.kr/og-image.webp",
         type: "website"
       },
       json_ld: tool_json_ld(
@@ -314,9 +352,14 @@ class ToolsController < ApplicationController
         title: "퇴직금 계산기 — 실무.kr",
         description: description_text,
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png",
+        image: "https://silmu.kr/og-image.webp",
         type: "website"
-      }
+      },
+      json_ld: tool_json_ld(
+        tool_name: "공무원 퇴직금 계산기",
+        description: "공무원연금법 제64조 기준 재직기간별 퇴직수당 예상액을 자동 계산하는 무료 도구",
+        url: severance_calculator_url
+      )
     )
   end
 
@@ -331,9 +374,14 @@ class ToolsController < ApplicationController
         title: "성과상여금 계산기 — 실무.kr",
         description: description_text,
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png",
+        image: "https://silmu.kr/og-image.webp",
         type: "website"
-      }
+      },
+      json_ld: tool_json_ld(
+        tool_name: "성과상여금 계산기",
+        description: "공무원 성과등급(S·A·B)별 성과상여금 지급액을 자동 계산하는 무료 도구",
+        url: performance_bonus_calculator_url
+      )
     )
   end
 
@@ -396,7 +444,7 @@ class ToolsController < ApplicationController
         title: "여비계산기 — 실무.kr",
         description: description_text,
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png",
+        image: "https://silmu.kr/og-image.webp",
         type: "website"
       },
       json_ld: tool_json_ld(

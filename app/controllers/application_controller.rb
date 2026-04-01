@@ -34,14 +34,14 @@ class ApplicationController < ActionController::Base
   end
 
   def set_default_meta_tags
-    og_image = @og_image_path.presence || "https://silmu.kr/og-image.png"
+    og_image = @og_image_path.presence || "https://silmu.kr/og-image.webp"
     set_meta_tags(
       site: "실무.kr",
       separator: "|",
       reverse: true,
       description: "공무원을 위한 계약 실무 가이드 — 수의계약, 입찰, 검수, 예산 업무를 쉽고 정확하게",
       canonical: canonical_url,
-      og: { site_name: "실무.kr", type: "website", locale: "ko_KR", image: { _: og_image, width: 1200, height: 630, type: "image/png" } },
+      og: { site_name: "실무.kr", type: "website", locale: "ko_KR", image: { _: og_image, width: 1200, height: 630, type: "image/webp" } },
       twitter: { card: "summary_large_image", site: "@silmu_kr", image: og_image }
     )
   end
@@ -64,7 +64,7 @@ class ApplicationController < ActionController::Base
     when "audit"     then "#{base}/og-audit.svg"
     when "tools"     then "#{base}/og-tools.svg"
     when "exam"      then "#{base}/og-exam.svg"
-    else "https://silmu.kr/og-image.png"
+    else "https://silmu.kr/og-image.webp"
     end
     # 즉시 메타태그에 반영 (set_default_meta_tags 이후 호출 시에도 덮어쓰기)
     set_meta_tags(

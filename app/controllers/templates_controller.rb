@@ -50,7 +50,7 @@ class TemplatesController < ApplicationController
       og: {
         title: "문서 양식 — 실무.kr",
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png"
+        image: "https://silmu.kr/og-image.webp"
       }
     )
   end
@@ -71,7 +71,7 @@ class TemplatesController < ApplicationController
         title: "#{@template[:title]} — 실무.kr",
         description: @template[:desc],
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png"
+        image: "https://silmu.kr/og-image.webp"
       }
     )
 

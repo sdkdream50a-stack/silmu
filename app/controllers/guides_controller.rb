@@ -51,7 +51,7 @@ class GuidesController < ApplicationController
         title: "업무 가이드 — 실무.kr",
         description: description_text,
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png"
+        image: "https://silmu.kr/og-image.webp"
       },
       canonical: canonical_url
     }
@@ -141,7 +141,7 @@ class GuidesController < ApplicationController
         title: "감사 빈출 지적 TOP 30 — 실무.kr",
         description: "계약·예산·인사·보조금 분야 감사 빈출 지적사항 30가지와 예방법을 한 페이지에서 확인하세요.",
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png",
+        image: "https://silmu.kr/og-image.webp",
         type: "website"
       },
       canonical: canonical_url
@@ -159,7 +159,7 @@ class GuidesController < ApplicationController
         title: "국가계약 vs 지방계약 비교 — 실무.kr",
         description: "국가계약법·지방계약법 핵심 차이 15개 항목 비교. 수의계약 한도·입찰·보증금·지체상금 구분.",
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png",
+        image: "https://silmu.kr/og-image.webp",
         type: "website"
       },
       canonical: canonical_url
@@ -176,7 +176,7 @@ class GuidesController < ApplicationController
         title: "계약 흐름도 — 공무원 계약 업무 전 과정 시각화",
         description: "계획 수립부터 대금 지급까지 공무원 계약 업무의 전체 프로세스를 단계별 흐름도로 한눈에 파악하세요. 수의계약·경쟁입찰·협상계약 등 계약 방식별 절차와 핵심 체크포인트를 시각적으로 정리했습니다.",
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png",
+        image: "https://silmu.kr/og-image.webp",
         type: "website"
       },
       canonical: canonical_url
@@ -192,7 +192,7 @@ class GuidesController < ApplicationController
       og: {
         title: "계약업무 사전 체크리스트 — 실무.kr",
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png"
+        image: "https://silmu.kr/og-image.webp"
       },
       canonical: canonical_url
     )
@@ -209,7 +209,7 @@ class GuidesController < ApplicationController
         title: "공공계약 판례·유권해석·FAQ 모음 — 실무.kr",
         description: "수의계약·입찰·계약이행 판례 해설과 기재부·행안부 유권해석을 한곳에서 확인하세요.",
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png"
+        image: "https://silmu.kr/og-image.webp"
       },
       canonical: canonical_url
     )

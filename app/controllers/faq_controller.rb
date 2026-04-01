@@ -13,7 +13,7 @@ class FaqController < ApplicationController
       og: {
         title: "자주 묻는 질문 — 실무.kr",
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png"
+        image: "https://silmu.kr/og-image.webp"
       }
     )
   end

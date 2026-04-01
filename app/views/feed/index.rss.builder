@@ -9,7 +9,7 @@ xml.rss version: "2.0", "xmlns:atom" => "http://www.w3.org/2005/Atom" do
     xml.tag! "atom:link", href: feed_url(format: :rss), rel: "self", type: "application/rss+xml"
     xml.lastBuildDate @updated_at&.rfc2822 || Time.current.rfc2822
     xml.image do
-      xml.url "https://silmu.kr/og-image.png"
+      xml.url "https://silmu.kr/og-image.webp"
       xml.title "실무.kr"
       xml.link root_url
     end

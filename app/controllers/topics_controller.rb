@@ -43,7 +43,7 @@ class TopicsController < ApplicationController
         title: "법령 가이드 | 실무.kr",
         description: "수의계약·경쟁입찰·계약체결 등 주요 법령을 법률→시행령→규칙 체계로 정리",
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png",
+        image: "https://silmu.kr/og-image.webp",
         type: "website"
       },
       canonical: canonical_url

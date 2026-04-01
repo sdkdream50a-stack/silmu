@@ -16,14 +16,19 @@
     <meta name="naver-site-verification" content="35e0ac97eb0b5463fb23f269f08bbcc729e81d77" />
     <meta name="ai-content-description" content="공무원을 위한 계약·예산·인사 실무 가이드, 자동화 도구, 법령 해설, 감사사례 분석">
     <%# twitter:card / twitter:site는 meta-tags gem이 display_meta_tags에서 출력 — 중복 방지로 여기서 제거 %>
-    <%# 인증 상태가 nav에 반영되므로 Turbo 페이지 캐시 비활성화 (stale nav 방지) %>
-    <meta name="turbo-cache-control" content="no-store">
+    <%# 인증 상태가 nav에 반영되므로 캐시 복원 전 nav 갱신 (no-cache: 캐시 후 즉시 재검증) %>
+    <meta name="turbo-cache-control" content="no-cache">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
     <%# [LCP 최적화] 메인 CSS를 head 최상단에 배치 %>
     <%# preconnect for CDN fonts %>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <%# AdSense preconnect — AdSense 로드 페이지에서만 적용 (조기 DNS/TCP 연결로 TBT 개선) %>
+    <% if Rails.env.production? && %w[guides tools topics audit_cases].include?(params[:controller]) %>
+      <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin>
+      <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com">
+    <% end %>
     <%# contract_flow.css는 해당 뷰(content_for :head)에서만 로드 — 전역 제외 %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload", fetchpriority: "high" %>
     <%= stylesheet_link_tag "application.tailwind", "data-turbo-track": "reload", fetchpriority: "high" %>
@@ -664,6 +669,16 @@
           }
         }
       })();
+    </script>
+    <script>
+      // 로그아웃 시 Turbo 캐시 무효화 (stale nav 방지)
+      // no-cache 전략: 캐시는 저장하되 복원 직후 재검증 → 빠른 표시 + 정확한 인증 상태
+      document.addEventListener('turbo:before-cache', function() {
+        var authEl = document.querySelector('[data-user-signed-in]');
+        if (!authEl) return;
+        // 로그아웃 상태로 캐시될 경우 nav 인증 영역 초기화 방지용 마킹
+        authEl.setAttribute('data-turbo-cached', 'true');
+      });
     </script>
     <script>
       // AI 기능 로그인 필요 응답 처리

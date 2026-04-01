@@ -20,7 +20,7 @@ class QualificationEvaluationsController < ApplicationController
       og: {
         title: "적격심사·종심제 자동 채점기 — 실무.kr",
         url: canonical_url,
-        image: "https://silmu.kr/og-image.png"
+        image: "https://silmu.kr/og-image.webp"
       }
     )
     @comprehensive_structure = COMPREHENSIVE_SCORE_STRUCTURE
