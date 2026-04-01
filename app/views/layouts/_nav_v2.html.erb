@@ -77,8 +77,64 @@
           </div>
         </div>
 
-        <%# --- 실무가이드 (단순 링크) --- %>
-        <%= link_to "실무가이드", guides_path, class: nav_class(:guides) %>
+        <%# --- 실무가이드 드롭다운 --- %>
+        <div class="relative"
+             data-action="mouseenter->dropdown-nav#hoverOpen mouseleave->dropdown-nav#hoverClose"
+             data-dropdown-key="guides">
+          <button type="button"
+                  class="<%= nav_class(:guides) %> flex items-center gap-0.5"
+                  data-action="click->dropdown-nav#toggle"
+                  data-dropdown-key="guides"
+                  aria-haspopup="true">
+            실무가이드
+            <span class="material-symbols-outlined text-base transition-transform duration-200"
+                  data-dropdown-nav-target="chevron"
+                  data-dropdown-key="guides">expand_more</span>
+          </button>
+
+          <div class="hidden absolute left-0 top-full pt-1 z-50 w-[320px]"
+               data-dropdown-nav-target="panel"
+               data-dropdown-key="guides"
+               data-action="mouseenter->dropdown-nav#panelEnter mouseleave->dropdown-nav#hoverClose"
+               aria-hidden="true">
+            <div class="bg-white rounded-2xl shadow-xl border border-slate-100 p-4">
+              <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 px-1">완전정복 시리즈</p>
+              <div class="grid grid-cols-2 gap-1">
+                <% [
+                  ["공사계약",   "construction",    "blue",   "공사계약_완전정복"],
+                  ["수의계약",   "gavel",           "indigo", "수의계약_완전정복"],
+                  ["입찰",       "campaign",        "violet", "입찰_완전정복"],
+                  ["예산집행",   "account_balance", "amber",  "예산집행_완전정복"],
+                  ["출장여비",   "flight_takeoff",  "rose",   "출장여비_완전정복"],
+                  ["인사복무",   "badge",           "slate",  "인사복무_완전정복"],
+                  ["예산편성",   "edit_note",       "teal",   "예산편성_완전정복"],
+                  ["지방보조금", "volunteer_activism", "green", "지방보조금_완전정복"],
+                ].each do |label, icon, color, series| %>
+                  <%= link_to guides_path,
+                        class: "group flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-slate-50 transition-colors" do %>
+                    <div class="w-7 h-7 rounded-lg bg-<%= color %>-100 group-hover:bg-<%= color %>-200 flex items-center justify-center shrink-0 transition-colors">
+                      <span class="material-symbols-outlined text-sm text-<%= color %>-600"><%= icon %></span>
+                    </div>
+                    <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900"><%= label %></span>
+                  <% end %>
+                <% end %>
+              </div>
+              <div class="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
+                <%= link_to contract_flow_path, class: "flex-1 flex items-center gap-1.5 px-3 py-2 rounded-xl hover:bg-slate-50 text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors" do %>
+                  <span class="material-symbols-outlined text-sm text-indigo-500">account_tree</span>계약흐름도
+                <% end %>
+                <%= link_to pre_contract_checklist_path, class: "flex-1 flex items-center gap-1.5 px-3 py-2 rounded-xl hover:bg-slate-50 text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors" do %>
+                  <span class="material-symbols-outlined text-sm text-emerald-500">checklist_rtl</span>사전체크리스트
+                <% end %>
+              </div>
+              <div class="pt-2 border-t border-slate-100 mt-1">
+                <%= link_to guides_path, class: "flex items-center justify-center gap-1 text-xs font-semibold text-indigo-600 hover:text-indigo-700 transition-colors" do %>
+                  전체 실무가이드 보기 <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <%# --- 도구 드롭다운 --- %>
         <div class="relative"
@@ -126,8 +182,51 @@
           </div>
         </div>
 
-        <%# --- 감사사례 (단순 링크) --- %>
-        <%= link_to "감사사례", audit_cases_path, class: nav_class(:audit_cases) %>
+        <%# --- 감사사례 드롭다운 --- %>
+        <div class="relative"
+             data-action="mouseenter->dropdown-nav#hoverOpen mouseleave->dropdown-nav#hoverClose"
+             data-dropdown-key="audit">
+          <button type="button"
+                  class="<%= nav_class(:audit_cases) %> flex items-center gap-0.5"
+                  data-action="click->dropdown-nav#toggle"
+                  data-dropdown-key="audit"
+                  aria-haspopup="true">
+            감사사례
+            <span class="material-symbols-outlined text-base transition-transform duration-200"
+                  data-dropdown-nav-target="chevron"
+                  data-dropdown-key="audit">expand_more</span>
+          </button>
+
+          <div class="hidden absolute left-0 top-full pt-1 z-50 w-52"
+               data-dropdown-nav-target="panel"
+               data-dropdown-key="audit"
+               data-action="mouseenter->dropdown-nav#panelEnter mouseleave->dropdown-nav#hoverClose"
+               aria-hidden="true">
+            <div class="bg-white rounded-2xl shadow-xl border border-slate-100 p-3">
+              <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 px-1">분야별 조회</p>
+              <% [
+                ["수의계약", "gavel",          "indigo"],
+                ["입찰",     "campaign",       "violet"],
+                ["계약체결", "handshake",      "amber"],
+                ["계약이행", "sync_alt",       "emerald"],
+                ["대금지급", "payments",       "blue"],
+                ["하도급",   "account_tree",   "rose"],
+                ["기타",     "more_horiz",     "slate"],
+              ].each do |cat, icon, color| %>
+                <%= link_to audit_cases_path(category: cat),
+                      class: "group flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-50 transition-colors" do %>
+                  <span class="material-symbols-outlined text-base text-<%= color %>-500"><%= icon %></span>
+                  <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900"><%= cat %></span>
+                <% end %>
+              <% end %>
+              <div class="mt-2 pt-2 border-t border-slate-100">
+                <%= link_to audit_cases_path, class: "flex items-center justify-center gap-1 text-xs font-semibold text-red-600 hover:text-red-700 transition-colors py-1" do %>
+                  전체 감사사례 보기 <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <%# --- 더보기 드롭다운 --- %>
         <div class="relative"
@@ -279,11 +378,31 @@
         </div>
       </div>
 
-      <%# 감사사례 %>
-      <%= link_to audit_cases_path,
-            class: (request.path.start_with?('/audit-cases') ? mobile_active : mobile_normal) do %>
-        <span class="material-symbols-outlined text-lg">find_in_page</span>감사사례
-      <% end %>
+      <%# 감사사례 아코디언 %>
+      <div>
+        <button type="button"
+                class="<%= request.path.start_with?('/audit-cases') ? mobile_active : mobile_normal %> w-full justify-between"
+                data-action="click->dropdown-nav#toggle"
+                data-dropdown-key="mobile-audit">
+          <span class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-lg">find_in_page</span>감사사례
+          </span>
+          <span class="material-symbols-outlined text-base transition-transform duration-200"
+                data-dropdown-nav-target="chevron"
+                data-dropdown-key="mobile-audit">expand_more</span>
+        </button>
+        <div class="hidden pl-4 pb-1"
+             data-dropdown-nav-target="panel"
+             data-dropdown-key="mobile-audit">
+          <div class="grid grid-cols-2 gap-1 pt-1">
+            <% [["수의계약","indigo"],["입찰","violet"],["계약체결","amber"],["계약이행","emerald"],["대금지급","blue"],["하도급","rose"],["기타","slate"]].each do |cat, _color| %>
+              <%= link_to cat, audit_cases_path(category: cat),
+                    class: "flex items-center gap-2 px-3 py-2 text-sm text-slate-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" %>
+            <% end %>
+          </div>
+          <%= link_to "전체 보기 →", audit_cases_path, class: "block px-3 py-2 text-xs text-red-600 font-semibold" %>
+        </div>
+      </div>
 
       <%# 구분선 %>
       <div class="h-px bg-gray-200 my-1"></div>
