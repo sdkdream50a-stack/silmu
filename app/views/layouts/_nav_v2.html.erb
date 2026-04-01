@@ -228,6 +228,14 @@
           </div>
         </div>
 
+        <%# --- 업무달력 아이콘 --- %>
+        <%= link_to task_calendar_path,
+              class: "#{nav_class(:task_calendar)} flex items-center gap-1.5 px-2.5 py-2 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 transition-colors",
+              title: "업무달력" do %>
+          <span class="material-symbols-outlined text-xl">calendar_month</span>
+          <span class="text-sm font-semibold hidden xl:inline">달력</span>
+        <% end %>
+
         <%# --- 더보기 드롭다운 --- %>
         <div class="relative"
              data-action="mouseenter->dropdown-nav#hoverOpen mouseleave->dropdown-nav#hoverClose"
@@ -250,7 +258,6 @@
                aria-hidden="true">
             <div class="bg-white rounded-2xl shadow-xl border border-slate-100 p-2">
               <% [
-                { icon: "calendar_month", title: "업무달력",       path: :task_calendar_path,    badge: nil,      color: "indigo" },
                 { icon: "folder_open",    title: "자료실",          path: :guide_resources_path,  badge: nil,      color: "slate" },
                 { icon: "psychology",     title: "AI 어시스턴트",  path: :ai_assistant_path,     badge: "AI",     color: "emerald" },
                 { icon: "feedback",       title: "의견보내기",      path: :feedback_path,         badge: nil,      color: "slate" },
@@ -404,12 +411,16 @@
         </div>
       </div>
 
+      <%# 업무달력 강조 %>
+      <%= link_to task_calendar_path,
+            class: "#{mobile_base} text-indigo-700 bg-indigo-50 border border-indigo-200 hover:bg-indigo-100 font-semibold" do %>
+        <span class="material-symbols-outlined text-lg text-indigo-600">calendar_month</span>
+        업무달력
+        <span class="ml-auto text-xs px-1.5 py-0.5 bg-indigo-600 text-white rounded-md font-bold">이달</span>
+      <% end %>
+
       <%# 구분선 %>
       <div class="h-px bg-gray-200 my-1"></div>
-
-      <%= link_to task_calendar_path, class: mobile_normal do %>
-        <span class="material-symbols-outlined text-lg">calendar_month</span>업무달력
-      <% end %>
       <%= link_to guide_resources_path, class: mobile_normal do %>
         <span class="material-symbols-outlined text-lg">folder_open</span>자료실
       <% end %>
