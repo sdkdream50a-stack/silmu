@@ -1,0 +1,320 @@
+<%# 네비게이션 v2 — 드롭다운 포함 (5개 메뉴) %>
+<% _colored_hero_pages = %w[home#index guides#index audit_cases#index topics#index] %>
+<% _has_colored_hero = _colored_hero_pages.include?("#{controller_name}##{action_name}") %>
+
+<nav class="<%= _has_colored_hero ? 'bg-white/95 border-b border-gray-100/60' : 'bg-gray-50 border-b border-gray-200' %> sticky top-0 z-50 transition-all duration-300"
+     id="main-nav"
+     data-controller="dropdown-nav"
+     data-action="keydown.esc->dropdown-nav#handleKeydown">
+
+  <div class="container-wide">
+    <div class="flex justify-between h-16 lg:h-[4.5rem]">
+
+      <!-- 로고 -->
+      <div class="flex items-center">
+        <%= link_to root_path, class: "group flex items-center gap-3 transition-all duration-200 hover:scale-[1.02]" do %>
+          <div class="w-9 h-9 flex items-center justify-center drop-shadow-md group-hover:drop-shadow-lg transition-all">
+            <svg width="36" height="36" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="실무.kr 로고" role="img">
+              <defs>
+                <linearGradient id="logo_grad_header" gradientUnits="userSpaceOnUse" x1="20" y1="20" x2="180" y2="180">
+                  <stop stop-color="#137fec"/>
+                  <stop offset="1" stop-color="#0ea5e9"/>
+                </linearGradient>
+              </defs>
+              <path d="M100 20C60 20 40 45 40 45V140C40 165 70 180 100 180C130 180 160 165 160 140V45C160 45 140 20 100 20Z" fill="url(#logo_grad_header)"/>
+              <path d="M85 70H115" stroke="white" stroke-linecap="round" stroke-opacity="0.9" stroke-width="8"/>
+              <path d="M70 100H130" stroke="white" stroke-linecap="round" stroke-opacity="0.9" stroke-width="8"/>
+              <path d="M85 130H115" stroke="white" stroke-linecap="round" stroke-opacity="0.9" stroke-width="8"/>
+              <circle cx="100" cy="50" fill="white" fill-opacity="0.9" r="6"/>
+            </svg>
+          </div>
+          <span class="text-xl font-bold text-slate-900 tracking-tight">실무.kr</span>
+        <% end %>
+      </div>
+
+      <!-- 데스크탑 메뉴 -->
+      <div class="hidden lg:flex items-center gap-1">
+
+        <%# --- 법령가이드 드롭다운 --- %>
+        <div class="relative"
+             data-action="mouseenter->dropdown-nav#hoverOpen mouseleave->dropdown-nav#hoverClose"
+             data-dropdown-key="topics">
+          <button type="button"
+                  class="<%= nav_class(:topics) %> flex items-center gap-0.5"
+                  data-action="click->dropdown-nav#toggle"
+                  data-dropdown-key="topics"
+                  aria-haspopup="true">
+            법령가이드
+            <span class="material-symbols-outlined text-base transition-transform duration-200"
+                  data-dropdown-nav-target="chevron"
+                  data-dropdown-key="topics">expand_more</span>
+          </button>
+
+          <div class="hidden absolute left-0 top-full pt-1 z-50 w-[480px]"
+               data-dropdown-nav-target="panel"
+               data-dropdown-key="topics"
+               data-action="mouseenter->dropdown-nav#panelEnter mouseleave->dropdown-nav#hoverClose"
+               aria-hidden="true">
+            <div class="bg-white rounded-2xl shadow-xl border border-slate-100 p-4">
+              <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 px-1">분야별 법령 가이드</p>
+              <div class="grid grid-cols-3 gap-1">
+                <% TopicsController::CATEGORY_CONFIG.each do |key, cfg| %>
+                  <%= link_to topics_category_path(key),
+                        class: "group flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition-colors" do %>
+                    <div class="w-8 h-8 rounded-lg bg-<%= cfg[:color] %>-100 group-hover:bg-<%= cfg[:color] %>-200 flex items-center justify-center transition-colors shrink-0">
+                      <span class="material-symbols-outlined text-sm text-<%= cfg[:color] %>-600"><%= cfg[:icon] %></span>
+                    </div>
+                    <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900 leading-tight"><%= cfg[:label] %></span>
+                  <% end %>
+                <% end %>
+              </div>
+              <div class="mt-3 pt-3 border-t border-slate-100">
+                <%= link_to topics_path, class: "flex items-center justify-center gap-1 text-xs font-semibold text-indigo-600 hover:text-indigo-700 transition-colors" do %>
+                  전체 법령 가이드 보기 <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <%# --- 실무가이드 (단순 링크) --- %>
+        <%= link_to "실무가이드", guides_path, class: nav_class(:guides) %>
+
+        <%# --- 도구 드롭다운 --- %>
+        <div class="relative"
+             data-action="mouseenter->dropdown-nav#hoverOpen mouseleave->dropdown-nav#hoverClose"
+             data-dropdown-key="tools">
+          <button type="button"
+                  class="<%= nav_class(:tools) %> flex items-center gap-0.5"
+                  data-action="click->dropdown-nav#toggle"
+                  data-dropdown-key="tools"
+                  aria-haspopup="true">
+            도구
+            <span class="material-symbols-outlined text-base transition-transform duration-200"
+                  data-dropdown-nav-target="chevron"
+                  data-dropdown-key="tools">expand_more</span>
+          </button>
+
+          <div class="hidden absolute left-0 top-full pt-1 z-50 w-64"
+               data-dropdown-nav-target="panel"
+               data-dropdown-key="tools"
+               data-action="mouseenter->dropdown-nav#panelEnter mouseleave->dropdown-nav#hoverClose"
+               aria-hidden="true">
+            <div class="bg-white rounded-2xl shadow-xl border border-slate-100 p-3">
+              <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 px-1">인기 도구</p>
+              <% [
+                { icon: "gavel",          title: "계약방식 결정기",  path: :contract_method_path,      color: "emerald" },
+                { icon: "calculate",      title: "추정가격 계산기",  path: :estimated_price_path,       color: "indigo" },
+                { icon: "directions_car", title: "여비 계산기",      path: :travel_calculator_path,     color: "rose" },
+                { icon: "shield",         title: "계약보증금 계산기", path: :contract_guarantee_path,   color: "blue" },
+                { icon: "calendar_month", title: "법정기간 계산기",  path: :legal_period_path,          color: "amber" },
+              ].each do |t| %>
+                <%= link_to send(t[:path]),
+                      class: "group flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-50 transition-colors" do %>
+                  <div class="w-7 h-7 rounded-lg bg-<%= t[:color] %>-100 group-hover:bg-<%= t[:color] %>-200 flex items-center justify-center shrink-0 transition-colors">
+                    <span class="material-symbols-outlined text-sm text-<%= t[:color] %>-600"><%= t[:icon] %></span>
+                  </div>
+                  <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900"><%= t[:title] %></span>
+                <% end %>
+              <% end %>
+              <div class="mt-2 pt-2 border-t border-slate-100">
+                <%= link_to tools_path, class: "flex items-center justify-center gap-1 text-xs font-semibold text-indigo-600 hover:text-indigo-700 transition-colors py-1" do %>
+                  전체 <%= tool_count %>개 도구 보기 <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <%# --- 감사사례 (단순 링크) --- %>
+        <%= link_to "감사사례", audit_cases_path, class: nav_class(:audit_cases) %>
+
+        <%# --- 더보기 드롭다운 --- %>
+        <div class="relative"
+             data-action="mouseenter->dropdown-nav#hoverOpen mouseleave->dropdown-nav#hoverClose"
+             data-dropdown-key="more">
+          <button type="button"
+                  class="nav-link py-2 flex items-center gap-0.5"
+                  data-action="click->dropdown-nav#toggle"
+                  data-dropdown-key="more"
+                  aria-haspopup="true">
+            더보기
+            <span class="material-symbols-outlined text-base transition-transform duration-200"
+                  data-dropdown-nav-target="chevron"
+                  data-dropdown-key="more">expand_more</span>
+          </button>
+
+          <div class="hidden absolute right-0 top-full pt-1 z-50 w-52"
+               data-dropdown-nav-target="panel"
+               data-dropdown-key="more"
+               data-action="mouseenter->dropdown-nav#panelEnter mouseleave->dropdown-nav#hoverClose"
+               aria-hidden="true">
+            <div class="bg-white rounded-2xl shadow-xl border border-slate-100 p-2">
+              <% [
+                { icon: "calendar_month", title: "업무달력",       path: :task_calendar_path,    badge: nil,      color: "indigo" },
+                { icon: "folder_open",    title: "자료실",          path: :guide_resources_path,  badge: nil,      color: "slate" },
+                { icon: "psychology",     title: "AI 어시스턴트",  path: :ai_assistant_path,     badge: "AI",     color: "emerald" },
+                { icon: "feedback",       title: "의견보내기",      path: :feedback_path,         badge: nil,      color: "slate" },
+              ].each do |item| %>
+                <%= link_to send(item[:path]),
+                      class: "group flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition-colors" do %>
+                  <span class="material-symbols-outlined text-lg text-slate-500 group-hover:text-slate-700"><%= item[:icon] %></span>
+                  <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900 flex-1"><%= item[:title] %></span>
+                  <% if item[:badge] %>
+                    <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700"><%= item[:badge] %></span>
+                  <% end %>
+                <% end %>
+              <% end %>
+              <div class="mt-1 pt-1 border-t border-slate-100 px-3 pb-1">
+                <a href="https://exam.silmu.kr" target="_blank" rel="noopener"
+                   class="group flex items-center gap-3 py-2.5 hover:text-slate-900 transition-colors">
+                  <span class="material-symbols-outlined text-lg text-slate-500 group-hover:text-slate-700">school</span>
+                  <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900 flex-1">시험 대비</span>
+                  <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-indigo-100 text-indigo-700">NEW</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 우측: 인증 + 모바일 버튼 -->
+      <div class="flex items-center gap-3">
+        <!-- 데스크탑 인증 -->
+        <div class="hidden lg:flex items-center gap-3">
+          <% if user_signed_in? %>
+            <%= link_to mypage_path, class: "flex items-center gap-1.5 text-slate-600 hover:text-slate-900 font-medium transition-colors text-sm" do %>
+              <span class="material-symbols-outlined text-xl">account_circle</span>마이페이지
+            <% end %>
+            <%= button_to "로그아웃", destroy_user_session_path, method: :delete, form: { data: { turbo: false } }, class: "btn btn-ghost btn-sm" %>
+          <% else %>
+            <%= link_to "로그인", new_user_session_path, class: "text-sm text-slate-600 hover:text-slate-900 font-medium transition-colors" %>
+            <%= link_to "무료 가입", new_user_registration_path, class: "btn btn-primary btn-sm" %>
+          <% end %>
+        </div>
+        <!-- 모바일 햄버거 -->
+        <button type="button"
+                class="lg:hidden p-2.5 text-slate-600 hover:text-slate-900 hover:bg-gray-100 rounded-xl transition-colors"
+                data-action="click->dropdown-nav#toggle"
+                data-dropdown-key="mobile"
+                id="mobile-menu-btn">
+          <span class="material-symbols-outlined text-2xl">menu</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 모바일 메뉴 패널 -->
+  <div class="lg:hidden hidden"
+       data-dropdown-nav-target="panel"
+       data-dropdown-key="mobile">
+    <div class="px-4 py-3 space-y-0.5 bg-white border-t border-gray-100">
+      <% mobile_base = "flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors text-sm" %>
+      <% mobile_normal = "#{mobile_base} text-slate-700 hover:bg-gray-50" %>
+      <% mobile_active  = "#{mobile_base} text-indigo-600 bg-indigo-50 font-semibold" %>
+
+      <%# 법령가이드 아코디언 %>
+      <div>
+        <button type="button"
+                class="<%= request.path.start_with?('/topics') ? mobile_active : mobile_normal %> w-full justify-between"
+                data-action="click->dropdown-nav#toggle"
+                data-dropdown-key="mobile-topics">
+          <span class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-lg">library_books</span>법령가이드
+          </span>
+          <span class="material-symbols-outlined text-base transition-transform duration-200"
+                data-dropdown-nav-target="chevron"
+                data-dropdown-key="mobile-topics">expand_more</span>
+        </button>
+        <div class="hidden pl-4 pb-1"
+             data-dropdown-nav-target="panel"
+             data-dropdown-key="mobile-topics">
+          <div class="grid grid-cols-2 gap-1 pt-1">
+            <% TopicsController::CATEGORY_CONFIG.each do |key, cfg| %>
+              <%= link_to cfg[:label], topics_category_path(key),
+                    class: "flex items-center gap-2 px-3 py-2 text-sm text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" %>
+            <% end %>
+          </div>
+          <%= link_to "전체 보기 →", topics_path, class: "block px-3 py-2 text-xs text-indigo-600 font-semibold" %>
+        </div>
+      </div>
+
+      <%# 실무가이드 %>
+      <%= link_to guides_path,
+            class: (request.path.start_with?('/guides') && !request.path.start_with?('/guides/resources') ? mobile_active : mobile_normal) do %>
+        <span class="material-symbols-outlined text-lg">menu_book</span>실무가이드
+      <% end %>
+
+      <%# 도구 아코디언 %>
+      <div>
+        <button type="button"
+                class="<%= (request.path.start_with?('/tools') && !request.path.start_with?('/tools/task-calendar')) ? mobile_active : mobile_normal %> w-full justify-between"
+                data-action="click->dropdown-nav#toggle"
+                data-dropdown-key="mobile-tools">
+          <span class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-lg">construction</span>도구
+          </span>
+          <span class="material-symbols-outlined text-base transition-transform duration-200"
+                data-dropdown-nav-target="chevron"
+                data-dropdown-key="mobile-tools">expand_more</span>
+        </button>
+        <div class="hidden pl-4 pb-1"
+             data-dropdown-nav-target="panel"
+             data-dropdown-key="mobile-tools">
+          <div class="space-y-0.5 pt-1">
+            <% [
+              { title: "계약방식 결정기",  path: :contract_method_path },
+              { title: "추정가격 계산기",  path: :estimated_price_path },
+              { title: "여비 계산기",      path: :travel_calculator_path },
+              { title: "계약보증금 계산기", path: :contract_guarantee_path },
+              { title: "법정기간 계산기",  path: :legal_period_path },
+            ].each do |t| %>
+              <%= link_to t[:title], send(t[:path]),
+                    class: "block px-3 py-2 text-sm text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" %>
+            <% end %>
+            <%= link_to "전체 #{tool_count}개 도구 →", tools_path, class: "block px-3 py-2 text-xs text-indigo-600 font-semibold" %>
+          </div>
+        </div>
+      </div>
+
+      <%# 감사사례 %>
+      <%= link_to audit_cases_path,
+            class: (request.path.start_with?('/audit-cases') ? mobile_active : mobile_normal) do %>
+        <span class="material-symbols-outlined text-lg">find_in_page</span>감사사례
+      <% end %>
+
+      <%# 구분선 %>
+      <div class="h-px bg-gray-200 my-1"></div>
+
+      <%= link_to task_calendar_path, class: mobile_normal do %>
+        <span class="material-symbols-outlined text-lg">calendar_month</span>업무달력
+      <% end %>
+      <%= link_to guide_resources_path, class: mobile_normal do %>
+        <span class="material-symbols-outlined text-lg">folder_open</span>자료실
+      <% end %>
+      <%= link_to ai_assistant_path, class: mobile_normal do %>
+        <span class="material-symbols-outlined text-lg">psychology</span>AI 어시스턴트
+      <% end %>
+      <a href="https://exam.silmu.kr" target="_blank" rel="noopener" class="<%= mobile_normal %>">
+        <span class="material-symbols-outlined text-lg">school</span>시험 대비
+      </a>
+
+      <div class="h-px bg-gray-200 my-1"></div>
+
+      <% if user_signed_in? %>
+        <%= link_to mypage_path, class: mobile_normal do %>
+          <span class="material-symbols-outlined text-lg">account_circle</span>마이페이지
+        <% end %>
+        <%= button_to "로그아웃", destroy_user_session_path, method: :delete,
+              form: { data: { turbo: false } },
+              class: "w-full text-left px-4 py-3 text-slate-700 hover:bg-gray-50 rounded-xl font-medium transition-colors text-sm" %>
+      <% else %>
+        <%= link_to "로그인", new_user_session_path, class: mobile_normal %>
+        <%= link_to "무료 가입", new_user_registration_path,
+              class: "block px-4 py-3 bg-slate-800 text-white text-center rounded-xl font-semibold hover:bg-slate-900 transition-colors text-sm" %>
+      <% end %>
+    </div>
+  </div>
+</nav>

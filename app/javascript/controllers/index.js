@@ -47,6 +47,9 @@ application.register("contract-flow", ContractFlowController)
 import ToolsFilterController from "./tools_filter_controller"
 application.register("tools-filter", ToolsFilterController)
 
+import DropdownNavController from "./dropdown_nav_controller"
+application.register("dropdown-nav", DropdownNavController)
+
 // --- 무거운 컨트롤러는 별도 entrypoint로 분리 ---
 // exam_controllers.js → 모의고사 페이지에서 javascript_include_tag "exam_controllers"
 // insurance_controller.js → 보험계산기 페이지에서 javascript_include_tag "insurance_controller"

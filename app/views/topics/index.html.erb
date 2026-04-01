@@ -1,191 +1,154 @@
-<%# Created: 2026-03-02 %>
-<%# 법령 가이드 허브 페이지 — 9개 카테고리 아코디언 카드 %>
+<%# 법령 가이드 허브 — 카테고리별 토픽 직접 노출 (아코디언 제거) %>
 
 <!-- 페이지 헤더 -->
-<section class="gradient-premium text-white py-12 lg:py-16 relative overflow-hidden">
+<section class="gradient-premium text-white py-10 lg:py-12 relative overflow-hidden">
   <div class="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/3"></div>
   <div class="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/4"></div>
   <div class="container-wide relative z-10">
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
-      <div class="flex items-start gap-5">
-        <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 shadow-lg">
-          <span class="material-symbols-outlined text-4xl text-white">library_books</span>
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div class="flex items-start gap-4">
+        <div class="w-14 h-14 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 shadow-lg shrink-0">
+          <span class="material-symbols-outlined text-3xl text-white">library_books</span>
         </div>
         <div>
-          <h1 class="text-3xl lg:text-4xl font-bold tracking-tight mb-2">법령 가이드</h1>
-          <p class="text-white/80 text-lg">주요 법령을 법률→시행령→규칙 체계로 쉽게 정리</p>
+          <h1 class="text-2xl lg:text-3xl font-bold tracking-tight mb-1">법령 가이드</h1>
+          <p class="text-white/80 text-sm">주요 법령을 법률→시행령→규칙 체계로 쉽게 정리 — 총 <%= @total_count %>개 법령</p>
         </div>
       </div>
-      <div class="flex gap-4 lg:gap-6">
-        <div class="text-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/15">
-          <div class="text-2xl font-bold"><%= @total_count %></div>
-          <div class="text-xs text-white/70 mt-0.5">전체 법령</div>
-        </div>
-        <div class="text-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/15">
-          <div class="text-2xl font-bold"><%= @hub_categories.size %></div>
-          <div class="text-xs text-white/70 mt-0.5">분야</div>
-        </div>
-      </div>
+      <!-- 검색 바로가기 -->
+      <%= link_to silmu_search_path, class: "shrink-0 hidden sm:inline-flex items-center gap-2 px-4 py-2 bg-white/15 hover:bg-white/25 text-white text-sm font-medium rounded-xl border border-white/20 transition-colors" do %>
+        <span class="material-symbols-outlined text-base">search</span>법령 검색
+      <% end %>
     </div>
   </div>
 </section>
 
-<!-- 카테고리 아코디언 그리드 -->
-<section class="py-10 bg-background-light min-h-screen">
+<!-- 카테고리 탭 + 토픽 목록 -->
+<section class="py-8 bg-background-light min-h-screen" data-controller="tabs">
   <div class="container-wide">
-    <!-- 처음 오셨나요? 시작 안내 배너 -->
-    <div class="mb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-2xl bg-gradient-to-r from-indigo-50 to-violet-50 border border-indigo-100 px-5 py-4">
+
+    <!-- 안내 배너 — 계약흐름도 -->
+    <div class="mb-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 rounded-2xl bg-gradient-to-r from-indigo-50 to-violet-50 border border-indigo-100 px-4 py-3.5">
       <div class="flex items-center gap-3">
-        <div class="shrink-0 w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center">
-          <span class="material-symbols-outlined text-indigo-600 text-xl">route</span>
+        <div class="shrink-0 w-9 h-9 rounded-xl bg-indigo-100 flex items-center justify-center">
+          <span class="material-symbols-outlined text-indigo-600 text-lg">route</span>
         </div>
         <div>
           <p class="text-sm font-bold text-slate-800">계약업무가 처음이라면 — 전체 흐름부터 확인하세요</p>
-          <p class="text-xs text-slate-500 mt-0.5">사업계획 → 견적·입찰 → 계약체결 → 검수 → 대금지급 순서로 이루어집니다</p>
+          <p class="text-xs text-slate-500 mt-0.5">사업계획 → 견적·입찰 → 계약체결 → 검수 → 대금지급 순서</p>
         </div>
       </div>
-      <%= link_to contract_flow_path, class: "shrink-0 inline-flex items-center gap-1 px-4 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition-colors" do %>
-        계약 흐름도 보기 <span class="material-symbols-outlined text-base">arrow_forward</span>
+      <%= link_to contract_flow_path, class: "shrink-0 inline-flex items-center gap-1 px-3.5 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition-colors" do %>
+        계약 흐름도 <span class="material-symbols-outlined text-base">arrow_forward</span>
       <% end %>
     </div>
 
-    <!-- 도구 허브 배너 -->
-    <div class="mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-100 px-5 py-4">
+    <!-- 카테고리 탭 (가로 스크롤) -->
+    <div class="flex gap-2 overflow-x-auto pb-2 mb-6 scrollbar-hide -mx-4 px-4 lg:mx-0 lg:px-0 lg:flex-wrap">
+      <% @hub_categories.each_with_index do |cat, i| %>
+        <% key = cat[:key]; cfg = cat[:cfg]; color = cfg[:color] %>
+        <button type="button"
+                data-tabs-target="tab"
+                data-tab="<%= key %>"
+                data-action="click->tabs#show"
+                class="shrink-0 flex items-center gap-2 px-3.5 py-2 rounded-xl text-sm font-semibold transition-colors whitespace-nowrap
+                       <%= i == 0 ? 'text-indigo-600 border-b-2 border-indigo-600 bg-indigo-50' : 'text-gray-500 hover:text-gray-700 bg-white border border-slate-200 hover:border-slate-300' %>">
+          <span class="material-symbols-outlined text-base"><%= cfg[:icon] %></span>
+          <%= cfg[:label] %>
+          <span class="text-xs font-normal opacity-70"><%= cat[:count] %></span>
+        </button>
+      <% end %>
+    </div>
+
+    <!-- 카테고리별 토픽 패널 -->
+    <% @hub_categories.each_with_index do |cat, i| %>
+      <% key = cat[:key]; cfg = cat[:cfg]; color = cfg[:color] %>
+
+      <div data-tabs-target="panel"
+           data-tab="<%= key %>"
+           class="<%= i == 0 ? '' : 'hidden' %>">
+
+        <!-- 카테고리 설명 헤더 -->
+        <div class="flex items-start gap-3 mb-5 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm">
+          <div class="shrink-0 w-10 h-10 rounded-xl flex items-center justify-center <%= tc(color, :icon_sm) %>">
+            <span class="material-symbols-outlined text-xl"><%= cfg[:icon] %></span>
+          </div>
+          <div class="flex-1 min-w-0">
+            <h2 class="text-base font-bold text-slate-900 mb-0.5"><%= cfg[:label] %></h2>
+            <p class="text-sm text-slate-500 leading-relaxed"><%= cfg[:desc] %></p>
+          </div>
+          <% if cat[:flowchart_count] > 0 || cat[:tool_count] > 0 %>
+            <div class="shrink-0 flex flex-col gap-1 items-end">
+              <% if cat[:flowchart_count] > 0 %>
+                <span class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-md bg-violet-50 text-violet-600 text-xs font-medium">
+                  <span class="material-symbols-outlined text-xs leading-none">account_tree</span>플로차트 <%= cat[:flowchart_count] %>
+                </span>
+              <% end %>
+              <% if cat[:tool_count] > 0 %>
+                <span class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-600 text-xs font-medium">
+                  <span class="material-symbols-outlined text-xs leading-none">build</span>도구 <%= cat[:tool_count] %>
+                </span>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+
+        <!-- 토픽 목록 — 서무실록 스타일 (아이콘+제목 1줄) -->
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden divide-y divide-slate-50">
+          <% cat[:topics].each do |topic| %>
+            <% topic_icon = TopicsController::TOPIC_ICONS[topic.slug] || cfg[:icon] %>
+            <% t_has_flow = TopicsController::FLOWCHART_SLUGS.include?(topic.slug) %>
+            <% t_tool_cnt = (TopicsController::TOPIC_TOOLS[topic.slug] || []).size %>
+            <%= link_to topic_path(topic.slug),
+                  class: "group flex items-center gap-3 px-5 py-3.5 hover:bg-slate-50 transition-colors" do %>
+              <div class="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center <%= tc(color, :icon_sm) %> opacity-80 group-hover:opacity-100 transition-opacity">
+                <span class="material-symbols-outlined text-base"><%= topic_icon %></span>
+              </div>
+              <span class="flex-1 text-sm font-medium text-slate-700 group-hover:text-slate-900 leading-snug"><%= topic.name %></span>
+              <div class="shrink-0 flex items-center gap-1.5">
+                <% if t_has_flow %>
+                  <span class="hidden sm:inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-violet-50 text-violet-500 text-xs">
+                    <span class="material-symbols-outlined text-xs leading-none">account_tree</span>플로차트
+                  </span>
+                <% end %>
+                <% if t_tool_cnt > 0 %>
+                  <span class="hidden sm:inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-600 text-xs">
+                    <span class="material-symbols-outlined text-xs leading-none">build</span>도구
+                  </span>
+                <% end %>
+                <span class="material-symbols-outlined text-slate-300 group-hover:text-slate-500 text-base">chevron_right</span>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+
+        <!-- 카테고리 전체 보기 링크 -->
+        <div class="mt-4 text-center">
+          <%= link_to topics_category_path(key),
+                class: "inline-flex items-center gap-1 text-sm font-semibold text-indigo-600 hover:text-indigo-700 transition-colors" do %>
+            <%= cfg[:label] %> 전체 <%= cat[:count] %>개 보기
+            <span class="material-symbols-outlined text-base">arrow_forward</span>
+          <% end %>
+        </div>
+
+      </div>
+    <% end %>
+
+    <!-- 도구 연결 배너 -->
+    <div class="mt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-100 px-4 py-3.5">
       <div class="flex items-center gap-3">
-        <div class="shrink-0 w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center">
-          <span class="material-symbols-outlined text-emerald-600 text-xl">calculate</span>
+        <div class="shrink-0 w-9 h-9 rounded-xl bg-emerald-100 flex items-center justify-center">
+          <span class="material-symbols-outlined text-emerald-600 text-lg">calculate</span>
         </div>
         <div>
-          <p class="text-sm font-bold text-slate-800">자동화 도구 <%= ApplicationHelper::ACTIVE_TOOL_COUNT %>개 — 법령 가이드와 함께 바로 활용하세요</p>
-          <p class="text-xs text-slate-500 mt-0.5">계약방식 결정, 추정가격 계산, 여비계산 등 실무 도구 모음</p>
+          <p class="text-sm font-bold text-slate-800">법령 가이드와 함께 실무 도구 <%= ApplicationHelper::ACTIVE_TOOL_COUNT %>개를 바로 활용하세요</p>
+          <p class="text-xs text-slate-500 mt-0.5">계약방식 결정, 추정가격 계산, 여비계산 등 자동화 도구 모음</p>
         </div>
       </div>
-      <%= link_to tools_path, class: "shrink-0 inline-flex items-center gap-1 px-4 py-2 rounded-xl bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700 transition-colors" do %>
+      <%= link_to tools_path, class: "shrink-0 inline-flex items-center gap-1 px-3.5 py-2 rounded-xl bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700 transition-colors" do %>
         도구 보기 <span class="material-symbols-outlined text-base">arrow_forward</span>
       <% end %>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <% @hub_categories.each do |cat| %>
-        <% key = cat[:key]; cfg = cat[:cfg]; color = cfg[:color] %>
-        <div class="flex flex-col rounded-2xl bg-white shadow-sm border border-slate-100 transition-shadow hover:shadow-lg <%= tc(color, :hub_border) %>"
-             data-accordion="<%= key %>">
-
-          <!-- 카드 헤더 (클릭으로 펼치기/접기) -->
-          <button type="button"
-                  class="flex flex-col p-6 text-left w-full"
-                  aria-expanded="false"
-                  onclick="silmuToggle('<%= key %>')">
-
-            <!-- 아이콘 + 카테고리명 + 뱃지 -->
-            <div class="flex items-center gap-3 mb-3 w-full">
-              <div class="shrink-0 w-11 h-11 rounded-xl flex items-center justify-center transition-colors <%= tc(color, :icon_sm) %>">
-                <span class="material-symbols-outlined text-xl"><%= cfg[:icon] %></span>
-              </div>
-              <h2 class="text-lg font-bold text-slate-900 transition-colors <%= tc(color, :hub_title) %>"><%= cfg[:label] %></h2>
-              <span class="ml-auto text-xs font-semibold px-2.5 py-1 rounded-full <%= tc(color, :hub_count) %>"><%= cat[:count] %>개</span>
-            </div>
-
-            <!-- 설명 -->
-            <p class="text-sm text-slate-500 leading-relaxed mb-3 text-left"><%= cfg[:desc] %></p>
-
-            <!-- 실무 자산 뱃지 -->
-            <% if cat[:flowchart_count] > 0 || cat[:tool_count] > 0 %>
-              <div class="flex flex-wrap gap-1.5 mb-2">
-                <% if cat[:flowchart_count] > 0 %>
-                  <span class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-md bg-violet-50 text-violet-600 text-xs font-medium">
-                    <span class="material-symbols-outlined text-sm leading-none">account_tree</span>플로차트 <%= cat[:flowchart_count] %>개
-                  </span>
-                <% end %>
-                <% if cat[:tool_count] > 0 %>
-                  <span class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-600 text-xs font-medium">
-                    <span class="material-symbols-outlined text-sm leading-none">build</span>도구 <%= cat[:tool_count] %>개 연결
-                  </span>
-                <% end %>
-              </div>
-            <% end %>
-
-            <!-- 대표 토픽 미리보기 태그 -->
-            <div class="flex flex-wrap gap-1.5 mb-4">
-              <% cat[:preview].each do |topic| %>
-                <span class="px-2.5 py-1 bg-slate-50 border border-slate-100 rounded-lg text-xs text-slate-500 leading-none"><%= topic.name %></span>
-              <% end %>
-              <% if cat[:count] > 3 %>
-                <span class="px-2.5 py-1 bg-slate-50 border border-slate-100 rounded-lg text-xs text-slate-400 leading-none">+<%= cat[:count] - 3 %>개 더</span>
-              <% end %>
-            </div>
-
-            <!-- 펼치기 버튼 -->
-            <div class="mt-auto flex items-center justify-between w-full">
-              <span class="text-sm font-medium transition-colors <%= tc(color, :hub_link) %>"
-                    data-label="<%= key %>">목록 펼치기</span>
-              <span class="material-symbols-outlined text-lg transition-transform duration-200 <%= tc(color, :hub_arrow) %>"
-                    data-chevron="<%= key %>">expand_more</span>
-            </div>
-          </button>
-
-          <!-- 펼쳐지는 토픽 목록 패널 -->
-          <div id="panel-<%= key %>"
-               class="hidden border-t border-slate-100 px-4 pb-4">
-            <div class="pt-3 flex flex-col gap-1">
-              <% cat[:topics].each do |topic| %>
-                <% topic_icon = TopicsController::TOPIC_ICONS[topic.slug] || cfg[:icon] %>
-                <% t_has_flow = TopicsController::FLOWCHART_SLUGS.include?(topic.slug) %>
-                <% t_tool_cnt = (TopicsController::TOPIC_TOOLS[topic.slug] || []).size %>
-                <%= link_to topic_path(topic.slug),
-                    class: "group flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition-colors" do %>
-                  <div class="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center <%= tc(color, :icon_sm) %> opacity-80 group-hover:opacity-100 transition-opacity">
-                    <span class="material-symbols-outlined text-base"><%= topic_icon %></span>
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900 leading-snug"><%= topic.name %></span>
-                    <% if t_has_flow || t_tool_cnt > 0 %>
-                      <div class="flex gap-1 mt-0.5">
-                        <% if t_has_flow %>
-                          <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-violet-50 text-violet-500 text-xs">
-                            <span class="material-symbols-outlined text-xs leading-none">account_tree</span>플로차트
-                          </span>
-                        <% end %>
-                        <% if t_tool_cnt > 0 %>
-                          <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-600 text-xs">
-                            <span class="material-symbols-outlined text-xs leading-none">build</span>도구
-                          </span>
-                        <% end %>
-                      </div>
-                    <% end %>
-                  </div>
-                  <span class="material-symbols-outlined text-slate-300 group-hover:text-slate-500 text-base shrink-0">chevron_right</span>
-                <% end %>
-              <% end %>
-            </div>
-          </div>
-
-        </div>
-      <% end %>
-    </div>
   </div>
 </section>
-
-<script>
-  function silmuToggle(key) {
-    var panel = document.getElementById('panel-' + key);
-    var chevron = document.querySelector('[data-chevron="' + key + '"]');
-    var label = document.querySelector('[data-label="' + key + '"]');
-    var btn = document.querySelector('[data-accordion="' + key + '"] button');
-    var isOpen = btn.getAttribute('aria-expanded') === 'true';
-
-    if (isOpen) {
-      btn.setAttribute('aria-expanded', 'false');
-      panel.classList.add('hidden');
-      chevron.style.transform = '';
-      label.textContent = '목록 펼치기';
-    } else {
-      btn.setAttribute('aria-expanded', 'true');
-      panel.classList.remove('hidden');
-      chevron.style.transform = 'rotate(180deg)';
-      label.textContent = '접기';
-    }
-  }
-
-  // Turbo 내비게이션 후에도 스크립트 재등록 불필요 (인라인 onclick)
-</script>
