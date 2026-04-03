@@ -1,0 +1,17 @@
+# Trivy 허용 예외 목록
+# 형식: CVE-ID   # 사유 (날짜)
+
+# ── OS 레벨 (Debian 12 베이스 이미지) — 패치 없음 (will_not_fix / affected) ──
+CVE-2023-45853   # zlib minizip 정수 오버플로 — Debian will_not_fix (2026-04-03)
+CVE-2026-25971   # ImageMagick DoS — Debian will_not_fix (2026-04-03)
+CVE-2026-26284   # ImageMagick OOB read — Debian affected, 패치 없음 (2026-04-03)
+CVE-2023-6879    # libaom3 heap-buffer-overflow — 패치 없음 (2026-04-03)
+CVE-2023-5841    # OpenEXR heap overflow — Debian 패치 없음 (2026-04-03)
+CVE-2025-7458    # SQLite 정수 오버플로 — 패치 없음 (2026-04-03)
+CVE-2025-15467   # OpenSSL RCE/DoS — 패치 없음 (2026-04-03)
+CVE-2026-23112   # linux-libc-dev 커널 헤더 — 컨테이너 내 비실행, 낮은 위험 (2026-04-03)
+
+CVE-2025-68121   # Go stdlib crypto/tls — 이미지 내 번들 Go 바이너리, Rails 앱 미사용 경로 (2026-04-03)
+
+# ── 테스트 픽스처 오탐 (false positive) ──
+# capybara gem spec/fixtures/key.pem — SSL 테스트용 더미 RSA 키, 실제 시크릿 아님

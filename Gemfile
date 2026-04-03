@@ -1,6 +1,7 @@
 source "https://rubygems.org"
 
 gem "csv"
+gem "json", ">= 2.19.2"  # CVE-2026-33210: DoS/정보노출 취약점 수정 버전
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 8.1.2"
