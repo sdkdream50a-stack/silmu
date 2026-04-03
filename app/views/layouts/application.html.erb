@@ -203,10 +203,6 @@
       </script>
     <% end %>
 
-    <%# AdSense — guides, tools, topics, audit_cases 페이지 조건부 로드 %>
-    <% if Rails.env.production? && %w[guides tools topics audit_cases].include?(params[:controller]) %>
-      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6241798439911569" crossorigin="anonymous"></script>
-    <% end %>
 
     <% if Rails.env.production? && Rails.application.credentials.clarity_project_id.present? %>
       <!-- Microsoft Clarity - 지연 로딩 -->

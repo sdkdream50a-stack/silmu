@@ -8,9 +8,6 @@
     <meta name="theme-color" content="#1d4ed8">
     <meta name="google-site-verification" content="4f2zo86zRxW5JBhdwgpDx16xvZKaC_QBDsBXvcb8xRc" />
     <meta name="naver-site-verification" content="35e0ac97eb0b5463fb23f269f08bbcc729e81d77" />
-    <% if Rails.env.production? %>
-      <meta name="google-adsense-account" content="ca-pub-6241798439911569">
-    <% end %>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -73,17 +70,6 @@
       </script>
     <% end %>
 
-    <% if Rails.env.production? %>
-      <script>
-        function loadAdSense() {
-          const script = document.createElement('script');
-          script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6241798439911569';
-          script.async = true; script.crossOrigin = 'anonymous'; document.head.appendChild(script);
-        }
-        if ('requestIdleCallback' in window) { requestIdleCallback(loadAdSense, { timeout: 2000 }); }
-        else { setTimeout(loadAdSense, 2000); }
-      </script>
-    <% end %>
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "application.tailwind", "data-turbo-track": "reload" %>
