@@ -13,5 +13,12 @@ CVE-2026-23112   # linux-libc-dev 커널 헤더 — 컨테이너 내 비실행, 
 
 CVE-2025-68121   # Go stdlib crypto/tls — 이미지 내 번들 Go 바이너리, Rails 앱 미사용 경로 (2026-04-03)
 
+# ── Python venv 패키지 (pip, Rails 앱과 무관) ──
+CVE-2024-6345   # setuptools 원격코드실행 — hwpx 생성용 venv, 외부 입력 pip install 없음 (2026-04-06)
+
+# ── Go stdlib (이미지 내 번들 바이너리) ──
+CVE-2025-61726  # golang net/url 메모리 고갈 — Rails 앱 미사용 경로, 번들 Go 바이너리 (2026-04-06)
+
 # ── 테스트 픽스처 오탐 (false positive) ──
 # capybara gem spec/fixtures/key.pem — SSL 테스트용 더미 RSA 키, 실제 시크릿 아님
+private-key     # capybara 테스트 픽스처 RSA 키 — 실제 시크릿 아님 (2026-04-06)
