@@ -3,7 +3,7 @@ class SeoMailer < ApplicationMailer
 
   def weekly_report(report)
     @report = report
-    @date = Date.today
+    @date = Time.zone.today
 
     mail(
       to: ENV['ADMIN_EMAIL'] || 'hello@silmu.kr',
@@ -13,7 +13,7 @@ class SeoMailer < ApplicationMailer
 
   def monthly_performance(report)
     @report = report
-    @date = Date.today
+    @date = Time.zone.today
 
     mail(
       to: ENV['ADMIN_EMAIL'] || 'hello@silmu.kr',
@@ -23,7 +23,7 @@ class SeoMailer < ApplicationMailer
 
   def broken_links_alert(broken_links)
     @broken_links = broken_links
-    @date = Date.today
+    @date = Time.zone.today
 
     mail(
       to: ENV['ADMIN_EMAIL'] || 'hello@silmu.kr',

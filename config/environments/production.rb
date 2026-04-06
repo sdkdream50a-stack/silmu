@@ -81,12 +81,12 @@ Rails.application.configure do
   # Only use :id for inspections in production.
   config.active_record.attributes_for_inspect = [ :id ]
 
-  # Enable DNS rebinding protection and other `Host` header attacks.
-  # config.hosts = [
-  #   "example.com",     # Allow requests from example.com
-  #   /.*\.example\.com/ # Allow requests from subdomains like `www.example.com`
-  # ]
-  #
-  # Skip DNS rebinding protection for the default health check endpoint.
-  # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+  # DNS 리바인딩 공격 방지 — Host 헤더 검증
+  config.hosts = [
+    "silmu.kr",
+    "www.silmu.kr",
+    "exam.silmu.kr",
+    /.*\.silmu\.kr/
+  ]
+  config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
 end

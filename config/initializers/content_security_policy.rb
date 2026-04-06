@@ -11,19 +11,28 @@ Rails.application.configure do
                        "cdn.jsdelivr.net",
                        "fonts.gstatic.com",
                        "fonts.googleapis.com"
-    policy.img_src     :self, :https, :data, :blob
+    policy.img_src     :self, :https, :data, :blob,
+                       "www.google-analytics.com",
+                       "www.clarity.ms"
     policy.object_src  :none
     policy.script_src  :self, :unsafe_inline,
                        "cdn.sheetjs.com",
                        "cdnjs.cloudflare.com",
-                       "unpkg.com"
+                       "unpkg.com",
+                       "code.iconify.design",
+                       "www.googletagmanager.com",
+                       "www.clarity.ms",
+                       "t1.kakaocdn.net"
     policy.style_src   :self, :unsafe_inline,
                        "cdn.jsdelivr.net",
                        "fonts.googleapis.com"
-    policy.connect_src :self, :https
+    policy.connect_src :self, :https,
+                       "www.google-analytics.com",
+                       "region1.analytics.google.com",
+                       "www.clarity.ms"
     policy.frame_ancestors :none
   end
 
-  # Report violations without enforcing the policy (안전하게 먼저 모니터링).
-  config.content_security_policy_report_only = true
+  # CSP 강제 적용 모드 (enforce)
+  config.content_security_policy_report_only = false
 end

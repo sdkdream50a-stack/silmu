@@ -107,7 +107,7 @@ class OfficialDocumentService
   def build_user_message
     type_label = DOC_TYPES[@doc_type] || @doc_type
     tone_label = TONE_LABELS[@tone] || "일반"
-    today = Date.today.strftime("%Y. %-m. %-d.")
+    today = Time.zone.today.strftime("%Y. %-m. %-d.")
 
     msg = "다음 정보로 #{type_label}을(를) 작성해주세요.\n\n"
     msg += "- 문서 유형: #{type_label}\n"

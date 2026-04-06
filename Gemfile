@@ -97,3 +97,7 @@ gem "whenever", require: false  # Cron job 관리
 
 # ========== Google Analytics ==========
 gem "google-analytics-data"  # GA4 Data API v1
+
+# ========== 에러 모니터링 ==========
+gem "sentry-ruby"
+gem "sentry-rails"
