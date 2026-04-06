@@ -14,8 +14,9 @@ FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
 # Rails app lives here
 WORKDIR /rails
 
-# Install base packages
+# Install base packages (upgrade first to patch OS-level CVEs)
 RUN apt-get update -qq && \
+    apt-get upgrade -y --no-install-recommends && \
     apt-get install --no-install-recommends -y curl libjemalloc2 libvips postgresql-client \
     python3 python3-venv python3-pip && \
     ln -s /usr/lib/$(uname -m)-linux-gnu/libjemalloc.so.2 /usr/local/lib/libjemalloc.so && \
