@@ -75,7 +75,7 @@ gem "devise", "~> 4.9"
 gem "omniauth-kakao"
 gem "omniauth-naver"
 gem "omniauth-rails_csrf_protection"
-gem "pagy", "~> 6.0"
+gem "pagy", "~> 43.4"
 gem "meta-tags", "~> 2.18"
 gem "dotenv-rails", groups: [:development, :test]
 gem "heroicon", "~> 1.0"
