@@ -25,7 +25,7 @@ RUN apt-get update -qq && \
 # python-hwpx 가상환경 설치 (HWP/HWPX 문서 생성용)
 # lxml: hwpx-skill XML 템플릿 방식 지원 (품질 향상)
 RUN python3 -m venv /opt/hwpx-venv && \
-    /opt/hwpx-venv/bin/pip install --no-cache-dir python-hwpx lxml
+    /opt/hwpx-venv/bin/pip install --no-cache-dir "setuptools>=78.1.1" python-hwpx lxml
 
 # Set production environment variables and enable jemalloc for reduced memory usage and latency.
 ENV RAILS_ENV="production" \
