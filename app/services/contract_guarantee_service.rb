@@ -6,7 +6,7 @@ class ContractGuaranteeService
     construction: { name: "공사 계약", rate: 0.10, note: "계약금액의 10% 이상 (이행보증서 제출 가능)" },
     service: { name: "용역 계약", rate: 0.10, note: "계약금액의 10% 이상" },
     lease: { name: "임대차 계약", rate: 0.05, note: "계약금액의 5% 이상" },
-    small_private: { name: "소액수의계약 (3천만원 이하)", rate: 0.0, note: "면제 가능 (지방계약법 시행규칙 제39조)" }
+    small_private: { name: "소액계약 (5천만원 이하)", rate: 0.0, note: "면제 가능 (지방계약법 시행령 제53조)" }
   }.freeze
 
   # 하자보수보증금률 (지방계약법 시행규칙 제70조)

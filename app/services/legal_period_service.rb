@@ -30,11 +30,15 @@ class LegalPeriodService
     }
   }.freeze
 
-  # 입찰공고기간 (일)
+  # 입찰공고기간 (일) — 지방계약법 시행령 제35조
+  # 고시금액(WTO 기준): 공사 265억원 (행정안전부 고시)
+  ANNOUNCEMENT_THRESHOLD = 26_500_000_000 # 265억원
+
   ANNOUNCEMENT_PERIODS = [
     { label: "10억 미만", min: 0, max: 1_000_000_000, days: 7 },
     { label: "10억 ~ 50억 미만", min: 1_000_000_000, max: 5_000_000_000, days: 15 },
-    { label: "50억 이상", min: 5_000_000_000, max: Float::INFINITY, days: 40 }
+    { label: "50억 ~ 265억 미만", min: 5_000_000_000, max: ANNOUNCEMENT_THRESHOLD, days: 30 },
+    { label: "265억(고시금액) 이상", min: ANNOUNCEMENT_THRESHOLD, max: Float::INFINITY, days: 40 }
   ].freeze
 
   ANNOUNCEMENT_URGENT_DAYS = 5
