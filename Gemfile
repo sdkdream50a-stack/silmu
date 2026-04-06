@@ -71,7 +71,7 @@ end
 
 # ========== silmu 추가 ==========
 gem "rack-attack"
-gem "devise", "~> 4.9"
+gem "devise", "~> 5.0"
 gem "omniauth-kakao"
 gem "omniauth-naver"
 gem "omniauth-rails_csrf_protection"
