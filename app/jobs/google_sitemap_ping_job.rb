@@ -1,29 +1,12 @@
-# Google Sitemap Ping API
-# Google은 IndexNow를 지원하지 않으므로 별도 ping 엔드포인트 사용
-# https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap#addsitemap
+# Google Sitemap Ping — 2024년 폐지됨
+# 대안: Google Search Console API (서비스 계정) 또는 IndexNow (Bing/Naver/Yandex만)
+# 이 Job은 IndexNow 보충 ping으로 전환 — Google은 GSC에서 자동 크롤링에 의존
 class GoogleSitemapPingJob < ApplicationJob
   queue_as :default
 
+  # IndexNow로 최근 변경 URL 제출 (Google Ping API 폐지 대안)
   def perform
-    require "net/http"
-
-    SitemapPingJob::SITEMAP_URLS.each do |sitemap_url|
-      ping_google(sitemap_url)
-    end
-  end
-
-  private
-
-  def ping_google(sitemap_url)
-    uri = URI("https://www.google.com/ping")
-    uri.query = URI.encode_www_form(sitemap: sitemap_url)
-    http = Net::HTTP.new(uri.host, 443)
-    http.use_ssl = true
-    http.open_timeout = 10
-    http.read_timeout = 10
-    response = http.request(Net::HTTP::Get.new(uri.request_uri))
-    Rails.logger.info "[GooglePing] #{sitemap_url}: #{response.code}"
-  rescue => e
-    Rails.logger.error "[GooglePing] #{sitemap_url} 실패: #{e.message}"
+    Rails.logger.info "[SitemapPing] Google Ping API 폐지 — IndexNow 보충 실행"
+    SitemapPingJob.perform_later
   end
 end
