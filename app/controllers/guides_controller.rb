@@ -60,7 +60,16 @@ class GuidesController < ApplicationController
   end
 
   def show
-    @guide = Guide.published.find_by!(slug: params[:slug])
+    @guide = Guide.published.find_by(slug: params[:slug])
+
+    unless @guide
+      new_slug = SlugRedirect.resolve(params[:slug], "Guide")
+      if new_slug
+        redirect_to guide_path(new_slug), status: :moved_permanently
+        return
+      end
+      raise ActiveRecord::RecordNotFound
+    end
 
     # full content 없이 external_link만 있는 가이드는 해당 페이지로 리디렉트
     if @guide.external_link.present? && !@guide.has_full_content?

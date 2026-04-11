@@ -91,7 +91,17 @@ class TopicsController < ApplicationController
 
   def show
     # parent를 미리 로드하여 @topic.parent 접근 시 추가 쿼리 방지
-    @topic = Topic.includes(:parent).find_by!(slug: params[:slug])
+    @topic = Topic.includes(:parent).find_by(slug: params[:slug])
+
+    # 슬러그 변경된 경우 301 리디렉션 (Search Console 404 해소)
+    unless @topic
+      new_slug = SlugRedirect.resolve(params[:slug], "Topic")
+      if new_slug
+        redirect_to topic_path(new_slug), status: :moved_permanently
+        return
+      end
+      raise ActiveRecord::RecordNotFound
+    end
     @topic.increment_view!
     # 같은 카테고리의 다른 토픽 (현재 토픽 제외, 최대 6개)
     @related_topics = Rails.cache.fetch("topic_related_list/#{@topic.slug}", expires_in: 1.hour) do

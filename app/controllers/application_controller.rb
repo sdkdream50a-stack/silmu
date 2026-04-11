@@ -2,11 +2,23 @@ class ApplicationController < ActionController::Base
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern
 
+  # 글로벌 에러 핸들링 — 5xx → 적절한 4xx 응답으로 전환 (Search Console 5xx 오류 해소)
+  rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
+  rescue_from ActionController::RoutingError, with: :render_not_found
+
   before_action :set_default_meta_tags
   before_action :capture_utm_params
   before_action :configure_permitted_parameters, if: :devise_controller?
 
   private
+
+  def render_not_found
+    respond_to do |format|
+      format.html { render file: Rails.public_path.join("404.html"), status: :not_found, layout: false }
+      format.json { render json: { error: "Not Found" }, status: :not_found }
+      format.any  { head :not_found }
+    end
+  end
 
   def require_login_for_ai
     return if current_user

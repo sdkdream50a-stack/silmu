@@ -78,7 +78,16 @@ class AuditCasesController < ApplicationController
   end
 
   def show
-    @audit_case = AuditCase.published.find_by!(slug: params[:slug])
+    @audit_case = AuditCase.published.find_by(slug: params[:slug])
+
+    unless @audit_case
+      new_slug = SlugRedirect.resolve(params[:slug], "AuditCase")
+      if new_slug
+        redirect_to audit_case_path(new_slug), status: :moved_permanently
+        return
+      end
+      raise ActiveRecord::RecordNotFound
+    end
     @audit_case.increment_view!
     @related_topic = Rails.cache.fetch("audit_case_topic/#{@audit_case.slug}", expires_in: 1.hour) do
       @audit_case.related_topic

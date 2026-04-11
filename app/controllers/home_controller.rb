@@ -93,6 +93,11 @@ class HomeController < ApplicationController
       scope.order(created_at: :desc).limit(3).to_a
     end
 
+    # 인기 가이드 (전체 sector 공통, 조회수 상위 6개)
+    @popular_guides = Rails.cache.fetch("home/popular_guides/v1", expires_in: 6.hours) do
+      Guide.published.where("view_count > 0").order(view_count: :desc).limit(6).to_a
+    end
+
     # sector 쿠키 저장 (30일)
     cookies[:sector] = { value: @sector, expires: 30.days, same_site: :lax }
 

@@ -201,6 +201,11 @@ class Topic < ApplicationRecord
     Rails.cache.delete("topic_keyword_map/#{old_slug}")
     Rails.cache.delete("audit_cases/all_published_v2")
     Rails.cache.delete("guides/all")
-    Rails.logger.info "[Topic] slug 변경: #{old_slug} → #{new_slug} (연쇄 업데이트 완료)"
+    # 301 리디렉션 레코드 생성 (Search Console 404 방지)
+    SlugRedirect.upsert(
+      { old_slug: old_slug, new_slug: new_slug, resource_type: "Topic", created_at: Time.current, updated_at: Time.current },
+      unique_by: [:old_slug, :resource_type]
+    )
+    Rails.logger.info "[Topic] slug 변경: #{old_slug} → #{new_slug} (연쇄 업데이트 + 리디렉션 등록 완료)"
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_29_132029) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_11_115558) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -202,6 +202,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_29_132029) do
     t.datetime "updated_at", null: false
     t.index ["law_id"], name: "index_laws_on_law_id"
     t.index ["law_type"], name: "index_laws_on_law_type"
+  end
+
+  create_table "slug_redirects", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "new_slug", null: false
+    t.string "old_slug", null: false
+    t.string "resource_type", null: false
+    t.datetime "updated_at", null: false
+    t.index ["old_slug", "resource_type"], name: "index_slug_redirects_on_old_slug_and_resource_type", unique: true
   end
 
   create_table "task_guides", force: :cascade do |t|

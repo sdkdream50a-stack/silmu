@@ -19,10 +19,15 @@ weekly_link_check:
   args: ["links"]
   schedule: "0 15 * * 3" # 매주 수요일 15시
 
-# 매일 오전 6시 - 사이트맵 핑 (검색엔진 알림)
+# 매일 오전 6시 - 사이트맵 핑 (IndexNow + Google)
 daily_sitemap_ping:
   class: SitemapPingJob
   schedule: "0 6 * * *" # 매일 06시
+
+# 매일 오후 6시 - Google Sitemap Ping 추가 (인덱싱 촉진)
+evening_google_ping:
+  class: GoogleSitemapPingJob
+  schedule: "0 18 * * *" # 매일 18시 (Google만 별도 핑)
 
 # 법령 정합성 자동 검증
 
