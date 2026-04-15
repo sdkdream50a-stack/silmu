@@ -93,14 +93,13 @@ asset_path: /rails/public/assets
 builder:
   arch: amd64
   # Build on remote server and push to GitHub Container Registry
-  remote: ssh://root@141.164.53.97
+  remote: ssh://root@141.164.53.97:2222
   # Pass secrets to Docker build process
   secrets:
     - RAILS_MASTER_KEY
 
-# Use a different ssh user than root
-# ssh:
-#   user: app
+ssh:
+  port: 2222
 
 # Use accessory services (secrets come from .kamal/secrets).
 # accessories:
