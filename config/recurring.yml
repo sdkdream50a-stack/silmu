@@ -29,19 +29,19 @@ evening_google_ping:
   class: GoogleSitemapPingJob
   schedule: "0 18 * * *" # 매일 18시 (Google만 별도 핑)
 
-# 법령 정합성 자동 검증
+# 법령 정합성 자동 검증 (잠정 중단 2026-04-13)
 
-# 매주 월요일 오전 10시 - 법령 주간 검증
-weekly_legal_check:
-  class: LegalComplianceJob
-  args: ["check"]
-  schedule: "0 10 * * 1" # 매주 월요일 10시
+# # 매주 월요일 오전 10시 - 법령 주간 검증
+# weekly_legal_check:
+#   class: LegalComplianceJob
+#   args: ["check"]
+#   schedule: "0 10 * * 1" # 매주 월요일 10시
 
-# 매월 1일, 15일 오전 11시 - AI 심층 검증 (격주 1회)
-biweekly_legal_deep_check:
-  class: LegalComplianceJob
-  args: ["deep_check"]
-  schedule: "0 11 1,15 * *" # 매월 1일, 15일 11시 (격주)
+# # 매월 1일, 15일 오전 11시 - AI 심층 검증 (격주 1회)
+# biweekly_legal_deep_check:
+#   class: LegalComplianceJob
+#   args: ["deep_check"]
+#   schedule: "0 11 1,15 * *" # 매월 1일, 15일 11시 (격주)
 
 # 매주 화요일 오전 7시 - 법제처 API 법령 메타데이터 동기화
 weekly_law_sync:

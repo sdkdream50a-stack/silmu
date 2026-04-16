@@ -3,6 +3,7 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
+         :lockable, :timeoutable,
          :omniauthable, omniauth_providers: [ :kakao, :naver ]
 
   def self.from_omniauth(auth)

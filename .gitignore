@@ -49,3 +49,6 @@ generate_taxonomy.py
 upload_to_sheets.py
 db/development.sqlite3
 docs/*.md
+
+# GSD 프레임워크
+.planning/
