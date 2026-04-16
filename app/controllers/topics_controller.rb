@@ -157,7 +157,7 @@ class TopicsController < ApplicationController
     @active_keyword = params[:keyword]
 
     # 토픽별 관련 도구 (3단계: 도구 카드)
-    tool_keys = TOPIC_TOOLS[@topic.slug] || [:contract_method, :contract_documents]
+    tool_keys = TOPIC_TOOLS[@topic.slug] || [ :contract_method, :contract_documents ]
     @related_tools = tool_keys.map { |k| TOOL_DEFINITIONS[k]&.merge(key: k) }.compact
     @page_rendered_at = Time.current
 
@@ -236,15 +236,23 @@ class TopicsController < ApplicationController
 
   # SEO description 생성: commentary가 있으면 commentary 사용 (150자 이상 보장)
   def generate_seo_description(topic, length = 155)
-    if topic.commentary.present?
-      # commentary에서 HTML 태그 제거 후 앞부분 사용
-      ActionView::Base.full_sanitizer.sanitize(topic.commentary)
-        .gsub(/\s+/, ' ')
-        .strip
-        .truncate(length)
-    else
-      # commentary가 없으면 summary 사용
-      topic.summary.truncate(length)
-    end
+    source = topic.commentary.presence || topic.summary
+    seo_plain_text(source).truncate(length)
+  end
+
+  def seo_plain_text(text)
+    ActionView::Base.full_sanitizer.sanitize(text.to_s)
+      .gsub(/```.*?```/m, " ")
+      .gsub(/!\[([^\]]*)\]\([^)]+\)/, "\\1")
+      .gsub(/\[([^\]]+)\]\([^)]+\)/, "\\1")
+      .gsub(/^\s{0,3}\#{1,6}\s*/, "")
+      .gsub(/^\s*[-*+]\s+/, "")
+      .gsub(/\*\*([^*]+)\*\*/, "\\1")
+      .gsub(/__([^_]+)__/, "\\1")
+      .gsub(/\*([^*]+)\*/, "\\1")
+      .gsub(/_([^_]+)_/, "\\1")
+      .gsub(/[`>#~]/, "")
+      .gsub(/\s+/, " ")
+      .strip
   end
 end

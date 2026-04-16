@@ -9,7 +9,7 @@
 - 이메일: hello@silmu.kr
 - 언어: 한국어
 - 대상: 대한민국 공무원 (계약·재무 담당자)
-- 콘텐츠 수: 법령 가이드 93개, 자동화 도구 34개, 실무 서식 26종, 감사사례 155건
+- 콘텐츠 수: 법령 가이드 93개, 자동화 도구 37개, 실무 서식 26종, 감사사례 155건
 
 ## 주요 법령 근거
 - 지방자치단체를 당사자로 하는 계약에 관한 법률 (지방계약법)
@@ -64,17 +64,17 @@
 - [복수예비가격](https://silmu.kr/topics/multiple-price): 예정가격 결정을 위한 복수예비가격 작성 방법과 추첨 절차
 - [낙찰하한율](https://silmu.kr/topics/lowest-bid-rate): 낙찰하한율 기준(89.745%), 적용 방법, 2026년 변경사항
 - [비교견적서 수집 방법](https://silmu.kr/topics/quote-collection-guide): 2인 이상 견적 수집 방법, 경쟁업체 찾는 방법, 공문 예시
-- [분할발주 금지](https://silmu.kr/topics/split-order-prohibition): 분할발주 금지 원칙(지방계약법 시행령 제77조), 위반 vs 적법 사례
+- [분할계약 금지](https://silmu.kr/topics/split-contract-prohibition): 분할발주·분할계약 금지 원칙(지방계약법 시행령 제77조), 위반 vs 적법 사례
 - [예산 편성 절차](https://silmu.kr/topics/budget-compilation): 지방자치단체 예산 편성 절차(지방자치법 제127조), 시도/시군구 기한 구분
-- [적격심사 탈락 사유](https://silmu.kr/topics/bid-disqualification): 적격심사 탈락 사유와 이의신청 방법
-- [계약보증금 면제 조건](https://silmu.kr/topics/guarantee-exemption): 계약보증금 면제 요건 상세 정리
-- [수의계약 사유서 작성](https://silmu.kr/topics/private-contract-reason): 수의계약 사유서 작성 방법, 필수 기재사항, 예시
-- [물품 vs 용역 구분](https://silmu.kr/topics/goods-vs-service): 물품과 용역 구분 기준, 혼합 계약 처리 방법
-- [입찰 참가자격 제한](https://silmu.kr/topics/bid-restriction): 부정당업자 제재, 입찰 참가자격 제한 사유와 기간
+- [적격심사 탈락 사유](https://silmu.kr/topics/qualification-failure): 적격심사 탈락 사유와 이의신청 방법
+- [계약보증금 면제 조건](https://silmu.kr/topics/contract-guarantee-exemption): 계약보증금 면제 요건 상세 정리
+- [수의계약 사유서 작성](https://silmu.kr/topics/private-contract-justification): 수의계약 사유서 작성 방법, 필수 기재사항, 예시
+- [물품 vs 용역 구분](https://silmu.kr/topics/goods-vs-service-contract): 물품과 용역 구분 기준, 혼합 계약 처리 방법
+- [입찰 참가자격 제한](https://silmu.kr/topics/bid-participation-restriction): 부정당업자 제재, 입찰 참가자격 제한 사유와 기간
 - [추가 계약 한도](https://silmu.kr/topics/additional-contract-limit): 설계변경 등으로 인한 계약금액 증액 한도 기준
-- [지체상금 감면 신청](https://silmu.kr/topics/late-penalty-reduction): 지체상금 감면 사유, 신청 방법, 판단 기준
-- [계약기간 연장](https://silmu.kr/topics/contract-extension): 계약기간 연장 사유, 절차, 지체상금 면제 여부
-- [전자입찰 오류 대처](https://silmu.kr/topics/e-bid-troubleshoot): 나라장터 전자입찰 오류 유형과 대처 방법
+- [지체상금 감면 신청](https://silmu.kr/topics/penalty-reduction-procedure): 지체상금 감면 사유, 신청 방법, 판단 기준
+- [계약기간 연장](https://silmu.kr/topics/contract-period-extension): 계약기간 연장 사유, 절차, 지체상금 면제 여부
+- [전자입찰 오류 대처](https://silmu.kr/topics/e-bidding-error-faq): 나라장터 전자입찰 오류 유형과 대처 방법
 - [계약금액 조정](https://silmu.kr/topics/contract-amount-adjustment): 물가변동·설계변경·환율변동에 의한 계약금액 조정 절차
 
 ## 실무 자동화 도구 (Tools)
@@ -96,15 +96,15 @@
 - [업무 할일 달력](https://silmu.kr/tools/task-calendar): 급여·세무·보험 등 월별 반복업무 일정 관리, CSV·ICS 내보내기
 
 ## 업무 가이드 (Guides)
-- [물품 구매 및 검수 절차 가이드](https://silmu.kr/guides/1): 물품 구매부터 검수까지 전체 절차
-- [검수조서 작성 가이드](https://silmu.kr/guides/2): 물품 납품 후 검수조서 작성 방법
-- [예정가격 작성 가이드](https://silmu.kr/guides/3): 적정 예정가격 산정 방법과 절차
-- [수의계약 체결 실무 가이드](https://silmu.kr/guides/4): 수의계약 요건, 절차, 주의사항
-- [입찰 실무 가이드](https://silmu.kr/guides/9): 경쟁입찰(일반·제한·지명) 요건, 공고기간, 낙찰자 결정 절차
-- [출장 여비 청구 가이드](https://silmu.kr/guides/5): 국내/국외 출장 여비 청구 방법
-- [연가 사용 및 관리 가이드](https://silmu.kr/guides/6): 연가일수 계산과 관리 방법
-- [민원 응대 매뉴얼](https://silmu.kr/guides/7): 민원인 응대 시 주의사항과 처리 절차
-- [예산 이월 실무 가이드](https://silmu.kr/guides/8): 명시이월, 사고이월, 계속비이월 절차
+- [물품 구매 및 검수 절차 가이드](https://silmu.kr/guides/purchase-and-inspection): 물품 구매부터 검수까지 전체 절차
+- [검수조서 작성 가이드](https://silmu.kr/guides/inspection-report): 물품 납품 후 검수조서 작성 방법
+- [예정가격 작성 가이드](https://silmu.kr/guides/estimated-price): 적정 예정가격 산정 방법과 절차
+- [수의계약 체결 실무 가이드](https://silmu.kr/guides/private-contract-guide): 수의계약 요건, 절차, 주의사항
+- [입찰 실무 가이드](https://silmu.kr/guides/bidding-guide): 경쟁입찰(일반·제한·지명) 요건, 공고기간, 낙찰자 결정 절차
+- [출장 여비 청구 가이드](https://silmu.kr/guides/travel-expense-guide): 국내/국외 출장 여비 청구 방법
+- [연가 사용 및 관리 가이드](https://silmu.kr/guides/annual-leave-guide): 연가일수 계산과 관리 방법
+- [민원 응대 매뉴얼](https://silmu.kr/guides/civil-complaint-guide): 민원인 응대 시 주의사항과 처리 절차
+- [예산 이월 실무 가이드](https://silmu.kr/guides/budget-carryover-guide): 명시이월, 사고이월, 계속비이월 절차
 - [계약 흐름도](https://silmu.kr/guides/contract-flow): 계약 업무 전체 프로세스 시각화
 - [계약업무 사전 체크리스트](https://silmu.kr/guides/pre-contract-checklist): 계약 전 확인사항 체크리스트
 
@@ -131,6 +131,6 @@ Q: 대금지급 기한은?
 A: 검사 완료 후 14일 이내에 지급해야 하며, 지연 시 지연이자를 지급해야 합니다.
 
 ## 최신 업데이트
-- 갱신일: 2026-04-02
-- 콘텐츠 현황: 법령 가이드 93개, 자동화 도구 34개, 서식 26종, 감사사례 155건
+- 갱신일: 2026-04-16
+- 콘텐츠 현황: 법령 가이드 93개, 자동화 도구 37개, 서식 26종, 감사사례 155건
 - 주요 추가: 입찰오류 대응, 물품/용역 구분, 계약보증금 면제, 적격심사, 입찰참가자격 제한, 추가계약 한도, 지체상금 감면, 공기연장, 물가변동, 준공대금, 직접생산확인 등 실무 FAQ
