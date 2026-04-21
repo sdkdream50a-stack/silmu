@@ -8,7 +8,7 @@ class LlmsController < ApplicationController
     # Topic·AuditCase의 최신 updated_at을 키에 포함해 콘텐츠 갱신 시 자동 무효화
     cache_key = [
       "llms-full",
-      "v1",
+      "v2", # AEO disclaimer 포함 — 캐시 버전 bump
       Topic.published.maximum(:updated_at)&.to_i,
       AuditCase.published.maximum(:updated_at)&.to_i,
     ].join("/")
