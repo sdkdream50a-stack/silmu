@@ -55,6 +55,9 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  # 위험한 마이그레이션(remove_column, NOT NULL 추가 등)을 배포 전 감지
+  gem "strong_migrations"
 end
 
 group :development do
