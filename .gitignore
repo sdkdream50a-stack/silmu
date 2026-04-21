@@ -52,3 +52,6 @@ docs/*.md
 
 # GSD 프레임워크
 .planning/
+
+# 잉여 lockfile (yarn.lock + package-lock.json 사용 중)
+bun.lock
