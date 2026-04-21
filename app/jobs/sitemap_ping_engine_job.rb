@@ -36,7 +36,14 @@ class SitemapPingEngineJob < ApplicationJob
     }.to_json
 
     response = http.request(request)
-    response.code.to_i < 400 ? :ok : :"error_#{response.code}"
+    if response.code.to_i < 400
+      :ok
+    else
+      # 4xx/5xx 시 응답 본문 앞부분을 로깅 (엔진별 페이로드 호환 디버깅)
+      body_sample = response.body.to_s.byteslice(0, 200)
+      Rails.logger.warn "[SitemapPing] #{engine} #{host} #{response.code}: #{body_sample}"
+      :"error_#{response.code}"
+    end
   rescue => e
     Rails.logger.error "[SitemapPing] #{engine} #{host} 실패: #{e.message}"
     :error
