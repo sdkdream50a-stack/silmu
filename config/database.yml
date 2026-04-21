@@ -15,9 +15,9 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  # For details on connection pooling, see Rails configuration guide
+  # Pool = 요청 스레드 수 + 버퍼(Solid Queue IN_PUMA가 별도 DB지만 커넥션 수집 시 race 여지)
   # https://guides.rubyonrails.org/configuring.html#database-pooling
-  max_connections: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  max_connections: <%= ENV.fetch("RAILS_DB_POOL") { (ENV.fetch("RAILS_MAX_THREADS") { 5 }.to_i + 2) } %>
 
 
 development:
