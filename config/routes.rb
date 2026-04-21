@@ -1,4 +1,12 @@
 Rails.application.routes.draw do
+  # www.silmu.kr → silmu.kr 301 (HSTS preload 조건: 모든 서브도메인 응답 필수)
+  constraints host: "www.silmu.kr" do
+    get "(*path)", to: redirect { |params, req|
+      query = req.query_string.presence
+      "https://silmu.kr/#{params[:path]}#{"?#{query}" if query}"
+    }, status: 301
+  end
+
   # exam.silmu.kr 서브도메인 — 공공조달관리사 시험 대비
   constraints subdomain: "exam" do
     scope module: "exam", as: "exam" do

@@ -22,7 +22,7 @@ servers:
 #
 proxy:
   ssl: true
-  host: silmu.kr,exam.silmu.kr
+  host: silmu.kr,www.silmu.kr,exam.silmu.kr
   healthcheck:
     path: /up
     interval: 3
