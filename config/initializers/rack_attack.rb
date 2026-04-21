@@ -78,7 +78,8 @@ class Rack::Attack
   #   enforce  = 403 차단 + 로그
   CF_LOCKDOWN_MODE = ENV.fetch("CF_ORIGIN_LOCKDOWN", "off").downcase.freeze
 
-  CF_LOCKDOWN_LOG_PATH = "/tmp/cf_lockdown.log".freeze
+  # storage/는 kamal silmu_storage volume에 영속 마운트 → 컨테이너 재시작/재배포에도 보존
+  CF_LOCKDOWN_LOG_PATH = Rails.root.join("storage/cf_lockdown.log").to_s.freeze
 
   def self.log_non_cf_origin(tag, req)
     peer = origin_peer_ip(req)&.to_s || req.env["REMOTE_ADDR"]
