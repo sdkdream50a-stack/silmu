@@ -185,10 +185,9 @@ Devise.setup do |config|
   # to give user feedback and not to assert the e-mail validity.
   config.email_regexp = /\A[^@\s]+@[^@\s]+\z/
 
-  # ==> Configuration for :timeoutable
-  # The time you want to timeout the user session without activity. After this
-  # time the user will be asked for credentials again. Default is 30 minutes.
-  config.timeout_in = 30.minutes
+  # ==> Configuration for :timeoutable (비활성화됨 — 공개 가이드 사이트엔 부적합)
+  # 기존 30분 타임아웃은 사용자 이탈 유발. :rememberable(2주) + :lockable로 보안 유지
+  # config.timeout_in = 30.minutes
 
   # ==> Configuration for :lockable
   config.lock_strategy = :failed_attempts
