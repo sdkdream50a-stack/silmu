@@ -1,8 +1,6 @@
 # Rack::Attack — Rate Limiting + Cloudflare-Only Origin Lockdown
 require "ipaddr"
 
-File.open("/tmp/cf_lockdown.log", "a") { |f| f.write("[boot] rack_attack.rb loaded at #{Time.now.iso8601}\n") }
-
 class Rack::Attack
   # Cloudflare 공식 IP 대역 (https://www.cloudflare.com/ips/)
   # kamal-proxy가 TCP peer를 XFF 끝자리에 append하므로, 정상 CF 요청은 XFF 끝자리가 CF 대역
@@ -43,19 +41,35 @@ class Rack::Attack
 
   ALLOWED_PEER_RANGES = (CLOUDFLARE_RANGES + INTERNAL_RANGES).freeze
 
-  # kamal-proxy가 append하는 TCP peer = XFF 마지막 엔트리 (스푸핑 불가)
-  def self.origin_peer_ip(req)
-    xff = req.env["HTTP_X_FORWARDED_FOR"]
-    candidate = xff.present? ? xff.split(",").last.strip : req.env["REMOTE_ADDR"]
-    IPAddr.new(candidate)
-  rescue IPAddr::InvalidAddressError, ArgumentError
-    nil
+  def self.internal_ip?(ip)
+    INTERNAL_RANGES.any? { |net| net.include?(ip) }
   end
 
+  # XFF 체인을 오른쪽→왼쪽으로 스캔하면서 internal(Docker/loopback) IP는 건너뛰고
+  # 첫 외부 IP 반환. 이것이 kamal-proxy가 본 실제 TCP peer (CF edge or 공격자).
+  # 실측: kamal-proxy는 XFF에 [inbound_peer, self_docker_ip]를 덧붙이므로
+  # 끝자리가 아니라 internal을 skip한 뒤 나오는 첫 엔트리가 진짜 peer.
+  def self.origin_peer_ip(req)
+    xff = req.env["HTTP_X_FORWARDED_FOR"]
+    if xff.present?
+      xff.split(",").map(&:strip).reverse.each do |addr|
+        ip = (IPAddr.new(addr) rescue nil)
+        next if ip.nil?
+        next if internal_ip?(ip)
+        return ip
+      end
+    end
+    # XFF가 전부 internal이거나 비어 있음 → REMOTE_ADDR fallback
+    remote = req.env["REMOTE_ADDR"]
+    remote.present? ? (IPAddr.new(remote) rescue nil) : nil
+  end
+
+  # 허용 조건: peer가 없음(순수 내부 트래픽) OR peer가 CF/internal 대역
   def self.cloudflare_peer?(req)
     ip = origin_peer_ip(req)
-    return false if ip.nil?
-    ALLOWED_PEER_RANGES.any? { |net| net.include?(ip) }
+    return true if ip.nil?        # 순수 내부 — 헬스체크 등 통과
+    return true if internal_ip?(ip) # 내부 IP — 통과
+    CLOUDFLARE_RANGES.any? { |net| net.include?(ip) }
   end
 
   # 3단계 락다운 모드 (ENV: CF_ORIGIN_LOCKDOWN)
@@ -76,18 +90,8 @@ class Rack::Attack
     $stderr.puts("[cf-lockdown] log write failed: #{e.message}")
   end
 
-  # DEBUG: verify middleware #call is invoked per request
-  module CallTrace
-    def call(env)
-      File.open("/tmp/cf_lockdown.log", "a") { |f| f.write("[call] path=#{env['PATH_INFO']} xff=#{env['HTTP_X_FORWARDED_FOR']}\n") }
-      super
-    end
-  end
-  prepend CallTrace
-
   if CF_LOCKDOWN_MODE == "observe"
     track("cf-lockdown/observe") do |req|
-      File.open("/tmp/cf_lockdown.log", "a") { |f| f.write("[track-entered] path=#{req.path}\n") }
       unless cloudflare_peer?(req)
         log_non_cf_origin("observe", req)
         true

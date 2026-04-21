@@ -1,8 +1,9 @@
 require "test_helper"
 
 class RackAttackCfLockdownTest < ActiveSupport::TestCase
-  # cloudflare_peer? 판정 로직 단위 검증
-  # (enforce/observe 모드 실제 토글은 ENV 의존이라 별도 통합 테스트에서 다룸)
+  # 실측: kamal-proxy는 XFF 체인에 [inbound_peer, self_docker_ip]를 append.
+  # 따라서 origin_peer_ip는 XFF를 오른쪽→왼쪽으로 훑어 internal을 skip한
+  # 뒤 나오는 첫 외부 IP를 반환해야 한다.
 
   def request_for(xff: nil, remote_addr: nil)
     env = {}
@@ -11,67 +12,87 @@ class RackAttackCfLockdownTest < ActiveSupport::TestCase
     Rack::Request.new(env)
   end
 
-  test "XFF 마지막 엔트리가 CF IPv4 대역이면 통과" do
-    req = request_for(xff: "1.2.3.4, 162.158.138.226")
+  # --- 정상 CF 트래픽 ---
+
+  test "CF 경유: XFF=[원클라이언트, cf-edge, kamal-docker] → CF IP로 인식" do
+    # 실측 패턴 가까움: [real-client, cf-edge, 172.18.x]
+    req = request_for(xff: "59.25.100.50, 162.158.138.226, 172.18.0.8")
+    assert_equal "162.158.138.226", Rack::Attack.origin_peer_ip(req).to_s
     assert Rack::Attack.cloudflare_peer?(req)
   end
 
-  test "XFF 마지막 엔트리가 CF IPv6 대역이면 통과" do
-    req = request_for(xff: "1.2.3.4, 2606:4700::1")
+  test "CF IPv6 peer 인식" do
+    req = request_for(xff: "2001:db8::1, 2606:4700::1, 172.18.0.8")
     assert Rack::Attack.cloudflare_peer?(req)
   end
 
-  test "XFF 마지막 엔트리가 비-CF 공인 IP면 차단" do
-    req = request_for(xff: "1.2.3.4, 45.205.1.8")
+  # --- 우회 공격 ---
+
+  test "우회 1: 외부 curl(XFF 없음) → kamal이 [peer, docker] 추가" do
+    # 실측: curl --resolve 후 XFF = "124.54.81.27, 172.18.0.8"
+    req = request_for(xff: "124.54.81.27, 172.18.0.8")
+    assert_equal "124.54.81.27", Rack::Attack.origin_peer_ip(req).to_s
     assert_not Rack::Attack.cloudflare_peer?(req)
   end
 
-  test "스푸핑 방지: 첫 엔트리가 CF여도 마지막이 공격자 IP면 차단" do
-    # 공격자가 XFF를 CF IP로 스푸핑해도 kamal-proxy가 실제 peer를 append하므로 끝자리로 판정
-    req = request_for(xff: "162.158.138.226, 45.205.1.8")
+  test "우회 2: 공격자가 CF IP 스푸핑해도 실제 peer로 판정" do
+    # 공격자가 XFF=162.158.x.x로 위조 → kamal이 실제 peer 추가
+    req = request_for(xff: "162.158.138.226, 45.205.1.8, 172.18.0.8")
+    assert_equal "45.205.1.8", Rack::Attack.origin_peer_ip(req).to_s
     assert_not Rack::Attack.cloudflare_peer?(req)
   end
 
-  test "XFF 없고 REMOTE_ADDR이 Docker 내부 대역이면 통과 (헬스체크)" do
+  test "우회 3: 공격자가 internal IP 삽입해도 실제 peer 드러남" do
+    req = request_for(xff: "10.0.0.1, 192.168.1.1, 45.205.1.8, 172.18.0.8")
+    assert_equal "45.205.1.8", Rack::Attack.origin_peer_ip(req).to_s
+    assert_not Rack::Attack.cloudflare_peer?(req)
+  end
+
+  # --- 내부 트래픽 (헬스체크 등) ---
+
+  test "순수 내부: XFF 전부 Docker 대역 → 통과" do
+    req = request_for(xff: "172.18.0.1, 172.18.0.8")
+    assert Rack::Attack.cloudflare_peer?(req)
+  end
+
+  test "XFF 없고 REMOTE_ADDR이 Docker 내부 → 통과" do
     req = request_for(remote_addr: "172.18.0.1")
     assert Rack::Attack.cloudflare_peer?(req)
   end
 
-  test "XFF 없고 REMOTE_ADDR이 localhost면 통과" do
+  test "XFF 없고 REMOTE_ADDR이 localhost → 통과" do
     req = request_for(remote_addr: "127.0.0.1")
     assert Rack::Attack.cloudflare_peer?(req)
   end
 
-  test "XFF 없고 REMOTE_ADDR이 외부 공인 IP면 차단" do
+  test "XFF 없고 REMOTE_ADDR이 외부 공인 IP (kamal-proxy 앞단 생략) → 차단" do
+    # edge case: 어떤 이유로든 XFF가 없고 REMOTE_ADDR만 있는데 외부면 차단
     req = request_for(remote_addr: "45.205.1.8")
     assert_not Rack::Attack.cloudflare_peer?(req)
   end
 
-  test "잘못된 IP 포맷은 차단 (fail-closed)" do
-    req = request_for(xff: "not-an-ip")
-    assert_not Rack::Attack.cloudflare_peer?(req)
+  # --- fallback / 이상 입력 ---
+
+  test "잘못된 IP 포맷 포함되면 해당 항목 skip" do
+    req = request_for(xff: "not-an-ip, 162.158.138.226, 172.18.0.8")
+    assert_equal "162.158.138.226", Rack::Attack.origin_peer_ip(req).to_s
+    assert Rack::Attack.cloudflare_peer?(req)
   end
 
-  test "XFF/REMOTE_ADDR 둘 다 없으면 차단" do
+  test "XFF와 REMOTE_ADDR 둘 다 없으면 통과 (내부 트래픽으로 간주)" do
     req = request_for
-    assert_not Rack::Attack.cloudflare_peer?(req)
+    assert Rack::Attack.cloudflare_peer?(req)
   end
 
-  test "CF 대역 전체 샘플 IPv4 검증" do
-    # 각 CIDR의 첫 번째 host IP 샘플
+  # --- CF 대역 커버리지 ---
+
+  test "CF IPv4 주요 대역 전부 검증" do
     [
-      "173.245.48.1",   # 173.245.48.0/20
-      "103.21.244.1",   # 103.21.244.0/22
-      "141.101.64.1",   # 141.101.64.0/18
-      "108.162.192.1",  # 108.162.192.0/18
-      "198.41.128.1",   # 198.41.128.0/17
-      "162.158.0.1",    # 162.158.0.0/15
-      "104.16.0.1",     # 104.16.0.0/13
-      "172.64.0.1",     # 172.64.0.0/13
-      "131.0.72.1"      # 131.0.72.0/22
+      "173.245.48.1", "103.21.244.1", "141.101.64.1", "108.162.192.1",
+      "198.41.128.1", "162.158.0.1", "104.16.0.1", "172.64.0.1", "131.0.72.1"
     ].each do |ip|
-      req = request_for(xff: ip)
-      assert Rack::Attack.cloudflare_peer?(req), "Expected #{ip} to be recognized as CF IP"
+      req = request_for(xff: "#{ip}, 172.18.0.8")
+      assert Rack::Attack.cloudflare_peer?(req), "Expected #{ip} to be recognized as CF peer"
     end
   end
 end
