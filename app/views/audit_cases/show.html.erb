@@ -58,6 +58,10 @@
                 <span class="material-symbols-outlined text-xs leading-none">loop</span>반복 지적 사례
               </span>
             <% end %>
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium text-slate-500" title="누적 열람 횟수">
+              <span class="material-symbols-outlined text-xs leading-none">visibility</span>
+              <%= number_with_delimiter(@audit_case.view_count) %>회
+            </span>
           </div>
           <h1 class="text-xl lg:text-2xl font-bold text-slate-900 mb-2"><%= @audit_case.title %></h1>
           <div class="flex items-center gap-3 flex-wrap">
