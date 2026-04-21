@@ -17,7 +17,11 @@
     "mainEntityOfPage": canonical_url,
     "url": canonical_url,
     "image": "https://silmu.kr/og-image.webp",
-    "inLanguage": "ko"
+    "inLanguage": "ko",
+    "speakable": {
+      "@type": "SpeakableSpecification",
+      "cssSelector": [ "h1", "#section-finding", "#section-lesson" ]
+    }
   }) %>
   <%= json_ld({
     "@context": "https://schema.org",

@@ -341,6 +341,9 @@ Rails.application.routes.draw do
   # 사이트맵
   get "sitemap.xml", to: "sitemap#index", as: :sitemap, defaults: { format: :xml }
 
+  # llms-full.txt — 전체 법령 본문 포함 AI 크롤러용 상세판 (llms.txt 는 public/ 정적)
+  get "llms-full.txt", to: "llms#full", as: :llms_full
+
   # RSS 피드 (백링크·구독자 확보용)
   get "feed.rss", to: "feed#index", defaults: { format: :rss }, as: :feed
 
