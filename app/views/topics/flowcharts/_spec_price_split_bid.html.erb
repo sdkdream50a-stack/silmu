@@ -38,7 +38,7 @@
         <div class="flex items-center gap-3">
           <span class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold shadow-md">1</span>
           <div>
-            <h4 class="font-bold text-slate-900">입찰 준비 및 공고</h4>
+            <h3 class="font-bold text-slate-900">입찰 준비 및 공고</h3>
             <p class="text-sm text-slate-600">규격서 작성, 2억원 이상 확인, 입찰공고</p>
           </div>
         </div>
@@ -103,13 +103,13 @@
         <div class="flex items-center gap-3">
           <span class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center font-bold shadow-md">2</span>
           <div>
-            <h4 class="font-bold text-slate-900 flex items-center gap-2">
+            <h3 class="font-bold text-slate-900 flex items-center gap-2">
               규격 평가
               <span class="doc-tool-badge" onclick="showDocPopup('step2')">
                 <span class="material-symbols-outlined" style="font-size:16px">edit_document</span>
                 공문/양식 생성 도구
               </span>
-            </h4>
+            </h3>
             <p class="text-sm text-slate-600">규격심사위원회 구성, 적격/부적격 판정</p>
           </div>
         </div>
@@ -171,7 +171,7 @@
         <div class="flex items-center gap-3">
           <span class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold shadow-md">3</span>
           <div>
-            <h4 class="font-bold text-slate-900">가격 개찰</h4>
+            <h3 class="font-bold text-slate-900">가격 개찰</h3>
             <p class="text-sm text-slate-600">규격 적격 업체만 참여, 최저가 낙찰</p>
           </div>
         </div>
@@ -233,7 +233,7 @@
         <div class="flex items-center gap-3">
           <span class="w-10 h-10 rounded-xl bg-slate-600 text-white flex items-center justify-center font-bold shadow-md">4</span>
           <div>
-            <h4 class="font-bold text-slate-900">계약 체결</h4>
+            <h3 class="font-bold text-slate-900">계약 체결</h3>
             <p class="text-sm text-slate-600">낙찰자 통보, 계약보증금 납부, 계약서 작성</p>
           </div>
         </div>
@@ -464,10 +464,10 @@ function showDocPopup(step) {
   var html = '';
   data.groups.forEach(function(group) {
     html += '<div class="mb-6 last:mb-0">';
-    html += '<h4 class="font-bold text-slate-900 mb-3 flex items-center gap-2">';
+    html += '<h3 class="font-bold text-slate-900 mb-3 flex items-center gap-2">';
     html += '<span class="material-symbols-outlined" style="color:' + group.color + '">' + group.icon + '</span>';
     html += group.label;
-    html += '</h4>';
+    html += '</h3>';
     html += '<div class="grid sm:grid-cols-2 gap-3">';
 
     group.items.forEach(function(item) {

@@ -19,7 +19,7 @@
       <div class="flex items-start gap-4">
         <div class="flex-shrink-0 w-10 h-10 bg-red-500 text-white rounded-full flex items-center justify-center font-bold">1</div>
         <div class="flex-1 bg-red-50 rounded-xl p-4 border border-red-200">
-          <h4 class="font-semibold text-red-800 mb-2">위반 사실 확인</h4>
+          <h3 class="font-semibold text-red-800 mb-2">위반 사실 확인</h3>
           <ul class="text-sm text-slate-700 space-y-1">
             <li>• 위반 행위 유형 파악 (담합·뇌물·허위서류·부실시공 등)</li>
             <li>• 위반 사실 증거 수집 (계약서, 준공서류, 감사 결과 등)</li>
@@ -34,7 +34,7 @@
       <div class="flex items-start gap-4">
         <div class="flex-shrink-0 w-10 h-10 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold">2</div>
         <div class="flex-1 bg-orange-50 rounded-xl p-4 border border-orange-200">
-          <h4 class="font-semibold text-orange-800 mb-2">제재 사유·기간 검토</h4>
+          <h3 class="font-semibold text-orange-800 mb-2">제재 사유·기간 검토</h3>
           <div class="grid grid-cols-3 gap-2 mb-3">
             <div class="p-2 bg-white rounded-lg border border-red-200 text-center">
               <div class="text-xs font-bold text-red-700">2년 (중대)</div>
@@ -60,7 +60,7 @@
         <div class="flex-shrink-0 w-10 h-10 bg-amber-500 text-white rounded-full flex items-center justify-center font-bold">3</div>
         <div class="flex-1 bg-amber-50 rounded-xl p-4 border border-amber-200">
           <div class="flex items-start justify-between mb-2">
-            <h4 class="font-semibold text-amber-800">의견 청취 (소명 기회 부여) — 필수</h4>
+            <h3 class="font-semibold text-amber-800">의견 청취 (소명 기회 부여) — 필수</h3>
             <span class="doc-tool-badge" onclick="showDocPopup('step3')"><span class="material-symbols-outlined" style="font-size:14px">edit_document</span>공문/양식 생성 도구</span>
           </div>
           <ul class="text-sm text-slate-700 space-y-1">
@@ -81,7 +81,7 @@
         <div class="flex-shrink-0 w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">4</div>
         <div class="flex-1 bg-blue-50 rounded-xl p-4 border border-blue-200">
           <div class="flex items-start justify-between mb-2">
-            <h4 class="font-semibold text-blue-800">처분 결정 및 업체 통보</h4>
+            <h3 class="font-semibold text-blue-800">처분 결정 및 업체 통보</h3>
             <span class="doc-tool-badge" onclick="showDocPopup('step4')"><span class="material-symbols-outlined" style="font-size:14px">edit_document</span>공문/양식 생성 도구</span>
           </div>
           <ul class="text-sm text-slate-700 space-y-1">
@@ -98,7 +98,7 @@
       <div class="flex items-start gap-4">
         <div class="flex-shrink-0 w-10 h-10 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold">5</div>
         <div class="flex-1 bg-slate-50 rounded-xl p-4 border border-slate-200">
-          <h4 class="font-semibold text-slate-800 mb-2">나라장터 제재 등록 (전국 적용)</h4>
+          <h3 class="font-semibold text-slate-800 mb-2">나라장터 제재 등록 (전국 적용)</h3>
           <ul class="text-sm text-slate-700 space-y-1">
             <li>• 나라장터 시스템에 부정당업자 등록</li>
             <li>• 제재 기간 동안 전국 공공기관 입찰 자동 차단</li>
@@ -120,7 +120,7 @@
           <div class="flex items-start gap-3">
             <span class="material-symbols-outlined text-indigo-500">list</span>
             <div class="w-full">
-              <h4 class="font-semibold text-slate-800 mb-3">제재 사유 13가지 요약 <span class="text-xs font-normal bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full">시행령 제92조</span></h4>
+              <h3 class="font-semibold text-slate-800 mb-3">제재 사유 13가지 요약 <span class="text-xs font-normal bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full">시행령 제92조</span></h3>
               <div class="grid grid-cols-2 md:grid-cols-3 gap-2 text-xs">
                 <% [["입찰 담합", "2년"], ["뇌물 제공", "2년"], ["허위 서류", "2년"], ["중대 재해", "2년"], ["부실 시공", "1년"], ["계약 불이행", "1년"], ["물품 불량", "1년"], ["무단 하도급", "1년"], ["안전사고", "1년"], ["환경 오염", "1년"], ["경미한 부실", "6개월"], ["납기 지연", "6개월"], ["서류 미제출", "6개월"]].each do |title, period| %>
                   <div class="flex items-center justify-between p-2 bg-slate-50 rounded-lg">
@@ -137,7 +137,7 @@
           <div class="flex items-start gap-3">
             <span class="material-symbols-outlined text-red-500">gavel</span>
             <div>
-              <h4 class="font-semibold text-red-800 mb-2">감사 대비 체크리스트</h4>
+              <h3 class="font-semibold text-red-800 mb-2">감사 대비 체크리스트</h3>
               <ul class="text-sm text-slate-700 space-y-1.5">
                 <li class="flex items-start gap-2"><span class="material-symbols-outlined text-red-400 text-lg mt-0.5">warning</span><span><strong>소명 기회 미부여</strong> — 가장 흔한 처분 취소 사유, 반드시 7일 이상 부여</span></li>
                 <li class="flex items-start gap-2"><span class="material-symbols-outlined text-red-400 text-lg mt-0.5">warning</span><span><strong>제재 등록 지연</strong> — 처분 결정 후 나라장터 등록을 지체하면 기간 중 입찰 가능</span></li>

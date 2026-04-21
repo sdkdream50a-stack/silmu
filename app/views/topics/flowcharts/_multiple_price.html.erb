@@ -33,13 +33,13 @@
         <div class="flex items-center gap-3">
           <span class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold shadow-md">1</span>
           <div>
-            <h4 class="font-bold text-slate-900 flex items-center gap-2">
+            <h3 class="font-bold text-slate-900 flex items-center gap-2">
               예정가격 산정
               <span class="doc-tool-badge" onclick="showDocPopup('step1')">
                 <span class="material-symbols-outlined" style="font-size:16px">edit_document</span>
                 공문/양식 생성 도구
               </span>
-            </h4>
+            </h3>
             <p class="text-sm text-slate-600">기초금액 산정, 예비가격 범위 확정</p>
           </div>
         </div>
@@ -104,7 +104,7 @@
         <div class="flex items-center gap-3">
           <span class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center font-bold shadow-md">2</span>
           <div>
-            <h4 class="font-bold text-slate-900">복수예비가격 15개 생성</h4>
+            <h3 class="font-bold text-slate-900">복수예비가격 15개 생성</h3>
             <p class="text-sm text-slate-600">나라장터 시스템 자동 생성, 15개 예비가격 확정</p>
           </div>
         </div>
@@ -166,7 +166,7 @@
         <div class="flex items-center gap-3">
           <span class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold shadow-md">3</span>
           <div>
-            <h4 class="font-bold text-slate-900">추첨 및 평균 산출</h4>
+            <h3 class="font-bold text-slate-900">추첨 및 평균 산출</h3>
             <p class="text-sm text-slate-600">개찰 시 4개 추첨, 평균값 = 예정가격</p>
           </div>
         </div>
@@ -388,10 +388,10 @@ function showDocPopup(step) {
   var html = '';
   data.groups.forEach(function(group) {
     html += '<div class="mb-6 last:mb-0">';
-    html += '<h4 class="font-bold text-slate-900 mb-3 flex items-center gap-2">';
+    html += '<h3 class="font-bold text-slate-900 mb-3 flex items-center gap-2">';
     html += '<span class="material-symbols-outlined" style="color:' + group.color + '">' + group.icon + '</span>';
     html += group.label;
-    html += '</h4>';
+    html += '</h3>';
     html += '<div class="grid sm:grid-cols-2 gap-3">';
 
     group.items.forEach(function(item) {

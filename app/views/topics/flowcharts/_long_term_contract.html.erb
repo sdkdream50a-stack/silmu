@@ -38,7 +38,7 @@
         <div class="flex items-center gap-3">
           <span class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold shadow-md">1</span>
           <div>
-            <h4 class="font-bold text-slate-900">최초 계약 체결</h4>
+            <h3 class="font-bold text-slate-900">최초 계약 체결</h3>
             <p class="text-sm text-slate-600">사업 기간 확정, 총 계약금액 결정, 최초 연도 계약 체결</p>
           </div>
         </div>
@@ -100,13 +100,13 @@
         <div class="flex items-center gap-3">
           <span class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold shadow-md">2</span>
           <div>
-            <h4 class="font-bold text-slate-900 flex items-center gap-2">
+            <h3 class="font-bold text-slate-900 flex items-center gap-2">
               연차별 예산 확보
               <span class="doc-tool-badge" onclick="showDocPopup('step2')">
                 <span class="material-symbols-outlined" style="font-size:16px">edit_document</span>
                 공문/양식 생성 도구
               </span>
-            </h4>
+            </h3>
             <p class="text-sm text-slate-600">다음 연도 예산 요구, 예산 편성, 계속비 신청</p>
           </div>
         </div>
@@ -171,7 +171,7 @@
         <div class="flex items-center gap-3">
           <span class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center font-bold shadow-md">3</span>
           <div>
-            <h4 class="font-bold text-slate-900">계약금액 조정</h4>
+            <h3 class="font-bold text-slate-900">계약금액 조정</h3>
             <p class="text-sm text-slate-600">물가변동 반영, 설계변경, 계약금액 증감</p>
           </div>
         </div>
@@ -233,7 +233,7 @@
         <div class="flex items-center gap-3">
           <span class="w-10 h-10 rounded-xl bg-slate-600 text-white flex items-center justify-center font-bold shadow-md">4</span>
           <div>
-            <h4 class="font-bold text-slate-900">계약 갱신</h4>
+            <h3 class="font-bold text-slate-900">계약 갱신</h3>
             <p class="text-sm text-slate-600">연차별 계약 갱신, 계약보증금 재납부, 검사 및 대금 지급</p>
           </div>
         </div>
@@ -465,10 +465,10 @@ function showDocPopup(step) {
   var html = '';
   data.groups.forEach(function(group) {
     html += '<div class="mb-6 last:mb-0">';
-    html += '<h4 class="font-bold text-slate-900 mb-3 flex items-center gap-2">';
+    html += '<h3 class="font-bold text-slate-900 mb-3 flex items-center gap-2">';
     html += '<span class="material-symbols-outlined" style="color:' + group.color + '">' + group.icon + '</span>';
     html += group.label;
-    html += '</h4>';
+    html += '</h3>';
     html += '<div class="grid sm:grid-cols-2 gap-3">';
 
     group.items.forEach(function(item) {
