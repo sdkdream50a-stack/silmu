@@ -321,6 +321,10 @@ Rails.application.routes.draw do
 
   # 관리자
   namespace :admin do
+    # Step-up 재인증 — 30분 이내 비밀번호 재확인 (OAuth 사용자는 재로그인으로 갱신)
+    get  "reauthenticate", to: "reauthentications#new",    as: :new_reauthentication
+    post "reauthenticate", to: "reauthentications#create", as: :reauthentication
+
     resources :newsletters, only: [ :new, :create ]
     get "analytics", to: "analytics#index", as: :analytics
     resources :exam_dashboard, only: [ :index ] do
