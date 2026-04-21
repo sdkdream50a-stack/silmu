@@ -60,7 +60,7 @@ env:
     ADMIN_EMAIL: sdkdream50a@gmail.com
     DB_HOST: 172.18.0.1
     # CF 우회 차단: observe(로그만) → enforce(403 차단). off로 즉시 롤백.
-    CF_ORIGIN_LOCKDOWN: observe
+    CF_ORIGIN_LOCKDOWN: enforce
 
     # Set number of processes dedicated to Solid Queue (default: 1)
     # JOB_CONCURRENCY: 3
