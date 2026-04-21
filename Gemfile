@@ -101,3 +101,4 @@ gem "google-analytics-data"  # GA4 Data API v1
 # ========== 에러 모니터링 ==========
 gem "sentry-ruby"
 gem "sentry-rails"
+gem "stackprof" # Sentry 프로파일러 (profiles_sample_rate=0.1 활성화에 필요)
