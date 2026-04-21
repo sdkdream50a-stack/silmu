@@ -62,25 +62,26 @@ class Rack::Attack
   #   enforce  = 403 차단 + 로그
   CF_LOCKDOWN_MODE = ENV.fetch("CF_ORIGIN_LOCKDOWN", "off").downcase.freeze
 
+  def self.log_non_cf_origin(tag, req)
+    peer = origin_peer_ip(req)&.to_s || req.env["REMOTE_ADDR"]
+    xff = req.env["HTTP_X_FORWARDED_FOR"]
+    line = "[cf-lockdown:#{tag}] peer=#{peer} xff=#{xff&.slice(0, 120)} host=#{req.host} path=#{req.path}"
+    # STDERR는 lograge/ActiveJob 로그 사이에서도 식별 가능. Rails.logger는 production에서 lograge로 재라우팅될 수 있음.
+    $stderr.puts(line)
+    Rails.logger.warn(line) if defined?(Rails)
+  end
+
   if CF_LOCKDOWN_MODE == "observe"
     track("cf-lockdown/observe") do |req|
       unless cloudflare_peer?(req)
-        Rails.logger.warn(
-          "[cf-lockdown:observe] non-cf peer=#{origin_peer_ip(req)&.to_s || req.env['REMOTE_ADDR']} " \
-          "xff=#{req.env['HTTP_X_FORWARDED_FOR']&.truncate(120)} host=#{req.host} path=#{req.path}"
-        )
+        log_non_cf_origin("observe", req)
         true
       end
     end
   elsif CF_LOCKDOWN_MODE == "enforce"
     blocklist("cf-lockdown/enforce") do |req|
       blocked = !cloudflare_peer?(req)
-      if blocked
-        Rails.logger.warn(
-          "[cf-lockdown:block] peer=#{origin_peer_ip(req)&.to_s || req.env['REMOTE_ADDR']} " \
-          "xff=#{req.env['HTTP_X_FORWARDED_FOR']&.truncate(120)} host=#{req.host} path=#{req.path}"
-        )
-      end
+      log_non_cf_origin("block", req) if blocked
       blocked
     end
   end
