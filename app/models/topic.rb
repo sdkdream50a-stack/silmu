@@ -95,16 +95,15 @@ class Topic < ApplicationRecord
     subtopics_loaded = subtopics.published.to_a
 
     safe_kws = kws.map { |k| Topic.sanitize_sql_like(k) }
-    name_cond = kws.map { "name ILIKE ?" }.join(" OR ")
-    kw_cond   = safe_kws.map { "keywords ILIKE ?" }.join(" OR ")
+
+    tbl = Topic.arel_table
+    name_matches = kws.map { |k| tbl[:name].matches(k) }
+    kw_matches   = safe_kws.map { |k| tbl[:keywords].matches("%#{k}%") }
+    combined     = (name_matches + kw_matches).reduce(:or)
 
     candidates = Topic.published
                       .where.not(id: id)
-                      .where(
-                        "(#{name_cond}) OR (#{kw_cond})",
-                        *kws,
-                        *safe_kws.map { |k| "%#{k}%" }
-                      )
+                      .where(combined)
                       .to_a
 
     kws.each_with_object({}) do |keyword, map|
