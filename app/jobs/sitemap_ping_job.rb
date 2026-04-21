@@ -7,13 +7,9 @@ class SitemapPingJob < ApplicationJob
   INDEXNOW_KEY = Rails.application.credentials.dig(:indexnow, :key) || "5ae9664d75415a43ef8341b00b97a941"
   INDEXNOW_KEY_LOCATION = "https://#{HOST}/#{INDEXNOW_KEY}.txt"
 
-  # IndexNow 지원 검색엔진 (Bing, Naver, Yandex, Seznam 등)
-  INDEXNOW_ENGINES = %w[
-    api.indexnow.org
-    www.bing.com
-    searchadvisor.naver.com
-    yandex.com
-  ].freeze
+  # IndexNow 공식 프록시 — api.indexnow.org 하나가 Bing/Naver/Yandex/Seznam에 자동 전파.
+  # 개별 엔진에 중복 제출하면 일일 quota(host당 10,000 URL)를 빠르게 소진하므로 단일 엔진 사용.
+  INDEXNOW_ENGINES = %w[api.indexnow.org].freeze
 
   SITEMAP_URLS = [
     "https://#{HOST}/sitemap.xml",
