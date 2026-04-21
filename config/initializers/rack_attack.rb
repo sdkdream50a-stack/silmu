@@ -1,6 +1,8 @@
 # Rack::Attack — Rate Limiting + Cloudflare-Only Origin Lockdown
 require "ipaddr"
 
+File.open("/tmp/cf_lockdown.log", "a") { |f| f.write("[boot] rack_attack.rb loaded at #{Time.now.iso8601}\n") }
+
 class Rack::Attack
   # Cloudflare 공식 IP 대역 (https://www.cloudflare.com/ips/)
   # kamal-proxy가 TCP peer를 XFF 끝자리에 append하므로, 정상 CF 요청은 XFF 끝자리가 CF 대역
