@@ -31,6 +31,14 @@ threads threads_count, threads_count
 # Specifies the `port` that Puma will listen on to receive requests; default is 3000.
 port ENV.fetch("PORT", 3000)
 
+# 클러스터 모드: WEB_CONCURRENCY>=1일 때 지정 수만큼 워커 프로세스 포크.
+# preload_app!로 CoW 메모리 절약(워커당 RSS 감소), GVL 병목 분산.
+workers_count = ENV.fetch("WEB_CONCURRENCY", 0).to_i
+if workers_count > 0
+  workers workers_count
+  preload_app!
+end
+
 # Allow puma to be restarted by `bin/rails restart` command.
 plugin :tmp_restart
 
