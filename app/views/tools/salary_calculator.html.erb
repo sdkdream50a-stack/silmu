@@ -4,7 +4,7 @@
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- 뒤로가기 -->
     <div class="mb-6">
-      <%= link_to tools_path, class: "inline-flex items-center text-slate-600 hover:text-indigo-600 transition-colors font-medium" do %>
+      <%= link_to tools_path, class: "inline-flex items-center text-slate-600 hover:text-editorial-navy transition-colors font-medium" do %>
         <span class="material-symbols-outlined mr-1">arrow_back</span>
         도구 목록으로
       <% end %>
@@ -22,9 +22,9 @@
         </div>
       </div>
 
-      <details class="bg-white rounded-2xl shadow-sm border border-indigo-100 mt-6">
+      <details class="bg-white rounded-2xl shadow-sm border border-editorial-navy-bg mt-6">
         <summary class="px-6 py-4 cursor-pointer hover:bg-slate-50 transition-colors flex items-center gap-2 [list-style:none] [&::-webkit-details-marker]:hidden">
-          <span class="material-symbols-outlined text-indigo-600 text-[20px]">info</span>
+          <span class="material-symbols-outlined text-editorial-navy text-[20px]">info</span>
           <span class="text-sm font-semibold text-slate-700">계산 기준 및 법령 근거</span>
           <span class="ml-auto text-xs text-slate-400">펼치기 ▾</span>
         </summary>
@@ -54,7 +54,7 @@
       <div class="lg:w-1/2 mb-8 lg:mb-0">
         <div class="card p-6">
           <h2 class="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
-            <span class="material-symbols-outlined text-indigo-600">edit</span>
+            <span class="material-symbols-outlined text-editorial-navy">edit</span>
             기본 정보 입력
           </h2>
 
@@ -140,7 +140,7 @@
           </h2>
 
           <!-- 실수령액 강조 -->
-          <div class="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 rounded-2xl p-6 mb-6 text-center">
+          <div class="bg-gradient-to-br from-blue-50 to-editorial-navy-bg border border-blue-100 rounded-2xl p-6 mb-6 text-center">
             <p class="text-sm text-slate-500 mb-1">월 실수령액 (추정)</p>
             <div class="text-3xl font-bold text-blue-700" id="result-net">직급과 호봉을 선택하세요</div>
             <p class="text-xs text-slate-400 mt-2" id="result-grade-label"></p>
@@ -214,8 +214,8 @@
             <p class="text-xs text-slate-500">예상 연금액 계산</p>
           </div>
         <% end %>
-        <%= link_to overtime_calculator_path, class: "card p-4 flex items-center gap-3 hover:border-indigo-200 border border-transparent transition-all" do %>
-          <span class="material-symbols-outlined text-indigo-600 text-2xl">schedule</span>
+        <%= link_to overtime_calculator_path, class: "card p-4 flex items-center gap-3 hover:border-editorial-navy-light border border-transparent transition-all" do %>
+          <span class="material-symbols-outlined text-editorial-navy text-2xl">schedule</span>
           <div>
             <p class="text-sm font-semibold text-slate-900">초과근무수당 계산기</p>
             <p class="text-xs text-slate-500">시간외·야간·휴일 수당</p>

@@ -149,11 +149,13 @@
   .btn-lg { @apply px-8 py-4 text-lg; }
 
   .btn-primary {
-    @apply bg-indigo-700 text-white
-           hover:bg-indigo-800 hover:shadow-lg hover:-translate-y-0.5
-           active:translate-y-0 active:shadow-md
-           focus:ring-indigo-600;
+    @apply text-white
+           hover:shadow-lg hover:-translate-y-0.5
+           active:translate-y-0 active:shadow-md;
+    background-color: var(--color-editorial-navy);
   }
+  .btn-primary:hover { background-color: var(--color-editorial-navy-dark); }
+  .btn-primary:focus { --tw-ring-color: var(--color-editorial-navy); }
 
   .btn-accent {
     @apply bg-emerald-600 text-white
@@ -163,11 +165,13 @@
   }
 
   .btn-point {
-    @apply bg-indigo-700 text-white
-           hover:bg-indigo-800 hover:shadow-lg hover:-translate-y-0.5
-           active:translate-y-0 active:shadow-md
-           focus:ring-indigo-600;
+    @apply text-white
+           hover:shadow-lg hover:-translate-y-0.5
+           active:translate-y-0 active:shadow-md;
+    background-color: var(--color-editorial-navy);
   }
+  .btn-point:hover { background-color: var(--color-editorial-navy-dark); }
+  .btn-point:focus { --tw-ring-color: var(--color-editorial-navy); }
 
   .btn-ghost {
     @apply bg-transparent text-slate-700 border-2 border-slate-200
@@ -244,8 +248,11 @@
            text-slate-900 placeholder-gray-400
            transition-all duration-200
            hover:border-gray-300
-           focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100
-           focus:outline-none;
+           focus:ring-4 focus:outline-none;
+  }
+  .input:focus {
+    border-color: var(--color-editorial-navy);
+    --tw-ring-color: var(--color-editorial-navy-bg);
   }
 
   .input-lg {
@@ -261,7 +268,7 @@
 
   .badge-slate { @apply bg-slate-100 text-slate-700; }
   .badge-emerald { @apply bg-emerald-100 text-emerald-700; }
-  .badge-indigo { @apply bg-indigo-100 text-indigo-700; }
+  .badge-indigo { @apply bg-editorial-navy-bg text-editorial-navy-dark; }
   .badge-amber { @apply bg-amber-100 text-amber-700; }
   .badge-blue { @apply bg-blue-100 text-blue-700; }
   .badge-violet { @apply bg-violet-100 text-violet-700; }
@@ -278,9 +285,9 @@
 
   .nav-link::after {
     content: '';
-    @apply absolute bottom-0 left-0 w-0 h-0.5
-           bg-indigo-500 rounded-full
+    @apply absolute bottom-0 left-0 w-0 h-0.5 rounded-full
            transition-all duration-300;
+    background-color: var(--color-editorial-navy);
   }
 
   .nav-link:hover::after {
@@ -373,7 +380,7 @@
   }
 
   .gradient-indigo {
-    @apply bg-gradient-to-br from-indigo-500 via-indigo-600 to-indigo-700;
+    background-image: linear-gradient(180deg, #174B8E 0%, #1E5AA8 100%);
   }
 
   .gradient-amber {
@@ -398,7 +405,7 @@
   }
 
   .text-gradient-indigo {
-    @apply bg-gradient-to-r from-indigo-500 to-indigo-700 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-editorial-navy to-editorial-navy-dark bg-clip-text text-transparent;
   }
 
   .text-gradient-emerald {
@@ -1146,3 +1153,301 @@
     @apply border-b-2 border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300;
   }
 }
+
+/* ============================================================================
+   9. CLAUDE EDITORIAL DESIGN SYSTEM (v4 — 2026-04-21)
+
+   Pretendard 800 / Deep Civic Navy #1E5AA8 기반 "법령 권위 톤"
+   - 기존 Stitch v2 시스템과 병존. 점진 전환용
+   - 랜딩: cream 배경(#FAF7F0), 콘텐츠 카드: pure white
+   - Flat editorial: no shadow, thin rule border, radius 8px
+   ============================================================================ */
+
+@theme {
+  /* ── Editorial Color Tokens ───────────────────────────────────────────── */
+  --color-editorial-navy:       #1E5AA8;   /* Primary — Deep Civic Navy */
+  --color-editorial-navy-dark:  #174B8E;
+  --color-editorial-navy-light: #2E6DBA;
+  --color-editorial-navy-bg:    #EEF3FA;   /* Navy 계열 연한 배경 */
+
+  --color-editorial-ink:        #0F172A;   /* 본문 텍스트 (slate-900) */
+  --color-editorial-ink-muted:  #334155;   /* 보조 텍스트 (slate-700) — AA 9.48:1 on cream */
+  --color-editorial-ink-soft:   #475569;   /* 캡션/메타 (slate-600) — AA 6.45:1 on cream */
+
+  --color-editorial-rule:       #E2E8F0;   /* 얇은 구분선 (slate-200) */
+  --color-editorial-rule-strong:#CBD5E1;   /* 강조 구분선 (slate-300) */
+
+  --color-editorial-cream:      #FAF7F0;   /* 랜딩 페이지 배경 */
+  --color-editorial-paper:      #FFFFFF;   /* 법령 콘텐츠 카드 */
+
+  /* Signal Colors — 한국 공공 신호 관습 (감사·지적·경고 통념) */
+  --color-signal-info:          #1E5AA8;   /* 정보/네비 = Navy */
+  --color-signal-success:       #059669;   /* 적합/승인 = Emerald-600 */
+  --color-signal-warn:          #D97706;   /* 주의/감사지적 = Amber-600 */
+  --color-signal-critical:      #DC2626;   /* 위반/경고 = Red-600 */
+  --color-signal-law:           #7C2D12;   /* 법령 하이라이트 = amber-950 */
+
+  /* Editorial Typography Scale (clamp 기반 responsive) */
+  --fs-editorial-hero:    clamp(2rem, 4.5vw, 3.25rem);      /* 32→52px */
+  --fs-editorial-section: clamp(1.5rem, 3vw, 2.125rem);     /* 24→34px */
+  --fs-editorial-card:    1.25rem;                          /* 20px */
+  --fs-editorial-meta:    0.8125rem;                        /* 13px */
+
+  /* Editorial Letter Spacing */
+  --ls-editorial-hero:    -0.03em;   /* 대형 헤드라인 */
+  --ls-editorial-section: -0.02em;
+  --ls-editorial-body:    -0.01em;
+
+  /* Editorial Radius — flat, thin */
+  --radius-editorial-sm: 6px;
+  --radius-editorial-md: 10px;
+  --radius-editorial-lg: 14px;
+
+  /* ── Indigo Palette Override → Editorial Navy 계조 매핑 ───────────────────
+     `tool[:color] == "indigo"` 동적 인터폴레이션과 기존 indigo-XXX 잔재가
+     모두 Editorial Deep Civic Navy 톤으로 렌더되도록 함 */
+  --color-indigo-50:  #F2F6FB;
+  --color-indigo-100: #E1EAF5;
+  --color-indigo-200: #C5D5ED;
+  --color-indigo-300: #97B4DC;
+  --color-indigo-400: #5E8ACA;
+  --color-indigo-500: #2E6DBA;  /* editorial-navy-light */
+  --color-indigo-600: #1E5AA8;  /* editorial-navy */
+  --color-indigo-700: #174B8E;  /* editorial-navy-dark */
+  --color-indigo-800: #153E76;
+  --color-indigo-900: #0F2F5C;
+}
+
+/* ── Editorial Typography Utilities ─────────────────────────────────────── */
+@layer utilities {
+  .heading-editorial-hero {
+    font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    font-size: var(--fs-editorial-hero);
+    font-weight: 800;
+    letter-spacing: var(--ls-editorial-hero);
+    line-height: 1.15;
+    color: var(--color-editorial-ink);
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+
+  .heading-editorial-section {
+    font-size: var(--fs-editorial-section);
+    font-weight: 800;
+    letter-spacing: var(--ls-editorial-section);
+    line-height: 1.25;
+    color: var(--color-editorial-ink);
+    word-break: keep-all;
+  }
+
+  .heading-editorial-card {
+    font-size: var(--fs-editorial-card);
+    font-weight: 700;
+    letter-spacing: var(--ls-editorial-body);
+    line-height: 1.35;
+    color: var(--color-editorial-ink);
+    word-break: keep-all;
+  }
+
+  .meta-editorial {
+    font-size: var(--fs-editorial-meta);
+    font-weight: 500;
+    color: var(--color-editorial-ink-soft);
+    letter-spacing: 0.01em;
+    text-transform: none;
+  }
+
+  .lede-editorial {
+    font-size: 1.125rem;
+    line-height: 1.65;
+    color: var(--color-editorial-ink-muted);
+    letter-spacing: var(--ls-editorial-body);
+    word-break: keep-all;
+  }
+
+  /* 배경 유틸리티 */
+  .bg-editorial-cream { background-color: var(--color-editorial-cream); }
+  .bg-editorial-paper { background-color: var(--color-editorial-paper); }
+  .bg-editorial-navy  { background-color: var(--color-editorial-navy); }
+
+  .text-editorial-navy { color: var(--color-editorial-navy); }
+  .text-editorial-ink  { color: var(--color-editorial-ink); }
+  .text-editorial-muted{ color: var(--color-editorial-ink-muted); }
+
+  /* 구분선 */
+  .divider-editorial {
+    border-top: 1px solid var(--color-editorial-rule);
+  }
+  .divider-editorial-strong {
+    border-top: 2px solid var(--color-editorial-rule-strong);
+  }
+
+  /* 신호 뱃지 */
+  .signal-info {
+    background-color: var(--color-editorial-navy-bg);
+    color: var(--color-editorial-navy);
+  }
+  .signal-success { background-color: #ECFDF5; color: var(--color-signal-success); }
+  .signal-warn    { background-color: #FEF3C7; color: var(--color-signal-warn); }
+  .signal-critical{ background-color: #FEE2E2; color: var(--color-signal-critical); }
+}
+
+/* ── Editorial Components ────────────────────────────────────────────────── */
+@layer components {
+
+  /* Card — flat editorial: 얇은 rule, 그림자 없음, hover 시 navy border */
+  .card-editorial {
+    background-color: var(--color-editorial-paper);
+    border: 1px solid var(--color-editorial-rule);
+    border-radius: var(--radius-editorial-md);
+    padding: 1.5rem;
+    transition: border-color 200ms ease, transform 200ms ease;
+  }
+  .card-editorial:hover {
+    border-color: var(--color-editorial-navy-light);
+  }
+
+  /* Interactive variant — 클릭 가능한 카드 */
+  .card-editorial-interactive {
+    cursor: pointer;
+  }
+  .card-editorial-interactive:hover {
+    border-color: var(--color-editorial-navy);
+    transform: translateY(-2px);
+  }
+
+  /* Quiet variant — 중요도 낮은 정보 (배경 없음, rule만) */
+  .card-editorial-quiet {
+    background-color: transparent;
+    border: 1px solid var(--color-editorial-rule);
+    border-radius: var(--radius-editorial-md);
+    padding: 1.25rem;
+  }
+
+  /* Button — primary (navy) */
+  .btn-editorial {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    background-color: var(--color-editorial-navy);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.9375rem;
+    letter-spacing: -0.005em;
+    border-radius: var(--radius-editorial-sm);
+    transition: background-color 180ms ease, transform 180ms ease;
+  }
+  .btn-editorial:hover {
+    background-color: var(--color-editorial-navy-dark);
+    transform: translateY(-1px);
+  }
+  .btn-editorial:active {
+    transform: translateY(0);
+  }
+  .btn-editorial:focus-visible {
+    outline: 2px solid var(--color-editorial-navy);
+    outline-offset: 2px;
+  }
+
+  /* Button — ghost/outline */
+  .btn-editorial-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    background-color: transparent;
+    color: var(--color-editorial-navy);
+    font-weight: 700;
+    font-size: 0.9375rem;
+    border: 1.5px solid var(--color-editorial-navy);
+    border-radius: var(--radius-editorial-sm);
+    transition: background-color 180ms ease, color 180ms ease;
+  }
+  .btn-editorial-ghost:hover {
+    background-color: var(--color-editorial-navy);
+    color: #ffffff;
+  }
+
+  /* Button — quiet (text link style) */
+  .btn-editorial-quiet {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 0.75rem;
+    color: var(--color-editorial-navy);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    border-radius: var(--radius-editorial-sm);
+    transition: background-color 180ms ease;
+  }
+  .btn-editorial-quiet:hover {
+    background-color: var(--color-editorial-navy-bg);
+  }
+
+  /* Section — 정돈된 수직 리듬 */
+  .section-editorial {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+  @media (min-width: 768px) {
+    .section-editorial {
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+    }
+  }
+
+  /* Container — 콘텐츠 최적 너비 (법령 읽기 편한 65-75ch) */
+  .container-editorial {
+    max-width: 68rem;              /* ~1088px */
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  @media (min-width: 640px) {
+    .container-editorial {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+  .container-editorial-narrow {
+    max-width: 48rem;              /* ~768px — 긴 글 읽기용 */
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /* Badge — 작고 조용한 태그 */
+  .badge-editorial {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.625rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    border-radius: 4px;
+    background-color: var(--color-editorial-navy-bg);
+    color: var(--color-editorial-navy);
+  }
+
+  /* Law citation — 법조문 인용 인라인 */
+  .cite-editorial {
+    color: var(--color-editorial-navy);
+    font-weight: 600;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+  }
+}
+
+/* ── Touch Target Compliance (WCAG 2.5cm / 44×44px) ─────────────────────── */
+@layer utilities {
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+

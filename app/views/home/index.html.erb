@@ -1,145 +1,113 @@
-<%# Stitch 디자인 v2 — Indigo/Violet 프리미엄 테마 (컴파일 CSS 사용) %>
-
-<div class="font-sans text-slate-800 antialiased selection:bg-indigo-500/30 selection:text-indigo-600">
+<%# Claude Editorial v4 — Deep Civic Navy / Pretendard 800 / Flat Authority
+   재구축: 2026-04-21 (phase 1-B) — 498줄 → 약 330줄, 7섹션 → 6섹션 %>
 
 <!-- 공지사항 배너 (2주 경과 시 자동 숨김) -->
 <% notice_date = Date.new(2026, 3, 27) %>
 <% if (Time.zone.today - notice_date) <= 14 %>
-<div class="bg-gradient-to-r from-amber-500 to-orange-500 text-white">
-  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-3">
-    <div class="flex items-center justify-center gap-3 text-sm flex-wrap">
-      <span class="material-symbols-outlined text-lg animate-pulse shrink-0">auto_stories</span>
-      <span class="font-medium text-center sm:text-left">
-        <strong>완전정복 시리즈 7개·70편 완성</strong>
-        <span class="mx-1.5 opacity-60">|</span>
-        <span class="hidden sm:inline">공사계약·수의계약·예산집행·출장여비·인사복무·예산편성·지방보조금</span>
-        <span class="sm:hidden">공사계약 10편 신규 추가</span>
-        <span class="mx-1.5 opacity-60 hidden md:inline">|</span>
-        <span class="hidden md:inline">복무·인사·예산 실무 가이드 신규 추가</span>
-      </span>
-      <%= link_to guides_path, class: "shrink-0 px-3 py-1 bg-white/20 hover:bg-white/30 rounded-lg text-white font-semibold transition-colors whitespace-nowrap" do %>
-        가이드 보기 →
-      <% end %>
+  <div class="bg-amber-50 border-b border-amber-200">
+    <div class="container-editorial py-2.5">
+      <div class="flex items-center justify-center gap-3 text-sm flex-wrap">
+        <span class="material-symbols-outlined text-[18px] text-amber-700 shrink-0">auto_stories</span>
+        <span class="text-amber-900">
+          <strong class="font-bold">완전정복 시리즈 7개·70편 완성</strong>
+          <span class="hidden sm:inline text-amber-700"> — 공사계약·수의계약·예산집행·출장여비·인사복무·예산편성·지방보조금</span>
+        </span>
+        <%= link_to "가이드 보기 →", guides_path,
+              class: "shrink-0 font-semibold text-amber-900 underline underline-offset-2 decoration-amber-400 hover:decoration-amber-700" %>
+      </div>
     </div>
   </div>
-</div>
 <% end %>
 
-<!-- First Screen Wrapper — Hero + 업무달력이 뷰포트를 정확히 채움 -->
+<!-- ============================================================
+     1. HERO (First Screen) — Navy 배경, Pretendard 800 헤드라인
+     ============================================================ -->
 <div class="flex flex-col min-h-[calc(100vh-4rem)] lg:min-h-[calc(100vh-4.5rem)]">
 
-<!-- Hero Section -->
-<div class="relative w-full hero-gradient overflow-hidden py-12 sm:py-16 flex-1 flex items-center">
-  <%# blur-3xl 제거 → 단순 그라디언트로 대체 (모바일 GPU 병목 해소, LCP 개선) %>
-  <div class="absolute top-0 left-1/4 h-96 w-96 rounded-full bg-indigo-500/15 opacity-60"></div>
-  <div class="absolute bottom-0 right-1/4 h-96 w-96 rounded-full bg-violet-500/10 opacity-40"></div>
-  <div class="relative mx-auto max-w-7xl px-4 sm:px-4 lg:px-4">
-    <div class="flex flex-col items-center text-center">
-      <div class="mb-6 inline-flex items-center rounded-full border border-indigo-400/30 bg-indigo-900/40 px-4 py-1.5 shadow-glow">
-        <span class="mr-2 flex h-2 w-2 relative">
-          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-          <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-        </span>
-        <span class="text-xs font-semibold text-indigo-100 tracking-wide">공무원 계약 실무 전문 가이드</span>
+<section class="relative flex-1 flex items-center bg-editorial-navy overflow-hidden"
+         style="background-image: linear-gradient(180deg, #174B8E 0%, #1E5AA8 100%);">
+  <div class="container-editorial section-editorial w-full">
+    <div class="max-w-4xl mx-auto text-center">
+
+      <!-- Kicker -->
+      <div class="inline-flex items-center gap-2 mb-6 px-3 py-1.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-sm">
+        <span class="h-1.5 w-1.5 rounded-full bg-emerald-300"></span>
+        <span class="text-xs font-semibold text-white/90 tracking-wide">공무원 계약·예산 실무 가이드</span>
       </div>
-      <h1 class="mb-8 w-full text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl leading-[1.15]">
-        복잡한 실무, 여기서 풀어가세요
+
+      <!-- Headline -->
+      <h1 class="heading-editorial-hero text-white mb-6">
+        복잡한 실무,<br class="sm:hidden"/> 여기서 풀어가세요
       </h1>
-      <p class="mb-10 max-w-5xl text-base sm:text-xl text-slate-200 leading-relaxed font-normal">
-        수의계약·입찰·검수·예산 — 현직 공무원이 가장 많이 찾는<br class="hidden sm:block"/>
+
+      <!-- Lede -->
+      <p class="lede-editorial text-white/90 max-w-2xl mx-auto mb-10">
+        현직 공무원이 가장 많이 찾는<br class="hidden sm:block"/>
         <strong class="font-bold text-white">실무 가이드 <%= @topic_count + @guide_count %>개, 감사 지적 사례 <%= @audit_case_count %>건</strong>이 여기 있습니다.
       </p>
 
       <!-- Search -->
-      <div class="w-full max-w-6xl mb-10 relative z-10">
-        <form action="<%= silmu_search_path %>" method="get" data-turbo="false"
-              data-controller="home-search" data-action="submit->home-search#submit">
-          <div class="search-glass relative flex items-center rounded-2xl overflow-hidden p-2 transition-all duration-300">
-            <div class="flex h-14 w-14 items-center justify-center text-indigo-300 pl-2">
-              <span class="material-symbols-outlined text-3xl">search</span>
-            </div>
-            <input name="q" data-home-search-target="input"
-                   data-action="input->home-search#inputChanged blur->home-search#blurred"
-                   aria-label="실무 가이드 검색"
-                   class="h-14 w-full border-0 bg-transparent px-4 text-white placeholder:text-slate-400 focus:ring-0 text-lg" placeholder="무엇을 도와드릴까요? (예: 수의계약 한도, 물품구매 절차)" type="text" autocomplete="off"/>
-            <button type="submit" class="flex h-12 items-center justify-center rounded-xl bg-indigo-600 px-4 sm:px-8 text-base font-bold text-white transition-all hover:bg-indigo-500 shadow-lg shadow-indigo-600/30">
-              <span class="material-symbols-outlined sm:hidden text-xl">search</span>
-              <span class="hidden sm:inline">검색</span>
-            </button>
-          </div>
-          <!-- 자동완성 힌트 -->
-          <div data-home-search-target="hint" class="hidden mt-2 text-center text-sm text-indigo-300 animate-pulse">
-            <span class="material-symbols-outlined text-base align-middle">keyboard_return</span>
-            <span class="ml-1">Enter로 검색</span>
-          </div>
-        </form>
-        <!-- 지금 어느 단계세요? — 단계별 빠른 진입 -->
-        <div class="mt-6 w-full">
-          <p class="text-center text-xs font-semibold text-indigo-300 uppercase tracking-wider mb-3">지금 어느 단계에 있으세요?</p>
-          <div class="flex flex-wrap justify-center gap-2">
-            <% [
-              [contract_method_path,                                                           "lightbulb",      "1. 계약방식 결정"],
-              [topics_category_path(key: "contract") + "?subgroup=수의계약",                  "gavel",          "2. 견적·입찰"],
-              [topic_path("contract-execution"),                                               "handshake",      "3. 계약체결"],
-              [topic_path("inspection"),                                                       "fact_check",     "4. 검수·대금지급"]
-            ].each_with_index do |(path, icon, label), idx| %>
-              <%= link_to path, class: "group inline-flex min-h-[44px] items-center gap-2 rounded-xl bg-slate-800/60 px-4 py-2.5 text-sm font-semibold text-slate-200 hover:bg-indigo-600/30 hover:text-white hover:border-indigo-400/60 transition-all backdrop-blur-sm border border-slate-600/50" do %>
-                <span class="material-symbols-outlined text-[16px] text-indigo-300 group-hover:text-indigo-200"><%= icon %></span>
-                <span><%= label %></span>
-              <% end %>
+      <form action="<%= silmu_search_path %>" method="get" data-turbo="false"
+            data-controller="home-search" data-action="submit->home-search#submit"
+            class="max-w-2xl mx-auto mb-8">
+        <div class="flex items-center gap-2 p-2 bg-white rounded-xl shadow-lg">
+          <span class="material-symbols-outlined text-slate-400 pl-3">search</span>
+          <input name="q" data-home-search-target="input"
+                 data-action="input->home-search#inputChanged blur->home-search#blurred"
+                 aria-label="실무 가이드 검색"
+                 placeholder="예: 수의계약 한도, 물품구매 절차"
+                 autocomplete="off" type="text"
+                 class="flex-1 h-12 px-2 border-0 bg-transparent text-slate-900 placeholder:text-slate-400 focus:ring-0 focus:outline-none text-base"/>
+          <button type="submit" class="btn-editorial h-12 px-5 shrink-0">검색</button>
+        </div>
+      </form>
+
+      <!-- 단계별 빠른 진입 (4칩 + 전체 흐름도) -->
+      <div class="mb-8">
+        <p class="text-xs font-semibold text-white/80 uppercase tracking-wider mb-3">지금 어느 단계에 있으세요?</p>
+        <div class="flex flex-wrap justify-center gap-2">
+          <% [
+            [contract_method_path,                                        "lightbulb",   "1. 계약방식 결정"],
+            [topics_category_path(key: "contract") + "?subgroup=수의계약", "gavel",       "2. 견적·입찰"],
+            [topic_path("contract-execution"),                            "handshake",   "3. 계약체결"],
+            [topic_path("inspection"),                                    "fact_check",  "4. 검수·대금지급"]
+          ].each do |path, icon, label| %>
+            <%= link_to path, class: "touch-target inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-white text-sm font-semibold backdrop-blur-sm transition-colors" do %>
+              <span class="material-symbols-outlined text-[16px] text-white/75"><%= icon %></span><%= label %>
             <% end %>
-            <%= link_to contract_flow_path, class: "inline-flex min-h-[44px] items-center gap-1.5 px-4 py-2.5 text-sm font-semibold text-slate-400 hover:text-white transition-colors border border-dashed border-slate-600/50 rounded-xl hover:border-slate-400/60" do %>
-              <span class="material-symbols-outlined text-[16px]">account_tree</span>전체 흐름도
-            <% end %>
-          </div>
+          <% end %>
+          <%= link_to contract_flow_path, class: "touch-target inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg border border-dashed border-white/25 text-white/75 hover:text-white hover:border-white/50 text-sm font-semibold transition-colors" do %>
+            <span class="material-symbols-outlined text-[16px]">account_tree</span>전체 흐름도
+          <% end %>
         </div>
       </div>
 
-      <!-- Sector 선택 인디케이터 (common 제외) -->
-      <% if @sector != "common" %>
-      <div class="mb-6 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 border border-white/20 backdrop-blur-sm">
-        <span class="material-symbols-outlined text-sm text-emerald-400">check_circle</span>
-        <span class="text-sm font-semibold text-white">
-          <%= @sector == "local_gov" ? "🏢 지자체" : "🏫 교육행정" %> 맞춤 콘텐츠로 보는 중
-        </span>
-        <%= link_to root_path(sector: "common", anchor: "sector-tabs"),
-              class: "ml-1 text-xs text-slate-300 hover:text-white transition-colors underline" do %>
-          초기화
-        <% end %>
-      </div>
-      <% end %>
-
-      <!-- Sector 탭 — Hero 하단 인라인 -->
-      <div id="sector-tabs" class="mt-6 flex items-center gap-2 justify-center scroll-mt-16 flex-wrap">
-        <span class="text-xs font-semibold text-indigo-300 whitespace-nowrap">내 직종:</span>
-        <% [["common", "🏛️", "공통"], ["local_gov", "🏢", "지자체"], ["edu", "🏫", "교육행정"]].each do |sector_key, emoji, label| %>
-          <% is_active = @sector == sector_key %>
-          <%= link_to root_path(sector: sector_key, anchor: "sector-tabs"),
-                class: "flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold rounded-full transition-colors #{is_active ? 'bg-white text-indigo-700 shadow-sm' : 'bg-white/15 text-indigo-100 hover:bg-white/25 hover:text-white border border-white/20'}" do %>
-            <%= emoji %> <%= label %>
-          <% end %>
+      <!-- Sector 탭 -->
+      <div id="sector-tabs" class="flex items-center justify-center gap-2 flex-wrap scroll-mt-16">
+        <span class="text-xs font-semibold text-white/85">내 직종:</span>
+        <% [["common", "공통"], ["local_gov", "지자체"], ["edu", "교육행정"]].each do |key, label| %>
+          <% is_active = @sector == key %>
+          <%= link_to label, root_path(sector: key, anchor: "sector-tabs"),
+                class: "touch-target inline-flex items-center px-4 py-1.5 rounded-full text-xs font-semibold transition-colors #{is_active ? 'bg-white text-editorial-navy' : 'bg-white/15 text-white hover:bg-white/25 border border-white/30'}" %>
         <% end %>
       </div>
 
     </div>
   </div>
-</div>
+</section>
 
-
-<!-- 업무달력 배너 — Hero 바로 아래 (above the fold) -->
-<div class="bg-gradient-to-r from-indigo-600 to-violet-600 text-white">
-  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-3">
+<!-- 업무달력 strip (Hero 하단 inline) -->
+<div class="bg-editorial-navy-bg border-y border-slate-200">
+  <div class="container-editorial py-3">
     <div class="flex items-center justify-between gap-4">
-      <div class="flex items-center gap-3">
-        <div class="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center shrink-0">
-          <span class="material-symbols-outlined text-xl">calendar_month</span>
-        </div>
-        <div>
-          <p class="text-sm font-bold text-white"><%= Time.zone.now.month %>월 업무달력 — 이달 마감일정 놓치지 마세요</p>
-          <p class="text-xs text-indigo-200 hidden sm:block">급여·보험료·세무신고 등 반복업무 일정을 한눈에 관리하세요</p>
+      <div class="flex items-center gap-3 min-w-0">
+        <span class="material-symbols-outlined text-editorial-navy shrink-0">calendar_month</span>
+        <div class="min-w-0">
+          <p class="text-sm font-bold text-editorial-ink truncate"><%= Time.zone.now.month %>월 업무달력 — 이달 마감일정 놓치지 마세요</p>
+          <p class="text-xs text-editorial-muted hidden sm:block">급여·보험료·세무신고 등 반복업무 일정을 한눈에</p>
         </div>
       </div>
-      <%= link_to task_calendar_path, class: "shrink-0 flex items-center gap-1 px-4 py-2 bg-white text-indigo-700 text-sm font-bold rounded-xl hover:bg-indigo-50 transition-colors whitespace-nowrap" do %>
+      <%= link_to task_calendar_path, class: "btn-editorial-quiet shrink-0" do %>
         일정 확인 <span class="material-symbols-outlined text-base">arrow_forward</span>
       <% end %>
     </div>
@@ -148,351 +116,266 @@
 
 </div><%# /First Screen Wrapper %>
 
-<%# 최근 본 항목 (로컬스토리지 기반 — 서버 렌더링 없음) %>
+<%# 최근 본 항목 (로컬스토리지 기반 — 기본 숨김) %>
 <section data-controller="recent-items" style="display:none"
          data-recent-items-container-target="container"
-         class="border-b border-gray-100 bg-surface-50">
-  <div class="container-wide py-4">
+         class="bg-editorial-cream border-b border-slate-200">
+  <div class="container-editorial py-4">
     <div class="flex items-center gap-2 mb-3">
-      <span class="material-symbols-outlined text-slate-400 text-base">history</span>
-      <h2 class="text-sm font-semibold text-slate-500">최근 본 항목</h2>
+      <span class="material-symbols-outlined text-editorial-muted text-base">history</span>
+      <h2 class="text-sm font-semibold text-editorial-muted">최근 본 항목</h2>
     </div>
     <div data-recent-items-list-target="list"
-         class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
-    </div>
+         class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2"></div>
   </div>
 </section>
 
-
-<!-- Core Tools Section -->
-<% cache "home/core_tools/v3", expires_in: 24.hours do %>
-<section class="bg-background-light py-10 relative">
-  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <div class="mb-8 flex items-end justify-between">
+<!-- ============================================================
+     2. CORE TOOLS — 3 main + 4 minor
+     ============================================================ -->
+<% cache "home/core_tools/editorial_v1", expires_in: 24.hours do %>
+<section class="section-editorial bg-editorial-cream">
+  <div class="container-editorial">
+    <div class="flex items-end justify-between mb-8 flex-wrap gap-4">
       <div>
-        <h2 class="text-2xl font-bold text-slate-900 tracking-tight mb-4">핵심 실무 도구</h2>
-        <p class="text-xl text-slate-600 font-medium">복잡한 계산과 서류 작성을 <strong class="text-indigo-700 font-bold">클릭 몇 번</strong>으로 처리하세요</p>
+        <h2 class="heading-editorial-section mb-2">핵심 실무 도구</h2>
+        <p class="lede-editorial">복잡한 계산과 서류 작성을 <strong class="text-editorial-navy">클릭 몇 번</strong>으로 처리하세요</p>
       </div>
-      <%= link_to tools_path, class: "group flex items-center gap-2 px-5 py-3 text-base font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-lg hover:shadow-xl transition-all" do %>
+      <%= link_to tools_path, class: "btn-editorial" do %>
         전체 도구 보기
-        <span class="material-symbols-outlined text-xl group-hover:translate-x-1 transition-transform">arrow_forward</span>
+        <span class="material-symbols-outlined text-lg">arrow_forward</span>
       <% end %>
     </div>
 
-    <!-- Main 3 Tools -->
-    <div class="grid grid-cols-1 gap-6 lg:grid-cols-3 mb-8">
-      <%= link_to contract_method_path, class: "group relative overflow-hidden rounded-2xl bg-white p-7 shadow-md hover:shadow-xl hover:-translate-y-2 transition-all duration-300 border border-slate-100 hover:border-indigo-200" do %>
-        <div class="absolute inset-0 bg-gradient-to-br from-indigo-50/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-        <div class="relative z-10 mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-300">
-          <span class="material-symbols-outlined text-2xl">account_tree</span>
-        </div>
-        <h3 class="relative z-10 text-base font-semibold text-slate-900 mb-2 tracking-tight">계약방식 결정</h3>
-        <p class="relative z-10 text-sm text-slate-600 leading-relaxed mb-6">예산과 품목만 입력하면 법령에 맞는 최적의 계약 방식을 <strong class="text-indigo-700 font-bold">인공지능이 추천</strong>해 드립니다.</p>
-        <div class="relative z-10 flex items-center text-indigo-600 font-bold text-sm group-hover:translate-x-1 transition-transform duration-300">
-          <span>지금 확인하기</span>
-          <span class="material-symbols-outlined ml-1 text-lg">arrow_forward</span>
-        </div>
-      <% end %>
-
-      <%= link_to contract_guarantee_path, class: "group relative overflow-hidden rounded-2xl bg-white p-7 shadow-md hover:shadow-xl hover:-translate-y-2 transition-all duration-300 border border-slate-100 hover:border-amber-200" do %>
-        <div class="absolute inset-0 bg-gradient-to-br from-amber-50/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-        <div class="relative z-10 mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-amber-50 text-amber-600 group-hover:bg-amber-600 group-hover:text-white transition-colors duration-300">
-          <span class="material-symbols-outlined text-2xl">percent</span>
-        </div>
-        <h3 class="relative z-10 text-base font-semibold text-slate-900 mb-2 tracking-tight">계약보증금 계산</h3>
-        <p class="relative z-10 text-sm text-slate-600 leading-relaxed mb-6">계약금액만 입력하면 <strong class="text-amber-700 font-bold">계약·이행·하자·선금 보증금</strong>을 법령 기준에 맞게 자동 계산합니다.</p>
-        <div class="relative z-10 flex items-center text-amber-600 font-bold text-sm group-hover:translate-x-1 transition-transform duration-300">
-          <span>지금 확인하기</span>
-          <span class="material-symbols-outlined ml-1 text-lg">arrow_forward</span>
-        </div>
-      <% end %>
-
-      <%= link_to estimated_price_path, class: "group relative overflow-hidden rounded-2xl bg-white p-7 shadow-md hover:shadow-xl hover:-translate-y-2 transition-all duration-300 border border-slate-100 hover:border-emerald-200" do %>
-        <div class="absolute inset-0 bg-gradient-to-br from-emerald-50/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-        <div class="relative z-10 mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-300">
-          <span class="material-symbols-outlined text-2xl">payments</span>
-        </div>
-        <h3 class="relative z-10 text-base font-semibold text-slate-900 mb-2 tracking-tight">예정가격 산정</h3>
-        <p class="relative z-10 text-sm text-slate-600 leading-relaxed mb-6">시장조사 가격을 입력하면 <strong class="text-emerald-700 font-bold">복수예비가격 85~100%</strong> 범위의 적정 예정가격을 즉시 산출합니다.</p>
-        <div class="relative z-10 flex items-center text-emerald-600 font-bold text-sm group-hover:translate-x-1 transition-transform duration-300">
-          <span>지금 확인하기</span>
-          <span class="material-symbols-outlined ml-1 text-lg">arrow_forward</span>
-        </div>
-      <% end %>
-    </div>
-
-    <!-- Minor Tools -->
-    <div class="grid grid-cols-2 gap-6 md:grid-cols-4">
-      <!-- 업무 할일 달력 (emphasized) -->
-      <%= link_to task_calendar_path, class: "flex flex-col items-center justify-center gap-3 rounded-2xl bg-gradient-to-br from-indigo-50 to-white p-6 shadow-md border-2 border-indigo-200 hover:border-indigo-300 hover:shadow-lg hover:-translate-y-1 transition-all duration-300" do %>
-        <div class="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-100 text-indigo-600">
-          <span class="material-symbols-outlined text-[20px]">calendar_today</span>
-        </div>
-        <span class="text-sm font-bold text-indigo-900">업무 할일 달력</span>
-      <% end %>
-
-      <!-- 나머지 도구들 -->
+    <!-- 주요 3 도구 -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-5">
       <% [
-        [legal_period_path, "calendar_month", "계약기간 산정"],
-        [pre_contract_checklist_path, "checklist_rtl", "사전 체크리스트"],
-        [contract_flow_path, "account_tree", "계약 흐름도"]
-      ].each do |path, icon, label| %>
-        <%= link_to path, class: "flex flex-col items-center justify-center gap-3 rounded-2xl bg-white p-6 shadow-sm border border-slate-100 hover:border-indigo-100 hover:shadow-md hover:-translate-y-1 transition-all duration-300" do %>
-          <div class="flex h-10 w-10 items-center justify-center rounded-full bg-slate-50 text-slate-600">
-            <span class="material-symbols-outlined text-[20px]"><%= icon %></span>
+        [contract_method_path,      "account_tree", "계약방식 결정",    "예산과 품목만 입력하면 법령에 맞는 최적의 계약 방식을 <strong class='text-editorial-navy'>인공지능이 추천</strong>해 드립니다."],
+        [contract_guarantee_path,   "percent",      "계약보증금 계산",  "계약금액만 입력하면 <strong class='text-editorial-navy'>계약·이행·하자·선금 보증금</strong>을 법령 기준에 맞게 자동 계산합니다."],
+        [estimated_price_path,      "payments",     "예정가격 산정",    "시장조사 가격을 입력하면 <strong class='text-editorial-navy'>복수예비가격 85~100%</strong> 범위의 적정 예정가격을 즉시 산출합니다."]
+      ].each do |path, icon, title, desc| %>
+        <%= link_to path, class: "card-editorial card-editorial-interactive group" do %>
+          <div class="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-lg bg-editorial-navy-bg text-editorial-navy group-hover:bg-editorial-navy group-hover:text-white transition-colors">
+            <span class="material-symbols-outlined text-[22px]"><%= icon %></span>
           </div>
-          <span class="text-sm font-semibold text-slate-900"><%= label %></span>
+          <h3 class="heading-editorial-card mb-2"><%= title %></h3>
+          <p class="text-sm text-editorial-muted leading-relaxed mb-5"><%= raw desc %></p>
+          <div class="flex items-center gap-1 text-sm font-bold text-editorial-navy group-hover:gap-2 transition-all">
+            지금 확인하기 <span class="material-symbols-outlined text-base">arrow_forward</span>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+
+    <!-- 부가 4 도구 -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <%= link_to task_calendar_path, class: "card-editorial card-editorial-interactive flex flex-col items-center gap-2 py-5 border-editorial-navy-light/30" do %>
+        <span class="material-symbols-outlined text-[22px] text-editorial-navy">calendar_today</span>
+        <span class="text-sm font-bold text-editorial-ink">업무 할일 달력</span>
+      <% end %>
+      <% [
+        [legal_period_path,          "calendar_month",   "계약기간 산정"],
+        [pre_contract_checklist_path,"checklist_rtl",    "사전 체크리스트"],
+        [contract_flow_path,         "account_tree",     "계약 흐름도"]
+      ].each do |path, icon, label| %>
+        <%= link_to path, class: "card-editorial-quiet card-editorial-interactive flex flex-col items-center gap-2 py-5" do %>
+          <span class="material-symbols-outlined text-[22px] text-editorial-muted"><%= icon %></span>
+          <span class="text-sm font-semibold text-editorial-ink"><%= label %></span>
         <% end %>
       <% end %>
     </div>
   </div>
 </section>
+<% end %><%# cache %>
 
-<% end %><%# cache home/core_tools %>
-
-<!-- Topic Guides & Templates -->
-<% if @sector != "common"
-     banner_bg    = @sector == "local_gov" ? "bg-blue-50 border-blue-200"   : "bg-orange-50 border-orange-200"
-     banner_text  = @sector == "local_gov" ? "text-blue-800"                : "text-orange-800"
-     banner_icon  = @sector == "local_gov" ? "account_balance"              : "school"
-     banner_icon_color = @sector == "local_gov" ? "text-blue-600"           : "text-orange-500"
-     banner_name  = @sector == "local_gov" ? "지방자치단체"                 : "교육행정기관"
-   end %>
+<!-- ============================================================
+     3. TOPIC GUIDES — Featured + Grid
+     ============================================================ -->
 <% if @sector != "common" %>
-<div class="border-b <%= banner_bg %> border-t">
-  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-3 flex items-center gap-3">
-    <span class="material-symbols-outlined <%= banner_icon_color %> text-xl"><%= banner_icon %></span>
-    <p class="text-sm font-semibold <%= banner_text %>">
-      <strong><%= banner_name %> 맞춤</strong> 콘텐츠를 표시하고 있습니다 — 법령 가이드·감사사례가 소속 기관에 맞게 조정되었습니다.
-    </p>
-    <%= link_to "전체 보기", root_path(sector: "common", anchor: "sector-tabs"),
-          class: "ml-auto shrink-0 text-xs font-semibold #{@sector == "local_gov" ? "text-blue-600 hover:text-blue-800" : "text-orange-600 hover:text-orange-800"} underline underline-offset-2 transition-colors" %>
+  <% banner_label = @sector == "local_gov" ? "지방자치단체" : "교육행정기관" %>
+  <div class="bg-editorial-navy-bg border-y border-slate-200">
+    <div class="container-editorial py-2.5 flex items-center gap-3 flex-wrap">
+      <span class="badge-editorial"><%= banner_label %> 맞춤</span>
+      <p class="text-sm text-editorial-muted">법령 가이드·감사사례가 소속 기관에 맞게 조정되었습니다.</p>
+      <%= link_to "전체 보기 →", root_path(sector: "common", anchor: "sector-tabs"),
+            class: "ml-auto shrink-0 text-xs font-semibold text-editorial-navy hover:underline underline-offset-2" %>
+    </div>
   </div>
-</div>
 <% end %>
-<section class="py-12 bg-background-light">
-  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-      <!-- Topic Guides (sector × month 큐레이션) -->
-      <div class="lg:col-span-12">
-        <% sector_label = { "common" => "공통", "local_gov" => "지자체", "edu" => "교육행정" }[@sector]
-           sector_icon  = { "common" => "library_books", "local_gov" => "account_balance", "edu" => "school" }[@sector]
-           sector_color = { "common" => "text-indigo-600", "local_gov" => "text-blue-600", "edu" => "text-orange-500" }[@sector]
-           sector_badge_bg = { "common" => "bg-slate-100 text-slate-500", "local_gov" => "bg-blue-50 text-blue-700 ring-1 ring-blue-200", "edu" => "bg-orange-50 text-orange-700 ring-1 ring-orange-200" }[@sector] %>
-        <div class="mb-8 flex items-center justify-between">
-          <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
-            <span class="material-symbols-outlined <%= sector_color %>"><%= sector_icon %></span>
-            <% if @sector == "common" %>
-              주요 법령 가이드
-            <% else %>
-              <span class="<%= sector_color %>"><%= sector_label %></span> 맞춤 가이드
-            <% end %>
-          </h2>
-          <span class="text-xs font-semibold px-2.5 py-1 rounded-full <%= sector_badge_bg %>">
-            <%= @sector == "common" ? "#{Time.zone.now.month}월 추천" : "#{Time.zone.now.month}월 #{sector_label} 특화" %>
-          </span>
-        </div>
 
-        <% topic_visual = {
-          "private-contract"             => ["handshake",      "indigo"],
-          "bidding"                      => ["gavel",          "violet"],
-          "contract-execution"           => ["description",    "amber"],
-          "inspection"                   => ["fact_check",     "emerald"],
-          "payment"                      => ["payments",       "blue"],
-          "travel-expense"               => ["flight_takeoff", "rose"],
-          "estimated-price"              => ["calculate",      "emerald"],
-          "contract-guarantee-deposit"   => ["security",       "amber"],
-          "advance-payment"              => ["wallet",         "blue"],
-          "late-penalty"                 => ["timer_off",      "rose"],
-          "design-change"                => ["edit_note",      "violet"],
-          "budget-compilation"           => ["account_balance","indigo"],
-          "budget-carryover"             => ["undo",           "slate"],
-          "year-end-settlement"          => ["receipt_long",   "slate"],
-          "completion-payment-checklist" => ["checklist_rtl",  "emerald"],
-          "goods-selection-committee"    => ["group_work",     "amber"]
-        } %>
+<section class="section-editorial bg-white">
+  <div class="container-editorial">
+    <div class="flex items-center justify-between mb-8 flex-wrap gap-4">
+      <div>
+        <h2 class="heading-editorial-section mb-2 flex items-center gap-2">
+          <span class="material-symbols-outlined text-editorial-navy">library_books</span>
+          <% if @sector == "common" %>주요 법령 가이드<% else %><%= @sector == "local_gov" ? "지자체" : "교육행정" %> 맞춤 가이드<% end %>
+        </h2>
+        <p class="meta-editorial"><%= Time.zone.now.month %>월 큐레이션 · 총 <%= @topic_count %>개 주제</p>
+      </div>
+      <%= link_to topics_path, class: "btn-editorial-ghost" do %>
+        전체 가이드 보기
+        <span class="material-symbols-outlined text-base">arrow_forward</span>
+      <% end %>
+    </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          <% if @curated_topics.present? %>
-            <% @curated_topics.each_with_index do |topic, idx| %>
-              <% icon, color = topic_visual[topic.slug] || ["library_books", "indigo"] %>
-              <% if idx == 0 %>
-                <%# Featured: 첫 번째 토픽 (가로 전폭, 강조 스타일) %>
-                <%= link_to topic_path(topic.slug), class: "group relative sm:col-span-2 lg:col-span-3 flex items-start gap-5 rounded-2xl bg-gradient-to-br from-indigo-50 via-white to-violet-50 p-6 shadow-sm border-2 border-indigo-200 transition-all hover:shadow-lg hover:-translate-y-1 hover:border-indigo-400 cursor-pointer overflow-hidden" do %>
-                  <div class="absolute top-3 right-3">
-                    <% badge_bg = { "common" => "bg-indigo-600", "local_gov" => "bg-blue-600", "edu" => "bg-orange-500" }[@sector]
-                       badge_label = { "common" => "이달의 필수", "local_gov" => "🏢 지자체 필수", "edu" => "🏫 교육행정 필수" }[@sector] %>
-                    <span class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold <%= badge_bg %> text-white rounded-full">
-                      <span class="material-symbols-outlined text-sm">star</span> <%= badge_label %>
-                    </span>
-                  </div>
-                  <div class="shrink-0 flex h-14 w-14 items-center justify-center rounded-xl <%= tc(color, :icon_lg) %> transition-colors">
-                    <span class="material-symbols-outlined text-3xl"><%= icon %></span>
-                  </div>
-                  <div class="pr-24 sm:pr-28">
-                    <h3 class="font-bold text-xl text-slate-900 <%= tc(color, :title) %> transition-colors"><%= topic.name %></h3>
-                    <p class="mt-1.5 text-sm text-slate-600 leading-relaxed"><%= topic.summary.to_s.truncate(80) %></p>
-                    <% keywords = topic.keyword_list.first(3) %>
-                    <% if keywords.any? %>
-                      <div class="mt-3 flex flex-wrap gap-2">
-                        <% keywords.each do |kw| %>
-                          <span class="inline-flex items-center gap-1 text-xs <%= tc(color, :badge) %> border rounded-md px-2 py-0.5 font-medium"><%= kw %></span>
-                        <% end %>
-                      </div>
+    <% topic_icons = {
+      "private-contract" => "handshake", "bidding" => "gavel", "contract-execution" => "description",
+      "inspection" => "fact_check", "payment" => "payments", "travel-expense" => "flight_takeoff",
+      "estimated-price" => "calculate", "contract-guarantee-deposit" => "security",
+      "advance-payment" => "wallet", "late-penalty" => "timer_off", "design-change" => "edit_note",
+      "budget-compilation" => "account_balance", "budget-carryover" => "undo",
+      "year-end-settlement" => "receipt_long", "completion-payment-checklist" => "checklist_rtl",
+      "goods-selection-committee" => "group_work"
+    } %>
+
+    <% if @curated_topics.present? %>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <% @curated_topics.each_with_index do |topic, idx| %>
+          <% icon = topic_icons[topic.slug] || "library_books" %>
+          <% if idx == 0 %>
+            <%# Featured — 첫 카드 강조 %>
+            <%= link_to topic_path(topic.slug),
+                  class: "card-editorial card-editorial-interactive group sm:col-span-2 lg:col-span-3 flex items-start gap-5 relative" do %>
+              <div class="absolute top-4 right-4">
+                <span class="badge-editorial"><span class="material-symbols-outlined text-sm mr-1">star</span>이달의 필수</span>
+              </div>
+              <div class="shrink-0 flex h-14 w-14 items-center justify-center rounded-lg bg-editorial-navy text-white">
+                <span class="material-symbols-outlined text-2xl"><%= icon %></span>
+              </div>
+              <div class="min-w-0 pr-28 sm:pr-32">
+                <h3 class="heading-editorial-card mb-1.5 group-hover:text-editorial-navy transition-colors"><%= topic.name %></h3>
+                <p class="text-sm text-editorial-muted leading-relaxed mb-3"><%= topic.summary.to_s.truncate(80) %></p>
+                <% keywords = topic.keyword_list.first(3) %>
+                <% if keywords.any? %>
+                  <div class="flex flex-wrap gap-1.5">
+                    <% keywords.each do |kw| %>
+                      <span class="badge-editorial"><%= kw %></span>
                     <% end %>
                   </div>
                 <% end %>
-              <% else %>
-                <%# 일반 카드 %>
-                <%= link_to topic_path(topic.slug), class: "group flex items-start gap-4 rounded-2xl bg-white p-6 shadow-sm border border-slate-100 transition-all hover:shadow-lg hover:-translate-y-1 hover:border-indigo-100 cursor-pointer" do %>
-                  <div class="shrink-0 flex h-12 w-12 items-center justify-center rounded-xl <%= tc(color, :icon_sm) %> transition-colors">
-                    <span class="material-symbols-outlined"><%= icon %></span>
-                  </div>
-                  <div>
-                    <h3 class="font-bold text-lg text-slate-900 <%= tc(color, :title) %> transition-colors"><%= topic.name %></h3>
-                    <p class="mt-1 text-sm text-slate-500 leading-snug"><%= topic.summary.to_s.truncate(70) %></p>
-                  </div>
-                <% end %>
+              </div>
+            <% end %>
+          <% else %>
+            <%= link_to topic_path(topic.slug),
+                  class: "card-editorial card-editorial-interactive group flex items-start gap-4" do %>
+              <div class="shrink-0 flex h-11 w-11 items-center justify-center rounded-lg bg-editorial-navy-bg text-editorial-navy group-hover:bg-editorial-navy group-hover:text-white transition-colors">
+                <span class="material-symbols-outlined text-[22px]"><%= icon %></span>
+              </div>
+              <div class="min-w-0">
+                <h3 class="font-bold text-base text-editorial-ink group-hover:text-editorial-navy transition-colors leading-snug mb-1"><%= topic.name %></h3>
+                <p class="text-xs text-editorial-muted line-clamp-2 leading-relaxed"><%= topic.summary.to_s.truncate(70) %></p>
+              </div>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</section>
+
+<!-- ============================================================
+     4. AUDIT CASES + POPULAR GUIDES (좌우 2칼럼 on lg)
+     ============================================================ -->
+<section class="section-editorial bg-editorial-cream">
+  <div class="container-editorial">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+
+      <!-- 감사사례 -->
+      <% if @recent_audit_cases.present? %>
+        <div>
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="heading-editorial-section flex items-center gap-2">
+              <span class="material-symbols-outlined text-red-600">policy</span>주요 감사 지적
+            </h2>
+            <%= link_to audit_cases_path, class: "btn-editorial-quiet" do %>
+              전체 <%= @audit_case_count %>건 <span class="material-symbols-outlined text-base">arrow_forward</span>
+            <% end %>
+          </div>
+          <div class="space-y-3">
+            <% @recent_audit_cases.each do |ac| %>
+              <% is_critical = ac.severity == "중대" %>
+              <%= link_to audit_case_path(ac.slug),
+                    class: "card-editorial card-editorial-interactive group block" do %>
+                <div class="flex items-center gap-2 mb-2 flex-wrap">
+                  <span class="badge-editorial <%= is_critical ? 'signal-critical' : 'signal-warn' %>"><%= ac.severity %></span>
+                  <span class="meta-editorial"><%= ac.category %></span>
+                  <% if ac.repeated_issue? %>
+                    <span class="badge-editorial signal-critical"><span class="material-symbols-outlined text-[11px] mr-0.5">loop</span>반복</span>
+                  <% end %>
+                </div>
+                <h3 class="font-bold text-base text-editorial-ink group-hover:text-editorial-navy transition-colors leading-snug line-clamp-2 mb-1"><%= ac.title %></h3>
+                <p class="text-xs text-editorial-muted line-clamp-2"><%= ac.issue.truncate(90) %></p>
               <% end %>
             <% end %>
-          <% end %>
+          </div>
         </div>
-        <div class="mt-6">
-          <%= link_to topics_path, class: "inline-flex items-center gap-1 text-sm font-bold text-indigo-600 hover:text-indigo-700 transition-colors" do %>
-            전체 법령가이드 보기 <span class="material-symbols-outlined text-lg">arrow_forward</span>
-          <% end %>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- 주요 감사사례 -->
-<% if @recent_audit_cases.present? %>
-<section class="bg-white py-10 border-t border-slate-100">
-  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <div class="flex items-center justify-between mb-8">
-      <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2 flex-wrap">
-        <span class="material-symbols-outlined text-red-500">policy</span>
-        주요 감사 지적 사례
-        <% if @sector != "common" %>
-          <% ac_badge_bg = @sector == "local_gov" ? "bg-blue-100 text-blue-700 ring-1 ring-blue-300" : "bg-orange-100 text-orange-700 ring-1 ring-orange-300"
-             ac_badge_icon = @sector == "local_gov" ? "🏢" : "🏫"
-             ac_badge_label = @sector == "local_gov" ? "지자체 맞춤" : "교육행정 맞춤" %>
-          <span class="text-sm font-bold px-2.5 py-1 rounded-full <%= ac_badge_bg %>"><%= ac_badge_icon %> <%= ac_badge_label %></span>
-        <% end %>
-      </h2>
-      <%= link_to audit_cases_path, class: "text-sm font-semibold text-slate-500 hover:text-red-600 transition-colors flex items-center gap-1" do %>
-        전체 <%= @audit_case_count %>건 보기 <span class="material-symbols-outlined text-base">arrow_forward</span>
       <% end %>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-      <% @recent_audit_cases.each do |ac| %>
-        <% is_critical = ac.severity == "중대" %>
-        <% severity_bg = is_critical ? "bg-red-50 border-red-200" : "bg-orange-50 border-orange-200" %>
-        <% severity_text = is_critical ? "text-red-700" : "text-orange-700" %>
-        <% severity_badge = is_critical ? "bg-red-100 text-red-700" : "bg-orange-100 text-orange-700" %>
-        <% severity_hover = is_critical ? "group-hover:text-red-700" : "group-hover:text-orange-700" %>
-        <%= link_to audit_case_path(ac.slug), class: "group flex flex-col gap-3 p-5 rounded-2xl border #{severity_bg} hover:shadow-md transition-all" do %>
-          <div class="flex items-center gap-2 flex-wrap">
-            <span class="text-xs font-bold px-2 py-0.5 rounded-full <%= severity_badge %>"><%= ac.severity %></span>
-            <span class="text-xs text-slate-500"><%= ac.category %></span>
-            <% if ac.repeated_issue? %>
-              <span class="inline-flex items-center gap-0.5 text-xs font-bold px-1.5 py-0.5 rounded-full bg-red-600 text-white">
-                <span class="material-symbols-outlined text-[10px] leading-none">loop</span>반복
-              </span>
+
+      <!-- 인기 가이드 -->
+      <% if @popular_guides.present? %>
+        <div>
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="heading-editorial-section flex items-center gap-2">
+              <span class="material-symbols-outlined text-editorial-navy">trending_up</span>많이 읽는 가이드
+            </h2>
+            <%= link_to guides_path, class: "btn-editorial-quiet" do %>
+              전체 보기 <span class="material-symbols-outlined text-base">arrow_forward</span>
             <% end %>
           </div>
-          <h3 class="font-bold text-lg text-slate-900 <%= severity_hover %> transition-colors leading-snug line-clamp-2"><%= ac.title %></h3>
-          <p class="text-xs text-slate-500 line-clamp-2 flex-1"><%= ac.issue.truncate(80) %></p>
-          <div class="flex items-center gap-1 <%= severity_text %> text-xs font-semibold group-hover:gap-2 transition-all">
-            사례 보기 <span class="material-symbols-outlined text-sm">arrow_forward</span>
-          </div>
-        <% end %>
-      <% end %>
-    </div>
-    <p class="mt-6 text-xs text-slate-400 flex items-center gap-1">
-      <span class="material-symbols-outlined text-sm">info</span>
-      실제 감사 지적 사례를 분석하여 같은 실수를 반복하지 않도록 안내합니다.
-    </p>
-  </div>
-</section>
-<% end %>
-
-<!-- 인기 실무 가이드 (이탈률 개선: 검색 유입 → 가이드 클릭 유도) -->
-<% if @popular_guides.present? %>
-<section class="bg-white py-10 border-t border-slate-100">
-  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <div class="flex items-center justify-between mb-8">
-      <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
-        <span class="material-symbols-outlined text-indigo-500">trending_up</span>
-        많이 읽는 실무 가이드
-      </h2>
-      <%= link_to guides_path, class: "text-sm font-semibold text-slate-500 hover:text-indigo-600 transition-colors flex items-center gap-1" do %>
-        전체 보기 <span class="material-symbols-outlined text-base">arrow_forward</span>
-      <% end %>
-    </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-      <% @popular_guides.each do |guide| %>
-        <%= link_to guide_path(guide.slug), class: "group flex items-start gap-4 rounded-2xl bg-slate-50 p-5 border border-slate-100 transition-all hover:shadow-md hover:-translate-y-1 hover:border-indigo-200 hover:bg-white" do %>
-          <div class="shrink-0 flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
-            <span class="material-symbols-outlined text-xl">menu_book</span>
-          </div>
-          <div class="min-w-0">
-            <h3 class="font-bold text-base text-slate-900 group-hover:text-indigo-700 transition-colors leading-snug line-clamp-2"><%= guide.title %></h3>
-            <p class="mt-1 text-xs text-slate-500 line-clamp-2"><%= guide.summary.to_s.truncate(60) %></p>
-            <% if guide.series.present? %>
-              <span class="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-indigo-500">
-                <span class="material-symbols-outlined text-[12px]">collections_bookmark</span>
-                <%= guide.series %>
-              </span>
+          <div class="space-y-3">
+            <% @popular_guides.first(5).each_with_index do |guide, idx| %>
+              <%= link_to guide_path(guide.slug),
+                    class: "card-editorial card-editorial-interactive group flex items-start gap-3" do %>
+                <span class="shrink-0 flex h-8 w-8 items-center justify-center rounded-md bg-editorial-navy-bg text-editorial-navy font-bold text-sm"><%= idx + 1 %></span>
+                <div class="min-w-0">
+                  <h3 class="font-bold text-sm text-editorial-ink group-hover:text-editorial-navy transition-colors leading-snug line-clamp-2"><%= guide.title %></h3>
+                  <% if guide.series.present? %>
+                    <p class="meta-editorial mt-1 flex items-center gap-1">
+                      <span class="material-symbols-outlined text-[12px]">collections_bookmark</span><%= guide.series %>
+                    </p>
+                  <% end %>
+                </div>
+              <% end %>
             <% end %>
           </div>
-        <% end %>
+        </div>
       <% end %>
+
     </div>
   </div>
 </section>
-<% end %>
 
-<!-- 공공조달관리사 시험 대비 유도 배너 -->
-<section class="bg-indigo-950 py-14">
-  <div class="mx-auto max-w-4xl px-4 text-center">
-    <div class="inline-flex items-center gap-2 mb-4 px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-500/30">
-      <span class="h-1.5 w-1.5 rounded-full bg-indigo-400 animate-pulse"></span>
-      <span class="text-xs font-bold text-indigo-300">2026년 신설 자격시험</span>
-    </div>
-    <h2 class="text-2xl font-bold text-white mb-3">공공조달관리사 시험 대비</h2>
-    <p class="text-slate-400 mb-6">계약 실무 지식을 체계적으로 정리하고 자격증까지 준비하세요</p>
-    <a href="https://exam.silmu.kr" class="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition-all shadow-lg shadow-indigo-600/30">
-      <span class="material-symbols-outlined">school</span>
-      시험 대비 시작하기
-    </a>
-  </div>
-</section>
-
-<!-- Final CTA -->
-<% cache "home/final_cta/v1", expires_in: 24.hours do %>
-<section class="bg-white py-14">
-  <div class="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-    <h2 class="text-xl font-bold tracking-tight text-slate-900">
-      실무, 이제 더 쉽고 완벽하게.
-    </h2>
-    <p class="mx-auto mt-6 max-w-2xl text-xl text-slate-500 font-light">
-      공무원이 선택한 프리미엄 실무 플랫폼, 지금 바로 시작해보세요.
+<!-- ============================================================
+     5. FINAL CTA — 가입 + 시험 통합
+     ============================================================ -->
+<% cache "home/final_cta/editorial_v1", expires_in: 24.hours do %>
+<section class="bg-editorial-navy"
+         style="background-image: linear-gradient(180deg, #1E5AA8 0%, #174B8E 100%);">
+  <div class="container-editorial section-editorial text-center">
+    <h2 class="heading-editorial-section text-white mb-3">실무, 이제 더 쉽고 완벽하게</h2>
+    <p class="lede-editorial text-white/80 mb-8 max-w-2xl mx-auto">
+      법령 가이드 · 자동화 도구 · 감사사례 — 공무원이 선택한 무료 실무 플랫폼
     </p>
-    <div class="mt-10 flex flex-col sm:flex-row justify-center gap-4">
-      <%= link_to new_user_registration_path, class: "rounded-xl bg-slate-900 px-6 py-3 text-base font-bold text-white shadow-xl shadow-slate-900/10 hover:bg-slate-800 hover:scale-105 transition-all" do %>
-        지금 바로 시작하기
-      <% end %>
-      <%= link_to tools_path, class: "rounded-xl bg-slate-100 px-6 py-3 text-base font-bold text-slate-700 hover:bg-slate-200 transition-all" do %>
+    <div class="flex flex-col sm:flex-row justify-center gap-3">
+      <%= link_to "지금 바로 시작하기", new_user_registration_path,
+            class: "touch-target btn-editorial bg-white !text-editorial-navy hover:bg-slate-50 hover:!text-editorial-navy-dark px-6 py-3" %>
+      <%= link_to tools_path,
+            class: "touch-target btn-editorial-ghost !border-white !text-white hover:!bg-white/10 px-6 py-3" do %>
         실무 도구 둘러보기
       <% end %>
     </div>
+
+    <!-- 시험 CTA (subtle) -->
+    <div class="mt-10 pt-8 border-t border-white/20">
+      <p class="meta-editorial !text-white/80 mb-3">2026년 신설 자격시험</p>
+      <a href="https://exam.silmu.kr"
+         class="inline-flex items-center gap-2 text-sm font-bold text-white/90 hover:text-white underline underline-offset-4 decoration-white/30 hover:decoration-white/70 transition-colors">
+        <span class="material-symbols-outlined text-base">school</span>
+        공공조달관리사 시험 대비 시작하기
+        <span class="material-symbols-outlined text-base">arrow_forward</span>
+      </a>
+    </div>
   </div>
 </section>
-
-<% end %><%# cache home/final_cta %>
-
-</div>
+<% end %>

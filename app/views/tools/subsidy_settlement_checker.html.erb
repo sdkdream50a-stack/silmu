@@ -4,7 +4,7 @@
   <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- 뒤로가기 -->
     <div class="mb-6">
-      <%= link_to tools_path, class: "inline-flex items-center text-slate-600 hover:text-indigo-600 transition-colors font-medium" do %>
+      <%= link_to tools_path, class: "inline-flex items-center text-slate-600 hover:text-editorial-navy transition-colors font-medium" do %>
         <span class="material-symbols-outlined mr-1">arrow_back</span>
         도구 목록으로
       <% end %>
@@ -21,8 +21,8 @@
           <p class="text-slate-500">e나라도움 정산 제출 전 자가점검 도구</p>
         </div>
       </div>
-      <div class="bg-indigo-50 border border-indigo-200 rounded-2xl p-5">
-        <p class="text-indigo-800 text-sm leading-relaxed">
+      <div class="bg-editorial-navy-bg border border-editorial-navy-light rounded-2xl p-5">
+        <p class="text-editorial-navy-dark text-sm leading-relaxed">
           <strong>사용 방법:</strong> 보조금 유형과 사업 정보를 입력하면 정산 전 반드시 확인해야 할 항목이 자동으로 생성됩니다.
           감사원 및 지자체 감사에서 <strong>2순위로 빈번하게 지적되는 보조금 분야</strong> 핵심 항목을 포함합니다.
           (<strong>근거:</strong> 보조금 관리에 관한 법률, 지방재정법 제17조, 지방보조금 관리 기준)
@@ -33,7 +33,7 @@
     <!-- 입력 영역 -->
     <div class="card p-6 mb-6">
       <h2 class="text-lg font-bold text-slate-900 mb-5 flex items-center gap-2">
-        <span class="material-symbols-outlined text-indigo-600">edit_note</span>
+        <span class="material-symbols-outlined text-editorial-navy">edit_note</span>
         사업 기본 정보
       </h2>
 
@@ -71,19 +71,19 @@
         <p class="text-sm font-semibold text-slate-700 mb-3">해당하는 집행 유형 (복수 선택 가능)</p>
         <div class="grid grid-cols-2 gap-3">
           <label class="flex items-center gap-2 cursor-pointer">
-            <input type="checkbox" class="exec-type w-4 h-4 accent-indigo-600" value="construction" onchange="generateChecklist()">
+            <input type="checkbox" class="exec-type w-4 h-4 accent-editorial-navy" value="construction" onchange="generateChecklist()">
             <span class="text-sm text-slate-700">공사·시설사업 포함</span>
           </label>
           <label class="flex items-center gap-2 cursor-pointer">
-            <input type="checkbox" class="exec-type w-4 h-4 accent-indigo-600" value="equipment" onchange="generateChecklist()">
+            <input type="checkbox" class="exec-type w-4 h-4 accent-editorial-navy" value="equipment" onchange="generateChecklist()">
             <span class="text-sm text-slate-700">물품·장비 구매 포함</span>
           </label>
           <label class="flex items-center gap-2 cursor-pointer">
-            <input type="checkbox" class="exec-type w-4 h-4 accent-indigo-600" value="personnel" onchange="generateChecklist()">
+            <input type="checkbox" class="exec-type w-4 h-4 accent-editorial-navy" value="personnel" onchange="generateChecklist()">
             <span class="text-sm text-slate-700">인건비 집행 포함</span>
           </label>
           <label class="flex items-center gap-2 cursor-pointer">
-            <input type="checkbox" class="exec-type w-4 h-4 accent-indigo-600" value="transfer" onchange="generateChecklist()">
+            <input type="checkbox" class="exec-type w-4 h-4 accent-editorial-navy" value="transfer" onchange="generateChecklist()">
             <span class="text-sm text-slate-700">재보조 (재교부) 포함</span>
           </label>
         </div>
@@ -291,7 +291,7 @@
     const criticalItems = sections.reduce((s, sec) => s + sec.items.filter(i => i.critical).length, 0);
 
     const colorMap = {
-      indigo: "bg-indigo-50 border-indigo-200 text-indigo-700",
+      indigo: "bg-editorial-navy-bg border-editorial-navy-light text-editorial-navy-dark",
       slate: "bg-slate-50 border-slate-200 text-slate-700",
       blue: "bg-blue-50 border-blue-200 text-blue-700",
       amber: "bg-amber-50 border-amber-200 text-amber-800",
@@ -305,24 +305,24 @@
 
     let html = `
       <!-- 요약 -->
-      <div class="card p-5 mb-5 bg-gradient-to-r from-indigo-50 to-blue-50 border border-indigo-100">
-        <h2 class="text-base font-bold text-indigo-900 mb-3 flex items-center gap-2">
-          <span class="material-symbols-outlined text-indigo-600">analytics</span>
+      <div class="card p-5 mb-5 bg-gradient-to-r from-editorial-navy-bg to-blue-50 border border-editorial-navy-bg">
+        <h2 class="text-base font-bold text-editorial-ink mb-3 flex items-center gap-2">
+          <span class="material-symbols-outlined text-editorial-navy">analytics</span>
           정산 현황 요약
         </h2>
         <div class="grid grid-cols-3 gap-3">
-          <div class="bg-white rounded-xl p-3 text-center border border-indigo-100">
+          <div class="bg-white rounded-xl p-3 text-center border border-editorial-navy-bg">
             <div class="text-xs text-slate-500 mb-1">집행률</div>
             <div class="text-xl font-bold ${executionRate >= 95 ? 'text-green-600' : executionRate >= 80 ? 'text-amber-600' : 'text-red-600'}">${executionRate}%</div>
           </div>
-          <div class="bg-white rounded-xl p-3 text-center border border-indigo-100">
+          <div class="bg-white rounded-xl p-3 text-center border border-editorial-navy-bg">
             <div class="text-xs text-slate-500 mb-1">잔액</div>
             <div class="text-xl font-bold ${remainder > 0 ? 'text-amber-600' : 'text-green-600'}">${formatNum(remainder)}만원</div>
             ${remainder > 0 ? '<div class="text-xs text-amber-600">반납 필요</div>' : ''}
           </div>
-          <div class="bg-white rounded-xl p-3 text-center border border-indigo-100">
+          <div class="bg-white rounded-xl p-3 text-center border border-editorial-navy-bg">
             <div class="text-xs text-slate-500 mb-1">점검 항목</div>
-            <div class="text-xl font-bold text-indigo-700">${totalItems}개</div>
+            <div class="text-xl font-bold text-editorial-navy-dark">${totalItems}개</div>
             <div class="text-xs text-red-500">필수 ${criticalItems}개</div>
           </div>
         </div>
@@ -348,7 +348,7 @@
       section.items.forEach((item, idx) => {
         html += `
           <label class="flex items-start gap-3 cursor-pointer group p-2 rounded-lg hover:bg-white/60 transition-colors">
-            <input type="checkbox" class="checklist-item mt-0.5 w-4 h-4 accent-indigo-600 flex-shrink-0" onchange="updateProgress()">
+            <input type="checkbox" class="checklist-item mt-0.5 w-4 h-4 accent-editorial-navy flex-shrink-0" onchange="updateProgress()">
             <div class="flex-1">
               <span class="text-sm text-slate-700 group-hover:text-slate-900 leading-relaxed">${item.text}</span>
               ${item.critical ? '<span class="ml-1 text-xs font-semibold text-red-500 bg-red-50 px-1.5 py-0.5 rounded">필수</span>' : ''}
@@ -369,7 +369,7 @@
           <span id="progress-text">0 / ${totalItems} 완료</span>
         </div>
         <div class="bg-slate-100 rounded-full h-3">
-          <div id="progress-bar" class="h-full rounded-full bg-indigo-500 transition-all duration-300" style="width: 0%"></div>
+          <div id="progress-bar" class="h-full rounded-full bg-editorial-navy transition-all duration-300" style="width: 0%"></div>
         </div>
         <p class="text-xs text-slate-500 mt-2">모든 항목을 점검한 후 e나라도움에 정산보고서를 제출하세요.</p>
       </div>
@@ -385,10 +385,10 @@
     document.getElementById('progress-text').textContent = `${checked} / ${total} 완료`;
     document.getElementById('progress-bar').style.width = pct + '%';
     if (pct === 100) {
-      document.getElementById('progress-bar').classList.replace('bg-indigo-500', 'bg-green-500');
+      document.getElementById('progress-bar').classList.replace('bg-editorial-navy', 'bg-green-500');
     } else {
       if (document.getElementById('progress-bar').classList.contains('bg-green-500')) {
-        document.getElementById('progress-bar').classList.replace('bg-green-500', 'bg-indigo-500');
+        document.getElementById('progress-bar').classList.replace('bg-green-500', 'bg-editorial-navy');
       }
     }
   }

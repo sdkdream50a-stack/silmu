@@ -38,7 +38,8 @@
 <% end %>
 
 <!-- 페이지 헤더 -->
-<section class="gradient-premium text-white py-12 lg:py-16">
+<section class="bg-editorial-navy text-white py-12 lg:py-16"
+         style="background-image: linear-gradient(180deg, #174B8E 0%, #1E5AA8 100%);">
   <div class="container-wide">
     <!-- 브레드크럼 -->
     <div class="flex items-center gap-2 text-slate-300 text-sm mb-6">
@@ -147,7 +148,7 @@
     <nav class="flex gap-1 overflow-x-auto py-3 -mx-4 px-4 scrollbar-hide" id="topic-tabs">
       <%# 실무 그룹: 실무흐름도 + 실무주의 + 실무절차 → "실무 가이드" %>
       <button onclick="showTab('flowchart')" data-tab="flowchart"
-              class="tab-btn px-3 py-2 <%= (@has_flowchart && @related_guide.blank?) ? 'bg-slate-800 text-white shadow-md font-semibold' : 'bg-surface-100 text-slate-600 hover:bg-surface-200 font-medium' %> rounded-lg text-sm whitespace-nowrap flex items-center gap-1.5 transition-all duration-200">
+              class="tab-btn px-3 py-2 <%= (@has_flowchart && @related_guide.blank?) ? 'bg-editorial-navy text-white shadow-md font-semibold' : 'bg-surface-100 text-slate-600 hover:bg-surface-200 font-medium' %> rounded-lg text-sm whitespace-nowrap flex items-center gap-1.5 transition-all duration-200">
         <span class="material-symbols-outlined" style="font-size:18px">account_tree</span>
         실무흐름도
       </button>
@@ -160,7 +161,7 @@
       <% end %>
       <%# 법령 그룹 %>
       <button onclick="showTab('law')" data-tab="law"
-              class="tab-btn px-3 py-2 <%= (@has_flowchart || @related_guide.present?) ? 'bg-surface-100 text-slate-600 hover:bg-surface-200 font-medium' : 'bg-slate-800 text-white shadow-md font-semibold' %> rounded-lg text-sm whitespace-nowrap flex items-center gap-1.5 transition-all duration-200">
+              class="tab-btn px-3 py-2 <%= (@has_flowchart || @related_guide.present?) ? 'bg-surface-100 text-slate-600 hover:bg-surface-200 font-medium' : 'bg-editorial-navy text-white shadow-md font-semibold' %> rounded-lg text-sm whitespace-nowrap flex items-center gap-1.5 transition-all duration-200">
         <span class="material-symbols-outlined" style="font-size:18px">balance</span>
         법령 비교
       </button>
@@ -184,22 +185,22 @@
         </button>
         <div id="more-tabs-dropdown" class="hidden absolute top-full left-0 mt-1 bg-white rounded-xl shadow-lg border border-gray-200 py-1.5 min-w-[160px] z-50">
           <button onclick="showTab('regulation'); closeMoreTabs();" data-tab="regulation"
-                  class="tab-btn more-tab-item w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 flex items-center gap-2 transition-colors">
+                  class="tab-btn more-tab-item w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-editorial-navy-bg hover:text-editorial-navy-dark flex items-center gap-2 transition-colors">
             <span class="material-symbols-outlined" style="font-size:16px">description</span>
             예규/지침
           </button>
           <button onclick="showTab('interpretation'); closeMoreTabs();" data-tab="interpretation"
-                  class="tab-btn more-tab-item w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 flex items-center gap-2 transition-colors">
+                  class="tab-btn more-tab-item w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-editorial-navy-bg hover:text-editorial-navy-dark flex items-center gap-2 transition-colors">
             <span class="material-symbols-outlined" style="font-size:16px">policy</span>
             유권해석
           </button>
           <button onclick="showTab('qa'); closeMoreTabs();" data-tab="qa"
-                  class="tab-btn more-tab-item w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 flex items-center gap-2 transition-colors">
+                  class="tab-btn more-tab-item w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-editorial-navy-bg hover:text-editorial-navy-dark flex items-center gap-2 transition-colors">
             <span class="material-symbols-outlined" style="font-size:16px">forum</span>
             질의답변
           </button>
           <button onclick="showTab('tips'); closeMoreTabs();" data-tab="tips"
-                  class="tab-btn more-tab-item w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 flex items-center gap-2 transition-colors">
+                  class="tab-btn more-tab-item w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-editorial-navy-bg hover:text-editorial-navy-dark flex items-center gap-2 transition-colors">
             <span class="material-symbols-outlined" style="font-size:16px">lightbulb</span>
             실무주의
           </button>
@@ -272,7 +273,7 @@ document.addEventListener('click', function(e) {
               <div class="flex items-start relative flex-nowrap" style="min-width: 600px; gap: 4px;">
                 <!-- 법률 (제일 왼쪽) -->
                 <div class="law-card-stack" style="flex: 1; min-width: 0;" data-card="law">
-                  <div class="law-card group overflow-hidden rounded-2xl border-2 border-indigo-200 bg-white shadow-xl cursor-pointer transition-all duration-500 hover:shadow-2xl" onclick="expandLawCard('law')">
+                  <div class="law-card group overflow-hidden rounded-2xl border-2 border-editorial-navy-light/30 bg-white shadow-xl cursor-pointer transition-all duration-500 hover:shadow-2xl" onclick="expandLawCard('law')">
                     <!-- 헤더 -->
                     <div class="relative px-6 py-5 overflow-hidden" style="background-color: #6366f1;">
                       <div class="relative flex items-center justify-between">
@@ -608,8 +609,8 @@ document.addEventListener('click', function(e) {
             <div class="mb-10">
               <div class="flex items-center justify-between mb-5">
                 <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
-                  <div class="icon-container icon-container-sm bg-indigo-100">
-                    <span class="material-symbols-outlined text-indigo-600">folder_open</span>
+                  <div class="icon-container icon-container-sm bg-editorial-navy-bg">
+                    <span class="material-symbols-outlined text-editorial-navy">folder_open</span>
                   </div>
                   여비 관련 서식
                 </h3>
@@ -641,14 +642,14 @@ document.addEventListener('click', function(e) {
             <!-- 실무 도구 -->
             <div class="mb-10">
               <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2 mb-5">
-                <div class="icon-container icon-container-sm bg-indigo-100">
-                  <span class="material-symbols-outlined text-indigo-600">construction</span>
+                <div class="icon-container icon-container-sm bg-editorial-navy-bg">
+                  <span class="material-symbols-outlined text-editorial-navy">construction</span>
                 </div>
                 실무 도구
               </h3>
 
               <%= link_to travel_calculator_path,
-                   class: "group block bg-gradient-to-br from-indigo-50 to-slate-50 rounded-2xl border-2 border-indigo-200 p-6 hover:border-indigo-400 hover:shadow-strong transition-all duration-300" do %>
+                   class: "group block bg-gradient-to-br from-editorial-navy-bg to-slate-50 rounded-2xl border-2 border-editorial-navy-light/30 p-6 hover:border-editorial-navy-light/30 hover:shadow-strong transition-all duration-300" do %>
                 <div class="flex items-start gap-5">
                   <div class="w-16 h-16 gradient-indigo rounded-2xl flex items-center justify-center shadow-lg shrink-0">
                     <span class="material-symbols-outlined text-3xl text-white">calculate</span>
@@ -665,7 +666,7 @@ document.addEventListener('click', function(e) {
                       <span class="badge badge-emerald">2025년 기준 (현행)</span>
                     </div>
                   </div>
-                  <span class="material-symbols-outlined text-2xl text-indigo-400 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                  <span class="material-symbols-outlined text-2xl text-editorial-navy-light group-hover:translate-x-1 transition-transform">arrow_forward</span>
                 </div>
               <% end %>
             </div>
@@ -703,8 +704,8 @@ document.addEventListener('click', function(e) {
             <!-- 여비 지급 기준 요약 -->
             <div>
               <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2 mb-5">
-                <div class="icon-container icon-container-sm bg-indigo-100">
-                  <span class="material-symbols-outlined text-indigo-600">payments</span>
+                <div class="icon-container icon-container-sm bg-editorial-navy-bg">
+                  <span class="material-symbols-outlined text-editorial-navy">payments</span>
                 </div>
                 여비 지급 기준 요약 <span class="text-sm font-normal text-slate-500">(2025년 개정, 현행)</span>
               </h3>
@@ -712,7 +713,7 @@ document.addEventListener('click', function(e) {
               <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6">
                 <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   <div class="bg-white rounded-xl p-4 text-center">
-                    <div class="text-2xl font-bold text-indigo-700">25,000원</div>
+                    <div class="text-2xl font-bold text-editorial-navy-dark">25,000원</div>
                     <div class="text-sm text-slate-600 mt-1">일비 (1일)</div>
                   </div>
                   <div class="bg-white rounded-xl p-4 text-center">
@@ -736,8 +737,8 @@ document.addEventListener('click', function(e) {
             <div class="mb-10">
               <div class="flex items-center justify-between mb-5">
                 <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
-                  <div class="icon-container icon-container-sm bg-indigo-100">
-                    <span class="material-symbols-outlined text-indigo-600">folder_open</span>
+                  <div class="icon-container icon-container-sm bg-editorial-navy-bg">
+                    <span class="material-symbols-outlined text-editorial-navy">folder_open</span>
                   </div>
                   연말정산 관련 서식
                 </h3>
@@ -801,8 +802,8 @@ document.addEventListener('click', function(e) {
             <div class="mb-10">
               <div class="flex items-center justify-between mb-5">
                 <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
-                  <div class="icon-container icon-container-sm bg-indigo-100">
-                    <span class="material-symbols-outlined text-indigo-600">folder_open</span>
+                  <div class="icon-container icon-container-sm bg-editorial-navy-bg">
+                    <span class="material-symbols-outlined text-editorial-navy">folder_open</span>
                   </div>
                   예산이월 관련 서식
                 </h3>
@@ -866,12 +867,12 @@ document.addEventListener('click', function(e) {
             <div class="mb-10">
               <div class="flex items-center justify-between mb-5">
                 <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
-                  <div class="icon-container icon-container-sm bg-indigo-100">
-                    <span class="material-symbols-outlined text-indigo-600">folder_open</span>
+                  <div class="icon-container icon-container-sm bg-editorial-navy-bg">
+                    <span class="material-symbols-outlined text-editorial-navy">folder_open</span>
                   </div>
                   필수 서식
                 </h3>
-                <%= link_to templates_path, class: "text-sm text-indigo-600 hover:text-indigo-700 font-medium flex items-center gap-1 transition-colors" do %>
+                <%= link_to templates_path, class: "text-sm text-editorial-navy hover:text-editorial-navy-dark font-medium flex items-center gap-1 transition-colors" do %>
                   전체보기
                   <span class="material-symbols-outlined text-sm">arrow_forward</span>
                 <% end %>
@@ -905,14 +906,14 @@ document.addEventListener('click', function(e) {
             <!-- 실무 도구 -->
             <div class="mb-10">
               <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2 mb-5">
-                <div class="icon-container icon-container-sm bg-indigo-100">
-                  <span class="material-symbols-outlined text-indigo-600">construction</span>
+                <div class="icon-container icon-container-sm bg-editorial-navy-bg">
+                  <span class="material-symbols-outlined text-editorial-navy">construction</span>
                 </div>
                 실무 도구
               </h3>
 
               <a href="/tools/quote-review" target="_blank"
-                 class="group block bg-gradient-to-br from-indigo-50 to-slate-50 rounded-2xl border-2 border-indigo-200 p-6 hover:border-indigo-400 hover:shadow-strong transition-all duration-300">
+                 class="group block bg-gradient-to-br from-editorial-navy-bg to-slate-50 rounded-2xl border-2 border-editorial-navy-light/30 p-6 hover:border-editorial-navy-light/30 hover:shadow-strong transition-all duration-300">
                 <div class="flex items-start gap-5">
                   <div class="w-16 h-16 gradient-indigo rounded-2xl flex items-center justify-center shadow-lg shrink-0">
                     <span class="material-symbols-outlined text-3xl text-white">fact_check</span>
@@ -929,7 +930,7 @@ document.addEventListener('click', function(e) {
                       <span class="badge badge-emerald">법규 검토</span>
                     </div>
                   </div>
-                  <span class="material-symbols-outlined text-2xl text-indigo-400 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                  <span class="material-symbols-outlined text-2xl text-editorial-navy-light group-hover:translate-x-1 transition-transform">arrow_forward</span>
                 </div>
               </a>
             </div>
@@ -967,8 +968,8 @@ document.addEventListener('click', function(e) {
             <!-- 작성 가이드 -->
             <div>
               <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2 mb-5">
-                <div class="icon-container icon-container-sm bg-indigo-100">
-                  <span class="material-symbols-outlined text-indigo-600">edit_note</span>
+                <div class="icon-container icon-container-sm bg-editorial-navy-bg">
+                  <span class="material-symbols-outlined text-editorial-navy">edit_note</span>
                 </div>
                 수의계약 사유서 작성 가이드
               </h3>
@@ -977,7 +978,7 @@ document.addEventListener('click', function(e) {
                 <div class="space-y-6">
                   <div>
                     <h4 class="font-semibold text-slate-800 mb-4 flex items-center gap-2">
-                      <span class="material-symbols-outlined text-indigo-700">checklist</span>
+                      <span class="material-symbols-outlined text-editorial-navy-dark">checklist</span>
                       필수 기재 항목
                     </h4>
                     <div class="grid sm:grid-cols-2 gap-3">
@@ -998,17 +999,17 @@ document.addEventListener('click', function(e) {
                     </div>
                   </div>
 
-                  <div class="border-t border-indigo-200 pt-6">
+                  <div class="border-t border-editorial-navy-light/30 pt-6">
                     <h4 class="font-semibold text-slate-800 mb-4 flex items-center gap-2">
-                      <span class="material-symbols-outlined text-indigo-600">code</span>
+                      <span class="material-symbols-outlined text-editorial-navy">code</span>
                       작성 예시
                     </h4>
                     <div class="bg-white rounded-xl p-5 text-sm text-slate-700 font-mono space-y-2 shadow-soft">
-                      <p><span class="text-indigo-600 font-semibold">1. 계약건명:</span> 2026년도 사무용품 구매</p>
-                      <p><span class="text-indigo-600 font-semibold">2. 추정가격:</span> 15,000,000원 (부가세 포함)</p>
-                      <p><span class="text-indigo-600 font-semibold">3. 수의계약 사유:</span></p>
+                      <p><span class="text-editorial-navy font-semibold">1. 계약건명:</span> 2026년도 사무용품 구매</p>
+                      <p><span class="text-editorial-navy font-semibold">2. 추정가격:</span> 15,000,000원 (부가세 포함)</p>
+                      <p><span class="text-editorial-navy font-semibold">3. 수의계약 사유:</span></p>
                       <p class="pl-4 text-slate-600">지방계약법 시행령 제25조 제1항 제1호에 따라 추정가격이 물품구매 수의계약 기준금액(2천만원) 이하이므로 수의계약 체결</p>
-                      <p><span class="text-indigo-600 font-semibold">4. 계약상대자:</span> (주)OO상사</p>
+                      <p><span class="text-editorial-navy font-semibold">4. 계약상대자:</span> (주)OO상사</p>
                       <p class="pl-4 text-slate-600">- 선정사유: 최저가 견적 제출업체</p>
                     </div>
                   </div>
@@ -1034,7 +1035,7 @@ document.addEventListener('click', function(e) {
             <!-- 섹션 구분선 + 타이틀 -->
             <div class="flex items-center gap-4 mb-8">
               <div class="flex items-center gap-4">
-                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-600 to-indigo-700 flex items-center justify-center shadow-lg">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-editorial-navy to-editorial-navy-dark flex items-center justify-center shadow-lg">
                   <span class="material-symbols-outlined text-white" style="font-size:28px">rate_review</span>
                 </div>
                 <div>
@@ -1042,14 +1043,14 @@ document.addEventListener('click', function(e) {
                   <p class="text-sm text-slate-500 mt-1">현장 경험 기반 실무 적용 포인트</p>
                 </div>
               </div>
-              <div class="flex-1 h-px bg-gradient-to-r from-indigo-200 via-indigo-100 to-transparent"></div>
-              <span class="px-4 py-1.5 bg-indigo-50 text-indigo-700 text-sm font-bold rounded-full border border-indigo-200 shadow-sm">실무 가이드</span>
+              <div class="flex-1 h-px bg-gradient-to-r from-editorial-navy-light via-editorial-navy-bg to-transparent"></div>
+              <span class="px-4 py-1.5 bg-editorial-navy-bg text-editorial-navy-dark text-sm font-bold rounded-full border border-editorial-navy-light/30 shadow-sm">실무 가이드</span>
             </div>
 
             <!-- 본문 카드 -->
-            <div class="bg-white rounded-3xl border-2 border-indigo-100 shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+            <div class="bg-white rounded-3xl border-2 border-editorial-navy-light/30 shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
               <!-- 상단 강조 띠 -->
-              <div class="h-2 bg-gradient-to-r from-indigo-500 via-violet-500 to-indigo-400"></div>
+              <div class="h-2 bg-gradient-to-r from-editorial-navy via-violet-500 to-editorial-navy-light"></div>
 
               <div class="px-8 py-10 commentary-body">
                 <%= render_legal_content(@topic.commentary) %>
@@ -1079,7 +1080,7 @@ document.addEventListener('click', function(e) {
             </h2>
             <div class="space-y-4" id="faq-accordion">
               <% @topic.faq_list.each_with_index do |faq, index| %>
-                <div class="border-2 border-gray-100 rounded-2xl overflow-hidden hover:border-indigo-200 hover:shadow-md transition-all duration-200">
+                <div class="border-2 border-gray-100 rounded-2xl overflow-hidden hover:border-editorial-navy-light/30 hover:shadow-md transition-all duration-200">
                   <button onclick="toggleFaq(<%= index %>)"
                           class="w-full px-6 py-5 text-left bg-surface-50 hover:bg-surface-100 flex items-center justify-between transition-colors">
                     <span class="font-semibold text-base text-slate-800 flex items-center gap-4">
@@ -1090,7 +1091,7 @@ document.addEventListener('click', function(e) {
                   </button>
                   <div id="faq-answer-<%= index %>" class="hidden px-6 py-5 bg-white border-t-2 border-gray-100">
                     <div class="flex gap-4">
-                      <span class="w-9 h-9 bg-indigo-100 text-indigo-700 rounded-full flex items-center justify-center text-base font-bold shrink-0">A</span>
+                      <span class="w-9 h-9 bg-editorial-navy-bg text-editorial-navy-dark rounded-full flex items-center justify-center text-base font-bold shrink-0">A</span>
                       <p class="text-slate-700 text-base whitespace-pre-line leading-relaxed"><%= faq['answer'] %></p>
                     </div>
                   </div>
@@ -1107,7 +1108,7 @@ document.addEventListener('click', function(e) {
           <!-- 퀵 링크 -->
           <div class="card p-5">
             <h3 class="font-bold text-slate-900 mb-4 flex items-center gap-2">
-              <span class="material-symbols-outlined text-indigo-600">bolt</span>
+              <span class="material-symbols-outlined text-editorial-navy">bolt</span>
               빠른 이동
             </h3>
             <nav class="space-y-1">
@@ -1119,7 +1120,7 @@ document.addEventListener('click', function(e) {
               ].each do |item| %>
                 <button onclick="showTab('<%= item[:tab] %>')"
                         class="w-full flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-surface-100 rounded-xl transition-all duration-200 text-left group">
-                  <span class="material-symbols-outlined text-slate-400 group-hover:text-indigo-500 transition-colors"><%= item[:icon] %></span>
+                  <span class="material-symbols-outlined text-slate-400 group-hover:text-editorial-navy transition-colors"><%= item[:icon] %></span>
                   <span class="text-sm font-medium group-hover:text-slate-900 transition-colors"><%= item[:title] %></span>
                 </button>
               <% end %>
@@ -1145,7 +1146,7 @@ document.addEventListener('click', function(e) {
 
           <!-- 관련 도구 — 토픽별 맞춤 도구 (3단계) -->
           <% if @related_tools.any? %>
-          <div class="card-glass bg-gradient-to-br from-emerald-50 to-indigo-50 border-emerald-200 p-5">
+          <div class="card-glass bg-gradient-to-br from-emerald-50 to-editorial-navy-bg border-emerald-200 p-5">
             <h3 class="font-bold text-slate-900 mb-4 flex items-center gap-2">
               <span class="material-symbols-outlined text-emerald-600">build</span>
               바로 사용하기
@@ -1183,8 +1184,8 @@ document.addEventListener('click', function(e) {
             <ul class="space-y-2">
               <% @related_topics.each do |t| %>
                 <li>
-                  <%= link_to topic_path(t.slug), class: "flex items-center gap-2 text-sm text-slate-700 hover:text-indigo-600 transition-colors group" do %>
-                    <span class="material-symbols-outlined text-slate-300 group-hover:text-indigo-400 shrink-0" style="font-size:16px">arrow_forward</span>
+                  <%= link_to topic_path(t.slug), class: "flex items-center gap-2 text-sm text-slate-700 hover:text-editorial-navy transition-colors group" do %>
+                    <span class="material-symbols-outlined text-slate-300 group-hover:text-editorial-navy-light shrink-0" style="font-size:16px">arrow_forward</span>
                     <%= t.name %>
                   <% end %>
                 </li>
@@ -1196,7 +1197,7 @@ document.addEventListener('click', function(e) {
           <!-- 법령 개정 알림 구독 -->
           <div id="law-subscription-<%= @topic.slug %>" class="mt-6 p-4 bg-slate-50 border border-slate-200 rounded-xl">
             <div class="flex items-start gap-3">
-              <span class="material-symbols-outlined text-indigo-600 mt-0.5">notifications</span>
+              <span class="material-symbols-outlined text-editorial-navy mt-0.5">notifications</span>
               <div class="flex-1">
                 <p class="font-semibold text-slate-800 text-sm">법령 개정 알림 받기</p>
                 <p class="text-xs text-slate-500 mt-0.5 mb-3"><%= @topic.name %> 관련 법령이 개정되면 이메일로 알려드립니다.</p>
@@ -1204,7 +1205,7 @@ document.addEventListener('click', function(e) {
                   <%= button_to law_change_subscriptions_path,
                         method: :post,
                         params: { topic_slug: @topic.slug, topic_name: @topic.name },
-                        class: "inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-lg transition-colors" do %>
+                        class: "inline-flex items-center gap-1.5 px-3 py-1.5 bg-editorial-navy hover:bg-editorial-navy-dark text-white text-xs font-semibold rounded-lg transition-colors" do %>
                     <span class="material-symbols-outlined text-sm">add_alert</span>
                     알림 구독하기
                   <% end %>
@@ -1213,10 +1214,10 @@ document.addEventListener('click', function(e) {
                     <%= f.hidden_field :topic_slug, value: @topic.slug %>
                     <%= f.hidden_field :topic_name, value: @topic.name %>
                     <%= f.email_field :email, placeholder: "이메일 주소 입력",
-                          class: "flex-1 px-3 py-1.5 text-xs border border-indigo-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400",
+                          class: "flex-1 px-3 py-1.5 text-xs border border-editorial-navy-light/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-editorial-navy-light",
                           required: true %>
                     <%= f.submit "구독",
-                          class: "px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-lg cursor-pointer transition-colors" %>
+                          class: "px-3 py-1.5 bg-editorial-navy hover:bg-editorial-navy-dark text-white text-xs font-semibold rounded-lg cursor-pointer transition-colors" %>
                   <% end %>
                 <% end %>
               </div>
@@ -1662,9 +1663,9 @@ function showTab(tabName) {
       var btn = _cachedBtns[j];
       if (btn.getAttribute('data-tab') === tabName) {
         btn.classList.remove('bg-surface-100', 'text-slate-600', 'hover:bg-surface-200', 'bg-emerald-600');
-        btn.classList.add('bg-slate-800', 'text-white', 'shadow-md');
+        btn.classList.add('bg-editorial-navy', 'text-white', 'shadow-md');
       } else {
-        btn.classList.remove('bg-slate-800', 'text-white', 'shadow-md');
+        btn.classList.remove('bg-editorial-navy', 'text-white', 'shadow-md');
         btn.classList.add('bg-surface-100', 'text-slate-600', 'hover:bg-surface-200');
       }
     }
@@ -1697,7 +1698,7 @@ document.addEventListener('turbo:render', initTabs);
 <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
   <div class="card p-6">
     <h2 class="text-xl font-bold text-slate-900 mb-1 flex items-center gap-2">
-      <span class="material-symbols-outlined text-indigo-500">forum</span>
+      <span class="material-symbols-outlined text-editorial-navy">forum</span>
       실무 Q&A
     </h2>
     <p class="text-sm text-slate-500 mb-6">이 법령에 관한 질문이나 실무 경험을 공유해주세요</p>

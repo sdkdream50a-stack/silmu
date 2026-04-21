@@ -93,6 +93,11 @@
 - [공문서 AI 작성 도우미](https://silmu.kr/tools/official-document): AI 기반 공문서 초안 작성
 - [적격심사 자동 채점기](https://silmu.kr/tools/qualification-evaluation): 2억원 이상 공사·용역 적격심사 가격·비가격 점수 자동 계산 및 낙찰자 선정
 - [4대보험 정산보험료 계산기](https://silmu.kr/tools/insurance-calculator): 국민연금·건강보험·고용보험 연말·퇴직정산 자동 계산
+- [공무원 봉급 실수령액 계산기](https://silmu.kr/tools/salary-calculator): 공무원 봉급표 기준 직급·호봉별 실수령액 자동 계산
+- [공무원연금 예상 수령액 계산기](https://silmu.kr/tools/pension-calculator): 재직년수와 기준소득월액으로 예상 공무원연금 수령액 산정
+- [물가변동 조정금액 계산기](https://silmu.kr/tools/price-adjustment-calculator): 지수조정률·품목조정률 방식으로 ESC 조정금액 자동 계산
+- [초과근무수당 계산기](https://silmu.kr/tools/overtime-calculator): 월봉급액·시간외·야간·휴일 근무시간 기반 초과근무수당 산정
+- [연가 일수 계산기](https://silmu.kr/tools/annual-leave-calculator): 입사일·근무년수 기반 연가 발생일수 및 잔여연가 자동 계산
 - [업무 할일 달력](https://silmu.kr/tools/task-calendar): 급여·세무·보험 등 월별 반복업무 일정 관리, CSV·ICS 내보내기
 
 ## 업무 가이드 (Guides)
@@ -131,6 +136,8 @@ Q: 대금지급 기한은?
 A: 검사 완료 후 14일 이내에 지급해야 하며, 지연 시 지연이자를 지급해야 합니다.
 
 ## 최신 업데이트
-- 갱신일: 2026-04-16
+- 갱신일: 2026-04-21
 - 콘텐츠 현황: 법령 가이드 93개, 자동화 도구 37개, 서식 26종, 감사사례 155건
 - 주요 추가: 입찰오류 대응, 물품/용역 구분, 계약보증금 면제, 적격심사, 입찰참가자격 제한, 추가계약 한도, 지체상금 감면, 공기연장, 물가변동, 준공대금, 직접생산확인 등 실무 FAQ
+- 법령 최신화: 「전자서명법」(2020.12.10. 시행)에 따라 '공인인증서' → '공동인증서' 용어 전면 갱신
+- 디자인 시스템: Editorial(Pretendard 800 + Deep Civic Navy) 통합 적용
