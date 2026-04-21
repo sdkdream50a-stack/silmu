@@ -15,8 +15,9 @@ class LegalContentRenderer
     # 1. Markdown 테이블을 HTML 테이블로 변환
     html = convert_markdown_tables(html)
 
-    # 2. 제목 변환 (## -> h3, ### -> h4)
-    html = html.gsub(/^### (.+)$/, '<h4 class="legal-h4">\1</h4>')
+    # 2. 제목 변환 — 접근성: h2(카드 헤더) 직후 h4 점프를 피하기 위해 둘 다 h3로 내보냄.
+    # WCAG 1.3.1 위반 방지. 시각 위계는 CSS class(legal-h3/legal-h4)가 유지.
+    html = html.gsub(/^### (.+)$/, '<h3 class="legal-h4">\1</h3>')
     html = html.gsub(/^## (.+)$/, '<h3 class="legal-h3">\1</h3>')
 
     # 2-1. 법령명 표기 (지방계약법, 국가계약법, 시행령, 시행규칙 등)

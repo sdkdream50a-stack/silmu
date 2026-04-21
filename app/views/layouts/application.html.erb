@@ -267,7 +267,7 @@
 
 
     <!-- Main Content -->
-    <main class="flex-1 pb-24 md:pb-0">
+    <main id="main-content" class="flex-1 pb-24 md:pb-0" role="main" aria-label="본문">
       <%= yield %>
     </main>
 
@@ -351,7 +351,7 @@
     </style>
 
     <!-- Footer — enhanced with gradient border -->
-    <footer class="bg-slate-900 text-white mt-auto relative<%= ' hidden' if content_for?(:hide_footer) %>" style="content-visibility:auto; contain-intrinsic-size:auto 500px">
+    <footer class="bg-slate-900 text-white mt-auto relative<%= ' hidden' if content_for?(:hide_footer) %>" style="content-visibility:auto; contain-intrinsic-size:auto 500px" aria-label="사이트 정보">
       <!-- Top gradient line -->
       <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#2E6DBA]/40 to-transparent"></div>
       <div class="container-wide py-16 lg:py-20">
