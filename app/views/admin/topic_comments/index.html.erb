@@ -102,7 +102,7 @@
       <!-- 페이지네이션 -->
       <% if @pagy.pages > 1 %>
         <div class="px-6 py-4 border-t border-slate-200 flex justify-center">
-          <%== pagy_nav(@pagy) %>
+          <%== @pagy.series_nav(aria_label: "페이지 네비게이션") %>
         </div>
       <% end %>
     <% end %>

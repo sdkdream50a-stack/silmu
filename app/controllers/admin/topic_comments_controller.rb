@@ -1,12 +1,12 @@
 class Admin::TopicCommentsController < Admin::BaseController
-  include Pagy::Backend
+  include Pagy::Method
 
   def index
     scope = TopicComment.includes(:user).order(created_at: :desc)
     scope = scope.where(comment_type: params[:comment_type]) if params[:comment_type].present?
     scope = scope.where(hidden: params[:hidden] == "true") if params[:hidden].present?
 
-    @pagy, @comments = pagy(scope, limit: 30)
+    @pagy, @comments = pagy(:offset, scope, limit: 30)
 
     @stats = {
       total:     TopicComment.count,
