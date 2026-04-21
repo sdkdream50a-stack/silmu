@@ -62,13 +62,16 @@ class Rack::Attack
   #   enforce  = 403 차단 + 로그
   CF_LOCKDOWN_MODE = ENV.fetch("CF_ORIGIN_LOCKDOWN", "off").downcase.freeze
 
+  CF_LOCKDOWN_LOG_PATH = "/tmp/cf_lockdown.log".freeze
+
   def self.log_non_cf_origin(tag, req)
     peer = origin_peer_ip(req)&.to_s || req.env["REMOTE_ADDR"]
     xff = req.env["HTTP_X_FORWARDED_FOR"]
-    line = "[cf-lockdown:#{tag}] peer=#{peer} xff=#{xff&.slice(0, 120)} host=#{req.host} path=#{req.path}"
-    # STDERR는 lograge/ActiveJob 로그 사이에서도 식별 가능. Rails.logger는 production에서 lograge로 재라우팅될 수 있음.
-    $stderr.puts(line)
-    Rails.logger.warn(line) if defined?(Rails)
+    line = "[cf-lockdown:#{tag}] #{Time.now.iso8601} peer=#{peer} xff=#{xff&.slice(0, 120)} host=#{req.host} path=#{req.path}\n"
+    # 파일 직접 기록 — lograge/Rails.logger 경로에 의존하지 않음
+    File.open(CF_LOCKDOWN_LOG_PATH, "a") { |f| f.write(line) }
+  rescue => e
+    $stderr.puts("[cf-lockdown] log write failed: #{e.message}")
   end
 
   if CF_LOCKDOWN_MODE == "observe"
