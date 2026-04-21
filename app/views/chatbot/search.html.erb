@@ -6,15 +6,25 @@
       <% no_results = @topics.blank? && @audit_cases.blank? && @guides.blank? && @templates.blank? %>
       <% if no_results %>
         <div class="bg-white rounded-2xl border border-slate-200 p-10 text-center">
-          <span class="material-symbols-outlined text-slate-300 text-5xl">search_off</span>
-          <h3 class="text-base font-semibold text-slate-700 mt-3 mb-1">"<%= @query %>" 검색 결과가 없습니다</h3>
-          <p class="text-slate-400 text-sm mb-5">다른 키워드로 검색하거나 아래 항목을 확인해보세요</p>
-          <div class="flex flex-wrap gap-2 justify-center">
-            <% ["수의계약", "적격심사", "입찰", "검수", "예산"].each do |kw| %>
+          <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-editorial-navy-bg flex items-center justify-center">
+            <span class="material-symbols-outlined text-editorial-navy text-4xl">search_off</span>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900 mb-1">"<%= @query %>" 검색 결과가 없습니다</h3>
+          <p class="text-slate-500 text-sm mb-6">다른 키워드로 검색하거나 아래 추천 키워드를 선택해보세요</p>
+          <div class="flex flex-wrap gap-2 justify-center mb-6">
+            <% ["수의계약", "적격심사", "입찰", "검수", "예산", "청렴서약서"].each do |kw| %>
               <button onclick="document.querySelector('[name=q]').value='<%= kw %>'; document.querySelector('[name=q]').closest('form').requestSubmit();"
-                      class="px-3 py-1.5 bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-600 rounded-full text-sm transition-colors">
+                      class="px-4 py-2 bg-slate-50 hover:bg-editorial-navy-bg hover:text-editorial-navy-dark border border-slate-200 hover:border-editorial-navy-light text-slate-700 rounded-full text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-editorial-navy focus-visible:ring-offset-2">
                 <%= kw %>
               </button>
+            <% end %>
+          </div>
+          <div class="pt-5 border-t border-slate-100 flex flex-wrap gap-4 justify-center text-xs">
+            <%= link_to topics_path, class: "text-editorial-navy hover:text-editorial-navy-dark font-medium flex items-center gap-1", data: { turbo_frame: "_top" } do %>
+              <span class="material-symbols-outlined text-sm">menu_book</span>법령 가이드 둘러보기
+            <% end %>
+            <%= link_to audit_cases_path, class: "text-editorial-navy hover:text-editorial-navy-dark font-medium flex items-center gap-1", data: { turbo_frame: "_top" } do %>
+              <span class="material-symbols-outlined text-sm">policy</span>감사사례 둘러보기
             <% end %>
           </div>
         </div>
