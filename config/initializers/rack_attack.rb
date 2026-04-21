@@ -76,8 +76,18 @@ class Rack::Attack
     $stderr.puts("[cf-lockdown] log write failed: #{e.message}")
   end
 
+  # DEBUG: verify middleware #call is invoked per request
+  module CallTrace
+    def call(env)
+      File.open("/tmp/cf_lockdown.log", "a") { |f| f.write("[call] path=#{env['PATH_INFO']} xff=#{env['HTTP_X_FORWARDED_FOR']}\n") }
+      super
+    end
+  end
+  prepend CallTrace
+
   if CF_LOCKDOWN_MODE == "observe"
     track("cf-lockdown/observe") do |req|
+      File.open("/tmp/cf_lockdown.log", "a") { |f| f.write("[track-entered] path=#{req.path}\n") }
       unless cloudflare_peer?(req)
         log_non_cf_origin("observe", req)
         true
