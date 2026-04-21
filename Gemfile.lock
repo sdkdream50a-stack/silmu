@@ -86,7 +86,7 @@ GEM
     base64 (0.3.0)
     bcrypt (3.1.22)
     bcrypt_pbkdf (1.1.2)
-    bigdecimal (4.1.1)
+    bigdecimal (4.1.2)
     bindex (0.8.1)
     bootsnap (1.21.1)
       msgpack (~> 1.2)
@@ -291,12 +291,12 @@ GEM
       net-smtp
     marcel (1.1.0)
     matrix (0.4.3)
-    meta-tags (2.22.3)
+    meta-tags (2.23.0)
       actionpack (>= 6.0.0)
     mini_magick (5.3.1)
       logger
     mini_mime (1.1.5)
-    minitest (6.0.3)
+    minitest (6.0.5)
       drb (~> 2.0)
       prism (~> 1.5)
     msgpack (1.8.0)
@@ -409,7 +409,7 @@ GEM
       base64 (>= 0.1.0)
       logger (>= 1.6.0)
       rack (>= 3.0.0, < 4)
-    rack-session (2.1.1)
+    rack-session (2.1.2)
       base64 (>= 0.1.0)
       rack (>= 3.0.0)
     rack-test (2.2.0)
@@ -610,7 +610,7 @@ DEPENDENCIES
   json (>= 2.19.2)
   kamal
   letter_opener
-  meta-tags (~> 2.18)
+  meta-tags (~> 2.23)
   omniauth-kakao
   omniauth-naver
   omniauth-rails_csrf_protection
