@@ -78,7 +78,8 @@ module ApplicationHelper
   def render_legal_content(content)
     return "" if content.blank?
 
-    cache_key = "legal_content/#{Digest::MD5.hexdigest(content)}"
+    # v2: LegalContentRenderer 헤딩 체계 변경(h4→h3, WCAG 1.3.1 수정)으로 캐시 무효화
+    cache_key = "legal_content/v2/#{Digest::MD5.hexdigest(content)}"
     cached = Rails.cache.read(cache_key)
     return cached.html_safe if cached
 
