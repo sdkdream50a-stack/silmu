@@ -19,39 +19,42 @@ class SitemapPingJob < ApplicationJob
   # urls: nil이면 최근 변경분 전체 수집, Array이면 해당 URL만 즉시 제출
   def perform(urls = nil)
     urls = urls ? Array(urls) : collect_urls
-    Rails.logger.info "[SitemapPing] #{urls.size}개 URL 제출 시작 (#{INDEXNOW_ENGINES.size}개 엔진 + Google 병렬)"
-
-    INDEXNOW_ENGINES.each do |engine|
-      SitemapPingEngineJob.perform_later(engine, urls)
+    if urls.empty?
+      Rails.logger.info "[SitemapPing] 최근 변경 URL 없음 — IndexNow 제출 건너뜀"
+    else
+      Rails.logger.info "[SitemapPing] #{urls.size}개 URL 제출 시작 (#{INDEXNOW_ENGINES.size}개 엔진)"
+      INDEXNOW_ENGINES.each do |engine|
+        SitemapPingEngineJob.perform_later(engine, urls)
+      end
     end
 
-    # Google은 IndexNow 미지원 → Sitemap Ping API 사용
+    # Google은 IndexNow 미지원 → Sitemap Ping API 사용 (변경 없어도 sitemap ping은 저비용)
     GoogleSitemapPingJob.perform_later
   end
 
   private
 
-  def collect_urls
-    # IndexNow는 변경된 콘텐츠 URL만 받음. sitemap.xml은 Google Sitemap Ping API에서 별도 처리.
-    urls = [
-      "https://#{HOST}/",
-      "https://#{EXAM_HOST}/"
-    ]
+  # daily cron 빈도에 맞춰 창은 `1.day + 2h buffer = 26h`.
+  # 기존 7일 창은 동일 URL을 7일 내내 반복 제출해 quota 낭비.
+  WINDOW = 26.hours
 
-    # 최근 7일간 업데이트된 토픽
-    Topic.published.where("updated_at > ?", 7.days.ago).find_each do |topic|
+  def collect_urls
+    urls = []
+
+    Topic.published.where("updated_at > ?", WINDOW.ago).find_each do |topic|
       urls << "https://#{HOST}/topics/#{topic.slug}"
     end
 
-    # 최근 7일간 업데이트된 감사사례
-    AuditCase.published.where("updated_at > ?", 7.days.ago).find_each do |ac|
+    AuditCase.published.where("updated_at > ?", WINDOW.ago).find_each do |ac|
       urls << "https://#{HOST}/audit-cases/#{ac.slug}"
     end
 
-    # 최근 7일간 업데이트된 가이드
-    Guide.published.where("updated_at > ?", 7.days.ago).find_each do |guide|
+    Guide.published.where("updated_at > ?", WINDOW.ago).find_each do |guide|
       urls << "https://#{HOST}/guides/#{guide.slug}"
     end
+
+    # 새 콘텐츠가 있을 때만 홈페이지 목록 함께 제출 (순서 변경 반영)
+    urls.unshift("https://#{HOST}/") if urls.any?
 
     urls.uniq
   end
