@@ -24,8 +24,10 @@ class User < ApplicationRecord
   after_create_commit :send_welcome_email
 
   def admin?
-    # DB 컬럼 우선, 환경변수 폴백 (점진적 전환)
-    self[:admin] || email == ENV.fetch("ADMIN_EMAIL", "admin@silmu.kr")
+    return true if self[:admin]
+
+    admin_email = ENV["ADMIN_EMAIL"].to_s.strip
+    admin_email.present? && email == admin_email
   end
 
   private

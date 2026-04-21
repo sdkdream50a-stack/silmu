@@ -23,11 +23,12 @@ class RobotsController < ApplicationController
       Disallow: /audit-cases/*/hwp
 
       # 쿼리 파라미터 필터 페이지 — 크롤 예산 절약 (canonical로 처리 중)
-      Disallow: /audit-cases?
-      Disallow: /guides?
-      Disallow: /silmu-search/search?
-      Disallow: /tools/official-document?
-      Disallow: /?sector=
+      # 주의: robots.txt는 wildcard `*`로 경로+쿼리 매칭해야 주요 크롤러(Google/Bing/Naver) 모두 인식
+      Disallow: /audit-cases?*
+      Disallow: /guides?*
+      Disallow: /silmu-search/search?*
+      Disallow: /tools/official-document?*
+      Disallow: /?sector=*
 
       # AI 검색/크롤 봇 명시적 허용 (GEO 최적화)
       # 주의: Cloudflare "Managed robots.txt" 설정이 활성화된 경우 이 규칙보다

@@ -62,7 +62,8 @@ module Api
 
       def authenticate_api_key!
         token = request.headers["Authorization"].to_s.delete_prefix("Bearer ").strip
-        expected = ENV["BLOG_API_KEY"].to_s
+        expected = Rails.application.credentials.dig(:blog_api, :key).to_s.presence ||
+                   ENV["BLOG_API_KEY"].to_s
 
         unless expected.present? && ActiveSupport::SecurityUtils.secure_compare(token, expected)
           render json: { error: "인증 실패" }, status: :unauthorized
