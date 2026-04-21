@@ -4,7 +4,7 @@
   <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- 뒤로가기 -->
     <div class="mb-6">
-      <%= link_to tools_path, class: "inline-flex items-center text-slate-600 hover:text-indigo-600 transition-colors font-medium" do %>
+      <%= link_to tools_path, class: "inline-flex items-center text-slate-600 hover:text-editorial-navy transition-colors font-medium" do %>
         <span class="material-symbols-outlined mr-1">arrow_back</span>
         도구 목록으로
       <% end %>
@@ -23,9 +23,9 @@
       </div>
 
       <!-- 도구 설명 -->
-      <details class="bg-white rounded-2xl shadow-sm border border-indigo-100 mt-6">
+      <details class="bg-white rounded-2xl shadow-sm border border-editorial-navy-bg mt-6">
         <summary class="px-6 py-4 cursor-pointer hover:bg-slate-50 transition-colors flex items-center gap-2 [list-style:none] [&::-webkit-details-marker]:hidden">
-          <span class="material-symbols-outlined text-indigo-600 text-[20px]">info</span>
+          <span class="material-symbols-outlined text-editorial-navy text-[20px]">info</span>
           <span class="text-sm font-semibold text-slate-700">이 도구를 사용하는 이유</span>
           <span class="ml-auto text-xs text-slate-400">펼치기 ▾</span>
         </summary>
@@ -70,11 +70,11 @@
               <label class="block text-sm font-semibold text-slate-700 mb-3">출장 유형</label>
               <div class="flex gap-6">
                 <label class="flex items-center cursor-pointer group">
-                  <input type="radio" name="trip_type" value="domestic" checked class="text-indigo-600 focus:ring-indigo-500 w-4 h-4" data-action="change->travel-calculator#toggleTripType">
+                  <input type="radio" name="trip_type" value="domestic" checked class="text-editorial-navy focus:ring-editorial-navy w-4 h-4" data-action="change->travel-calculator#toggleTripType">
                   <span class="ml-2 text-slate-700 group-hover:text-slate-900 transition-colors">국내 출장</span>
                 </label>
                 <label class="flex items-center cursor-pointer group">
-                  <input type="radio" name="trip_type" value="international" class="text-indigo-600 focus:ring-indigo-500 w-4 h-4" data-action="change->travel-calculator#toggleTripType">
+                  <input type="radio" name="trip_type" value="international" class="text-editorial-navy focus:ring-editorial-navy w-4 h-4" data-action="change->travel-calculator#toggleTripType">
                   <span class="ml-2 text-slate-700 group-hover:text-slate-900 transition-colors">국외 출장</span>
                 </label>
               </div>
@@ -119,31 +119,31 @@
             <div>
               <label class="block text-sm font-semibold text-slate-700 mb-3">교통수단</label>
               <div class="grid grid-cols-2 sm:grid-cols-4 gap-3" id="transport-options">
-                <label class="transport-label flex items-center justify-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-indigo-300 transition-all group" data-action="click->travel-calculator#selectTransport">
+                <label class="transport-label flex items-center justify-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-editorial-navy-light transition-all group" data-action="click->travel-calculator#selectTransport">
                   <input type="radio" name="transport" value="train" class="sr-only" checked>
                   <div class="text-center">
-                    <span class="material-symbols-outlined text-2xl text-slate-400 group-hover:text-indigo-500 transition-colors transport-icon">train</span>
+                    <span class="material-symbols-outlined text-2xl text-slate-400 group-hover:text-editorial-navy transition-colors transport-icon">train</span>
                     <p class="text-sm mt-1 font-medium text-slate-600">기차</p>
                   </div>
                 </label>
-                <label class="transport-label flex items-center justify-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-indigo-300 transition-all group" data-action="click->travel-calculator#selectTransport">
+                <label class="transport-label flex items-center justify-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-editorial-navy-light transition-all group" data-action="click->travel-calculator#selectTransport">
                   <input type="radio" name="transport" value="bus" class="sr-only">
                   <div class="text-center">
-                    <span class="material-symbols-outlined text-2xl text-slate-400 group-hover:text-indigo-500 transition-colors transport-icon">directions_bus</span>
+                    <span class="material-symbols-outlined text-2xl text-slate-400 group-hover:text-editorial-navy transition-colors transport-icon">directions_bus</span>
                     <p class="text-sm mt-1 font-medium text-slate-600">버스</p>
                   </div>
                 </label>
-                <label class="transport-label flex items-center justify-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-indigo-300 transition-all group" data-action="click->travel-calculator#selectTransport">
+                <label class="transport-label flex items-center justify-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-editorial-navy-light transition-all group" data-action="click->travel-calculator#selectTransport">
                   <input type="radio" name="transport" value="car" class="sr-only">
                   <div class="text-center">
-                    <span class="material-symbols-outlined text-2xl text-slate-400 group-hover:text-indigo-500 transition-colors transport-icon">directions_car</span>
+                    <span class="material-symbols-outlined text-2xl text-slate-400 group-hover:text-editorial-navy transition-colors transport-icon">directions_car</span>
                     <p class="text-sm mt-1 font-medium text-slate-600">자차</p>
                   </div>
                 </label>
-                <label class="transport-label flex items-center justify-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-indigo-300 transition-all group" data-action="click->travel-calculator#selectTransport">
+                <label class="transport-label flex items-center justify-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-editorial-navy-light transition-all group" data-action="click->travel-calculator#selectTransport">
                   <input type="radio" name="transport" value="flight" class="sr-only">
                   <div class="text-center">
-                    <span class="material-symbols-outlined text-2xl text-slate-400 group-hover:text-indigo-500 transition-colors transport-icon">flight</span>
+                    <span class="material-symbols-outlined text-2xl text-slate-400 group-hover:text-editorial-navy transition-colors transport-icon">flight</span>
                     <p class="text-sm mt-1 font-medium text-slate-600">항공</p>
                   </div>
                 </label>
@@ -153,7 +153,7 @@
             <!-- 숙박 여부 -->
             <div>
               <label class="flex items-center cursor-pointer group">
-                <input type="checkbox" id="accommodation" name="accommodation" data-travel-calculator-target="accommodation" checked class="text-indigo-600 focus:ring-indigo-500 rounded w-5 h-5">
+                <input type="checkbox" id="accommodation" name="accommodation" data-travel-calculator-target="accommodation" checked class="text-editorial-navy focus:ring-editorial-navy rounded w-5 h-5">
                 <span class="ml-3 text-slate-700 font-medium group-hover:text-slate-900 transition-colors">숙박 필요</span>
               </label>
             </div>
@@ -185,9 +185,9 @@
           <div id="result-content" data-travel-calculator-target="resultContent" class="hidden">
             <!-- 총액 -->
             <div class="gradient-indigo rounded-2xl p-6 text-white mb-6 shadow-lg">
-              <p class="text-indigo-100 text-sm mb-1">총 여비</p>
+              <p class="text-editorial-navy-bg text-sm mb-1">총 여비</p>
               <p class="text-4xl font-bold" id="total-amount" data-travel-calculator-target="totalAmount">₩ 0</p>
-              <p class="text-indigo-200 text-xs mt-2">2026.01.02 시행 여비규정 기준</p>
+              <p class="text-editorial-navy-light text-xs mt-2">2026.01.02 시행 여비규정 기준</p>
             </div>
 
             <!-- 출장 정보 요약 -->
@@ -241,7 +241,7 @@
 
             <!-- 관련 규정 -->
             <div class="mt-6 pt-6 border-t border-gray-100">
-              <a href="https://www.law.go.kr/법령/공무원여비규정" target="_blank" class="text-sm text-indigo-600 hover:text-indigo-700 font-medium flex items-center gap-1 transition-colors">
+              <a href="https://www.law.go.kr/법령/공무원여비규정" target="_blank" class="text-sm text-editorial-navy hover:text-editorial-navy-dark font-medium flex items-center gap-1 transition-colors">
                 <span class="material-symbols-outlined text-lg">gavel</span>
                 공무원여비규정 확인하기
               </a>

@@ -4,7 +4,7 @@
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- 뒤로가기 -->
     <div class="mb-6">
-      <%= link_to tools_path, class: "inline-flex items-center text-slate-600 hover:text-indigo-600 transition-colors font-medium" do %>
+      <%= link_to tools_path, class: "inline-flex items-center text-slate-600 hover:text-editorial-navy transition-colors font-medium" do %>
         <span class="material-symbols-outlined mr-1">arrow_back</span>
         도구 목록으로
       <% end %>
@@ -22,9 +22,9 @@
         </div>
       </div>
 
-      <details class="bg-white rounded-2xl shadow-sm border border-indigo-100 mt-6">
+      <details class="bg-white rounded-2xl shadow-sm border border-editorial-navy-bg mt-6">
         <summary class="px-6 py-4 cursor-pointer hover:bg-slate-50 transition-colors flex items-center gap-2 [list-style:none] [&::-webkit-details-marker]:hidden">
-          <span class="material-symbols-outlined text-indigo-600 text-[20px]">info</span>
+          <span class="material-symbols-outlined text-editorial-navy text-[20px]">info</span>
           <span class="text-sm font-semibold text-slate-700">이 도구를 사용하는 이유</span>
           <span class="ml-auto text-xs text-slate-400">펼치기 ▾</span>
         </summary>
@@ -52,7 +52,7 @@
       <div class="lg:w-1/2 mb-8 lg:mb-0">
         <div class="card p-6">
           <h2 class="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
-            <span class="material-symbols-outlined text-indigo-600">edit</span>
+            <span class="material-symbols-outlined text-editorial-navy">edit</span>
             근무 정보 입력
           </h2>
 
@@ -132,7 +132,7 @@
       <div class="lg:w-1/2">
         <div id="result-area" class="card p-6">
           <h2 class="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
-            <span class="material-symbols-outlined text-indigo-600">receipt</span>
+            <span class="material-symbols-outlined text-editorial-navy">receipt</span>
             계산 결과
           </h2>
 
@@ -162,7 +162,7 @@
                   <div class="font-semibold text-slate-800 text-sm">시간외근무수당</div>
                   <div id="overtime-detail" class="text-xs text-slate-400 mt-0.5"></div>
                 </div>
-                <div id="overtime-pay" class="font-bold text-indigo-600 text-lg"></div>
+                <div id="overtime-pay" class="font-bold text-editorial-navy text-lg"></div>
               </div>
 
               <div id="row-night" class="hidden flex items-center justify-between bg-white border border-slate-100 rounded-xl p-4">
@@ -183,7 +183,7 @@
             </div>
 
             <!-- 합계 -->
-            <div class="bg-gradient-to-r from-indigo-600 to-indigo-700 rounded-2xl p-5 text-white">
+            <div class="bg-gradient-to-r from-editorial-navy to-editorial-navy-dark rounded-2xl p-5 text-white">
               <div class="text-sm font-semibold opacity-80 mb-1">이번 달 초과근무수당 합계</div>
               <div class="text-3xl font-bold" id="total-pay">-</div>
               <div class="text-xs opacity-70 mt-1" id="total-detail"></div>

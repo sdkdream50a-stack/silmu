@@ -228,15 +228,15 @@
 </div>
 
 <!-- 도구 설명 섹션 (접을 수 있음) -->
-<details class="bg-gradient-to-b from-indigo-50 to-white border-b border-indigo-100">
-  <summary class="px-6 py-4 cursor-pointer hover:bg-indigo-50/50 transition-colors flex items-center justify-between">
-    <span class="text-sm font-semibold text-indigo-900 flex items-center gap-2">
-      <span class="material-symbols-outlined text-indigo-600" style="font-size:20px">info</span>
+<details class="bg-gradient-to-b from-editorial-navy-bg to-white border-b border-editorial-navy-bg">
+  <summary class="px-6 py-4 cursor-pointer hover:bg-editorial-navy-bg/50 transition-colors flex items-center justify-between">
+    <span class="text-sm font-semibold text-editorial-ink flex items-center gap-2">
+      <span class="material-symbols-outlined text-editorial-navy" style="font-size:20px">info</span>
       이 도구를 사용하는 이유 (펼치기)
     </span>
   </summary>
   <div class="px-6 pb-6 max-w-4xl mx-auto">
-    <div class="bg-white rounded-xl shadow-sm border border-indigo-100 p-6">
+    <div class="bg-white rounded-xl shadow-sm border border-editorial-navy-bg p-6">
       <div class="text-slate-700 text-sm leading-relaxed space-y-3 mb-4">
         <p>
           공무원은 매월 급여·세무·보험 등 정기 업무를 처리해야 하지만, 업무가 많아 마감일을 놓치거나 빠뜨리는 경우가 발생합니다.
@@ -248,19 +248,19 @@
       </div>
       <div class="grid grid-cols-2 gap-3 text-xs">
         <div class="flex items-start gap-1.5">
-          <span class="material-symbols-outlined text-indigo-500 mt-0.5" style="font-size:16px">check_circle</span>
+          <span class="material-symbols-outlined text-editorial-navy mt-0.5" style="font-size:16px">check_circle</span>
           <span class="text-slate-700">급여·세무·보험 등 월별 정기 업무 자동 표시</span>
         </div>
         <div class="flex items-start gap-1.5">
-          <span class="material-symbols-outlined text-indigo-500 mt-0.5" style="font-size:16px">check_circle</span>
+          <span class="material-symbols-outlined text-editorial-navy mt-0.5" style="font-size:16px">check_circle</span>
           <span class="text-slate-700">사용자 맞춤 업무 추가·관리 기능</span>
         </div>
         <div class="flex items-start gap-1.5">
-          <span class="material-symbols-outlined text-indigo-500 mt-0.5" style="font-size:16px">check_circle</span>
+          <span class="material-symbols-outlined text-editorial-navy mt-0.5" style="font-size:16px">check_circle</span>
           <span class="text-slate-700">오늘·주간·월간 뷰 전환</span>
         </div>
         <div class="flex items-start gap-1.5">
-          <span class="material-symbols-outlined text-indigo-500 mt-0.5" style="font-size:16px">check_circle</span>
+          <span class="material-symbols-outlined text-editorial-navy mt-0.5" style="font-size:16px">check_circle</span>
           <span class="text-slate-700">체크리스트 완료 표시 및 진행률 확인</span>
         </div>
         <div class="flex items-start gap-1.5">
@@ -286,41 +286,41 @@
   <aside id="sidebar" class="bg-white border-r border-gray-200 flex-shrink-0 flex-col overflow-y-auto hidden lg:flex" style="width:19rem">
     <!-- 작업 추가 버튼 + 검색 -->
     <div class="p-3 pb-2 flex flex-col gap-3">
-      <button id="btn-add-task" class="w-full flex items-center justify-center gap-1.5 h-10 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-bold text-sm shadow-md shadow-indigo-500/20 active:scale-[0.98] transition-all">
+      <button id="btn-add-task" class="w-full flex items-center justify-center gap-1.5 h-10 bg-editorial-navy hover:bg-editorial-navy-dark text-white rounded-lg font-bold text-sm shadow-md shadow-editorial-navy/20 active:scale-[0.98] transition-all">
         <span class="material-symbols-outlined" style="font-size:18px">add_circle</span>
         업무 추가
-        <span class="ml-auto text-[10px] text-indigo-300 font-normal tracking-wide">Q</span>
+        <span class="ml-auto text-[10px] text-editorial-navy-light font-normal tracking-wide">Q</span>
       </button>
       <div class="relative group">
-        <div class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-gray-400 group-focus-within:text-indigo-600 transition-colors">
+        <div class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-gray-400 group-focus-within:text-editorial-navy transition-colors">
           <span class="material-symbols-outlined" style="font-size:18px">search</span>
         </div>
-        <input id="btn-search" type="text" readonly class="block w-full h-9 pl-9 pr-2 py-1.5 border-none bg-gray-50 rounded-lg text-xs text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:bg-white transition-all cursor-pointer" placeholder="검색...">
+        <input id="btn-search" type="text" readonly class="block w-full h-9 pl-9 pr-2 py-1.5 border-none bg-gray-50 rounded-lg text-xs text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-editorial-navy/20 focus:bg-white transition-all cursor-pointer" placeholder="검색...">
       </div>
     </div>
 
     <!-- 네비게이션 -->
     <nav class="flex-1 px-2 py-3 space-y-0.5 overflow-y-auto">
       <button class="nav-item relative w-full flex items-center gap-2 px-3 py-4 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors" data-view="inbox">
-        <div class="nav-indicator hidden absolute left-0 top-1/2 -translate-y-1/2 h-8 w-[3px] bg-indigo-600 rounded-r-full"></div>
+        <div class="nav-indicator hidden absolute left-0 top-1/2 -translate-y-1/2 h-8 w-[3px] bg-editorial-navy rounded-r-full"></div>
         <span class="material-symbols-outlined" style="font-size:20px">inventory_2</span>
         <span class="flex-1 text-left">관리함</span>
         <span class="nav-count text-[10px] font-semibold text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded-full" data-count="inbox"></span>
       </button>
       <button class="nav-item relative w-full flex items-center gap-2 px-3 py-4 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors" data-view="today">
-        <div class="nav-indicator hidden absolute left-0 top-1/2 -translate-y-1/2 h-8 w-[3px] bg-indigo-600 rounded-r-full"></div>
+        <div class="nav-indicator hidden absolute left-0 top-1/2 -translate-y-1/2 h-8 w-[3px] bg-editorial-navy rounded-r-full"></div>
         <span class="material-symbols-outlined" style="font-size:20px">calendar_today</span>
         <span class="flex-1 text-left">오늘</span>
         <span class="nav-count text-[10px] font-semibold text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded-full" data-count="today" id="today-count"></span>
       </button>
       <button class="nav-item relative w-full flex items-center gap-2 px-3 py-4 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors" data-view="upcoming">
-        <div class="nav-indicator hidden absolute left-0 top-1/2 -translate-y-1/2 h-8 w-[3px] bg-indigo-600 rounded-r-full"></div>
+        <div class="nav-indicator hidden absolute left-0 top-1/2 -translate-y-1/2 h-8 w-[3px] bg-editorial-navy rounded-r-full"></div>
         <span class="material-symbols-outlined" style="font-size:20px">date_range</span>
         <span class="flex-1 text-left">주간</span>
         <span class="nav-count text-[10px] font-semibold text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded-full" id="week-count"></span>
       </button>
       <button class="nav-item relative w-full flex items-center gap-2 px-3 py-4 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors" data-view="monthly">
-        <div class="nav-indicator hidden absolute left-0 top-1/2 -translate-y-1/2 h-8 w-[3px] bg-indigo-600 rounded-r-full"></div>
+        <div class="nav-indicator hidden absolute left-0 top-1/2 -translate-y-1/2 h-8 w-[3px] bg-editorial-navy rounded-r-full"></div>
         <span class="material-symbols-outlined" style="font-size:20px">calendar_month</span>
         <span class="flex-1 text-left">월간</span>
         <span class="nav-count text-[10px] font-semibold text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded-full" id="month-count"></span>
@@ -332,13 +332,13 @@
       <div class="px-1 mb-2">
         <p class="text-[10px] font-bold text-gray-500 uppercase tracking-wider">관련 도구</p>
       </div>
-      <%= link_to legal_period_path, class: "w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-indigo-50 hover:text-indigo-700 transition-colors group", target: "_blank" do %>
-        <span class="material-symbols-outlined text-indigo-600 group-hover:text-indigo-700" style="font-size:20px">schedule</span>
+      <%= link_to legal_period_path, class: "w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-editorial-navy-bg hover:text-editorial-navy-dark transition-colors group", target: "_blank" do %>
+        <span class="material-symbols-outlined text-editorial-navy group-hover:text-editorial-navy-dark" style="font-size:20px">schedule</span>
         <div class="flex-1 text-left">
           <div class="text-sm font-semibold">계약기간 산정</div>
           <div class="text-[11px] text-gray-500">입찰·계약 법정기간 계산</div>
         </div>
-        <span class="material-symbols-outlined text-gray-400 group-hover:text-indigo-600 transition-colors" style="font-size:18px">open_in_new</span>
+        <span class="material-symbols-outlined text-gray-400 group-hover:text-editorial-navy transition-colors" style="font-size:18px">open_in_new</span>
       <% end %>
     </div>
 
@@ -347,13 +347,13 @@
       <!-- 접기/펼치기 헤더 -->
       <div id="standing-header" class="flex items-center justify-between px-1 py-1.5 cursor-pointer hover:bg-gray-50 rounded-lg transition-colors group">
         <div class="flex items-center gap-2 flex-1 min-w-0">
-          <span id="standing-toggle-icon" class="material-symbols-outlined text-gray-400 group-hover:text-indigo-600 transition-all" style="font-size:18px">expand_more</span>
+          <span id="standing-toggle-icon" class="material-symbols-outlined text-gray-400 group-hover:text-editorial-navy transition-all" style="font-size:18px">expand_more</span>
           <div class="flex-1 min-w-0">
             <p class="text-[10px] font-bold text-gray-500 uppercase tracking-wider">상시 체크리스트</p>
             <p id="standing-summary" class="text-[10px] text-gray-400"></p>
           </div>
         </div>
-        <button id="btn-add-standing-item" class="text-gray-400 hover:text-indigo-600 transition-colors" onclick="event.stopPropagation()">
+        <button id="btn-add-standing-item" class="text-gray-400 hover:text-editorial-navy transition-colors" onclick="event.stopPropagation()">
           <span class="material-symbols-outlined" style="font-size:18px">add</span>
         </button>
       </div>
@@ -371,7 +371,7 @@
         <span id="progress-label" class="text-xs font-bold text-gray-800">0%</span>
       </div>
       <div class="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
-        <div id="progress-bar" class="h-1.5 bg-gradient-to-r from-indigo-600 to-emerald-400 rounded-full transition-all duration-500" style="width: 0%"></div>
+        <div id="progress-bar" class="h-1.5 bg-gradient-to-r from-editorial-navy to-emerald-400 rounded-full transition-all duration-500" style="width: 0%"></div>
       </div>
     </div>
 
@@ -379,16 +379,16 @@
     <div class="p-3 pt-3 border-t border-gray-100">
       <div class="flex items-center justify-between mb-2">
         <p class="text-[10px] font-bold text-gray-500 uppercase tracking-wider">분류</p>
-        <button id="btn-edit-cats" class="text-gray-400 hover:text-indigo-600 transition-colors">
+        <button id="btn-edit-cats" class="text-gray-400 hover:text-editorial-navy transition-colors">
           <span class="material-symbols-outlined" style="font-size:18px">add</span>
         </button>
       </div>
       <div id="cat-list" class="flex flex-wrap gap-2"></div>
       <!-- 분류 추가 인라인 -->
       <div id="cat-add-row" class="hidden mt-3 flex items-center gap-1.5">
-        <input type="text" id="cat-add-input" class="flex-1 min-w-0 px-2.5 py-1.5 text-xs rounded-lg border border-slate-200 outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/20" placeholder="새 분류명" maxlength="8">
+        <input type="text" id="cat-add-input" class="flex-1 min-w-0 px-2.5 py-1.5 text-xs rounded-lg border border-slate-200 outline-none focus:border-editorial-navy-light focus:ring-2 focus:ring-editorial-navy/20" placeholder="새 분류명" maxlength="8">
         <input type="color" id="cat-add-color" value="#6366f1" class="w-7 h-7 rounded cursor-pointer border-0 p-0">
-        <button id="cat-add-submit" class="w-7 h-7 rounded-lg bg-indigo-600 text-white flex items-center justify-center hover:bg-indigo-700 transition-colors flex-shrink-0">
+        <button id="cat-add-submit" class="w-7 h-7 rounded-lg bg-editorial-navy text-white flex items-center justify-center hover:bg-editorial-navy-dark transition-colors flex-shrink-0">
           <span class="material-symbols-outlined" style="font-size:16px">check</span>
         </button>
       </div>
@@ -404,7 +404,7 @@
         <span class="material-symbols-outlined">menu</span>
       </button>
       <h1 id="mobile-title" class="text-lg font-bold text-slate-900 flex-1"></h1>
-      <button id="btn-add-task-mobile" class="w-11 h-11 rounded-lg bg-indigo-600 text-white flex items-center justify-center shadow-sm">
+      <button id="btn-add-task-mobile" class="w-11 h-11 rounded-lg bg-editorial-navy text-white flex items-center justify-center shadow-sm">
         <span class="material-symbols-outlined text-lg">add</span>
       </button>
     </div>
@@ -417,7 +417,7 @@
           <div class="flex items-center gap-3">
             <h1 class="text-2xl font-black text-slate-900">관리함</h1>
             <div class="flex items-center gap-1">
-              <button id="btn-share" class="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] font-semibold text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 transition-all" title="내 업무를 내보냅니다">
+              <button id="btn-share" class="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] font-semibold text-slate-500 hover:text-editorial-navy hover:bg-editorial-navy-bg transition-all" title="내 업무를 내보냅니다">
                 <span class="material-symbols-outlined" style="font-size:15px">upload</span>
                 업무 내보내기
               </button>
@@ -438,7 +438,7 @@
           </div>
         </div>
 
-        <p class="text-[11px] text-slate-400 -mt-4 mb-3"><span class="text-indigo-400 font-medium">내보내기</span> 코드를 동료에게 전달하면 <span class="text-emerald-500 font-medium">가져오기</span>로 바로 반영됩니다.</p>
+        <p class="text-[11px] text-slate-400 -mt-4 mb-3"><span class="text-editorial-navy-light font-medium">내보내기</span> 코드를 동료에게 전달하면 <span class="text-emerald-500 font-medium">가져오기</span>로 바로 반영됩니다.</p>
 
         <!-- 카테고리 필터 -->
         <div id="inbox-cat-filter" class="flex items-center gap-1.5 flex-wrap mb-5"></div>
@@ -460,7 +460,7 @@
               <div class="task-item group flex items-center gap-3 px-3 py-3 hover:bg-white hover:shadow-sm transition-all rounded-lg" data-task-key="<%= m %>_<%= t[:title] %>" data-task-id="<%= m %>_<%= t[:title] %>" data-task-month="<%= m %>" data-task-day="<%= t[:day] %>" data-task-cat="<%= t[:cat] %>">
                 <label class="flex-shrink-0 cursor-pointer">
                   <input type="checkbox" class="task-cb sr-only" data-key="<%= m %>_<%= t[:title] %>">
-                  <span class="check-box w-[22px] h-[22px] rounded-full border-2 border-slate-300 flex items-center justify-center hover:border-indigo-400 transition-colors">
+                  <span class="check-box w-[22px] h-[22px] rounded-full border-2 border-slate-300 flex items-center justify-center hover:border-editorial-navy-light transition-colors">
                     <svg class="w-3 h-3 text-white opacity-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                   </span>
                 </label>
@@ -482,7 +482,7 @@
                   <button class="btn-guide flex-shrink-0 w-7 h-7 rounded-lg hover:bg-violet-50 flex items-center justify-center text-slate-400 hover:text-violet-600" title="AI 업무 지원">
                     <span class="material-symbols-outlined" style="font-size:18px">smart_toy</span>
                   </button>
-                  <button class="btn-edit-default-task flex-shrink-0 w-7 h-7 rounded-lg hover:bg-indigo-50 flex items-center justify-center text-slate-400 hover:text-indigo-600" title="수정" data-task-id="<%= m %>_<%= t[:title] %>">
+                  <button class="btn-edit-default-task flex-shrink-0 w-7 h-7 rounded-lg hover:bg-editorial-navy-bg flex items-center justify-center text-slate-400 hover:text-editorial-navy" title="수정" data-task-id="<%= m %>_<%= t[:title] %>">
                     <span class="material-symbols-outlined" style="font-size:18px">edit</span>
                   </button>
                   <button class="btn-delete-default-task flex-shrink-0 w-7 h-7 rounded-lg hover:bg-red-50 flex items-center justify-center text-slate-400 hover:text-red-600" title="삭제" data-task-id="<%= m %>_<%= t[:title] %>">
@@ -495,7 +495,7 @@
             <div class="custom-tasks-area" data-month="<%= m %>"></div>
             <!-- 업무 추가 버튼 -->
             <div class="py-2">
-              <button class="btn-inline-add flex items-center gap-2 px-3 py-2 text-sm text-slate-400 hover:text-indigo-600 transition-colors w-full rounded-lg hover:bg-indigo-50/50" data-date="" data-inbox-month="<%= m %>">
+              <button class="btn-inline-add flex items-center gap-2 px-3 py-2 text-sm text-slate-400 hover:text-editorial-navy transition-colors w-full rounded-lg hover:bg-editorial-navy-bg/50" data-date="" data-inbox-month="<%= m %>">
                 <span class="material-symbols-outlined" style="font-size:18px">add</span>
                 업무 추가
               </button>
@@ -505,8 +505,8 @@
 
         <!-- 빈 상태 (모든 체크 시) -->
         <div id="inbox-empty" class="hidden py-16 text-center">
-          <div class="w-20 h-20 mx-auto mb-4 bg-indigo-50 rounded-2xl flex items-center justify-center">
-            <span class="material-symbols-outlined text-4xl text-indigo-300">check_circle</span>
+          <div class="w-20 h-20 mx-auto mb-4 bg-editorial-navy-bg rounded-2xl flex items-center justify-center">
+            <span class="material-symbols-outlined text-4xl text-editorial-navy-light">check_circle</span>
           </div>
           <h3 class="text-lg font-bold text-slate-700 mb-2">모든 업무를 완료했습니다</h3>
           <p class="text-sm text-slate-400">이번 달 업무가 모두 처리되었습니다.</p>
@@ -535,10 +535,10 @@
           <!-- 마감 인디케이터 -->
           <div class="mt-8 mb-4 flex items-center gap-2">
             <div class="relative flex h-3 w-3">
-              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-3 w-3 bg-indigo-500"></span>
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-editorial-navy-light opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-3 w-3 bg-editorial-navy"></span>
             </div>
-            <h2 class="text-indigo-600 text-xs font-bold tracking-widest uppercase">오늘 마감</h2>
+            <h2 class="text-editorial-navy text-xs font-bold tracking-widest uppercase">오늘 마감</h2>
           </div>
 
           <!-- 업무 목록 -->
@@ -548,7 +548,7 @@
                 <div class="task-item group flex items-start gap-4 py-5 border-b-2 border-dotted border-slate-100 hover:bg-slate-50 transition-colors rounded-lg px-2 -mx-2">
                   <label class="flex-shrink-0 pt-0.5 cursor-pointer">
                     <input type="checkbox" class="task-cb sr-only" data-key="<%= current_month %>_<%= t[:title] %>">
-                    <span class="check-box w-[22px] h-[22px] rounded-full border-2 border-slate-300 flex items-center justify-center hover:border-indigo-400 transition-colors">
+                    <span class="check-box w-[22px] h-[22px] rounded-full border-2 border-slate-300 flex items-center justify-center hover:border-editorial-navy-light transition-colors">
                       <svg class="w-3 h-3 text-white opacity-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                     </span>
                   </label>
@@ -567,7 +567,7 @@
               <% end %>
               <!-- 업무 추가 -->
               <div class="py-3">
-                <button class="btn-inline-add flex items-center gap-2 px-2 py-2.5 text-sm text-slate-400 hover:text-indigo-600 transition-colors w-full rounded-lg hover:bg-indigo-50/50" data-date="<%= today.strftime('%Y-%m-%d') %>">
+                <button class="btn-inline-add flex items-center gap-2 px-2 py-2.5 text-sm text-slate-400 hover:text-editorial-navy transition-colors w-full rounded-lg hover:bg-editorial-navy-bg/50" data-date="<%= today.strftime('%Y-%m-%d') %>">
                   <span class="material-symbols-outlined" style="font-size:18px">add</span>
                   업무 추가
                 </button>
@@ -590,10 +590,10 @@
               </div>
               <h3 class="text-slate-900 font-bold text-lg mb-1">오늘 마감 업무가 없어요</h3>
               <p class="text-slate-500 text-sm">여유 시간에 처리할 업무를 추가해보세요</p>
-              <button onclick="openAddModal()" class="mt-4 px-4 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700 transition-colors">+ 업무 추가</button>
+              <button onclick="openAddModal()" class="mt-4 px-4 py-2 bg-editorial-navy text-white text-sm rounded-lg hover:bg-editorial-navy-dark transition-colors">+ 업무 추가</button>
             </div>
             <div class="py-3 mt-2">
-              <button class="btn-inline-add flex items-center gap-2 px-2 py-2.5 text-sm text-slate-400 hover:text-indigo-600 transition-colors w-full rounded-lg hover:bg-indigo-50/50" data-date="<%= today.strftime('%Y-%m-%d') %>">
+              <button class="btn-inline-add flex items-center gap-2 px-2 py-2.5 text-sm text-slate-400 hover:text-editorial-navy transition-colors w-full rounded-lg hover:bg-editorial-navy-bg/50" data-date="<%= today.strftime('%Y-%m-%d') %>">
                 <span class="material-symbols-outlined" style="font-size:18px">add</span>
                 업무 추가
               </button>
@@ -611,7 +611,7 @@
           </div>
           <div id="today-custom-tasks"></div>
           <div class="py-3 mt-2">
-            <button class="btn-inline-add flex items-center gap-2 px-2 py-2.5 text-sm text-slate-400 hover:text-indigo-600 transition-colors w-full rounded-lg hover:bg-indigo-50/50" data-date="<%= today.strftime('%Y-%m-%d') %>">
+            <button class="btn-inline-add flex items-center gap-2 px-2 py-2.5 text-sm text-slate-400 hover:text-editorial-navy transition-colors w-full rounded-lg hover:bg-editorial-navy-bg/50" data-date="<%= today.strftime('%Y-%m-%d') %>">
               <span class="material-symbols-outlined" style="font-size:18px">add</span>
               업무 추가
             </button>
@@ -631,8 +631,8 @@
           <div class="p-5 border-b border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-slate-50/50">
             <!-- 년월 클릭 → 달력 드롭다운 -->
             <div class="relative">
-              <button id="upcoming-month-toggle" class="flex items-center gap-1.5 text-base font-bold text-slate-800 hover:text-indigo-600 transition-colors">
-                <div class="bg-indigo-500/10 p-1.5 rounded-lg text-indigo-600">
+              <button id="upcoming-month-toggle" class="flex items-center gap-1.5 text-base font-bold text-slate-800 hover:text-editorial-navy transition-colors">
+                <div class="bg-editorial-navy/10 p-1.5 rounded-lg text-editorial-navy">
                   <span class="material-symbols-outlined" style="font-size:20px">date_range</span>
                 </div>
                 <span id="upcoming-month-label"></span>
@@ -733,28 +733,28 @@
       <button class="mobile-tab-item w-full flex flex-col items-center justify-center gap-1.5 py-3 text-slate-400 hover:text-slate-600 transition-colors group" data-view="inbox">
         <span class="material-symbols-outlined group-hover:scale-110 transition-transform" style="font-size:28px">inbox</span>
         <span class="tab-label text-xs font-semibold tracking-tight">관리함</span>
-        <span class="tab-dot hidden w-1.5 h-1.5 rounded-full bg-indigo-600"></span>
+        <span class="tab-dot hidden w-1.5 h-1.5 rounded-full bg-editorial-navy"></span>
       </button>
     </li>
     <li class="flex-1">
       <button class="mobile-tab-item w-full flex flex-col items-center justify-center gap-1.5 py-3 text-slate-400 hover:text-slate-600 transition-colors group" data-view="today">
         <span class="material-symbols-outlined group-hover:scale-110 transition-transform" style="font-size:28px">today</span>
         <span class="tab-label text-xs font-semibold tracking-tight">오늘</span>
-        <span class="tab-dot hidden w-1.5 h-1.5 rounded-full bg-indigo-600"></span>
+        <span class="tab-dot hidden w-1.5 h-1.5 rounded-full bg-editorial-navy"></span>
       </button>
     </li>
     <li class="flex-1">
       <button class="mobile-tab-item w-full flex flex-col items-center justify-center gap-1.5 py-3 text-slate-400 hover:text-slate-600 transition-colors group" data-view="upcoming">
         <span class="material-symbols-outlined group-hover:scale-110 transition-transform" style="font-size:28px">date_range</span>
         <span class="tab-label text-xs font-semibold tracking-tight">주간</span>
-        <span class="tab-dot hidden w-1.5 h-1.5 rounded-full bg-indigo-600"></span>
+        <span class="tab-dot hidden w-1.5 h-1.5 rounded-full bg-editorial-navy"></span>
       </button>
     </li>
     <li class="flex-1">
       <button class="mobile-tab-item w-full flex flex-col items-center justify-center gap-1.5 py-3 text-slate-400 hover:text-slate-600 transition-colors group" data-view="monthly">
         <span class="material-symbols-outlined group-hover:scale-110 transition-transform" style="font-size:28px">calendar_month</span>
         <span class="tab-label text-xs font-semibold tracking-tight">월간</span>
-        <span class="tab-dot hidden w-1.5 h-1.5 rounded-full bg-indigo-600"></span>
+        <span class="tab-dot hidden w-1.5 h-1.5 rounded-full bg-editorial-navy"></span>
       </button>
     </li>
   </ul>
@@ -772,7 +772,7 @@
       <p class="text-sm text-gray-400 mb-4">새로운 업무를 등록하고 관리하세요.</p>
       <!-- 탭 바 -->
       <div class="flex border-b border-gray-200">
-        <button type="button" class="modal-tab flex-1 pb-3 pt-2 text-sm font-bold text-center transition-colors border-b-[3px] border-indigo-600 text-gray-900" data-modal-tab="regular">정기업무</button>
+        <button type="button" class="modal-tab flex-1 pb-3 pt-2 text-sm font-bold text-center transition-colors border-b-[3px] border-editorial-navy text-gray-900" data-modal-tab="regular">정기업무</button>
         <button type="button" class="modal-tab flex-1 pb-3 pt-2 text-sm font-bold text-center transition-colors text-gray-400 border-b-[3px] border-transparent hover:text-gray-600" data-modal-tab="onetime">비정기업무</button>
         <button type="button" class="modal-tab flex-1 pb-3 pt-2 text-sm font-bold text-center transition-colors text-gray-400 border-b-[3px] border-transparent hover:text-gray-600" data-modal-tab="document">공문 업로드</button>
       </div>
@@ -782,18 +782,18 @@
     <div id="tab-panel-regular" class="tab-panel flex-1 overflow-y-auto px-6 py-5 space-y-5">
       <div class="space-y-2">
         <label class="block text-sm font-bold text-gray-900">업무 내용</label>
-        <textarea id="new-task-input" class="w-full resize-none rounded-xl border border-gray-200 bg-white text-sm text-gray-800 placeholder-gray-400 p-4 min-h-[100px] outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" placeholder="할 일을 입력해주세요. (예: 월간 급여 대장 작성)"></textarea>
+        <textarea id="new-task-input" class="w-full resize-none rounded-xl border border-gray-200 bg-white text-sm text-gray-800 placeholder-gray-400 p-4 min-h-[100px] outline-none focus:ring-2 focus:ring-editorial-navy/20 focus:border-editorial-navy transition-all" placeholder="할 일을 입력해주세요. (예: 월간 급여 대장 작성)"></textarea>
       </div>
       <div class="space-y-2">
         <label class="block text-sm font-bold text-gray-900">반복 설정</label>
-        <select id="new-task-repeat" class="w-full h-11 rounded-xl border border-gray-200 bg-white text-sm font-medium text-gray-600 px-4 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
+        <select id="new-task-repeat" class="w-full h-11 rounded-xl border border-gray-200 bg-white text-sm font-medium text-gray-600 px-4 outline-none focus:ring-2 focus:ring-editorial-navy/20 focus:border-editorial-navy transition-all">
           <option value="monthly">매월 반복</option>
           <option value="weekly">매주 반복</option>
         </select>
       </div>
       <div id="repeat-monthly-opts" class="space-y-2">
         <label class="block text-sm font-bold text-gray-900">날짜 선택 <span class="text-xs font-normal text-gray-400 ml-1">(매월)</span></label>
-        <select id="new-task-day" class="w-full h-11 rounded-xl border border-gray-200 bg-white text-sm font-medium text-gray-600 px-4 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
+        <select id="new-task-day" class="w-full h-11 rounded-xl border border-gray-200 bg-white text-sm font-medium text-gray-600 px-4 outline-none focus:ring-2 focus:ring-editorial-navy/20 focus:border-editorial-navy transition-all">
           <% (1..31).each do |d| %><option value="<%= d %>"><%= d %>일</option><% end %>
         </select>
       </div>
@@ -801,7 +801,7 @@
         <label class="block text-sm font-bold text-gray-900">요일 선택</label>
         <div class="flex gap-2">
           <% %w[월 화 수 목 금].each_with_index do |dn, i| %>
-            <button type="button" class="weekday-btn flex-1 h-10 rounded-xl text-sm font-semibold border border-gray-200 text-gray-500 hover:border-indigo-400 hover:text-indigo-600 transition-colors" data-weekday="<%= i + 1 %>"><%= dn %></button>
+            <button type="button" class="weekday-btn flex-1 h-10 rounded-xl text-sm font-semibold border border-gray-200 text-gray-500 hover:border-editorial-navy-light hover:text-editorial-navy transition-colors" data-weekday="<%= i + 1 %>"><%= dn %></button>
           <% end %>
         </div>
       </div>
@@ -810,12 +810,12 @@
         <label class="block text-sm font-bold text-gray-900">시간 <span class="text-xs font-normal text-gray-400 ml-1">(선택사항)</span></label>
         <div class="flex gap-2 flex-wrap">
           <% [["09:00","오전9"], ["10:00","오전10"], ["14:00","오후2"], ["15:00","오후3"], ["17:00","오후5"]] .each do |val, label| %>
-            <button type="button" class="regular-time-preset px-3 h-9 rounded-xl text-xs font-semibold border border-gray-200 text-gray-500 hover:border-indigo-400 hover:text-indigo-600 transition-colors" data-time="<%= val %>"><%= label %>시</button>
+            <button type="button" class="regular-time-preset px-3 h-9 rounded-xl text-xs font-semibold border border-gray-200 text-gray-500 hover:border-editorial-navy-light hover:text-editorial-navy transition-colors" data-time="<%= val %>"><%= label %>시</button>
           <% end %>
           <button type="button" id="regular-time-clear" class="px-3 h-9 rounded-xl text-xs font-semibold border border-gray-200 text-gray-400 hover:border-red-300 hover:text-red-400 transition-colors">없음</button>
         </div>
         <div class="relative mt-1">
-          <input type="time" id="new-task-time" class="w-full h-11 rounded-xl border border-gray-200 bg-white text-sm text-gray-800 px-4 pr-10 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
+          <input type="time" id="new-task-time" class="w-full h-11 rounded-xl border border-gray-200 bg-white text-sm text-gray-800 px-4 pr-10 outline-none focus:ring-2 focus:ring-editorial-navy/20 focus:border-editorial-navy transition-all">
           <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" style="font-size:20px">schedule</span>
         </div>
       </div>
@@ -831,20 +831,20 @@
     <div id="tab-panel-onetime" class="tab-panel hidden flex-1 overflow-y-auto px-6 py-5 space-y-5">
       <div class="space-y-2">
         <label class="block text-sm font-bold text-gray-900">업무명</label>
-        <input type="text" id="onetime-task-input" class="w-full h-12 rounded-xl border border-gray-200 bg-white text-sm text-gray-800 placeholder-gray-400 px-4 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" placeholder="업무명을 입력해 주세요">
+        <input type="text" id="onetime-task-input" class="w-full h-12 rounded-xl border border-gray-200 bg-white text-sm text-gray-800 placeholder-gray-400 px-4 outline-none focus:ring-2 focus:ring-editorial-navy/20 focus:border-editorial-navy transition-all" placeholder="업무명을 입력해 주세요">
       </div>
       <div class="flex gap-4">
         <div class="flex-1 space-y-2">
           <label class="block text-sm font-bold text-gray-900">날짜</label>
           <div class="relative">
-            <input type="date" id="onetime-date" class="w-full h-12 rounded-xl border border-gray-200 bg-white text-sm text-gray-800 px-4 pr-10 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
+            <input type="date" id="onetime-date" class="w-full h-12 rounded-xl border border-gray-200 bg-white text-sm text-gray-800 px-4 pr-10 outline-none focus:ring-2 focus:ring-editorial-navy/20 focus:border-editorial-navy transition-all">
             <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" style="font-size:20px">calendar_today</span>
           </div>
         </div>
         <div class="flex-1 space-y-2">
           <label class="block text-sm font-bold text-gray-900">시간</label>
           <div class="relative">
-            <input type="time" id="onetime-time" class="w-full h-12 rounded-xl border border-gray-200 bg-white text-sm text-gray-800 px-4 pr-10 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
+            <input type="time" id="onetime-time" class="w-full h-12 rounded-xl border border-gray-200 bg-white text-sm text-gray-800 px-4 pr-10 outline-none focus:ring-2 focus:ring-editorial-navy/20 focus:border-editorial-navy transition-all">
             <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" style="font-size:20px">schedule</span>
           </div>
         </div>
@@ -853,7 +853,7 @@
         <label class="block text-sm font-bold text-gray-900">기간 설정 <span class="text-xs font-normal text-gray-400 ml-1">(며칠간 계속 표시)</span></label>
         <div class="flex items-center gap-3">
           <input type="number" id="onetime-duration" min="1" max="365" value="1"
-            class="w-24 h-11 rounded-xl border border-gray-200 bg-white text-sm text-gray-800 px-4 text-center outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
+            class="w-24 h-11 rounded-xl border border-gray-200 bg-white text-sm text-gray-800 px-4 text-center outline-none focus:ring-2 focus:ring-editorial-navy/20 focus:border-editorial-navy transition-all">
           <span class="text-sm text-gray-500">일간 <span class="text-gray-400 text-xs">(1 = 해당 날만)</span></span>
         </div>
       </div>
@@ -867,13 +867,13 @@
 
     <!-- 탭 3: 공문 업로드 -->
     <div id="tab-panel-document" class="tab-panel hidden flex-1 overflow-y-auto px-6 py-5 space-y-5">
-      <div class="flex items-start gap-3 p-3 bg-indigo-50/50 rounded-lg border border-indigo-100">
-        <span class="material-symbols-outlined text-indigo-500 text-xl shrink-0 mt-0.5">info</span>
-        <p class="text-sm text-gray-500 leading-relaxed">공문 파일을 업로드하면 <span class="text-indigo-600 font-bold">AI가 자동으로 내용을 분석</span>하여 업무 정보를 입력해줍니다.</p>
+      <div class="flex items-start gap-3 p-3 bg-editorial-navy-bg/50 rounded-lg border border-editorial-navy-bg">
+        <span class="material-symbols-outlined text-editorial-navy text-xl shrink-0 mt-0.5">info</span>
+        <p class="text-sm text-gray-500 leading-relaxed">공문 파일을 업로드하면 <span class="text-editorial-navy font-bold">AI가 자동으로 내용을 분석</span>하여 업무 정보를 입력해줍니다.</p>
       </div>
-      <div id="doc-upload-zone" class="group relative flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-200 rounded-xl hover:border-indigo-400 hover:bg-indigo-50/30 transition-all cursor-pointer bg-gray-50/50">
+      <div id="doc-upload-zone" class="group relative flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-200 rounded-xl hover:border-editorial-navy-light hover:bg-editorial-navy-bg/30 transition-all cursor-pointer bg-gray-50/50">
         <div class="flex flex-col items-center text-center gap-2">
-          <div class="size-10 rounded-full bg-white shadow-sm flex items-center justify-center text-indigo-400 mb-1">
+          <div class="size-10 rounded-full bg-white shadow-sm flex items-center justify-center text-editorial-navy-light mb-1">
             <span class="material-symbols-outlined text-2xl">cloud_upload</span>
           </div>
           <p class="text-sm font-semibold text-gray-700">클릭 또는 파일을 이곳에 드래그하세요</p>
@@ -894,7 +894,7 @@
         </button>
       </div>
       <div id="doc-analysis-status" class="hidden"></div>
-      <button id="doc-btn-analyze" class="hidden w-full flex items-center justify-center gap-2 h-12 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-sm shadow-md shadow-indigo-500/20 transition-all">
+      <button id="doc-btn-analyze" class="hidden w-full flex items-center justify-center gap-2 h-12 bg-editorial-navy hover:bg-editorial-navy-dark text-white rounded-xl font-bold text-sm shadow-md shadow-editorial-navy/20 transition-all">
         <span class="material-symbols-outlined" style="font-size:18px">auto_awesome</span>
         AI 분석 시작
       </button>
@@ -904,7 +904,7 @@
     <!-- 하단 버튼 -->
     <div class="flex-none p-4 bg-gray-50/50 border-t border-gray-100 flex justify-end gap-3">
       <button id="modal-cancel" class="px-5 py-2.5 rounded-xl border border-gray-200 bg-white text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors">취소</button>
-      <button id="modal-submit" class="px-5 py-2.5 rounded-xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 shadow-lg shadow-indigo-500/25 transition-colors flex items-center gap-2">
+      <button id="modal-submit" class="px-5 py-2.5 rounded-xl bg-editorial-navy text-white text-sm font-semibold hover:bg-editorial-navy-dark shadow-lg shadow-editorial-navy/25 transition-colors flex items-center gap-2">
         <span class="material-symbols-outlined" style="font-size:18px">add</span>
         업무 추가
       </button>
@@ -935,7 +935,7 @@
     </div>
     <div class="p-4">
       <p class="text-xs text-slate-500 mb-3">공유받은 코드를 아래에 붙여넣으세요.</p>
-      <textarea id="import-textarea" class="w-full h-28 px-3 py-2.5 text-xs font-mono text-slate-700 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-200 resize-none" placeholder="SILMU_TASKS:..."></textarea>
+      <textarea id="import-textarea" class="w-full h-28 px-3 py-2.5 text-xs font-mono text-slate-700 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-editorial-navy-light focus:ring-1 focus:ring-editorial-navy-light resize-none" placeholder="SILMU_TASKS:..."></textarea>
       <div id="import-preview" class="hidden mt-3 max-h-40 overflow-y-auto"></div>
       <div id="import-error" class="hidden mt-2 text-xs text-red-500 font-medium"></div>
     </div>
@@ -949,15 +949,15 @@
 <!-- 로그인 유도 배너 (비로그인 사용자만) -->
 <% unless user_signed_in? %>
 <div id="sync-banner" class="fixed bottom-20 lg:bottom-6 left-1/2 -translate-x-1/2 z-40 hidden w-[calc(100%-2rem)] max-w-md">
-  <div class="flex items-start gap-3 px-4 py-3 bg-white border border-indigo-200 rounded-xl shadow-lg">
-    <span class="material-symbols-outlined text-indigo-500 flex-shrink-0 mt-0.5" style="font-size:20px">cloud_upload</span>
+  <div class="flex items-start gap-3 px-4 py-3 bg-white border border-editorial-navy-light rounded-xl shadow-lg">
+    <span class="material-symbols-outlined text-editorial-navy flex-shrink-0 mt-0.5" style="font-size:20px">cloud_upload</span>
     <div class="flex-1 min-w-0">
       <p class="text-sm font-semibold text-slate-800">데이터를 안전하게 보관하세요</p>
       <p class="text-xs text-slate-500 mt-0.5">로그인하면 다른 기기에서도, 초기화해도 안전하게 보관됩니다.</p>
       <div class="flex items-center gap-2 mt-2">
-        <%= link_to "로그인", new_user_session_path, class: "text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition-colors" %>
+        <%= link_to "로그인", new_user_session_path, class: "text-xs font-semibold text-editorial-navy hover:text-editorial-navy-dark transition-colors" %>
         <span class="text-slate-300">|</span>
-        <%= link_to "시작하기", new_user_registration_path, class: "text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition-colors" %>
+        <%= link_to "시작하기", new_user_registration_path, class: "text-xs font-semibold text-editorial-navy hover:text-editorial-navy-dark transition-colors" %>
       </div>
     </div>
     <button id="sync-banner-close" class="flex-shrink-0 w-6 h-6 rounded-full hover:bg-slate-100 flex items-center justify-center transition-colors">
@@ -992,7 +992,7 @@
       <!-- 로딩 스켈레톤 -->
       <div id="guide-skeleton" class="p-6 space-y-8">
         <div class="space-y-2">
-          <p class="text-indigo-600 text-sm font-medium animate-pulse">AI 가이드를 생성 중입니다...</p>
+          <p class="text-editorial-navy text-sm font-medium animate-pulse">AI 가이드를 생성 중입니다...</p>
           <div class="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
             <div class="h-full w-1/3 rounded-full" style="background-image:linear-gradient(90deg,transparent,rgba(99,102,241,0.4),transparent);animation:guide-shimmer 1.5s infinite linear"></div>
           </div>
@@ -1052,7 +1052,7 @@
             <h3 class="text-slate-900 text-lg font-bold leading-tight">가이드를 생성하는 중 오류가 발생했습니다</h3>
             <p id="guide-error-msg" class="text-slate-500 text-sm leading-relaxed">일시적인 시스템 문제일 수 있습니다.<br>잠시 후 다시 시도해 주세요.</p>
           </div>
-          <button id="guide-retry" class="mt-4 flex items-center justify-center gap-2 h-10 px-6 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold tracking-wide transition-all shadow-md hover:shadow-lg min-w-[120px]">
+          <button id="guide-retry" class="mt-4 flex items-center justify-center gap-2 h-10 px-6 rounded-lg bg-editorial-navy hover:bg-editorial-navy-dark text-white text-sm font-bold tracking-wide transition-all shadow-md hover:shadow-lg min-w-[120px]">
             <span class="material-symbols-outlined text-[20px]">refresh</span>
             <span>다시 시도</span>
           </button>
@@ -1062,7 +1062,7 @@
     <!-- 기본 푸터 (로딩/성공) -->
     <footer id="guide-footer-default" class="flex-none p-4 bg-slate-50 border-t border-slate-100 rounded-b-2xl">
       <div class="flex items-start gap-3">
-        <div class="mt-0.5 p-1 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 text-white shadow-sm">
+        <div class="mt-0.5 p-1 rounded-full bg-gradient-to-br from-editorial-navy-light to-purple-500 text-white shadow-sm">
           <span class="material-symbols-outlined text-[14px] block">auto_awesome</span>
         </div>
         <div class="flex flex-col gap-1">
@@ -1158,8 +1158,8 @@
       const indicator = n.querySelector(".nav-indicator");
       const iconSpan = n.querySelector(".material-symbols-outlined");
       // 활성 상태: Stitch 디자인 — 인디고 배경 + 좌측 인디케이터
-      n.classList.toggle("bg-indigo-50", isActive);
-      n.classList.toggle("text-indigo-700", isActive);
+      n.classList.toggle("bg-editorial-navy-bg", isActive);
+      n.classList.toggle("text-editorial-navy-dark", isActive);
       n.classList.toggle("font-bold", isActive);
       n.classList.toggle("text-gray-600", !isActive);
       n.classList.toggle("hover:bg-gray-50", !isActive);
@@ -1171,7 +1171,7 @@
       // 활성 카운트 배지 스타일
       const count = n.querySelector(".nav-count");
       if (count) {
-        count.classList.toggle("text-indigo-600", isActive);
+        count.classList.toggle("text-editorial-navy", isActive);
         count.classList.toggle("bg-white", isActive);
         count.classList.toggle("shadow-sm", isActive);
         count.classList.toggle("font-bold", isActive);
@@ -1183,7 +1183,7 @@
     // 모바일 하단 탭 바 동기화
     document.querySelectorAll(".mobile-tab-item").forEach(t => {
       const isActive = t.dataset.view === view;
-      t.classList.toggle("text-indigo-600", isActive);
+      t.classList.toggle("text-editorial-navy", isActive);
       t.classList.toggle("text-slate-400", !isActive);
       t.classList.toggle("hover:text-slate-600", !isActive);
       const dot = t.querySelector(".tab-dot");
@@ -1278,7 +1278,7 @@
     if (remaining === 0 && total > 0) {
       el.innerHTML = '<span class="text-emerald-500">' + total + '/' + total + '</span>';
     } else {
-      el.innerHTML = '<span class="text-indigo-600 font-bold">' + remaining + '</span><span class="text-slate-300">/' + total + '</span>';
+      el.innerHTML = '<span class="text-editorial-navy font-bold">' + remaining + '</span><span class="text-slate-300">/' + total + '</span>';
     }
   }
 
@@ -1295,7 +1295,7 @@
     if (bar) bar.style.width = pct + "%";
     if (label) {
       label.textContent = done + "/" + total + " (" + pct + "%)";
-      label.className = "text-[11px] font-bold " + (pct === 100 ? "text-emerald-500" : "text-indigo-600");
+      label.className = "text-[11px] font-bold " + (pct === 100 ? "text-emerald-500" : "text-editorial-navy");
     }
   }
 
@@ -1465,8 +1465,8 @@
 
         const cc = catColorMap[t.cat] || {bg:"#f1f5f9",text:"#475569"};
         const iconName = t.repeat === "once" ? "event" : "person";
-        const iconColor = t.repeat === "once" ? "text-amber-400" : "text-indigo-400";
-        const borderColor = t.repeat === "once" ? "border-amber-300" : "border-indigo-300";
+        const iconColor = t.repeat === "once" ? "text-amber-400" : "text-editorial-navy-light";
+        const borderColor = t.repeat === "once" ? "border-amber-300" : "border-editorial-navy-light";
         const row = document.createElement("div");
         row.className = "task-item group flex items-center gap-3 px-3 py-3.5 hover:bg-white hover:shadow-sm transition-all border-t border-dashed border-slate-200";
         row.dataset.taskCat = t.cat || "서무";
@@ -1567,7 +1567,7 @@
       return '<div class="task-item group flex items-start gap-4 py-5 border-b-2 border-dotted border-slate-100 hover:bg-slate-50 transition-colors rounded-lg px-2 -mx-2">' +
         '<label class="flex-shrink-0 pt-0.5 cursor-pointer">' +
           '<input type="checkbox" class="task-cb sr-only" data-key="' + key + '">' +
-          '<span class="check-box w-[22px] h-[22px] rounded-full border-2 border-slate-300 flex items-center justify-center hover:border-indigo-400 transition-colors">' +
+          '<span class="check-box w-[22px] h-[22px] rounded-full border-2 border-slate-300 flex items-center justify-center hover:border-editorial-navy-light transition-colors">' +
             '<svg class="w-3 h-3 text-white opacity-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>' +
           '</span>' +
         '</label>' +
@@ -1686,7 +1686,7 @@
       activeModalTab = tab.dataset.modalTab;
       document.querySelectorAll(".modal-tab").forEach(t => {
         const isActive = t.dataset.modalTab === activeModalTab;
-        t.classList.toggle("border-indigo-600", isActive);
+        t.classList.toggle("border-editorial-navy", isActive);
         t.classList.toggle("text-gray-900", isActive);
         t.classList.toggle("text-gray-400", !isActive);
         t.classList.toggle("border-transparent", !isActive);
@@ -1712,10 +1712,10 @@
   document.querySelectorAll(".weekday-btn").forEach(btn => {
     btn.addEventListener("click", () => {
       document.querySelectorAll(".weekday-btn").forEach(b => {
-        b.classList.remove("bg-indigo-600", "text-white", "border-indigo-600");
+        b.classList.remove("bg-editorial-navy", "text-white", "border-editorial-navy");
         b.classList.add("border-slate-200", "text-slate-500");
       });
-      btn.classList.add("bg-indigo-600", "text-white", "border-indigo-600");
+      btn.classList.add("bg-editorial-navy", "text-white", "border-editorial-navy");
       btn.classList.remove("border-slate-200", "text-slate-500");
       selectedWeekday = parseInt(btn.dataset.weekday);
     });
@@ -1745,7 +1745,7 @@
     Object.entries(currentCats).forEach(([name, c]) => {
       const btn = document.createElement("button");
       btn.type = "button";
-      btn.className = "onetime-cat-btn flex h-8 items-center justify-center gap-1.5 rounded-full px-3 ring-1 ring-inset ring-gray-200 text-xs font-medium text-gray-500 transition-all hover:ring-indigo-300";
+      btn.className = "onetime-cat-btn flex h-8 items-center justify-center gap-1.5 rounded-full px-3 ring-1 ring-inset ring-gray-200 text-xs font-medium text-gray-500 transition-all hover:ring-editorial-navy-light";
       btn.dataset.cat = name;
 
       const dot = document.createElement("div");
@@ -1762,8 +1762,8 @@
   document.getElementById("regular-cat-container").addEventListener("click", (e) => {
     const btn = e.target.closest(".cat-select-btn");
     if (!btn) return;
-    document.querySelectorAll(".cat-select-btn").forEach(b => b.classList.remove("ring-2", "ring-indigo-400"));
-    btn.classList.add("ring-2", "ring-indigo-400");
+    document.querySelectorAll(".cat-select-btn").forEach(b => b.classList.remove("ring-2", "ring-editorial-navy-light"));
+    btn.classList.add("ring-2", "ring-editorial-navy-light");
     selectedCat = btn.dataset.cat;
   });
 
@@ -1771,8 +1771,8 @@
   document.getElementById("onetime-cat-container").addEventListener("click", (e) => {
     const btn = e.target.closest(".onetime-cat-btn");
     if (!btn) return;
-    document.querySelectorAll(".onetime-cat-btn").forEach(b => b.classList.remove("ring-2", "ring-indigo-400"));
-    btn.classList.add("ring-2", "ring-indigo-400");
+    document.querySelectorAll(".onetime-cat-btn").forEach(b => b.classList.remove("ring-2", "ring-editorial-navy-light"));
+    btn.classList.add("ring-2", "ring-editorial-navy-light");
     selectedOnetimeCat = btn.dataset.cat;
   });
 
@@ -1802,9 +1802,9 @@
   function syncRegularTimePresets(timeVal) {
     document.querySelectorAll(".regular-time-preset").forEach(b => {
       const active = b.dataset.time === timeVal;
-      b.classList.toggle("bg-indigo-600", active);
+      b.classList.toggle("bg-editorial-navy", active);
       b.classList.toggle("text-white", active);
-      b.classList.toggle("border-indigo-600", active);
+      b.classList.toggle("border-editorial-navy", active);
       b.classList.toggle("border-gray-200", !active);
       b.classList.toggle("text-gray-500", !active);
     });
@@ -1857,7 +1857,7 @@
         document.querySelectorAll(".onetime-cat-btn").forEach(b => {
           const active = b.dataset.cat === selectedOnetimeCat;
           b.classList.toggle("ring-2", active);
-          b.classList.toggle("ring-indigo-400", active);
+          b.classList.toggle("ring-editorial-navy-light", active);
         });
       }, 60);
     } else {
@@ -1871,9 +1871,9 @@
         selectedWeekday = task.weekday;
         document.querySelectorAll(".weekday-btn").forEach(b => {
           const active = parseInt(b.dataset.weekday) === task.weekday;
-          b.classList.toggle("bg-indigo-600", active);
+          b.classList.toggle("bg-editorial-navy", active);
           b.classList.toggle("text-white", active);
-          b.classList.toggle("border-indigo-600", active);
+          b.classList.toggle("border-editorial-navy", active);
           b.classList.toggle("border-slate-200", !active);
           b.classList.toggle("text-slate-500", !active);
         });
@@ -1885,7 +1885,7 @@
         document.querySelectorAll(".cat-select-btn").forEach(b => {
           const active = b.dataset.cat === selectedCat;
           b.classList.toggle("ring-2", active);
-          b.classList.toggle("ring-indigo-400", active);
+          b.classList.toggle("ring-editorial-navy-light", active);
         });
       }, 60);
     }
@@ -1973,10 +1973,10 @@
   const docFileInput = document.getElementById("doc-file-input");
 
   docUploadZone.addEventListener("click", () => docFileInput.click());
-  docUploadZone.addEventListener("dragover", (e) => { e.preventDefault(); docUploadZone.classList.add("border-indigo-400", "bg-indigo-50"); });
-  docUploadZone.addEventListener("dragleave", (e) => { e.preventDefault(); docUploadZone.classList.remove("border-indigo-400", "bg-indigo-50"); });
+  docUploadZone.addEventListener("dragover", (e) => { e.preventDefault(); docUploadZone.classList.add("border-editorial-navy-light", "bg-editorial-navy-bg"); });
+  docUploadZone.addEventListener("dragleave", (e) => { e.preventDefault(); docUploadZone.classList.remove("border-editorial-navy-light", "bg-editorial-navy-bg"); });
   docUploadZone.addEventListener("drop", (e) => {
-    e.preventDefault(); docUploadZone.classList.remove("border-indigo-400", "bg-indigo-50");
+    e.preventDefault(); docUploadZone.classList.remove("border-editorial-navy-light", "bg-editorial-navy-bg");
     if (e.dataTransfer.files.length > 0) docProcessFile(e.dataTransfer.files[0]);
   });
   docFileInput.addEventListener("change", (e) => { if (e.target.files.length > 0) docProcessFile(e.target.files[0]); });
@@ -2011,9 +2011,9 @@
     btn.innerHTML = '<span class="material-symbols-outlined animate-spin" style="font-size:18px">progress_activity</span> AI 분석 중...';
     const statusEl = document.getElementById("doc-analysis-status");
     statusEl.classList.remove("hidden");
-    statusEl.innerHTML = '<div class="flex items-center gap-2 px-3 py-2 bg-indigo-50 rounded-lg">' +
-      '<span class="material-symbols-outlined text-indigo-500 animate-spin" style="font-size:16px">progress_activity</span>' +
-      '<span class="text-xs text-indigo-600 font-medium">AI가 공문을 분석하고 있습니다... (10~30초 소요)</span></div>';
+    statusEl.innerHTML = '<div class="flex items-center gap-2 px-3 py-2 bg-editorial-navy-bg rounded-lg">' +
+      '<span class="material-symbols-outlined text-editorial-navy animate-spin" style="font-size:16px">progress_activity</span>' +
+      '<span class="text-xs text-editorial-navy font-medium">AI가 공문을 분석하고 있습니다... (10~30초 소요)</span></div>';
 
     const formData = new FormData();
     formData.append("file", docUploadedFile);
@@ -2037,7 +2037,7 @@
 
         const container = document.getElementById("doc-extracted-tasks");
         container.classList.remove("hidden");
-        let html = '<label class="flex items-center gap-2 px-2 py-1.5 text-[11px] text-indigo-600 font-medium cursor-pointer hover:bg-indigo-50 rounded mb-1">' +
+        let html = '<label class="flex items-center gap-2 px-2 py-1.5 text-[11px] text-editorial-navy font-medium cursor-pointer hover:bg-editorial-navy-bg rounded mb-1">' +
           '<input type="checkbox" id="doc-select-all" checked> 전체 선택</label>';
         tasks.forEach(task => {
           const cc = catColorMap[task.cat] || {bg:"#f1f5f9",text:"#475569"};
@@ -2198,7 +2198,7 @@
       } else if (isSat) {
         dayColor = "text-blue-400"; numColor = "text-blue-500";
       } else if (isToday) {
-        dayColor = "text-indigo-600"; numColor = "text-indigo-600";
+        dayColor = "text-editorial-navy"; numColor = "text-editorial-navy";
       } else {
         dayColor = "text-slate-400"; numColor = "text-slate-700";
       }
@@ -2206,11 +2206,11 @@
       const cell = document.createElement("div");
       const dateStr = d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
       const isSelected = selectedWeekDate === dateStr;
-      cell.className = "text-center py-2.5 cursor-pointer rounded-lg transition-colors hover:bg-slate-100 " + (isSelected ? "border-b-2 border-indigo-600" : "");
+      cell.className = "text-center py-2.5 cursor-pointer rounded-lg transition-colors hover:bg-slate-100 " + (isSelected ? "border-b-2 border-editorial-navy" : "");
       cell.dataset.date = dateStr;
       let numHtml;
       if (isToday) {
-        numHtml = '<span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-indigo-600 text-white text-sm font-bold">' + d.getDate() + '</span>';
+        numHtml = '<span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-editorial-navy text-white text-sm font-bold">' + d.getDate() + '</span>';
       } else {
         numHtml = '<span class="text-sm font-bold ' + numColor + '">' + d.getDate() + '</span>';
       }
@@ -2262,7 +2262,7 @@
       let dateColor, dayColor;
       if (isSun || hName) { dateColor = "text-red-600 font-bold"; dayColor = "text-red-600 font-medium"; }
       else if (isSat) { dateColor = "text-blue-600 font-bold"; dayColor = "text-blue-600 font-medium"; }
-      else if (isToday) { dateColor = "text-indigo-600 font-bold"; dayColor = "text-indigo-600 font-medium"; }
+      else if (isToday) { dateColor = "text-editorial-navy font-bold"; dayColor = "text-editorial-navy font-medium"; }
       else { dateColor = "text-slate-900 font-medium"; dayColor = "text-slate-500"; }
 
       // 행 배경 (주말 틴트)
@@ -2301,7 +2301,7 @@
           '<div class="col-span-6 sm:col-span-8"><span class="text-slate-400 italic text-sm">업무 없음' +
             (hName ? ' · <span class="text-red-400 not-italic font-medium">' + hName + '</span>' : '') + '</span></div>' +
           '<div class="col-span-2 flex justify-end">' +
-            '<button class="btn-inline-add flex items-center gap-1 text-xs text-slate-400 hover:text-indigo-600 transition-colors" data-date="' + dateStr + '">' +
+            '<button class="btn-inline-add flex items-center gap-1 text-xs text-slate-400 hover:text-editorial-navy transition-colors" data-date="' + dateStr + '">' +
               '<span class="material-symbols-outlined" style="font-size:16px">add</span>업무 추가</button></div>' +
           '</div>';
       } else {
@@ -2321,7 +2321,7 @@
               '<div class="flex items-start gap-4">' +
                 '<label class="flex-shrink-0 pt-0.5 cursor-pointer">' +
                   '<input type="checkbox" class="task-cb sr-only" data-key="' + key + '">' +
-                  '<span class="check-box w-[22px] h-[22px] rounded-full border-2 border-slate-300 flex items-center justify-center hover:border-indigo-400 transition-colors">' +
+                  '<span class="check-box w-[22px] h-[22px] rounded-full border-2 border-slate-300 flex items-center justify-center hover:border-editorial-navy-light transition-colors">' +
                     '<svg class="w-3 h-3 text-white opacity-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>' +
                   '</span>' +
                 '</label>' +
@@ -2344,7 +2344,7 @@
         });
         // 인라인 추가 버튼
         html += '<div class="px-6 py-2">' +
-          '<button class="btn-inline-add flex items-center justify-center gap-2 w-full py-2.5 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-slate-50 transition-all text-sm font-medium" data-date="' + dateStr + '">' +
+          '<button class="btn-inline-add flex items-center justify-center gap-2 w-full py-2.5 rounded-lg text-slate-400 hover:text-editorial-navy hover:bg-slate-50 transition-all text-sm font-medium" data-date="' + dateStr + '">' +
             '<span class="material-symbols-outlined" style="font-size:18px">add_circle</span> 업무 추가</button></div>';
       }
       html += '</div>';
@@ -2387,7 +2387,7 @@
     } else if (remaining === 0) {
       el.innerHTML = '<span class="text-emerald-500">' + _weekTotal + '/' + _weekTotal + '</span>';
     } else {
-      el.innerHTML = '<span class="text-indigo-600 font-bold">' + remaining + '</span><span class="text-slate-300">/' + _weekTotal + '</span>';
+      el.innerHTML = '<span class="text-editorial-navy font-bold">' + remaining + '</span><span class="text-slate-300">/' + _weekTotal + '</span>';
     }
   }
 
@@ -2460,7 +2460,7 @@
       // 주차 헤더 + 그라데이션 라인
       html += '<div class="flex items-center gap-4">';
       html += '<h3 class="text-lg font-bold text-slate-900 whitespace-nowrap">' + (wIdx + 1) + '주차 · ' + wLabel + '</h3>';
-      html += '<div class="h-px flex-1 bg-gradient-to-r from-indigo-400/40 to-transparent"></div>';
+      html += '<div class="h-px flex-1 bg-gradient-to-r from-editorial-navy-light/40 to-transparent"></div>';
       html += '</div>';
 
       if (weekTasks.length === 0) {
@@ -2469,7 +2469,7 @@
         html += '<div class="size-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 mb-1">';
         html += '<span class="material-symbols-outlined">event_busy</span></div>';
         html += '<p class="text-sm font-medium text-gray-400">이 주에 등록된 업무가 없습니다</p>';
-        html += '<button class="text-xs font-bold text-indigo-500 hover:underline" onclick="openAddModal(null, null)">업무 추가</button>';
+        html += '<button class="text-xs font-bold text-editorial-navy hover:underline" onclick="openAddModal(null, null)">업무 추가</button>';
         html += '</div>';
       } else {
         // 태스크 카드 컨테이너
@@ -2490,14 +2490,14 @@
           // 체크박스
           html += '<label class="flex-shrink-0 cursor-pointer">' +
             '<input type="checkbox" class="task-cb monthly-task-cb sr-only" data-key="' + key + '">' +
-            '<span class="check-box w-[22px] h-[22px] rounded-full border-2 border-gray-300 flex items-center justify-center hover:border-indigo-400 transition-colors">' +
+            '<span class="check-box w-[22px] h-[22px] rounded-full border-2 border-gray-300 flex items-center justify-center hover:border-editorial-navy-light transition-colors">' +
               '<svg class="w-3 h-3 text-white opacity-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>' +
             '</span>' +
           '</label>';
 
           // 제목
           html += '<div class="flex-1 min-w-0">';
-          html += '<p class="task-text text-sm font-medium text-slate-800 truncate group-hover:text-indigo-600 transition-colors">' + escapeHtml(t.title) + '</p>';
+          html += '<p class="task-text text-sm font-medium text-slate-800 truncate group-hover:text-editorial-navy transition-colors">' + escapeHtml(t.title) + '</p>';
           html += '</div>';
 
           // 카테고리 배지 + D-day + 날짜
@@ -2558,7 +2558,7 @@
     } else if (remaining === 0) {
       el.innerHTML = '<span class="text-emerald-500">' + _monthTotal + '/' + _monthTotal + '</span>';
     } else {
-      el.innerHTML = '<span class="text-indigo-600 font-bold">' + remaining + '</span><span class="text-slate-300">/' + _monthTotal + '</span>';
+      el.innerHTML = '<span class="text-editorial-navy font-bold">' + remaining + '</span><span class="text-slate-300">/' + _monthTotal + '</span>';
     }
   }
 
@@ -2595,9 +2595,9 @@
       const isThisMonth = (monthlyPickYear === todayDate.getFullYear() && i === todayDate.getMonth());
       let cls = "py-2 rounded-lg text-sm font-medium transition-colors ";
       if (isCurrent) {
-        cls += "bg-indigo-600 text-white font-bold";
+        cls += "bg-editorial-navy text-white font-bold";
       } else if (isThisMonth) {
-        cls += "bg-indigo-50 text-indigo-600 font-bold hover:bg-indigo-100";
+        cls += "bg-editorial-navy-bg text-editorial-navy font-bold hover:bg-editorial-navy-bg";
       } else {
         cls += "text-slate-700 hover:bg-slate-100";
       }
@@ -2705,13 +2705,13 @@
       const cell = document.createElement("button");
       let cls = "w-8 h-8 rounded-full text-sm font-medium flex items-center justify-center transition-colors ";
       if (isToday) {
-        cls += "bg-indigo-600 text-white font-bold";
+        cls += "bg-editorial-navy text-white font-bold";
       } else if (isHoliday || isSun) {
         cls += "text-red-500 font-semibold hover:bg-red-50";
       } else if (isSat) {
         cls += "text-blue-500 font-semibold hover:bg-blue-50";
       } else {
-        cls += "text-slate-700 hover:bg-indigo-50 hover:text-indigo-600";
+        cls += "text-slate-700 hover:bg-editorial-navy-bg hover:text-editorial-navy";
       }
       cell.className = cls;
       cell.textContent = d;
@@ -2795,7 +2795,7 @@
 
     if (editMode) {
       const addBtn = document.createElement("button");
-      addBtn.className = "inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium border border-dashed border-gray-300 text-gray-400 hover:border-indigo-400 hover:text-indigo-500 transition-colors";
+      addBtn.className = "inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium border border-dashed border-gray-300 text-gray-400 hover:border-editorial-navy-light hover:text-editorial-navy transition-colors";
       addBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:14px">add</span>추가';
       addBtn.addEventListener("click", () => {
         catAddRow.classList.toggle("hidden");
@@ -2810,7 +2810,7 @@
     editBtn.innerHTML = editMode
       ? '<span class="material-symbols-outlined" style="font-size:18px">check</span>'
       : '<span class="material-symbols-outlined" style="font-size:18px">add</span>';
-    editBtn.classList.toggle("text-indigo-600", editMode);
+    editBtn.classList.toggle("text-editorial-navy", editMode);
     if (!editMode) catAddRow.classList.add("hidden");
     renderCats();
   });
@@ -3198,7 +3198,7 @@
     { bg: "bg-cyan-50", text: "text-cyan-700", border: "border-cyan-200" },
     { bg: "bg-sky-50", text: "text-sky-700", border: "border-sky-200" },
     { bg: "bg-blue-50", text: "text-blue-700", border: "border-blue-200" },
-    { bg: "bg-indigo-50", text: "text-indigo-700", border: "border-indigo-200" },
+    { bg: "bg-editorial-navy-bg", text: "text-editorial-navy-dark", border: "border-editorial-navy-light" },
     { bg: "bg-violet-50", text: "text-violet-700", border: "border-violet-200" },
     { bg: "bg-purple-50", text: "text-purple-700", border: "border-purple-200" },
     { bg: "bg-fuchsia-50", text: "text-fuchsia-700", border: "border-fuchsia-200" },
@@ -3284,7 +3284,7 @@
         <div class="p-2.5 rounded-lg border ${color.border} ${color.bg} group hover:shadow-sm transition-all">
           <div class="flex items-start gap-2">
             <input type="checkbox" ${item.checked ? 'checked' : ''}
-                   class="standing-item-cb mt-0.5 w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+                   class="standing-item-cb mt-0.5 w-4 h-4 rounded border-gray-300 text-editorial-navy focus:ring-editorial-navy cursor-pointer"
                    data-idx="${idx}">
             <div class="flex-1 min-w-0">
               <p class="text-xs font-medium ${color.text} ${item.checked ? 'line-through opacity-60' : ''}">${escapeHtml(item.title)}</p>
@@ -3454,7 +3454,7 @@
       document.querySelectorAll("#onetime-cat-container .cat-btn").forEach(catBtn => {
         const isSelected = catBtn.textContent.trim() === taskCat;
         catBtn.classList.toggle("ring-2", isSelected);
-        catBtn.classList.toggle("ring-indigo-600", isSelected);
+        catBtn.classList.toggle("ring-editorial-navy", isSelected);
       });
 
       // 기본 업무 수정 플래그 설정 (submit 핸들러에서 처리)

@@ -4,7 +4,7 @@
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- 뒤로가기 -->
     <div class="mb-6">
-      <%= link_to tools_path, class: "inline-flex items-center text-slate-600 hover:text-indigo-600 transition-colors font-medium" do %>
+      <%= link_to tools_path, class: "inline-flex items-center text-slate-600 hover:text-editorial-navy transition-colors font-medium" do %>
         <span class="material-symbols-outlined mr-1">arrow_back</span>
         도구 목록으로
       <% end %>
@@ -23,18 +23,18 @@
       </div>
 
       <!-- 요건 안내 -->
-      <div class="bg-indigo-50 border border-indigo-200 rounded-2xl p-5">
-        <h3 class="text-sm font-bold text-indigo-900 mb-2 flex items-center gap-2">
+      <div class="bg-editorial-navy-bg border border-editorial-navy-light rounded-2xl p-5">
+        <h3 class="text-sm font-bold text-editorial-ink mb-2 flex items-center gap-2">
           <span class="material-symbols-outlined text-sm">info</span>
           물가변동(ESC) 조정 요건 — 두 가지를 모두 충족해야 합니다
         </h3>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div class="flex items-center gap-2 text-sm text-indigo-800">
-            <span class="material-symbols-outlined text-indigo-500">schedule</span>
+          <div class="flex items-center gap-2 text-sm text-editorial-navy-dark">
+            <span class="material-symbols-outlined text-editorial-navy">schedule</span>
             <strong>기간 요건:</strong> 계약체결일(또는 직전 조정기준일)로부터 90일 이상 경과
           </div>
-          <div class="flex items-center gap-2 text-sm text-indigo-800">
-            <span class="material-symbols-outlined text-indigo-500">percent</span>
+          <div class="flex items-center gap-2 text-sm text-editorial-navy-dark">
+            <span class="material-symbols-outlined text-editorial-navy">percent</span>
             <strong>등락률 요건:</strong> 등락률 3% 이상 변동
           </div>
         </div>
@@ -44,7 +44,7 @@
     <!-- 조정 방법 선택 -->
     <div class="card p-6 mb-6">
       <h2 class="text-base font-bold text-slate-900 mb-4 flex items-center gap-2">
-        <span class="material-symbols-outlined text-indigo-600">tune</span>
+        <span class="material-symbols-outlined text-editorial-navy">tune</span>
         기본 정보
       </h2>
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
@@ -71,10 +71,10 @@
     <div id="index-section" class="card p-6 mb-6">
       <div class="flex items-center justify-between mb-4">
         <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
-          <span class="material-symbols-outlined text-indigo-600">bar_chart</span>
+          <span class="material-symbols-outlined text-editorial-navy">bar_chart</span>
           비목별 지수 입력
         </h2>
-        <button type="button" onclick="addIndexItem()" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium flex items-center gap-1">
+        <button type="button" onclick="addIndexItem()" class="text-xs text-editorial-navy hover:text-editorial-navy-dark font-medium flex items-center gap-1">
           <span class="material-symbols-outlined text-sm">add</span>
           비목 추가
         </button>
@@ -88,7 +88,7 @@
               <th class="pb-2 text-right font-semibold">계약금액<br><span class="font-normal">(만원)</span></th>
               <th class="pb-2 text-right font-semibold">입찰일<br>지수</th>
               <th class="pb-2 text-right font-semibold">조정기준일<br>지수</th>
-              <th class="pb-2 text-right font-semibold text-indigo-600">등락률</th>
+              <th class="pb-2 text-right font-semibold text-editorial-navy">등락률</th>
               <th class="pb-2"></th>
             </tr>
           </thead>
@@ -127,10 +127,10 @@
     <div id="item-section" class="card p-6 mb-6 hidden">
       <div class="flex items-center justify-between mb-4">
         <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
-          <span class="material-symbols-outlined text-indigo-600">inventory_2</span>
+          <span class="material-symbols-outlined text-editorial-navy">inventory_2</span>
           품목별 단가 변동 입력
         </h2>
-        <button type="button" onclick="addItemRow()" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium flex items-center gap-1">
+        <button type="button" onclick="addItemRow()" class="text-xs text-editorial-navy hover:text-editorial-navy-dark font-medium flex items-center gap-1">
           <span class="material-symbols-outlined text-sm">add</span>
           품목 추가
         </button>
@@ -144,7 +144,7 @@
               <th class="pb-2 text-right font-semibold">수량</th>
               <th class="pb-2 text-right font-semibold">입찰일<br>단가(원)</th>
               <th class="pb-2 text-right font-semibold">조정기준일<br>단가(원)</th>
-              <th class="pb-2 text-right font-semibold text-indigo-600">변동액</th>
+              <th class="pb-2 text-right font-semibold text-editorial-navy">변동액</th>
               <th class="pb-2"></th>
             </tr>
           </thead>
@@ -173,30 +173,30 @@
 
     <!-- 결과 -->
     <div id="result-area" class="hidden">
-      <div class="card p-6 border-2 border-indigo-200 bg-indigo-50/30">
-        <h2 class="text-base font-bold text-indigo-900 mb-5 flex items-center gap-2">
-          <span class="material-symbols-outlined text-indigo-600">calculate</span>
+      <div class="card p-6 border-2 border-editorial-navy-light bg-editorial-navy-bg/30">
+        <h2 class="text-base font-bold text-editorial-ink mb-5 flex items-center gap-2">
+          <span class="material-symbols-outlined text-editorial-navy">calculate</span>
           조정금액 계산 결과
         </h2>
 
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
-          <div class="bg-white rounded-xl p-4 text-center border border-indigo-100">
+          <div class="bg-white rounded-xl p-4 text-center border border-editorial-navy-bg">
             <div class="text-xs text-slate-500 mb-1">계약금액</div>
             <div id="res-contract" class="text-base font-bold text-slate-800">-</div>
             <div class="text-xs text-slate-400">만원</div>
           </div>
-          <div class="bg-white rounded-xl p-4 text-center border border-indigo-100">
+          <div class="bg-white rounded-xl p-4 text-center border border-editorial-navy-bg">
             <div class="text-xs text-slate-500 mb-1">가중평균 등락률</div>
-            <div id="res-rate" class="text-base font-bold text-indigo-700">-</div>
+            <div id="res-rate" class="text-base font-bold text-editorial-navy-dark">-</div>
           </div>
-          <div class="bg-white rounded-xl p-4 text-center border border-indigo-100">
+          <div class="bg-white rounded-xl p-4 text-center border border-editorial-navy-bg">
             <div class="text-xs text-slate-500 mb-1">조정금액</div>
-            <div id="res-adj" class="text-base font-bold text-indigo-700">-</div>
+            <div id="res-adj" class="text-base font-bold text-editorial-navy-dark">-</div>
             <div class="text-xs text-slate-400">만원</div>
           </div>
-          <div class="bg-white rounded-xl p-4 text-center border border-indigo-100">
+          <div class="bg-white rounded-xl p-4 text-center border border-editorial-navy-bg">
             <div class="text-xs text-slate-500 mb-1">선금공제 후 조정금액</div>
-            <div id="res-final" class="text-xl font-bold text-indigo-800">-</div>
+            <div id="res-final" class="text-xl font-bold text-editorial-navy-dark">-</div>
             <div class="text-xs text-slate-400">만원</div>
           </div>
         </div>
@@ -205,7 +205,7 @@
         <div id="res-eligibility" class="mb-4"></div>
 
         <!-- 계산식 표시 -->
-        <div class="bg-white rounded-xl p-4 border border-indigo-100">
+        <div class="bg-white rounded-xl p-4 border border-editorial-navy-bg">
           <h3 class="text-xs font-bold text-slate-600 mb-2">계산 과정</h3>
           <div id="res-formula" class="text-xs text-slate-600 space-y-1 font-mono"></div>
         </div>
@@ -299,7 +299,7 @@
       if (amount > 0 && baseIdx > 0 && adjIdx > 0) {
         const rate = (adjIdx - baseIdx) / baseIdx * 100;
         rateEl.textContent = (rate >= 0 ? '+' : '') + rate.toFixed(2) + '%';
-        rateEl.className = `py-2 pl-2 text-right font-bold item-rate ${rate >= 0 ? 'text-indigo-600' : 'text-red-600'}`;
+        rateEl.className = `py-2 pl-2 text-right font-bold item-rate ${rate >= 0 ? 'text-editorial-navy' : 'text-red-600'}`;
         totalAmount += amount;
         weightedRate += rate * amount;
         details.push({ name, amount, rate });
@@ -385,7 +385,7 @@
         const change = (adjPrice - basePrice) * qty;
         totalChange += change;
         changeEl.textContent = (change >= 0 ? '+' : '') + formatNum(Math.round(change / 10000)) + '만원';
-        changeEl.className = `py-2 pl-2 text-right font-bold item-change ${change >= 0 ? 'text-indigo-600' : 'text-red-600'}`;
+        changeEl.className = `py-2 pl-2 text-right font-bold item-change ${change >= 0 ? 'text-editorial-navy' : 'text-red-600'}`;
       } else {
         changeEl.textContent = '-';
         changeEl.className = 'py-2 pl-2 text-right font-bold item-change text-slate-400';

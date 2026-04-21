@@ -4,7 +4,7 @@
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- 뒤로가기 -->
     <div class="mb-6">
-      <%= link_to tools_path, class: "inline-flex items-center text-slate-600 hover:text-indigo-600 transition-colors font-medium" do %>
+      <%= link_to tools_path, class: "inline-flex items-center text-slate-600 hover:text-editorial-navy transition-colors font-medium" do %>
         <span class="material-symbols-outlined mr-1">arrow_back</span>
         도구 목록으로
       <% end %>
@@ -22,9 +22,9 @@
         </div>
       </div>
 
-      <details class="bg-white rounded-2xl shadow-sm border border-indigo-100 mt-6">
+      <details class="bg-white rounded-2xl shadow-sm border border-editorial-navy-bg mt-6">
         <summary class="px-6 py-4 cursor-pointer hover:bg-slate-50 transition-colors flex items-center gap-2 [list-style:none] [&::-webkit-details-marker]:hidden">
-          <span class="material-symbols-outlined text-indigo-600 text-[20px]">info</span>
+          <span class="material-symbols-outlined text-editorial-navy text-[20px]">info</span>
           <span class="text-sm font-semibold text-slate-700">이 도구를 사용하는 이유</span>
           <span class="ml-auto text-xs text-slate-400">펼치기 ▾</span>
         </summary>
@@ -52,7 +52,7 @@
       <div class="lg:w-1/2 mb-8 lg:mb-0">
         <div class="card p-6">
           <h2 class="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
-            <span class="material-symbols-outlined text-indigo-600">edit</span>
+            <span class="material-symbols-outlined text-editorial-navy">edit</span>
             근무 정보 입력
           </h2>
 
@@ -139,7 +139,7 @@
       <div class="lg:w-1/2">
         <div id="result-area" class="card p-6">
           <h2 class="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
-            <span class="material-symbols-outlined text-indigo-600">event_note</span>
+            <span class="material-symbols-outlined text-editorial-navy">event_note</span>
             계산 결과
           </h2>
 
@@ -161,10 +161,10 @@
 
             <!-- 연가 현황 카드 3개 -->
             <div class="grid grid-cols-3 gap-3 mb-5">
-              <div class="bg-indigo-50 rounded-xl p-4 text-center">
-                <div class="text-xs font-semibold text-indigo-600 mb-1">부여 연가</div>
-                <div class="text-2xl font-bold text-indigo-700" id="total-leave">-</div>
-                <div class="text-xs text-indigo-400 mt-0.5">일</div>
+              <div class="bg-editorial-navy-bg rounded-xl p-4 text-center">
+                <div class="text-xs font-semibold text-editorial-navy mb-1">부여 연가</div>
+                <div class="text-2xl font-bold text-editorial-navy-dark" id="total-leave">-</div>
+                <div class="text-xs text-editorial-navy-light mt-0.5">일</div>
               </div>
               <div class="bg-rose-50 rounded-xl p-4 text-center">
                 <div class="text-xs font-semibold text-rose-600 mb-1">사용 연가</div>
@@ -204,7 +204,7 @@
             <!-- 다운로드 버튼 -->
             <div class="mt-4 pt-4 border-t border-slate-100 flex flex-col gap-2">
               <button onclick="downloadPdf()" id="pdf-btn"
-                      class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition-colors">
+                      class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-editorial-navy hover:bg-editorial-navy-dark text-white text-sm font-semibold rounded-xl transition-colors">
                 <span class="material-symbols-outlined text-lg">picture_as_pdf</span>
                 PDF로 저장
               </button>
@@ -250,7 +250,7 @@
               <tr><td class="py-1.5">3년 이상 ~ 4년 미만</td><td class="text-right font-semibold">15일</td></tr>
               <tr><td class="py-1.5">4년 이상 ~ 5년 미만</td><td class="text-right font-semibold">17일</td></tr>
               <tr><td class="py-1.5">5년 이상 ~ 6년 미만</td><td class="text-right font-semibold">20일</td></tr>
-              <tr><td class="py-1.5">6년 이상</td><td class="text-right font-semibold text-indigo-600">21일</td></tr>
+              <tr><td class="py-1.5">6년 이상</td><td class="text-right font-semibold text-editorial-navy">21일</td></tr>
             </tbody>
           </table>
         </div>

@@ -4,7 +4,7 @@
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- 뒤로가기 -->
     <div class="mb-6">
-      <%= link_to tools_path, class: "inline-flex items-center text-slate-600 hover:text-indigo-600 transition-colors font-medium" do %>
+      <%= link_to tools_path, class: "inline-flex items-center text-slate-600 hover:text-editorial-navy transition-colors font-medium" do %>
         <span class="material-symbols-outlined mr-1">arrow_back</span>
         도구 목록으로
       <% end %>
@@ -22,9 +22,9 @@
         </div>
       </div>
 
-      <details class="bg-white rounded-2xl shadow-sm border border-indigo-100 mt-6">
+      <details class="bg-white rounded-2xl shadow-sm border border-editorial-navy-bg mt-6">
         <summary class="px-6 py-4 cursor-pointer hover:bg-slate-50 transition-colors flex items-center gap-2 [list-style:none] [&::-webkit-details-marker]:hidden">
-          <span class="material-symbols-outlined text-indigo-600 text-[20px]">info</span>
+          <span class="material-symbols-outlined text-editorial-navy text-[20px]">info</span>
           <span class="text-sm font-semibold text-slate-700">이 도구를 사용하는 이유</span>
           <span class="ml-auto text-xs text-slate-400">펼치기 ▾</span>
         </summary>
@@ -51,7 +51,7 @@
       <div class="lg:w-1/2 mb-8 lg:mb-0">
         <div class="card p-6">
           <h2 class="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
-            <span class="material-symbols-outlined text-indigo-600">edit</span>
+            <span class="material-symbols-outlined text-editorial-navy">edit</span>
             예산 정보 입력
           </h2>
 
@@ -131,7 +131,7 @@
       <div class="lg:w-1/2">
         <div class="card p-6 h-full">
           <h2 class="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
-            <span class="material-symbols-outlined text-indigo-600">analytics</span>
+            <span class="material-symbols-outlined text-editorial-navy">analytics</span>
             예비비 한도 분석
           </h2>
 
@@ -154,7 +154,7 @@
             <div class="grid grid-cols-2 gap-3 mb-5">
               <div class="bg-white border border-slate-100 rounded-xl p-3 text-center">
                 <div class="text-xs text-slate-400 mb-1">법정 최대 한도</div>
-                <div id="max-limit" class="text-base font-bold text-indigo-700">-</div>
+                <div id="max-limit" class="text-base font-bold text-editorial-navy-dark">-</div>
               </div>
               <div class="bg-white border border-slate-100 rounded-xl p-3 text-center">
                 <div class="text-xs text-slate-400 mb-1">현재 편성액</div>
@@ -260,13 +260,13 @@
 
     // 한도 카드
     const limitCard = document.getElementById('limit-card');
-    limitCard.className = 'rounded-xl p-4 mb-5 bg-indigo-50';
+    limitCard.className = 'rounded-xl p-4 mb-5 bg-editorial-navy-bg';
     document.getElementById('limit-label').textContent = '법정 최대 한도 (예산 총액의 1%)';
-    document.getElementById('limit-label').className = 'text-sm font-medium mb-1 text-indigo-600';
+    document.getElementById('limit-label').className = 'text-sm font-medium mb-1 text-editorial-navy';
     document.getElementById('limit-amount').textContent = formatKRW(maxLimit);
-    document.getElementById('limit-amount').className = 'text-3xl font-bold mb-1 text-indigo-700';
+    document.getElementById('limit-amount').className = 'text-3xl font-bold mb-1 text-editorial-navy-dark';
     document.getElementById('limit-desc').textContent = `예산 총액 ${formatKRW(budget)} × 1%`;
-    document.getElementById('limit-desc').className = 'text-xs text-indigo-500';
+    document.getElementById('limit-desc').className = 'text-xs text-editorial-navy';
 
     // 수치
     document.getElementById('max-limit').textContent = formatKRW(maxLimit);

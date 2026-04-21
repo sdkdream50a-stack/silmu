@@ -218,18 +218,18 @@
         <% if @related_cases.present? && @related_cases.length > 0 %>
           <div class="mt-10 pt-8 border-t border-gray-200">
             <h2 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-              <span class="material-symbols-outlined text-indigo-600">auto_awesome</span>
+              <span class="material-symbols-outlined text-editorial-navy">auto_awesome</span>
               유사 감사사례
             </h2>
             <div class="grid gap-4 sm:grid-cols-2">
               <% @related_cases.first(4).each do |ac| %>
-                <%= link_to audit_case_path(slug: ac.slug), class: "group block p-4 bg-white rounded-xl border border-gray-200 hover:border-indigo-300 hover:shadow-md transition-all" do %>
+                <%= link_to audit_case_path(slug: ac.slug), class: "group block p-4 bg-white rounded-xl border border-gray-200 hover:border-editorial-navy-light hover:shadow-md transition-all" do %>
                   <div class="flex items-start gap-3">
                     <div class="shrink-0 w-8 h-8 bg-red-50 rounded-lg flex items-center justify-center">
                       <span class="material-symbols-outlined text-sm text-red-500">gavel</span>
                     </div>
                     <div class="flex-1 min-w-0">
-                      <p class="font-semibold text-slate-800 text-sm leading-snug group-hover:text-indigo-700 transition-colors line-clamp-2"><%= ac.title %></p>
+                      <p class="font-semibold text-slate-800 text-sm leading-snug group-hover:text-editorial-navy-dark transition-colors line-clamp-2"><%= ac.title %></p>
                       <div class="flex items-center gap-2 mt-1.5 flex-wrap">
                         <span class="text-xs text-slate-400"><%= ac.category %></span>
                         <% if ac.severity.present? %>
@@ -242,7 +242,7 @@
               <% end %>
             </div>
 
-            <%= link_to audit_cases_path(category: @audit_case.category), class: "mt-4 inline-flex items-center gap-1.5 text-sm text-indigo-600 hover:text-indigo-800 font-medium transition-colors" do %>
+            <%= link_to audit_cases_path(category: @audit_case.category), class: "mt-4 inline-flex items-center gap-1.5 text-sm text-editorial-navy hover:text-editorial-navy-dark font-medium transition-colors" do %>
               <%= @audit_case.category %> 카테고리 전체 보기
               <span class="material-symbols-outlined text-sm">arrow_forward</span>
             <% end %>
@@ -256,19 +256,19 @@
           <!-- 목차 (TOC) -->
           <div class="bg-white rounded-xl border border-gray-200 p-5">
             <h3 class="font-bold text-gray-900 mb-3 text-sm flex items-center gap-1.5">
-              <span class="material-symbols-outlined text-sm text-indigo-600">list</span>
+              <span class="material-symbols-outlined text-sm text-editorial-navy">list</span>
               목차
             </h3>
             <nav class="space-y-0.5 text-sm" id="toc-nav">
-              <a href="#section-finding" class="toc-link block py-1.5 px-2 rounded-lg text-gray-600 hover:bg-indigo-50 hover:text-indigo-700 transition-colors">지적사항</a>
-              <a href="#section-law" class="toc-link block py-1.5 px-2 rounded-lg text-gray-600 hover:bg-indigo-50 hover:text-indigo-700 transition-colors">관련근거</a>
-              <a href="#section-improvement" class="toc-link block py-1.5 px-2 rounded-lg text-gray-600 hover:bg-indigo-50 hover:text-indigo-700 transition-colors">조치내용</a>
-              <a href="#section-lesson" class="toc-link block py-1.5 px-2 rounded-lg text-gray-600 hover:bg-indigo-50 hover:text-indigo-700 transition-colors">교훈 및 시사점</a>
+              <a href="#section-finding" class="toc-link block py-1.5 px-2 rounded-lg text-gray-600 hover:bg-editorial-navy-bg hover:text-editorial-navy-dark transition-colors">지적사항</a>
+              <a href="#section-law" class="toc-link block py-1.5 px-2 rounded-lg text-gray-600 hover:bg-editorial-navy-bg hover:text-editorial-navy-dark transition-colors">관련근거</a>
+              <a href="#section-improvement" class="toc-link block py-1.5 px-2 rounded-lg text-gray-600 hover:bg-editorial-navy-bg hover:text-editorial-navy-dark transition-colors">조치내용</a>
+              <a href="#section-lesson" class="toc-link block py-1.5 px-2 rounded-lg text-gray-600 hover:bg-editorial-navy-bg hover:text-editorial-navy-dark transition-colors">교훈 및 시사점</a>
               <% if @audit_case.checkpoint_list.any? %>
-                <a href="#section-checkpoint" class="toc-link block py-1.5 px-2 rounded-lg text-gray-600 hover:bg-indigo-50 hover:text-indigo-700 transition-colors">실무 체크포인트</a>
+                <a href="#section-checkpoint" class="toc-link block py-1.5 px-2 rounded-lg text-gray-600 hover:bg-editorial-navy-bg hover:text-editorial-navy-dark transition-colors">실무 체크포인트</a>
               <% end %>
               <% if @audit_case.detail.present? %>
-                <a href="#section-detail" class="toc-link block py-1.5 px-2 rounded-lg text-gray-600 hover:bg-indigo-50 hover:text-indigo-700 transition-colors">상세 분석</a>
+                <a href="#section-detail" class="toc-link block py-1.5 px-2 rounded-lg text-gray-600 hover:bg-editorial-navy-bg hover:text-editorial-navy-dark transition-colors">상세 분석</a>
               <% end %>
             </nav>
           </div>
@@ -336,11 +336,11 @@
       entries.forEach(function(entry) {
         if (entry.isIntersecting) {
           tocLinks.forEach(function(link) {
-            link.classList.remove('bg-indigo-50', 'text-indigo-700', 'font-medium');
+            link.classList.remove('bg-editorial-navy-bg', 'text-editorial-navy-dark', 'font-medium');
           });
           const activeLink = document.querySelector('.toc-link[href="#' + entry.target.id + '"]');
           if (activeLink) {
-            activeLink.classList.add('bg-indigo-50', 'text-indigo-700', 'font-medium');
+            activeLink.classList.add('bg-editorial-navy-bg', 'text-editorial-navy-dark', 'font-medium');
           }
         }
       });
