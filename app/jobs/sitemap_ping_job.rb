@@ -36,9 +36,10 @@ class SitemapPingJob < ApplicationJob
   private
 
   def collect_urls
+    # IndexNow는 변경된 콘텐츠 URL만 받음. sitemap.xml은 Google Sitemap Ping API에서 별도 처리.
     urls = [
-      "https://#{HOST}/", "https://#{HOST}/sitemap.xml",
-      "https://#{EXAM_HOST}/", "https://#{EXAM_HOST}/sitemap.xml"
+      "https://#{HOST}/",
+      "https://#{EXAM_HOST}/"
     ]
 
     # 최근 7일간 업데이트된 토픽

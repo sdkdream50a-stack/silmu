@@ -1,29 +1,44 @@
 class SitemapPingEngineJob < ApplicationJob
   queue_as :default
 
+  # 429 Too Many Requests 때는 재시도 대기로 완화 (기본 discard 방지)
+  retry_on Net::OpenTimeout, Net::ReadTimeout, wait: :polynomially_longer, attempts: 3
+
   def perform(engine, urls)
     require "net/http"
-    urls.each do |url|
-      status = submit_indexnow(engine, url)
-      Rails.logger.info "[SitemapPing] #{engine} #{url}: #{status}"
+    require "json"
+
+    # IndexNow 사양: 한 요청의 모든 URL은 동일 host여야 함.
+    # 따라서 host별로 그룹핑해 엔진당 최대 2회(silmu.kr / exam.silmu.kr) POST.
+    urls.group_by { |u| URI(u).host rescue nil }.compact.each do |host, host_urls|
+      status = submit_indexnow(engine, host, host_urls)
+      Rails.logger.info "[SitemapPing] #{engine} #{host} (#{host_urls.size} URLs): #{status}"
     end
   end
 
   private
 
-  def submit_indexnow(engine, url)
+  def submit_indexnow(engine, host, urls)
     key = Rails.application.credentials.dig(:indexnow, :key) || SitemapPingJob::INDEXNOW_KEY
     uri = URI("https://#{engine}/indexnow")
-    uri.query = URI.encode_www_form(url: url, key: key)
+
     http = Net::HTTP.new(uri.host, 443)
     http.use_ssl = true
     http.open_timeout = 10
     http.read_timeout = 10
-    request = Net::HTTP::Get.new(uri.request_uri)
+
+    request = Net::HTTP::Post.new(uri.request_uri, "Content-Type" => "application/json; charset=utf-8")
+    request.body = {
+      host: host,
+      key: key,
+      keyLocation: "https://#{host}/#{key}.txt",
+      urlList: urls
+    }.to_json
+
     response = http.request(request)
     response.code.to_i < 400 ? :ok : :"error_#{response.code}"
   rescue => e
-    Rails.logger.error "[SitemapPing] #{engine} 실패: #{e.message}"
+    Rails.logger.error "[SitemapPing] #{engine} #{host} 실패: #{e.message}"
     :error
   end
 end
