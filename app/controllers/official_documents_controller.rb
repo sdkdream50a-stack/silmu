@@ -1,5 +1,5 @@
 class OfficialDocumentsController < ApplicationController
-  before_action :require_login_for_ai, only: [:generate, :download_hwp]
+  before_action :require_login_for_ai, only: [ :generate, :download_hwp ]
 
   # IP당 분당 3회, 일일 30회 제한
   RATE_LIMIT = 3

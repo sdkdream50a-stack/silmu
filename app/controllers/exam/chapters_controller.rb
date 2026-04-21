@@ -1,5 +1,5 @@
 class Exam::ChaptersController < ApplicationController
-  layout 'exam'
+  layout "exam"
 
   def show
     @subject = ExamCurriculum.find_subject(params[:subject_id])

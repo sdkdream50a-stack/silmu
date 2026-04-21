@@ -130,7 +130,7 @@ attrs = {
     - 연가 중간에 끼는 공휴일: 연가 일수 불산입
     - 대체 공휴일도 동일하게 적용
   CONTENT
-  qa_content: <<~CONTENT,
+  qa_content: <<~CONTENT
     ## 자주 묻는 질문
 
     **Q. 재직 첫 해에 연가를 전부 사용할 수 있나요?**

@@ -1,5 +1,5 @@
 class Exam::SubjectsController < ApplicationController
-  layout 'exam'
+  layout "exam"
 
   def index
     @subjects = ExamCurriculum::SUBJECTS

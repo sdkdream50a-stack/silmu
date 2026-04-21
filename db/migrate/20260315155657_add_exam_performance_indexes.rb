@@ -5,7 +5,7 @@ class AddExamPerformanceIndexes < ActiveRecord::Migration[8.1]
               name: "idx_exam_progresses_on_weekly_quiz_count"
 
     # 댓글 복합 인덱스: question_id + hidden + likes_count (by_question 스코프)
-    add_index :exam_question_comments, [:question_id, :hidden, :likes_count],
+    add_index :exam_question_comments, [ :question_id, :hidden, :likes_count ],
               name: "idx_exam_comments_on_qid_hidden_likes"
 
     # 오류 제보 조회용

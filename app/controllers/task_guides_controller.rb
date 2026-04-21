@@ -1,5 +1,5 @@
 class TaskGuidesController < ApplicationController
-  before_action :require_login_for_ai, only: [:show]
+  before_action :require_login_for_ai, only: [ :show ]
 
   # 사용자당 분당 10회, 일일 50회 제한 (캐싱 우회 악용 방지)
   RATE_LIMIT = 10

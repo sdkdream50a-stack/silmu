@@ -127,7 +127,7 @@ attrs = {
     - SMPP(smpp.go.kr): 직접생산확인 신청·발급·조회 통합 시스템
     - 나라장터와 데이터 연동: 자동 인증 가능
   CONTENT
-  qa_content: <<~CONTENT,
+  qa_content: <<~CONTENT
     ## 자주 묻는 질문
 
     **Q. 모든 공공기관 납품에 직접생산확인이 필요한가요?**

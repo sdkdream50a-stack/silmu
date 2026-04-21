@@ -34,7 +34,7 @@ class GuidesController < ApplicationController
     non_series = @guides.reject { |g| g.series.present? }
     grouped = non_series.group_by(&:category)
     top = grouped.max_by { |_, v| v.size }
-    @top_category, @top_category_count = top ? [top[0], top[1].size] : [nil, 0]
+    @top_category, @top_category_count = top ? [ top[0], top[1].size ] : [ nil, 0 ]
     @category_count = grouped.keys.size
     @guide_categories = grouped.keys
 
@@ -82,7 +82,7 @@ class GuidesController < ApplicationController
 
     # 최근 본 가이드 쿠키 업데이트 (최대 5개)
     recent = JSON.parse(cookies[:recent_guides] || "[]") rescue []
-    recent = ([  @guide.slug] + recent).uniq.first(5)
+    recent = ([  @guide.slug ] + recent).uniq.first(5)
     cookies[:recent_guides] = { value: recent.to_json, expires: 30.days, same_site: :lax }
 
     # topic_slug 필드로 연결된 Topic 우선, 없으면 external_link 기반 폴백 (캐시로 DB 쿼리 제거)
@@ -106,7 +106,7 @@ class GuidesController < ApplicationController
 
     @related_guides = Rails.cache.fetch("guides/related/#{@guide.slug}", expires_in: 1.hour) do
       same_cat = Guide.published.where(category: @guide.category).where.not(id: @guide.id).ordered.limit(2).to_a
-      fill     = [3 - same_cat.size, 0].max
+      fill     = [ 3 - same_cat.size, 0 ].max
       others   = fill > 0 ? Guide.published.where.not(category: @guide.category).where.not(id: @guide.id).ordered.limit(fill).to_a : []
       same_cat + others
     end

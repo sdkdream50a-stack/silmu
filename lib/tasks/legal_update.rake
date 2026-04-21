@@ -12,77 +12,77 @@
 #   rake legal:scan           - 법령 관련 파일 스캔 (새 파일 발견)
 #   rake legal:sources        - 법령 출처 URL 확인
 
-require 'yaml'
-require 'json'
-require 'fileutils'
+require "yaml"
+require "json"
+require "fileutils"
 
 namespace :legal do
-  LEGAL_STANDARDS_PATH = Rails.root.join('config', 'legal_standards.yml')
-  REPORT_PATH = Rails.root.join('tmp', 'legal_check_report.md')
+  LEGAL_STANDARDS_PATH = Rails.root.join("config", "legal_standards.yml")
+  REPORT_PATH = Rails.root.join("tmp", "legal_check_report.md")
 
   # 자동 스캔 대상 디렉토리 및 파일 패턴
   AUTO_SCAN_PATTERNS = [
-    'app/controllers/**/*.rb',
-    'app/services/**/*.rb',
-    'app/views/**/*.erb',
-    'app/views/**/*.html.erb',
-    'app/javascript/**/*.js',
-    'db/seeds/**/*.rb',
-    'lib/**/*.rb',
-    'config/locales/**/*.yml'
+    "app/controllers/**/*.rb",
+    "app/services/**/*.rb",
+    "app/views/**/*.erb",
+    "app/views/**/*.html.erb",
+    "app/javascript/**/*.js",
+    "db/seeds/**/*.rb",
+    "lib/**/*.rb",
+    "config/locales/**/*.yml"
   ].freeze
 
   # 법령 관련 키워드 (이 키워드가 포함된 파일만 검증)
   LEGAL_KEYWORDS = [
     # 금액 관련
-    '천만원', '억원', '만원',
-    '20_000_000', '50_000_000', '100_000_000', '400_000_000', '200_000_000', '160_000_000',
-    '20000000', '50000000', '100000000', '400000000',
+    "천만원", "억원", "만원",
+    "20_000_000", "50_000_000", "100_000_000", "400_000_000", "200_000_000", "160_000_000",
+    "20000000", "50000000", "100000000", "400000000",
     # 계약 관련
-    '수의계약', '1인 견적', '2인 견적', '소액수의', '경쟁입찰',
-    '지방계약법', '시행령',
+    "수의계약", "1인 견적", "2인 견적", "소액수의", "경쟁입찰",
+    "지방계약법", "시행령",
     # 여비 관련
-    '숙박비', '식비', '일비', '여비', '출장비',
-    'accommodation', 'meal', 'daily',
+    "숙박비", "식비", "일비", "여비", "출장비",
+    "accommodation", "meal", "daily",
     # 기타 법령
-    '공무원여비규정', '건설산업기본법', '중소기업'
+    "공무원여비규정", "건설산업기본법", "중소기업"
   ].freeze
 
   # 잘못된 금액 패턴 (자동 감지 및 수정)
   # line_exemptions: 해당 키워드가 같은 줄에 있으면 교육용 예시로 판단하여 오류에서 제외
   WRONG_AMOUNT_PATTERNS = [
     # 수의계약 금액 오류 (숫자 표기)
-    { pattern: /2[,_]?200[,_]?000(?!\d)/, correct: '20_000_000', desc: '2천만원 (오류: 2,200만원)' },
-    { pattern: /22[,_]?000[,_]?000(?!\d)/, correct: '20_000_000', desc: '2천만원 (오류: 2,200만원)' },
-    { pattern: /5[,_]?500[,_]?000(?!\d)/, correct: '50_000_000', desc: '5천만원 (오류: 5,500만원)' },
-    { pattern: /55[,_]?000[,_]?000(?!\d)/, correct: '50_000_000', desc: '5천만원 (오류: 5,500만원)' },
+    { pattern: /2[,_]?200[,_]?000(?!\d)/, correct: "20_000_000", desc: "2천만원 (오류: 2,200만원)" },
+    { pattern: /22[,_]?000[,_]?000(?!\d)/, correct: "20_000_000", desc: "2천만원 (오류: 2,200만원)" },
+    { pattern: /5[,_]?500[,_]?000(?!\d)/, correct: "50_000_000", desc: "5천만원 (오류: 5,500만원)" },
+    { pattern: /55[,_]?000[,_]?000(?!\d)/, correct: "50_000_000", desc: "5천만원 (오류: 5,500만원)" },
     # 텍스트 오류
     # line_exemptions: "부가세", "공급가", "최종 계약금액", "추가계약" 등 맥락어가 같은 줄에 있으면
     # 교육용 예시(VAT 설명, 추가계약 계산 예시)이므로 오류로 처리하지 않음
-    { pattern: /2,?200만원/, correct: '2천만원', desc: '2천만원 (오류: 2,200만원)',
+    { pattern: /2,?200만원/, correct: "2천만원", desc: "2천만원 (오류: 2,200만원)",
       line_exemptions: %w[부가세 공급가 VAT 합계 추정가격 계약금액] },
-    { pattern: /2천2백만원/, correct: '2천만원', desc: '2천만원 (오류: 2천2백만원)' },
-    { pattern: /5,?500만원/, correct: '5천만원', desc: '5천만원 (오류: 5,500만원)',
-      line_exemptions: ['부가세 포함', '최종 계약금액', '추가계약', '최대 5,500만원', '5,500만원.*최대'] },
+    { pattern: /2천2백만원/, correct: "2천만원", desc: "2천만원 (오류: 2천2백만원)" },
+    { pattern: /5,?500만원/, correct: "5천만원", desc: "5천만원 (오류: 5,500만원)",
+      line_exemptions: [ "부가세 포함", "최종 계약금액", "추가계약", "최대 5,500만원", "5,500만원.*최대" ] },
     # 여비 금액 오류 (구 기준)
-    { pattern: /숙박비[^0-9]*80[,_]?000(?!\d).*서울/m, correct: nil, desc: '서울 숙박비 확인 필요 (현행: 10만원)', warning_only: true },
+    { pattern: /숙박비[^0-9]*80[,_]?000(?!\d).*서울/m, correct: nil, desc: "서울 숙박비 확인 필요 (현행: 10만원)", warning_only: true }
   ].freeze
 
   # 올바른 금액 패턴 (이 패턴이 있어야 함)
   CORRECT_AMOUNT_PATTERNS = {
     contract: {
-      single_estimate: ['20_000_000', '20000000', '2천만원', '2,000만원'],
-      multiple_estimate_goods: ['50_000_000', '50000000', '5천만원', '5,000만원'],
-      construction_general: ['400_000_000', '400000000', '4억원', '4억'],
-      construction_special: ['200_000_000', '200000000', '2억원', '2억'],
-      construction_etc: ['160_000_000', '160000000', '1억6천만원', '1억 6천만원']
+      single_estimate: [ "20_000_000", "20000000", "2천만원", "2,000만원" ],
+      multiple_estimate_goods: [ "50_000_000", "50000000", "5천만원", "5,000만원" ],
+      construction_general: [ "400_000_000", "400000000", "4억원", "4억" ],
+      construction_special: [ "200_000_000", "200000000", "2억원", "2억" ],
+      construction_etc: [ "160_000_000", "160000000", "1억6천만원", "1억 6천만원" ]
     },
     travel: {
-      seoul_accommodation: ['100_000', '100000', '10만원'],
-      metro_accommodation: ['80_000', '80000', '8만원'],
-      other_accommodation: ['70_000', '70000', '7만원'],
-      meal: ['25_000', '25000', '2만5천원', '25,000'],
-      daily: ['25_000', '25000', '2만5천원', '25,000']
+      seoul_accommodation: [ "100_000", "100000", "10만원" ],
+      metro_accommodation: [ "80_000", "80000", "8만원" ],
+      other_accommodation: [ "70_000", "70000", "7만원" ],
+      meal: [ "25_000", "25000", "2만5천원", "25,000" ],
+      daily: [ "25_000", "25000", "2만5천원", "25,000" ]
     }
   }.freeze
 
@@ -150,13 +150,13 @@ namespace :legal do
     puts "=" * 60
 
     files = scan_legal_files
-    registered_files = load_standards.dig('validation', 'files')&.map { |f| f['path'] } || []
+    registered_files = load_standards.dig("validation", "files")&.map { |f| f["path"] } || []
 
     puts "\n🔍 발견된 법령 관련 파일 (#{files.count}개):\n"
 
     new_files = []
     files.each do |file|
-      relative_path = file.sub("#{Rails.root}/", '')
+      relative_path = file.sub("#{Rails.root}/", "")
       is_new = !registered_files.include?(relative_path)
       new_files << relative_path if is_new
 
@@ -193,8 +193,8 @@ namespace :legal do
     standards = load_standards
 
     all_sources = []
-    all_sources += standards.dig('contract', 'sources') || []
-    all_sources += standards.dig('travel_expense', 'sources') || []
+    all_sources += standards.dig("contract", "sources") || []
+    all_sources += standards.dig("travel_expense", "sources") || []
 
     all_sources.each do |source|
       puts "\n📌 #{source['name']}"
@@ -210,7 +210,7 @@ namespace :legal do
     results = validate_all_files(files, standards)
 
     output = {
-      version: standards['version'],
+      version: standards["version"],
       timestamp: Time.now.iso8601,
       success: results[:errors].empty?,
       scanned_files: files.count,
@@ -241,8 +241,8 @@ namespace :legal do
     AUTO_SCAN_PATTERNS.each do |pattern|
       Dir.glob(Rails.root.join(pattern)).each do |file|
         next if File.directory?(file)
-        next if file.include?('/tmp/')
-        next if file.include?('/log/')
+        next if file.include?("/tmp/")
+        next if file.include?("/log/")
 
         content = File.read(file) rescue next
 
@@ -267,7 +267,7 @@ namespace :legal do
 
     files.each do |file_path|
       content = File.read(file_path) rescue next
-      relative_path = file_path.sub("#{Rails.root}/", '')
+      relative_path = file_path.sub("#{Rails.root}/", "")
 
       results[:checked] << relative_path
 
@@ -329,13 +329,13 @@ namespace :legal do
     # 파일 내 금액 하드코딩이 불필요 → 패턴 검증 스킵
     return if file_path.match?(/contract_method_service\.rb/)
 
-    contract = standards['contract']
+    contract = standards["contract"]
 
     # 주요 금액 확인
     checks = [
-      { value: contract.dig('single_estimate', 'goods'), name: '1인 견적 한도 (물품)' },
-      { value: contract.dig('multiple_estimate', 'goods'), name: '2인 견적 한도 (물품)' },
-      { value: contract.dig('multiple_estimate', 'construction_general'), name: '종합공사 한도' }
+      { value: contract.dig("single_estimate", "goods"), name: "1인 견적 한도 (물품)" },
+      { value: contract.dig("multiple_estimate", "goods"), name: "2인 견적 한도 (물품)" },
+      { value: contract.dig("multiple_estimate", "construction_general"), name: "종합공사 한도" }
     ]
 
     checks.each do |check|
@@ -351,11 +351,11 @@ namespace :legal do
 
   # 챗봇 컨트롤러 검증
   def validate_chatbot_controller(content, file_path, standards, results)
-    contract = standards['contract']
+    contract = standards["contract"]
 
     # 수의계약 금액 기준 확인
-    single_limit = contract.dig('single_estimate', 'goods')
-    if content.include?('price <=') || content.include?('price >')
+    single_limit = contract.dig("single_estimate", "goods")
+    if content.include?("price <=") || content.include?("price >")
       formatted = single_limit.to_s.gsub(/(\d)(?=(\d{3})+(?!\d))/, '\\1_')
       unless content.include?(formatted)
         results[:warnings] << {
@@ -369,15 +369,15 @@ namespace :legal do
   # 출장비 계산기 검증
   def validate_travel_calculator(content, file_path, standards, results)
     # ERB 뷰 파일은 금액을 직접 정의하지 않으므로 스킵 (JS 컨트롤러에서 정의)
-    return if file_path.end_with?('.erb')
+    return if file_path.end_with?(".erb")
 
-    travel = standards['travel_expense']
+    travel = standards["travel_expense"]
 
     # 숙박비 확인
     accommodations = {
-      'seoul' => travel.dig('accommodation', 'seoul'),
-      'metro' => travel.dig('accommodation', 'metro'),
-      'other' => travel.dig('accommodation', 'other')
+      "seoul" => travel.dig("accommodation", "seoul"),
+      "metro" => travel.dig("accommodation", "metro"),
+      "other" => travel.dig("accommodation", "other")
     }
 
     accommodations.each do |region, amount|
@@ -394,8 +394,8 @@ namespace :legal do
     end
 
     # 식비, 일비 확인
-    meal = travel['meal']
-    daily = travel['daily_allowance']
+    meal = travel["meal"]
+    daily = travel["daily_allowance"]
 
     unless content.include?("meal: #{meal}") || content.include?(meal.to_s)
       results[:warnings] << {
@@ -414,8 +414,8 @@ namespace :legal do
       content.match?(/수의계약 기준금액.*종합공사|종합공사.*수의계약.*기준금액/)
 
     if is_private_contract_amount_topic
-      if content.include?('종합공사') || content.include?('종합')
-        unless content.include?('4억원') || content.include?('4억')
+      if content.include?("종합공사") || content.include?("종합")
+        unless content.include?("4억원") || content.include?("4억")
           results[:warnings] << {
             file: file_path,
             message: "종합공사 수의계약 한도 (4억원) 확인 필요"
@@ -427,7 +427,7 @@ namespace :legal do
     # 1인 견적 기준: 금액 기준표를 나열하는 맥락에서만 검사
     # (업체가 1인뿐인 경우 등 다른 맥락의 "1인 견적"은 제외)
     if content.match?(/1인 견적.*2[,_]?000만원|1인 견적.*금액|금액.*1인 견적/) &&
-        !content.include?('2천만원')
+        !content.include?("2천만원")
       results[:warnings] << {
         file: file_path,
         message: "1인 견적 기준 (2천만원) 확인 필요"
@@ -526,8 +526,8 @@ namespace :legal do
   end
 
   def format_currency(amount)
-    return '미정' if amount.nil?
-    amount.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse + '원'
+    return "미정" if amount.nil?
+    amount.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse + "원"
   end
 
   def print_results(results)

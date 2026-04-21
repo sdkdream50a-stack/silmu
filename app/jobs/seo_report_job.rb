@@ -28,7 +28,7 @@ class SeoReportJob < ApplicationJob
     Rails.logger.info "=" * 60
 
     # 이메일 발송
-    if ENV['ADMIN_EMAIL'].present?
+    if ENV["ADMIN_EMAIL"].present?
       SeoMailer.weekly_report(report).deliver_now
       Rails.logger.info "✅ 주간 리포트 이메일 발송 완료"
     end
@@ -43,7 +43,7 @@ class SeoReportJob < ApplicationJob
     Rails.logger.info "=" * 60
 
     # 이메일 발송
-    if ENV['ADMIN_EMAIL'].present?
+    if ENV["ADMIN_EMAIL"].present?
       SeoMailer.monthly_performance(report).deliver_now
       Rails.logger.info "✅ 월간 성능 리포트 이메일 발송 완료"
     end
@@ -58,7 +58,7 @@ class SeoReportJob < ApplicationJob
       Rails.logger.warn "❌ 깨진 링크 발견: #{broken_links.count}개"
 
       # 이메일 알림
-      if ENV['ADMIN_EMAIL'].present?
+      if ENV["ADMIN_EMAIL"].present?
         SeoMailer.broken_links_alert(broken_links).deliver_now
         Rails.logger.info "✅ 깨진 링크 알림 이메일 발송 완료"
       end

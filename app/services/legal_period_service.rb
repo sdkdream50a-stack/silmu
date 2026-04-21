@@ -240,7 +240,7 @@ class LegalPeriodService
       # 지체상금 최고 한도: 계약금액의 30% (시행령 제90조 제2항)
       max_penalty = (contract_amount * 0.3).to_i
       capped = penalty_amount > max_penalty
-      penalty_amount = [penalty_amount, max_penalty].min
+      penalty_amount = [ penalty_amount, max_penalty ].min
 
       {
         success: true,

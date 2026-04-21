@@ -1,6 +1,5 @@
 # 계약방식 결정 도구 컨트롤러
 class ContractMethodsController < ApplicationController
-
   # GET /tools/contract-method
   def index
     @contract_types = ContractMethodService.contract_types

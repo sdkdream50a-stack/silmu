@@ -27,9 +27,9 @@ class PdfProcessorService
 
         filename = if page_ranges.length == 1
                      "split_#{range.first}-#{range.last}.pdf"
-                   else
+        else
                      "split_part#{index + 1}_#{range.first}-#{range.last}.pdf"
-                   end
+        end
 
         files << {
           name: filename,
@@ -132,7 +132,7 @@ class PdfProcessorService
 
     # 페이지 범위 파싱 (예: "1-3,5,7-10")
     def parse_ranges(ranges_str, total_pages)
-      return [(1..total_pages).to_a] if ranges_str.blank?
+      return [ (1..total_pages).to_a ] if ranges_str.blank?
 
       result = []
 
@@ -141,12 +141,12 @@ class PdfProcessorService
 
         if part.include?("-")
           start_page, end_page = part.split("-").map(&:to_i)
-          start_page = [1, start_page].max
-          end_page = [end_page, total_pages].min
+          start_page = [ 1, start_page ].max
+          end_page = [ end_page, total_pages ].min
           result << (start_page..end_page).to_a if start_page <= end_page
         else
           page = part.to_i
-          result << [page] if page >= 1 && page <= total_pages
+          result << [ page ] if page >= 1 && page <= total_pages
         end
       end
 
@@ -188,7 +188,7 @@ class PdfProcessorService
       nanum_font_path = Rails.root.join("vendor", "fonts", "NanumGothic.ttf").to_s
 
       Prawn::Document.new(
-        page_size: [page_width, page_height],
+        page_size: [ page_width, page_height ],
         margin: 0
       ) do |pdf|
         if has_korean && File.exist?(nanum_font_path)
@@ -204,15 +204,15 @@ class PdfProcessorService
 
         # 위치 조정 (가운데 정렬용)
         adjusted_x = case position
-                     when /center/
+        when /center/
                        x - (text_width / 2)
-                     when /right/
+        when /right/
                        x - text_width
-                     else
+        else
                        x
-                     end
+        end
 
-        pdf.draw_text number_text, at: [adjusted_x, y]
+        pdf.draw_text number_text, at: [ adjusted_x, y ]
       end.render
     end
 
@@ -222,19 +222,19 @@ class PdfProcessorService
 
       case position
       when "top_left"
-        [margin, height - margin]
+        [ margin, height - margin ]
       when "top_center"
-        [width / 2, height - margin]
+        [ width / 2, height - margin ]
       when "top_right"
-        [width - margin, height - margin]
+        [ width - margin, height - margin ]
       when "bottom_left"
-        [margin, margin]
+        [ margin, margin ]
       when "bottom_center"
-        [width / 2, margin]
+        [ width / 2, margin ]
       when "bottom_right"
-        [width - margin, margin]
+        [ width - margin, margin ]
       else
-        [width / 2, margin] # 기본: 하단 중앙
+        [ width / 2, margin ] # 기본: 하단 중앙
       end
     end
 

@@ -1,6 +1,5 @@
 # 기성검사 체크리스트 컨트롤러
 class ProgressInspectionsController < ApplicationController
-
   # GET /tools/progress-inspection
   def index
     @inspection_types = ProgressInspectionService.get_inspection_types

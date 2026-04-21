@@ -50,29 +50,29 @@ class CostCalculationReviewService
   # 비용 항목별 적정 비율 범위
   EXPENSE_RATE_RANGES = {
     general: {
-      overhead: { name: "제경비(간접노무비+기타경비)", rate_range: [0.10, 0.20], basis: "직접인건비", note: "통상 110~120%" },
-      direct_expense: { name: "직접경비", items: ["여비·교통비", "인쇄·복사비", "소모품비", "회의비", "통신·우편료"], note: "실비 산정, 통상 직접인건비의 5~15%" },
-      general_admin: { name: "일반관리비", rate_range: [0.05, 0.06], basis: "노무비+경비", note: "5~6% (회계예규)" }
+      overhead: { name: "제경비(간접노무비+기타경비)", rate_range: [ 0.10, 0.20 ], basis: "직접인건비", note: "통상 110~120%" },
+      direct_expense: { name: "직접경비", items: [ "여비·교통비", "인쇄·복사비", "소모품비", "회의비", "통신·우편료" ], note: "실비 산정, 통상 직접인건비의 5~15%" },
+      general_admin: { name: "일반관리비", rate_range: [ 0.05, 0.06 ], basis: "노무비+경비", note: "5~6% (회계예규)" }
     },
     research: {
-      overhead: { name: "제경비", rate_range: [0.86, 1.20], basis: "직접인건비", note: "학술연구 기준 86~120%" },
-      direct_expense: { name: "직접경비", items: ["여비", "유인물비", "전산처리비", "시약·재료비", "회의비", "임차료"], note: "실비 산정" },
-      general_admin: { name: "일반관리비", rate_range: [0.05, 0.06], basis: "노무비+경비", note: "해당 시 5~6%" }
+      overhead: { name: "제경비", rate_range: [ 0.86, 1.20 ], basis: "직접인건비", note: "학술연구 기준 86~120%" },
+      direct_expense: { name: "직접경비", items: [ "여비", "유인물비", "전산처리비", "시약·재료비", "회의비", "임차료" ], note: "실비 산정" },
+      general_admin: { name: "일반관리비", rate_range: [ 0.05, 0.06 ], basis: "노무비+경비", note: "해당 시 5~6%" }
     },
     software: {
-      overhead: { name: "제경비(직접경비)", rate_range: [0.10, 0.20], basis: "직접인건비", note: "SW 대가기준" },
-      direct_expense: { name: "직접경비", items: ["장비사용료", "라이선스", "통신비", "여비"], note: "실비 산정" },
-      general_admin: { name: "일반관리비", rate_range: [0.05, 0.06], basis: "노무비+경비", note: "5~6%" }
+      overhead: { name: "제경비(직접경비)", rate_range: [ 0.10, 0.20 ], basis: "직접인건비", note: "SW 대가기준" },
+      direct_expense: { name: "직접경비", items: [ "장비사용료", "라이선스", "통신비", "여비" ], note: "실비 산정" },
+      general_admin: { name: "일반관리비", rate_range: [ 0.05, 0.06 ], basis: "노무비+경비", note: "5~6%" }
     },
     design: {
-      overhead: { name: "제경비", rate_range: [1.10, 1.20], basis: "직접인건비", note: "엔지니어링 기준 110~120%" },
-      direct_expense: { name: "직접경비", items: ["여비", "인쇄비", "관급자재시험비", "측량비", "모형제작비"], note: "실비 산정" },
-      general_admin: { name: "일반관리비", rate_range: [0.05, 0.06], basis: "노무비+경비", note: "해당 시 5~6%" }
+      overhead: { name: "제경비", rate_range: [ 1.10, 1.20 ], basis: "직접인건비", note: "엔지니어링 기준 110~120%" },
+      direct_expense: { name: "직접경비", items: [ "여비", "인쇄비", "관급자재시험비", "측량비", "모형제작비" ], note: "실비 산정" },
+      general_admin: { name: "일반관리비", rate_range: [ 0.05, 0.06 ], basis: "노무비+경비", note: "해당 시 5~6%" }
     },
     supervision: {
-      overhead: { name: "제경비", rate_range: [1.10, 1.20], basis: "직접인건비", note: "엔지니어링 기준 110~120%" },
-      direct_expense: { name: "직접경비", items: ["여비", "차량유지비", "사무용품", "시험검사비"], note: "실비 산정" },
-      general_admin: { name: "일반관리비", rate_range: [0.05, 0.06], basis: "노무비+경비", note: "해당 시 5~6%" }
+      overhead: { name: "제경비", rate_range: [ 1.10, 1.20 ], basis: "직접인건비", note: "엔지니어링 기준 110~120%" },
+      direct_expense: { name: "직접경비", items: [ "여비", "차량유지비", "사무용품", "시험검사비" ], note: "실비 산정" },
+      general_admin: { name: "일반관리비", rate_range: [ 0.05, 0.06 ], basis: "노무비+경비", note: "해당 시 5~6%" }
     }
   }.freeze
 

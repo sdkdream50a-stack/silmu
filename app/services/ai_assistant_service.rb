@@ -33,7 +33,7 @@ class AiAssistantService
 
   def remaining_count(ip_or_id)
     limit = @user ? DAILY_LIMIT_USER : DAILY_LIMIT_GUEST
-    [limit - current_usage(ip_or_id), 0].max
+    [ limit - current_usage(ip_or_id), 0 ].max
   end
 
   def increment_usage(ip_or_id)
@@ -74,7 +74,7 @@ class AiAssistantService
 
   def build_messages(question, topic_context)
     if topic_context.present?
-      [{
+      [ {
         role: "user",
         content: <<~MSG
           [참고 법령 정보]
@@ -83,9 +83,9 @@ class AiAssistantService
           [질문]
           #{question}
         MSG
-      }]
+      } ]
     else
-      [{ role: "user", content: question }]
+      [ { role: "user", content: question } ]
     end
   end
 

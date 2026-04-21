@@ -14,7 +14,7 @@ class HomeController < ApplicationController
       9  => %w[bidding contract-execution private-contract],
       10 => %w[inspection payment late-penalty completion-payment-checklist],
       11 => %w[budget-carryover year-end-settlement inspection payment],
-      12 => %w[year-end-settlement budget-carryover inspection payment],
+      12 => %w[year-end-settlement budget-carryover inspection payment]
     },
     edu: {
       # 학교회계: 회계연도 3.1~다음해 2.28 (초중등교육법 제30조의2)
@@ -30,7 +30,7 @@ class HomeController < ApplicationController
       9  => %w[goods-selection-committee bidding contract-execution goods-selection-committee],
       10 => %w[goods-selection-committee inspection payment late-penalty],
       11 => %w[goods-selection-committee year-end-settlement inspection],
-      12 => %w[year-end-settlement budget-carryover payment],
+      12 => %w[year-end-settlement budget-carryover payment]
     },
     common: {
       1  => %w[year-end-settlement budget-carryover payment inspection],
@@ -44,7 +44,7 @@ class HomeController < ApplicationController
       9  => %w[bidding contract-execution private-contract],
       10 => %w[inspection payment late-penalty completion-payment-checklist],
       11 => %w[budget-carryover year-end-settlement private-contract],
-      12 => %w[year-end-settlement budget-carryover payment inspection],
+      12 => %w[year-end-settlement budget-carryover payment inspection]
     }
   }.freeze
 
@@ -76,7 +76,7 @@ class HomeController < ApplicationController
       if ordered.size < 6
         exclude_ids = ordered.map(&:id)
         filler = Topic.published
-                      .where(sector: [:common, @sector])
+                      .where(sector: [ :common, @sector ])
                       .where.not(id: exclude_ids)
                       .order(view_count: :desc)
                       .limit(6 - ordered.size).to_a
@@ -89,7 +89,7 @@ class HomeController < ApplicationController
     # sector별 감사사례 (중대/보통 최신 3건)
     @recent_audit_cases = Rails.cache.fetch("home/audit_cases/v#{curated_version}/#{@sector}", expires_in: 1.hour) do
       scope = AuditCase.published.where(severity: %w[중대 보통])
-      scope = scope.where(sector: [:common, @sector]) if @sector != "common"
+      scope = scope.where(sector: [ :common, @sector ]) if @sector != "common"
       scope.order(created_at: :desc).limit(3).to_a
     end
 

@@ -58,5 +58,4 @@ class SitemapPingJob < ApplicationJob
 
     urls.uniq
   end
-
 end

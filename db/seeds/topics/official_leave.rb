@@ -112,7 +112,7 @@ attrs = {
     - 지역 예비군 대대에 연기 신청서 제출
     - 연기 후 새 훈련 일정으로 공가 재신청
   CONTENT
-  qa_content: <<~CONTENT,
+  qa_content: <<~CONTENT
     ## 자주 묻는 질문
 
     **Q. 개인 건강검진도 공가 처리가 되나요?**

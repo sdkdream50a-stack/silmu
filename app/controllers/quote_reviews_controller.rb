@@ -3,9 +3,9 @@
 class QuoteReviewsController < ApplicationController
   include RequestOriginVerifiable
 
-  layout false, only: [:index]
-  skip_before_action :verify_authenticity_token, only: [:analyze]
-  before_action :verify_request_origin, only: [:analyze]
+  layout false, only: [ :index ]
+  skip_before_action :verify_authenticity_token, only: [ :analyze ]
+  before_action :verify_request_origin, only: [ :analyze ]
 
   MAX_FILE_SIZE = 20.megabytes
   ALLOWED_CONTENT_TYPES = %w[application/pdf image/jpeg image/png].freeze

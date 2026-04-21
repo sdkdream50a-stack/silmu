@@ -1,6 +1,5 @@
 # 소요예산 추정 컨트롤러
 class EstimationsController < ApplicationController
-
   # GET /tools/budget-estimator
   def index
     @price_catalog = EstimateCalculatorService.price_catalog

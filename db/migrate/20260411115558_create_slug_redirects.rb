@@ -7,6 +7,6 @@ class CreateSlugRedirects < ActiveRecord::Migration[8.1]
 
       t.timestamps
     end
-    add_index :slug_redirects, [:old_slug, :resource_type], unique: true
+    add_index :slug_redirects, [ :old_slug, :resource_type ], unique: true
   end
 end

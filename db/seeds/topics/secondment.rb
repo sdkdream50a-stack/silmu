@@ -105,7 +105,7 @@ attrs = {
     | 급여 | 원소속기관 지급 | 원소속기관 지급 |
     | 기간 | 유형별 2~3년 이내 | 별도 규정 |
   CONTENT
-  qa_content: <<~CONTENT,
+  qa_content: <<~CONTENT
     ## 자주 묻는 질문
 
     **Q. 파견을 거부할 수 있나요?**

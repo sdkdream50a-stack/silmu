@@ -123,7 +123,7 @@ attrs = {
     - 감가상각 처리 누락 (고정자산 감가상각 미처리)
     - 미지급금 과다 누적 (연말 대금 정산 지연)
   CONTENT
-  qa_content: <<~CONTENT,
+  qa_content: <<~CONTENT
     ## 자주 묻는 질문
 
     **Q. 복식부기를 모르면 업무에 지장이 있나요?**

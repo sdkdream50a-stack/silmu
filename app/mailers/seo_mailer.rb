@@ -1,12 +1,12 @@
 class SeoMailer < ApplicationMailer
-  default from: 'seo-report@silmu.kr'
+  default from: "seo-report@silmu.kr"
 
   def weekly_report(report)
     @report = report
     @date = Time.zone.today
 
     mail(
-      to: ENV['ADMIN_EMAIL'] || 'hello@silmu.kr',
+      to: ENV["ADMIN_EMAIL"] || "hello@silmu.kr",
       subject: "[실무.kr] SEO 주간 리포트 - #{@date}"
     )
   end
@@ -16,7 +16,7 @@ class SeoMailer < ApplicationMailer
     @date = Time.zone.today
 
     mail(
-      to: ENV['ADMIN_EMAIL'] || 'hello@silmu.kr',
+      to: ENV["ADMIN_EMAIL"] || "hello@silmu.kr",
       subject: "[실무.kr] PageSpeed 월간 리포트 - #{@date}"
     )
   end
@@ -26,7 +26,7 @@ class SeoMailer < ApplicationMailer
     @date = Time.zone.today
 
     mail(
-      to: ENV['ADMIN_EMAIL'] || 'hello@silmu.kr',
+      to: ENV["ADMIN_EMAIL"] || "hello@silmu.kr",
       subject: "[실무.kr] ⚠️ 깨진 링크 발견 - #{broken_links.count}개"
     )
   end

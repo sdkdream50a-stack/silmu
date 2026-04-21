@@ -2,12 +2,12 @@ class Topic < ApplicationRecord
   include PgSearch::Model
 
   # 부모-자식 관계 (서브토픽)
-  belongs_to :parent, class_name: 'Topic', optional: true
-  has_many :subtopics, class_name: 'Topic', foreign_key: 'parent_id', dependent: :destroy
+  belongs_to :parent, class_name: "Topic", optional: true
+  has_many :subtopics, class_name: "Topic", foreign_key: "parent_id", dependent: :destroy
 
   # 검색 설정
   pg_search_scope :search_by_keyword,
-    against: [:name, :keywords, :summary],
+    against: [ :name, :keywords, :summary ],
     using: {
       tsearch: { prefix: true, dictionary: "simple" },
       trigram: { threshold: 0.1 }
@@ -16,7 +16,7 @@ class Topic < ApplicationRecord
   # Sector enum (0: common 공통, 1: local_gov 지자체, 2: edu 교육행정)
   enum :sector, { common: 0, local_gov: 1, edu: 2 }, default: :common
   # "common" 또는 blank 전달 시 전체 반환 (common은 모든 sector에 공유되므로)
-  scope :for_sector, ->(s) { where(sector: [:common, s]) if s.present? && s != "common" }
+  scope :for_sector, ->(s) { where(sector: [ :common, s ]) if s.present? && s != "common" }
 
   # Scopes
   scope :published, -> { where(published: true) }
@@ -83,7 +83,7 @@ class Topic < ApplicationRecord
   # 키워드 배열로 반환
   def keyword_list
     return [] if keywords.blank?
-    keywords.split(',').map(&:strip)
+    keywords.split(",").map(&:strip)
   end
 
   # 키워드별 매칭 토픽을 단일 쿼리로 조회 (N+1 방지)
@@ -142,15 +142,15 @@ class Topic < ApplicationRecord
 
   # 카테고리 목록
   CATEGORIES = {
-    'contract' => '계약',
-    'budget' => '예산/결산',
-    'expense' => '지출',
-    'salary' => '급여/수당',
-    'subsidy' => '보조금',
-    'property' => '공유재산',
-    'travel' => '여비/출장',
-    'duty' => '복무',
-    'other' => '기타'
+    "contract" => "계약",
+    "budget" => "예산/결산",
+    "expense" => "지출",
+    "salary" => "급여/수당",
+    "subsidy" => "보조금",
+    "property" => "공유재산",
+    "travel" => "여비/출장",
+    "duty" => "복무",
+    "other" => "기타"
   }.freeze
 
   def category_name
@@ -165,7 +165,7 @@ class Topic < ApplicationRecord
   end
 
   def notify_indexnow
-    SitemapPingJob.perform_later(["https://#{SitemapPingJob::HOST}/topics/#{slug}"])
+    SitemapPingJob.perform_later([ "https://#{SitemapPingJob::HOST}/topics/#{slug}" ])
   end
 
   def expire_count_cache
@@ -204,7 +204,7 @@ class Topic < ApplicationRecord
     # 301 리디렉션 레코드 생성 (Search Console 404 방지)
     SlugRedirect.upsert(
       { old_slug: old_slug, new_slug: new_slug, resource_type: "Topic", created_at: Time.current, updated_at: Time.current },
-      unique_by: [:old_slug, :resource_type]
+      unique_by: [ :old_slug, :resource_type ]
     )
     Rails.logger.info "[Topic] slug 변경: #{old_slug} → #{new_slug} (연쇄 업데이트 + 리디렉션 등록 완료)"
   end

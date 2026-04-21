@@ -41,8 +41,8 @@ class ApplicationController < ActionController::Base
   end
 
   def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:newsletter_agreed])
-    devise_parameter_sanitizer.permit(:account_update, keys: [:newsletter_agreed])
+    devise_parameter_sanitizer.permit(:sign_up, keys: [ :newsletter_agreed ])
+    devise_parameter_sanitizer.permit(:account_update, keys: [ :newsletter_agreed ])
   end
 
   def set_default_meta_tags
@@ -87,7 +87,7 @@ class ApplicationController < ActionController::Base
 
   # SEO: 쿼리 파라미터 제거한 canonical URL 반환
   def canonical_url
-    @canonical_url ||= request.original_url.split('?').first
+    @canonical_url ||= request.original_url.split("?").first
   end
   helper_method :canonical_url
 end
