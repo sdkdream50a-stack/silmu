@@ -14,7 +14,7 @@ class Admin::BaseController < ApplicationController
   def require_recent_admin_auth
     return if admin_recently_authenticated?
 
-    session[:admin_return_to] = request.fullpath if request.get?
+    session[:admin_return_to] = request.fullpath if request.get? || request.head?
     redirect_to admin_new_reauthentication_path,
                 alert: "관리자 영역 접근을 위해 비밀번호를 다시 입력해주세요. (마지막 인증 #{ADMIN_REAUTH_WINDOW.inspect} 초과)"
   end
