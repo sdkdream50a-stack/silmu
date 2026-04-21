@@ -102,3 +102,6 @@ gem "google-analytics-data"  # GA4 Data API v1
 gem "sentry-ruby"
 gem "sentry-rails"
 gem "stackprof" # Sentry 프로파일러 (profiles_sample_rate=0.1 활성화에 필요)
+
+# ========== 구조화 로깅 ==========
+gem "lograge"   # 1-line JSON logs (응답시간·DB시간·뷰시간 집계용)

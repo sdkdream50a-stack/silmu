@@ -10,6 +10,13 @@ class ApplicationController < ActionController::Base
   before_action :capture_utm_params
   before_action :configure_permitted_parameters, if: :devise_controller?
 
+  # Lograge payload 확장 — remote_ip, user_id를 JSON 로그에 주입
+  def append_info_to_payload(payload)
+    super
+    payload[:remote_ip] = request.remote_ip
+    payload[:user_id] = current_user&.id if respond_to?(:current_user)
+  end
+
   private
 
   def render_not_found
