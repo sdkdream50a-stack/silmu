@@ -1,28 +1,41 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <title>페이지를 찾을 수 없습니다 | 실무</title>
+  <title>페이지를 찾을 수 없습니다 | 실무.kr</title>
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1, width=device-width">
+  <meta name="robots" content="noindex,follow">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Pretendard', -apple-system, sans-serif; background: #f8fafc; color: #1e3a5f; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
-    .container { text-align: center; padding: 2rem; max-width: 480px; }
-    .code { font-size: 6rem; font-weight: 700; background: linear-gradient(135deg, #1e3a5f, #4f46e5); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; }
-    h1 { font-size: 1.5rem; font-weight: 700; margin: 1rem 0 0.5rem; }
-    p { color: #64748b; line-height: 1.6; margin-bottom: 2rem; }
-    a { display: inline-block; padding: 0.75rem 2rem; background: #1e3a5f; color: #fff; border-radius: 0.75rem; text-decoration: none; font-weight: 600; transition: background 0.2s; }
-    a:hover { background: #2d4a6f; }
+    body { font-family: 'Pretendard', -apple-system, sans-serif; background: #F6F7F9; color: #0F172A; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1.5rem; }
+    .container { text-align: center; max-width: 560px; width: 100%; background: #fff; border: 1px solid #E2E8F0; border-radius: 1.25rem; padding: 3rem 2rem; box-shadow: 0 1px 3px rgba(15,23,42,.04); }
+    .code { font-size: 5rem; font-weight: 800; background: linear-gradient(135deg, #174B8E 0%, #1E5AA8 50%, #2E6DBA 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; letter-spacing: -0.04em; }
+    h1 { font-size: 1.5rem; font-weight: 700; margin: 1.25rem 0 0.75rem; color: #0F172A; letter-spacing: -0.02em; }
+    p { color: #475569; line-height: 1.7; margin-bottom: 2rem; font-size: 0.95rem; }
+    .actions { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+    .btn-primary { display: inline-flex; align-items: center; padding: 0.75rem 1.5rem; background: #1E5AA8; color: #fff; border-radius: 0.625rem; text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: background 0.15s; min-height: 44px; }
+    .btn-primary:hover { background: #174B8E; }
+    .btn-secondary { display: inline-flex; align-items: center; padding: 0.75rem 1.5rem; background: #fff; color: #334155; border: 1px solid #CBD5E1; border-radius: 0.625rem; text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: all 0.15s; min-height: 44px; }
+    .btn-secondary:hover { border-color: #1E5AA8; color: #1E5AA8; }
+    .help { margin-top: 1.75rem; padding-top: 1.5rem; border-top: 1px solid #F1F5F9; font-size: 0.8rem; color: #64748B; }
+    .help a { color: #1E5AA8; text-decoration: none; font-weight: 500; }
+    .help a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="code">404</div>
+  <main class="container" role="main">
+    <div class="code" aria-label="404">404</div>
     <h1>페이지를 찾을 수 없습니다</h1>
-    <p>요청하신 페이지가 존재하지 않거나 이동되었을 수 있습니다.</p>
-    <a href="/">홈으로 돌아가기</a>
-  </div>
+    <p>요청하신 페이지가 존재하지 않거나 이동·변경되었을 수 있습니다.<br>홈 또는 가이드 목록에서 원하는 내용을 찾아보세요.</p>
+    <div class="actions">
+      <a href="/" class="btn-primary">홈으로 돌아가기</a>
+      <a href="/topics" class="btn-secondary">법령 가이드 보기</a>
+    </div>
+    <div class="help">
+      문제가 계속되면 <a href="mailto:hello@silmu.kr">hello@silmu.kr</a>로 알려주세요.
+    </div>
+  </main>
 </body>
 </html>

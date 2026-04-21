@@ -125,9 +125,11 @@
     @apply bg-slate-200 text-slate-900;
   }
 
-  /* Focus */
+  /* Focus — Editorial Navy 통일 (키보드 접근성 일관성) */
   :focus-visible {
-    @apply outline-none ring-2 ring-indigo-500 ring-offset-2;
+    outline: none;
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--color-editorial-navy);
+    border-radius: 0.375rem;
   }
 }
 
@@ -515,11 +517,24 @@
     @apply max-w-none text-slate-700 leading-relaxed;
   }
 
-  .prose-premium h1,
-  .prose-premium h2,
-  .prose-premium h3,
+  .prose-premium h1 {
+    @apply text-2xl lg:text-3xl font-bold tracking-tight text-slate-900 mb-4 mt-10;
+  }
+  .prose-premium h2 {
+    @apply text-xl lg:text-2xl font-bold tracking-tight text-slate-900 mb-3 mt-10
+           pb-2 border-b border-slate-100;
+  }
+  .prose-premium h3 {
+    @apply text-lg font-bold tracking-tight text-slate-900 mb-2 mt-7;
+  }
   .prose-premium h4 {
-    @apply font-bold tracking-tight text-slate-900 mb-4 mt-8;
+    @apply text-base font-bold text-slate-800 mb-2 mt-5;
+  }
+  .prose-premium h1:first-child,
+  .prose-premium h2:first-child,
+  .prose-premium h3:first-child,
+  .prose-premium h4:first-child {
+    @apply mt-0;
   }
 
   .prose-premium p {
@@ -527,7 +542,7 @@
   }
 
   .prose-premium a {
-    @apply text-indigo-600 hover:underline;
+    @apply text-editorial-navy hover:text-editorial-navy-dark hover:underline font-medium;
   }
 
   .prose-premium strong {
@@ -945,17 +960,63 @@
    8. PRINT STYLES
    =========================================== */
 @media print {
-  .no-print {
+  .no-print,
+  nav,
+  header,
+  footer,
+  aside,
+  .fixed,
+  .sticky,
+  [role="navigation"],
+  [data-nav],
+  button:not([type="submit"]),
+  .chatbot-widget,
+  .ai-assistant,
+  iframe,
+  video,
+  audio {
     display: none !important;
   }
 
-  .legal-content {
-    font-size: 10pt;
+  body {
+    background: #fff !important;
+    color: #000 !important;
+    font-size: 11pt;
+    line-height: 1.5;
   }
 
-  .legal-content .legal-table {
-    font-size: 9pt;
+  main, .container-editorial {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
+
+  a {
+    color: #000 !important;
+    text-decoration: none !important;
+  }
+
+  /* 외부 링크는 URL 병기 (참고용) */
+  a[href^="http"]:after {
+    content: " (" attr(href) ")";
+    font-size: 8pt;
+    color: #666;
+    word-break: break-all;
+  }
+
+  h1, h2, h3 {
+    page-break-after: avoid;
+    color: #000 !important;
+  }
+
+  .card, .guide-meta-box, .prose-premium {
+    break-inside: avoid;
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+  }
+
+  .legal-content { font-size: 10pt; }
+  .legal-content .legal-table { font-size: 9pt; }
 }
 
 /* ===========================================

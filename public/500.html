@@ -1,29 +1,35 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <title>서버 오류 | 실무</title>
+  <title>서버 오류 | 실무.kr</title>
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1, width=device-width">
+  <meta name="robots" content="noindex,follow">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Pretendard', -apple-system, sans-serif; background: #f8fafc; color: #1e3a5f; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
-    .container { text-align: center; padding: 2rem; max-width: 480px; }
-    .code { font-size: 6rem; font-weight: 700; background: linear-gradient(135deg, #dc2626, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; }
-    h1 { font-size: 1.5rem; font-weight: 700; margin: 1rem 0 0.5rem; }
-    p { color: #64748b; line-height: 1.6; margin-bottom: 2rem; }
-    .email { color: #4f46e5; text-decoration: none; }
-    .btn { display: inline-block; padding: 0.75rem 2rem; background: #1e3a5f; color: #fff; border-radius: 0.75rem; text-decoration: none; font-weight: 600; transition: background 0.2s; }
-    .btn:hover { background: #2d4a6f; }
+    body { font-family: 'Pretendard', -apple-system, sans-serif; background: #F6F7F9; color: #0F172A; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1.5rem; }
+    .container { text-align: center; max-width: 560px; width: 100%; background: #fff; border: 1px solid #E2E8F0; border-radius: 1.25rem; padding: 3rem 2rem; box-shadow: 0 1px 3px rgba(15,23,42,.04); }
+    .code { font-size: 5rem; font-weight: 800; background: linear-gradient(135deg, #B91C1C 0%, #DC2626 50%, #F59E0B 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; letter-spacing: -0.04em; }
+    h1 { font-size: 1.5rem; font-weight: 700; margin: 1.25rem 0 0.75rem; color: #0F172A; letter-spacing: -0.02em; }
+    p { color: #475569; line-height: 1.7; margin-bottom: 2rem; font-size: 0.95rem; }
+    p a { color: #1E5AA8; text-decoration: none; font-weight: 600; }
+    p a:hover { text-decoration: underline; }
+    .btn-primary { display: inline-flex; align-items: center; padding: 0.75rem 1.5rem; background: #1E5AA8; color: #fff; border-radius: 0.625rem; text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: background 0.15s; min-height: 44px; }
+    .btn-primary:hover { background: #174B8E; }
+    .help { margin-top: 1.75rem; padding-top: 1.5rem; border-top: 1px solid #F1F5F9; font-size: 0.8rem; color: #64748B; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="code">500</div>
+  <main class="container" role="main">
+    <div class="code" aria-label="500">500</div>
     <h1>일시적인 오류가 발생했습니다</h1>
-    <p>잠시 후 다시 시도해 주세요.<br>문제가 계속되면 <a href="mailto:hello@silmu.kr" class="email">hello@silmu.kr</a>로 문의해 주세요.</p>
-    <a href="/" class="btn">홈으로 돌아가기</a>
-  </div>
+    <p>잠시 후 다시 시도해 주세요.<br>문제가 계속되면 <a href="mailto:hello@silmu.kr">hello@silmu.kr</a>로 문의해 주세요.</p>
+    <a href="/" class="btn-primary">홈으로 돌아가기</a>
+    <div class="help">
+      운영팀이 오류를 확인하고 있습니다.
+    </div>
+  </main>
 </body>
 </html>
