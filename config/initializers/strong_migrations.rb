@@ -1,3 +1,6 @@
+# strong_migrations는 development/test 그룹 전용이므로 production 부팅 시 가드
+return unless defined?(StrongMigrations)
+
 # Mark existing migrations as safe
 StrongMigrations.start_after = 20260421161436
 
