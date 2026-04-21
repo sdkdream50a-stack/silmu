@@ -1,6 +1,5 @@
 # 계약서류 원클릭 생성기 컨트롤러
 class ContractDocumentsController < ApplicationController
-
   # GET /tools/contract-documents
   def index
     @contract_types = ContractDocumentService.get_all_types

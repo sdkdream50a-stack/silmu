@@ -48,7 +48,7 @@ namespace :task_guides do
       { title: "맞춤형복지 잔여포인트 소진 안내", cat: "복지" },
       { title: "하반기 업무 실적 보고", cat: "보고" },
       { title: "연간 결산·마감 준비", cat: "회계" },
-      { title: "다음연도 예산 요구서 작성", cat: "회계" },
+      { title: "다음연도 예산 요구서 작성", cat: "회계" }
     ].uniq { |t| t[:title] }
 
     service = TaskGuideService.new

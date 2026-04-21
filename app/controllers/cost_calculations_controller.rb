@@ -1,6 +1,5 @@
 # 원가계산서 검토 가이드 컨트롤러
 class CostCalculationsController < ApplicationController
-
   # GET /tools/cost-calculation
   def index
     @service_types = CostCalculationReviewService.get_service_types

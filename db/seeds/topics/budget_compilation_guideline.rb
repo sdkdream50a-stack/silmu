@@ -110,7 +110,7 @@ attrs = {
     - 행안부 홈페이지: 지방재정 → 예산편성 운영기준 (매년 업데이트)
     - e나라지방재정(lofin.mois.go.kr): 예산편성 지원 시스템
   CONTENT
-  qa_content: <<~CONTENT,
+  qa_content: <<~CONTENT
     ## 자주 묻는 질문
 
     **Q. 행안부 예산편성 지침은 언제 나오나요?**

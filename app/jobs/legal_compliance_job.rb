@@ -22,7 +22,7 @@ class LegalComplianceJob < ApplicationJob
     Rails.logger.info "=" * 60
 
     # 1단계: 규칙 기반 검증 실행 (무료)
-    require 'open3'
+    require "open3"
     stdout, stderr, status = Open3.capture3("cd #{Rails.root} && bundle exec rake legal:ci_check 2>&1")
 
     begin
@@ -58,7 +58,7 @@ class LegalComplianceJob < ApplicationJob
       end
 
       # 이메일 발송
-      if ENV['ADMIN_EMAIL'].present?
+      if ENV["ADMIN_EMAIL"].present?
         LegalComplianceMailer.weekly_summary(report).deliver_now
         Rails.logger.info "📧 검증 결과 이메일 발송 완료"
       end
@@ -70,7 +70,7 @@ class LegalComplianceJob < ApplicationJob
       # 파싱 실패 시 안전하게 AI 검증 실행
       run_ai_verification([])
 
-      if ENV['ADMIN_EMAIL'].present?
+      if ENV["ADMIN_EMAIL"].present?
         error_msg = "검증 결과 파싱 실패\n\nSTDOUT:\n#{stdout}\n\nSTDERR:\n#{stderr}"
         LegalComplianceMailer.error_alert(error_msg).deliver_now
       end
@@ -82,7 +82,7 @@ class LegalComplianceJob < ApplicationJob
     Rails.logger.info "법령 AI 심층 검증 시작 (전체): #{Time.current}"
     Rails.logger.info "=" * 60
 
-    unless ENV['ANTHROPIC_API_KEY'].present?
+    unless ENV["ANTHROPIC_API_KEY"].present?
       Rails.logger.warn "⚠️ ANTHROPIC_API_KEY 미설정, AI 검증 건너뜀"
       return
     end
@@ -98,7 +98,7 @@ class LegalComplianceJob < ApplicationJob
       Rails.logger.info "=" * 60
 
       # 결과 이메일 발송
-      if ENV['ADMIN_EMAIL'].present?
+      if ENV["ADMIN_EMAIL"].present?
         LegalComplianceMailer.monthly_deep_check(result).deliver_now
         Rails.logger.info "📧 월간 AI 검증 리포트 이메일 발송 완료"
       end
@@ -106,7 +106,7 @@ class LegalComplianceJob < ApplicationJob
     rescue StandardError => e
       Rails.logger.error "❌ AI 검증 중 오류 발생: #{e.message}"
 
-      if ENV['ADMIN_EMAIL'].present?
+      if ENV["ADMIN_EMAIL"].present?
         LegalComplianceMailer.error_alert(e.message).deliver_now
       end
     end
@@ -138,7 +138,7 @@ class LegalComplianceJob < ApplicationJob
   def run_ai_verification(triggering_errors)
     Rails.logger.info "🤖 AI 심층 검증 시작 (트리거: #{triggering_errors.count}건 중대 오류)"
 
-    unless ENV['ANTHROPIC_API_KEY'].present?
+    unless ENV["ANTHROPIC_API_KEY"].present?
       Rails.logger.warn "⚠️ ANTHROPIC_API_KEY 미설정, AI 검증 건너뜀"
       return { skipped: true, reason: "API 키 없음" }
     end
@@ -152,7 +152,7 @@ class LegalComplianceJob < ApplicationJob
       Rails.logger.info "   도구 오류: #{result[:errors].select { |e| e[:tool] }.count}건"
 
       # AI 검증 결과 이메일 발송
-      if ENV['ADMIN_EMAIL'].present?
+      if ENV["ADMIN_EMAIL"].present?
         LegalComplianceMailer.ai_triggered_check(result, triggering_errors).deliver_now
         Rails.logger.info "📧 AI 검증 결과 이메일 발송 완료"
       end
@@ -161,12 +161,11 @@ class LegalComplianceJob < ApplicationJob
     rescue StandardError => e
       Rails.logger.error "❌ AI 검증 중 오류: #{e.message}"
 
-      if ENV['ADMIN_EMAIL'].present?
+      if ENV["ADMIN_EMAIL"].present?
         LegalComplianceMailer.error_alert("AI 검증 오류: #{e.message}").deliver_now
       end
 
       { error: e.message }
     end
   end
-
 end

@@ -122,7 +122,7 @@ attrs = {
     - 정보공개시스템(open.go.kr)에 정기 공표
     - 적극 공개로 청구 건수 감소 효과
   CONTENT
-  qa_content: <<~CONTENT,
+  qa_content: <<~CONTENT
     ## 자주 묻는 질문
 
     **Q. 개인이 자신에 관한 정보를 요청할 때도 정보공개법을 따르나요?**

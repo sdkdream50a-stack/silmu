@@ -1,6 +1,5 @@
 # 추정가격 계산기 컨트롤러
 class EstimatedPricesController < ApplicationController
-
   # GET /tools/estimated-price
   def index
     @contract_types = EstimatedPriceService.get_contract_types

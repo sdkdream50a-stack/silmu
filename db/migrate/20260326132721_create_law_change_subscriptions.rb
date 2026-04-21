@@ -8,7 +8,7 @@ class CreateLawChangeSubscriptions < ActiveRecord::Migration[8.1]
       t.boolean :active, default: true, null: false
       t.timestamps
     end
-    add_index :law_change_subscriptions, [:email, :topic_slug], unique: true
+    add_index :law_change_subscriptions, [ :email, :topic_slug ], unique: true
     add_index :law_change_subscriptions, :topic_slug
   end
 end

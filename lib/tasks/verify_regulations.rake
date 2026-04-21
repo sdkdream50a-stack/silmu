@@ -6,7 +6,7 @@ namespace :verify do
     puts "🔍 법규정 자동 검증 시작..."
 
     # API 키 확인
-    unless ENV['ANTHROPIC_API_KEY'].present?
+    unless ENV["ANTHROPIC_API_KEY"].present?
       puts "⚠️ ANTHROPIC_API_KEY 환경변수가 설정되지 않았습니다."
       puts "   export ANTHROPIC_API_KEY='your-api-key'"
       exit 1
@@ -52,7 +52,7 @@ namespace :verify do
   end
 
   desc "특정 토픽만 검증"
-  task :topic, [:slug] => :environment do |_, args|
+  task :topic, [ :slug ] => :environment do |_, args|
     unless args[:slug]
       puts "사용법: rails verify:topic[토픽슬러그]"
       puts "예시: rails verify:topic[travel-expense]"
@@ -71,7 +71,7 @@ namespace :verify do
 
   desc "검증 리포트 목록 조회"
   task reports: :environment do
-    report_dir = Rails.root.join('log', 'regulation_reports')
+    report_dir = Rails.root.join("log", "regulation_reports")
 
     unless Dir.exist?(report_dir)
       puts "검증 리포트가 없습니다."
@@ -86,9 +86,9 @@ namespace :verify do
       puts "📋 검증 리포트 목록:"
       reports.first(10).each do |report|
         data = JSON.parse(File.read(report))
-        timestamp = data['timestamp']
-        changes = data.dig('summary', 'total_changes') || 0
-        errors = data.dig('summary', 'total_errors') || 0
+        timestamp = data["timestamp"]
+        changes = data.dig("summary", "total_changes") || 0
+        errors = data.dig("summary", "total_errors") || 0
         puts "  #{File.basename(report)}: #{changes}건 수정, #{errors}건 오류"
       end
     end

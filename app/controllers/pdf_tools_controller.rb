@@ -1,5 +1,5 @@
 class PdfToolsController < ApplicationController
-  before_action :validate_pdf_file, only: [:split, :merge, :add_page_numbers]
+  before_action :validate_pdf_file, only: [ :split, :merge, :add_page_numbers ]
 
   MAX_FILE_SIZE = 50.megabytes
   ALLOWED_CONTENT_TYPES = %w[application/pdf].freeze
@@ -110,7 +110,7 @@ class PdfToolsController < ApplicationController
   private
 
   def validate_pdf_file
-    files = [params[:file], params[:files]].flatten.compact
+    files = [ params[:file], params[:files] ].flatten.compact
 
     files.each do |file|
       next unless file.respond_to?(:content_type)

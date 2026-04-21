@@ -73,7 +73,7 @@ AuditCase.find_or_create_by!(slug: 'guideline-excess-budget-compilation') do |ac
 3. 의회 제출 전 예산담당관 최종 검토 체크리스트 작성
   LESSON
   ac.action_taken = '예산담당관 주의, 기획조정실장 주의, 초과 편성 2,160만원 시정 명령 (차기 추경 반영)'
-  ac.checkpoints = ['행안부 예산편성 운영기준 매년 10월 전후 시달 여부 확인', '업무추진비 등 경비 항목별 한도 기준 초과 여부 편성 전 점검', '부서 요구서 접수 시 기준 초과 항목 전수 검토 절차 구축'].to_json
+  ac.checkpoints = [ '행안부 예산편성 운영기준 매년 10월 전후 시달 여부 확인', '업무추진비 등 경비 항목별 한도 기준 초과 여부 편성 전 점검', '부서 요구서 접수 시 기준 초과 항목 전수 검토 절차 구축' ].to_json
   ac.repeated_issue = true
   ac.sector = "common"
 end
@@ -147,7 +147,7 @@ AuditCase.find_or_create_by!(slug: 'guideline-abolished-project-budget') do |ac|
 3. 예산담당관: 접수된 요구서 검토 시 폐지 사업 포함 여부 재확인
   LESSON
   ac.action_taken = '복지과 담당자 경고, 예산담당관 주의, 집행액 4,500만원 국고 중복 여부 조사 및 환수 여부 결정, 폐지 사업 전수 확인 절차 수립 명령'
-  ac.checkpoints = ['행안부 운영기준 내 폐지·금지 사업 목록 매년 확인 후 전 부서 공문 통보', '전년도 예산 항목 그대로 재계상 금지 — 사업별 계속 여부 사전 검토 의무화', '국고보조 사업 통합 전환 시 자체 예산 자동 폐지 여부 확인'].to_json
+  ac.checkpoints = [ '행안부 운영기준 내 폐지·금지 사업 목록 매년 확인 후 전 부서 공문 통보', '전년도 예산 항목 그대로 재계상 금지 — 사업별 계속 여부 사전 검토 의무화', '국고보조 사업 통합 전환 시 자체 예산 자동 폐지 여부 확인' ].to_json
   ac.repeated_issue = false
   ac.sector = "common"
 end
@@ -232,7 +232,7 @@ B씨는 "운영위원회 일정 잡기가 어렵고, 어차피 통과될 내용"
 심의가 끝난 후 반드시 의결록을 작성·보관하고, 예산안과 함께 결재 서류에 첨부해야 합니다.
   LESSON
   ac.action_taken = '교장 견책 처분, 잔여 예산 집행 전 학교운영위원회 긴급 소집 후 사후 심의 진행, 기집행분 소급 추인, 재발 방지 연수 이수 명령'
-  ac.checkpoints = ['학교 예산안은 학교운영위원회 심의·의결 후 확정 — 사전 일정 조율 필수', '예산안 확정 전 운영위원회 심의 의결록 작성 및 서류 보관', '2월 말 이전 심의 완료 → 3월 1일 예산 확정 일정 준수'].to_json
+  ac.checkpoints = [ '학교 예산안은 학교운영위원회 심의·의결 후 확정 — 사전 일정 조율 필수', '예산안 확정 전 운영위원회 심의 의결록 작성 및 서류 보관', '2월 말 이전 심의 완료 → 3월 1일 예산 확정 일정 준수' ].to_json
   ac.repeated_issue = false
   ac.sector = 2
 end
@@ -316,7 +316,7 @@ AuditCase.find_or_create_by!(slug: 'school-budget-deadline-violation') do |ac|
 - 2월 말: 예산 확정·공고
   LESSON
   ac.action_taken = '교장 주의, 행정실장 주의, 다음 연도 예산 편성 일정표 교육청 사전 제출 의무화, 운영위원 결원 시 처리 절차 수립 명령'
-  ac.checkpoints = ['학교회계 예산 확정 기한(3월 1일 전후) 역산하여 1월부터 운영위원 심의 일정 확보', '운영위원 불참 대비 예비 일정 2회 이상 사전 설정', '기한 초과 우려 시 즉시 교육청 담당 장학사에게 보고 및 대처 방법 문의'].to_json
+  ac.checkpoints = [ '학교회계 예산 확정 기한(3월 1일 전후) 역산하여 1월부터 운영위원 심의 일정 확보', '운영위원 불참 대비 예비 일정 2회 이상 사전 설정', '기한 초과 우려 시 즉시 교육청 담당 장학사에게 보고 및 대처 방법 문의' ].to_json
   ac.repeated_issue = false
   ac.sector = 2
 end

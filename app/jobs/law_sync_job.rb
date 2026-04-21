@@ -15,7 +15,7 @@ class LawSyncJob < ApplicationJob
     "공무원 여비 규정",
     "지방재정법",
     "지방재정법 시행령",
-    "소득세법",
+    "소득세법"
   ].freeze
 
   def perform

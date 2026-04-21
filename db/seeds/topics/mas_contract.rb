@@ -247,7 +247,7 @@ attrs = {
       answer: "구매금액이 2천만원 이하인 경우 2단계 경쟁 없이 등록업체 중 1개를 직접 선택할 수 있습니다. 또한 재난·재해 등 긴급구매 사유가 있는 경우, 해당 물품을 공급할 수 있는 등록업체가 3개 미만인 경우 등 예외적 사유가 인정될 수 있습니다. 그러나 편의를 위한 임의 생략은 감사 지적 대상입니다."
     }
   ].to_json,
-  practical_tips: <<~HTML,
+  practical_tips: <<~HTML
     <div class="space-y-4">
       <div class="bg-blue-50 border border-blue-200 rounded-xl p-4">
         <h4 class="font-bold text-blue-800 flex items-center gap-2 mb-2">

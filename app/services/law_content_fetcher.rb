@@ -75,7 +75,7 @@ class LawContentFetcher
     "budget-carryover"              => { law: "지방재정법",
                                          decree: "지방재정법 시행령" },
     "year-end-settlement"           => { law: "소득세법",
-                                         decree: "소득세법 시행령" },
+                                         decree: "소득세법 시행령" }
   }.freeze
 
   def initialize
@@ -135,7 +135,7 @@ class LawContentFetcher
       ministry:         min,
       effective_date:   eff,
       effective_display: effective_display,
-      url:              law_go_kr_url(mst, name),
+      url:              law_go_kr_url(mst, name)
     }
   end
 
@@ -152,7 +152,7 @@ class LawContentFetcher
     {
       name:             law_name,
       url:              "https://www.law.go.kr/법령/#{URI.encode_www_form_component(law_name.gsub(' ', ''))}",
-      effective_display: nil,
+      effective_display: nil
     }
   end
 end

@@ -2,9 +2,9 @@ class DocumentAnalysisController < ApplicationController
   include RequestOriginVerifiable
 
   # 정적 HTML(public/forms/)에서 호출하므로 CSRF 예외 처리 + Origin 검증으로 보완
-  skip_before_action :verify_authenticity_token, only: [:analyze]
-  before_action :require_login_for_ai, only: [:analyze]
-  before_action :verify_request_origin, only: [:analyze]
+  skip_before_action :verify_authenticity_token, only: [ :analyze ]
+  before_action :require_login_for_ai, only: [ :analyze ]
+  before_action :verify_request_origin, only: [ :analyze ]
 
   MAX_FILE_SIZE = 20.megabytes
   ALLOWED_CONTENT_TYPES = %w[application/pdf image/jpeg image/png].freeze

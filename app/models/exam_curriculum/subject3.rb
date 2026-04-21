@@ -39,7 +39,7 @@ module ExamCurriculum
             "국가계약법 제5조(계약 원칙): 신의성실, 상호 대등한 입장",
             "계약변경 요건: 물가변동·설계변경·기타 계약내용 변경"
           ],
-          related_topic_slugs: ["contract-guarantee-deposit", "late-penalty", "payment", "design-change", "contract-termination"],
+          related_topic_slugs: [ "contract-guarantee-deposit", "late-penalty", "payment", "design-change", "contract-termination" ],
           theory_content: [
             {
               section: "효과적 계약관리 계획",
@@ -73,11 +73,11 @@ module ExamCurriculum
                   content: "계약 체결 후 사정 변경이 발생한 경우 계약금액 또는 이행 기간을 조정할 수 있다. 변경 사유는 ①**설계변경** ②**물가변동**(에스컬레이션) ③기타 계약내용 변경의 3가지로 구분된다.",
                   table: {
                     caption: "계약변경 유형 비교",
-                    headers: ["유형", "사유", "조정 방향", "근거 조문"],
+                    headers: [ "유형", "사유", "조정 방향", "근거 조문" ],
                     rows: [
-                      ["**설계변경**", "공사 범위·내용 변경", "금액·기간 증감", "**국계법 시행령 제65조**"],
-                      ["**물가변동**", "물가상승률 **3%** or 지수변동률 충족", "금액 조정(주로 증액)", "**국계법 시행령 제64조**"],
-                      ["기타 변경", "법령 개정, 발주기관 지시", "금액·기간 조정", "개별 계약 조항"]
+                      [ "**설계변경**", "공사 범위·내용 변경", "금액·기간 증감", "**국계법 시행령 제65조**" ],
+                      [ "**물가변동**", "물가상승률 **3%** or 지수변동률 충족", "금액 조정(주로 증액)", "**국계법 시행령 제64조**" ],
+                      [ "기타 변경", "법령 개정, 발주기관 지시", "금액·기간 조정", "개별 계약 조항" ]
                     ]
                   }
                 }
@@ -142,7 +142,7 @@ module ExamCurriculum
             "물품구매심의위원회: 고액 물품 구매 시 심의 절차",
             "납품검사: 계약 수량·규격 확인 후 대금지급"
           ],
-          related_topic_slugs: ["goods-vs-service-contract", "goods-selection-committee", "inspection", "late-penalty"],
+          related_topic_slugs: [ "goods-vs-service-contract", "goods-selection-committee", "inspection", "late-penalty" ],
           theory_content: [
             {
               section: "물품계약 일반절차 관리",
@@ -216,7 +216,7 @@ module ExamCurriculum
             "용역계약 대금: 착수금·중도금·잔금 분할 지급 가능",
             "기성검사: 용역·공사 진행 단계별 이행 확인"
           ],
-          related_topic_slugs: ["mas-contract", "unit-price-contract", "payment"],
+          related_topic_slugs: [ "mas-contract", "unit-price-contract", "payment" ],
           theory_content: [
             {
               section: "용역계약 절차 및 이행관리",
@@ -295,7 +295,7 @@ module ExamCurriculum
             "기성검사: 공사 진행 단계별 이행 확인 후 기성금 지급",
             "하자담보책임: 준공 후 1~10년(시설물 종류에 따라)"
           ],
-          related_topic_slugs: ["design-change", "subcontract", "price-escalation", "defect-warranty"],
+          related_topic_slugs: [ "design-change", "subcontract", "price-escalation", "defect-warranty" ],
           theory_content: [
             {
               section: "공사계약 일반 개요",
@@ -335,13 +335,13 @@ module ExamCurriculum
                   content: "공사계약서에는 공사 범위, 공사금액, 이행 기간, 기성 지급 방법, 지체상금, 하자보수 보증기간 등이 명시된다.",
                   table: {
                     caption: "공사계약 주요 조건",
-                    headers: ["항목", "내용", "비고"],
+                    headers: [ "항목", "내용", "비고" ],
                     rows: [
-                      ["**지체상금률**", "국가 **1/1,000**, 지방 **0.5/1,000**", "일별 계산"],
-                      ["**계약이행보증금**", "계약금액의 **10%** 이상", "이행보증보험 대체 가능"],
-                      ["**하자보수보증금**", "계약금액의 **2~10%**", "건물 **10년**, 기계설비 **1~3년**"],
-                      ["하도급 대가 지급", "원도급자가 기성금 수령 후 **15일** 이내 하도급 대금 지급 의무", "**건설산업기본법**"],
-                      ["**설계변경**", "공사 내용 변경 시 금액·기간 조정", "**시행령 제65조**"]
+                      [ "**지체상금률**", "국가 **1/1,000**, 지방 **0.5/1,000**", "일별 계산" ],
+                      [ "**계약이행보증금**", "계약금액의 **10%** 이상", "이행보증보험 대체 가능" ],
+                      [ "**하자보수보증금**", "계약금액의 **2~10%**", "건물 **10년**, 기계설비 **1~3년**" ],
+                      [ "하도급 대가 지급", "원도급자가 기성금 수령 후 **15일** 이내 하도급 대금 지급 의무", "**건설산업기본법**" ],
+                      [ "**설계변경**", "공사 내용 변경 시 금액·기간 조정", "**시행령 제65조**" ]
                     ]
                   }
                 }
@@ -410,7 +410,7 @@ module ExamCurriculum
             "품질보증조달물품: 조달청이 품질 보증하는 물품 지정",
             "안전관리물자: 안전 관련 핵심 물자 품질 강화 관리"
           ],
-          related_topic_slugs: ["inspection"],
+          related_topic_slugs: [ "inspection" ],
           theory_content: [
             {
               section: "공공조달 품질관리",
@@ -522,7 +522,7 @@ module ExamCurriculum
             "혁신시제품: 시장 미검증 혁신 제품 공공기관 시범 구매 제도",
             "우수조달물품: 품질·성능 우수 인정 — 종합쇼핑몰 등재 우선 혜택"
           ],
-          related_topic_slugs: ["mas-contract"],
+          related_topic_slugs: [ "mas-contract" ],
           theory_content: [
             {
               section: "벤처나라(벤처창업혁신조달상품) 등록제도",

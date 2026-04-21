@@ -11,7 +11,7 @@ class FeedController < ApplicationController
     # 최신 감사사례 10개
     @audit_cases = AuditCase.published.order(created_at: :desc).limit(10)
 
-    @updated_at = [@topics.maximum(:updated_at), @audit_cases.maximum(:created_at)].compact.max
+    @updated_at = [ @topics.maximum(:updated_at), @audit_cases.maximum(:created_at) ].compact.max
 
     respond_to do |format|
       format.rss { render layout: false }

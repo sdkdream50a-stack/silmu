@@ -1,6 +1,5 @@
 # 설계변경 검토서 도우미 컨트롤러
 class DesignChangesController < ApplicationController
-
   # GET /tools/design-change
   def index
     @change_reasons = DesignChangeReviewService.get_change_reasons

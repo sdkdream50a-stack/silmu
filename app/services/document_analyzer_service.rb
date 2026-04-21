@@ -107,14 +107,14 @@ class DocumentAnalyzerService
     # PDF 텍스트 추출·결합
     pdf_text = pdf_files.map { |f| extract_pdf_text(f) }.reject(&:blank?).join("\n\n---\n\n")
     if pdf_text.present?
-      max_len = [8000 * pdf_files.size, 24000].min
+      max_len = [ 8000 * pdf_files.size, 24000 ].min
       pdf_text = pdf_text[0..max_len] if pdf_text.length > max_len
     end
 
     prompt = build_prompt(document_type, pdf_text.presence)
     content_blocks << { type: "text", text: prompt }
 
-    messages = [{ role: "user", content: content_blocks }]
+    messages = [ { role: "user", content: content_blocks } ]
     result = call_api(messages)
 
     Rails.cache.write(cache_key, result, expires_in: 7.days) if result[:success]
@@ -145,7 +145,7 @@ class DocumentAnalyzerService
     text = text[0..8000] if text.length > 8000
 
     prompt = build_prompt(document_type, text)
-    messages = [{ role: "user", content: prompt }]
+    messages = [ { role: "user", content: prompt } ]
 
     call_api(messages)
   end
@@ -158,7 +158,7 @@ class DocumentAnalyzerService
     media_type = content_type == "image/jpeg" ? "image/jpeg" : "image/png"
 
     prompt = build_prompt(document_type)
-    messages = [{
+    messages = [ {
       role: "user",
       content: [
         {
@@ -174,7 +174,7 @@ class DocumentAnalyzerService
           text: prompt
         }
       ]
-    }]
+    } ]
 
     call_api(messages)
   end

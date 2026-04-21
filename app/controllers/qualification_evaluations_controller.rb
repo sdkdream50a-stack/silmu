@@ -88,7 +88,7 @@ class QualificationEvaluationsController < ApplicationController
         is_qualified: total >= 92,   # 종심제 적격 기준: 92점 이상
         floor_price: floor_price
       )
-    end.sort_by { |b| [-b[:total_score], b[:bid_price]] }
+    end.sort_by { |b| [ -b[:total_score], b[:bid_price] ] }
 
     # 종심제 낙찰자: 적격자(92점 이상) 중 최고점, 동점 시 최저가
     winner = scored.select { |b| b[:is_qualified] }.first
@@ -127,9 +127,9 @@ class QualificationEvaluationsController < ApplicationController
     valid_bidders.map do |bidder|
       price_score = if bidder[:bid_price] == lowest_price
                       price_max
-                    else
+      else
                       price_max * (lowest_price / bidder[:bid_price])
-                    end
+      end
       bidder.merge(price_score: price_score.round(2), is_valid: true, floor_price: floor_price)
     end
   end

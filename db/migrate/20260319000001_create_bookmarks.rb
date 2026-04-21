@@ -9,12 +9,12 @@ class CreateBookmarks < ActiveRecord::Migration[8.1]
     end
 
     # 같은 리소스를 중복 북마크하지 못하도록 복합 유니크 인덱스
-    add_index :bookmarks, [:user_id, :bookmarkable_type, :bookmarkable_id],
+    add_index :bookmarks, [ :user_id, :bookmarkable_type, :bookmarkable_id ],
               unique: true,
               name: "index_bookmarks_on_user_and_bookmarkable"
 
     # 폴리모픽 조회용 인덱스
-    add_index :bookmarks, [:bookmarkable_type, :bookmarkable_id],
+    add_index :bookmarks, [ :bookmarkable_type, :bookmarkable_id ],
               name: "index_bookmarks_on_bookmarkable"
   end
 end

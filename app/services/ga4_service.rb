@@ -22,7 +22,7 @@ class Ga4Service
     Rails.cache.fetch("#{@cache_key_prefix}/real_time_users", expires_in: 1.minute) do
       request = Google::Analytics::Data::V1beta::RunRealtimeReportRequest.new(
         property: "properties/#{PROPERTY_ID}",
-        metrics: [{ name: "activeUsers" }]
+        metrics: [ { name: "activeUsers" } ]
       )
 
       response = @client.run_realtime_report(request)
@@ -38,10 +38,10 @@ class Ga4Service
     Rails.cache.fetch("#{@cache_key_prefix}/daily_active_users_#{days}d", expires_in: CACHE_TTL) do
       request = Google::Analytics::Data::V1beta::RunReportRequest.new(
         property: "properties/#{PROPERTY_ID}",
-        date_ranges: [{ start_date: "#{days}daysAgo", end_date: "today" }],
-        dimensions: [{ name: "date" }],
-        metrics: [{ name: "activeUsers" }],
-        order_bys: [{ dimension: { dimension_name: "date" }, desc: false }],
+        date_ranges: [ { start_date: "#{days}daysAgo", end_date: "today" } ],
+        dimensions: [ { name: "date" } ],
+        metrics: [ { name: "activeUsers" } ],
+        order_bys: [ { dimension: { dimension_name: "date" }, desc: false } ],
         dimension_filter: hostname_filter
       )
 
@@ -75,10 +75,10 @@ class Ga4Service
     Rails.cache.fetch("#{@cache_key_prefix}/page_views_#{days}d", expires_in: CACHE_TTL) do
       request = Google::Analytics::Data::V1beta::RunReportRequest.new(
         property: "properties/#{PROPERTY_ID}",
-        date_ranges: [{ start_date: "#{days}daysAgo", end_date: "today" }],
-        dimensions: [{ name: "pagePath" }, { name: "pageTitle" }],
-        metrics: [{ name: "screenPageViews" }],
-        order_bys: [{ metric: { metric_name: "screenPageViews" }, desc: true }],
+        date_ranges: [ { start_date: "#{days}daysAgo", end_date: "today" } ],
+        dimensions: [ { name: "pagePath" }, { name: "pageTitle" } ],
+        metrics: [ { name: "screenPageViews" } ],
+        order_bys: [ { metric: { metric_name: "screenPageViews" }, desc: true } ],
         limit: 10,
         dimension_filter: hostname_filter
       )
@@ -105,7 +105,7 @@ class Ga4Service
     Rails.cache.fetch("#{@cache_key_prefix}/traffic_sources_#{days}d", expires_in: CACHE_TTL) do
       request = Google::Analytics::Data::V1beta::RunReportRequest.new(
         property: "properties/#{PROPERTY_ID}",
-        date_ranges: [{ start_date: "#{days}daysAgo", end_date: "today" }],
+        date_ranges: [ { start_date: "#{days}daysAgo", end_date: "today" } ],
         dimensions: [
           { name: "sessionSource" },
           { name: "sessionMedium" }
@@ -114,7 +114,7 @@ class Ga4Service
           { name: "sessions" },
           { name: "activeUsers" }
         ],
-        order_bys: [{ metric: { metric_name: "sessions" }, desc: true }],
+        order_bys: [ { metric: { metric_name: "sessions" }, desc: true } ],
         limit: 10,
         dimension_filter: hostname_filter
       )
@@ -139,13 +139,13 @@ class Ga4Service
     Rails.cache.fetch("#{@cache_key_prefix}/top_pages_#{days}d", expires_in: CACHE_TTL) do
       request = Google::Analytics::Data::V1beta::RunReportRequest.new(
         property: "properties/#{PROPERTY_ID}",
-        date_ranges: [{ start_date: "#{days}daysAgo", end_date: "today" }],
-        dimensions: [{ name: "pagePath" }, { name: "pageTitle" }],
+        date_ranges: [ { start_date: "#{days}daysAgo", end_date: "today" } ],
+        dimensions: [ { name: "pagePath" }, { name: "pageTitle" } ],
         metrics: [
           { name: "screenPageViews" },
           { name: "activeUsers" }
         ],
-        order_bys: [{ metric: { metric_name: "screenPageViews" }, desc: true }],
+        order_bys: [ { metric: { metric_name: "screenPageViews" }, desc: true } ],
         limit: 10,
         dimension_filter: hostname_filter
       )
@@ -170,9 +170,9 @@ class Ga4Service
     Rails.cache.fetch("#{@cache_key_prefix}/new_vs_returning_#{days}d", expires_in: CACHE_TTL) do
       request = Google::Analytics::Data::V1beta::RunReportRequest.new(
         property: "properties/#{PROPERTY_ID}",
-        date_ranges: [{ start_date: "#{days}daysAgo", end_date: "today" }],
-        dimensions: [{ name: "newVsReturning" }],
-        metrics: [{ name: "activeUsers" }],
+        date_ranges: [ { start_date: "#{days}daysAgo", end_date: "today" } ],
+        dimensions: [ { name: "newVsReturning" } ],
+        metrics: [ { name: "activeUsers" } ],
         dimension_filter: hostname_filter
       )
 
@@ -202,7 +202,7 @@ class Ga4Service
     Rails.cache.fetch("#{@cache_key_prefix}/engagement_metrics_#{days}d", expires_in: CACHE_TTL) do
       request = Google::Analytics::Data::V1beta::RunReportRequest.new(
         property: "properties/#{PROPERTY_ID}",
-        date_ranges: [{ start_date: "#{days}daysAgo", end_date: "today" }],
+        date_ranges: [ { start_date: "#{days}daysAgo", end_date: "today" } ],
         metrics: [
           { name: "averageSessionDuration" },
           { name: "bounceRate" },
@@ -245,8 +245,8 @@ class Ga4Service
   def fetch_active_users(days:)
     request = Google::Analytics::Data::V1beta::RunReportRequest.new(
       property: "properties/#{PROPERTY_ID}",
-      date_ranges: [{ start_date: "#{days}daysAgo", end_date: "today" }],
-      metrics: [{ name: "activeUsers" }],
+      date_ranges: [ { start_date: "#{days}daysAgo", end_date: "today" } ],
+      metrics: [ { name: "activeUsers" } ],
       dimension_filter: hostname_filter
     )
     response = @client.run_report(request)

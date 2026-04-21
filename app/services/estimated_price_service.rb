@@ -126,7 +126,7 @@ class EstimatedPriceService
     def calculate_base_amount(type, amounts)
       case type
       when :goods
-        unit_total = amounts[:unit_price] * [amounts[:quantity], 1].max
+        unit_total = amounts[:unit_price] * [ amounts[:quantity], 1 ].max
         unit_total + amounts.fetch(:delivery_fee, 0) + amounts.fetch(:install_fee, 0)
       when :service
         amounts[:direct_labor] + amounts[:overhead] + amounts[:direct_expense] +

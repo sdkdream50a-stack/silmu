@@ -112,7 +112,7 @@ attrs = {
     | 비위 은폐·허위 진술 | 즉시 시인·반성 |
     | 동일 비위 반복 | 자수·자진 신고 |
   CONTENT
-  qa_content: <<~CONTENT,
+  qa_content: <<~CONTENT
     ## 자주 묻는 질문
 
     **Q. 징계처분을 받으면 연금에 영향이 있나요?**

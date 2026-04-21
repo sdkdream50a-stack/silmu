@@ -4,7 +4,7 @@
 class Admin::AnalyticsController < Admin::BaseController
   def index
     @days = (params[:days] || 7).to_i
-    @days = 7 unless [1, 7, 14, 30].include?(@days)
+    @days = 7 unless [ 1, 7, 14, 30 ].include?(@days)
 
     begin
       ga4_service = Ga4Service.new

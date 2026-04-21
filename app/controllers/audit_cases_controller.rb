@@ -11,7 +11,7 @@ class AuditCasesController < ApplicationController
     all_cases, @categories = Rails.cache.fetch("audit_cases/all_published_v2", expires_in: 30.minutes) do
       cases = AuditCase.published.recent.to_a
       cats  = cases.map(&:category).compact.uniq.sort
-      [cases, cats]
+      [ cases, cats ]
     end
     @total_count = all_cases.size
 
@@ -25,8 +25,8 @@ class AuditCasesController < ApplicationController
     @filtered_count = filtered.size
 
     # 페이지 범위 보정: 필터 결과가 줄어도 유효 범위 유지
-    total_pages = [(@filtered_count.to_f / PER_PAGE).ceil, 1].max
-    @page = [[@page, total_pages].min, 1].max
+    total_pages = [ (@filtered_count.to_f / PER_PAGE).ceil, 1 ].max
+    @page = [ [ @page, total_pages ].min, 1 ].max
 
     # 페이지네이션: 초기 로드 시 PER_PAGE개만 렌더링 (HTML 크기 ~75% 감소)
     offset = (@page - 1) * PER_PAGE

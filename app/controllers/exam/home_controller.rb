@@ -1,5 +1,5 @@
 class Exam::HomeController < ApplicationController
-  layout 'exam'
+  layout "exam"
 
   def index
     # 정적 콘텐츠이므로 HTTP 캐싱

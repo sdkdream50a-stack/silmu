@@ -1,9 +1,9 @@
 class QuoteDocumentsController < ApplicationController
   include RequestOriginVerifiable
 
-  skip_before_action :verify_authenticity_token, only: [:extract]
-  before_action :require_login_for_ai, only: [:extract]
-  before_action :verify_request_origin, only: [:extract]
+  skip_before_action :verify_authenticity_token, only: [ :extract ]
+  before_action :require_login_for_ai, only: [ :extract ]
+  before_action :verify_request_origin, only: [ :extract ]
 
   MAX_FILE_SIZE = 20.megabytes
   ALLOWED_CONTENT_TYPES = %w[application/pdf image/jpeg image/png].freeze
@@ -30,7 +30,7 @@ class QuoteDocumentsController < ApplicationController
     files = if params[:files].present?
       Array(params[:files])
     elsif params[:file].present?
-      [params[:file]]
+      [ params[:file] ]
     else
       return render json: { success: false, error: "파일을 업로드해주세요." }, status: :unprocessable_entity
     end

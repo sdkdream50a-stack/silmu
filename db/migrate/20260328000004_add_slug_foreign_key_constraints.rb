@@ -15,14 +15,14 @@ class AddSlugForeignKeyConstraints < ActiveRecord::Migration[8.1]
     # 1단계: orphan 레코드 확인 및 정리
     valid_slugs = Topic.select(:slug)
 
-    orphan_guides = Guide.where.not(topic_slug: [nil, ""])
+    orphan_guides = Guide.where.not(topic_slug: [ nil, "" ])
                          .where.not(topic_slug: valid_slugs)
     if orphan_guides.any?
       Rails.logger.warn "[P4-2] Orphan guides 발견 (topic_slug 없음): #{orphan_guides.pluck(:slug, :topic_slug)}"
       orphan_guides.update_all(topic_slug: nil)
     end
 
-    orphan_audit_cases = AuditCase.where.not(topic_slug: [nil, ""])
+    orphan_audit_cases = AuditCase.where.not(topic_slug: [ nil, "" ])
                                   .where.not(topic_slug: valid_slugs)
     if orphan_audit_cases.any?
       Rails.logger.warn "[P4-2] Orphan audit_cases 발견 (topic_slug 없음): #{orphan_audit_cases.pluck(:slug, :topic_slug)}"

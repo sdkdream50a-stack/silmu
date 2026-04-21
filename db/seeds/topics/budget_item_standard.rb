@@ -132,7 +132,7 @@ attrs = {
     3. 업무추진비로 개인 식사 처리
     4. 여비 대신 업무추진비로 출장 비용 처리
   CONTENT
-  qa_content: <<~CONTENT,
+  qa_content: <<~CONTENT
     ## 자주 묻는 질문
 
     **Q. 비품과 소모품의 기준은?**

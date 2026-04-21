@@ -79,7 +79,7 @@ class LegalContentRenderer
     in_table = false
 
     lines.each do |line|
-      if line.strip.start_with?('|') && line.strip.end_with?('|')
+      if line.strip.start_with?("|") && line.strip.end_with?("|")
         in_table = true
         table_lines << line
       else
@@ -100,7 +100,7 @@ class LegalContentRenderer
 
   # Markdown 테이블 파싱
   def parse_markdown_table(lines)
-    return '' if lines.empty?
+    return "" if lines.empty?
 
     html = '<div class="legal-table-wrapper"><table class="legal-table">'
 
@@ -108,9 +108,9 @@ class LegalContentRenderer
       # 구분선(---|---) 건너뛰기
       next if line.match?(/^\|[\s\-:|]+\|$/)
 
-      cells = line.split('|').map(&:strip).reject(&:empty?)
-      tag = index == 0 ? 'th' : 'td'
-      row_class = index == 0 ? 'legal-table-header' : 'legal-table-row'
+      cells = line.split("|").map(&:strip).reject(&:empty?)
+      tag = index == 0 ? "th" : "td"
+      row_class = index == 0 ? "legal-table-header" : "legal-table-row"
 
       html += "<tr class=\"#{row_class}\">"
       cells.each do |cell|
@@ -118,10 +118,10 @@ class LegalContentRenderer
         cell = cell.gsub(/\*\*([^*]+)\*\*/, '<strong>\1</strong>')
         html += "<#{tag}>#{cell}</#{tag}>"
       end
-      html += '</tr>'
+      html += "</tr>"
     end
 
-    html += '</table></div>'
+    html += "</table></div>"
     html
   end
 end

@@ -3,7 +3,7 @@ class Bookmark < ApplicationRecord
   belongs_to :bookmarkable, polymorphic: true
 
   validates :bookmarkable_id, uniqueness: {
-    scope: [:user_id, :bookmarkable_type],
+    scope: [ :user_id, :bookmarkable_type ],
     message: "이미 북마크된 항목입니다"
   }
 

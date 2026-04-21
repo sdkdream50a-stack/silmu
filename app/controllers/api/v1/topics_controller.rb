@@ -8,7 +8,7 @@ module Api
   module V1
     class TopicsController < ActionController::API
       before_action :authenticate_api_key!
-      before_action :find_topic, only: [:update]
+      before_action :find_topic, only: [ :update ]
 
       # POST /api/v1/topics
       def create

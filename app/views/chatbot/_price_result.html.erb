@@ -3,14 +3,9 @@
 <% if @result %>
   <div class="card p-8">
     <div class="flex items-center gap-4 mb-6">
-      <div class="w-14 h-14 rounded-xl flex items-center justify-center
-        <% case @result[:color] %>
-        <% when 'green' %>bg-green-100<% when 'blue' %>bg-blue-100<% when 'purple' %>bg-purple-100<% end %>">
-        <span class="material-symbols-outlined text-2xl
-          <% case @result[:color] %>
-          <% when 'green' %>text-green-600<% when 'blue' %>text-blue-600<% when 'purple' %>text-purple-600<% end %>">
-          <% case @result[:method_type] %>
-          <% when 'private_1' %>person<% when 'private_2' %>group<% when 'bidding' %>gavel<% end %>
+      <div class="w-14 h-14 rounded-xl flex items-center justify-center <%= { "green" => "bg-green-100", "blue" => "bg-blue-100", "purple" => "bg-purple-100" }[@result[:color]] %>">
+        <span class="material-symbols-outlined text-2xl <%= { "green" => "text-green-600", "blue" => "text-blue-600", "purple" => "text-purple-600" }[@result[:color]] %>">
+          <%= { "private_1" => "person", "private_2" => "group", "bidding" => "gavel" }[@result[:method_type]] %>
         </span>
       </div>
       <div>

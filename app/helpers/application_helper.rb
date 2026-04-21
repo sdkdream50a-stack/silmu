@@ -39,7 +39,7 @@ module ApplicationHelper
 
   # slug → 한국어 레이블 반환 (없으면 slug 그대로)
   def topic_slug_label(slug)
-    TOPIC_SLUG_LABELS[slug] || slug.gsub('-', ' ')
+    TOPIC_SLUG_LABELS[slug] || slug.gsub("-", " ")
   end
 
   def tool_count
@@ -76,7 +76,7 @@ module ApplicationHelper
   # 조, 항, 호 기준으로 줄바꿈하고 가시성 향상
   # 결과를 캐싱하여 무거운 정규식 처리를 반복하지 않음
   def render_legal_content(content)
-    return '' if content.blank?
+    return "" if content.blank?
 
     cache_key = "legal_content/#{Digest::MD5.hexdigest(content)}"
     cached = Rails.cache.read(cache_key)
@@ -96,7 +96,7 @@ module ApplicationHelper
 
   # 간단한 Markdown 변환 (일반 콘텐츠용)
   def simple_markdown(content)
-    return '' if content.blank?
+    return "" if content.blank?
 
     html = sanitize(content, tags: [], attributes: []).dup
 

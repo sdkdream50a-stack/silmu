@@ -41,7 +41,7 @@ class LawApiService
   HEADERS = {
     "User-Agent"      => "Mozilla/5.0 (compatible; silmu-law-bot/1.0)",
     "Accept"          => "application/xml, text/xml, */*",
-    "Accept-Language" => "ko-KR,ko;q=0.9",
+    "Accept-Language" => "ko-KR,ko;q=0.9"
   }.freeze
 
   def get(path, params)

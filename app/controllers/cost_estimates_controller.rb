@@ -1,6 +1,5 @@
 # 물량내역서 + 시방서 생성기 컨트롤러
 class CostEstimatesController < ApplicationController
-
   # GET /tools/cost-estimate
   def index
     @construction_types = CostEstimateGeneratorService.get_construction_types
@@ -24,8 +23,8 @@ class CostEstimatesController < ApplicationController
   # POST /cost-estimates/generate
   def generate
     result = CostEstimateGeneratorService.generate(
-      construction_types: params[:construction_types] || [params[:construction_type]].compact,
-      contract_type: params[:contract_type] || 'private',
+      construction_types: params[:construction_types] || [ params[:construction_type] ].compact,
+      contract_type: params[:contract_type] || "private",
       items: params[:items],
       info: info_params,
       custom_instructions: params[:custom_instructions]

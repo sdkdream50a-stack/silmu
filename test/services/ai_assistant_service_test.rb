@@ -51,6 +51,10 @@ class AiAssistantServiceTest < ActiveSupport::TestCase
   end
 
   test "answer 정상 응답 시 text 반환" do
+    original_key = ENV["ANTHROPIC_API_KEY"]
+    ENV["ANTHROPIC_API_KEY"] = "test-key"
+    service = AiAssistantService.new
+
     stub_text = "수의계약은 경쟁 없이 계약하는 방식입니다."
     stub_response = OpenStruct.new(content: [ OpenStruct.new(text: stub_text) ])
     stub_client = Object.new
@@ -59,10 +63,11 @@ class AiAssistantServiceTest < ActiveSupport::TestCase
     original_new = Anthropic::Client.method(:new)
     Anthropic::Client.define_singleton_method(:new) { |**_| stub_client }
     begin
-      result = @service_guest.answer("수의계약이란?")
+      result = service.answer("수의계약이란?")
       assert result[:text].present?
     ensure
       Anthropic::Client.define_singleton_method(:new, original_new)
+      ENV["ANTHROPIC_API_KEY"] = original_key
     end
   end
 

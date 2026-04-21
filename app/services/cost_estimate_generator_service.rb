@@ -141,12 +141,12 @@ class CostEstimateGeneratorService
       items = parse_items(params[:items])
       info = params[:info] || {}
       custom_instructions = params[:custom_instructions] || ""
-      contract_type = params[:contract_type] || 'private'
+      contract_type = params[:contract_type] || "private"
 
       material_cost = items.sum { |i| i[:amount] }
 
       # 계약 방식에 따른 처리
-      if contract_type == 'private'
+      if contract_type == "private"
         # 수의계약: 간접비 계산 안 함
         subtotal = material_cost
         vat = (material_cost * 0.10).round(0)

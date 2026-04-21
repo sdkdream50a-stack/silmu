@@ -99,7 +99,7 @@ topics = [
       { question: "선금을 다른 공사에 유용하면?", answer: "선금은 해당 계약 이행에만 사용해야 합니다. 타 공사 유용, 대표자 개인 사용 등은 계약 해지 사유이며, 선금 전액 즉시 반환 의무가 생깁니다. 형사 처벌 대상이 될 수도 있습니다." },
       { question: "선금 정산은 어떻게 하나요?", answer: "기성금 청구 시 선금 지급 비율만큼 차감합니다. 예를 들어 계약금액 1억원에 선금 30%(3천만원)를 지급했다면, 기성금 청구 시마다 청구액의 30%를 차감 지급합니다." }
     ].to_json,
-    practical_tips: <<~HTML,
+    practical_tips: <<~HTML
       <div class="space-y-4">
         <div class="bg-blue-50 border border-blue-200 rounded-xl p-4">
           <h4 class="font-bold text-blue-800 flex items-center gap-2 mb-2">
@@ -226,7 +226,7 @@ topics = [
       { question: "물품 구매에도 적격심사가 있나요?", answer: "추정가격 2억원 이상 물품·용역은 적격심사 대상이 될 수 있습니다. 이행실적, 납품능력, 신용도 등을 평가합니다." },
       { question: "종합심사낙찰제(종심제)는 언제 쓰나요?", answer: "추정가격 300억원 이상 대형 공사에 적용됩니다. 가격뿐 아니라 공사수행능력(시공계획, 품질관리 등)과 사회적가치(고용, 안전 등)까지 종합 평가합니다." }
     ].to_json,
-    practical_tips: <<~HTML,
+    practical_tips: <<~HTML
       <div class="space-y-4">
         <div class="bg-blue-50 border border-blue-200 rounded-xl p-4">
           <h4 class="font-bold text-blue-800 flex items-center gap-2 mb-2">
@@ -345,7 +345,7 @@ topics = [
       { question: "2천만원 이하 소액 입찰도 보증금을 내야 하나요?", answer: "입찰금액이 2천만원 이하인 경우 입찰보증금을 면제할 수 있습니다. 면제 여부는 발주기관의 재량이므로 입찰공고문을 확인해야 합니다." },
       { question: "낙찰 안 된 사람은 보증금을 돌려받나요?", answer: "네. 낙찰되지 않은 입찰자의 입찰보증금은 낙찰자 결정 후 즉시 반환됩니다. 전자보증서의 경우 G2B 시스템에서 자동으로 처리됩니다." }
     ].to_json,
-    practical_tips: <<~HTML,
+    practical_tips: <<~HTML
       <div class="space-y-4">
         <div class="bg-blue-50 border border-blue-200 rounded-xl p-4">
           <h4 class="font-bold text-blue-800 flex items-center gap-2 mb-2">
@@ -442,7 +442,7 @@ topics = [
       { question: "1차년도 계약서에 총액을 써야 하나요?", answer: "네. 1차년도 계약서에는 총 계약금액과 총 이행기간을 부기(附記)해야 합니다. 이것이 장기계속계약의 핵심으로, 차년도 계약의 법적 근거가 됩니다." },
       { question: "장기계속계약에서 설계변경은 어떻게 하나요?", answer: "설계변경은 총 계약금액 기준으로 합니다. 변경금액을 산출한 후 잔여 연차에 반영하며, 이미 이행 완료된 연차분은 소급 변경하지 않습니다." }
     ].to_json,
-    practical_tips: <<~HTML,
+    practical_tips: <<~HTML
       <div class="space-y-4">
         <div class="bg-blue-50 border border-blue-200 rounded-xl p-4">
           <h4 class="font-bold text-blue-800 flex items-center gap-2 mb-2">
@@ -551,7 +551,7 @@ topics = [
       { question: "여러 수요기관이 같이 쓸 수 있나요?", answer: "네. 단가계약의 장점 중 하나가 여러 수요기관이 공동으로 이용할 수 있다는 점입니다. 교육청이 단가계약을 체결하면 산하 각 학교가 발주서로 발주할 수 있습니다." },
       { question: "발주서 없이 납품 요청하면 안 되나요?", answer: "단가계약에서는 반드시 발주서를 발행해야 합니다. 구두로 납품 요청하고 나중에 발주서를 작성하는 것은 계약 위반이며 감사 지적 대상입니다." }
     ].to_json,
-    practical_tips: <<~HTML,
+    practical_tips: <<~HTML
       <div class="space-y-4">
         <div class="bg-blue-50 border border-blue-200 rounded-xl p-4">
           <h4 class="font-bold text-blue-800 flex items-center gap-2 mb-2">
@@ -651,7 +651,7 @@ topics = [
       { question: "규격심사 결과 반려되면?", answer: "규격심의위원회가 규격을 반려하면 해당 규격을 수정하거나 재심의를 요청해야 합니다. 반려된 규격으로 입찰공고를 내면 위법입니다." },
       { question: "규격 심사 통과 안 된 업체는?", answer: "제출한 규격서가 심사를 통과하지 못한 업체는 가격 입찰에 참가할 수 없습니다. 규격 적합 업체만 가격 입찰에 참가합니다." }
     ].to_json,
-    practical_tips: <<~HTML,
+    practical_tips: <<~HTML
       <div class="space-y-4">
         <div class="bg-blue-50 border border-blue-200 rounded-xl p-4">
           <h4 class="font-bold text-blue-800 flex items-center gap-2 mb-2">
@@ -768,7 +768,7 @@ topics = [
       { question: "2천만원 이하 계약도 이행보증서 내야 하나요?", answer: "2천만원 이하 소액 계약은 계약보증금을 면제할 수 있습니다. 다만 면제는 의무가 아닌 재량이므로, 기관의 계약 관리 규정을 확인하세요." },
       { question: "계약상대자가 이행을 포기하면?", answer: "계약을 해지하고 보증기관에 보증금 청구를 합니다. 보증기관은 조사 후 보증금을 지급하거나 잔여 공사를 대체 이행합니다. 부정당업자 제재도 병행됩니다." }
     ].to_json,
-    practical_tips: <<~HTML,
+    practical_tips: <<~HTML
       <div class="space-y-4">
         <div class="bg-blue-50 border border-blue-200 rounded-xl p-4">
           <h4 class="font-bold text-blue-800 flex items-center gap-2 mb-2">
@@ -871,7 +871,7 @@ topics = [
       { question: "추첨에 참여 못하면?", answer: "입찰자 수가 4명 미만인 경우 입찰자 전원이 추첨합니다. 입찰자가 없으면 발주기관 담당자가 대신 추첨합니다. 전자입찰의 경우 G2B 시스템이 자동으로 추첨 처리합니다." },
       { question: "예정가격보다 낮게 입찰하면 무조건 낙찰인가요?", answer: "예정가격 이하여야 낙찰 가능하지만, 적격심사가 있는 경우 낙찰하한율(공사 89.745%~90%, 추정가격 구간별 상이) 이상이어야 합니다. 예정가격보다 낮더라도 낙찰하한율 미만이면 낙찰될 수 없습니다. (행안부 예규 제325호, 2025.7.1. 시행)" }
     ].to_json,
-    practical_tips: <<~HTML,
+    practical_tips: <<~HTML
       <div class="space-y-4">
         <div class="bg-blue-50 border border-blue-200 rounded-xl p-4">
           <h4 class="font-bold text-blue-800 flex items-center gap-2 mb-2">

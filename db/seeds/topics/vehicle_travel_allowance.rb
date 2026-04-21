@@ -120,7 +120,7 @@ attrs = {
     - 하이패스 홈페이지(www.hpass.co.kr) → 이용내역 조회 → 출력
     - 출장일 날짜·시간대 이용내역 확인 후 영수증 출력 첨부
   CONTENT
-  qa_content: <<~CONTENT,
+  qa_content: <<~CONTENT
     ## 자주 묻는 질문
 
     **Q. 자가용 출장 시 km당 얼마를 받나요?**

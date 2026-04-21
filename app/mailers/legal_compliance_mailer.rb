@@ -1,5 +1,5 @@
 class LegalComplianceMailer < ApplicationMailer
-  default from: 'noreply@silmu.kr'
+  default from: "noreply@silmu.kr"
 
   # 주간 요약 리포트 (매주 월요일)
   def weekly_summary(report)
@@ -7,7 +7,7 @@ class LegalComplianceMailer < ApplicationMailer
     @timestamp = report[:timestamp] || Time.current
 
     mail(
-      to: ENV['ADMIN_EMAIL'],
+      to: ENV["ADMIN_EMAIL"],
       subject: "[실무.kr] 법령 주간 검증 리포트 (#{@timestamp.strftime('%Y-%m-%d')})"
     )
   end
@@ -20,7 +20,7 @@ class LegalComplianceMailer < ApplicationMailer
     @timestamp = Time.current
 
     mail(
-      to: ENV['ADMIN_EMAIL'],
+      to: ENV["ADMIN_EMAIL"],
       subject: "[실무.kr] 법령 AI 검증 월간 리포트 (#{@timestamp.strftime('%Y년 %m월')})"
     )
   end
@@ -31,7 +31,7 @@ class LegalComplianceMailer < ApplicationMailer
     @timestamp = Time.current
 
     mail(
-      to: ENV['ADMIN_EMAIL'],
+      to: ENV["ADMIN_EMAIL"],
       subject: "[긴급] 실무.kr 법령 검증 오류 발생"
     )
   end
@@ -45,7 +45,7 @@ class LegalComplianceMailer < ApplicationMailer
     @timestamp = Time.current
 
     mail(
-      to: ENV['ADMIN_EMAIL'],
+      to: ENV["ADMIN_EMAIL"],
       subject: "[실무.kr] AI 법령 검증 결과 (중대 오류 #{triggering_errors.count}건 발견)"
     )
   end

@@ -15,7 +15,7 @@ module HomeHelper
       hub_title:    "group-hover:text-indigo-700",
       hub_count:    "text-indigo-600 bg-indigo-50",
       hub_link:     "text-indigo-600 group-hover:text-indigo-700",
-      hub_arrow:    "text-indigo-400 group-hover:text-indigo-600",
+      hub_arrow:    "text-indigo-400 group-hover:text-indigo-600"
     },
     "violet"  => {
       icon_lg:      "bg-violet-100 text-violet-600 group-hover:bg-violet-600 group-hover:text-white",
@@ -30,7 +30,7 @@ module HomeHelper
       hub_title:    "group-hover:text-violet-700",
       hub_count:    "text-violet-600 bg-violet-50",
       hub_link:     "text-violet-600 group-hover:text-violet-700",
-      hub_arrow:    "text-violet-400 group-hover:text-violet-600",
+      hub_arrow:    "text-violet-400 group-hover:text-violet-600"
     },
     "amber"   => {
       icon_lg:      "bg-amber-100 text-amber-600 group-hover:bg-amber-600 group-hover:text-white",
@@ -45,7 +45,7 @@ module HomeHelper
       hub_title:    "group-hover:text-amber-700",
       hub_count:    "text-amber-600 bg-amber-50",
       hub_link:     "text-amber-600 group-hover:text-amber-700",
-      hub_arrow:    "text-amber-400 group-hover:text-amber-600",
+      hub_arrow:    "text-amber-400 group-hover:text-amber-600"
     },
     "emerald" => {
       icon_lg:      "bg-emerald-100 text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white",
@@ -60,7 +60,7 @@ module HomeHelper
       hub_title:    "group-hover:text-emerald-700",
       hub_count:    "text-emerald-600 bg-emerald-50",
       hub_link:     "text-emerald-600 group-hover:text-emerald-700",
-      hub_arrow:    "text-emerald-400 group-hover:text-emerald-600",
+      hub_arrow:    "text-emerald-400 group-hover:text-emerald-600"
     },
     "blue"    => {
       icon_lg:      "bg-blue-100 text-blue-600 group-hover:bg-blue-600 group-hover:text-white",
@@ -75,7 +75,7 @@ module HomeHelper
       hub_title:    "group-hover:text-blue-700",
       hub_count:    "text-blue-600 bg-blue-50",
       hub_link:     "text-blue-600 group-hover:text-blue-700",
-      hub_arrow:    "text-blue-400 group-hover:text-blue-600",
+      hub_arrow:    "text-blue-400 group-hover:text-blue-600"
     },
     "rose"    => {
       icon_lg:      "bg-rose-100 text-rose-600 group-hover:bg-rose-600 group-hover:text-white",
@@ -90,7 +90,7 @@ module HomeHelper
       hub_title:    "group-hover:text-rose-700",
       hub_count:    "text-rose-600 bg-rose-50",
       hub_link:     "text-rose-600 group-hover:text-rose-700",
-      hub_arrow:    "text-rose-400 group-hover:text-rose-600",
+      hub_arrow:    "text-rose-400 group-hover:text-rose-600"
     },
     "slate"   => {
       icon_lg:      "bg-slate-100 text-slate-600 group-hover:bg-slate-600 group-hover:text-white",
@@ -105,7 +105,7 @@ module HomeHelper
       hub_title:    "group-hover:text-slate-700",
       hub_count:    "text-slate-600 bg-slate-50",
       hub_link:     "text-slate-600 group-hover:text-slate-700",
-      hub_arrow:    "text-slate-400 group-hover:text-slate-600",
+      hub_arrow:    "text-slate-400 group-hover:text-slate-600"
     },
     "pink"    => {
       icon_lg:      "bg-pink-100 text-pink-600 group-hover:bg-pink-600 group-hover:text-white",
@@ -120,7 +120,7 @@ module HomeHelper
       hub_title:    "group-hover:text-pink-700",
       hub_count:    "text-pink-600 bg-pink-50",
       hub_link:     "text-pink-600 group-hover:text-pink-700",
-      hub_arrow:    "text-pink-400 group-hover:text-pink-600",
+      hub_arrow:    "text-pink-400 group-hover:text-pink-600"
     },
     "teal"    => {
       icon_lg:      "bg-teal-100 text-teal-600 group-hover:bg-teal-600 group-hover:text-white",
@@ -135,7 +135,7 @@ module HomeHelper
       hub_title:    "group-hover:text-teal-700",
       hub_count:    "text-teal-600 bg-teal-50",
       hub_link:     "text-teal-600 group-hover:text-teal-700",
-      hub_arrow:    "text-teal-400 group-hover:text-teal-600",
+      hub_arrow:    "text-teal-400 group-hover:text-teal-600"
     },
     "orange"  => {
       icon_lg:      "bg-orange-100 text-orange-600 group-hover:bg-orange-600 group-hover:text-white",
@@ -150,8 +150,8 @@ module HomeHelper
       hub_title:    "group-hover:text-orange-700",
       hub_count:    "text-orange-600 bg-orange-50",
       hub_link:     "text-orange-600 group-hover:text-orange-700",
-      hub_arrow:    "text-orange-400 group-hover:text-orange-600",
-    },
+      hub_arrow:    "text-orange-400 group-hover:text-orange-600"
+    }
   }.freeze
 
   # 뷰에서 tc(color, :icon_sm) 형태로 호출

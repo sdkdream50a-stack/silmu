@@ -16,44 +16,44 @@ class RegulationVerifier
 
   # 토픽별 검증 키워드
   TOPIC_KEYWORDS = {
-    'travel-expense' => ['공무원 여비 규정', '출장비', '일비', '숙박비', '식비'],
-    'year-end-settlement' => ['연말정산', '소득세법', '세액공제', '소득공제'],
-    'budget-carryover' => ['예산이월', '지방재정법', '사고이월', '명시이월'],
-    'private-contract' => ['수의계약', '지방계약법', '추정가격'],
-    'private-contract-limit' => ['수의계약 한도', '지방계약법 시행령'],
-    'single-quote' => ['1인견적', '수의계약'],
-    'dual-quote' => ['2인 이상 견적', '2인견적', '나라장터', '지정정보처리장치'],
-    'emergency-contract' => ['긴급수의', '긴급계약'],
-    'price-negotiation' => ['수의시담', '가격협상']
+    "travel-expense" => [ "공무원 여비 규정", "출장비", "일비", "숙박비", "식비" ],
+    "year-end-settlement" => [ "연말정산", "소득세법", "세액공제", "소득공제" ],
+    "budget-carryover" => [ "예산이월", "지방재정법", "사고이월", "명시이월" ],
+    "private-contract" => [ "수의계약", "지방계약법", "추정가격" ],
+    "private-contract-limit" => [ "수의계약 한도", "지방계약법 시행령" ],
+    "single-quote" => [ "1인견적", "수의계약" ],
+    "dual-quote" => [ "2인 이상 견적", "2인견적", "나라장터", "지정정보처리장치" ],
+    "emergency-contract" => [ "긴급수의", "긴급계약" ],
+    "price-negotiation" => [ "수의시담", "가격협상" ]
   }.freeze
 
   # 도구별 검증 항목
   TOOL_VERIFICATIONS = {
-    'travel_calculator' => {
-      file: 'app/views/tools/travel_calculator.html.erb',
-      checks: ['숙박비: 서울 7만원, 광역시 6만원, 기타 5만원 (2026.01.02 시행)']
+    "travel_calculator" => {
+      file: "app/views/tools/travel_calculator.html.erb",
+      checks: [ "숙박비: 서울 7만원, 광역시 6만원, 기타 5만원 (2026.01.02 시행)" ]
     },
-    'estimated_price' => {
-      file: 'app/services/estimated_price_service.rb',
+    "estimated_price" => {
+      file: "app/services/estimated_price_service.rb",
       checks: [
-        '수의계약 한도: 물품/용역 2천만원, 공사 2억원 (전문공사 기준)',
-        '견적 요건: 2백만원 이하 생략 가능, 2천만원 이하 1인 견적',
-        '이윤율 상한: 용역 10%, 공사 15%',
-        '일반관리비 상한: 8%'
+        "수의계약 한도: 물품/용역 2천만원, 공사 2억원 (전문공사 기준)",
+        "견적 요건: 2백만원 이하 생략 가능, 2천만원 이하 1인 견적",
+        "이윤율 상한: 용역 10%, 공사 15%",
+        "일반관리비 상한: 8%"
       ]
     },
-    'contract_reason' => {
-      file: 'app/views/contract_reasons/index.html.erb',
-      checks: ['공사 금액: 종합 4억, 전문 2억, 기타 1.6억']
+    "contract_reason" => {
+      file: "app/views/contract_reasons/index.html.erb",
+      checks: [ "공사 금액: 종합 4억, 전문 2억, 기타 1.6억" ]
     },
-    'legal_period' => {
-      file: 'app/services/legal_period_service.rb',
-      checks: ['입찰공고: 10억 미만 7일, 10억~50억 15일, 50억 이상 40일']
+    "legal_period" => {
+      file: "app/services/legal_period_service.rb",
+      checks: [ "입찰공고: 10억 미만 7일, 10억~50억 15일, 50억 이상 40일" ]
     }
   }.freeze
 
   def initialize
-    @api_key = ENV['ANTHROPIC_API_KEY']
+    @api_key = ENV["ANTHROPIC_API_KEY"]
     @changes = []
     @errors = []
   end
@@ -81,7 +81,7 @@ class RegulationVerifier
   def verify_topic(topic)
     log "\n[#{topic.slug}] #{topic.name} 검증 중..."
 
-    keywords = TOPIC_KEYWORDS[topic.slug] || [topic.name]
+    keywords = TOPIC_KEYWORDS[topic.slug] || [ topic.name ]
 
     VERIFIABLE_FIELDS.each do |field|
       content = topic.send(field)
@@ -314,23 +314,23 @@ class RegulationVerifier
     http.read_timeout = 60
 
     request = Net::HTTP::Post.new(uri)
-    request['Content-Type'] = 'application/json'
-    request['x-api-key'] = @api_key
-    request['anthropic-version'] = '2023-06-01'
+    request["Content-Type"] = "application/json"
+    request["x-api-key"] = @api_key
+    request["anthropic-version"] = "2023-06-01"
 
     request.body = {
-      model: 'claude-3-5-sonnet-20241022',
+      model: "claude-3-5-sonnet-20241022",
       max_tokens: 2000,
       messages: [
-        { role: 'user', content: prompt }
+        { role: "user", content: prompt }
       ]
     }.to_json
 
     response = http.request(request)
 
-    if response.code == '200'
+    if response.code == "200"
       result = JSON.parse(response.body)
-      content = result.dig('content', 0, 'text')
+      content = result.dig("content", 0, "text")
       parse_ai_response(content)
     else
       log "  ⚠️ API 오류: #{response.code}"
@@ -442,7 +442,7 @@ class RegulationVerifier
   end
 
   def save_report
-    report_dir = Rails.root.join('log', 'regulation_reports')
+    report_dir = Rails.root.join("log", "regulation_reports")
     FileUtils.mkdir_p(report_dir)
 
     report_file = report_dir.join("report_#{Time.current.strftime('%Y%m%d_%H%M%S')}.json")

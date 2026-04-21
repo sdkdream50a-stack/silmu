@@ -95,7 +95,7 @@ attrs = {
     - 전용 승인 전에 먼저 집행 → 예산 초과 지적
     - 인건비 목 예산을 업무추진비로 전용 시도 → 절대 불가
   CONTENT
-  qa_content: <<~CONTENT,
+  qa_content: <<~CONTENT
     ## 자주 묻는 질문
 
     **Q. 전용과 이용을 어떻게 구분하나요?**

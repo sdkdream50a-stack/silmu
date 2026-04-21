@@ -77,7 +77,7 @@ gem "omniauth-naver"
 gem "omniauth-rails_csrf_protection"
 gem "pagy", "~> 6.0"
 gem "meta-tags", "~> 2.18"
-gem "dotenv-rails", groups: [:development, :test]
+gem "dotenv-rails", groups: [ :development, :test ]
 gem "heroicon", "~> 1.0"
 
 # ========== AI 기능 ==========

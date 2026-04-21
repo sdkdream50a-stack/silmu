@@ -1,6 +1,5 @@
 # 계약보증금·하자보증금·인지세·지체상금 계산기 컨트롤러
 class ContractGuaranteesController < ApplicationController
-
   # GET /tools/contract-guarantee
   def index
     @guarantee_types = ContractGuaranteeService.get_contract_guarantee_types

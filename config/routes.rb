@@ -1,49 +1,49 @@
 Rails.application.routes.draw do
   # exam.silmu.kr 서브도메인 — 공공조달관리사 시험 대비
-  constraints subdomain: 'exam' do
-    scope module: 'exam', as: 'exam' do
-      root to: 'home#index'
-      resources :subjects, only: [:index, :show] do
-        resources :chapters, only: [:show], param: :number
+  constraints subdomain: "exam" do
+    scope module: "exam", as: "exam" do
+      root to: "home#index"
+      resources :subjects, only: [ :index, :show ] do
+        resources :chapters, only: [ :show ], param: :number
       end
-      get 'keywords', to: 'keywords#index', as: :keywords
-      get 'quiz', to: 'quizzes#index', as: :quiz_index
-      get 'quiz/subject/:subject_id/chapter/:chapter_num', to: 'quizzes#chapter', as: :quiz_chapter
-      get 'quiz/mini', to: 'quizzes#mini', as: :quiz_mini
-      get 'quiz/bookmarks', to: 'quizzes#bookmarks', as: :quiz_bookmarks
-      get 'quiz/wrong', to: 'quizzes#wrong', as: :quiz_wrong
-      get 'quiz/simulation', to: 'quizzes#simulation', as: :quiz_simulation
-      get 'quiz/analysis', to: 'quizzes#analysis', as: :quiz_analysis
+      get "keywords", to: "keywords#index", as: :keywords
+      get "quiz", to: "quizzes#index", as: :quiz_index
+      get "quiz/subject/:subject_id/chapter/:chapter_num", to: "quizzes#chapter", as: :quiz_chapter
+      get "quiz/mini", to: "quizzes#mini", as: :quiz_mini
+      get "quiz/bookmarks", to: "quizzes#bookmarks", as: :quiz_bookmarks
+      get "quiz/wrong", to: "quizzes#wrong", as: :quiz_wrong
+      get "quiz/simulation", to: "quizzes#simulation", as: :quiz_simulation
+      get "quiz/analysis", to: "quizzes#analysis", as: :quiz_analysis
       # quiz/questions는 quiz/:id 와일드카드보다 반드시 앞에 위치해야 함
-      get 'quiz/questions', to: 'quizzes#questions_by_ids', as: :quiz_questions_api
-      get 'quiz/:id', to: 'quizzes#show', as: :quiz
-      get 'exam-info', to: 'exam_info#index', as: :exam_info
-      get 'exam-strategy', to: 'strategy#index', as: :exam_strategy
-      get 'sitemap.xml', to: 'sitemap#index', defaults: { format: :xml }
+      get "quiz/questions", to: "quizzes#questions_by_ids", as: :quiz_questions_api
+      get "quiz/:id", to: "quizzes#show", as: :quiz
+      get "exam-info", to: "exam_info#index", as: :exam_info
+      get "exam-strategy", to: "strategy#index", as: :exam_strategy
+      get "sitemap.xml", to: "sitemap#index", defaults: { format: :xml }
 
       # #6 서버 기반 진도 저장 동기화
-      get 'sync', to: 'sync#show', as: :sync
-      post 'sync', to: 'sync#create'
+      get "sync", to: "sync#show", as: :sync
+      post "sync", to: "sync#create"
 
       # #7 AI 해설
-      post 'quiz/explain', to: 'explanations#create', as: :quiz_explain
+      post "quiz/explain", to: "explanations#create", as: :quiz_explain
 
       # #8 주간 랭킹
-      get 'rankings', to: 'rankings#index', as: :rankings
-      patch 'rankings/nickname', to: 'rankings#update_nickname', as: :rankings_nickname
+      get "rankings", to: "rankings#index", as: :rankings
+      patch "rankings/nickname", to: "rankings#update_nickname", as: :rankings_nickname
 
       # #9 실기 대비
-      get 'practical', to: 'practical#index', as: :practical
+      get "practical", to: "practical#index", as: :practical
 
       # #10 Q&A 커뮤니티 (문제별 댓글)
       resources :questions, only: [] do
-        resources :comments, controller: 'question_comments', only: [ :index, :create, :destroy ] do
+        resources :comments, controller: "question_comments", only: [ :index, :create, :destroy ] do
           member do
             post :like
             post :report
           end
         end
-        resources :reports, controller: 'question_reports', only: [ :create ]
+        resources :reports, controller: "question_reports", only: [ :create ]
       end
     end
   end
@@ -119,7 +119,7 @@ Rails.application.routes.draw do
   get "topics/:slug", to: "topics#show", as: :topic
 
   # 문서 양식
-  resources :templates, only: [:index, :show]
+  resources :templates, only: [ :index, :show ]
 
   # 완전정복 시리즈 랜딩 페이지
   get "series/:slug", to: "series#show", as: :series, constraints: { slug: /[a-z][a-z0-9-]+/ }
@@ -134,10 +134,10 @@ Rails.application.routes.draw do
   get "guides/contract-flow", to: "guides#contract_flow", as: :contract_flow
   get "guides/pre-contract-checklist", to: "guides#pre_contract_checklist", as: :pre_contract_checklist
   get "guides/resources", to: "guides#resources", as: :guide_resources
-  resources :guides, only: [:index, :show], param: :slug
+  resources :guides, only: [ :index, :show ], param: :slug
 
   # 업무달력 데이터 동기화
-  resource :calendar_data, only: [:show, :update]
+  resource :calendar_data, only: [ :show, :update ]
 
   # 업무 AI 가이드
   get "task_guides", to: "task_guides#show"
@@ -291,14 +291,14 @@ Rails.application.routes.draw do
   post "feedback", to: "feedback#create"
 
   # 북마크
-  resources :bookmarks, only: [:create, :destroy, :index]
+  resources :bookmarks, only: [ :create, :destroy, :index ]
 
   # 법령 개정 알림 구독
-  resources :law_change_subscriptions, only: [:create, :destroy]
+  resources :law_change_subscriptions, only: [ :create, :destroy ]
 
   # 토픽 Q&A 댓글
   scope "/topics/:topic_slug" do
-    resources :comments, controller: :topic_comments, only: [:create], as: :topic_comments
+    resources :comments, controller: :topic_comments, only: [ :create ], as: :topic_comments
     post "/comments/:id/like", to: "topic_comments#like", as: :topic_comment_like
   end
 
@@ -321,16 +321,16 @@ Rails.application.routes.draw do
 
   # 관리자
   namespace :admin do
-    resources :newsletters, only: [:new, :create]
+    resources :newsletters, only: [ :new, :create ]
     get "analytics", to: "analytics#index", as: :analytics
-    resources :exam_dashboard, only: [:index] do
+    resources :exam_dashboard, only: [ :index ] do
       collection do
         patch :restore_comment
         delete :delete_comment
         delete :delete_report
       end
     end
-    resources :topic_comments, only: [:index, :destroy] do
+    resources :topic_comments, only: [ :index, :destroy ] do
       member do
         patch :hide
         patch :unhide

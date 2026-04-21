@@ -1,6 +1,6 @@
 class BookmarksController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_bookmark, only: [:destroy]
+  before_action :set_bookmark, only: [ :destroy ]
 
   # GET /bookmarks — 마이페이지 북마크 목록
   def index

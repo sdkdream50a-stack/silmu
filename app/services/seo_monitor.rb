@@ -49,7 +49,7 @@ class SeoMonitor
       topics_count: Topic.published.count,
       audit_cases_count: AuditCase.published.count,
       tools_count: 19, # ACTIVE_TOOL_COUNT
-      topics_with_faq: Topic.published.where.not(faqs: [nil, "", "[]"]).count,
+      topics_with_faq: Topic.published.where.not(faqs: [ nil, "", "[]" ]).count,
       topics_without_meta: Topic.published.where("summary IS NULL OR summary = ''").count
     }
   end
@@ -78,7 +78,7 @@ class SeoMonitor
       sitemap_urls: count_sitemap_urls,
       avg_meta_length: calculate_avg_meta_length,
       topics_with_article_jsonld: Topic.published.count,  # 모든 토픽에 Article JSON-LD 출력
-      topics_with_faq_jsonld: Topic.published.where.not(faqs: [nil, "", "[]"]).count,  # FAQPage JSON-LD 포함 토픽
+      topics_with_faq_jsonld: Topic.published.where.not(faqs: [ nil, "", "[]" ]).count,  # FAQPage JSON-LD 포함 토픽
       canonical_issues: 0 # 모두 수정됨
     }
   end
@@ -104,7 +104,7 @@ class SeoMonitor
 
   def self.count_sitemap_urls
     begin
-      require 'net/http'
+      require "net/http"
       uri = URI("#{SITE_URL}/sitemap.xml")
       response = Net::HTTP.get_response(uri)
       response.body.scan(/<url>/).count
@@ -115,7 +115,7 @@ class SeoMonitor
   end
 
   def self.calculate_avg_meta_length
-    lengths = Topic.published.where.not(summary: [nil, ""]).pluck(:summary).map(&:length)
+    lengths = Topic.published.where.not(summary: [ nil, "" ]).pluck(:summary).map(&:length)
     lengths.any? ? (lengths.sum / lengths.size) : 0
   end
 
@@ -123,7 +123,7 @@ class SeoMonitor
     # 실제로는 PageSpeed Insights API 호출
     # 여기서는 로컬 테스트
     begin
-      require 'net/http'
+      require "net/http"
       uri = URI(SITE_URL)
       start_time = Time.now
       Net::HTTP.get_response(uri)

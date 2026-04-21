@@ -1,6 +1,5 @@
 # 법정기간 계산기 컨트롤러
 class LegalPeriodsController < ApplicationController
-
   # GET /tools/legal-period
   def index
     @period_types = LegalPeriodService.get_period_types

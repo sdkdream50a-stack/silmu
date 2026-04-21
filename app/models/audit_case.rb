@@ -4,7 +4,7 @@ class AuditCase < ApplicationRecord
   # Sector enum (0: common 공통, 1: local_gov 지자체, 2: edu 교육행정)
   enum :sector, { common: 0, local_gov: 1, edu: 2 }, default: :common
   # "common" 또는 blank 전달 시 전체 반환 (common은 모든 sector에 공유되므로)
-  scope :for_sector, ->(s) { where(sector: [:common, s]) if s.present? && s != "common" }
+  scope :for_sector, ->(s) { where(sector: [ :common, s ]) if s.present? && s != "common" }
 
   scope :published, -> { where(published: true) }
   scope :by_category, ->(cat) { where(category: cat) if cat.present? }
@@ -81,7 +81,7 @@ class AuditCase < ApplicationRecord
   private
 
   def notify_indexnow
-    SitemapPingJob.perform_later(["https://#{SitemapPingJob::HOST}/audit-cases/#{slug}"])
+    SitemapPingJob.perform_later([ "https://#{SitemapPingJob::HOST}/audit-cases/#{slug}" ])
   end
 
   def expire_count_cache

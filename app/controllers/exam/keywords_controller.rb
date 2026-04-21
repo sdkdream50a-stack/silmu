@@ -1,5 +1,5 @@
 class Exam::KeywordsController < ApplicationController
-  layout 'exam'
+  layout "exam"
 
   def index
     # 메모이제이션된 키워드+상세 통합 데이터 사용 (매 요청마다 ~100회 merge 제거)

@@ -14,6 +14,6 @@ class CreateTopicComments < ActiveRecord::Migration[8.1]
 
     add_index :topic_comments, :topic_slug
     add_index :topic_comments, :parent_id
-    add_index :topic_comments, [:topic_slug, :hidden, :created_at]
+    add_index :topic_comments, [ :topic_slug, :hidden, :created_at ]
   end
 end
