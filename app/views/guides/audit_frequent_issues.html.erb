@@ -101,11 +101,11 @@
 
         <%= render "guides/audit_item", number: 10, severity: "medium", title: "낙찰자 결정 후 계약 체결 지연",
             law: "국가계약법 시행령 제47조, 지방계약법 시행령 제58조",
-            issue: "낙찰 통보 후 5일 이내(수의계약 10일) 계약 체결 의무 미준수",
+            issue: "낙찰 통보 후 10일 이내(수의계약 5일) 계약 체결 의무 미준수",
             prevention: "낙찰 통보 즉시 계약 체결 일정 수립. 지연 불가피 시 사유서 작성", tool_label: nil, tool_path: nil %>
 
         <%= render "guides/audit_item", number: 11, severity: "medium", title: "검수·검사 부실 또는 생략",
-            law: "국가계약법 시행령 제55조~제57조, 지방계약법 시행령 제64조",
+            law: "국가계약법 시행령 제55조~제57조, 지방계약법 시행령 제66조",
             issue: "납품 확인 없이 대금 지급, 검수조서 미작성, 검사·검수 담당자 지정 없이 처리",
             prevention: "납품 즉시 검수 실시 후 검수조서 작성. 담당자 사전 지정 및 전결 처리",
             tool_label: "기성검사 체크리스트", tool_path: :progress_inspection_path %>
