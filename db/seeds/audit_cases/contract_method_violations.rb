@@ -468,7 +468,7 @@ AuditCase.find_or_create_by!(slug: 'unit-price-contract-quantity-exceeded') do |
   ac.published = true
   ac.view_count = 0
   ac.topic_slug = 'unit-price-contract'
-  ac.legal_basis = '지방계약법 시행령 제71조 (단가계약), 지방재정법 제38조 (지출원인행위), 지방계약법 제7조 (경쟁의 원칙)'
+  ac.legal_basis = '지방계약법 시행령 제79조 (단가계약), 지방회계법 제29조 (지출원인행위), 지방계약법 제7조 (경쟁의 원칙)'
   ac.issue = '○○도 도로관리팀에서 아스팔트 패칭 자재 단가계약(연간 수량 200톤 한도) 체결 후 실제 280톤을 발주하여 초과 80톤 분을 한도 초과 단가로 집행하고, 추가 경쟁입찰 없이 기존 단가계약 업체와 수의계약 처리한 사례.'
 
   ac.detail = <<~DETAIL

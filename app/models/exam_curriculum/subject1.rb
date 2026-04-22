@@ -845,10 +845,10 @@ module ExamCurriculum
             { topic: "수의계약 한도", national: "시행령 제26조", local: "시행령 제25조", note: "금액 기준 동일" },
             { topic: "지체상금", national: "시행령 제74조 (지체상금)", local: "시행령 제90조 (지연배상금)", note: "공사: 국가 1/1000 > 지방 0.5/1000" },
             { topic: "설계변경", national: "시행령 제65조", local: "시행령 제74조", note: "번호 역전 주의" },
-            { topic: "검사", national: "시행령 제55조", local: "시행령 제64조", note: "" },
+            { topic: "검사", national: "시행령 제55조", local: "시행령 제66조", note: "" },
             { topic: "대가(금)지급", national: "시행령 제58조", local: "시행령 제67조", note: "국가=대가, 지방=대금" },
             { topic: "장기계속계약", national: "시행령 제69조", local: "시행령 제78조", note: "" },
-            { topic: "계약보증금", national: "시행령 제50조", local: "시행령 제51조", note: "" },
+            { topic: "계약보증금", national: "시행령 제50조", local: "시행령 제50조", note: "지방은 제51조가 면제" },
             { topic: "분할계약금지", national: "시행령 제68조(공사)", local: "시행령 제77조", note: "" },
             { topic: "부정당업자", national: "시행령 제76조", local: "시행령 제92조", note: "" }
           ],

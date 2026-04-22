@@ -86,7 +86,7 @@ AuditCase.find_or_create_by!(slug: 'guideline-abolished-project-budget') do |ac|
   ac.published = true
   ac.view_count = 0
   ac.topic_slug = 'budget-compilation-guideline'
-  ac.legal_basis = '지방재정법 제36조의2(예산편성 운영기준), 지방재정법 제38조(지출원인행위), 행정안전부 지방자치단체 예산편성 운영기준(훈령) — 폐지 사업 재계상 금지 조항'
+  ac.legal_basis = '지방재정법 제36조(예산 편성의 원칙), 지방회계법 제29조(지출원인행위 — 예산 범위 내 집행), 행정안전부 지방자치단체 예산편성 운영기준(훈령) — 폐지 사업 재계상 금지 조항'
   ac.issue = '△△군 복지과가 행안부 예산편성 운영기준에서 신규 편성 금지로 명시된 읍·면 경로당 특별수당 사업을 이듬해 예산에 그대로 재계상하고 집행하여 4,500만원 부적정 집행 판정'
   ac.detail = <<~DETAIL
 ## 사건 개요
