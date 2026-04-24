@@ -8,7 +8,7 @@ AuditCase.find_or_create_by!(slug: 'defective-construction-cover-up') do |ac|
   ac.published = true
   ac.view_count = 0
   ac.topic_slug = nil  # 부실 시공 관련 토픽이 없으므로 nil
-  ac.legal_basis = '지방계약법 제14조 (검사), 지방계약법 시행령 제56조 (준공검사), 형법 제129조 (수뢰죄), 건설산업기본법 제82조 (부정행위 금지)'
+  ac.legal_basis = '지방계약법 제17조 (검사), 지방계약법 시행령 제64조 (검사), 형법 제129조 (수뢰죄), 건설산업기본법 제82조 (부정행위 금지)'
 
   ac.issue = '△△시 ○○교 교량 보수공사(12억원)에서 시공사가 콘크리트 두께·철근 배근 기준을 준수하지 않고 부실 시공한 후, 감독 공무원과 검사 담당자에게 금품을 제공하여 준공검사를 부정 통과함. 완공 1년 후 교량 균열 발생으로 적발되어 전면 재시공.'
 

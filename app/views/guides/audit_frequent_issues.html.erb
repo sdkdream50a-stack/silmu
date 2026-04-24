@@ -76,9 +76,9 @@
             tool_label: "계약보증금 계산기", tool_path: :contract_guarantee_path %>
 
         <%= render "guides/audit_item", number: 6, severity: "high", title: "지체상금 미부과·과소 부과",
-            law: "국가계약법 시행규칙 제75조, 지방계약법 시행규칙 제94조",
+            law: "국가계약법 시행령 제74조·시행규칙 제75조, 지방계약법 시행령 제90조·시행규칙 제75조",
             issue: "준공 기일 이후 지체일수 계산 오류, 천재지변·발주자 귀책 등 면제 사유 없이 감면, 지체상금 부과 누락",
-            prevention: "준공일 지연 즉시 지체상금 산정. 지체일수 = 준공기한 다음날~실준공일. 상한(계약금액의 10%) 확인",
+            prevention: "준공일 지연 즉시 지체상금 산정. 지체일수 = 준공기한 다음날~실준공일. 상한(계약금액의 30%) 확인",
             tool_label: "계약보증금·지체상금 계산기", tool_path: :contract_guarantee_path %>
 
         <%= render "guides/audit_item", number: 7, severity: "high", title: "설계변경 계약금액 조정 부적정",

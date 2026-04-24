@@ -111,7 +111,7 @@ AuditCase.find_or_create_by!(slug: 'small-amount-intentional-split') do |ac|
   ac.published = true
   ac.view_count = 0
   ac.topic_slug = 'small-amount-contract'
-  ac.legal_basis = '지방계약법 제7조 제1항 (경쟁의 원칙), 지방계약법 시행령 제25조 제1항 제5호, 지방계약법 시행규칙 제48조 (분할계약 금지)'
+  ac.legal_basis = '지방계약법 제7조 제1항 (경쟁의 원칙), 지방계약법 시행령 제25조 제1항 제5호, 지방계약법 시행령 제77조 (공사의 분할계약 금지)'
   ac.issue = '△△시 정보통신과에서 소프트웨어 유지관리 용역(총 1억 5천만원)을 임의로 3개 시스템으로 나누어 건당 5천만원 이하로 만든 뒤 각각 소액 수의계약 처리하여 경쟁입찰을 회피한 사례.'
 
   ac.detail = <<~DETAIL
@@ -174,7 +174,7 @@ AuditCase.find_or_create_by!(slug: 'small-amount-intentional-split') do |ac|
 
 ### 3. 소액 수의계약 한도(2천만원/5천만원)에 맞추기 위한 분할은 명백한 위법입니다
 
-지방계약법 제7조는 경쟁 원칙을 규정하며, 시행규칙 제48조는 분할계약을 명시적으로 금지합니다. "관행이었다", "바쁘다"는 이유는 면책 사유가 아닙니다.
+지방계약법 제7조는 경쟁 원칙을 규정하며, 시행령 제77조는 분할계약을 명시적으로 금지합니다. "관행이었다", "바쁘다"는 이유는 면책 사유가 아닙니다.
 
 ### 4. 결재자도 책임을 집니다
 
@@ -289,7 +289,7 @@ AuditCase.find_or_create_by!(slug: 'split-contract-to-avoid-bidding') do |ac|
   ac.published = true
   ac.view_count = 0
   ac.topic_slug = 'split-contract'
-  ac.legal_basis = '지방계약법 제7조 제1항 (경쟁의 원칙), 지방계약법 시행규칙 제48조 (분할계약 금지), 지방계약법 시행령 제25조 제1항 (수의계약 기준)'
+  ac.legal_basis = '지방계약법 제7조 제1항 (경쟁의 원칙), 지방계약법 시행령 제77조 (공사의 분할계약 금지), 지방계약법 시행령 제25조 제1항 (수의계약 기준)'
   ac.issue = '◇◇군 건설과에서 마을 진입로 포장공사(총 예산 3억 5천만원)를 2개 구간으로 나눠 각 1억 7천만원대로 계약하여 종합공사 일반경쟁입찰 기준을 회피하고 지명경쟁 또는 수의계약으로 처리한 사례.'
 
   ac.detail = <<~DETAIL
@@ -324,7 +324,7 @@ AuditCase.find_or_create_by!(slug: 'split-contract-to-avoid-bidding') do |ac|
 
 ### 적법한 처리 기준
 
-총 공사금액 3억 4,700만원은 전문공사 기준 2억원을 초과하므로, **일반경쟁입찰**로 시행했어야 합니다(지방계약법 시행령 제25조). 단일 사업을 분할하여 금액 기준을 낮추는 행위는 지방계약법 시행규칙 제48조가 명시적으로 금지하는 분할계약에 해당합니다.
+총 공사금액 3억 4,700만원은 전문공사 기준 2억원을 초과하므로, **일반경쟁입찰**로 시행했어야 합니다(지방계약법 시행령 제25조). 단일 사업을 분할하여 금액 기준을 낮추는 행위는 지방계약법 시행령 제77조가 명시적으로 금지하는 분할계약에 해당합니다.
 
 ### 처분 결과
 
@@ -377,7 +377,7 @@ AuditCase.find_or_create_by!(slug: 'split-order-monthly-to-avoid-bidding') do |a
   ac.published = true
   ac.view_count = 0
   ac.topic_slug = 'split-contract-prohibition'
-  ac.legal_basis = '지방계약법 제7조 제1항 (경쟁의 원칙), 지방계약법 시행규칙 제48조 (분할계약 금지), 지방계약법 시행령 제80조 (단가계약 활용)'
+  ac.legal_basis = '지방계약법 제7조 제1항 (경쟁의 원칙), 지방계약법 시행령 제77조 (공사의 분할계약 금지), 지방계약법 시행령 제79조 (단가계약)'
   ac.issue = '▽▽시 총무과에서 연간 복사용지·사무용품 소요량(총 6,000만원)을 월별 500만원으로 분할하여 동일 업체와 소액 수의계약 12건을 반복 체결함으로써 입찰을 회피한 사례.'
 
   ac.detail = <<~DETAIL
