@@ -31,6 +31,8 @@ Rails.application.configure do
                        "code.iconify.design",
                        "www.googletagmanager.com",
                        "www.clarity.ms",
+                       "scripts.clarity.ms",
+                       "static.cloudflareinsights.com",
                        "t1.kakaocdn.net"         # Kakao 공유 SDK
 
     policy.style_src   :self, :unsafe_inline,
@@ -45,6 +47,9 @@ Rails.application.configure do
                        "region1.analytics.google.com",
                        "stats.g.doubleclick.net",
                        "www.clarity.ms",
+                       "c.clarity.ms",
+                       "c.bing.com",
+                       "cloudflareinsights.com",
                        "api.iconify.design",
                        "api.simplesvg.com",
                        "api.unisvg.com"

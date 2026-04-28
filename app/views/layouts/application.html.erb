@@ -214,12 +214,8 @@
           gtag('config', '<%= ENV['GA_MEASUREMENT_ID'] %>');
         }
 
-        // requestIdleCallback 사용 (유휴 시간에 로드) 또는 3초 후
-        if ('requestIdleCallback' in window) {
-          requestIdleCallback(loadGoogleAnalytics, { timeout: 3000 });
-        } else {
-          setTimeout(loadGoogleAnalytics, 3000);
-        }
+        // Analytics는 window load 이후에만 시작해 탭 로딩 표시가 길어지지 않게 한다.
+        window.addEventListener('load', function() { setTimeout(loadGoogleAnalytics, 2500); }, { once: true });
       </script>
     <% end %>
 
@@ -235,11 +231,8 @@
           })(window, document, "clarity", "script", "<%= Rails.application.credentials.clarity_project_id %>");
         }
 
-        if ('requestIdleCallback' in window) {
-          requestIdleCallback(loadClarity, { timeout: 3000 });
-        } else {
-          setTimeout(loadClarity, 3000);
-        }
+        // Clarity도 load 이후 지연 로드. 초기 렌더/탭 로딩 표시와 분리한다.
+        window.addEventListener('load', function() { setTimeout(loadClarity, 3000); }, { once: true });
       </script>
     <% end %>
 
