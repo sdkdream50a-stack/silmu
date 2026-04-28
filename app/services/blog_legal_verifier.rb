@@ -3,6 +3,31 @@
 # blog_autopilot 블로그 본문의 법령·수치 정확성 검증
 # RegulationVerifier의 체크리스트 + LawApiService 조문 조회를 결합
 class BlogLegalVerifier
+  # 인용 조문 환각 검증 — 검증 가능한 법령 (LawSyncJob TARGET_LAWS 일치)
+  # 본문이 인용한 "<법령명> 제X조"의 실존 여부를 법제처 API로 교차검증.
+  # 법령명을 정확히 컴파일하기 위해 약칭/정식명 모두 패턴에 포함.
+  CITATION_LAW_RE = /
+    (?:
+      공무원\s*여비\s*규정 |
+      소득세법(?:\s*시행령)? |
+      지방재정법(?:\s*시행령)? |
+      지방자치단체를\s*당사자로\s*하는\s*계약에\s*관한\s*법률(?:\s*시행령|\s*시행규칙)? |
+      국가를\s*당사자로\s*하는\s*계약에\s*관한\s*법률(?:\s*시행령)? |
+      지방계약법(?:\s*시행령|\s*시행규칙)? |
+      국가계약법(?:\s*시행령)?
+    )
+  /x.freeze
+
+  CITATION_RE = /
+    (?<law>#{CITATION_LAW_RE.source})
+    \s*제(?<art>\d+)조
+    (?:의(?<sub>\d+))?
+    (?:\s*제(?<para>\d+)항)?
+  /x.freeze
+
+  # 1회 verify에서 검증할 최대 인용 수 (외부 API 호출 latency 보호 — Python 15s 타임아웃)
+  MAX_CITATIONS_PER_VERIFY = 3
+
   # 검증 기준 — 출처: regulation_verifier.rb TOOL_VERIFICATIONS + 법제처 원문
   # 형식: { pattern: Regexp, correct: "올바른 표현", source: "근거 법령" }
   AMOUNT_CHECKS = [
@@ -71,6 +96,7 @@ class BlogLegalVerifier
 
     check_amounts(text)
     check_expressions(text)
+    check_citations(text)
 
     {
       valid: @issues.empty?,
@@ -126,5 +152,71 @@ class BlogLegalVerifier
 
     # 단순 포함 비교 (예: "2" in "2천만원")
     correct_amount.include?(extracted_normalized)
+  end
+
+  # 인용 조문 환각 검증
+  # 본문에서 "<법령명> 제X조" 패턴을 추출 → 법제처 API로 실존 여부 교차검증.
+  # 존재하지 않는 조문이면 wrong_citation 이슈로 기록 (auto-replace는 비활성:
+  # correct를 빈 문자열로 두어 silmu_verifier.py의 apply_corrections가 스킵).
+  def check_citations(text)
+    found = {}
+    text.to_s.scan(CITATION_RE) do
+      m = Regexp.last_match
+      key = m[0].strip
+      found[key] ||= { law: m[:law], art: m[:art].to_i, raw: key }
+    end
+
+    found.values.take(MAX_CITATIONS_PER_VERIFY).each do |c|
+      canonical = canonical_law_name(c[:law])
+      mst = mst_for(canonical)
+      next if mst.blank? # 검증 불가 → 통과 (false positive 방지)
+
+      next if article_exists?(mst, c[:art])
+
+      @issues << {
+        type: "wrong_citation",
+        found: c[:raw],
+        correct: "", # auto-replace 비활성 — 블로그 본문 자동 수정 부적합
+        note: "법제처 현행 #{canonical}에서 제#{c[:art]}조를 찾을 수 없음",
+        source: "법제처 lawService API 교차검증"
+      }
+    end
+  rescue => e
+    Rails.logger.warn "[BlogLegalVerifier] check_citations 실패: #{e.class} #{e.message}"
+  end
+
+  # 추출된 법령명 raw → canonical (시행령/시행규칙 접미사 보존)
+  def canonical_law_name(raw)
+    s = raw.to_s.gsub(/\s+/, " ").strip
+    if s =~ /\A(.+?)\s*(시행령|시행규칙)\z/
+      base = Regexp.last_match(1).strip
+      suffix = Regexp.last_match(2)
+      "#{LawAliasResolver.resolve(base).canonical} #{suffix}"
+    else
+      LawAliasResolver.resolve(s).canonical
+    end
+  end
+
+  # 정식명 → MST. LawContentFetcher의 7일 캐시 위에 추가 캐시 한 겹.
+  def mst_for(canonical)
+    Rails.cache.fetch("blog_verify/mst/#{Digest::MD5.hexdigest(canonical)}", expires_in: 7.days) do
+      meta = LawContentFetcher.new.fetch_law_meta(canonical)
+      meta&.dig(:mst)
+    end
+  rescue => e
+    Rails.logger.warn "[BlogLegalVerifier] mst_for 오류 (#{canonical}): #{e.message}"
+    nil
+  end
+
+  # (mst, 조번호) 쌍의 조문 실존 여부. 7일 캐시.
+  # 보수적 정책: API 오류 시 true 반환(통과) — false positive로 블로그 본문 차단 방지.
+  def article_exists?(mst, n)
+    Rails.cache.fetch("blog_verify/article_exists/#{mst}/#{n}", expires_in: 7.days) do
+      xml = LawApiService.new.fetch_article(mst, n)
+      !!(xml && xml.at_css("조문번호, 조문제목, 조문내용"))
+    end
+  rescue => e
+    Rails.logger.warn "[BlogLegalVerifier] article_exists? 오류 (mst=#{mst}, n=#{n}): #{e.message}"
+    true
   end
 end
