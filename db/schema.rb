@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_28_100000) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_28_145442) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -241,6 +241,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_100000) do
     t.index ["user_id"], name: "index_topic_comments_on_user_id"
   end
 
+  create_table "topic_feedbacks", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "ip_hash"
+    t.text "memo"
+    t.integer "rating", null: false
+    t.string "topic_slug", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id"
+    t.index ["created_at"], name: "index_topic_feedbacks_on_created_at"
+    t.index ["topic_slug", "ip_hash"], name: "idx_topic_feedback_dedupe"
+    t.index ["topic_slug"], name: "index_topic_feedbacks_on_topic_slug"
+    t.index ["user_id"], name: "index_topic_feedbacks_on_user_id"
+  end
+
   create_table "topics", force: :cascade do |t|
     t.text "audit_cases"
     t.string "category"
@@ -262,6 +276,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_100000) do
     t.text "practical_tips"
     t.boolean "published", default: false
     t.text "qa_content"
+    t.jsonb "quick_stats", default: []
     t.text "regulation_content"
     t.text "rule_content"
     t.integer "sector", default: 0, null: false

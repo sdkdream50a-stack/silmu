@@ -1,0 +1,68 @@
+<% content_for :title, "사용자 만족도 — Admin" %>
+
+<div class="container-wide py-8">
+  <h1 class="text-2xl font-bold text-slate-900 mb-2">토픽 만족도 (TopicFeedback)</h1>
+  <p class="text-sm text-slate-600 mb-6">Sprint Task #5 — Krug·NN/g 권위자 권고 — 사용자 콘텐츠 신호 측정</p>
+
+  <%# 통계 카드 %>
+  <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-6">
+    <% [
+      { label: "전체",       value: @stats[:total],            color: "slate" },
+      { label: "👍 도움됨",  value: @stats[:up],               color: "emerald" },
+      { label: "👎 부족",    value: @stats[:down],             color: "rose" },
+      { label: "메모 첨부",  value: @stats[:with_memo],        color: "amber" },
+      { label: "만족도",     value: "#{@stats[:satisfaction_rate]}%", color: "blue" }
+    ].each do |c| %>
+      <div class="bg-white border border-slate-200 rounded-lg p-3 text-center">
+        <p class="text-xs text-slate-500 m-0"><%= c[:label] %></p>
+        <p class="text-xl font-bold text-<%= c[:color] %>-600 m-0"><%= c[:value] %></p>
+      </div>
+    <% end %>
+  </div>
+
+  <%# 필터 %>
+  <div class="flex gap-2 mb-4">
+    <%= link_to "전체",    admin_topic_feedbacks_path, class: "px-3 py-1 text-sm rounded #{params[:rating].blank? ? 'bg-slate-900 text-white' : 'bg-white border border-slate-200'}" %>
+    <%= link_to "👍 도움됨", admin_topic_feedbacks_path(rating: 1), class: "px-3 py-1 text-sm rounded #{params[:rating] == '1' ? 'bg-emerald-600 text-white' : 'bg-white border border-slate-200'}" %>
+    <%= link_to "👎 부족",  admin_topic_feedbacks_path(rating: 0), class: "px-3 py-1 text-sm rounded #{params[:rating] == '0' ? 'bg-rose-600 text-white' : 'bg-white border border-slate-200'}" %>
+  </div>
+
+  <%# 리스트 %>
+  <div class="bg-white border border-slate-200 rounded-lg overflow-hidden">
+    <table class="w-full text-sm">
+      <thead class="bg-slate-50">
+        <tr>
+          <th class="text-left px-3 py-2 font-medium">시간</th>
+          <th class="text-left px-3 py-2 font-medium">토픽</th>
+          <th class="text-center px-3 py-2 font-medium">평가</th>
+          <th class="text-left px-3 py-2 font-medium">메모</th>
+          <th class="text-center px-3 py-2 font-medium">사용자</th>
+          <th class="text-center px-3 py-2 font-medium">작업</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if @feedbacks.empty? %>
+          <tr><td colspan="6" class="text-center py-6 text-slate-400">아직 피드백이 없습니다.</td></tr>
+        <% else %>
+          <% @feedbacks.each do |fb| %>
+            <tr class="border-t border-slate-100">
+              <td class="px-3 py-2 text-slate-500 text-xs"><%= fb.created_at.strftime("%m/%d %H:%M") %></td>
+              <td class="px-3 py-2"><%= link_to fb.topic_slug, topic_path(fb.topic_slug), class: "text-blue-600 hover:underline" %></td>
+              <td class="px-3 py-2 text-center"><%= fb.up? ? "👍" : "👎" %></td>
+              <td class="px-3 py-2 text-slate-700"><%= fb.memo.presence || "—" %></td>
+              <td class="px-3 py-2 text-center text-xs text-slate-500"><%= fb.user_id || "익명" %></td>
+              <td class="px-3 py-2 text-center">
+                <%= button_to "삭제", admin_topic_feedback_path(fb), method: :delete,
+                      class: "text-xs text-red-600 hover:underline",
+                      form: { class: "inline-block" },
+                      data: { turbo_confirm: "삭제할까요?" } %>
+              </td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <%= pagy_nav(@pagy) if @pagy %>
+</div>

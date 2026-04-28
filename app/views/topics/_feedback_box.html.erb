@@ -1,0 +1,41 @@
+<%# Sprint Task #5 — 토픽 만족도 1클릭 (Krug + NN/g 권위자 검증)
+    👍/👎 + 선택적 메모. 익명 허용, 24h 중복 차단 (IP+UA hash) %>
+<section class="my-10 border-t border-slate-200 pt-6">
+  <div class="max-w-2xl mx-auto text-center">
+    <p class="text-sm text-slate-700 font-medium mb-3">이 가이드가 도움이 되었나요?</p>
+
+    <div class="flex justify-center gap-3 flex-wrap">
+      <%= button_to topic_feedbacks_path, params: { topic_slug: @topic.slug, rating: 1 },
+            method: :post,
+            class: "inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-slate-200 hover:border-emerald-400 hover:bg-emerald-50 text-sm font-medium text-slate-700 transition-colors",
+            form: { class: "inline-block" } do %>
+        <span class="material-symbols-outlined text-base text-emerald-600" aria-hidden="true">thumb_up</span>
+        도움 됐어요
+      <% end %>
+
+      <button type="button"
+              class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-slate-200 hover:border-rose-400 hover:bg-rose-50 text-sm font-medium text-slate-700 transition-colors"
+              onclick="document.getElementById('topic-feedback-down-form').classList.toggle('hidden')">
+        <span class="material-symbols-outlined text-base text-rose-600" aria-hidden="true">thumb_down</span>
+        부족해요
+      </button>
+    </div>
+
+    <%# 👎 클릭 시 메모 입력창 노출 (NN/g 권고 패턴) %>
+    <div id="topic-feedback-down-form" class="hidden mt-4">
+      <%= form_with url: topic_feedbacks_path, method: :post, local: true, class: "space-y-2" do |f| %>
+        <%= f.hidden_field :topic_slug, value: @topic.slug %>
+        <%= f.hidden_field :rating, value: 0 %>
+        <%= f.text_area :memo,
+              rows: 3,
+              maxlength: 1000,
+              class: "w-full max-w-md mx-auto block px-3 py-2 text-sm border border-slate-300 rounded-lg focus:border-rose-400 focus:ring-1 focus:ring-rose-200",
+              placeholder: "어떤 점이 부족했는지 알려주세요 (선택, 1000자 이내)" %>
+        <%= f.submit "의견 보내기",
+              class: "inline-flex items-center gap-1 px-4 py-2 rounded-lg bg-rose-500 hover:bg-rose-600 text-white text-sm font-medium" %>
+      <% end %>
+    </div>
+
+    <p class="mt-3 text-[11px] text-slate-400">실무.kr는 사용자 의견을 콘텐츠 우선순위 결정에 반영합니다 · 익명 가능</p>
+  </div>
+</section>

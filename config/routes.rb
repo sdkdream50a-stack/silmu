@@ -352,7 +352,11 @@ Rails.application.routes.draw do
         patch :unhide
       end
     end
+    resources :topic_feedbacks, only: [ :index, :destroy ]
   end
+
+  # Sprint Task #5 — 사용자 만족도 1클릭 (익명 허용)
+  resources :topic_feedbacks, only: [ :create ]
 
   # 사이트맵
   get "sitemap.xml", to: "sitemap#index", as: :sitemap, defaults: { format: :xml }

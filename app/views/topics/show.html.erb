@@ -146,6 +146,20 @@
               <span class="material-symbols-outlined" style="font-size:13px" aria-hidden="true">gavel</span>
               <span class="legal-citation">근거: <%= topic_law_label(@topic) %></span>
             </p>
+            <%# Quick Stats — 핵심 수치 표 (Sprint Task #4: Schwartz·Tufte 검색 의도 매칭) %>
+            <% if @topic.respond_to?(:quick_stats) && @topic.quick_stats.is_a?(Array) && @topic.quick_stats.any? %>
+              <div class="quick-stats mt-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 max-w-3xl" role="group" aria-label="핵심 수치">
+                <% @topic.quick_stats.each do |s| %>
+                  <div class="bg-white/10 border border-white/20 rounded-lg px-3 py-2 backdrop-blur-sm">
+                    <p class="text-[11px] text-white/60 m-0 leading-tight"><%= s["label"] %></p>
+                    <p class="law-key-fact text-base lg:text-lg font-bold text-amber-200 m-0 leading-tight"><%= s["value"] %></p>
+                    <% if s["note"].present? %>
+                      <p class="text-[11px] text-white/50 m-0 mt-0.5 leading-tight"><%= s["note"] %></p>
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
             <p class="mt-2 text-xs text-white/60 flex items-center gap-3 flex-wrap">
               <span class="law-key-fact flex items-center gap-1">
                 <span class="material-symbols-outlined" style="font-size:14px">verified</span>
@@ -1776,6 +1790,11 @@ initTabs();
 document.addEventListener('turbo:load', initTabs);
 document.addEventListener('turbo:render', initTabs);
 </script>
+
+<%# Sprint Task #5 — 만족도 1클릭 (Krug + NN/g 권위자 검증) %>
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+  <%= render "feedback_box" %>
+</div>
 
 <%= render 'shared/recent_items',
       title: @topic.name,
