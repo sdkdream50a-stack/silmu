@@ -65,6 +65,10 @@ Rails.application.routes.draw do
   # ads.txt — 컨트롤러에서 서빙 (1일 TTL, Cloudflare 1년 캐시 우회)
   get "ads.txt", to: "ads_txt#show", format: false
 
+  # IETF AI Preferences 초안 표준 (.well-known/ai.txt) — 5차 권위자 AGO 추천
+  # 기존 /ai.txt 정적 파일을 표준 위치에서도 노출
+  get "/.well-known/ai.txt", to: redirect("/ai.txt", status: 301), format: false
+
   # SEO 최적화: 404 방지 리디렉션
   get "favicon.ico", to: redirect("/favicon.svg")
   get "audit_cases", to: redirect("/audit-cases", status: 301), as: :audit_cases_underscore

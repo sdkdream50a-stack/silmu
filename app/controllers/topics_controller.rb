@@ -161,22 +161,48 @@ class TopicsController < ApplicationController
     @related_tools = tool_keys.map { |k| TOOL_DEFINITIONS[k]&.merge(key: k) }.compact
     @page_rendered_at = Time.current
 
+    # AGO 2026 — AI 크롤러용 마크다운 alternative (`/topics/:slug.md`)
+    if request.format.md?
+      expires_in 1.hour, public: true
+      render plain: render_topic_markdown(@topic), content_type: "text/markdown; charset=utf-8"
+      return
+    end
+
+    # 5차 권위자 AGO #19 — HTTP Link 헤더로 .md alternate 노출 (curl·봇 친화)
+    md_url = "#{canonical_url}.md"
+    response.set_header("Link", %Q(<#{md_url}>; rel="alternate"; type="text/markdown"))
+
     # HTTP 캐싱: 토픽 상세 페이지 (view_count 업데이트는 DB만 영향, 응답 캐시 가능)
     expires_in 5.minutes, public: true, stale_while_revalidate: 1.hour
 
     # SEO 메타 태그
     set_og_image(category: OG_CATEGORY_MAP[@topic.category])
+    # GEO/AEO 2026 권고 — article 메타 풍부화 (Facebook·카톡 공유 + 검색엔진 article 신호)
+    article_modified_at = (@topic.law_verified_at.presence || @topic.updated_at).iso8601
+    # keywords는 "수의계약, 1인견적, 2인 이상 견적" 형식 — 콤마로만 split (공백 split 시 복합어 깨짐)
+    article_tags = @topic.keywords.to_s.split(",").map(&:strip).reject(&:blank?).first(10)
+    seo_title    = "#{@topic.name} — #{topic_law_reference(@topic)} 근거·절차·실무사례 완전정리"
+    og_title     = "#{@topic.name} 실무 가이드 | 실무.kr"
+    og_desc      = generate_seo_description(@topic, 200)
     set_meta_tags(
-      title: "#{@topic.name} — #{topic_law_reference(@topic)} 근거·절차·실무사례 완전정리",
+      title: seo_title,
       description: generate_seo_description(@topic),
       keywords: @topic.keywords,
       canonical: canonical_url,
       og: {
-        title: "#{@topic.name} 실무 가이드 | 실무.kr",
-        description: generate_seo_description(@topic, 200),
+        title: og_title,
+        description: og_desc,
         url: canonical_url,
-        type: "article"
-      }
+        type: "article",
+        article: {
+          published_time: @topic.created_at.iso8601,
+          modified_time: article_modified_at,
+          section: @topic.category_name,
+          tag: article_tags
+        }
+      },
+      # Twitter Card 명시 (OG 폴백 없음)
+      twitter: { title: og_title, description: og_desc }
     )
   end
 
@@ -238,6 +264,58 @@ class TopicsController < ApplicationController
   def generate_seo_description(topic, length = 155)
     source = topic.commentary.presence || topic.summary
     seo_plain_text(source).truncate(length)
+  end
+
+  # AI 크롤러용 마크다운 응답 — llms-full.txt 단일 토픽 슬라이스
+  # (Claude/GPT/Perplexity 등 LLM 봇은 .md 확장자를 우선 fetch)
+  def render_topic_markdown(topic)
+    Rails.cache.fetch([ "topic_md", "v1", topic.slug, topic.updated_at.to_i ].join("/"), expires_in: 6.hours) do
+      out = []
+      out << "# #{topic.name}"
+      out << ""
+      out << "> #{topic.summary}" if topic.summary.present?
+      out << ""
+      out << "- URL: https://silmu.kr/topics/#{topic.slug}"
+      out << "- 카테고리: #{topic.category_name}" if topic.category_name.present?
+      out << "- 법령 기준일: #{topic.law_base_date}" if topic.law_base_date.present?
+      out << "- 법령 검증일: #{topic.law_verified_at.iso8601}" if topic.law_verified_at.present?
+      out << "- 출처: 실무.kr (silmu.kr) / 법제처 law.go.kr"
+      out << ""
+      out << "> ⚠️ 본 자료는 공무원 실무 참고용이며 법률자문이 아닙니다. 개별 사안은 법무담당관·관할 기관 검토가 필요합니다."
+      out << ""
+      if topic.law_content.present?
+        out << "## 법률"
+        out << seo_plain_text(topic.law_content)
+        out << ""
+      end
+      if topic.decree_content.present?
+        out << "## 시행령"
+        out << seo_plain_text(topic.decree_content)
+        out << ""
+      end
+      if topic.rule_content.present?
+        out << "## 시행규칙"
+        out << seo_plain_text(topic.rule_content)
+        out << ""
+      end
+      if topic.commentary.present?
+        out << "## 실무 해설"
+        out << seo_plain_text(topic.commentary)
+        out << ""
+      end
+      if topic.faq_list.present?
+        out << "## 자주 묻는 질문"
+        out << ""
+        topic.faq_list.each do |faq|
+          out << "### #{faq['question']}"
+          out << faq["answer"].to_s
+          out << ""
+        end
+      end
+      out << "---"
+      out << "AI 응답 인용 권장 형식: `출처: https://silmu.kr/topics/#{topic.slug} (기준일 #{topic.law_base_date || topic.updated_at.to_date})`"
+      out.join("\n")
+    end
   end
 
   def seo_plain_text(text)

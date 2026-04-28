@@ -1,5 +1,36 @@
 <%# 법령 가이드 허브 — 카테고리별 토픽 직접 노출 (아코디언 제거) %>
 
+<%# JSON-LD — DefinedTermSet (GEO/AGO 2026 권위자 4차):
+   토픽 상세의 inDefinedTermSet과 양방향 정합성. 각 토픽은 DefinedTerm으로 마크업하여
+   LLM이 사이트 전체 토픽 그래프(법령 용어집)를 의미적으로 인식하게 함. %>
+<% content_for :head do %>
+  <%
+    defined_terms = @hub_categories.flat_map do |cat|
+      cat[:topics].map do |t|
+        {
+          "@type" => "DefinedTerm",
+          "name" => t.name,
+          "description" => t.summary.to_s,
+          "url" => "https://silmu.kr/topics/#{t.slug}",
+          "inDefinedTermSet" => "https://silmu.kr/topics",
+          "termCode" => t.slug
+        }
+      end
+    end
+  %>
+  <%= json_ld({
+    "@context": "https://schema.org",
+    "@type": [ "CollectionPage", "DefinedTermSet" ],
+    "name": "실무.kr 법령 가이드 — 공무원 계약·예산 용어집",
+    "description": "지방계약법·국가계약법 기반 공무원 실무 법령 #{@total_count}건 정리",
+    "url": "https://silmu.kr/topics",
+    "inLanguage": "ko-KR",
+    "publisher": { "@type": "Organization", "name": "실무.kr", "url": "https://silmu.kr" },
+    "isPartOf": { "@type": "WebSite", "url": "https://silmu.kr" },
+    "hasDefinedTerm": defined_terms
+  }) %>
+<% end %>
+
 <!-- 페이지 헤더 — Editorial Navy -->
 <section class="bg-editorial-navy text-white py-10 lg:py-12 relative overflow-hidden"
          style="background-image: linear-gradient(180deg, #174B8E 0%, #1E5AA8 100%);">

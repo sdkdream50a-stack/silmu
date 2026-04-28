@@ -1,21 +1,78 @@
 <%# 주제 상세 페이지 - 프리미엄 디자인 시스템 %>
 
-<%# JSON-LD 구조화 데이터 %>
+<%# JSON-LD 구조화 데이터 (GEO/AEO 최적화 — 2026 권위자 표준)
+   - Article: speakable + articleSection + keywords + isBasedOn(법령 1차 출처)
+   - dateModified: law_verified_at 우선 (law_content 변경 시 갱신, citation freshness 신호)
+   - FAQPage: speakable (음성 검색/Google Assistant 인용 대응) %>
 <% content_for :head do %>
+  <% date_modified = (@topic.law_verified_at.presence || @topic.updated_at).iso8601 %>
+  <%
+    # Article hasPart — 페이지에 포함된 주요 섹션 명시 (LLM 콘텐츠 구조 신호)
+    has_part = []
+    has_part << { "@type" => "WebPageElement", "name" => "법령 본문", "cssSelector" => ".law-content" } if @topic.law_content.present?
+    has_part << { "@type" => "WebPageElement", "name" => "실무 해설", "cssSelector" => ".commentary" } if @topic.commentary.present?
+    has_part << { "@type" => "FAQPage", "name" => "자주 묻는 질문", "cssSelector" => "#faq-section" } if @topic.faq_list.present?
+    has_part << { "@type" => "WebPageElement", "name" => "감사사례", "cssSelector" => ".audit-cases" } if @related_audit_cases&.any?
+  %>
+  <%# 5차 권위자 AGO #19 — .md alternative URL을 HTML head에서도 명시 (HTML 크롤러 발견 경로) %>
+  <link rel="alternate" type="text/markdown" href="<%= canonical_url %>.md" title="<%= @topic.name %> (Markdown)">
   <%= json_ld({
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": [ "Article", "LearningResource" ],
     "headline": "#{@topic.name} — 지방계약법 근거·절차·실무사례 완전정리",
     "description": @topic.summary,
-    "author": { "@type": "Organization", "name": "실무.kr" },
+    "author": { "@type": "Organization", "name": "실무.kr", "url": "https://silmu.kr" },
     "publisher": { "@type": "Organization", "name": "실무.kr", "logo": { "@type": "ImageObject", "url": "https://silmu.kr/icon.png" } },
     "url": canonical_url,
-    "image": "https://silmu.kr/og-image.webp",
-    "inLanguage": "ko",
+    # 5차 권위자 SEO #21 — image를 ImageObject 객체로 (width/height/caption — Google 이미지·OG 카드 정확성 ↑)
+    "image": {
+      "@type": "ImageObject",
+      "url": (@og_image_path.presence || "https://silmu.kr/og-image.webp"),
+      "width": 1200,
+      "height": 630,
+      "caption": "#{@topic.name} — 실무.kr"
+    },
+    "inLanguage": "ko-KR",
     "datePublished": @topic.created_at.iso8601,
-    "dateModified": @topic.updated_at.iso8601,
-    "mainEntityOfPage": canonical_url
-  }) %>
+    "dateModified": date_modified,
+    "lastReviewed": date_modified,
+    "reviewedBy": { "@type": "Organization", "name": "실무.kr 법령검증팀", "url": "https://silmu.kr/about" },
+    "mainEntityOfPage": canonical_url,
+    "articleSection": @topic.category_name,
+    "keywords": (@topic.keywords.presence || @topic.name).to_s,
+    "isBasedOn": topic_legal_basis,
+    # 5차 권위자 GEO+AEO #20 — wordCount + timeRequired (LearningResource 정량 신호)
+    "wordCount": topic_word_count(@topic),
+    "timeRequired": topic_reading_time_iso(@topic),
+    # 5차 권위자 GEO #22 — mainEntity DefinedTerm (자기 자신, 양방향 의미 매핑)
+    "mainEntity": {
+      "@type": "DefinedTerm",
+      "@id": "#{canonical_url}#term",
+      "name": @topic.name,
+      "termCode": @topic.slug,
+      "inDefinedTermSet": "https://silmu.kr/topics"
+    },
+    # LearningResource 신호 — 공무원 실무 학습 리소스로 명시 (AI Overviews 인용 ↑)
+    "learningResourceType": "Practical Guide",
+    "educationalLevel": "Professional",
+    "audience": { "@type": "Audience", "audienceType": "공무원·공공기관 계약·재무 담당자", "geographicArea": { "@type": "Country", "name": "대한민국" } },
+    "teaches": @topic.name,
+    "inDefinedTermSet": "https://silmu.kr/topics",
+    # 인기도 신호 — 조회수를 InteractionCounter로 노출 (popularity 신호)
+    "interactionStatistic": {
+      "@type": "InteractionCounter",
+      "interactionType": "https://schema.org/ReadAction",
+      "userInteractionCount": @topic.view_count.to_i
+    },
+    "potentialAction": { "@type": "ReadAction", "target": [ canonical_url ] },
+    "speakable": {
+      "@type": "SpeakableSpecification",
+      "cssSelector": [ ".topic-summary", ".topic-headline", ".faq-answer", ".quick-answer", ".legal-citation", ".law-key-fact" ]
+    },
+    # citation — LLM 인용 시 법조문까지 함께 끌고 가도록 (4차 권위자 GEO 추천)
+    "citation": topic_legal_basis,
+    "hasPart": has_part
+  }.compact) %>
   <%= json_ld({
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -30,9 +87,25 @@
     <%= json_ld({
       "@context": "https://schema.org",
       "@type": "FAQPage",
+      "inLanguage": "ko-KR",
+      "speakable": {
+        "@type": "SpeakableSpecification",
+        "cssSelector": [ ".faq-answer" ]
+      },
       "mainEntity": @topic.faq_list.map { |faq|
         { "@type": "Question", "name": faq["question"], "acceptedAnswer": { "@type": "Answer", "text": faq["answer"] } }
       }
+    }) %>
+  <% end %>
+  <%# HowTo Schema — 절차형 토픽 (howto_steps 입력 시만 출력). AI Overviews 인용률 ↑ %>
+  <% if @topic.respond_to?(:howto_steps) && @topic.howto_steps.is_a?(Array) && @topic.howto_steps.any? %>
+    <%= json_ld({
+      "@context": "https://schema.org",
+      "@type": "HowTo",
+      "name": "#{@topic.name} 절차",
+      "description": @topic.summary,
+      "inLanguage": "ko-KR",
+      "step": topic_howto_steps(@topic.howto_steps)
     }) %>
   <% end %>
 <% end %>
@@ -62,10 +135,19 @@
             <span class="material-symbols-outlined text-4xl text-white">gavel</span>
           </div>
           <div>
-            <h1 class="text-3xl lg:text-4xl font-bold tracking-tight"><%= @topic.name %></h1>
-            <p class="text-slate-200 mt-2 text-lg"><%= @topic.summary %></p>
+            <h1 class="topic-headline text-3xl lg:text-4xl font-bold tracking-tight"><%= @topic.name %></h1>
+            <%# Quick Answer Block — GenOptima 2026 권고: above-the-fold 즉답 박스 (AI 인용률 ↑) %>
+            <div class="topic-summary quick-answer mt-3 inline-flex items-start gap-2.5 bg-white/15 border border-white/30 rounded-xl px-4 py-3 backdrop-blur-sm max-w-3xl">
+              <span class="material-symbols-outlined text-amber-300 text-xl shrink-0 mt-0.5" aria-hidden="true">verified</span>
+              <p class="text-slate-100 text-base lg:text-lg leading-relaxed m-0"><%= @topic.summary %></p>
+            </div>
+            <%# 법령 인용 chip — speakable .legal-citation (4차 GEO 추천: LLM이 법령명까지 함께 인용) %>
+            <p class="mt-2 inline-flex items-center gap-1.5 text-xs font-medium text-white/85 bg-white/10 border border-white/20 rounded-md px-2 py-1">
+              <span class="material-symbols-outlined" style="font-size:13px" aria-hidden="true">gavel</span>
+              <span class="legal-citation">근거: <%= topic_law_label(@topic) %></span>
+            </p>
             <p class="mt-2 text-xs text-white/60 flex items-center gap-3 flex-wrap">
-              <span class="flex items-center gap-1">
+              <span class="law-key-fact flex items-center gap-1">
                 <span class="material-symbols-outlined" style="font-size:14px">verified</span>
                 <%= (@topic.law_base_date || @topic.updated_at.strftime("%Y.%m.%d")) %> 기준 법령 반영
               </span>
@@ -1095,7 +1177,7 @@ document.addEventListener('click', function(e) {
                     </span>
                     <span id="faq-icon-<%= index %>" class="material-symbols-outlined text-slate-400 transition-transform duration-200 text-2xl">expand_more</span>
                   </button>
-                  <div id="faq-answer-<%= index %>" class="hidden px-6 py-5 bg-white border-t-2 border-gray-100">
+                  <div id="faq-answer-<%= index %>" class="faq-answer hidden px-6 py-5 bg-white border-t-2 border-gray-100">
                     <div class="flex gap-4">
                       <span class="w-9 h-9 bg-editorial-navy-bg text-editorial-navy-dark rounded-full flex items-center justify-center text-base font-bold shrink-0">A</span>
                       <p class="text-slate-700 text-base whitespace-pre-line leading-relaxed"><%= faq['answer'] %></p>

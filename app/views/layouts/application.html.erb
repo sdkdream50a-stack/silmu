@@ -39,14 +39,16 @@
 
     <%= yield :head %>
 
-    <%# 전체 사이트 JSON-LD 구조화 데이터 %>
+    <%# 전체 사이트 JSON-LD 구조화 데이터 (E-E-A-T 신호 강화) %>
     <%= json_ld({
       "@context": "https://schema.org",
       "@type": "WebSite",
       "name": "실무.kr",
+      "alternateName": "실무 — 공무원 계약·예산 실무 가이드",
       "url": "https://silmu.kr",
-      "description": "공무원을 위한 계약 실무 가이드",
-      "inLanguage": "ko",
+      "description": "공무원을 위한 계약·예산 실무 가이드 — 지방계약법·국가계약법·여비규정 기반 법령 해설과 자동화 도구",
+      "inLanguage": "ko-KR",
+      "publisher": { "@type": "Organization", "name": "실무.kr", "url": "https://silmu.kr" },
       "potentialAction": {
         "@type": "SearchAction",
         "target": {
@@ -60,17 +62,35 @@
       "@context": "https://schema.org",
       "@type": "Organization",
       "name": "실무.kr",
+      "alternateName": [ "실무", "silmu", "silmu.kr" ],
       "url": "https://silmu.kr",
       "logo": { "@type": "ImageObject", "url": "https://silmu.kr/icon.png", "width": 512, "height": 512 },
       "email": "hello@silmu.kr",
-      "description": "공무원을 위한 계약 실무 가이드, 자동화 도구, 법령 해설",
+      "description": "공무원을 위한 계약·예산 실무 가이드, 자동화 도구, 법령 해설, 감사사례 분석",
+      "knowsAbout": [
+        "지방자치단체를 당사자로 하는 계약에 관한 법률",
+        "국가를 당사자로 하는 계약에 관한 법률",
+        "공무원 여비 규정",
+        "공무원 보수 규정",
+        "지방재정법",
+        "수의계약", "입찰", "적격심사", "계약보증금", "지체상금", "예산편성"
+      ],
+      "areaServed": { "@type": "Country", "name": "대한민국" },
       "contactPoint": {
         "@type": "ContactPoint",
         "email": "hello@silmu.kr",
         "contactType": "customer support",
-        "availableLanguage": "Korean"
+        "availableLanguage": [ "Korean", "ko" ]
       }
     }) %>
+    <%# SiteNavigationElement — Google Sitelinks Search Box 신호 강화 %>
+    <%= json_ld([
+      { "@context": "https://schema.org", "@type": "SiteNavigationElement", "name": "법령 가이드", "url": "https://silmu.kr/topics" },
+      { "@context": "https://schema.org", "@type": "SiteNavigationElement", "name": "자동화 도구", "url": "https://silmu.kr/tools" },
+      { "@context": "https://schema.org", "@type": "SiteNavigationElement", "name": "감사사례", "url": "https://silmu.kr/audit-cases" },
+      { "@context": "https://schema.org", "@type": "SiteNavigationElement", "name": "서식 템플릿", "url": "https://silmu.kr/templates" },
+      { "@context": "https://schema.org", "@type": "SiteNavigationElement", "name": "실무 가이드", "url": "https://silmu.kr/guides" }
+    ]) %>
 
     <%# Fonts - 비동기 로딩으로 렌더 블로킹 제거 %>
     <%# Iconify preconnect 제거 — requestIdleCallback으로 지연 로딩되므로 초기 대역폭 경합 방지 %>

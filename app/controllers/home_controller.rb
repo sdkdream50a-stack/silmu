@@ -109,19 +109,30 @@ class HomeController < ApplicationController
       response.headers["Cache-Control"] = "public, max-age=60, stale-while-revalidate=300"
     end
 
-    description_text = "공무원을 위한 계약·예산 실무 종합 플랫폼. 수의계약, 적격심사, 입찰, 검수, 예산 편성 등 #{@topic_count}개 현행 법령 가이드와 #{ApplicationHelper::ACTIVE_TOOL_COUNT}개 자동화 도구를 무료로 제공합니다. #{@audit_case_count}건 실제 감사사례 분석으로 실수를 예방하고, #{@template_count}종 서식 템플릿으로 업무 시간을 절약하고 안전한 공무를 실현하세요."
+    # description 압축 (190자 → 약 120자) — Google SERP 한국어 잘림 방지
+    # 핵심 숫자(통계)는 GenOptima 2026 GEO 권고: AI 인용 시 신뢰도 +40% 효과
+    description_text = "공무원 계약·예산 실무 통합 플랫폼. 수의계약·적격심사·입찰·검수·여비까지 법령 가이드 #{@topic_count}개, 자동화 도구 #{ApplicationHelper::ACTIVE_TOOL_COUNT}개, 감사사례 #{@audit_case_count}건, 서식 #{@template_count}종 무료 제공."
+
+    # title 축소 (모바일 SERP 잘림 방지) — site 접미사 "| 실무.kr" 포함 30자 내외
+    page_title = "공무원 계약·예산 실무 가이드 — 수의계약·입찰·여비"
+    og_title   = "실무.kr — 공무원 계약 실무 가이드"
 
     set_meta_tags(
-      title: "공무원 계약·예산 실무 가이드 — 수의계약·입찰·여비 법령 안내",
+      title: page_title,
       description: description_text,
       keywords: "공무원, 계약 실무, 수의계약, 입찰, 검수, 예산, 실무 도구",
       canonical: canonical_url,
       og: {
-        title: "실무.kr — 공무원 계약 실무 가이드",
+        title: og_title,
         description: description_text,
         url: canonical_url,
         image: "https://silmu.kr/og-image.webp",
         type: "website"
+      },
+      # Twitter Card 명시 — OG 자동 폴백되지 않으므로 title/description 별도 출력
+      twitter: {
+        title: og_title,
+        description: description_text
       }
     )
   end
@@ -134,19 +145,23 @@ class HomeController < ApplicationController
     audit_case_count = Rails.cache.fetch("stats/audit_case_count", expires_in: 30.minutes) { AuditCase.published.count }
     template_count   = TemplatesController::TEMPLATES.count
     tool_count       = ApplicationHelper::ACTIVE_TOOL_COUNT
-    description_text = "실무(silmu.kr)는 공무원의 계약·예산 업무를 돕는 무료 플랫폼입니다. 법령 가이드 #{topic_count}개, 자동화 도구 #{tool_count}개, 감사사례 #{audit_case_count}건, 서식 템플릿 #{template_count}개를 제공하여 복잡한 법령과 절차를 쉽게 이해하고 실무에 바로 적용할 수 있도록 지원합니다."
+    # description 압축 (170자 → 약 100자) — SERP 한국어 잘림 방지
+    description_text = "공무원 계약·예산 무료 플랫폼. 법령 가이드 #{topic_count}개, 자동화 도구 #{tool_count}개, 감사사례 #{audit_case_count}건, 서식 #{template_count}개로 복잡한 절차를 쉽게 안내합니다."
+
+    og_title = "실무.kr 서비스 소개"
 
     set_meta_tags(
-      title: "서비스 소개 — 공무원 계약·예산 실무 무료 플랫폼",
+      title: "서비스 소개 — 공무원 계약·예산 실무 플랫폼",
       description: description_text,
       canonical: canonical_url,
       og: {
-        title: "실무.kr 서비스 소개",
+        title: og_title,
         description: description_text,
         url: canonical_url,
         image: "https://silmu.kr/og-image.webp",
         type: "website"
-      }
+      },
+      twitter: { title: og_title, description: description_text }
     )
   end
 

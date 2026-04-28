@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_22_000001) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_28_100000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -250,6 +250,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_22_000001) do
     t.jsonb "faqs", default: []
     t.text "flowchart_mermaid"
     t.string "flowchart_url"
+    t.jsonb "howto_steps", default: []
     t.string "infographic_url"
     t.text "interpretation_content"
     t.text "keywords"

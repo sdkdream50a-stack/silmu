@@ -54,14 +54,16 @@ class ApplicationController < ActionController::Base
 
   def set_default_meta_tags
     og_image = @og_image_path.presence || "https://silmu.kr/og-image.webp"
+    default_description = "공무원을 위한 계약 실무 가이드 — 수의계약, 입찰, 검수, 예산 업무를 쉽고 정확하게"
     set_meta_tags(
       site: "실무.kr",
       separator: "|",
       reverse: true,
-      description: "공무원을 위한 계약 실무 가이드 — 수의계약, 입찰, 검수, 예산 업무를 쉽고 정확하게",
+      description: default_description,
       canonical: canonical_url,
       og: { site_name: "실무.kr", type: "website", locale: "ko_KR", image: { _: og_image, width: 1200, height: 630, type: "image/webp" } },
-      twitter: { card: "summary_large_image", site: "@silmu_kr", image: og_image }
+      # twitter title/description은 OG 자동 폴백되지 않음 — 명시 출력 (Twitter Card 권장 표준)
+      twitter: { card: "summary_large_image", site: "@silmu_kr", image: og_image, title: "실무.kr", description: default_description }
     )
   end
 
