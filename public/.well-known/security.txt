@@ -1,0 +1,12 @@
+# silmu.kr Security Contact (RFC 9116)
+# https://datatracker.ietf.org/doc/html/rfc9116
+
+Contact: mailto:hello@silmu.kr
+Expires: 2027-04-28T00:00:00.000Z
+Preferred-Languages: ko, en
+Canonical: https://silmu.kr/.well-known/security.txt
+
+# 취약점 신고 가이드
+# - 재현 가능한 PoC와 영향 범위를 함께 기재해 주세요.
+# - 보고자 정보는 별도 요청이 없으면 비공개로 처리합니다.
+# - 신고 후 합리적 시간(통상 90일) 내 패치 후 공개를 원칙으로 합니다.

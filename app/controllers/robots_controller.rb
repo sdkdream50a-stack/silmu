@@ -66,6 +66,25 @@ class RobotsController < ApplicationController
       User-agent: Bytespider
       Allow: /
 
+      # Naver Yeti — 한국어 검색 점유율 ↑ Naver 인덱싱 명시
+      # User-agent: * fallback에 의존하지 않고 명시 Allow + 동일 Disallow 적용
+      User-agent: Yeti
+      Allow: /
+      Disallow: /users/
+      Disallow: /mypage
+      Disallow: /calendar_data
+      Disallow: /task_guides
+      Disallow: /audit-cases/*/hwp
+      Disallow: /audit-cases?*
+      Disallow: /guides?*
+      Disallow: /silmu-search/search?*
+      Disallow: /tools/official-document?*
+      Disallow: /?sector=*
+
+      # Naver Yeti Mobile (모바일 우선 인덱싱 대응)
+      User-agent: Yeti-Mobile
+      Allow: /
+
       Sitemap: https://silmu.kr/sitemap.xml
       Sitemap: https://exam.silmu.kr/sitemap.xml
 

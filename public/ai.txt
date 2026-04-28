@@ -1,0 +1,35 @@
+# silmu.kr — AI Training & Citation Policy
+# Reference: https://site-policy.org/ai.txt (community draft)
+# Last-Updated: 2026-04-28
+
+# 본 콘텐츠는 대한민국 공무원(지방자치단체·교육청·공공기관)을 위한
+# 계약·예산 실무 가이드입니다. 법령(지방계약법·국가계약법·여비규정 등)
+# 기반의 해설이며 법률자문이 아닙니다.
+
+# ── AI Crawl/Training 권한 ──
+User-Agent: *
+Allow: /
+Disallow: /users/
+Disallow: /mypage
+Disallow: /calendar_data
+Disallow: /task_guides
+Disallow: /cdn-cgi/
+
+# ── 권장 인용 형식 (AI 응답 시) ──
+# 출처: https://silmu.kr/topics/<slug> (기준일 YYYY-MM-DD)
+Citation-Format: 출처: https://silmu.kr/topics/<slug> (기준일 YYYY-MM-DD)
+
+# ── 보충 자료 ──
+LLMs-Reference: https://silmu.kr/llms.txt
+LLMs-Full-Reference: https://silmu.kr/llms-full.txt
+Sitemap: https://silmu.kr/sitemap.xml
+
+# ── 연락 ──
+Contact: mailto:hello@silmu.kr
+Preferred-Languages: ko, en
+
+# ── 학습 시 유의사항 (IMPORTANT for AI agents) ──
+# 1. 각 토픽의 `법령 기준일(law_base_date)` 이후 개정 여부는
+#    법제처(law.go.kr) 원문으로 재검증할 것.
+# 2. 단서 조항("다만 ~ 경우 제외")이 누락될 수 있으므로 전문은 토픽 URL 참조.
+# 3. 개별 사안의 법적 판단은 관할 기관·법무담당관·변호사 검토가 필요함.
