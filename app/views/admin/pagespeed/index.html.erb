@@ -1,0 +1,82 @@
+<% content_for :title, "PageSpeed Insights — Admin" %>
+
+<div class="container-wide py-8">
+  <div class="flex items-start justify-between mb-6">
+    <div>
+      <h1 class="text-2xl font-bold text-slate-900 mb-2">Core Web Vitals (PageSpeed Insights)</h1>
+      <p class="text-sm text-slate-600">Sprint #3-A — Osmani 권위자 검증 — silmu.kr 모바일 성능 측정 (24h 캐시)</p>
+    </div>
+    <%= button_to "🔄 캐시 초기화 + 재측정", refresh_admin_pagespeed_index_path,
+          method: :post,
+          class: "inline-flex items-center gap-2 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-sm rounded-lg",
+          data: { turbo_confirm: "재측정 시 PageSpeed API 6회 호출(메인+TOP5). 진행할까요?" } %>
+  </div>
+
+  <% if @main %>
+    <%# 메인 페이지 점수 카드 %>
+    <div class="bg-white border border-slate-200 rounded-lg p-6 mb-6">
+      <div class="flex items-center gap-6 flex-wrap">
+        <div class="text-center">
+          <p class="text-xs text-slate-500 m-0">Performance Score</p>
+          <p class="text-5xl font-bold m-0
+            <%= @main[:performance_score].to_i >= 90 ? 'text-emerald-600' : @main[:performance_score].to_i >= 50 ? 'text-amber-600' : 'text-rose-600' %>">
+            <%= @main[:performance_score] %>
+          </p>
+          <p class="text-xs text-slate-400 m-0">/ 100</p>
+        </div>
+
+        <% [
+          { label: "FCP", value: @main[:fcp_ms], unit: "ms", good: 1800,  poor: 3000 },
+          { label: "LCP", value: @main[:lcp_ms], unit: "ms", good: 2500,  poor: 4000 },
+          { label: "TBT", value: @main[:tbt_ms], unit: "ms", good: 200,   poor: 600 },
+          { label: "CLS", value: @main[:cls],    unit: "",   good: 0.1,   poor: 0.25 },
+          { label: "SI",  value: @main[:si_ms],  unit: "ms", good: 3400,  poor: 5800 }
+        ].each do |m| %>
+          <div class="text-center">
+            <p class="text-xs text-slate-500 m-0"><%= m[:label] %></p>
+            <p class="text-2xl font-bold m-0
+              <%= m[:value].to_f <= m[:good] ? 'text-emerald-600' : m[:value].to_f <= m[:poor] ? 'text-amber-600' : 'text-rose-600' %>">
+              <%= m[:value] || "—" %><span class="text-sm font-normal text-slate-500"><%= m[:unit] %></span>
+            </p>
+            <p class="text-[10px] text-slate-400 m-0">≤ <%= m[:good] %><%= m[:unit] %> good</p>
+          </div>
+        <% end %>
+      </div>
+      <p class="text-[11px] text-slate-400 mt-4 m-0">측정: <%= @main[:measured_at] %> · 모바일 / Lighthouse 12</p>
+    </div>
+
+    <%# TOP 5 토픽 %>
+    <h2 class="text-lg font-semibold text-slate-900 mb-3">TOP 5 토픽 페이지 성능</h2>
+    <div class="bg-white border border-slate-200 rounded-lg overflow-hidden">
+      <table class="w-full text-sm">
+        <thead class="bg-slate-50">
+          <tr>
+            <th class="text-left px-3 py-2 font-medium">URL</th>
+            <th class="text-center px-3 py-2 font-medium">점수</th>
+            <th class="text-center px-3 py-2 font-medium">FCP</th>
+            <th class="text-center px-3 py-2 font-medium">LCP</th>
+            <th class="text-center px-3 py-2 font-medium">TBT</th>
+            <th class="text-center px-3 py-2 font-medium">CLS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @overview.reject { |o| o[:url] == SeoMonitor::SITE_URL }.each do |row| %>
+            <tr class="border-t border-slate-100">
+              <td class="px-3 py-2 truncate max-w-md text-blue-600"><%= row[:url].sub("https://silmu.kr", "") %></td>
+              <td class="px-3 py-2 text-center font-bold
+                <%= row[:performance_score].to_i >= 90 ? 'text-emerald-600' : row[:performance_score].to_i >= 50 ? 'text-amber-600' : 'text-rose-600' %>"><%= row[:performance_score] %></td>
+              <td class="px-3 py-2 text-center"><%= row[:fcp_ms] %><span class="text-xs text-slate-400">ms</span></td>
+              <td class="px-3 py-2 text-center"><%= row[:lcp_ms] %><span class="text-xs text-slate-400">ms</span></td>
+              <td class="px-3 py-2 text-center"><%= row[:tbt_ms] %><span class="text-xs text-slate-400">ms</span></td>
+              <td class="px-3 py-2 text-center"><%= row[:cls] %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="bg-amber-50 border border-amber-200 rounded-lg p-6 text-center text-amber-800">
+      PageSpeed 데이터 없음. PAGESPEED_API_KEY가 설정됐는지 확인하거나 "재측정"을 눌러보세요.
+    </div>
+  <% end %>
+</div>

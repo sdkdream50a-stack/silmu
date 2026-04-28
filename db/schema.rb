@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_28_210701) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_28_211623) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -81,6 +81,23 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_210701) do
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_calendar_data_on_user_id", unique: true
+  end
+
+  create_table "content_requests", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.text "memo"
+    t.integer "priority", default: 3
+    t.string "source", null: false
+    t.integer "source_id"
+    t.string "status", default: "open"
+    t.string "title", null: false
+    t.string "topic_slug"
+    t.datetime "updated_at", null: false
+    t.index ["created_at"], name: "index_content_requests_on_created_at"
+    t.index ["source", "source_id"], name: "idx_content_request_source"
+    t.index ["source"], name: "index_content_requests_on_source"
+    t.index ["status"], name: "index_content_requests_on_status"
+    t.index ["topic_slug"], name: "index_content_requests_on_topic_slug"
   end
 
   create_table "exam_progresses", force: :cascade do |t|

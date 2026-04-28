@@ -354,6 +354,14 @@ Rails.application.routes.draw do
     end
     resources :topic_feedbacks, only: [ :index, :destroy ]
     resources :topic_events, only: [ :index ]
+
+    # Sprint #3-A — Core Web Vitals (PageSpeed Insights) 모니터링
+    resources :pagespeed, only: [ :index ], controller: "pagespeed" do
+      collection { post :refresh }
+    end
+
+    # Sprint #3-B — 콘텐츠 backlog (부정 피드백 자동 입력)
+    resources :content_requests, only: [ :index, :update, :destroy ]
   end
 
   # Sprint Task #5 — 사용자 만족도 1클릭 (익명 허용)

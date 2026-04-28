@@ -1,0 +1,79 @@
+<% content_for :title, "콘텐츠 Backlog — Admin" %>
+
+<div class="container-wide py-8">
+  <h1 class="text-2xl font-bold text-slate-900 mb-2">콘텐츠 Backlog (ContentRequest)</h1>
+  <p class="text-sm text-slate-600 mb-6">Sprint #3-B — Editorial Ops — 부정 피드백·검색 빈손 → 자동 backlog 입력</p>
+
+  <%# 통계 %>
+  <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-6">
+    <% [
+      { label: "전체",        value: @stats[:total],         color: "slate" },
+      { label: "Open",        value: @stats[:open],          color: "blue" },
+      { label: "In Progress", value: @stats[:in_progress],   color: "amber" },
+      { label: "Done",        value: @stats[:done],          color: "emerald" },
+      { label: "피드백 출처", value: @stats[:from_feedback], color: "rose" }
+    ].each do |c| %>
+      <div class="bg-white border border-slate-200 rounded-lg p-3 text-center">
+        <p class="text-xs text-slate-500 m-0"><%= c[:label] %></p>
+        <p class="text-xl font-bold text-<%= c[:color] %>-600 m-0"><%= c[:value] %></p>
+      </div>
+    <% end %>
+  </div>
+
+  <%# 필터 %>
+  <div class="flex gap-2 mb-4 flex-wrap">
+    <%= link_to "전체", admin_content_requests_path, class: "px-3 py-1 text-sm rounded #{params[:status].blank? ? 'bg-slate-900 text-white' : 'bg-white border border-slate-200'}" %>
+    <% %w[open in_progress done rejected].each do |s| %>
+      <%= link_to s, admin_content_requests_path(status: s), class: "px-3 py-1 text-sm rounded #{params[:status] == s ? 'bg-slate-900 text-white' : 'bg-white border border-slate-200'}" %>
+    <% end %>
+  </div>
+
+  <div class="bg-white border border-slate-200 rounded-lg overflow-hidden">
+    <table class="w-full text-sm">
+      <thead class="bg-slate-50">
+        <tr>
+          <th class="text-left px-3 py-2 font-medium">시간</th>
+          <th class="text-center px-3 py-2 font-medium">우선순위</th>
+          <th class="text-center px-3 py-2 font-medium">출처</th>
+          <th class="text-left px-3 py-2 font-medium">제목 / 메모</th>
+          <th class="text-left px-3 py-2 font-medium">토픽</th>
+          <th class="text-center px-3 py-2 font-medium">상태</th>
+          <th class="text-center px-3 py-2 font-medium">작업</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if @requests.empty? %>
+          <tr><td colspan="7" class="text-center py-8 text-slate-400">아직 backlog가 없습니다 (부정 피드백 누적 시 자동 생성).</td></tr>
+        <% else %>
+          <% @requests.each do |cr| %>
+            <tr class="border-t border-slate-100 align-top">
+              <td class="px-3 py-2 text-xs text-slate-500"><%= cr.created_at.strftime("%m/%d") %></td>
+              <td class="px-3 py-2 text-center"><span class="inline-block px-2 py-0.5 rounded text-xs font-bold bg-amber-100 text-amber-700">P<%= cr.priority %></span></td>
+              <td class="px-3 py-2 text-center text-xs"><%= cr.source %></td>
+              <td class="px-3 py-2">
+                <p class="font-semibold text-slate-800 m-0"><%= cr.title %></p>
+                <% if cr.memo.present? %><p class="text-xs text-slate-500 mt-1 m-0"><%= cr.memo.truncate(120) %></p><% end %>
+              </td>
+              <td class="px-3 py-2 text-blue-600">
+                <% if cr.topic_slug.present? %><%= link_to cr.topic_slug, topic_path(cr.topic_slug), class: "hover:underline" %><% end %>
+              </td>
+              <td class="px-3 py-2 text-center">
+                <%= form_with url: admin_content_request_path(cr), method: :patch, local: true, class: "inline-block" do |f| %>
+                  <%= f.select "content_request[status]", ContentRequest::STATUSES.map { |s| [s, s] }, { selected: cr.status }, class: "text-xs border border-slate-200 rounded px-2 py-0.5", onchange: "this.form.submit()" %>
+                <% end %>
+              </td>
+              <td class="px-3 py-2 text-center">
+                <%= button_to "삭제", admin_content_request_path(cr), method: :delete,
+                      class: "text-xs text-red-600 hover:underline",
+                      form: { class: "inline-block" },
+                      data: { turbo_confirm: "삭제할까요?" } %>
+              </td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <%= pagy_nav(@pagy) if @pagy %>
+</div>

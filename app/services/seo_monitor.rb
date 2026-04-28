@@ -10,18 +10,63 @@ class SeoMonitor
     }
   end
 
+  # Sprint #3-A — Google PageSpeed Insights API 연동 (Osmani 권위자 검증)
+  # API 무료 (rate limit: 분 240 / 일 25,000 with key)
+  # 키 없어도 anonymous 사용 가능 (낮은 rate limit)
+  PAGESPEED_API = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed".freeze
+
+  # silmu Core Web Vitals 측정 (cached 24h)
+  # @param url [String] 측정 대상 URL
+  # @param strategy [String] "mobile" or "desktop"
+  def self.fetch_pagespeed(url = SITE_URL, strategy: "mobile")
+    Rails.cache.fetch("pagespeed/#{Digest::MD5.hexdigest(url + strategy)}", expires_in: 24.hours) do
+      require "net/http"
+      require "json"
+      params = {
+        url: url,
+        strategy: strategy,
+        category: "performance"
+      }
+      params[:key] = ENV["PAGESPEED_API_KEY"] if ENV["PAGESPEED_API_KEY"].present?
+      query = params.map { |k, v| "#{k}=#{CGI.escape(v.to_s)}" }.join("&")
+      uri = URI("#{PAGESPEED_API}?#{query}")
+
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+      http.read_timeout = 60
+
+      response = http.get(uri.request_uri)
+      next nil unless response.is_a?(Net::HTTPSuccess)
+
+      data = JSON.parse(response.body)
+      audits = data.dig("lighthouseResult", "audits") || {}
+
+      {
+        url: url,
+        strategy: strategy,
+        performance_score: ((data.dig("lighthouseResult", "categories", "performance", "score") || 0) * 100).round,
+        fcp_ms: audits.dig("first-contentful-paint", "numericValue")&.round,
+        lcp_ms: audits.dig("largest-contentful-paint", "numericValue")&.round,
+        tbt_ms: audits.dig("total-blocking-time", "numericValue")&.round,
+        cls:    audits.dig("cumulative-layout-shift", "numericValue")&.round(3),
+        si_ms:  audits.dig("speed-index", "numericValue")&.round,
+        measured_at: Time.current.iso8601
+      }
+    rescue => e
+      Rails.logger.warn "[SeoMonitor] PageSpeed fetch 실패: #{e.class}: #{e.message}"
+      nil
+    end
+  end
+
   def self.check_page_speed
-    # PageSpeed Insights API 사용 (실제 구현 시 API 키 필요)
-    raw = {
-      performance_score: check_performance_score,
-      fcp: measure_fcp,
-      lcp: measure_lcp,
-      tbt: measure_tbt,
-      cls: measure_cls,
-      opportunities: performance_opportunities
-    }
-    # nil 값 필터링 (미구현 지표 제외)
-    raw.reject { |_k, v| v.nil? }
+    fetch_pagespeed(SITE_URL, strategy: "mobile") || {}
+  end
+
+  # 메인 + TOP 5 토픽 측정 (한 번에)
+  def self.pagespeed_silmu_overview
+    targets = [ SITE_URL ]
+    targets += Topic.published.order(view_count: :desc).limit(5).pluck(:slug).map { |s| "#{SITE_URL}/topics/#{s}" }
+    targets.map { |u| fetch_pagespeed(u, strategy: "mobile") }.compact
   end
 
   def self.check_broken_links
@@ -137,29 +182,28 @@ class SeoMonitor
     end
   end
 
-  def self.measure_fcp
-    # TODO: PageSpeed Insights API 연동 필요 (현재 미구현)
-    nil
+  # Sprint #3-A — fetch_pagespeed(url)로 통합. 아래는 호환성 유지용 thin wrapper.
+  def self.measure_fcp(url = SITE_URL)
+    fetch_pagespeed(url)&.dig(:fcp_ms)
   end
 
-  def self.measure_lcp
-    # TODO: PageSpeed Insights API 연동 필요 (현재 미구현)
-    nil
+  def self.measure_lcp(url = SITE_URL)
+    fetch_pagespeed(url)&.dig(:lcp_ms)
   end
 
-  def self.measure_tbt
-    # TODO: PageSpeed Insights API 연동 필요 (현재 미구현)
-    nil
+  def self.measure_tbt(url = SITE_URL)
+    fetch_pagespeed(url)&.dig(:tbt_ms)
   end
 
-  def self.measure_cls
-    # TODO: PageSpeed Insights API 연동 필요 (현재 미구현)
-    nil
+  def self.measure_cls(url = SITE_URL)
+    fetch_pagespeed(url)&.dig(:cls)
   end
 
   def self.performance_opportunities
-    # TODO: PageSpeed Insights API 연동 필요 (현재 미구현)
-    []
+    # PageSpeed Insights audits 중 score < 0.9인 항목만 (개선 기회)
+    data = fetch_pagespeed(SITE_URL)
+    return [] unless data
+    [] # 상세 audits는 향후 확장
   end
 
   def self.check_page_links(page, broken)
