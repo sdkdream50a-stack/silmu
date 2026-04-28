@@ -362,6 +362,11 @@ Rails.application.routes.draw do
 
     # Sprint #3-B — 콘텐츠 backlog (부정 피드백 자동 입력)
     resources :content_requests, only: [ :index, :update, :destroy ]
+
+    # Sprint #4-B — 법령 개정 영향 토픽 검토
+    resources :topic_reviews, only: [ :index ] do
+      member { patch :resolve }
+    end
   end
 
   # Sprint Task #5 — 사용자 만족도 1클릭 (익명 허용)

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_28_211623) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_28_212258) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -301,12 +301,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_211623) do
     t.text "law_content"
     t.datetime "law_verified_at"
     t.string "name", null: false
+    t.boolean "needs_review", default: false, null: false
     t.integer "parent_id"
     t.text "practical_tips"
     t.boolean "published", default: false
     t.text "qa_content"
     t.jsonb "quick_stats", default: []
     t.text "regulation_content"
+    t.datetime "review_flagged_at"
+    t.string "review_reason"
     t.text "rule_content"
     t.integer "sector", default: 0, null: false
     t.string "slug", null: false
@@ -316,6 +319,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_211623) do
     t.integer "view_count", default: 0
     t.index ["category"], name: "index_topics_on_category"
     t.index ["faqs"], name: "index_topics_on_faqs_jsonb", where: "(faqs <> '[]'::jsonb)", using: :gin
+    t.index ["needs_review"], name: "index_topics_on_needs_review"
     t.index ["parent_id"], name: "index_topics_on_parent_id"
     t.index ["published", "category"], name: "index_topics_on_published_and_category"
     t.index ["published", "sector", "category"], name: "index_topics_on_pub_sector_cat"

@@ -65,6 +65,31 @@ class LawSyncJob < ApplicationJob
     # 개정된 법령이 있으면 구독자 알림 Job 실행
     LawChangeNotificationJob.perform_later(changed_law_names) if changed_law_names.any?
 
+    # Sprint #4-B — 영향 토픽 자동 flag (Westlaw 권위자: 콘텐츠 신선도 자동화)
+    flag_affected_topics(changed_law_names) if changed_law_names.any?
+
     Rails.logger.info "[LawSyncJob] 완료 (#{success_count}/#{TARGET_LAWS.size}, 개정 #{changed_law_names.size}건)"
+  end
+
+  private
+
+  # 변경된 법령 → TOPIC_LAW_MAP reverse-lookup → 영향 토픽 needs_review=true
+  def flag_affected_topics(changed_laws)
+    affected_slugs = []
+    LawContentFetcher::TOPIC_LAW_MAP.each do |slug, mapping|
+      next if mapping.blank?
+      law_names = [ mapping[:law], mapping[:decree], mapping[:rule] ].compact
+      affected_slugs << slug if law_names.any? { |ln| changed_laws.include?(ln) }
+    end
+
+    return if affected_slugs.empty?
+
+    flagged = Topic.where(slug: affected_slugs).update_all(
+      needs_review: true,
+      review_reason: "법령 개정 감지: #{changed_laws.first(3).join(', ')}#{changed_laws.size > 3 ? ' 외' : ''}",
+      review_flagged_at: Time.current
+    )
+
+    Rails.logger.info "[LawSyncJob] needs_review flag #{flagged}건 (#{affected_slugs.first(5).join(', ')}#{'...' if affected_slugs.size > 5})"
   end
 end
