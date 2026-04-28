@@ -12,6 +12,8 @@ class RobotsController < ApplicationController
   private
 
   def robots_content
+    sitemap_url = request.host == "exam.silmu.kr" ? "https://exam.silmu.kr/sitemap.xml" : "https://silmu.kr/sitemap.xml"
+
     <<~ROBOTS
       User-agent: *
       Allow: /
@@ -85,8 +87,7 @@ class RobotsController < ApplicationController
       User-agent: Yeti-Mobile
       Allow: /
 
-      Sitemap: https://silmu.kr/sitemap.xml
-      Sitemap: https://exam.silmu.kr/sitemap.xml
+      Sitemap: #{sitemap_url}
 
       # IndexNow 키 파일 허용
       Allow: /af70a5ade3fa44588a1e92879ecbe8d5.txt

@@ -6,6 +6,10 @@
    - FAQPage: speakable (음성 검색/Google Assistant 인용 대응) %>
 <% content_for :head do %>
   <% date_modified = (@topic.law_verified_at.presence || @topic.updated_at).iso8601 %>
+  <% law_base_date = (@topic.law_base_date.presence || @topic.updated_at.to_date).to_s.tr(".", "-") %>
+  <meta name="law-base-date" content="<%= law_base_date %>">
+  <meta property="article:published_time" content="<%= @topic.created_at.iso8601 %>">
+  <meta property="article:modified_time" content="<%= date_modified %>">
   <%
     # Article hasPart — 페이지에 포함된 주요 섹션 명시 (LLM 콘텐츠 구조 신호)
     has_part = []
@@ -61,6 +65,8 @@
     "datePublished": @topic.created_at.iso8601,
     "dateModified": date_modified,
     "lastReviewed": date_modified,
+    "contentReferenceTime": law_base_date,
+    "temporalCoverage": law_base_date,
     "reviewedBy": { "@type": "Organization", "name": "실무.kr 법령검증팀", "url": "https://silmu.kr/about" },
     "mainEntityOfPage": canonical_url,
     "articleSection": @topic.category_name,

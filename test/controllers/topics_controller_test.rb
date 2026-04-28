@@ -28,6 +28,27 @@ class TopicsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "topic exposes law base date for SEO and AI citation freshness" do
+    topic = Topic.create!(
+      name: "법령 기준일 테스트",
+      slug: "law-base-date-topic",
+      category: "contract",
+      summary: "법령 기준일 구조화 데이터 확인",
+      commentary: "기준일 이후 개정 여부를 확인합니다.",
+      keywords: "법령 기준일",
+      law_base_date: "2026.03.19",
+      published: false
+    )
+
+    get topic_url(topic.slug)
+
+    assert_response :success
+    assert_includes response.body, '<meta name="law-base-date" content="2026-03-19">'
+    assert_includes response.body, '<meta property="article:modified_time"'
+    assert_includes response.body, '"contentReferenceTime":"2026-03-19"'
+    assert_includes response.body, '"temporalCoverage":"2026-03-19"'
+  end
+
   test "llms txt uses current canonical url references" do
     llms = Rails.root.join("public/llms.txt").read
 
