@@ -14,6 +14,10 @@ application.register("utm-banner", UtmBannerController)
 import TabsController from "./tabs_controller"
 application.register("tabs", TabsController)
 
+// Sprint #2-C — 토픽 행동 이벤트 3종 추적 (scroll/time/faq)
+import TopicTelemetryController from "./topic_telemetry_controller"
+application.register("topic-telemetry", TopicTelemetryController)
+
 import HomeBookmarkController from "./home_bookmark_controller"
 application.register("home-bookmark", HomeBookmarkController)
 

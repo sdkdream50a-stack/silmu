@@ -12,7 +12,32 @@
     has_part << { "@type" => "WebPageElement", "name" => "법령 본문", "cssSelector" => ".law-content" } if @topic.law_content.present?
     has_part << { "@type" => "WebPageElement", "name" => "실무 해설", "cssSelector" => ".commentary" } if @topic.commentary.present?
     has_part << { "@type" => "FAQPage", "name" => "자주 묻는 질문", "cssSelector" => "#faq-section" } if @topic.faq_list.present?
-    has_part << { "@type" => "WebPageElement", "name" => "감사사례", "cssSelector" => ".audit-cases" } if @related_audit_cases&.any?
+
+    # Sprint #2-A — AuditCase ItemList schema (NYT + Westlaw 권위자: 콘텐츠 위계 + 검색 풍부도)
+    if @related_audit_cases&.any?
+      audit_items = @related_audit_cases.first(5).each_with_index.map do |ac, i|
+        item = {
+          "@type" => "ListItem",
+          "position" => i + 1,
+          "item" => {
+            "@type" => "Article",
+            "@id" => "https://silmu.kr/audit-cases/#{ac.slug}",
+            "headline" => ac.title.to_s,
+            "url" => "https://silmu.kr/audit-cases/#{ac.slug}",
+            "articleSection" => ac.category.to_s,
+            "abstract" => (ac.issue || ac.lesson).to_s.truncate(200)
+          }.compact
+        }
+        item
+      end
+      has_part << {
+        "@type" => "ItemList",
+        "name" => "관련 감사사례",
+        "numberOfItems" => @related_audit_cases.size,
+        "cssSelector" => ".audit-cases",
+        "itemListElement" => audit_items
+      }
+    end
   %>
   <%# 5차 권위자 AGO #19 — .md alternative URL을 HTML head에서도 명시 (HTML 크롤러 발견 경로) %>
   <link rel="alternate" type="text/markdown" href="<%= canonical_url %>.md" title="<%= @topic.name %> (Markdown)">
@@ -110,6 +135,11 @@
   <% end %>
 <% end %>
 
+<%# Sprint #2-C — 토픽 행동 이벤트 3종 추적 (scroll_depth/time_on_page/faq_open) %>
+<div data-controller="topic-telemetry"
+     data-topic-telemetry-topic-slug-value="<%= @topic.slug %>"
+     style="display:none" aria-hidden="true"></div>
+
 <!-- 페이지 헤더 -->
 <section class="bg-editorial-navy text-white py-12 lg:py-16"
          style="background-image: linear-gradient(180deg, #174B8E 0%, #1E5AA8 100%);">
@@ -169,6 +199,13 @@
                 <span class="material-symbols-outlined" style="font-size:14px">visibility</span>
                 <%= number_with_delimiter(@topic.view_count) %>회 열람
               </span>
+              <%# Sprint #2-D — 사회적 증거 (5건 미만은 미노출) %>
+              <% if @topic_helpful_count.to_i >= 5 %>
+                <span class="law-key-fact flex items-center gap-1 text-emerald-200">
+                  <span class="material-symbols-outlined" style="font-size:14px">thumb_up</span>
+                  <%= number_with_delimiter(@topic_helpful_count) %>명에게 도움됨
+                </span>
+              <% end %>
             </p>
           </div>
         </div>
@@ -1790,6 +1827,38 @@ initTabs();
 document.addEventListener('turbo:load', initTabs);
 document.addEventListener('turbo:render', initTabs);
 </script>
+
+<%# Sprint #2-A — AuditCase 본문 임베드 (NYT 권위자 case study 패턴)
+    탭 외부에 1건 미리보기 카드. 시인성 강화. 클릭 시 상세 또는 audit 탭. %>
+<% if @related_audit_cases.present? && (preview_case = @related_audit_cases.first) %>
+  <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-10">
+    <div class="audit-cases bg-rose-50 border border-rose-200 rounded-2xl p-5 lg:p-6">
+      <div class="flex items-start gap-3 mb-3">
+        <span class="material-symbols-outlined text-rose-600 text-2xl shrink-0" aria-hidden="true">warning</span>
+        <div class="flex-1 min-w-0">
+          <p class="text-xs font-bold text-rose-700 uppercase tracking-wider m-0">⚠️ 이런 실수가 있었어요</p>
+          <h3 class="text-base lg:text-lg font-bold text-slate-900 mt-1 mb-1"><%= preview_case.title %></h3>
+          <p class="text-sm text-slate-700 leading-relaxed line-clamp-2 m-0"><%= preview_case.issue.to_s.truncate(200) %></p>
+        </div>
+      </div>
+      <div class="flex items-center justify-between gap-3 mt-4">
+        <span class="text-xs text-slate-500 flex items-center gap-1 min-w-0">
+          <span class="material-symbols-outlined text-sm shrink-0">gavel</span>
+          <span class="truncate"><%= preview_case.legal_basis %></span>
+        </span>
+        <div class="flex items-center gap-2 shrink-0">
+          <%= link_to audit_case_path(slug: preview_case.slug),
+                class: "inline-flex items-center gap-1 text-xs font-semibold text-rose-700 hover:text-rose-900" do %>
+            상세 보기 <span class="material-symbols-outlined text-sm">arrow_forward</span>
+          <% end %>
+          <% if @related_audit_cases.size > 1 %>
+            <span class="text-xs text-slate-400">· 외 <%= @related_audit_cases.size - 1 %>건</span>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </section>
+<% end %>
 
 <%# Sprint Task #5 — 만족도 1클릭 (Krug + NN/g 권위자 검증) %>
 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

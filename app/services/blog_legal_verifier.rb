@@ -47,9 +47,10 @@ class BlogLegalVerifier
       correct: "전문공사 추정가격 2억원 이하",
       source: "「지방자치단체를 당사자로 하는 계약에 관한 법률 시행령」 제25조 제1항 제1호"
     },
-    # 공사 수의계약 한도 — 종합공사
+    # 공사 수의계약 한도 — 종합공사 (정답 4억원, 그 외 매칭은 false)
+    # wrong_pattern은 4억이 아닌 다른 숫자 표기만 잡아야 함 — 「3억」「5억」「6억」 등
     {
-      wrong_patterns: [ /종합공사.{0,10}[^2]억원?\s*이하/ ],
+      wrong_patterns: [ /종합공사.{0,10}([1-3]|[5-9])억원?\s*이하/ ],
       correct_amount: "4억원",
       correct: "종합공사 추정가격 4억원 이하",
       source: "「지방자치단체를 당사자로 하는 계약에 관한 법률 시행령」 제25조 제1항 제1호"
@@ -108,6 +109,24 @@ class BlogLegalVerifier
 
   private
 
+  # §25(수의계약 한도) 검증 룰에 한해 컨텍스트 게이트 적용
+  # 인근 텍스트에 보증금/면제/§51 등이 있으면 §51 제1항(보증금 면제 기준) 컨텍스트라
+  # §25 한도 검증을 false-positive로 처리.
+  CONTEXT_EXCLUDE_FOR_25 = %w[
+    보증금
+    면제
+    보증
+    계약보증
+    입찰보증
+    이행보증
+    제51조
+    §51
+    51조
+    면제기준
+  ].freeze
+
+  CONTEXT_WINDOW = 250 # 매칭 위치 ±N자 안에서 exclude 키워드 검사
+
   def check_amounts(text)
     AMOUNT_CHECKS.each do |rule|
       rule[:wrong_patterns].each do |pattern|
@@ -118,6 +137,17 @@ class BlogLegalVerifier
         matches.each do |match|
           captured = match.is_a?(Array) ? match.first : nil
           next if captured && amount_matches_correct?(captured, rule[:correct_amount])
+
+          # 컨텍스트 게이트: §25 제1항 제1호 룰만 적용
+          if rule[:source].to_s.include?("제25조 제1항 제1호")
+            match_pos = text.index(pattern)
+            if match_pos
+              window_start = [ match_pos - CONTEXT_WINDOW, 0 ].max
+              window_end   = [ match_pos + CONTEXT_WINDOW, text.length ].min
+              context = text[window_start...window_end].to_s
+              next if CONTEXT_EXCLUDE_FOR_25.any? { |kw| context.include?(kw) }
+            end
+          end
 
           @issues << {
             type: "wrong_amount",

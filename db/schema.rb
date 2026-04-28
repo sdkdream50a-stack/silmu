@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_28_145442) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_28_210701) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -239,6 +239,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_145442) do
     t.index ["topic_slug", "hidden", "created_at"], name: "index_topic_comments_on_topic_slug_and_hidden_and_created_at"
     t.index ["topic_slug"], name: "index_topic_comments_on_topic_slug"
     t.index ["user_id"], name: "index_topic_comments_on_user_id"
+  end
+
+  create_table "topic_events", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "event_type", null: false
+    t.integer "event_value"
+    t.string "ip_hash"
+    t.string "topic_slug", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_at"], name: "index_topic_events_on_created_at"
+    t.index ["topic_slug", "event_type"], name: "idx_topic_events_slug_type"
+    t.index ["topic_slug"], name: "index_topic_events_on_topic_slug"
   end
 
   create_table "topic_feedbacks", force: :cascade do |t|

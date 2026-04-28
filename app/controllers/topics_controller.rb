@@ -121,6 +121,11 @@ class TopicsController < ApplicationController
     end
     @audit_case_total = Rails.cache.fetch("stats/audit_case_count", expires_in: 30.minutes) { AuditCase.published.count }
 
+    # Sprint #2-D — feedback up 카운트 (Krug 사회적 증거, 5건 미만은 노출 X)
+    @topic_helpful_count = Rails.cache.fetch("topic_helpful/#{@topic.slug}", expires_in: 30.minutes) do
+      TopicFeedback.up.where(topic_slug: @topic.slug).count
+    end
+
     # 법제처 API — 토픽별 법령 원문 참조 링크 (7일 캐시)
     # [LCP 최적화] 캐시 miss 시 API를 동기 호출하지 않고 백그라운드 워밍 → 페이지 렌더 블로킹 방지
     # [중복 방지] unless_exist: true로 동시 요청 시 job 하나만 enqueue

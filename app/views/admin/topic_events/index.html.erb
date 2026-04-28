@@ -1,0 +1,51 @@
+<% content_for :title, "토픽 이벤트 추적 — Admin" %>
+
+<div class="container-wide py-8">
+  <h1 class="text-2xl font-bold text-slate-900 mb-2">토픽 이벤트 추적 (TopicEvent)</h1>
+  <p class="text-sm text-slate-600 mb-6">Sprint #2-C — Krug + Editorial Ops — 사용자 행동 3종(스크롤·체류·FAQ)</p>
+
+  <%# 30일 통계 %>
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+    <% [
+      { label: "전체 이벤트",  value: @stats[:total],        color: "slate" },
+      { label: "스크롤 도달",  value: @stats[:scroll_depth], color: "blue" },
+      { label: "체류 시간",    value: @stats[:time_on_page], color: "emerald" },
+      { label: "FAQ 열람",     value: @stats[:faq_open],     color: "amber" }
+    ].each do |c| %>
+      <div class="bg-white border border-slate-200 rounded-lg p-3 text-center">
+        <p class="text-xs text-slate-500 m-0"><%= c[:label] %></p>
+        <p class="text-xl font-bold text-<%= c[:color] %>-600 m-0"><%= number_with_delimiter(c[:value]) %></p>
+      </div>
+    <% end %>
+  </div>
+
+  <h2 class="text-lg font-semibold text-slate-900 mb-3">토픽별 행동 (30일, TOP 30)</h2>
+  <div class="bg-white border border-slate-200 rounded-lg overflow-hidden">
+    <table class="w-full text-sm">
+      <thead class="bg-slate-50">
+        <tr>
+          <th class="text-left px-3 py-2 font-medium">토픽</th>
+          <th class="text-center px-3 py-2 font-medium">평균 스크롤 %</th>
+          <th class="text-center px-3 py-2 font-medium">평균 체류 (s)</th>
+          <th class="text-center px-3 py-2 font-medium">FAQ 열람</th>
+          <th class="text-center px-3 py-2 font-medium">전체 이벤트</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if @per_topic.empty? %>
+          <tr><td colspan="5" class="text-center py-8 text-slate-400">아직 측정 데이터가 없습니다 (배포 후 1~2일 대기 권장).</td></tr>
+        <% else %>
+          <% @per_topic.each do |row| %>
+            <tr class="border-t border-slate-100">
+              <td class="px-3 py-2"><%= link_to row[:slug], topic_path(row[:slug]), class: "text-blue-600 hover:underline" %></td>
+              <td class="px-3 py-2 text-center"><%= row.dig(:scroll_depth, :avg) || "—" %></td>
+              <td class="px-3 py-2 text-center"><%= row.dig(:time_on_page, :avg) || "—" %></td>
+              <td class="px-3 py-2 text-center"><%= row.dig(:faq_open, :cnt) || 0 %></td>
+              <td class="px-3 py-2 text-center font-medium"><%= row[:total] %></td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

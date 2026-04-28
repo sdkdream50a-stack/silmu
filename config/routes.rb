@@ -353,10 +353,14 @@ Rails.application.routes.draw do
       end
     end
     resources :topic_feedbacks, only: [ :index, :destroy ]
+    resources :topic_events, only: [ :index ]
   end
 
   # Sprint Task #5 — 사용자 만족도 1클릭 (익명 허용)
   resources :topic_feedbacks, only: [ :create ]
+
+  # Sprint #2-C — 토픽 행동 이벤트 (scroll/time/faq) 익명 수집
+  resources :topic_events, only: [ :create ]
 
   # 사이트맵
   get "sitemap.xml", to: "sitemap#index", as: :sitemap, defaults: { format: :xml }
