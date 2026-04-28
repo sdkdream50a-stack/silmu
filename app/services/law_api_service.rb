@@ -15,9 +15,16 @@ class LawApiService
 
   # 법령 검색 (법령명 → 목록 반환)
   # 반환: Nokogiri::XML 또는 nil
+  #
+  # 약칭/오타는 LawAliasResolver로 정식명 치환 후 API 호출.
+  # ("산안법" → "산업안전보건법", "관세벚" → "관세법" 등)
   def search_law(query, display: 5)
+    resolution = LawAliasResolver.resolve(query)
+    if resolution.matched_alias
+      Rails.logger.debug "[LawApiService] 약칭 매칭: #{query} → #{resolution.canonical}"
+    end
     params = { OC: @oc_id, target: "law", type: "XML",
-               query: query, display: display, page: 1 }
+               query: resolution.canonical, display: display, page: 1 }
     get("/DRF/lawSearch.do", params)
   end
 

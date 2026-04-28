@@ -31,6 +31,37 @@
 
 ## 실행 순서
 
+### 0단계: `verify_citations` MCP 사전검증 (2026-04-28 추가)
+
+본 검증을 시작하기 전에, **korean-law-mcp**의 `verify_citations` 도구로 인용 조문의 실존 여부를 일괄 1차 스크리닝한다. 정규식·체크리스트가 못 잡는 "조문번호 자체가 없음", "항번호 초과" 류 환각 오류를 PR 단계에서 차단하기 위함.
+
+**커버 대상 (예시 — 검증 범위 전체에 동일하게 적용 가능)**
+- `db/seeds/topics.rb`, `db/seeds/topic_*.rb`, `db/seeds/*_series.rb`, `db/seeds/audit_cases.rb`
+- `app/services/legal_period_service.rb`, `app/services/contract_guarantee_service.rb`
+- `app/views/topics/flowcharts/*.html.erb`, `app/views/guides/*.html.erb`
+- `public/llms.txt`
+
+**실행**
+
+각 파일을 읽어 인용된 조문(예: "지방계약법 시행령 제25조 제1항")을 추출한 뒤 `mcp__korean-law__verify_citations` 1회 호출에 일괄 투입한다. 결과는 다음 형식:
+
+- ✓ 실존 — 그대로 통과
+- ✗ **NOT_FOUND** — 조문/항번호가 법제처 DB에 없음 → **즉시 1단계 검증 태스크에 배정**
+- ⚠ 법령명 불명확 — `LawAliasResolver`가 약칭을 못 잡은 경우 (`app/services/law_alias_resolver.rb` 사전에 추가 후 재실행)
+
+**판정 규칙**
+- `failCount > 0`이면 그 파일은 **CRITICAL 후보로 1단계 태스크 큐 최상단에 배치**한다 (검증자가 우선 확인).
+- 모든 인용이 ✓라도 1단계(체크리스트 기반 검증)는 생략하지 않는다 — `verify_citations`는 "조문 실존"만 확인하지 "조문 내용·금액·요율 일치"는 검증하지 않음.
+
+**보조 도구 (선택)**
+- `mcp__korean-law__chain_amendment_track` (`scenario: timeline`) — `LawSyncJob`이 시행일 변경을 감지한 법령에 대해 신구대조표·관련 판례를 자동 수집 → 알림 콘텐츠 보강에 활용
+- `mcp__korean-law__get_annexes` — 여비규정 별표(숙박비 한도 등) HWPX 자동 Markdown 변환. 도구 검증(4단계) 시 별표 수치 대조 1차 자료로 사용
+- `mcp__korean-law__chain_action_basis` (`scenario: penalty`) — 처분기준표·벌칙·감경 행심 종합 → `audit_cases.rb` 보강 자료
+
+> 이 단계는 **읽기 전용**이다. 어떤 파일도 수정하지 않으며, 발견된 의심 항목을 1단계 태스크에 우선순위 태그로만 전달한다.
+
+---
+
 ### 1단계: 팀 생성 및 태스크 생성
 
 1. **팀 생성**
