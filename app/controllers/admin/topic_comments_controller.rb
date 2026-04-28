@@ -31,4 +31,27 @@ class Admin::TopicCommentsController < Admin::BaseController
     TopicComment.find(params[:id]).destroy!
     redirect_to admin_topic_comments_path, notice: "삭제했습니다."
   end
+
+  # Sprint #5-D — admin 공식 답변 작성 (Krug + 카페 모델 권위자)
+  def answer
+    parent = TopicComment.find(params[:id])
+    body = params[:body].to_s.strip
+    if body.blank? || body.length < 5
+      redirect_to admin_topic_comments_path, alert: "답변 본문은 5자 이상이어야 합니다."
+      return
+    end
+
+    answer_record = TopicComment.create!(
+      topic_slug:   parent.topic_slug,
+      parent_id:    parent.id,
+      comment_type: :answer,
+      body:         body,
+      user_id:      current_user&.id,
+      is_official:  true,
+      hidden:       false
+    )
+
+    redirect_to admin_topic_comments_path,
+                notice: "공식 답변을 작성했습니다 (##{answer_record.id})."
+  end
 end

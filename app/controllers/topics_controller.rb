@@ -55,6 +55,20 @@ class TopicsController < ApplicationController
     @cfg = CATEGORY_CONFIG[@key]
     return redirect_to topics_path, status: :moved_permanently unless @cfg
 
+    # Sprint #5-B — 카테고리 PDF 묶음 다운로드 (Tufte 권위자 권고)
+    if request.format.pdf?
+      pdf_data = PdfBundleService.category_pdf(@key)
+      if pdf_data
+        send_data pdf_data,
+                  filename: "silmu-#{@key}-#{Time.zone.today.strftime('%Y%m%d')}.pdf",
+                  type: "application/pdf",
+                  disposition: "attachment"
+      else
+        head :not_found
+      end
+      return
+    end
+
     all_topics = Rails.cache.fetch("topics/all_published_v2", expires_in: 30.minutes) do
       Topic.published.to_a
     end

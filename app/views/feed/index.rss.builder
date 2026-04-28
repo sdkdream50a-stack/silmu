@@ -14,17 +14,19 @@ xml.rss version: "2.0", "xmlns:atom" => "http://www.w3.org/2005/Atom" do
       xml.link root_url
     end
 
-    # 최신 토픽 (법령 가이드)
+    # 최신 토픽 (법령 가이드) — Sprint #5-C: needs_review 우선 표시
     @topics.each do |topic|
+      review_prefix = topic.needs_review ? "🔄 [법령 개정 검토 중] " : ""
       xml.item do
-        xml.title "#{topic.name} — 지방계약법 근거·절차·실무사례 완전정리"
+        xml.title "#{review_prefix}#{topic.name} — 지방계약법 근거·절차·실무사례 완전정리"
         xml.link topic_url(topic.slug)
         xml.guid topic_url(topic.slug), isPermaLink: "true"
         xml.description do
-          xml.cdata! topic.summary.to_s
+          desc = topic.needs_review ? "⚠️ #{topic.review_reason}\n\n#{topic.summary}" : topic.summary.to_s
+          xml.cdata! desc
         end
-        xml.pubDate topic.updated_at.rfc2822
-        xml.category "법령 가이드"
+        xml.pubDate (topic.review_flagged_at || topic.updated_at).rfc2822
+        xml.category(topic.needs_review ? "법령 개정 알림" : "법령 가이드")
       end
     end
 

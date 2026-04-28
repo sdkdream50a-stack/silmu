@@ -350,6 +350,7 @@ Rails.application.routes.draw do
       member do
         patch :hide
         patch :unhide
+        post  :answer  # Sprint #5-D — admin 공식 답변
       end
     end
     resources :topic_feedbacks, only: [ :index, :destroy ]

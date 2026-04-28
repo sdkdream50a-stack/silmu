@@ -40,9 +40,19 @@
           <p class="text-white/80 text-lg"><%= @cfg[:desc] %></p>
         </div>
       </div>
-      <div class="text-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/15 self-start sm:self-auto">
-        <div class="text-2xl font-bold"><%= @topics.size %></div>
-        <div class="text-xs text-white/70 mt-0.5">법령</div>
+      <div class="flex items-stretch gap-2 self-start sm:self-auto">
+        <div class="text-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/15">
+          <div class="text-2xl font-bold"><%= @topics.size %></div>
+          <div class="text-xs text-white/70 mt-0.5">법령</div>
+        </div>
+        <%# Sprint #5-B — 카테고리 PDF 묶음 다운로드 %>
+        <%= link_to topics_category_path(key: @key, format: :pdf),
+              class: "flex items-center gap-1.5 px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/15 hover:bg-white/20 text-white text-sm font-semibold transition-colors",
+              title: "이 카테고리의 모든 법령 가이드를 PDF 1개로 다운로드",
+              data: { turbo: false } do %>
+          <span class="material-symbols-outlined text-base" aria-hidden="true">download</span>
+          <span>PDF</span>
+        <% end %>
       </div>
     </div>
   </div>
