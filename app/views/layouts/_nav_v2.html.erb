@@ -202,30 +202,34 @@
                   aria-hidden="true">expand_more</span>
           </button>
 
-          <div class="hidden absolute left-0 top-full pt-1 z-50 w-52"
+          <div class="hidden absolute left-0 top-full pt-1 z-50 w-[min(480px,calc(100vw-2rem))]"
                data-dropdown-nav-target="panel"
                data-dropdown-key="audit"
                data-action="mouseenter->dropdown-nav#panelEnter mouseleave->dropdown-nav#hoverClose"
                aria-hidden="true">
-            <div class="bg-white rounded-2xl shadow-xl border border-slate-100 p-3">
-              <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 px-1">분야별 조회</p>
-              <% [
-                ["수의계약", "gavel",          "indigo"],
-                ["입찰",     "campaign",       "violet"],
-                ["계약체결", "handshake",      "amber"],
-                ["계약이행", "sync_alt",       "emerald"],
-                ["대금지급", "payments",       "blue"],
-                ["하도급",   "account_tree",   "rose"],
-                ["기타",     "more_horiz",     "slate"],
-              ].each do |cat, icon, color| %>
-                <%= link_to audit_cases_path(category: cat),
-                      class: "group flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-50 transition-colors" do %>
-                  <span class="material-symbols-outlined text-base text-<%= color %>-500" aria-hidden="true"><%= icon %></span>
-                  <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900"><%= cat %></span>
+            <div class="bg-white rounded-2xl shadow-xl border border-slate-100 p-4">
+              <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 px-1">분야별 감사사례</p>
+              <div class="grid grid-cols-3 gap-1">
+                <% [
+                  ["수의계약", "gavel",          "indigo"],
+                  ["입찰",     "campaign",       "violet"],
+                  ["계약체결", "handshake",      "amber"],
+                  ["계약이행", "sync_alt",       "emerald"],
+                  ["대금지급", "payments",       "blue"],
+                  ["하도급",   "account_tree",   "rose"],
+                  ["기타",     "more_horiz",     "slate"],
+                ].each do |cat, icon, color| %>
+                  <%= link_to audit_cases_path(category: cat),
+                        class: "group flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition-colors" do %>
+                    <div class="w-8 h-8 rounded-lg bg-<%= color %>-100 group-hover:bg-<%= color %>-200 flex items-center justify-center transition-colors shrink-0">
+                      <span class="material-symbols-outlined text-sm text-<%= color %>-600" aria-hidden="true"><%= icon %></span>
+                    </div>
+                    <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900 leading-tight"><%= cat %></span>
+                  <% end %>
                 <% end %>
-              <% end %>
-              <div class="mt-2 pt-2 border-t border-slate-100">
-                <%= link_to audit_cases_path, class: "flex items-center justify-center gap-1 text-xs font-semibold text-red-600 hover:text-red-700 transition-colors py-1" do %>
+              </div>
+              <div class="mt-3 pt-3 border-t border-slate-100">
+                <%= link_to audit_cases_path, class: "flex items-center justify-center gap-1 text-xs font-semibold text-editorial-navy hover:text-editorial-navy-dark transition-colors" do %>
                   전체 감사사례 보기 <span class="material-symbols-outlined text-sm" aria-hidden="true">arrow_forward</span>
                 <% end %>
               </div>
