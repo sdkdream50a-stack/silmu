@@ -1,3 +1,8 @@
+---
+name: rollback
+description: 배포 실패 또는 장애 발생 시 silmu.kr을 이전 버전으로 안전하게 롤백. 현재 상태 진단 → 사용자 확인 → kamal rollback → 검증의 5단계 절차와 시나리오별(502, 마이그레이션, MAX_THREADS, 환경변수, Solid Queue) 대응 가이드 포함.
+---
+
 # 안전한 롤백 (silmu.kr)
 
 이 스킬은 배포 실패 또는 장애 발생 시 silmu.kr을 이전 버전으로 안전하게 롤백합니다.

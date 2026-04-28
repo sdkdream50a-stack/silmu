@@ -1,3 +1,8 @@
+---
+name: verify-live
+description: 배포 후 또는 장애 의심 시 silmu.kr의 HTTP 상태, 핵심 엔드포인트, 로그, Solid Queue/Puma, SSL, DB 연결을 약 30초 안에 확인하는 빠른 헬스체크.
+---
+
 # 빠른 라이브 검증 (silmu.kr)
 
 이 스킬은 배포 후 또는 긴급 상황에서 silmu.kr이 정상 작동하는지 빠르게 확인합니다.

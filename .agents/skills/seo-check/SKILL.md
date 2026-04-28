@@ -1,3 +1,8 @@
+---
+name: seo-check
+description: silmu.kr의 sitemap, robots.txt, ads.txt, meta tags, 구조화 데이터, 검색엔진 verification, 모바일 친화성, 페이지 속도, Soft 404, SSL/HTTPS를 종합 점검하는 SEO 전체 감사.
+---
+
 # SEO 전체 감사 (silmu.kr)
 
 이 스킬은 silmu.kr의 SEO 상태를 종합적으로 점검합니다.

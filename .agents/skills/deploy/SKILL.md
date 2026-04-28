@@ -1,3 +1,8 @@
+---
+name: deploy
+description: silmu.kr 프로젝트를 Kamal로 운영 환경에 배포. 배포 전 git 상태/테스트/RAILS_MAX_THREADS 검증, 배포 실행, 배포 후 HTTP/엔드포인트/로그/SSL/DNS·SEO 검증까지 수행.
+---
+
 # Deploy to Production (silmu.kr)
 
 이 스킬은 silmu.kr 프로젝트를 안전하게 운영 환경에 배포합니다.
