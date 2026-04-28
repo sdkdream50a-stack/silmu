@@ -38,11 +38,16 @@ Rails.application.configure do
                        "fonts.googleapis.com"
 
     # connect_src https: catch-all 제거 → 임의 exfiltration 경로 차단.
+    # Iconify 3.x는 SVG 아이콘 데이터를 api.iconify.design에서 fetch
+    # (fallback: api.simplesvg.com, api.unisvg.com)
     policy.connect_src :self,
                        "www.google-analytics.com",
                        "region1.analytics.google.com",
                        "stats.g.doubleclick.net",
-                       "www.clarity.ms"
+                       "www.clarity.ms",
+                       "api.iconify.design",
+                       "api.simplesvg.com",
+                       "api.unisvg.com"
 
     policy.frame_ancestors :none
     policy.base_uri :self    # <base> 주입을 통한 relative URL 탈취 방지
