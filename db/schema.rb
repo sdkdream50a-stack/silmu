@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_28_212258) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_29_100000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -25,6 +25,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_212258) do
     t.text "issue"
     t.string "legal_basis"
     t.text "lesson"
+    t.integer "org_type"
     t.boolean "published", default: true
     t.boolean "repeated_issue", default: false
     t.integer "sector", default: 0, null: false
@@ -38,6 +39,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_212258) do
     t.index ["published", "created_at"], name: "index_audit_cases_on_published_and_created_at"
     t.index ["published", "sector"], name: "index_audit_cases_on_published_and_sector"
     t.index ["published", "updated_at"], name: "index_audit_cases_on_published_and_updated_at"
+    t.index ["sector", "org_type"], name: "index_audit_cases_on_sector_and_org_type"
     t.index ["slug"], name: "index_audit_cases_on_slug", unique: true
     t.index ["topic_slug"], name: "index_audit_cases_on_topic_slug"
   end
@@ -302,6 +304,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_212258) do
     t.datetime "law_verified_at"
     t.string "name", null: false
     t.boolean "needs_review", default: false, null: false
+    t.integer "org_type"
     t.integer "parent_id"
     t.text "practical_tips"
     t.boolean "published", default: false
@@ -327,6 +330,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_212258) do
     t.index ["published", "updated_at"], name: "index_topics_on_published_and_updated_at"
     t.index ["published", "view_count"], name: "index_topics_on_published_and_view_count"
     t.index ["published"], name: "index_topics_on_published"
+    t.index ["sector", "org_type"], name: "index_topics_on_sector_and_org_type"
     t.index ["slug"], name: "index_topics_on_slug", unique: true
   end
 

@@ -18,6 +18,12 @@ class Topic < ApplicationRecord
   # "common" 또는 blank 전달 시 전체 반환 (common은 모든 sector에 공유되므로)
   scope :for_sector, ->(s) { where(sector: [ :common, s ]) if s.present? && s != "common" }
 
+  # 6차 권위자 P1 — sector=edu 내부 분리 (전문가 패널 9:1 추천)
+  # school: 단위학교 행정실 (학교회계 §30-2 + 교육공무원·지방공무원)
+  # edu_office: 시도교육청 본청·지원청 (지방교육자치법 + 지방재정법)
+  # nil: edu가 아닌 토픽 (common/local_gov)
+  enum :org_type, { school: 0, edu_office: 1 }, prefix: :org
+
   # Scopes
   scope :published, -> { where(published: true) }
   scope :by_category, ->(cat) { where(category: cat) if cat.present? }

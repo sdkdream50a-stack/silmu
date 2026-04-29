@@ -47,8 +47,10 @@
   <link rel="alternate" type="text/markdown" href="<%= canonical_url %>.md" title="<%= @topic.name %> (Markdown)">
   <%= json_ld({
     "@context": "https://schema.org",
-    "@type": [ "Article", "LearningResource" ],
-    "headline": "#{@topic.name} — 지방계약법 근거·절차·실무사례 완전정리",
+    # 6차 권위자 #H1 — sector=edu 토픽은 GovernmentService 다중타입 (AGO 신호)
+    "@type": topic_article_types(@topic),
+    # 6차 권위자 #P0-2.5 — 동적 headline (카테고리·섹터별, "지방계약법" 하드코딩 제거)
+    "headline": topic_headline(@topic),
     "description": @topic.summary,
     "author": { "@type": "Organization", "name": "실무.kr", "url": "https://silmu.kr" },
     "publisher": { "@type": "Organization", "name": "실무.kr", "logo": { "@type": "ImageObject", "url": "https://silmu.kr/icon.png" } },
@@ -67,7 +69,8 @@
     "lastReviewed": date_modified,
     "contentReferenceTime": law_base_date,
     "temporalCoverage": law_base_date,
-    "reviewedBy": { "@type": "Organization", "name": "실무.kr 법령검증팀", "url": "https://silmu.kr/about" },
+    # 6차 권위자 #F1 — reviewedBy Organization 객체화 (parentOrganization으로 실무.kr와 연결, E-E-A-T)
+    "reviewedBy": topic_reviewed_by,
     "mainEntityOfPage": canonical_url,
     "articleSection": @topic.category_name,
     "keywords": (@topic.keywords.presence || @topic.name).to_s,
@@ -86,7 +89,8 @@
     # LearningResource 신호 — 공무원 실무 학습 리소스로 명시 (AI Overviews 인용 ↑)
     "learningResourceType": "Practical Guide",
     "educationalLevel": "Professional",
-    "audience": { "@type": "Audience", "audienceType": "공무원·공공기관 계약·재무 담당자", "geographicArea": { "@type": "Country", "name": "대한민국" } },
+    # 6차 권위자 #F2 — sector별 audience (edu는 EducationalAudience + schoolAdministrator)
+    "audience": topic_audience(@topic),
     "teaches": @topic.name,
     "inDefinedTermSet": "https://silmu.kr/topics",
     # 인기도 신호 — 조회수를 InteractionCounter로 노출 (popularity 신호)
@@ -103,7 +107,7 @@
     # citation — LLM 인용 시 법조문까지 함께 끌고 가도록 (4차 권위자 GEO 추천)
     "citation": topic_legal_basis,
     "hasPart": has_part
-  }.compact) %>
+  }.merge(topic_government_service_fields(@topic) || {}).compact) %>
   <%= json_ld({
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",

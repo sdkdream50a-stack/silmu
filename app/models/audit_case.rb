@@ -6,6 +6,10 @@ class AuditCase < ApplicationRecord
   # "common" 또는 blank 전달 시 전체 반환 (common은 모든 sector에 공유되므로)
   scope :for_sector, ->(s) { where(sector: [ :common, s ]) if s.present? && s != "common" }
 
+  # 6차 권위자 P1 — sector=edu 내부 분리 (Topic과 동일)
+  # school: 단위학교 / edu_office: 시도교육청 / nil: 비-edu
+  enum :org_type, { school: 0, edu_office: 1 }, prefix: :org
+
   scope :published, -> { where(published: true) }
   scope :by_category, ->(cat) { where(category: cat) if cat.present? }
   scope :by_severity, ->(sev) { where(severity: sev) if sev.present? }
