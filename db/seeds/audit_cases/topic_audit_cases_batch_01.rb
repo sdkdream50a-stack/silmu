@@ -140,7 +140,7 @@ AuditCase.find_or_create_by!(slug: 'performance-guarantee-waiver-loss') do |ac|
   ac.published = true
   ac.view_count = 0
   ac.topic_slug = 'performance-guarantee'
-  ac.legal_basis = '지방계약법 시행령 제53조 (계약보증금 면제), 지방계약법 제15조 (계약보증금), 지방계약법 시행규칙 제66조 (계약보증금 면제 대상)'
+  ac.legal_basis = '지방계약법 시행령 제53조 (계약보증금 면제), 지방계약법 제15조 (계약보증금)'
 
   ac.issue = '○○시 공공시설 유지관리 용역(계약금액 8억원)에서 계약담당자가 지방계약법 시행령 제53조의 면제 요건(직전 2회 이상 성실 이행, 신용등급 BBB 이상 등)을 확인하지 않고 이행보증금(4천만원)을 면제해 주었고, 이후 해당 업체가 계약 이행을 포기하여 이행보증금 환수가 불가능해진 채 대체 계약 비용 등 총 7,200만원의 재정 손실이 발생함.'
 
