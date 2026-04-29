@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_29_100000) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_29_110000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -31,6 +31,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_29_100000) do
     t.integer "sector", default: 0, null: false
     t.string "severity"
     t.string "slug"
+    t.jsonb "source", default: {}
     t.string "title"
     t.string "topic_slug"
     t.datetime "updated_at", null: false
@@ -41,6 +42,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_29_100000) do
     t.index ["published", "updated_at"], name: "index_audit_cases_on_published_and_updated_at"
     t.index ["sector", "org_type"], name: "index_audit_cases_on_sector_and_org_type"
     t.index ["slug"], name: "index_audit_cases_on_slug", unique: true
+    t.index ["source"], name: "index_audit_cases_on_source", using: :gin
     t.index ["topic_slug"], name: "index_audit_cases_on_topic_slug"
   end
 
