@@ -18,6 +18,26 @@
   <div class="container-wide">
     <div class="max-w-4xl mx-auto space-y-6">
 
+      <!-- 2026-04-29 -->
+      <div class="card p-10 border-l-4 border-sky-500 shadow-lg hover:shadow-xl transition-shadow">
+        <div class="flex items-start justify-between mb-6">
+          <div>
+            <span class="inline-block px-4 py-1.5 bg-sky-100 text-sky-700 text-sm font-bold rounded-full mb-3 shadow-sm">대규모 업데이트</span>
+            <h2 class="text-3xl font-bold text-slate-900 tracking-tight">교육행정 분야 대규모 확장 — 토픽 100개 돌파 · 학교 감사사례 66건 신설</h2>
+          </div>
+          <span class="text-slate-500 text-base font-medium whitespace-nowrap ml-4">2026.04.29</span>
+        </div>
+        <ul class="list-disc pl-7 text-slate-700 space-y-3 leading-relaxed text-base">
+          <li><strong class="font-bold text-slate-900">교육 분야(sector=edu) 토픽 5건 신설 + 1건 백필</strong>: 기간제 교사 정근수당 · 시간외수당 퇴직월 특례 · 육아휴직수당 2025.1.3 개정 사후지급분 폐지 · 육아휴직수당 상한·6+6 부모육아휴직제·한부모 분기 · 정근수당 호봉 오인정 (총 토픽 <span class="font-bold text-sky-600">100개 돌파</span>)</li>
+          <li><strong class="font-bold text-slate-900">학교 감사사례 66건 대규모 추가</strong>: 경기도교육청 2021 감사사례집 — 보수 8건 · 물품관리 3건 · 재산관리 6건 · 학교회계 3-1·3-2 5건 · 학교회계 3-5·3-6 7건 · 예산집행 19건 · 계약·시설공사 14건 + 서울특별시교육청 2024 종합감사(배명고·학교법인) 4건</li>
+          <li><strong class="font-bold text-slate-900">3-tier 분기(school / edu_office) 도입</strong>: 학교 vs 교육청 실무 차이를 토픽별로 자동 분기, 법령 환각 제거</li>
+          <li><strong class="font-bold text-slate-900">감사사례 출처 메타데이터 정규화</strong>: AuditCase에 source jsonb + GIN 인덱스 추가 — 출처(기관·연도·문서명) 기준 검색·집계 지원</li>
+          <li><strong class="font-bold text-slate-900">익명화 정책 공식화</strong>: 감사사례 실명 잔존 자동 lint(rake audit_cases:lint) + CI 연동, <a href="/about" class="text-sky-600 underline">/about</a>에 익명화 원칙 명시</li>
+          <li><strong class="font-bold text-slate-900">전수 법령 검증 정정</strong>: 검증팀 8명이 발견한 56건 중 핵심 14파일 + 잔여 5파일 일괄 정정 (정식명 일관성 확보)</li>
+          <li><strong class="font-bold text-slate-900">UX 개선</strong>: 메인 nav 드롭다운 4종 그리드 통일(2열 320px), 감사사례 드롭다운을 법령가이드 스타일로 통일</li>
+        </ul>
+      </div>
+
       <!-- 2026-03-01 -->
       <div class="card p-10 border-l-4 border-emerald-500 shadow-lg hover:shadow-xl transition-shadow">
         <div class="flex items-start justify-between mb-6">
