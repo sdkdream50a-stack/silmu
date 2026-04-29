@@ -59,7 +59,7 @@ module SeoHelper
     else
       case topic.category
       when "travel", "duty", "salary" then "공무원수당 등에 관한 규정·공무원보수규정"
-      when "subsidy" then "보조금 관리에 관한 법률"
+      when "subsidy" then "보조금 관리에 관한 법률·지방자치단체 보조금 관리에 관한 법률"
       when "property" then "공유재산 및 물품 관리법"
       when "budget" then "지방재정법·지방회계법"
       else "지방계약법·시행령"
