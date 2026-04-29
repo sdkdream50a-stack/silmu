@@ -7,7 +7,7 @@ class DesignChangeReviewService
       name: "현장여건 상이",
       icon: "landscape",
       desc: "실제 현장이 설계도서와 다른 경우",
-      legal_basis: "지방계약법 시행령 제65조 제1항 제1호",
+      legal_basis: "지방계약법 시행령 제74조 제1항 제1호",
       legal_text: "공사현장의 상태가 설계서와 다른 경우",
       documents: [
         "현장 상태 확인서 (사진 포함)",
@@ -28,7 +28,7 @@ class DesignChangeReviewService
       name: "설계서 오류·누락",
       icon: "bug_report",
       desc: "설계도서에 오류나 누락이 있는 경우",
-      legal_basis: "지방계약법 시행령 제65조 제1항 제2호",
+      legal_basis: "지방계약법 시행령 제74조 제1항 제2호",
       legal_text: "설계서의 내용이 불분명하거나 누락·오류가 있는 경우",
       documents: [
         "설계오류 확인서",
@@ -49,7 +49,7 @@ class DesignChangeReviewService
       name: "민원 요청",
       icon: "people",
       desc: "주민 민원으로 설계 변경이 필요한 경우",
-      legal_basis: "지방계약법 시행령 제65조 제1항 제5호",
+      legal_basis: "지방계약법 시행령 제74조 제1항 제5호",
       legal_text: "기타 발주기관이 설계변경이 필요하다고 인정하는 경우",
       documents: [
         "민원 접수서 (신청서·진정서 등)",
@@ -70,7 +70,7 @@ class DesignChangeReviewService
       name: "물량 변경",
       icon: "straighten",
       desc: "시공 수량이 설계와 다른 경우",
-      legal_basis: "지방계약법 시행령 제65조 제1항 제3호",
+      legal_basis: "지방계약법 시행령 제74조 제1항 제3호",
       legal_text: "물량의 증감이 발생한 경우",
       documents: [
         "당초 수량산출서",
@@ -90,7 +90,7 @@ class DesignChangeReviewService
       name: "공법 변경",
       icon: "engineering",
       desc: "시공 공법을 변경해야 하는 경우",
-      legal_basis: "지방계약법 시행령 제65조 제1항 제4호",
+      legal_basis: "지방계약법 시행령 제74조 제1항 제4호",
       legal_text: "새로운 기술·공법 사용으로 공사비 절감이 가능한 경우",
       documents: [
         "공법 변경 검토서",
@@ -112,7 +112,7 @@ class DesignChangeReviewService
       name: "기타 사유",
       icon: "more_horiz",
       desc: "기타 설계변경이 필요한 경우",
-      legal_basis: "지방계약법 시행령 제65조 제1항 제5호",
+      legal_basis: "지방계약법 시행령 제74조 제1항 제5호",
       legal_text: "기타 발주기관이 설계변경이 필요하다고 인정하는 경우",
       documents: [
         "설계변경 사유서 (상세)",

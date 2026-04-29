@@ -56,7 +56,7 @@
 - [예산이월](https://silmu.kr/topics/budget-carryover): 명시이월, 사고이월, 계속비이월의 요건과 절차
 - [여비](https://silmu.kr/topics/travel-expense): 공무원 국내·외 출장 시 여비 지급 기준과 청구 절차
 - [연말정산](https://silmu.kr/topics/year-end-settlement): 공무원 연말정산 절차와 주요 변경사항
-- [선금](https://silmu.kr/topics/advance-payment): 선금 지급 요건(30% 범위), 선금보증금, 정산 절차
+- [선금](https://silmu.kr/topics/advance-payment): 선금 지급 요건(공사·용역 70% 이내, 학술 50% 이내), 선금보증금, 정산 절차
 - [적격심사](https://silmu.kr/topics/bid-qualification): 입찰 낙찰자 결정 시 적격심사 기준, 심사 항목, 낙찰하한율
 - [입찰보증금](https://silmu.kr/topics/bid-deposit): 입찰보증금 납부 기준(입찰금액의 5%), 면제 요건, 귀속 사유
 - [장기계속계약](https://silmu.kr/topics/long-term-contract): 장기계속계약 체결 요건, 차수별 계약, 총사업비 관리
@@ -66,7 +66,7 @@
 - [복수예비가격](https://silmu.kr/topics/multiple-price): 예정가격 결정을 위한 복수예비가격 작성 방법과 추첨 절차
 - [낙찰하한율](https://silmu.kr/topics/lowest-bid-rate): 낙찰하한율 기준(89.745%), 적용 방법, 2026년 변경사항
 - [비교견적서 수집 방법](https://silmu.kr/topics/quote-collection-guide): 2인 이상 견적 수집 방법, 경쟁업체 찾는 방법, 공문 예시
-- [분할계약 금지](https://silmu.kr/topics/split-contract-prohibition): 분할발주·분할계약 금지 원칙(지방계약법 시행령 제77조), 위반 vs 적법 사례
+- [분할계약 금지](https://silmu.kr/topics/split-contract-prohibition): 분할발주·분할계약 금지 원칙(지방계약법 시행령 제5조 제2항), 위반 vs 적법 사례
 - [예산 편성 절차](https://silmu.kr/topics/budget-compilation): 지방자치단체 예산 편성 절차(지방자치법 제127조), 시도/시군구 기한 구분
 - [적격심사 탈락 사유](https://silmu.kr/topics/qualification-failure): 적격심사 탈락 사유와 이의신청 방법
 - [계약보증금 면제 조건](https://silmu.kr/topics/contract-guarantee-exemption): 계약보증금 면제 요건 상세 정리
