@@ -35,8 +35,9 @@
           </p>
           <div class="bg-slate-50 rounded-lg p-4 text-sm space-y-2">
             <p><strong>평균기준소득월액</strong> = 재직 기간 중 기준소득월액의 평균 (공무원보수인상률 반영하여 연금 지급 시작 시점의 현재가치로 환산)</p>
-            <p><strong>2016년 이후 임용자</strong>: 연금 = 평균기준소득월액 × 재직년수 × <strong>1.7%</strong> (공무원연금법 §43 본문, 2035년 최종 목표 단계적 인하 중)</p>
-            <p><strong>2015년 이전 임용자</strong>: 구간별 차등 적용 (단순화하여 평균 <strong>1.9%</strong> 적용)</p>
+            <p><strong>퇴직 연도별 산정율</strong> (공무원연금법 부칙 — 2015.6.22 전부개정 경과조치):</p>
+            <p class="text-xs text-slate-500 ml-2">2016: 1.878% / 2017: 1.856% / 2018: 1.834% / 2019: 1.812% / 2020: 1.79% / 2021: 1.78% / 2022: 1.77% / 2023: 1.76% / 2024: 1.75% / 2025: 1.74% / <strong class="text-slate-700">2026: 1.736%</strong> / 2030: 1.72% / 2035: 1.7% (§43 본문 최종 목표)</p>
+            <p><strong>2015년 이전 임용자</strong>: 1.9% 적용 (2016년 이후 단계적 인하 시작)</p>
             <p><strong>2026년 인상률</strong>: 2025년 물가상승률 2.1% 반영 자동 계산</p>
           </div>
           <div class="bg-amber-50 border-l-4 border-amber-500 p-3 rounded-r-lg mt-4">
@@ -70,7 +71,7 @@
                       class="era-btn py-3 rounded-xl border-2 text-sm font-semibold transition-all border-slate-200 text-slate-500 hover:border-violet-300"
                       data-era="after">2016년 이후 임용</button>
             </div>
-            <p class="text-xs text-slate-400 mt-2" id="era-desc">지급율 평균 1.9% 적용 (구간별 차등)</p>
+            <p class="text-xs text-slate-400 mt-2" id="era-desc">2015년 이전 임용자: 1.9% 적용</p>
           </div>
 
           <!-- 재직년수 슬라이더 -->
@@ -259,8 +260,8 @@ function selectEra(era) {
   });
   document.getElementById('era-desc').textContent =
     era === 'before'
-      ? '지급율 평균 1.9% 적용 (구간별 차등)'
-      : '지급율 1.7% 적용 (2035년 최종 목표, 현재 단계적 인하 중)';
+      ? '2015년 이전 임용자: 1.9% 적용'
+      : '2026년 현재 적용율: 1.736% (공무원연금법 부칙 — 단계적 인하 2035년 1.7% 도달)';
   calculate();
 }
 
@@ -278,7 +279,8 @@ function calculate() {
   const income = parseInt(document.getElementById('income-input').value) || 0;
   if (!income) return;
 
-  const rate = selectedEra === 'before' ? 0.019 : 0.017;
+  // 공무원연금법 부칙 (2015.6.22 전부개정) 단계적 인하율 — 2026년 현재 1.736%
+  const rate = selectedEra === 'before' ? 0.019 : 0.01736;
   const monthlyPension = Math.round(income * tenure * rate);
   const monthlyPension2026 = Math.round(monthlyPension * 1.021);
   const annualPension = monthlyPension * 12;
