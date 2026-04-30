@@ -88,6 +88,35 @@ namespace :silmu do
       }
     ]
 
+    # 저작권 안전 패턴 (외부 xlsm/유료도구 §7 표현 모방 예방)
+    # 근거: 2026-04-30 외부 통합프로그램 xlsm 분석 학습. 법령 사실(§7 보호 제외)은 추출 가능,
+    # 표현물(셀 좌표·VBA·UI 모방)은 저작권 침해 위험으로 차단.
+    copyright_violations = [
+      {
+        # 1. 외부 xlsm 셀 좌표 패턴 ($B$5, 시트명!, A1:B10 등)
+        pattern: /\$[A-Z]+\$\d+|'[가-힣0-9\s\)]+'\![A-Z]+\d+|[A-Z]{1,3}\d+:[A-Z]{1,3}\d+/,
+        rule: "외부 xlsm 셀 좌표 패턴 잔존. silmu는 자체 erb/js로 재구현, 셀 참조 도입 금지"
+      },
+      {
+        # 2. VBA 함수 시그니처 (Function, Sub, Dim As Double 등)
+        pattern: /\bFunction\s+\w+\s*\(|\bSub\s+\w+\s*\(|\bDim\s+\w+\s+As\s+(Double|Integer|String)/,
+        rule: "VBA 매크로 함수 시그니처 잔존. silmu는 Ruby/JavaScript로 재구현"
+      },
+      {
+        # 3. 외부 유료 도구 명칭 직접 인용
+        pattern: /통합프로그램.{0,30}ver\d+|통합프로그램.{0,20}\.xlsm|공무원연금.{0,10}통합프로그램/,
+        rule: "외부 유료 도구 명칭 직접 인용. silmu는 출처를 \"공무원연금법 부칙\" 등 법령으로만 인용"
+      },
+      {
+        # 4. 외부 도구 시트 라벨 모방 ('5)연금계산표' 같은 번호 prefix 시트명)
+        pattern: /\d+\)[가-힣]+계산표|\d+\)통합화면|\d+\)이행률표/,
+        rule: "외부 xlsm 시트 라벨 패턴 모방. silmu는 silmu 자체 명칭 사용"
+      }
+    ]
+
+    # 저작권 검사는 부정확 매핑과 동일하게 수행
+    incorrect_mappings += copyright_violations
+
     # 스캔 대상 경로
     target_globs = %w[
       app/views/**/*.erb
