@@ -66,7 +66,7 @@ class ContractDocumentService
             id: "contract_form", name: "물품구매 표준계약서", required: true,
             description: "계약서 본문",
             legal_basis: "지방계약법 제14조, 시행령 제49조",
-            caution: "계약금액 5,000만원 초과 시 계약서 작성 의무 (시행령 제50조)",
+            caution: "계약금액 5,000만원 초과 시 계약서 작성 의무 (시행령 제49조 — 작성 본조). 5천만원 이하는 시행령 제50조 ①항에 따라 생략 가능",
             tip: "계약서 특수조건에 납품지연 지체상금 조항 포함"
           },
           {
@@ -117,8 +117,8 @@ class ContractDocumentService
           {
             id: "delivery_confirmation", name: "납품확인서", required: true,
             description: "납품 완료 확인",
-            legal_basis: "지방계약법 시행령 제65조",
-            caution: "검사조서 작성 후 발급",
+            legal_basis: "지방계약법 시행령 제64조 (검사) — 검사조서 작성 생략 가능 사유는 §65",
+            caution: "검사조서 작성 후 발급 (작성 생략 사유 §65 ①항 해당 시 면제)",
             tip: "물품대장 등재 후 확인서 발급"
           }
         ],
