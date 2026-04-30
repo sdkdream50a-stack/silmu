@@ -55,11 +55,18 @@ class EstimatedPriceService
                     general_admin: { max: 0.08, basis: "재료비+노무비+경비", name: "일반관리비" } }
   }.freeze
 
-  # 수의계약 기준금액 (지방계약법 시행령 제25조 제1항 제1호)
+  # 수의계약 기준금액 (지방계약법 시행령 제25조 제1항)
   PRIVATE_CONTRACT_THRESHOLDS = {
     goods: 20_000_000,          # 2천만원 (일반)
     service: 20_000_000,        # 2천만원 (일반)
-    construction: 200_000_000   # 2억원 (전문공사 기준)
+    construction: 400_000_000   # 4억원 (종합공사 기준 - 가장 일반적 발주)
+  }.freeze
+
+  # 공사 종류별 수의계약 한도 (지방계약법 시행령 제25조 제1항 제5호)
+  CONSTRUCTION_THRESHOLDS = {
+    general: 400_000_000,    # 종합공사 4억
+    special: 200_000_000,    # 전문공사 2억
+    other: 160_000_000       # 기타공사(전기·정보통신·소방시설 등) 1.6억
   }.freeze
 
   VAT_RATE = 0.10
