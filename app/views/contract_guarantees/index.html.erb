@@ -130,7 +130,7 @@
           <li>공사 계약 시 공종별(구조체·방수·전기·설비 등) 하자보수보증금 개별 산출</li>
           <li>하자보증 기간(1~5년) 및 보증금률(2~5%) 자동 적용</li>
           <li>계약금액 구간별 인지세 자동 계산 (발주자·계약자 각 50% 부담)</li>
-          <li>법령 근거(지방계약법 시행령 제37조·제78조, 인지세법) 함께 제공</li>
+          <li>법령 근거(지방계약법 시행령 제51조·제78조, 인지세법) 함께 제공</li>
         </ul>
 
         <h3 class="text-lg font-bold text-slate-900 mt-6 mb-3">주의사항</h3>
@@ -531,7 +531,7 @@ document.addEventListener('turbo:load', function() {
     } else {
       html += '<div class="cg-detail-grid">';
       html += '<div class="cg-detail-item"><div class="cg-detail-label">계약 유형</div><div class="cg-detail-value">' + cgEsc(cg.type_name) + '</div></div>';
-      html += '<div class="cg-detail-item"><div class="cg-detail-label">보증금률 <span style="font-size:11px;color:#818cf8;">(지방계약법 시행령 제37조 제1항)</span></div><div class="cg-detail-value">' + cg.rate + '%</div></div>';
+      html += '<div class="cg-detail-item"><div class="cg-detail-label">보증금률 <span style="font-size:11px;color:#818cf8;">(지방계약법 시행령 제51조 — 계약의 이행보증)</span></div><div class="cg-detail-value">' + cg.rate + '%</div></div>';
       html += '<div class="cg-detail-item"><div class="cg-detail-label">계약보증금 <span style="font-size:11px;color:#818cf8;">(§37①)</span></div><div class="cg-detail-value" style="color:#4338ca;">' + cgComma(cg.amount) + '원</div></div>';
       html += '<div class="cg-detail-item"><div class="cg-detail-label">비고</div><div class="cg-detail-value" style="font-size:14px;">' + cgEsc(cg.note) + '</div></div>';
       html += '</div>';
@@ -576,7 +576,7 @@ document.addEventListener('turbo:load', function() {
     // 법령
     html += '<div class="cg-result-section"><div class="cg-result-title"><span class="material-symbols-outlined" style="color:#f59e0b;">info</span> 관련 법령</div>';
     html += '<div class="cg-ref-box">';
-    html += '• 계약보증금: 지방계약법 시행령 제37조 (계약금액의 10% 이상)<br>';
+    html += '• 계약보증금: 지방계약법 시행령 제51조 (계약의 이행보증, 계약금액의 10% 이상)<br>';
     html += '• 소액계약 면제: 지방계약법 시행령 제53조 제1항 제2호 (5천만원 이하, 한시적 특례 ~2026.6.30.)<br>';
     html += '• 하자보수보증금: 지방계약법 시행령 제78조 (공종별 차등 적용)<br>';
     html += '• 인지세: 인지세법 제3조, 시행령 별표 (발주자·계약자 각 50%)<br>';

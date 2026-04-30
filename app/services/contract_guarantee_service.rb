@@ -1,6 +1,6 @@
 # 계약보증금·하자보증금·인지세·지체상금 계산기 서비스
 class ContractGuaranteeService
-  # 계약보증금률 (지방계약법 시행령 제50조, 법 제15조; 면제 시행령 제53조)
+  # 계약보증금률 (지방계약법 시행령 제51조 — 계약의 이행보증; 면제 시행령 제53조)
   CONTRACT_GUARANTEE_RATES = {
     general: { name: "일반 계약", rate: 0.10, note: "계약금액의 10% 이상" },
     construction: { name: "공사 계약", rate: 0.10, note: "계약금액의 10% 이상 (이행보증서 제출 가능)" },
