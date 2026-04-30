@@ -557,7 +557,7 @@ Topic.find_or_create_by!(slug: 'qualification-failure') do |t|
   LAW
 
   t.decree_content = <<~DECREE
-## 지방계약법 시행령 제42조의2 (적격심사)
+## 지방계약법 시행령 제42조 + 행안부 예규 「지방자치단체 입찰 및 계약 집행기준」 (적격심사)
 
 ### 적격심사 대상 금액
 

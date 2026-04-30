@@ -1,0 +1,46 @@
+# silmu 5단계 법령 검증 게이트 — PR 자동 lint
+#
+# 트리거: db/seeds·app/services·app/views·config 변경 PR
+# 차단: 폐지 조문(§42의2) / 표준값 위반(지체상금 30%, 낙찰하한율 87.745%) / 부정확 매핑
+# 참조: /Users/seong/.claude/projects/-Users-seong-project-silmu/memory/project_legal_validation_gate.md
+
+name: silmu 5단계 법령 검증 게이트
+
+on:
+  pull_request:
+    paths:
+      - 'app/views/**/*.erb'
+      - 'app/services/**/*.rb'
+      - 'app/models/exam_*.rb'
+      - 'app/models/exam_curriculum/**/*.rb'
+      - 'db/seeds/topics.rb'
+      - 'db/seeds/topic_*.rb'
+      - 'db/seeds/audit_cases.rb'
+      - 'db/seeds/audit_cases/**/*.rb'
+      - 'db/seeds/suui_contract_series.rb'
+      - 'config/contract_thresholds.yml'
+      - 'lib/tasks/silmu_legal_lint.rake'
+  workflow_dispatch:
+
+jobs:
+  legal_lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: silmu legal lint
+        run: bin/rake silmu:legal_lint
+
+      - name: Failure summary
+        if: failure()
+        run: |
+          echo "::error::silmu 5단계 법령 검증 게이트 위반"
+          echo "참조: /Users/seong/.claude/projects/-Users-seong-project-silmu/memory/project_legal_validation_gate.md"
+          echo ""
+          echo "수정 후 재실행:"
+          echo "  bin/rake silmu:legal_lint"
