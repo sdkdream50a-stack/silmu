@@ -62,7 +62,7 @@ contract_thresholds:
       - max: .inf
         method: "입찰"
         method_detail: "일반/제한경쟁입찰"
-        basis: "지방계약법 제9조, 시행령 제13조"
+        basis: "지방계약법 제9조 (계약의 방법), 시행령 제15조 (공사의 입찰)"
         note: "추정가격 1억원 초과 (특례기업 외 일반 업체는 2천만원 초과 시 입찰)"
         special_condition: "나라장터(G2B) 또는 학교장터(S2B) 전자입찰 필수"
         documents:
@@ -131,7 +131,7 @@ contract_thresholds:
       - max: .inf
         method: "입찰"
         method_detail: "일반/제한경쟁입찰 또는 협상에의한계약"
-        basis: "지방계약법 제9조, 시행령 제13조, 제43조"
+        basis: "지방계약법 제9조 (계약의 방법), 시행령 제16조 (물품·용역 입찰), 제43조 (협상에의한계약)"
         note: "추정가격 1억원 초과 (특례기업 외 일반 업체는 2천만원 초과 시 입찰)"
         special_condition: "기술제안서 평가 등 협상에의한계약 적용 가능"
         documents:
