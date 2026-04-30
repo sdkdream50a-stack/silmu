@@ -205,7 +205,7 @@ class LegalPeriodService
           completion_date: format_date(completion_date),
           completion_weekday: weekday_name(completion_date),
           warranties: results,
-          note: "하자담보책임기간 (국가계약법 시행령 제70조, 지방계약법 시행령 제78조)"
+          note: "하자담보책임기간 (국가계약법 시행령 제60조 — 공사계약의 하자담보책임기간, 지방계약법 시행령 제71조 — 하자보수보증금)"
         }
       }
     end
