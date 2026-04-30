@@ -9,7 +9,7 @@ class ContractGuaranteeService
     small_private: { name: "소액계약 (5천만원 이하)", rate: 0.0, note: "면제 가능 (지방계약법 시행령 제53조)" }
   }.freeze
 
-  # 하자보수보증금률 (지방계약법 시행규칙 제70조)
+  # 하자보수보증금: 위임 시행령 제71조 + 요율 시행규칙 제70조 + 공종별 존속기간 시행규칙 제68조
   DEFECT_GUARANTEE_RATES = [
     { id: "structure", name: "구조체 공사", rate: 0.05, years: 5, note: "철근콘크리트·철골 구조" },
     { id: "roof_waterproof", name: "지붕·방수공사", rate: 0.03, years: 3, note: "지붕, 방수" },

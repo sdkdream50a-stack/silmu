@@ -130,7 +130,7 @@
           <li>공사 계약 시 공종별(구조체·방수·전기·설비 등) 하자보수보증금 개별 산출</li>
           <li>하자보증 기간(1~5년) 및 보증금률(2~5%) 자동 적용</li>
           <li>계약금액 구간별 인지세 자동 계산 (발주자·계약자 각 50% 부담)</li>
-          <li>법령 근거(지방계약법 시행령 제51조·제78조, 인지세법) 함께 제공</li>
+          <li>법령 근거(지방계약법 시행령 제51조·제71조, 시행규칙 제70조·제68조, 인지세법) 함께 제공</li>
         </ul>
 
         <h3 class="text-lg font-bold text-slate-900 mt-6 mb-3">주의사항</h3>
@@ -540,7 +540,7 @@ document.addEventListener('turbo:load', function() {
 
     // 하자보증금
     if (r.defect_guarantee && r.defect_guarantee.length > 0) {
-      html += '<div class="cg-result-section"><div class="cg-result-title"><span class="material-symbols-outlined" style="color:#6366f1;">shield</span> 하자보수보증금 <span style="font-size:13px;font-weight:400;color:#818cf8;margin-left:4px;">(지방계약법 시행령 제78조)</span></div>';
+      html += '<div class="cg-result-section"><div class="cg-result-title"><span class="material-symbols-outlined" style="color:#6366f1;">shield</span> 하자보수보증금 <span style="font-size:13px;font-weight:400;color:#818cf8;margin-left:4px;">(지방계약법 시행령 제71조 + 시행규칙 제70조·제68조)</span></div>';
       html += '<table class="cg-defect-table"><thead><tr><th>공종</th><th>보증금률</th><th>보증기간</th><th style="text-align:right;">보증금액</th></tr></thead><tbody>';
       var defTotal = 0;
       for (var i = 0; i < r.defect_guarantee.length; i++) {
@@ -578,7 +578,7 @@ document.addEventListener('turbo:load', function() {
     html += '<div class="cg-ref-box">';
     html += '• 계약보증금: 지방계약법 시행령 제51조 (계약의 이행보증, 계약금액의 10% 이상)<br>';
     html += '• 소액계약 면제: 지방계약법 시행령 제53조 제1항 제2호 (5천만원 이하, 한시적 특례 ~2026.6.30.)<br>';
-    html += '• 하자보수보증금: 지방계약법 시행령 제78조 (공종별 차등 적용)<br>';
+    html += '• 하자보수보증금: 지방계약법 시행령 제71조 + 시행규칙 제70조 (요율)·제68조 (공종별 담보책임 존속기간)<br>';
     html += '• 인지세: 인지세법 제3조, 시행령 별표 (발주자·계약자 각 50%)<br>';
     html += '• 본 계산 결과는 참고용이며, 기관별 내부 지침에 따라 다를 수 있습니다.';
     html += '</div></div>';
