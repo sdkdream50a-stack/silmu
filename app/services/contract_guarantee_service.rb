@@ -68,8 +68,8 @@ class ContractGuaranteeService
       daily_penalty = (contract_amount * rate_info[:rate]).to_f.round(0)
       total_penalty = daily_penalty * delay_days
 
-      # 지체상금 최고 한도: 계약금액의 30% (시행령 제90조 제2항)
-      max_penalty = (contract_amount * 0.3).round(0)
+      # 지체상금 최고 한도: 계약금액의 10% (지방계약법 시행규칙 제75조 단서)
+      max_penalty = (contract_amount * 0.10).round(0)
       capped = total_penalty > max_penalty
       total_penalty = [ total_penalty, max_penalty ].min
 

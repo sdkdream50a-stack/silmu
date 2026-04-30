@@ -237,8 +237,8 @@ class LegalPeriodService
       rate_info = LATE_PENALTY_RATES[penalty_type]
       penalty_amount = (contract_amount * rate_info[:rate] * delay_days).to_i
 
-      # 지체상금 최고 한도: 계약금액의 30% (시행령 제90조 제2항)
-      max_penalty = (contract_amount * 0.3).to_i
+      # 지체상금 최고 한도: 계약금액의 10% (지방계약법 시행규칙 제75조 단서)
+      max_penalty = (contract_amount * 0.10).to_i
       capped = penalty_amount > max_penalty
       penalty_amount = [ penalty_amount, max_penalty ].min
 

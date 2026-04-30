@@ -179,8 +179,8 @@ class LegalPeriodServiceTest < ActiveSupport::TestCase
     assert_equal 0, result[:result][:penalty_amount]
   end
 
-  test "late_penalty: 계약금액의 30% 상한 (시행령 제90조 제2항)" do
-    # 100만원 계약, 공사 1000일 지체 → 500만원 계산되지만 30만원 cap
+  test "late_penalty: 계약금액의 10% 상한 (지방계약법 시행규칙 제75조 단서)" do
+    # 100만원 계약, 공사 1000일 지체 → 500만원 계산되지만 10만원 cap
     result = LegalPeriodService.calculate(
       period_type: "late_penalty",
       penalty_type: "construction",
@@ -188,8 +188,8 @@ class LegalPeriodServiceTest < ActiveSupport::TestCase
       due_date: "2026-01-01",
       actual_date: "2028-10-01" # 1000+일 지체
     )
-    assert result[:result][:capped], "30% 상한에 걸려야 함"
-    assert_equal 300_000, result[:result][:penalty_amount]
+    assert result[:result][:capped], "10% 상한에 걸려야 함"
+    assert_equal 100_000, result[:result][:penalty_amount]
   end
 
   test "late_penalty: 용역 요율 1.3/1000" do
