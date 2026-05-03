@@ -78,6 +78,13 @@ class AuditCase < ApplicationRecord
     end
   end
 
+  # P1-4 (권위자 패널): 슬러그에서 발간 연도 추출 (예: sen-2025-* → 2025)
+  # 사용자가 자료 신선도를 즉시 인식할 수 있도록 카드에 연도 배지 표시
+  def publication_year
+    return @publication_year if defined?(@publication_year)
+    @publication_year = slug.to_s.match(/-(\d{4})-/)&.captures&.first&.to_i
+  end
+
   def increment_view!
     self.class.update_counters(id, view_count: 1)
   end

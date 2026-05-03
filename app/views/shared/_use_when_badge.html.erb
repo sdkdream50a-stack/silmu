@@ -1,0 +1,18 @@
+<%# 도구별 사용 시점 1줄 안내 배지 — P1-2 (권위자 패널 권고) %>
+<%# 사용: <%= render 'shared/use_when_badge', tool: 'contingency-fund' %> %>
+<%# Dark hero 위: <%= render 'shared/use_when_badge', tool: 'xxx', variant: 'on_dark' %> %>
+<% msg = tool_use_when(local_assigns[:tool]) %>
+<% if msg.present? %>
+  <% on_dark = local_assigns[:variant] == 'on_dark' %>
+  <% if on_dark %>
+    <div class="mt-3 inline-flex items-start gap-1.5 text-xs px-3 py-1.5 bg-white/15 backdrop-blur text-white rounded-full border border-white/30" role="note" aria-label="이 도구의 사용 시점 안내">
+      <span class="material-symbols-outlined text-[14px] text-amber-200 mt-px" aria-hidden="true">lightbulb</span>
+      <span><strong>이런 상황에 사용:</strong> <%= msg %></span>
+    </div>
+  <% else %>
+    <div class="mt-3 inline-flex items-start gap-1.5 text-xs px-3 py-1.5 bg-amber-50 text-amber-900 rounded-full border border-amber-200" role="note" aria-label="이 도구의 사용 시점 안내">
+      <span class="material-symbols-outlined text-[14px] text-amber-600 mt-px" aria-hidden="true">lightbulb</span>
+      <span><strong>이런 상황에 사용:</strong> <%= msg %></span>
+    </div>
+  <% end %>
+<% end %>

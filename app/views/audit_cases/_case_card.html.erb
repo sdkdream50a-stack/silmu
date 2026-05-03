@@ -1,7 +1,15 @@
 <% _above_fold = local_assigns[:above_fold] %>
 <%= link_to audit_case_path(slug: audit_case.slug), class: "block card card-hover p-6 group case-item", style: (_above_fold ? nil : "content-visibility:auto; contain-intrinsic-size:auto 180px"), data: { title: audit_case.title.downcase, issue: audit_case.issue.truncate(100).downcase, severity: audit_case.severity } do %>
   <div class="flex items-start justify-between mb-3">
-    <span class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-semibold bg-red-50 text-red-700"><%= audit_case.category %></span>
+    <div class="flex items-center gap-1.5 flex-wrap">
+      <span class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-semibold bg-red-50 text-red-700"><%= audit_case.category %></span>
+      <% if (year = audit_case.publication_year) %>
+        <% recent = year >= 2024 %>
+        <span class="inline-flex items-center gap-0.5 px-2 py-1 rounded-lg text-[11px] font-semibold <%= recent ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-slate-100 text-slate-500' %>" title="감사 발간 연도">
+          <%= year %><% if recent %><span class="ml-0.5 text-[9px] font-bold tracking-wide">최신</span><% end %>
+        </span>
+      <% end %>
+    </div>
     <div class="flex items-center gap-1.5">
       <% if audit_case.repeated_issue? %>
         <span class="inline-flex items-center gap-0.5 px-2 py-1 rounded-lg text-xs font-bold bg-red-600 text-white">

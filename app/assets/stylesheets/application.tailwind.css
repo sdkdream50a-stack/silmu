@@ -131,6 +131,23 @@
     box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--color-editorial-navy);
     border-radius: 0.375rem;
   }
+
+  /* P1-3: 모바일 반응형 테이블 — main 영역 내 테이블만 자동 가로 스크롤
+     (nav/footer 등 layout chrome 미영향, prose 내 inline table 포함) */
+  @media (max-width: 640px) {
+    main table {
+      display: block;
+      max-width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    main table thead,
+    main table tbody {
+      display: table;
+      width: 100%;
+      min-width: max-content;
+    }
+  }
 }
 
 /* ===========================================
