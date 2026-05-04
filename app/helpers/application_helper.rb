@@ -82,6 +82,7 @@ module ApplicationHelper
     "salary-calculator"               => "공무원 봉급(월급) 본봉 산정 시",
     "severance-calculator"            => "퇴직수당·퇴직금 산정 시",
     "split-contract-checker"          => "분할계약 위반 여부 사전 검토 시",
+    "standard-term-checker"           => "기안서·사유서 작성 후 행정 표준어 준수 여부 확인 시",
     "subsidy-settlement-checker"      => "보조금 정산 제출 전 자가점검 시",
     "task-calendar"                   => "월별 업무 일정·법정 기한 관리 시",
     "travel-calculator"               => "공무원 여비(국내/국외 출장) 산정 시"

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_29_110000) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_04_100000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -233,6 +233,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_29_110000) do
     t.string "resource_type", null: false
     t.datetime "updated_at", null: false
     t.index ["old_slug", "resource_type"], name: "index_slug_redirects_on_old_slug_and_resource_type", unique: true
+  end
+
+  create_table "standard_terms", force: :cascade do |t|
+    t.string "agency_name"
+    t.datetime "created_at", null: false
+    t.string "data_type"
+    t.text "description"
+    t.string "domain_classification"
+    t.integer "max_length"
+    t.string "revision_round"
+    t.jsonb "synonyms", default: [], null: false
+    t.string "term_english"
+    t.string "term_korean", null: false
+    t.datetime "updated_at", null: false
+    t.index ["synonyms"], name: "index_standard_terms_on_synonyms", using: :gin
+    t.index ["term_korean"], name: "index_standard_terms_on_term_korean", unique: true
   end
 
   create_table "task_guides", force: :cascade do |t|

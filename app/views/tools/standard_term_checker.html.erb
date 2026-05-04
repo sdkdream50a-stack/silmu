@@ -1,0 +1,140 @@
+<%# 공공기관 표준어 검사기 — P3 Sprint 1 PoC %>
+<%# 행정안전부 공통표준용어(2025-12 8차) 기반 비표준 행정 용어 자동 검사·교정 %>
+
+<section class="section py-10">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- 뒤로가기 -->
+    <div class="mb-6">
+      <%= link_to tools_path, class: "inline-flex items-center text-slate-600 hover:text-editorial-navy transition-colors font-medium" do %>
+        <span class="material-symbols-outlined mr-1">arrow_back</span>
+        도구 목록으로
+      <% end %>
+    </div>
+
+    <!-- 페이지 헤더 -->
+    <div class="mb-8">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="icon-container icon-container-lg gradient-emerald shadow-lg">
+          <span class="material-symbols-outlined text-3xl text-white">spellcheck</span>
+        </div>
+        <div>
+          <h1 class="text-2xl font-bold text-slate-900">공공기관 표준어 검사기</h1>
+          <p class="text-slate-500">행정안전부 「공공데이터 공통표준용어」 기준 비표준 행정 용어 자동 검사</p>
+          <%= render 'shared/use_when_badge', tool: 'standard-term-checker' %>
+        </div>
+      </div>
+
+      <details class="bg-white rounded-2xl shadow-sm border border-emerald-100 mt-6">
+        <summary class="px-6 py-4 cursor-pointer hover:bg-slate-50 transition-colors flex items-center gap-2 [list-style:none] [&::-webkit-details-marker]:hidden">
+          <span class="material-symbols-outlined text-emerald-600 text-[20px]">info</span>
+          <span class="text-sm font-semibold text-slate-700">이 도구를 사용하는 이유</span>
+          <span class="ml-auto text-xs text-slate-400">펼치기 ▾</span>
+        </summary>
+        <div class="px-6 pb-6 prose prose-slate prose-sm max-w-none">
+          <p class="text-slate-700 leading-relaxed mb-3">
+            「공통표준용어」는 행정안전부장관이 정한 공공기관 표준 행정 용어로, <cite class="legal-cite">공공데이터법 §23 + 공공기관의 데이터베이스 표준화 지침 §11~§13</cite>에 따라 모든 공공기관 DB 구축 시 준용 의무가 있습니다.
+          </p>
+          <p class="text-slate-700 leading-relaxed mb-3">
+            기안서·계약 사유서·정책 문서 등에서 띄어쓰기·이음동의어 변형(예: "거래처" vs "계약상대자")을 사용하면 행정 문서의 일관성·신뢰성이 떨어지고 감사 지적 우려도 있습니다. 이 도구는 입력 텍스트의 비표준어를 자동 탐지하여 표준어 권고를 제공합니다.
+          </p>
+          <div class="bg-emerald-50 border-l-4 border-emerald-500 p-3 rounded-r-lg mt-4">
+            <p class="text-emerald-900 text-xs leading-relaxed">
+              <strong>📌 출처:</strong> <cite class="legal-cite">행정안전부 「공공데이터 공통표준용어」(2025-12-11 8차 제정·개정)</cite> — 13,176건 표준용어 + 이음동의어 매핑. 공공데이터포털 무료 제공.
+            </p>
+            <p class="text-emerald-800 text-[11px] mt-2">
+              현재 PoC 버전: silmu 도메인(공공계약·예산·인사) 핵심 50건 sample 적재. 차후 13,176건 전체 적재 예정.
+            </p>
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <!-- 입력 폼 -->
+    <div class="card p-6 mb-6">
+      <h2 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-emerald-600">edit_note</span>
+        검사할 텍스트 입력
+      </h2>
+      <%= form_with url: standard_term_checker_path, method: :post, local: true do |f| %>
+        <%= f.text_area :text,
+              value: @input_text,
+              class: "form-input w-full font-mono text-sm",
+              rows: 8,
+              placeholder: "예시) 계약 상대자에게 대가 지급을 완료하고 종심제로 낙찰업체를 결정했습니다.",
+              "aria-label": "검사할 텍스트" %>
+        <div class="flex items-center justify-between mt-4">
+          <p class="text-xs text-slate-400">
+            기안서·계약사유서·공문 등을 붙여넣으세요 (최대 5,000자 권장)
+          </p>
+          <%= f.submit "표준어 검사", class: "btn btn-primary inline-flex items-center gap-2" %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- 결과 -->
+    <% if @result.present? %>
+      <div class="card p-6 mb-6">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+            <span class="material-symbols-outlined text-emerald-600">fact_check</span>
+            검사 결과
+          </h2>
+          <% rate_pct = (@result[:compliance_rate] * 100).round %>
+          <% rate_color = rate_pct >= 90 ? 'emerald' : (rate_pct >= 70 ? 'amber' : 'red') %>
+          <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold bg-<%= rate_color %>-50 text-<%= rate_color %>-700 border border-<%= rate_color %>-200">
+            <span class="material-symbols-outlined text-base">verified</span>
+            표준어 준수율 <%= rate_pct %>%
+          </span>
+        </div>
+
+        <% if @result[:changes].any? %>
+          <p class="text-sm text-slate-600 mb-4">
+            <strong class="text-slate-900"><%= @result[:changes].size %>건</strong>의 비표준 용어가 발견되었습니다. 표준어로 교정한 결과는 다음과 같습니다.
+          </p>
+
+          <!-- 변경 목록 -->
+          <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-4">
+            <h3 class="text-sm font-semibold text-amber-900 mb-3 flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-base">edit</span>
+              교정된 용어 (<%= @result[:changes].size %>건)
+            </h3>
+            <ul class="space-y-1.5">
+              <% @result[:changes].each do |change| %>
+                <li class="flex items-center gap-2 text-sm">
+                  <span class="px-2 py-0.5 rounded bg-red-100 text-red-700 font-mono text-xs line-through"><%= change[:from] %></span>
+                  <span class="material-symbols-outlined text-slate-400 text-base">arrow_forward</span>
+                  <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-mono text-xs font-semibold"><%= change[:to] %></span>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+
+          <!-- 교정 결과 -->
+          <h3 class="text-sm font-semibold text-slate-700 mb-2 flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-base text-emerald-600">check_circle</span>
+            교정 결과
+          </h3>
+          <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-sm text-slate-800 leading-relaxed whitespace-pre-wrap font-mono"><%= @result[:corrected] %></div>
+        <% else %>
+          <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 flex items-center gap-3">
+            <span class="material-symbols-outlined text-emerald-600 text-3xl">check_circle</span>
+            <div>
+              <p class="text-sm font-semibold text-emerald-900">모든 용어가 공공기관 표준어를 준수합니다 ✓</p>
+              <p class="text-xs text-emerald-700 mt-1">교정이 필요한 비표준 용어가 발견되지 않았습니다.</p>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+
+    <!-- 안내 -->
+    <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 text-xs text-slate-600 leading-relaxed">
+      <p class="mb-2">
+        <strong class="text-slate-800">⚠️ 안내:</strong> 본 도구는 PoC(Proof of Concept) 버전으로, silmu 도메인 핵심 50건만 적재되어 있습니다. 행정안전부 「공공데이터 공통표준용어」 13,176건 전체 적재는 차후 업데이트 예정입니다.
+      </p>
+      <p>
+        도구 결과는 참고용이며, 실제 공공기관 문서 작성 시에는 <a href="https://www.data.go.kr/data/15156379/fileData.do" target="_blank" rel="noopener" class="text-editorial-navy underline">행정안전부 공통표준용어 원문</a>을 함께 확인하시길 권장합니다.
+      </p>
+    </div>
+  </div>
+</section>

@@ -161,6 +161,7 @@ Rails.application.routes.draw do
   get "tools/travel-calculator", to: "tools#travel_calculator", as: :travel_calculator
   get "tools/task-calendar.ics", to: "tools#task_calendar_ics", as: :task_calendar_ics
   get "tools/task-calendar", to: "tools#task_calendar", as: :task_calendar
+  match "tools/standard-term-checker", to: "tools#standard_term_checker", as: :standard_term_checker, via: %i[get post]
 
   # PDF 도구
   get "tools/pdf", to: "pdf_tools#index", as: :pdf_tools

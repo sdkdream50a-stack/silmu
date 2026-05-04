@@ -51,6 +51,13 @@ class ToolsController < ApplicationController
   def performance_bonus_calculator = render_tool_page(:performance_bonus_calculator)
   def travel_calculator = render_tool_page(:travel_calculator)
 
+  # P3 Sprint 1: 공공기관 표준어 검사기 PoC (행정안전부 공통표준용어 13,176건 기반)
+  def standard_term_checker
+    @input_text = params[:text].to_s
+    @result = StandardTermCorrector.call(@input_text) if @input_text.present?
+    render_tool_page(:standard_term_checker)
+  end
+
   # POST /tools/annual-leave/pdf
   def annual_leave_pdf
     pdf_data = PdfExportService.annual_leave_pdf(
