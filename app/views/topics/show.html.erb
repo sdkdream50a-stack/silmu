@@ -1293,6 +1293,13 @@ document.addEventListener('click', function(e) {
           </div>
           <% end %>
 
+          <!-- E-E-A-T 검증 배지 (Sprint A) -->
+          <%= render 'shared/verification_badge',
+                date: silmu_verification_date(@topic),
+                source: '법제처 국가법령정보센터',
+                source_url: 'https://www.law.go.kr',
+                variant: 'sidebar' %>
+
           <!-- 관련 도구 — 토픽별 맞춤 도구 (3단계) -->
           <% if @related_tools.any? %>
           <div class="card-glass bg-gradient-to-br from-emerald-50 to-editorial-navy-bg border-emerald-200 p-5">

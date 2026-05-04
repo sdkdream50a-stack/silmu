@@ -93,6 +93,14 @@ module ApplicationHelper
     TOOL_USE_WHEN[slug.to_s]
   end
 
+  # E-E-A-T 검증 타임스탬프 (Sprint A — gimi9 "기미 버전" 벤치마킹)
+  # Topic: law_verified_at 우선, 없으면 updated_at
+  # AuditCase: updated_at (별도 verified_at 필드 없음)
+  def silmu_verification_date(record)
+    return record.law_verified_at.presence || record.updated_at if record.respond_to?(:law_verified_at)
+    record.try(:updated_at)
+  end
+
   def utm_params
     session[:utm_params] || {}
   end

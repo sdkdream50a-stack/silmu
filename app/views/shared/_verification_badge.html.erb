@@ -1,0 +1,47 @@
+<%# E-E-A-T 검증 타임스탬프 배지 — Sprint A (gimi9 "기미 버전" 벤치마킹) %>
+<%# 사용: <%= render 'shared/verification_badge', date: @topic.law_verified_at, source: '법제처 국가법령정보센터', source_url: 'https://www.law.go.kr', variant: 'inline' %> %>
+<%# variants: 'inline' (기본, 콘텐츠 헤더용), 'sidebar' (사이드바 카드용), 'compact' (소형) %>
+<%
+  date = local_assigns[:date]
+  source = local_assigns[:source].presence || "법제처 국가법령정보센터"
+  source_url = local_assigns[:source_url].presence || "https://www.law.go.kr"
+  variant = local_assigns[:variant].presence || "inline"
+%>
+<% if date.present? %>
+  <% case variant %>
+  <% when 'sidebar' %>
+    <aside class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 my-4" role="complementary" aria-label="콘텐츠 검증 정보">
+      <div class="flex items-start gap-2 mb-2">
+        <span class="material-symbols-outlined text-emerald-600 text-base shrink-0 mt-px" aria-hidden="true">verified</span>
+        <div class="flex-1 min-w-0">
+          <p class="text-xs font-bold text-emerald-900 leading-tight">5단계 정합성 검증 완료</p>
+          <p class="text-[11px] text-emerald-700 mt-0.5">
+            <time datetime="<%= date.iso8601 %>"><%= date.strftime('%Y-%m-%d') %></time>
+            <span class="text-emerald-500"> · silmu 검토일</span>
+          </p>
+        </div>
+      </div>
+      <p class="text-[11px] text-emerald-800 leading-relaxed mt-2 pt-2 border-t border-emerald-200">
+        <span class="font-semibold">📚 1차 출처:</span>
+        <a href="<%= source_url %>" target="_blank" rel="noopener" class="text-emerald-700 hover:text-emerald-900 underline">
+          <cite class="legal-cite"><%= source %></cite>
+        </a>
+      </p>
+    </aside>
+  <% when 'compact' %>
+    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200" title="5단계 정합성 검증 완료일 — silmu 자체 검토">
+      <span class="material-symbols-outlined text-[12px]" aria-hidden="true">verified</span>
+      <time datetime="<%= date.iso8601 %>"><%= date.strftime('%Y-%m-%d') %></time>
+    </span>
+  <% else %>
+    <%# inline (default) — 콘텐츠 헤더 %>
+    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs bg-emerald-50 text-emerald-800 border border-emerald-200" role="note" aria-label="콘텐츠 검증 정보">
+      <span class="material-symbols-outlined text-[14px] text-emerald-600" aria-hidden="true">verified</span>
+      <span class="font-semibold">검증 완료</span>
+      <span class="text-emerald-600">·</span>
+      <time datetime="<%= date.iso8601 %>" class="text-emerald-700"><%= date.strftime('%Y-%m-%d') %></time>
+      <span class="text-emerald-500 hidden sm:inline">·</span>
+      <span class="text-emerald-700 hidden sm:inline">5단계 게이트</span>
+    </div>
+  <% end %>
+<% end %>
