@@ -32,7 +32,7 @@
   <div class="flex items-center gap-4 text-xs text-slate-400">
     <span class="flex items-center gap-1">
       <span class="material-symbols-outlined text-sm">menu_book</span>
-      <%= audit_case.legal_basis %>
+      <cite class="legal-cite"><%= audit_case.legal_basis %></cite>
     </span>
     <% if audit_case.topic_slug.present? %>
       <span class="flex items-center gap-1">

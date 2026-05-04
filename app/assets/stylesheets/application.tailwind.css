@@ -829,6 +829,15 @@
 /* 조(條) 스타일 */
 .legal-content .legal-article {
   @apply mt-5 mb-3 pb-2 border-b-2 border-indigo-200;
+  /* P2-1: cite 태그 도입 후 italic 기본값 제거 (시각 동일 유지) */
+  font-style: normal;
+  display: block;
+}
+
+/* P2-1: 법령 인용 시맨틱 cite (감사사례 legal_basis 등 inline 사용)
+   HTML5 cite 태그 italic 기본값 제거하고 일반 텍스트로 표시 — AEO/GEO 추출 정확도 향상 */
+.legal-cite {
+  font-style: normal;
 }
 
 .legal-content .legal-article-num {

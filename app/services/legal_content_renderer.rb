@@ -25,9 +25,9 @@ class LegalContentRenderer
       "<div class=\"legal-law-name\">#{$1}</div>"
     end
 
-    # 3. 조(條) 표기 - 제X조 형식 (span 사용 - inline 요소 내부에서도 안전)
+    # 3. 조(條) 표기 - 제X조 형식 (cite 태그 — HTML5 시맨틱 + AEO/GEO 추출 정확도 향상)
     html = html.gsub(/(제\d+조(?:의\d+)?)\s*\(([^)]+)\)/) do |match|
-      "<span class=\"legal-article\"><span class=\"legal-article-num\">#{$1}</span> <span class=\"legal-article-title\">(#{$2})</span></span>"
+      "<cite class=\"legal-article\"><span class=\"legal-article-num\">#{$1}</span> <span class=\"legal-article-title\">(#{$2})</span></cite>"
     end
 
     # 4. 항(①②③...) - 줄 시작에서만 매칭 (인라인 §25① 등은 제외)

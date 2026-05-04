@@ -126,7 +126,7 @@
             <div class="flex items-start gap-3">
               <span class="material-symbols-outlined text-slate-400 mt-0.5 flex-shrink-0 text-base">gavel</span>
               <div>
-                <p class="text-sm text-slate-700 leading-relaxed"><%= @audit_case.legal_basis %></p>
+                <p class="text-sm text-slate-700 leading-relaxed"><cite class="legal-cite"><%= @audit_case.legal_basis %></cite></p>
                 <% if @audit_case.topic_slug.present? && @related_topic %>
                   <%= link_to topic_path(@related_topic.slug), class: "inline-flex items-center gap-1.5 mt-3 px-3 py-1.5 bg-slate-900 hover:bg-slate-700 text-white text-xs font-semibold rounded-lg transition-colors" do %>
                     <span class="material-symbols-outlined text-xs">menu_book</span>
@@ -301,7 +301,7 @@
               </div>
               <div class="flex justify-between">
                 <dt class="text-slate-500">관련근거</dt>
-                <dd class="font-semibold text-slate-800 text-right max-w-[60%]"><%= @audit_case.legal_basis %></dd>
+                <dd class="font-semibold text-slate-800 text-right max-w-[60%]"><cite class="legal-cite"><%= @audit_case.legal_basis %></cite></dd>
               </div>
             </dl>
           </div>
