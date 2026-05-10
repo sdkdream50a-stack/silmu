@@ -59,3 +59,9 @@ weekly_newsletter:
   class: WeeklyNewsletterJob
   args: []
   schedule: "0 0 * * 1" # 매주 월요일 00:00 UTC = 09:00 KST
+
+# Solid Queue finished jobs 자동 정리 (clear_finished_jobs_after = 1.day, default)
+# 누락 시 finished 잡이 무한 누적 → 디스크 점유 (실측 사례: 9,900만 건 / 76 GB)
+clear_solid_queue_finished_jobs:
+  command: "SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"
+  schedule: "12 18 * * *" # 매일 UTC 18:12 = KST 03:12
