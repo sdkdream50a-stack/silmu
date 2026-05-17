@@ -57,7 +57,8 @@ class AeoCitationMonitorJob < ApplicationJob
   end
 
   def measure(client, query)
-    response = client.messages(
+    # Anthropic SDK 1.x: client.messages.create(...) 패턴 사용 (1.x에서 client.messages는 namespace)
+    response = client.messages.create(
       model: MODEL,
       max_tokens: MAX_TOKENS,
       messages: [ { role: "user", content: query } ]

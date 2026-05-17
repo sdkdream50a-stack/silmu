@@ -57,8 +57,11 @@ class AiAssistantServiceTest < ActiveSupport::TestCase
 
     stub_text = "수의계약은 경쟁 없이 계약하는 방식입니다."
     stub_response = OpenStruct.new(content: [ OpenStruct.new(text: stub_text) ])
+    # Anthropic SDK 1.x: client.messages.create(...) 패턴
+    stub_messages = Object.new
+    stub_messages.define_singleton_method(:create) { |**_| stub_response }
     stub_client = Object.new
-    stub_client.define_singleton_method(:messages) { |**_| stub_response }
+    stub_client.define_singleton_method(:messages) { stub_messages }
 
     original_new = Anthropic::Client.method(:new)
     Anthropic::Client.define_singleton_method(:new) { |**_| stub_client }
@@ -73,7 +76,9 @@ class AiAssistantServiceTest < ActiveSupport::TestCase
 
   test "answer API 오류 시 error 반환" do
     error_client = Object.new
-    error_client.define_singleton_method(:messages) { |**_| raise "API 연결 실패" }
+    error_messages = Object.new
+    error_messages.define_singleton_method(:create) { |**_| raise "API 연결 실패" }
+    error_client.define_singleton_method(:messages) { error_messages }
 
     original_new = Anthropic::Client.method(:new)
     Anthropic::Client.define_singleton_method(:new) { |**_| error_client }

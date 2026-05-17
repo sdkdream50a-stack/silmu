@@ -15,7 +15,7 @@ class ExamQuestionComment < ApplicationRecord
   # 반환: { approved: true/false, reason: "거부 이유" }
   def self.moderate_with_ai(body, question_text)
     client = Anthropic::Client.new
-    response = client.messages(
+    response = client.messages.create(
       model: "claude-haiku-4-5-20251001",
       max_tokens: 100,
       messages: [ {

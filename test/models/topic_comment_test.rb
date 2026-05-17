@@ -48,7 +48,9 @@ class TopicCommentTest < ActiveSupport::TestCase
   test "moderate_with_ai AI 오류 시 승인 처리 (fail-open)" do
     original_new = Anthropic::Client.method(:new)
     error_client = Object.new
-    error_client.define_singleton_method(:messages) { |**_| raise "API 오류" }
+    error_messages = Object.new
+    error_messages.define_singleton_method(:create) { |**_| raise "API 오류" }
+    error_client.define_singleton_method(:messages) { error_messages }
     Anthropic::Client.define_singleton_method(:new) { |**_| error_client }
     result = TopicComment.moderate_with_ai("테스트")
     Anthropic::Client.define_singleton_method(:new, original_new)
@@ -81,8 +83,11 @@ class TopicCommentTest < ActiveSupport::TestCase
 
   def with_ai_response(text)
     stub_response = OpenStruct.new(content: [ OpenStruct.new(text: text) ])
+    # Anthropic SDK 1.x: client.messages.create(...) 패턴
+    stub_messages = Object.new
+    stub_messages.define_singleton_method(:create) { |**_| stub_response }
     stub_client = Object.new
-    stub_client.define_singleton_method(:messages) { |**_| stub_response }
+    stub_client.define_singleton_method(:messages) { stub_messages }
     original_new = Anthropic::Client.method(:new)
     Anthropic::Client.define_singleton_method(:new) { |**_| stub_client }
     yield

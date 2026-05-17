@@ -19,7 +19,7 @@ class TopicComment < ApplicationRecord
   # Claude Haiku로 댓글 품질 자동 검증 (ExamQuestionComment 패턴 재사용)
   def self.moderate_with_ai(body)
     client = Anthropic::Client.new
-    response = client.messages(
+    response = client.messages.create(
       model: "claude-haiku-4-5-20251001",
       max_tokens: 100,
       messages: [ {

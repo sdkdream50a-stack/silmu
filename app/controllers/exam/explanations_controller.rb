@@ -46,7 +46,7 @@ module Exam
         반드시 한국어로, 공무원/계약담당자가 이해하기 쉽게 작성하세요.
       PROMPT
 
-      response = client.messages(
+      response = client.messages.create(
         model: "claude-haiku-4-5-20251001",
         max_tokens: 300,
         messages: [ { role: "user", content: prompt } ]
