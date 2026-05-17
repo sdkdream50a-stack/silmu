@@ -117,22 +117,17 @@ class TopicsController < ApplicationController
       raise ActiveRecord::RecordNotFound
     end
     @topic.increment_view!
-    # 같은 카테고리의 다른 토픽 (현재 토픽 제외, 최대 6개)
-    @related_topics = Rails.cache.fetch("topic_related_list/#{@topic.slug}", expires_in: 1.hour) do
-      Topic.published
-           .where(category: @topic.category)
-           .where.not(slug: @topic.slug)
-           .limit(6)
-           .to_a
-    end
-    @related_guide = Rails.cache.fetch("topic_guide/#{@topic.slug}", expires_in: 1.hour) do
-      Guide.published.find_by(topic_slug: @topic.slug) ||
-        Guide.published.find_by(external_link: "/topics/#{@topic.slug}")
-    end
-    # [LCP 최적화] @related_articles 제거 — 뷰에서 미사용 (불필요한 DB 쿼리 + 캐시 제거)
-    @related_audit_cases = Rails.cache.fetch("topic_audit_cases/#{@topic.slug}", expires_in: 1.hour) do
-      @topic.related_audit_cases.to_a
-    end
+
+    # Sprint B Phase 1 — RelatedContentResolver 통합 (키워드+카테고리+sector 가중치 점수)
+    resolver = RelatedContentResolver.new(@topic)
+    @related_topics      = resolver.topics
+    @related_audit_cases = resolver.audit_cases
+    @related_guides      = resolver.guides
+    # 단일 가이드(기존 @related_guide)는 첫 번째 가이드 또는 external_link fallback 유지 (탭 노출용)
+    @related_guide = @related_guides.first ||
+                     Rails.cache.fetch("topic_guide_ext/#{@topic.slug}", expires_in: 1.hour) do
+                       Guide.published.find_by(external_link: "/topics/#{@topic.slug}")
+                     end
     @audit_case_total = Rails.cache.fetch("stats/audit_case_count", expires_in: 30.minutes) { AuditCase.published.count }
 
     # Sprint #2-D — feedback up 카운트 (Krug 사회적 증거, 5건 미만은 노출 X)

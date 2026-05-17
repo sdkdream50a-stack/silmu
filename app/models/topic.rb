@@ -179,6 +179,10 @@ class Topic < ApplicationRecord
     Rails.cache.delete("topic_related/#{slug}")
     Rails.cache.delete("topic_audit_cases/#{slug}")
     Rails.cache.delete("topic_keyword_map/#{slug}")
+    # Sprint B Phase 1 — RelatedContentResolver 캐시 무효화
+    Rails.cache.delete("related_content_v2/#{slug}/topics")
+    Rails.cache.delete("related_content_v2/#{slug}/audit_cases")
+    Rails.cache.delete("related_content_v2/#{slug}/guides")
     # 부모 토픽의 keyword_map도 무효화 (서브토픽 변경 시 부모 키워드 매핑에 영향)
     Rails.cache.delete("topic_keyword_map/#{parent&.slug}") if parent_id.present?
     # 뷰 fragment cache 무효화: 토픽 내용 변경 시 버전 증가 → 캐시 키가 달라져 자연 무효화
@@ -206,6 +210,11 @@ class Topic < ApplicationRecord
     Rails.cache.delete("topic_keyword_map/#{old_slug}")
     Rails.cache.delete("audit_cases/all_published_v2")
     Rails.cache.delete("guides/all")
+    # Sprint B Phase 1 — RelatedContentResolver 캐시 무효화
+    [ "topics", "audit_cases", "guides" ].each do |kind|
+      Rails.cache.delete("related_content_v2/#{old_slug}/#{kind}")
+      Rails.cache.delete("related_content_v2/#{new_slug}/#{kind}")
+    end
     # 301 리디렉션 레코드 생성 (Search Console 404 방지)
     SlugRedirect.upsert(
       { old_slug: old_slug, new_slug: new_slug, resource_type: "Topic", created_at: Time.current, updated_at: Time.current },
