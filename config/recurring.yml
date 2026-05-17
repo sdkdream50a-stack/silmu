@@ -55,6 +55,13 @@ daily_mpm_rss_monitor:
   class: MpmRssMonitorJob
   schedule: "0 8 * * *" # 매일 08시 KST
 
+# 매주 일요일 오전 6시 - AEO 인용 측정 (2026-05-17 신설)
+# Claude haiku에 silmu 핵심 쿼리 10개 → silmu.kr 인용 여부 측정
+# 인용률 0% 시 Sentry warning, 추이 변화 추적
+weekly_aeo_citation_monitor:
+  class: AeoCitationMonitorJob
+  schedule: "0 6 * * 0" # 매주 일요일 06시 KST
+
 
 # exam.silmu.kr 학습 리마인더 (3일 미접속 유저)
 daily_exam_reminder:
