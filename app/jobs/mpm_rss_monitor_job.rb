@@ -18,13 +18,18 @@ class MpmRssMonitorJob < ApplicationJob
   RSS_URL = "https://www.mpm.go.kr/board/rss.do?boardId=bbs_0000000000000029&mode=fed&proc=rss"
 
   # 매년 갱신 단가 관련 키워드 (silmu 도구·시드 영향)
-  YEARLY_CHANGE_KEYWORDS = %w[
-    봉급 봉급표 호봉
-    수당 가족수당 명절휴가비 직급보조비 시간외 성과상여금 정근수당
-    여비 출장 숙박비 일비 식비
+  # 정밀도 강화: 변경 신호(별표/개정/시행/인상/고시) AND 영역(봉급/수당/여비/...) 동시 매칭만 알림.
+  # "공무원 마음 건강" 같은 일반 보도자료 false positive 차단.
+  DOMAIN_KEYWORDS = %w[
+    봉급표 호봉 봉급
+    가족수당 명절휴가비 직급보조비 시간외수당 성과상여금 정근수당
+    여비 숙박비 일비 식비
     보수지침 보수업무지침 보수규정
-    연금 퇴직수당 기여금
-    건강보험 장기요양 4대보험
+    퇴직수당 기여금
+    건강보험료 장기요양보험
+  ].freeze
+  CHANGE_SIGNAL_KEYWORDS = %w[
+    별표 개정 시행 인상 인하 고시 예규 신설 변경 갱신 조정
   ].freeze
 
   CACHE_KEY = "mpm_rss/last_seen_pubdate"
@@ -98,19 +103,27 @@ class MpmRssMonitorJob < ApplicationJob
 
   def matches_yearly_change?(item)
     haystack = "#{item[:title]} #{item[:description]}"
-    YEARLY_CHANGE_KEYWORDS.any? { |kw| haystack.include?(kw) }
+    domain_hits = DOMAIN_KEYWORDS.select { |kw| haystack.include?(kw) }
+    signal_hits = CHANGE_SIGNAL_KEYWORDS.select { |kw| haystack.include?(kw) }
+    # 영역 키워드 AND 변경 신호 키워드 동시 매칭 시에만 알림
+    domain_hits.any? && signal_hits.any?
   end
 
   def notify_match(item)
+    haystack = "#{item[:title]} #{item[:description]}"
+    domain_hits = DOMAIN_KEYWORDS.select { |kw| haystack.include?(kw) }
+    signal_hits = CHANGE_SIGNAL_KEYWORDS.select { |kw| haystack.include?(kw) }
+
     msg = "[MpmRssMonitorJob] 매년 갱신 영향 보도자료 감지: #{item[:title]}"
-    Rails.logger.warn "#{msg} (#{item[:link]})"
+    Rails.logger.warn "#{msg} (domain: #{domain_hits.join(',')} / signal: #{signal_hits.join(',')}) (#{item[:link]})"
 
     if defined?(Sentry)
       Sentry.capture_message(msg, level: :warning, extra: {
         title: item[:title],
         link: item[:link],
         pub_date: item[:pub_date]&.iso8601,
-        matched_keywords: YEARLY_CHANGE_KEYWORDS.select { |k| item[:title].include?(k) || item[:description].include?(k) }
+        domain_keywords: domain_hits,
+        change_signal_keywords: signal_hits
       })
     end
   end
