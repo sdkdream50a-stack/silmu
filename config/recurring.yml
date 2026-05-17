@@ -48,6 +48,13 @@ weekly_law_sync:
   class: LawSyncJob
   schedule: "0 7 * * 2" # 매주 화요일 7시
 
+# 매일 오전 8시 - 인사혁신처 보도자료 RSS 모니터링 (2026-05-17 신설)
+# 봉급·수당·여비·보수지침 키워드 매칭 시 Sentry warning 알림
+# 매년 1~2월 일괄 개정 감지로 silmu 콘텐츠 갱신 사이클 누락 방지
+daily_mpm_rss_monitor:
+  class: MpmRssMonitorJob
+  schedule: "0 8 * * *" # 매일 08시 KST
+
 
 # exam.silmu.kr 학습 리마인더 (3일 미접속 유저)
 daily_exam_reminder:

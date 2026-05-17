@@ -117,6 +117,40 @@ namespace :silmu do
     # 저작권 검사는 부정확 매핑과 동일하게 수행
     incorrect_mappings += copyright_violations
 
+    # 2026-05-17 — 연도 라벨 드리프트 검증 (WARN, FAIL 아님)
+    # silmu가 매년 갱신 단가(봉급·수당·여비·보험료)를 따라가지 못해 발생한 13건 정정 사례 재발 방지.
+    # 현재 연도 - 1 이상 묵은 라벨이 단가/조문 컨텍스트에 있으면 경고.
+    current_year = Time.current.year
+    stale_year_threshold = current_year - 1
+    stale_year_pattern = /(?:20[0-9]{2})년/
+    stale_context_keywords = %w[봉급 수당 여비 보험료 시행 기준 별표 봉급표 단가 한도]
+    stale_warnings = []
+
+    target_globs_for_year = %w[
+      app/views/tools/**/*.erb
+      app/controllers/concerns/tools_meta.rb
+      app/controllers/concerns/topic_config.rb
+      app/views/guides/*.html.erb
+      db/seeds/topics/*.rb
+      db/seeds/travel_expense_series.rb
+      db/seeds/hr_welfare_part*.rb
+    ]
+    target_globs_for_year.each do |glob|
+      Dir[Rails.root.join(glob)].each do |path|
+        rel = path.sub("#{Rails.root}/", "")
+        content = File.read(path)
+        content.scan(/.{0,40}(20[0-9]{2})년.{0,40}/).each do |year_match|
+          year = year_match.first.to_i
+          next if year > current_year || year >= stale_year_threshold
+          # 단가/조문 컨텍스트 매칭 확인
+          surrounding = content.match(/.{0,40}#{year}년.{0,40}/)&.to_s.to_s
+          next unless stale_context_keywords.any? { |kw| surrounding.include?(kw) }
+          stale_warnings << { file: rel, year: year, context: surrounding.gsub(/\s+/, " ").strip }
+        end
+      end
+    end
+    stale_warnings.uniq!
+
     # 스캔 대상 경로
     target_globs = %w[
       app/views/**/*.erb
@@ -168,6 +202,14 @@ namespace :silmu do
       puts "  - 폐지 조문 블랙리스트 0건"
       puts "  - 표준값 위반 0건"
       puts "  - 부정확 매핑 0건"
+      if stale_warnings.any?
+        puts ""
+        puts "[WARN] 연도 라벨 드리프트 경고 #{stale_warnings.size}건 (현재 #{current_year}년, #{stale_year_threshold}년 이전 라벨이 단가/조문 컨텍스트에 발견됨)"
+        stale_warnings.first(10).each do |w|
+          puts "  - #{w[:file]} (#{w[:year]}년): #{w[:context]}"
+        end
+        puts "  → 매년 1~2월 인사혁신처 일괄 개정 후 갱신 확인 필요. WARN이므로 빌드는 통과."
+      end
       exit 0
     end
 
