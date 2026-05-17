@@ -52,7 +52,7 @@ class CostCalculationReviewService
     general: {
       overhead: { name: "제경비(간접노무비+기타경비)", rate_range: [ 0.10, 0.20 ], basis: "직접인건비", note: "통상 110~120%" },
       direct_expense: { name: "직접경비", items: [ "여비·교통비", "인쇄·복사비", "소모품비", "회의비", "통신·우편료" ], note: "실비 산정, 통상 직접인건비의 5~15%" },
-      general_admin: { name: "일반관리비", rate_range: [ 0.05, 0.06 ], basis: "노무비+경비", note: "5~6% (회계예규)" }
+      general_admin: { name: "일반관리비", rate_range: [ 0.05, 0.06 ], basis: "재료비+노무비+경비", note: "5~6% (회계예규 §20, 시설공사 일반건설공사: 50억 미만 6.0% / 50~300억 5.5% / 300억 이상 5.0%)" }
     },
     research: {
       overhead: { name: "제경비", rate_range: [ 0.86, 1.20 ], basis: "직접인건비", note: "학술연구 기준 86~120%" },

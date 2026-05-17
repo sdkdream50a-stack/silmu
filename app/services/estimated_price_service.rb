@@ -32,8 +32,8 @@ class EstimatedPriceService
       { id: "direct_labor", name: "직접인건비", note: "노임단가 × 투입 M/M" },
       { id: "overhead", name: "제경비", note: "직접인건비의 110~120%" },
       { id: "direct_expense", name: "직접경비", note: "여비·인쇄비 등 실비" },
-      { id: "general_admin", name: "일반관리비", note: "노무비+경비의 5~8%" },
-      { id: "profit", name: "이윤", note: "노무비+경비+일반관리비의 10% 이내" }
+      { id: "general_admin", name: "일반관리비", note: "직접인건비+제경비+직접경비의 5% 이내 (학술연구용역: 회계예규 §28, 시행규칙 §8 별표)" },
+      { id: "profit", name: "이윤", note: "직접인건비+제경비+직접경비+일반관리비의 10% 이내 (학술연구용역)" }
     ],
     construction: [
       { id: "material", name: "재료비", note: "자재·부재료비" },
@@ -41,18 +41,18 @@ class EstimatedPriceService
       { id: "indirect_labor", name: "간접노무비", note: "직접노무비의 일정비율" },
       { id: "industrial_insurance", name: "산재보험료", note: "노무비의 일정비율" },
       { id: "expense", name: "경비", note: "기계경비·가설비·운반비 등" },
-      { id: "general_admin", name: "일반관리비", note: "재+노+경의 8% 이내" },
-      { id: "profit", name: "이윤", note: "노+경+관의 15% 이내" }
+      { id: "general_admin", name: "일반관리비", note: "재료비+노무비+경비의 6% 이내 (50억 미만 6.0%/50~300억 5.5%/300억 이상 5.0%, 일반건설공사, 회계예규 §20)" },
+      { id: "profit", name: "이윤", note: "노무비+경비+일반관리비의 15% 이내 (회계예규 §21, 기술료·외주가공비 제외)" }
     ]
   }.freeze
 
-  # 요율 상한
+  # 요율 상한 (회계예규 「원가계산에 의한 예정가격 작성기준」 §13·§14·§20·§21·§28)
   RATE_LIMITS = {
-    goods: { profit: { max: 0.25, basis: "원가", name: "이윤" } },
-    service: { profit: { max: 0.10, basis: "노무비+경비+일반관리비", name: "이윤" },
-               general_admin: { max: 0.08, basis: "노무비+경비", name: "일반관리비" } },
-    construction: { profit: { max: 0.15, basis: "노무비+경비+일반관리비", name: "이윤" },
-                    general_admin: { max: 0.08, basis: "재료비+노무비+경비", name: "일반관리비" } }
+    goods: { profit: { max: 0.25, basis: "노무비+경비+일반관리비 (기술료·외주가공비 제외)", name: "이윤" } },
+    service: { profit: { max: 0.10, basis: "직접인건비+제경비+직접경비+일반관리비", name: "이윤" },
+               general_admin: { max: 0.05, basis: "직접인건비+제경비+직접경비", name: "일반관리비 (학술연구용역 §28)" } },
+    construction: { profit: { max: 0.15, basis: "노무비+경비+일반관리비 (기술료·외주가공비 제외)", name: "이윤" },
+                    general_admin: { max: 0.06, basis: "재료비+노무비+경비 (50억 미만 일반건설공사 / 50~300억 5.5% / 300억 이상 5.0%)", name: "일반관리비" } }
   }.freeze
 
   # 수의계약 기준금액 (지방계약법 시행령 제25조 제1항)

@@ -92,9 +92,13 @@ class CostEstimateGeneratorService
   }.freeze
 
   # 간접비 요율
+  # ※ 회계예규 「원가계산에 의한 예정가격 작성기준」 §20·§21 정확 basis는 각각
+  #   "재료비+노무비+경비" 및 "노무비+경비+일반관리비"이지만, 본 도구는 경비를
+  #   별도 입력받지 않는 수의계약 단순 견적용이라 견적금액(material_cost)을 입력
+  #   원가 합으로 보고 계산함. 한도 6%/15%는 회계예규 일치.
   INDIRECT_RATES = {
-    general_expense: { name: "일반관리비", rate: 0.06, basis: "재료비+직접노무비", note: "회계예규 제6조" },
-    profit: { name: "이윤", rate: 0.15, basis: "노무비+일반관리비", note: "회계예규 제7조, 상한 15%" },
+    general_expense: { name: "일반관리비", rate: 0.06, basis: "재료비+노무비+경비", note: "회계예규 §20 (시설공사 50억 미만 6.0%/50~300억 5.5%/300억 이상 5.0%, 일반건설공사 기준)" },
+    profit: { name: "이윤", rate: 0.15, basis: "노무비+경비+일반관리비", note: "회계예규 §21 (시설공사 이윤율 상한 15%, 기술료·외주가공비 제외)" },
     industrial_safety: { name: "산업안전보건관리비", rate: 0.018, basis: "재료비+직접노무비", note: "산안법 시행규칙 별표1", threshold: 4000000 },
     industrial_accident: { name: "산재보험료", rate: 0.036, basis: "직접노무비", note: "고시 요율" },
     employment_insurance: { name: "고용보험료", rate: 0.009, basis: "직접노무비", note: "고용보험법" },
@@ -217,11 +221,13 @@ class CostEstimateGeneratorService
 
       details = []
 
-      # 일반관리비 = (재료비+직접노무비) × 6%
+      # 일반관리비: 회계예규 §20 정확 basis는 (재료비+노무비+경비) × 6% (50억 미만 일반건설공사)
+      # 본 도구는 단순 견적용으로 경비 별도 입력 없음 → material_cost(=재료비+노무비 추정)를 base로 사용
       general = ((material_only + labor_cost) * INDIRECT_RATES[:general_expense][:rate]).round(0)
-      details << { name: "일반관리비", amount: general, note: "#{(INDIRECT_RATES[:general_expense][:rate] * 100).round(0)}%" }
+      details << { name: "일반관리비", amount: general, note: "#{(INDIRECT_RATES[:general_expense][:rate] * 100).round(0)}% (회계예규 §20)" }
 
-      # 이윤 = (노무비+일반관리비) × 15%
+      # 이윤: 회계예규 §21 정확 basis는 (노무비+경비+일반관리비) × 15% (시설공사)
+      # 단순 견적용으로 경비 별도 입력 없음 → (노무비+일반관리비)를 base로 사용
       profit = ((labor_cost + general) * INDIRECT_RATES[:profit][:rate]).round(0)
       details << { name: "이윤", amount: profit, note: "상한 #{(INDIRECT_RATES[:profit][:rate] * 100).round(0)}%" }
 
