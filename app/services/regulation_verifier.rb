@@ -31,7 +31,7 @@ class RegulationVerifier
   TOOL_VERIFICATIONS = {
     "travel_calculator" => {
       file: "app/views/tools/travel_calculator.html.erb",
-      checks: [ "숙박비: 서울 7만원, 광역시 6만원, 기타 5만원 (2026.01.02 시행)" ]
+      checks: [ "숙박비 상한액: 서울 10만원, 광역시·세종 8만원, 기타 7만원 — 「공무원보수 등의 업무지침」 〈국내숙박비 지급기준표〉 (2026.01.22 시행)" ]
     },
     "estimated_price" => {
       file: "app/services/estimated_price_service.rb",

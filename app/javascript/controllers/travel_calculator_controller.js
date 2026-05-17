@@ -64,8 +64,8 @@ export default class extends Controller {
     '인천-제주':130000
   }
 
-  // ── 여비 정액 (공무원여비규정 별표2, 대통령령 제36013호 2026.01.02 시행) ──
-  static accommodationByRegion = { seoul: 70000, metro: 60000, other: 50000 }
+  // ── 여비 정액 (「공무원 여비 규정」+ 인사혁신처 「공무원보수 등의 업무지침」 〈국내숙박비 지급기준표〉, 2026.01.22 시행) ──
+  static accommodationByRegion = { seoul: 100000, metro: 80000, other: 70000 }
   static mealRate = 25000
   static dailyRate = 25000
   static transportNames = { train: 'KTX', bus: '고속버스', car: '자차', flight: '항공' }
