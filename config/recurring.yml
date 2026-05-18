@@ -63,6 +63,13 @@ weekly_aeo_citation_monitor:
   schedule: "0 6 * * 0" # 매주 일요일 06시 KST
 
 
+# 매일 오전 7시 - SEO 자동 진단 (2026-05-18 신설)
+# sitemap URL count, thin content 비율, core 페이지 HTTP, IndexNow 송신 카운트
+# 결과는 log/seo_health.jsonl에 영구 기록 → 일별 추이 추적 가능
+daily_seo_health:
+  class: SeoHealthJob
+  schedule: "0 7 * * *" # 매일 07시 KST
+
 # exam.silmu.kr 학습 리마인더 (3일 미접속 유저)
 daily_exam_reminder:
   class: ExamReminderJob
