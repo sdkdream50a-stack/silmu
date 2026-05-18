@@ -51,7 +51,13 @@ class Guide < ApplicationRecord
   before_validation :generate_slug, if: -> { slug.blank? && title.present? }
 
   after_commit :expire_cache
-  after_commit :notify_indexnow, if: -> { saved_change_to_published? && published? }
+  # 2026-05-18: 본문 변경에도 ping (published 컬럼 미변경 시에도 의미있는 갱신 알림)
+  after_commit :notify_indexnow, if: lambda {
+    published? && (
+      saved_change_to_published? || saved_change_to_title? || saved_change_to_summary? ||
+        saved_change_to_description? || saved_change_to_sections?
+    )
+  }
 
   # guide_path(guide) → /guides/purchase-and-inspection
   def to_param

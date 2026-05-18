@@ -38,7 +38,14 @@ class Topic < ApplicationRecord
   before_validation :generate_slug, if: -> { slug.blank? && name.present? }
   before_save :update_law_verified_at, if: -> { law_content_changed? || decree_content_changed? || rule_content_changed? }
   after_commit :expire_count_cache
-  after_commit :notify_indexnow, if: -> { saved_change_to_published? && published? }
+  # 2026-05-18: 본문/법령 변경에도 ping (published 컬럼 미변경 시에도 의미있는 갱신 알림)
+  after_commit :notify_indexnow, if: lambda {
+    published? && (
+      saved_change_to_published? || saved_change_to_name? || saved_change_to_summary? ||
+        saved_change_to_law_content? || saved_change_to_decree_content? ||
+        saved_change_to_rule_content? || saved_change_to_commentary?
+    )
+  }
   before_update :cascade_slug_change, if: :slug_changed?
 
   # 통합 검색: 복수 토픽 반환 (이름·키워드·요약 ILIKE, 없으면 pg_search)

@@ -104,14 +104,15 @@ class AuditCasesController < ApplicationController
     expires_in 5.minutes, public: true, stale_while_revalidate: 1.hour
 
     set_og_image(category: "audit")
+    seo_desc = @audit_case.seo_description.presence || @audit_case.issue.to_s.truncate(150)
     set_meta_tags(
       title: "#{@audit_case.title} — 감사 지적 사례와 실무 대응 방법",
-      description: "#{@audit_case.issue.truncate(150)}",
+      description: seo_desc,
       keywords: "감사사례,#{@audit_case.category},#{@audit_case.legal_basis}",
       canonical: canonical_url,
       og: {
         title: "#{@audit_case.title} — 감사사례",
-        description: @audit_case.issue.truncate(200),
+        description: seo_desc,
         url: canonical_url,
         type: "article"
       }

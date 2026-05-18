@@ -31,7 +31,16 @@ class AuditCase < ApplicationRecord
 
   before_validation :generate_slug, if: -> { slug.blank? && title.present? }
   after_commit :expire_count_cache
-  after_commit :notify_indexnow, if: -> { saved_change_to_published? && published? }
+  # published 상태 + (신규 게시 OR 의미있는 본문/법령 변경)에 IndexNow ping
+  # 2026-05-18: 법령 정정·본문 강화 작업이 published 컬럼 미변경이라 ping 누락 발견 후 확장
+  after_commit :notify_indexnow, if: lambda {
+    published? && (
+      saved_change_to_published? ||
+        saved_change_to_title? || saved_change_to_issue? ||
+        saved_change_to_detail? || saved_change_to_lesson? ||
+        saved_change_to_legal_basis? || saved_change_to_action_taken?
+    )
+  }
 
   # 카테고리 목록
   CATEGORIES = {
@@ -87,6 +96,26 @@ class AuditCase < ApplicationRecord
 
   def increment_view!
     self.class.update_counters(id, view_count: 1)
+  end
+
+  # 2026-05-18: SEO/GEO 권위자 비판 정정 — meta description 풍부화
+  # 기존: issue.truncate(150). issue가 짧으면 description도 짧아 GSC 신호 약함.
+  # 개선: detail에서 마크다운 마크업·가상시나리오 명시 제외 + 첫 200자 추출 → 본문 풍부도 반영
+  def seo_description
+    base = detail.presence || issue.presence || ""
+    return "" if base.blank?
+
+    plain = base
+              .gsub(/^---+$/m, "")              # 가상 시나리오 명시 구분선
+              .gsub(/^>\s*※[^\n]*$/m, "")      # 가상 시나리오 ※ 인용블록
+              .gsub(/^\#{1,6}\s+/m, "")        # 마크다운 헤더
+              .gsub(/\*\*([^*]+)\*\*/, '\1')   # 볼드
+              .gsub(/\|[^|\n]*\|/, "")          # 표 셀
+              .gsub(/^[-\s]+$/m, "")            # 표 구분선
+              .gsub(/^\s*[-*+]\s+/m, "")        # 리스트 마커
+              .gsub(/\s+/, " ")
+              .strip
+    plain.length > 200 ? "#{plain[0, 197]}..." : plain
   end
 
   private
