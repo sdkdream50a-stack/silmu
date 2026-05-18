@@ -50,16 +50,19 @@ namespace :silmu do
       results[table.to_sym] = { total:, thin:, ratio: (total.positive? ? (thin * 100.0 / total).round(1) : 0) }
     end
 
-    # 3. 최근 24h IndexNow 송신 — SolidQueue 잡 카운트 (테이블 없으면 skip)
-    if defined?(SolidQueue::Job) && ActiveRecord::Base.connection.table_exists?("solid_queue_jobs")
-      since = 24.hours.ago
-      results[:indexnow_24h] = {
-        sitemap_ping_jobs: SolidQueue::Job.where(class_name: "SitemapPingJob").where("created_at > ?", since).count,
-        engine_ping_jobs: SolidQueue::Job.where(class_name: "SitemapPingEngineJob").where("created_at > ?", since).count,
-        google_ping_jobs: SolidQueue::Job.where(class_name: "GoogleSitemapPingJob").where("created_at > ?", since).count
-      }
-    else
-      results[:indexnow_24h] = { skipped: "solid_queue_jobs 테이블 없음 (로컬 환경)" }
+    # 3. 최근 24h IndexNow 송신 — SolidQueue 잡 카운트
+    # SolidQueue는 별도 DB connection 사용 가능 → ActiveRecord::Base 테이블 검사 대신 직접 시도
+    if defined?(SolidQueue::Job)
+      begin
+        since = 24.hours.ago
+        results[:indexnow_24h] = {
+          sitemap_ping_jobs: SolidQueue::Job.where(class_name: "SitemapPingJob").where("created_at > ?", since).count,
+          engine_ping_jobs: SolidQueue::Job.where(class_name: "SitemapPingEngineJob").where("created_at > ?", since).count,
+          google_ping_jobs: SolidQueue::Job.where(class_name: "GoogleSitemapPingJob").where("created_at > ?", since).count
+        }
+      rescue ActiveRecord::StatementInvalid, ActiveRecord::ConnectionNotEstablished => e
+        results[:indexnow_24h] = { skipped: "SolidQueue DB 미연결: #{e.class.name}" }
+      end
     end
 
     # 4. 핵심 페이지 HTTP 검증
