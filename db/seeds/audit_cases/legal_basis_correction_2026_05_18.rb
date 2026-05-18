@@ -29,6 +29,35 @@ corrections = [
   {
     slug: "budget-transfer-without-council-approval",
     legal_basis: "지방재정법 제47조(예산의 목적 외 사용금지와 예산 이체), 지방자치법 제142조(예산의 편성 및 의결)"
+  },
+  # 시드 정정 7건 (시드 재실행 사이드이펙트 회피 위해 정정 시드에 통합)
+  {
+    slug: "budget-execution-before-approval",
+    legal_basis: "지방회계법 제29조(지출원인행위), 회계관계직원 등의 책임에 관한 법률 제4조"
+  },
+  {
+    slug: "accounting-officer-dual-role-fraud",
+    legal_basis: "회계관계직원 등의 책임에 관한 법률 제4조, 지방회계법 제23조(징수기관과 수납기관의 분리)"
+  },
+  {
+    slug: "business-expense-personal-use",
+    legal_basis: "지방자치단체 업무추진비 집행에 관한 규칙, 지방재정법 제47조(예산의 목적 외 사용금지와 예산 이체)"
+  },
+  {
+    slug: "accounting-data-falsification",
+    legal_basis: "지방회계법 제20조(세입의 징수와 수납)·제22조(수납기관), 회계관계직원 등의 책임에 관한 법률 제4조, 형법 제355조(업무상횡령)"
+  },
+  {
+    slug: "budget-appropriation-mistake",
+    legal_basis: "지방재정법 제9조(회계의 구분), 지방재정법 제7조(회계연도 독립의 원칙)"
+  },
+  {
+    slug: "expenditure-over-budget",
+    legal_basis: "지방회계법 제29조(지출원인행위), 회계관계직원 등의 책임에 관한 법률 제4조"
+  },
+  {
+    slug: "travel-expense-double-claim",
+    legal_basis: "공무원여비규정 제4조(여비 지급의 원칙), 지방공무원 여비규정 제4조(여비 지급의 원칙), 지방공무원법 제53조(겸직 금지), 회계관계직원 등의 책임에 관한 법률 제4조"
   }
 ]
 
