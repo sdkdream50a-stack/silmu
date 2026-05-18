@@ -24,10 +24,11 @@ daily_sitemap_ping:
   class: SitemapPingJob
   schedule: "0 6 * * *" # 매일 06시
 
-# 매일 오후 6시 - Google Sitemap Ping 추가 (인덱싱 촉진)
-evening_google_ping:
-  class: GoogleSitemapPingJob
-  schedule: "0 18 * * *" # 매일 18시 (Google만 별도 핑)
+# 2026-05-18: GoogleSitemapPingJob 무한 루프 사건으로 cron 비활성화
+# Google Sitemap Ping API 2024년 폐지 → cron 자체가 무의미. SitemapPingJob과의 재귀로 폭주 유발
+# evening_google_ping:
+#   class: GoogleSitemapPingJob
+#   schedule: "0 18 * * *"
 
 # 법령 정합성 자동 검증 (잠정 중단 2026-04-13)
 

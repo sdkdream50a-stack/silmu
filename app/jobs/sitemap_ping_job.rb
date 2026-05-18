@@ -28,8 +28,9 @@ class SitemapPingJob < ApplicationJob
       end
     end
 
-    # Google은 IndexNow 미지원 → Sitemap Ping API 사용 (변경 없어도 sitemap ping은 저비용)
-    GoogleSitemapPingJob.perform_later
+    # 2026-05-18: GoogleSitemapPingJob 무한 루프 차단 (양방향 재귀 사건)
+    # Google Sitemap Ping API는 2024년 폐지. GSC가 sitemap.xml을 자동 크롤링하므로 별도 ping 불필요.
+    # GoogleSitemapPingJob.perform_later  # 호출 제거
   end
 
   private
