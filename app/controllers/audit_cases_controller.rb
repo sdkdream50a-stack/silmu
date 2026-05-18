@@ -105,7 +105,7 @@ class AuditCasesController < ApplicationController
 
     set_og_image(category: "audit")
     set_meta_tags(
-      title: "#{@audit_case.title} — 실제 감사 지적 사례와 대응 방법",
+      title: "#{@audit_case.title} — 감사 지적 사례와 실무 대응 방법",
       description: "#{@audit_case.issue.truncate(150)}",
       keywords: "감사사례,#{@audit_case.category},#{@audit_case.legal_basis}",
       canonical: canonical_url,
