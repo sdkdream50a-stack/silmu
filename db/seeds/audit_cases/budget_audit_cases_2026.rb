@@ -8,7 +8,7 @@ cases = [
     category: "예산",
     severity: "중대",
     topic_slug: "expenditure-commitment",
-    legal_basis: "지방회계법 제29조(지출원인행위), 회계관계공무원 등의 책임에 관한 법률 제4조",
+    legal_basis: "지방회계법 제29조(지출원인행위), 회계관계직원 등의 책임에 관한 법률 제4조",
     issue: "○○시 환경과에서 청소 용역을 먼저 제공받고 계약·품의 없이 사후에 소급 결재 처리하여 감사 지적 및 담당자 징계 처분",
     detail: <<~DETAIL,
 ## 사건 개요
@@ -332,7 +332,7 @@ cases = [
     category: "회계",
     severity: "심각",
     topic_slug: "accounting-officers",
-    legal_basis: "회계관계공무원 등의 책임에 관한 법률 제4조, 지방재정법 제48조(세입·세출의 현금 관리)",
+    legal_basis: "회계관계직원 등의 책임에 관한 법률 제4조, 지방회계법 제23조(징수기관과 수납기관의 분리)",
     issue: "소규모 읍사무소에서 재무관과 출납원을 1인이 겸직하며 소액 공금 900만원을 장기간 유용하다 적발",
     detail: <<~DETAIL,
 ## 사건 개요
@@ -443,7 +443,7 @@ cases = [
     category: "회계",
     severity: "중대",
     topic_slug: "budget-item-standard",
-    legal_basis: "지방자치단체 업무추진비 집행에 관한 규칙, 지방재정법 제46조(예산의 목적 외 사용 금지)",
+    legal_basis: "지방자치단체 업무추진비 집행에 관한 규칙, 지방재정법 제47조(예산의 목적 외 사용금지와 예산 이체)",
     issue: "△△시 과장 M씨가 업무추진비로 개인 가족 식사·직원 생일 파티 비용 총 380만원을 3년간 집행하여 중징계",
     detail: <<~DETAIL,
 ## 사건 개요
@@ -826,7 +826,7 @@ cases = [
     category: "회계",
     severity: "심각",
     topic_slug: "accounting-officers",
-    legal_basis: "지방재정법 제48조(세입·세출 현금관리), 회계관계공무원 등의 책임에 관한 법률 제4조, 형법 제355조(업무상횡령)",
+    legal_basis: "지방회계법 제20조(세입의 징수와 수납)·제22조(수납기관), 회계관계직원 등의 책임에 관한 법률 제4조, 형법 제355조(업무상횡령)",
     issue: "○○읍 출납원 D씨가 수수료 수입 일부를 장부에 미기재하고 허위로 '잔액 없음' 처리하여 3년간 2,100만원 개인 유용",
     detail: <<~DETAIL,
 ## 사건 개요
@@ -933,7 +933,7 @@ cases = [
     category: "예산",
     severity: "보통",
     topic_slug: "budget-execution",
-    legal_basis: "지방재정법 제9조(회계의 구분), 지방재정법 제60조(회계연도 독립의 원칙)",
+    legal_basis: "지방재정법 제9조(회계의 구분), 지방재정법 제7조(회계연도 독립의 원칙)",
     issue: "○○시 상하수도과에서 상수도특별회계 예산 500만원을 일반회계 사업(도로 보수)에 집행하여 회계 독립 원칙 위반",
     detail: <<~DETAIL,
 ## 사건 개요
@@ -987,7 +987,7 @@ cases = [
     category: "예산",
     severity: "중대",
     topic_slug: "expenditure-commitment",
-    legal_basis: "지방회계법 제29조(지출원인행위), 회계관계공무원 등의 책임에 관한 법률 제4조",
+    legal_basis: "지방회계법 제29조(지출원인행위), 회계관계직원 등의 책임에 관한 법률 제4조",
     issue: "△△군 총무과에서 예산 잔액을 확인하지 않고 계약을 연속 체결하여 1,800만원 예산 초과 지출원인행위 발생",
     detail: <<~DETAIL,
 ## 사건 개요

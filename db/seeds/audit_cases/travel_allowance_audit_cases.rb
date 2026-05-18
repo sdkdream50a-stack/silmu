@@ -279,7 +279,7 @@ AuditCase.find_or_create_by!(slug: 'travel-expense-double-claim') do |ac|
   ac.published = true
   ac.view_count = 0
   ac.topic_slug = 'travel-expense'
-  ac.legal_basis = '공무원여비규정 제4조(여비 지급의 원칙), 지방공무원 여비규정 제4조(여비 지급의 원칙), 지방공무원법 제53조(겸직 금지), 회계관계공무원 등의 책임에 관한 법률 제4조'
+  ac.legal_basis = '공무원여비규정 제4조(여비 지급의 원칙), 지방공무원 여비규정 제4조(여비 지급의 원칙), 지방공무원법 제53조(겸직 금지), 회계관계직원 등의 책임에 관한 법률 제4조'
   ac.issue = '○○도 교육청에서 파견 근무 중이던 H씨가 원 소속 기관(○○도)과 파견 기관(교육청)에 동일 날짜 출장을 각각 별도 신청·정산하여 일비·식비·교통비를 중복 수령한 사실이 합동 감사에서 적발되어 징계 및 전액 환수 처분'
 
   ac.detail = <<~DETAIL
