@@ -1,0 +1,2 @@
+# 빈 fixture — rake task 테스트가 ContentMigration.count 정확성에 의존하므로
+# 데이터는 각 테스트 setup에서 직접 생성

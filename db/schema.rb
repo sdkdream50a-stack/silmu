@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_19_133752) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_19_133753) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -88,6 +88,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_19_133752) do
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_calendar_data_on_user_id", unique: true
+  end
+
+  create_table "content_migrations", force: :cascade do |t|
+    t.datetime "applied_at"
+    t.datetime "created_at", null: false
+    t.integer "duration_ms"
+    t.text "error_message"
+    t.string "filename", null: false
+    t.string "status", default: "pending", null: false
+    t.datetime "updated_at", null: false
+    t.index ["filename"], name: "index_content_migrations_on_filename", unique: true
+    t.index ["status"], name: "index_content_migrations_on_status"
   end
 
   create_table "content_requests", force: :cascade do |t|
