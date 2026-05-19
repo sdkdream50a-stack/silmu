@@ -6,7 +6,8 @@
 
 Topic.singleton_class.class_eval do
   alias_method :original_find_or_create_by!, :find_or_create_by!
-  def find_or_create_by!(attrs, &block)
+  def find_or_create_by!(*args, **kwargs, &block)
+    attrs = args.first.is_a?(Hash) ? args.first : kwargs
     t = find_or_initialize_by(attrs)
     block.call(t) if block
     t.save!
