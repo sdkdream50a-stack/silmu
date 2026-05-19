@@ -9,16 +9,17 @@ class ContractGuaranteeService
     small_private: { name: "소액계약 (5천만원 이하)", rate: 0.0, note: "면제 가능 (지방계약법 시행령 제53조)" }
   }.freeze
 
-  # 하자보수보증금: 위임 시행령 제71조 + 요율 시행규칙 제70조 + 공종별 존속기간 시행규칙 제68조
+  # 하자보수보증금: 요율은 지방계약법 시행규칙 제70조 + 위임 시행령 제71조
+  # 공종별 존속기간은 시행규칙 제68조 → 건설산업기본법 시행령 제30조·별표 4 위임
   DEFECT_GUARANTEE_RATES = [
     { id: "structure", name: "구조체 공사", rate: 0.05, years: 5, note: "철근콘크리트·철골 구조" },
     { id: "roof_waterproof", name: "지붕·방수공사", rate: 0.03, years: 3, note: "지붕, 방수" },
     { id: "road", name: "도로·포장공사", rate: 0.03, years: 3, note: "아스팔트·콘크리트 포장" },
     { id: "civil", name: "토목공사", rate: 0.03, years: 3, note: "토공, 배수, 옹벽" },
-    { id: "metal_window", name: "창호공사", rate: 0.02, years: 2, note: "금속·목재 창호" },
+    { id: "metal_window", name: "창호공사", rate: 0.02, years: 1, note: "금속·목재 창호 (건산법 시행령 별표 4 §15⑦)" },
     { id: "electrical", name: "전기·설비공사", rate: 0.02, years: 2, note: "전기, 기계설비, 소방" },
-    { id: "landscaping", name: "조경공사", rate: 0.05, years: 2, note: "조경식재, 시설물 (시행규칙 제70조 제1호)" },
-    { id: "interior", name: "실내건축공사", rate: 0.02, years: 2, note: "바닥재, 벽체, 천장" },
+    { id: "landscaping", name: "조경공사", rate: 0.05, years: 2, note: "조경식재, 시설물 (시행규칙 §70-1호 + 건산법 시행령 별표 4 §11)" },
+    { id: "interior", name: "실내건축공사", rate: 0.02, years: 1, note: "바닥재, 벽체, 천장 (건산법 시행령 별표 4 §15①)" },
     { id: "painting", name: "도장공사", rate: 0.02, years: 1, note: "내·외부 도장" },
     { id: "plaster", name: "미장·타일공사", rate: 0.02, years: 1, note: "미장, 타일, 돌붙임" }
   ].freeze
