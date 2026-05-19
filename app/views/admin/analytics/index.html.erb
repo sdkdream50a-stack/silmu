@@ -189,6 +189,64 @@
       </div>
     </div>
 
+    <%# P8 ROI — 베이스라인 vs 현재 비교 (P3/P6 영향 면) %>
+    <% if @roi_snapshot_labels.any? %>
+      <div class="bg-white rounded-xl p-6 border border-slate-200 shadow-sm mb-8">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+            <span class="material-symbols-outlined text-rose-600">trending_up</span>
+            P3/P6 ROI — 베이스라인 vs 최근 <%= @days %>일
+          </h2>
+          <%= form_with url: admin_analytics_path, method: :get, local: true, class: "flex gap-2 items-center" do %>
+            <%= hidden_field_tag :days, @days %>
+            <%= select_tag :baseline,
+                  options_for_select(@roi_snapshot_labels.map { |l| [ l, l ] }, params[:baseline]),
+                  include_blank: "베이스라인 선택…",
+                  class: "px-3 py-1.5 text-sm border border-slate-200 rounded-lg",
+                  onchange: "this.form.submit()" %>
+          <% end %>
+        </div>
+
+        <% if @roi_compare.present? %>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b border-slate-200">
+                  <th class="text-left py-2 px-3 text-slate-600 font-semibold">페이지</th>
+                  <th class="text-right py-2 px-3 text-slate-600 font-semibold">PV (전)</th>
+                  <th class="text-right py-2 px-3 text-slate-600 font-semibold">PV (현재)</th>
+                  <th class="text-right py-2 px-3 text-slate-600 font-semibold">Δ%</th>
+                  <th class="text-right py-2 px-3 text-slate-600 font-semibold">이탈률 (전→현재)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @roi_compare.each do |row| %>
+                  <tr class="border-b border-slate-100 hover:bg-slate-50">
+                    <td class="py-2 px-3 font-mono text-xs text-slate-700"><%= row[:path] %></td>
+                    <td class="py-2 px-3 text-right text-slate-600"><%= number_with_delimiter(row[:before_pv]) %></td>
+                    <td class="py-2 px-3 text-right font-semibold text-slate-900"><%= number_with_delimiter(row[:after_pv]) %></td>
+                    <td class="py-2 px-3 text-right font-semibold <%= row[:delta_pct] >= 0 ? 'text-emerald-600' : 'text-rose-600' %>">
+                      <%= row[:delta_pct] >= 0 ? "+" : "" %><%= row[:delta_pct] %>%
+                    </td>
+                    <td class="py-2 px-3 text-right text-slate-600 text-xs">
+                      <%= row[:before_bounce].round(1) %>% → <%= row[:after_bounce].round(1) %>%
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        <% else %>
+          <p class="text-sm text-slate-500">베이스라인을 선택하면 P3/P6 영향 페이지의 전/현재 비교가 표시됩니다.</p>
+        <% end %>
+
+        <p class="mt-4 text-xs text-slate-500">
+          저장된 스냅샷: <%= @roi_snapshot_labels.join(", ") %>
+          · 캡처: <code class="text-xs bg-slate-100 px-1 rounded">bin/rake silmu:roi:snapshot LABEL=… DAYS=…</code>
+        </p>
+      </div>
+    <% end %>
+
     <%# 6. DAU 그래프 (간단한 막대 그래프) %>
     <div class="bg-white rounded-xl p-6 border border-slate-200 shadow-sm">
       <h2 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">

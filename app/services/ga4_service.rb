@@ -225,6 +225,45 @@ class Ga4Service
     { avg_session_duration: 0, bounce_rate: 0, engagement_rate: 0 }
   end
 
+  # P8 ROI — 특정 page_path들의 지표를 한 번에 조회
+  # 반환: { "/tools/ai-assistant" => { pageviews:, users:, avg_duration:, bounce_rate: }, ... }
+  def page_metrics(paths:, days:)
+    return {} if paths.blank?
+
+    Rails.cache.fetch("#{@cache_key_prefix}/page_metrics_#{Digest::MD5.hexdigest(paths.sort.join('|'))}_#{days}d", expires_in: CACHE_TTL) do
+      request = Google::Analytics::Data::V1beta::RunReportRequest.new(
+        property: "properties/#{PROPERTY_ID}",
+        date_ranges: [ { start_date: "#{days}daysAgo", end_date: "today" } ],
+        dimensions: [ { name: "pagePath" } ],
+        metrics: [
+          { name: "screenPageViews" },
+          { name: "activeUsers" },
+          { name: "averageSessionDuration" },
+          { name: "bounceRate" }
+        ],
+        dimension_filter: path_in_filter(paths),
+        limit: paths.length
+      )
+
+      response = @client.run_report(request)
+      result = paths.index_with { { pageviews: 0, users: 0, avg_duration: 0.0, bounce_rate: 0.0 } }
+      response.rows.each do |row|
+        path = row.dimension_values[0].value
+        next unless result.key?(path)
+        result[path] = {
+          pageviews:    row.metric_values[0].value.to_i,
+          users:        row.metric_values[1].value.to_i,
+          avg_duration: row.metric_values[2].value.to_f.round(2),
+          bounce_rate:  (row.metric_values[3].value.to_f * 100).round(2)
+        }
+      end
+      result
+    end
+  rescue => e
+    Rails.logger.error "GA4 page_metrics error: #{e.message}"
+    paths.index_with { { pageviews: 0, users: 0, avg_duration: 0.0, bounce_rate: 0.0 } }
+  end
+
   # 대시보드 전체 데이터 (한 번에 가져오기)
   def dashboard_data(days: 7)
     {
@@ -251,6 +290,22 @@ class Ga4Service
     )
     response = @client.run_report(request)
     response.rows.first&.metric_values&.first&.value&.to_i || 0
+  end
+
+  def path_in_filter(paths)
+    in_list = Google::Analytics::Data::V1beta::FilterExpression.new(
+      filter: {
+        field_name: "pagePath",
+        in_list_filter: { values: paths }
+      }
+    )
+    return in_list unless @hostname
+
+    Google::Analytics::Data::V1beta::FilterExpression.new(
+      and_group: {
+        expressions: [ hostname_filter, in_list ]
+      }
+    )
   end
 
   def hostname_filter

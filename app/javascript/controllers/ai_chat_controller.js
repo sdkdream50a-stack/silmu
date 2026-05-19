@@ -121,6 +121,14 @@ export default class extends Controller {
   termBadgeHtml(rate, count) {
     if (typeof rate !== "number") return ""
     const pct = Math.round(rate * 1000) / 10
+    // P8 ROI — 표준어 후처리 적용 이벤트
+    if (typeof gtag === "function") {
+      gtag("event", "term_correction_applied", {
+        source: "ai_assistant",
+        compliance_rate: pct,
+        changes_count: count || 0
+      })
+    }
     if (count > 0) {
       return `<div class="mt-2 inline-flex items-center gap-1 px-2 py-1 rounded text-xs bg-amber-50 border border-amber-200 text-amber-800">
         <span class="material-symbols-outlined" style="font-size:14px;">auto_fix_high</span>

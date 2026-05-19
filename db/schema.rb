@@ -10,10 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_19_133753) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_19_162818) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
+
+  create_table "analytics_snapshots", force: :cascade do |t|
+    t.datetime "captured_at", null: false
+    t.datetime "created_at", null: false
+    t.integer "days", null: false
+    t.string "label", null: false
+    t.jsonb "metrics", default: {}, null: false
+    t.text "notes"
+    t.string "page_path", null: false
+    t.datetime "updated_at", null: false
+    t.index ["captured_at"], name: "index_analytics_snapshots_on_captured_at"
+    t.index ["label", "page_path"], name: "index_analytics_snapshots_on_label_and_page_path"
+  end
 
   create_table "audit_cases", force: :cascade do |t|
     t.text "action_taken"
