@@ -1967,6 +1967,73 @@ document.addEventListener('turbo:render', initTabs);
   </section>
 <% end %>
 
+<%# P9 Norman Information Scent — 본문 흐름 끝 "다음 단계" 단일 결정 카드
+    진단: GA4 세션당 PV 1.85 → sticky 사이드바 banner blindness 추정
+    처방: F-pattern 시선 끝점에 3개 옵션 카드 (가이드·계산기·관련 토픽)
+    계측: gtag next_action_click 이벤트 (slot 파라미터로 효과 측정) %>
+<% next_topic = @related_topics.first %>
+<% next_tool  = @related_tools.first %>
+<% has_next_actions = @related_guide.present? || next_tool.present? || next_topic.present? %>
+<% if has_next_actions %>
+  <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-10"
+           data-controller="next-action"
+           data-next-action-topic-slug-value="<%= @topic.slug %>">
+    <div class="bg-gradient-to-br from-emerald-50 via-white to-editorial-navy-bg/30 border-2 border-emerald-200 rounded-2xl p-6 lg:p-8 shadow-soft">
+      <div class="flex items-start gap-3 mb-5">
+        <span class="material-symbols-outlined text-3xl text-emerald-600 shrink-0" aria-hidden="true">arrow_forward</span>
+        <div class="flex-1 min-w-0">
+          <h2 class="text-lg lg:text-xl font-bold text-slate-900 mb-1">이 다음으로 자주 하는 일</h2>
+          <p class="text-sm text-slate-600 m-0"><%= @topic.name %>을(를) 본 분들이 이어서 본 것들입니다</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <% if @related_guide %>
+          <%= link_to guide_path(@related_guide),
+                class: "block p-4 bg-white rounded-xl border border-emerald-100 hover:border-emerald-400 hover:shadow-medium transition-all duration-200",
+                data: { action: "click->next-action#track", "next-action-slot-param": "guide" } do %>
+            <div class="flex items-center gap-2 text-emerald-700 text-xs font-semibold mb-2">
+              <span class="material-symbols-outlined text-base">menu_book</span>
+              단계별 가이드
+            </div>
+            <p class="font-semibold text-slate-900 text-sm mb-1 line-clamp-2"><%= @related_guide.title %></p>
+            <p class="text-xs text-slate-500 line-clamp-2 m-0"><%= @related_guide.summary.to_s.truncate(80) %></p>
+          <% end %>
+        <% end %>
+
+        <% if next_tool %>
+          <%= link_to send("#{next_tool[:key]}_path"),
+                class: "block p-4 bg-white rounded-xl border border-#{next_tool[:color]}-100 hover:border-#{next_tool[:color]}-400 hover:shadow-medium transition-all duration-200",
+                data: { action: "click->next-action#track", "next-action-slot-param": "tool" } do %>
+            <div class="flex items-center gap-2 text-<%= next_tool[:color] %>-700 text-xs font-semibold mb-2">
+              <span class="material-symbols-outlined text-base"><%= next_tool[:icon] %></span>
+              바로 계산
+            </div>
+            <p class="font-semibold text-slate-900 text-sm mb-1 line-clamp-2"><%= next_tool[:title] %></p>
+            <p class="text-xs text-slate-500 line-clamp-2 m-0"><%= next_tool[:desc] %></p>
+          <% end %>
+        <% end %>
+
+        <% if next_topic %>
+          <%= link_to topic_path(next_topic.slug),
+                class: "block p-4 bg-white rounded-xl border border-slate-200 hover:border-editorial-navy hover:shadow-medium transition-all duration-200",
+                data: { action: "click->next-action#track", "next-action-slot-param": "topic" } do %>
+            <div class="flex items-center gap-2 text-editorial-navy text-xs font-semibold mb-2">
+              <span class="material-symbols-outlined text-base">topic</span>
+              함께 보는 토픽
+            </div>
+            <p class="font-semibold text-slate-900 text-sm mb-1 line-clamp-2"><%= next_topic.name %></p>
+            <p class="text-xs text-slate-500 line-clamp-2 m-0"><%= next_topic.summary.to_s.truncate(80) %></p>
+            <% if next_topic.view_count.to_i >= 100 %>
+              <p class="text-[10px] text-slate-400 mt-2 m-0">조회 <%= number_with_delimiter(next_topic.view_count) %>회</p>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </section>
+<% end %>
+
 <%# Sprint Task #5 — 만족도 1클릭 (Krug + NN/g 권위자 검증) %>
 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
   <%= render "feedback_box" %>

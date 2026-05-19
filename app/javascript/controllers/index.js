@@ -22,6 +22,10 @@ application.register("tabs", TabsController)
 import TopicTelemetryController from "./topic_telemetry_controller"
 application.register("topic-telemetry", TopicTelemetryController)
 
+// P9 Norman Information Scent — 토픽 본문 끝 "다음 단계" 카드 클릭 계측
+import NextActionController from "./next_action_controller"
+application.register("next-action", NextActionController)
+
 import HomeBookmarkController from "./home_bookmark_controller"
 application.register("home-bookmark", HomeBookmarkController)
 
