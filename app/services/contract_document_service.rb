@@ -13,7 +13,7 @@ class ContractDocumentService
           {
             id: "restriction_check", name: "수의계약 체결 제한 여부 확인서", required: true,
             description: "배제사유 확인",
-            legal_basis: "지방계약법 시행령 제25조, 제31조",
+            legal_basis: "지방계약법 시행령 제25조(수의계약 사유)",
             caution: "계약상대자가 부정당업자 제재, 영업정지 등 배제사유에 해당하는지 반드시 확인",
             tip: "나라장터(G2B) 부정당업자 제재현황 조회 후 확인서 징구"
           },
@@ -117,8 +117,8 @@ class ContractDocumentService
           {
             id: "delivery_confirmation", name: "납품확인서", required: true,
             description: "납품 완료 확인",
-            legal_basis: "지방계약법 시행령 제64조 (검사) — 검사조서 작성 생략 가능 사유는 §65",
-            caution: "검사조서 작성 후 발급 (작성 생략 사유 §65 ①항 해당 시 면제)",
+            legal_basis: "지방계약법 시행령 제64조(검사) — 검사조서 작성 생략 금액 기준은 §65(계약금액 3천만원)",
+            caution: "검사조서 작성 후 발급 (계약금액 3천만원 이하는 §65에 따라 작성 생략 가능)",
             tip: "물품대장 등재 후 확인서 발급"
           }
         ],
@@ -148,7 +148,7 @@ class ContractDocumentService
           {
             id: "restriction_check", name: "수의계약 체결 제한 여부 확인서", required: true,
             description: "배제사유 확인",
-            legal_basis: "지방계약법 시행령 제25조, 제31조",
+            legal_basis: "지방계약법 시행령 제25조(수의계약 사유)",
             caution: "계약상대자가 부정당업자 제재, 영업정지 등 배제사유에 해당하는지 반드시 확인",
             tip: "나라장터(G2B) 부정당업자 제재현황 조회 후 확인서 징구"
           },
@@ -310,7 +310,7 @@ class ContractDocumentService
           {
             id: "restriction_check", name: "수의계약 체결 제한 여부 확인서", required: true,
             description: "배제사유 확인",
-            legal_basis: "지방계약법 시행령 제25조, 제31조",
+            legal_basis: "지방계약법 시행령 제25조(수의계약 사유)",
             caution: "계약상대자가 부정당업자 제재, 영업정지 등 배제사유에 해당하는지 반드시 확인",
             tip: "나라장터(G2B) 부정당업자 제재현황 조회 후 확인서 징구"
           },

@@ -68,8 +68,8 @@ class LegalPeriodService
     { id: "interior", name: "실내건축공사", years: 2, note: "바닥재, 벽체, 천장" }
   ].freeze
 
-  # 지체상금 요율 (1일당, 지방계약법 시행규칙 제75조 기준)
-  # 공사 0.5/1,000 / 물품(제조구매) 0.8/1,000 / 용역·물품수리가공 1.3/1,000
+  # 지체상금(지연배상금) 요율 (1일당, 지방계약법 시행규칙 제75조 기준)
+  # 공사 0.5/1,000 / 물품 제조구매 0.8/1,000 / 물품 수리·가공·용역·기타 1.3/1,000 / 운송·보관 2.5/1,000
   LATE_PENALTY_RATES = {
     construction: { name: "공사", rate: Rational(5, 10000), display: "0.5/1,000" },
     goods: { name: "물품", rate: Rational(8, 10000), display: "0.8/1,000" },
@@ -128,7 +128,7 @@ class LegalPeriodService
           end_date: format_date(end_date),
           end_weekday: weekday_name(end_date),
           urgent: urgent,
-          note: urgent ? "긴급입찰: 천재지변·비상재해 등 긴급한 경우 (국가계약법 시행령 제33조)" : "일반입찰 공고기간 (국가계약법 시행령 제33조)"
+          note: urgent ? "긴급입찰: 긴급한 행사·재해 예방·복구 등 (지방계약법 시행령 제35조 제4항)" : "일반입찰 공고기간 (지방계약법 시행령 제35조)"
         }
       }
     end
@@ -149,7 +149,7 @@ class LegalPeriodService
           deadline: format_date(deadline),
           deadline_weekday: weekday_name(deadline),
           days: CONTRACT_SIGNING_DEADLINE,
-          note: "낙찰통지를 받은 날부터 10일 이내 (국가계약법 시행령 제49조)"
+          note: "낙찰통지를 받은 날부터 10일 이내 (행안부 예규 「지방자치단체 입찰 및 계약 집행기준」 — 계약서 작성은 지방계약법 시행령 제50조)"
         }
       }
     end
@@ -237,8 +237,8 @@ class LegalPeriodService
       rate_info = LATE_PENALTY_RATES[penalty_type]
       penalty_amount = (contract_amount * rate_info[:rate] * delay_days).to_i
 
-      # 지체상금 최고 한도: 계약금액의 10% (지방계약법 시행규칙 제75조 단서)
-      max_penalty = (contract_amount * 0.10).to_i
+      # 지체상금(지연배상금) 법정 한도: 계약금액의 100분의 30 (지방계약법 시행령 제90조 제3항, 국가계약법 시행령 제74조 제3항)
+      max_penalty = (contract_amount * 0.30).to_i
       capped = penalty_amount > max_penalty
       penalty_amount = [ penalty_amount, max_penalty ].min
 
@@ -256,7 +256,7 @@ class LegalPeriodService
           delay_days: delay_days,
           penalty_amount: penalty_amount,
           capped: capped,
-          note: "지체상금 (국가계약법 시행령 제74조, 지방계약법 시행령 제90조·시행규칙 제75조)"
+          note: "지체상금(법령상 명칭 '지연배상금', 한도 30%) — 지방계약법 시행령 제90조·시행규칙 제75조 / 국가계약법 시행령 제74조. 개별 계약서 특약으로 한도를 따로 정할 수 있음"
         }
       }
     end
