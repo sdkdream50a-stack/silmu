@@ -94,6 +94,7 @@ class OfficialDocumentService
 
     content = call_anthropic_api
     result = sanitize_html(content) if content
+    result = apply_standard_terms_to_html(result) if result.present?
 
     Rails.cache.write(cache_key, result, expires_in: 7.days) if result.present?
     result
@@ -103,6 +104,22 @@ class OfficialDocumentService
   end
 
   private
+
+  # P3 Sprint 2 — 공통표준용어 후처리 (HTML 텍스트 노드만, style·구조 보존)
+  def apply_standard_terms_to_html(html)
+    doc = Nokogiri::HTML.fragment(html)
+    doc.traverse do |node|
+      next unless node.text?
+      next if node.content.strip.empty?
+
+      result = StandardTermCorrector.call(node.content)
+      node.content = result[:corrected] if result[:changes].any?
+    end
+    doc.to_html
+  rescue => e
+    Rails.logger.warn "[OfficialDocumentService] StandardTerm 후처리 실패: #{e.message}"
+    html
+  end
 
   def build_user_message
     type_label = DOC_TYPES[@doc_type] || @doc_type

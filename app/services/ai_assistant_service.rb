@@ -64,7 +64,14 @@ class AiAssistantService
       messages: messages
     )
 
-    { text: response.content.first.text }
+    raw_text = response.content.first.text
+    correction = StandardTermCorrector.call(raw_text)
+    {
+      text: correction[:corrected],
+      original_text: raw_text,
+      term_changes: correction[:changes],
+      term_compliance_rate: correction[:compliance_rate]
+    }
   rescue => e
     Rails.logger.error "[AiAssistantService] 오류: #{e.class} #{e.message}"
     { error: "일시적인 오류가 발생했습니다. 잠시 후 다시 시도해주세요." }

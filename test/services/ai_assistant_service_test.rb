@@ -89,4 +89,66 @@ class AiAssistantServiceTest < ActiveSupport::TestCase
       Anthropic::Client.define_singleton_method(:new, original_new)
     end
   end
+
+  # --- P3 Sprint 2 — 공통표준용어 후처리 ---
+
+  test "answer 응답에 StandardTermCorrector 후처리 적용 (term_changes·compliance_rate 키 포함)" do
+    StandardTerm.expire_synonym_index!
+    term = StandardTerm.find_or_create_by!(term_korean: "계약상대자") { |t| t.synonyms = [ "계약 상대자" ] }
+
+    original_key = ENV["ANTHROPIC_API_KEY"]
+    ENV["ANTHROPIC_API_KEY"] = "test-key"
+    service = AiAssistantService.new
+
+    stub_text = "계약 상대자에게 통보합니다."
+    stub_response = OpenStruct.new(content: [ OpenStruct.new(text: stub_text) ])
+    stub_messages = Object.new
+    stub_messages.define_singleton_method(:create) { |**_| stub_response }
+    stub_client = Object.new
+    stub_client.define_singleton_method(:messages) { stub_messages }
+
+    original_new = Anthropic::Client.method(:new)
+    Anthropic::Client.define_singleton_method(:new) { |**_| stub_client }
+    begin
+      result = service.answer("질문")
+      assert_equal "계약상대자에게 통보합니다.", result[:text]
+      assert_equal stub_text, result[:original_text]
+      assert_equal 1, result[:term_changes].size
+      # "계약 상대자에게 통보합니다." 어절 3개 / 변경 1개 → 1 - 1/3 = 0.667
+      assert_in_delta 0.667, result[:term_compliance_rate], 0.001
+    ensure
+      Anthropic::Client.define_singleton_method(:new, original_new)
+      ENV["ANTHROPIC_API_KEY"] = original_key
+      term.destroy
+      StandardTerm.expire_synonym_index!
+    end
+  end
+
+  test "answer 변경 없으면 changes 빈 배열 + compliance_rate 1.0" do
+    StandardTerm.expire_synonym_index!
+
+    original_key = ENV["ANTHROPIC_API_KEY"]
+    ENV["ANTHROPIC_API_KEY"] = "test-key"
+    service = AiAssistantService.new
+
+    stub_text = "특별히 치환할 단어가 없는 문장입니다."
+    stub_response = OpenStruct.new(content: [ OpenStruct.new(text: stub_text) ])
+    stub_messages = Object.new
+    stub_messages.define_singleton_method(:create) { |**_| stub_response }
+    stub_client = Object.new
+    stub_client.define_singleton_method(:messages) { stub_messages }
+
+    original_new = Anthropic::Client.method(:new)
+    Anthropic::Client.define_singleton_method(:new) { |**_| stub_client }
+    begin
+      result = service.answer("질문")
+      assert_equal stub_text, result[:text]
+      assert_equal stub_text, result[:original_text]
+      assert_equal [], result[:term_changes]
+      assert_equal 1.0, result[:term_compliance_rate]
+    ensure
+      Anthropic::Client.define_singleton_method(:new, original_new)
+      ENV["ANTHROPIC_API_KEY"] = original_key
+    end
+  end
 end
