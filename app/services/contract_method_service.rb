@@ -217,12 +217,13 @@ class ContractMethodService
         }
       end
 
-      # 전자입찰 안내
-      if price > 100_000_000
+      # 전자입찰(지정정보처리장치) 안내 — 지방계약법 시행령 §39 ①항
+      # 입찰서 제출은 임계금액 없이 지정정보처리장치 이용 의무
+      if threshold && threshold[:method] == "입찰"
         warnings << {
           level: "info",
-          title: "전자입찰 필수",
-          message: "추정가격 1억원 초과 시 나라장터(G2B) 또는 학교장터(S2B) 전자입찰이 필수입니다.",
+          title: "전자입찰(지정정보처리장치) 필수",
+          message: "입찰 대상 계약은 나라장터(G2B) 또는 학교장터(S2B) 등 지정정보처리장치를 이용한 입찰서 제출이 의무입니다. (지방계약법 시행령 제39조제1항)",
           link: "https://www.g2b.go.kr"
         }
       end
