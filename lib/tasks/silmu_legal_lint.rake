@@ -333,9 +333,13 @@ namespace :silmu do
 
     failures = []
 
+    # patch/correction 시드는 정정 매핑(from/to)을 모두 포함하므로 자기 자신을 거짓 양성으로 잡음 → 제외
+    correction_file_pattern = %r{db/seeds/.+_correction_\d{4}_\d{2}_\d{2}\.rb\z|db/seeds/audit_cases/legal_basis_correction_\d{4}_\d{2}_\d{2}\.rb\z}
+
     target_globs.each do |glob|
       Dir[Rails.root.join(glob)].each do |path|
         rel = path.sub("#{Rails.root}/", "")
+        next if rel.match?(correction_file_pattern)
         content = File.read(path)
 
         # 1. 폐지 조문 검사
