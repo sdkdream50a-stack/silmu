@@ -116,7 +116,7 @@ cases = [
     category: "예산",
     severity: "보통",
     topic_slug: "contingency-fund",
-    legal_basis: "지방재정법 제43조(예비비), 지방재정법 시행령 제65조(예비비 사용 요건)",
+    legal_basis: "지방재정법 제43조(예비비), 지방재정법 시행령 제48조(예비비 사용의 제한)",
     issue: "○○군이 연례적으로 발생하는 제설 작업비를 예비비로 처리하여 예측 가능성 요건 미충족 지적",
     detail: <<~DETAIL,
 ## 사건 개요
@@ -273,7 +273,7 @@ cases = [
     category: "예산",
     severity: "보통",
     topic_slug: "budget-lapse",
-    legal_basis: "지방재정법 제50조(이월비), 지방재정법 시행령 제72조(사고이월 요건)",
+    legal_basis: "지방재정법 제50조 제2항(사고이월비 — 회계연도 내 지출원인행위 + 불가피 사유)",
     issue: "△△시 건설과에서 단순 행정 지연을 사고이월 사유로 처리하여 2년 연속 미집행, 최종 불용 처리 권고",
     detail: <<~DETAIL,
 ## 사건 개요
@@ -669,7 +669,7 @@ cases = [
     category: "예산",
     severity: "보통",
     topic_slug: "contingency-fund",
-    legal_basis: "지방재정법 제43조 제2항(목적예비비), 지방재정법 시행령 제65조",
+    legal_basis: "지방재정법 제43조 제2항(목적예비비 — 재해·재난 별도 계상), 지방재정법 시행령 제48조(예비비 사용 제한 — 업무추진비·보조금 제외)",
     issue: "△△군이 재해·재난 대비용 목적예비비를 일반 행사 지원비로 사용하여 예비비 목적 위반 지적",
     detail: <<~DETAIL,
 ## 사건 개요

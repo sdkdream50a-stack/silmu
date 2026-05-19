@@ -55,7 +55,7 @@ class ContractDocumentService
           {
             id: "budget_request", name: "예산배정요청서", required: false,
             description: "예산 미배정 시",
-            legal_basis: "지방재정법 제44조",
+            legal_basis: "지방재정법 제43조",
             caution: "예산 배정 전 계약 체결 불가",
             tip: "예산과목, 금액, 사업명 정확히 기재"
           }
