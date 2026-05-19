@@ -164,6 +164,15 @@
               <% end %>
             </div>
             <h1 class="text-xl md:text-2xl font-bold text-gray-900 mb-4"><%= @guide.title %></h1>
+            <% if @guide.effective_verified_at %>
+              <div class="mb-3">
+                <%= render 'shared/verification_badge',
+                  date: @guide.effective_verified_at,
+                  source: @guide.verification_source.presence || "법제처 국가법령정보센터",
+                  source_url: "https://www.law.go.kr",
+                  variant: 'inline' %>
+              </div>
+            <% end %>
             <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500">
               <span class="flex items-center gap-1">
                 <span class="material-symbols-outlined text-lg">calendar_today</span>

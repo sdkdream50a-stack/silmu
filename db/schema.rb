@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_04_100000) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_19_133752) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -23,6 +23,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_04_100000) do
     t.text "detail"
     t.string "infographic_url"
     t.text "issue"
+    t.datetime "last_verified_at"
     t.string "legal_basis"
     t.text "lesson"
     t.integer "org_type"
@@ -35,6 +36,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_04_100000) do
     t.string "title"
     t.string "topic_slug"
     t.datetime "updated_at", null: false
+    t.string "verification_method", limit: 32
+    t.string "verification_source", limit: 200
     t.integer "view_count", default: 0
     t.index ["published", "category"], name: "index_audit_cases_on_published_and_category"
     t.index ["published", "created_at"], name: "index_audit_cases_on_published_and_created_at"
@@ -173,6 +176,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_04_100000) do
     t.datetime "created_at", null: false
     t.text "description"
     t.string "external_link"
+    t.datetime "last_verified_at"
     t.boolean "published", default: true, null: false
     t.date "published_on"
     t.jsonb "rich_media", default: {}
@@ -187,6 +191,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_04_100000) do
     t.string "title", null: false
     t.string "topic_slug"
     t.datetime "updated_at", null: false
+    t.string "verification_method", limit: 32
+    t.string "verification_source", limit: 200
     t.integer "view_count", default: 0, null: false
     t.index ["category"], name: "index_guides_on_category"
     t.index ["published", "sector"], name: "index_guides_on_published_and_sector"
@@ -317,6 +323,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_04_100000) do
     t.string "infographic_url"
     t.text "interpretation_content"
     t.text "keywords"
+    t.datetime "last_verified_at"
     t.string "law_base_date"
     t.text "law_content"
     t.datetime "law_verified_at"
@@ -336,6 +343,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_04_100000) do
     t.string "slug", null: false
     t.text "summary"
     t.datetime "updated_at", null: false
+    t.string "verification_method", limit: 32
+    t.string "verification_source", limit: 200
     t.string "video_url"
     t.integer "view_count", default: 0
     t.index ["category"], name: "index_topics_on_category"

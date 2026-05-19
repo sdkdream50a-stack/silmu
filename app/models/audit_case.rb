@@ -1,4 +1,6 @@
 class AuditCase < ApplicationRecord
+  include LegalVerifiable
+
   belongs_to :topic, foreign_key: :topic_slug, primary_key: :slug, optional: true
 
   # Sector enum (0: common 공통, 1: local_gov 지자체, 2: edu 교육행정)

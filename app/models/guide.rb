@@ -1,6 +1,7 @@
 # Created: 2026-02-18 00:35
 class Guide < ApplicationRecord
   include PgSearch::Model
+  include LegalVerifiable
 
   # 검색 설정
   pg_search_scope :search_by_keyword,
