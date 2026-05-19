@@ -450,6 +450,8 @@ namespace :silmu do
         end
         puts "  → 매년 1~2월 인사혁신처 일괄 개정 후 갱신 확인 필요. WARN이므로 빌드는 통과."
       end
+      puts ""
+      puts "[INFO] 공통표준용어 sample 준수율은 'bin/rake silmu:term_compliance' 별도 실행 (DB 의존, 정보성)"
       exit 0
     end
 
