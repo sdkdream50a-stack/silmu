@@ -500,7 +500,7 @@ cases = [
     category: "회계",
     severity: "보통",
     topic_slug: "budget-settlement",
-    legal_basis: "지방재정법 제53조(결산), 지방자치법 제150조(결산 승인)",
+    legal_basis: "지방회계법 제14조(결산의 수행), 지방자치법 제150조(결산 — 출납 폐쇄 후 80일 내 작성·다음 해 의회 승인)",
     issue: "○○군이 3년 연속 결산서 의회 제출을 8월 31일 법정 기한 초과하여 행정안전부 재정진단 대상 지정",
     detail: <<~DETAIL,
 ## 사건 개요
