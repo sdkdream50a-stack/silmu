@@ -8,6 +8,10 @@ import { application } from "./application"
 import MobileMenuController from "./mobile_menu_controller"
 application.register("mobile-menu", MobileMenuController)
 
+// AI Assistant 채팅 (ActionCable consumer 포함, /ai-assistant 페이지 전용이지만 경량)
+import AiChatController from "./ai_chat_controller"
+application.register("ai-chat", AiChatController)
+
 import UtmBannerController from "./utm_banner_controller"
 application.register("utm-banner", UtmBannerController)
 
