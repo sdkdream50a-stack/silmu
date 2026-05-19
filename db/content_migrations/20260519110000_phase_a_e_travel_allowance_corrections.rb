@@ -1,5 +1,7 @@
+# P6 Phase 2 — db/seeds/audit_cases/legal_basis_correction_2026_05_19_b.rb 컨버전
+#
 # 2026-05-19 batch #3 — 여비 audit_case legal_basis 운영 patch
-# travel_allowance_audit_cases.rb는 find_or_create_by! 패턴 (idempotent 아님)
+# travel_allowance_audit_cases.rb는 find_or_create_by! 패턴 (idempotent 아님) → patch 별도 필요
 # 정정 사유:
 #   - §21(국내 가족여비)를 숙박비 본조로 잘못 인용 → §16 ①항(별표 2 상한액)
 #   - §18(근무지 내 국내 출장)을 자가용 여비로 잘못 인용 → 별표 2 + 「공무원보수 등의 업무지침」
@@ -30,7 +32,7 @@ corrections = [
 corrections.each do |c|
   ac = AuditCase.find_by(slug: c[:slug])
   if ac.nil?
-    puts "  [skipped] #{c[:slug]} — 미존재"
+    puts "    [skipped] #{c[:slug]} — 미존재"
     next
   end
   ac.legal_basis = c[:legal_basis] if c[:legal_basis]
@@ -42,10 +44,8 @@ corrections.each do |c|
   end
   if ac.changed?
     ac.save!
-    puts "  [updated] #{c[:slug]} — #{ac.previous_changes.keys.join(', ')}"
+    puts "    [updated] #{c[:slug]} — #{ac.previous_changes.keys.join(', ')}"
   else
-    puts "  [unchanged] #{c[:slug]}"
+    puts "    [unchanged] #{c[:slug]}"
   end
 end
-
-puts "✅ 2026-05-19 batch #3 여비 audit_case 정정 batch 완료 (#{corrections.size}건 시도)"

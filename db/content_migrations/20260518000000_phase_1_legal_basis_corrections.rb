@@ -1,15 +1,11 @@
-# frozen_string_literal: true
-# 2026-05-18 Phase 1 — 운영 DB only 3건의 legal_basis·issue 정정 시드
+# P6 Phase 2 — db/seeds/audit_cases/legal_basis_correction_2026_05_18.rb 컨버전
+#
+# 2026-05-18 Phase 1 — 운영 DB only 12건의 audit_case legal_basis·issue 정정
 # 진단: GSC 색인 위기(396→1 deindexing) 해결 전 법령 인용 정합성 확보
 # 검증: 일반 에이전트 + WebSearch + silmu-db-analyst 교차 검증
 #
-# 정정 대상 (운영 DB에는 존재하나 코드베이스 시드 없음):
-# - reserve-fund-violation         : 지방재정법 §46(예비비) → §43(예비비). §46은 예산 불성립 시 집행
-# - budget-transfer-limit-violation: §47 라벨 "(예산의 전용)" → "(예산의 목적 외 사용금지와 예산 이체)"
-#                                    issue "관 간 전용" → "관 간 이동=이용(移用)"
-# - budget-transfer-without-council-approval: §47 라벨 "(예산의 이용·전용)" → "(예산의 목적 외 사용금지와 예산 이체)"
-#
-# 패턴: find_or_initialize_by(slug) + assign_attributes (project_seed_upsert_pattern 메모리)
+# 운영 DB에는 이미 적용 완료. ContentMigration 첫 실행 시 모두 [unchanged] 예상 (멱등성).
+# 패턴: find_by(slug) + assign_attributes (project_seed_upsert_pattern 메모리)
 
 corrections = [
   {
@@ -40,7 +36,6 @@ corrections = [
     slug: "budget-transfer-without-council-approval",
     legal_basis: "지방재정법 제47조(예산의 목적 외 사용금지·정책사업 간 이용·예산 이체), 지방자치법 제142조(예산의 편성 및 의결)"
   },
-  # 시드 정정 7건 (시드 재실행 사이드이펙트 회피 위해 정정 시드에 통합)
   {
     slug: "budget-execution-before-approval",
     legal_basis: "지방회계법 제29조(지출원인행위), 회계관계직원 등의 책임에 관한 법률 제4조"
@@ -69,7 +64,6 @@ corrections = [
     slug: "travel-expense-double-claim",
     legal_basis: "공무원여비규정 제4조(여비 지급의 원칙), 지방공무원 여비규정 제4조(여비 지급의 원칙), 지방공무원법 제53조(겸직 금지), 회계관계직원 등의 책임에 관한 법률 제4조"
   },
-  # 2026-05-18 Phase 2 #2 1차 batch 검증 중 발견 (§44=채무부담행위, 정책사업 간 이용은 §47)
   {
     slug: "budget-misuse",
     legal_basis: "지방재정법 제47조(예산의 목적 외 사용금지·정책사업 간 이용·예산 이체)",
@@ -83,15 +77,15 @@ corrections.each do |attrs|
   slug = attrs[:slug]
   ac = AuditCase.find_by(slug: slug)
   if ac.nil?
-    puts "[skip] #{slug} — 운영 DB에 없음 (생성 안 함)"
+    puts "    [skip] #{slug} — 운영 DB에 없음 (생성 안 함)"
     next
   end
   changed = attrs.except(:slug).reject { |k, v| ac.public_send(k) == v }
   if changed.empty?
-    puts "[unchanged] #{slug}"
+    puts "    [unchanged] #{slug}"
   else
     ac.assign_attributes(changed)
     ac.save!
-    puts "[updated] #{slug} — #{changed.keys.join(', ')}"
+    puts "    [updated] #{slug} — #{changed.keys.join(', ')}"
   end
 end
