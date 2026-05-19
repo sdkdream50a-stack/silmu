@@ -31,7 +31,30 @@ qa_corrections = [
   }
 ]
 
-(corrections + qa_corrections).each do |c|
+# bid-deposit 토픽 DB 콘텐츠 정정 (시드 파일이 아닌 운영 DB에 직접 입력된 콘텐츠)
+# 발견: 라이브 검증에서 §41(수입입찰 낙찰)·§78(장기계속계약) 부정확 인용 발견
+bid_deposit_corrections = [
+  {
+    slug: "bid-deposit",
+    field: :law_content,
+    from: "입찰보증금은 지방계약법 시행령 제41조에 따라",
+    to: "입찰보증금은 지방계약법 시행령 제37조(입찰보증금)에 따라"
+  },
+  {
+    slug: "bid-deposit",
+    field: :law_content,
+    from: "입찰보증금을 국고에 귀속시킵니다 (지방계약법 시행령 제78조)",
+    to: "입찰보증금을 국고에 귀속시킵니다 (지방계약법 시행령 제38조 — 입찰보증금의 세입조치)"
+  },
+  {
+    slug: "bid-deposit",
+    field: :law_content,
+    from: "추정가격의 5% 이상",
+    to: "입찰금액의 5% 이상"
+  }
+]
+
+(corrections + qa_corrections + bid_deposit_corrections).each do |c|
   t = Topic.find_by(slug: c[:slug])
   if t.nil?
     puts "  [skipped] #{c[:slug]} — 미존재"
