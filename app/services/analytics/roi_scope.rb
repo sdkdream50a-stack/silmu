@@ -6,7 +6,7 @@
 module Analytics
   module RoiScope
     P3_PATHS = [
-      "/tools/ai-assistant",
+      "/ai-assistant",
       "/tools/official-document"
     ].freeze
 
