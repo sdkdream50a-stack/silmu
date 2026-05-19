@@ -301,6 +301,13 @@
 
     <!-- 결과 -->
     <div class="od-result" id="od-result">
+      <!-- P3 Sprint 2 — 공통표준용어 후처리 배지 -->
+      <div id="od-term-badge" class="no-print" style="display:none; margin-bottom:16px; padding:12px 16px; border-radius:10px; font-size:13px; align-items:center; gap:8px;">
+        <span class="material-symbols-outlined" style="font-size:18px;" id="od-term-badge-icon"></span>
+        <span id="od-term-badge-text"></span>
+        <span style="margin-left:auto; font-size:11px; color:#94a3b8;">행정안전부 공통표준용어 기준</span>
+      </div>
+
       <div class="no-print od-actions">
         <button class="od-btn od-btn-secondary" onclick="odCopy()">
           <span class="material-symbols-outlined" style="font-size:18px;">content_copy</span> 복사
@@ -412,6 +419,7 @@ function odGenerate() {
 
     if (data.success) {
       document.getElementById('od-doc-content').innerHTML = data.html;
+      odUpdateTermBadge(data.term_compliance_rate, data.term_changes_count);
       document.getElementById('od-result').classList.add('active');
       document.getElementById('od-result').scrollIntoView({ behavior:'smooth', block:'start' });
       odShowToast('공문서가 생성되었습니다');
@@ -424,6 +432,28 @@ function odGenerate() {
     document.getElementById('od-loading').classList.remove('active');
     odShowToast('네트워크 오류가 발생했습니다');
   });
+}
+
+function odUpdateTermBadge(rate, count) {
+  var badge = document.getElementById('od-term-badge');
+  var icon  = document.getElementById('od-term-badge-icon');
+  var text  = document.getElementById('od-term-badge-text');
+  if (typeof rate !== 'number') { badge.style.display = 'none'; return; }
+  badge.style.display = 'flex';
+  var pct = Math.round(rate * 1000) / 10;
+  if (count > 0) {
+    badge.style.background = '#fef3c7';
+    badge.style.border = '1px solid #fcd34d';
+    badge.style.color = '#92400e';
+    icon.textContent = 'auto_fix_high';
+    text.textContent = '표준어 자동 교정: ' + count + '건 (준수율 ' + pct + '%)';
+  } else {
+    badge.style.background = '#dcfce7';
+    badge.style.border = '1px solid #86efac';
+    badge.style.color = '#166534';
+    icon.textContent = 'check_circle';
+    text.textContent = '표준어 준수율 100%';
+  }
 }
 
 function odRegenerate() {

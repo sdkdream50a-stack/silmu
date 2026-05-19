@@ -26,7 +26,12 @@ class OfficialDocumentsController < ApplicationController
     result = service.generate
 
     if result
-      render json: { success: true, html: result }
+      render json: {
+        success: true,
+        html: result[:html],
+        term_compliance_rate: result[:compliance_rate],
+        term_changes_count: result[:changes].size
+      }
     else
       render json: { success: false, error: "공문서 생성에 실패했습니다. 잠시 후 다시 시도해주세요." }, status: :unprocessable_entity
     end

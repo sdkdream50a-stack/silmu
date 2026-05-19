@@ -16,7 +16,13 @@ class AiAssistantJob < ApplicationJob
     else
       ActionCable.server.broadcast(
         "ai_assistant_#{session_id}",
-        { type: "answer", text: result[:text], remaining: remaining }
+        {
+          type: "answer",
+          text: result[:text],
+          remaining: remaining,
+          term_compliance_rate: result[:term_compliance_rate],
+          term_changes_count: result[:term_changes].to_a.size
+        }
       )
     end
   end

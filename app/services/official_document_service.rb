@@ -84,19 +84,23 @@ class OfficialDocumentService
     @tone = params[:tone] || "normal"
   end
 
+  # 반환: { html: String, changes: Array, compliance_rate: Float } 또는 nil
   def generate
     return nil unless @api_key
 
-    # 동일 입력 캐싱 — 반복 API 호출 방지
-    cache_key = "official_doc:#{Digest::SHA256.hexdigest(build_user_message)}"
+    # cache 키 v2 — 후처리 결과 Hash 구조 변경 (이전 String 캐시는 7일 자연 만료)
+    cache_key = "official_doc:v2:#{Digest::SHA256.hexdigest(build_user_message)}"
     cached = Rails.cache.read(cache_key)
     return cached if cached
 
     content = call_anthropic_api
-    result = sanitize_html(content) if content
-    result = apply_standard_terms_to_html(result) if result.present?
+    return nil if content.blank?
 
-    Rails.cache.write(cache_key, result, expires_in: 7.days) if result.present?
+    sanitized = sanitize_html(content)
+    return nil if sanitized.blank?
+
+    result = apply_standard_terms_to_html(sanitized)
+    Rails.cache.write(cache_key, result, expires_in: 7.days)
     result
   rescue => e
     Rails.logger.error "OfficialDocumentService error: #{e.message}"
@@ -106,19 +110,27 @@ class OfficialDocumentService
   private
 
   # P3 Sprint 2 — 공통표준용어 후처리 (HTML 텍스트 노드만, style·구조 보존)
+  # 반환: { html:, changes:, compliance_rate: } — UI 배지 노출용
   def apply_standard_terms_to_html(html)
     doc = Nokogiri::HTML.fragment(html)
+    all_changes = []
     doc.traverse do |node|
       next unless node.text?
       next if node.content.strip.empty?
 
       result = StandardTermCorrector.call(node.content)
-      node.content = result[:corrected] if result[:changes].any?
+      next if result[:changes].empty?
+
+      node.content = result[:corrected]
+      all_changes.concat(result[:changes])
     end
-    doc.to_html
+
+    word_count = doc.text.scan(/\S+/).size
+    compliance = word_count.zero? ? 1.0 : (1.0 - all_changes.size.to_f / word_count).clamp(0.0, 1.0).round(3)
+    { html: doc.to_html, changes: all_changes, compliance_rate: compliance }
   rescue => e
     Rails.logger.warn "[OfficialDocumentService] StandardTerm 후처리 실패: #{e.message}"
-    html
+    { html: html, changes: [], compliance_rate: 1.0 }
   end
 
   def build_user_message
