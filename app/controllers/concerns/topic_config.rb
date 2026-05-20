@@ -46,7 +46,9 @@ module TopicConfig
     "lowest-bid-rate"         => [ :estimated_price, :legal_period, :contract_method ],
     "quote-collection-guide"  => [ :quote_review, :contract_method, :contract_documents ],
     # 2026-02-25 추가
-    "completion-payment-checklist" => [ :progress_inspection, :contract_documents ]
+    "completion-payment-checklist" => [ :progress_inspection, :contract_documents ],
+    # 2026-05-20 추가 (Phase 2 #1 — 개산급 콘텐츠 갭)
+    "estimated-payment"       => [ :travel_calculator, :contract_documents ]
   }.freeze
 
   # 플로차트가 있는 토픽 목록
@@ -64,6 +66,7 @@ module TopicConfig
     goods-vs-service-contract bid-participation-restriction additional-contract-limit
     penalty-reduction-procedure contract-period-extension e-bidding-error-faq
     contract-amount-adjustment completion-payment-checklist
+    estimated-payment
   ].freeze
 
   # 토픽별 개별 아이콘 매핑
@@ -109,7 +112,9 @@ module TopicConfig
     "lowest-bid-rate"            => "trending_down",
     "quote-collection-guide"     => "description",
     # 2026-02-25 추가
-    "completion-payment-checklist" => "checklist"
+    "completion-payment-checklist" => "checklist",
+    # 2026-05-20 추가 (Phase 2 #1 — 개산급)
+    "estimated-payment"            => "account_balance_wallet"
   }.freeze
 
   CATEGORY_CONFIG = {
