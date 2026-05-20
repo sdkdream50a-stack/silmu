@@ -48,7 +48,9 @@ module TopicConfig
     # 2026-02-25 추가
     "completion-payment-checklist" => [ :progress_inspection, :contract_documents ],
     # 2026-05-20 추가 (Phase 2 #1 — 개산급 콘텐츠 갭)
-    "estimated-payment"       => [ :travel_calculator, :contract_documents ]
+    "estimated-payment"       => [ :travel_calculator, :contract_documents ],
+    # 2026-05-20 추가 (Phase 2 #2 — 펜스 설치 콘텐츠 갭)
+    "fence-installation"      => [ :contract_method, :contract_documents, :estimated_price ]
   }.freeze
 
   # 플로차트가 있는 토픽 목록
@@ -66,7 +68,7 @@ module TopicConfig
     goods-vs-service-contract bid-participation-restriction additional-contract-limit
     penalty-reduction-procedure contract-period-extension e-bidding-error-faq
     contract-amount-adjustment completion-payment-checklist
-    estimated-payment
+    estimated-payment fence-installation
   ].freeze
 
   # 토픽별 개별 아이콘 매핑
@@ -114,7 +116,9 @@ module TopicConfig
     # 2026-02-25 추가
     "completion-payment-checklist" => "checklist",
     # 2026-05-20 추가 (Phase 2 #1 — 개산급)
-    "estimated-payment"            => "account_balance_wallet"
+    "estimated-payment"            => "account_balance_wallet",
+    # 2026-05-20 추가 (Phase 2 #2 — 펜스 설치)
+    "fence-installation"           => "fence"
   }.freeze
 
   CATEGORY_CONFIG = {
@@ -159,7 +163,8 @@ module TopicConfig
                 bid-participation-restriction qualification-failure e-bidding-error-faq] },
     { id: "execution",        label: "계약체결",   icon: "description",   desc: "계약서 작성, 전자계약, 특수계약, 계약 유형 구분",
       slugs: %w[contract-execution e-procurement-guide unit-price-contract long-term-contract
-                joint-contract subcontract split-contract-prohibition goods-vs-service-contract] },
+                joint-contract subcontract split-contract-prohibition goods-vs-service-contract
+                fence-installation] },
     { id: "guarantee",        label: "보증금/담보", icon: "security",      desc: "계약보증금, 입찰보증금, 이행보증, 하자보증",
       slugs: %w[contract-guarantee-deposit bid-deposit performance-guarantee defect-warranty
                 contract-guarantee-exemption] },
