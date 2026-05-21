@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_19_162818) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_22_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -255,6 +255,21 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_19_162818) do
     t.datetime "updated_at", null: false
     t.index ["law_id"], name: "index_laws_on_law_id"
     t.index ["law_type"], name: "index_laws_on_law_type"
+  end
+
+  create_table "search_logs", force: :cascade do |t|
+    t.integer "audit_case_count", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.integer "guide_count", default: 0, null: false
+    t.string "ip_hash"
+    t.string "query", limit: 200, null: false
+    t.integer "template_count", default: 0, null: false
+    t.integer "topic_count", default: 0, null: false
+    t.datetime "updated_at", null: false
+    t.boolean "zero_result", default: false, null: false
+    t.index ["created_at"], name: "index_search_logs_on_created_at"
+    t.index ["query"], name: "index_search_logs_on_query"
+    t.index ["zero_result", "created_at"], name: "index_search_logs_on_zero_result_and_created_at"
   end
 
   create_table "slug_redirects", force: :cascade do |t|

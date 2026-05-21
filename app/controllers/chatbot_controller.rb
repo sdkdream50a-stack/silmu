@@ -55,6 +55,8 @@ class ChatbotController < ApplicationController
 
       # 4. 서식 템플릿 (메모리 내 검색)
       @templates = search_templates(@query)
+
+      log_search(@query, @topics, @audit_cases, @guides, @templates)
     end
 
     respond_to do |format|
@@ -64,6 +66,24 @@ class ChatbotController < ApplicationController
   end
 
   private
+
+  def log_search(query, topics, audit_cases, guides, templates)
+    t = topics.respond_to?(:size) ? topics.size : 0
+    a = audit_cases.respond_to?(:size) ? audit_cases.size : 0
+    g = guides.respond_to?(:size) ? guides.size : 0
+    tm = templates.is_a?(Array) ? templates.size : 0
+    SearchLog.create(
+      query: query,
+      topic_count: t,
+      audit_case_count: a,
+      guide_count: g,
+      template_count: tm,
+      zero_result: (t + a + g + tm).zero?,
+      ip_hash: Digest::SHA256.hexdigest("#{request.remote_ip}-#{Rails.application.secret_key_base}")[0..15]
+    )
+  rescue => e
+    Rails.logger.warn "[SearchLog] failed: #{e.class}: #{e.message}"
+  end
 
   def search_templates(query)
     q = query.downcase
