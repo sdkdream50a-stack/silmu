@@ -107,6 +107,22 @@
   </div>
 </section>
 
+<%# P9 Information Scent — 과목 분류 다음 단계 %>
+<%= render 'shared/tool_next_actions',
+  tool_key: 'budget-category-finder',
+  next_actions: [
+    { type: 'tool',  path: budget_execution_rate_path, label: '바로 계산',
+      title: '예산 집행률 계산', desc: '과목별 집행률·잔액·권장률 비교',
+      icon: 'bar_chart', color: 'emerald' },
+    { type: 'tool',  path: budget_transfer_checker_path, label: '관련 도구',
+      title: '이월·전용 판단기', desc: '과목 변경 가능 여부 즉시 확인',
+      icon: 'swap_horiz', color: 'amber' },
+    { type: 'tool',  path: subsidy_settlement_checker_path, label: '관련 도구',
+      title: '보조금 정산 체크리스트', desc: '민간이전 과목 정산 필수 항목',
+      icon: 'volunteer_activism', color: 'blue' }
+  ]
+%>
+
 <script>
   const BUDGET_CATEGORIES = [
     // 인건비

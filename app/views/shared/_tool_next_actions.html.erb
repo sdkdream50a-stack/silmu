@@ -1,0 +1,47 @@
+<%# P9 Information Scent — 도구 본문 끝 "다음 단계" 카드
+    원본: topics/show.html.erb:1969 (2026-05-19 운영 라이브 fbc2e18)
+    도구 적용: 결과 영역 아래 / footer 직전 권장
+
+    인자:
+      tool_key     (필수, 도구 slug — gtag 이벤트 라벨용. 예: 'budget-execution-rate')
+      next_actions (필수, 3 슬롯 hash 배열, 각각:
+                    { type: 'guide'|'tool'|'topic', path: <url_helper 결과>,
+                      label: '단계별 가이드'|'바로 계산'|'함께 보는 토픽',
+                      title: '...', desc: '...', icon: 'menu_book',
+                      color: 'emerald'|'amber'|'blue'|... })
+                    nil 슬롯은 자동 skip. 모두 nil이면 카드 전체 미노출.
+%>
+<% next_actions = Array(next_actions).compact %>
+<% if next_actions.any? %>
+  <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 mb-6"
+           data-controller="next-action"
+           data-next-action-topic-slug-value="tool:<%= tool_key %>">
+    <div class="bg-gradient-to-br from-emerald-50 via-white to-editorial-navy-bg/30 border-2 border-emerald-200 rounded-2xl p-6 lg:p-8 shadow-soft">
+      <div class="flex items-start gap-3 mb-5">
+        <span class="material-symbols-outlined text-3xl text-emerald-600 shrink-0" aria-hidden="true">arrow_forward</span>
+        <div class="flex-1 min-w-0">
+          <h2 class="text-lg lg:text-xl font-bold text-slate-900 mb-1">이 도구와 함께 자주 보는 자료</h2>
+          <p class="text-sm text-slate-600 m-0">계산 후 다음 단계로 자주 이동하는 자료입니다</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-<%= [next_actions.size, 3].min %> gap-3">
+        <% next_actions.each do |slot| %>
+          <% color = slot[:color] || 'emerald' %>
+          <%= link_to slot[:path],
+                class: "block p-4 bg-white rounded-xl border border-#{color}-100 hover:border-#{color}-400 hover:shadow-medium transition-all duration-200",
+                data: { action: "click->next-action#track", "next-action-slot-param": slot[:type] } do %>
+            <div class="flex items-center gap-2 text-<%= color %>-700 text-xs font-semibold mb-2">
+              <span class="material-symbols-outlined text-base"><%= slot[:icon] || 'arrow_forward' %></span>
+              <%= slot[:label] %>
+            </div>
+            <p class="font-semibold text-slate-900 text-sm mb-1 line-clamp-2"><%= slot[:title] %></p>
+            <% if slot[:desc].present? %>
+              <p class="text-xs text-slate-500 line-clamp-2 m-0"><%= slot[:desc] %></p>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </section>
+<% end %>
