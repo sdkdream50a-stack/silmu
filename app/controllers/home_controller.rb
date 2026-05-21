@@ -148,12 +148,13 @@ class HomeController < ApplicationController
   def about
     expires_in 1.day, public: true, stale_while_revalidate: 7.days
 
-    @topic_count      = Rails.cache.fetch("stats/topic_count", expires_in: 30.minutes) { Topic.published.count }
-    @guide_count      = Rails.cache.fetch("stats/guide_count", expires_in: 30.minutes) { Guide.published.count }
-    @audit_case_count = Rails.cache.fetch("stats/audit_case_count", expires_in: 30.minutes) { AuditCase.published.count }
-    @template_count   = TemplatesController::TEMPLATES.count
-    @tool_count       = ApplicationHelper::ACTIVE_TOOL_COUNT
-    @guide_total      = @topic_count + @guide_count
+    @topic_count            = Rails.cache.fetch("stats/topic_count", expires_in: 30.minutes) { Topic.published.count }
+    @guide_count            = Rails.cache.fetch("stats/guide_count", expires_in: 30.minutes) { Guide.published.count }
+    @audit_case_count       = Rails.cache.fetch("stats/audit_case_count", expires_in: 30.minutes) { AuditCase.published.count }
+    @audit_case_verified    = Rails.cache.fetch("stats/audit_case_verified", expires_in: 30.minutes) { AuditCase.published.where.not(last_verified_at: nil).count }
+    @template_count         = TemplatesController::TEMPLATES.count
+    @tool_count             = ApplicationHelper::ACTIVE_TOOL_COUNT
+    @guide_total            = @topic_count + @guide_count
     # description 압축 (170자 → 약 100자) — SERP 한국어 잘림 방지
     description_text = "공공계약·예산을 중심으로 지자체·교육행정 공무원의 실무를 돕는 법령 가이드 #{@guide_total}개, 자동화 도구 #{@tool_count}개, 감사사례 #{@audit_case_count}건, 서식 #{@template_count}개."
 

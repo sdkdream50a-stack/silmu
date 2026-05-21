@@ -9,7 +9,7 @@
       </div>
       <div>
         <h1 class="text-3xl lg:text-4xl font-bold tracking-tight mb-2">서비스 소개</h1>
-        <p class="text-slate-200 text-lg">공공계약 실무 전문가가 만든 업무 지원 플랫폼</p>
+        <p class="text-amber-200 text-lg font-semibold">공공계약·예산을 중심으로 지자체·교육행정 공무원의 실무를 돕는 법령 가이드</p>
       </div>
     </div>
   </div>
@@ -21,14 +21,9 @@
       <!-- 서비스 소개 -->
       <div class="card p-8 mb-8">
         <h2 class="text-2xl font-bold text-slate-900 mb-6">실무.kr이란?</h2>
-        <%# 정체성 헌장 — 사이트의 단일 mission statement (모든 페이지·JSON-LD·meta description의 source of truth) %>
-        <div class="bg-indigo-50 border-l-4 border-indigo-600 rounded-r-xl p-5 mb-6">
-          <p class="text-indigo-900 font-bold text-lg leading-relaxed">
-            공공계약·예산을 중심으로 지자체·교육행정 공무원의 실무를 돕는 법령 가이드
-          </p>
-        </div>
         <p class="text-slate-700 leading-relaxed mb-4">
           <strong>실무.kr</strong>은 교육행정직 공무원의 예산·감사 실무 경험을 바탕으로 만든 전문 플랫폼입니다.
+          교육행정 분야의 계약·예산 실무는 지자체와 동일한 법령(지방계약법·지방재정법·국가공무원법)을 적용하므로, 시군구·교육청·학교 회계 담당자가 공통으로 활용할 수 있습니다.
           2026년 2월부터 운영을 시작하여, 공공계약 업무를 처리하는 공무원과 실무자들에게 신뢰할 수 있는 법령 정보와 실무 도구를 제공하고 있습니다.
         </p>
         <p class="text-slate-700 leading-relaxed mb-4">
@@ -322,6 +317,7 @@
           <div class="bg-white rounded-xl p-5 text-center">
             <div class="text-3xl font-bold text-amber-600 mb-1"><%= @audit_case_count %></div>
             <div class="text-sm text-slate-600">감사사례</div>
+            <% if @audit_case_verified %><div class="text-[10px] text-slate-400 mt-1">검증 완료 <%= @audit_case_verified %>건</div><% end %>
           </div>
           <div class="bg-white rounded-xl p-5 text-center">
             <div class="text-3xl font-bold text-slate-600 mb-1"><%= @template_count %></div>
