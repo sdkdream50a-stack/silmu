@@ -54,7 +54,7 @@ class ApplicationController < ActionController::Base
 
   def set_default_meta_tags
     og_image = @og_image_path.presence || "https://silmu.kr/og-image.webp"
-    default_description = "공무원을 위한 계약 실무 가이드 — 수의계약, 입찰, 검수, 예산 업무를 쉽고 정확하게"
+    default_description = "공공계약·예산을 중심으로 지자체·교육행정 공무원의 실무를 돕는 법령 가이드 — 자동화 도구, 법령 해설, 감사사례 분석"
     set_meta_tags(
       site: "실무.kr",
       separator: "|",

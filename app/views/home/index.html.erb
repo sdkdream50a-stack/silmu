@@ -82,13 +82,16 @@
         </div>
       </div>
 
-      <!-- Sector 탭 -->
+      <!-- Sector 탭 — 카운트 칩으로 클릭 전 기대치 정렬 (가이드+사례 합산) -->
       <div id="sector-tabs" class="flex items-center justify-center gap-2 flex-wrap scroll-mt-16">
         <span class="text-xs font-semibold text-white/85">내 직종:</span>
         <% [["common", "공통"], ["local_gov", "지자체"], ["edu", "교육행정"]].each do |key, label| %>
           <% is_active = @sector == key %>
-          <%= link_to label, root_path(sector: key, anchor: "sector-tabs"),
-                class: "touch-target inline-flex items-center px-4 py-1.5 rounded-full text-xs font-semibold transition-colors #{is_active ? 'bg-white text-editorial-navy' : 'bg-white/15 text-white hover:bg-white/25 border border-white/30'}" %>
+          <% count = @sector_counts && @sector_counts[key] %>
+          <%= link_to root_path(sector: key, anchor: "sector-tabs"),
+                class: "touch-target inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold transition-colors #{is_active ? 'bg-white text-editorial-navy' : 'bg-white/15 text-white hover:bg-white/25 border border-white/30'}" do %>
+            <%= label %><% if count %><span class="text-[10px] font-medium opacity-70">·<%= count %></span><% end %>
+          <% end %>
         <% end %>
       </div>
 
