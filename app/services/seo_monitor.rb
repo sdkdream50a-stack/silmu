@@ -94,7 +94,7 @@ class SeoMonitor
       topics_count: Topic.published.count,
       audit_cases_count: AuditCase.published.count,
       tools_count: 19, # ACTIVE_TOOL_COUNT
-      topics_with_faq: Topic.published.where.not(faqs: [ nil, "", "[]" ]).count,
+      topics_with_faq: Topic.published.where("faqs IS NOT NULL AND faqs != '[]'::jsonb").count,
       topics_without_meta: Topic.published.where("summary IS NULL OR summary = ''").count
     }
   end
@@ -123,7 +123,7 @@ class SeoMonitor
       sitemap_urls: count_sitemap_urls,
       avg_meta_length: calculate_avg_meta_length,
       topics_with_article_jsonld: Topic.published.count,  # 모든 토픽에 Article JSON-LD 출력
-      topics_with_faq_jsonld: Topic.published.where.not(faqs: [ nil, "", "[]" ]).count,  # FAQPage JSON-LD 포함 토픽
+      topics_with_faq_jsonld: Topic.published.where("faqs IS NOT NULL AND faqs != '[]'::jsonb").count,  # FAQPage JSON-LD 포함 토픽
       canonical_issues: 0 # 모두 수정됨
     }
   end

@@ -45,19 +45,19 @@
 
         <div class="metric">
           <div class="metric-name">First Contentful Paint (FCP)</div>
-          <div class="metric-value"><%= @report[:fcp] %> <span class="metric-unit">초</span></div>
+          <div class="metric-value"><%= @report[:fcp_ms] %> <span class="metric-unit">ms</span></div>
           <p style="margin: 10px 0 0 0; color: #6b7280; font-size: 14px;">첫 번째 콘텐츠가 화면에 표시되는 시간</p>
         </div>
 
         <div class="metric">
           <div class="metric-name">Largest Contentful Paint (LCP)</div>
-          <div class="metric-value"><%= @report[:lcp] %> <span class="metric-unit">초</span></div>
-          <p style="margin: 10px 0 0 0; color: #6b7280; font-size: 14px;">가장 큰 콘텐츠가 표시되는 시간 (2.5초 이하 권장)</p>
+          <div class="metric-value"><%= @report[:lcp_ms] %> <span class="metric-unit">ms</span></div>
+          <p style="margin: 10px 0 0 0; color: #6b7280; font-size: 14px;">가장 큰 콘텐츠가 표시되는 시간 (2,500ms 이하 권장)</p>
         </div>
 
         <div class="metric">
           <div class="metric-name">Total Blocking Time (TBT)</div>
-          <div class="metric-value"><%= @report[:tbt] %> <span class="metric-unit">ms</span></div>
+          <div class="metric-value"><%= @report[:tbt_ms] %> <span class="metric-unit">ms</span></div>
           <p style="margin: 10px 0 0 0; color: #6b7280; font-size: 14px;">페이지가 반응하지 않는 총 시간</p>
         </div>
 
@@ -72,7 +72,7 @@
       <div class="section">
         <h2>💡 개선 제안</h2>
         <ul class="opportunities">
-          <% @report[:opportunities].each do |opp| %>
+          <% (@report[:opportunities] || []).each do |opp| %>
             <li><%= opp %></li>
           <% end %>
         </ul>
