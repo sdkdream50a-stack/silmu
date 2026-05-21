@@ -33,8 +33,9 @@
       <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com">
     <% end %>
     <%# contract_flow.css는 해당 뷰(content_for :head)에서만 로드 — 전역 제외 %>
+    <%# 단일 stylesheet — application.css는 application.tailwind.css source를 yarn build:css로 빌드한 결과 (모든 Tailwind utility + 디자인 시스템 포함) %>
+    <%# 이전: application.tailwind 중복 로드 → 브라우저가 @import "tailwindcss" 를 silmu.kr 루트로 fetch → MIME 오류 (lighthouse BP 격차 원인) %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload", fetchpriority: "high" %>
-    <%= stylesheet_link_tag "application.tailwind", "data-turbo-track": "reload", fetchpriority: "high" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module", defer: true %>
 
     <%= yield :head %>
