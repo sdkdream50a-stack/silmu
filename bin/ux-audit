@@ -1,0 +1,63 @@
+#!/bin/bash
+# silmu Phase 0 UX Audit — 36 tools × 8 criteria
+# Each criterion: 0-5 score, total /40
+
+cd /Users/seong/project/silmu
+
+PATHS=$(grep -E '^[[:space:]]*get "tools/' config/routes.rb \
+  | grep -v '\.ics\|hwpx\|redirect' \
+  | sed -E 's/.*get "(tools\/[a-z-]+)".*to: "([a-z_]+)#([a-z_]+)".*/\1|\2|\3/')
+
+printf "%-40s | %3s %3s %3s %3s %3s %3s %3s %3s | %5s | %s\n" \
+  "tool" "IS" "ES" "AI" "CD" "CS" "VH" "MB" "A11" "TOTAL" "view-lines"
+printf '%s\n' "----------------------------------------------------------------------------------------------------"
+
+while IFS='|' read -r route ctrl action; do
+  if [ "$ctrl" = "tools" ]; then
+    f="app/views/tools/${action}.html.erb"
+  else
+    f="app/views/${ctrl}/${action}.html.erb"
+  fi
+  [ ! -f "$f" ] && continue
+  lines=$(wc -l < "$f" | tr -d ' ')
+
+  # 1. Information Scent (양성): 다가오는·예정·preview·예시·샘플·미리보기
+  c1=$(grep -cE "다가오는|예정된|preview|recommend|예시|샘플|미리보기|다음.업무|next-action" "$f")
+  s1=$([ $c1 -ge 3 ] && echo 5 || ([ $c1 -ge 1 ] && echo 3 || echo 0))
+
+  # 2. Empty State Quality (양성): 없어요/비어있/추가하세요 + 주변 CTA·예시
+  c2_empty=$(grep -cE "없어요|결과가 없|empty.state|비어있|아직.*없|추가해보세요" "$f")
+  c2_cta=$(grep -cE "샘플로 시작|예시 보기|시작하기" "$f")
+  if [ $c2_empty -eq 0 ]; then s2=5  # empty state 불필요 도구
+  elif [ $c2_cta -ge 1 ]; then s2=5
+  else s2=2; fi
+
+  # 3. AI Surface (양성): smart_toy·AI·claude·PDF·HWP 업로드 view 표면
+  c3=$(grep -cE "smart_toy|AI 분석|AI.가이드|claude|gpt|PDF.업로드|HWP.업로드|파일.첨부|업로드.자동" "$f")
+  s3=$([ $c3 -ge 3 ] && echo 5 || ([ $c3 -ge 1 ] && echo 3 || echo 0))
+
+  # 4. CTA 중복 (음성): primary 버튼 류 카운트 — 많으면 감점
+  c4=$(grep -cE 'class="[^"]*bg-(navy|blue|editorial-navy|emerald|indigo)[^"]*".*<.*button|onclick="open' "$f")
+  s4=$([ $c4 -le 3 ] && echo 5 || ([ $c4 -le 7 ] && echo 3 || echo 1))
+
+  # 5. Color Semantic (음성): bg-red·text-red 카운트 — 적정 사용 1-3건
+  c5=$(grep -cE "bg-red-50|text-red-[0-9]|border-red-" "$f")
+  s5=$([ $c5 -le 3 ] && echo 5 || ([ $c5 -le 8 ] && echo 3 || echo 1))
+
+  # 6. Visual Hierarchy: h1·h2 카운트
+  c6=$(grep -cE "<h[12][ >]" "$f")
+  s6=$([ $c6 -ge 2 ] && echo 5 || ([ $c6 -ge 1 ] && echo 3 || echo 1))
+
+  # 7. Mobile/Responsive: Tailwind breakpoints
+  c7=$(grep -cE "sm:|md:|lg:|sticky|mobile|drawer" "$f")
+  s7=$([ $c7 -ge 30 ] && echo 5 || ([ $c7 -ge 10 ] && echo 3 || echo 1))
+
+  # 8. Accessibility: aria-/alt=/role=/tabindex
+  c8=$(grep -cE 'aria-|alt="|role="|tabindex' "$f")
+  s8=$([ $c8 -ge 5 ] && echo 5 || ([ $c8 -ge 1 ] && echo 3 || echo 0))
+
+  total=$((s1+s2+s3+s4+s5+s6+s7+s8))
+
+  printf "%-40s | %3d %3d %3d %3d %3d %3d %3d %3d | %5d | %5d\n" \
+    "$route" $s1 $s2 $s3 $s4 $s5 $s6 $s7 $s8 $total $lines
+done <<< "$PATHS"
