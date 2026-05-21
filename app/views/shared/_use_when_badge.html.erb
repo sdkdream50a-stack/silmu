@@ -1,6 +1,6 @@
 <%# 도구별 사용 시점 1줄 안내 배지 — P1-2 (권위자 패널 권고) %>
-<%# 사용: <%= render 'shared/use_when_badge', tool: 'contingency-fund' %> %>
-<%# Dark hero 위: <%= render 'shared/use_when_badge', tool: 'xxx', variant: 'on_dark' %> %>
+<%# 사용: render 'shared/use_when_badge', tool: 'contingency-fund' %>
+<%# Dark hero 위: render 'shared/use_when_badge', tool: 'xxx', variant: 'on_dark' %>
 <% msg = tool_use_when(local_assigns[:tool]) %>
 <% if msg.present? %>
   <% on_dark = local_assigns[:variant] == 'on_dark' %>
