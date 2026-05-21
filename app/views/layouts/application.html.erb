@@ -580,5 +580,20 @@
         return false;
       };
     </script>
+    <script>
+      // [A11Y 글로벌 패치] Material Symbols 장식 아이콘은 스크린리더에서 무시되어야 함
+      // - aria-label이 명시된 경우는 의미 있는 아이콘으로 간주 (skip)
+      // - 그 외 모두 aria-hidden="true" 자동 부여 (DOMContentLoaded + Turbo 모든 페이지 적용)
+      (function() {
+        function applyIconAriaHidden() {
+          document.querySelectorAll('.material-symbols-outlined:not([aria-hidden]):not([aria-label])')
+            .forEach(function(el) { el.setAttribute('aria-hidden', 'true'); });
+        }
+        document.addEventListener('DOMContentLoaded', applyIconAriaHidden);
+        document.addEventListener('turbo:load', applyIconAriaHidden);
+        document.addEventListener('turbo:render', applyIconAriaHidden);
+        document.addEventListener('turbo:frame-load', applyIconAriaHidden);
+      })();
+    </script>
   </body>
 </html>
