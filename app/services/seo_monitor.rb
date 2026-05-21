@@ -132,7 +132,7 @@ class SeoMonitor
     warnings = []
 
     # FAQ 없는 토픽 체크
-    topics_without_faq = Topic.published.where("faqs IS NULL OR faqs = ? OR faqs = ?", "", "[]").count
+    topics_without_faq = Topic.published.where("faqs IS NULL OR faqs = '[]'::jsonb").count
     warnings << "FAQ가 없는 토픽: #{topics_without_faq}개" if topics_without_faq > 0
 
     # 메타 설명 없는 토픽
