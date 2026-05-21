@@ -197,9 +197,10 @@
   current_day = today.day
   day_names_short = %w[월 화 수 목 금 토 일]
 
-  # 오늘 업무 계산
-  today_tasks = (months_tasks[current_month] || []).select { |t| t[:day] >= current_day }.sort_by { |t| t[:day] }
+  # 오늘 업무 계산 (오늘 정확 일치 + 다음 7일 미리보기)
+  today_tasks = (months_tasks[current_month] || []).select { |t| t[:day] >= current_day && t[:day] <= current_day + 7 }.sort_by { |t| t[:day] }
   today_exact = today_tasks.select { |t| t[:day] == current_day }
+  upcoming_week = today_tasks.reject { |t| t[:day] == current_day }
 
   # 이번 주 날짜 계산 (월~일)
   week_start = today - ((today.wday - 1) % 7)
@@ -578,10 +579,6 @@
         <% if today_exact.empty? %>
           <!-- 빈 상태 (기본 업무 없을 때) — custom_tasks 있으면 JS가 숨김 처리 -->
           <div id="today-empty-state" class="mt-12">
-            <div class="flex items-center justify-between mb-6">
-              <h3 class="text-slate-400 text-xs font-bold uppercase tracking-widest">완료</h3>
-              <div class="h-px bg-slate-100 flex-grow ml-4"></div>
-            </div>
             <div class="flex flex-col items-center justify-center py-12 px-4 text-center bg-slate-50 rounded-xl border border-dashed border-slate-200">
               <div class="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center shadow-sm mb-4 empty-pulse">
                 <svg class="w-10 h-10 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -590,14 +587,43 @@
               </div>
               <h3 class="text-slate-900 font-bold text-lg mb-1">오늘 마감 업무가 없어요</h3>
               <p class="text-slate-500 text-sm">여유 시간에 처리할 업무를 추가해보세요</p>
-              <button onclick="openAddModal()" class="mt-4 px-4 py-2 bg-editorial-navy text-white text-sm rounded-lg hover:bg-editorial-navy-dark transition-colors">+ 업무 추가</button>
+              <div class="mt-4 flex flex-wrap items-center justify-center gap-2">
+                <button onclick="openAddModal()" class="px-4 py-2 bg-editorial-navy text-white text-sm rounded-lg hover:bg-editorial-navy-dark transition-colors">+ 업무 추가</button>
+                <button onclick="openDocModal()" class="px-4 py-2 bg-violet-50 text-violet-700 text-sm font-medium rounded-lg hover:bg-violet-100 transition-colors inline-flex items-center gap-1.5">
+                  <span class="material-symbols-outlined" style="font-size:16px">smart_toy</span>
+                  공문 PDF로 업무 자동 추출
+                </button>
+              </div>
             </div>
-            <div class="py-3 mt-2">
-              <button class="btn-inline-add flex items-center gap-2 px-2 py-2.5 text-sm text-slate-400 hover:text-editorial-navy transition-colors w-full rounded-lg hover:bg-editorial-navy-bg/50" data-date="<%= today.strftime('%Y-%m-%d') %>">
-                <span class="material-symbols-outlined" style="font-size:18px">add</span>
-                업무 추가
-              </button>
-            </div>
+
+            <!-- 이번 주 다가오는 업무 미리보기 (Information Scent) -->
+            <% if upcoming_week.any? %>
+              <div class="mt-8">
+                <div class="flex items-center justify-between mb-4">
+                  <h3 class="text-editorial-navy text-xs font-bold tracking-widest uppercase flex items-center gap-1.5">
+                    <span class="material-symbols-outlined" style="font-size:16px">event_upcoming</span>
+                    다음 7일 다가오는 <%= upcoming_week.size %>건
+                  </h3>
+                  <button type="button" onclick="switchView('upcoming')" class="text-xs font-semibold text-editorial-navy hover:underline">주간 뷰 →</button>
+                </div>
+                <div class="bg-white rounded-xl border border-slate-200 divide-y divide-slate-100">
+                  <% upcoming_week.first(5).each do |t| %>
+                    <% tc = cat_colors[t[:cat]] %>
+                    <% d_day = t[:day] - current_day %>
+                    <div class="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 transition-colors">
+                      <div class="flex-shrink-0 w-12 text-center">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">D-<%= d_day %></p>
+                        <p class="text-xs text-slate-500"><%= current_month %>/<%= t[:day] %></p>
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium text-slate-800 truncate"><%= t[:title] %></p>
+                      </div>
+                      <span class="inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium ring-1 ring-inset ring-slate-500/10 <%= tc[:badge] %> <%= tc[:text] %>"><%= t[:cat] %></span>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
           </div>
         <% end %>
 
@@ -1797,6 +1823,14 @@
       setTimeout(() => taskInput.focus(), 100);
     }
   }
+
+  // 공문 PDF 업로드 탭으로 직진 (AI 자동 추출 surface)
+  function openDocModal() {
+    renderCategoryButtons();
+    modalAdd.classList.remove("hidden");
+    document.querySelector('.modal-tab[data-modal-tab="document"]').click();
+  }
+  window.openDocModal = openDocModal;
 
   // 정기업무 시간 프리셋 버튼 동기화
   function syncRegularTimePresets(timeVal) {
@@ -3187,8 +3221,9 @@
   const STANDING_CHECKLIST_KEY = "silmu_standing_checklist";
   const STANDING_EXPANDED_KEY = "silmu_standing_expanded";
   const CHECKLIST_COLORS = [
-    { bg: "bg-red-50", text: "text-red-700", border: "border-red-200" },
+    { bg: "bg-slate-50", text: "text-slate-700", border: "border-slate-200" },
     { bg: "bg-orange-50", text: "text-orange-700", border: "border-orange-200" },
+    { bg: "bg-red-50", text: "text-red-700", border: "border-red-200" },
     { bg: "bg-amber-50", text: "text-amber-700", border: "border-amber-200" },
     { bg: "bg-yellow-50", text: "text-yellow-700", border: "border-yellow-200" },
     { bg: "bg-lime-50", text: "text-lime-700", border: "border-lime-200" },
