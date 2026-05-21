@@ -132,11 +132,13 @@ class RelatedContentResolverTest < ActiveSupport::TestCase
       published: true
     )
 
-    # category contract 매칭 fallback (host.category와 동일)
+    # category 매핑(contract → 수의계약 등 한국어) fallback
+    # 운영 DB의 AuditCase.category는 한국어 분류를 사용하므로
+    # AUDIT_CATEGORY_MAP["contract"] 안에 포함된 카테고리로 생성해야 매칭됨
     AuditCase.create!(
       title: "Fallback by category",
       slug: "rc-ac-fb-cat",
-      category: "contract",
+      category: "수의계약",
       sector: :common,
       topic_slug: nil,
       published: true

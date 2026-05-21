@@ -17,6 +17,16 @@ class RelatedContentResolver
   SCORE_DIRECT_SLUG   = 100   # topic_slug 직접 매칭은 절대 우선
   VIEW_WEIGHT         = 0.001
 
+  # Topic.category(영문) → AuditCase.category(한국어) 매핑.
+  # Topic은 영문 카테고리, AuditCase는 한국어 카테고리를 쓰는 분류 체계 차이를
+  # 메우기 위한 변환 테이블. duty/salary/travel은 AuditCase 한국어 분류와
+  # 의미적 1:1 대응이 없으므로(인사/복무/급여 카테고리 부재) 매핑을 두지 않음.
+  # 이 토픽들은 키워드(title ILIKE) 매칭으로만 fallback.
+  AUDIT_CATEGORY_MAP = {
+    "contract" => %w[수의계약 입찰 계약체결 계약이행 대금지급 하도급 검수/검사],
+    "budget"   => %w[예산 회계]
+  }.freeze
+
   def initialize(topic)
     @topic = topic
     @keywords = topic.keyword_list
@@ -73,15 +83,22 @@ class RelatedContentResolver
   end
 
   def fallback_audit_cases(exclude_slugs:)
-    base = AuditCase.published.recent.where(category: @topic.category)
+    mapped = AUDIT_CATEGORY_MAP[@topic.category.to_s] || []
+
+    base = AuditCase.published.recent
     base = base.where.not(slug: exclude_slugs) if exclude_slugs.any?
-    if @keywords.any?
+
+    if mapped.any? && @keywords.any?
       base.where(
-        "category = :cat OR (#{keyword_or_clause(:title)})",
-        cat: @topic.category, **keyword_binds
+        "category IN (:cats) OR (#{keyword_or_clause(:title)})",
+        cats: mapped, **keyword_binds
       ).limit(AUDIT_LIMIT).to_a
+    elsif @keywords.any?
+      base.where(keyword_or_clause(:title), **keyword_binds).limit(AUDIT_LIMIT).to_a
+    elsif mapped.any?
+      base.where(category: mapped).limit(AUDIT_LIMIT).to_a
     else
-      base.limit(AUDIT_LIMIT).to_a
+      []
     end
   end
 
