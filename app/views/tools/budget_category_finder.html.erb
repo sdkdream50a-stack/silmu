@@ -163,6 +163,17 @@
     { keywords: ["토지","건물매입","부동산취득","자산취득"], category: "자본지출", sub: "자산취득비", code: "900", note: "토지·건물 등 고정자산 취득" },
   ];
 
+  // P2: 예산 과목 → silmu 도구 cross-link 매핑 (sub 정확 일치)
+  const SUB_TO_TOOL = {
+    '보수':              { path: '/tools/salary-calculator',         label: '봉급 계산기로 계산' },
+    '직책급여·수당':     { path: '/tools/allowance-calculator',      label: '수당 계산기로 계산' },
+    '국내여비':          { path: '/tools/travel-calculator',         label: '여비 계산기로 계산' },
+    '국외여비':          { path: '/tools/travel-calculator',         label: '여비 계산기로 계산' },
+    '용역비':            { path: '/tools/quote-review',              label: '견적서 검토기로 확인' },
+    '시설비':            { path: '/tools/cost-estimate',             label: '물량내역서·시방서 도구' },
+    '민간이전':          { path: '/tools/subsidy-settlement-checker', label: '보조금 정산 체크리스트' }
+  };
+
   let currentFilter = null;
 
   function searchCategory() {
@@ -188,14 +199,55 @@
     renderResults(BUDGET_CATEGORIES.filter(item => item.category === cat || item.category.includes(cat)), null, cat);
   }
 
+  // 검색 0건 시 유사 키워드 fallback — query 글자 1-2개 부분 매칭으로 후보 추출
+  function findSimilarKeywords(query) {
+    if (!query || query.length < 2) return [];
+    const ngrams = [];
+    for (let i = 0; i < query.length - 1; i++) ngrams.push(query.substring(i, i + 2));
+    const scored = [];
+    BUDGET_CATEGORIES.forEach(item => {
+      let score = 0;
+      const matchedKw = [];
+      item.keywords.forEach(k => {
+        const kl = k.toLowerCase();
+        ngrams.forEach(g => { if (kl.includes(g)) { score += 1; if (!matchedKw.includes(k)) matchedKw.push(k); } });
+      });
+      if (score > 0) scored.push({ item, score, matchedKw });
+    });
+    return scored.sort((a, b) => b.score - a.score).slice(0, 5);
+  }
+
   function renderResults(items, query, catLabel) {
     const container = document.getElementById('search-results');
     if (!items.length) {
+      // P1: 유사 키워드 fallback + 인기 검색어 재노출 (Information Scent)
+      const similar = query ? findSimilarKeywords(query) : [];
+      const similarHtml = similar.length ? `
+        <div class="mt-5 pt-5 border-t border-slate-100 text-left max-w-md mx-auto">
+          <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">💡 이런 과목을 찾으시나요?</p>
+          <div class="space-y-2">
+            ${similar.map(({ item, matchedKw }) => `
+              <button type="button" onclick="quickSearch('${matchedKw[0]}')" class="w-full text-left p-2.5 rounded-lg bg-emerald-50/50 hover:bg-emerald-50 border border-emerald-100 transition-colors">
+                <div class="flex items-center gap-2 mb-0.5">
+                  <span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-1.5 py-0.5 rounded">${item.category}</span>
+                  <span class="text-xs font-bold text-slate-800">${item.sub}</span>
+                </div>
+                <p class="text-[11px] text-slate-500">매칭: ${matchedKw.slice(0, 3).join(', ')}</p>
+              </button>
+            `).join('')}
+          </div>
+        </div>` : '';
+
+      const popularTags = ["복사용지", "출장비", "강사비", "시설보수", "회의비", "보조금"];
       container.innerHTML = `
         <div class="card p-8 text-center">
           <span class="material-symbols-outlined text-4xl text-slate-300 mb-3 block">search_off</span>
-          <p class="text-slate-500 font-medium">검색 결과가 없습니다</p>
-          <p class="text-sm text-slate-400 mt-1">다른 키워드로 검색하거나 분야별 탐색을 이용하세요</p>
+          <p class="text-slate-500 font-medium">${query ? `"${query}" 검색 결과가 없습니다` : '검색 결과가 없습니다'}</p>
+          <p class="text-sm text-slate-400 mt-1">분야별 탐색을 이용하거나 아래 인기 검색어를 시도해 보세요</p>
+          <div class="flex flex-wrap gap-2 justify-center mt-4">
+            ${popularTags.map(t => `<button type="button" onclick="quickSearch('${t}')" class="px-3 py-1.5 text-xs font-medium bg-slate-100 hover:bg-emerald-100 hover:text-emerald-700 text-slate-600 rounded-full transition-colors">${t}</button>`).join('')}
+          </div>
+          ${similarHtml}
         </div>`;
       return;
     }
@@ -204,6 +256,13 @@
     let html = `<div class="card p-5"><h2 class="text-sm font-bold text-slate-700 mb-4">${title}</h2><div class="space-y-3">`;
 
     items.forEach(item => {
+      const tool = SUB_TO_TOOL[item.sub];
+      const toolLink = tool ? `
+        <a href="${tool.path}" class="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-editorial-navy hover:underline">
+          <span class="material-symbols-outlined" style="font-size:14px">build</span>
+          ${tool.label}
+          <span class="material-symbols-outlined" style="font-size:14px">arrow_forward</span>
+        </a>` : '';
       html += `
         <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 hover:border-emerald-300 hover:bg-emerald-50 transition-colors">
           <div class="flex items-start justify-between gap-3">
@@ -217,6 +276,7 @@
               <div class="mt-2 flex flex-wrap gap-1">
                 ${item.keywords.slice(0, 5).map(k => `<span class="text-xs text-slate-400 bg-white border border-slate-200 px-2 py-0.5 rounded-full">${k}</span>`).join('')}
               </div>
+              ${toolLink}
             </div>
           </div>
         </div>`;
