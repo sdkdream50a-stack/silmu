@@ -1,5 +1,16 @@
 <%# 예산 집행률 계산기 %>
 
+<%
+  today = Time.zone.today
+  current_month = today.month
+  recommended_rate = (current_month / 12.0 * 100).round(1)
+  year_progress = ((today.yday / (Date.new(today.year, 12, 31).yday).to_f) * 100).round(1)
+  # 분기말 권장 집행률 (3·6·9·12월)
+  quarter_targets = { 3 => 25, 6 => 50, 9 => 75, 12 => 90 }
+  next_quarter_month = [3, 6, 9, 12].find { |m| m >= current_month } || 12
+  next_quarter_target = quarter_targets[next_quarter_month]
+%>
+
 <section class="section py-10">
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- 뒤로가기 -->
@@ -60,18 +71,9 @@
           <div class="mb-5">
             <label class="block text-sm font-semibold text-slate-700 mb-2">기준 월</label>
             <select id="base-month" class="form-input w-full" onchange="calculate()">
-              <option value="1">1월</option>
-              <option value="2">2월</option>
-              <option value="3">3월</option>
-              <option value="4">4월</option>
-              <option value="5">5월</option>
-              <option value="6">6월</option>
-              <option value="7">7월</option>
-              <option value="8">8월</option>
-              <option value="9" selected>9월</option>
-              <option value="10">10월</option>
-              <option value="11">11월</option>
-              <option value="12">12월</option>
+              <% (1..12).each do |m| %>
+                <option value="<%= m %>"<%= ' selected' if m == current_month %>><%= m %>월</option>
+              <% end %>
             </select>
             <p class="text-xs text-slate-400 mt-1">현재 기준으로 삼을 월을 선택하세요</p>
           </div>
@@ -125,10 +127,45 @@
             집행률 분석 결과
           </h2>
 
-          <!-- 초기 안내 메시지 -->
-          <div id="empty-state" class="flex flex-col items-center justify-center h-48 text-slate-300">
-            <span class="material-symbols-outlined text-5xl mb-3">bar_chart</span>
-            <p class="text-sm">예산 정보를 입력하면 결과가 표시됩니다</p>
+          <!-- 초기 안내 — 권장 집행률 reference 카드 + 샘플 시작 (Information Scent) -->
+          <div id="empty-state">
+            <!-- 오늘 기준 권장 집행률 카드 -->
+            <div class="bg-gradient-to-br from-editorial-navy-bg to-emerald-50/40 border border-editorial-navy-light rounded-xl p-5 mb-4">
+              <div class="flex items-center gap-2 mb-3">
+                <span class="material-symbols-outlined text-editorial-navy" style="font-size:18px">trending_up</span>
+                <span class="text-xs font-bold text-editorial-navy uppercase tracking-wider">오늘 기준 권장 집행률</span>
+              </div>
+              <div class="flex items-end gap-3 mb-2">
+                <div class="text-4xl font-bold text-editorial-navy-dark"><%= recommended_rate %>%</div>
+                <div class="text-sm text-slate-500 pb-1.5"><%= current_month %>월 (균등 배분)</div>
+              </div>
+              <div class="bg-white/70 rounded-full h-2 overflow-hidden mb-2">
+                <div class="h-full bg-editorial-navy rounded-full" style="width: <%= recommended_rate %>%"></div>
+              </div>
+              <div class="flex justify-between text-[11px] text-slate-500 mb-3">
+                <span>1월 0%</span>
+                <span>6월 50%</span>
+                <span>12월 100%</span>
+              </div>
+              <div class="grid grid-cols-2 gap-2 text-xs">
+                <div class="bg-white/60 rounded-lg p-2">
+                  <div class="text-slate-400 text-[10px] uppercase tracking-wide">올해 경과</div>
+                  <div class="font-bold text-slate-700"><%= year_progress %>% (<%= today.strftime('%-m/%-d') %>)</div>
+                </div>
+                <div class="bg-white/60 rounded-lg p-2">
+                  <div class="text-slate-400 text-[10px] uppercase tracking-wide">다음 분기말 목표</div>
+                  <div class="font-bold text-slate-700"><%= next_quarter_month %>월 <%= next_quarter_target %>%</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 샘플 데이터로 시작 (Empty State Work) -->
+            <button type="button" onclick="loadSampleData()"
+                    class="w-full py-3 px-4 bg-violet-50 hover:bg-violet-100 border border-violet-200 rounded-xl text-sm font-medium text-violet-700 transition-colors flex items-center justify-center gap-2">
+              <span class="material-symbols-outlined" style="font-size:18px">auto_awesome</span>
+              샘플 데이터로 미리보기
+            </button>
+            <p class="text-[11px] text-slate-400 text-center mt-2">3개 예산 항목으로 즉시 결과 확인</p>
           </div>
 
           <!-- 결과 영역 -->
@@ -229,12 +266,36 @@
 <script>
   let itemCount = 1;
 
-  // 페이지 로드 시 현재 월로 기준 월 설정
+  // 페이지 로드 시 현재 월로 기준 월 설정 (SSR ERB와 sync — JS는 fallback safety net)
   document.addEventListener('DOMContentLoaded', function() {
     const now = new Date();
     const month = now.getMonth() + 1;
     document.getElementById('base-month').value = month;
   });
+
+  // 샘플 데이터로 미리보기 (Empty State Work — Schoger)
+  function loadSampleData() {
+    const month = parseInt(document.getElementById('base-month').value);
+    const targetRate = month / 12;
+    // 권장률 ±10% 분포로 3개 항목 — 양호·약간 부진·부진 색상이 동시 노출되도록 의도
+    const samples = [
+      { name: '도로유지보수비', budget: 50000, rate: targetRate + 0.05 },
+      { name: '청사 운영비',     budget: 30000, rate: targetRate - 0.03 },
+      { name: '사업비',           budget: 20000, rate: targetRate - 0.18 }
+    ];
+    const container = document.getElementById('items-container');
+    container.innerHTML = '';
+    itemCount = 0;
+    samples.forEach((s, i) => {
+      addItem();
+      const items = container.querySelectorAll('.budget-item');
+      const last = items[items.length - 1];
+      last.querySelector('input[type="text"]').value = s.name;
+      last.querySelector('.budget-amount').value = s.budget;
+      last.querySelector('.executed-amount').value = Math.round(s.budget * Math.max(s.rate, 0));
+    });
+    calculate();
+  }
 
   function addItem() {
     itemCount++;
