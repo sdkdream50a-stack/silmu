@@ -182,6 +182,22 @@
   </div>
 </section>
 
+<%# P9 Information Scent — 이 도구 다음 단계 %>
+<%= render 'shared/tool_next_actions',
+  tool_key: 'severance-calculator',
+  next_actions: [
+    { type: 'tool',  path: pension_calculator_path, label: '관련 도구',
+      title: '연금 계산기', desc: '퇴직 후 연금 수령액·노후 자금 분석',
+      icon: 'savings', color: 'emerald' },
+    { type: 'tool',  path: salary_calculator_path, label: '관련 도구',
+      title: '봉급 계산기', desc: '퇴직 직전 월봉급 기준 재확인',
+      icon: 'payments', color: 'amber' },
+    { type: 'guide', path: guide_path('leave-of-absence-guide'), label: '단계별 가이드',
+      title: '휴직·복직 가이드', desc: '재직기간 산입 여부와 퇴직금 영향',
+      icon: 'menu_book', color: 'blue' }
+  ]
+%>
+
 <script>
   function toggleInputMode(mode) {
     if (mode === 'years') {

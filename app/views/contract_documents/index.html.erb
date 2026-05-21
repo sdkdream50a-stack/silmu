@@ -843,6 +843,22 @@
   </div>
 </section>
 
+<%# P9 Information Scent — 이 도구 다음 단계 %>
+<%= render 'shared/tool_next_actions',
+  tool_key: 'contract-documents',
+  next_actions: [
+    { type: 'tool',  path: official_document_path, label: '관련 도구',
+      title: '공문 자동 작성', desc: '계약 관련 공문·통보문 일괄 생성',
+      icon: 'mail', color: 'emerald' },
+    { type: 'tool',  path: contract_method_path, label: '관련 도구',
+      title: '계약방법 결정', desc: '일반·제한·지명·수의 방식 자동 판단',
+      icon: 'rule', color: 'amber' },
+    { type: 'topic', path: topic_path('bidding'), label: '함께 보는 토픽',
+      title: '입찰 절차 한눈에', desc: '입찰 공고부터 낙찰자 선정까지 절차 정리',
+      icon: 'gavel', color: 'blue' }
+  ]
+%>
+
 <script>
   // HTML 이스케이프 헬퍼
   function escapeHtml(str) {

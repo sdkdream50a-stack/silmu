@@ -189,3 +189,20 @@
     </p>
   </div>
 </div>
+
+<%# P9 Information Scent — 이 도구 다음 단계 %>
+<%= render 'shared/tool_next_actions',
+  tool_key: 'qualification-evaluation',
+  next_actions: [
+    { type: 'topic', path: topic_path('bid-qualification'), label: '함께 보는 토픽',
+      title: '입찰 자격 핵심', desc: '적격심사·종심제 평가 기준 정리',
+      icon: 'description', color: 'emerald' },
+    { type: 'tool',  path: contract_method_path, label: '관련 도구',
+      title: '계약방법 결정', desc: '적격심사 적용 대상 여부 자동 판단',
+      icon: 'rule', color: 'amber' },
+    { type: 'guide', path: guide_path('bidding-guide'), label: '단계별 가이드',
+      title: '입찰 가이드', desc: '공고·평가·낙찰 절차 한눈에',
+      icon: 'menu_book', color: 'blue' }
+  ]
+%>
+

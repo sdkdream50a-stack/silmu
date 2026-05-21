@@ -385,6 +385,22 @@
   <span id="cr-toast-msg"></span>
 </div>
 
+<%# P9 Information Scent — 이 도구 다음 단계 %>
+<%= render 'shared/tool_next_actions',
+  tool_key: 'contract-reason',
+  next_actions: [
+    { type: 'guide', path: guide_path('private-contract-guide'), label: '단계별 가이드',
+      title: '수의계약 가이드', desc: '사유·한도·증빙 서류 전반 정리',
+      icon: 'menu_book', color: 'emerald' },
+    { type: 'tool',  path: contract_documents_path, label: '관련 도구',
+      title: '계약 서류 자동 작성', desc: '사유서 + 계약서 패키지 일괄 생성',
+      icon: 'description', color: 'amber' },
+    { type: 'topic', path: topic_path('private-contract-justification'), label: '함께 보는 토픽',
+      title: '수의계약 정당성 입증', desc: '감사 대응에 필요한 근거 자료 정리',
+      icon: 'verified', color: 'blue' }
+  ]
+%>
+
 <script>
 // Data
 var crState = { type: null, reason: null };

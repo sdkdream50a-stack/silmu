@@ -235,6 +235,22 @@
   </div>
 </section>
 
+<%# P9 Information Scent — 이 도구 다음 단계 %>
+<%= render 'shared/tool_next_actions',
+  tool_key: 'salary-calculator',
+  next_actions: [
+    { type: 'tool',  path: allowance_calculator_path, label: '관련 도구',
+      title: '수당 계산기', desc: '직급보조비·정근수당 등 7종 수당 일괄 계산',
+      icon: 'payments', color: 'emerald' },
+    { type: 'tool',  path: overtime_calculator_path, label: '관련 도구',
+      title: '시간외근무수당 계산기', desc: '시간외·야간·휴일근무 수당 자동 계산',
+      icon: 'schedule', color: 'amber' },
+    { type: 'guide', path: guide_path('year-end-settlement-guide'), label: '단계별 가이드',
+      title: '연말정산 가이드', desc: '봉급 기준 환급 분석과 서류 절차',
+      icon: 'menu_book', color: 'blue' }
+  ]
+%>
+
 <script>
 // 2026년 공무원 봉급표 (일반직 기준, 단위: 원)
 // 출처: 인사혁신처 / 공무원보수규정 별표 3 (대통령령 제36147호 2026.02.27 공포, 봉급 인상분 2026.01.01 소급 적용)

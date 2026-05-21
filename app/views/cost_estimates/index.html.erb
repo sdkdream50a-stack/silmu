@@ -438,6 +438,22 @@
   </div>
 </section>
 
+<%# P9 Information Scent — 이 도구 다음 단계 %>
+<%= render 'shared/tool_next_actions',
+  tool_key: 'cost-estimate',
+  next_actions: [
+    { type: 'tool',  path: estimated_price_path, label: '관련 도구',
+      title: '예정가격 산정', desc: '원가계산 결과로 예정가격 자동 산정',
+      icon: 'calculate', color: 'emerald' },
+    { type: 'tool',  path: cost_calculation_path, label: '관련 도구',
+      title: '계약 금액 정산', desc: '준공·완료 시 실제 정산 금액 계산',
+      icon: 'paid', color: 'amber' },
+    { type: 'topic', path: topic_path('cost-calculation-guide'), label: '함께 보는 토픽',
+      title: '원가계산 가이드', desc: '재료비·노무비·경비 산출 방식 정리',
+      icon: 'description', color: 'blue' }
+  ]
+%>
+
 <!-- 인쇄용 영역 -->
 <div class="ce-print-area" id="ce-print-area"></div>
 

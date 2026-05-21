@@ -363,6 +363,22 @@
   </div>
 </section>
 
+<%# P9 Information Scent — 이 도구 다음 단계 %>
+<%= render 'shared/tool_next_actions',
+  tool_key: 'estimated-price',
+  next_actions: [
+    { type: 'topic', path: topic_path('estimated-price'), label: '함께 보는 토픽',
+      title: '예정가격 산정 핵심', desc: '복수예가·복수기초 산정 원리와 비교',
+      icon: 'description', color: 'emerald' },
+    { type: 'tool',  path: cost_estimate_path, label: '관련 도구',
+      title: '원가계산 도구', desc: '재료비·노무비·경비 자동 합산',
+      icon: 'calculate', color: 'amber' },
+    { type: 'tool',  path: contract_guarantee_path, label: '관련 도구',
+      title: '계약 보증금 계산', desc: '예정가격 기준 보증금 자동 산정',
+      icon: 'shield', color: 'blue' }
+  ]
+%>
+
 <script>
 document.addEventListener('turbo:load', function() {
   var epStep1 = document.getElementById('ep-step1');

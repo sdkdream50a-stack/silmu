@@ -199,6 +199,22 @@
   </div>
 </section>
 
+<%# P9 Information Scent — 이 도구 다음 단계 %>
+<%= render 'shared/tool_next_actions',
+  tool_key: 'split-contract-checker',
+  next_actions: [
+    { type: 'topic', path: topic_path('split-contract'), label: '함께 보는 토픽',
+      title: '분할계약 금지 사유', desc: '연간계약 회피·예산 분할의 위법 판단',
+      icon: 'block', color: 'emerald' },
+    { type: 'tool',  path: contract_method_path, label: '관련 도구',
+      title: '계약방법 결정', desc: '금액·성격별 적정 계약방법 자동 판단',
+      icon: 'rule', color: 'amber' },
+    { type: 'guide', path: audit_frequent_issues_path, label: '단계별 가이드',
+      title: '감사 단골 지적사항', desc: '분할계약·중복지급 등 자주 지적되는 사례',
+      icon: 'menu_book', color: 'blue' }
+  ]
+%>
+
 <script>
   let threshold = 2000; // 물품·용역 기준
 

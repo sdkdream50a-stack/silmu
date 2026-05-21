@@ -1044,6 +1044,22 @@
   </div>
 </section>
 
+<%# P9 Information Scent — 이 도구 다음 단계 %>
+<%= render 'shared/tool_next_actions',
+  tool_key: 'budget-estimator',
+  next_actions: [
+    { type: 'tool',  path: cost_estimate_path, label: '관련 도구',
+      title: '원가계산 도구', desc: '예산 산정 후 원가 세부 항목 산출',
+      icon: 'calculate', color: 'emerald' },
+    { type: 'tool',  path: budget_execution_rate_path, label: '관련 도구',
+      title: '예산 집행률 점검', desc: '편성 후 실제 집행 진도 즉시 확인',
+      icon: 'monitoring', color: 'amber' },
+    { type: 'topic', path: topic_path('budget-carryover'), label: '함께 보는 토픽',
+      title: '예산 이월·전용', desc: '집행 부진 시 이월·전용 가능 여부 판단',
+      icon: 'description', color: 'blue' }
+  ]
+%>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>

@@ -341,6 +341,22 @@
   </div>
 </section>
 
+<%# P9 Information Scent — 이 도구 다음 단계 %>
+<%= render 'shared/tool_next_actions',
+  tool_key: 'legal-period',
+  next_actions: [
+    { type: 'tool',  path: task_calendar_path, label: '관련 도구',
+      title: '업무 캘린더', desc: '계약 일정 일괄 관리·iCal 동기화',
+      icon: 'calendar_month', color: 'emerald' },
+    { type: 'tool',  path: contract_guarantee_path, label: '관련 도구',
+      title: '계약 보증금 계산', desc: '보증금 납부·반환 기일 함께 점검',
+      icon: 'shield', color: 'amber' },
+    { type: 'topic', path: topic_path('contract-period-extension'), label: '함께 보는 토픽',
+      title: '계약기간 연장 절차', desc: '발주자·시공자 사유별 연장 가능성 판단',
+      icon: 'description', color: 'blue' }
+  ]
+%>
+
 <script>
 document.addEventListener('turbo:load', function() {
   var lpStep1 = document.getElementById('lp-step1');

@@ -311,6 +311,22 @@
   </div>
 </section>
 
+<%# P9 Information Scent — 이 도구 다음 단계 %>
+<%= render 'shared/tool_next_actions',
+  tool_key: 'contract-guarantee',
+  next_actions: [
+    { type: 'topic', path: topic_path('contract-guarantee-deposit'), label: '함께 보는 토픽',
+      title: '계약보증금 면제·감면', desc: '보증보험·이행각서 활용 정리',
+      icon: 'shield', color: 'emerald' },
+    { type: 'tool',  path: estimated_price_path, label: '관련 도구',
+      title: '예정가격 산정', desc: '보증금 산정 기준 예정가격 확인',
+      icon: 'calculate', color: 'amber' },
+    { type: 'tool',  path: cost_estimate_path, label: '관련 도구',
+      title: '원가계산 도구', desc: '재료비·노무비·경비 기초 산출',
+      icon: 'paid', color: 'blue' }
+  ]
+%>
+
 <script>
 document.addEventListener('turbo:load', function() {
   var cgInput = document.getElementById('cg-input-section');

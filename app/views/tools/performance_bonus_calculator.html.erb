@@ -183,6 +183,22 @@
   </div>
 </section>
 
+<%# P9 Information Scent — 이 도구 다음 단계 %>
+<%= render 'shared/tool_next_actions',
+  tool_key: 'performance-bonus-calculator',
+  next_actions: [
+    { type: 'topic', path: topic_path('performance-bonus'), label: '함께 보는 토픽',
+      title: '성과상여금 등급·지급률', desc: 'S/A/B/C 등급별 차등 지급률 핵심 정리',
+      icon: 'description', color: 'emerald' },
+    { type: 'tool',  path: salary_calculator_path, label: '관련 도구',
+      title: '봉급 계산기', desc: '지급 기준이 되는 월봉급액 확인',
+      icon: 'payments', color: 'amber' },
+    { type: 'tool',  path: allowance_calculator_path, label: '관련 도구',
+      title: '수당 계산기', desc: '정근수당·명절휴가비 등 함께 산정',
+      icon: 'savings', color: 'blue' }
+  ]
+%>
+
 <script>
   let selectedGrade = 'A';
 

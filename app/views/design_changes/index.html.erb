@@ -360,6 +360,22 @@
   </div>
 </section>
 
+<%# P9 Information Scent — 이 도구 다음 단계 %>
+<%= render 'shared/tool_next_actions',
+  tool_key: 'design-change',
+  next_actions: [
+    { type: 'topic', path: topic_path('design-change'), label: '함께 보는 토픽',
+      title: '설계변경 사유·절차', desc: '발주자·시공자 책임 구분과 변경 한도',
+      icon: 'description', color: 'emerald' },
+    { type: 'tool',  path: price_adjustment_calculator_path, label: '관련 도구',
+      title: '물가변동 조정 계산', desc: '품목조정·지수조정 방식 자동 비교',
+      icon: 'trending_up', color: 'amber' },
+    { type: 'tool',  path: contract_documents_path, label: '관련 도구',
+      title: '계약 서류 자동 작성', desc: '변경 계약서·정정합의서 표준 서식',
+      icon: 'description', color: 'blue' }
+  ]
+%>
+
 <script>
 document.addEventListener('turbo:load', function() {
   var dcStep1 = document.getElementById('dc-step1');

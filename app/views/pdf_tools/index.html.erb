@@ -290,6 +290,22 @@
   </div>
 </section>
 
+<%# P9 Information Scent — 이 도구 다음 단계 %>
+<%= render 'shared/tool_next_actions',
+  tool_key: 'pdf',
+  next_actions: [
+    { type: 'tool',  path: official_document_path, label: '관련 도구',
+      title: '공문 자동 작성', desc: 'PDF 합본 전 공문·통보문 표준 서식 작성',
+      icon: 'mail', color: 'emerald' },
+    { type: 'tool',  path: contract_documents_path, label: '관련 도구',
+      title: '계약 서류 자동 작성', desc: 'PDF 패키지로 만들 계약 서식 일괄 생성',
+      icon: 'description', color: 'amber' },
+    { type: 'guide', path: pre_contract_checklist_path, label: '단계별 가이드',
+      title: '계약 전 체크리스트', desc: '계약 전 필수 검토 사항 정리',
+      icon: 'menu_book', color: 'blue' }
+  ]
+%>
+
 <style>
   .gradient-slate {
     background: linear-gradient(135deg, #1e3a5f 0%, #2d4a6f 100%);

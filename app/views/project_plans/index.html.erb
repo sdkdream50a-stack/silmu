@@ -271,6 +271,22 @@
   <span id="pp-toast-msg"></span>
 </div>
 
+<%# P9 Information Scent — 이 도구 다음 단계 %>
+<%= render 'shared/tool_next_actions',
+  tool_key: 'project-plan',
+  next_actions: [
+    { type: 'tool',  path: contract_method_path, label: '관련 도구',
+      title: '계약방법 결정', desc: '사업 규모·성격에 맞는 계약방법 자동 판단',
+      icon: 'rule', color: 'emerald' },
+    { type: 'tool',  path: official_document_path, label: '관련 도구',
+      title: '공문 자동 작성', desc: '사업계획 보고·결재 공문 일괄 생성',
+      icon: 'mail', color: 'amber' },
+    { type: 'topic', path: topic_path('bidding'), label: '함께 보는 토픽',
+      title: '입찰 절차 한눈에', desc: '사업계획 확정 후 입찰 진행 절차 정리',
+      icon: 'gavel', color: 'blue' }
+  ]
+%>
+
 <script>
 function ppFormatBudget(el) {
   let v = el.value.replace(/[^\d]/g, '');

@@ -261,6 +261,22 @@
   </div>
 </section>
 
+<%# P9 Information Scent — 이 도구 다음 단계 %>
+<%= render 'shared/tool_next_actions',
+  tool_key: 'annual-leave-calculator',
+  next_actions: [
+    { type: 'guide', path: guide_path('annual-leave-guide'), label: '단계별 가이드',
+      title: '연가 사용 가이드', desc: '저축·이월 등 연가 운영 실무 절차',
+      icon: 'menu_book', color: 'emerald' },
+    { type: 'tool',  path: overtime_calculator_path, label: '관련 도구',
+      title: '시간외근무수당 계산기', desc: '연가 미사용 시 보상금 산정',
+      icon: 'schedule', color: 'amber' },
+    { type: 'tool',  path: severance_calculator_path, label: '관련 도구',
+      title: '퇴직금 계산기', desc: '재직기간 누적치로 퇴직급여 추정',
+      icon: 'savings', color: 'blue' }
+  ]
+%>
+
 <script>
   // 기준 연도 셀렉트 초기화
   (function initYears() {

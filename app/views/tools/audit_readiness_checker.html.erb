@@ -158,6 +158,22 @@
   </div>
 </section>
 
+<%# P9 Information Scent — 이 도구 다음 단계 %>
+<%= render 'shared/tool_next_actions',
+  tool_key: 'audit-readiness-checker',
+  next_actions: [
+    { type: 'guide', path: audit_frequent_issues_path, label: '단계별 가이드',
+      title: '감사 단골 지적사항', desc: '계약·집행·여비 단계별 자주 지적되는 사례',
+      icon: 'menu_book', color: 'emerald' },
+    { type: 'tool',  path: contract_legality_check_path, label: '관련 도구',
+      title: '계약 적법성 점검', desc: '계약 단계별 위반 가능성 자동 확인',
+      icon: 'fact_check', color: 'amber' },
+    { type: 'tool',  path: split_contract_checker_path, label: '관련 도구',
+      title: '분할계약 판단기', desc: '연간계약 회피·금액 분할 위법성 점검',
+      icon: 'block', color: 'blue' }
+  ]
+%>
+
 <script>
   const AUDIT_ITEMS = {
     contract: {

@@ -138,3 +138,19 @@
     </div>
   </div>
 </section>
+
+<%# P9 Information Scent — 이 도구 다음 단계 %>
+<%= render 'shared/tool_next_actions',
+  tool_key: 'standard-term-checker',
+  next_actions: [
+    { type: 'tool',  path: contract_documents_path, label: '관련 도구',
+      title: '계약 서류 자동 작성', desc: '표준 용어로 작성된 계약 서식 일괄 생성',
+      icon: 'description', color: 'emerald' },
+    { type: 'tool',  path: contract_legality_check_path, label: '관련 도구',
+      title: '계약 적법성 점검', desc: '용어 정리 후 적법성 자동 확인',
+      icon: 'fact_check', color: 'amber' },
+    { type: 'guide', path: audit_frequent_issues_path, label: '단계별 가이드',
+      title: '감사 단골 지적사항', desc: '용어 오기·표준 미준수 등 지적 사례',
+      icon: 'menu_book', color: 'blue' }
+  ]
+%>

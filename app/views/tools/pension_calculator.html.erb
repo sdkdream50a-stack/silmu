@@ -246,6 +246,22 @@
   </div>
 </section>
 
+<%# P9 Information Scent — 이 도구 다음 단계 %>
+<%= render 'shared/tool_next_actions',
+  tool_key: 'pension-calculator',
+  next_actions: [
+    { type: 'tool',  path: severance_calculator_path, label: '관련 도구',
+      title: '퇴직금 계산기', desc: '퇴직 시 일시금·연금 합산 추정',
+      icon: 'savings', color: 'emerald' },
+    { type: 'tool',  path: salary_calculator_path, label: '관련 도구',
+      title: '봉급 계산기', desc: '현재 월봉급 기준 연금 산정 재확인',
+      icon: 'payments', color: 'amber' },
+    { type: 'topic', path: topic_path('leave-of-absence'), label: '함께 보는 토픽',
+      title: '휴직 시 연금 정리', desc: '병가·육아휴직 등 가입기간 영향 분석',
+      icon: 'description', color: 'blue' }
+  ]
+%>
+
 <script>
 let selectedEra = 'before'; // 'before' or 'after'
 

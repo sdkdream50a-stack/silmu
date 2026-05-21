@@ -315,6 +315,22 @@
   </div>
 </section>
 
+<%# P9 Information Scent — 이 도구 다음 단계 %>
+<%= render 'shared/tool_next_actions',
+  tool_key: 'price-adjustment-calculator',
+  next_actions: [
+    { type: 'topic', path: topic_path('price-escalation'), label: '함께 보는 토픽',
+      title: '물가변동 조정 핵심', desc: '90일 요건·등락률 산정 원리 정리',
+      icon: 'trending_up', color: 'emerald' },
+    { type: 'tool',  path: cost_calculation_path, label: '관련 도구',
+      title: '계약 금액 정산', desc: '조정 후 정산 금액 자동 산정',
+      icon: 'paid', color: 'amber' },
+    { type: 'tool',  path: design_change_path, label: '관련 도구',
+      title: '설계변경 도구', desc: '설계변경과 물가변동 동시 적용 시 점검',
+      icon: 'sync_alt', color: 'blue' }
+  ]
+%>
+
 <script>
   function toggleMethod() {
     const method = document.getElementById('method').value;

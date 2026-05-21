@@ -354,6 +354,22 @@
   </div>
 </section>
 
+<%# P9 Information Scent — 이 도구 다음 단계 %>
+<%= render 'shared/tool_next_actions',
+  tool_key: 'progress-inspection',
+  next_actions: [
+    { type: 'topic', path: topic_path('inspection'), label: '함께 보는 토픽',
+      title: '검사·검수 실무', desc: '기성검사·준공검사 절차와 책임 구분',
+      icon: 'fact_check', color: 'emerald' },
+    { type: 'tool',  path: cost_calculation_path, label: '관련 도구',
+      title: '계약 금액 정산', desc: '기성검사 결과 기반 부분지급금 산정',
+      icon: 'paid', color: 'amber' },
+    { type: 'tool',  path: official_document_path, label: '관련 도구',
+      title: '공문 자동 작성', desc: '검사 통지·결과 보고 공문 일괄 생성',
+      icon: 'mail', color: 'blue' }
+  ]
+%>
+
 <script>
 document.addEventListener('turbo:load', function() {
   var piStep1 = document.getElementById('pi-step1');

@@ -229,6 +229,22 @@
   </div>
 </section>
 
+<%# P9 Information Scent — 이 도구 다음 단계 %>
+<%= render 'shared/tool_next_actions',
+  tool_key: 'contingency-fund',
+  next_actions: [
+    { type: 'tool',  path: budget_execution_rate_path, label: '관련 도구',
+      title: '예산 집행률 점검', desc: '예비비 사용 전 본예산 집행 상황 확인',
+      icon: 'monitoring', color: 'emerald' },
+    { type: 'tool',  path: budget_transfer_checker_path, label: '관련 도구',
+      title: '이월·전용 판단기', desc: '예비비 대신 전용 가능한지 동시 점검',
+      icon: 'swap_horiz', color: 'amber' },
+    { type: 'topic', path: topic_path('budget-carryover'), label: '함께 보는 토픽',
+      title: '예산 이월·전용', desc: '예비비 vs 이월·전용 의사결정 기준',
+      icon: 'description', color: 'blue' }
+  ]
+%>
+
 <script>
   // 목적예비비 체크박스
   document.getElementById('include-purpose').addEventListener('change', function() {

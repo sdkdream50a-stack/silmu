@@ -1112,6 +1112,22 @@
   </div>
 </div>
 
+<%# P9 Information Scent — 이 도구 다음 단계 %>
+<%= render 'shared/tool_next_actions',
+  tool_key: 'task-calendar',
+  next_actions: [
+    { type: 'tool',  path: legal_period_path, label: '관련 도구',
+      title: '법정기간 계산', desc: '계약·입찰 법정기간 산정 후 캘린더에 추가',
+      icon: 'event', color: 'emerald' },
+    { type: 'tool',  path: official_document_path, label: '관련 도구',
+      title: '공문 자동 작성', desc: '일정 통보 공문 일괄 생성',
+      icon: 'mail', color: 'amber' },
+    { type: 'topic', path: topic_path('bidding'), label: '함께 보는 토픽',
+      title: '입찰 절차 한눈에', desc: '공고~낙찰 주요 마감일 일정 관리',
+      icon: 'gavel', color: 'blue' }
+  ]
+%>
+
 <script>
 (function() {
   // --- 서버 동기화 ---

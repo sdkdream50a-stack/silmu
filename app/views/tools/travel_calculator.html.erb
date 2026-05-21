@@ -255,3 +255,19 @@
   </div>
 </section>
 
+<%# P9 Information Scent — 이 도구 다음 단계 %>
+<%= render 'shared/tool_next_actions',
+  tool_key: 'travel-calculator',
+  next_actions: [
+    { type: 'guide', path: guide_path('travel-expense-guide'), label: '단계별 가이드',
+      title: '여비 지급 단계별 가이드', desc: '출장 신청→여비 정산 절차 한눈에',
+      icon: 'menu_book', color: 'emerald' },
+    { type: 'topic', path: topic_path('travel-expense'), label: '함께 보는 토픽',
+      title: '여비 규정 핵심 정리', desc: '국내·국외 여비 등급별 단가와 자주 묻는 질문',
+      icon: 'description', color: 'amber' },
+    { type: 'tool',  path: allowance_calculator_path, label: '관련 도구',
+      title: '수당 계산기', desc: '특수업무수당·직급보조비 등 함께 산정',
+      icon: 'payments', color: 'blue' }
+  ]
+%>
+

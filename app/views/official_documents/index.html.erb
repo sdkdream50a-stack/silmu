@@ -340,6 +340,22 @@
   <span id="od-toast-msg"></span>
 </div>
 
+<%# P9 Information Scent — 이 도구 다음 단계 %>
+<%= render 'shared/tool_next_actions',
+  tool_key: 'official-document',
+  next_actions: [
+    { type: 'tool',  path: contract_documents_path, label: '관련 도구',
+      title: '계약 서류 자동 작성', desc: '공문 + 계약서 패키지 함께 생성',
+      icon: 'description', color: 'emerald' },
+    { type: 'tool',  path: contract_reason_path, label: '관련 도구',
+      title: '수의계약 사유서', desc: '수의계약 시 사유서 자동 작성',
+      icon: 'edit_note', color: 'amber' },
+    { type: 'tool',  path: project_plan_path, label: '관련 도구',
+      title: '사업계획 도구', desc: '사업계획서 + 결재 공문 동시 작성',
+      icon: 'task', color: 'blue' }
+  ]
+%>
+
 <script>
 var odState = { type: null, tone: 'normal' };
 

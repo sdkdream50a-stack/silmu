@@ -224,6 +224,22 @@
   </div>
 </section>
 
+<%# P9 Information Scent — 이 도구 다음 단계 %>
+<%= render 'shared/tool_next_actions',
+  tool_key: 'overtime-calculator',
+  next_actions: [
+    { type: 'tool',  path: salary_calculator_path, label: '관련 도구',
+      title: '봉급 계산기', desc: '시간외수당 산정 기준 월봉급액 확인',
+      icon: 'payments', color: 'emerald' },
+    { type: 'tool',  path: allowance_calculator_path, label: '관련 도구',
+      title: '수당 계산기', desc: '직급보조비·정근수당 등 7종 일괄 계산',
+      icon: 'savings', color: 'amber' },
+    { type: 'tool',  path: annual_leave_calculator_path, label: '관련 도구',
+      title: '연가일수 계산기', desc: '재직기간별 연가 일수·잔여일수 산정',
+      icon: 'event_available', color: 'blue' }
+  ]
+%>
+
 <script>
   function formatKRW(n) {
     return Math.round(n).toLocaleString('ko-KR') + '원';

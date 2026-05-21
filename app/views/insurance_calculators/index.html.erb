@@ -67,3 +67,19 @@
   </div>
 
 </div>
+
+<%# P9 Information Scent — 이 도구 다음 단계 %>
+<%= render 'shared/tool_next_actions',
+  tool_key: 'insurance-calculator',
+  next_actions: [
+    { type: 'tool',  path: salary_calculator_path, label: '관련 도구',
+      title: '봉급 계산기', desc: '연말정산 기준 월급여 재확인',
+      icon: 'payments', color: 'emerald' },
+    { type: 'guide', path: guide_path('year-end-settlement-guide'), label: '단계별 가이드',
+      title: '연말정산 가이드', desc: '서류·환급 절차 한눈에 정리',
+      icon: 'menu_book', color: 'amber' },
+    { type: 'tool',  path: severance_calculator_path, label: '관련 도구',
+      title: '퇴직금 계산기', desc: '퇴직정산 보험료 산정 시 함께 검토',
+      icon: 'savings', color: 'blue' }
+  ]
+%>

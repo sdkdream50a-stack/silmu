@@ -354,6 +354,22 @@
   </div>
 </section>
 
+<%# P9 Information Scent — 이 도구 다음 단계 %>
+<%= render 'shared/tool_next_actions',
+  tool_key: 'cost-calculation',
+  next_actions: [
+    { type: 'tool',  path: cost_estimate_path, label: '관련 도구',
+      title: '원가계산 도구', desc: '재료비·노무비·경비 기초 산출',
+      icon: 'calculate', color: 'emerald' },
+    { type: 'topic', path: topic_path('cost-calculation-guide'), label: '함께 보는 토픽',
+      title: '원가계산 가이드', desc: '재료비·노무비·경비 산출 방식 정리',
+      icon: 'description', color: 'amber' },
+    { type: 'tool',  path: price_adjustment_calculator_path, label: '관련 도구',
+      title: '물가변동 조정 계산', desc: '정산 시 물가지수 반영 자동 산정',
+      icon: 'trending_up', color: 'blue' }
+  ]
+%>
+
 <script>
 document.addEventListener('turbo:load', function() {
   var ccStep1 = document.getElementById('cc-step1');
