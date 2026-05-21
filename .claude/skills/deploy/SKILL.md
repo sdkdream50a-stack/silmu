@@ -64,7 +64,27 @@
    - 예상 결과: 최종적으로 `200`
    - 5번 모두 실패하면 즉시 사용자에게 보고하고 **자동 롤백 실행**
 
-2. **주요 페이지 확인**
+2. **Cloudflare 캐시 퍼지 (CRITICAL — 동적 HTML 변경 시 필수)**
+   ```bash
+   # 변경된 view/erb 경로 자동 감지
+   CHANGED=$(git diff --name-only HEAD~1 HEAD | grep -E 'app/views/.*\.html\.erb$|app/controllers' | head -20)
+   echo "변경 감지된 파일:"
+   echo "$CHANGED"
+
+   # 변경된 페이지 경로를 사용자와 함께 확정 후 퍼지
+   # 예: app/views/tools/task_calendar.html.erb → https://silmu.kr/tools/task-calendar
+   bin/cf-purge https://silmu.kr/<path1> https://silmu.kr/<path2> ...
+
+   # 변경 경로가 광범위하거나 불확실하면 기본 주요 페이지 일괄 퍼지
+   bin/cf-purge
+   ```
+   - **Why:** silmu.kr는 Cloudflare 뒤에 있고 동적 HTML 응답에 `cache-control: public, max-age=14400, stale-while-revalidate=86400` (4시간 edge cache, 24시간 stale revalidate)이 붙음. `kamal deploy`만으로는 **이미 캐시된 페이지가 stale 버전 그대로 서빙됨** → 사용자는 변경사항을 4시간 이상 못 봄.
+   - **진단:** `curl -sI URL | grep -iE "cf-cache|age"` → `cf-cache-status: HIT` + `age > 0`이면 캐시 잠김 상태.
+   - **퍼지 후 확인:** `cf-cache-status: HIT, age: 0`이면 fresh fetch 완료.
+   - **퍼지 불필요 경우:** 정적 자산(JS/CSS)은 sprockets/propshaft hash로 우회됨. sitemap.xml·robots.txt·ads.txt는 Rails 자체에서 즉시 재생성. *동적 HTML 페이지* (토픽·도구·콘텐츠·about·home 등)만 퍼지 대상.
+   - **사례:** 2026-05-21 task-calendar 6건 UX 정정 배포 직후 변경사항 0건 확인 → `cf-cache-status: HIT, age: 2647s` 진단 → `bin/cf-purge`로 즉시 해소.
+
+3. **주요 페이지 확인**
    ```bash
    # 메인 페이지
    curl -s https://silmu.kr | head -20
@@ -77,31 +97,39 @@
    ```
    - 각 페이지가 정상적으로 응답하는지 확인
 
-3. **애플리케이션 로그 확인**
+4. **애플리케이션 로그 확인**
    ```bash
    cd ~/silmu && kamal app logs --tail 50
    ```
    - 최근 50줄의 로그에서 에러나 경고 확인
    - 에러가 있으면 사용자에게 보고
 
-4. **Solid Queue 상태 확인**
+5. **Solid Queue 상태 확인**
    ```bash
    cd ~/silmu && kamal app exec 'ps aux | grep solid_queue'
    ```
    - Solid Queue 프로세스가 실행 중인지 확인
    - 실행되지 않으면 경고 출력
 
-5. **SSL 인증서 확인**
+6. **SSL 인증서 확인**
    ```bash
    curl -vI https://silmu.kr 2>&1 | grep -i "ssl\|certificate"
    ```
    - SSL 인증서가 유효한지 확인
 
-6. **응답 시간 확인**
+7. **응답 시간 확인**
    ```bash
    curl -w "\nTime total: %{time_total}s\n" -o /dev/null -s https://silmu.kr
    ```
    - 응답 시간이 2초 이상이면 경고 (성능 이슈 가능성)
+
+8. **변경 페이지 라이브 검증 (cf-purge 후)**
+   ```bash
+   # 변경된 페이지에서 새 컨텐츠 흔적 grep
+   curl -s https://silmu.kr/<changed-path> | grep -c "<새로 추가한 문자열>"
+   ```
+   - 0이면 cf-purge 누락 또는 컴파일 실패 의심
+   - 캐시 우회 빠른 확인: `?nocache=$(date +%s)` 쿼리 추가
 
 ### 4단계: DNS/SEO 변경사항 확인 (해당하는 경우만)
 
@@ -141,6 +169,8 @@
 
 📋 검증 결과:
 - HTTP 상태: 200 OK
+- Cloudflare 캐시 퍼지: N개 URL 처리 (cf-cache-status: HIT, age: 0)
+- 변경 페이지 라이브 검증: 새 컨텐츠 노출 확인 ✓
 - 메인 페이지: 정상
 - sitemap.xml: 200 OK
 - robots.txt: 200 OK
@@ -189,7 +219,8 @@ cd ~/silmu && kamal rollback
 2. **커밋되지 않은 변경사항이 있으면 배포하지 않음** (Kamal은 커밋된 코드만 배포)
 3. **HTTP 200이 아니면 즉시 롤백 권장**
 4. **배포 후 검증을 건너뛰지 않음** — 이 단계가 가장 중요함
-5. **DNS/SEO 변경사항은 반드시 라이브 환경에서 확인** — Google Search Console, Naver Search Advisor에서 실제 적용 여부 확인
+5. **Cloudflare 캐시 퍼지를 생략하지 않음** — 동적 HTML 변경은 cf-purge 없이는 4시간 동안 stale 서빙됨
+6. **DNS/SEO 변경사항은 반드시 라이브 환경에서 확인** — Google Search Console, Naver Search Advisor에서 실제 적용 여부 확인
 
 ---
 
@@ -214,6 +245,13 @@ cd ~/silmu && kamal rollback
   - 배포 성공으로 판단했으나 실제로는 변경사항 미적용
   - **해결:** 3단계 검증 절대 생략 금지
 
+- **Cloudflare 캐시 stale 서빙** (2026-05-21 task-calendar 배포 시 발견)
+  - `kamal deploy` 성공 + HTTP 200 OK + 로그 정상이었으나 라이브 grep 검증에서 변경사항 0건
+  - 진단 결과 `cf-cache-status: HIT` + `age: 2647s` (44분 캐시됨)
+  - 동적 HTML 페이지가 `max-age=14400` (4시간) edge cache로 잠겨 있었음
+  - **해결:** 3단계에 cf-purge 단계 필수 포함. `bin/cf-purge https://silmu.kr/<변경 경로>`로 즉시 해소
+  - **검증 함정:** cf-purge 전 라이브 검증은 모두 stale 결과 → 항상 cf-purge 다음에 검증
+
 ### Medium
 - **로컬 DB 조회 실수** (최소 2회)
   - 운영 데이터 확인 시 로컬 개발 DB를 조회
@@ -231,8 +269,15 @@ git status && \
 rails test && \
 kamal deploy && \
 sleep 30 && \
+bin/cf-purge && \
 curl -s -o /dev/null -w 'HTTP: %{http_code}\nTime: %{time_total}s\n' https://silmu.kr && \
+curl -sI https://silmu.kr | grep -iE "cf-cache|age" && \
 kamal app logs --tail 20
+```
+
+`bin/cf-purge`는 인자 없으면 기본 주요 페이지를 일괄 퍼지합니다. 특정 변경 페이지가 있으면 명시 권장:
+```bash
+bin/cf-purge https://silmu.kr/tools/task-calendar https://silmu.kr/topics/some-topic
 ```
 
 단, 이 자동화 스크립트는 에러 발생 시 즉시 중단되지 않으므로 각 단계를 수동으로 확인하는 것을 권장합니다.
