@@ -69,6 +69,41 @@
           <p class="text-xs text-slate-400 mt-1">선금 지급분은 조정 대상 제외</p>
         </div>
       </div>
+
+      <!-- 의사결정 가이드 (지수 vs 품목) — Information Scent -->
+      <details class="mt-4 bg-editorial-navy-bg/30 rounded-xl border border-editorial-navy-light">
+        <summary class="px-4 py-3 cursor-pointer text-sm font-semibold text-editorial-ink hover:bg-editorial-navy-bg/50 transition-colors flex items-center gap-2 [list-style:none] [&::-webkit-details-marker]:hidden">
+          <span class="material-symbols-outlined text-editorial-navy" style="font-size:18px">help</span>
+          어느 방법을 선택해야 하나요? (펼치기)
+        </summary>
+        <div class="px-4 pb-4 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+          <div class="bg-white rounded-lg p-3 border border-editorial-navy-bg">
+            <p class="font-bold text-editorial-navy mb-1.5 flex items-center gap-1">
+              <span class="material-symbols-outlined" style="font-size:14px">bar_chart</span>
+              지수조정률 선택
+            </p>
+            <ul class="text-slate-600 space-y-1 list-disc list-inside leading-relaxed">
+              <li>종합건설·전문공사 등 <strong>장기·복합 공사</strong></li>
+              <li>비목(노무·재료·경비)이 다양하고 한국은행 PPI 추적이 쉬울 때</li>
+              <li>대부분의 <strong>건설공사 표준 방법</strong></li>
+            </ul>
+          </div>
+          <div class="bg-white rounded-lg p-3 border border-editorial-navy-bg">
+            <p class="font-bold text-editorial-navy mb-1.5 flex items-center gap-1">
+              <span class="material-symbols-outlined" style="font-size:14px">inventory_2</span>
+              품목조정률 선택
+            </p>
+            <ul class="text-slate-600 space-y-1 list-disc list-inside leading-relaxed">
+              <li><strong>단순 물품 공급·자재 위주</strong> 계약</li>
+              <li>품목 수가 적고 거래실례가격 조사가 가능할 때</li>
+              <li>지수 적용이 부적절하거나 단가 변동을 직접 산정해야 할 때</li>
+            </ul>
+          </div>
+          <p class="sm:col-span-2 text-[11px] text-slate-500 mt-1">
+            <strong>2차 이상 조정 시:</strong> "입찰일 지수" 칸에 <em>직전 조정기준일 지수</em>를 입력하세요 (입찰일 지수 X). 자주 하는 실수 1순위.
+          </p>
+        </div>
+      </details>
     </div>
 
     <!-- 지수조정률 입력 -->
@@ -173,6 +208,39 @@
         </table>
       </div>
       <p class="text-xs text-slate-400 mt-3">* 거래실례가격 조사 기준. 변동액 = (조정기준일 단가 - 입찰일 단가) × 수량</p>
+    </div>
+
+    <!-- 빈 상태 — 결과 미리보기 + 샘플 시나리오 (Empty State Work) -->
+    <div id="empty-state-card" class="card p-6 border-2 border-dashed border-slate-200 mb-6">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="material-symbols-outlined text-slate-400">preview</span>
+        <h3 class="text-sm font-bold text-slate-700">계산 결과 미리보기</h3>
+      </div>
+      <p class="text-xs text-slate-500 mb-4">계약금액과 지수(또는 단가)를 입력하면 다음 4가지가 즉시 산출됩니다.</p>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4 opacity-60">
+        <div class="bg-slate-50 rounded-lg p-3 text-center">
+          <div class="text-[10px] text-slate-400 mb-1">계약금액</div>
+          <div class="text-sm font-bold text-slate-400">- 만원</div>
+        </div>
+        <div class="bg-slate-50 rounded-lg p-3 text-center">
+          <div class="text-[10px] text-slate-400 mb-1">가중평균 등락률</div>
+          <div class="text-sm font-bold text-slate-400">-</div>
+        </div>
+        <div class="bg-slate-50 rounded-lg p-3 text-center">
+          <div class="text-[10px] text-slate-400 mb-1">조정금액</div>
+          <div class="text-sm font-bold text-slate-400">- 만원</div>
+        </div>
+        <div class="bg-slate-50 rounded-lg p-3 text-center">
+          <div class="text-[10px] text-slate-400 mb-1">선금공제 후</div>
+          <div class="text-sm font-bold text-slate-400">- 만원</div>
+        </div>
+      </div>
+      <button type="button" onclick="loadSampleScenario()"
+              class="w-full py-2.5 px-4 bg-violet-50 hover:bg-violet-100 border border-violet-200 rounded-lg text-sm font-medium text-violet-700 transition-colors inline-flex items-center justify-center gap-1.5">
+        <span class="material-symbols-outlined" style="font-size:16px">auto_awesome</span>
+        샘플 시나리오로 즉시 계산해 보기
+      </button>
+      <p class="text-[11px] text-slate-400 text-center mt-2">계약 10억 + 노무·재료·경비 지수 변동 → 조정 가능 여부 즉시 확인</p>
     </div>
 
     <!-- 결과 -->
@@ -314,10 +382,13 @@
     });
 
     const resultArea = document.getElementById('result-area');
+    const emptyCard = document.getElementById('empty-state-card');
     if (contractAmount === 0 || totalAmount === 0) {
       resultArea.classList.add('hidden');
+      if (emptyCard) emptyCard.classList.remove('hidden');
       return;
     }
+    if (emptyCard) emptyCard.classList.add('hidden');
 
     const avgRate = weightedRate / totalAmount;
     const adjAmount = contractAmount * avgRate / 100;
@@ -397,10 +468,13 @@
     });
 
     const resultArea = document.getElementById('result-area');
+    const emptyCard = document.getElementById('empty-state-card');
     if (contractAmount === 0) {
       resultArea.classList.add('hidden');
+      if (emptyCard) emptyCard.classList.remove('hidden');
       return;
     }
+    if (emptyCard) emptyCard.classList.add('hidden');
 
     const changeInWon = totalChange; // 원 단위
     const changeInMan = changeInWon / 10000; // 만원 단위
@@ -444,6 +518,39 @@
 
   function formatNum(n) {
     return Math.round(n).toLocaleString('ko-KR');
+  }
+
+  // 샘플 시나리오: 계약 10억(100,000만원) + 지수조정 4건 → 평균 약 +4% 등락 (조정 가능 결과)
+  function loadSampleScenario() {
+    document.getElementById('method').value = 'index';
+    toggleMethod();
+    document.getElementById('contract-amount').value = 100000;
+    document.getElementById('advance-rate').value = 30;
+    // 지수 행 3개 default + 1개 추가 = 4건
+    const presets = [
+      { name: '노무비',   amount: 40000, base: 100.0, adj: 105.0 },
+      { name: '재료비',   amount: 35000, base: 100.0, adj: 106.5 },
+      { name: '경비',     amount: 15000, base: 100.0, adj: 102.0 },
+      { name: '간접비',   amount: 10000, base: 100.0, adj: 103.0 }
+    ];
+    // 기존 행 3개 활용 후 1행 추가
+    const rows = document.querySelectorAll('#index-items .index-row');
+    presets.slice(0, 3).forEach((p, i) => {
+      const r = rows[i];
+      r.querySelector('.item-name').value = p.name;
+      r.querySelector('.item-amount').value = p.amount;
+      r.querySelector('.item-base-idx').value = p.base;
+      r.querySelector('.item-adj-idx').value = p.adj;
+    });
+    addIndexItem();
+    const lastRow = document.querySelector('#index-items .index-row:last-child');
+    const p4 = presets[3];
+    lastRow.querySelector('.item-name').value = p4.name;
+    lastRow.querySelector('.item-amount').value = p4.amount;
+    lastRow.querySelector('.item-base-idx').value = p4.base;
+    lastRow.querySelector('.item-adj-idx').value = p4.adj;
+    calculate();
+    document.getElementById('result-area').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   document.addEventListener('DOMContentLoaded', function() {
