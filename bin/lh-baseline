@@ -1,0 +1,34 @@
+#!/bin/bash
+set -e
+export CHROME_PATH="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+mkdir -p /tmp/lh_results
+declare -a PAGES=(
+  "home:/"
+  "topics:/topics"
+  "tools:/tools"
+  "task-calendar:/tools/task-calendar"
+  "budget-execution-rate:/tools/budget-execution-rate"
+)
+for entry in "${PAGES[@]}"; do
+  name="${entry%%:*}"
+  path="${entry#*:}"
+  out="/tmp/lh_results/${name}.json"
+  echo "▶ $name (${path})"
+  lighthouse "https://silmu.kr${path}" \
+    --output=json --output-path="$out" \
+    --only-categories=accessibility,performance,seo,best-practices \
+    --quiet --chrome-flags="--headless=new --no-sandbox" --max-wait-for-load=45000 2>&1 | tail -1
+done
+echo ""
+echo "=== 점수 매트릭스 ==="
+printf "%-25s %5s %5s %5s %5s\n" "page" "perf" "a11y" "BP" "seo"
+printf -- "---------------------------------------------------\n"
+for entry in "${PAGES[@]}"; do
+  name="${entry%%:*}"
+  out="/tmp/lh_results/${name}.json"
+  perf=$(jq -r '(.categories.performance.score * 100) | floor' "$out")
+  a11y=$(jq -r '(.categories.accessibility.score * 100) | floor' "$out")
+  bp=$(jq -r '(.categories["best-practices"].score * 100) | floor' "$out")
+  seo=$(jq -r '(.categories.seo.score * 100) | floor' "$out")
+  printf "%-25s %5s %5s %5s %5s\n" "$name" "$perf" "$a11y" "$bp" "$seo"
+done
