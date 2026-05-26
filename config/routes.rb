@@ -98,6 +98,9 @@ Rails.application.routes.draw do
   get "qualification-evaluations/evaluate", to: redirect("/tools/qualification-evaluation")
   get "document-analysis/analyze", to: redirect("/tools")
   get "cost-estimates/default-items", to: redirect("/tools/cost-estimate")
+  get "official-documents/download-hwp", to: redirect("/tools/official-document")
+  get "contract-guarantees/delay-penalty", to: redirect("/tools/contract-guarantee")
+  get "tools/annual-leave/pdf", to: redirect("/tools/annual-leave-calculator")
 
   # GSC 크롤 오류 해소: /assets/tailwindcss 404 → 홈으로 리디렉트
   get "assets/tailwindcss", to: redirect("/", status: 301)
