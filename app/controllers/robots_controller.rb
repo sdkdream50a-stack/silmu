@@ -26,6 +26,8 @@ class RobotsController < ApplicationController
 
       # 쿼리 파라미터 필터 페이지 — 크롤 예산 절약 (canonical로 처리 중)
       # 주의: robots.txt는 wildcard `*`로 경로+쿼리 매칭해야 주요 크롤러(Google/Bing/Naver) 모두 인식
+      # 페이지네이션(?page=)은 허용 — 감사사례 257건 전체 크롤 도달성 (필터 조합만 차단)
+      Allow: /audit-cases?page=
       Disallow: /audit-cases?*
       Disallow: /guides?*
       Disallow: /silmu-search/search?*
@@ -77,6 +79,7 @@ class RobotsController < ApplicationController
       Disallow: /calendar_data
       Disallow: /task_guides
       Disallow: /audit-cases/*/hwp
+      Allow: /audit-cases?page=
       Disallow: /audit-cases?*
       Disallow: /guides?*
       Disallow: /silmu-search/search?*

@@ -121,6 +121,12 @@
                 loading: :lazy do %>
               <%= render "next_page_loader" %>
             <% end %>
+            <%# SEO: 크롤러용 페이지네이션 링크 (필터 없는 기본 목록만 — 감사사례 257건 전체 크롤 도달성). JS 사용자는 위 lazy frame으로 처리 %>
+            <% if @category.blank? && @severity.blank? && @search.blank? %>
+              <noscript>
+                <a rel="next" href="<%= audit_cases_path(page: @next_page) %>">다음 감사사례 (페이지 <%= @next_page %>)</a>
+              </noscript>
+            <% end %>
           <% end %>
         <% else %>
           <div class="text-center py-16">
