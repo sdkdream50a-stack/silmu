@@ -60,12 +60,12 @@ class LegalPeriodService
     { id: "roof_waterproof", name: "지붕·방수공사", years: 3, note: "지붕공사, 방수공사" },
     { id: "painting", name: "도장공사", years: 1, note: "내·외부 도장" },
     { id: "plaster", name: "미장·타일공사", years: 1, note: "미장, 타일, 돌붙임" },
-    { id: "metal_window", name: "창호공사", years: 2, note: "금속·목재 창호" },
+    { id: "metal_window", name: "창호공사", years: 1, note: "금속·목재 창호 (건산법 시행령 별표 4 §15⑦)" },
     { id: "electrical", name: "전기·설비공사", years: 2, note: "전기, 기계설비, 소방" },
     { id: "landscaping", name: "조경공사", years: 2, note: "조경식재, 시설물" },
     { id: "road", name: "도로·포장공사", years: 3, note: "아스팔트·콘크리트 포장" },
     { id: "civil", name: "토목공사", years: 3, note: "토공, 배수, 옹벽 등" },
-    { id: "interior", name: "실내건축공사", years: 2, note: "바닥재, 벽체, 천장" }
+    { id: "interior", name: "실내건축공사", years: 1, note: "바닥재, 벽체, 천장 (건산법 시행령 별표 4 §15①)" }
   ].freeze
 
   # 지체상금(지연배상금) 요율 (1일당, 지방계약법 시행규칙 제75조 기준)

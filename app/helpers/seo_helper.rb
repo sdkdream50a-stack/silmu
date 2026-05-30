@@ -17,17 +17,52 @@ module SeoHelper
     end
   end
 
-  # 토픽 1차 출처 — Article schema의 isBasedOn에 주입할 법령 Legislation 배열
-  # (모든 토픽 공통 근거: 지방계약법 + 시행령 + 행안부 예규)
-  def topic_legal_basis
-    [
-      { "@type" => "Legislation", "name" => "지방자치단체를 당사자로 하는 계약에 관한 법률",
-        "url" => "https://www.law.go.kr/법령/지방자치단체를당사자로하는계약에관한법률" },
-      { "@type" => "Legislation", "name" => "지방자치단체를 당사자로 하는 계약에 관한 법률 시행령",
-        "url" => "https://www.law.go.kr/법령/지방자치단체를당사자로하는계약에관한법률시행령" },
-      { "@type" => "Legislation", "name" => "지방자치단체 입찰 및 계약집행기준",
-        "url" => "https://www.law.go.kr/행정규칙/지방자치단체입찰및계약집행기준" }
-    ]
+  # 토픽 1차 출처 — Article schema의 isBasedOn/citation에 주입할 법령 Legislation 배열
+  # category별 1차 근거 법령 (지방 우선 인용 원칙 — 비계약 토픽이 '지방계약법'으로 오신호되던 결함 정정)
+  def topic_legal_basis(topic = nil)
+    names =
+      case topic&.category
+      when "budget"   then [ "지방재정법", "지방재정법 시행령" ]
+      when "expense"  then [ "지방회계법", "지방회계법 시행령" ]
+      when "duty"     then [ "지방공무원법", "국가공무원법" ]
+      when "salary"   then [ "공무원수당 등에 관한 규정", "지방공무원 수당 등에 관한 규정" ]
+      when "travel"   then [ "공무원 여비 규정", "지방공무원 여비 규정" ]
+      when "subsidy"  then [ "지방자치단체 보조금 관리에 관한 법률", "보조금 관리에 관한 법률" ]
+      when "property" then [ "공유재산 및 물품 관리법" ]
+      else
+        return [
+          legislation_ref("지방자치단체를 당사자로 하는 계약에 관한 법률"),
+          legislation_ref("지방자치단체를 당사자로 하는 계약에 관한 법률 시행령"),
+          legislation_ref("지방자치단체 입찰 및 계약집행기준", "행정규칙")
+        ]
+      end
+    names.map { |n| legislation_ref(n) }
+  end
+
+  def legislation_ref(name, kind = "법령")
+    { "@type" => "Legislation", "name" => name,
+      "url" => "https://www.law.go.kr/#{kind}/#{name.delete(' ')}" }
+  end
+
+  # 법령 3단 카드 헤더 라벨 {law:, decree:, rule:} (P1-1 정체성 — 비계약 토픽 '지방계약법' 오표시 정정)
+  # travel-expense·budget-carryover·year-end-settlement 3개 토픽은 기존 수기 라벨 유지
+  def topic_law_card_labels(topic)
+    case topic.slug
+    when "travel-expense"      then { law: "지방공무원법", decree: "지방공무원 여비 규정", rule: "여비 규정 별표" }
+    when "budget-carryover"    then { law: "지방재정법", decree: "지방재정법 시행령", rule: "예산편성 기준" }
+    when "year-end-settlement" then { law: "소득세법", decree: "소득세법 시행령", rule: "연말정산 지침" }
+    else
+      case topic.category
+      when "budget"   then { law: "지방재정법", decree: "지방재정법 시행령", rule: "지방재정법 시행규칙" }
+      when "expense"  then { law: "지방회계법", decree: "지방회계법 시행령", rule: "지방회계법 시행규칙" }
+      when "duty"     then { law: "지방공무원법·국가공무원법", decree: "공무원 임용령·복무규정", rule: "부령·예규" }
+      when "salary"   then { law: "공무원보수·수당 관계법령", decree: "공무원수당 등에 관한 규정", rule: "수당·보수규정 별표" }
+      when "travel"   then { law: "지방공무원법", decree: "공무원 여비 규정", rule: "여비 규정 별표" }
+      when "subsidy"  then { law: "지방자치단체 보조금 관리에 관한 법률", decree: "대통령령", rule: "부령·예규" }
+      when "property" then { law: "공유재산 및 물품 관리법", decree: "대통령령", rule: "부령·예규" }
+      else { law: "지방계약법", decree: "대통령령", rule: "부령 / 예규" }
+      end
+    end
   end
 
   # 토픽 카테고리 → 1차 법령 표시 라벨 (Quick Answer 박스 chip + speakable .legal-citation)
@@ -58,7 +93,9 @@ module SeoHelper
       end
     else
       case topic.category
-      when "travel", "duty", "salary" then "공무원수당 등에 관한 규정·공무원보수규정"
+      when "duty" then "지방공무원법·국가공무원법"
+      when "salary" then "공무원수당 등에 관한 규정·지방공무원 수당규정"
+      when "travel" then "공무원 여비 규정·지방공무원 여비 규정"
       when "subsidy" then "보조금 관리에 관한 법률·지방자치단체 보조금 관리에 관한 법률"
       when "property" then "공유재산 및 물품 관리법"
       when "budget" then "지방재정법·지방회계법"

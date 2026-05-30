@@ -214,7 +214,7 @@
           <ul class="text-xs text-slate-500 space-y-1.5 leading-relaxed">
             <li>• <strong class="text-slate-600">시간외근무수당</strong> = 월봉급액 × 55%(9급은 60%) ÷ 209 × 1.5 × 시간외근무시간 (공무원수당규정 §15②, 월 57시간 한도)</li>
             <li>• <strong class="text-slate-600">야간근무수당</strong> = 시간당 단가 × 야간근무시간 × 0.5 (22:00~06:00)</li>
-            <li>• <strong class="text-slate-600">휴일근무수당</strong> = 월봉급액 ÷ 26 × 휴일근무일수 × 1.5 (1일 단위, 제17조)</li>
+            <li>• <strong class="text-slate-600">휴일근무수당</strong> = 봉급기준액(월봉급액 × 55%, 9급 60%) ÷ 26 × 휴일근무일수 × 1.5 (제17조 — 현업공무원등)</li>
             <li>• 시간외·야간·휴일이 중복되는 경우 각각 합산됩니다</li>
           </ul>
         </div>
@@ -311,8 +311,8 @@
       document.getElementById('row-night').classList.add('hidden');
     }
 
-    // 휴일근무수당 (월봉급액 ÷ 26 × 일수 × 1.5, 제17조)
-    const dailyRate = salary / 26;
+    // 휴일근무수당 (봉급기준액[월봉급액×55%, 9급 60%] ÷ 26 × 일수 × 1.5, 제17조 — 현업공무원등)
+    const dailyRate = salary * baseRate / 26;
     const holidayPay = dailyRate * holiday * 1.5;
     if (holiday > 0) {
       document.getElementById('row-holiday').classList.remove('hidden');

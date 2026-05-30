@@ -74,7 +74,7 @@
     "mainEntityOfPage": canonical_url,
     "articleSection": @topic.category_name,
     "keywords": (@topic.keywords.presence || @topic.name).to_s,
-    "isBasedOn": topic_legal_basis,
+    "isBasedOn": topic_legal_basis(@topic),
     # 5차 권위자 GEO+AEO #20 — wordCount + timeRequired (LearningResource 정량 신호)
     "wordCount": topic_word_count(@topic),
     "timeRequired": topic_reading_time_iso(@topic),
@@ -105,7 +105,7 @@
       "cssSelector": [ ".topic-summary", ".topic-headline", ".faq-answer", ".quick-answer", ".legal-citation", ".law-key-fact", ".topic-first-paragraph", ".commentary > p:first-child" ]
     },
     # citation — LLM 인용 시 법조문까지 함께 끌고 가도록 (4차 권위자 GEO 추천)
-    "citation": topic_legal_basis,
+    "citation": topic_legal_basis(@topic),
     "hasPart": has_part
   }.merge(topic_government_service_fields(@topic) || {}).compact) %>
   <%= json_ld({
@@ -414,7 +414,7 @@ document.addEventListener('click', function(e) {
         </div>
 
         <!-- 법령 3단 비교 -->
-        <% cache [@topic, "law_tabs", @topic.updated_at.to_i] do %>
+        <% cache [@topic, "law_tabs_v2", @topic.updated_at.to_i] do %>
         <div class="tab-panel <%= 'active' unless @has_flowchart || @related_guide.present? %>" data-tab="law">
           <% if @topic.has_law_content? %>
             <!-- 캐스케이드 카드 레이아웃 -->
@@ -432,12 +432,7 @@ document.addEventListener('click', function(e) {
                           </div>
                           <div>
                             <h3 class="font-bold text-white text-xl tracking-tight">법률</h3>
-                            <p class="text-sm font-medium" style="color: rgba(255,255,255,0.8);"><%= case @topic.slug
-                              when 'travel-expense' then '지방공무원법'
-                              when 'budget-carryover' then '지방재정법'
-                              when 'year-end-settlement' then '소득세법'
-                              else '지방계약법'
-                            end %></p>
+                            <p class="text-sm font-medium" style="color: rgba(255,255,255,0.8);"><%= topic_law_card_labels(@topic)[:law] %></p>
                           </div>
                         </div>
                         <div class="flex items-center gap-2">
@@ -467,12 +462,7 @@ document.addEventListener('click', function(e) {
                           </div>
                           <div>
                             <h3 class="font-bold text-white text-xl tracking-tight">시행령</h3>
-                            <p class="text-sm font-medium" style="color: rgba(255,255,255,0.8);"><%= case @topic.slug
-                              when 'travel-expense' then '지방공무원 여비 규정'
-                              when 'budget-carryover' then '지방재정법 시행령'
-                              when 'year-end-settlement' then '소득세법 시행령'
-                              else '대통령령'
-                            end %></p>
+                            <p class="text-sm font-medium" style="color: rgba(255,255,255,0.8);"><%= topic_law_card_labels(@topic)[:decree] %></p>
                           </div>
                         </div>
                         <div class="flex items-center gap-2">
@@ -502,12 +492,7 @@ document.addEventListener('click', function(e) {
                           </div>
                           <div>
                             <h3 class="font-bold text-white text-xl tracking-tight">시행규칙</h3>
-                            <p class="text-sm font-medium" style="color: rgba(255,255,255,0.8);"><%= case @topic.slug
-                              when 'travel-expense' then '여비 규정 별표'
-                              when 'budget-carryover' then '예산편성 기준'
-                              when 'year-end-settlement' then '연말정산 지침'
-                              else '부령 / 예규'
-                            end %></p>
+                            <p class="text-sm font-medium" style="color: rgba(255,255,255,0.8);"><%= topic_law_card_labels(@topic)[:rule] %></p>
                           </div>
                         </div>
                         <div class="flex items-center gap-2">
