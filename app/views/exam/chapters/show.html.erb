@@ -16,7 +16,7 @@
       "inLanguage": "ko",
       "isAccessibleForFree": true,
       "educationalLevel": "전문",
-      "teaches": <%= @chapter[:keywords].first(5).to_json %>,
+      "teaches": <%= raw @chapter[:keywords].first(5).to_json %>,
       "isPartOf": {
         "@type": "Course",
         "name": "공공조달관리사 시험 대비 완전 커리큘럼",

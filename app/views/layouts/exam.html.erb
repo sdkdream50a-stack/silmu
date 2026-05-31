@@ -202,7 +202,7 @@
                     </div>
                     <div>
                       <div class="text-sm font-semibold text-slate-800">전체 커리큘럼</div>
-                      <div class="text-xs text-slate-400">4권 27장 전체 보기</div>
+                      <div class="text-xs text-slate-400">4권 28장 전체 보기</div>
                     </div>
                   </a>
                   <hr class="my-1.5 border-slate-100">
@@ -210,7 +210,7 @@
                     [1, "공공조달의 이해", "7장", "emerald", "account_balance"],
                     [2, "공공조달 계획분석", "6장", "blue", "analytics"],
                     [3, "공공계약관리", "6장", "violet", "handshake"],
-                    [4, "공공조달 관리실무", "8장", "rose", "manage_accounts"]
+                    [4, "공공조달 관리실무", "9장", "rose", "manage_accounts"]
                   ].each do |id, title, chapters, color, icon| %>
                     <a href="<%= exam_subject_path(id) %>" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-50 transition-colors">
                       <div class="w-7 h-7 bg-<%= color %>-600 rounded-md flex items-center justify-center flex-shrink-0">
@@ -474,7 +474,7 @@
           <div>
             <h3 class="font-semibold mb-4">커리큘럼</h3>
             <ul class="space-y-2 text-sm">
-              <li><a href="<%= exam_subjects_path %>" class="text-slate-400 hover:text-white transition-colors">전체 커리큘럼 (27장)</a></li>
+              <li><a href="<%= exam_subjects_path %>" class="text-slate-400 hover:text-white transition-colors">전체 커리큘럼 (28장)</a></li>
               <li><a href="<%= exam_subject_path(1) %>" class="text-slate-400 hover:text-white transition-colors">1권 공공조달의 이해</a></li>
               <li><a href="<%= exam_subject_path(2) %>" class="text-slate-400 hover:text-white transition-colors">2권 공공조달 계획분석</a></li>
               <li><a href="<%= exam_subject_path(3) %>" class="text-slate-400 hover:text-white transition-colors">3권 공공계약관리</a></li>
@@ -502,6 +502,7 @@
           </div>
         </div>
         <div class="border-t border-slate-800 mt-8 pt-6">
+          <p class="text-slate-400 text-xs text-center mb-2 max-w-3xl mx-auto leading-relaxed">본 모의고사·해설은 표준교재 기반 자체 제작 학습자료로 공식 기출이 아니며, 시험 일정·기준은 공식 공고 전 변동될 수 있습니다.</p>
           <p class="text-slate-500 text-xs text-center">&copy; <%= Time.current.year %> 실무.kr All rights reserved.</p>
         </div>
       </div>

@@ -9,12 +9,12 @@ class Exam::SubjectsController < ApplicationController
 
     set_meta_tags(
       title: "4권 커리큘럼",
-      description: "공공조달관리사 표준교재 4권(27장) 기반 체계적 학습 커리큘럼. 1권 공공조달의 이해, 2권 계획분석, 3권 계약관리, 4권 관리실무.",
+      description: "공공조달관리사 표준교재 4권(28장) 기반 체계적 학습 커리큘럼. 1권 공공조달의 이해, 2권 계획분석, 3권 계약관리, 4권 관리실무.",
       keywords: "공공조달관리사 커리큘럼, 공공조달관리사 교재, 공공조달관리사 공부",
       canonical: "https://exam.silmu.kr/subjects",
       og: {
         title: "4권 커리큘럼 | 공공조달관리사",
-        description: "공공조달관리사 표준교재 4권(27장) 기반 체계적 학습 커리큘럼.",
+        description: "공공조달관리사 표준교재 4권(28장) 기반 체계적 학습 커리큘럼.",
         image: "https://exam.silmu.kr/icon.png"
       },
       twitter: { card: "summary" }
