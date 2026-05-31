@@ -39,7 +39,7 @@ ExamQuestion.transaction do
       subject_id: q[:subject_id],
       chapter_num: q[:chapter_num],
       question: q[:question],
-      options: q[:options].to_json,
+      options: q[:options], # serialize coder: JSON이 insert_all!에서 1회 인코딩 (.to_json 시 이중인코딩)
       correct: q[:correct],
       explanation: q[:explanation].to_s,
       difficulty: difficulty_map[q[:id]] || "basic",

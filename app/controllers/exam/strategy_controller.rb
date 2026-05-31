@@ -14,9 +14,9 @@ module Exam
           title: "공공조달관리사 합격 전략 · 과목별 학습법 · 출제 유형",
           description: "필기 3과목 핵심 학습법과 출제 유형 분석으로 1회 시험 합격을 준비하세요",
           url: "https://exam.silmu.kr/exam-strategy",
-          image: "https://exam.silmu.kr/icon.png"
+          image: "https://exam.silmu.kr/exam-og.png"
         },
-        twitter: { card: "summary" },
+        twitter: { card: "summary_large_image" },
         canonical: "https://exam.silmu.kr/exam-strategy"
       )
     end

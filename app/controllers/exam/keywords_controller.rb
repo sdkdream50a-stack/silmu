@@ -39,8 +39,8 @@ class Exam::KeywordsController < ApplicationController
       description: "공공조달관리사 표준교재 4권 핵심 용어 #{@total_count}개 완전 정리. 용어 정의, 실무 예시 문장, 관련 모의고사 문제까지 한 번에 확인하세요.",
       keywords: "공공조달 용어, 공공조달관리사 키워드, 공공조달 용어집, VFM, 낙찰하한율, 수의계약, 나라장터",
       canonical: "https://exam.silmu.kr/keywords",
-      og: { image: "https://exam.silmu.kr/icon.png" },
-      twitter: { card: "summary" }
+      og: { image: "https://exam.silmu.kr/exam-og.png" },
+      twitter: { card: "summary_large_image" }
     )
   end
 end

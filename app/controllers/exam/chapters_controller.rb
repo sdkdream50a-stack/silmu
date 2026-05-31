@@ -31,9 +31,9 @@ class Exam::ChaptersController < ApplicationController
       og: {
         title: "#{@subject[:number]} 제#{@chapter[:number]}장: #{@chapter[:title]} | 공공조달관리사",
         description: "공공조달관리사 #{@subject[:number]} #{@subject[:title]} — 제#{@chapter[:number]}장 #{@chapter[:title]}. 학습목표·핵심키워드·시험 출제 포인트 완벽 정리.",
-        image: "https://exam.silmu.kr/icon.png"
+        image: "https://exam.silmu.kr/exam-og.png"
       },
-      twitter: { card: "summary" }
+      twitter: { card: "summary_large_image" }
     )
   end
 end

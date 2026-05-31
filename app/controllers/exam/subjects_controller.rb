@@ -15,9 +15,9 @@ class Exam::SubjectsController < ApplicationController
       og: {
         title: "4권 커리큘럼 | 공공조달관리사",
         description: "공공조달관리사 표준교재 4권(28장) 기반 체계적 학습 커리큘럼.",
-        image: "https://exam.silmu.kr/icon.png"
+        image: "https://exam.silmu.kr/exam-og.png"
       },
-      twitter: { card: "summary" }
+      twitter: { card: "summary_large_image" }
     )
   end
 
@@ -40,9 +40,9 @@ class Exam::SubjectsController < ApplicationController
       og: {
         title: "#{@subject[:number]}: #{@subject[:title]} | 공공조달관리사",
         description: "공공조달관리사 #{@subject[:number]} #{@subject[:title]}(#{@subject[:subtitle]}) — #{@subject[:total_chapters]}개 챕터 학습목표·핵심키워드·시험 포인트 정리.",
-        image: "https://exam.silmu.kr/icon.png"
+        image: "https://exam.silmu.kr/exam-og.png"
       },
-      twitter: { card: "summary" }
+      twitter: { card: "summary_large_image" }
     )
   end
 end

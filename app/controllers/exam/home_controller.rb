@@ -15,13 +15,13 @@ class Exam::HomeController < ApplicationController
         description: "2026년 신설 공공조달관리사 국가기술자격시험을 체계적으로 준비하세요. 표준교재 4권 28장 전 범위 핵심 내용 정리, 현행 법령 조문 해설, 100건 감사사례 분석, 68개 법령 가이드를 무료 제공합니다. 공무원·공공기관 종사자를 위한 기출 유형 분석과 암기법을 한 곳에서 완성하세요.",
         url: "https://exam.silmu.kr",
         type: "website",
-        image: "https://exam.silmu.kr/icon.png"
+        image: "https://exam.silmu.kr/exam-og.png"
       },
       twitter: {
-        card: "summary",
+        card: "summary_large_image",
         title: "공공조달관리사 시험 대비 | 실무.kr",
         description: "2026년 신설 공공조달관리사 국가기술자격시험을 체계적으로 준비하세요. 표준교재 4권 28장 전 범위 핵심 내용 정리, 현행 법령 조문 해설, 100건 감사사례 분석, 68개 법령 가이드를 무료 제공합니다. 공무원·공공기관 종사자를 위한 기출 유형 분석과 암기법을 한 곳에서 완성하세요.",
-        image: "https://exam.silmu.kr/icon.png"
+        image: "https://exam.silmu.kr/exam-og.png"
       }
     )
   end
