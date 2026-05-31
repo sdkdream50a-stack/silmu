@@ -441,6 +441,9 @@ export default class extends Controller {
     const timeUsedMin = Math.floor(timeUsed / 60)
     const timeUsedSec = timeUsed % 60
 
+    // GA 학습행동 이벤트 — 실전 시험 제출 완료
+    if (typeof window.gtag === 'function') window.gtag('event', 'simulation_finish', { score: score, total: total, time_spent: timeUsed })
+
     // 과목별 분석 (3과목 기준: subject_id 1→1과목, 2→2과목, 3·4→3과목)
     const examSubjectMap = { 1: 1, 2: 2, 3: 3, 4: 3 }
     const examSubjectStats = {}

@@ -8,7 +8,7 @@ class Exam::SubjectsController < ApplicationController
     expires_in 1.hour, public: true, stale_while_revalidate: 1.day
 
     set_meta_tags(
-      title: "4권 커리큘럼",
+      title: "공공조달관리사 4권 커리큘럼",
       description: "공공조달관리사 표준교재 4권(28장) 기반 체계적 학습 커리큘럼. 1권 공공조달의 이해, 2권 계획분석, 3권 계약관리, 4권 관리실무.",
       keywords: "공공조달관리사 커리큘럼, 공공조달관리사 교재, 공공조달관리사 공부",
       canonical: "https://exam.silmu.kr/subjects",
@@ -33,7 +33,7 @@ class Exam::SubjectsController < ApplicationController
     expires_in 1.hour, public: true, stale_while_revalidate: 1.day
 
     set_meta_tags(
-      title: "#{@subject[:number]}: #{@subject[:title]}",
+      title: "공공조달관리사 #{@subject[:number]}: #{@subject[:title]}",
       description: "공공조달관리사 #{@subject[:number]} #{@subject[:title]}(#{@subject[:subtitle]}) — #{@subject[:total_chapters]}개 챕터 학습목표·핵심키워드·시험 포인트 정리.",
       keywords: "공공조달관리사 #{@subject[:title]}, #{@subject[:chapters].map { |c| c[:title] }.join(', ')}",
       canonical: "https://exam.silmu.kr/subjects/#{@subject[:id]}",

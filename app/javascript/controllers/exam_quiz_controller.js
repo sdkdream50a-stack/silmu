@@ -535,6 +535,8 @@ export default class extends Controller {
       this._updateNavStreakBadge()
       // #6 서버 동기화 (quiz_completed=true, 정답수·전체수 전송)
       this.syncToServer(true, score, total)
+      // GA 학습행동 이벤트 — 퀴즈 완료
+      if (typeof window.gtag === 'function') window.gtag('event', 'quiz_complete', { subject_id: subjectId, chapter_num: chapterNum, score: score, total: total })
     }
 
     // 등급 결정

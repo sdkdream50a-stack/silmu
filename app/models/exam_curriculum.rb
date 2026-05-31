@@ -1,5 +1,5 @@
 # 공공조달관리사 표준교재 4권 기반 커리큘럼 데이터
-# 한국조달연구원 공공조달관리사 표준교재 (2026.01 기준)
+# 조달청·공공조달역량개발원 공공조달관리사 표준교재 (2026.01 기준)
 # 각 권 데이터는 app/models/exam_curriculum/subject{1..4}.rb에 분리 보관
 module ExamCurriculum
   SUBJECTS = [

@@ -287,6 +287,8 @@ export default class extends Controller {
     saveStreakToday()
     // nav 배지 즉시 갱신
     this._updateNavStreakBadge()
+    // GA 학습행동 이벤트 — 플래시카드 학습 세션 완주
+    if (typeof window.gtag === 'function') window.gtag('event', 'flashcard_study', { learned: this.learned, total: this.total, typing_mode: this.typingMode })
 
     if (this.hasCardTarget) {
       this.cardTarget.closest('[data-card-area]')?.classList.add("hidden")

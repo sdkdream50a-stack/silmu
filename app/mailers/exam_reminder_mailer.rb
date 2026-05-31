@@ -17,7 +17,7 @@ class ExamReminderMailer < ApplicationMailer
   private
 
   def days_until_exam
-    target = Date.new(2026, 10, 17)
+    target = Date.new(2026, 10, 3)
     [ (target - Time.zone.today).to_i, 0 ].max
   end
 end
