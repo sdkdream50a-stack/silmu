@@ -5,11 +5,13 @@ import { saveQuizScore, saveWrongAnswer, removeWrongAnswer } from "../exam_progr
 import { escapeHtml } from "../exam_utils"
 
 const EXAM_DURATION = 120 * 60  // 120분 (초 단위)
+const SIM_STATE_KEY = "exam_sim_state"  // 답안·타이머 영속화 키
+const PERSIST_THROTTLE = 5  // 타이머 tick 5초마다 저장 (과도한 쓰기 방지)
 
 export default class extends Controller {
   static targets = [
     "startArea", "examArea", "resultArea",
-    "timer", "timerBar", "currentNum", "totalNum", "progressBar",
+    "timer", "timerBar", "timerLive", "currentNum", "totalNum", "progressBar",
     "questionBadge", "questionText", "optionsArea",
     "prevBtn", "nextBtn", "submitBtn",
     "navGrid", "navGridMobile"
@@ -29,20 +31,87 @@ export default class extends Controller {
     this.answers = new Array(this.questions.length).fill(null)  // null = 미답
     this.timerInterval = null
     this.remainingSeconds = EXAM_DURATION
+    this._inProgress = false  // 시험 진행 중(미제출) 여부
+    this._tickSincePersist = 0
     this.totalNumTarget.textContent = this.questions.length
     this.renderNavGrid()
+
+    // beforeunload 가드 — 진행 중 이탈 경고
+    this._beforeUnload = (e) => {
+      if (this._isInProgress()) {
+        e.preventDefault()
+        e.returnValue = ""
+      }
+    }
+    window.addEventListener("beforeunload", this._beforeUnload)
+
+    // 키보드 내비게이션 (1~4 보기 선택 / ←→ 이동 / Enter 제출)
+    this._keydown = (e) => this._handleKeydown(e)
+    document.addEventListener("keydown", this._keydown)
+
+    // 저장된 상태 복원 제안
+    this._maybeRestore()
   }
 
   disconnect() {
     this.stopTimer()
+    if (this._beforeUnload) window.removeEventListener("beforeunload", this._beforeUnload)
+    if (this._keydown) document.removeEventListener("keydown", this._keydown)
+  }
+
+  // 진행 중(미제출) & 답안 일부 존재 또는 시간 일부 경과 → 이탈 가드 대상
+  _isInProgress() {
+    if (!this._inProgress) return false
+    const answered = this.answers.some(a => a !== null)
+    const timeElapsed = this.remainingSeconds < EXAM_DURATION
+    return answered || timeElapsed
+  }
+
+  // ── 상태 영속화 ──
+  _persist() {
+    try {
+      localStorage.setItem(SIM_STATE_KEY, JSON.stringify({
+        answers: this.answers,
+        remainingSeconds: this.remainingSeconds,
+        current: this.currentValue,
+        total: this.questions.length,
+        savedAt: Date.now()
+      }))
+    } catch (e) { /* 스토리지 접근 실패 시 무시 */ }
+  }
+
+  _clearPersisted() {
+    try { localStorage.removeItem(SIM_STATE_KEY) } catch (e) { /* 무시 */ }
+  }
+
+  // 저장된 상태가 유효하면 이어하기 제안 → 복원 또는 새로 시작
+  _maybeRestore() {
+    let saved = null
+    try {
+      saved = JSON.parse(localStorage.getItem(SIM_STATE_KEY) || "null")
+    } catch (e) { saved = null }
+
+    if (!saved || !Array.isArray(saved.answers)) return
+    if (saved.total !== this.questions.length) return
+    if (!(saved.remainingSeconds > 0)) { this._clearPersisted(); return }
+
+    if (window.confirm("진행 중이던 시험이 있습니다. 이어서 풀이하시겠습니까?\n(취소 시 새로 시작합니다)")) {
+      this.answers = saved.answers.slice(0, this.questions.length)
+      while (this.answers.length < this.questions.length) this.answers.push(null)
+      this.remainingSeconds = saved.remainingSeconds
+      this._resumeFrom = Math.min(Math.max(saved.current | 0, 0), this.questions.length - 1)
+    } else {
+      this._clearPersisted()
+    }
   }
 
   // ── 시험 시작 ──
   startExam() {
     this.startAreaTarget.classList.add("hidden")
     this.examAreaTarget.classList.remove("hidden")
+    this._inProgress = true
     this.startTimer()
-    this.showQuestion(0)
+    this.showQuestion(this._resumeFrom ?? 0)
   }
 
   // ── 타이머 ──
@@ -51,6 +120,11 @@ export default class extends Controller {
     this.timerInterval = setInterval(() => {
       this.remainingSeconds--
       this.updateTimerDisplay()
+      // 5초마다 throttle 저장 (과도한 쓰기 방지)
+      if (++this._tickSincePersist >= PERSIST_THROTTLE) {
+        this._tickSincePersist = 0
+        this._persist()
+      }
       if (this.remainingSeconds <= 0) {
         this.stopTimer()
         this.submitExam(true)  // 시간 초과 자동 제출
@@ -80,6 +154,25 @@ export default class extends Controller {
       this.timerTarget.classList.remove("text-white")
       this.timerBarTarget.classList.add("bg-red-400")
       this.timerBarTarget.classList.remove("bg-yellow-300")
+    }
+
+    // 남은시간 임계 음성 안내 (10분·5분·1분, 각 1회)
+    this._announceTimeThreshold()
+  }
+
+  _announceTimeThreshold() {
+    if (!this.hasTimerLiveTarget) return
+    const thresholds = [
+      { sec: 600, msg: "10분 남았습니다." },
+      { sec: 300, msg: "5분 남았습니다." },
+      { sec: 60, msg: "1분 남았습니다." }
+    ]
+    this._announcedThresholds = this._announcedThresholds || new Set()
+    for (const t of thresholds) {
+      if (this.remainingSeconds === t.sec && !this._announcedThresholds.has(t.sec)) {
+        this._announcedThresholds.add(t.sec)
+        this.timerLiveTarget.textContent = t.msg
+      }
     }
   }
 
@@ -133,9 +226,44 @@ export default class extends Controller {
   // ── 답 선택 ──
   selectAnswer(event) {
     const selected = parseInt(event.currentTarget.dataset.index)
+    this._selectByIndex(selected)
+  }
+
+  // ── 키보드 내비게이션 (a11y) ──
+  _handleKeydown(e) {
+    // 시험 진행 중에만 동작
+    if (!this._inProgress) return
+    // 입력 포커스 시 무시
+    const tag = (e.target.tagName || "").toLowerCase()
+    if (tag === "textarea" || tag === "input" || e.target.isContentEditable) return
+    if (e.metaKey || e.ctrlKey || e.altKey) return
+
+    const q = this.questions[this.currentValue]
+    if (e.key >= "1" && e.key <= "4") {
+      const idx = parseInt(e.key, 10) - 1
+      if (q && idx < q.options.length) {
+        e.preventDefault()
+        this._selectByIndex(idx)
+      }
+    } else if (e.key === "ArrowLeft") {
+      e.preventDefault()
+      this.prevQuestion()
+    } else if (e.key === "ArrowRight") {
+      e.preventDefault()
+      this.nextQuestion()
+    } else if (e.key === "Enter") {
+      // 마지막 문항일 때만 제출 트리거
+      if (this.currentValue === this.questions.length - 1) {
+        e.preventDefault()
+        this.submitExam(false)
+      }
+    }
+  }
+
+  // 보기 인덱스로 답 선택 (키보드·클릭 공통 경로)
+  _selectByIndex(selected) {
     this.answers[this.currentValue] = selected
 
-    // 선택 UI 업데이트
     this.optionsAreaTarget.querySelectorAll(".sim-option").forEach((btn, i) => {
       btn.classList.remove(
         "border-2", "border-[#004ac6]", "bg-[#dbe1ff]/40", "text-[#004ac6]", "font-semibold",
@@ -148,8 +276,8 @@ export default class extends Controller {
       }
     })
 
-    // 네비게이션 그리드 업데이트
     this.updateNavGrid()
+    this._persist()
   }
 
   // ── 이전/다음 이동 ──
@@ -268,6 +396,9 @@ export default class extends Controller {
 
   _doSubmit(timeUp = false) {
     this.stopTimer()
+    this._inProgress = false
+    this._clearPersisted()  // 제출 완료 → 저장 상태 삭제 (재시작 깨끗하게)
+    if (this._beforeUnload) window.removeEventListener("beforeunload", this._beforeUnload)
     this.showResults(timeUp)
   }
 

@@ -65,13 +65,16 @@
       <!-- 글래스모피즘 타이머 바 -->
       <div class="bg-white/90 backdrop-blur-md rounded-2xl shadow-[0_2px_16px_rgba(13,28,47,0.06)] px-5 py-3 mb-6 flex items-center gap-4">
         <!-- 타이머 -->
-        <div class="flex items-center gap-2 flex-shrink-0">
+        <div class="flex items-center gap-2 flex-shrink-0" role="timer" aria-label="남은 시험 시간">
           <span class="material-symbols-outlined text-[#004ac6] text-lg">timer</span>
           <span data-exam-simulation-target="timer"
                 class="font-mono text-xl font-extrabold text-[#004ac6] tabular-nums tracking-tight">
             120:00
           </span>
         </div>
+        <!-- 남은시간 임계 음성 안내 (시각적 숨김) -->
+        <span data-exam-simulation-target="timerLive"
+              class="sr-only" aria-live="assertive" aria-atomic="true"></span>
         <!-- 타이머 바 -->
         <div class="flex-1 bg-[#e6eeff] rounded-full h-2">
           <div data-exam-simulation-target="timerBar"
@@ -200,7 +203,7 @@
     </div>
 
     <!-- 결과 화면 (hidden) -->
-    <div data-exam-simulation-target="resultArea" class="hidden">
+    <div data-exam-simulation-target="resultArea" class="hidden" aria-live="polite">
     </div>
 
   </div>

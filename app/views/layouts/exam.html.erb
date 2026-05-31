@@ -54,6 +54,19 @@
       }
     </style>
 
+    <%# 아이콘 a11y — 머티리얼 심볼 텍스트(예: "menu_book") 스크린리더 낭독 차단 (application.html.erb 패턴 포팅) %>
+    <script>
+      (function(){
+        function applyIconAriaHidden(){
+          document.querySelectorAll('.material-symbols-outlined:not([aria-hidden]):not([aria-label])')
+            .forEach(function(el){ el.setAttribute('aria-hidden','true'); });
+        }
+        document.addEventListener('DOMContentLoaded', applyIconAriaHidden);
+        document.addEventListener('turbo:load', applyIconAriaHidden);
+        document.addEventListener('turbo:render', applyIconAriaHidden);
+      })();
+    </script>
+
     <% exam_ga_id = ENV['EXAM_GA_MEASUREMENT_ID'].presence || ENV['GA_MEASUREMENT_ID'] %>
     <% if Rails.env.production? && exam_ga_id.present? && !current_user&.admin? %>
       <script>
@@ -415,7 +428,7 @@
           <span class="text-[10px] font-medium">홈</span>
         </a>
         <!-- 학습 -->
-        <a href="<%= exam_keywords_path %>"
+        <a href="<%= exam_subjects_path %>"
            aria-label="학습"
            <%= 'aria-current="page"'.html_safe if tab_study %>
            class="flex flex-col items-center justify-center gap-0.5 transition-colors <%= tab_study ? 'text-blue-600' : 'text-slate-400 hover:text-slate-600' %>">

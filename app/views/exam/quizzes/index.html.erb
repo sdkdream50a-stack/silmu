@@ -81,7 +81,12 @@
             </div>
             <div class="relative z-10">
               <h3 class="text-2xl font-extrabold text-white leading-tight mb-1"><%= subject[:title] %></h3>
-              <p class="text-white/70 text-sm"><%= q_count %>문제 · 약 <%= (q_count * 1.5).ceil %>분</p>
+              <% est_min = (q_count * 1.5).ceil %>
+              <% if est_min > 120 %>
+                <p class="text-white/70 text-sm">총 <%= q_count %>문제 · 이어풀기 가능</p>
+              <% else %>
+                <p class="text-white/70 text-sm"><%= q_count %>문제 · 약 <%= est_min %>분</p>
+              <% end %>
             </div>
           </a>
         <% end %>
