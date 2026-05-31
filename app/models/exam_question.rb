@@ -22,13 +22,15 @@ class ExamQuestion < ApplicationRecord
   end
 
   def to_quiz_hash
+    # 보기는 id 시드 결정적 셔플로 재배열 (모듈 서빙 경로와 동일 규칙 → 북마크/오답 정합)
+    shuffled_options, shuffled_correct = ExamQuestions.shuffled_options(id, options, correct)
     {
       id: id,
       subject_id: subject_id,
       chapter_num: chapter_num,
       question: question,
-      options: options,
-      correct: correct,
+      options: shuffled_options,
+      correct: shuffled_correct,
       explanation: explanation,
       difficulty: difficulty
     }

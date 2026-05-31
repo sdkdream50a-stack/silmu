@@ -60,7 +60,7 @@ module ExamQuestions
         "SRPP는 사회적 가치를 고려하는 조달이다"
       ],
       correct: 2,
-      explanation: "SRPP(Socially Responsible Public Procurement)는 경제성 극대화가 목표가 아닌, 사회적 가치(고용·인권·환경)를 고려하는 사회적 책임조달입니다. ③의 설명이 틀렸습니다."
+      explanation: "SRPP(Socially Responsible Public Procurement)는 경제성 극대화가 목표가 아닌, 사회적 가치(고용·인권·환경)를 고려하는 사회적 책임조달입니다. 'SRPP는 경제성 극대화를 목표로 한다'는 설명이 틀렸습니다."
     },
     {
       id: 7, subject_id: 1, chapter_num: 1,
@@ -12148,13 +12148,23 @@ module ExamQuestions
     end
   end
 
+  # 보기 순서 결정적 셔플 (정답 위치 편중 단서 제거)
+  # 같은 문제는 id 시드로 항상 동일하게 셔플 → 북마크/오답/해설 경로 간 정합 유지.
+  # 반환: [재배열된 options, 새 correct 인덱스]
+  def self.shuffled_options(id, options, correct)
+    perm = (0...options.size).to_a.shuffle(random: Random.new(id))
+    [ perm.map { |i| options[i] }, perm.index(correct) ]
+  end
+
   # ── 사전 슬라이싱된 문제 데이터 (뷰 전송용) ──────────────────
   # 매 요청마다 .map { |q| q.slice(...) } 반복 제거 (~400문제 * 7필드)
   QUIZ_FIELDS = %i[id question options correct explanation subject_id chapter_num].freeze
 
   # 전체 문제 슬라이싱 + 난이도 포함 (bookmarks, wrong, show("all") 공용)
+  # 보기는 id 시드 결정적 셔플로 재배열 (정답 위치 ②편중 단서 제거)
   ALL_SLICED_WITH_DIFFICULTY = QUESTIONS.map { |q|
-    q.slice(*QUIZ_FIELDS).merge(difficulty: DIFFICULTY_MAP[q[:id]] || "basic")
+    opts, corr = shuffled_options(q[:id], q[:options], q[:correct])
+    q.slice(*QUIZ_FIELDS).merge(options: opts, correct: corr, difficulty: DIFFICULTY_MAP[q[:id]] || "basic")
   }.freeze
 
   def self.all_sliced_with_difficulty
