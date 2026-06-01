@@ -1,6 +1,19 @@
 require "test_helper"
 
 class LlmsControllerTest < ActionDispatch::IntegrationTest
+  test "llms.txt returns 200 plain text (dynamic summary)" do
+    get llms_url
+    assert_response :success
+    assert_equal "text/plain", response.media_type
+  end
+
+  test "llms.txt summary lists topics and audit case count dynamically" do
+    get llms_url
+    assert_includes response.body, "## 핵심 법령 가이드 (Topics"
+    assert_includes response.body, "https://silmu.kr/topics/"
+    assert_match(/감사사례 \d+건/, response.body)
+  end
+
   test "llms-full.txt returns 200 plain text" do
     get llms_full_url
     assert_response :success
