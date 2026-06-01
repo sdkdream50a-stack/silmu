@@ -50,7 +50,9 @@ module TopicConfig
     # 2026-05-20 추가 (Phase 2 #1 — 개산급 콘텐츠 갭)
     "estimated-payment"       => [ :travel_calculator, :contract_documents ],
     # 2026-05-20 추가 (Phase 2 #2 — 펜스 설치 콘텐츠 갭)
-    "fence-installation"      => [ :contract_method, :contract_documents, :estimated_price ]
+    "fence-installation"      => [ :contract_method, :contract_documents, :estimated_price ],
+    # 2026-06-01 추가 (SearchLog 콘텐츠 갭 — 강사수당)
+    "instructor-allowance"    => [ :travel_calculator ]
   }.freeze
 
   # 플로차트가 있는 토픽 목록
@@ -68,7 +70,7 @@ module TopicConfig
     goods-vs-service-contract bid-participation-restriction additional-contract-limit
     penalty-reduction-procedure contract-period-extension e-bidding-error-faq
     contract-amount-adjustment completion-payment-checklist
-    estimated-payment fence-installation
+    estimated-payment fence-installation instructor-allowance
   ].freeze
 
   # 토픽별 개별 아이콘 매핑
@@ -118,7 +120,9 @@ module TopicConfig
     # 2026-05-20 추가 (Phase 2 #1 — 개산급)
     "estimated-payment"            => "account_balance_wallet",
     # 2026-05-20 추가 (Phase 2 #2 — 펜스 설치)
-    "fence-installation"           => "fence"
+    "fence-installation"           => "fence",
+    # 2026-06-01 추가 (SearchLog 갭 — 강사수당)
+    "instructor-allowance"         => "co_present"
   }.freeze
 
   CATEGORY_CONFIG = {
