@@ -295,22 +295,25 @@
 <section class="bg-white border-b border-gray-100 sticky top-16 z-40 shadow-soft">
   <div class="container-wide">
     <nav class="flex gap-1 overflow-x-auto py-3 -mx-4 px-4 scrollbar-hide" id="topic-tabs">
+      <%# 기본 활성 탭 결정: 흐름도가 있으면 흐름도, 없으면 법령(토픽 고유 답)을 우선.
+          fuzzy 매칭된 실무절차(related_guide)는 기본 탭에서 제외 — intent mismatch 방지 %>
+      <% flowchart_default = (@has_flowchart || @topic.flowchart_mermaid.present?) && @related_guide.blank? %>
       <%# 실무 그룹: 실무흐름도 + 실무주의 + 실무절차 → "실무 가이드" %>
       <button onclick="showTab('flowchart')" data-tab="flowchart"
-              class="tab-btn px-3 py-2 <%= (@has_flowchart && @related_guide.blank?) ? 'bg-editorial-navy text-white shadow-md font-semibold' : 'bg-surface-100 text-slate-600 hover:bg-surface-200 font-medium' %> rounded-lg text-sm whitespace-nowrap flex items-center gap-1.5 transition-all duration-200">
+              class="tab-btn px-3 py-2 <%= flowchart_default ? 'bg-editorial-navy text-white shadow-md font-semibold' : 'bg-surface-100 text-slate-600 hover:bg-surface-200 font-medium' %> rounded-lg text-sm whitespace-nowrap flex items-center gap-1.5 transition-all duration-200">
         <span class="material-symbols-outlined" style="font-size:18px">account_tree</span>
         실무흐름도
       </button>
       <% if @related_guide.present? %>
       <button onclick="showTab('procedure')" data-tab="procedure"
-              class="tab-btn px-3 py-2 bg-emerald-600 text-white shadow-md font-semibold rounded-lg text-sm whitespace-nowrap flex items-center gap-1.5 transition-all duration-200">
+              class="tab-btn px-3 py-2 bg-surface-100 text-slate-600 hover:bg-surface-200 font-medium rounded-lg text-sm whitespace-nowrap flex items-center gap-1.5 transition-all duration-200">
         <span class="material-symbols-outlined" style="font-size:18px">checklist</span>
         실무절차
       </button>
       <% end %>
       <%# 법령 그룹 %>
       <button onclick="showTab('law')" data-tab="law"
-              class="tab-btn px-3 py-2 <%= (@has_flowchart || @related_guide.present?) ? 'bg-surface-100 text-slate-600 hover:bg-surface-200 font-medium' : 'bg-editorial-navy text-white shadow-md font-semibold' %> rounded-lg text-sm whitespace-nowrap flex items-center gap-1.5 transition-all duration-200">
+              class="tab-btn px-3 py-2 <%= flowchart_default ? 'bg-surface-100 text-slate-600 hover:bg-surface-200 font-medium' : 'bg-editorial-navy text-white shadow-md font-semibold' %> rounded-lg text-sm whitespace-nowrap flex items-center gap-1.5 transition-all duration-200">
         <span class="material-symbols-outlined" style="font-size:18px">balance</span>
         법령 비교
       </button>
@@ -396,7 +399,7 @@ document.addEventListener('click', function(e) {
       <!-- 메인 콘텐츠 영역 -->
       <div class="flex-1 min-w-0">
         <!-- 실무흐름도 -->
-        <div class="tab-panel <%= 'active' if (@has_flowchart || @topic.flowchart_mermaid.present?) && @related_guide.blank? %>" data-tab="flowchart">
+        <div class="tab-panel <%= 'active' if flowchart_default %>" data-tab="flowchart">
           <% if @topic.flowchart_mermaid.present? %>
             <%# Mermaid.js 기반 다이어그램 (신규 방식) %>
             <div class="card p-6" data-controller="mermaid">
@@ -415,7 +418,7 @@ document.addEventListener('click', function(e) {
 
         <!-- 법령 3단 비교 -->
         <% cache [@topic, "law_tabs_v2", @topic.updated_at.to_i] do %>
-        <div class="tab-panel <%= 'active' unless @has_flowchart || @related_guide.present? %>" data-tab="law">
+        <div class="tab-panel <%= 'active' unless flowchart_default %>" data-tab="law">
           <% if @topic.has_law_content? %>
             <!-- 캐스케이드 카드 레이아웃 -->
             <div class="law-cascade-container overflow-x-auto">
@@ -657,7 +660,7 @@ document.addEventListener('click', function(e) {
 
         <!-- 실무절차 (연결된 Guide의 Step 섹션 렌더링) -->
         <% if @related_guide.present? && @related_guide.sections.present? %>
-        <div class="tab-panel active" data-tab="procedure">
+        <div class="tab-panel" data-tab="procedure">
           <div class="card p-6 lg:p-8">
             <!-- 가이드 헤더 -->
             <div class="flex items-start justify-between gap-4 mb-8 pb-6 border-b border-slate-100">

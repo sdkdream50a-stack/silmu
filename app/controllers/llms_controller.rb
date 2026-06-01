@@ -41,7 +41,7 @@ class LlmsController < ApplicationController
 
     cache_key = [
       "llms-summary",
-      "v1",
+      "v2", # 하위 토픽 포함(parent_id 필터 제거) — 캐시 버전 bump
       Topic.published.maximum(:updated_at)&.to_i,
       Guide.published.maximum(:updated_at)&.to_i,
       AuditCase.published.maximum(:updated_at)&.to_i
@@ -60,13 +60,13 @@ class LlmsController < ApplicationController
     # Topic·AuditCase의 최신 updated_at을 키에 포함해 콘텐츠 갱신 시 자동 무효화
     cache_key = [
       "llms-full",
-      "v2", # AEO disclaimer 포함 — 캐시 버전 bump
+      "v3", # 하위 토픽 포함(parent_id 필터 제거) — 캐시 버전 bump
       Topic.published.maximum(:updated_at)&.to_i,
       AuditCase.published.maximum(:updated_at)&.to_i
     ].join("/")
 
     content = Rails.cache.fetch(cache_key, expires_in: 6.hours) do
-      @topics = Topic.published.where(parent_id: nil).order(:category, :name).limit(TOPIC_LIMIT)
+      @topics = Topic.published.order(:category, :name).limit(TOPIC_LIMIT)
       @audit_cases = AuditCase.published.order(updated_at: :desc).limit(AUDIT_LIMIT)
       build_content
     end
@@ -89,7 +89,7 @@ class LlmsController < ApplicationController
   }.freeze
 
   def build_summary
-    topics = Topic.published.where(parent_id: nil).order(:name).limit(TOPIC_LIMIT).to_a
+    topics = Topic.published.order(:name).limit(TOPIC_LIMIT).to_a
     standalone_guides = Guide.published.where(series: nil).ordered.to_a
     topic_count = topics.size
     audit_count = AuditCase.published.count
