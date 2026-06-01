@@ -11,22 +11,9 @@
 
 puts "exam_questions 시딩 시작..."
 
-# 챕터별 ID 정렬 기준 난이도 계산 (ExamQuestions::DIFFICULTY_MAP 로직 복제)
-# 챕터 내 하위 60% = "basic", 상위 40% = "advanced"
-chapter_ids = {}
-ExamQuestions::QUESTIONS.each do |q|
-  key = "#{q[:subject_id]}-#{q[:chapter_num]}"
-  (chapter_ids[key] ||= []) << q[:id]
-end
-chapter_ids.each_value(&:sort!)
-
-difficulty_map = {}
-chapter_ids.each do |_key, ids|
-  threshold = (ids.size * 0.6).ceil
-  ids.each_with_index do |id, idx|
-    difficulty_map[id] = idx < threshold ? "basic" : "advanced"
-  end
-end
+# 난이도는 ExamQuestions::DIFFICULTY_MAP(문항 내용 기반 휴리스틱)을 그대로 사용
+# — 종전 ID 위치 기반 로직 복제본은 모듈과 어긋나므로 폐기
+difficulty_map = ExamQuestions::DIFFICULTY_MAP
 
 ExamQuestion.transaction do
   # 멱등성: 재실행 시 기존 데이터 초기화 후 재삽입
