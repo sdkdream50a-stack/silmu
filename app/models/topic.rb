@@ -50,12 +50,17 @@ class Topic < ApplicationRecord
   before_update :cascade_slug_change, if: :slug_changed?
 
   # 통합 검색: 복수 토픽 반환 (이름·키워드·요약 ILIKE, 없으면 pg_search)
+  # 띄어쓰기 정규화: "숙박 확인서"↔"숙박확인서" 양방향 매칭 (공백 제거 비교, 순수 가산)
   def self.search_multiple(query, limit: 4)
     return none if query.blank?
     sanitized = sanitize_sql_like(query)
+    despaced  = sanitize_sql_like(query.gsub(/\s+/, ""))
     matches = published
-                .where("name ILIKE ? OR keywords ILIKE ? OR summary ILIKE ?",
-                       "%#{sanitized}%", "%#{sanitized}%", "%#{sanitized}%")
+                .where(
+                  "name ILIKE :q OR keywords ILIKE :q OR summary ILIKE :q OR " \
+                  "REPLACE(name, ' ', '') ILIKE :dq OR REPLACE(keywords, ' ', '') ILIKE :dq OR REPLACE(summary, ' ', '') ILIKE :dq",
+                  q: "%#{sanitized}%", dq: "%#{despaced}%"
+                )
                 .order(view_count: :desc)
                 .limit(limit)
     return matches if matches.any?

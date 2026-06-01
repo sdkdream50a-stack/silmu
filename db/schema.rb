@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_22_000000) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_01_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -259,6 +259,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_22_000000) do
 
   create_table "search_logs", force: :cascade do |t|
     t.integer "audit_case_count", default: 0, null: false
+    t.datetime "clicked_at"
+    t.integer "clicked_result_rank"
+    t.string "clicked_result_type"
     t.datetime "created_at", null: false
     t.integer "guide_count", default: 0, null: false
     t.string "ip_hash"

@@ -56,13 +56,26 @@ class ChatbotController < ApplicationController
       # 4. 서식 템플릿 (메모리 내 검색)
       @templates = search_templates(@query)
 
-      log_search(@query, @topics, @audit_cases, @guides, @templates)
+      @search_log = log_search(@query, @topics, @audit_cases, @guides, @templates)
     end
 
     respond_to do |format|
       format.html
       format.turbo_stream
     end
+  end
+
+  # 검색 결과 클릭 계측 — 첫 클릭만 기록 (CTR/만족도 측정)
+  def click
+    log = SearchLog.find_by(id: params[:log_id])
+    if log && log.clicked_at.nil?
+      log.update_columns(
+        clicked_at: Time.current,
+        clicked_result_type: params[:result_type].to_s.first(20),
+        clicked_result_rank: params[:rank].to_i
+      )
+    end
+    head :no_content
   end
 
   private
@@ -83,6 +96,7 @@ class ChatbotController < ApplicationController
     )
   rescue => e
     Rails.logger.warn "[SearchLog] failed: #{e.class}: #{e.message}"
+    nil
   end
 
   def search_templates(query)

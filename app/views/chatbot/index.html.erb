@@ -170,6 +170,32 @@
 </div>
 
 <script>
+// 검색 결과 클릭 계측 — 만족도(CTR) DB 기록. document 위임 (turbo-frame 결과에도 적용)
+if (!window.__silmuSearchClickBound) {
+  window.__silmuSearchClickBound = true;
+  document.addEventListener('click', function(e) {
+    const link = e.target.closest('[data-search-result]');
+    if (!link) return;
+    const container = link.closest('[data-search-log-id]');
+    const logId = container && container.getAttribute('data-search-log-id');
+    if (!logId) return;
+    const resultType = link.getAttribute('data-search-result');
+    const rank = link.getAttribute('data-search-rank');
+    const token = document.querySelector('meta[name="csrf-token"]');
+    try {
+      fetch('/silmu-search/click', {
+        method: 'POST',
+        keepalive: true,
+        headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': token ? token.content : '' },
+        body: JSON.stringify({ log_id: logId, result_type: resultType, rank: rank })
+      });
+    } catch (_) {}
+    if (typeof gtag === 'function') {
+      gtag('event', 'search_result_click', { result_type: resultType, rank: parseInt(rank || '0', 10) });
+    }
+  });
+}
+
 // /silmu-search/search?q=xxx 직접 접근 시 자동 검색
 document.addEventListener('DOMContentLoaded', function() {
   const urlParams = new URLSearchParams(window.location.search);

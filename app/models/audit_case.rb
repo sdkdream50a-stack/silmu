@@ -18,12 +18,17 @@ class AuditCase < ApplicationRecord
   scope :recent, -> { order(created_at: :desc) }
   scope :repeated, -> { where(repeated_issue: true) }
 
+  # 띄어쓰기 정규화: 공백 제거 비교로 표기 변형 양방향 매칭 (순수 가산)
   def self.search_by_query(query, limit: 3)
     return none if query.blank?
     sanitized = sanitize_sql_like(query)
+    despaced  = sanitize_sql_like(query.gsub(/\s+/, ""))
     published
-      .where("title ILIKE ? OR issue ILIKE ? OR category ILIKE ?",
-             "%#{sanitized}%", "%#{sanitized}%", "%#{sanitized}%")
+      .where(
+        "title ILIKE :q OR issue ILIKE :q OR category ILIKE :q OR " \
+        "REPLACE(title, ' ', '') ILIKE :dq OR REPLACE(issue, ' ', '') ILIKE :dq OR REPLACE(category, ' ', '') ILIKE :dq",
+        q: "%#{sanitized}%", dq: "%#{despaced}%"
+      )
       .order(view_count: :desc)
       .limit(limit)
   end

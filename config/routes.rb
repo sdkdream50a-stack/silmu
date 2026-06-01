@@ -116,6 +116,7 @@ Rails.application.routes.draw do
   get "silmu-search",        to: "chatbot#index",       as: :silmu_search
   get "silmu-search/search", to: "chatbot#search",      as: :silmu_search_search
   get "silmu-search/price",  to: "chatbot#price_guide", as: :silmu_search_price
+  post "silmu-search/click", to: "chatbot#click",       as: :silmu_search_click
 
   # SEO 301 리디렉션 (기존 chatbot URL 보존)
   get "chatbot",        to: redirect("/silmu-search", status: 301)
