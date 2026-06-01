@@ -418,7 +418,7 @@ document.addEventListener('turbo:load', function() {
     html += '<div class="cg-result-section"><div class="cg-result-title"><span class="material-symbols-outlined" style="color:#dc2626;">timer_off</span> 지체상금 계산 내역 <span style="font-size:13px;font-weight:400;color:#818cf8;margin-left:4px;">(지방계약법 시행령 제90조, 시행규칙 제75조)</span></div>';
     html += '<div class="cg-detail-grid">';
     html += '<div class="cg-detail-item"><div class="cg-detail-label">계약금액</div><div class="cg-detail-value">' + cgComma(r.contract_amount) + '원</div></div>';
-    html += '<div class="cg-detail-item"><div class="cg-detail-label">지체상금률 <span style="font-size:11px;color:#818cf8;">(§88)</span></div><div class="cg-detail-value">' + cgEsc(r.rate_str) + '/일</div></div>';
+    html += '<div class="cg-detail-item"><div class="cg-detail-label">지체상금률 <span style="font-size:11px;color:#818cf8;">(§88)</span></div><div class="cg-detail-value">' + cgEsc(r.rate_str) + '<span>/일</span></div></div>';
     html += '<div class="cg-detail-item"><div class="cg-detail-label">1일 지체상금</div><div class="cg-detail-value">' + cgComma(r.daily_penalty) + '원</div></div>';
     html += '<div class="cg-detail-item"><div class="cg-detail-label">지체일수</div><div class="cg-detail-value">' + r.delay_days + '일</div></div>';
     html += '</div>';
