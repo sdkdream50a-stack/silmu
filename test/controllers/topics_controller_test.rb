@@ -49,49 +49,8 @@ class TopicsControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, '"temporalCoverage":"2026-03-19"'
   end
 
-  test "llms txt uses current canonical url references" do
-    llms = Rails.root.join("public/llms.txt").read
-
-    assert_includes llms, "자동화 도구 37개"
-
-    stale_paths = %w[
-      /topics/split-order-prohibition
-      /topics/bid-disqualification
-      /topics/guarantee-exemption
-      /topics/private-contract-reason
-      /topics/goods-vs-service
-      /topics/bid-restriction
-      /topics/late-penalty-reduction
-      /topics/contract-extension
-      /topics/e-bid-troubleshoot
-      /guides/1
-      /guides/2
-      /guides/3
-      /guides/4
-      /guides/5
-      /guides/6
-      /guides/7
-      /guides/8
-      /guides/9
-    ]
-    stale_paths.each { |path| refute_includes llms, "https://silmu.kr#{path})" }
-
-    current_paths = %w[
-      /topics/split-contract-prohibition
-      /topics/qualification-failure
-      /topics/contract-guarantee-exemption
-      /topics/private-contract-justification
-      /topics/goods-vs-service-contract
-      /topics/bid-participation-restriction
-      /topics/penalty-reduction-procedure
-      /topics/contract-period-extension
-      /topics/e-bidding-error-faq
-      /guides/purchase-and-inspection
-      /guides/inspection-report
-      /guides/estimated-price
-      /guides/private-contract-guide
-      /guides/bidding-guide
-    ]
-    current_paths.each { |path| assert_includes llms, "https://silmu.kr#{path}" }
-  end
+  # NOTE: 구 "llms txt uses current canonical url references" 테스트는 제거됨.
+  # public/llms.txt 정적 파일이 LlmsController#summary 동적 생성으로 대체되면서
+  # (운영 DB slug 직접 참조) stale slug 혼입이 구조적으로 불가능해짐.
+  # 동적 엔드포인트 검증은 LlmsControllerTest 로 이관.
 end
