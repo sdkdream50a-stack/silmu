@@ -283,7 +283,7 @@ class TopicsController < ApplicationController
   # AI 크롤러용 마크다운 응답 — llms-full.txt 단일 토픽 슬라이스
   # (Claude/GPT/Perplexity 등 LLM 봇은 .md 확장자를 우선 fetch)
   def render_topic_markdown(topic)
-    Rails.cache.fetch([ "topic_md", "v1", topic.slug, topic.updated_at.to_i ].join("/"), expires_in: 6.hours) do
+    Rails.cache.fetch([ "topic_md", "v2", topic.slug, topic.updated_at.to_i ].join("/"), expires_in: 6.hours) do
       out = []
       out << "# #{topic.name}"
       out << ""
