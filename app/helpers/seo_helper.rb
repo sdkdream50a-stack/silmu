@@ -52,6 +52,7 @@ module SeoHelper
     when "budget-carryover"    then { law: "지방재정법", decree: "지방재정법 시행령", rule: "예산편성 기준" }
     when "year-end-settlement" then { law: "소득세법", decree: "소득세법 시행령", rule: "연말정산 지침" }
     when "instructor-allowance" then { law: "지방재정법", decree: "세출예산 집행기준(예규)", rule: "교육비특별회계 집행기준(예규)" }
+    when "estimated-amount"    then { law: "지방계약법", decree: "지방계약법 시행령", rule: "지방계약법 시행규칙" }
     else
       case topic.category
       when "budget"   then { law: "지방재정법", decree: "지방재정법 시행령", rule: "지방재정법 시행규칙" }
