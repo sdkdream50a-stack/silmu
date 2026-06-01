@@ -12146,20 +12146,28 @@ module ExamQuestions
     result.freeze
   end
 
-  # 문제별 난이도 맵 (메모이제이션: with_difficulty 호출마다 index 탐색 제거)
-  # { question_id => "basic" | "advanced" }
-  DIFFICULTY_MAP = begin
-    result = {}
-    CHAPTER_IDS.each do |_key, ids|
-      threshold = (ids.size * 0.6).ceil
-      ids.each_with_index do |id, idx|
-        result[id] = idx < threshold ? "basic" : "advanced"
-      end
-    end
-    result.freeze
+  # 문제별 난이도 판정 (문항 내용 기반 휴리스틱)
+  # 심화: 부정형 발문(옳지 않은/아닌 것)·순서·차이·비교·'모두 고른' 복합 발문,
+  #       계산/공식, 구체 수치(%·금액·기간) 인용, 긴 보기(변별 난이도↑) 중 하나라도 해당.
+  # (종전의 챕터 내 ID 위치 기반 라벨은 실제 난이도와 무관해 폐기)
+  def self.advanced_question?(q)
+    ql = q[:question].to_s
+    opts = q[:options].map(&:to_s)
+    all = "#{ql} #{opts.join(' ')}"
+    !!((ql =~ /옳지\s?않은|옳지않은|아닌\s?것|적절하지\s?않은|해당하지\s?않는|틀린/) ||
+       (ql =~ /모두\s?고른|짝지|순서|나열|차이|비교|구분/) ||
+       (ql =~ /공식|계산|산정|산출/) ||
+       (all =~ /\d+\s?%|억원|천만원|\d+일|\d+개월|\d+년/) ||
+       (opts.map { |o| o.gsub(/\s/, "").length }.max >= 42))
   end
 
-  # 난이도 태그 부여 (챕터 내 ID 정렬 기준: 하위 60% = 기초, 상위 40% = 심화)
+  # 문제별 난이도 맵 (메모이제이션: with_difficulty 호출마다 판정 재계산 제거)
+  # { question_id => "basic" | "advanced" }
+  DIFFICULTY_MAP = QUESTIONS.each_with_object({}) do |q, h|
+    h[q[:id]] = advanced_question?(q) ? "advanced" : "basic"
+  end.freeze
+
+  # 난이도 태그 부여 (문항 내용 기반 휴리스틱 → DIFFICULTY_MAP 참조)
   # 반환값: 원본 해시에 difficulty: "basic" | "advanced" 추가
   # 메모이제이션된 DIFFICULTY_MAP 사용 → O(n) 단순 merge만 수행
   def self.with_difficulty(questions)
