@@ -343,7 +343,8 @@ class TopicsController < ApplicationController
       .gsub(/__([^_]+)__/, "\\1")
       .gsub(/\*([^*]+)\*/, "\\1")
       .gsub(/_([^_]+)_/, "\\1")
-      .gsub(/[`>#~]/, "")
+      .gsub(/~~([^~]+)~~/, "\\1")
+      .gsub(/[`>#]/, "")
       .gsub(/\s+/, " ")
       .strip
   end
