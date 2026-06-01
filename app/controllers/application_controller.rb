@@ -74,22 +74,22 @@ class ApplicationController < ActionController::Base
   def set_og_image(category: nil)
     base = "https://silmu.kr/og"
     @og_image_path = case category
-    when "contract"  then "#{base}/og-contract.svg"
-    when "budget"    then "#{base}/og-budget.svg"
-    when "expense"   then "#{base}/og-expense.svg"
-    when "salary"    then "#{base}/og-salary.svg"
-    when "subsidy"   then "#{base}/og-subsidy.svg"
-    when "property"  then "#{base}/og-property.svg"
-    when "travel"    then "#{base}/og-travel.svg"
-    when "duty"      then "#{base}/og-duty.svg"
-    when "audit"     then "#{base}/og-audit.svg"
-    when "tools"     then "#{base}/og-tools.svg"
-    when "exam"      then "#{base}/og-exam.svg"
+    when "contract"  then "#{base}/og-contract.webp"
+    when "budget"    then "#{base}/og-budget.webp"
+    when "expense"   then "#{base}/og-expense.webp"
+    when "salary"    then "#{base}/og-salary.webp"
+    when "subsidy"   then "#{base}/og-subsidy.webp"
+    when "property"  then "#{base}/og-property.webp"
+    when "travel"    then "#{base}/og-travel.webp"
+    when "duty"      then "#{base}/og-duty.webp"
+    when "audit"     then "#{base}/og-audit.webp"
+    when "tools"     then "#{base}/og-tools.webp"
+    when "exam"      then "#{base}/og-exam.webp"
     else "https://silmu.kr/og-image.webp"
     end
     # 즉시 메타태그에 반영 (set_default_meta_tags 이후 호출 시에도 덮어쓰기)
     set_meta_tags(
-      og: { image: { _: @og_image_path, width: 1200, height: 630, type: "image/svg+xml" } },
+      og: { image: { _: @og_image_path, width: 1200, height: 630, type: "image/webp" } },
       twitter: { image: @og_image_path }
     )
   end
