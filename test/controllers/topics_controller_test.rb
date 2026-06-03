@@ -49,6 +49,25 @@ class TopicsControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, '"temporalCoverage":"2026-03-19"'
   end
 
+  test "shared topic served on exam subdomain canonicalizes to apex silmu.kr" do
+    topic = Topic.create!(
+      name: "교차 canonical",
+      slug: "cross-host-canonical-topic",
+      category: "contract",
+      summary: "요약",
+      commentary: "본문",
+      keywords: "수의계약",
+      published: false
+    )
+
+    host! "exam.silmu.kr"
+    get topic_url(topic.slug)
+
+    assert_response :success
+    assert_includes response.body, '<link rel="canonical" href="https://silmu.kr/topics/cross-host-canonical-topic"'
+    refute_includes response.body, 'href="https://exam.silmu.kr/topics/cross-host-canonical-topic"'
+  end
+
   # NOTE: 구 "llms txt uses current canonical url references" 테스트는 제거됨.
   # public/llms.txt 정적 파일이 LlmsController#summary 동적 생성으로 대체되면서
   # (운영 DB slug 직접 참조) stale slug 혼입이 구조적으로 불가능해짐.

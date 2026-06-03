@@ -95,8 +95,11 @@ class ApplicationController < ActionController::Base
   end
 
   # SEO: 쿼리 파라미터 제거한 canonical URL 반환
+  # exam.silmu.kr이 공유 콘텐츠(topics/guides/audit-cases 등)를 복제 서빙하므로
+  # 메인 콘텐츠는 항상 apex(silmu.kr)로 canonical 통합 — 교차 서브도메인 중복 색인 방지.
+  # exam-native 페이지(app/controllers/exam/*)는 리터럴 canonical로 override되어 무영향.
   def canonical_url
-    @canonical_url ||= request.original_url.split("?").first
+    @canonical_url ||= request.original_url.split("?").first.sub(%r{\Ahttps?://exam\.silmu\.kr}i, "https://silmu.kr")
   end
   helper_method :canonical_url
 end
