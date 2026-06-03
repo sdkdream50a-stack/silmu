@@ -95,6 +95,30 @@ class TopicsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "silmu.kr", URI.parse(canonical).host
   end
 
+  test "topic speakable schema uses real selectors and audience is category-neutral" do
+    topic = Topic.create!(
+      name: "스피커블 셀렉터",
+      slug: "speakable-selector-topic",
+      category: "duty",
+      summary: "복무 토픽 요약",
+      commentary: "본문",
+      keywords: "특별휴가",
+      published: false
+    )
+
+    host! "silmu.kr"
+    get "/topics/#{topic.slug}"
+
+    assert_response :success
+    # quick_stats(핵심 답변 자산)가 speakable에 포함, 죽은 셀렉터는 제거됨
+    assert_includes response.body, ".quick-stats"
+    refute_includes response.body, ".topic-first-paragraph"
+    refute_includes response.body, ".commentary > p:first-child"
+    # 복무 토픽 audience가 "계약·재무"로 오기되지 않고 일반화됨
+    refute_includes response.body, "계약·재무 담당자"
+    assert_includes response.body, "공무원·공공기관 실무 담당자"
+  end
+
   # NOTE: 구 "llms txt uses current canonical url references" 테스트는 제거됨.
   # public/llms.txt 정적 파일이 LlmsController#summary 동적 생성으로 대체되면서
   # (운영 DB slug 직접 참조) stale slug 혼입이 구조적으로 불가능해짐.

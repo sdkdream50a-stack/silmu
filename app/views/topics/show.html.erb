@@ -14,7 +14,7 @@
     # Article hasPart — 페이지에 포함된 주요 섹션 명시 (LLM 콘텐츠 구조 신호)
     has_part = []
     has_part << { "@type" => "WebPageElement", "name" => "법령 본문", "cssSelector" => ".law-content" } if @topic.law_content.present?
-    has_part << { "@type" => "WebPageElement", "name" => "실무 해설", "cssSelector" => ".commentary" } if @topic.commentary.present?
+    has_part << { "@type" => "WebPageElement", "name" => "실무 해설", "cssSelector" => ".commentary-body" } if @topic.commentary.present?
     has_part << { "@type" => "FAQPage", "name" => "자주 묻는 질문", "cssSelector" => "#faq-section" } if @topic.faq_list.present?
 
     # Sprint #2-A — AuditCase ItemList schema (NYT + Westlaw 권위자: 콘텐츠 위계 + 검색 풍부도)
@@ -102,7 +102,7 @@
     "potentialAction": { "@type": "ReadAction", "target": [ canonical_url ] },
     "speakable": {
       "@type": "SpeakableSpecification",
-      "cssSelector": [ ".topic-summary", ".topic-headline", ".faq-answer", ".quick-answer", ".legal-citation", ".law-key-fact", ".topic-first-paragraph", ".commentary > p:first-child" ]
+      "cssSelector": [ ".topic-summary", ".topic-headline", ".quick-answer", ".quick-stats", ".legal-citation", ".law-key-fact", ".faq-answer" ]
     },
     # citation — LLM 인용 시 법조문까지 함께 끌고 가도록 (4차 권위자 GEO 추천)
     "citation": topic_legal_basis(@topic),

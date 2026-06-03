@@ -163,7 +163,7 @@ module SeoHelper
     else
       {
         "@type" => "Audience",
-        "audienceType" => "공무원·공공기관 계약·재무 담당자",
+        "audienceType" => "공무원·공공기관 실무 담당자",
         "geographicArea" => { "@type" => "Country", "name" => "대한민국" }
       }
     end
