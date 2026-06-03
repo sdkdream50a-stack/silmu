@@ -278,5 +278,22 @@ fixes.each do |slug, attrs|
   updated << "#{slug} (#{attrs.keys.join('+')})"
 end
 
+# 결함4 보강: completion-payment-checklist의 interpretation_content·regulation_content에
+# 잔존한 검사/대가 조문번호 오기(§15=검사·§17=대금) → §17(검사)·§18(대가지급) gsub 정정.
+# 전체 재작성 대신 기존 서술을 보존하며 조문번호만 외과적 치환(고유 문자열, 충돌 없음).
+cpc = Topic.find_by(slug: "completion-payment-checklist")
+if cpc
+  reg = cpc.regulation_content.to_s.dup
+  reg = reg.gsub("제15조(검사), 제17조(대금 지급)", "제17조(검사), 제18조(대가 지급)")
+           .gsub("준공검사 관련 근거 (지방계약법 제15조)", "준공검사 관련 근거 (지방계약법 제17조)")
+           .gsub("대금지급 관련 근거 (지방계약법 제17조)", "대금지급 관련 근거 (지방계약법 제18조)")
+  intp = cpc.interpretation_content.to_s.dup
+  intp = intp.gsub("지방계약법 제17조는 검사를 완료한 후 대금을 지급하도록", "지방계약법 제18조는 검사를 완료한 후 대가를 지급하도록")
+             .gsub("지방계약법 제17조의", "지방계약법 제18조의")
+             .gsub("지방계약법 제15조의 준공검사 14일 이내 완료 의무", "지방계약법 제17조의 검사(시행령 제64조에 따라 14일 이내) 완료 의무")
+  cpc.update!(regulation_content: reg, interpretation_content: intp)
+  updated << "completion-payment-checklist (regulation+interpretation 조문번호 보강)"
+end
+
 puts "[topic_content_fix] UPDATED #{updated.size}: #{updated.join(', ')}"
 puts "[topic_content_fix] SKIPPED #{skipped.size}: #{skipped.join(', ')}" if skipped.any?
