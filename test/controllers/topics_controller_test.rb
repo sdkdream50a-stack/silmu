@@ -49,10 +49,10 @@ class TopicsControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, '"temporalCoverage":"2026-03-19"'
   end
 
-  test "shared topic served on exam subdomain canonicalizes to apex silmu.kr" do
+  test "exam subdomain 301 redirects shared topic content to apex silmu.kr" do
     topic = Topic.create!(
-      name: "교차 canonical",
-      slug: "cross-host-canonical-topic",
+      name: "교차 301",
+      slug: "cross-host-301-topic",
       category: "contract",
       summary: "요약",
       commentary: "본문",
@@ -61,11 +61,38 @@ class TopicsControllerTest < ActionDispatch::IntegrationTest
     )
 
     host! "exam.silmu.kr"
-    get topic_url(topic.slug)
+    get "/topics/#{topic.slug}"
+
+    assert_response :moved_permanently
+    assert_equal "https://silmu.kr/topics/cross-host-301-topic", response.location
+  end
+
+  test "exam subdomain preserves query string on shared content 301" do
+    host! "exam.silmu.kr"
+    get "/audit-cases?page=2"
+
+    assert_response :moved_permanently
+    assert_equal "https://silmu.kr/audit-cases?page=2", response.location
+  end
+
+  test "main host serves shared topic content without redirect" do
+    topic = Topic.create!(
+      name: "메인 무리다이렉트",
+      slug: "main-no-redirect-topic",
+      category: "contract",
+      summary: "요약",
+      commentary: "본문",
+      keywords: "수의계약",
+      published: false
+    )
+
+    host! "silmu.kr"
+    get "/topics/#{topic.slug}"
 
     assert_response :success
-    assert_includes response.body, '<link rel="canonical" href="https://silmu.kr/topics/cross-host-canonical-topic"'
-    refute_includes response.body, 'href="https://exam.silmu.kr/topics/cross-host-canonical-topic"'
+    canonical = response.body.match(/<link rel="canonical" href="([^"]*)"/)[1]
+    assert_equal "/topics/main-no-redirect-topic", URI.parse(canonical).path
+    assert_equal "silmu.kr", URI.parse(canonical).host
   end
 
   # NOTE: 구 "llms txt uses current canonical url references" 테스트는 제거됨.

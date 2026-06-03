@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
   rescue_from ActionController::RoutingError, with: :render_not_found
 
+  before_action :redirect_exam_shared_content_to_apex
   before_action :set_default_meta_tags
   before_action :capture_utm_params
   before_action :configure_permitted_parameters, if: :devise_controller?
@@ -18,6 +19,23 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
+  EXAM_HOST = "exam.silmu.kr"
+  # exam 서브도메인(공공조달관리사 시험 사이트)이 단일 앱 구조상 복제 서빙하던
+  # 메인 공유 콘텐츠를 apex(silmu.kr)로 301 통합 — cross-host canonical(hint)을
+  # directive로 격상해 중복 색인·크롤예산 누수·AI 오인용을 원천 차단.
+  # exam-native 경로(/subjects·/quiz·/keywords 등)와 인증/마이페이지는 매칭되지 않아 제외.
+  EXAM_SHARED_CONTENT_PREFIXES = %w[/topics /guides /audit-cases /tools /faq /series].freeze
+
+  def redirect_exam_shared_content_to_apex
+    return unless request.host == EXAM_HOST
+    return unless request.get? || request.head?
+
+    path = request.path
+    return unless EXAM_SHARED_CONTENT_PREFIXES.any? { |p| path == p || path.start_with?("#{p}/") }
+
+    redirect_to "https://silmu.kr#{request.fullpath}", status: :moved_permanently, allow_other_host: true
+  end
 
   def render_not_found
     respond_to do |format|
