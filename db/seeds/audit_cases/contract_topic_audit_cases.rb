@@ -313,7 +313,7 @@ AuditCase.find_or_create_by!(slug: 'mas-contract-non-listed-product') do |ac|
   ac.published = true
   ac.view_count = 0
   ac.topic_slug = 'mas-contract'
-  ac.legal_basis = '조달사업에 관한 법률 제9조의2(다수공급자 물품구매계약), 조달사업에 관한 법률 시행령 제7조의2(다수공급자계약 방법), 국가종합전자조달시스템(나라장터) 이용약관, 지방계약법 제9조(계약의 방법)'
+  ac.legal_basis = '조달사업에 관한 법률 제13조(다수공급자계약), 같은 법 시행령 제13조(다수공급자계약), 다수공급자계약 업무처리규정(조달청 고시), 지방계약법 제9조(계약의 방법)'
   ac.issue = '○○도 교육청이 사무용 복합기(칼라) 15대 구매 시 나라장터 종합쇼핑몰 MAS 목록에 등재되지 않은 특정 모델을 "MAS 구매"로 처리하여 예산을 집행하였다가, 감사에서 조달사업에 관한 법률 위반으로 적발되고 해당 집행 전액 부적정 판정을 받음.'
 
   ac.detail = <<~DETAIL
