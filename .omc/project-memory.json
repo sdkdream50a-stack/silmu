@@ -1,0 +1,682 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1780551192692,
+  "projectRoot": "/Users/seong/project/silmu",
+  "techStack": {
+    "languages": [
+      {
+        "name": "JavaScript/TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "package.json"
+        ]
+      },
+      {
+        "name": "Ruby",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "Gemfile"
+        ]
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "esbuild",
+        "version": "0.27.2",
+        "category": "build"
+      }
+    ],
+    "packageManager": "yarn",
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": "yarn build",
+    "testCommand": null,
+    "lintCommand": null,
+    "devCommand": null,
+    "scripts": {
+      "build": "esbuild app/javascript/*.* --bundle --sourcemap --format=esm --outdir=app/assets/builds --public-path=/assets --minify --target=es2020",
+      "build:css": "tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --minify"
+    }
+  },
+  "conventions": {
+    "namingStyle": "snake_case",
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "app",
+      "bin",
+      "docs",
+      "lib",
+      "public",
+      "test"
+    ],
+    "gitBranches": {
+      "defaultBranch": "main",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "--headless=new": {
+      "path": "--headless=new",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1780551192677,
+      "keyFiles": []
+    },
+    "--no-default-browser-check": {
+      "path": "--no-default-browser-check",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1780551192677,
+      "keyFiles": []
+    },
+    "--no-first-run": {
+      "path": "--no-first-run",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1780551192677,
+      "keyFiles": []
+    },
+    "--remote-debugging-port=9222": {
+      "path": "--remote-debugging-port=9222",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1780551192677,
+      "keyFiles": []
+    },
+    "--user-data-dir=": {
+      "path": "--user-data-dir=",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1780551192679,
+      "keyFiles": []
+    },
+    "about:blank": {
+      "path": "about:blank",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1780551192679,
+      "keyFiles": []
+    },
+    "app": {
+      "path": "app",
+      "purpose": "Application code",
+      "fileCount": 0,
+      "lastAccessed": 1780551192680,
+      "keyFiles": []
+    },
+    "bin": {
+      "path": "bin",
+      "purpose": "Executable scripts",
+      "fileCount": 16,
+      "lastAccessed": 1780551192680,
+      "keyFiles": [
+        "brakeman",
+        "bundler-audit",
+        "cf-purge",
+        "ci",
+        "dev"
+      ]
+    },
+    "config": {
+      "path": "config",
+      "purpose": "Configuration files",
+      "fileCount": 20,
+      "lastAccessed": 1780551192680,
+      "keyFiles": [
+        "application.rb",
+        "boot.rb",
+        "bundler-audit.yml",
+        "cable.yml",
+        "cache.yml"
+      ]
+    },
+    "db": {
+      "path": "db",
+      "purpose": null,
+      "fileCount": 6,
+      "lastAccessed": 1780551192680,
+      "keyFiles": [
+        "cable_schema.rb",
+        "cache_schema.rb",
+        "development.sqlite3",
+        "queue_schema.rb",
+        "schema.rb"
+      ]
+    },
+    "docs": {
+      "path": "docs",
+      "purpose": "Documentation",
+      "fileCount": 17,
+      "lastAccessed": 1780551192680,
+      "keyFiles": [
+        "adsense_monetization_report.md",
+        "blog-claude-code-experience.md",
+        "blog-topics.md",
+        "cafe_analysis.md",
+        "community-outreach-guide.md"
+      ]
+    },
+    "lib": {
+      "path": "lib",
+      "purpose": "Library code",
+      "fileCount": 1,
+      "lastAccessed": 1780551192681,
+      "keyFiles": [
+        "hwpx_generator.py"
+      ]
+    },
+    "log": {
+      "path": "log",
+      "purpose": null,
+      "fileCount": 4,
+      "lastAccessed": 1780551192681,
+      "keyFiles": [
+        "development.log",
+        "seo_health.jsonl",
+        "test.log"
+      ]
+    },
+    "public": {
+      "path": "public",
+      "purpose": "Public files",
+      "fileCount": 20,
+      "lastAccessed": 1780551192681,
+      "keyFiles": [
+        "400.html",
+        "404.html",
+        "406-unsupported-browser.html",
+        "422.html",
+        "500.html"
+      ]
+    },
+    "script": {
+      "path": "script",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1780551192681,
+      "keyFiles": []
+    },
+    "storage": {
+      "path": "storage",
+      "purpose": null,
+      "fileCount": 2,
+      "lastAccessed": 1780551192681,
+      "keyFiles": [
+        "development.sqlite3"
+      ]
+    },
+    "test": {
+      "path": "test",
+      "purpose": "Test files",
+      "fileCount": 1,
+      "lastAccessed": 1780551192681,
+      "keyFiles": [
+        "test_helper.rb"
+      ]
+    },
+    "tmp": {
+      "path": "tmp",
+      "purpose": null,
+      "fileCount": 36,
+      "lastAccessed": 1780551192681,
+      "keyFiles": [
+        "add_audit_cases.rb",
+        "apply_variants.rb",
+        "audit_case_verification.rb",
+        "audit_cases_accounting.sql",
+        "audit_cases_budget.sql"
+      ]
+    },
+    "vendor": {
+      "path": "vendor",
+      "purpose": "Third-party code",
+      "fileCount": 1,
+      "lastAccessed": 1780551192682,
+      "keyFiles": []
+    },
+    "app/assets": {
+      "path": "app/assets",
+      "purpose": "Static assets",
+      "fileCount": 0,
+      "lastAccessed": 1780551192682,
+      "keyFiles": []
+    },
+    "app/controllers": {
+      "path": "app/controllers",
+      "purpose": "Controllers",
+      "fileCount": 45,
+      "lastAccessed": 1780551192682,
+      "keyFiles": [
+        "ads_txt_controller.rb",
+        "ai_assistant_controller.rb",
+        "application_controller.rb"
+      ]
+    },
+    "app/helpers": {
+      "path": "app/helpers",
+      "purpose": "Helper functions",
+      "fileCount": 8,
+      "lastAccessed": 1780551192682,
+      "keyFiles": [
+        "analytics_helper.rb",
+        "application_helper.rb",
+        "bookmarks_helper.rb"
+      ]
+    },
+    "app/models": {
+      "path": "app/models",
+      "purpose": "Data models",
+      "fileCount": 28,
+      "lastAccessed": 1780551192682,
+      "keyFiles": [
+        "analytics_snapshot.rb",
+        "application_record.rb",
+        "audit_case.rb"
+      ]
+    },
+    "app/services": {
+      "path": "app/services",
+      "purpose": "Business logic services",
+      "fileCount": 30,
+      "lastAccessed": 1780551192683,
+      "keyFiles": [
+        "ai_assistant_service.rb",
+        "blog_legal_verifier.rb",
+        "contract_document_service.rb"
+      ]
+    },
+    "app/views": {
+      "path": "app/views",
+      "purpose": "View templates",
+      "fileCount": 0,
+      "lastAccessed": 1780551192683,
+      "keyFiles": []
+    },
+    "db/scripts": {
+      "path": "db/scripts",
+      "purpose": "Build/utility scripts",
+      "fileCount": 1,
+      "lastAccessed": 1780551192683,
+      "keyFiles": [
+        "update_topic_commentaries.rb"
+      ]
+    },
+    "db/seeds": {
+      "path": "db/seeds",
+      "purpose": "Database seeds",
+      "fileCount": 97,
+      "lastAccessed": 1780551192683,
+      "keyFiles": [
+        "add_comparison_tables.rb",
+        "audit_cases.rb",
+        "backfill_sectors.rb"
+      ]
+    },
+    "test/controllers": {
+      "path": "test/controllers",
+      "purpose": "Controllers",
+      "fileCount": 9,
+      "lastAccessed": 1780551192684,
+      "keyFiles": [
+        "audit_cases_controller_test.rb",
+        "chatbot_controller_test.rb",
+        "guides_controller_test.rb"
+      ]
+    },
+    "test/fixtures": {
+      "path": "test/fixtures",
+      "purpose": "Test fixtures",
+      "fileCount": 5,
+      "lastAccessed": 1780551192684,
+      "keyFiles": [
+        "cafe_articles.yml",
+        "content_migrations.yml",
+        "guides.yml"
+      ]
+    },
+    "test/helpers": {
+      "path": "test/helpers",
+      "purpose": "Helper functions",
+      "fileCount": 2,
+      "lastAccessed": 1780551192684,
+      "keyFiles": [
+        "analytics_helper_test.rb"
+      ]
+    },
+    "test/models": {
+      "path": "test/models",
+      "purpose": "Data models",
+      "fileCount": 9,
+      "lastAccessed": 1780551192684,
+      "keyFiles": [
+        "analytics_snapshot_test.rb",
+        "cafe_article_test.rb",
+        "content_migration_test.rb"
+      ]
+    },
+    "test/services": {
+      "path": "test/services",
+      "purpose": "Business logic services",
+      "fileCount": 8,
+      "lastAccessed": 1780551192684,
+      "keyFiles": [
+        "ai_assistant_service_test.rb",
+        "blog_legal_verifier_test.rb",
+        "government_calendar_ics_service_test.rb"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "db/seeds/topic_subcontract.rb",
+      "accessCount": 14,
+      "lastAccessed": 1780554509034,
+      "type": "file"
+    },
+    {
+      "path": "app/controllers/application_controller.rb",
+      "accessCount": 6,
+      "lastAccessed": 1780463009724,
+      "type": "file"
+    },
+    {
+      "path": "app/views/topics/show.html.erb",
+      "accessCount": 6,
+      "lastAccessed": 1780486454565,
+      "type": "file"
+    },
+    {
+      "path": "app/views/topics/flowcharts/_subcontract.html.erb",
+      "accessCount": 6,
+      "lastAccessed": 1780554292852,
+      "type": "file"
+    },
+    {
+      "path": "db/seeds/topic_quick_stats_backfill_2026_06_03_batch1.rb",
+      "accessCount": 6,
+      "lastAccessed": 1780578957866,
+      "type": "file"
+    },
+    {
+      "path": "test/controllers/topics_controller_test.rb",
+      "accessCount": 5,
+      "lastAccessed": 1780463573488,
+      "type": "file"
+    },
+    {
+      "path": "app/helpers/seo_helper.rb",
+      "accessCount": 3,
+      "lastAccessed": 1780463554827,
+      "type": "file"
+    },
+    {
+      "path": "db/seeds/topic_quick_stats_backfill_2026_06_03_batch2.rb",
+      "accessCount": 3,
+      "lastAccessed": 1780486453992,
+      "type": "file"
+    },
+    {
+      "path": "db/seeds/topic_faqs_backfill_2026_06_03_batch4.rb",
+      "accessCount": 3,
+      "lastAccessed": 1780578969034,
+      "type": "file"
+    },
+    {
+      "path": "db/seeds/topic_faqs_backfill_2026_06_03_batch2.rb",
+      "accessCount": 2,
+      "lastAccessed": 1780465310243,
+      "type": "file"
+    },
+    {
+      "path": "db/seeds/topic_content_fix_2026_06_03.rb",
+      "accessCount": 2,
+      "lastAccessed": 1780483735881,
+      "type": "file"
+    },
+    {
+      "path": "db/seeds/topic_quick_stats_backfill_2026_06_03_batch3.rb",
+      "accessCount": 2,
+      "lastAccessed": 1780486338141,
+      "type": "file"
+    },
+    {
+      "path": "db/seeds/topic_quick_stats_backfill_2026_06_03_batch4.rb",
+      "accessCount": 2,
+      "lastAccessed": 1780489298001,
+      "type": "file"
+    },
+    {
+      "path": "db/seeds/topic_quick_stats_backfill_2026_06_03_batch7.rb",
+      "accessCount": 2,
+      "lastAccessed": 1780493771148,
+      "type": "file"
+    },
+    {
+      "path": "db/seeds/topic_content_fix_2026_06_04_batch13.rb",
+      "accessCount": 2,
+      "lastAccessed": 1780549742293,
+      "type": "file"
+    },
+    {
+      "path": "db/seeds/topic_content_fix_2026_06_04_batch14.rb",
+      "accessCount": 2,
+      "lastAccessed": 1780551857242,
+      "type": "file"
+    },
+    {
+      "path": "db/seeds/topic_content_fix_2026_06_04_batch17b.rb",
+      "accessCount": 2,
+      "lastAccessed": 1780553783020,
+      "type": "file"
+    },
+    {
+      "path": "app/views/topics/flowcharts/_private_contract.html.erb",
+      "accessCount": 2,
+      "lastAccessed": 1780556503602,
+      "type": "file"
+    },
+    {
+      "path": "db/seeds/suui_contract_series.rb",
+      "accessCount": 2,
+      "lastAccessed": 1780556587898,
+      "type": "file"
+    },
+    {
+      "path": "app/views/topics/flowcharts/_contract_period_extension.html.erb",
+      "accessCount": 2,
+      "lastAccessed": 1780575259641,
+      "type": "file"
+    },
+    {
+      "path": "app/views/topics/flowcharts/_goods_selection_committee.html.erb",
+      "accessCount": 2,
+      "lastAccessed": 1780575264624,
+      "type": "file"
+    },
+    {
+      "path": "app/controllers/robots_controller.rb",
+      "accessCount": 1,
+      "lastAccessed": 1780462391322,
+      "type": "file"
+    },
+    {
+      "path": "app/controllers/exam/sitemap_controller.rb",
+      "accessCount": 1,
+      "lastAccessed": 1780462391800,
+      "type": "file"
+    },
+    {
+      "path": "db/seeds/topic_faqs_backfill_2026_06_03.rb",
+      "accessCount": 1,
+      "lastAccessed": 1780464104458,
+      "type": "file"
+    },
+    {
+      "path": "db/seeds/topic_faqs_backfill_2026_06_03_batch3.rb",
+      "accessCount": 1,
+      "lastAccessed": 1780465675102,
+      "type": "file"
+    },
+    {
+      "path": "db/seeds/topic_faqs_backfill_2026_06_03_batch5.rb",
+      "accessCount": 1,
+      "lastAccessed": 1780480453419,
+      "type": "file"
+    },
+    {
+      "path": "db/seeds/topic_faqs_backfill_2026_06_03_batch6.rb",
+      "accessCount": 1,
+      "lastAccessed": 1780482290458,
+      "type": "file"
+    },
+    {
+      "path": "db/seeds/topic_quick_stats_backfill_2026_06_03_batch5.rb",
+      "accessCount": 1,
+      "lastAccessed": 1780489858152,
+      "type": "file"
+    },
+    {
+      "path": "db/seeds/topic_quick_stats_backfill_2026_06_03_batch6.rb",
+      "accessCount": 1,
+      "lastAccessed": 1780490732422,
+      "type": "file"
+    },
+    {
+      "path": "db/seeds/topic_quick_stats_backfill_2026_06_03_batch8.rb",
+      "accessCount": 1,
+      "lastAccessed": 1780494166565,
+      "type": "file"
+    },
+    {
+      "path": "db/seeds/topic_quick_stats_backfill_2026_06_03_batch9.rb",
+      "accessCount": 1,
+      "lastAccessed": 1780495035213,
+      "type": "file"
+    },
+    {
+      "path": "db/seeds/topic_content_fix_2026_06_03_batch2.rb",
+      "accessCount": 1,
+      "lastAccessed": 1780496021162,
+      "type": "file"
+    },
+    {
+      "path": "db/seeds/topic_content_fix_2026_06_03_batch3.rb",
+      "accessCount": 1,
+      "lastAccessed": 1780523904264,
+      "type": "file"
+    },
+    {
+      "path": "db/seeds/topic_quick_stats_EXCLUSIONS_2026_06_04.md",
+      "accessCount": 1,
+      "lastAccessed": 1780525490426,
+      "type": "file"
+    },
+    {
+      "path": "db/seeds/topic_content_fix_2026_06_04_batch4.rb",
+      "accessCount": 1,
+      "lastAccessed": 1780526135647,
+      "type": "file"
+    },
+    {
+      "path": "db/seeds/topic_content_fix_2026_06_04_batch5.rb",
+      "accessCount": 1,
+      "lastAccessed": 1780531337498,
+      "type": "file"
+    },
+    {
+      "path": "db/seeds/topic_content_fix_2026_06_04_batch6.rb",
+      "accessCount": 1,
+      "lastAccessed": 1780535954691,
+      "type": "file"
+    },
+    {
+      "path": "db/seeds/topic_content_fix_2026_06_04_batch7.rb",
+      "accessCount": 1,
+      "lastAccessed": 1780536586548,
+      "type": "file"
+    },
+    {
+      "path": "db/seeds/topic_content_fix_2026_06_04_batch8.rb",
+      "accessCount": 1,
+      "lastAccessed": 1780537844143,
+      "type": "file"
+    },
+    {
+      "path": "db/seeds/topic_content_fix_2026_06_04_batch9.rb",
+      "accessCount": 1,
+      "lastAccessed": 1780538503759,
+      "type": "file"
+    },
+    {
+      "path": "db/seeds/topic_content_fix_2026_06_04_batch10.rb",
+      "accessCount": 1,
+      "lastAccessed": 1780538936220,
+      "type": "file"
+    },
+    {
+      "path": "db/seeds/topic_content_fix_2026_06_04_batch11.rb",
+      "accessCount": 1,
+      "lastAccessed": 1780543438160,
+      "type": "file"
+    },
+    {
+      "path": "db/seeds/topic_content_fix_2026_06_04_batch12.rb",
+      "accessCount": 1,
+      "lastAccessed": 1780548773150,
+      "type": "file"
+    },
+    {
+      "path": "db/seeds/topic_content_fix_2026_06_04_batch15.rb",
+      "accessCount": 1,
+      "lastAccessed": 1780551887781,
+      "type": "file"
+    },
+    {
+      "path": "db/seeds/topic_content_fix_2026_06_04_batch16.rb",
+      "accessCount": 1,
+      "lastAccessed": 1780552357595,
+      "type": "file"
+    },
+    {
+      "path": "db/seeds/topic_content_fix_2026_06_04_batch16b.rb",
+      "accessCount": 1,
+      "lastAccessed": 1780552595406,
+      "type": "file"
+    },
+    {
+      "path": "db/seeds/topic_content_fix_2026_06_04_batch17.rb",
+      "accessCount": 1,
+      "lastAccessed": 1780553367014,
+      "type": "file"
+    },
+    {
+      "path": "db/seeds/topic_content_fix_2026_06_04_batch18.rb",
+      "accessCount": 1,
+      "lastAccessed": 1780556264692,
+      "type": "file"
+    },
+    {
+      "path": "db/seeds/topic_content_fix_2026_06_04_batch19.rb",
+      "accessCount": 1,
+      "lastAccessed": 1780558126844,
+      "type": "file"
+    },
+    {
+      "path": "db/seeds/topic_content_fix_2026_06_04_batch19b.rb",
+      "accessCount": 1,
+      "lastAccessed": 1780558432450,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}

@@ -245,7 +245,7 @@ Topic.find_or_create_by!(slug: 'e-procurement-guide') do |t|
   LAW
 
   t.decree_content = <<~DECREE
-## 지방계약법 시행령 제39조 (전자입찰)
+## 지방계약법 시행령 제39조 (입찰서의 제출ㆍ접수 및 입찰의 무효)
 
 ### 전자입찰 의무 대상
 

@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"cd /Users/seong/project/silmu\\necho \\\"=== flowchart partials ===\\\"; ls app/views/topics/flowcharts/ 2>/dev/null | grep -iE \\\"bid|procure|mas|electronic|e_\\\" \\necho \\\"=== repo seeds mention...",
+  "error": "Exit code 1\n=== flowchart partials ===\n_advance_payment.html.erb\n_bid_announcement.html.erb\n_bid_deposit.html.erb\n_bid_participation_restriction.html.erb\n_bid_qualification.html.erb\n_bidding.html.erb\n_contract_guarantee_deposit.html.erb\n_contract_guarantee_exemption.html.erb\n_e_bidding_error_faq.html.erb\n_e_bidding.html.erb\n_e_procurement_guide.html.erb\n_goods_vs_service_contract.html.erb\n_late_penalty.html.erb\n_lowest_bid_rate.html.erb\n_multiple_price.html.erb\n_performance_guarantee.html.erb\n_p...",
+  "timestamp": "2026-06-04T13:33:09.043Z",
+  "retry_count": 1
+}
