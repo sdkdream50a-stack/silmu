@@ -26,7 +26,7 @@
             <li>• 금액 기준 확인 (물품·용역 2천만원, 공사 종합 4억원 등)</li>
           </ul>
           <div class="mt-3 grid grid-cols-2 md:grid-cols-3 gap-2">
-            <% [["소액 수의", "제25조 제1항", "indigo"], ["긴급 수의", "법 제9조 제1항 제1호", "red"], ["특정 수의", "법 제9조 제1항 제3호", "amber"], ["국가기관", "법 제9조 제1항 제2호", "blue"], ["입찰 불성립", "제25조 제1항 제5호", "green"]].each do |title, basis, color| %>
+            <% [["소액 수의", "시행령 제25조 제1항 제5호", "indigo"], ["긴급 수의", "시행령 제25조 제1항 제1호", "red"], ["특정 수의", "시행령 제25조 제1항 제4호", "amber"], ["국가기관", "시행령 제25조 제1항 제3호", "blue"], ["입찰 불성립", "시행령 제26조", "green"]].each do |title, basis, color| %>
               <div class="p-2 bg-white rounded-lg border border-slate-200 text-center">
                 <div class="text-xs font-bold text-<%= color %>-700"><%= title %></div>
                 <div class="text-xs text-slate-500 mt-0.5"><%= basis %></div>
@@ -115,7 +115,7 @@
           <div class="space-y-3 text-sm">
             <div class="p-3 bg-green-50 rounded-lg border border-green-200">
               <div class="text-green-700 font-bold mb-1">✅ 올바른 예시</div>
-              <div class="text-slate-700">"지방계약법 제9조 제1항 제4호 및 시행령 제25조 제1항 제1호에 따라 추정가격 1,500만원 이하 물품 구매로 수의계약을 체결함"</div>
+              <div class="text-slate-700">"지방계약법 제9조 제1항 단서 및 시행령 제25조 제1항 제5호 나목에 따라 추정가격 1,500만원 이하 물품 구매로 수의계약을 체결함"</div>
             </div>
             <div class="p-3 bg-red-50 rounded-lg border border-red-200">
               <div class="text-red-700 font-bold mb-1">❌ 잘못된 예시</div>
