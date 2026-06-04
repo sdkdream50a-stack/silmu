@@ -111,7 +111,7 @@ AuditCase.find_or_create_by!(slug: 'small-amount-intentional-split') do |ac|
   ac.published = true
   ac.view_count = 0
   ac.topic_slug = 'small-amount-contract'
-  ac.legal_basis = '지방계약법 제7조 제1항 (경쟁의 원칙), 지방계약법 시행령 제25조 제1항 제5호, 지방계약법 시행령 제77조 (공사의 분할계약 금지)'
+  ac.legal_basis = '지방계약법 제9조 제1항 (경쟁입찰의 원칙), 지방계약법 시행령 제25조 제1항 제5호, 지방계약법 시행령 제77조 (공사의 분할계약 금지)'
   ac.issue = '△△시 정보통신과에서 소프트웨어 유지관리 용역(총 1억 5천만원)을 임의로 3개 시스템으로 나누어 건당 5천만원 이하로 만든 뒤 각각 소액 수의계약 처리하여 경쟁입찰을 회피한 사례.'
 
   ac.detail = <<~DETAIL
@@ -174,7 +174,7 @@ AuditCase.find_or_create_by!(slug: 'small-amount-intentional-split') do |ac|
 
 ### 3. 소액 수의계약 한도(2천만원/5천만원)에 맞추기 위한 분할은 명백한 위법입니다
 
-지방계약법 제7조는 경쟁 원칙을 규정하며, 시행령 제77조는 분할계약을 명시적으로 금지합니다. "관행이었다", "바쁘다"는 이유는 면책 사유가 아닙니다.
+지방계약법 제9조는 경쟁입찰 원칙을 규정하며, 시행령 제77조는 분할계약을 명시적으로 금지합니다. "관행이었다", "바쁘다"는 이유는 면책 사유가 아닙니다.
 
 ### 4. 결재자도 책임을 집니다
 
@@ -468,7 +468,7 @@ AuditCase.find_or_create_by!(slug: 'unit-price-contract-quantity-exceeded') do |
   ac.published = true
   ac.view_count = 0
   ac.topic_slug = 'unit-price-contract'
-  ac.legal_basis = '지방계약법 시행령 제79조 (단가계약), 지방회계법 제29조 (지출원인행위), 지방계약법 제7조 (경쟁의 원칙)'
+  ac.legal_basis = '지방계약법 시행령 제79조 (단가계약), 지방회계법 제29조 (지출원인행위), 지방계약법 제9조 (경쟁입찰의 원칙)'
   ac.issue = '○○도 도로관리팀에서 아스팔트 패칭 자재 단가계약(연간 수량 200톤 한도) 체결 후 실제 280톤을 발주하여 초과 80톤 분을 한도 초과 단가로 집행하고, 추가 경쟁입찰 없이 기존 단가계약 업체와 수의계약 처리한 사례.'
 
   ac.detail = <<~DETAIL
