@@ -24,8 +24,9 @@
             { type: "물품 구매",  amount: "2,000만 원 이하", note: "1인 견적 가능",   highlight: false },
             { type: "용역",      amount: "2,000만 원 이하", note: "1인 견적 가능",   highlight: false },
             { type: "소규모 공사", amount: "2,000만 원 이하", note: "1인 견적 가능",  highlight: false },
-            { type: "공사",      amount: "5,000만 원 이하", note: "2인 이상 견적 필요", highlight: true },
-            { type: "전문공사",   amount: "3,000만 원 이하", note: "2인 이상 견적 필요", highlight: true }
+            { type: "공사(종합)",  amount: "4억 원 이하",     note: "2천만 원 초과 시 2인 이상 견적", highlight: true },
+            { type: "전문공사",   amount: "2억 원 이하",     note: "2천만 원 초과 시 2인 이상 견적", highlight: true },
+            { type: "그 밖의 공사", amount: "1억 6천만 원 이하", note: "2천만 원 초과 시 2인 이상 견적", highlight: true }
           ].each_with_index do |row, i| %>
             <tr class="<%= i.even? ? 'bg-white' : 'bg-slate-50' %> border-b border-slate-100 hover:bg-indigo-50 transition-colors">
               <td class="px-4 py-3 font-semibold text-slate-800"><%= row[:type] %></td>
