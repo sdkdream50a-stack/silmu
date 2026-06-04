@@ -8,7 +8,7 @@ AuditCase.find_or_create_by!(slug: 'contract-guarantee-not-collected') do |ac|
   ac.published = true
   ac.view_count = 0
   ac.topic_slug = 'contract-guarantee-exemption'
-  ac.legal_basis = '지방계약법 제15조 (계약보증금), 지방계약법 시행령 제51조 (계약보증금), 지방계약법 시행령 제53조 (계약보증금 면제)'
+  ac.legal_basis = '지방계약법 제15조 (계약보증금), 지방계약법 시행령 제52조 (계약보증금 납부방법), 지방계약법 시행령 제53조 (계약보증금 면제)'
 
   ac.issue = '□□군 체육시설 조성공사(계약금액 8억원)에서 계약보증금(계약금액의 10% = 8천만원)을 징구하지 않고 계약을 체결함. 이후 업체가 공사 중 부도 처리되어 공사가 중단되었으나, 계약보증금이 없어 재정 손실 8천만원 발생.'
 
