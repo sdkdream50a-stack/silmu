@@ -289,7 +289,7 @@ AuditCase.find_or_create_by!(slug: 'split-contract-to-avoid-bidding') do |ac|
   ac.published = true
   ac.view_count = 0
   ac.topic_slug = 'split-contract'
-  ac.legal_basis = '지방계약법 제7조 제1항 (경쟁의 원칙), 지방계약법 시행령 제77조 (공사의 분할계약 금지), 지방계약법 시행령 제25조 제1항 (수의계약 기준)'
+  ac.legal_basis = '지방계약법 제9조 제1항 (경쟁입찰의 원칙), 지방계약법 시행령 제77조 (공사의 분할계약 금지), 지방계약법 시행령 제25조 제1항 (수의계약 기준)'
   ac.issue = '◇◇군 건설과에서 마을 진입로 포장공사(총 예산 3억 5천만원)를 2개 구간으로 나눠 각 1억 7천만원대로 계약하여 종합공사 일반경쟁입찰 기준을 회피하고 지명경쟁 또는 수의계약으로 처리한 사례.'
 
   ac.detail = <<~DETAIL
@@ -377,7 +377,7 @@ AuditCase.find_or_create_by!(slug: 'split-order-monthly-to-avoid-bidding') do |a
   ac.published = true
   ac.view_count = 0
   ac.topic_slug = 'split-contract-prohibition'
-  ac.legal_basis = '지방계약법 제7조 제1항 (경쟁의 원칙), 지방계약법 시행령 제77조 (공사의 분할계약 금지), 지방계약법 시행령 제79조 (단가계약)'
+  ac.legal_basis = '지방계약법 제9조 제1항 (경쟁입찰의 원칙), 지방계약법 시행령 제77조 (공사의 분할계약 금지), 지방계약법 시행령 제79조 (단가계약)'
   ac.issue = '▽▽시 총무과에서 연간 복사용지·사무용품 소요량(총 6,000만원)을 월별 500만원으로 분할하여 동일 업체와 소액 수의계약 12건을 반복 체결함으로써 입찰을 회피한 사례.'
 
   ac.detail = <<~DETAIL
