@@ -7,7 +7,7 @@ class ContractGuaranteesController < ApplicationController
     @delay_penalty_types = ContractGuaranteeService.get_delay_penalty_types
     set_meta_tags(
       title: "계약보증금 계산기",
-      description: "계약보증금, 하자보증금, 인지세를 자동으로 계산합니다. 계약 유형별 보증금률 자동 적용.",
+      description: "계약보증금·하자보증금·인지세를 자동으로 계산합니다. 계약 유형별 보증금률을 자동 적용해 금액과 납부 기준을 빠르고 정확하게 확인하세요.",
       keywords: "계약보증금, 하자보증금, 인지세, 보증금 계산기, 계약보증금률",
       og: { title: "계약보증금 계산기 — 실무.kr", url: canonical_url }
     )

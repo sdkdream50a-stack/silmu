@@ -5,7 +5,7 @@ class DesignChangesController < ApplicationController
     @change_reasons = DesignChangeReviewService.get_change_reasons
     set_meta_tags(
       title: "설계변경 검토서 도우미",
-      description: "설계변경 사유별 검토서를 자동으로 작성합니다. 설계변경 요건과 절차를 안내합니다.",
+      description: "설계변경 사유를 선택하면 검토서를 자동으로 작성합니다. 공사 설계변경의 요건과 절차를 안내해 사유 정리부터 문서화까지 한 번에 처리하세요.",
       keywords: "설계변경, 설계변경 검토서, 설계변경 사유, 공사 설계변경",
       og: { title: "설계변경 검토서 도우미 — 실무.kr", url: canonical_url }
     )

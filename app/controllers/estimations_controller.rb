@@ -5,7 +5,7 @@ class EstimationsController < ApplicationController
     @price_catalog = EstimateCalculatorService.price_catalog
     set_meta_tags(
       title: "소요예산 추정기",
-      description: "사업 유형별 소요예산을 간편하게 추정합니다. 공사, 물품, 용역별 예산 산출.",
+      description: "사업 유형을 선택하면 소요예산을 간편하게 추정합니다. 공사·물품·용역별 예산을 산출해 사업계획 수립과 예산 편성 단계에서 빠르게 참고하세요.",
       keywords: "소요예산, 예산 추정, 예산 계산기, 공사 예산, 물품 예산",
       og: { title: "소요예산 추정기 — 실무.kr", url: canonical_url }
     )

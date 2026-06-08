@@ -5,7 +5,7 @@ class ProgressInspectionsController < ApplicationController
     @inspection_types = ProgressInspectionService.get_inspection_types
     set_meta_tags(
       title: "기성검사 체크리스트",
-      description: "기성검사·준공검사 시 확인해야 할 항목을 체크리스트로 자동 생성합니다.",
+      description: "기성검사·준공검사 시 확인해야 할 항목을 체크리스트로 자동 생성합니다. 공사 유형별 검사 항목과 기성금 지급 전 점검 사항을 빠짐없이 챙기세요.",
       keywords: "기성검사, 준공검사, 체크리스트, 기성금, 검사 항목",
       og: { title: "기성검사 체크리스트 — 실무.kr", url: canonical_url }
     )

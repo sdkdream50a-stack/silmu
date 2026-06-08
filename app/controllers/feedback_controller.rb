@@ -2,7 +2,7 @@ class FeedbackController < ApplicationController
   def index
     set_meta_tags(
       title: "의견보내기",
-      description: "실무.kr 콘텐츠 수정 요청, 자료 추가 요청, 기타 의견을 보내주세요.",
+      description: "실무.kr 콘텐츠 수정 요청, 자료 추가 요청, 오류 신고, 기타 의견을 보내주세요. 보내주신 의견은 법령 가이드와 실무 도구를 개선하는 데 반영됩니다.",
       og: { title: "의견보내기 — 실무.kr", url: canonical_url }
     )
   end

@@ -15,7 +15,7 @@ class QuoteDocumentsController < ApplicationController
   def index
     set_meta_tags(
       title: "견적서 일괄 문서생성",
-      description: "견적서 1장을 업로드하면 사업계획서·소요예산·예정가격 조서를 한 번에 자동 생성합니다.",
+      description: "견적서 1장을 업로드하면 사업계획서·소요예산서·예정가격 조서를 한 번에 자동 생성합니다. 수의계약 문서 작업에 드는 시간을 크게 줄여 드립니다.",
       keywords: "견적서, 사업계획서, 소요예산, 예정가격, 수의계약, 일괄생성",
       og: { title: "견적서 일괄 문서생성 — 실무.kr", url: canonical_url }
     )

@@ -5,7 +5,7 @@ class CostEstimatesController < ApplicationController
     @construction_types = CostEstimateGeneratorService.get_construction_types
     set_meta_tags(
       title: "물량내역서+시방서 생성기",
-      description: "공사 유형별 물량내역서와 시방서를 자동으로 생성합니다.",
+      description: "공사 유형을 선택하면 물량내역서와 시방서를 자동으로 생성합니다. 공무원이 설계서·내역서를 작성하는 시간을 줄이도록 표준 서식으로 한 번에 만들어 드립니다.",
       keywords: "물량내역서, 시방서, 공사 내역서, 내역서 생성, 설계서",
       og: { title: "물량내역서+시방서 생성기 — 실무.kr", url: canonical_url }
     )

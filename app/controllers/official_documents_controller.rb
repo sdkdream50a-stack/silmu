@@ -9,7 +9,7 @@ class OfficialDocumentsController < ApplicationController
   def index
     meta = {
       title: "공문서 AI 작성 도우미",
-      description: "기안문, 협조문, 통보문 등 공문서를 AI가 행정업무운영규정에 맞게 자동 작성합니다.",
+      description: "기안문·협조문·통보문 등 공문서를 AI가 행정업무운영규정 서식에 맞게 자동 작성합니다. 작성 목적과 내용을 입력하면 격식을 갖춘 공문 초안을 만들어 드립니다.",
       keywords: "공문서 작성, 기안문, 협조문, 통보문, 보고문, 행정업무운영규정",
       og: { title: "공문서 AI 작성 도우미 — 실무.kr", url: canonical_url }
     }

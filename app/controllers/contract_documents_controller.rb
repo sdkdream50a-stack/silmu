@@ -5,7 +5,7 @@ class ContractDocumentsController < ApplicationController
     @contract_types = ContractDocumentService.get_all_types
     set_meta_tags(
       title: "계약서류 원클릭 생성기",
-      description: "계약 유형에 맞는 필수 서류를 자동으로 생성합니다. 계약서, 청렴서약서, 인감증명서 등.",
+      description: "계약 유형에 맞는 필수 서류를 자동으로 생성합니다. 계약서·청렴서약서·인감증명서 등 누락하기 쉬운 서류 목록을 한 번에 챙겨 계약 사무를 마무리하세요.",
       keywords: "계약서류, 서류 생성기, 계약서, 청렴서약서, 계약 서류 목록",
       og: { title: "계약서류 원클릭 생성기 — 실무.kr", url: canonical_url }
     )
