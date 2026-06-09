@@ -12,6 +12,7 @@ module Exam
         title: "공공조달관리사 미니 퀴즈 — 랜덤 10문제",
         description: "공공조달관리사 랜덤 10문제 미니 퀴즈. 빈 시간에 짧게 실력을 점검하세요. 즉시 채점·상세 해설 제공.",
         keywords: "공공조달관리사 미니 퀴즈, 랜덤 문제, 빠른 복습",
+        canonical: "https://exam.silmu.kr/quiz/mini",
         og: { image: "https://exam.silmu.kr/exam-og.png" },
         twitter: { card: "summary_large_image" }
       )
@@ -30,6 +31,7 @@ module Exam
         title: "공공조달관리사 모의고사 — 3과목 #{@total_count}문제 무료",
         description: "공공조달관리사 4지선다 모의고사. 3과목별·전체 #{@total_count}문제, 즉시 채점·상세 해설 제공.",
         keywords: "공공조달관리사 모의고사, 공공조달 시험 문제, 국가기술자격 모의고사",
+        canonical: "https://exam.silmu.kr/quiz",
         og: { image: "https://exam.silmu.kr/exam-og.png" },
         twitter: { card: "summary_large_image" }
       )
@@ -48,6 +50,7 @@ module Exam
         title: "공공조달관리사 실전 모의고사 — 80문제 120분 타이머",
         description: "공공조달관리사 실전 시험 모드 — 3과목 80문제 120분 타이머. 실제 시험과 동일한 환경으로 도전하세요.",
         keywords: "공공조달관리사 실전 시험, 공공조달 모의고사 타이머",
+        canonical: "https://exam.silmu.kr/quiz/simulation",
         og: { image: "https://exam.silmu.kr/exam-og.png" },
         twitter: { card: "summary_large_image" }
       )
@@ -62,6 +65,7 @@ module Exam
         title: "학습 분석 대시보드",
         description: "과목별 챕터 진도, 모의고사 점수, 오답 분포를 한눈에 확인하세요. 공공조달관리사 합격을 위한 맞춤 학습 추천.",
         keywords: "공공조달관리사 학습 분석, 공공조달 오답 분석, 시험 대비 학습 추적",
+        canonical: "https://exam.silmu.kr/quiz/analysis",
         og: { image: "https://exam.silmu.kr/exam-og.png" },
         twitter: { card: "summary_large_image" }
       )
