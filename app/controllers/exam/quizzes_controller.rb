@@ -9,7 +9,7 @@ module Exam
       @topic_map = ExamCurriculum.chapter_topic_slugs
       @signed_in = user_signed_in?
       set_meta_tags(
-        title: "미니 퀴즈 — 랜덤 10문제",
+        title: "공공조달관리사 미니 퀴즈 — 랜덤 10문제",
         description: "공공조달관리사 랜덤 10문제 미니 퀴즈. 빈 시간에 짧게 실력을 점검하세요. 즉시 채점·상세 해설 제공.",
         keywords: "공공조달관리사 미니 퀴즈, 랜덤 문제, 빠른 복습",
         og: { image: "https://exam.silmu.kr/exam-og.png" },
@@ -27,7 +27,7 @@ module Exam
       expires_in 1.hour, public: true, stale_while_revalidate: 1.day
 
       set_meta_tags(
-        title: "모의고사",
+        title: "공공조달관리사 모의고사 — 3과목 #{@total_count}문제 무료",
         description: "공공조달관리사 4지선다 모의고사. 3과목별·전체 #{@total_count}문제, 즉시 채점·상세 해설 제공.",
         keywords: "공공조달관리사 모의고사, 공공조달 시험 문제, 국가기술자격 모의고사",
         og: { image: "https://exam.silmu.kr/exam-og.png" },
@@ -45,7 +45,7 @@ module Exam
       @questions = (q1 + q2 + q3).shuffle
 
       set_meta_tags(
-        title: "실전 시험 모드",
+        title: "공공조달관리사 실전 모의고사 — 80문제 120분 타이머",
         description: "공공조달관리사 실전 시험 모드 — 3과목 80문제 120분 타이머. 실제 시험과 동일한 환경으로 도전하세요.",
         keywords: "공공조달관리사 실전 시험, 공공조달 모의고사 타이머",
         og: { image: "https://exam.silmu.kr/exam-og.png" },
