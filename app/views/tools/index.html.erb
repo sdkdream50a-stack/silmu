@@ -133,7 +133,20 @@
         { title: "공무원연금 예상 수령액 계산기", desc: "재직년수와 기준소득월액으로 예상 공무원연금 수령액을 자동 계산합니다.",             icon: "savings",           color: "violet",  category: "계산기",      domain: "인사", path: pension_calculator_path,            badge: "NEW" },
         { title: "공공기관 표준어 검사기",        desc: "행정안전부 「공공데이터 공통표준용어」 기준 비표준 행정 용어 자동 검사·교정 (PoC).", icon: "spellcheck",        color: "emerald", category: "검사기",      domain: "데이터", path: standard_term_checker_path,         badge: "NEW" },
       ]
+
+      # S4 — 도구 ItemList 구조화데이터 (검색 풍부도·도구 색인 회복)
+      tools_item_list = {
+        "@context" => "https://schema.org",
+        "@type" => "ItemList",
+        "name" => "공무원 계약·예산·인사 실무 도구",
+        "numberOfItems" => tools_data.size,
+        "itemListElement" => tools_data.each_with_index.map do |tool, i|
+          { "@type" => "ListItem", "position" => i + 1, "name" => tool[:title],
+            "url" => "https://silmu.kr#{tool[:path]}" }
+        end
+      }
     %>
+    <script type="application/ld+json"><%= raw tools_item_list.to_json %></script>
 
     <!-- 그리드 뷰 -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"

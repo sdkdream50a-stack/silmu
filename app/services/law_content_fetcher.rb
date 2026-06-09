@@ -75,7 +75,10 @@ class LawContentFetcher
     "budget-carryover"              => { law: "지방재정법",
                                          decree: "지방재정법 시행령" },
     "year-end-settlement"           => { law: "소득세법",
-                                         decree: "소득세법 시행령" }
+                                         decree: "소득세법 시행령" },
+    # 2026-06-09 S5 — 청탁금지 한도(시행령 별표1) 개정 시 업무추진비·경조사 토픽 자동 flag
+    "entertainment-expense-rules"   => { law: "부정청탁 및 금품등 수수의 금지에 관한 법률",
+                                         decree: "부정청탁 및 금품등 수수의 금지에 관한 법률 시행령" }
   }.freeze
 
   def initialize

@@ -629,3 +629,22 @@ document.addEventListener('turbo:before-cache', function() {
   delete window.guideGoToPage;
 });
 </script>
+
+<%
+  # S4 — 가이드 CollectionPage/ItemList 구조화데이터 (색인 회복)
+  guides_item_list = {
+    "@context" => "https://schema.org",
+    "@type" => "CollectionPage",
+    "name" => "실무 가이드",
+    "url" => "https://silmu.kr#{guides_path}",
+    "mainEntity" => {
+      "@type" => "ItemList",
+      "numberOfItems" => @guides.size,
+      "itemListElement" => @guides.each_with_index.map do |g, i|
+        { "@type" => "ListItem", "position" => i + 1, "name" => g.title.to_s,
+          "url" => "https://silmu.kr#{guide_path(g)}" }
+      end
+    }
+  }
+%>
+<script type="application/ld+json"><%= raw guides_item_list.to_json %></script>
