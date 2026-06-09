@@ -1,6 +1,6 @@
 # Created: 2026-03-17
 # 부정당업자 제재 및 입찰참가자격 제한 토픽 (대폭 보강)
-# 예규 제324호 제9장 제10절 기준
+# 예규 제332호 제9장 제10절 기준
 
 # 기존 bid-participation-restriction 토픽 내용 보강
 topic = Topic.find_or_initialize_by(slug: 'bid-participation-restriction')
@@ -34,7 +34,7 @@ topic.law_content = <<~CONTENT
 <div style="background:#eff6ff; padding:12px; border-radius:8px; margin-top:12px;">
 <strong>법률 위임 구조</strong>
 
-법률(제31조) → 시행령(제92조~제96조) → 예규 제324호 제9장 제10절
+법률(제31조) → 시행령(제92조~제96조) → 예규 제332호 제9장 제10절
 
 입찰 참가자격 제한의 구체적 사유별 기간, 감경·가중 기준, 절차는 시행령과 예규에서 규정합니다.
 </div>
@@ -136,7 +136,7 @@ topic.decree_content = <<~CONTENT
 CONTENT
 
 topic.rule_content = <<~CONTENT
-## 예규 제324호 제9장 제10절 — 부정당업자 제재 실무
+## 예규 제332호 제9장 제10절 — 부정당업자 제재 실무
 
 ### 제재 이력 조회 방법
 
@@ -421,7 +421,7 @@ topic2.decree_content = <<~CONTENT
 CONTENT
 
 topic2.rule_content = <<~CONTENT
-## 예규 제324호 제9장 제10절 — 부정당업자 제재 집행기준
+## 예규 제332호 제9장 제10절 — 부정당업자 제재 집행기준
 
 ### 제재 이력 조회 방법
 

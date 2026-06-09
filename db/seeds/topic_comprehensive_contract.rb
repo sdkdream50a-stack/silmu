@@ -1,5 +1,5 @@
 # 종합계약 운영요령 토픽
-# 예규 제324호 제7장 — 장기계속계약·계속비계약·단가계약 종합 운영
+# 예규 제332호 제7장 — 장기계속계약·계속비계약·단가계약 종합 운영
 
 topic = Topic.find_or_initialize_by(slug: "comprehensive-contract")
 topic.assign_attributes(
@@ -47,7 +47,7 @@ topic.law_content = <<~CONTENT
   - 1차년도 계약서에 **총 계약금액·총 이행기간 부기(附記)** 필수
 
   <div style="background:#f3f4f6;padding:12px;border-radius:8px;margin:8px 0;">
-  ※ 관련 법령: 지방계약법 제24조·제25조, 지방계약법 시행령 제78조·제79조, 지방자치단체 입찰 및 계약집행기준(예규 제324호) 제7장
+  ※ 관련 법령: 지방계약법 제24조·제25조, 지방계약법 시행령 제78조·제79조, 지방자치단체 입찰 및 계약집행기준(예규 제332호) 제7장
   </div>
 CONTENT
 
@@ -104,7 +104,7 @@ topic.decree_content = <<~CONTENT
   ③ 단가계약 기간은 **1년 이내**를 원칙으로 하되, 부득이한 경우 2년 이내로 할 수 있다.
   </div>
 
-  ### 장기계속계약 중도 해지 (예규 제324호 제7장)
+  ### 장기계속계약 중도 해지 (예규 제332호 제7장)
 
   <div style="background:#dcfce7;padding:12px;border-radius:8px;margin:8px 0;">
   ① 장기계속계약에서 **예산 미확보** 등 부득이한 사유로 차년도 계약을 체결할 수 없게 된 경우, 계약담당자는 계약상대자에게 **사전 통보**하여야 한다.

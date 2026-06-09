@@ -11,7 +11,7 @@ AuditCase.find_or_create_by!(slug: 'software-dev-misclassified-as-goods') do |ac
   ac.published = true
   ac.view_count = 0
   ac.topic_slug = 'goods-vs-service-contract'
-  ac.legal_basis = '지방계약법 제9조(계약의 방법), 지방계약법 시행령 제25조(수의계약에 의할 수 있는 경우), 소프트웨어산업 진흥법 제2조(정의), 행정안전부 예규 제324호(지방자치단체 입찰 및 계약 집행기준) 제2장'
+  ac.legal_basis = '지방계약법 제9조(계약의 방법), 지방계약법 시행령 제25조(수의계약에 의할 수 있는 경우), 소프트웨어산업 진흥법 제2조(정의), 행정안전부 예규 제332호(지방자치단체 입찰 및 계약 집행기준) 제2장'
   ac.issue = '○○시 정보화담당관실이 행정업무 자동화 소프트웨어 개발(추정가격 4,800만원)을 "패키지 SW 구매"로 계약 유형을 잘못 분류하여, 용역계약 경쟁입찰 의무를 회피하고 특정 업체와 물품 수의계약을 체결하였다가 감사원 감사에서 적발되어 계약 취소 및 담당자 징계 처분을 받음.'
 
   ac.detail = <<~DETAIL

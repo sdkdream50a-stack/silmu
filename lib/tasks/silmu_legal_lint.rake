@@ -194,7 +194,8 @@ namespace :silmu do
         # 2026-05-19 Phase 3 정정: 한도는 30%가 정확 (지방계약법 시행령 §90③·국가계약법 시행령 §74③). 10% 인용 차단
         pattern: /지체상금[^.\n]{0,80}10\s*%(?!\s*\W*30)|10\s*%[^.\n]{0,40}지체상금/,
         rule: "지체상금(지연배상금) 한도 = 100분의 30 (지방계약법 시행령 §90③항, 국가계약법 시행령 §74③항). 10% 인용 금지 — 과거(2018년 개정 전) 한도",
-        exclude_files: %w[home_quiz_controller.js].freeze
+        # exam_questions=오답지 distractor / quick_stats_backfill_batch1=주석(30%한도 정확, 10%는 설계변경) — 둘 다 거짓 양성 제외
+        exclude_files: %w[home_quiz_controller.js exam_questions.rb topic_quick_stats_backfill_2026_06_03_batch1.rb].freeze
       },
       {
         # 87.745%만 단독 언급 (범위형 87.745~89.745% 표기 + 사례 본문 "당시 적용된" 묘사 제외)
@@ -456,7 +457,15 @@ namespace :silmu do
       {
         # 지방계약법 시행령 §65 = 단일 조문 (검사조서 작성 생략, 3천만원 기준). 항 표기(①항·②항) 부정확
         pattern: /시행령[^,)\n]{0,5}제65조\s*제[1-9]항|시행령[^,)\n]{0,5}제65조\s*[①-⑩]항/,
-        rule: "지방계약법 시행령 §65 = 단일 조문 (검사조서 작성 생략 — '대통령령으로 정하는 금액'을 3천만원으로 정한 한 문장). 항 번호 표기 금지"
+        rule: "지방계약법 시행령 §65 = 단일 조문 (검사조서 작성 생략 — '대통령령으로 정하는 금액'을 3천만원으로 정한 한 문장). 항 번호 표기 금지",
+        # 국가계약법 시행령 §65(설계변경 계약금액 조정)는 제3항 실재 — exam은 국가/지방 혼재라 제외
+        exclude_files: %w[exam_questions.rb].freeze
+      },
+      # 2026-06-09 S2 — 「지방자치단체 입찰 및 계약집행기준」 예규 번호 stale 검출
+      {
+        # 현행 = 행정안전부 예규 제332호(2025.7.8 시행). 제167·197·277·282·324호는 구판 (장 구조 동일하나 번호 갱신 필요)
+        pattern: /예규\s*제?(167|197|277|282|324)호/,
+        rule: "「지방자치단체 입찰 및 계약집행기준」 현행 = 행정안전부 예규 제332호(2025.7.8 시행). 제167·197·277·282·324호는 폐지된 구판 — 제332호로 갱신 (장·절 구조는 동일)"
       }
     ]
 
@@ -541,7 +550,7 @@ namespace :silmu do
     failures = []
 
     # patch/correction 시드는 정정 매핑(from/to)을 모두 포함하므로 자기 자신을 거짓 양성으로 잡음 → 제외
-    correction_file_pattern = %r{db/seeds/.+_correction(_[a-z0-9]+)?_\d{4}_\d{2}_\d{2}(_[a-z0-9]+)?\.rb\z|db/seeds/audit_cases/legal_basis_correction_\d{4}_\d{2}_\d{2}(_[a-z0-9]+)?\.rb\z}
+    correction_file_pattern = %r{db/seeds/.+_correction(_[a-z0-9]+)?_\d{4}_\d{2}_\d{2}(_[a-z0-9]+)?\.rb\z|db/seeds/audit_cases/legal_basis_correction_\d{4}_\d{2}_\d{2}(_[a-z0-9]+)?\.rb\z|db/seeds/topic_content_fix_\d{4}_\d{2}_\d{2}(_[a-z0-9]+)?\.rb\z}
 
     target_globs.each do |glob|
       Dir[Rails.root.join(glob)].each do |path|
@@ -566,6 +575,7 @@ namespace :silmu do
 
         # 3. 부정확 매핑 검사
         incorrect_mappings.each do |mapping|
+          next if Array(mapping[:exclude_files]).any? { |ex| rel.end_with?(ex) }
           if content.match?(mapping[:pattern])
             failures << { kind: :incorrect_mapping, file: rel, rule: mapping[:rule] }
           end

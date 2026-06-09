@@ -1,5 +1,5 @@
 # 입찰 유의서 작성 및 입찰 무효 사유 토픽
-# 예규 제324호 제8장 — 입찰 유의서, 입찰 무효, 입찰 취소·연기
+# 예규 제332호 제8장 — 입찰 유의서, 입찰 무효, 입찰 취소·연기
 
 topic = Topic.find_or_initialize_by(slug: "bid-notice-requirements")
 topic.assign_attributes(
@@ -46,7 +46,7 @@ topic.law_content = <<~CONTENT
   - 유의서에 명시된 사항을 위반한 입찰은 **무효** 처리 가능
 
   <div style="background:#f3f4f6;padding:12px;border-radius:8px;margin:8px 0;">
-  ※ 관련 법령: 지방계약법 제9조, 지방계약법 시행령 제35조·제39조 제4항, 지방자치단체 입찰 및 계약집행기준(예규 제324호) 제8장
+  ※ 관련 법령: 지방계약법 제9조, 지방계약법 시행령 제35조·제39조 제4항, 지방자치단체 입찰 및 계약집행기준(예규 제332호) 제8장
   </div>
 CONTENT
 

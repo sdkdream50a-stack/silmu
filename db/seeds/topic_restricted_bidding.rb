@@ -1,7 +1,7 @@
 Topic.find_or_initialize_by(slug: "restricted-bidding") do |t|
   t.name = "제한경쟁입찰 운영요령"
   t.category = "contract"
-  t.keywords = "제한경쟁입찰,실적제한,기술능력제한,지역제한,중소기업제한,여성기업,장애인기업,입찰참가자격,제한기준,예규324호"
+  t.keywords = "제한경쟁입찰,실적제한,기술능력제한,지역제한,중소기업제한,여성기업,장애인기업,입찰참가자격,제한기준,예규332호"
   t.summary = "제한경쟁입찰의 허용 사유, 제한 기준 설정 방법, 공고 방법, 위반 시 처리 등 실무 운영요령을 안내합니다."
   t.published = true
   t.view_count = 0
@@ -66,7 +66,7 @@ Topic.find_or_initialize_by(slug: "restricted-bidding") do |t|
   CONTENT
 
   t.decree_content = <<~CONTENT
-## 제한경쟁입찰 세부 기준 (예규 제324호 제4장)
+## 제한경쟁입찰 세부 기준 (예규 제332호 제4장)
 
 ### 제한 사유별 허용 기준 상세
 
@@ -129,7 +129,7 @@ Topic.find_or_initialize_by(slug: "restricted-bidding") do |t|
   CONTENT
 
   t.rule_content = <<~CONTENT
-## 지방자치단체 입찰 및 계약집행기준 (예규 제324호) 제4장
+## 지방자치단체 입찰 및 계약집행기준 (예규 제332호) 제4장
 
 ### 제한 기준 설정 방법과 근거 문서
 
@@ -198,7 +198,7 @@ Topic.find_or_initialize_by(slug: "restricted-bidding") do |t|
   CONTENT
 
   t.regulation_content = <<~CONTENT
-지방자치단체 입찰 및 계약집행기준 (예규 제324호)
+지방자치단체 입찰 및 계약집행기준 (예규 제332호)
 
 ## 제한경쟁입찰 유형별 운영 기준
 
@@ -257,7 +257,7 @@ Topic.find_or_initialize_by(slug: "restricted-bidding") do |t|
 
 ### 사례 1: 실적 기준 과도하게 높게 설정
 **지적사항:** 추정가격 1억원 용역 입찰에서 실적 기준을 "최근 3년 이내 1억원 이상 동종 용역 3건 이상"으로 설정 — 계약금액보다 높은 실적 기준
-**관련근거:** 지방계약법 시행령 제20조, 예규 제324호 제4장
+**관련근거:** 지방계약법 시행령 제20조, 예규 제332호 제4장
 **조치내용:** 입찰 취소 후 기준 완화하여 재공고, 관련자 경고
 > 실적 기준은 계약 목적 달성에 필요한 최소한으로 설정해야 하며, 당해 계약금액과 동일하거나 높은 기준은 특혜 입찰로 간주
 
@@ -281,7 +281,7 @@ Topic.find_or_initialize_by(slug: "restricted-bidding") do |t|
 
 ### 사례 4: 제한 기준 근거 문서 미보관
 **지적사항:** 제한경쟁입찰을 실시하면서 제한 기준 설정의 근거 검토 문서를 작성하지 않아 적정성 소명 불가
-**관련근거:** 예규 제324호 제4장 (제한 기준 설정 문서화 의무)
+**관련근거:** 예규 제332호 제4장 (제한 기준 설정 문서화 의무)
 **조치내용:** 관련자 주의, 향후 근거 문서 보관 의무화
 > 제한 기준 설정 검토서는 반드시 작성·보관해야 감사 시 근거 제시 가능
   CONTENT
