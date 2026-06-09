@@ -191,5 +191,14 @@ module Exam
         twitter: { card: "summary_large_image" }
       )
     end
+
+    private
+
+    # exam-native 페이지는 self-canonical 유지 (기본 canonical_url의 exam→apex 재작성 비적용).
+    # show·chapter·wrong·all 등 canonical 미지정 액션이 set_default_meta_tags 경유로
+    # 존재하지 않는 apex(silmu.kr/quiz/* = 404) canonical을 상속하던 색인차단 버그 일괄 해소.
+    def canonical_url
+      @canonical_url ||= request.original_url.split("?").first
+    end
   end
 end
