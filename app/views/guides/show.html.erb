@@ -10,7 +10,7 @@
     "image": "https://silmu.kr/og-image.webp",
     "datePublished": (@guide.published_on&.iso8601 || @guide.created_at.iso8601),
     "dateModified": @guide.updated_at.iso8601,
-    "author": { "@type": "Organization", "name": "실무.kr", "url": "https://silmu.kr" },
+    "author": { "@type": "Person", "name": "실무.kr 운영자", "jobTitle": "교육행정직 공무원", "description": "공공 예산·계약·감사 실무 약 32년 경력", "url": "https://silmu.kr/about", "worksFor": { "@type": "Organization", "name": "실무.kr", "url": "https://silmu.kr" } },
     "step": (@guide.sections ? [
       @guide.sections[:step1],
       @guide.sections[:step2],
