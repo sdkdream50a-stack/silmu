@@ -99,7 +99,7 @@ class CostEstimateGeneratorService
   INDIRECT_RATES = {
     general_expense: { name: "일반관리비", rate: 0.06, basis: "재료비+노무비+경비", note: "회계예규 §20 (시설공사 50억 미만 6.0%/50~300억 5.5%/300억 이상 5.0%, 일반건설공사 기준)" },
     profit: { name: "이윤", rate: 0.15, basis: "노무비+경비+일반관리비", note: "회계예규 §21 (시설공사 이윤율 상한 15%, 기술료·외주가공비 제외)" },
-    industrial_safety: { name: "산업안전보건관리비", rate: 0.018, basis: "재료비+직접노무비", note: "산안법 시행규칙 별표1", threshold: 4000000 },
+    industrial_safety: { name: "산업안전보건관리비", rate: 0.0311, basis: "재료비+직접노무비", note: "고용노동부 고시 제2025-11호 별표1 (건축공사·대상액 5억원 미만 3.11%), 총공사금액 2천만원 이상 계상", threshold: 20000000 },
     industrial_accident: { name: "산재보험료", rate: 0.036, basis: "직접노무비", note: "고시 요율" },
     employment_insurance: { name: "고용보험료", rate: 0.009, basis: "직접노무비", note: "고용보험법" },
     health_pension: { name: "국민건강·연금보험료", rate: 0.089, basis: "직접노무비", note: "4대보험" },
@@ -235,11 +235,11 @@ class CostEstimateGeneratorService
       insurance = (labor_cost * (INDIRECT_RATES[:industrial_accident][:rate] + INDIRECT_RATES[:employment_insurance][:rate] + INDIRECT_RATES[:health_pension][:rate])).round(0)
       details << { name: "보험료(산재·고용·건강·연금)", amount: insurance, note: "노무비 기준" }
 
-      # 산업안전보건관리비 (400만원 이상)
+      # 산업안전보건관리비 (총공사금액 2천만원 이상 계상 — 고시 제3조. 입력 견적금액을 기준으로 비교)
       safety = 0
       if material_cost >= INDIRECT_RATES[:industrial_safety][:threshold]
         safety = ((material_only + labor_cost) * INDIRECT_RATES[:industrial_safety][:rate]).round(0)
-        details << { name: "산업안전보건관리비", amount: safety, note: "#{(INDIRECT_RATES[:industrial_safety][:rate] * 100).round(1)}%" }
+        details << { name: "산업안전보건관리비", amount: safety, note: "#{(INDIRECT_RATES[:industrial_safety][:rate] * 100).round(2)}%" }
       end
 
       subtotal = material_cost + general + profit + insurance + safety

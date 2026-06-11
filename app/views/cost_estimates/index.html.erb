@@ -684,8 +684,9 @@ document.addEventListener('turbo:load', function() {
     var profit = Math.round((laborCost + general) * 0.15);
     // 보험료
     var insurance = Math.round(laborCost * (0.036 + 0.009 + 0.089));
-    // 산업안전보건관리비
-    var safety = directCost >= 4000000 ? Math.round((materialOnly + laborCost) * 0.018) : 0;
+    // 산업안전보건관리비 — 고용노동부 고시 제2025-11호: 건축공사·대상액 5억 미만 3.11%, 총공사금액 2천만원 이상 계상
+    var preSafetyTotal = Math.round((directCost + general + profit + insurance) * 1.10);
+    var safety = preSafetyTotal >= 20000000 ? Math.round((materialOnly + laborCost) * 0.0311) : 0;
 
     var subtotal = directCost + general + profit + insurance + safety;
     var vat = Math.round(subtotal * 0.10);
@@ -696,7 +697,7 @@ document.addEventListener('turbo:load', function() {
     indirectHtml += '<div class="ce-summary-row"><span class="ce-summary-label">이윤 (15%)</span><span class="ce-summary-value">' + ceComma(profit) + ' 원</span></div>';
     indirectHtml += '<div class="ce-summary-row"><span class="ce-summary-label">보험료 (산재·고용·건강·연금)</span><span class="ce-summary-value">' + ceComma(insurance) + ' 원</span></div>';
     if (safety > 0) {
-      indirectHtml += '<div class="ce-summary-row"><span class="ce-summary-label">산업안전보건관리비 (1.8%)</span><span class="ce-summary-value">' + ceComma(safety) + ' 원</span></div>';
+      indirectHtml += '<div class="ce-summary-row"><span class="ce-summary-label">산업안전보건관리비 (3.11%)</span><span class="ce-summary-value">' + ceComma(safety) + ' 원</span></div>';
     }
     document.getElementById('ce-indirect-rows').innerHTML = indirectHtml;
     document.getElementById('ce-subtotal').textContent = ceComma(subtotal) + ' 원';

@@ -102,7 +102,7 @@ class EstimatedPriceService
 
       # 수의계약 가능 여부 + 견적 요건 — 추정가격(VAT 제외) 기준 비교
       threshold = PRIVATE_CONTRACT_THRESHOLDS[type]
-      estimate_requirement = determine_estimate_requirement(base_amount)
+      estimate_requirement = determine_estimate_requirement(type, base_amount)
       private_contract = {
         available: base_amount <= threshold,
         threshold: threshold,
@@ -192,10 +192,15 @@ class EstimatedPriceService
       warnings
     end
 
-    def determine_estimate_requirement(price)
+    def determine_estimate_requirement(type, price)
       # price = 추정가격 (VAT 제외)
+      # 견적서 생략(시행규칙 제33조)은 200만원 미만 물품·용역만 해당 — 공사는 미열거
       if price <= 2_000_000
-        { type: "생략가능", desc: "추정가격 2백만원 이하: 견적서 생략 또는 1인 견적", basis: "지방계약법 시행령 제30조제2항" }
+        if type == :construction
+          { type: "1인견적", desc: "추정가격 2백만원 이하: 1인 견적 수의계약 (공사는 견적서 생략 대상 아님)", basis: "지방계약법 시행령 제30조제1항" }
+        else
+          { type: "생략가능", desc: "추정가격 200만원 미만: 견적서 생략 가능 (200만원 이하는 1인 견적)", basis: "지방계약법 시행령 제30조제1항·제4항, 시행규칙 제33조" }
+        end
       elsif price <= 20_000_000
         { type: "1인견적", desc: "추정가격 2천만원 이하: 1인 견적 수의계약", basis: "지방계약법 시행령 제25조제1항제5호" }
       elsif price <= 100_000_000

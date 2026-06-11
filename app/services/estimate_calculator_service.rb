@@ -118,33 +118,36 @@ class EstimateCalculatorService
   }.freeze
 
   # 공사규모별 간접비율 (예정가격작성기준)
+  # safety(산업안전보건관리비)는 고용노동부 고시 제2025-11호 별표1 건축공사 기준:
+  # 대상액 5억 미만 3.11%, 5억~50억 2.28% + 기초액 4,325,000원 (총공사금액 2천만원 미만은 계상 대상 아님)
   CONSTRUCTION_INDIRECT_RATES_BY_SCALE = {
     small: {      # 5천만원 미만
       threshold: 50_000_000,
       overhead: 0.06,
       profit: 0.05,
-      safety: 0.018,
+      safety: 0.0311,
       insurance: 0.035
     },
     medium: {     # 5천만원 ~ 2억원
       threshold: 200_000_000,
       overhead: 0.06,
       profit: 0.05,
-      safety: 0.022,
+      safety: 0.0311,
       insurance: 0.035
     },
     large: {      # 2억원 ~ 5억원
       threshold: 500_000_000,
       overhead: 0.06,
       profit: 0.05,
-      safety: 0.025,
+      safety: 0.0311,
       insurance: 0.035
     },
     xlarge: {     # 5억원 이상
       threshold: Float::INFINITY,
       overhead: 0.06,
       profit: 0.05,
-      safety: 0.027,
+      safety: 0.0228,
+      safety_base: 4_325_000,
       insurance: 0.035
     }
   }.freeze
@@ -209,7 +212,7 @@ class EstimateCalculatorService
     construction: {
       overhead: 0.06,        # 일반관리비 6%
       profit: 0.05,          # 이윤 5%
-      safety: 0.025,         # 안전관리비 2.5%
+      safety: 0.0311,        # 산업안전보건관리비 3.11% (고용노동부 고시 제2025-11호, 건축공사·5억 미만)
       insurance: 0.035,      # 산재보험료 3.5%
       vat: 0.10              # 부가세 10%
     },
@@ -259,8 +262,10 @@ class EstimateCalculatorService
       rates = get_construction_indirect_rates(direct_cost)
       overhead = (direct_cost * rates[:overhead]).round(-3)
       profit = (direct_cost * rates[:profit]).round(-3)
-      safety = (direct_cost * rates[:safety]).round(-3)
+      safety = (direct_cost * rates[:safety] + rates.fetch(:safety_base, 0)).round(-3)
       insurance = (direct_cost * rates[:insurance]).round(-3)
+      # 고시 제3조: 총공사금액 2천만원 미만 공사는 산업안전보건관리비 계상 대상 아님 (부가세 포함 추정 총액 기준)
+      safety = 0 if (direct_cost + overhead + profit + insurance) * 1.1 < 20_000_000
 
       subtotal = direct_cost + overhead + profit + safety + insurance
       vat = (subtotal * INDIRECT_COST_RATES[:construction][:vat]).round(-3)
@@ -483,7 +488,7 @@ class EstimateCalculatorService
         ※ 본 추정 금액은 일반적인 시장 단가를 기준으로 산출된 참고 자료입니다.
         ※ 실제 계약 금액은 현장 조건, 시공 난이도, 자재 품질, 업체 견적 등에 따라 달라질 수 있습니다.
         ※ 정확한 예산 산정을 위해서는 반드시 전문 업체의 현장 실사 및 정밀 견적을 받으시기 바랍니다.
-        ※ 간접비(일반관리비, 이윤, 안전관리비, 산재보험료)는 「예정가격작성기준」에 따른 표준 요율을 적용하였습니다.
+        ※ 간접비 중 일반관리비·이윤·산재보험료는 「예정가격작성기준」, 산업안전보건관리비는 고용노동부 고시 「건설업 산업안전보건관리비 계상 및 사용기준」에 따른 요율을 적용하였습니다.
       DISCLAIMER
     end
 

@@ -265,9 +265,11 @@ export default class extends Controller {
       else { fare = Math.round(dist*57/100)*100*2; estimated = true; desc = '고속버스 추정 왕복' }
     } else if (transport === 'car') {
       if (isIsland) return { fare: 0, desc: '제주는 자차 이동 불가', unavailable: true }
+      // 177원/km는 추정 단가(유가 약 2,118원/L ÷ 휘발유 기준연비 11.97km/L 환산값) — 규정상 정액 단가 아님.
+      // 실제 지급: 「공무원 여비 규정」 별표2 비고 — 연료비(주행거리 ÷ 기준연비 × 당일 오피넷 유가) + 통행료 실비
       fare = Math.round(dist*2*177/1000)*1000
       estimated = true
-      desc = '자차 왕복 약 '+(dist*2).toLocaleString()+'km (유류비+통행료)'
+      desc = '자차 왕복 약 '+(dist*2).toLocaleString()+'km (유류비+통행료 추정)'
     } else if (transport === 'flight') {
       const known = this._lookupFare(C.flightFares, c1, c2)
       if (known) { fare = known; desc = '항공 왕복 이코노미' }
