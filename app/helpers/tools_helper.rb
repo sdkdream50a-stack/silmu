@@ -36,13 +36,13 @@ module ToolsHelper
       { title: "공무원 봉급 실수령액 계산기",   desc: "2026년 봉급표 기준 직급·호봉별 실수령액을 자동 계산합니다.",                     icon: "payments",          color: "blue",    category: "계산기",      domain: "인사", path: salary_calculator_path,             badge: "NEW" },
       { title: "공무원연금 예상 수령액 계산기", desc: "재직년수와 기준소득월액으로 예상 공무원연금 수령액을 자동 계산합니다.",             icon: "savings",           color: "violet",  category: "계산기",      domain: "인사", path: pension_calculator_path,            badge: "NEW" },
       { title: "공공기관 표준어 검사기",        desc: "행정안전부 「공공데이터 공통표준용어」 기준 비표준 행정 용어 자동 검사·교정 (PoC).", icon: "spellcheck",        color: "emerald", category: "검사기",      domain: "데이터", path: standard_term_checker_path,         badge: "NEW" },
-      # unlisted: tools/index 카드 목록에는 없지만 라이브 운영 중인 도구 — 검색에만 노출 (목록 게재 여부는 별도 결정)
-      { title: "예산 과목 분류 도우미",         desc: "지출 내용을 입력하면 적합한 세출예산 과목(목·세목)을 자동으로 추천합니다.",       icon: "category",          color: "indigo",  category: "자동화 도구", domain: "예산", path: budget_category_finder_path,        unlisted: true, keywords: "수도광열비, 특근매식비, 수용비, 공공요금, 세출예산, 목 세목" },
-      { title: "공무원 수당 계산기",            desc: "정근수당·가족수당·명절휴가비·직급보조비를 수당 규정 기준으로 자동 계산합니다.",   icon: "payments",          color: "indigo",  category: "계산기",      domain: "인사", path: allowance_calculator_path,          unlisted: true, keywords: "가족수당, 정근수당, 명절휴가비, 직급보조비, 강사수당" },
-      { title: "보조금 정산 체크리스트",        desc: "국고·지방보조금 정산 전 자가점검 항목을 감사 빈출 지적 기준으로 즉시 확인합니다.", icon: "checklist",         color: "amber",   category: "체크리스트",  domain: "예산", path: subsidy_settlement_checker_path,    unlisted: true, keywords: "e나라도움, 국고보조금, 지방보조금" },
-      { title: "부서별 감사 대비 체크리스트",   desc: "담당 업무 유형별 감사 빈출 지적 기반 자가점검 체크리스트를 즉시 생성합니다.",     icon: "rule",              color: "red",     category: "체크리스트",  domain: "기타", path: audit_readiness_checker_path,       unlisted: true, keywords: "회계감사, 감사 지적, 자가점검" },
-      { title: "계약 적법성 자가진단",          desc: "계약 단계별 감사원 빈출 지적사항을 체크리스트로 즉시 점검합니다.",                icon: "fact_check",        color: "emerald", category: "체크리스트",  domain: "계약", path: contract_legality_check_path,       unlisted: true, keywords: "감사 지적, 자가진단" },
-      { title: "이월·전용 적법성 판단기",       desc: "예산 이월·전용 요건과 절차를 법령 기준으로 자동 판단합니다.",                     icon: "swap_horiz",        color: "amber",   category: "자동화 도구", domain: "예산", path: budget_transfer_checker_path,       unlisted: true, keywords: "명시이월, 사고이월, 계속비, 예산 전용" }
+      # 2026-06-11 전수 감사 통과로 6개 도구 목록 게재 (종전 unlisted — 검색에만 노출했었음)
+      { title: "예산 과목 분류 도우미",         desc: "지출 내용을 입력하면 적합한 세출예산 과목(목·세목)을 자동으로 추천합니다.",       icon: "category",          color: "indigo",  category: "자동화 도구", domain: "예산", path: budget_category_finder_path,        badge: "NEW", keywords: "수도광열비, 특근매식비, 수용비, 공공요금, 세출예산, 목 세목" },
+      { title: "공무원 수당 계산기",            desc: "정근수당·가족수당·명절휴가비·직급보조비를 수당 규정 기준으로 자동 계산합니다.",   icon: "payments",          color: "indigo",  category: "계산기",      domain: "인사", path: allowance_calculator_path,          badge: "NEW", keywords: "가족수당, 정근수당, 명절휴가비, 직급보조비, 강사수당" },
+      { title: "보조금 정산 체크리스트",        desc: "국고·지방보조금 정산 전 자가점검 항목을 감사 빈출 지적 기준으로 즉시 확인합니다.", icon: "checklist",         color: "amber",   category: "체크리스트",  domain: "예산", path: subsidy_settlement_checker_path,    badge: "NEW", keywords: "e나라도움, 국고보조금, 지방보조금" },
+      { title: "부서별 감사 대비 체크리스트",   desc: "담당 업무 유형별 감사 빈출 지적 기반 자가점검 체크리스트를 즉시 생성합니다.",     icon: "rule",              color: "red",     category: "체크리스트",  domain: "기타", path: audit_readiness_checker_path,       badge: "NEW", keywords: "회계감사, 감사 지적, 자가점검" },
+      { title: "계약 적법성 자가진단",          desc: "계약 단계별 감사원 빈출 지적사항을 체크리스트로 즉시 점검합니다.",                icon: "fact_check",        color: "emerald", category: "체크리스트",  domain: "계약", path: contract_legality_check_path,       badge: "NEW", keywords: "감사 지적, 자가진단" },
+      { title: "이월·전용 적법성 판단기",       desc: "예산 이월·전용 요건과 절차를 법령 기준으로 자동 판단합니다.",                     icon: "swap_horiz",        color: "amber",   category: "자동화 도구", domain: "예산", path: budget_transfer_checker_path,       badge: "NEW", keywords: "명시이월, 사고이월, 계속비, 예산 전용" }
     ]
   end
 end
