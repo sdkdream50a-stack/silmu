@@ -52,6 +52,7 @@
             class="max-w-2xl mx-auto mb-8">
         <div class="flex items-center gap-2 p-2 bg-white rounded-xl shadow-lg">
           <span class="material-symbols-outlined text-slate-400 pl-3">search</span>
+          <input type="hidden" name="src" value="home_form"/>
           <input name="q" data-home-search-target="input"
                  data-action="input->home-search#inputChanged blur->home-search#blurred"
                  aria-label="실무 가이드 검색"
@@ -67,7 +68,7 @@
         <p class="text-xs font-semibold text-white/80 uppercase tracking-wider mb-3">인기 검색어</p>
         <div class="flex flex-wrap justify-center gap-2">
           <% %w[수의계약 연말정산 출장비 이월 기간제 보조금정산 겸직 일상경비].each do |keyword| %>
-            <%= link_to keyword, silmu_search_search_path(q: keyword), data: { turbo: false },
+            <%= link_to keyword, silmu_search_search_path(q: keyword, src: "home_chip"), data: { turbo: false },
                 class: "touch-target inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-white text-sm font-semibold backdrop-blur-sm transition-colors" %>
           <% end %>
         </div>

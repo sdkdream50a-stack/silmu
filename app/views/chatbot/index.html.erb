@@ -205,6 +205,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = input && input.closest('form');
     if (input && form) {
       input.value = q;
+      const src = urlParams.get('src');
+      if (src && !form.querySelector('input[name="src"]')) {
+        const hidden = document.createElement('input');
+        hidden.type = 'hidden';
+        hidden.name = 'src';
+        hidden.value = src;
+        form.appendChild(hidden);
+      }
       form.requestSubmit();
     }
   }

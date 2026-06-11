@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_11_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_11_202659) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -266,6 +266,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_11_120000) do
     t.integer "guide_count", default: 0, null: false
     t.string "ip_hash"
     t.string "query", limit: 200, null: false
+    t.string "source", limit: 20
     t.integer "template_count", default: 0, null: false
     t.integer "tool_count", default: 0, null: false
     t.integer "topic_count", default: 0, null: false
