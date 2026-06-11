@@ -1,0 +1,55 @@
+# silmu-search 테스트용 토픽 픽스처
+
+# 멀티워드 AND: "지방계약법 수의계약" 매칭 대상
+local_private_contract:
+  name: 지방계약법 수의계약 절차
+  slug: test-local-private-contract
+  summary: 지방계약법령에 따른 수의계약 체결 절차
+  keywords: 수의계약, 지방계약법, 추정가격
+  published: true
+  view_count: 50
+
+# 동의어: "성과급" → keywords "성과상여금" 매칭 대상
+performance_bonus:
+  name: 성과상여금 지급 기준
+  slug: test-performance-bonus
+  summary: 공무원 성과상여금 등급별 지급 기준
+  keywords: 성과상여금, 성과등급
+  published: true
+  view_count: 30
+
+# 랭킹: name 매칭 (검수 토픽) — keywords 매칭보다 상위여야 함
+inspection_name_match:
+  name: 검수
+  slug: test-inspection-name
+  summary: 물품 검수 개요
+  keywords: 검사, 인수
+  published: true
+  view_count: 5
+
+# 랭킹: keywords 에만 "검수" 포함 (name 매칭 토픽보다 하위)
+inspection_keyword_match:
+  name: 물품 인수 가이드
+  slug: test-inspection-keyword
+  summary: 물품 인수 절차
+  keywords: 검수, 납품
+  published: true
+  view_count: 999
+
+# 동의어 랭킹: summary 에만 "성과상여금" 포함 — name 매칭(performance_bonus)보다 하위여야 함 (view_count 가 높아도)
+performance_summary_only:
+  name: 공무원 보수 제도 안내
+  slug: test-performance-summary-only
+  summary: 성과상여금 제도 개요 설명
+  keywords: 제도, 수당
+  published: true
+  view_count: 999
+
+# 2자 쿼리 공백제거 오탐 대상: "기관 인수" 텍스트에 "관인"이 공백제거 매칭되면 안 됨
+agency_takeover:
+  name: 기관 인수 절차
+  slug: test-agency-takeover
+  summary: 공공기관 인수 인계 절차
+  keywords: 기관, 인수인계
+  published: true
+  view_count: 10

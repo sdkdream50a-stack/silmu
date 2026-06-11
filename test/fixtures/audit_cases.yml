@@ -1,0 +1,29 @@
+# silmu-search 테스트용 감사사례 픽스처
+
+split_contract:
+  title: 수의계약 분할 지적 사례
+  slug: test-split-contract
+  issue: 동일 사업을 분할하여 수의계약한 지방계약법 위반 사례
+  category: 수의계약
+  severity: 중대
+  published: true
+  view_count: 20
+
+# 랭킹: issue 에만 "수의계약" 포함 — title 매칭(split_contract)보다 하위여야 함 (view_count 가 높아도)
+contract_issue_only:
+  title: 입찰 공고 기간 미준수 사례
+  slug: test-contract-issue-only
+  issue: 유찰 후 수의계약 전환 과정 부적정
+  category: 계약
+  severity: 보통
+  published: true
+  view_count: 500
+
+budget_misuse:
+  title: 예산 목적외 사용 사례
+  slug: test-budget-misuse
+  issue: 수도광열비를 다른 목적으로 집행한 사례
+  category: 예산
+  severity: 보통
+  published: true
+  view_count: 8

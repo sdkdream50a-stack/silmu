@@ -49,19 +49,44 @@ class Topic < ApplicationRecord
   }
   before_update :cascade_slug_change, if: :slug_changed?
 
-  # 통합 검색: 복수 토픽 반환 (이름·키워드·요약 ILIKE, 없으면 pg_search)
-  # 띄어쓰기 정규화: "숙박 확인서"↔"숙박확인서" 양방향 매칭 (공백 제거 비교, 순수 가산)
+  # 통합 검색: 복수 토픽 반환 (멀티워드 토큰 AND 매칭 + 동의어 확장, 없으면 pg_search)
+  # 각 토큰(동의어 변형 중 하나라도)이 name/keywords/summary 어느 필드든 매칭되어야 함.
+  # 띄어쓰기 정규화(공백 제거 매칭)는 토큰 길이 4자 이상일 때만 적용 (단문 오탐 방지).
+  # 랭킹: name 전 토큰 매칭 > keywords 매칭 > 나머지, 동순위 내 view_count DESC.
   def self.search_multiple(query, limit: 4)
     return none if query.blank?
-    sanitized = sanitize_sql_like(query)
-    despaced  = sanitize_sql_like(query.gsub(/\s+/, ""))
+    token_variants = SearchQueryParser.tokens(query)
+    return none if token_variants.empty?
+
+    clauses = []
+    binds = {}
+    token_variants.each_with_index do |variants, ti|
+      per_token = []
+      variants.each_with_index do |variant, vi|
+        key = :"t#{ti}_#{vi}"
+        binds[key] = "%#{sanitize_sql_like(variant)}%"
+        per_token << "name ILIKE :#{key} OR keywords ILIKE :#{key} OR summary ILIKE :#{key}"
+        if variant.length >= 4
+          dkey = :"d#{ti}_#{vi}"
+          binds[dkey] = "%#{sanitize_sql_like(variant.gsub(/\s+/, ''))}%"
+          per_token << "REPLACE(name, ' ', '') ILIKE :#{dkey} OR REPLACE(keywords, ' ', '') ILIKE :#{dkey} OR REPLACE(summary, ' ', '') ILIKE :#{dkey}"
+        end
+      end
+      clauses << "(#{per_token.join(' OR ')})"
+    end
+
+    # 랭킹: 전 토큰(동의어 변형 포함)이 name에 매칭되면 0, keywords면 1, 그 외 2.
+    name_all = token_variants.map { |variants|
+      "(" + variants.map { |v| sanitize_sql_array([ "name ILIKE ?", "%#{sanitize_sql_like(v)}%" ]) }.join(" OR ") + ")"
+    }.join(" AND ")
+    kw_all = token_variants.map { |variants|
+      "(" + variants.map { |v| sanitize_sql_array([ "keywords ILIKE ?", "%#{sanitize_sql_like(v)}%" ]) }.join(" OR ") + ")"
+    }.join(" AND ")
+    rank_sql = "CASE WHEN #{name_all} THEN 0 WHEN #{kw_all} THEN 1 ELSE 2 END"
+
     matches = published
-                .where(
-                  "name ILIKE :q OR keywords ILIKE :q OR summary ILIKE :q OR " \
-                  "REPLACE(name, ' ', '') ILIKE :dq OR REPLACE(keywords, ' ', '') ILIKE :dq OR REPLACE(summary, ' ', '') ILIKE :dq",
-                  q: "%#{sanitized}%", dq: "%#{despaced}%"
-                )
-                .order(view_count: :desc)
+                .where(clauses.join(" AND "), binds)
+                .order(Arel.sql("#{rank_sql} ASC, view_count DESC"))
                 .limit(limit)
     return matches if matches.any?
     search_by_keyword(query).merge(published).limit(limit)

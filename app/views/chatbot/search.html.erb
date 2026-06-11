@@ -3,7 +3,7 @@
     <% if @query.present? %>
 
       <%# 결과 없음 %>
-      <% no_results = @topics.blank? && @audit_cases.blank? && @guides.blank? && @templates.blank? %>
+      <% no_results = @topics.blank? && @audit_cases.blank? && @guides.blank? && @templates.blank? && @tools.blank? %>
       <% if no_results %>
         <div class="bg-white rounded-2xl border border-slate-200 p-10 text-center">
           <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-editorial-navy-bg flex items-center justify-center">
@@ -30,6 +30,32 @@
         </div>
 
       <% else %>
+
+        <%# ── 실무 도구 결과 ── %>
+        <% if @tools.present? %>
+          <div class="mb-6">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="material-symbols-outlined text-emerald-500 text-lg">construction</span>
+              <h3 class="text-sm font-bold text-slate-600">실무 도구 (<%= @tools.size %>)</h3>
+            </div>
+            <div class="space-y-2">
+              <% @tools.each_with_index do |tool, i| %>
+                <%= link_to tool[:path],
+                      class: "flex items-start gap-4 bg-white border border-slate-200 hover:border-emerald-300 hover:shadow-sm rounded-xl p-4 transition-all group",
+                      data: { turbo_frame: "_top", search_result: "tool", search_rank: i + 1 } do %>
+                  <div class="w-9 h-9 bg-emerald-50 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span class="material-symbols-outlined text-emerald-500 text-lg"><%= tool[:icon] %></span>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="text-sm font-semibold text-slate-800 group-hover:text-emerald-700 truncate"><%= tool[:title] %></div>
+                    <div class="text-xs text-slate-500 mt-0.5 line-clamp-1"><%= tool[:desc] %></div>
+                  </div>
+                  <span class="material-symbols-outlined text-slate-300 group-hover:text-emerald-400 text-base flex-shrink-0 mt-1">chevron_right</span>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
 
         <%# ── 법령 가이드 결과 ── %>
         <% if @topics.present? %>

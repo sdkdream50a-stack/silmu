@@ -56,7 +56,10 @@ class ChatbotController < ApplicationController
       # 4. 서식 템플릿 (메모리 내 검색)
       @templates = search_templates(@query)
 
-      @search_log = log_search(@query, @topics, @audit_cases, @guides, @templates)
+      # 5. 실무 도구 (메모리 내 검색, 토큰 AND 매칭 + 동의어 확장)
+      @tools = search_tools(@query)
+
+      @search_log = log_search(@query, @topics, @audit_cases, @guides, @templates, @tools)
     end
 
     respond_to do |format|
@@ -80,18 +83,20 @@ class ChatbotController < ApplicationController
 
   private
 
-  def log_search(query, topics, audit_cases, guides, templates)
+  def log_search(query, topics, audit_cases, guides, templates, tools)
     t = topics.respond_to?(:size) ? topics.size : 0
     a = audit_cases.respond_to?(:size) ? audit_cases.size : 0
     g = guides.respond_to?(:size) ? guides.size : 0
     tm = templates.is_a?(Array) ? templates.size : 0
+    tl = tools.is_a?(Array) ? tools.size : 0
     SearchLog.create(
       query: query,
       topic_count: t,
       audit_case_count: a,
       guide_count: g,
       template_count: tm,
-      zero_result: (t + a + g + tm).zero?,
+      tool_count: tl,
+      zero_result: (t + a + g + tm + tl).zero?,
       ip_hash: Digest::SHA256.hexdigest("#{request.remote_ip}-#{Rails.application.secret_key_base}")[0..15]
     )
   rescue => e
@@ -104,6 +109,19 @@ class ChatbotController < ApplicationController
     TemplatesController::TEMPLATES.select do |t|
       t[:title].downcase.include?(q) || t[:desc].downcase.include?(q) || t[:category].downcase.include?(q)
     end.first(3)
+  end
+
+  # 도구 검색 — title/desc/category/domain/keywords를 합쳐 토큰 AND 매칭.
+  # 각 토큰(동의어 변형 중 하나라도)이 합친 텍스트에 포함되어야 함.
+  def search_tools(query)
+    token_variants = SearchQueryParser.tokens(query)
+    return [] if token_variants.empty?
+
+    view_context.tools_registry.select do |tool|
+      haystack = [ tool[:title], tool[:desc], tool[:category], tool[:domain], tool[:keywords] ]
+                   .compact.join(" ").downcase
+      token_variants.all? { |variants| variants.any? { |v| haystack.include?(v.downcase) } }
+    end.first(4)
   end
 
   def calculate_contract_method(category, price)

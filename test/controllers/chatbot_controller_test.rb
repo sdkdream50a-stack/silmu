@@ -1,7 +1,39 @@
 require "test_helper"
 
 class ChatbotControllerTest < ActionDispatch::IntegrationTest
-  # test "the truth" do
-  #   assert true
-  # end
+  # turbo_frame 요청만 검색 결과를 렌더 (직접 접근은 리다이렉트)
+  TURBO_HEADERS = { "Turbo-Frame" => "search-results" }.freeze
+
+  test "검색 결과에 도구가 포함된다 ('여비' → 여비계산기)" do
+    get silmu_search_search_path(q: "여비"), headers: TURBO_HEADERS
+    assert_response :success
+    assert_select "[data-search-result='tool']"
+    assert_match "여비계산기", response.body
+  end
+
+  test "도구 검색 결과가 tool_count 로 로깅된다" do
+    assert_difference -> { SearchLog.count }, 1 do
+      get silmu_search_search_path(q: "여비"), headers: TURBO_HEADERS
+    end
+    log = SearchLog.order(:created_at).last
+    assert_operator log.tool_count, :>=, 1
+    assert_not log.zero_result
+  end
+
+  test "직접 접근은 silmu-search 인덱스로 리다이렉트" do
+    get silmu_search_search_path(q: "여비")
+    assert_response :moved_permanently
+  end
+
+  test "unlisted 도구도 검색된다 ('가족수당' → 공무원 수당 계산기)" do
+    get silmu_search_search_path(q: "가족수당"), headers: TURBO_HEADERS
+    assert_response :success
+    assert_match "공무원 수당 계산기", response.body
+  end
+
+  test "unlisted 도구는 tools 인덱스 카드 목록에 노출되지 않는다" do
+    get tools_path
+    assert_response :success
+    assert_no_match "예산 과목 분류 도우미", response.body
+  end
 end

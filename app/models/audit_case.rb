@@ -18,18 +18,43 @@ class AuditCase < ApplicationRecord
   scope :recent, -> { order(created_at: :desc) }
   scope :repeated, -> { where(repeated_issue: true) }
 
-  # 띄어쓰기 정규화: 공백 제거 비교로 표기 변형 양방향 매칭 (순수 가산)
+  # 멀티워드 토큰 AND 매칭 + 동의어 확장 (없으면 빈 결과)
+  # 각 토큰(동의어 변형 중 하나라도)이 title/issue/category 어느 필드든 매칭되어야 함.
+  # 띄어쓰기 정규화(공백 제거 매칭)는 토큰 길이 4자 이상일 때만 적용 (단문 오탐 방지).
+  # 랭킹: title 전 토큰 매칭 > issue 매칭 > category, 동순위 내 view_count DESC.
   def self.search_by_query(query, limit: 3)
     return none if query.blank?
-    sanitized = sanitize_sql_like(query)
-    despaced  = sanitize_sql_like(query.gsub(/\s+/, ""))
+    token_variants = SearchQueryParser.tokens(query)
+    return none if token_variants.empty?
+
+    clauses = []
+    binds = {}
+    token_variants.each_with_index do |variants, ti|
+      per_token = []
+      variants.each_with_index do |variant, vi|
+        key = :"t#{ti}_#{vi}"
+        binds[key] = "%#{sanitize_sql_like(variant)}%"
+        per_token << "title ILIKE :#{key} OR issue ILIKE :#{key} OR category ILIKE :#{key}"
+        if variant.length >= 4
+          dkey = :"d#{ti}_#{vi}"
+          binds[dkey] = "%#{sanitize_sql_like(variant.gsub(/\s+/, ''))}%"
+          per_token << "REPLACE(title, ' ', '') ILIKE :#{dkey} OR REPLACE(issue, ' ', '') ILIKE :#{dkey} OR REPLACE(category, ' ', '') ILIKE :#{dkey}"
+        end
+      end
+      clauses << "(#{per_token.join(' OR ')})"
+    end
+
+    title_all = token_variants.map { |variants|
+      "(" + variants.map { |v| sanitize_sql_array([ "title ILIKE ?", "%#{sanitize_sql_like(v)}%" ]) }.join(" OR ") + ")"
+    }.join(" AND ")
+    issue_all = token_variants.map { |variants|
+      "(" + variants.map { |v| sanitize_sql_array([ "issue ILIKE ?", "%#{sanitize_sql_like(v)}%" ]) }.join(" OR ") + ")"
+    }.join(" AND ")
+    rank_sql  = "CASE WHEN #{title_all} THEN 0 WHEN #{issue_all} THEN 1 ELSE 2 END"
+
     published
-      .where(
-        "title ILIKE :q OR issue ILIKE :q OR category ILIKE :q OR " \
-        "REPLACE(title, ' ', '') ILIKE :dq OR REPLACE(issue, ' ', '') ILIKE :dq OR REPLACE(category, ' ', '') ILIKE :dq",
-        q: "%#{sanitized}%", dq: "%#{despaced}%"
-      )
-      .order(view_count: :desc)
+      .where(clauses.join(" AND "), binds)
+      .order(Arel.sql("#{rank_sql} ASC, view_count DESC"))
       .limit(limit)
   end
 
