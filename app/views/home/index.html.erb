@@ -37,7 +37,7 @@
 
       <!-- Headline -->
       <h1 class="heading-editorial-hero !text-amber-200 mb-6">
-        복잡한 실무,<br class="sm:hidden"/> 여기서 풀어가세요
+        실무 가이드·도구·감사사례,<br class="sm:hidden"/> 한 번에 검색
       </h1>
 
       <!-- Lede -->
@@ -55,29 +55,20 @@
           <input name="q" data-home-search-target="input"
                  data-action="input->home-search#inputChanged blur->home-search#blurred"
                  aria-label="실무 가이드 검색"
-                 placeholder="예: 수의계약 한도, 물품구매 절차"
+                 placeholder="예: 수의계약 한도, 출장비 정산, 보조금, 연말정산"
                  autocomplete="off" type="text"
                  class="flex-1 h-12 px-2 border-0 bg-transparent text-slate-900 placeholder:text-slate-400 focus:ring-0 focus:outline-none text-base"/>
           <button type="submit" class="btn-editorial h-12 px-5 shrink-0">검색</button>
         </div>
       </form>
 
-      <!-- 단계별 빠른 진입 (4칩 + 전체 흐름도) -->
+      <!-- 인기 검색어 — 전 직무 검색 직행 (계약 단계칩은 핵심 실무 도구 섹션으로 이동) -->
       <div class="mb-8">
-        <p class="text-xs font-semibold text-white/80 uppercase tracking-wider mb-3">지금 어느 단계에 있으세요?</p>
+        <p class="text-xs font-semibold text-white/80 uppercase tracking-wider mb-3">인기 검색어</p>
         <div class="flex flex-wrap justify-center gap-2">
-          <% [
-            [contract_method_path,                                        "lightbulb",   "1. 계약방식 결정"],
-            [topics_category_path(key: "contract") + "?subgroup=수의계약", "gavel",       "2. 견적·입찰"],
-            [topic_path("contract-execution"),                            "handshake",   "3. 계약체결"],
-            [topic_path("inspection"),                                    "fact_check",  "4. 검수·대금지급"]
-          ].each do |path, icon, label| %>
-            <%= link_to path, class: "touch-target inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-white text-sm font-semibold backdrop-blur-sm transition-colors" do %>
-              <span class="material-symbols-outlined text-[16px] text-white/75"><%= icon %></span><%= label %>
-            <% end %>
-          <% end %>
-          <%= link_to contract_flow_path, class: "touch-target inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg border border-dashed border-white/25 text-white/75 hover:text-white hover:border-white/50 text-sm font-semibold transition-colors" do %>
-            <span class="material-symbols-outlined text-[16px]">account_tree</span>전체 흐름도
+          <% %w[수의계약 연말정산 출장비 이월 기간제 보조금정산 겸직 일상경비].each do |keyword| %>
+            <%= link_to keyword, silmu_search_search_path(q: keyword), data: { turbo: false },
+                class: "touch-target inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-white text-sm font-semibold backdrop-blur-sm transition-colors" %>
           <% end %>
         </div>
       </div>
@@ -185,6 +176,20 @@
           <span class="material-symbols-outlined text-[22px] text-editorial-muted"><%= icon %></span>
           <span class="text-sm font-semibold text-editorial-ink"><%= label %></span>
         <% end %>
+      <% end %>
+    </div>
+
+    <!-- 계약 절차 단계별 바로가기 (홈 히어로에서 이동) -->
+    <div class="mt-5 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-sm">
+      <span class="font-semibold text-editorial-muted">계약 절차:</span>
+      <% [
+        [contract_method_path,                                        "1. 계약방식 결정"],
+        [topics_category_path(key: "contract") + "?subgroup=수의계약", "2. 견적·입찰"],
+        [topic_path("contract-execution"),                            "3. 계약체결"],
+        [topic_path("inspection"),                                    "4. 검수·대금지급"]
+      ].each_with_index do |(path, label), i| %>
+        <% if i > 0 %><span class="text-editorial-muted/50">→</span><% end %>
+        <%= link_to label, path, class: "font-semibold text-editorial-navy hover:underline" %>
       <% end %>
     </div>
   </div>
