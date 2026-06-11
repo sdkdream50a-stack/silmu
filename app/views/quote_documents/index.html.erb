@@ -1224,8 +1224,9 @@ function qdBuildBudgetDoc(d) {
 // ----- 예정가격 조서 -----
 function qdBuildPriceDoc(d) {
   // 수의계약 기준금액 판단 — 추정가격(부가세 제외 = 공급가액) 기준
-  const thresholdLabel = d.contractType === '공사' ? '5천만원' : '2천만원';
-  const thresholdAmount = d.contractType === '공사' ? 50000000 : 20000000;
+  // 1인 견적 수의계약은 공사·물품·용역 공통 추정가격 2천만원 이하 (지방계약법 시행령 제30조)
+  const thresholdLabel = '2천만원';
+  const thresholdAmount = 20000000;
   const isUnder = d.supply <= thresholdAmount;
 
   let h = '';
@@ -1713,8 +1714,9 @@ function qdExcelBudget(d) {
 
 // ----- 엑셀: 예정가격조서 -----
 function qdExcelPrice(d) {
-  var thresholdLabel = d.contractType === '공사' ? '5천만원' : '2천만원';
-  var thresholdAmount = d.contractType === '공사' ? 50000000 : 20000000;
+  // 1인 견적 수의계약은 공사·물품·용역 공통 추정가격 2천만원 이하 (지방계약법 시행령 제30조)
+  var thresholdLabel = '2천만원';
+  var thresholdAmount = 20000000;
   var isUnder = d.supply <= thresholdAmount;
 
   var rows = [];

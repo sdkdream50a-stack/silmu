@@ -138,7 +138,7 @@
       label: "입찰·견적 단계",
       icon: "gavel",
       common: [
-        { text: "입찰공고 게재 기간 준수 (일반입찰 7일 이상, 긴급입찰 5일 이상)", critical: true },
+        { text: "입찰공고 게재 기간 준수 (소액 7일 이상·긴급 5일 이상, 고액·고시금액 이상은 추정가격 구간별 차등 적용)", critical: true },
         { text: "예정가격 작성 및 봉인 완료 (개찰 전까지 비공개)", critical: true },
         { text: "입찰 참가자격 제한 기준의 적정성 확인", critical: false },
         { text: "나라장터(G2B) 공고 등록 여부 확인 (추정가격 1억원 이상)", critical: true },
@@ -205,7 +205,7 @@
       common: [
         { text: "검수·준공검사 완료 및 검사조서 작성", critical: true },
         { text: "지체일수 최종 산정 및 지체상금 부과 여부 확인", critical: true },
-        { text: "대금 지급 기한 준수 (검사 완료 후 5일 이내)", critical: true },
+        { text: "대금 지급 기한 준수 (검사 14일 이내 → 검사완료 후 대금지급 5일 이내, 별개 기한)", critical: true },
         { text: "계약 관련 서류 일체 편철 및 보존 (5년)", critical: false },
       ],
       goods_service: [

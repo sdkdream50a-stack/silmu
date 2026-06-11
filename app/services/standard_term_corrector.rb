@@ -32,6 +32,8 @@ class StandardTermCorrector
     sorted.each do |synonym, standard|
       next if synonym.blank? || standard.blank?
       next if synonym == standard
+      # F4-2: 2글자 이하 짧은 이음동의어는 일반어 과잉치환(false positive) 위험으로 제외
+      next if synonym.length <= 2
       # 표준어 자체에 이음동의어가 substring으로 포함되면 skip
       # (예: "종합심사" ⊂ "종합심사낙찰제" → 치환 후 재매칭 방지)
       next if standard.include?(synonym)

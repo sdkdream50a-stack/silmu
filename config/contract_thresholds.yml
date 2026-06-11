@@ -374,21 +374,22 @@ special_enterprises:
     threshold: 50000000
     basis: "협동조합 기본법"
 
+# 행안부 예규 「지방자치단체 입찰시 낙찰자 결정기준」 2026-01-30 개정: 전 구간 2%p 상향 (구기준 87.745% 등 사용 금지)
 lowest_bid_rates:
   construction:
     name: "공사"
     rates:
       - min: 100000000000
         max: .inf
-        rate: "87.745% ~ 89.745%"
+        rate: "89.745%"
         detail: "1,000억원 이상"
       - min: 30000000000
         max: 100000000000
-        rate: "87.495% ~ 89.495%"
+        rate: "89.495%"
         detail: "300억원 이상 ~ 1,000억원 미만"
       - min: 0
         max: 30000000000
-        rate: "87.745% ~ 89.745%"
+        rate: "89.745%"
         detail: "300억원 미만"
   goods_service:
     name: "물품·용역"

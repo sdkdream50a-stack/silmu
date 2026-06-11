@@ -55,7 +55,7 @@
               <div>
                 <h3 class="font-bold text-slate-900 mb-1">명시이월</h3>
                 <p class="text-sm text-slate-600">세출예산 중 연도 내 지출을 끝내지 못할 것이 예측되는 경비를 <strong>예산을 편성할 때부터</strong> 미리 이월로 지정한 경우</p>
-                <p class="text-xs text-slate-400 mt-1">지방재정법 제50조(세출예산의 이월) / 국가재정법 제24조</p>
+                <p class="text-xs text-slate-400 mt-1">지방재정법 제50조(세출예산의 이월) / 국가재정법 제24조(명시이월비 설정)·제48조(세출예산의 이월 실행)</p>
               </div>
             </div>
           </div>
@@ -153,7 +153,8 @@
           <li class="flex gap-2"><span class="font-bold">②</span> 기획·예산 부서 검토</li>
           <li class="flex gap-2"><span class="font-bold">③</span> 단체장 전결 (또는 의회 심의·의결)</li>
           <li class="flex gap-2"><span class="font-bold">④</span> 재정정보시스템(e호조) 전산 처리</li>
-          <li class="flex gap-2"><span class="font-bold">⑤</span> 세입세출결산서에 전용 내역 표시</li>
+          <li class="flex gap-2"><span class="font-bold">⑤</span> 분기별 전용내역 지방의회 제출 (분기만료일이 속하는 달의 다음 달 말일까지, 지방재정법 제49조)</li>
+          <li class="flex gap-2"><span class="font-bold">⑥</span> 세입세출결산서에 전용 내역 표시</li>
         </ol>
       </div>
     </div>
@@ -195,7 +196,7 @@
       title: "사고이월 요건 점검",
       color: "orange",
       requirements: [
-        { text: "해당 회계연도 내에 지출 원인 행위(계약 체결 또는 발주)가 완료되었다", critical: true },
+        { text: "해당 회계연도 내에 지출 원인 행위(계약 체결 또는 발주)가 완료되었다 (원칙. 단, 사고이월 사업비 부대경비·대형공사·손실보상비 등 시행령상 원인행위 없이도 가능한 법정 예외 존재)", critical: true },
         { text: "연도 내 지출이 불가능한 사유가 천재지변, 법령 개정, 예측불가한 사정으로 인한 것이다", critical: true },
         { text: "단순 행정 지연이나 담당자 과실로 인한 이월이 아니다 (단순 지연은 불가)", critical: true },
         { text: "이월 사유를 구체적으로 소명하는 사유서를 작성할 수 있다", critical: true },

@@ -454,7 +454,7 @@ class ContractDocumentService
           {
             id: "design_change", name: "설계변경요청서", required: false,
             description: "설계변경 시",
-            legal_basis: "지방계약법 시행령 제65조, 제66조",
+            legal_basis: "지방계약법 시행령 제74조(설계변경으로 인한 계약금액의 조정)", # 감사 정정: §65(검사조서 생략)·§66(감독·검사 겸직) 오인용 → §74
             caution: "설계변경 사유: 현장여건 상이, 물가변동 등",
             tip: "설계변경 전 반드시 승인 후 시공"
           }

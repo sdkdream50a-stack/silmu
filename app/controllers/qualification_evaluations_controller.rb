@@ -34,10 +34,13 @@ class QualificationEvaluationsController < ApplicationController
     price_max       = project_type == "construction" ? 60 : 70
     non_price_max   = project_type == "construction" ? 40 : 30
 
+    # 적격심사 통과기준 추정가격 차등 (행안부 예규 「지방자치단체 입찰시 낙찰자 결정기준」 제325호: 공사 100억 미만 95점 / 100억~300억 미만 92점)
+    pass_score = qualification_pass_score(project_type, estimated_price)
+
     bidders = parse_bidders_from_params
     bidders_with_scores = calculate_price_scores(bidders, estimated_price, floor_rate, price_max)
-    bidders_with_total  = calculate_total_scores(bidders_with_scores, price_max, non_price_max)
-    qualified_bidders   = bidders_with_total.select { |b| b[:total_score_100] >= 95 }
+    bidders_with_total  = calculate_total_scores(bidders_with_scores, price_max, non_price_max, pass_score)
+    qualified_bidders   = bidders_with_total.select { |b| b[:total_score_100] >= pass_score }
     winner              = qualified_bidders.min_by { |b| b[:bid_price] }
 
     render json: {
@@ -50,7 +53,8 @@ class QualificationEvaluationsController < ApplicationController
         estimated_price: estimated_price,
         floor_rate: floor_rate,
         price_max: price_max,
-        non_price_max: non_price_max
+        non_price_max: non_price_max,
+        pass_score: pass_score
       }
     }
   end
@@ -134,7 +138,7 @@ class QualificationEvaluationsController < ApplicationController
     end
   end
 
-  def calculate_total_scores(bidders, price_max, non_price_max)
+  def calculate_total_scores(bidders, price_max, non_price_max, pass_score = 95)
     bidders.map do |bidder|
       total_score     = bidder[:price_score] + bidder[:non_price_score]
       total_max       = price_max + non_price_max
@@ -142,8 +146,15 @@ class QualificationEvaluationsController < ApplicationController
       bidder.merge(
         total_score:     total_score.round(2),
         total_score_100: total_score_100,
-        is_qualified:    total_score_100 >= 95
+        is_qualified:    total_score_100 >= pass_score
       )
     end.sort_by { |b| -b[:total_score_100] }
+  end
+
+  # 적격심사 통과기준 (행안부 예규 제325호): 공사 추정가격 100억 미만 95점 / 100억~300억 미만 92점. 물품·용역은 별도 기준(현행 95점 유지).
+  def qualification_pass_score(project_type, estimated_price)
+    return 95 unless project_type == "construction"
+
+    estimated_price >= 10_000_000_000 ? 92 : 95
   end
 end

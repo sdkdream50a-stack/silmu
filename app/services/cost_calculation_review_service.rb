@@ -169,7 +169,8 @@ class CostCalculationReviewService
         end
       else
         # 이윤 검토
-        profit_basis = direct_labor + overhead + general_admin
+        # 이윤 기준액: 직접인건비+제경비+직접경비+일반관리비 (예정가격작성기준, 도구1 estimated_price_service 기준과 통일)
+        profit_basis = direct_labor + overhead + direct_expense + general_admin
         if profit_basis > 0 && profit_or_tech > 0
           profit_rate = profit_or_tech.to_f / profit_basis
           max_rate = type_info[:profit_rate_max]

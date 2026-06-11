@@ -729,7 +729,8 @@ function crDownloadHwpx() {
   }
 
   if (reason) {
-    var reasonMap = { '소액': 'small_amount', '긴급': 'emergency', '유일품': 'sole_source', '특례기업': 'special_enterprise' };
+    // 감사 정정: crReasonData 실제 키는 urgent — 'emergency'·'special_enterprise'는 미존재 키로 연동 실패했음
+    var reasonMap = { '소액': 'small_amount', '긴급': 'urgent', '유일품': 'sole_source' };
     var reasonKey = reasonMap[reason];
     if (reasonKey) {
       var reasonBtn = document.querySelector('#cr-reason-grid .cr-reason-btn[data-reason="' + reasonKey + '"]');
