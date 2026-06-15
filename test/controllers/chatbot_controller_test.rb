@@ -25,15 +25,17 @@ class ChatbotControllerTest < ActionDispatch::IntegrationTest
     assert_response :moved_permanently
   end
 
-  test "unlisted 도구도 검색된다 ('가족수당' → 공무원 수당 계산기)" do
+  test "레지스트리 도구가 검색된다 ('가족수당' → 공무원 수당 계산기)" do
     get silmu_search_search_path(q: "가족수당"), headers: TURBO_HEADERS
     assert_response :success
     assert_match "공무원 수당 계산기", response.body
   end
 
-  test "unlisted 도구는 tools 인덱스 카드 목록에 노출되지 않는다" do
+  # 2026-06-11 a827467: 전수 감사 통과로 종전 unlisted 6개 도구를 /tools 카드 목록에 게재(NEW 배지).
+  # 종전 테스트는 "노출 안 됨"을 단언했으나 의도적 게재 후 stale → 현재 의도(노출됨)로 정정.
+  test "감사 통과 도구(예산 과목 분류 도우미)는 tools 인덱스 카드 목록에 노출된다" do
     get tools_path
     assert_response :success
-    assert_no_match "예산 과목 분류 도우미", response.body
+    assert_match "예산 과목 분류 도우미", response.body
   end
 end
