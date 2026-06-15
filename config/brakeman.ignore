@@ -1,0 +1,97 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "323c5e0a949918e8dd2d8d5a565937093137f79e199d3c372d21e0cc30c49455",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/services/related_content_resolver.rb",
+      "line": 77,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Topic.published.where.not(:slug => topic.slug).where(\"category = :cat OR sector = :sector OR (#{keyword_or_clause(:keywords)})\", :cat => topic.category, :sector => Topic.sectors[topic.sector], **keyword_binds)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "RelatedContentResolver",
+        "method": "candidate_topics"
+      },
+      "user_input": "keyword_or_clause(:keywords)",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": "오탐(false positive): keyword_or_clause는 고정 컬럼 심볼(:keywords/:title/:name)만 문자열 보간하고, 검색 값은 keyword_binds에서 Topic.sanitize_sql_like 처리 후 바인드 파라미터(:kw_N)로 전달. 사용자 입력이 SQL에 직접 보간되지 않음. 가변 개수 토큰 매칭을 위해 플레이스홀더 절을 동적 생성하는 안전 패턴."
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "38388cc5eb9d5e0ad7d8bdd0cba4d630f2e53dcc04d87d913018d7d0e0ff0dd0",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/topic.rb",
+      "line": 88,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "published.where(\"#{\"(#{\"#{\"name ILIKE :#{:\"t#{ti}_#{vi}\"} OR keywords ILIKE :#{:\"t#{ti}_#{vi}\"} OR summary ILIKE :#{:\"t#{ti}_#{vi}\"}\"} OR #{\"REPLACE(name, ' ', '') ILIKE :#{:\"d#{ti}_#{vi}\"} OR REPLACE(keywords, ' ', '') ILIKE :#{:\"d#{ti}_#{vi}\"} OR REPLACE(summary, ' ', '') ILIKE :#{:\"d#{ti}_#{vi}\"}\"}\"})\"}\", :\"t#{ti}_#{vi}\" => (\"%#{sanitize_sql_like(variant)}%\"), :\"d#{ti}_#{vi}\" => (\"%#{sanitize_sql_like(variant.gsub(/\\s+/, \"\"))}%\"))",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Topic",
+        "method": "Topic.search_multiple"
+      },
+      "user_input": ":\"t#{ti}_#{vi}\"",
+      "confidence": "Weak",
+      "cwe_id": [
+        89
+      ],
+      "note": "오탐(false positive): 보간 대상은 고정 컬럼명(name/keywords/summary)과 내부 생성 바인드 플레이스홀더 이름뿐. 검색 토큰 값은 sanitize_sql_like + 바인드 파라미터로 처리. 사용자 입력 미보간."
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "a94666bc3d56f4cc6a9e9318290c99640b129cf02f0ffee3a68423e700b44e8a",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/services/related_content_resolver.rb",
+      "line": 93,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "AuditCase.published.recent.where.not(:slug => exclude_slugs).where(\"category IN (:cats) OR (#{keyword_or_clause(:title)})\", :cats => ((AUDIT_CATEGORY_MAP[topic.category.to_s] or [])), **keyword_binds)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "RelatedContentResolver",
+        "method": "fallback_audit_cases"
+      },
+      "user_input": "keyword_or_clause(:title)",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": "오탐(false positive): keyword_or_clause는 고정 컬럼 심볼(:keywords/:title/:name)만 문자열 보간하고, 검색 값은 keyword_binds에서 Topic.sanitize_sql_like 처리 후 바인드 파라미터(:kw_N)로 전달. 사용자 입력이 SQL에 직접 보간되지 않음. 가변 개수 토큰 매칭을 위해 플레이스홀더 절을 동적 생성하는 안전 패턴."
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "dcb259ef5115a55ff52808e797005f5bf88dade3b3373f8065ae0c3f7b89d56d",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/audit_case.rb",
+      "line": 56,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "published.where(\"#{\"(#{\"#{\"title ILIKE :#{:\"t#{ti}_#{vi}\"} OR issue ILIKE :#{:\"t#{ti}_#{vi}\"} OR category ILIKE :#{:\"t#{ti}_#{vi}\"}\"} OR #{\"REPLACE(title, ' ', '') ILIKE :#{:\"d#{ti}_#{vi}\"} OR REPLACE(issue, ' ', '') ILIKE :#{:\"d#{ti}_#{vi}\"} OR REPLACE(category, ' ', '') ILIKE :#{:\"d#{ti}_#{vi}\"}\"}\"})\"}\", :\"t#{ti}_#{vi}\" => (\"%#{sanitize_sql_like(variant)}%\"), :\"d#{ti}_#{vi}\" => (\"%#{sanitize_sql_like(variant.gsub(/\\s+/, \"\"))}%\"))",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "AuditCase",
+        "method": "AuditCase.search_by_query"
+      },
+      "user_input": ":\"t#{ti}_#{vi}\"",
+      "confidence": "Weak",
+      "cwe_id": [
+        89
+      ],
+      "note": "오탐(false positive): 보간 대상은 고정 컬럼명(title/issue/category)과 내부 생성 바인드 플레이스홀더 이름(:tN_M/:dN_M)뿐. 검색 토큰 값은 sanitize_sql_like + 바인드 파라미터(binds) 및 sanitize_sql_array로 처리. 사용자 입력 미보간."
+    }
+  ],
+  "brakeman_version": "8.0.4"
+}
