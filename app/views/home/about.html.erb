@@ -109,6 +109,41 @@
         </div>
       </div>
 
+      <!-- 법령 검증 프로세스 (E-E-A-T — 검증 배지 근거) -->
+      <div class="card p-8 mb-8">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="material-symbols-outlined text-3xl text-emerald-600">fact_check</span>
+          <h2 class="text-2xl font-bold text-slate-900">법령 검증 프로세스</h2>
+        </div>
+        <p class="text-slate-700 leading-relaxed mb-6">
+          공공계약·예산은 금액·기한·요율 하나가 틀리면 실무에서 곧바로 위법으로 이어집니다.
+          그래서 모든 법령 콘텐츠는 발행 전 다음 <strong>5단계 정합성 검증</strong>을 거치며,
+          각 페이지 본문·사이드바에 표시되는 <span class="font-semibold text-emerald-700">「검증 완료 · 검토일」</span> 배지가 이 절차를 통과한 날짜를 나타냅니다.
+        </p>
+        <ol class="space-y-3">
+          <li class="flex gap-3">
+            <span class="shrink-0 w-7 h-7 rounded-full bg-emerald-100 text-emerald-700 font-bold text-sm flex items-center justify-center">1</span>
+            <p class="text-slate-700 text-sm leading-relaxed"><strong>1차 출처 대조</strong> — 모든 조문·수치를 법제처 국가법령정보센터(law.go.kr) 원문과 직접 대조합니다.</p>
+          </li>
+          <li class="flex gap-3">
+            <span class="shrink-0 w-7 h-7 rounded-full bg-emerald-100 text-emerald-700 font-bold text-sm flex items-center justify-center">2</span>
+            <p class="text-slate-700 text-sm leading-relaxed"><strong>법령 체계 검증</strong> — 법률·시행령·시행규칙·예규의 위계가 올바른지, 해당 주제에 맞는 법령만 인용했는지 확인합니다.</p>
+          </li>
+          <li class="flex gap-3">
+            <span class="shrink-0 w-7 h-7 rounded-full bg-emerald-100 text-emerald-700 font-bold text-sm flex items-center justify-center">3</span>
+            <p class="text-slate-700 text-sm leading-relaxed"><strong>조문 정확성·폐지 조문 점검</strong> — 조문 번호 매핑을 검증하고, 삭제·폐지된 조문 인용을 자동 lint(<code class="text-xs">silmu:legal_lint</code>)로 차단합니다.</p>
+          </li>
+          <li class="flex gap-3">
+            <span class="shrink-0 w-7 h-7 rounded-full bg-emerald-100 text-emerald-700 font-bold text-sm flex items-center justify-center">4</span>
+            <p class="text-slate-700 text-sm leading-relaxed"><strong>수치 기준 대조</strong> — 금액·기간·요율(수의계약 한도, 공고기간, 지체상금률, 낙찰하한율 등)을 현행 규정 표준값과 대조합니다.</p>
+          </li>
+          <li class="flex gap-3">
+            <span class="shrink-0 w-7 h-7 rounded-full bg-emerald-100 text-emerald-700 font-bold text-sm flex items-center justify-center">5</span>
+            <p class="text-slate-700 text-sm leading-relaxed"><strong>정기 재검증</strong> — 법령은 수시로 개정되므로, 월 단위 정기 점검과 법령 API 주기 대조로 개정·폐지를 추적해 콘텐츠에 반영합니다.</p>
+          </li>
+        </ol>
+      </div>
+
       <!-- 콘텐츠 작성 원칙 -->
       <div class="card p-8 mb-8">
         <div class="flex items-center gap-3 mb-6">
