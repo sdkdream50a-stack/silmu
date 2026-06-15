@@ -21,7 +21,7 @@ class SitemapPingJobTest < ActiveJob::TestCase
     captured_args = nil
     SitemapPingEngineJob.class_eval do
       alias_method :__orig_perform, :perform unless method_defined?(:__orig_perform)
-      define_method(:perform) { |engine, urls| captured_args = [engine, urls] }
+      define_method(:perform) { |engine, urls| captured_args = [ engine, urls ] }
     end
 
     begin

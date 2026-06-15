@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # 2026-06-09 E-E-A-T 검증 배치6 (S4 색인 회복) — AuditCase(검증 토픽 정렬·legal_basis 정합분만).
 #
 # ⚠️ 무결성 원칙: 이 사례들은 LLM이 공개 감사패턴을 일반화한 합성 콘텐츠(특정 실사례 아님).

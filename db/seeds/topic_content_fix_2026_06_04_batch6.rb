@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # 토픽 본문 법령결함 정정 — 배치6 (제N조 의미오기 전수감사 #1: 지방계약법 본법 검사·대가 off-by-one)
 # 2026-06-04. cf. [[project_topic_content_defects_2026_06_03]] (배치1~5는 부존재/오기 조문).
@@ -23,24 +24,24 @@
 # 운영 적용: kamal app exec --reuse 'bin/rails runner "load Rails.root.join(%q{db/seeds/topic_content_fix_2026_06_04_batch6.rb})"'
 
 fixes = [
-  ["inspection", "law_content", [
-    ["## 지방계약법 제16조 (검사)", "## 지방계약법 제17조 (검사)"],
-    ["- **제17조 (대가의 지급):**", "- **제18조 (대가의 지급):**"]
-  ]],
-  ["inspection", "commentary", [
-    ["지방계약법 제16조에 따라", "지방계약법 제17조에 따라"]
-  ]],
-  ["defect-warranty", "law_content", [
-    ["- **제16조 (검사):**", "- **제17조 (검사):**"],
-    ["- **제17조 (대가의 지급):**", "- **제18조 (대가의 지급):**"]
-  ]],
-  ["late-penalty", "law_content", [
-    ["- **제16조 (검사):**", "- **제17조 (검사):**"],
-    ["- **제17조 (대가의 지급):**", "- **제18조 (대가의 지급):**"]
-  ]],
-  ["price-escalation", "law_content", [
-    ["- **제17조 (대가의 지급):**", "- **제18조 (대가의 지급):**"]
-  ]]
+  [ "inspection", "law_content", [
+    [ "## 지방계약법 제16조 (검사)", "## 지방계약법 제17조 (검사)" ],
+    [ "- **제17조 (대가의 지급):**", "- **제18조 (대가의 지급):**" ]
+  ] ],
+  [ "inspection", "commentary", [
+    [ "지방계약법 제16조에 따라", "지방계약법 제17조에 따라" ]
+  ] ],
+  [ "defect-warranty", "law_content", [
+    [ "- **제16조 (검사):**", "- **제17조 (검사):**" ],
+    [ "- **제17조 (대가의 지급):**", "- **제18조 (대가의 지급):**" ]
+  ] ],
+  [ "late-penalty", "law_content", [
+    [ "- **제16조 (검사):**", "- **제17조 (검사):**" ],
+    [ "- **제17조 (대가의 지급):**", "- **제18조 (대가의 지급):**" ]
+  ] ],
+  [ "price-escalation", "law_content", [
+    [ "- **제17조 (대가의 지급):**", "- **제18조 (대가의 지급):**" ]
+  ] ]
 ]
 
 results = []
@@ -69,10 +70,10 @@ puts "[content_fix batch6] #{results.join(' | ')}"
 # 잔존 검증: 정정 대상 토픽에 "제16조 (검사)"·"제17조 (대가의 지급)" 잔존 0 확인
 puts "--- 잔존 검증 (해당 토픽/필드) ---"
 checks = {
-  "inspection"       => { law_content: ["제16조 (검사)", "제17조 (대가의 지급)"], commentary: ["제16조에 따라"] },
-  "defect-warranty"  => { law_content: ["제16조 (검사)", "제17조 (대가의 지급)"] },
-  "late-penalty"     => { law_content: ["제16조 (검사)", "제17조 (대가의 지급)"] },
-  "price-escalation" => { law_content: ["제17조 (대가의 지급)"] }
+  "inspection"       => { law_content: [ "제16조 (검사)", "제17조 (대가의 지급)" ], commentary: [ "제16조에 따라" ] },
+  "defect-warranty"  => { law_content: [ "제16조 (검사)", "제17조 (대가의 지급)" ] },
+  "late-penalty"     => { law_content: [ "제16조 (검사)", "제17조 (대가의 지급)" ] },
+  "price-escalation" => { law_content: [ "제17조 (대가의 지급)" ] }
 }
 checks.each do |slug, fmap|
   t = Topic.find_by(slug: slug); next unless t

@@ -7,7 +7,7 @@ class SitemapPingEngineJobTest < ActiveSupport::TestCase
     # submit_indexnow를 스파이로 교체 — 실제 네트워크 호출 없이 인자만 관찰
     SitemapPingEngineJob.class_eval do
       alias_method :__orig_submit_indexnow, :submit_indexnow unless private_method_defined?(:__orig_submit_indexnow)
-      define_method(:submit_indexnow) { |engine, host, urls| captured << [engine, host, urls]; :ok }
+      define_method(:submit_indexnow) { |engine, host, urls| captured << [ engine, host, urls ]; :ok }
     end
 
     begin
@@ -32,6 +32,6 @@ class SitemapPingEngineJobTest < ActiveSupport::TestCase
 
     assert_equal "www.bing.com", silmu_call[0]
     assert_equal %w[https://silmu.kr/topics/a https://silmu.kr/topics/b].sort, silmu_call[2].sort
-    assert_equal ["https://exam.silmu.kr/"], exam_call[2]
+    assert_equal [ "https://exam.silmu.kr/" ], exam_call[2]
   end
 end

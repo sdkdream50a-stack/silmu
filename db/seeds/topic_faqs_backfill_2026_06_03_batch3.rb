@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # P0b FAQPage 백필 — 배치3 (복무·인사·예산 핵심 토픽 10개)
 # 2026-06-03. 답변은 각 토픽의 이미 검증된 qa_content·law_content 조문/사실에서만

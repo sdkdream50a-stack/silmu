@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # 토픽 본문 법령결함 정정 — 배치19 (제N조 의미오기 감사 #14: budget 클러스터)
 # 2026-06-04. cf. [[project_cite_meaning_audit_2026_06_04]].
@@ -21,32 +22,32 @@
 # 운영 적용: kamal app exec --reuse 'bin/rails runner "eval(Base64.decode64(...))"'
 
 fixes = [
-  ["accounting-officers", "law_content", [
-    ["**[지방] 지방회계법 제46조 (\"회계관계공무원\"의 법령상 정의)**", "**[지방] 지방회계법 제46조 (회계관계공무원의 임명 또는 위임)**"]
-  ]],
-  ["budget-compilation", "law_content", [
-    ["<p><strong>지방자치법 제127조 (예산안의 편성 및 의결)</strong></p>", "<p><strong>지방자치법 제142조 (예산의 편성 및 의결)</strong></p>"],
-    ["지방자치법 제127조는 예산안 편성 및 의회 제출·의결 기한을 규정합니다.", "지방자치법 제142조는 예산안 편성 및 의회 제출·의결 기한을 규정합니다."],
-    ["<strong>관련 법령:</strong> 지방재정법 제36조 (예산의 편성), 지방재정법 시행령 제37조 (예산편성기준), 제38조 (예산의 편성절차)", "<strong>관련 법령:</strong> 지방재정법 제36조 (예산의 편성), 지방자치법 제142조 (예산의 편성 및 의결), 행정안전부 「지방자치단체 예산편성 운영기준」"]
-  ]],
-  ["budget-compilation", "decree_content", [
-    ["<p><strong>지방재정법 시행령 제37조 (예산편성기준)</strong></p>", "<p><strong>행정안전부 「지방자치단체 예산편성 운영기준」 (예산편성기준)</strong></p>"],
-    ["<p style='margin-top:20px'><strong>지방재정법 시행령 제38조 (예산의 편성절차)</strong></p>", "<p style='margin-top:20px'><strong>예산편성 절차 (지방재정법 제36조)</strong></p>"],
-    ["① 지방자치단체의 장은 제37조의 예산편성기준에 따라 그 지방자치단체의 예산편성지침을 작성하여 각 부서에 통보하여야 한다.", "① 지방자치단체의 장은 행정안전부의 예산편성기준에 따라 그 지방자치단체의 예산편성지침을 작성하여 각 부서에 통보하여야 한다."]
-  ]],
-  ["budget-settlement", "law_content", [
-    ["## 지방재정법 제53조 (결산)", "## 결산 (지방회계법 제14조)"],
-    ["**지방재정법 제53조 (결산)**", "**지방회계법 제14조 (결산의 수행)**"],
-    ["**출납 폐쇄 시기 (지방재정법 제66조)**", "**출납 폐쇄 시기 (지방회계법 제7조)**"]
-  ]],
-  ["budget-transfer", "law_content", [
-    ["## 지방재정법 제47조 (예산의 이용·전용)", "## 예산의 이용·이체·전용 (지방재정법 제47조의2·제49조)"],
-    ["**지방재정법 제47조 (예산의 이용·전용)**", "**지방재정법 제47조의2 (예산의 이용·이체)·제49조 (예산의 전용)**"],
-    ["② 각 중앙관서의 장은 예산의 목적 범위 안에서 재원의 효율적 활용을 위하여 대통령령이 정하는 바에 따라 기획재정부장관의 승인을 얻어 각 세항 또는 목의 금액을 전용(轉用)할 수 있다.", "② 지방자치단체의 장은 예산의 목적 범위에서 재원의 효율적 활용을 위하여 대통령령으로 정하는 바에 따라 각 정책사업 내 단위사업 또는 목의 금액을 전용(轉用)할 수 있다."]
-  ]],
-  ["supplementary-budget", "law_content", [
-    ["지방자치법 제144조(예산안의 편성 및 의결) 및 제56조(임시회)", "지방자치법 제142조(예산의 편성 및 의결) 및 제54조(임시회)"]
-  ]]
+  [ "accounting-officers", "law_content", [
+    [ "**[지방] 지방회계법 제46조 (\"회계관계공무원\"의 법령상 정의)**", "**[지방] 지방회계법 제46조 (회계관계공무원의 임명 또는 위임)**" ]
+  ] ],
+  [ "budget-compilation", "law_content", [
+    [ "<p><strong>지방자치법 제127조 (예산안의 편성 및 의결)</strong></p>", "<p><strong>지방자치법 제142조 (예산의 편성 및 의결)</strong></p>" ],
+    [ "지방자치법 제127조는 예산안 편성 및 의회 제출·의결 기한을 규정합니다.", "지방자치법 제142조는 예산안 편성 및 의회 제출·의결 기한을 규정합니다." ],
+    [ "<strong>관련 법령:</strong> 지방재정법 제36조 (예산의 편성), 지방재정법 시행령 제37조 (예산편성기준), 제38조 (예산의 편성절차)", "<strong>관련 법령:</strong> 지방재정법 제36조 (예산의 편성), 지방자치법 제142조 (예산의 편성 및 의결), 행정안전부 「지방자치단체 예산편성 운영기준」" ]
+  ] ],
+  [ "budget-compilation", "decree_content", [
+    [ "<p><strong>지방재정법 시행령 제37조 (예산편성기준)</strong></p>", "<p><strong>행정안전부 「지방자치단체 예산편성 운영기준」 (예산편성기준)</strong></p>" ],
+    [ "<p style='margin-top:20px'><strong>지방재정법 시행령 제38조 (예산의 편성절차)</strong></p>", "<p style='margin-top:20px'><strong>예산편성 절차 (지방재정법 제36조)</strong></p>" ],
+    [ "① 지방자치단체의 장은 제37조의 예산편성기준에 따라 그 지방자치단체의 예산편성지침을 작성하여 각 부서에 통보하여야 한다.", "① 지방자치단체의 장은 행정안전부의 예산편성기준에 따라 그 지방자치단체의 예산편성지침을 작성하여 각 부서에 통보하여야 한다." ]
+  ] ],
+  [ "budget-settlement", "law_content", [
+    [ "## 지방재정법 제53조 (결산)", "## 결산 (지방회계법 제14조)" ],
+    [ "**지방재정법 제53조 (결산)**", "**지방회계법 제14조 (결산의 수행)**" ],
+    [ "**출납 폐쇄 시기 (지방재정법 제66조)**", "**출납 폐쇄 시기 (지방회계법 제7조)**" ]
+  ] ],
+  [ "budget-transfer", "law_content", [
+    [ "## 지방재정법 제47조 (예산의 이용·전용)", "## 예산의 이용·이체·전용 (지방재정법 제47조의2·제49조)" ],
+    [ "**지방재정법 제47조 (예산의 이용·전용)**", "**지방재정법 제47조의2 (예산의 이용·이체)·제49조 (예산의 전용)**" ],
+    [ "② 각 중앙관서의 장은 예산의 목적 범위 안에서 재원의 효율적 활용을 위하여 대통령령이 정하는 바에 따라 기획재정부장관의 승인을 얻어 각 세항 또는 목의 금액을 전용(轉用)할 수 있다.", "② 지방자치단체의 장은 예산의 목적 범위에서 재원의 효율적 활용을 위하여 대통령령으로 정하는 바에 따라 각 정책사업 내 단위사업 또는 목의 금액을 전용(轉用)할 수 있다." ]
+  ] ],
+  [ "supplementary-budget", "law_content", [
+    [ "지방자치법 제144조(예산안의 편성 및 의결) 및 제56조(임시회)", "지방자치법 제142조(예산의 편성 및 의결) 및 제54조(임시회)" ]
+  ] ]
 ]
 
 results = []
@@ -71,14 +72,14 @@ puts "[content_fix batch19] #{results.join(' | ')}"
 
 puts "--- 잔존 검증 (가공/오기 0이어야) ---"
 checks = {
-  ["accounting-officers","law_content"] => ["제46조 (\"회계관계공무원\"의 법령상 정의)"],
-  ["budget-compilation","law_content"] => ["지방자치법 제127조", "시행령 제37조 (예산편성기준)"],
-  ["budget-compilation","decree_content"] => ["지방재정법 시행령 제37조 (예산편성기준)", "지방재정법 시행령 제38조 (예산의 편성절차)"],
-  ["budget-settlement","law_content"] => ["지방재정법 제53조", "지방재정법 제66조"],
-  ["budget-transfer","law_content"] => ["제47조 (예산의 이용·전용)", "중앙관서의 장", "기획재정부장관"],
-  ["supplementary-budget","law_content"] => ["제144조", "제56조(임시회)"]
+  [ "accounting-officers", "law_content" ] => [ "제46조 (\"회계관계공무원\"의 법령상 정의)" ],
+  [ "budget-compilation", "law_content" ] => [ "지방자치법 제127조", "시행령 제37조 (예산편성기준)" ],
+  [ "budget-compilation", "decree_content" ] => [ "지방재정법 시행령 제37조 (예산편성기준)", "지방재정법 시행령 제38조 (예산의 편성절차)" ],
+  [ "budget-settlement", "law_content" ] => [ "지방재정법 제53조", "지방재정법 제66조" ],
+  [ "budget-transfer", "law_content" ] => [ "제47조 (예산의 이용·전용)", "중앙관서의 장", "기획재정부장관" ],
+  [ "supplementary-budget", "law_content" ] => [ "제144조", "제56조(임시회)" ]
 }
-checks.each do |(slug,field), pats|
+checks.each do |(slug, field), pats|
   t = Topic.find_by(slug: slug); next unless t
   c = t.public_send(field).to_s
   pats.each do |p|
@@ -87,8 +88,8 @@ checks.each do |(slug,field), pats|
   end
 end
 # 정정 앵커 출현
-{ "budget-settlement"=>["지방회계법 제14조","지방회계법 제7조"], "budget-transfer"=>["제47조의2","제49조"], "supplementary-budget"=>["제142조","제54조"], "budget-compilation"=>["제142조","예산편성 운영기준"] }.each do |slug,pats|
-  t=Topic.find_by(slug:slug); next unless t
+{ "budget-settlement"=>[ "지방회계법 제14조", "지방회계법 제7조" ], "budget-transfer"=>[ "제47조의2", "제49조" ], "supplementary-budget"=>[ "제142조", "제54조" ], "budget-compilation"=>[ "제142조", "예산편성 운영기준" ] }.each do |slug, pats|
+  t=Topic.find_by(slug: slug); next unless t
   full=(t.law_content.to_s+t.decree_content.to_s)
-  puts "  #{slug} 앵커: "+pats.map{|p| "#{p}=#{full.scan(p).size}"}.join(" ")
+  puts "  #{slug} 앵커: "+pats.map { |p| "#{p}=#{full.scan(p).size}" }.join(" ")
 end

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # 토픽 본문 법령결함 정정 — 배치19b (budget 클러스터 보강: faqs·quick_stats JSONB)
 # 2026-06-04. cf. [[project_cite_meaning_audit_2026_06_04]].
@@ -11,11 +12,11 @@
 # 운영 적용: kamal app exec --reuse 'bin/rails runner "eval(Base64.decode64(...))"'
 
 jfixes = [
-  ["budget-compilation", "faqs", [["지방자치법 제127조", "지방자치법 제142조"]]],
-  ["budget-compilation", "quick_stats", [["지방자치법 제127조", "지방자치법 제142조"]]],
-  ["budget-settlement", "faqs", [["지방재정법 제53조", "지방회계법 제14조"]]],
-  ["budget-settlement", "quick_stats", [["지방재정법 제53조", "지방회계법 제14조"]]],
-  ["supplementary-budget", "quick_stats", [["지방자치법 제144조", "지방자치법 제142조"]]]
+  [ "budget-compilation", "faqs", [ [ "지방자치법 제127조", "지방자치법 제142조" ] ] ],
+  [ "budget-compilation", "quick_stats", [ [ "지방자치법 제127조", "지방자치법 제142조" ] ] ],
+  [ "budget-settlement", "faqs", [ [ "지방재정법 제53조", "지방회계법 제14조" ] ] ],
+  [ "budget-settlement", "quick_stats", [ [ "지방재정법 제53조", "지방회계법 제14조" ] ] ],
+  [ "supplementary-budget", "quick_stats", [ [ "지방자치법 제144조", "지방자치법 제142조" ] ] ]
 ]
 
 results = []
@@ -34,7 +35,7 @@ puts "[content_fix batch19b] #{results.join(' | ')}"
 
 puts "--- budget 클러스터 전 필드 잔존 전수 재스캔 ---"
 slugs = %w[accounting-officers budget-compilation budget-settlement budget-transfer supplementary-budget budget-compilation-guideline budget-item-standard budget-execution extra-budgetary-fund]
-pats = ['지방재정법 제53조', '지방재정법 제66조', '지방자치법 제127조', '지방자치법 제144조', '제56조(임시회)', '시행령 제37조 (예산편성', '제47조 (예산의 이용·전용)', '"회계관계공무원"의 법령상 정의']
+pats = [ '지방재정법 제53조', '지방재정법 제66조', '지방자치법 제127조', '지방자치법 제144조', '제56조(임시회)', '시행령 제37조 (예산편성', '제47조 (예산의 이용·전용)', '"회계관계공무원"의 법령상 정의' ]
 total = 0
 slugs.each do |slug|
   t = Topic.find_by(slug: slug); next unless t

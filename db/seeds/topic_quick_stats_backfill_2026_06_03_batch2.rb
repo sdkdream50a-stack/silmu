@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # AEO Sprint3 quick_stats 백필 — 배치2 (복무·인사·예산 안정조문 8토픽)
 # 2026-06-03. quick_stats = [{label,value,note}] 배열. 값은 이번 세션 FAQ 백필에서 검증한

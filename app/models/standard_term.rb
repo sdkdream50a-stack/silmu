@@ -1,7 +1,7 @@
 class StandardTerm < ApplicationRecord
   validates :term_korean, presence: true, uniqueness: true
 
-  scope :with_synonym, ->(word) { where("synonyms @> ?", [word].to_json) }
+  scope :with_synonym, ->(word) { where("synonyms @> ?", [ word ].to_json) }
 
   # 비표준어 → 표준어 매핑 캐시 (synonym → term_korean)
   # 13,176건 적재 시 메모리 약 5MB 추정

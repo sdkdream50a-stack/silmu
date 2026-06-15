@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # 2026-06-09 E-E-A-T 검증 배치5 (S4 색인 회복) — Guide(고조회 실무 가이드).
 # 대응 토픽(검증 완료)과 substantive 법령 사실이 일치하고 인용이 정합한 가이드만 등재.
 # 운영(silmu.kr/guides/<slug>) 본문 직접 확인 후 attest. 헤드라인 자동채움 금지.

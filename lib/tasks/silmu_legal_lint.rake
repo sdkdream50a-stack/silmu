@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # silmu 5단계 법령 검증 게이트 — 자동 lint
 # 운영 방식: 로컬·CI 환경에서 `bin/rake silmu:legal_lint` 실행
 # 메모리 참조: project_legal_validation_gate.md
@@ -116,7 +117,7 @@ namespace :silmu do
     end
 
     # §89~§95 + §97·§98 — 잡칙·벌칙 조문 폐지
-    ((89..95).to_a + [97, 98]).each do |n|
+    ((89..95).to_a + [ 97, 98 ]).each do |n|
       repealed_articles["지방재정법 제#{n}조"] = {
         repealed: "삭제",
         replacement: "잡칙·벌칙 조문 — 행정안전부 예규 또는 「지방세 징수법」 등 관련 법령으로 분산 이관"
@@ -147,7 +148,7 @@ namespace :silmu do
     end
 
     # 시행령 §102·§104·§105 (대형공사 관련)
-    [102, 104, 105].each do |n|
+    [ 102, 104, 105 ].each do |n|
       repealed_articles["지방계약법 시행령 제#{n}조"] = {
         repealed: "삭제",
         replacement: "대형공사 입찰 관련 절차는 §94~§101로 재편 (§94 적용대상, §95 정의, §96 심의, §97~§100 입찰절차·낙찰자 결정)"
@@ -155,7 +156,7 @@ namespace :silmu do
     end
 
     # 시행령 §112·§130 (이의신청·기술제안입찰 관련)
-    [112, 130].each do |n|
+    [ 112, 130 ].each do |n|
       repealed_articles["지방계약법 시행령 제#{n}조"] = {
         repealed: "삭제",
         replacement: "관련 절차는 §110~§123(이의신청·계약심의·분쟁조정) 또는 §126~§138(기술제안입찰) 등 현행 조문 사용"

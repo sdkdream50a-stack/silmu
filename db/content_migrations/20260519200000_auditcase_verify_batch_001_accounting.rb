@@ -118,9 +118,9 @@ group_b_source = "법제처 OPEN API spot check + 부정확 정정 (lawId 001717
 group_c_source = "GOE 2021 경기교육청 감사보고서 (조문번호 명시 없음 — 차후 정밀화 backlog)"
 
 [
-  [group_a_slugs, "mcp_law_api", group_a_source],
-  [group_b_slugs, "mcp_law_api", group_b_source],
-  [group_c_slugs, "manual",      group_c_source]
+  [ group_a_slugs, "mcp_law_api", group_a_source ],
+  [ group_b_slugs, "mcp_law_api", group_b_source ],
+  [ group_c_slugs, "manual",      group_c_source ]
 ].each do |slugs, method, source|
   slugs.each do |slug|
     ac = AuditCase.find_by(slug: slug)

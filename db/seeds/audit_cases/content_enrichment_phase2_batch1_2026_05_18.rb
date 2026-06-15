@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # 2026-05-18 Phase 2 #2 — 1차 batch 본문 강화 (detail/lesson NULL 3건)
 # 권위자 패널 비판 정정 원칙 준수:
 #   - 가상 시나리오 명시 + 법령 기준일 표기

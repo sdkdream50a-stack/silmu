@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # 토픽 본문 법령결함 정정 — 배치18 (private-contract-amount 금액 드리프트 + 시행규칙§25 오기 REFRAME)
 # 2026-06-04. cf. [[project_cite_meaning_audit_2026_06_04]].
@@ -107,9 +108,9 @@ puts "  정본앵커: 종합공사4억=#{rc.scan('종합공사: 추정가격 **4
 # 전 필드 드리프트 재확인
 puts "--- 전 필드 잔존 드리프트 ---"
 total=0
-t.attributes.each do |c,v|
+t.attributes.each do |c, v|
   next if v.nil?; s=v.is_a?(String) ? v : v.to_json
-  ["2억 원 이하**인 공사","5,000만 원 이하**인 물품","제25조 (소액 수의계약의 범위)"].each do |p|
+  [ "2억 원 이하**인 공사", "5,000만 원 이하**인 물품", "제25조 (소액 수의계약의 범위)" ].each do |p|
     n=s.scan(p).size; (puts "  RESIDUAL #{c}: '#{p}'=#{n}"; total+=n) if n>0
   end
 end

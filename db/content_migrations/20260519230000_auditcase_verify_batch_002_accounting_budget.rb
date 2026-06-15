@@ -203,8 +203,8 @@ puts ""
 puts "=== AuditCase verify batch #2 — mark_verified! (#{group_a_slugs.size + group_b_slugs.size}건) ==="
 
 [
-  [group_a_slugs, "mcp_law_api", group_a_source],
-  [group_b_slugs, "mcp_law_api", group_b_source]
+  [ group_a_slugs, "mcp_law_api", group_a_source ],
+  [ group_b_slugs, "mcp_law_api", group_b_source ]
 ].each do |slugs, method, source|
   slugs.each do |slug|
     ac = AuditCase.find_by(slug: slug)
