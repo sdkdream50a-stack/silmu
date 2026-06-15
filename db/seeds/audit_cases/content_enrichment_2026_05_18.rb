@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # 2026-05-18 Phase 2 — thin content 보강 1차 (detail/lesson NULL 2건)
 # 진단: GSC "Crawled but not indexed" 495건 회복 본질 작업
 # 전제: Phase 1 법령 정정 10건 운영 반영 완료 (commit 10a681f7+67a5bd2)

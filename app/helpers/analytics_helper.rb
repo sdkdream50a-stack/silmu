@@ -6,10 +6,10 @@ module AnalyticsHelper
   # content_type: "topic" | "audit_case"
   def roi_content_migration_tag(content_type:, slug:)
     affected = case content_type
-               when "topic"      then Analytics::RoiScope.affected_topic?(slug)
-               when "audit_case" then Analytics::RoiScope.affected_audit_case?(slug)
-               else false
-               end
+    when "topic"      then Analytics::RoiScope.affected_topic?(slug)
+    when "audit_case" then Analytics::RoiScope.affected_audit_case?(slug)
+    else false
+    end
     return "" unless affected
 
     payload = { content_type: content_type, slug: slug }.to_json

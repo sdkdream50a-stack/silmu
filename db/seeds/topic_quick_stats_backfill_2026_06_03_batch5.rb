@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # AEO Sprint3 quick_stats 백필 — 배치5 (계약·예산·회계 안정조문 10토픽)
 # 2026-06-03. quick_stats = [{label,value,note}] 배열(뷰 show.html.erb:190 렌더, category 미사용).

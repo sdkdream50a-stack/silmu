@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # P0b FAQPage 백필 — 배치2 (고트래픽 faqs 결손 토픽 8개)
 # 2026-06-03. 답변은 각 토픽의 이미 검증된 summary·quick_stats·law_content

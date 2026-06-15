@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # P0b FAQPage 백필 — 배치1 (고트래픽 faqs 결손 토픽)
 # 2026-06-03 SEO/GEO/AEO 권위 패널 P0b. 답변은 각 토픽의 이미 검증된

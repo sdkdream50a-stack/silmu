@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # silmu SEO 자동 진단 — GSC API 없이 외부 측정 가능한 지표를 매일 자동 기록
 # 운영 방식: recurring.yml에 등록되어 매일 자정 실행
 # 출력: log/seo_health.jsonl (JSON Lines 형식, 일별 1줄)
@@ -40,10 +41,10 @@ namespace :silmu do
     [ AuditCase, Topic, Guide ].each do |model|
       table = model.table_name
       content_cols = case model.name
-                     when "AuditCase" then %w[detail lesson]
-                     when "Topic" then %w[law_content decree_content rule_content commentary]
-                     when "Guide" then %w[description sections]
-                     end
+      when "AuditCase" then %w[detail lesson]
+      when "Topic" then %w[law_content decree_content rule_content commentary]
+      when "Guide" then %w[description sections]
+      end
       content_expr = content_cols.map { |c| "char_length(coalesce(#{c}::text,''))" }.join(" + ")
       total = model.public_send(:published).count
       thin = model.public_send(:published).where("#{content_expr} < 1500").count

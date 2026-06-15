@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # 2026-06-09 E-E-A-T 검증 배치7 (S4) — 예규 332 현행화로 차단해제된 토픽 + 부정당업자/적격/정의.
 # topic_content_fix_2026_06_09_yegyu332.rb로 324→332 정정 후 attest. 운영 라이브+law.go.kr 1:1 대조.
 # verification_source ≤200, verification_method ≤32 가드. 헤드라인 자동채움 금지.

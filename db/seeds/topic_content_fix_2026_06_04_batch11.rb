@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # 토픽 본문 법령결함 정정 — 배치11 (제N조 의미오기 감사 #6: 예정가격 작성·조서)
 # 2026-06-04. cf. [[project_cite_meaning_audit_2026_06_04]].
@@ -26,18 +27,18 @@
 # 운영 적용: kamal app exec --reuse 'bin/rails runner "load Rails.root.join(%q{db/seeds/topic_content_fix_2026_06_04_batch11.rb})"'
 
 fixes = [
-  ["cost-calculation-guide", "law_content", [
-    ["국가계약법 제9조 (예정가격의 결정)", "국가계약법 제8조의2 (예정가격의 작성)"],
-    ["지방계약법 시행령 제33조 (예정가격 작성)", "지방계약법 시행령 제8조 (예정가격의 작성 및 비치)"]
-  ]],
-  ["cost-calculation-guide", "rule_content", [
-    ["시행규칙 제5조 (예정가격 조서)", "시행규칙 제4조 (예정가격조서의 작성)"],
-    ["시행규칙 제5조 (예정가격조서 작성)", "시행규칙 제4조 (예정가격조서의 작성)"]
-  ]],
-  ["estimated-price", "law_content", [
-    ["지방계약법 제13조 (예정가격)", "지방계약법 제11조 (예정가격의 작성)"],
-    ["제10조 (경쟁입찰의 성립)", "시행령 제12조 (입찰의 성립)"]
-  ]]
+  [ "cost-calculation-guide", "law_content", [
+    [ "국가계약법 제9조 (예정가격의 결정)", "국가계약법 제8조의2 (예정가격의 작성)" ],
+    [ "지방계약법 시행령 제33조 (예정가격 작성)", "지방계약법 시행령 제8조 (예정가격의 작성 및 비치)" ]
+  ] ],
+  [ "cost-calculation-guide", "rule_content", [
+    [ "시행규칙 제5조 (예정가격 조서)", "시행규칙 제4조 (예정가격조서의 작성)" ],
+    [ "시행규칙 제5조 (예정가격조서 작성)", "시행규칙 제4조 (예정가격조서의 작성)" ]
+  ] ],
+  [ "estimated-price", "law_content", [
+    [ "지방계약법 제13조 (예정가격)", "지방계약법 제11조 (예정가격의 작성)" ],
+    [ "제10조 (경쟁입찰의 성립)", "시행령 제12조 (입찰의 성립)" ]
+  ] ]
 ]
 
 results = []
@@ -63,10 +64,10 @@ puts "[content_fix batch11] #{results.join(' | ')}"
 puts "--- 잔존 검증 ---"
 checks = {
   "cost-calculation-guide" => {
-    law_content: ["국가계약법 제9조 (예정가격의 결정)", "시행령 제33조 (예정가격 작성)"],
-    rule_content: ["제5조 (예정가격 조서)", "제5조 (예정가격조서 작성)"]
+    law_content: [ "국가계약법 제9조 (예정가격의 결정)", "시행령 제33조 (예정가격 작성)" ],
+    rule_content: [ "제5조 (예정가격 조서)", "제5조 (예정가격조서 작성)" ]
   },
-  "estimated-price" => { law_content: ["제13조 (예정가격)", "제10조 (경쟁입찰의 성립)"] }
+  "estimated-price" => { law_content: [ "제13조 (예정가격)", "제10조 (경쟁입찰의 성립)" ] }
 }
 checks.each do |slug, fmap|
   t = Topic.find_by(slug: slug); next unless t

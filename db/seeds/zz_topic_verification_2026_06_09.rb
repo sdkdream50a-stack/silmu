@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # 2026-06-09 E-E-A-T 검증 배치 (S4 색인 회복) — 조회수 상위 토픽 실검증 후 슬롯 채움.
 # 각 토픽 본문 법령 주장을 law.go.kr 1:1 대조 후에만 등재(헤드라인 자동채움 금지 — 거짓 E-E-A-T 방지).
 # 'topic' 접두사를 피해 other_files로 분류 → 모든 토픽 정의(topics.rb 포함) 이후 로드 보장.

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # P0b FAQPage 백필 — 배치6(마지막, 백필 완주) 잔여 14토픽
 # 2026-06-03. 답변은 각 토픽의 이미 검증된 qa_content·law_content 조문/사실에서만

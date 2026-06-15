@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # 토픽 본문 법령결함 정정 — 배치7 (제N조 의미오기 감사 #2: budget-carryover 지방재정법 예산이월 조문)
 # 2026-06-04. cf. [[project_topic_content_defects_2026_06_03]].
@@ -21,18 +22,18 @@
 # 운영 적용: kamal app exec --reuse 'bin/rails runner "load Rails.root.join(%q{db/seeds/topic_content_fix_2026_06_04_batch7.rb})"'
 
 fixes = [
-  ["budget-carryover", "rule_content", [
-    ["제48조에 따른 계속비", "제42조에 따른 계속비"]
-  ]],
-  ["budget-carryover", "interpretation_content", [
-    ["계속비는 지방재정법 제48조에 따라", "계속비는 지방재정법 제42조에 따라"]
-  ]],
-  ["budget-carryover", "regulation_content", [
-    ["| 지방재정법 제48조 |", "| 지방재정법 제42조 |"]
-  ]],
-  ["budget-carryover", "commentary", [
-    ["제48조 및 제49조에 따라 명시이월과 사고이월", "제50조에 따라 명시이월과 사고이월"]
-  ]]
+  [ "budget-carryover", "rule_content", [
+    [ "제48조에 따른 계속비", "제42조에 따른 계속비" ]
+  ] ],
+  [ "budget-carryover", "interpretation_content", [
+    [ "계속비는 지방재정법 제48조에 따라", "계속비는 지방재정법 제42조에 따라" ]
+  ] ],
+  [ "budget-carryover", "regulation_content", [
+    [ "| 지방재정법 제48조 |", "| 지방재정법 제42조 |" ]
+  ] ],
+  [ "budget-carryover", "commentary", [
+    [ "제48조 및 제49조에 따라 명시이월과 사고이월", "제50조에 따라 명시이월과 사고이월" ]
+  ] ]
 ]
 
 results = []

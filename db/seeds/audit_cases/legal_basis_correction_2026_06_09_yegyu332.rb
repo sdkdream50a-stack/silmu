@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # 감사사례 법령근거 정정 — 예규 번호 현행화 (제324호 → 제332호)
 # 2026-06-09. cf. topic_content_fix_2026_06_09_yegyu332.rb (토픽 동일 정정).

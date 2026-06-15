@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # 토픽 본문 법령결함 정정 — 배치5 (배치4 누락 필드 보강 / 운영 DB 인라인 사후 정정의 committed 재현 시드)
 # 2026-06-04. cf. [[project_topic_content_defects_2026_06_03]] (배치1 1a614fb·배치2 afc283e·배치3 ba59a8b·배치4 dccabc9).
@@ -23,15 +24,15 @@
 # 운영 적용: kamal app exec --reuse 'bin/rails runner "load Rails.root.join(%q{db/seeds/topic_content_fix_2026_06_04_batch5.rb})"'
 
 fixes = [
-  ["subcontract", "commentary", [
-    ["하도급법 제14조의2", "건설산업기본법 제29조제3항"]
-  ]],
-  ["school-budget-compilation", "interpretation_content", [
-    ["초중등교육법 시행령 제65조의2", "초중등교육법 시행령 제64조"]
-  ]],
-  ["penalty-reduction-procedure", "commentary", [
-    ["지방계약법 시행령 제74조의2", "지방계약법 시행령 제90조"]
-  ]]
+  [ "subcontract", "commentary", [
+    [ "하도급법 제14조의2", "건설산업기본법 제29조제3항" ]
+  ] ],
+  [ "school-budget-compilation", "interpretation_content", [
+    [ "초중등교육법 시행령 제65조의2", "초중등교육법 시행령 제64조" ]
+  ] ],
+  [ "penalty-reduction-procedure", "commentary", [
+    [ "지방계약법 시행령 제74조의2", "지방계약법 시행령 제90조" ]
+  ] ]
 ]
 
 results = []

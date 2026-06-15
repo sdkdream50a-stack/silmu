@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # 토픽 본문 법령결함 정정 — 배치3 (부존재 조문 §16의2 클러스터 + §90 선급금 오기 + 시행규칙 §47의2 부존재)
 # 2026-06-04. legal_basis/본문 전수 grep(폐지·부존재 조문 재검사) 중 적발한 잔존 결함 정정.
@@ -26,32 +27,32 @@
 # 운영 적용: kamal app exec --reuse 'bin/rails runner "load Rails.root.join(%q{db/seeds/topic_content_fix_2026_06_03_batch3.rb})"'
 
 fixes = [
-  ["payment", "law_content", [
-    ["지방계약법 제16조의2 (대가의 지급)", "지방계약법 제18조 (대가의 지급)"]
-  ]],
-  ["payment", "interpretation_content", [
-    ["지방계약법 제16조의2, 시행령 제68조", "지방계약법 제18조, 시행령 제67조"]
-  ]],
-  ["e-bidding", "decree_content", [
-    ["제16조의2 (전자입찰)", "제39조 (입찰서의 제출·전자입찰)"]
-  ]],
-  ["e-bidding", "interpretation_content", [
-    ["지방계약법 시행령 제16조의2", "지방계약법 시행령 제39조"]
-  ]],
-  ["e-bidding-error-faq", "regulation_content", [
-    ["지방계약법 시행령 제16조의2", "지방계약법 시행령 제39조"]
-  ]],
-  ["bid-announcement", "decree_content", [
-    ["제16조의2 (재공고입찰)", "제19조 (재입찰 및 재공고입찰)"]
-  ]],
-  ["budget-execution", "interpretation_content", [
-    ["지방계약법 시행령 제90조에 따라 선급금", "「지방회계법」 제35조(선금급과 개산급) 및 관련 예규에 따라 선급금"]
-  ]],
-  ["year-end-settlement", "rule_content", [
-    ["## 소득세법 시행규칙 관련 조문", "## 소득세법 관련 조문"],
-    ["소득세법 시행규칙 제47조의2", "소득세법 제140조"],
-    ["**제47조의2 (소득·세액공제 증명서류)**", "**소득세법 제140조 (근로소득자의 소득·세액 공제 신고)**"]
-  ]]
+  [ "payment", "law_content", [
+    [ "지방계약법 제16조의2 (대가의 지급)", "지방계약법 제18조 (대가의 지급)" ]
+  ] ],
+  [ "payment", "interpretation_content", [
+    [ "지방계약법 제16조의2, 시행령 제68조", "지방계약법 제18조, 시행령 제67조" ]
+  ] ],
+  [ "e-bidding", "decree_content", [
+    [ "제16조의2 (전자입찰)", "제39조 (입찰서의 제출·전자입찰)" ]
+  ] ],
+  [ "e-bidding", "interpretation_content", [
+    [ "지방계약법 시행령 제16조의2", "지방계약법 시행령 제39조" ]
+  ] ],
+  [ "e-bidding-error-faq", "regulation_content", [
+    [ "지방계약법 시행령 제16조의2", "지방계약법 시행령 제39조" ]
+  ] ],
+  [ "bid-announcement", "decree_content", [
+    [ "제16조의2 (재공고입찰)", "제19조 (재입찰 및 재공고입찰)" ]
+  ] ],
+  [ "budget-execution", "interpretation_content", [
+    [ "지방계약법 시행령 제90조에 따라 선급금", "「지방회계법」 제35조(선금급과 개산급) 및 관련 예규에 따라 선급금" ]
+  ] ],
+  [ "year-end-settlement", "rule_content", [
+    [ "## 소득세법 시행규칙 관련 조문", "## 소득세법 관련 조문" ],
+    [ "소득세법 시행규칙 제47조의2", "소득세법 제140조" ],
+    [ "**제47조의2 (소득·세액공제 증명서류)**", "**소득세법 제140조 (근로소득자의 소득·세액 공제 신고)**" ]
+  ] ]
 ]
 
 results = []

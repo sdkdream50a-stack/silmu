@@ -37,7 +37,7 @@ namespace :audit_cases do
 
     db_failures = []
     AuditCase.where(published: true).find_each do |ac|
-      blob = [ac.title, ac.legal_basis, ac.issue, ac.detail, ac.lesson].compact.join("\n")
+      blob = [ ac.title, ac.legal_basis, ac.issue, ac.detail, ac.lesson ].compact.join("\n")
       blob.scan(school_pattern) do
         full = Regexp.last_match(0)
         next if generic_terms.include?(full)

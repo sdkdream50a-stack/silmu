@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # 토픽 본문 법령결함 정정 — 배치4 (전수 "제N조의M" 인용 검증 → 부존재 14건 + 오기 1건)
 # 2026-06-04. 전 토픽·전 콘텐츠필드+faqs에서 "제N조의M" 인용을 전수 추출 후 korean-law MCP로
@@ -32,48 +33,48 @@
 # 운영 적용: kamal app exec --reuse 'bin/rails runner "load Rails.root.join(%q{db/seeds/topic_content_fix_2026_06_04_batch4.rb})"'
 
 fixes = [
-  ["e-bidding", "law_content", [
-    ["지방계약법 제14조의2", "지방계약법 제14조제2항"]
-  ]],
-  ["e-bidding", "decree_content", [
-    ["### 제49조의2 (전자계약)", "### 전자계약 (지방계약법 제14조제2항·전자조달법)"]
-  ]],
-  ["design-change", "law_content", [
-    ["제22조의2", "제22조"]
-  ]],
-  ["design-change", "decree_content", [
-    ["### 제65조의2 (설계변경의 범위 제한)", "### 제74조 (설계 변경으로 인한 계약금액의 조정)"]
-  ]],
-  ["design-change", "interpretation_content", [
-    ["시행령 제65조의2", "시행령 제74조"]
-  ]],
-  ["contract-execution", "decree_content", [
-    ["### 제49조의2 (계약 체결 기한)", "### 계약 체결 기한 (지방계약법 제14조·집행기준 예규)"]
-  ]],
-  ["contract-execution", "interpretation_content", [
-    ["시행령 제49조의2", "지방계약법 제14조·행정안전부 예규(지방자치단체 입찰 및 계약집행기준)"]
-  ]],
-  ["payment", "decree_content", [
-    ["### 제68조의2 (지연이자)", "### 제68조 (대가 지급 지연 이자)"]
-  ]],
-  ["penalty-reduction-procedure", "law_content", [
-    ["법률(제30조) → 시행령(제74조의2) → 집행기준", "법률(제30조) → 시행령(제90조) → 시행규칙(제75조)·집행기준"]
-  ]],
-  ["penalty-reduction-procedure", "decree_content", [
-    ["## 지방계약법 시행령 제74조의2 (지체상금)", "## 지방계약법 시행령 제90조 (지연배상금)"]
-  ]],
-  ["school-budget-compilation", "decree_content", [
-    ["### 제65조의2(학교발전기금)", "### 제64조(학교발전기금)"]
-  ]],
-  ["year-end-settlement", "rule_content", [
-    ["### 소득세법 시행규칙 제100조의2 (의료비 세액공제 증명)", "### 의료비 세액공제 증명서류 (소득세법 제140조·국세청 간소화)"],
-    ["**제100조의2 (의료비 공제 대상 증명)**", "**의료비 공제 대상 증명**"],
-    ["### 소득세법 시행규칙 제55조의2 (주택 관련 공제 증명)", "### 주택 관련 공제 증명서류 (소득세법 제140조·국세청 간소화)"],
-    ["**제55조의2 (주택임차차입금 원리금 상환 증명)**", "**주택임차차입금 원리금 상환 증명**"]
-  ]],
-  ["local-government-accounting", "law_content", [
-    ["지방재정법 제60조의2 (복식부기 회계)", "지방회계법 제12조 (지방회계기준·복식부기)"]
-  ]]
+  [ "e-bidding", "law_content", [
+    [ "지방계약법 제14조의2", "지방계약법 제14조제2항" ]
+  ] ],
+  [ "e-bidding", "decree_content", [
+    [ "### 제49조의2 (전자계약)", "### 전자계약 (지방계약법 제14조제2항·전자조달법)" ]
+  ] ],
+  [ "design-change", "law_content", [
+    [ "제22조의2", "제22조" ]
+  ] ],
+  [ "design-change", "decree_content", [
+    [ "### 제65조의2 (설계변경의 범위 제한)", "### 제74조 (설계 변경으로 인한 계약금액의 조정)" ]
+  ] ],
+  [ "design-change", "interpretation_content", [
+    [ "시행령 제65조의2", "시행령 제74조" ]
+  ] ],
+  [ "contract-execution", "decree_content", [
+    [ "### 제49조의2 (계약 체결 기한)", "### 계약 체결 기한 (지방계약법 제14조·집행기준 예규)" ]
+  ] ],
+  [ "contract-execution", "interpretation_content", [
+    [ "시행령 제49조의2", "지방계약법 제14조·행정안전부 예규(지방자치단체 입찰 및 계약집행기준)" ]
+  ] ],
+  [ "payment", "decree_content", [
+    [ "### 제68조의2 (지연이자)", "### 제68조 (대가 지급 지연 이자)" ]
+  ] ],
+  [ "penalty-reduction-procedure", "law_content", [
+    [ "법률(제30조) → 시행령(제74조의2) → 집행기준", "법률(제30조) → 시행령(제90조) → 시행규칙(제75조)·집행기준" ]
+  ] ],
+  [ "penalty-reduction-procedure", "decree_content", [
+    [ "## 지방계약법 시행령 제74조의2 (지체상금)", "## 지방계약법 시행령 제90조 (지연배상금)" ]
+  ] ],
+  [ "school-budget-compilation", "decree_content", [
+    [ "### 제65조의2(학교발전기금)", "### 제64조(학교발전기금)" ]
+  ] ],
+  [ "year-end-settlement", "rule_content", [
+    [ "### 소득세법 시행규칙 제100조의2 (의료비 세액공제 증명)", "### 의료비 세액공제 증명서류 (소득세법 제140조·국세청 간소화)" ],
+    [ "**제100조의2 (의료비 공제 대상 증명)**", "**의료비 공제 대상 증명**" ],
+    [ "### 소득세법 시행규칙 제55조의2 (주택 관련 공제 증명)", "### 주택 관련 공제 증명서류 (소득세법 제140조·국세청 간소화)" ],
+    [ "**제55조의2 (주택임차차입금 원리금 상환 증명)**", "**주택임차차입금 원리금 상환 증명**" ]
+  ] ],
+  [ "local-government-accounting", "law_content", [
+    [ "지방재정법 제60조의2 (복식부기 회계)", "지방회계법 제12조 (지방회계기준·복식부기)" ]
+  ] ]
 ]
 
 results = []

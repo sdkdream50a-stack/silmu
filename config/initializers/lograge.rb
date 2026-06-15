@@ -9,7 +9,7 @@ Rails.application.configure do
   # 헬스체크·assets 로그 억제 (디스크 절약)
   config.lograge.ignore_actions = [
     "Rails::HealthController#show",
-    "ActiveStorage::Blobs::RedirectController#show",
+    "ActiveStorage::Blobs::RedirectController#show"
   ]
 
   # Sentry가 처리하므로 에러 본문은 짧게
@@ -19,7 +19,7 @@ Rails.application.configure do
       remote_ip: event.payload[:remote_ip],
       user_id: event.payload[:user_id],
       params: event.payload[:params]&.except("controller", "action", "format", "utf8", "authenticity_token", "password", "password_confirmation"),
-      exception: event.payload[:exception]&.first,
+      exception: event.payload[:exception]&.first
     }.compact
   end
 end

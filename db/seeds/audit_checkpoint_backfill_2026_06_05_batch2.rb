@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # 감사사례 checkpoints 백필 2차 (2026-06-05) — 조회수 상위 빈건 14건
 #

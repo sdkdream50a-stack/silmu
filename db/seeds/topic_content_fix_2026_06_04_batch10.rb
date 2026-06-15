@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # 토픽 본문 법령결함 정정 — 배치10 (제N조 의미오기 감사 #5: 계약원칙·계약해제해지·검사)
 # 2026-06-04. cf. [[project_cite_meaning_audit_2026_06_04]].
@@ -27,21 +28,21 @@
 # 운영 적용: kamal app exec --reuse 'bin/rails runner "load Rails.root.join(%q{db/seeds/topic_content_fix_2026_06_04_batch10.rb})"'
 
 fixes = [
-  ["contract-termination", "law_content", [
-    ["제23조 (계약의 해제·해지)", "제30조의2 (계약의 해제·해지)"],
-    ["제12조 (계약의 원칙)", "제6조 (계약의 원칙)"]
-  ]],
-  ["contract-termination", "decree_content", [
-    ["### 제60조 (발주기관의 계약 해제·해지 사유)", "### 발주기관의 계약 해제·해지 사유 (지방계약법 제30조의2)"],
-    ["### 제61조 (계약상대자의 계약 해제·해지 사유)", "### 계약상대자의 계약 해제·해지 사유 (지방계약법 제30조의2)"],
-    ["### 제62조 (해제·해지의 효과)", "### 해제·해지의 효과 (지방계약법 제30조의2)"]
-  ]],
-  ["contract-execution", "law_content", [
-    ["제12조 (계약의 원칙)", "제6조 (계약의 원칙)"]
-  ]],
-  ["construction-completion", "law_content", [
-    ["지방계약법 시행령 제71조 (검사)", "지방계약법 시행령 제64조 (검사)"]
-  ]]
+  [ "contract-termination", "law_content", [
+    [ "제23조 (계약의 해제·해지)", "제30조의2 (계약의 해제·해지)" ],
+    [ "제12조 (계약의 원칙)", "제6조 (계약의 원칙)" ]
+  ] ],
+  [ "contract-termination", "decree_content", [
+    [ "### 제60조 (발주기관의 계약 해제·해지 사유)", "### 발주기관의 계약 해제·해지 사유 (지방계약법 제30조의2)" ],
+    [ "### 제61조 (계약상대자의 계약 해제·해지 사유)", "### 계약상대자의 계약 해제·해지 사유 (지방계약법 제30조의2)" ],
+    [ "### 제62조 (해제·해지의 효과)", "### 해제·해지의 효과 (지방계약법 제30조의2)" ]
+  ] ],
+  [ "contract-execution", "law_content", [
+    [ "제12조 (계약의 원칙)", "제6조 (계약의 원칙)" ]
+  ] ],
+  [ "construction-completion", "law_content", [
+    [ "지방계약법 시행령 제71조 (검사)", "지방계약법 시행령 제64조 (검사)" ]
+  ] ]
 ]
 
 results = []
@@ -67,11 +68,11 @@ puts "[content_fix batch10] #{results.join(' | ')}"
 puts "--- 잔존 검증 ---"
 checks = {
   "contract-termination" => {
-    law_content: ["제23조 (계약의 해제·해지)", "제12조 (계약의 원칙)"],
-    decree_content: ["### 제60조 (발주기관의 계약 해제·해지 사유)", "### 제61조 (계약상대자의 계약 해제·해지 사유)", "### 제62조 (해제·해지의 효과)"]
+    law_content: [ "제23조 (계약의 해제·해지)", "제12조 (계약의 원칙)" ],
+    decree_content: [ "### 제60조 (발주기관의 계약 해제·해지 사유)", "### 제61조 (계약상대자의 계약 해제·해지 사유)", "### 제62조 (해제·해지의 효과)" ]
   },
-  "contract-execution" => { law_content: ["제12조 (계약의 원칙)"] },
-  "construction-completion" => { law_content: ["지방계약법 시행령 제71조 (검사)"] }
+  "contract-execution" => { law_content: [ "제12조 (계약의 원칙)" ] },
+  "construction-completion" => { law_content: [ "지방계약법 시행령 제71조 (검사)" ] }
 }
 checks.each do |slug, fmap|
   t = Topic.find_by(slug: slug); next unless t

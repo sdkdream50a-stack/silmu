@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # 감사사례 checkpoints 백필 (2026-06-15) — 빈-checkpoint 8건 (예산·복무 클러스터)
 #
@@ -24,7 +25,7 @@ CHECKPOINTS = {
   "contingency-fund-misuse" => [
     { "icon" => "help",       "title" => "예측 가능성 자가점검",    "desc" => "편성 당시 예상했거나 매년 반복되는 지출은 예비비 대상이 아니다." },
     { "icon" => "swap_horiz", "title" => "전용·추경 우선 검토",     "desc" => "추경 편성 여유가 있으면 추경이 우선. 다른 항목 잔액은 전용으로 대응한다." },
-    { "icon" => "event_repeat","title" => "반복지출은 본예산 증액", "desc" => "제설비 등 연례 발생 비용은 다음 해 예산에 증액 편성한다." }
+    { "icon" => "event_repeat", "title" => "반복지출은 본예산 증액", "desc" => "제설비 등 연례 발생 비용은 다음 해 예산에 증액 편성한다." }
   ],
 
   # === 복무: 복직·신고 클러스터 ===
@@ -36,13 +37,13 @@ CHECKPOINTS = {
   "silmu-2026-reinstatement-expired-no-notice" => [
     { "icon" => "event_available", "title" => "만료 30일 내 = 당연복직", "desc" => "휴직 만료일 30일 이내 복귀신고 시 별도 처분 없이 당연 복직된다(§65③)." },
     { "icon" => "assignment_late",  "title" => "30일 경과 시 별도 처분",  "desc" => "당연 복직 효력 상실 시 임용권자의 별도 복직 명령이 있어야 하며 그 사이는 무단결근 위험." },
-    { "icon" => "description","title" => "구두 표명은 신고 아님", "desc" => "전화·구두 의사 표명은 정식 신고로 인정되지 않는다." }
+    { "icon" => "description", "title" => "구두 표명은 신고 아님", "desc" => "전화·구두 의사 표명은 정식 신고로 인정되지 않는다." }
   ],
 
   # === 복무: 겸직·영리 클러스터 ===
   "silmu-2026-concurrent-unauthorized" => [
     { "icon" => "verified_user", "title" => "비영리·무보수도 사전허가", "desc" => "지방공무원법 §56 — 영리·비영리·보수 유무 무관하게 소속 기관장 사전 허가가 필수." },
-    { "icon" => "account_balance","title" => "소속 기관장 확인",      "desc" => "지방은 단체장 또는 의장, 국가는 직급별 임용(제청)권자가 허가권자." },
+    { "icon" => "account_balance", "title" => "소속 기관장 확인",      "desc" => "지방은 단체장 또는 의장, 국가는 직급별 임용(제청)권자가 허가권자." },
     { "icon" => "block",         "title" => "사후 허가는 무효",       "desc" => "사후에 허가를 받아도 위반 사실은 해소되지 않는다." }
   ],
   "silmu-2026-concurrent-for-profit-business" => [

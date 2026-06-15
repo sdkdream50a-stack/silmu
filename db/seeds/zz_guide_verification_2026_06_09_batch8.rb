@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # 2026-06-09 E-E-A-T 검증 배치8 (S4) — 고조회 Guide(대응 토픽 검증·본문 정합분).
 # 운영(silmu.kr/guides/<slug>) 본문 직접 확인 + 대응 토픽(배치1 검증) 법령 정합. 헤드라인 자동채움 금지.
 # 보류: private-contract-limit-guide(한도 "연간 누계 5천만" framing — 일반 2천만/특례 5천만 혼동 소지),

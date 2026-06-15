@@ -194,7 +194,7 @@ attrs = {
     **Q. 정년퇴직월의 시간외수당은 어떻게 계산하나요?**
     A. 정년·명예퇴직 시 1일 이상 근무하면 **정액분(월 10시간) 전액**을 받을 수 있는 특례가 있습니다. 자세한 내용은 「시간외수당 퇴직월 특례」 토픽(slug=`edu-overtime-retirement-month`)을 참고하세요. 일반 일할 기준(15일)과 다른 점에 유의해야 합니다.
   CONTENT
-  flowchart_mermaid: <<~MERMAID,
+  flowchart_mermaid: <<~MERMAID
     graph TD
       A[시간외근무 필요] --> B[부서장 사전 근무명령 결재]
       B --> C{1일 4시간·월 57시간 한도}

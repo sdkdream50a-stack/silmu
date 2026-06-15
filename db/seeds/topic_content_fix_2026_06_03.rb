@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # 토픽 본문 법령 정확성 정정 4건 (2026-06-03)
 # FAQ 백필 중 발견한 본문 오류를 korean-law MCP 검증값으로 정정.
@@ -41,7 +42,7 @@ fixes["retirement-allowance"] = {
     ※ 구체적 지급비율과 계산식은 공무원연금법 시행령에서 정하며, 정확한 금액은 <b>공무원연금공단</b> 또는 소속 기관 인사·급여 부서에서 확인하시기 바랍니다.
     </div>
   HTML
-  decree_content: <<~HTML,
+  decree_content: <<~HTML
     ## 퇴직수당 산정 구조
 
     **계산 구조 (공무원연금법 제62조제2항 및 시행령)**
@@ -72,7 +73,7 @@ fixes["retirement-allowance"] = {
 # 정확: 국가공무원법 제73조 = 휴직의 효력. 별도 "공무국외여행에 관한 규정"(대통령령) 부존재.
 #       공무 국외출장은 소속 기관장 허가, 절차는 기관별 「공무국외출장 규정」(훈령·예규)·지자체 조례, 여비는 「공무원 여비 규정」 국외여비.
 fixes["foreign-travel"] = {
-  law_content: <<~HTML,
+  law_content: <<~HTML
     ## 공무 국외출장(국외여행)의 근거
 
     <strong>허가 근거</strong>
@@ -164,7 +165,7 @@ fixes["completion-payment-checklist"] = {
 
     공사 계약은 준공 후 **하자보수보증금**을 납부받거나 보증보험에 가입하게 한 후 대금을 지급합니다. 하자담보책임기간·보증금률은 공종별로 시행령 별표 및 계약서에서 정하며, 소액 공사 등은 면제될 수 있습니다.
   HTML
-  qa_content: <<~HTML,
+  qa_content: <<~HTML
     ## 준공대가 지급 질의답변
 
     ### Q1. 준공검사 없이 대가를 먼저 지급할 수 있나요?
@@ -240,7 +241,7 @@ fixes["additional-contract-limit"] = {
     - 증액 조정 시 행정안전부장관이 정하는 바에 따라 적절성·적법성을 심사합니다(제74조제8항).
     - 제조·용역 계약도 위 규정을 준용할 수 있습니다(제74조제9항).
   HTML
-  rule_content: <<~HTML,
+  rule_content: <<~HTML
     ## 설계변경 계약금액 조정 절차
 
     1단계: 설계변경·물량 증감 사유 발생 및 확인

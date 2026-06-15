@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # 토픽 본문 법령결함 정정 — 배치14 (제N조 의미오기 감사 #9: 설계변경·장기계속 구조 reframe)
 # 2026-06-04. cf. [[project_cite_meaning_audit_2026_06_04]].
@@ -22,15 +23,15 @@
 # 운영 적용: kamal app exec --reuse 'bin/rails runner "load Rails.root.join(%q{db/seeds/topic_content_fix_2026_06_04_batch14.rb})"'
 
 fixes = [
-  ["design-change", "decree_content", [
-    ["### 제65조 (설계변경)", "### 설계변경의 요건·사유 (지방계약법 시행령 제74조·「지방자치단체 공사계약 일반조건」)"],
-    ["### 제66조 (설계변경으로 인한 계약금액의 조정)", "### 설계변경 계약금액 조정방법 (지방계약법 시행령 제74조)"]
-  ]],
-  ["long-term-contract", "decree_content", [
-    ["## 지방계약법 시행령 제65조~제67조 (장기계속계약)", "## 지방계약법 시행령 제78조 (장기계속계약과 계속비계약)"],
-    ["**지방계약법 시행령 제65조 (장기계속계약)**", "**지방계약법 시행령 제78조 (장기계속계약)**"],
-    ["**지방계약법 시행령 제66조 (계속비계약)**", "**지방계약법 시행령 제78조 (계속비계약)**"]
-  ]]
+  [ "design-change", "decree_content", [
+    [ "### 제65조 (설계변경)", "### 설계변경의 요건·사유 (지방계약법 시행령 제74조·「지방자치단체 공사계약 일반조건」)" ],
+    [ "### 제66조 (설계변경으로 인한 계약금액의 조정)", "### 설계변경 계약금액 조정방법 (지방계약법 시행령 제74조)" ]
+  ] ],
+  [ "long-term-contract", "decree_content", [
+    [ "## 지방계약법 시행령 제65조~제67조 (장기계속계약)", "## 지방계약법 시행령 제78조 (장기계속계약과 계속비계약)" ],
+    [ "**지방계약법 시행령 제65조 (장기계속계약)**", "**지방계약법 시행령 제78조 (장기계속계약)**" ],
+    [ "**지방계약법 시행령 제66조 (계속비계약)**", "**지방계약법 시행령 제78조 (계속비계약)**" ]
+  ] ]
 ]
 
 results = []
@@ -55,8 +56,8 @@ puts "[content_fix batch14] #{results.join(' | ')}"
 
 puts "--- 잔존 검증 ---"
 checks = {
-  "design-change" => { decree_content: ["### 제65조 (설계변경)", "### 제66조 (설계변경으로 인한 계약금액의 조정)"] },
-  "long-term-contract" => { decree_content: ["시행령 제65조~제67조", "시행령 제65조 (장기계속계약)", "시행령 제66조 (계속비계약)"] }
+  "design-change" => { decree_content: [ "### 제65조 (설계변경)", "### 제66조 (설계변경으로 인한 계약금액의 조정)" ] },
+  "long-term-contract" => { decree_content: [ "시행령 제65조~제67조", "시행령 제65조 (장기계속계약)", "시행령 제66조 (계속비계약)" ] }
 }
 checks.each do |slug, fmap|
   t = Topic.find_by(slug: slug); next unless t
@@ -69,6 +70,6 @@ checks.each do |slug, fmap|
 end
 # §74·§78 출현 확인
 %w[design-change long-term-contract].each do |slug|
-  t=Topic.find_by(slug:slug); next unless t; d=t.decree_content.to_s
+  t=Topic.find_by(slug: slug); next unless t; d=t.decree_content.to_s
   puts "  #{slug}: 시행령제74조=#{d.scan('시행령 제74조').size} 시행령제78조=#{d.scan('시행령 제78조').size}"
 end

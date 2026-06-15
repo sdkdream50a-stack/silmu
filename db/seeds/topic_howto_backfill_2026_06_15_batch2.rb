@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # 토픽 howto_steps 백필 (2026-06-15) batch2 — 절차형 토픽 5건
 #

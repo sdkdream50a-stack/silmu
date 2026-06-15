@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # 2026-06-09 E-E-A-T 검증 배치3 (S4 색인 회복) — 계약 이행·보증·전자조달·회계 클러스터.
 # 각 토픽 조문을 운영(silmu.kr 라이브)+law.go.kr 정본 1:1 대조 후 등재. 헤드라인 자동채움 금지.
 # verification_source = varchar(200) → 200자 가드 강제(초과 시 abort).

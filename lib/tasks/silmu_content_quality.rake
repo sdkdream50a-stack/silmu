@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # S4 — published 콘텐츠 E-E-A-T 필수 슬롯 게이트 (색인 회복 재발방지)
 #
 # plan v2 S4 대책: published 게이트는 N자 임계가 아니라 "필수 슬롯 충족" —

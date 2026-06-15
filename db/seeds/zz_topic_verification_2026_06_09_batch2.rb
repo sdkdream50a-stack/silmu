@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # 2026-06-09 E-E-A-T 검증 배치2 (S4 색인 회복) — 계약-core 클러스터.
 # 각 토픽의 법령 조문을 운영(silmu.kr 라이브)·law.go.kr·법제처 정본 조문맵과 1:1 대조 후에만 등재.
 # (헤드라인 자동채움 금지 — 거짓 E-E-A-T 방지). 메타데이터만 갱신하므로 update_columns 사용.

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # 토픽 fold intent 감사 2차 (2026-06-05) — answer-first 요약 재작성
 #
