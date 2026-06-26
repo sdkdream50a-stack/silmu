@@ -95,8 +95,9 @@ module ApplicationHelper
 
   # E-E-A-T 검증 타임스탬프 (Sprint A — gimi9 "기미 버전" 벤치마킹)
   # Topic: law_verified_at 우선, 없으면 updated_at
-  # AuditCase: updated_at (별도 verified_at 필드 없음)
+  # AuditCase: last_verified_at 명시 검증일만 사용 (없으면 배지 미표시)
   def silmu_verification_date(record)
+    return record.last_verified_at.presence if record.is_a?(AuditCase)
     return record.law_verified_at.presence || record.updated_at if record.respond_to?(:law_verified_at)
     record.try(:updated_at)
   end

@@ -3,8 +3,8 @@
 <%# variants: 'inline' (기본, 콘텐츠 헤더용), 'sidebar' (사이드바 카드용), 'compact' (소형) %>
 <%
   date = local_assigns[:date]
-  source = local_assigns[:source].presence || "법제처 국가법령정보센터"
-  source_url = local_assigns[:source_url].presence || "https://www.law.go.kr"
+  source = local_assigns.key?(:source) ? local_assigns[:source].presence : "법제처 국가법령정보센터"
+  source_url = local_assigns.key?(:source_url) ? local_assigns[:source_url].presence : "https://www.law.go.kr"
   variant = local_assigns[:variant].presence || "inline"
 %>
 <% if date.present? %>
@@ -21,12 +21,18 @@
           </p>
         </div>
       </div>
-      <p class="text-[11px] text-emerald-800 leading-relaxed mt-2 pt-2 border-t border-emerald-200">
-        <span class="font-semibold">📚 1차 출처:</span>
-        <a href="<%= source_url %>" target="_blank" rel="noopener" class="text-emerald-700 hover:text-emerald-900 underline">
-          <cite class="legal-cite"><%= source %></cite>
-        </a>
-      </p>
+      <% if source.present? %>
+        <p class="text-[11px] text-emerald-800 leading-relaxed mt-2 pt-2 border-t border-emerald-200">
+          <span class="font-semibold">📚 <%= source_url.present? ? "1차 출처" : "검토 출처" %>:</span>
+          <% if source_url.present? %>
+            <a href="<%= source_url %>" target="_blank" rel="noopener" class="text-emerald-700 hover:text-emerald-900 underline">
+              <cite class="legal-cite"><%= source %></cite>
+            </a>
+          <% else %>
+            <cite class="legal-cite"><%= source %></cite>
+          <% end %>
+        </p>
+      <% end %>
     </aside>
   <% when 'compact' %>
     <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200" title="5단계 정합성 검증 완료일 — silmu 자체 검토">

@@ -5,6 +5,7 @@
   <% if @audit_case.infographic_url.present? %>
     <link rel="preload" href="<%= @audit_case.infographic_url %>" as="image" fetchpriority="high">
   <% end %>
+  <% verification_date = silmu_verification_date(@audit_case) %>
   <%= json_ld({
     "@context": "https://schema.org",
     "@type": "Article",
@@ -15,8 +16,8 @@
     "datePublished": @audit_case.created_at.iso8601,
     "dateModified": @audit_case.updated_at.iso8601,
     # Sprint A — E-E-A-T 신호 강화 (gimi9 "기미 버전" 벤치마킹)
-    "lastReviewed": silmu_verification_date(@audit_case).iso8601,
-    "reviewedBy": { "@type": "Organization", "name": "실무.kr 5단계 정합성 검증 게이트", "url": "https://silmu.kr" },
+    "lastReviewed": verification_date&.iso8601,
+    "reviewedBy": (verification_date.present? ? { "@type": "Organization", "name": "실무.kr 5단계 정합성 검증 게이트", "url": "https://silmu.kr" } : nil),
     "mainEntityOfPage": canonical_url,
     "url": canonical_url,
     "image": "https://silmu.kr/og-image.webp",
@@ -25,7 +26,7 @@
       "@type": "SpeakableSpecification",
       "cssSelector": [ "#section-finding" ]
     }
-  }) %>
+  }.compact) %>
   <%= json_ld({
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -87,8 +88,8 @@
           <div class="mt-3">
             <%= render 'shared/verification_badge',
                   date: silmu_verification_date(@audit_case),
-                  source: '감사원 공공감사 결과·법제처 국가법령정보센터',
-                  source_url: 'https://www.law.go.kr',
+                  source: @audit_case.verification_source,
+                  source_url: nil,
                   variant: 'inline' %>
           </div>
         </div>
@@ -319,8 +320,8 @@
           <!-- E-E-A-T 검증 배지 (Sprint A) -->
           <%= render 'shared/verification_badge',
                 date: silmu_verification_date(@audit_case),
-                source: '감사원 공공감사 결과·법제처 국가법령정보센터',
-                source_url: 'https://www.law.go.kr',
+                source: @audit_case.verification_source,
+                source_url: nil,
                 variant: 'sidebar' %>
 
           <!-- AI 상담 -->

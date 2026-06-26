@@ -132,14 +132,12 @@ class AuditCase < ApplicationRecord
 
   # 2026-05-18: SEO/GEO 권위자 비판 정정 — meta description 풍부화
   # 기존: issue.truncate(150). issue가 짧으면 description도 짧아 GSC 신호 약함.
-  # 개선: detail에서 마크다운 마크업·가상시나리오 명시 제외 + 첫 200자 추출 → 본문 풍부도 반영
+  # 개선: detail에서 마크다운 마크업을 정리하되 가상시나리오 명시는 보존 + 첫 200자 추출 → 본문 풍부도 반영
   def seo_description
     base = detail.presence || issue.presence || ""
     return "" if base.blank?
 
     plain = base
-              .gsub(/^---+$/m, "")              # 가상 시나리오 명시 구분선
-              .gsub(/^>\s*※[^\n]*$/m, "")      # 가상 시나리오 ※ 인용블록
               .gsub(/^\#{1,6}\s+/m, "")        # 마크다운 헤더
               .gsub(/\*\*([^*]+)\*\*/, '\1')   # 볼드
               .gsub(/\|[^|\n]*\|/, "")          # 표 셀
