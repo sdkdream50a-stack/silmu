@@ -40,7 +40,7 @@
   <div class="container-editorial">
     <div class="max-w-4xl mx-auto space-y-4">
       <% @onboarding_steps.each do |step| %>
-        <article id="step-<%= step[:index] %>" class="card-editorial scroll-mt-24">
+        <article id="step-<%= step[:index] %>" class="card-editorial scroll-mt-24" data-onboarding-step data-step="<%= step[:index] %>">
           <div class="flex flex-col sm:flex-row gap-4 sm:gap-5">
             <div class="shrink-0 flex sm:flex-col items-center sm:items-start gap-2">
               <span class="w-10 h-10 flex items-center justify-center rounded-full bg-amber-100 text-amber-700 text-sm font-bold">
@@ -61,7 +61,8 @@
                   </div>
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                     <% step[:lessons].each do |lesson| %>
-                      <%= link_to lesson[:path], class: "group flex items-center gap-3 rounded-lg border border-slate-200 bg-white px-3.5 py-3 hover:border-editorial-navy-light hover:shadow-sm transition-all" do %>
+                      <% lesson_slug = lesson[:path].to_s.split("?").first.split("#").first.split("/").reject(&:blank?).last %>
+                      <%= link_to lesson[:path], class: "group flex items-center gap-3 rounded-lg border border-slate-200 bg-white px-3.5 py-3 hover:border-editorial-navy-light hover:shadow-sm transition-all", data: { onboarding_link: true, step: step[:index], slug: lesson_slug, link_type: "lesson" } do %>
                         <span class="badge-editorial shrink-0"><%= lesson[:badge] %></span>
                         <span class="min-w-0 flex-1 text-sm font-semibold text-editorial-ink group-hover:text-editorial-navy truncate"><%= lesson[:title] %></span>
                         <span class="material-symbols-outlined text-slate-300 group-hover:text-editorial-navy text-base">chevron_right</span>
@@ -79,7 +80,8 @@
                   </div>
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                     <% step[:red_flags].each do |red_flag| %>
-                      <%= link_to red_flag[:path], class: "group flex items-center gap-3 rounded-lg border border-red-100 bg-red-50 px-3.5 py-3 hover:border-red-200 hover:bg-white transition-all" do %>
+                      <% red_flag_slug = red_flag[:path].to_s.split("?").first.split("#").first.split("/").reject(&:blank?).last %>
+                      <%= link_to red_flag[:path], class: "group flex items-center gap-3 rounded-lg border border-red-100 bg-red-50 px-3.5 py-3 hover:border-red-200 hover:bg-white transition-all", data: { onboarding_link: true, step: step[:index], slug: red_flag_slug, link_type: "red_flag" } do %>
                         <span class="px-2 py-1 rounded-md bg-white text-red-700 text-xs font-bold shrink-0"><%= red_flag[:badge] %></span>
                         <span class="min-w-0 flex-1 text-sm font-semibold text-red-950 group-hover:text-red-700 truncate"><%= red_flag[:title] %></span>
                         <span class="material-symbols-outlined text-red-300 group-hover:text-red-500 text-base">chevron_right</span>
@@ -95,3 +97,52 @@
     </div>
   </div>
 </section>
+
+<script>
+  (function () {
+    function trackEvent(name, params) {
+      if (typeof window.gtag !== 'function') return;
+      window.gtag('event', name, params || {});
+    }
+
+    function stepIndexFor(element) {
+      var step = element.dataset.step || '';
+      if (step) return parseInt(step, 10);
+
+      var match = (element.id || '').match(/^step-(\d+)$/);
+      return match ? parseInt(match[1], 10) : null;
+    }
+
+    trackEvent('onboarding_start');
+
+    if ('IntersectionObserver' in window) {
+      var seenSteps = new Set();
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+
+          var stepIndex = stepIndexFor(entry.target);
+          if (!stepIndex || seenSteps.has(stepIndex)) return;
+
+          seenSteps.add(stepIndex);
+          trackEvent('onboarding_step_view', { step_index: stepIndex });
+          observer.unobserve(entry.target);
+        });
+      }, { threshold: 0.35 });
+
+      document.querySelectorAll("[id^='step-']").forEach(function (stepElement) {
+        observer.observe(stepElement);
+      });
+    }
+
+    document.querySelectorAll("[data-onboarding-link]").forEach(function (link) {
+      link.addEventListener("click", function () {
+        trackEvent('onboarding_lesson_click', {
+          step_index: parseInt(link.dataset.step || '0', 10),
+          slug: link.dataset.slug || '',
+          link_type: link.dataset.linkType || ''
+        });
+      });
+    });
+  })();
+</script>

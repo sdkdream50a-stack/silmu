@@ -87,21 +87,37 @@ class GuidesControllerTest < ActionDispatch::IntegrationTest
 
     assert_select "h1", text: /신규자 첫달 계약 실무 코스/
     assert_select "h3", text: "이렇게 하면 걸려요"
+    assert_select "article#step-7[data-onboarding-step][data-step=?]", "7"
 
     Array(lesson_slugs_by_type[:topic]).each do |lesson|
       assert_select "a[href=?]", topic_path(lesson[:slug])
+      assert_select "a[href=?][data-onboarding-link][data-step][data-slug=?][data-link-type=?]",
+                    topic_path(lesson[:slug]), lesson[:slug], "lesson"
     end
 
     Array(lesson_slugs_by_type[:guide]).each do |lesson|
       assert_select "a[href=?]", guide_path(lesson[:slug])
+      assert_select "a[href=?][data-onboarding-link][data-step][data-slug=?][data-link-type=?]",
+                    guide_path(lesson[:slug]), lesson[:slug], "lesson"
     end
 
     assert_select "a[href=?]", contract_flow_path
+    assert_select "a[href=?][data-onboarding-link][data-slug=?][data-link-type=?]",
+                  contract_flow_path, "contract-flow", "lesson"
     assert_select "a[href=?]", pre_contract_checklist_path
+    assert_select "a[href=?][data-onboarding-link][data-slug=?][data-link-type=?]",
+                  pre_contract_checklist_path, "pre-contract-checklist", "lesson"
 
     GuidesController::ONBOARDING_TRACK.flat_map { |step| step[:red_flags] }.each do |slug|
       assert_select "a[href=?]", audit_case_path(slug)
+      assert_select "a[href=?][data-onboarding-link][data-step][data-slug=?][data-link-type=?]",
+                    audit_case_path(slug), slug, "red_flag"
       assert_match "온보딩 감사사례 #{slug}", response.body
     end
+
+    assert_match "window.gtag('event', name, params || {})", response.body
+    assert_match "trackEvent('onboarding_start')", response.body
+    assert_match "trackEvent('onboarding_step_view', { step_index: stepIndex })", response.body
+    assert_match "trackEvent('onboarding_lesson_click'", response.body
   end
 end
