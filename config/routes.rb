@@ -150,6 +150,7 @@ Rails.application.routes.draw do
   get "guides/contract-flow", to: "guides#contract_flow", as: :contract_flow
   get "guides/pre-contract-checklist", to: "guides#pre_contract_checklist", as: :pre_contract_checklist
   get "guides/resources", to: "guides#resources", as: :guide_resources
+  get "start", to: "guides#onboarding", as: :onboarding
   resources :guides, only: [ :index, :show ], param: :slug
 
   # 업무달력 데이터 동기화

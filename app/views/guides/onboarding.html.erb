@@ -1,0 +1,97 @@
+<%# 신규자 첫달 계약 실무 온보딩 코스 %>
+
+<% content_for :head do %>
+  <script type="application/ld+json">
+  <%= {
+    "@context" => "https://schema.org",
+    "@type" => "ItemList",
+    "name" => "신규자 첫달 계약 실무 7단계 코스",
+    "description" => "공무원 계약 담당 신규자가 첫달에 익혀야 할 계약 실무 순서",
+    "numberOfItems" => @onboarding_steps.size,
+    "itemListElement" => @onboarding_steps.map { |step|
+      { "@type" => "ListItem", "position" => step[:index], "name" => step[:title], "url" => "#{request.base_url}#{onboarding_path}#step-#{step[:index]}" }
+    }
+  }.to_json.html_safe %>
+  </script>
+<% end %>
+
+<section class="bg-editorial-navy text-white py-12 lg:py-16">
+  <div class="container-editorial">
+    <nav class="flex items-center gap-2 text-sm text-white/65 mb-6">
+      <%= link_to "실무.kr", root_path, class: "hover:text-white transition-colors" %>
+      <span class="material-symbols-outlined text-xs">chevron_right</span>
+      <span class="text-white/85">신규자 첫달 코스</span>
+    </nav>
+
+    <div class="max-w-3xl">
+      <div class="inline-flex items-center gap-2 mb-4 px-3 py-1.5 rounded-lg bg-white/10 border border-white/20">
+        <span class="material-symbols-outlined text-base text-amber-200">route</span>
+        <span class="text-xs font-bold text-amber-100">7단계 선형 온보딩</span>
+      </div>
+      <h1 class="text-2xl lg:text-4xl font-bold tracking-tight mb-4">신규자 첫달 계약 실무 코스</h1>
+      <p class="text-white/78 text-base lg:text-lg leading-relaxed">
+        발령 첫달 계약 담당자가 계약 흐름, 수의계약, 예정가격, 나라장터, 검수와 대금지급까지 순서대로 확인하는 시작 경로입니다.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section-editorial bg-editorial-cream">
+  <div class="container-editorial">
+    <div class="max-w-4xl mx-auto space-y-4">
+      <% @onboarding_steps.each do |step| %>
+        <article id="step-<%= step[:index] %>" class="card-editorial scroll-mt-24">
+          <div class="flex flex-col sm:flex-row gap-4 sm:gap-5">
+            <div class="shrink-0 flex sm:flex-col items-center sm:items-start gap-2">
+              <span class="w-10 h-10 flex items-center justify-center rounded-full bg-amber-100 text-amber-700 text-sm font-bold">
+                <%= step[:index] %>
+              </span>
+              <span class="text-xs font-semibold text-editorial-muted"><%= step[:index] %>/7</span>
+            </div>
+
+            <div class="min-w-0 flex-1">
+              <h2 class="heading-editorial-card mb-2"><%= step[:title] %></h2>
+              <p class="text-sm text-editorial-muted leading-relaxed mb-5"><%= step[:objective] %></p>
+
+              <% if step[:lessons].present? %>
+                <div class="mb-5">
+                  <div class="flex items-center gap-2 mb-2">
+                    <span class="material-symbols-outlined text-editorial-navy text-base">school</span>
+                    <h3 class="text-sm font-bold text-editorial-ink">배우기</h3>
+                  </div>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                    <% step[:lessons].each do |lesson| %>
+                      <%= link_to lesson[:path], class: "group flex items-center gap-3 rounded-lg border border-slate-200 bg-white px-3.5 py-3 hover:border-editorial-navy-light hover:shadow-sm transition-all" do %>
+                        <span class="badge-editorial shrink-0"><%= lesson[:badge] %></span>
+                        <span class="min-w-0 flex-1 text-sm font-semibold text-editorial-ink group-hover:text-editorial-navy truncate"><%= lesson[:title] %></span>
+                        <span class="material-symbols-outlined text-slate-300 group-hover:text-editorial-navy text-base">chevron_right</span>
+                      <% end %>
+                    <% end %>
+                  </div>
+                </div>
+              <% end %>
+
+              <% if step[:red_flags].present? %>
+                <div>
+                  <div class="flex items-center gap-2 mb-2">
+                    <span class="material-symbols-outlined text-red-600 text-base">warning</span>
+                    <h3 class="text-sm font-bold text-red-900">이렇게 하면 걸려요</h3>
+                  </div>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                    <% step[:red_flags].each do |red_flag| %>
+                      <%= link_to red_flag[:path], class: "group flex items-center gap-3 rounded-lg border border-red-100 bg-red-50 px-3.5 py-3 hover:border-red-200 hover:bg-white transition-all" do %>
+                        <span class="px-2 py-1 rounded-md bg-white text-red-700 text-xs font-bold shrink-0"><%= red_flag[:badge] %></span>
+                        <span class="min-w-0 flex-1 text-sm font-semibold text-red-950 group-hover:text-red-700 truncate"><%= red_flag[:title] %></span>
+                        <span class="material-symbols-outlined text-red-300 group-hover:text-red-500 text-base">chevron_right</span>
+                      <% end %>
+                    <% end %>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </article>
+      <% end %>
+    </div>
+  </div>
+</section>

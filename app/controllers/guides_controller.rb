@@ -12,6 +12,103 @@ class GuidesController < ApplicationController
     "audit"     => "audit",
     "tools"     => "tools"
   }.freeze
+
+  ONBOARDING_CUSTOM_ROUTES = {
+    "contract-flow" => {
+      title: "계약 흐름도",
+      path_helper: :contract_flow_path
+    },
+    "pre-contract-checklist" => {
+      title: "계약업무 사전 체크리스트",
+      path_helper: :pre_contract_checklist_path
+    }
+  }.freeze
+
+  ONBOARDING_TRACK = [
+    {
+      title: "오리엔테이션: 내 일에 어떤 법이 적용되나",
+      objective: "국가계약법과 지방계약법을 구분하고 계약 전체 흐름을 먼저 잡습니다.",
+      lessons: [
+        { type: :topic, slug: "national-vs-local-contract-law" },
+        { type: :custom_route, slug: "contract-flow" },
+        { type: :custom_route, slug: "pre-contract-checklist" }
+      ],
+      red_flags: []
+    },
+    {
+      title: "계약방식 정하기",
+      objective: "수의계약과 입찰의 차이, 금액 기준, 첫 분기점을 판단합니다.",
+      lessons: [
+        { type: :topic, slug: "private-contract" },
+        { type: :topic, slug: "private-contract-amount" },
+        { type: :topic, slug: "bidding" }
+      ],
+      red_flags: []
+    },
+    {
+      title: "수의계약 실무",
+      objective: "사유서 작성과 1인·2인 견적의 기본 요건을 확인합니다.",
+      lessons: [
+        { type: :topic, slug: "private-contract-justification" },
+        { type: :topic, slug: "single-quote" },
+        { type: :topic, slug: "dual-quote" },
+        { type: :guide, slug: "private-contract-guide" }
+      ],
+      red_flags: %w[
+        false-private-contract-reason
+        single-quote-exceeds-limit
+      ]
+    },
+    {
+      title: "예정가격 작성",
+      objective: "예정가격 산정 절차와 누설 금지 기준을 익힙니다.",
+      lessons: [
+        { type: :topic, slug: "estimated-price" },
+        { type: :guide, slug: "estimated-price" }
+      ],
+      red_flags: %w[
+        estimated-price-leak-incident
+      ]
+    },
+    {
+      title: "나라장터 전자계약·입찰 집행",
+      objective: "G2B 공고와 전자입찰·전자계약의 기본 절차를 연결합니다.",
+      lessons: [
+        { type: :topic, slug: "e-bidding" },
+        { type: :guide, slug: "e-procurement-guide" },
+        { type: :guide, slug: "bidding-guide" }
+      ],
+      red_flags: %w[
+        e-procurement-bypass-narajangteo
+        spec-price-integration-violation
+      ]
+    },
+    {
+      title: "검사·검수와 대가지급",
+      objective: "검수 절차와 청구일부터 5일 이내 대가지급 기준을 점검합니다.",
+      lessons: [
+        { type: :topic, slug: "inspection" },
+        { type: :topic, slug: "payment" },
+        { type: :guide, slug: "purchase-and-inspection" }
+      ],
+      red_flags: %w[
+        defective-inspection
+        improper-advance-payment
+      ]
+    },
+    {
+      title: "사고 안 나게: 쪼개기 금지와 첫달 마무리",
+      objective: "분할발주 금지와 완료·대금지급 체크리스트로 첫달 업무를 마무리합니다.",
+      lessons: [
+        { type: :topic, slug: "split-contract" },
+        { type: :topic, slug: "completion-payment-checklist" }
+      ],
+      red_flags: %w[
+        split-contract-to-avoid-bidding
+      ]
+    }
+  ].freeze
+
   def index
     @guides            = Rails.cache.fetch("guides/all/v2", expires_in: 1.hour) { Guide.published.ordered.to_a }
     @popular_guides    = Rails.cache.fetch("guides/popular", expires_in: 1.hour) { Guide.published.order(view_count: :desc).limit(5).to_a }
@@ -57,6 +154,33 @@ class GuidesController < ApplicationController
     }
     meta[:robots] = "noindex, follow" if params[:category].present?
     set_meta_tags(meta)
+  end
+
+  def onboarding
+    @onboarding_steps = ONBOARDING_TRACK.map.with_index(1) do |step, index|
+      step.merge(
+        index: index,
+        lessons: step[:lessons].filter_map { |lesson| resolve_onboarding_lesson(lesson) },
+        red_flags: step[:red_flags].filter_map { |slug| resolve_onboarding_red_flag(slug) }
+      )
+    end
+
+    expires_in 5.minutes, public: true, stale_while_revalidate: 1.hour
+
+    canonical_url = request.original_url.split("?").first
+    set_meta_tags(
+      title: "신규자 첫달 계약 실무 7단계 코스",
+      description: "발령 첫달 계약 담당자가 계약 흐름, 수의계약, 예정가격, 나라장터, 검수와 대금지급까지 순서대로 익히는 실무 온보딩 코스입니다.",
+      keywords: "신규 공무원, 계약 담당자, 수의계약, 나라장터, 검수, 대금지급",
+      og: {
+        title: "신규자 첫달 계약 실무 7단계 코스 — 실무.kr",
+        description: "키워드를 몰라도 순서대로 따라가는 공무원 계약 실무 시작 코스",
+        url: canonical_url,
+        image: "https://silmu.kr/og-image.webp",
+        type: "website"
+      },
+      canonical: canonical_url
+    )
   end
 
   def show
@@ -229,5 +353,45 @@ class GuidesController < ApplicationController
       { id: 4, title: "부정당업자 제재 절차 안내", category: "FAQ", date: "2026.01.18", type: "FAQ" },
       { id: 5, title: "분할계약 금지 관련 유권해석", category: "판례", date: "2026.01.15", type: "유권해석" }
     ]
+  end
+
+  private
+
+  def resolve_onboarding_lesson(item)
+    case item[:type]
+    when :topic
+      record = Topic.published.find_by(slug: item[:slug])
+      return log_missing_onboarding_item(item[:type], item[:slug]) unless record
+
+      onboarding_item(record.name, topic_path(record.slug), "토픽")
+    when :guide
+      record = Guide.published.find_by(slug: item[:slug])
+      return log_missing_onboarding_item(item[:type], item[:slug]) unless record
+
+      onboarding_item(record.title, guide_path(record.slug), "가이드")
+    when :custom_route
+      route = ONBOARDING_CUSTOM_ROUTES[item[:slug]]
+      return log_missing_onboarding_item(item[:type], item[:slug]) unless route
+
+      onboarding_item(route[:title], public_send(route[:path_helper]), "가이드")
+    else
+      log_missing_onboarding_item(item[:type], item[:slug])
+    end
+  end
+
+  def resolve_onboarding_red_flag(slug)
+    record = AuditCase.published.find_by(slug: slug)
+    return log_missing_onboarding_item(:audit_case, slug) unless record
+
+    onboarding_item(record.title, audit_case_path(record.slug), record.severity.presence || "감사사례")
+  end
+
+  def onboarding_item(title, path, badge)
+    { title: title, path: path, badge: badge }
+  end
+
+  def log_missing_onboarding_item(type, slug)
+    Rails.logger.warn("[GuidesController#onboarding] missing published #{type}: #{slug}")
+    nil
   end
 end

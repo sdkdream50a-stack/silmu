@@ -46,4 +46,62 @@ class GuidesControllerTest < ActionDispatch::IntegrationTest
     get guide_url(guide)
     assert_response :success
   end
+
+  test "GET /start renders onboarding track links and red flags" do
+    lesson_slugs_by_type = GuidesController::ONBOARDING_TRACK
+      .flat_map { |step| step[:lessons] }
+      .group_by { |lesson| lesson[:type] }
+
+    Array(lesson_slugs_by_type[:topic]).each do |lesson|
+      topic = Topic.find_or_initialize_by(slug: lesson[:slug])
+      topic.update!(
+        name: "온보딩 토픽 #{lesson[:slug]}",
+        summary: "온보딩 테스트 토픽",
+        published: true
+      )
+    end
+
+    Array(lesson_slugs_by_type[:guide]).each do |lesson|
+      guide = Guide.find_or_initialize_by(slug: lesson[:slug])
+      guide.update!(
+        title: "온보딩 가이드 #{lesson[:slug]}",
+        category: "계약",
+        category_color: "emerald",
+        published: true
+      )
+    end
+
+    GuidesController::ONBOARDING_TRACK.flat_map { |step| step[:red_flags] }.each do |slug|
+      audit_case = AuditCase.find_or_initialize_by(slug: slug)
+      audit_case.update!(
+        title: "온보딩 감사사례 #{slug}",
+        issue: "온보딩 테스트 감사사례",
+        category: "계약",
+        severity: "중대",
+        published: true
+      )
+    end
+
+    get onboarding_url
+    assert_response :success
+
+    assert_select "h1", text: /신규자 첫달 계약 실무 코스/
+    assert_select "h3", text: "이렇게 하면 걸려요"
+
+    Array(lesson_slugs_by_type[:topic]).each do |lesson|
+      assert_select "a[href=?]", topic_path(lesson[:slug])
+    end
+
+    Array(lesson_slugs_by_type[:guide]).each do |lesson|
+      assert_select "a[href=?]", guide_path(lesson[:slug])
+    end
+
+    assert_select "a[href=?]", contract_flow_path
+    assert_select "a[href=?]", pre_contract_checklist_path
+
+    GuidesController::ONBOARDING_TRACK.flat_map { |step| step[:red_flags] }.each do |slug|
+      assert_select "a[href=?]", audit_case_path(slug)
+      assert_match "온보딩 감사사례 #{slug}", response.body
+    end
+  end
 end
