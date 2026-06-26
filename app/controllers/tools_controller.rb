@@ -43,6 +43,7 @@ class ToolsController < ApplicationController
   def audit_readiness_checker = render_tool_page(:audit_readiness_checker)
   def split_contract_checker = render_tool_page(:split_contract_checker)
   def price_adjustment_calculator = render_tool_page(:price_adjustment_calculator)
+  def predetermined_price = render_tool_page(:predetermined_price)
   def budget_execution_rate = render_tool_page(:budget_execution_rate)
   def contingency_fund = render_tool_page(:contingency_fund)
   def overtime_calculator = render_tool_page(:overtime_calculator)

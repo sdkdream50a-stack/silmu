@@ -26,12 +26,13 @@ class LlmsController < ApplicationController
     [ "salary-calculator", "공무원 봉급 실수령액 계산기", "공무원 봉급표 기준 직급·호봉별 실수령액 자동 계산" ],
     [ "pension-calculator", "공무원연금 예상 수령액 계산기", "재직년수와 기준소득월액으로 예상 공무원연금 수령액 산정" ],
     [ "price-adjustment-calculator", "물가변동 조정금액 계산기", "지수조정률·품목조정률 방식으로 ESC 조정금액 자동 계산" ],
+    [ "predetermined-price", "예정가격 복수예비가격 계산기", "기초금액에서 15개 복수예비가격을 생성하고 4개 추첨 평균과 하한가 시뮬레이션" ],
     [ "overtime-calculator", "초과근무수당 계산기", "월봉급액·시간외·야간·휴일 근무시간 기반 초과근무수당 산정" ],
     [ "annual-leave-calculator", "연가 일수 계산기", "입사일·근무년수 기반 연가 발생일수 및 잔여연가 자동 계산" ],
     [ "task-calendar", "업무 할일 달력", "급여·세무·보험 등 월별 반복업무 일정 관리, CSV·ICS 내보내기" ]
   ].freeze
 
-  TOOLS_TOTAL = 37
+  TOOLS_TOTAL = 38
   TEMPLATES_TOTAL = 26
 
   # AI 크롤러용 요약판 (구 public/llms.txt 정적 파일의 동적 대체).

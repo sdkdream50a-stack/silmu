@@ -398,6 +398,30 @@ document.addEventListener('click', function(e) {
         <div class="lg:flex lg:gap-10">
       <!-- 메인 콘텐츠 영역 -->
       <div class="flex-1 min-w-0">
+        <% if @topic.slug == "estimated-price" %>
+          <div class="mb-8 bg-gradient-to-br from-emerald-50 via-white to-editorial-navy-bg/30 border-2 border-emerald-200 rounded-2xl p-6 lg:p-8 shadow-soft">
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
+              <div class="flex items-start gap-4">
+                <div class="icon-container icon-container-lg bg-emerald-100 shrink-0">
+                  <span class="material-symbols-outlined text-3xl text-emerald-700">casino</span>
+                </div>
+                <div>
+                  <p class="text-xs font-bold text-emerald-700 uppercase tracking-wide mb-1">바로 계산</p>
+                  <h2 class="text-xl lg:text-2xl font-bold text-slate-900 mb-2">복수예비가격 15개 생성부터 하한가까지 시뮬레이션</h2>
+                  <p class="text-sm text-slate-600 leading-relaxed">
+                    기초금액과 범위를 입력하면 15개 예비가격을 만들고 4개 추첨 평균으로 예정가격을 계산합니다.
+                    낙찰하한율은 공고 기준에 맞게 직접 입력합니다.
+                  </p>
+                </div>
+              </div>
+              <%= link_to predetermined_price_path, class: "btn btn-point btn-lg shrink-0 justify-center" do %>
+                <span class="material-symbols-outlined">calculate</span>
+                예정가격 계산기 열기
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+
         <!-- 실무흐름도 -->
         <div class="tab-panel <%= 'active' if flowchart_default %>" data-tab="flowchart">
           <% if @topic.flowchart_mermaid.present? %>

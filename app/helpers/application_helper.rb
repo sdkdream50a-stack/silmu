@@ -1,5 +1,5 @@
 module ApplicationHelper
-  ACTIVE_TOOL_COUNT = 37
+  ACTIVE_TOOL_COUNT = 38
 
   # exam.silmu.kr — 법령 가이드 slug → 한국어 레이블 맵
   # chapters/show.html.erb에서 related_topic_slugs 렌더링 시 사용
@@ -73,6 +73,7 @@ module ApplicationHelper
     "pdf"                             => "PDF 분할·병합·페이지번호·정보 확인 시",
     "pension-calculator"              => "공무원연금 예상 수령액 시뮬레이션 시",
     "performance-bonus-calculator"    => "성과상여금 등급별(S·A·B·C) 산정 시",
+    "predetermined-price"             => "복수예비가격 15개·4개 추첨 예정가격을 사전 시뮬레이션할 때",
     "price-adjustment-calculator"     => "물가변동 ESC 조정(지수·품목조정률) 시",
     "progress-inspection"             => "기성검사·완료검사 조서 작성 시",
     "project-plan"                    => "사업계획서 hwpx 자동 생성 시",

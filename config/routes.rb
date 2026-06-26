@@ -272,6 +272,9 @@ Rails.application.routes.draw do
   # 물가변동 계약금액조정 계산기
   get "tools/price-adjustment-calculator", to: "tools#price_adjustment_calculator", as: :price_adjustment_calculator
 
+  # 예정가격 복수예비가격 계산기
+  get "tools/predetermined-price", to: "tools#predetermined_price", as: :predetermined_price
+
   # 예산 집행률 계산기
   get "tools/budget-execution-rate", to: "tools#budget_execution_rate", as: :budget_execution_rate
 
