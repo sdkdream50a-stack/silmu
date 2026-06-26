@@ -115,6 +115,10 @@ class GuidesControllerTest < ActionDispatch::IntegrationTest
       assert_match "온보딩 감사사례 #{slug}", response.body
     end
 
+    assert_match "setInterval(function ()", response.body
+    assert_match "typeof window.gtag === 'function'", response.body
+    assert_match "++tries > 50", response.body
+    assert_match "}, 300)", response.body
     assert_match "window.gtag('event', name, params || {})", response.body
     assert_match "trackEvent('onboarding_start')", response.body
     assert_match "trackEvent('onboarding_step_view', { step_index: stepIndex })", response.body

@@ -101,8 +101,20 @@
 <script>
   (function () {
     function trackEvent(name, params) {
-      if (typeof window.gtag !== 'function') return;
-      window.gtag('event', name, params || {});
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', name, params || {});
+        return;
+      }
+
+      var tries = 0;
+      var timer = setInterval(function () {
+        if (typeof window.gtag === 'function') {
+          window.gtag('event', name, params || {});
+          clearInterval(timer);
+        } else if (++tries > 50) {
+          clearInterval(timer);
+        }
+      }, 300);
     }
 
     function stepIndexFor(element) {
