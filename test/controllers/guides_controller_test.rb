@@ -122,6 +122,8 @@ class GuidesControllerTest < ActionDispatch::IntegrationTest
     assert_match "window.gtag('event', name, params || {})", response.body
     assert_match "trackEvent('onboarding_start')", response.body
     assert_match "trackEvent('onboarding_step_view', { step_index: stepIndex })", response.body
+    assert_match "if (stepIndex === 7 && !completionTracked)", response.body
+    assert_match "trackEvent('onboarding_complete')", response.body
     assert_match "trackEvent('onboarding_lesson_click'", response.body
   end
 end
