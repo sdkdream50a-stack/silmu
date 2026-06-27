@@ -281,7 +281,7 @@
             </h3>
             <nav class="space-y-0.5 text-sm" id="toc-nav">
               <a href="#section-finding" class="toc-link block py-1.5 px-2 rounded-lg text-gray-600 hover:bg-editorial-navy-bg hover:text-editorial-navy-dark transition-colors">지적사항</a>
-              <a href="#section-law" class="toc-link block py-1.5 px-2 rounded-lg text-gray-600 hover:bg-editorial-navy-bg hover:text-editorial-navy-dark transition-colors">관련근거</a>
+              <a href="#section-law" class="toc-link block py-1.5 px-2 rounded-lg text-gray-600 hover:bg-editorial-navy-bg hover:text-editorial-navy-dark transition-colors">근거 법령</a>
               <a href="#section-improvement" class="toc-link block py-1.5 px-2 rounded-lg text-gray-600 hover:bg-editorial-navy-bg hover:text-editorial-navy-dark transition-colors">조치내용</a>
               <a href="#section-lesson" class="toc-link block py-1.5 px-2 rounded-lg text-gray-600 hover:bg-editorial-navy-bg hover:text-editorial-navy-dark transition-colors">교훈 및 시사점</a>
               <% if @audit_case.checkpoint_list.any? %>
@@ -312,7 +312,7 @@
                 <dd class="font-semibold text-<%= @audit_case.severity_color %>-700"><%= @audit_case.severity %></dd>
               </div>
               <div class="flex justify-between">
-                <dt class="text-slate-500">관련근거</dt>
+                <dt class="text-slate-500">근거 법령</dt>
                 <dd class="font-semibold text-slate-800 text-right max-w-[60%]"><cite class="legal-cite"><%= @audit_case.legal_basis %></cite></dd>
               </div>
             </dl>
