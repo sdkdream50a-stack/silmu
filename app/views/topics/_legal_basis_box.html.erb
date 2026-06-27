@@ -21,7 +21,7 @@
                   rel: "noopener noreferrer nofollow",
                   class: "inline-flex items-center gap-1.5 rounded-lg border border-indigo-200 bg-white px-3 py-1.5 text-xs font-semibold text-indigo-700 shadow-sm transition-colors hover:bg-indigo-50 hover:text-indigo-900" do %>
                 <span class="material-symbols-outlined text-sm">open_in_new</span>
-                <span><%= basis[:name] %></span>
+                <span><%= basis[:name].gsub("지방자치단체를 당사자로 하는 계약에 관한 법률", "지방계약법") %></span>
               <% end %>
             <% end %>
           </div>
