@@ -62,9 +62,12 @@ class HomeController < ApplicationController
 
     # sector별 콘텐츠 카운트 (Topic + AuditCase 합산) — sector 탭 칩 노출용
     # 약속(탭)과 실체(콘텐츠) 정합: 클릭 전 기대치 정렬
-    @sector_counts = Rails.cache.fetch("stats/sector_counts/v1", expires_in: 30.minutes) do
+    @sector_counts = Rails.cache.fetch("stats/sector_counts/v2", expires_in: 30.minutes) do
+      count_for = ->(key) { Topic.published.where(sector: key).count + AuditCase.published.where(sector: key).count }
+      common_n = count_for.call("common")
+
       %w[common local_gov edu].index_with do |key|
-        Topic.published.where(sector: key).count + AuditCase.published.where(sector: key).count
+        key == "common" ? common_n : count_for.call(key) + common_n
       end
     end
 
