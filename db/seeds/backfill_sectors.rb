@@ -14,6 +14,10 @@ puts "  완료: #{updated}건 업데이트"
 puts "\n=== [2/3] Topic sector 배정 (property, subsidy → local_gov) ==="
 local_gov_count = Topic.where(category: %w[property subsidy]).update_all(sector: 1)
 puts "  local_gov 배정: #{local_gov_count}건"
+# 시군구 특화 토픽 — 카테고리(budget)이나 지자체 전속이라 slug로 명시 배정
+local_gov_slugs = %w[public-debt-management local-government-accounting]
+slug_lg_count = Topic.where(slug: local_gov_slugs).update_all(sector: 1)
+puts "  local_gov 슬러그 배정: #{slug_lg_count}건 (#{local_gov_slugs.join(', ')})"
 puts "  (나머지는 common 기본값 유지)"
 
 puts "\n=== [3/3] 결과 확인 ==="
