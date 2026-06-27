@@ -21,20 +21,33 @@ module SeoHelper
   # category별 1차 근거 법령 (지방 우선 인용 원칙 — 비계약 토픽이 '지방계약법'으로 오신호되던 결함 정정)
   def topic_legal_basis(topic = nil)
     names =
-      case topic&.category
-      when "budget"   then [ "지방재정법", "지방재정법 시행령" ]
-      when "expense"  then [ "지방회계법", "지방회계법 시행령" ]
-      when "duty"     then [ "지방공무원법", "국가공무원법" ]
-      when "salary"   then [ "공무원수당 등에 관한 규정", "지방공무원 수당 등에 관한 규정" ]
-      when "travel"   then [ "공무원 여비 규정", "지방공무원 여비 규정" ]
-      when "subsidy"  then [ "지방자치단체 보조금 관리에 관한 법률", "보조금 관리에 관한 법률" ]
-      when "property" then [ "공유재산 및 물품 관리법" ]
+      case topic&.slug
+      when "local-tax-levy"
+        [ "지방세기본법", "지방세법", "지방세징수법", "지방세특례제한법" ]
+      when "non-tax-revenue"
+        [ "지방행정제재·부과금의 징수 등에 관한 법률", "질서위반행위규제법", "지방자치법" ]
+      when "local-subsidy-grant"
+        [ "지방자치단체 보조금 관리에 관한 법률", "지방자치단체 보조금 관리에 관한 법률 시행령", "지방재정법", "지방회계법" ]
+      when "local-festival-event"
+        [ "지방재정법", "지방자치단체 예산편성 운영기준", "지방자치단체 보조금 관리에 관한 법률", "지방자치단체를 당사자로 하는 계약에 관한 법률" ]
+      when "participatory-budget"
+        [ "지방재정법 제39조", "지방재정법 시행령 제46조", "지방자치법" ]
       else
-        return [
-          legislation_ref("지방자치단체를 당사자로 하는 계약에 관한 법률"),
-          legislation_ref("지방자치단체를 당사자로 하는 계약에 관한 법률 시행령"),
-          legislation_ref("지방자치단체 입찰 및 계약집행기준", "행정규칙")
-        ]
+        case topic&.category
+        when "budget"   then [ "지방재정법", "지방재정법 시행령" ]
+        when "expense"  then [ "지방회계법", "지방회계법 시행령" ]
+        when "duty"     then [ "지방공무원법", "국가공무원법" ]
+        when "salary"   then [ "공무원수당 등에 관한 규정", "지방공무원 수당 등에 관한 규정" ]
+        when "travel"   then [ "공무원 여비 규정", "지방공무원 여비 규정" ]
+        when "subsidy"  then [ "지방자치단체 보조금 관리에 관한 법률", "보조금 관리에 관한 법률" ]
+        when "property" then [ "공유재산 및 물품 관리법" ]
+        else
+          return [
+            legislation_ref("지방자치단체를 당사자로 하는 계약에 관한 법률"),
+            legislation_ref("지방자치단체를 당사자로 하는 계약에 관한 법률 시행령"),
+            legislation_ref("지방자치단체 입찰 및 계약집행기준", "행정규칙")
+          ]
+        end
       end
     names.map { |n| legislation_ref(n) }
   end
@@ -48,6 +61,11 @@ module SeoHelper
   # travel-expense·budget-carryover·year-end-settlement 3개 토픽은 기존 수기 라벨 유지
   def topic_law_card_labels(topic)
     case topic.slug
+    when "local-tax-levy"      then { law: "지방세기본법·지방세법", decree: "지방세징수법", rule: "지방세특례제한법·세조례" }
+    when "non-tax-revenue"    then { law: "지방세외수입법", decree: "질서위반행위규제법", rule: "지방자치법·조례" }
+    when "local-subsidy-grant" then { law: "지방자치단체 보조금 관리에 관한 법률", decree: "지방보조금법 시행령", rule: "보조금 관리 조례·지방재정법" }
+    when "local-festival-event" then { law: "지방재정법", decree: "예산편성 운영기준(훈령)", rule: "지방보조금법·지방계약법" }
+    when "participatory-budget" then { law: "지방재정법 제39조", decree: "지방재정법 시행령 제46조", rule: "주민참여예산 운영 조례·지방자치법" }
     when "travel-expense"      then { law: "지방공무원법", decree: "지방공무원 여비 규정", rule: "여비 규정 별표" }
     when "budget-carryover"    then { law: "지방재정법", decree: "지방재정법 시행령", rule: "예산편성 기준" }
     when "year-end-settlement" then { law: "소득세법", decree: "소득세법 시행령", rule: "연말정산 지침" }
@@ -73,6 +91,15 @@ module SeoHelper
   # 환각 제거: "교육공무원수당규정"·"학교회계법"·"교육기관 계약사무 처리지침" (존재X)
   # ⚠️ 학교 행정실의 행정직 공무원은 "지방공무원" (교육공무원 X) — label 작성 시 혼동 금지
   def topic_law_label(topic)
+    slug_label = {
+      "local-tax-levy" => "지방세기본법·지방세법·지방세징수법·지방세특례제한법",
+      "non-tax-revenue" => "지방세외수입법·질서위반행위규제법·지방자치법",
+      "local-subsidy-grant" => "지방자치단체 보조금 관리에 관한 법률·지방재정법",
+      "local-festival-event" => "지방재정법·지방자치단체 예산편성 운영기준",
+      "participatory-budget" => "지방재정법 제39조·지방재정법 시행령 제46조"
+    }[topic.slug]
+    return slug_label if slug_label
+
     if topic.sector == "edu" && topic.org_edu_office?
       # 시도교육청 본청·지원청 (지방공무원·일반행정직)
       case topic.category
