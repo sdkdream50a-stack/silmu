@@ -117,6 +117,14 @@ export default class extends Controller {
     if (data.small) {
       smallHtml = '<div class="small-box"><span class="material-symbols-outlined">info</span><div><span class="small-label">소액</span><br>' + data.small + '</div></div>'
     }
+    let lawsHtml = ''
+    if (data.laws) {
+      const lawItemsHtml = data.laws.map(law => {
+        const lawText = '<strong>' + law.ref + '</strong> — ' + law.desc
+        return law.href ? '<div><a href="' + law.href + '">' + lawText + '</a></div>' : '<div>' + lawText + '</div>'
+      }).join('')
+      lawsHtml = '<div class="small-box"><span class="material-symbols-outlined">gavel</span><div><span class="small-label">근거 법령</span><br>' + lawItemsHtml + '</div></div>'
+    }
     return '<div class="step-detail-panel">' +
       '<div class="step-detail-top">' +
         '<div class="step-detail-num">' + data.num + '</div>' +
@@ -127,6 +135,7 @@ export default class extends Controller {
         '<ul>' + itemsHtml + '</ul>' +
         '<div class="tip-box"><span class="material-symbols-outlined">lightbulb</span>' + data.tip + '</div>' +
         smallHtml +
+        lawsHtml +
       '</div>' +
     '</div>'
   }
