@@ -113,6 +113,8 @@ export default class extends Controller {
     const itemsHtml = data.items.map(item =>
       '<li><span class="material-symbols-outlined">check_circle</span>' + item + '</li>'
     ).join('')
+    const docsHtml = this._buildDocsHtml(data.docs)
+    const finalDocsHtml = this._buildFinalDocsHtml(data.final_docs)
     let smallHtml = ''
     if (data.small) {
       smallHtml = '<div class="small-box"><span class="material-symbols-outlined">info</span><div><span class="small-label">소액</span><br>' + data.small + '</div></div>'
@@ -133,10 +135,59 @@ export default class extends Controller {
       '</div>' +
       '<div class="step-detail-content">' +
         '<ul>' + itemsHtml + '</ul>' +
+        docsHtml +
+        finalDocsHtml +
         '<div class="tip-box"><span class="material-symbols-outlined">lightbulb</span>' + data.tip + '</div>' +
         smallHtml +
         lawsHtml +
       '</div>' +
     '</div>'
+  }
+
+  _buildDocsHtml(docs) {
+    if (!docs || docs.length === 0) return ''
+
+    const docItemsHtml = docs.map(doc =>
+      '<li><span class="material-symbols-outlined">task_alt</span>' + this._formatDocText(doc) + '</li>'
+    ).join('')
+
+    return '<div class="small-box"><span class="material-symbols-outlined">folder_copy</span><div><span class="small-label">필요 서류</span><br><ul>' + docItemsHtml + '</ul></div></div>'
+  }
+
+  _buildFinalDocsHtml(finalDocs) {
+    if (!finalDocs) return ''
+
+    const alwaysHtml = this._buildChecklistItems(finalDocs.always)
+    const conditionalHtml = this._buildChecklistItems(finalDocs.conditional)
+
+    return '<div class="small-box"><span class="material-symbols-outlined">fact_check</span><div>' +
+      '<span class="small-label">📋 최종 완비 서류 체크리스트</span><br>' +
+      '<strong>상시</strong><ul>' + alwaysHtml + '</ul>' +
+      '<strong>[해당 시]</strong><ul>' + conditionalHtml + '</ul>' +
+    '</div></div>'
+  }
+
+  _buildChecklistItems(items) {
+    if (!items || items.length === 0) return ''
+
+    return items.map(item =>
+      '<li><span aria-hidden="true">&#9633;</span>' + this._formatDocText(item) + '</li>'
+    ).join('')
+  }
+
+  _formatDocText(text) {
+    const escapedText = this._escapeHtml(text)
+    return escapedText
+      .replace(/^(\([^)]+\))/, '<strong>$1</strong>')
+      .replace(/(\[[^\]]+\])/g, '<span class="small-label">$1</span>')
+  }
+
+  _escapeHtml(value) {
+    return String(value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;')
   }
 }
