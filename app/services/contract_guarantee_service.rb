@@ -6,8 +6,8 @@ class ContractGuaranteeService
     construction: { name: "공사 계약", rate: 0.10, note: "계약금액의 10% 이상 (이행보증서 제출 가능)" },
     service: { name: "용역 계약", rate: 0.10, note: "계약금액의 10% 이상" },
     lease: { name: "임대차 계약", rate: 0.05, note: "계약금액의 5% 이상" },
-    # 감사 정정: 면제 기준은 3천만원 이하이며, 5천만원 확대 특례는 2026.6.30 종료 — 토픽(contract-guarantee-exemption)과 통일
-    small_private: { name: "소액계약 (3천만원 이하 면제; 5천만원 특례는 2026.6.30 종료)", rate: 0.0, note: "면제 가능 (지방계약법 시행령 제53조)" }
+    # 면제 기준은 시행령 제53조 제1항 제2호의 계약금액 5천만원 이하 상시 기준이다.
+    small_private: { name: "소액계약 (5천만원 이하 면제)", rate: 0.0, note: "면제 가능 (지방계약법 시행령 제53조)" }
   }.freeze
 
   # 하자보수보증금: 요율은 지방계약법 시행규칙 제70조 + 위임 시행령 제71조
