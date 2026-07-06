@@ -886,12 +886,12 @@ A. 2인 이상 견적 대상에서 1인만 수의시담에 응한 경우, 해당
         <div class="bg-purple-50 border border-purple-200 rounded-xl p-4">
           <h4 class="font-bold text-purple-800 flex items-center gap-2 mb-2">
             <span class="material-symbols-outlined">campaign</span>
-            한시적 특례 적용 중 (~2026.6.30)
+            한시적 특례 종료 (2026.6.30 만료)
           </h4>
           <ul class="text-purple-700 text-sm space-y-1">
             <li>• 한시적 특례 적용 여부는 <strong>공고일(견적요청일) 기준</strong>으로 판단</li>
-            <li>• 특례 기간 내 공고했다면, 계약 체결이 기간 이후라도 특례 적용</li>
-            <li class="text-xs text-purple-500">※ 행안부 고시 제2025-72호 (2026.1.1~6.30)</li>
+            <li>• 6.30 이전 공고했다면, 계약 체결이 7월 이후라도 특례 적용(공고일 기준)</li>
+            <li class="text-xs text-purple-500">※ 행안부 고시 제2025-72호 (2026.1.1~6.30) — 2026.7.1 이후 공고분부터 원칙 기준</li>
           </ul>
         </div>
       </div>

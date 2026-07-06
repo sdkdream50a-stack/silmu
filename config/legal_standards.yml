@@ -101,11 +101,11 @@ misc:
   # 계약보증금 면제 한도
   # - 기본(상시): 지방계약법 시행령 제51조 — 3천만원 이하
   # - 한시적 특례: 2026-06-30까지 5천만원 이하 (지방계약법 시행령 부칙)
-  # - 특례 만료 시 'guarantee_exemption' 상위 키를 base 값으로 되돌릴 것
+  # - 2026-06-30 만료로 'guarantee_exemption' 상위 키를 base 값으로 환원 완료
   guarantee_exemption_base: 30_000_000
   guarantee_exemption_special: 50_000_000
   guarantee_exemption_special_expires: "2026-06-30"
-  guarantee_exemption: 50_000_000   # 현재 유효 한도 (특례 적용 중)
+  guarantee_exemption: 30_000_000   # 현재 유효 한도 (특례 2026.6.30 종료, base 환원)
 
   # 전자입찰 필수 금액
   electronic_bid_required: 100_000_000

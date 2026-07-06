@@ -268,11 +268,11 @@ Topic.find_or_create_by!(slug: "inspection") do |t|
   <div class="bg-purple-50 border border-purple-200 rounded-xl p-4">
     <h4 class="font-bold text-purple-800 flex items-center gap-2 mb-2">
       <span class="material-symbols-outlined">campaign</span>
-      한시적 특례 적용 중 (~2026.6.30)
+      한시적 특례 종료 (2026.6.30 만료)
     </h4>
     <ul class="text-purple-700 text-sm space-y-2 mt-2">
-      <li><strong>검사기간:</strong> 14일 → <strong>7일</strong> 이내로 단축</li>
-      <li class="text-xs text-purple-500">※ 행안부 고시 제2025-72호 (2026.1.1~6.30)</li>
+      <li><strong>검사기간 특례:</strong> 특례기간(~2026.6.30)에는 14일→7일 단축이었으나 <strong>종료</strong> — 현재 14일 이내</li>
+      <li class="text-xs text-purple-500">※ 행안부 고시 제2025-72호 (2026.1.1~6.30) — 2026.7.1 이후 공고분부터 원칙 기준</li>
     </ul>
   </div>
 
@@ -284,7 +284,7 @@ Topic.find_or_create_by!(slug: "inspection") do |t|
     <ul class="text-amber-700 text-sm space-y-2 mt-2">
       <li><strong>검사 없이 대금 지급:</strong> 검사는 대금 지급의 전제 조건 — 반드시 선행</li>
       <li><strong>검사조서 미작성:</strong> 3천만원 초과 계약은 검사조서 작성 필수</li>
-      <li><strong>검사 기한 초과:</strong> 14일 이내(한시적 특례 시 7일) 미완료 시 지연이자 발생 가능</li>
+      <li><strong>검사 기한 초과:</strong> 14일 이내(특례 7일 단축은 2026.6.30 종료) 미완료 시 지연이자 발생 가능</li>
       <li><strong>형식적 검수:</strong> 규격 미확인 후 합격 처리 → 감사 지적 대상</li>
     </ul>
   </div>
