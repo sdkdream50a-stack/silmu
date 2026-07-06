@@ -16,7 +16,7 @@
 # 운영 적용:
 # kamal app exec --reuse 'bin/rails runner "load Rails.root.join(%q{db/seeds/topic_content_fix_2026_07_06_hansi_expiry.rb})"'
 
-Fix = Struct.new(:slug, :field, :old, :new, keyword_init: true)
+Fix = Struct.new(:slug, :field, :old, :new, :record_class, keyword_init: true)
 
 FIXES = [
   Fix.new(
@@ -256,6 +256,19 @@ FIXES = [
     old: "**A**: 계약금액 3천만원 이하인 경우 계약보증금 면제 가능합니다(시행령 제53조). 다만, 한시적 특례(~2026.6.30.)로 5천만원 이하까지 면제가 적용되고 있으므로 최신 기준을 확인하세요.",
     new: "**A**: 계약금액 3천만원 이하인 경우 계약보증금 면제 가능합니다(시행령 제53조). 한시적 특례(5천만원 이하 확대)는 2026.6.30 종료되어, 2026.7.1 이후 공고분은 3천만원 기준입니다(6.30 이전 공고분은 특례 적용)."
   ),
+  Fix.new(
+    slug: "private-contract",
+    field: "qa_content",
+    old: "**A**: 계약금액 5천만원 이하인 경우 계약보증금 면제 가능합니다.",
+    new: "**A**: 계약금액 3천만원 이하인 경우 계약보증금 면제 가능합니다(시행령 제53조). ※ 5천만원 이하 확대는 2026.6.30 종료된 특례(6.30 이전 공고분 적용)."
+  ),
+
+  Fix.new(
+    slug: "small-amount-contract",
+    field: "interpretation_content",
+    old: "**A:** 추정가격 **5천만원 이하**(공사 1억원 이하)인 경우 계약보증금 납부를 면제할 수 있습니다.",
+    new: "**A:** 추정가격 **3천만원 이하**인 경우 계약보증금 납부를 면제할 수 있습니다(시행령 제53조). ※ 5천만원·공사 1억원 확대는 2026.6.30 종료된 특례(6.30 이전 공고분 적용)."
+  ),
 
   Fix.new(
     slug: "contract-guarantee-exemption",
@@ -346,6 +359,14 @@ FIXES = [
     field: "commentary",
     old: "A: 네, 가능합니다. 5천만원 이하 계약이므로 면제할 수 있습니다. 다만, 신규 업체이거나 신용도가 불확실하면 보증금을 징수하는 것이 안전합니다.",
     new: "A: 네, 가능합니다. 3천만원 이하 계약이므로 면제할 수 있습니다. 다만, 신규 업체이거나 신용도가 불확실하면 보증금을 징수하는 것이 안전합니다."
+  ),
+
+  Fix.new(
+    slug: "contract-guarantee-exemption-wrong",
+    field: "checkpoints",
+    old: "물품·용역 5천만원, 공사 1억원 면제 기준금액 확인",
+    new: "현행 물품·용역 3천만원 면제 기준금액 확인 (5천만원·공사 1억원은 2026.6.30 종료된 특례)",
+    record_class: AuditCase
   )
 ].freeze
 
@@ -396,22 +417,23 @@ missing = 0
 not_found = 0
 updated_fields = []
 
-FIXES.group_by { |fix| [fix.slug, fix.field] }.each do |(slug, field), fixes|
-  topic = Topic.find_by(slug: slug)
+FIXES.group_by { |fix| [fix.record_class || Topic, fix.slug, fix.field] }.each do |(record_class, slug, field), fixes|
+  record = record_class.find_by(slug: slug)
+  label = "#{record_class.name} #{slug}.#{field}"
 
-  if topic.nil?
+  if record.nil?
     not_found += fixes.size
-    puts "WARN #{slug}.#{field}: Topic NOT_FOUND"
+    puts "WARN #{label}: NOT_FOUND"
     next
   end
 
-  unless topic.respond_to?(field)
+  unless record.respond_to?(field)
     missing += fixes.size
-    puts "WARN #{slug}.#{field}: field NOT_FOUND"
+    puts "WARN #{label}: field NOT_FOUND"
     next
   end
 
-  original_value = topic.public_send(field)
+  original_value = record.public_send(field)
   value = original_value
 
   fixes.each do |fix|
@@ -425,24 +447,24 @@ FIXES.group_by { |fix| [fix.slug, fix.field] }.each do |(slug, field), fixes|
       already_applied += 1
     else
       missing += 1
-      puts "WARN #{slug}.#{field}: old anchor missing; skipped"
+      puts "WARN #{label}: old anchor missing; skipped"
     end
   end
 
   next if value == original_value
 
-  topic.update_columns(field => value)
-  updated_fields << "#{slug}.#{field}"
+  record.update_columns(field => value)
+  updated_fields << label
 end
 
 residuals = []
-FIXES.group_by { |fix| [fix.slug, fix.field] }.each do |(slug, field), fixes|
-  topic = Topic.find_by(slug: slug)
-  next unless topic&.respond_to?(field)
+FIXES.group_by { |fix| [fix.record_class || Topic, fix.slug, fix.field] }.each do |(record_class, slug, field), fixes|
+  record = record_class.find_by(slug: slug)
+  next unless record&.respond_to?(field)
 
-  value = topic.public_send(field)
+  value = record.public_send(field)
   count = fixes.sum { |fix| occurrence_count(value, fix.old) }
-  residuals << "#{slug}.#{field}=#{count}" if count.positive?
+  residuals << "#{record_class.name} #{slug}.#{field}=#{count}" if count.positive?
 end
 
 puts "한시적 특례 종료 본문 정정 결과:"
