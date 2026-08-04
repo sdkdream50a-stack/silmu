@@ -41,8 +41,8 @@
           <h3 class="font-bold text-blue-900 mb-2">🏗️ 공사</h3>
           <ul class="text-sm text-blue-800 space-y-1">
             <li>• 가격점수: 60점 / 비가격점수: 40점</li>
-            <li>• 낙찰하한율: 89.745%</li>
-            <li>• 적격 기준: <strong>95점 이상</strong></li>
+            <li>• 낙찰하한율: 추정가격 구간별로 다름 — 공고문 값 입력</li>
+            <li>• 적격 기준: 추정가격 100억 미만 <strong>95점</strong> / 100억 이상 300억 미만 <strong>92점</strong> 이상</li>
           </ul>
         </div>
         <div class="bg-indigo-50 p-4 rounded-lg">
@@ -54,7 +54,7 @@
           </ul>
         </div>
       </div>
-      <p class="text-xs text-gray-500">근거: 지방계약법 시행령 제42조 (재정지출의 부담이 되는 입찰에서의 낙찰자 결정) + 행정안전부 예규 「지방자치단체 입찰 및 계약 집행기준」 — 적격자 중 최저가 낙찰</p>
+      <p class="text-xs text-gray-500">근거: 지방계약법 시행령 제42조 (재정지출의 부담이 되는 입찰에서의 낙찰자 결정) + 행정안전부 예규 「지방자치단체 입찰 및 계약 집행기준」 — 적격자 중 최저가 낙찰. 위 통과기준 점수는 별도 예규 「지방자치단체 입찰시 낙찰자 결정기준」에 따릅니다</p>
     </div>
 
     <!-- 종심제 설명 -->
@@ -70,7 +70,10 @@
       </div>
       <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded text-xs text-amber-800">
         <strong>적용 대상:</strong> 추정가격 300억원 이상 공사 (지방계약법 시행령 제42조의3 — 지자체에 가장 유리하게 입찰한 자에 대한 낙찰자 결정) &nbsp;|&nbsp;
-        <strong>적격 기준:</strong> 총점 92점 이상인 업체 중 최고점 낙찰
+        <strong>적격 기준:</strong> 총점 기준·낙찰자는 공고문의 심사기준표로 확인하세요 (배점·통과점수는 발주기관·공사유형별로 다를 수 있어 이 도구가 검증하지 않습니다)
+        <br>
+        <strong>이 도구가 하는 일:</strong> 입찰금액 평점은 예규 별표 산식이라 산출하지 않습니다. 위 배점은 참고용이며,
+        총점·적격 여부·낙찰자는 판정하지 않고 <strong>낙찰하한율 미달 여부와 입찰률</strong>만 확인합니다.
       </div>
     </div>
   </div>
@@ -78,7 +81,7 @@
   <!-- 입력 폼 -->
   <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
     <%= form_with url: qualification_evaluations_evaluate_path, method: :post, local: false,
-          data: { action: "submit->qualification-evaluation#submit" } do |f| %>
+          data: { action: "submit->qualification-evaluation#submit input->qualification-evaluation#inputChanged" } do |f| %>
 
       <!-- 1. 사업 기본 정보 -->
       <div class="mb-6">
@@ -87,7 +90,7 @@
         <!-- 300억 임계값 감지 배너 -->
         <div data-qualification-evaluation-target="priceBanner"
              class="hidden mb-4 p-3 bg-purple-50 border border-purple-200 rounded-lg text-sm text-purple-800 flex items-center gap-3">
-          <span>📊 <strong>300억 이상</strong> — 종합심사낙찰제(종심제) 적용 대상입니다.</span>
+          <span>📊 <strong>추정가격 300억 이상 공사</strong> — 종합심사낙찰제(종심제) 대상이라 적격심사 기준을 적용할 수 없습니다.</span>
           <button type="button"
                   data-action="click->qualification-evaluation#switchModeToComprehensive"
                   class="ml-auto px-3 py-1 bg-purple-600 text-white rounded text-xs font-bold hover:bg-purple-700 whitespace-nowrap flex-shrink-0">
@@ -113,9 +116,23 @@
             <label class="block text-sm font-medium text-gray-700 mb-2">예정가격 (원)</label>
             <%= number_field_tag :estimated_price, nil,
                 placeholder: "예: 500000000",
+                class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-forest-500 focus:border-transparent"
+            %>
+            <p class="text-xs text-gray-500 mt-1">낙찰하한가·입찰률 계산의 기준값입니다</p>
+          </div>
+
+          <%# 대상 판정(300억)과 통과기준 구간(100억)은 예정가격이 아니라 추정가격 기준이다. %>
+          <%# 두 값은 법적 정의·산정 단계가 달라 서로 환산되지 않는다. 겸용하면 판정이 어긋나므로 따로 받고, 미입력이면 판정하지 않는다. %>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              추정가격 (원) <span class="text-gray-400 text-xs">선택 — 부가세 제외</span>
+            </label>
+            <%= number_field_tag :presumed_price, nil,
+                placeholder: "공고문의 추정가격",
                 class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-forest-500 focus:border-transparent",
                 data: { action: "input->qualification-evaluation#checkThreshold" }
             %>
+            <p class="text-xs text-gray-500 mt-1">종심제 대상 여부(300억)·통과기준 구간(100억) 판정에만 씁니다. 미입력 시 판정하지 않습니다</p>
           </div>
 
           <div data-qualification-evaluation-target="floorRateContainer">
@@ -124,10 +141,10 @@
             </label>
             <%= number_field_tag :floor_rate, nil,
                 step: 0.001, required: true, min: 0.001, max: 100,
-                placeholder: "공고문의 낙찰하한율 (예: 89.745)",
+                placeholder: "공고문의 낙찰하한율",
                 class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-forest-500 focus:border-transparent"
             %>
-            <p class="text-xs text-gray-500 mt-1" data-qualification-evaluation-target="floorRateNote">공사: 89.745% (2026년 1월 변경)</p>
+            <p class="text-xs text-gray-500 mt-1" data-qualification-evaluation-target="floorRateNote">공사: 공고문의 낙찰하한율을 입력하세요 (추정가격 구간별로 다릅니다)</p>
           </div>
 
           <div>
@@ -174,11 +191,11 @@
     <div class="space-y-3 text-sm text-gray-700">
       <div>
         <strong class="text-forest-600">적격심사 (추정가격 2억 이상 ~ 300억 미만)</strong>
-        <p class="mt-1">지방계약법 시행령 제42조 + 행안부 예규 「지방자치단체 입찰 및 계약 집행기준」: 가격(60~70점) + 비가격(30~40점) 종합평가, 95점 이상 업체 중 최저가 낙찰 (시행령 §42의2는 2022년 삭제)</p>
+        <p class="mt-1">지방계약법 시행령 제42조 + 행안부 예규 「지방자치단체 입찰 및 계약 집행기준」: 가격(60~70점) + 비가격(30~40점) 종합평가 후 통과기준 이상 업체 중 최저가 낙찰 (시행령 §42의2는 2022년 삭제). 통과기준은 별도 예규 「지방자치단체 입찰시 낙찰자 결정기준」 제2장의1 시설공사 적격심사 세부기준 제6절(낙찰자 결정)에 따라 공사 추정가격 100억 미만 95점 / 100억 이상 300억 미만 92점, 물품·용역 95점 — 개정분은 해당 예규 원문으로 확인하세요</p>
       </div>
       <div>
         <strong class="text-forest-600">종합심사낙찰제 (추정가격 300억 이상 공사)</strong>
-        <p class="mt-1">지방계약법 시행령 제42조의3 (지자체에 가장 유리하게 입찰한 자에 대한 낙찰자 결정): 가격50 + 시공실적20 + 시공능력15 + 경영상태10 + 사회적책임5 = 100점, 92점 이상 업체 중 최고점 낙찰</p>
+        <p class="mt-1">지방계약법 시행령 제42조의3 (지방자치단체에 가장 유리하게 입찰한 자에 대한 낙찰자 결정). 위 화면의 배점(가격50·시공실적20·시공능력15·경영상태10·사회적책임5)과 통과점수는 <strong>참고값</strong>이며, 발주기관·공사유형별 심사기준표에 따라 달라집니다 — 이 도구는 총점·적격 여부·낙찰자를 판정하지 않습니다</p>
       </div>
     </div>
   </div>
@@ -209,4 +226,3 @@
       icon: 'menu_book', color: 'blue' }
   ]
 %>
-

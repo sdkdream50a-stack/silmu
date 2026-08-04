@@ -16,6 +16,8 @@ export default class extends Controller {
 
   connect() {
     this.mode = "qualification"
+    // 초기 안내도 같은 경로로 정한다. ERB 기본 문구를 그대로 두면 단일 출처가 아니게 된다.
+    this._setFloorRateNote(false)
     this.updateBidderFields()
   }
 
@@ -31,6 +33,8 @@ export default class extends Controller {
   }
 
   _applyMode(newMode) {
+    // 같은 탭 재클릭은 모드 변경이 아니다. 구분하지 않으면 입력해 둔 공고문 값이 지워진다.
+    const modeChanged = newMode !== this.mode
     this.mode = newMode
     const isComprehensive = newMode === "comprehensive"
 
@@ -58,69 +62,122 @@ export default class extends Controller {
       this.projectTypeSectionTarget.classList.toggle("hidden", isComprehensive)
     }
 
-    // 낙찰하한율 라벨 업데이트
-    if (this.hasFloorRateNoteTarget) {
-      this.floorRateNoteTarget.textContent = isComprehensive
-        ? "종심제: 89.745% (공사 기준)"
-        : "공사: 89.745% (2026년 1월 변경)"
+    // 낙찰하한율은 모드마다 공고문 값이 다르다. 이전 모드 값이 남으면 확인 없이 그대로 제출된다 → 비운다.
+    if (modeChanged) {
+      const floorRateInput = this.floorRateContainerTarget?.querySelector("input")
+      if (floorRateInput) floorRateInput.value = ""
     }
+    this._setFloorRateNote(isComprehensive)
 
     // 제출 버튼 텍스트
     if (this.hasSubmitBtnTextTarget) {
       this.submitBtnTextTarget.textContent = isComprehensive ? "종심제 입찰률 확인" : "적격심사 입찰률 확인"
     }
 
-    // 배너 숨기기
-    if (this.hasPriceBannerTarget) {
-      this.priceBannerTarget.classList.add("hidden")
+    // 배너는 무조건 숨기면 적격심사로 돌아왔을 때 300억 경고가 사라진 채로 남는다 → 현재 입력으로 다시 판정한다.
+    this.checkThreshold()
+
+    // 모드가 그대로면 입력을 다시 그리지 않는다. 다시 그리면 입력해 둔 업체 정보가 전부 지워진다.
+    if (modeChanged) {
+      this._invalidateResult()
+      this.updateBidderFields()
+    }
+  }
+
+  // 산출 조건이 바뀌면 앞선 결과는 더 이상 그 조건의 결과가 아니다.
+  // 남겨두면 사용자가 지금 선택과 다른 모드·사업종류의 판정을 보고 판단하게 된다.
+  _invalidateResult() {
+    // 이미 날아간 요청의 응답이 나중에 도착해 지운 결과를 되살리면, 바뀐 조건에 옛 판정이 붙는다.
+    // 세대 번호를 올려 그 응답을 버린다.
+    this._resultGeneration = (this._resultGeneration || 0) + 1
+    if (!this.hasResultTarget) return
+    this.resultTarget.innerHTML = ""
+    this.resultTarget.classList.add("hidden")
+  }
+
+  // 금액·업체값 변경도 산출 조건 변경이다. 폼 레벨 input 이벤트로 동적 업체 입력까지 함께 잡는다.
+  inputChanged() {
+    this._invalidateResult()
+  }
+
+  // 낙찰하한율 안내는 모드와 사업 종류 양쪽에 달려 있다.
+  // 두 곳에서 따로 쓰면 모드 복귀 때 용역인데 공사 참고값을 안내하는 식으로 갈라진다 → 한 곳에서만 정한다.
+  _setFloorRateNote(isComprehensive) {
+    if (!this.hasFloorRateNoteTarget) return
+
+    // 공사 낙찰하한율은 추정가격 구간별로 갈린다(10억 미만 89.745 / 10억~50억 88.745 /
+    // 50억~100억 87.495 / 100억~300억 81.995). 한 값을 참고값으로 제시하면 다른 구간 사용자가
+    // 그대로 넣어 하한가와 미달 판정이 틀린다 → 숫자를 권하지 않고 공고문 값을 받는다.
+    if (isComprehensive) {
+      this.floorRateNoteTarget.textContent = "종심제: 공고문의 낙찰하한율을 입력하세요"
+      return
     }
 
-    this.updateBidderFields()
+    const projectType = this.element.querySelector('[name="project_type"]')?.value || "construction"
+    this.floorRateNoteTarget.textContent = projectType === "construction"
+      ? "공사: 공고문의 낙찰하한율을 입력하세요 (추정가격 구간별로 다릅니다)"
+      : "용역: 공고문의 낙찰하한율을 입력하세요 (계약 종류·금액구간별로 다름)"
   }
 
   // 비가격 배점 구조 업데이트 (적격심사 사업종류 변경 시)
-  updateScoreStructure(event) {
-    const projectType = event.target.value
+  updateScoreStructure() {
+    // 종류가 바뀌면 이전 종류의 공고문 값이 남으면 안 된다.
     const floorRateInput = this.floorRateContainerTarget?.querySelector("input")
-    const floorRateNote = this.hasFloorRateNoteTarget ? this.floorRateNoteTarget : null
+    if (floorRateInput) floorRateInput.value = ""
 
-    if (projectType === "construction") {
-      // 기본값을 미리 채우면 "공고문 값 필수"라고 안내해도 확인 없이 제출된다 → 공란으로 둔다.
-      if (floorRateInput) floorRateInput.value = ""
-      if (floorRateNote) floorRateNote.textContent = "공사 참고값 89.745%(2026.1 변경) — 공고문의 값을 확인해 입력하세요"
-    } else {
-      // 용역 낙찰하한율은 계약 종류·금액구간·공고문에 따라 달라 단일값이 없다.
-      // 0%로 강제하면 모든 투찰이 "하한 이상"으로 보여 미달 확인이 무력화된다 → 비워두고 공고문 값을 받는다.
-      if (floorRateInput) floorRateInput.value = ""
-      if (floorRateNote) floorRateNote.textContent = "용역: 공고문의 낙찰하한율을 입력하세요 (계약 종류·금액구간별로 다름)"
-    }
+    this._setFloorRateNote(this.mode === "comprehensive")
+    // 종심제 대상은 공사 한정이라 사업 종류가 바뀌면 배너 판정도 다시 해야 한다.
+    this.checkThreshold()
+    this._invalidateResult()
     this.updateBidderFields()
   }
 
-  // 300억 임계값 감지
-  checkThreshold(event) {
-    const price = parseFloat(event.target.value) || 0
-    const THRESHOLD = 30_000_000_000 // 300억
+  // 300억 임계값 감지 — 기준은 추정가격이고, 종심제는 공사 대상이므로 용역에는 띄우지 않는다.
+  checkThreshold() {
+    const THRESHOLD = 30_000_000_000 // 추정가격 300억
+    const presumed = parseFloat(this.element.querySelector('[name="presumed_price"]')?.value) || 0
+    const projectType = this.element.querySelector('[name="project_type"]')?.value || "construction"
 
     if (this.hasPriceBannerTarget) {
-      this.priceBannerTarget.classList.toggle("hidden", price < THRESHOLD || this.mode === "comprehensive")
+      const applies = presumed >= THRESHOLD && projectType === "construction" && this.mode !== "comprehensive"
+      this.priceBannerTarget.classList.toggle("hidden", !applies)
     }
   }
 
   // 업체 수 변경 시 재렌더링
   updateBidderFields() {
     const bidderCount = parseInt(this.element.querySelector('[name="bidder_count"]')?.value) || 3
+    // 입력란을 다시 그리면 앞선 결과는 그 입력 구성의 결과가 아니다.
+    this._invalidateResult()
+    // 다시 그리면서 입력해 둔 값을 버리면 업체 수만 바꿔도 전부 다시 넣어야 한다 → 그대로 되살린다.
+    const previous = this._currentBidderValues()
 
     if (this.mode === "comprehensive") {
-      this._renderComprehensiveBidderFields(bidderCount)
+      this._renderComprehensiveBidderFields(bidderCount, previous)
     } else {
       const projectType = this.element.querySelector('[name="project_type"]')?.value || "construction"
       const nonPriceMax = projectType === "construction" ? 40 : 30
-      this._renderQualificationBidderFields(bidderCount, nonPriceMax)
+      this._renderQualificationBidderFields(bidderCount, nonPriceMax, previous)
     }
   }
 
-  _renderQualificationBidderFields(bidderCount, nonPriceMax) {
+  _currentBidderValues() {
+    const values = {}
+    const nodes = this.element.querySelectorAll ? this.element.querySelectorAll('[name^="bidder_"]') : []
+    for (const el of nodes) {
+      if (/^bidder_\d+_/.test(el.name)) values[el.name] = el.value
+    }
+    return values
+  }
+
+  // 되살린 값은 속성값으로 들어가므로 따옴표·꺾쇠를 그대로 두면 마크업이 깨진다.
+  _attr(value) {
+    return String(value ?? "")
+      .replace(/&/g, "&amp;").replace(/"/g, "&quot;")
+      .replace(/</g, "&lt;").replace(/>/g, "&gt;")
+  }
+
+  _renderQualificationBidderFields(bidderCount, nonPriceMax, previous = {}) {
     let html = '<div class="space-y-4">'
     for (let i = 1; i <= bidderCount; i++) {
       html += `
@@ -130,17 +187,20 @@ export default class extends Controller {
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">업체명</label>
               <input type="text" name="bidder_${i}_name" placeholder="예: (주)ABC건설"
+                     value="${this._attr(previous[`bidder_${i}_name`])}"
                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-forest-500 text-sm">
             </div>
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">입찰가격 (원)</label>
               <input type="number" name="bidder_${i}_price" placeholder="예: 450000000"
+                     value="${this._attr(previous[`bidder_${i}_price`])}"
                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-forest-500 text-sm">
             </div>
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">비가격점수 (${nonPriceMax}점 만점)</label>
               <input type="number" name="bidder_${i}_non_price" placeholder="예: 35"
                      step="0.01" min="0" max="${nonPriceMax}"
+                     value="${this._attr(previous[`bidder_${i}_non_price`])}"
                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-forest-500 text-sm">
             </div>
           </div>
@@ -151,7 +211,7 @@ export default class extends Controller {
     this.bidderFieldsTarget.innerHTML = html
   }
 
-  _renderComprehensiveBidderFields(bidderCount) {
+  _renderComprehensiveBidderFields(bidderCount, previous = {}) {
     let html = '<div class="space-y-4">'
     for (let i = 1; i <= bidderCount; i++) {
       html += `
@@ -161,49 +221,55 @@ export default class extends Controller {
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">업체명</label>
               <input type="text" name="bidder_${i}_name" placeholder="예: (주)ABC건설"
+                     value="${this._attr(previous[`bidder_${i}_name`])}"
                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 text-sm bg-white">
             </div>
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">입찰가격 (원)</label>
               <input type="number" name="bidder_${i}_price" placeholder="예: 35000000000"
+                     value="${this._attr(previous[`bidder_${i}_price`])}"
                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 text-sm bg-white">
             </div>
           </div>
           <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
             <div>
               <label class="block text-xs font-medium text-purple-700 mb-1">
-                시공실적 <span class="text-gray-400">(20점)</span>
+                시공실적 <span class="text-gray-400">(참고 20점)</span>
               </label>
               <input type="number" name="bidder_${i}_construction"
-                     placeholder="0~20" step="0.01" min="0" max="20"
+                     placeholder="공고문 배점 기준" step="0.01" min="0" max="100"
+                     value="${this._attr(previous[`bidder_${i}_construction`])}"
                      class="w-full px-3 py-2 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-500 text-sm bg-white">
             </div>
             <div>
               <label class="block text-xs font-medium text-purple-700 mb-1">
-                시공능력 <span class="text-gray-400">(15점)</span>
+                시공능력 <span class="text-gray-400">(참고 15점)</span>
               </label>
               <input type="number" name="bidder_${i}_capacity"
-                     placeholder="0~15" step="0.01" min="0" max="15"
+                     placeholder="공고문 배점 기준" step="0.01" min="0" max="100"
+                     value="${this._attr(previous[`bidder_${i}_capacity`])}"
                      class="w-full px-3 py-2 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-500 text-sm bg-white">
             </div>
             <div>
               <label class="block text-xs font-medium text-purple-700 mb-1">
-                경영상태 <span class="text-gray-400">(10점)</span>
+                경영상태 <span class="text-gray-400">(참고 10점)</span>
               </label>
               <input type="number" name="bidder_${i}_management"
-                     placeholder="0~10" step="0.01" min="0" max="10"
+                     placeholder="공고문 배점 기준" step="0.01" min="0" max="100"
+                     value="${this._attr(previous[`bidder_${i}_management`])}"
                      class="w-full px-3 py-2 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-500 text-sm bg-white">
             </div>
             <div>
               <label class="block text-xs font-medium text-purple-700 mb-1">
-                사회적책임 <span class="text-gray-400">(5점)</span>
+                사회적책임 <span class="text-gray-400">(참고 5점)</span>
               </label>
               <input type="number" name="bidder_${i}_social"
-                     placeholder="0~5" step="0.01" min="0" max="5"
+                     placeholder="공고문 배점 기준" step="0.01" min="0" max="100"
+                     value="${this._attr(previous[`bidder_${i}_social`])}"
                      class="w-full px-3 py-2 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-500 text-sm bg-white">
             </div>
           </div>
-          <p class="text-xs text-purple-600 mt-2">비가격점수 합계 최대 50점 (시공실적20 + 시공능력15 + 경영상태10 + 사회적책임5)</p>
+          <p class="text-xs text-purple-600 mt-2">배점(시공실적20·시공능력15·경영상태10·사회적책임5)은 참고값입니다 — 발주기관·공사유형별로 다를 수 있으니 공고문의 심사기준표를 확인하세요</p>
         </div>
       `
     }
@@ -213,6 +279,9 @@ export default class extends Controller {
 
   async submit(event) {
     event.preventDefault()
+    // 새 제출은 앞선 요청을 폐기한다. 입력 변경 없이 연속 제출해 응답 순서가 뒤집혀도 최신 요청만 그린다.
+    this._invalidateResult()
+    const generation = this._resultGeneration || 0
     const form = event.target
     const formData = new FormData(form)
     const url = this.mode === "comprehensive"
@@ -229,11 +298,30 @@ export default class extends Controller {
         body: formData
       })
       const data = await response.json()
+      // 응답을 기다리는 동안 입력·모드·사업종류·업체수가 바뀌었으면 지금 조건의 결과가 아니다.
+      if ((this._resultGeneration || 0) !== generation) return
+      // 422는 서버가 산출을 차단한 경우다. 본문을 결과로 넘기면 차단 사유가 화면에 뜨지 않아
+      // 사용자는 아무 반응이 없는 것으로 본다 → 차단 메시지를 그대로 보여준다.
+      if (!response.ok) {
+        this._displayError(data.error)
+        return
+      }
       this.displayResult(data)
     } catch (error) {
       console.error("Error:", error)
       alert("계산 중 오류가 발생했습니다. 다시 시도해주세요.")
     }
+  }
+
+  _displayError(message) {
+    this.resultTarget.innerHTML = `
+      <div class="bg-red-50 border border-red-200 rounded-lg p-6">
+        <h3 class="text-lg font-bold text-red-900 mb-2">⚠️ 산출할 수 없습니다</h3>
+        <p class="text-sm text-red-800 leading-relaxed">${message || "입력값을 확인해주세요."}</p>
+      </div>
+    `
+    this.resultTarget.classList.remove("hidden")
+    this.resultTarget.scrollIntoView({ behavior: "smooth", block: "nearest" })
   }
 
   displayResult(data) {
@@ -346,7 +434,9 @@ export default class extends Controller {
           </table>
         </div>
         <div class="mt-5 p-4 bg-blue-50 rounded-lg text-sm text-blue-800">
-          <strong>적격 기준(참고):</strong> 100점 환산 ${metadata.pass_score}점 이상 &nbsp;|&nbsp;
+          <strong>적격 기준(참고):</strong> ${metadata.pass_score === null || metadata.pass_score === undefined
+            ? "추정가격을 입력하지 않아 통과기준 구간(공사 100억)을 판정하지 않았습니다 — 공고문에서 확인하세요"
+            : `100점 환산 ${metadata.pass_score}점 이상`} &nbsp;|&nbsp;
           <strong>가격평점:</strong> 예규 별표의 금액구간별 산식 — 이 도구는 산출하지 않습니다
         </div>
       </div>
@@ -369,7 +459,7 @@ export default class extends Controller {
             ${data.notice || ""}
           </div>
         ` : ""}
-        <p class="text-sm text-purple-600 mb-6">배점: 가격50 + 시공실적20 + 시공능력15 + 경영상태10 + 사회적책임5 = 100점</p>
+        <p class="text-sm text-purple-600 mb-6">참고 배점: 가격50 + 시공실적20 + 시공능력15 + 경영상태10 + 사회적책임5 — 실제 배점은 공고문의 심사기준표를 따릅니다</p>
 
         <div class="bg-gray-50 p-4 rounded-lg mb-6">
           <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
@@ -416,10 +506,10 @@ export default class extends Controller {
                 <th class="px-3 py-3 text-left">업체명</th>
                 <th class="px-3 py-3 text-right">입찰가격</th>
                 <th class="px-3 py-3 text-right">입찰률</th>
-                <th class="px-3 py-3 text-right">시공실적<br><span class="text-xs font-normal text-gray-500">(20)</span></th>
-                <th class="px-3 py-3 text-right">시공능력<br><span class="text-xs font-normal text-gray-500">(15)</span></th>
-                <th class="px-3 py-3 text-right">경영상태<br><span class="text-xs font-normal text-gray-500">(10)</span></th>
-                <th class="px-3 py-3 text-right">사회적책임<br><span class="text-xs font-normal text-gray-500">(5)</span></th>
+                <th class="px-3 py-3 text-right">시공실적<br><span class="text-xs font-normal text-gray-500">(참고 20)</span></th>
+                <th class="px-3 py-3 text-right">시공능력<br><span class="text-xs font-normal text-gray-500">(참고 15)</span></th>
+                <th class="px-3 py-3 text-right">경영상태<br><span class="text-xs font-normal text-gray-500">(참고 10)</span></th>
+                <th class="px-3 py-3 text-right">사회적책임<br><span class="text-xs font-normal text-gray-500">(참고 5)</span></th>
                 <th class="px-3 py-3 text-right font-bold">총점</th>
                 <th class="px-3 py-3 text-center">낙찰하한율</th>
               </tr>
@@ -459,7 +549,7 @@ export default class extends Controller {
           </table>
         </div>
         <div class="mt-5 p-4 bg-purple-50 rounded-lg text-sm text-purple-800">
-          <strong>적격 기준(참고):</strong> 총점 92점 이상 &nbsp;|&nbsp;
+          <strong>적격 기준:</strong> 이 도구는 판정하지 않습니다 — 총점 기준은 공고문의 심사기준표로 확인하세요 &nbsp;|&nbsp;
           <strong>입찰금액 평점:</strong> 예규 별표 산식 — 이 도구는 산출하지 않습니다
         </div>
       </div>

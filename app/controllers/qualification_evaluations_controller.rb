@@ -3,7 +3,9 @@
 # - 종합심사낙찰제(종심제): 추정가격 300억 이상 공사 (가격50+시공실적20+시공능력15+경영상태10+사회책임5)
 
 class QualificationEvaluationsController < ApplicationController
-  # 종심제 배점 구조 (조달청/지자체 공통 기준)
+  # 종심제 배점 구조 — **참고값**이다. 1차출처(발주기관 심사기준표)로 확인되지 않았고
+  # 발주기관·공사유형별로 달라지므로, 입력 상한으로 강제하거나 확정 배점으로 고지하지 않는다.
+  # 이 상수는 화면에 참고 배점을 보여주는 용도로만 쓴다(총점·적격 여부·낙찰자는 산출하지 않는다).
   COMPREHENSIVE_SCORE_STRUCTURE = {
     price:           { name: "가격",           max: 50, desc: "입찰금액 / 예정가격 비율 기준" },
     construction:    { name: "시공실적",        max: 20, desc: "최근 10년 시공실적 평가" },
@@ -30,16 +32,26 @@ class QualificationEvaluationsController < ApplicationController
   def evaluate
     project_type    = params[:project_type]
     estimated_price = params[:estimated_price].to_f
+    # 낙찰하한가의 기준은 예정가격이고, 적격심사·종심제 대상 판단과 통과기준 구간의 기준은 추정가격이다.
+    # 두 값은 법적 정의와 산정 단계가 달라(추정가격은 부가세 제외 사전 산정치) 서로 환산되지 않는다.
+    # 한 값으로 겸용하면 대상 판정이 어긋나므로 별도 입력으로 받는다.
+    presumed_price  = params[:presumed_price].to_f
     # 빈 문자열은 to_f가 0.0으로 만들어 모든 투찰이 "하한 이상"이 된다 → 미달 확인이 무력화된다.
     floor_rate      = parse_floor_rate(params[:floor_rate])
     return render json: { error: FLOOR_RATE_REQUIRED }, status: :unprocessable_entity if floor_rate.nil?
     # 예정가격이 0이면 하한가도 0이 되어 모든 투찰이 "하한 이상"으로 나온다.
     return render json: { error: ESTIMATED_PRICE_REQUIRED }, status: :unprocessable_entity if estimated_price <= 0
+    # 추정가격 300억 이상 공사는 종합심사낙찰제 대상이라 적격심사 기준을 적용하면 안 된다.
+    if project_type == "construction" && presumed_price >= COMPREHENSIVE_THRESHOLD
+      return render json: { error: COMPREHENSIVE_REQUIRED }, status: :unprocessable_entity
+    end
     price_max       = project_type == "construction" ? 60 : 70
     non_price_max   = project_type == "construction" ? 40 : 30
 
-    # 적격심사 통과기준 추정가격 차등 (행안부 예규 「지방자치단체 입찰시 낙찰자 결정기준」 제325호: 공사 100억 미만 95점 / 100억~300억 미만 92점)
-    pass_score = qualification_pass_score(project_type, estimated_price)
+    # 적격심사 통과기준 추정가격 차등 — 행안부 예규 「지방자치단체 입찰시 낙찰자 결정기준」
+    # 제2장의1 시설공사 적격심사 세부기준 제6절(낙찰자 결정): 공사 100억 미만 95점 / 100억 이상 300억 미만 92점.
+    # 예규 호수는 개정마다 바뀌므로 인용하지 않는다(장·절로 고정).
+    pass_score = qualification_pass_score(project_type, presumed_price)
 
     bidders = parse_bidders_from_params
     bidders_with_scores = calculate_price_scores(bidders, estimated_price, floor_rate, price_max)
@@ -57,6 +69,7 @@ class QualificationEvaluationsController < ApplicationController
       metadata: {
         project_type: project_type,
         estimated_price: estimated_price,
+        presumed_price: presumed_price,
         floor_rate: floor_rate,
         price_max: price_max,
         non_price_max: non_price_max,
@@ -130,6 +143,12 @@ class QualificationEvaluationsController < ApplicationController
   FLOOR_RATE_REQUIRED = "낙찰하한율을 입력하세요. 계약 종류·금액구간·공고문에 따라 다르므로 " \
                         "공고문에 적힌 값을 그대로 넣어야 미달 여부를 확인할 수 있습니다.".freeze
 
+  # 종합심사낙찰제 대상 기준 (지방계약법 시행령 제42조의3) — 추정가격 300억원 이상 공사
+  COMPREHENSIVE_THRESHOLD = 30_000_000_000
+
+  COMPREHENSIVE_REQUIRED = "추정가격 300억원 이상 공사는 종합심사낙찰제(종심제) 대상이라 " \
+                           "적격심사 기준을 적용할 수 없습니다. 상단의 「종합심사낙찰제」 탭으로 전환해 확인하세요.".freeze
+
   private
 
   # 낙찰하한율은 이 도구의 유일한 판정 기준이다. 비었거나 범위를 벗어나면 추정하지 않고 거부한다.
@@ -190,10 +209,13 @@ class QualificationEvaluationsController < ApplicationController
     end.sort_by { |b| b[:bid_price] }
   end
 
-  # 적격심사 통과기준 (행안부 예규 제325호): 공사 추정가격 100억 미만 95점 / 100억~300억 미만 92점. 물품·용역은 별도 기준(현행 95점 유지).
-  def qualification_pass_score(project_type, estimated_price)
+  # 적격심사 통과기준 (예규 「지방자치단체 입찰시 낙찰자 결정기준」 제2장의1 제6절):
+  # 공사 추정가격 100억 미만 95점 / 100억 이상 300억 미만 92점. 물품·용역은 별도 기준(현행 95점 유지).
+  # 공사는 구간이 추정가격으로 갈리므로, 추정가격을 받지 못하면 점수를 단정하지 않고 nil을 돌려준다(공고문 확인 안내).
+  def qualification_pass_score(project_type, presumed_price)
     return 95 unless project_type == "construction"
+    return nil if presumed_price <= 0
 
-    estimated_price >= 10_000_000_000 ? 92 : 95
+    presumed_price >= 10_000_000_000 ? 92 : 95
   end
 end
