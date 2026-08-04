@@ -18,6 +18,15 @@ class PdfExportService
     #   monthly_wage: Integer (선택)
     #   daily_wage: Integer (선택)
     def annual_leave_pdf(params)
+      data = annual_leave_data(params)
+      return nil unless data
+
+      build_annual_leave_pdf(**data)
+    end
+
+    # 연가 계산의 단일 출처. PDF·HWPX 모두 이 결과만 쓴다 —
+    # 클라이언트가 보낸 granted_leave 같은 값을 그대로 문서화하면 위조가 가능하다.
+    def annual_leave_data(params)
       hire_date_str = params[:hire_date].to_s
       ref_year      = params[:ref_year].to_i
       used_leave    = params[:used_leave].to_f
@@ -28,8 +37,10 @@ class PdfExportService
 
       hire_date = Date.parse(hire_date_str)
       ref_date  = Date.new(ref_year, 1, 1)
-      diff_days = [ (ref_date - hire_date).to_i, 0 ].max
-      total_months = (diff_days / 30.44).floor
+      # 평균 월일수(30.44)로 나누면 365일이 11.99개월이 되어 만 1년이 11개월로 깎인다.
+      total_months = (ref_date.year - hire_date.year) * 12 + (ref_date.month - hire_date.month)
+      total_months -= 1 if ref_date.day < hire_date.day
+      total_months = 0 if total_months.negative?
       years  = total_months / 12
       months = total_months % 12
 
@@ -47,7 +58,8 @@ class PdfExportService
       # 통상임금 연차수당 계산 (근로기준법 제60조 제5항)
       ordinary_allowance = nil
       if monthly_wage > 0 && remaining > 0
-        daily_ordinary = monthly_wage / 209.0
+        # 1일 통상임금 = 시간급(월급÷209) × 1일 소정근로 8시간. ×8을 빠뜨리면 시간급이 일당으로 나간다.
+        daily_ordinary = monthly_wage / 209.0 * 8
         ordinary_allowance = {
           daily_ordinary: daily_ordinary.round,
           total: (daily_ordinary * remaining).round,
@@ -62,7 +74,7 @@ class PdfExportService
         compensation = { days: comp_days, total: (daily_wage * comp_days).round }
       end
 
-      build_annual_leave_pdf(
+      {
         hire_date: hire_date,
         ref_year: ref_year,
         years: years,
@@ -75,7 +87,7 @@ class PdfExportService
         compensation: compensation,
         monthly_wage: monthly_wage,
         daily_wage: daily_wage
-      )
+      }
     end
 
     private
@@ -167,7 +179,7 @@ class PdfExportService
           pdf.fill_rounded_rectangle [ 0, pdf.cursor ], pdf.bounds.width, 80, 6
           pdf.fill_color "000000"
           pdf.bounding_box([ 10, pdf.cursor - 5 ], width: pdf.bounds.width - 20) do
-            pdf.text "1일 통상임금: #{fmt_currency(data[:monthly_wage])}원 / 209시간 = #{fmt_currency(oa[:daily_ordinary])}원",
+            pdf.text "1일 통상임금: #{fmt_currency(data[:monthly_wage])}원 / 209시간 x 8시간 = #{fmt_currency(oa[:daily_ordinary])}원",
               size: 11
             pdf.move_down 5
             pdf.text "연차수당 합계: #{fmt_currency(oa[:daily_ordinary])}원 x #{oa[:days].to_i}일 = #{fmt_currency(oa[:total])}원",
@@ -202,7 +214,7 @@ class PdfExportService
         section_header(pdf, "법적 근거")
         pdf.fill_color "374151"
         pdf.text "• 연가일수 기준: 국가공무원 복무규정 제15조, 지방공무원 복무규정 제7조", size: 9
-        pdf.text "• 연차수당 기준: 근로기준법 제60조 제5항 (1일 통상임금 = 월급 / 209시간)", size: 9
+        pdf.text "• 연차수당 기준: 근로기준법 제60조 제5항 (1일 통상임금 = 월급 / 209시간 x 8시간)", size: 9
         pdf.text "• 연가보상비: 국가공무원 복무규정 제21조의2 (최대 20일 한도)", size: 9
         pdf.fill_color "000000"
         pdf.move_down 10

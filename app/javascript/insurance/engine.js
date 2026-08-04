@@ -20,15 +20,42 @@ export function rounddown(value, digits) {
 /**
  * 연도별 4대보험 요율표
  *
- * pension.ceiling/floor : 기준소득월액 상·하한선
- *   - year=2025: 상한 6,170,000원 / 하한 390,000원 (2024.7~2025.6 기준)
- *   - year=2026: 상한 6,370,000원 / 하한 400,000원 (2025.7~2026.6 기준)
+ * pension.ceiling/floor : 기준소득월액 상·하한선의 "연초 기준" 기본값.
+ *   상·하한은 매년 7월에 바뀌므로 달력연도 하나로 고정하면 하반기에 틀린다 →
+ *   실제 적용값은 PENSION_BRACKETS에서 기준일로 찾는다.
  *
  * [수정 이력]
  *   2026-03-05: RATES[2025].pension.g 0.0475 → 0.045 수정
  *               (국민연금 9.5% 인상은 2026년부터 적용. 2025년은 여전히 9% = 4.5%+4.5%)
  *               pension 상·하한선 추가
+ *   2026-08-04: 상·하한을 7월 개정 주기에 맞춰 PENSION_BRACKETS로 분리.
+ *               2026.7~2027.6 상한 6,590,000 / 하한 410,000 (보건복지부 고시) 반영.
  */
+
+/**
+ * 국민연금 기준소득월액 상·하한 적용 구간. from 이상이면 그 구간을 쓴다(최신순 탐색).
+ * 출처: 「국민연금 기준소득월액 하한액과 상한액」 보건복지부 고시. 매년 7월 1일 적용.
+ */
+export const PENSION_BRACKETS = [
+  { from: "2026-07-01", to: "2027-06-30", ceiling: 6_590_000, floor: 410_000 },
+  { from: "2025-07-01", to: "2026-06-30", ceiling: 6_370_000, floor: 400_000 },
+  { from: "2024-07-01", to: "2025-06-30", ceiling: 6_170_000, floor: 390_000 }
+];
+
+/**
+ * 기준일에 적용되는 상·하한을 돌려준다. 구간을 못 찾으면 null.
+ * toISOString은 UTC로 바꿔버려 KST 자정~09시에 전날로 판정된다(7/1 00:00 KST → 6/30).
+ * 로컬 달력 기준으로 YYYY-MM-DD를 만든다.
+ */
+export function pensionBracket(refDate) {
+  const d = refDate instanceof Date ? refDate : new Date(refDate);
+  const iso = typeof refDate === "string" && /^\d{4}-\d{2}-\d{2}/.test(refDate)
+    ? refDate.slice(0, 10)
+    : `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  // 고시되지 않은 미래 날짜(예: 2027-01-01)를 최신 구간으로 계산하면 확인되지 않은 값을 내놓게 된다.
+  // 구간의 적용 종료일을 넘어서면 null을 돌려주고 호출부가 차단하게 한다.
+  return PENSION_BRACKETS.find((b) => iso >= b.from && iso <= b.to) || null;
+}
 export const RATES = {
   2025: {
     pension:    { p: 0.045,   g: 0.045,   ceiling: 6_170_000, floor: 390_000 },
@@ -54,20 +81,32 @@ export const RATES = {
  *
  * @param {number} bonsuWol  보수월액 (입력값)
  * @param {number} year      2025|2026
+ * @param {Date|string} [refDate]  상·하한 적용 기준일. 상·하한은 매년 7월에 바뀌므로
+ *   특정 시점 기준으로 계산하려면 이 값을 준다. 생략하면 RATES[year]의 연초 기준값을 쓴다
+ *   (기존 호출부 호환 — year는 정산연도이지 적용시점이 아니다).
  * @returns {{ monthly: { p, g }, cappedWol, isOverCeiling, isUnderFloor }}
  */
-export function calcPension(bonsuWol, year) {
+export function calcPension(bonsuWol, year, refDate = null) {
   const rate = RATES[year].pension;
-  // 기준소득월액 상·하한선 적용
-  const cappedWol = Math.min(Math.max(bonsuWol, rate.floor), rate.ceiling);
+  // 기준일을 줬는데 해당 구간이 없으면(=고시 범위 밖) 조용히 연초값으로 떨어뜨리지 않는다.
+  const bracket = refDate ? pensionBracket(refDate) : rate;
+  if (!bracket) {
+    throw new RangeError(
+      `국민연금 기준소득월액 상·하한이 고시된 기간(${PENSION_BRACKETS[PENSION_BRACKETS.length - 1].from} ~ ` +
+      `${PENSION_BRACKETS[0].to}) 밖의 기준일입니다: ${refDate}`
+    );
+  }
+  const ceiling = bracket.ceiling;
+  const floor = bracket.floor;
+  const cappedWol = Math.min(Math.max(bonsuWol, floor), ceiling);
   return {
     monthly: {
       p: rounddown(cappedWol * rate.p, -1),
       g: rounddown(cappedWol * rate.g, -1),
     },
     cappedWol,
-    isOverCeiling: bonsuWol > rate.ceiling,
-    isUnderFloor:  bonsuWol < rate.floor,
+    isOverCeiling: bonsuWol > ceiling,
+    isUnderFloor:  bonsuWol < floor,
   };
 }
 
@@ -254,7 +293,8 @@ export function calcSettlement(input) {
   const bonsuTotalEmploy = input.bonsuTotalEmploy ?? bonsuTotal;
 
   // ① 연금 (정산 없음, 상·하한선 자동 적용)
-  const pension = calcPension(bonsuWol, year);
+  // 기준소득월액 상·하한은 7월에 개정된다. 호출부가 기준일을 주면 그 시점 값을 쓴다.
+  const pension = calcPension(bonsuWol, year, input.refDate ?? null);
 
   // ② 건강
   const health = calcHealth(

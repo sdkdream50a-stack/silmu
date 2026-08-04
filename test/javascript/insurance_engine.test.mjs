@@ -420,3 +420,52 @@ describe('T09: calcSettlement (정산 통합)', () => {
     assert.strictEqual(resultY.health.decided.p, 134_790);
   });
 });
+
+// ── 2026-08-04 추가: 기준소득월액 상·하한의 7월 개정 반영 ──
+import { pensionBracket, PENSION_BRACKETS } from '../../app/javascript/insurance/engine.js';
+
+describe('기준소득월액 상·하한 구간 (7월 개정)', () => {
+  it('2026-08-04 기준은 상한 6,590,000 / 하한 410,000', () => {
+    const b = pensionBracket('2026-08-04');
+    assert.strictEqual(b.ceiling, 6_590_000);
+    assert.strictEqual(b.floor, 410_000);
+  });
+
+  it('2026-06-30 기준은 아직 상한 6,370,000', () => {
+    assert.strictEqual(pensionBracket('2026-06-30').ceiling, 6_370_000);
+  });
+
+  it('기준일을 주면 월 700만원 개인부담은 313,020원 (구값 302,570원 아님)', () => {
+    const r = calcPension(7_000_000, 2026, '2026-08-04');
+    assert.strictEqual(r.monthly.p, 313_020);
+  });
+
+  it('기준일을 생략하면 기존 동작(연초 기준값)을 유지한다', () => {
+    assert.strictEqual(calcPension(7_000_000, 2026).monthly.p, 302_570);
+  });
+
+  it('구간표는 최신순으로 정렬돼 있다', () => {
+    const froms = PENSION_BRACKETS.map((b) => b.from);
+    assert.deepStrictEqual(froms, [...froms].sort().reverse());
+  });
+});
+
+describe('기준표 밖 기준일 차단', () => {
+  it('2027-01-01은 2026.7~2027.6 구간 안이므로 정상 계산된다', () => {
+    assert.strictEqual(pensionBracket('2027-01-01').ceiling, 6_590_000);
+  });
+
+  it('아직 고시되지 않은 2027-07-01은 최신 구간을 재사용하지 않고 예외를 던진다', () => {
+    assert.strictEqual(pensionBracket('2027-07-01'), null);
+    assert.throws(() => calcPension(7_000_000, 2026, '2027-07-01'), RangeError);
+  });
+
+  it('가장 오래된 구간보다 이전 날짜도 차단한다', () => {
+    assert.strictEqual(pensionBracket('2024-06-30'), null);
+  });
+
+  it('구간 경계일은 정상 동작한다', () => {
+    assert.strictEqual(pensionBracket('2027-06-30').ceiling, 6_590_000);
+    assert.strictEqual(pensionBracket('2024-07-01').ceiling, 6_170_000);
+  });
+});

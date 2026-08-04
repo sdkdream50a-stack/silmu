@@ -217,18 +217,13 @@
               <p class="text-xs text-slate-400 mt-0.5 text-center">계산 결과를 파일로 저장합니다</p>
             </div>
 
-            <!-- HWPX 다운로드용 hidden form -->
+            <!-- HWPX 다운로드용 hidden form — 계산 결과가 아니라 입력값만 보낸다(서버가 재계산) -->
             <%= form_with url: annual_leave_hwpx_path, method: :post, id: "al-hwpx-form", local: true do |f| %>
               <%= hidden_field_tag :hire_date, "", id: "al-hwpx-hire-date" %>
               <%= hidden_field_tag :ref_year, "", id: "al-hwpx-ref-year" %>
-              <%= hidden_field_tag :service_period, "", id: "al-hwpx-service-period" %>
-              <%= hidden_field_tag :granted_leave, "", id: "al-hwpx-granted-leave" %>
               <%= hidden_field_tag :used_leave, "", id: "al-hwpx-used-leave" %>
-              <%= hidden_field_tag :remaining_leave, "", id: "al-hwpx-remaining-leave" %>
-              <%= hidden_field_tag :annual_allowance_pay, "", id: "al-hwpx-allowance-pay" %>
-              <%= hidden_field_tag :annual_allowance_detail, "", id: "al-hwpx-allowance-detail" %>
-              <%= hidden_field_tag :compensation_pay, "", id: "al-hwpx-compensation-pay" %>
-              <%= hidden_field_tag :compensation_detail, "", id: "al-hwpx-compensation-detail" %>
+              <%= hidden_field_tag :monthly_wage, "", id: "al-hwpx-monthly-wage" %>
+              <%= hidden_field_tag :daily_wage, "", id: "al-hwpx-daily-wage" %>
             <% end %>
 
           </div>
@@ -329,7 +324,15 @@
     let diffMs = refDate - hireDate;
     if (diffMs < 0) diffMs = 0; // 임용 전
 
-    const totalMonths = Math.floor(diffMs / (1000 * 60 * 60 * 24 * 30.44));
+    // 평균 월일수(30.44)로 나누면 365일이 11.99개월이 되어 만 1년 재직이 11개월로 깎인다.
+    // 달력 기준으로 세고, 기준일의 '일'이 임용일의 '일'보다 이르면 한 달을 뺀다.
+    let totalMonths = 0;
+    if (diffMs > 0) {
+      totalMonths = (refDate.getFullYear() - hireDate.getFullYear()) * 12 +
+                    (refDate.getMonth() - hireDate.getMonth());
+      if (refDate.getDate() < hireDate.getDate()) totalMonths -= 1;
+      if (totalMonths < 0) totalMonths = 0;
+    }
     const years  = Math.floor(totalMonths / 12);
     const months = totalMonths % 12;
 
@@ -391,28 +394,12 @@
     document.getElementById('result-empty').classList.add('hidden');
     document.getElementById('result-content').classList.remove('hidden');
 
-    // HWPX hidden form 동기화
-    document.getElementById('al-hwpx-hire-date').value      = hireDateVal;
-    document.getElementById('al-hwpx-ref-year').value       = refYear;
-    document.getElementById('al-hwpx-service-period').value = periodText;
-    document.getElementById('al-hwpx-granted-leave').value  = grantedLeave;
-    document.getElementById('al-hwpx-used-leave').value     = usedLeave;
-    document.getElementById('al-hwpx-remaining-leave').value = remaining;
-    if (monthlyWage > 0 && remaining > 0) {
-      const hourlyOrdinaryWage = monthlyWage / 209;
-      const dailyOrdinaryWage = hourlyOrdinaryWage * 8;
-      const allowancePay = dailyOrdinaryWage * remaining;
-      document.getElementById('al-hwpx-allowance-pay').value    = Math.round(allowancePay).toLocaleString('ko-KR') + '원';
-      document.getElementById('al-hwpx-allowance-detail').value =
-        '1일 통상임금: ' + Math.round(dailyOrdinaryWage).toLocaleString('ko-KR') + '원 × 미사용 ' + remaining + '일';
-    }
-    if (dailyWage > 0) {
-      const compensationDays = Math.min(remaining, 20);
-      const compensationPay = dailyWage * compensationDays;
-      document.getElementById('al-hwpx-compensation-pay').value    = Math.round(compensationPay).toLocaleString('ko-KR') + '원';
-      document.getElementById('al-hwpx-compensation-detail').value =
-        '잔여 ' + remaining + '일 중 최대 20일 한도 → ' + compensationDays + '일 × ' + dailyWage.toLocaleString('ko-KR') + '원';
-    }
+    // HWPX hidden form 동기화 — 입력값만 전달하고 결과는 서버가 다시 계산한다
+    document.getElementById('al-hwpx-hire-date').value     = hireDateVal;
+    document.getElementById('al-hwpx-ref-year').value      = refYear;
+    document.getElementById('al-hwpx-used-leave').value    = usedLeave;
+    document.getElementById('al-hwpx-monthly-wage').value  = monthlyWage || '';
+    document.getElementById('al-hwpx-daily-wage').value    = dailyWage || '';
   }
 
   function downloadHwpx() {

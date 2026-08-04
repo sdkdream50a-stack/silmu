@@ -273,7 +273,9 @@
 
     // 시간당 단가 = 봉급기준액의 55%(9급은 60%)의 209분의 1의 150% (공무원수당규정 §15②)
     const baseRate = document.getElementById('is-grade9').checked ? 0.60 : 0.55;
-    const hourlyRate = salary * baseRate / 209 * 1.5;
+    // 봉급기준액을 209로 나눈 시간당 기본액. 시간외는 ×1.5, 야간은 ×0.5로 각각 가산한다(§19는 150% 미적용).
+    const baseHourly = salary * baseRate / 209;
+    const hourlyRate = baseHourly * 1.5;
     document.getElementById('hourly-rate').textContent = Math.round(hourlyRate).toLocaleString('ko-KR');
 
     let total = 0;
@@ -299,12 +301,12 @@
       document.getElementById('limit-warning').classList.add('hidden');
     }
 
-    // 야간근무수당 (시간당 단가 × 0.5 가산)
-    const nightPay = hourlyRate * night * 0.5;
+    // 야간근무수당 (공무원수당규정 §19: 봉급기준액÷209의 100분의 50. 시간외 150% 미포함)
+    const nightPay = baseHourly * night * 0.5;
     if (night > 0) {
       document.getElementById('row-night').classList.remove('hidden');
       document.getElementById('night-detail').textContent =
-        Math.round(hourlyRate).toLocaleString('ko-KR') + '원 × ' + night + '시간 × 0.5';
+        Math.round(baseHourly).toLocaleString('ko-KR') + '원 × ' + night + '시간 × 0.5';
       document.getElementById('night-pay').textContent = formatKRW(nightPay);
       total += nightPay;
     } else {

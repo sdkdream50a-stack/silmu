@@ -234,6 +234,21 @@
         <% end %>
       </div>
 
+      <div id="ep-construction-type-wrap" style="display:none; margin-top:20px;">
+        <label style="display:block; font-weight:600; font-size:14px; color:#334155; margin-bottom:8px;">
+          공사 종류 <span style="font-size:12px; color:#94a3b8; font-weight:400;">(수의계약 한도가 다릅니다)</span>
+        </label>
+        <select id="ep-construction-type" style="width:100%; max-width:360px; border:1px solid #d1d5db; border-radius:10px; padding:10px 14px; font-size:14px;">
+          <option value="">선택하세요</option>
+          <option value="general">종합공사 (한도 4억원)</option>
+          <option value="special">전문공사 (한도 2억원)</option>
+          <option value="other">기타공사 — 전기·정보통신·소방시설 등 (한도 1.6억원)</option>
+        </select>
+        <p style="font-size:12px; color:#94a3b8; margin-top:6px;">
+          선택하지 않으면 수의계약 가능 여부를 판단하지 않습니다 (지방계약법 시행령 제25조 제1항 제5호).
+        </p>
+      </div>
+
       <div style="margin-top:24px; text-align:right;">
         <button class="ep-btn ep-btn-primary" id="ep-btn-step1" disabled onclick="epGoStep(2)">
           다음 <span class="material-symbols-outlined text-lg">arrow_forward</span>
@@ -421,6 +436,10 @@ document.addEventListener('turbo:load', function() {
     el.classList.add('selected');
     epSelectedType = el.dataset.type;
     document.getElementById('ep-btn-step1').disabled = false;
+
+    // 공사만 종류(종합/전문/기타)에 따라 수의계약 한도가 달라진다.
+    var ctWrap = document.getElementById('ep-construction-type-wrap');
+    if (ctWrap) ctWrap.style.display = (epSelectedType === 'construction') ? '' : 'none';
   };
 
   window.epGoStep = function(step) {
@@ -475,6 +494,8 @@ document.addEventListener('turbo:load', function() {
 
   function epCalculate() {
     var body = { contract_type: epSelectedType };
+    var ctSel = document.getElementById('ep-construction-type');
+    if (epSelectedType === 'construction' && ctSel) body.construction_type = ctSel.value;
 
     if (epSelectedType === 'goods') {
       body.unit_price = document.getElementById('ep-unit_price').value || '0';
@@ -532,7 +553,10 @@ document.addEventListener('turbo:load', function() {
 
     // 수의계약 가능 여부
     html += '<div class="ep-result-section"><div class="ep-result-title"><span class="material-symbols-outlined" style="color:#059669;">gavel</span> 수의계약 가능 여부</div>';
-    if (r.private_contract.available) {
+    if (r.private_contract.undetermined) {
+      html += '<div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;"><span class="ep-badge" style="background:#fef3c7;color:#92400e;"><span class="material-symbols-outlined text-lg">help</span> 판단 보류</span></div>';
+      html += '<div style="font-size:14px;color:#64748b;margin-bottom:14px;">' + (r.private_contract.note || '') + '</div>';
+    } else if (r.private_contract.available) {
       html += '<div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;"><span class="ep-badge ep-badge-green"><span class="material-symbols-outlined text-lg">check_circle</span> 수의계약 가능</span>';
       html += '<span style="font-size:14px;color:#64748b;">추정가격 ' + epComma(r.base_amount) + '원 ≤ 기준금액 ' + epComma(r.private_contract.threshold) + '원 (부가세 제외 기준)</span></div>';
     } else {

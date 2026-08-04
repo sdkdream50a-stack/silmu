@@ -18,7 +18,7 @@
         </div>
         <div>
           <h1 class="text-2xl font-bold text-slate-900">성과상여금 계산기</h1>
-          <p class="text-slate-600 mt-1">공무원 성과등급별 성과상여금 자동 계산</p>
+          <p class="text-slate-600 mt-1">월봉급액과 소속 기관 지급률로 성과상여금 계산</p>
           <%= render 'shared/use_when_badge', tool: 'performance-bonus-calculator' %>
         </div>
       </div>
@@ -50,6 +50,21 @@
               class="w-full border border-slate-200 rounded-lg px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-amber-400 bg-slate-50"
               oninput="calculate()">
             <p class="text-xs text-slate-400 mt-1">※ 각종 수당 제외, 기본 봉급액만 입력</p>
+          </div>
+
+          <!-- 지급률 (기관 지급계획이 우선하므로 직접 입력 가능) -->
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-2" for="custom-rate">
+              지급률 (%) <span class="text-xs font-normal text-red-500">— 필수</span>
+            </label>
+            <input type="number" id="custom-rate" step="0.1" min="0" placeholder="예: 172.5"
+              oninput="calculate()"
+              class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 text-sm focus:border-amber-400 focus:outline-none">
+            <p class="text-xs text-amber-700 mt-2">
+              ⚠️ 지급등급별 지급률은 <strong>소속 기관의 성과상여금 지급계획</strong>으로 정해집니다.
+              계급·기관·연도에 따라 달라 이 도구가 대신 정할 수 없으므로, 지급계획의 지급률을 직접 입력해야 계산됩니다.
+              (인사혁신처 기본 모형 예시: S 172.5 / A 125 / B 85%)
+            </p>
           </div>
 
           <!-- 성과등급 -->
@@ -170,10 +185,9 @@
             <div class="text-sm text-blue-800">
               <p class="font-semibold mb-1">계급별 지급율 차이</p>
               <ul class="space-y-1 text-xs">
-                <li>• <strong>5급 이상:</strong> S 172.5% / A 125% / B 85%</li>
-                <li>• <strong>6급 이하:</strong> S 170% / A 120% / B 80%</li>
-                <li>• <strong>연구·지도직:</strong> 별도 기준 적용</li>
-                <li>• 기관장 재량으로 ±10% 조정 가능</li>
+                <li>• 위 지급률(S 172.5 / A 125 / B 85%)은 <strong>기본 모형 예시</strong>이며 법정 고정값이 아닙니다</li>
+                <li>• 실제 지급률·등급 구성은 <strong>기관별 성과상여금 지급계획</strong>으로 정해집니다</li>
+                <li>• 계급(5급 이상/6급 이하)·연구지도직에 따라 달라질 수 있어 지급률 직접 입력을 권장합니다</li>
               </ul>
             </div>
           </div>
@@ -202,11 +216,22 @@
 <script>
   let selectedGrade = 'A';
 
-  const RATES = {
+  // 지급등급별 지급률은 기관의 성과상여금 지급계획으로 정해지며 계급·기관·연도에 따라 다르다.
+  // 아래 값은 인사혁신처 기본 모형의 예시일 뿐 법정 고정값이 아니므로, 사용자가 직접 고칠 수 있게 한다.
+  // (검증되지 않은 '6급 이하 170/120/80' 상수는 1차출처를 확인하지 못해 제거했다.)
+  const DEFAULT_RATES = {
     S: { label: 'S등급 (최우수)', rate: 1.725 },
     A: { label: 'A등급 (우수)',   rate: 1.25  },
     B: { label: 'B등급 (보통)',   rate: 0.85  }
   };
+
+  // 지급률 미입력이면 계산하지 않는다.
+  // 기본 모형 예시율(172.5/125/85)을 자동 적용하면 6급 이하·타 기관 사용자가 틀린 금액을 받는다.
+  function currentRate() {
+    const el = document.getElementById('custom-rate');
+    const v = el ? parseFloat(el.value) : NaN;
+    return (!isNaN(v) && v > 0) ? v / 100 : null;
+  }
 
   function selectGrade(grade) {
     selectedGrade = grade;
@@ -231,8 +256,18 @@
     const payCount = parseInt(document.getElementById('pay-count').value);
     const payMethod = document.getElementById('pay-method').value;
 
-    const gradeInfo = RATES[selectedGrade];
-    let rate = gradeInfo.rate;
+    const gradeInfo = DEFAULT_RATES[selectedGrade];
+    let rate = currentRate();
+
+    if (rate === null) {
+      document.getElementById('grade-display').textContent = gradeInfo.label + ' / 지급률 입력 필요';
+      document.getElementById('bonus-amount').textContent = '지급률을 입력하세요';
+      document.getElementById('bonus-formula').textContent =
+        '지급률은 소속 기관의 성과상여금 지급계획으로 정해집니다. 기본 모형 예시는 S 172.5 / A 125 / B 85%입니다.';
+      const annualSec = document.getElementById('annual-section');
+      if (annualSec) annualSec.classList.add('hidden');
+      return;
+    }
 
     // 부서 성과 포함 방식은 70% 적용
     if (payMethod === 'group') rate *= 0.7;
@@ -241,7 +276,7 @@
     const annualAmount = bonusAmount * payCount;
 
     document.getElementById('grade-display').textContent =
-      `${gradeInfo.label} / 지급율 ${(rate * 100).toFixed(1)}%`;
+      `${gradeInfo.label} / 지급율 ${(rate * 100).toFixed(3).replace(/0+$/,'').replace(/\.$/,'')}%`;
 
     document.getElementById('bonus-amount').textContent =
       salary > 0 ? Math.round(bonusAmount).toLocaleString('ko-KR') + '원' : '봉급액을 입력하세요';

@@ -15,6 +15,8 @@ class EstimatedPricesController < ApplicationController
   def calculate
     result = EstimatedPriceService.calculate(
       contract_type: params[:contract_type],
+      # 공사는 종류(종합/전문/기타)에 따라 수의계약 한도가 다르다.
+      construction_type: params[:construction_type],
       unit_price: params[:unit_price],
       quantity: params[:quantity],
       delivery_fee: params[:delivery_fee],

@@ -308,9 +308,9 @@ function calculate() {
 
   document.getElementById('d-income').textContent = income.toLocaleString('ko-KR') + '원';
   document.getElementById('d-tenure').textContent = tenure + '년';
-  document.getElementById('d-rate').textContent = (rate * 100).toFixed(1) + '% × 재직년수';
+  document.getElementById('d-rate').textContent = (rate * 100).toFixed(3) + '% × 재직년수';
   document.getElementById('d-formula').textContent =
-    income.toLocaleString('ko-KR') + '원 × ' + tenure + '년 × ' + (rate * 100).toFixed(1) + '%';
+    income.toLocaleString('ko-KR') + '원 × ' + tenure + '년 × ' + (rate * 100).toFixed(3) + '%';
   document.getElementById('d-monthly').textContent = monthlyPension.toLocaleString('ko-KR') + '원';
   document.getElementById('d-annual').textContent = annualPension.toLocaleString('ko-KR') + '원';
 

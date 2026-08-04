@@ -663,6 +663,7 @@
         <h3 class="text-lg font-bold text-slate-900 mt-6 mb-3">주의사항</h3>
         <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg">
           <p class="text-amber-900 text-sm leading-relaxed mb-2">
+            <span id="base-price-source" class="hidden block mb-2 text-xs font-semibold text-amber-900"></span>
             <strong>⚠️ 이 도구는 사업계획 수립 전 참고용 예산 추정 도구입니다.</strong> 법적 효력이 있는 추정가격·예정가격 산정(지방계약법 시행령 §7·§9·§10, 시행규칙 §11의2)과는 다릅니다. 본 도구 결과는 사업계획서·예산편성(지방재정법 §36) 단계 참고용.
           </p>
           <ul class="list-disc list-inside text-amber-900 text-sm space-y-1">
@@ -1403,6 +1404,17 @@
 
   // 결과 렌더링
   function renderResult(result) {
+    // 기준단가의 출처·기준일을 결과에 함께 표시한다 — 근거 없는 단가가 예산 근거로 쓰이지 않도록.
+    const srcBox = document.getElementById('base-price-source');
+    if (srcBox) {
+      if (result.base_price_source_note) {
+        srcBox.textContent = '기준단가 기준일 ' + (result.base_price_as_of || '-') + ' · ' + result.base_price_source_note;
+        srcBox.classList.remove('hidden');
+      } else {
+        srcBox.classList.add('hidden');
+      }
+    }
+
     const typeNames = { construction: '공사', service: '용역', goods: '물품', design_fee: '설계용역비' };
     const gradeNames = { basic: '기본형', standard: '보통', premium: '고급', luxury: '프리미엄' };
     const designNames = {

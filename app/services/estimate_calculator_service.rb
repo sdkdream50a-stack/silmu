@@ -153,6 +153,15 @@ class EstimateCalculatorService
   }.freeze
 
   # 공사 종류별 기준 단가 (원/m² 또는 원/단위)
+  #
+  # ⚠️ 출처 주의: 아래 단가는 공표된 표준품셈·물가자료 인용이 아니라 **사이트 자체 참고값**이다.
+  # 지역·시기·자재 등급에 따라 실제 견적과 크게 다를 수 있으므로 예산 편성 근거로 쓰면 안 되고,
+  # 실제 산출은 조달청 표준품셈·물가정보지·복수 견적으로 해야 한다.
+  # 기준일: 2026-08-04 (이 값이 갱신될 때 함께 고쳐야 하는 단일 지점)
+  BASE_PRICE_AS_OF = "2026-08-04".freeze
+  BASE_PRICE_SOURCE_NOTE = "사이트 자체 참고 단가(공표 표준품셈·물가자료 인용 아님). " \
+                           "실제 예산 근거는 표준품셈·물가정보지·복수 견적으로 산출하세요.".freeze
+
   CONSTRUCTION_BASE_PRICES = {
     # 인테리어/마감 공사
     "wallpaper" => { name: "도배", unit: "m²", base_price: 15_000, description: "벽지 도배" },
@@ -274,6 +283,8 @@ class EstimateCalculatorService
       {
         success: true,
         type: :construction,
+        base_price_as_of: BASE_PRICE_AS_OF,
+        base_price_source_note: BASE_PRICE_SOURCE_NOTE,
         grade: grade_info,
         details: details,
         summary: {
@@ -315,6 +326,8 @@ class EstimateCalculatorService
       {
         success: true,
         type: :service,
+        base_price_as_of: BASE_PRICE_AS_OF,
+        base_price_source_note: BASE_PRICE_SOURCE_NOTE,
         grade: grade_info,
         details: [ {
           name: price_info[:name],
@@ -374,6 +387,8 @@ class EstimateCalculatorService
       {
         success: true,
         type: :goods,
+        base_price_as_of: BASE_PRICE_AS_OF,
+        base_price_source_note: BASE_PRICE_SOURCE_NOTE,
         grade: grade_info,
         details: details,
         summary: {

@@ -93,7 +93,7 @@ class SeoMonitor
     {
       topics_count: Topic.published.count,
       audit_cases_count: AuditCase.published.count,
-      tools_count: 19, # ACTIVE_TOOL_COUNT
+      tools_count: ApplicationHelper::ACTIVE_TOOL_COUNT,
       topics_with_faq: Topic.published.where("faqs IS NOT NULL AND faqs != '[]'::jsonb").count,
       topics_without_meta: Topic.published.where("summary IS NULL OR summary = ''").count
     }

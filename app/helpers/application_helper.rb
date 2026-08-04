@@ -1,5 +1,8 @@
 module ApplicationHelper
-  ACTIVE_TOOL_COUNT = 38
+  # ToolsHelper#tools_registry 항목 수와 일치해야 한다.
+  # tools_registry는 route helper를 쓰기 때문에 상수 정의 시점에 호출할 수 없어 값을 적어 두고,
+  # test/helpers/tools_helper_test.rb 가 레지스트리 실제 개수와 대조해 갈라짐을 막는다.
+  ACTIVE_TOOL_COUNT = 39
 
   # exam.silmu.kr — 법령 가이드 slug → 한국어 레이블 맵
   # chapters/show.html.erb에서 related_topic_slugs 렌더링 시 사용
@@ -77,7 +80,7 @@ module ApplicationHelper
     "price-adjustment-calculator"     => "물가변동 ESC 조정(지수·품목조정률) 시",
     "progress-inspection"             => "기성검사·완료검사 조서 작성 시",
     "project-plan"                    => "사업계획서 hwpx 자동 생성 시",
-    "qualification-evaluation"        => "적격심사·낙찰자 결정 점수 검토 시",
+    "qualification-evaluation"        => "낙찰하한율 미달 여부·입찰률 확인 시",
     "quote-auto"                      => "견적서 자동 추출·정리 시",
     "quote-review"                    => "견적서 적정성·재무평가 즉시 검토 시",
     "salary-calculator"               => "공무원 봉급(월급) 본봉 산정 시",

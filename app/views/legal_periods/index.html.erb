@@ -131,19 +131,19 @@
       <div class="px-8 pb-8">
         <div class="prose prose-slate max-w-none">
         <p class="text-slate-700 leading-relaxed mb-4">
-          공공계약에는 <strong>법령으로 정해진 기간과 기한</strong>이 많습니다. 입찰공고 기간(7일·15일·40일), 계약체결 기한(낙찰통지 후 10일), 대금지급 기한(검사완료 후 5일·14일), 하자보증 기간(1~5년) 등 계약 단계별로 지켜야 할 법정 기간이 다르며, 이를 어기면 감사 지적이나 지체상금 발생의 원인이 됩니다. 특히 공휴일·토요일·일요일은 기간 계산에서 제외되는 경우가 많아, 수기로 계산하면 실수하기 쉽습니다.
+          공공계약에는 <strong>법령으로 정해진 기간과 기한</strong>이 많습니다. 입찰공고 기간(7일·15일·40일), 계약체결 기한(낙찰통지 후 10일), 대금지급 기한(검사 완료 후 청구일 + 5일), 하자보증 기간(1~5년) 등 계약 단계별로 지켜야 할 법정 기간이 다르며, 이를 어기면 감사 지적이나 지체상금 발생의 원인이 됩니다. 특히 공휴일·토요일·일요일은 기간 계산에서 제외되는 경우가 많아, 수기로 계산하면 실수하기 쉽습니다.
         </p>
         <p class="text-slate-700 leading-relaxed mb-4">
-          이 도구는 <strong>기준일과 기간 유형만 선택하면 법정 기간을 자동 계산</strong>하여, 입찰공고 마감일, 계약체결 기한, 대금지급 기한 등을 정확하게 안내합니다. 공휴일·주말 자동 제외, 기간 말일이 공휴일인 경우 익일 적용 등 법령상 기간 계산 원칙을 모두 반영하므로, 복잡한 달력을 일일이 확인하지 않아도 정확한 날짜를 즉시 확인할 수 있습니다. 지체상금 발생일 계산 기능도 제공하여 계약 관리에 활용할 수 있습니다.
+          이 도구는 <strong>기준일과 기간 유형만 선택하면 법정 기간을 자동 계산</strong>하여, 입찰공고 마감일, 계약체결 기한, 대금지급 기한 등을 정확하게 안내합니다. 기간 말일이 토요일·일요일이면 그 다음 월요일로 자동 조정합니다(민법 제161조). 다만 <strong>공휴일은 아직 반영되지 않으므로</strong> 산출된 날짜가 공휴일인지는 별도로 확인해야 합니다. 지체상금 발생일 계산 기능도 제공하여 계약 관리에 활용할 수 있습니다.
         </p>
 
         <h3 class="text-lg font-bold text-slate-900 mt-6 mb-3">주요 기능</h3>
         <ul class="list-disc list-inside space-y-2 text-slate-700 mb-4">
           <li>입찰공고 기간(7일·15일·40일) 및 마감일 자동 계산</li>
           <li>계약체결 기한(낙찰통지 후 10일) 계산</li>
-          <li>대금지급 기한(검사완료 후 5일·14일) 계산</li>
+          <li>대금지급 기한 계산 (국가·지방 모두 검사 완료 후 청구일+5일, 선금=청구일+14일)</li>
           <li>하자보증 기간(공종별 1~5년) 만료일 계산</li>
-          <li>공휴일·주말 자동 제외, 기간 말일 공휴일 시 익일 적용</li>
+          <li>기간 말일이 토·일요일이면 다음 월요일로 자동 조정 (공휴일은 미반영)</li>
           <li>지체상금 발생일 및 일수 자동 계산</li>
         </ul>
 
@@ -154,7 +154,7 @@
           </p>
           <ul class="list-disc list-inside text-amber-900 text-sm space-y-1">
             <li>기간 계산 방법은 민법 제155~161조, 행정절차법 등에 따라 다를 수 있습니다</li>
-            <li>기간 말일이 공휴일인 경우 그 다음 날로 만기가 연장됩니다 (민법 제161조)</li>
+            <li>기간 말일이 토요일·공휴일이면 그 다음 날로 만기가 연장됩니다 (민법 제161조). 이 계산기는 토·일요일만 자동 반영합니다</li>
             <li>개별 계약서에 별도 기한이 명시된 경우 계약서 우선 적용됩니다</li>
           </ul>
         </div>
@@ -247,14 +247,14 @@
         <div class="lp-form-group">
           <label>지급 유형</label>
           <select id="lp-pay-type">
-            <option value="national">국가기관 (5일)</option>
-            <option value="local">지방자치단체 (14일)</option>
-            <option value="advance">선금 지급 (14일)</option>
-            <option value="subcontract">하도급 대금 (15일)</option>
+            <option value="national">국가기관 (청구일 + 5일)</option>
+            <option value="local">지방자치단체 (청구일 + 5일)</option>
+            <option value="advance">선금 지급 (청구일 + 14일)</option>
+            <option value="subcontract">하도급 대금 (대금 수령일 + 15일)</option>
           </select>
         </div>
         <div class="lp-form-group">
-          <label>검사완료일 <span class="lp-sublabel">(또는 청구일)</span></label>
+          <label>기준일 <span class="lp-sublabel">(지급 유형별 기산일)</span></label>
           <input type="date" id="lp-insp-date">
         </div>
         <button class="lp-btn lp-btn-primary" onclick="lpCalc('payment')">
@@ -292,10 +292,10 @@
         <div class="lp-form-group">
           <label>계약 유형</label>
           <select id="lp-pen-type">
-            <option value="construction">공사 (1/2,000)</option>
-            <option value="goods">물품 (3/4,000)</option>
-            <option value="service">용역 (3/4,000)</option>
-            <option value="lease">임대차 (1/1,000)</option>
+            <option value="construction">공사 (0.5/1,000)</option>
+            <option value="goods">물품 제조·구매 (0.8/1,000)</option>
+            <option value="service">용역·물품 수리·가공·대여 (1.3/1,000)</option>
+            <option value="transport">운송·보관·양곡가공 (2.5/1,000)</option>
           </select>
         </div>
         <div class="lp-form-group">
@@ -583,9 +583,9 @@ document.addEventListener('turbo:load', function() {
 
     } else if (r.type === 'payment') {
       html += '<div class="lp-result-title"><span class="material-symbols-outlined" style="color:#d97706;">payments</span> 대금지급기한 계산 결과</div>';
-      html += '<div class="lp-date-hero"><div class="lp-date-label">' + lpEsc(r.payment_type_name) + ' 지급기한</div><div class="lp-date-value">' + r.deadline + '</div><div class="lp-date-sub">' + r.deadline_weekday + ' · 검사완료 후 ' + r.days + '일 이내</div></div>';
+      html += '<div class="lp-date-hero"><div class="lp-date-label">' + lpEsc(r.payment_type_name) + ' 지급기한</div><div class="lp-date-value">' + r.deadline + '</div><div class="lp-date-sub">' + r.deadline_weekday + ' · ' + (r.base_date_name || '기준일') + ' 후 ' + r.days + '일 이내</div></div>';
       html += '<div class="lp-info-grid">';
-      html += '<div class="lp-info-item"><div class="lp-info-label">검사완료일</div><div class="lp-info-value">' + r.inspection_date + ' (' + r.inspection_weekday + ')</div></div>';
+      html += '<div class="lp-info-item"><div class="lp-info-label">' + (r.base_date_name || '기준일') + '</div><div class="lp-info-value">' + r.inspection_date + ' (' + r.inspection_weekday + ')</div></div>';
       html += '<div class="lp-info-item"><div class="lp-info-label">지급기한</div><div class="lp-info-value" style="color:#d97706;">' + r.deadline + ' (' + r.deadline_weekday + ')</div></div>';
       html += '</div>';
       html += '<div class="lp-ref-box">' + lpEsc(r.note) + '</div>';
@@ -616,7 +616,7 @@ document.addEventListener('turbo:load', function() {
         html += '<div class="lp-penalty-hero"><div class="lp-penalty-label">지체상금</div><div class="lp-penalty-value">' + lpComma(r.penalty_amount) + '원</div><div class="lp-penalty-sub">지체일수 ' + r.delay_days + '일 × 요율 ' + r.rate_display + '</div></div>';
 
         if (r.capped) {
-          html += '<div style="background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:12px 16px;font-size:13px;color:#991b1b;margin-bottom:16px;"><strong>주의:</strong> 지체상금이 계약금액을 초과하여 계약금액으로 상한 적용되었습니다.</div>';
+          html += '<div style="background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:12px 16px;font-size:13px;color:#991b1b;margin-bottom:16px;"><strong>주의:</strong> 지연배상금이 법정 한도(계약금액의 30%)를 초과하여 상한이 적용되었습니다.</div>';
         }
 
         html += '<div class="lp-info-grid">';

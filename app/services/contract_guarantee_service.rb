@@ -67,8 +67,11 @@ class ContractGuaranteeService
       return { success: false, error: "계약유형을 선택해주세요." } unless DELAY_PENALTY_RATES.key?(contract_type)
 
       rate_info = DELAY_PENALTY_RATES[contract_type]
-      daily_penalty = (contract_amount * rate_info[:rate]).to_f.round(0)
-      total_penalty = daily_penalty * delay_days
+      # 전체식을 먼저 계산한 뒤 원 단위로 반올림한다. 일일 금액을 먼저 반올림하면
+      # 소액 계약에서 절사 오차가 일수만큼 증폭된다(1,001원 용역 10일: 10원 vs 13원).
+      daily_penalty = (contract_amount * rate_info[:rate]).to_f
+      total_penalty = (daily_penalty * delay_days).round(0)
+      daily_penalty = daily_penalty.round(0)
 
       # 지체상금(지연배상금) 법정 한도: 계약금액의 100분의 30 (지방계약법 시행령 제90조 제3항)
       max_penalty = (contract_amount * 0.30).round(0)
@@ -134,12 +137,18 @@ class ContractGuaranteeService
       stamp_tax = stamp_info ? stamp_info[:tax] : 0
       stamp_each = stamp_tax > 0 ? (stamp_tax / 2.0).ceil : 0
 
+      # 인지세는 문서 공동작성자가 **연대하여** 납부할 의무를 진다(인지세법 제1조 제2항).
+      # 당사자 사이의 분담 비율은 계약서 약정 사항이지 법정 50:50이 아니다 —
+      # 균등분담은 '관행상 예시'로만 제시하고, 총비용에는 세액 전액을 넣는다.
       results[:stamp_tax] = {
         amount: stamp_tax,
-        each_party: stamp_each,
+        each_party_if_equal_split: stamp_each,
         label: stamp_info ? stamp_info[:label] : "",
         exempt: stamp_tax == 0,
-        note: stamp_tax > 0 ? "발주자·계약자 각 50% 부담 (각 #{format_currency(stamp_each)}원)" : "1천만원 이하 면제"
+        note: stamp_tax > 0 ?
+          "총 #{format_currency(stamp_tax)}원. 공동작성자가 연대납부하며(인지세법 제1조 제2항), " \
+          "당사자 분담 비율은 계약서 약정에 따릅니다. 균등분담 시 각 #{format_currency(stamp_each)}원." :
+          "1천만원 이하 면제"
       }
 
       # 4. 총 비용 요약
@@ -151,7 +160,7 @@ class ContractGuaranteeService
         contract_guarantee: guarantee_amount,
         defect_guarantee_total: total_defect,
         stamp_tax: stamp_tax,
-        total_cost: guarantee_amount + stamp_each
+        total_cost: guarantee_amount + stamp_tax
       }
 
       { success: true, result: results }

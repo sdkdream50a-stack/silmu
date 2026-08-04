@@ -8,7 +8,7 @@ class ToolsController < ApplicationController
   before_action -> { response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate" }, only: :task_calendar
 
   def index
-    description_text = "계약방식 결정·예정가격 계산·계약보증금·여비계산·법정기간 산출 등 공무원 업무를 자동화하는 #{ApplicationHelper::ACTIVE_TOOL_COUNT}개 실무 도구. 법령 기준으로 복잡한 계산을 원클릭으로 해결합니다. 수의계약 분할 판단·물가변동 조정·적격심사 채점까지 업무 시간을 대폭 단축하세요."
+    description_text = "계약방식 결정·예정가격 계산·계약보증금·여비계산·법정기간 산출 등 공무원 업무를 자동화하는 #{ApplicationHelper::ACTIVE_TOOL_COUNT}개 실무 도구. 법령 기준으로 복잡한 계산을 원클릭으로 해결합니다. 수의계약 분할 판단·물가변동 조정까지 업무 시간을 대폭 단축하세요."
 
     set_og_image(category: "tools")
     set_meta_tags(
@@ -80,14 +80,21 @@ class ToolsController < ApplicationController
   end
 
   def annual_leave_hwpx
-    binary = HwpxExportService.generate_annual_leave(
-      params.permit(
-        :hire_date, :ref_year, :service_period,
-        :granted_leave, :used_leave, :remaining_leave,
-        :annual_allowance_pay, :annual_allowance_detail,
-        :compensation_pay, :compensation_detail
-      )
+    # 클라이언트가 보낸 granted_leave·remaining_leave를 그대로 문서화하면 위조된 결과가
+    # 그대로 공문서 서식으로 나간다. 입력값(임용일·기준연도·사용연가·임금)만 받아 서버에서 재계산한다.
+    data = PdfExportService.annual_leave_data(
+      hire_date:    params[:hire_date],
+      ref_year:     params[:ref_year],
+      used_leave:   params[:used_leave],
+      monthly_wage: params[:monthly_wage],
+      daily_wage:   params[:daily_wage]
     )
+
+    unless data
+      return render json: { success: false, error: "임용일 형식이 올바르지 않습니다." }, status: :unprocessable_entity
+    end
+
+    binary = HwpxExportService.generate_annual_leave(annual_leave_hwpx_fields(data))
 
     if binary
       send_data binary,
@@ -104,5 +111,28 @@ class ToolsController < ApplicationController
       filename: "silmu-kr-업무달력.ics",
       type: "text/calendar; charset=utf-8",
       disposition: "attachment"
+  end
+
+  private
+
+  # 서버 재계산 결과(PdfExportService.annual_leave_data)를 HWPX 서식 필드로 변환한다.
+  def annual_leave_hwpx_fields(data)
+    period = [ ("#{data[:years]}년" if data[:years] > 0), ("#{data[:months]}개월" if data[:months] > 0) ]
+              .compact.join(" ").presence || "1개월 미만"
+    oa   = data[:ordinary_allowance]
+    comp = data[:compensation]
+
+    {
+      hire_date:               data[:hire_date].strftime("%Y-%m-%d"),
+      ref_year:                data[:ref_year].to_s,
+      service_period:          period,
+      granted_leave:           "#{data[:granted]}일",
+      used_leave:              "#{data[:used_leave].to_f.round(1)}일",
+      remaining_leave:         "#{data[:remaining]}일",
+      annual_allowance_pay:    oa ? "#{helpers.number_with_delimiter(oa[:total])}원" : "",
+      annual_allowance_detail: oa ? "1일 통상임금 #{helpers.number_with_delimiter(oa[:daily_ordinary])}원 × #{oa[:days]}일" : "",
+      compensation_pay:        comp ? "#{helpers.number_with_delimiter(comp[:total])}원" : "",
+      compensation_detail:     comp ? "1일 봉급액 기준 × #{comp[:days]}일(최대 20일)" : ""
+    }
   end
 end

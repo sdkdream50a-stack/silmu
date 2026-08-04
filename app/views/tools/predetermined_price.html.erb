@@ -95,7 +95,7 @@
         <span class="material-symbols-outlined text-slate-400">preview</span>
         <h3 class="text-sm font-bold text-slate-700">계산 결과 미리보기</h3>
       </div>
-      <p class="text-sm text-slate-500 leading-relaxed">
+      <p class="text-sm text-slate-500 leading-relaxed" id="pp-empty-text">
         기초금액을 입력하면 선택한 범위 안에서 15개 복수예비가격을 생성하고, 4개를 추첨하여 산술평균 예정가격을 계산합니다.
         낙찰하한율을 입력하면 예정가격에 비율을 곱한 하한가까지 함께 표시됩니다.
       </p>
@@ -207,7 +207,7 @@
       title: '추정가격 계산기', desc: '원가항목 입력으로 추정가격 산출',
       icon: 'calculate', color: 'blue' },
     { type: 'tool',  path: qualification_evaluation_path, label: '다음 단계',
-      title: '적격심사 자동 채점', desc: '예정가격 확정 후 점수 사전 검토',
+      title: '적격심사 입찰률 확인', desc: '예정가격 확정 후 낙찰하한율·입찰률 점검',
       icon: 'fact_check', color: 'amber' }
   ]
 %>
@@ -231,9 +231,27 @@
     input.value = value > 0 ? value.toLocaleString('ko-KR') : '';
   }
 
+  // ±rangeRate% 범위 안에 서로 다른 정수가 15개 이상 생기는 최소 기초금액.
+  // 정수 개수는 floor/ceil 때문에 2kB+1 ~ 2kB+3 사이라 해석식으로 딱 떨어지지 않는다.
+  // 하한(6/k)부터 상한(7/k)까지만 훑으면 정확한 값이 나온다(±2%면 50회 이내).
+  function minimumBaseAmount(rangeRate) {
+    const k = rangeRate / 100;
+    // 안쪽 반올림(하한 ceil·상한 floor) 기준이라 필요한 금액이 바깥쪽 반올림보다 크다.
+    const upper = Math.ceil(16 / k);
+    for (let b = 1; b <= upper; b++) {
+      if (spanCount(b, k) >= 15) return b;
+    }
+    return upper;
+  }
+
+  // ±k 범위 "안쪽"의 정수 개수. 범위를 벗어난 가격을 만들지 않으려면 하한은 올리고 상한은 내린다.
+  function spanCount(baseAmount, k) {
+    return Math.floor(baseAmount * (1 + k)) - Math.ceil(baseAmount * (1 - k)) + 1;
+  }
+
   function generateMultiplePrices(baseAmount, rangeRate) {
-    const min = Math.floor(baseAmount * (1 - rangeRate / 100));
-    const max = Math.ceil(baseAmount * (1 + rangeRate / 100));
+    const min = Math.ceil(baseAmount * (1 - rangeRate / 100));
+    const max = Math.floor(baseAmount * (1 + rangeRate / 100));
     const used = new Set();
     const prices = [];
 
@@ -265,11 +283,33 @@
     const floorRateInput = document.getElementById('floor-rate').value;
     const floorRate = floorRateInput === '' ? null : parseFloat(floorRateInput);
 
+    const emptyText = document.getElementById('pp-empty-text');
+    const DEFAULT_EMPTY_TEXT = '기초금액을 입력하면 선택한 범위 안에서 15개 복수예비가격을 생성하고, 4개를 추첨하여 산술평균 예정가격을 계산합니다. 낙찰하한율을 입력하면 예정가격에 비율을 곱한 하한가까지 함께 표시됩니다.';
+
     if (baseAmount <= 0) {
       document.getElementById('pp-result-area').classList.add('hidden');
       document.getElementById('pp-empty-state').classList.remove('hidden');
+      if (emptyText) emptyText.textContent = DEFAULT_EMPTY_TEXT;
       return;
     }
+
+    // 범위 안의 서로 다른 정수가 15개 미만이면 15개를 뽑을 수 없다(기초금액 300원·±2% → 294~306원 13개).
+    // 가드가 없으면 generateMultiplePrices의 while이 끝나지 않아 탭이 멈춘다.
+    const spanMin = Math.ceil(baseAmount * (1 - rangeRate / 100));
+    const spanMax = Math.floor(baseAmount * (1 + rangeRate / 100));
+    if (spanMax - spanMin + 1 < 15) {
+      const needed = minimumBaseAmount(rangeRate);
+      document.getElementById('pp-result-area').classList.add('hidden');
+      document.getElementById('pp-empty-state').classList.remove('hidden');
+      if (emptyText) {
+        emptyText.textContent =
+          '기초금액이 너무 작아 ±' + rangeRate + '% 범위(' + formatWon(spanMin) + ' ~ ' + formatWon(spanMax) +
+          ') 안에서 서로 다른 예비가격 15개를 만들 수 없습니다. ±' + rangeRate + '% 기준 최소 기초금액은 약 ' +
+          formatWon(needed) + '입니다.';
+      }
+      return;
+    }
+    if (emptyText) emptyText.textContent = DEFAULT_EMPTY_TEXT;
 
     if (regenerate || ppPrices.length !== 15 || ppLastBaseAmount !== baseAmount || ppLastRangeRate !== rangeRate) {
       ppPrices = generateMultiplePrices(baseAmount, rangeRate);
@@ -282,8 +322,8 @@
     const sum = drawnPrices.reduce(function(total, price) { return total + price; }, 0);
     const predeterminedPrice = Math.floor(sum / drawnPrices.length);
     const floorPrice = floorRate !== null && floorRate > 0 ? Math.floor(predeterminedPrice * floorRate / 100) : null;
-    const minPrice = Math.floor(baseAmount * (1 - rangeRate / 100));
-    const maxPrice = Math.ceil(baseAmount * (1 + rangeRate / 100));
+    const minPrice = Math.ceil(baseAmount * (1 - rangeRate / 100));
+    const maxPrice = Math.floor(baseAmount * (1 + rangeRate / 100));
 
     document.getElementById('pp-empty-state').classList.add('hidden');
     document.getElementById('pp-result-area').classList.remove('hidden');

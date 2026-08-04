@@ -216,7 +216,7 @@
         <span class="material-symbols-outlined text-slate-400">preview</span>
         <h3 class="text-sm font-bold text-slate-700">계산 결과 미리보기</h3>
       </div>
-      <p class="text-xs text-slate-500 mb-4">계약금액과 지수(또는 단가)를 입력하면 다음 4가지가 즉시 산출됩니다.</p>
+      <p class="text-xs text-slate-500 mb-4" id="empty-state-msg">계약금액과 지수(또는 단가)를 입력하면 다음 4가지가 즉시 산출됩니다.</p>
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4 opacity-60">
         <div class="bg-slate-50 rounded-lg p-3 text-center">
           <div class="text-[10px] text-slate-400 mb-1">계약금액</div>
@@ -405,9 +405,31 @@
       return;
     }
     if (emptyCard) emptyCard.classList.add('hidden');
+    const emptyMsg = document.getElementById('empty-state-msg');
+    if (emptyMsg) emptyMsg.textContent = '계약금액과 지수(또는 단가)를 입력하면 다음 4가지가 즉시 산출됩니다.';
+
+    // 지수조정률은 계약금액 전체를 비목군으로 나눠 가중평균한다.
+    // 일부 비목만 입력하면 등락률(3% 요건 판정)과 조정액이 모두 왜곡되므로,
+    // 비목 합계가 계약금액과 맞지 않으면 산출하지 않는다(틀린 값보다 안 내놓는 편이 맞다).
+    const gap = Math.abs(totalAmount - contractAmount);
+    if (gap > 0.5) {
+      resultArea.classList.add('hidden');
+      if (emptyCard) {
+        emptyCard.classList.remove('hidden');
+        const msg = document.getElementById('empty-state-msg');
+        if (msg) {
+          msg.textContent =
+            '비목 금액 합계(' + formatNum(totalAmount) + '만원)가 계약금액(' + formatNum(contractAmount) +
+            '만원)과 다릅니다. 지수조정률은 계약금액 전체를 비목군으로 나눠 가중평균하므로, ' +
+            '모든 비목을 빠짐없이 입력해야 등락률과 조정금액이 맞습니다. (차액 ' + formatNum(gap) + '만원)';
+        }
+      }
+      return;
+    }
 
     const avgRate = weightedRate / totalAmount;
-    const adjAmount = contractAmount * avgRate / 100;
+    // 조정금액 = Σ(비목금액 × 등락률). 비목 합계 = 계약금액이므로 계약금액 기준과 동일하다.
+    const adjAmount = weightedRate / 100;
     const finalAmount = adjAmount * (1 - advanceRate);
 
     resultArea.classList.remove('hidden');
@@ -429,7 +451,7 @@
       `${d.name}: 등락률 ${d.rate.toFixed(3)}% × 금액비중 ${(d.amount / totalAmount * 100).toFixed(1)}% = ${(d.rate * d.amount / totalAmount).toFixed(3)}%p`
     );
     formulas.push(`가중평균 등락률 = ${avgRate.toFixed(3)}%`);
-    formulas.push(`조정금액 = ${formatNum(contractAmount)}만원 × ${avgRate.toFixed(3)}% = ${formatNum(adjAmount)}만원`);
+    formulas.push(`조정금액 = Σ(비목금액 × 등락률) = ${formatNum(adjAmount)}만원`);
     if (advanceRate > 0) {
       formulas.push(`선금공제 후 = ${formatNum(adjAmount)}만원 × (1 - ${(advanceRate * 100).toFixed(0)}%) = ${formatNum(finalAmount)}만원`);
     }

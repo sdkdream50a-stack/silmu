@@ -1,5 +1,5 @@
 // Created: 2026-02-22, Updated: 2026-03-05 (종심제 지원 추가)
-// 적격심사·종합심사낙찰제 자동 채점기 Stimulus Controller
+// 적격심사·종합심사낙찰제 입찰률 확인 Stimulus Controller (가격평점은 예규 별표 산식이라 미산출)
 
 import { Controller } from "@hotwired/stimulus"
 
@@ -67,7 +67,7 @@ export default class extends Controller {
 
     // 제출 버튼 텍스트
     if (this.hasSubmitBtnTextTarget) {
-      this.submitBtnTextTarget.textContent = isComprehensive ? "종심제 계산하기" : "적격심사 계산하기"
+      this.submitBtnTextTarget.textContent = isComprehensive ? "종심제 입찰률 확인" : "적격심사 입찰률 확인"
     }
 
     // 배너 숨기기
@@ -85,11 +85,14 @@ export default class extends Controller {
     const floorRateNote = this.hasFloorRateNoteTarget ? this.floorRateNoteTarget : null
 
     if (projectType === "construction") {
-      if (floorRateInput) floorRateInput.value = "89.745"
-      if (floorRateNote) floorRateNote.textContent = "공사: 89.745% (2026년 1월 변경)"
+      // 기본값을 미리 채우면 "공고문 값 필수"라고 안내해도 확인 없이 제출된다 → 공란으로 둔다.
+      if (floorRateInput) floorRateInput.value = ""
+      if (floorRateNote) floorRateNote.textContent = "공사 참고값 89.745%(2026.1 변경) — 공고문의 값을 확인해 입력하세요"
     } else {
-      if (floorRateInput) floorRateInput.value = "0"
-      if (floorRateNote) floorRateNote.textContent = "용역: 낙찰하한율 없음"
+      // 용역 낙찰하한율은 계약 종류·금액구간·공고문에 따라 달라 단일값이 없다.
+      // 0%로 강제하면 모든 투찰이 "하한 이상"으로 보여 미달 확인이 무력화된다 → 비워두고 공고문 값을 받는다.
+      if (floorRateInput) floorRateInput.value = ""
+      if (floorRateNote) floorRateNote.textContent = "용역: 공고문의 낙찰하한율을 입력하세요 (계약 종류·금액구간별로 다름)"
     }
     this.updateBidderFields()
   }
@@ -248,6 +251,13 @@ export default class extends Controller {
       <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
         <h3 class="text-2xl font-bold text-gray-900 mb-6">📊 적격심사 결과</h3>
 
+        ${data.score_unavailable ? `
+          <div class="bg-amber-50 border-2 border-amber-400 rounded-lg p-4 mb-6 text-sm text-amber-900">
+            <strong class="block mb-1">점수는 산출하지 않습니다</strong>
+            ${data.notice || ""}
+          </div>
+        ` : ""}
+
         <div class="bg-gray-50 p-4 rounded-lg mb-6">
           <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
             <div>
@@ -283,8 +293,9 @@ export default class extends Controller {
             </div>
           </div>
         ` : `
-          <div class="bg-red-50 border-2 border-red-500 rounded-lg p-5 mb-6">
-            <p class="text-red-900 font-bold">⚠️ 적격자(95점 이상)가 없습니다. 재입찰이 필요합니다.</p>
+          <div class="bg-amber-50 border-2 border-amber-400 rounded-lg p-5 mb-6">
+            <p class="text-amber-900 font-bold">가격평점을 산출하지 않으므로 적격 여부·낙찰자를 판정하지 않습니다.</p>
+            <p class="text-amber-800 text-sm mt-1">낙찰하한율 미달 여부와 입찰률만 참고하고, 적격 판정은 공고문의 적격심사 세부기준으로 하세요.</p>
           </div>
         `}
 
@@ -295,11 +306,11 @@ export default class extends Controller {
                 <th class="px-4 py-3 text-left">순위</th>
                 <th class="px-4 py-3 text-left">업체명</th>
                 <th class="px-4 py-3 text-right">입찰가격</th>
-                <th class="px-4 py-3 text-right">가격점수</th>
+                <th class="px-4 py-3 text-right">입찰률</th>
                 <th class="px-4 py-3 text-right">비가격점수</th>
                 <th class="px-4 py-3 text-right">총점</th>
                 <th class="px-4 py-3 text-right">100점 환산</th>
-                <th class="px-4 py-3 text-center">적격 여부</th>
+                <th class="px-4 py-3 text-center">낙찰하한율</th>
               </tr>
             </thead>
             <tbody>
@@ -307,7 +318,7 @@ export default class extends Controller {
 
     bidders.forEach((b, idx) => {
       const isWinner = winner && b.name === winner.name
-      const bg = isWinner ? "bg-green-100" : (b.is_qualified ? "bg-blue-50" : "")
+      const bg = b.below_floor ? "bg-red-50" : ""
       const cls = isWinner ? "font-bold text-green-900" : ""
       html += `
         <tr class="${bg} border-b border-gray-200">
@@ -317,14 +328,14 @@ export default class extends Controller {
             ${isWinner ? '<span class="ml-2 px-2 py-0.5 bg-green-600 text-white text-xs rounded">낙찰</span>' : ""}
           </td>
           <td class="px-4 py-3 text-right ${cls}">${this._fmt(b.bid_price)}원</td>
-          <td class="px-4 py-3 text-right ${cls}">${b.price_score}</td>
+          <td class="px-4 py-3 text-right ${cls}">${b.bid_ratio === null || b.bid_ratio === undefined ? '—' : b.bid_ratio + '%'}</td>
           <td class="px-4 py-3 text-right ${cls}">${b.non_price_score}</td>
-          <td class="px-4 py-3 text-right ${cls}">${b.total_score}</td>
-          <td class="px-4 py-3 text-right ${cls}">${b.total_score_100}</td>
+          <td class="px-4 py-3 text-right ${cls}">${b.total_score === null ? '—' : b.total_score}</td>
+          <td class="px-4 py-3 text-right ${cls}">${b.total_score_100 === null ? '—' : b.total_score_100}</td>
           <td class="px-4 py-3 text-center">
-            ${b.is_qualified
-              ? '<span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded font-bold">적격</span>'
-              : '<span class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded">부적격</span>'}
+            ${b.below_floor
+              ? '<span class="px-2 py-1 bg-red-100 text-red-800 text-xs rounded font-bold">낙찰하한율 미달</span>'
+              : '<span class="px-2 py-1 bg-slate-100 text-slate-700 text-xs rounded">하한 이상</span>'}
           </td>
         </tr>
       `
@@ -335,8 +346,8 @@ export default class extends Controller {
           </table>
         </div>
         <div class="mt-5 p-4 bg-blue-50 rounded-lg text-sm text-blue-800">
-          <strong>적격 기준:</strong> 100점 환산 95점 이상 &nbsp;|&nbsp;
-          <strong>낙찰자:</strong> 적격자 중 입찰가격 최저 업체
+          <strong>적격 기준(참고):</strong> 100점 환산 ${metadata.pass_score}점 이상 &nbsp;|&nbsp;
+          <strong>가격평점:</strong> 예규 별표의 금액구간별 산식 — 이 도구는 산출하지 않습니다
         </div>
       </div>
     `
@@ -351,6 +362,13 @@ export default class extends Controller {
     let html = `
       <div class="bg-white rounded-lg shadow-sm border border-purple-200 p-6">
         <h3 class="text-2xl font-bold text-gray-900 mb-1">📊 종합심사낙찰제 결과</h3>
+
+        ${data.score_unavailable ? `
+          <div class="bg-amber-50 border-2 border-amber-400 rounded-lg p-4 mb-6 text-sm text-amber-900">
+            <strong class="block mb-1">점수는 산출하지 않습니다</strong>
+            ${data.notice || ""}
+          </div>
+        ` : ""}
         <p class="text-sm text-purple-600 mb-6">배점: 가격50 + 시공실적20 + 시공능력15 + 경영상태10 + 사회적책임5 = 100점</p>
 
         <div class="bg-gray-50 p-4 rounded-lg mb-6">
@@ -384,8 +402,9 @@ export default class extends Controller {
             </div>
           </div>
         ` : `
-          <div class="bg-red-50 border-2 border-red-500 rounded-lg p-5 mb-6">
-            <p class="text-red-900 font-bold">⚠️ 적격자(92점 이상)가 없습니다. 재입찰이 필요합니다.</p>
+          <div class="bg-amber-50 border-2 border-amber-400 rounded-lg p-5 mb-6">
+            <p class="text-amber-900 font-bold">입찰금액 평점을 산출하지 않으므로 낙찰자를 판정하지 않습니다.</p>
+            <p class="text-amber-800 text-sm mt-1">비가격 평점 합계와 낙찰하한율 미달 여부만 참고하고, 낙찰자 판단은 공고문 기준으로 하세요.</p>
           </div>
         `}
 
@@ -396,13 +415,13 @@ export default class extends Controller {
                 <th class="px-3 py-3 text-left">순위</th>
                 <th class="px-3 py-3 text-left">업체명</th>
                 <th class="px-3 py-3 text-right">입찰가격</th>
-                <th class="px-3 py-3 text-right">가격<br><span class="text-xs font-normal text-gray-500">(50)</span></th>
+                <th class="px-3 py-3 text-right">입찰률</th>
                 <th class="px-3 py-3 text-right">시공실적<br><span class="text-xs font-normal text-gray-500">(20)</span></th>
                 <th class="px-3 py-3 text-right">시공능력<br><span class="text-xs font-normal text-gray-500">(15)</span></th>
                 <th class="px-3 py-3 text-right">경영상태<br><span class="text-xs font-normal text-gray-500">(10)</span></th>
                 <th class="px-3 py-3 text-right">사회적책임<br><span class="text-xs font-normal text-gray-500">(5)</span></th>
                 <th class="px-3 py-3 text-right font-bold">총점</th>
-                <th class="px-3 py-3 text-center">적격</th>
+                <th class="px-3 py-3 text-center">낙찰하한율</th>
               </tr>
             </thead>
             <tbody>
@@ -410,7 +429,7 @@ export default class extends Controller {
 
     bidders.forEach((b, idx) => {
       const isWinner = winner && b.name === winner.name
-      const bg = isWinner ? "bg-green-100" : (b.is_qualified ? "bg-blue-50" : "")
+      const bg = b.below_floor ? "bg-red-50" : ""
       const cls = isWinner ? "font-bold text-green-900" : ""
       html += `
         <tr class="${bg} border-b border-gray-200">
@@ -420,16 +439,16 @@ export default class extends Controller {
             ${isWinner ? '<span class="ml-1 px-2 py-0.5 bg-green-600 text-white text-xs rounded">낙찰</span>' : ""}
           </td>
           <td class="px-3 py-3 text-right ${cls}">${this._fmt(b.bid_price)}원</td>
-          <td class="px-3 py-3 text-right ${cls}">${b.price_score}</td>
+          <td class="px-3 py-3 text-right ${cls}">${b.bid_ratio === null || b.bid_ratio === undefined ? '—' : b.bid_ratio + '%'}</td>
           <td class="px-3 py-3 text-right ${cls}">${b.construction}</td>
           <td class="px-3 py-3 text-right ${cls}">${b.capacity}</td>
           <td class="px-3 py-3 text-right ${cls}">${b.management}</td>
           <td class="px-3 py-3 text-right ${cls}">${b.social}</td>
-          <td class="px-3 py-3 text-right font-bold ${cls}">${b.total_score}</td>
+          <td class="px-3 py-3 text-right font-bold ${cls}">${b.total_score === null ? '—' : b.total_score}</td>
           <td class="px-3 py-3 text-center">
-            ${b.is_qualified
-              ? '<span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded font-bold">적격</span>'
-              : '<span class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded">부적격</span>'}
+            ${b.below_floor
+              ? '<span class="px-2 py-1 bg-red-100 text-red-800 text-xs rounded font-bold">낙찰하한율 미달</span>'
+              : '<span class="px-2 py-1 bg-slate-100 text-slate-700 text-xs rounded">하한 이상</span>'}
           </td>
         </tr>
       `
@@ -440,9 +459,8 @@ export default class extends Controller {
           </table>
         </div>
         <div class="mt-5 p-4 bg-purple-50 rounded-lg text-sm text-purple-800">
-          <strong>적격 기준:</strong> 총점 92점 이상 &nbsp;|&nbsp;
-          <strong>낙찰자:</strong> 적격자 중 최고점 업체 (동점 시 최저가) &nbsp;|&nbsp;
-          <strong>가격점수:</strong> 최저입찰금액 × 50 ÷ 해당입찰금액
+          <strong>적격 기준(참고):</strong> 총점 92점 이상 &nbsp;|&nbsp;
+          <strong>입찰금액 평점:</strong> 예규 별표 산식 — 이 도구는 산출하지 않습니다
         </div>
       </div>
     `

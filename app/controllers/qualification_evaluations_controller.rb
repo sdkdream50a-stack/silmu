@@ -1,4 +1,4 @@
-# 적격심사·종합심사낙찰제 자동 채점기 컨트롤러
+# 적격심사·종합심사낙찰제 입찰률 확인 컨트롤러 (가격평점은 예규 별표 산식이라 미산출)
 # - 적격심사: 추정가격 300억 미만 공사 (가격60+비가격40, 95점 이상 적격)
 # - 종합심사낙찰제(종심제): 추정가격 300억 이상 공사 (가격50+시공실적20+시공능력15+경영상태10+사회책임5)
 
@@ -14,11 +14,11 @@ class QualificationEvaluationsController < ApplicationController
 
   def index
     set_meta_tags(
-      title: "적격심사·종심제 자동 채점기 — 가격·비가격 점수 자동 계산",
-      description: "공사·용역 입찰의 적격심사(300억 미만)와 종합심사낙찰제(300억 이상) 점수를 자동으로 계산합니다. 공사금액 입력 시 적용 제도를 자동 판별합니다.",
+      title: "적격심사·종심제 입찰률 확인 — 낙찰하한율 미달 여부 점검",
+      description: "공사·용역 입찰의 낙찰하한율 미달 여부와 입찰률을 확인합니다. 가격평점은 행안부 예규 별표의 금액구간별 산식이라 이 도구에서 산출하지 않으며, 적격 여부와 낙찰자는 공고문의 적격심사 세부기준으로 판단해야 합니다.",
       keywords: "적격심사, 종심제, 종합심사낙찰제, 가격점수, 비가격점수, 낙찰자 선정, 입찰평가",
       og: {
-        title: "적격심사·종심제 자동 채점기 — 실무.kr",
+        title: "적격심사·종심제 입찰률 확인 — 실무.kr",
         url: canonical_url,
         image: "https://silmu.kr/og-image.webp"
       }
@@ -30,7 +30,11 @@ class QualificationEvaluationsController < ApplicationController
   def evaluate
     project_type    = params[:project_type]
     estimated_price = params[:estimated_price].to_f
-    floor_rate      = params[:floor_rate]&.to_f || 89.745
+    # 빈 문자열은 to_f가 0.0으로 만들어 모든 투찰이 "하한 이상"이 된다 → 미달 확인이 무력화된다.
+    floor_rate      = parse_floor_rate(params[:floor_rate])
+    return render json: { error: FLOOR_RATE_REQUIRED }, status: :unprocessable_entity if floor_rate.nil?
+    # 예정가격이 0이면 하한가도 0이 되어 모든 투찰이 "하한 이상"으로 나온다.
+    return render json: { error: ESTIMATED_PRICE_REQUIRED }, status: :unprocessable_entity if estimated_price <= 0
     price_max       = project_type == "construction" ? 60 : 70
     non_price_max   = project_type == "construction" ? 40 : 30
 
@@ -40,14 +44,16 @@ class QualificationEvaluationsController < ApplicationController
     bidders = parse_bidders_from_params
     bidders_with_scores = calculate_price_scores(bidders, estimated_price, floor_rate, price_max)
     bidders_with_total  = calculate_total_scores(bidders_with_scores, price_max, non_price_max, pass_score)
-    qualified_bidders   = bidders_with_total.select { |b| b[:total_score_100] >= pass_score }
-    winner              = qualified_bidders.min_by { |b| b[:bid_price] }
 
     render json: {
       mode: "qualification",
       bidders: bidders_with_total,
-      qualified_bidders: qualified_bidders,
-      winner: winner,
+      qualified_bidders: [],
+      winner: nil,
+      score_unavailable: true,
+      notice: "입찰가격 평점은 행안부 예규 별표의 금액구간별 산식으로 산출해야 하며, " \
+              "이 도구는 해당 별표·금액구간 입력을 지원하지 않아 점수를 산출하지 않습니다. " \
+              "낙찰하한율 미달 여부와 입찰률만 참고하시고, 적격 여부는 공고문의 적격심사 세부기준으로 판단하세요.",
       metadata: {
         project_type: project_type,
         estimated_price: estimated_price,
@@ -62,7 +68,11 @@ class QualificationEvaluationsController < ApplicationController
   # POST /qualification-evaluations/comprehensive (종합심사낙찰제)
   def comprehensive
     estimated_price = params[:estimated_price].to_f
-    floor_rate      = params[:floor_rate]&.to_f || 89.745
+    floor_rate      = parse_floor_rate(params[:floor_rate])
+    return render json: { error: FLOOR_RATE_REQUIRED }, status: :unprocessable_entity if floor_rate.nil?
+    # 예정가격이 0이면 하한가도 0이 되어 모든 투찰이 "하한 이상"으로 나온다.
+    return render json: { error: ESTIMATED_PRICE_REQUIRED }, status: :unprocessable_entity if estimated_price <= 0
+
     bidder_count    = params[:bidder_count].to_i
 
     bidders = (1..bidder_count).map do |i|
@@ -76,31 +86,35 @@ class QualificationEvaluationsController < ApplicationController
       }
     end
 
-    floor_price   = estimated_price * (floor_rate / 100.0)
-    valid_bidders = bidders.select { |b| b[:bid_price] >= floor_price }
-    lowest_price  = valid_bidders.map { |b| b[:bid_price] }.min || 0
+    floor_price = estimated_price * (floor_rate / 100.0)
 
-    scored = valid_bidders.map do |b|
-      price_score = lowest_price > 0 ? (50.0 * lowest_price / b[:bid_price]).round(2) : 0
-      non_price   = b[:construction] + b[:capacity] + b[:management] + b[:social]
-      total       = (price_score + non_price).round(2)
+    # 적격심사와 같은 이유로 가격점수를 산출하지 않는다 —
+    # 종합심사낙찰제 입찰금액 평점도 예규 별표 산식을 따르며, 최저가 대비 비율이 아니다.
+    # 비가격(시공실적·능력·경영·사회적책임) 합계만 그대로 제공한다.
+    scored = bidders.map do |b|
+      non_price = b[:construction] + b[:capacity] + b[:management] + b[:social]
+      below = floor_price > 0 && b[:bid_price] < floor_price
 
       b.merge(
-        price_score: price_score,
+        price_score: nil,
+        price_score_unavailable: true,
+        bid_ratio: estimated_price > 0 ? (b[:bid_price] / estimated_price * 100).round(3) : nil,
+        below_floor: below,
+        is_valid: !below,
         non_price_total: non_price.round(2),
-        total_score: total,
-        is_qualified: total >= 92,   # 종심제 적격 기준: 92점 이상
+        total_score: nil,
+        is_qualified: nil,
         floor_price: floor_price
       )
-    end.sort_by { |b| [ -b[:total_score], b[:bid_price] ] }
-
-    # 종심제 낙찰자: 적격자(92점 이상) 중 최고점, 동점 시 최저가
-    winner = scored.select { |b| b[:is_qualified] }.first
+    end.sort_by { |b| b[:bid_price] }
 
     render json: {
       mode: "comprehensive",
       bidders: scored,
-      winner: winner,
+      winner: nil,
+      score_unavailable: true,
+      notice: "입찰금액 평점은 예규 별표의 산식으로 산출해야 하며 이 도구는 이를 지원하지 않습니다. " \
+              "비가격 평점 합계와 낙찰하한율 미달 여부만 참고하시고, 낙찰자 판단은 공고문 기준으로 하세요.",
       metadata: {
         estimated_price: estimated_price,
         floor_rate: floor_rate,
@@ -110,7 +124,24 @@ class QualificationEvaluationsController < ApplicationController
     }
   end
 
+  ESTIMATED_PRICE_REQUIRED = "예정가격을 입력하세요. 예정가격이 없으면 낙찰하한가를 산출할 수 없어 " \
+                             "미달 여부를 판단할 수 없습니다.".freeze
+
+  FLOOR_RATE_REQUIRED = "낙찰하한율을 입력하세요. 계약 종류·금액구간·공고문에 따라 다르므로 " \
+                        "공고문에 적힌 값을 그대로 넣어야 미달 여부를 확인할 수 있습니다.".freeze
+
   private
+
+  # 낙찰하한율은 이 도구의 유일한 판정 기준이다. 비었거나 범위를 벗어나면 추정하지 않고 거부한다.
+  def parse_floor_rate(raw)
+    value = raw.to_s.strip
+    return nil if value.empty?
+
+    rate = Float(value, exception: false)
+    return nil if rate.nil? || rate <= 0 || rate > 100
+
+    rate
+  end
 
   def parse_bidders_from_params
     bidder_count = params[:bidder_count].to_i
@@ -123,32 +154,40 @@ class QualificationEvaluationsController < ApplicationController
     end
   end
 
+  # ⚠️ 공식 가격평점 산식이 아니다.
+  # 지방계약 적격심사의 입찰가격 평점은 행안부 예규 별표의 **금액구간별 산식**으로 산출하며
+  # 입찰자 자신의 입찰률(입찰가격/예정가격)만으로 결정된다. 아래 상대평가(최저가 대비 비율)는
+  # 경쟁자 구성이 바뀌면 같은 입찰가의 점수가 달라져 실제 제도와 어긋난다.
+  # 별표·금액구간 입력이 없는 상태에서 숫자를 내놓으면 입찰 판단을 오도하므로 산출하지 않는다.
   def calculate_price_scores(bidders, estimated_price, floor_rate, price_max)
-    floor_price   = estimated_price * (floor_rate / 100.0)
-    valid_bidders = bidders.select { |b| b[:bid_price] >= floor_price }
-    lowest_price  = valid_bidders.map { |b| b[:bid_price] }.min
+    floor_price = estimated_price * (floor_rate / 100.0)
 
-    valid_bidders.map do |bidder|
-      price_score = if bidder[:bid_price] == lowest_price
-                      price_max
-      else
-                      price_max * (lowest_price / bidder[:bid_price])
-      end
-      bidder.merge(price_score: price_score.round(2), is_valid: true, floor_price: floor_price)
+    # 하한 미달 업체를 목록에서 빼면 이 도구의 유일한 기능(미달 여부 확인)이 불가능해진다.
+    # 제거하지 않고 below_floor로 표시해 사용자가 직접 확인하게 한다.
+    bidders.map do |bidder|
+      below = floor_price > 0 && bidder[:bid_price] < floor_price
+      bidder.merge(
+        price_score: nil,
+        price_score_unavailable: true,
+        bid_ratio: estimated_price > 0 ? (bidder[:bid_price] / estimated_price * 100).round(3) : nil,
+        below_floor: below,
+        is_valid: !below,
+        floor_price: floor_price
+      )
     end
   end
 
+  # 가격평점을 산출하지 않으므로 총점·적격 여부도 확정할 수 없다.
+  # 비가격 평점만 그대로 돌려주고, 판정은 공고문 기준으로 하도록 남긴다.
   def calculate_total_scores(bidders, price_max, non_price_max, pass_score = 95)
     bidders.map do |bidder|
-      total_score     = bidder[:price_score] + bidder[:non_price_score]
-      total_max       = price_max + non_price_max
-      total_score_100 = (total_score / total_max * 100).round(2)
       bidder.merge(
-        total_score:     total_score.round(2),
-        total_score_100: total_score_100,
-        is_qualified:    total_score_100 >= pass_score
+        total_score:     nil,
+        total_score_100: nil,
+        is_qualified:    nil,
+        score_unavailable: true
       )
-    end.sort_by { |b| -b[:total_score_100] }
+    end.sort_by { |b| b[:bid_price] }
   end
 
   # 적격심사 통과기준 (행안부 예규 제325호): 공사 추정가격 100억 미만 95점 / 100억~300억 미만 92점. 물품·용역은 별도 기준(현행 95점 유지).

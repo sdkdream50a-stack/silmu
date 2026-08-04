@@ -29,11 +29,8 @@
     <%# [LCP 최적화] 메인 CSS를 head 최상단에 배치 %>
     <%# preconnect for CDN fonts %>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-    <%# AdSense preconnect — AdSense 로드 페이지에서만 적용 (조기 DNS/TCP 연결로 TBT 개선) %>
-    <% if Rails.env.production? && %w[guides tools topics audit_cases].include?(params[:controller]) %>
-      <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin>
-      <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com">
-    <% end %>
+    <%# AdSense preconnect 제거 (2026-08-04) — 광고를 게재하지 않으므로 불필요한 사전 연결이다.
+        _ad_slot 파티셜은 이미 비어 있고 ads.txt도 함께 내렸다. %>
     <%# contract_flow.css는 해당 뷰(content_for :head)에서만 로드 — 전역 제외 %>
     <%# 단일 stylesheet — application.css는 application.tailwind.css source를 yarn build:css로 빌드한 결과 (모든 Tailwind utility + 디자인 시스템 포함) %>
     <%# 이전: application.tailwind 중복 로드 → 브라우저가 @import "tailwindcss" 를 silmu.kr 루트로 fetch → MIME 오류 (lighthouse BP 격차 원인) %>

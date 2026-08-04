@@ -82,14 +82,19 @@ class EstimatedPriceService
       COST_ITEMS[type_sym]
     end
 
-    def calculate(params)
+    def calculate(raw_params)
+      # 컨트롤러는 심볼 키 Hash를, 뷰(JSON)·테스트·직접 호출은 문자열 키를 넘긴다.
+      # 한쪽 표기만 조회하면 값이 전부 nil이 되어 추정가격이 0으로 나오고
+      # 모든 공사가 "수의계약 가능"으로 표시된다. 진입부에서 한 번만 정규화한다.
+      params = normalize_keys(raw_params)
+
       type = params[:contract_type].to_s.to_sym
       return { success: false, error: "유효하지 않은 계약유형입니다." } unless CONTRACT_TYPES.key?(type)
 
       items = COST_ITEMS[type]
       amounts = {}
       items.each do |item|
-        amounts[item[:id].to_sym] = params[item[:id]].to_i
+        amounts[item[:id].to_sym] = params[item[:id].to_sym].to_i
       end
 
       # 기초금액 계산 (= 추정가격, VAT 제외)
@@ -101,14 +106,37 @@ class EstimatedPriceService
       warnings = check_rate_limits(type, amounts, base_amount)
 
       # 수의계약 가능 여부 + 견적 요건 — 추정가격(VAT 제외) 기준 비교
-      threshold = PRIVATE_CONTRACT_THRESHOLDS[type]
-      estimate_requirement = determine_estimate_requirement(type, base_amount)
-      private_contract = {
-        available: base_amount <= threshold,
-        threshold: threshold,
-        type_name: CONTRACT_TYPES[type][:name],
-        estimate_requirement: estimate_requirement
-      }
+      # 공사는 종류(종합 4억 / 전문 2억 / 기타 1.6억)에 따라 한도가 다르다.
+      # 종류를 모르면 4억을 단정하지 않고 "종류 확인 필요"로 돌려준다 —
+      # 3억 공사에 대해 "수의계약 가능"과 "1억 초과라 입찰"을 동시에 답하던 결함의 원인이었다.
+      construction_type = params[:construction_type].to_s.to_sym
+      threshold =
+        if type == :construction
+          CONSTRUCTION_THRESHOLDS[construction_type]
+        else
+          PRIVATE_CONTRACT_THRESHOLDS[type]
+        end
+
+      estimate_requirement = determine_estimate_requirement(type, base_amount, threshold)
+      private_contract =
+        if threshold
+          {
+            available: base_amount <= threshold,
+            threshold: threshold,
+            type_name: CONTRACT_TYPES[type][:name],
+            estimate_requirement: estimate_requirement
+          }
+        else
+          {
+            available: nil,
+            threshold: nil,
+            undetermined: true,
+            type_name: CONTRACT_TYPES[type][:name],
+            note: "공사 종류를 선택해야 수의계약 한도를 판단할 수 있습니다 " \
+                  "(종합공사 4억 / 전문공사 2억 / 기타공사(전기·정보통신·소방 등) 1.6억, 지방계약법 시행령 제25조 제1항 제5호).",
+            estimate_requirement: estimate_requirement
+          }
+        end
 
       # 복수예비가격 시뮬레이션 (기초금액 ±3%, 15개)
       multiple_prices = generate_multiple_prices(base_amount)
@@ -129,6 +157,12 @@ class EstimatedPriceService
     end
 
     private
+
+    # ActionController::Parameters·문자열 키 Hash·심볼 키 Hash를 모두 심볼 키로 통일한다.
+    def normalize_keys(params)
+      source = params.respond_to?(:to_unsafe_h) ? params.to_unsafe_h : params
+      source.to_h.each_with_object({}) { |(k, v), acc| acc[k.to_sym] = v }
+    end
 
     def calculate_base_amount(type, amounts)
       case type
@@ -192,17 +226,30 @@ class EstimatedPriceService
       warnings
     end
 
-    def determine_estimate_requirement(type, price)
-      # price = 추정가격 (VAT 제외)
+    # price = 추정가격 (VAT 제외)
+    # threshold = 해당 계약의 수의계약 한도. 공사는 종류별로 다르고(4억/2억/1.6억),
+    # 종류 미지정이면 nil이 들어온다. 물품·용역 기준(2천만·1억)을 공사에 그대로 적용하면
+    # "수의계약 가능(≤4억)"과 "1억 초과라 입찰"이 동시에 나오는 모순이 생긴다.
+    def determine_estimate_requirement(type, price, threshold = nil)
       # 견적서 생략(시행규칙 제33조)은 200만원 미만 물품·용역만 해당 — 공사는 미열거
       if price <= 2_000_000
         if type == :construction
-          { type: "1인견적", desc: "추정가격 2백만원 이하: 1인 견적 수의계약 (공사는 견적서 생략 대상 아님)", basis: "지방계약법 시행령 제30조제1항" }
+          return { type: "1인견적", desc: "추정가격 2백만원 이하: 1인 견적 수의계약 (공사는 견적서 생략 대상 아님)", basis: "지방계약법 시행령 제30조제1항" }
         else
-          { type: "생략가능", desc: "추정가격 200만원 미만: 견적서 생략 가능 (200만원 이하는 1인 견적)", basis: "지방계약법 시행령 제30조제1항·제4항, 시행규칙 제33조" }
+          return { type: "생략가능", desc: "추정가격 200만원 미만: 견적서 생략 가능 (200만원 이하는 1인 견적)", basis: "지방계약법 시행령 제30조제1항·제4항, 시행규칙 제33조" }
         end
-      elsif price <= 20_000_000
-        { type: "1인견적", desc: "추정가격 2천만원 이하: 1인 견적 수의계약", basis: "지방계약법 시행령 제25조제1항제5호" }
+      end
+
+      return { type: "1인견적", desc: "추정가격 2천만원 이하: 1인 견적 수의계약", basis: "지방계약법 시행령 제30조제1항" } if price <= 20_000_000
+
+      if type == :construction
+        return { type: "확인 필요", desc: "공사 종류(종합/전문/기타)를 선택해야 수의계약 가능 여부와 견적 요건을 판단할 수 있습니다", basis: "지방계약법 시행령 제25조제1항제5호" } if threshold.nil?
+
+        if price <= threshold
+          { type: "2인 이상 견적", desc: "2천만원 초과 ~ 수의계약 한도(#{format_amount(threshold)}) 이하: 2인 이상 견적 수의계약", basis: "지방계약법 시행령 제25조제1항제5호·제30조제1항" }
+        else
+          { type: "입찰", desc: "수의계약 한도(#{format_amount(threshold)}) 초과: 경쟁입찰 진행 필요", basis: "지방계약법 제9조" }
+        end
       elsif price <= 100_000_000
         { type: "2인 이상 견적 또는 특례 수의", desc: "2천만원 초과: 일반 기업은 입찰, 특례기업(청년창업·소기업·여성·장애인·사회적기업 등)은 5천만원~1억원 이하 수의계약 가능", basis: "지방계약법 시행령 제25조제1항제5호" }
       else
@@ -210,14 +257,28 @@ class EstimatedPriceService
       end
     end
 
+    def format_amount(won)
+      eok = won / 100_000_000.0
+      eok == eok.to_i ? "#{eok.to_i}억원" : "#{eok.round(1)}억원"
+    end
+
+    # 복수예비가격 15개는 **서로 달라야** 한다. ±3% 범위 안의 정수가 15개 미만이면
+    # 만들 수 없으므로(예: 기초금액 200원 → 194~206원, 13개) 무한 시도 대신 빈 배열을 돌려준다.
     def generate_multiple_prices(base_amount)
-      prices = []
-      15.times do
-        variation = (rand * 6 - 3) / 100.0  # -3% ~ +3%
-        price = (base_amount * (1 + variation)).round(0)
-        prices << { price: price, rate: (variation * 100).round(2) }
+      return [] if base_amount <= 0
+
+      # ±3% "안쪽"의 정수만 허용한다. floor/ceil을 바깥쪽으로 쓰면 범위를 벗어난 가격이 섞인다
+      # (기초금액 201원: 올바른 범위 195~207원 13개인데, 바깥쪽 반올림이면 194~208원 15개가 되어 통과).
+      min_price = (base_amount * 0.97).ceil
+      max_price = (base_amount * 1.03).floor
+      return [] if max_price - min_price + 1 < 15
+
+      seen = {}
+      while seen.size < 15
+        price = rand(min_price..max_price)
+        seen[price] ||= { price: price, rate: ((price - base_amount) * 100.0 / base_amount).round(2) }
       end
-      prices.sort_by { |p| p[:price] }
+      seen.values.sort_by { |p| p[:price] }
     end
   end
 end

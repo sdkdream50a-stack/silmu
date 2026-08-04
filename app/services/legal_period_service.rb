@@ -47,11 +47,12 @@ class LegalPeriodService
   CONTRACT_SIGNING_DEADLINE = 10
 
   # 대금지급 기한 (일)
+  # base = 기산일의 성격. 유형마다 다르므로 입력값을 검사완료일로 고정하면 지방·선금·하도급이 틀린다.
   PAYMENT_DEADLINES = {
-    national: { name: "국가기관", days: 5, note: "검사완료 후 5일 이내 (국가계약법 시행령 제58조)" },
-    local: { name: "지방자치단체", days: 5, note: "청구일로부터 5일 이내 (지방계약법 제17조, 시행령 제67조)" },
-    advance: { name: "선금 지급", days: 14, note: "청구일로부터 14일 이내" },
-    subcontract: { name: "하도급 대금", days: 15, note: "원수급인 대금 수령 후 15일 이내 (하도급법 제13조)" }
+    national: { name: "국가기관", days: 5, base: "대가 지급 청구일", note: "검사 완료 후 대가 지급 청구를 받은 날부터 5일 이내 (국가계약법 시행령 제58조)" },
+    local: { name: "지방자치단체", days: 5, base: "대가 지급 청구일", note: "검사 완료 후 대가 지급 청구를 받은 날부터 5일 이내 (지방계약법 제18조, 시행령 제67조)" },
+    advance: { name: "선금 지급", days: 14, base: "선금 지급 청구일", note: "청구일로부터 14일 이내" },
+    subcontract: { name: "하도급 대금", days: 15, base: "원수급인의 대금 수령일", note: "원수급인 대금 수령 후 15일 이내 (하도급법 제13조)" }
   }.freeze
 
   # 하자보증기간 (년)
@@ -156,12 +157,12 @@ class LegalPeriodService
 
     def calc_payment(params)
       payment_type = params[:payment_type].to_s.to_sym
-      inspection_date = parse_date(params[:inspection_date])
-      return { success: false, error: "검사완료일을 입력해주세요." } unless inspection_date
+      base_date = parse_date(params[:inspection_date])
+      return { success: false, error: "기준일을 입력해주세요." } unless base_date
       return { success: false, error: "유효하지 않은 지급유형입니다." } unless PAYMENT_DEADLINES.key?(payment_type)
 
       info = PAYMENT_DEADLINES[payment_type]
-      deadline = inspection_date + info[:days]
+      deadline = base_date + info[:days]
       deadline = adjust_weekend(deadline)
 
       {
@@ -169,8 +170,9 @@ class LegalPeriodService
         result: {
           type: "payment",
           payment_type_name: info[:name],
-          inspection_date: format_date(inspection_date),
-          inspection_weekday: weekday_name(inspection_date),
+          base_date_name: info[:base],
+          inspection_date: format_date(base_date),
+          inspection_weekday: weekday_name(base_date),
           deadline: format_date(deadline),
           deadline_weekday: weekday_name(deadline),
           days: info[:days],
@@ -235,10 +237,12 @@ class LegalPeriodService
 
       delay_days = (actual_date - due_date).to_i
       rate_info = LATE_PENALTY_RATES[penalty_type]
-      penalty_amount = (contract_amount * rate_info[:rate] * delay_days).to_i
+      # 계약보증금 계산기와 동일하게 전체식 계산 후 원 단위 반올림한다.
+      # to_i(절사)를 쓰면 같은 입력에 두 도구가 다른 값을 낸다(1,000원·용역·5일 → 6원 vs 7원).
+      penalty_amount = (contract_amount * rate_info[:rate] * delay_days).round(0)
 
       # 지체상금(지연배상금) 법정 한도: 계약금액의 100분의 30 (지방계약법 시행령 제90조 제3항, 국가계약법 시행령 제74조 제3항)
-      max_penalty = (contract_amount * 0.30).to_i
+      max_penalty = (contract_amount * 0.30).round(0)
       capped = penalty_amount > max_penalty
       penalty_amount = [ penalty_amount, max_penalty ].min
 
@@ -256,7 +260,10 @@ class LegalPeriodService
           delay_days: delay_days,
           penalty_amount: penalty_amount,
           capped: capped,
-          note: "지체상금(법령상 명칭 '지연배상금', 한도 30%) — 지방계약법 시행령 제90조·시행규칙 제75조 / 국가계약법 시행령 제74조. 개별 계약서 특약으로 한도를 따로 정할 수 있음"
+          note: "지체상금(법령상 명칭 '지연배상금', 한도 30%) — **지방계약 기준**(지방계약법 시행령 제90조·시행규칙 제75조). " \
+                "국가계약은 공사 0.5/1,000로 같지만 **물품(0.75)·용역(1.25)은 요율이 다르므로** " \
+                "국가계약 물품·용역은 이 값을 쓰면 안 됩니다(국가계약법 시행규칙 제75조). " \
+                "개별 계약서 특약으로 한도를 따로 정할 수 있음"
         }
       }
     end

@@ -5,6 +5,8 @@ export default class extends Controller {
   static targets = [
     // 탭 UI
     "tabBtn", "panel", "combinedTab", "combinedPanel", "advancedToggle",
+    // 국민연금 기준일 (상·하한 7월 개정)
+    "pensionRefDateYearend", "pensionRefDateRetire",
     // 연말정산 입력
     "bonsuWolYearend", "bonsuTotalYearend", "geunMonthsYearend",
     "wolIpYearend", "il1MonthYearend", "il1FieldYearend", "accidentRateYearend",
@@ -112,6 +114,10 @@ export default class extends Controller {
         accident_g:  this.parseNum(this[`ginamAccidentG${key}Target`].value),
       },
       year,
+      // 국민연금 기준소득월액 상·하한은 매년 7월 1일에 개정돼 한 해 안에서도 갈린다.
+      // 오늘로 고정하면 과거연도 정산이, 연초로 고정하면 하반기 사용자가 틀린다 →
+      // 어느 시점 기준인지 사용자가 직접 고르게 하고 그 값을 쓴다.
+      refDate:          this[`pensionRefDate${key}Target`]?.value || "",
       accidentRate:     parseFloat(this[`accidentRate${key}Target`].value) / 100 || RATES[year].accident.g,
       employStableRate: parseFloat(this[`employStableRate${key}Target`].value) / 100 || RATES[year].employment.g_stable,
     }
@@ -119,6 +125,11 @@ export default class extends Controller {
     // 입력 검증
     if (!input.bonsuWol || !input.bonsuTotal || !input.geunMonths) {
       alert("보수월액, 보수총액, 근무월수는 필수 입력항목입니다.")
+      return
+    }
+    // 기준일이 비면 연초 값으로 조용히 되돌아가 하반기 계산이 틀어진다 → 차단한다.
+    if (!input.refDate) {
+      alert("국민연금 기준일을 입력하세요. 기준소득월액 상·하한이 매년 7월 1일에 개정되어 시점에 따라 달라집니다.")
       return
     }
 

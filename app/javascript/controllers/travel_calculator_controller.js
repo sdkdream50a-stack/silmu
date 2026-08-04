@@ -138,6 +138,15 @@ export default class extends Controller {
   calculate(event) {
     event.preventDefault()
 
+    // 국외 출장은 별표 3·4 기준이라 국내 수식으로 계산하면 틀린 값이 나온다.
+    // 안내만 띄우고 계산은 막는다(틀린 금액을 내놓는 것보다 안 내놓는 편이 맞다).
+    const tripType = this.formTarget.querySelector('input[name="trip_type"]:checked')
+    if (tripType && tripType.value === 'international') {
+      this.dateErrorTarget.textContent = '국외 출장은 아직 계산을 지원하지 않습니다. 공무원여비규정 별표 3·4를 확인해주세요.'
+      this.dateErrorTarget.classList.remove('hidden')
+      return
+    }
+
     const departure = this.departureTarget.value
     const destination = this.destinationTarget.value
     const startDate = new Date(this.startDateTarget.value)
