@@ -26,13 +26,16 @@ class AuthorityFreshnessCheckJob < ApplicationJob
     documents = target_documents(document_ids, limit)
     detector = Authority::ChangeDetector.new
     analyzer = Authority::ImpactAnalyzer.new
-    report = { checked: 0, unchanged: 0, changed: 0, failed: 0, tasks_created: 0, skipped_failing: 0 }
+    report = { checked: 0, unchanged: 0, changed: 0, failed: 0, tasks_created: 0, skipped_failing: 0,
+               alerts_sent: 0 }
 
     documents.each_with_index do |document, index|
       source = document.authority_source
       if source.failure_count >= MAX_CONSECUTIVE_FAILURES
         report[:skipped_failing] += 1
         Rails.logger.warn "[AuthorityFreshness] 연속 실패 #{source.failure_count}회 — 건너뜀: #{source.key}"
+        # degraded 상태에서도 아직 안 알렸다면 알린다. 여기서 막히면 사람이 알 경로가 없다.
+        report[:alerts_sent] += 1 if alert_operator(source)
         next
       end
 
@@ -49,6 +52,7 @@ class AuthorityFreshnessCheckJob < ApplicationJob
         if source.last_failure_kind == "SOURCE_UNAVAILABLE" && source.failure_count >= 3
           ContentFreshnessUpdater.mark_source_unavailable(document)
         end
+        report[:alerts_sent] += 1 if alert_operator(source)
       when :changed
         report[:changed] += 1
         next if dry_run
@@ -64,6 +68,22 @@ class AuthorityFreshnessCheckJob < ApplicationJob
   end
 
   private
+
+  # P1.55B §10 — 연속 실패가 임계값에 이르면 운영자에게 알린다. 한 장애 episode 당 1회.
+  #
+  # best-effort: 알림 전송 실패가 **수집 자체를 실패시키면 안 된다**(§29).
+  # 발송에 실패하면 alerted_at 을 찍지 않으므로 다음 주기에 다시 시도한다.
+  def alert_operator(source)
+    return false unless source.alert_due?
+
+    AuthoritySourceMailer.failure_alert(source).deliver_now
+    source.mark_alerted!
+    Rails.logger.warn "[AuthorityFreshness] 소스 장애 알림 발송: #{source.key} (연속 #{source.failure_count}회)"
+    true
+  rescue StandardError => e
+    Rails.logger.error "[AuthorityFreshness] 알림 발송 실패(수집은 계속): #{e.class} #{e.message}"
+    false
+  end
 
   # idempotent — 같은 주기 안에서 다시 돌려도 due? 가 false 라 재검사하지 않는다.
   def target_documents(document_ids, limit)

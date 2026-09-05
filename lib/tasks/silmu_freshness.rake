@@ -42,6 +42,11 @@ namespace :silmu do
         puts "    마지막 검사=#{s.last_checked_at&.strftime('%Y-%m-%d %H:%M') || '없음'} " \
              "마지막 성공=#{s.last_success_at&.strftime('%Y-%m-%d %H:%M') || '없음'} " \
              "연속실패=#{s.failure_count}#{" (#{s.last_failure_kind})" if s.last_failure_kind}"
+        if s.first_failed_at || s.alerted_at
+          puts "    장애시작=#{s.first_failed_at&.strftime('%Y-%m-%d %H:%M') || '없음'} " \
+               "알림=#{s.alerted_at&.strftime('%Y-%m-%d %H:%M') || '미발송'} " \
+               "임계값=#{AuthoritySource::ALERT_THRESHOLD}회"
+        end
       end
 
       puts "\n[문서 · 현행 버전]"

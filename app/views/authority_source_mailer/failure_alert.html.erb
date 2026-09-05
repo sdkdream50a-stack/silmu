@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; color: #333; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .header { background: #b91c1c; color: white; padding: 24px; text-align: center; border-radius: 10px 10px 0 0; }
+    .content { background: #fff; padding: 24px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 10px 10px; }
+    table.facts { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+    table.facts th { text-align: left; padding: 8px 10px; background: #f9fafb; color: #6b7280; font-weight: 600; width: 40%; border-bottom: 1px solid #e5e7eb; }
+    table.facts td { padding: 8px 10px; border-bottom: 1px solid #e5e7eb; }
+    .note { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 14px; border-radius: 5px; margin-bottom: 16px; }
+    .safe { background: #f0fdf4; border-left: 4px solid #10b981; padding: 14px; border-radius: 5px; }
+    code { background: #f3f4f6; padding: 2px 5px; border-radius: 3px; }
+    .footer { text-align: center; margin-top: 24px; padding-top: 16px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1 style="margin: 0; font-size: 20px;">⚠️ 공식 출처 수집 실패</h1>
+      <p style="margin: 8px 0 0 0; opacity: 0.9;"><%= @source.name %></p>
+    </div>
+
+    <div class="content">
+      <div class="note">
+        연속 <strong><%= @source.failure_count %>회</strong> 실패했습니다
+        (알림 임계값 <%= @threshold %>회).
+        <% if @degraded %>
+          <br><strong>이 소스는 현재 자동 점검에서 제외(degraded)되어 있습니다.</strong>
+        <% end %>
+      </div>
+
+      <table class="facts">
+        <tr><th>소스 키</th><td><code><%= @source.key %></code></td></tr>
+        <tr><th>기관</th><td><%= @source.agency.presence || "-" %></td></tr>
+        <tr><th>실패 종류</th><td><%= @source.last_failure_kind.presence || "-" %></td></tr>
+        <tr><th>실패 메시지</th><td><%= @source.last_failure_message.presence || "-" %></td></tr>
+        <tr><th>연속 실패</th><td><%= @source.failure_count %>회</td></tr>
+        <tr><th>장애 시작</th><td><%= @source.first_failed_at&.strftime("%Y-%m-%d %H:%M") || "미상" %></td></tr>
+        <tr><th>마지막 검사</th><td><%= @source.last_checked_at&.strftime("%Y-%m-%d %H:%M") || "없음" %></td></tr>
+        <tr><th>마지막 성공</th><td><%= @source.last_success_at&.strftime("%Y-%m-%d %H:%M") || "없음" %></td></tr>
+        <tr><th>공식 URL</th><td><%= @source.official_url.presence || "-" %></td></tr>
+      </table>
+
+      <div class="safe">
+        <strong>콘텐츠는 변경되지 않았습니다.</strong>
+        현행성 엔진은 감지·기록만 하며 게시 본문을 자동 수정하지 않습니다.
+        출처 장애는 법령 삭제가 아니므로 콘텐츠를 내리지 않습니다.
+      </div>
+
+      <p style="margin-top: 20px;">확인:</p>
+      <ul>
+        <li><code>bin/rails silmu:freshness:status</code> — 소스별 상태</li>
+        <li><code>/admin/authority_reviews</code> — 검토 큐</li>
+      </ul>
+
+      <div class="footer">
+        실무.kr · 이 알림은 한 장애당 1회만 발송됩니다. 소스가 복구되면 다시 알립니다.
+      </div>
+    </div>
+  </div>
+</body>
+</html>

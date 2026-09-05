@@ -50,14 +50,28 @@ class AuthoritySource < ApplicationRecord
 
   def tier_label = TIER_LABELS[authority_tier]
 
+  # P1.55B §10 — 연속 실패가 이 횟수에 이르면 운영자에게 1회 알린다.
+  # AuthorityFreshnessCheckJob::MAX_CONSECUTIVE_FAILURES(5) 에서 잡이 소스를 건너뛰므로,
+  # 그 전에 알리지 않으면 사람이 알 기회 자체가 없다.
+  ALERT_THRESHOLD = 3
+
+  # 성공은 장애 episode 를 닫는다 — 알림 이력도 함께 초기화해 다음 episode 에 다시 알릴 수 있게 한다.
   def record_success!(at: Time.current)
     update!(last_checked_at: at, last_success_at: at, failure_count: 0,
-            last_failure_kind: nil, last_failure_message: nil)
+            last_failure_kind: nil, last_failure_message: nil,
+            first_failed_at: nil, alerted_at: nil)
   end
 
   # §25 — 무한 retry 금지. 실패는 카운트하고 종류를 구분해 남긴다.
+  # first_failed_at 은 episode 최초 실패에만 찍고 이후 실패로 옮기지 않는다(지속 시간 관측용).
   def record_failure!(kind, message, at: Time.current)
     update!(last_checked_at: at, failure_count: failure_count + 1,
-            last_failure_kind: kind, last_failure_message: message.to_s.truncate(1000))
+            last_failure_kind: kind, last_failure_message: message.to_s.truncate(1000),
+            first_failed_at: first_failed_at || at)
   end
+
+  # 알릴 때가 됐는가 — 임계값 도달 + 이 episode 에서 아직 안 알림
+  def alert_due? = failure_count >= ALERT_THRESHOLD && alerted_at.nil?
+
+  def mark_alerted!(at: Time.current) = update!(alerted_at: at)
 end

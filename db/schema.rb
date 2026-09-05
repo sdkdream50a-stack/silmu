@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_06_010200) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_06_065000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -155,6 +155,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_06_010200) do
 
   create_table "authority_sources", force: :cascade do |t|
     t.string "agency"
+    t.datetime "alerted_at"
     t.integer "authority_tier", default: 1, null: false
     t.integer "check_interval_hours", default: 168, null: false
     t.jsonb "config", default: {}, null: false
@@ -162,6 +163,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_06_010200) do
     t.boolean "enabled", default: true, null: false
     t.integer "failure_count", default: 0, null: false
     t.string "fetch_strategy", null: false
+    t.datetime "first_failed_at"
     t.string "jurisdiction"
     t.string "key", null: false
     t.datetime "last_checked_at"

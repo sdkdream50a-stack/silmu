@@ -1,6 +1,7 @@
-# SOURCE_FAILURE_ALERTING — 소스 장애 알림 (미착수)
+# SOURCE_FAILURE_ALERTING — 소스 장애 알림 (설계 정본)
 
-> §8~§10. **이번 세션에서 구현하지 않았다.** 조사 결과와 설계안만 남긴다.
+> §8~§10. P1.55A 에서 설계만 남겼고, **P1.55B 에서 이 설계대로 구현됐다.**
+> 구현 = `SOURCE_FAILURE_IMPLEMENTATION.md` · 검증 = `SOURCE_FAILURE_TESTS.md`.
 
 ## 1. 현재 상태 (이미 있는 것)
 
@@ -79,7 +80,11 @@ add_column :authority_sources, :alerted_at, :datetime      # 중복 발송 억�
 ## 6. 상태
 
 ```
-IMPLEMENTED = NO
-DESIGN      = 위 5번
-우선순위     = 스케줄러 등록보다 먼저 (사람이 화면을 안 보면 조용히 죽으므로)
+IMPLEMENTED = YES   (P1.55B · 2026-09-06)
+DESIGN      = 위 5번 — 설계 변경 없이 그대로 구현됨
+우선순위     = 스케줄러 등록보다 먼저 (사람이 화면을 안 보면 조용히 죽으므로) — 지켜짐
 ```
+
+P1.55B 에서 설계안 대비 **추가된 판단 1건**:
+5회(degraded)에서 잡이 소스를 건너뛰는 분기에서도 아직 안 알렸으면 알린다.
+3·4회의 발송이 모두 실패한 채 5회에 도달하면 사람이 알 경로가 사라지기 때문이다.
