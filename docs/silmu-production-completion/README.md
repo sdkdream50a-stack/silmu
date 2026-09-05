@@ -30,7 +30,7 @@
 원격 복구지점  origin/fix/tool-accuracy-p1-0804  ✅
 origin/main   74056244 (무변경 — 이번 세션 미승인)
 schema        20260906065000
-테스트         362 runs / 2,727 assertions / 0F / 0E / 14 skips (신규 skip 0)
+테스트         362 runs / 2,731 assertions / 0F / 0E / 14 skips (신규 skip 0)
 운영 콘텐츠    변경 0 (Topic/Guide/AuditCase sha256 배포 전후 동일)
 스케줄러       DISABLED (별도 승인 필요)
 P2_GATE       CONDITIONAL

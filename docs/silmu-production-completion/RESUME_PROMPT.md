@@ -27,7 +27,7 @@ origin/main   74056244  (배포 이전 상태 — 이번 세션에서 건드리�
 운영 revision  2d05bae9d99fc47518ae212ea24cd806e8fa67c2
 운영 health    200
 schema         20260906065000
-테스트          362 runs · 2,727 assertions · 0F · 0E · 14 skips
+테스트          362 runs · 2,731 assertions · 0F · 0E · 14 skips
 ```
 
 ### 해소된 리스크

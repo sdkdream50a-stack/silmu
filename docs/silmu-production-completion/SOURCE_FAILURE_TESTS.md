@@ -106,11 +106,11 @@ assert_equal before, content_body_snapshot       # 그러고도 본문 무변경
 
 ```
 P1.55A 기준선 : 353 runs · 2,682 assertions · 0 failures · 0 errors · 14 skips
-P1.55B 이후   : 362 runs · 2,727 assertions · 0 failures · 0 errors · 14 skips
+P1.55B 이후   : 362 runs · 2,731 assertions · 0 failures · 0 errors · 14 skips
 ```
 
 ```
-신규 테스트 = +9 · 신규 assertion = +45
+신규 테스트 = +9 · 신규 assertion = +49
 신규 skip   = 0
 회귀        = 0
 ```
