@@ -62,19 +62,26 @@ class Topic < ApplicationRecord
 
     clauses = []
     binds = {}
+    literal_clauses = []
     token_variants.each_with_index do |variants, ti|
       per_token = []
+      literal_per_token = []
       variants.each_with_index do |variant, vi|
         key = :"t#{ti}_#{vi}"
-        binds[key] = "%#{sanitize_sql_like(variant)}%"
+        pattern = "%#{sanitize_sql_like(variant)}%"
+        binds[key] = pattern
         per_token << "name ILIKE :#{key} OR keywords ILIKE :#{key} OR summary ILIKE :#{key}"
+        literal_per_token << sanitize_sql_array([ "name ILIKE ? OR keywords ILIKE ? OR summary ILIKE ?", pattern, pattern, pattern ])
         if variant.length >= 4
           dkey = :"d#{ti}_#{vi}"
-          binds[dkey] = "%#{sanitize_sql_like(variant.gsub(/\s+/, ''))}%"
+          dpattern = "%#{sanitize_sql_like(variant.gsub(/\s+/, ''))}%"
+          binds[dkey] = dpattern
           per_token << "REPLACE(name, ' ', '') ILIKE :#{dkey} OR REPLACE(keywords, ' ', '') ILIKE :#{dkey} OR REPLACE(summary, ' ', '') ILIKE :#{dkey}"
+          literal_per_token << sanitize_sql_array([ "REPLACE(name, ' ', '') ILIKE ? OR REPLACE(keywords, ' ', '') ILIKE ? OR REPLACE(summary, ' ', '') ILIKE ?", dpattern, dpattern, dpattern ])
         end
       end
       clauses << "(#{per_token.join(' OR ')})"
+      literal_clauses << "(#{literal_per_token.join(' OR ')})"
     end
 
     # 랭킹: 전 토큰(동의어 변형 포함)이 name에 매칭되면 0, keywords면 1, 그 외 2.
@@ -91,7 +98,58 @@ class Topic < ApplicationRecord
                 .order(Arel.sql("#{rank_sql} ASC, view_count DESC"))
                 .limit(limit)
     return matches if matches.any?
+
+    # 전 토큰 AND 가 0건이면 부분집합으로 완화한다. 정확 매칭이 이미 0건이므로 순위 역전은 없다.
+    relaxed = relaxed_match(literal_clauses, rank_sql, limit)
+    return relaxed if relaxed && relaxed.any?
+
     search_by_keyword(query).merge(published).limit(limit)
+  end
+
+  # 점진적 완화 — 토큰 과반 이상이 매칭되면 채택하고, 매칭 토큰 수가 많은 순으로 정렬한다.
+  # 자연어 질문에서 조사·어미를 걸러도 남는 비내용어("처음" 등) 때문에 AND 가 깨지는 경우를 구한다.
+  # ORDER BY 는 바인드를 받지 못하므로 sanitize 된 리터럴 절을 쓴다(binds 판본과 동일한 패턴).
+  def self.relaxed_match(literal_clauses, rank_sql, limit)
+    return nil if literal_clauses.size < 2
+
+    hit_count = literal_clauses.map { |c| "CASE WHEN #{c} THEN 1 ELSE 0 END" }.join(" + ")
+    required = (literal_clauses.size / 2.0).ceil
+
+    published
+      .where("(#{hit_count}) >= #{required}")
+      .order(Arel.sql("(#{hit_count}) DESC, #{rank_sql} ASC, view_count DESC"))
+      .limit(limit)
+  end
+
+  # 검색어에 대한 "바로 답" — **기존 FAQ 원문만** 쓴다. 요약하거나 생성하지 않는다.
+  # 후보 토픽의 faq_list 중 질문에 검색어 내용 토큰이 과반 이상 들어간 항목을 고르고,
+  # 과반 미달이면 nil 을 준다. 약한 매칭에 "바로 답" 딱지를 붙이면 그게 거짓 신뢰다(P1.6 §21·§32).
+  # 반환: { topic:, question:, answer:, hits: } 또는 nil
+  def self.answer_for(query, topics)
+    return nil if query.blank? || topics.blank?
+
+    token_variants = SearchQueryParser.tokens(query)
+    return nil if token_variants.empty?
+
+    required = (token_variants.size / 2.0).ceil
+    best = nil
+
+    topics.each do |topic|
+      topic.faq_list.each do |faq|
+        next unless faq.is_a?(Hash)
+
+        question = faq["question"].to_s
+        answer   = faq["answer"].to_s
+        next if question.blank? || answer.blank?
+
+        hits = token_variants.count { |variants| variants.any? { |v| question.include?(v) } }
+        next if hits < required
+
+        best = { topic: topic, question: question, answer: answer, hits: hits } if best.nil? || hits > best[:hits]
+      end
+    end
+
+    best
   end
 
   # 키워드 매칭으로 토픽 찾기

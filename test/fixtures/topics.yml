@@ -1,4 +1,10 @@
 # silmu-search 테스트용 토픽 픽스처
+#
+# ⚠️ 토픽을 추가하기 전에 읽을 것 (P1.6, 2026-09-06):
+#   test/controllers/home_controller_test.rb 의 "SEASONAL_TOPICS … 존재해야 한다" 는
+#   `skip if Topic.count < all_slugs.size / 2` 로 건너뛴다. 현재 픽스처 6개 · 임계 7.
+#   여기에 토픽을 **1개만 더해도** skip 이 풀리고, SEASONAL_TOPICS 14개 slug 가
+#   픽스처에 없어서 그 테스트가 실패한다. 픽스처를 늘리려면 그 skip 조건도 함께 고칠 것.
 
 # 멀티워드 AND: "지방계약법 수의계약" 매칭 대상
 local_private_contract:

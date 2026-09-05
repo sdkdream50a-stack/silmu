@@ -19,17 +19,60 @@
               </button>
             <% end %>
           </div>
-          <div class="pt-5 border-t border-slate-100 flex flex-wrap gap-4 justify-center text-xs">
-            <%= link_to topics_path, class: "text-editorial-navy hover:text-editorial-navy-dark font-medium flex items-center gap-1", data: { turbo_frame: "_top" } do %>
-              <span class="material-symbols-outlined text-sm">menu_book</span>법령 가이드 둘러보기
-            <% end %>
-            <%= link_to audit_cases_path, class: "text-editorial-navy hover:text-editorial-navy-dark font-medium flex items-center gap-1", data: { turbo_frame: "_top" } do %>
-              <span class="material-symbols-outlined text-sm">policy</span>감사사례 둘러보기
-            <% end %>
+          <%# P1.6 §41 — 막다른 길을 만들지 않는다. 다른 표현·둘러보기·질문 남기기 세 갈래를 준다. %>
+          <div class="pt-5 border-t border-slate-100 text-left max-w-md mx-auto">
+            <p class="text-xs font-semibold text-slate-500 mb-2">다른 표현으로 찾아보기</p>
+            <p class="text-xs text-slate-500 leading-relaxed mb-4">
+              업무에서 쓰는 말 대신 <strong class="text-slate-700">법령 용어</strong>로 바꾸면 찾아지는 경우가 많습니다.
+              예: <span class="text-slate-700">연가 돈 → 연가보상비</span> · <span class="text-slate-700">출장 차비 → 여비</span> ·
+              <span class="text-slate-700">업체 하나 견적 → 1인견적</span>
+            </p>
+            <div class="flex flex-wrap gap-4 justify-center text-xs">
+              <%= link_to topics_path, class: "text-editorial-navy hover:text-editorial-navy-dark font-medium flex items-center gap-1", data: { turbo_frame: "_top" } do %>
+                <span class="material-symbols-outlined text-sm">menu_book</span>법령 가이드 둘러보기
+              <% end %>
+              <%= link_to audit_cases_path, class: "text-editorial-navy hover:text-editorial-navy-dark font-medium flex items-center gap-1", data: { turbo_frame: "_top" } do %>
+                <span class="material-symbols-outlined text-sm">policy</span>감사사례 둘러보기
+              <% end %>
+              <%= link_to feedback_path, class: "text-editorial-navy hover:text-editorial-navy-dark font-medium flex items-center gap-1", data: { turbo_frame: "_top" } do %>
+                <span class="material-symbols-outlined text-sm">contact_support</span>이 업무를 요청하기
+              <% end %>
+            </div>
           </div>
         </div>
 
       <% else %>
+
+        <%# ── ① 바로 답 (P1.6 §21) ──
+             기존 FAQ 원문만 쓴다. 매칭 FAQ 가 없으면 카드를 아예 그리지 않는다 —
+             빈 박스나 지어낸 요약은 거짓 신뢰가 된다. %>
+        <% if @answer.present? %>
+          <% answer_topic = @answer[:topic] %>
+          <% answer_authority = AuthorityPresenter.new(answer_topic) %>
+          <section class="mb-6 bg-white border-2 border-editorial-navy-light rounded-2xl p-5" aria-labelledby="direct-answer-heading">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="material-symbols-outlined text-editorial-navy text-lg" aria-hidden="true">lightbulb</span>
+              <h3 id="direct-answer-heading" class="text-sm font-bold text-editorial-navy">바로 답</h3>
+              <span class="text-[11px] text-slate-400">실무.kr 검증 콘텐츠 인용</span>
+            </div>
+
+            <p class="text-sm font-bold text-slate-900 mb-2 leading-snug"><%= @answer[:question] %></p>
+            <p class="text-sm text-slate-700 leading-relaxed whitespace-pre-line"><%= @answer[:answer] %></p>
+
+            <div class="mt-4 pt-3 border-t border-slate-100 flex flex-wrap items-center gap-3">
+              <%= render "shared/verification_badge", record: answer_topic, variant: "compact" %>
+              <%# 적용 대상은 presenter 경유 · HIGH confidence 일 때만 나온다(§27·§32). 모델 직접 접근 금지. %>
+              <% if answer_authority.show_agency_scope? && answer_authority.agency_labels.present? %>
+                <span class="text-[11px] text-slate-500">적용 대상: <%= answer_authority.agency_labels.join(" · ") %></span>
+              <% end %>
+              <%= link_to topic_path(answer_topic.slug),
+                    class: "ml-auto inline-flex items-center gap-1 text-xs font-bold text-editorial-navy hover:text-editorial-navy-dark",
+                    data: { turbo_frame: "_top", search_result: "answer", search_rank: 1 } do %>
+                자세히 보기 <span class="material-symbols-outlined text-sm" aria-hidden="true">arrow_forward</span>
+              <% end %>
+            </div>
+          </section>
+        <% end %>
 
         <%# ── 실무 도구 결과 ── %>
         <% if @tools.present? %>

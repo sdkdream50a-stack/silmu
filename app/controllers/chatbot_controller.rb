@@ -59,6 +59,9 @@ class ChatbotController < ApplicationController
       # 5. 실무 도구 (메모리 내 검색, 토큰 AND 매칭 + 동의어 확장)
       @tools = search_tools(@query)
 
+      # P1.6 §21 — "바로 답". 검증된 기존 FAQ 원문에서만 나온다(생성 금지). 없으면 nil.
+      @answer = Topic.answer_for(@query, @topics)
+
       @search_log = log_search(@query, @topics, @audit_cases, @guides, @templates, @tools)
     end
 
