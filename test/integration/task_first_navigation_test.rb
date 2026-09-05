@@ -69,10 +69,15 @@ class TaskFirstNavigationTest < ActionDispatch::IntegrationTest
     assert shown.any?, "업무 카드가 하나도 렌더되지 않았다"
   end
 
-  test "홈이 콘텐츠 개수를 자랑하지 않는다 (§83)" do
+  test "홈 히어로가 콘텐츠 개수를 자랑하지 않는다 (§83)" do
+    # 특정 문장을 금지하면 문장만 바꿔서 되살아난다(뮤테이션으로 실측).
+    # 그래서 "히어로 lede 에 숫자가 없다"는 성질 자체를 고정한다.
+    # (섹터 탭 칩·도구 개수 같은 정당한 숫자는 lede 밖이라 영향받지 않는다.)
     get root_path
     assert_response :success
-    assert_no_match(/실무 가이드 \d+개, 감사 지적 사례 \d+건/, response.body)
+    lede = css_select(".hero-lede").first
+    assert lede, "히어로 lede 를 찾을 수 없다"
+    assert_no_match(/\d/, lede.text, "히어로 lede 에 콘텐츠 개수가 들어갔다: #{lede.text.strip}")
   end
 
   test "예시 질문은 실제로 결과가 나오는 것만 건다 (첫 클릭이 빈손이면 안 된다)" do
