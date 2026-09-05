@@ -11,6 +11,10 @@
                       color: 'emerald'|'amber'|'blue'|... })
                     nil 슬롯은 자동 skip. 모두 nil이면 카드 전체 미노출.
 %>
+<%# P1-5 — 도구 신뢰 레이어는 next_actions 유무와 무관하게 항상 표시한다.
+    (이 파셜은 도구 37개 전부에서 render 되므로 단일 삽입점이 된다) %>
+<%= render 'shared/tool_trust', tool_key: local_assigns[:tool_key] %>
+
 <% next_actions = Array(next_actions).compact %>
 <% if next_actions.any? %>
   <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 mb-6"

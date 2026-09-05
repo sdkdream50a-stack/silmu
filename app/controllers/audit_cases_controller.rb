@@ -88,6 +88,8 @@ class AuditCasesController < ApplicationController
       end
       raise ActiveRecord::RecordNotFound
     end
+    # P1 — 공개 권위 정보는 반드시 presenter 경계를 통과한다 (내부 메타데이터 차단 지점)
+    @authority = AuthorityPresenter.new(@audit_case)
     @audit_case.increment_view!
     @related_topic = Rails.cache.fetch("audit_case_topic/#{@audit_case.slug}", expires_in: 1.hour) do
       @audit_case.related_topic

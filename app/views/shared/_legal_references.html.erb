@@ -1,0 +1,26 @@
+<%# P1-4 §14~§16 — 법령 근거 표시.
+    확실하게 식별되는 법령만 공식 원문으로 링크한다(HIGH confidence).
+    식별 실패 시 링크를 만들지 않고 텍스트로 남긴다 — 추측 링크는 만들지 않는다. %>
+<% refs = Array(local_assigns[:references]) %>
+<% if refs.any? %>
+  <ul class="flex flex-wrap gap-1.5">
+    <% refs.each do |ref| %>
+      <li>
+        <% if ref.resolved? %>
+          <a href="<%= ref.official_url %>" target="_blank" rel="noopener noreferrer nofollow"
+             class="inline-flex items-center gap-1 rounded-lg border border-indigo-200 bg-white px-2 py-1 text-[11px] font-semibold text-indigo-700 hover:bg-indigo-50 hover:text-indigo-900 transition-colors"
+             title="국가법령정보센터에서 원문 보기">
+            <span class="material-symbols-outlined text-[12px]" aria-hidden="true">open_in_new</span>
+            <span><%= ref.label %></span>
+          </a>
+        <% else %>
+          <span class="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-slate-50 px-2 py-1 text-[11px] text-slate-600"
+                title="자동 확인되지 않은 근거입니다. 소속 기관 규정·원문을 직접 확인하세요.">
+            <span class="material-symbols-outlined text-[12px] text-slate-400" aria-hidden="true">description</span>
+            <span><%= ref.label %></span>
+          </span>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

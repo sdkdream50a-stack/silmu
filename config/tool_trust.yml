@@ -1,0 +1,59 @@
+# P1-5 §18 — 도구 신뢰 메타데이터.
+#
+# 각 도구가 "무엇을 기준으로 계산하는가"를 화면에 표시하기 위한 등록부.
+# ⚠️ 기준을 모르는 도구는 여기에 넣지 않는다. 없는 근거를 만들지 않는다.
+#    등록되지 않은 도구는 공통 면책만 표시된다.
+#
+# standard: 기준값을 소유한 설정 파일 (버전은 그 파일에서 직접 읽는다 — 손으로 적지 않는다)
+#   contract_thresholds → config/contract_thresholds.yml
+#   legal_standards     → config/legal_standards.yml
+# laws: 근거 법령명 (LegalReferenceResolver 허용목록과 대조되어 링크로 승격된다)
+
+defaults:
+  disclaimer: "계산 결과는 실무 참고용입니다. 소속 기관의 최신 지침·예규와 개별 상황에 따라 달라질 수 있으니, 기안 전 표시된 공식 근거를 확인하세요."
+
+tools:
+  contract-method:
+    basis: "지방계약법령 계약방법 결정 기준"
+    standard: contract_thresholds
+    laws: "지방계약법 제9조, 지방계약법 시행령 제25조, 제30조"
+  contract-guarantee:
+    basis: "지방계약법령 계약보증금·지연배상금 기준"
+    standard: contract_thresholds
+    laws: "지방계약법 제15조, 지방계약법 시행령 제51조, 제53조, 제90조"
+  estimated-price:
+    basis: "지방계약법령 예정가격 결정 기준"
+    standard: contract_thresholds
+    laws: "지방계약법 시행령 제7조, 제8조, 제9조"
+  predetermined-price:
+    basis: "지방계약법령 복수예비가격 기준"
+    standard: contract_thresholds
+    laws: "지방계약법 시행령 제7조"
+  split-contract-checker:
+    basis: "지방계약법령 분할계약 금지 기준"
+    standard: contract_thresholds
+    laws: "지방계약법 시행령 제77조"
+  contract-legality-check:
+    basis: "지방계약법령 계약 적법성 점검 기준"
+    standard: contract_thresholds
+    laws: "지방계약법 제9조, 지방계약법 시행령 제25조"
+  contract-documents:
+    basis: "지방계약법령 계약서류 작성 기준"
+    standard: contract_thresholds
+    laws: "지방계약법 제14조, 지방계약법 시행령 제48조"
+  contract-reason:
+    basis: "지방계약법령 수의계약 사유 기준"
+    standard: contract_thresholds
+    laws: "지방계약법 시행령 제25조"
+  qualification-evaluation:
+    basis: "지방계약법령 적격심사 기준"
+    standard: contract_thresholds
+    laws: "지방계약법 시행령 제42조"
+  budget-estimator:
+    basis: "지방계약법령 추정가격 산정 기준"
+    standard: contract_thresholds
+    laws: "지방계약법 시행령 제7조"
+  travel-calculator:
+    basis: "공무원 여비 지급 기준"
+    standard: legal_standards
+    laws: "공무원 여비 규정, 지방공무원 여비 규정"

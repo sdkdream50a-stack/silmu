@@ -1,5 +1,8 @@
 class AuditCase < ApplicationRecord
   include LegalVerifiable
+  include AuthorityMetadata
+  include AgencyScope
+  include AuditCaseProvenance
 
   belongs_to :topic, foreign_key: :topic_slug, primary_key: :slug, optional: true
 

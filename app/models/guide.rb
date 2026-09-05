@@ -2,6 +2,8 @@
 class Guide < ApplicationRecord
   include PgSearch::Model
   include LegalVerifiable
+  include AuthorityMetadata
+  include AgencyScope
 
   # 검색 설정
   pg_search_scope :search_by_keyword,

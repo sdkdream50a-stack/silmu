@@ -1,0 +1,32 @@
+<%# P1-2 §8·§9 — 감사사례 유형 배너.
+    사용자가 페이지 상단에서 "이게 실제 사건인가, 재구성인가"를 즉시 알 수 있어야 한다.
+    P0 문제: 재구성 사례 110건에 "5단계 정합성 검증 완료" 배지가 붙어 실제 사건으로 읽혔다.
+    사용: render 'shared/provenance_banner', authority: AuthorityPresenter.new(@audit_case) %>
+<% a = local_assigns[:authority] %>
+<% if a&.show_provenance? %>
+  <%
+    tone = a.provenance_tone
+    palette = {
+      green:  %w[bg-emerald-50 border-emerald-200 text-emerald-900 text-emerald-700 text-emerald-600],
+      blue:   %w[bg-sky-50     border-sky-200     text-sky-900     text-sky-700     text-sky-600],
+      purple: %w[bg-violet-50  border-violet-200  text-violet-900  text-violet-700  text-violet-600],
+      amber:  %w[bg-amber-50   border-amber-200   text-amber-900   text-amber-800   text-amber-600],
+      gray:   %w[bg-slate-50   border-slate-200   text-slate-900   text-slate-700   text-slate-500]
+    }[tone] || %w[bg-slate-50 border-slate-200 text-slate-900 text-slate-700 text-slate-500]
+    bg, border, title_c, body_c, icon_c = palette
+  %>
+  <div class="<%= bg %> <%= border %> border rounded-xl p-4" role="note" aria-label="사례 출처 유형">
+    <div class="flex items-start gap-2.5">
+      <span class="material-symbols-outlined <%= icon_c %> text-lg shrink-0 mt-px" aria-hidden="true"><%= a.provenance_icon %></span>
+      <div class="min-w-0">
+        <p class="text-sm font-bold <%= title_c %> leading-tight"><%= a.provenance_label %></p>
+        <p class="text-xs <%= body_c %> mt-1 leading-relaxed"><%= a.provenance_note %></p>
+        <% if a.reconstructed? %>
+          <p class="text-[11px] <%= body_c %> mt-1.5 font-semibold">
+            ⚠️ 본문의 기관명·인물·금액은 실무 이해를 돕기 위한 예시입니다.
+          </p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>

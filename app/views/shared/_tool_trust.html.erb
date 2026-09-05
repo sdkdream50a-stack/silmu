@@ -1,0 +1,35 @@
+<%# P1-5 §18·§19 — 도구 신뢰 레이어.
+    37개 도구를 각각 고치지 않는다. 이 파셜 하나가 shared/_tool_next_actions 를 통해 전 도구에 붙는다.
+    기준일은 설정 파일에서 직접 읽으므로, 기준값이 낡으면 화면이 스스로 낡았다고 말한다.
+    사용: render 'shared/tool_trust', tool_key: 'contract-method' %>
+<% trust = ToolTrust.for(local_assigns[:tool_key]) %>
+<section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 mb-8" aria-label="계산 기준 및 주의사항">
+  <div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+    <% if trust.any_basis? %>
+      <dl class="grid gap-2 sm:grid-cols-2 text-xs mb-3">
+        <% if trust.basis.present? %>
+          <div>
+            <dt class="font-semibold text-slate-500">적용 기준</dt>
+            <dd class="text-slate-800 mt-0.5"><%= trust.basis %></dd>
+          </div>
+        <% end %>
+        <% if trust.standard_version.present? %>
+          <div>
+            <dt class="font-semibold text-slate-500"><%= trust.standard_label %> 기준일</dt>
+            <dd class="text-slate-800 mt-0.5"><%= trust.standard_version %></dd>
+          </div>
+        <% end %>
+      </dl>
+      <% if trust.legal_references.any? %>
+        <div class="text-xs mb-3">
+          <p class="font-semibold text-slate-500 mb-1.5">계산 근거</p>
+          <%= render 'shared/legal_references', references: trust.legal_references %>
+        </div>
+      <% end %>
+    <% end %>
+    <p class="text-[11px] text-slate-600 leading-relaxed <%= 'pt-3 border-t border-slate-200' if trust.any_basis? %>">
+      <span class="material-symbols-outlined text-[13px] text-slate-400 align-text-bottom" aria-hidden="true">info</span>
+      <%= trust.disclaimer %>
+    </p>
+  </div>
+</section>

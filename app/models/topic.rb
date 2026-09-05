@@ -1,6 +1,8 @@
 class Topic < ApplicationRecord
   include PgSearch::Model
   include LegalVerifiable
+  include AuthorityMetadata
+  include AgencyScope
 
   # 부모-자식 관계 (서브토픽)
   belongs_to :parent, class_name: "Topic", optional: true

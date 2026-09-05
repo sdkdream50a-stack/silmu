@@ -1308,11 +1308,17 @@ document.addEventListener('click', function(e) {
           <% end %>
 
           <!-- E-E-A-T 검증 배지 (Sprint A) -->
-          <%= render 'shared/verification_badge',
-                date: silmu_verification_date(@topic),
-                source: '법제처 국가법령정보센터',
-                source_url: 'https://www.law.go.kr',
-                variant: 'sidebar' %>
+          <%# P1.5 §31 — 개정 검토 중임을 숨기지 않는다 %>
+          <div class="mt-3">
+            <%= render 'shared/freshness_notice', authority: @authority %>
+          </div>
+          <%= render 'shared/verification_badge', record: @topic, variant: 'sidebar' %>
+
+          <% if @authority&.show_agency_scope? %>
+            <div class="my-4">
+              <%= render 'shared/authority_source', authority: @authority %>
+            </div>
+          <% end %>
 
           <!-- 관련 도구 — 토픽별 맞춤 도구 (3단계) -->
           <% if @related_tools.any? %>

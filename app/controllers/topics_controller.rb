@@ -106,6 +106,8 @@ class TopicsController < ApplicationController
   def show
     # parent를 미리 로드하여 @topic.parent 접근 시 추가 쿼리 방지
     @topic = Topic.includes(:parent).find_by(slug: params[:slug])
+    # P1 — 공개 권위 정보는 반드시 presenter 경계를 통과한다
+    @authority = AuthorityPresenter.new(@topic) if @topic
 
     # 슬러그 변경된 경우 301 리디렉션 (Search Console 404 해소)
     unless @topic

@@ -1,31 +1,85 @@
-<%# E-E-A-T 검증 타임스탬프 배지 — Sprint A (gimi9 "기미 버전" 벤치마킹) %>
-<%# 사용: render 'shared/verification_badge', date: @topic.law_verified_at, source: '법제처 국가법령정보센터', source_url: 'https://www.law.go.kr', variant: 'inline' %>
-<%# variants: 'inline' (기본, 콘텐츠 헤더용), 'sidebar' (사이드바 카드용), 'compact' (소형) %>
+<%# P1-1 §7 — 검증 배지. **무엇을 검증했는지**를 말한다.
+    P0 문제(TR-02): "5단계 정합성 검증 완료" 하나가 사례 사실관계 검증으로 읽혔다.
+      · 배지가 붙은 감사사례 246건 중 110건은 스스로 "특정 실사례 아님"이라 밝힌 재구성 사례였다.
+      · "5단계"의 정의는 /about 에 있으나(법령 정합성 5단계) 배지에서 도달할 수 없었고,
+        그 정의 자체가 "법령 콘텐츠" 검증이어서 사례 사실관계 검증으로 읽히면 안 된다.
+    이제 배지는 verification_status(검증 범위)를 표시하고, 신선도가 지나면 스스로 강등한다.
+
+    권장 사용: render 'shared/verification_badge', record: @audit_case, variant: 'sidebar'
+    (레거시 사용: date:/source:/source_url: — 이 경로도 InternalMetadataFilter 를 통과한다) %>
 <%
-  date = local_assigns[:date]
-  source = local_assigns.key?(:source) ? local_assigns[:source].presence : "법제처 국가법령정보센터"
-  source_url = local_assigns.key?(:source_url) ? local_assigns[:source_url].presence : "https://www.law.go.kr"
+  record   = local_assigns[:record]
+  presenter = record ? AuthorityPresenter.new(record) : nil
+
+  date = presenter&.verified_on || local_assigns[:date]
   variant = local_assigns[:variant].presence || "inline"
+
+  # 검증 범위 문구 — presenter 가 없으면 범위를 단정하지 않는다.
+  label = presenter&.verification_label || "내용 검토"
+  scope_text = presenter&.verification_scope_text
+  stale = presenter&.stale?
+  freshness_label = presenter&.freshness_label
+
+  # 출처 문자열: 어떤 경로로 들어와도 내부 메타데이터는 차단한다(방어 다중화).
+  raw_source =
+    if presenter
+      presenter.public_source_label
+    elsif local_assigns.key?(:source)
+      local_assigns[:source]
+    else
+      "법제처 국가법령정보센터"
+    end
+  source = InternalMetadataFilter.public_only(raw_source)
+
+  source_url = presenter ? presenter.source_url : (local_assigns.key?(:source_url) ? local_assigns[:source_url].presence : "https://www.law.go.kr")
+
+  # 신선도 경과 시 색을 낮춘다 — 화면이 스스로 낡음을 고발해야 한다(P0 TR-05).
+  # ⚠️ Tailwind JIT 는 소스에 리터럴로 존재하는 클래스만 생성한다.
+  #    "bg-#{accent}-50" 처럼 동적으로 조립하면 CSS 가 만들어지지 않는다 → 전부 리터럴로 둔다.
+  c = if stale
+    { box: "bg-amber-50 border-amber-200", icon: "text-amber-600", title: "text-amber-900",
+      meta: "text-amber-700", dim: "text-amber-500", body: "text-amber-800",
+      link: "text-amber-700 hover:text-amber-900", divider: "border-amber-200",
+      pill: "bg-amber-50 text-amber-800 border-amber-200", pill_icon: "text-amber-600",
+      pill_time: "text-amber-700", sym: "update" }
+  else
+    { box: "bg-emerald-50 border-emerald-200", icon: "text-emerald-600", title: "text-emerald-900",
+      meta: "text-emerald-700", dim: "text-emerald-500", body: "text-emerald-800",
+      link: "text-emerald-700 hover:text-emerald-900", divider: "border-emerald-200",
+      pill: "bg-emerald-50 text-emerald-800 border-emerald-200", pill_icon: "text-emerald-600",
+      pill_time: "text-emerald-700", sym: "verified" }
+  end
 %>
-<% if date.present? %>
+<% if date.present? || presenter.present? %>
   <% case variant %>
   <% when 'sidebar' %>
-    <aside class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 my-4" role="complementary" aria-label="콘텐츠 검증 정보">
+    <aside class="<%= c[:box] %> border rounded-xl p-4 my-4" role="complementary" aria-label="콘텐츠 검증 정보">
       <div class="flex items-start gap-2 mb-2">
-        <span class="material-symbols-outlined text-emerald-600 text-base shrink-0 mt-px" aria-hidden="true">verified</span>
+        <span class="material-symbols-outlined <%= c[:icon] %> text-base shrink-0 mt-px" aria-hidden="true"><%= c[:sym] %></span>
         <div class="flex-1 min-w-0">
-          <p class="text-xs font-bold text-emerald-900 leading-tight">5단계 정합성 검증 완료</p>
-          <p class="text-[11px] text-emerald-700 mt-0.5">
-            <time datetime="<%= date.iso8601 %>"><%= date.strftime('%Y-%m-%d') %></time>
-            <span class="text-emerald-500"> · silmu 검토일</span>
-          </p>
+          <p class="text-xs font-bold <%= c[:title] %> leading-tight"><%= label %></p>
+          <% if date.present? %>
+            <p class="text-[11px] <%= c[:meta] %> mt-0.5">
+              <time datetime="<%= date.iso8601 %>"><%= date.strftime('%Y-%m-%d') %></time>
+              <span class="<%= c[:dim] %>"> · 실무.kr 검토일</span>
+            </p>
+          <% end %>
+          <% if stale && freshness_label.present? %>
+            <p class="text-[11px] font-semibold text-amber-800 mt-1"><%= freshness_label %> — 공식 원문을 함께 확인하세요.</p>
+          <% end %>
         </div>
       </div>
+      <% if scope_text.present? %>
+        <p class="text-[11px] <%= c[:body] %> leading-relaxed mt-2 pt-2 border-t <%= c[:divider] %>">
+          <%= scope_text %>
+          <%= link_to "검증 절차", about_path, class: "underline font-semibold" %>
+        </p>
+      <% end %>
       <% if source.present? %>
-        <p class="text-[11px] text-emerald-800 leading-relaxed mt-2 pt-2 border-t border-emerald-200">
-          <span class="font-semibold">📚 <%= source_url.present? ? "1차 출처" : "검토 출처" %>:</span>
+        <p class="text-[11px] <%= c[:body] %> leading-relaxed mt-2">
+          <span class="font-semibold">📚 출처:</span>
           <% if source_url.present? %>
-            <a href="<%= source_url %>" target="_blank" rel="noopener" class="text-emerald-700 hover:text-emerald-900 underline">
+            <a href="<%= source_url %>" target="_blank" rel="noopener" class="<%= c[:link] %> underline">
               <cite class="legal-cite"><%= source %></cite>
             </a>
           <% else %>
@@ -35,19 +89,21 @@
       <% end %>
     </aside>
   <% when 'compact' %>
-    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200" title="5단계 정합성 검증 완료일 — silmu 자체 검토">
-      <span class="material-symbols-outlined text-[12px]" aria-hidden="true">verified</span>
-      <time datetime="<%= date.iso8601 %>"><%= date.strftime('%Y-%m-%d') %></time>
+    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold <%= c[:pill] %> border" title="<%= scope_text %>">
+      <span class="material-symbols-outlined text-[12px]" aria-hidden="true"><%= c[:sym] %></span>
+      <% if date.present? %><time datetime="<%= date.iso8601 %>"><%= date.strftime('%Y-%m-%d') %></time><% end %>
     </span>
   <% else %>
-    <%# inline (default) — 콘텐츠 헤더 %>
-    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs bg-emerald-50 text-emerald-800 border border-emerald-200" role="note" aria-label="콘텐츠 검증 정보">
-      <span class="material-symbols-outlined text-[14px] text-emerald-600" aria-hidden="true">verified</span>
-      <span class="font-semibold">검증 완료</span>
-      <span class="text-emerald-600">·</span>
-      <time datetime="<%= date.iso8601 %>" class="text-emerald-700"><%= date.strftime('%Y-%m-%d') %></time>
-      <span class="text-emerald-500 hidden sm:inline">·</span>
-      <span class="text-emerald-700 hidden sm:inline">5단계 게이트</span>
+    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs <%= c[:pill] %> border" role="note" aria-label="콘텐츠 검증 정보" title="<%= scope_text %>">
+      <span class="material-symbols-outlined text-[14px] <%= c[:pill_icon] %>" aria-hidden="true"><%= c[:sym] %></span>
+      <span class="font-semibold"><%= label %></span>
+      <% if date.present? %>
+        <span class="<%= c[:pill_icon] %>">·</span>
+        <time datetime="<%= date.iso8601 %>" class="<%= c[:pill_time] %>"><%= date.strftime('%Y-%m-%d') %></time>
+      <% end %>
+      <% if stale %>
+        <span class="text-amber-700 font-semibold hidden sm:inline">· <%= freshness_label %></span>
+      <% end %>
     </div>
   <% end %>
 <% end %>
