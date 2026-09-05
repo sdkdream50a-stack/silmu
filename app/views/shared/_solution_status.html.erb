@@ -1,0 +1,54 @@
+<%# P1.6 §28·§31·§32 — Solution Page 첫 화면 상태 줄.
+    "적용 대상"과 "현재 기준 상태"를 스크롤 전에 보여준다. 다만 화면을 지배하지 않는다(§31).
+
+    사용: render 'shared/solution_status', authority: @authority, variant: 'hero'
+
+    규칙
+      · 판정은 전부 presenter 가 한다. 여기서 계산하지 않는다(§6·§27).
+      · show_agency_scope? 가 false 면 적용 대상을 그리지 않는다 — 근거 없는 범위는 오답을 만든다.
+      · freshness_label 은 상태별로 정직한 문구를 이미 갖고 있다(CURRENT 일 때만 "현재 기준 확인").
+        그러므로 여기서 문구를 지어내지 않고 그대로 쓴다 → 거짓 CURRENT 가 구조적으로 불가능하다(§32).
+      · Tailwind JIT 는 리터럴 클래스만 스캔한다 → 색을 동적으로 조립하지 않는다. %>
+<% a = local_assigns[:authority] %>
+<% if a.present? %>
+  <% hero = local_assigns[:variant].to_s == "hero" %>
+  <%
+    chip = hero ? "bg-white/15 border-white/30 text-white" : "bg-slate-50 border-slate-200 text-slate-700"
+    if a.freshness_attention?
+      state_chip = hero ? "bg-amber-400/20 border-amber-300/50 text-amber-100" : "bg-amber-50 border-amber-200 text-amber-800"
+      state_icon = "update"
+    elsif a.stale?
+      state_chip = hero ? "bg-amber-400/15 border-amber-300/40 text-amber-100" : "bg-amber-50 border-amber-200 text-amber-800"
+      state_icon = "update"
+    elsif a.freshness_status == "UNKNOWN"
+      state_chip = hero ? "bg-white/10 border-white/20 text-white/80" : "bg-slate-50 border-slate-200 text-slate-600"
+      state_icon = "help"
+    else
+      state_chip = hero ? "bg-emerald-400/20 border-emerald-300/50 text-emerald-50" : "bg-emerald-50 border-emerald-200 text-emerald-800"
+      state_icon = "verified"
+    end
+  %>
+  <div class="mt-3 flex flex-wrap items-center gap-2" role="group" aria-label="적용 대상과 현행성">
+    <% if a.show_agency_scope? && a.agency_labels.present? %>
+      <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border text-xs font-medium <%= chip %>">
+        <span class="material-symbols-outlined" style="font-size:14px" aria-hidden="true">apartment</span>
+        적용 대상: <%= a.agency_labels.join(" · ") %>
+      </span>
+    <% end %>
+
+    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border text-xs font-semibold <%= state_chip %>">
+      <span class="material-symbols-outlined" style="font-size:14px" aria-hidden="true"><%= state_icon %></span>
+      <%= a.freshness_label %>
+      <% if (v = a.verified_on).present? %>
+        <span class="font-normal opacity-80">· <time datetime="<%= v.iso8601 %>"><%= v.strftime("%Y.%m.%d") %></time> 검토</span>
+      <% end %>
+    </span>
+
+    <% if (eff = a.effective_on).present? %>
+      <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border text-xs font-medium <%= chip %>">
+        <span class="material-symbols-outlined" style="font-size:14px" aria-hidden="true">event</span>
+        시행 <time datetime="<%= eff.iso8601 %>"><%= eff.strftime("%Y.%m.%d") %></time>
+      </span>
+    <% end %>
+  </div>
+<% end %>

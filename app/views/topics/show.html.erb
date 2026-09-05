@@ -186,6 +186,9 @@
               <span class="material-symbols-outlined" style="font-size:13px" aria-hidden="true">gavel</span>
               <span class="legal-citation">근거: <%= topic_law_label(@topic) %></span>
             </p>
+            <%# P1.6 §28 — 적용 대상 · 현재 기준 상태를 스크롤 전에. 판정은 presenter 가 한다. %>
+            <%= render "shared/solution_status", authority: @authority, variant: "hero" %>
+
             <%# Quick Stats — 핵심 수치 표 (Sprint Task #4: Schwartz·Tufte 검색 의도 매칭) %>
             <% if @topic.respond_to?(:quick_stats) && @topic.quick_stats.is_a?(Array) && @topic.quick_stats.any? %>
               <div class="quick-stats mt-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 max-w-3xl" role="group" aria-label="핵심 수치">
@@ -268,6 +271,36 @@
     </div>
   </div>
 </section>
+
+<%# P1.6 §28·§29·§30 — "지금 해야 할 일".
+    Level 1(결론=summary)을 읽은 사용자에게 Level 2(다음 행동)를 스크롤 전에 준다.
+    howto_steps 가 없는 토픽에는 **섹션 자체를 만들지 않는다** — 빈 박스는 신뢰를 깎는다(§29).
+    데이터는 기존 howto_steps 원문이다. 요약·생성하지 않는다(§69). %>
+<% _steps = (@topic.howto_steps if @topic.respond_to?(:howto_steps) && @topic.howto_steps.is_a?(Array)) || [] %>
+<% _steps = _steps.select { |st| st.is_a?(Hash) && st["name"].present? } %>
+<% if _steps.any? %>
+<section class="bg-white border-b border-slate-200" aria-labelledby="next-actions-heading">
+  <div class="container-wide py-6 lg:py-8">
+    <h2 id="next-actions-heading" class="text-sm font-bold text-editorial-navy uppercase tracking-wider mb-4 flex items-center gap-2">
+      <span class="material-symbols-outlined text-lg" aria-hidden="true">checklist</span>
+      지금 해야 할 일
+    </h2>
+    <ol class="space-y-3 max-w-3xl">
+      <% _steps.first(5).each_with_index do |st, i| %>
+        <li class="flex items-start gap-3">
+          <span class="w-6 h-6 shrink-0 rounded-full bg-editorial-navy-bg text-editorial-navy text-xs font-bold flex items-center justify-center mt-0.5"><%= i + 1 %></span>
+          <div class="min-w-0">
+            <p class="text-sm font-semibold text-editorial-ink leading-snug m-0"><%= st["name"] %></p>
+            <% if st["text"].present? %>
+              <p class="text-sm text-editorial-muted leading-relaxed mt-1 m-0"><%= st["text"] %></p>
+            <% end %>
+          </div>
+        </li>
+      <% end %>
+    </ol>
+  </div>
+</section>
+<% end %>
 
 <!-- 핵심 Q&A 미리보기 (QuickbackClick 개선) -->
 <% if @topic.faq_list.any? %>
