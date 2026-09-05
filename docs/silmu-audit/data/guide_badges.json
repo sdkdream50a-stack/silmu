@@ -1,0 +1,430 @@
+{
+ "official-leave-guide": {
+  "pill": null,
+  "rev": null
+ },
+ "bid-complete-7": {
+  "pill": null,
+  "rev": null
+ },
+ "local-subsidy-complete-2": {
+  "pill": null,
+  "rev": null
+ },
+ "budget-planning-complete-4": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "contract-flow": {
+  "pill": null,
+  "rev": null
+ },
+ "construction-contract-complete-2": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "private-contract-amount-guide": {
+  "pill": "verified 검증 완료 · 2026-06-09 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-06"
+ },
+ "hr-welfare-complete-2": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "budget-execution-complete-6": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "budget-planning-complete-8": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "emergency-contract-guide": {
+  "pill": "verified 검증 완료 · 2026-06-09 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-06"
+ },
+ "suui-contract-complete-1": {
+  "pill": null,
+  "rev": null
+ },
+ "pre-contract-checklist": {
+  "pill": null,
+  "rev": null
+ },
+ "travel-expense-complete-1": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "goods-selection-committee-guide": {
+  "pill": null,
+  "rev": null
+ },
+ "budget-carryover-guide": {
+  "pill": "verified 검증 완료 · 2026-06-09 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-06"
+ },
+ "budget-planning-complete-9": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "budget-execution-complete-7": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "construction-contract-complete-10": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "hr-welfare-complete-3": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "construction-contract-complete-3": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "budget-planning-complete-5": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "local-subsidy-complete-3": {
+  "pill": null,
+  "rev": null
+ },
+ "bid-complete-6": {
+  "pill": null,
+  "rev": null
+ },
+ "local-subsidy-complete-8": {
+  "pill": null,
+  "rev": null
+ },
+ "hr-welfare-complete-4": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "travel-expense-complete-6": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "construction-contract-complete-8": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "suui-contract-complete-6": {
+  "pill": null,
+  "rev": null
+ },
+ "bid-complete-1": {
+  "pill": null,
+  "rev": null
+ },
+ "suui-contract-complete-10": {
+  "pill": null,
+  "rev": null
+ },
+ "local-subsidy-complete-4": {
+  "pill": null,
+  "rev": null
+ },
+ "hr-welfare-complete-8": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "budget-planning-complete-2": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "e-procurement-guide": {
+  "pill": null,
+  "rev": null
+ },
+ "local-subsidy-complete-10": {
+  "pill": null,
+  "rev": null
+ },
+ "construction-contract-complete-4": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "construction-contract-complete-5": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "dual-quote-guide": {
+  "pill": "verified 검증 완료 · 2026-06-09 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-06"
+ },
+ "budget-planning-complete-3": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "concurrent-job-guide": {
+  "pill": null,
+  "rev": null
+ },
+ "hr-welfare-complete-9": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "local-subsidy-complete-5": {
+  "pill": null,
+  "rev": null
+ },
+ "local-subsidy-guide": {
+  "pill": null,
+  "rev": null
+ },
+ "suui-contract-complete-7": {
+  "pill": null,
+  "rev": null
+ },
+ "construction-contract-complete-9": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "bid-complete-10": {
+  "pill": null,
+  "rev": null
+ },
+ "year-end-settlement-guide": {
+  "pill": null,
+  "rev": null
+ },
+ "travel-expense-complete-7": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "travel-expense-complete-10": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "budget-execution-complete-1": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "hr-welfare-complete-5": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "local-subsidy-complete-9": {
+  "pill": null,
+  "rev": null
+ },
+ "suui-contract-complete-4": {
+  "pill": null,
+  "rev": null
+ },
+ "travel-expense-complete-4": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "budget-execution-complete-2": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "hr-welfare-complete-6": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "national-vs-local-contract": {
+  "pill": null,
+  "rev": null
+ },
+ "construction-contract-complete-6": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "suui-contract-complete-8": {
+  "pill": null,
+  "rev": null
+ },
+ "travel-expense-complete-8": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "hr-welfare-complete-10": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "local-subsidy-complete-6": {
+  "pill": null,
+  "rev": null
+ },
+ "leave-of-absence-guide": {
+  "pill": null,
+  "rev": null
+ },
+ "bid-complete-3": {
+  "pill": null,
+  "rev": null
+ },
+ "private-contract-limit-guide": {
+  "pill": null,
+  "rev": null
+ },
+ "bid-complete-2": {
+  "pill": null,
+  "rev": null
+ },
+ "local-subsidy-complete-7": {
+  "pill": null,
+  "rev": null
+ },
+ "budget-planning-complete-1": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "budget-execution-complete-10": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "travel-expense-complete-9": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "suui-contract-complete-9": {
+  "pill": null,
+  "rev": null
+ },
+ "construction-contract-complete-7": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "hr-welfare-complete-7": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "budget-execution-complete-3": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "single-quote-guide": {
+  "pill": "verified 검증 완료 · 2026-06-09 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-06"
+ },
+ "travel-expense-complete-5": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "travel-expense-guide": {
+  "pill": null,
+  "rev": null
+ },
+ "suui-contract-complete-5": {
+  "pill": null,
+  "rev": null
+ },
+ "estimated-price": {
+  "pill": null,
+  "rev": null
+ },
+ "budget-execution-complete-8": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "budget-planning-complete-6": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "budget-planning-complete-10": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "civil-complaint-guide": {
+  "pill": null,
+  "rev": null
+ },
+ "bid-complete-5": {
+  "pill": null,
+  "rev": null
+ },
+ "audit-frequent-issues": {
+  "pill": null,
+  "rev": null
+ },
+ "suui-contract-complete-2": {
+  "pill": null,
+  "rev": null
+ },
+ "inspection-report": {
+  "pill": "verified 검증 완료 · 2026-06-09 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-06"
+ },
+ "travel-expense-complete-2": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "budget-execution-complete-4": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "budget-transfer-guide": {
+  "pill": null,
+  "rev": null
+ },
+ "bid-complete-9": {
+  "pill": null,
+  "rev": null
+ },
+ "bid-complete-8": {
+  "pill": null,
+  "rev": null
+ },
+ "hr-welfare-complete-1": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "budget-execution-complete-5": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "travel-expense-complete-3": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "annual-leave-guide": {
+  "pill": null,
+  "rev": null
+ },
+ "suui-contract-complete-3": {
+  "pill": null,
+  "rev": null
+ },
+ "purchase-and-inspection": {
+  "pill": "verified 검증 완료 · 2026-06-09 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-06"
+ },
+ "private-contract-guide": {
+  "pill": "verified 검증 완료 · 2026-06-09 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-06"
+ },
+ "bidding-guide": {
+  "pill": null,
+  "rev": null
+ },
+ "bid-complete-4": {
+  "pill": null,
+  "rev": null
+ },
+ "local-subsidy-complete-1": {
+  "pill": null,
+  "rev": null
+ },
+ "budget-planning-complete-7": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "budget-execution-complete-9": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ },
+ "price-negotiation-guide": {
+  "pill": null,
+  "rev": null
+ },
+ "construction-contract-complete-1": {
+  "pill": "verified 검증 완료 · 2026-05-19 · <span class=\"text-emerald-700 hidde",
+  "rev": "2026-05"
+ }
+}

@@ -1,0 +1,3950 @@
+{
+ "audit-cases__private-contract-over-limit": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-09",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제25조. 운영 정합",
+  "crt": null
+ },
+ "guides__official-leave-guide": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "guides__bid-complete-7": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__contract-missing-special-terms": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-09",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제49조, 입찰 및 계약집행기준. 운영 정합",
+  "crt": null
+ },
+ "guides__local-subsidy-complete-2": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__annual-leave": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-05-21"
+ },
+ "guides__budget-planning-complete-4": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__local-tax-levy": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-27",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-27"
+ },
+ "guides__contract-flow": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__edu-allowance-temp-teacher-tenure": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-04-29",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-04-29"
+ },
+ "topics__participatory-budget": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-27",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-27"
+ },
+ "topics": {
+  "sec": "static",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__contingency-fund-misuse": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "Phase A~E batch #1~#4 (commits eed4ceb..35dff5d) — 법제처 OPEN API 5단계 게이트 검증",
+  "crt": null
+ },
+ "audit-cases__goe-2021-misc-allowance-improper": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "topics__edu-childcare-allowance-cap": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-04-29",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-04-29"
+ },
+ "audit-cases__sick-leave-days-exceeded": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 국가공무원 복무규정 제18조(병가), 지방공무원 복무규정 제7조의5(병가). 운영 정합",
+  "crt": null
+ },
+ "templates__13": {
+  "sec": "templates",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__silmu-2026-concurrent-unauthorized": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-30",
+  "src": "silmu 자체 시드 — 공개 감사패턴(GOE 2021·SEN 2024 등) 일반화",
+  "crt": null
+ },
+ "audit-cases__price-escalation-below-threshold": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제73조. 운영 정합",
+  "crt": null
+ },
+ "audit-cases__subsidy-settlement-false-report": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 OPEN API mcp spot check + 부정확 정정 (lawId 276363·281909·281539·276163·276357·276117·276113·279605·285453·283257, 2026-05-19 batch #2 — 폐지 조문 3건 + 잘못된 § 9건 정정)",
+  "crt": null
+ },
+ "templates__6": {
+  "sec": "templates",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__split-contract-prohibition": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "topics__retirement-allowance": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-03",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-03"
+ },
+ "topics__budget-compilation-guideline": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-05-19"
+ },
+ "guides__construction-contract-complete-2": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__payment-without-completion": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-09",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 제17조, 시행령 제66조, 제67조. 운영 정합",
+  "crt": null
+ },
+ "audit-cases__budget-misuse": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 OPEN API mcp spot check + 부정확 정정 (lawId 276363·281909·281539·276163·276357·276117·276113·279605·285453·283257, 2026-05-19 batch #2 — 폐지 조문 3건 + 잘못된 § 9건 정정)",
+  "crt": null
+ },
+ "topics__single-quote": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "guides__private-contract-amount-guide": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "tools__progress-inspection": {
+  "sec": "tools",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "templates__25": {
+  "sec": "templates",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__subcontract-unauthorized-re-sub": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 건설산업기본법 제29조(재하도급 제한). 운영 정합",
+  "crt": null
+ },
+ "guides__hr-welfare-complete-2": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__extra-budgetary-fund": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-05-21"
+ },
+ "topics__bid-deposit": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "guides__budget-execution-complete-6": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "guides__budget-planning-complete-8": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__sen-2025-school-y-school-council-online": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "sen_2025_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "audit-cases__local-bond-excess-issuance": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 OPEN API mcp 대조 — legal_basis 정확 확인 (lawId 276363·281909·276163·276357·276113·281539, 2026-05-19 batch #2)",
+  "crt": null
+ },
+ "audit-cases__goe-2021-daily-audit-89-cases": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "tools__design-change": {
+  "sec": "tools",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__goe-2021-reserve-fund-improper": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "GOE 2021 경기교육청 감사보고서 (조문번호 명시 없음 — 차후 정밀화 backlog)",
+  "crt": null
+ },
+ "audit-cases__goe-2021-development-fund-misuse": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "GOE 2021 경기교육청 감사보고서 (조문번호 명시 없음 — 차후 정밀화 backlog)",
+  "crt": null
+ },
+ "audit-cases__inspection-by-requester": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-09",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제66조, 입찰 및 계약집행기준. 운영 정합",
+  "crt": null
+ },
+ "series__budget-execution-complete": {
+  "sec": "series",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__bid-qualification": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-05",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-05"
+ },
+ "audit-cases__cash-management-failure": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 OPEN API mcp spot check + 부정확 정정 (lawId 276363·281909·281539·276163·276357·276117·276113·279605·285453·283257, 2026-05-19 batch #2 — 폐지 조문 3건 + 잘못된 § 9건 정정)",
+  "crt": null
+ },
+ "audit-cases__contract-verbal-agreement": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-09",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 제14조, 시행령 제74조. 운영 정합",
+  "crt": null
+ },
+ "audit-cases__inspector-qualification-violation": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제64조 (검사자의 자격). 운영 정합",
+  "crt": null
+ },
+ "series__bid-complete": {
+  "sec": "series",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "guides__emergency-contract-guide": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__sen-2025-school-c-development-fund-misuse": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "sen_2025_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "topics__performance-bonus": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-05-21"
+ },
+ "topics__welfare-point": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-05-21"
+ },
+ "topics__multiple-price": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "topics__estimated-amount": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-01",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-01"
+ },
+ "topics__fence-installation": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-05-21"
+ },
+ "guides__suui-contract-complete-1": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__foreign-travel-private-tourism": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 OPEN API spot check + 부정확 정정 (lawId 001717·001565·003956·009965·009402·000696, 2026-05-19 batch #1)",
+  "crt": null
+ },
+ "tools__task-calendar": {
+  "sec": "tools",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "guides__pre-contract-checklist": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__goe-2021-budget-transfer-violation": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "feedback": {
+  "sec": "static",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__bid-participation-restriction": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-04-29",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-04-29"
+ },
+ "audit-cases__holiday-bonus-pre-retirement-payment": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "Phase A~E batch #1~#4 mcp baseline 재확인 (2026-05-19 AuditCase verify batch #1)",
+  "crt": null
+ },
+ "guides__travel-expense-complete-1": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "tools__legal-period": {
+  "sec": "tools",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__contract-termination": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "audit-cases__goe-2021-development-fund-handover": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "GOE 2021 경기교육청 감사보고서 (조문번호 명시 없음 — 차후 정밀화 backlog)",
+  "crt": null
+ },
+ "audit-cases__disciplinary-action-request-delay": {
+  "sec": "audit-cases",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "tools__quote-auto": {
+  "sec": "tools",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__payment": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "audit-cases__private-contract-no-reason": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-09",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제25조, 입찰 및 계약집행기준. 운영 정합",
+  "crt": null
+ },
+ "guides__goods-selection-committee-guide": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "guides__budget-carryover-guide": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__silmu-2026-position-suspension-incompetence-dismissal": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-30",
+  "src": "silmu 자체 시드 — 공개 감사패턴(GOE 2021·SEN 2024 등) 일반화",
+  "crt": null
+ },
+ "guides__budget-planning-complete-9": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__sen-2025-school-c-school-council-composition": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "sen_2025_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "guides__budget-execution-complete-7": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__foreign-travel": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-03",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-03"
+ },
+ "guides__construction-contract-complete-10": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "templates__24": {
+  "sec": "templates",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "guides__hr-welfare-complete-3": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__bid-two-envelope-violation": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-29",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제18조(2단계 입찰). 운영 정합",
+  "crt": null
+ },
+ "audit-cases__silmu-2026-overtime-post-approval": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-30",
+  "src": "silmu 자체 시드 — 공개 감사패턴(GOE 2021·SEN 2024 등) 일반화",
+  "crt": null
+ },
+ "audit-cases__travel-expense-double-claim": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 OPEN API spot check + 부정확 정정 (lawId 001717·001565·003956·009965·009402·000696, 2026-05-19 batch #1)",
+  "crt": null
+ },
+ "topics__holiday-bonus": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-04-29",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-04-29"
+ },
+ "audit-cases__design-change-unapproved": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제74조. 운영 정합",
+  "crt": null
+ },
+ "topics__expenditure-commitment": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-05-19"
+ },
+ "tools__contract-documents": {
+  "sec": "tools",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "guides__construction-contract-complete-3": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "templates__7": {
+  "sec": "templates",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__entertainment-expense-rules": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-05-21"
+ },
+ "audit-cases__goe-2021-bid-announcement-period": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "tools__estimated-price": {
+  "sec": "tools",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__school-budget-compilation": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "audit-cases__contract-no-guarantee-forfeiture": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-09",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제52조. 운영 정합",
+  "crt": null
+ },
+ "tools__budget-category-finder": {
+  "sec": "tools",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__parental-leave-benefit-double-receipt": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-29",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 고용보험법 제70조(육아휴직 급여), 고용보험법 제73조(부정 수급), 지방공무원법 제63조제2항제4호·제65조(휴직의 효력) / 국가공무원법 제71조제2항제4호·제73조. 운영 정합",
+  "crt": null
+ },
+ "topics__e-bidding": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "templates__12": {
+  "sec": "templates",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "about": {
+  "sec": "static",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__cost-calculation-guide": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "audit-cases__goe-2021-public-property-occupation-violation": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "audit-cases__cost-calculation-indirect-cost-overrate": {
+  "sec": "audit-cases",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "tools__audit-readiness-checker": {
+  "sec": "tools",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "tools__split-contract-checker": {
+  "sec": "tools",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "guides__budget-planning-complete-5": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "contact": {
+  "sec": "static",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__non-tax-revenue": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-27",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-27"
+ },
+ "audit-cases__late-penalty-not-imposed": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-09",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 제30조, 시행령 제90조, 시행규칙 제75조. 운영 정합",
+  "crt": null
+ },
+ "audit-cases__emergency-contract-unjustified": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제25조 제1항 제2호. 운영 정합",
+  "crt": null
+ },
+ "topics__bid-failure-negotiation": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-04-29",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-04-29"
+ },
+ "topics__e-bidding-error-faq": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-04-29",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-04-29"
+ },
+ "audit-cases__private-contract-split-over-limit": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제25조 제1항 제1호 (소액 수의계약), 지방계약법 시행령 제77조 (계약 분할 금지), 행정안전부 예규 제2023-24호 제5장 제2절 (계약 분할 금지 기준). 운영 정합",
+  "crt": null
+ },
+ "audit-cases__retirement-allowance-service-period-error": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 OPEN API spot check + 부정확 정정 (lawId 001717·001565·003956·009965·009402·000696, 2026-05-19 batch #1)",
+  "crt": null
+ },
+ "topics__accommodation-allowance": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-01",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-01"
+ },
+ "audit-cases__silmu-2026-overtime-travel-overlap": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-30",
+  "src": "silmu 자체 시드 — 공개 감사패턴(GOE 2021·SEN 2024 등) 일반화",
+  "crt": null
+ },
+ "audit-cases__substitution-material-unapproved": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-09",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제63조, 입찰 및 계약집행기준. 운영 정합",
+  "crt": null
+ },
+ "audit-cases__goe-2021-specialized-construction-license": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "guides__local-subsidy-complete-3": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__bid-qualification-001": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제42조(적격심사), 지방자치단체 입찰 및 계약 집행기준 제3장, 지방자치단체 적격심사 세부기준(행정안전부 예규). 운영 정합",
+  "crt": null
+ },
+ "audit-cases__goe-2021-credit-card-self-inspection": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "GOE 2021 경기교육청 감사보고서 (조문번호 명시 없음 — 차후 정밀화 backlog)",
+  "crt": null
+ },
+ "tools__predetermined-price": {
+  "sec": "tools",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__additional-contract-limit": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-03",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-03"
+ },
+ "guides__bid-complete-6": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__payment-advance-misuse": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-29",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방자치단체 입찰 및 계약 집행기준(행정안전부 예규)의 선금 사용 관련 규정, 지방계약법 제6조(계약의 원칙). 운영 정합",
+  "crt": null
+ },
+ "audit-cases__domestic-travel-transport-overclaim": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "Phase A~E batch #1~#4 (commits eed4ceb..35dff5d) — 법제처 OPEN API 5단계 게이트 검증",
+  "crt": null
+ },
+ "guides__local-subsidy-complete-8": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "templates__23": {
+  "sec": "templates",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__private-contract-same-vendor": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-09",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 제9조, 시행령 제25조. 운영 정합",
+  "crt": null
+ },
+ "audit-cases__performance-bonus-score-manipulation": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "Phase A~E batch #1~#4 mcp baseline 재확인 (2026-05-19 AuditCase verify batch #1)",
+  "crt": null
+ },
+ "tools__overtime-calculator": {
+  "sec": "tools",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__split-contract": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "guides__hr-welfare-complete-4": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__private-contract-split": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-09",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 제9조, 시행령 제25조. 운영 정합",
+  "crt": null
+ },
+ "series__hr-complete": {
+  "sec": "series",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__vehicle-travel-allowance": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-05-21"
+ },
+ "topics__contract-guarantee-deposit": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "topics__budget-transfer": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "audit-cases__goe-2021-suspense-cash-single-approval": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "GOE 2021 경기교육청 감사보고서 (조문번호 명시 없음 — 차후 정밀화 backlog)",
+  "crt": null
+ },
+ "audit-cases__information-disclosure-delay": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 공공기관의 정보공개에 관한 법률 제11조(정보공개 여부의 결정), 제9조(비공개 대상 정보), 제18조(이의신청). 운영 정합",
+  "crt": null
+ },
+ "audit-cases__goe-2021-suspension-pay-deduction": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "audit-cases__goe-2021-budget-account-mixed-execution": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "audit-cases__goe-2021-business-promotion-improper": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "audit-cases__revenue-collection-delay": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-29",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방행정제재·부과금의 징수 등에 관한 법률 제8조(독촉)·제9조(압류의 요건 등), 지방재정법 제82조(금전채권의 소멸시효). 운영 정합",
+  "crt": null
+ },
+ "audit-cases__goe-2021-disposal-procedure-violation": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "audit-cases__budget-appropriation-mistake": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 OPEN API mcp 대조 — legal_basis 정확 확인 (lawId 276363·281909·276163·276357·276113·281539, 2026-05-19 batch #2)",
+  "crt": null
+ },
+ "templates__19": {
+  "sec": "templates",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__completion-payment-checklist": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-03",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-03"
+ },
+ "guides__travel-expense-complete-6": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__contract-amount-adjustment-001": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제73조(물가변동으로 인한 계약금액의 조정), 지방자치단체 입찰 및 계약 집행기준 제6장 제1절. 운영 정합",
+  "crt": null
+ },
+ "audit-cases__goe-2021-supplies-management-neglect": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "topics__unit-price-contract": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "guides__construction-contract-complete-8": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__sen-2025-school-c-long-term-contract-violation": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "sen_2025_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "audit-cases__special-leave-holiday-miscalculation": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 국가공무원 복무규정 제20조(특별휴가), 지방공무원 복무규정 제7조의7(특별휴가). 운영 정합",
+  "crt": null
+ },
+ "guides__suui-contract-complete-6": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__contract-execution": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "audit-cases__official-leave-false-reason": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 국가공무원 복무규정 제19조(공가), 지방공무원 복무규정 제7조의6(공가). 운영 정합",
+  "crt": null
+ },
+ "audit-cases__sen-2025-school-y-handover": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "sen_2025_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "audit-cases__budget-timing-violation": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 OPEN API mcp spot check + 부정확 정정 (lawId 276363·281909·281539·276163·276357·276117·276113·279605·285453·283257, 2026-05-19 batch #2 — 폐지 조문 3건 + 잘못된 § 9건 정정)",
+  "crt": null
+ },
+ "guides__bid-complete-1": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "guides__suui-contract-complete-10": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__silmu-2026-reinstatement-unfair-placement": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-30",
+  "src": "silmu 자체 시드 — 공개 감사패턴(GOE 2021·SEN 2024 등) 일반화",
+  "crt": null
+ },
+ "guides__local-subsidy-complete-4": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__e-bidding-error-switched-to-paper": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-29",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 전자조달의 이용 및 촉진에 관한 법률 제7조(전자입찰), 지방계약법 시행령 제6조의2(정보처리장치의 지정·고시), 국가종합전자조달시스템 이용약관 제24조(시스템 장애 처리), 「지방자치단체 입찰 및 계약 집행기준」(전자입찰 운영·임의 변경 제한). 운영 정합",
+  "crt": null
+ },
+ "audit-cases__public-procurement-mandatory-bid-bypassed": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 제9조 제1항 (계약의 방법), 지방계약법 시행령 제25조 (수의계약 허용 범위). 운영 정합",
+  "crt": null
+ },
+ "topics__estimated-price": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "series__travel-complete": {
+  "sec": "series",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "tools__cost-calculation": {
+  "sec": "tools",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__emergency-budget-violation": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 OPEN API mcp spot check + 부정확 정정 (lawId 276363·281909·281539·276163·276357·276117·276113·279605·285453·283257, 2026-05-19 batch #2 — 폐지 조문 3건 + 잘못된 § 9건 정정)",
+  "crt": null
+ },
+ "guides__hr-welfare-complete-8": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "guides__budget-planning-complete-2": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__silmu-2026-overtime-fixed-share-no-prorate": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-30",
+  "src": "silmu 자체 시드 — 공개 감사패턴(GOE 2021·SEN 2024 등) 일반화",
+  "crt": null
+ },
+ "guides__e-procurement-guide": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "tools__severance-calculator": {
+  "sec": "tools",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__budget-lapse": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-05-19"
+ },
+ "topics__late-penalty": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "audit-cases__subcontract-whole-transfer": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 건설산업기본법 제29조(일괄하도급 금지). 운영 정합",
+  "crt": null
+ },
+ "audit-cases__silmu-2026-position-suspension-criminal-prosecution": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-30",
+  "src": "silmu 자체 시드 — 공개 감사패턴(GOE 2021·SEN 2024 등) 일반화",
+  "crt": null
+ },
+ "audit-cases__goe-2021-credit-card-payment-account": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "GOE 2021 경기교육청 감사보고서 (조문번호 명시 없음 — 차후 정밀화 backlog)",
+  "crt": null
+ },
+ "terms": {
+  "sec": "static",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__unit-price-contract-quantity-exceeded": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제79조 (단가계약), 지방회계법 제29조 (지출원인행위), 지방계약법 제9조 (경쟁입찰의 원칙). 운영 정합",
+  "crt": null
+ },
+ "audit-cases__contract-guarantee-not-collected": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 제15조 (계약보증금), 지방계약법 시행령 제52조 (계약보증금 납부방법), 지방계약법 시행령 제53조 (계약보증금 면제). 운영 정합",
+  "crt": null
+ },
+ "templates__15": {
+  "sec": "templates",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__goe-2021-beneficiary-cost-settlement": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "GOE 2021 경기교육청 감사보고서 (조문번호 명시 없음 — 차후 정밀화 backlog)",
+  "crt": null
+ },
+ "audit-cases__business-expense-personal-use": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 OPEN API mcp spot check + 부정확 정정 (lawId 276363·281909·281539·276163·276357·276117·276113·279605·285453·283257, 2026-05-19 batch #2 — 폐지 조문 3건 + 잘못된 § 9건 정정)",
+  "crt": null
+ },
+ "topics__lowest-bid-rate": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "audit-cases__goods-inspection-failure": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제64조 (검사의 방법). 운영 정합",
+  "crt": null
+ },
+ "guides__local-subsidy-complete-10": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "guides__construction-contract-complete-4": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__e-procurement-guide": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "silmu-search": {
+  "sec": "static",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__sick-leave": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-05-21"
+ },
+ "guides__construction-contract-complete-5": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "templates__1": {
+  "sec": "templates",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__sen-2024-school-s-academic-eval-violation": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "sen_2024_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "topics__concurrent-position": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-05-21"
+ },
+ "audit-cases__goods-selection-committee-bypassed": {
+  "sec": "audit-cases",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__contract-amount-adjustment": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-04-29",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-04-29"
+ },
+ "topics__goods-selection-committee": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "audit-cases__bid-unfair-spec": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-29",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 제9조, 입찰 및 계약집행기준. 운영 정합",
+  "crt": null
+ },
+ "topics__private-contract": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "topics__subcontract": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "audit-cases__sen-2024-school-s-temp-building-unauthorized": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "sen_2024_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "templates__14": {
+  "sec": "templates",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "guides__dual-quote-guide": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__private-contract-justification": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-05",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-05"
+ },
+ "audit-cases__budget-execution-wrong-account": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "Phase A~E batch #1~#4 mcp baseline 재확인 (2026-05-19 AuditCase verify batch #1)",
+  "crt": null
+ },
+ "start": {
+  "sec": "static",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__bid-announcement": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-15",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-15"
+ },
+ "audit-cases__goe-2021-school-facility-temp-use-permit": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "audit-cases__spec-price-integration-violation": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제18조 (규격가격 분리입찰), 행정안전부 지방자치단체 입찰 및 계약 집행기준 제3장 제4절 규격가격 분리입찰. 운영 정합",
+  "crt": null
+ },
+ "guides__budget-planning-complete-3": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "guides__concurrent-job-guide": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__price-escalation": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "topics__national-vs-local-contract-law": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-05",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-05"
+ },
+ "audit-cases__school-budget-without-committee-review": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 OPEN API mcp spot check + 부정확 정정 (lawId 276363·281909·281539·276163·276357·276117·276113·279605·285453·283257, 2026-05-19 batch #2 — 폐지 조문 3건 + 잘못된 § 9건 정정)",
+  "crt": null
+ },
+ "audit-cases__subcontract-direct-payment-denied": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 건설산업기본법 제35조, 하도급법 제14조. 운영 정합",
+  "crt": null
+ },
+ "guides__hr-welfare-complete-9": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__goe-2021-vending-machine-fee-miscalculation": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "audit-cases__settlement-report-delayed": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 OPEN API mcp spot check + 부정확 정정 (lawId 276363·281909·281539·276163·276357·276117·276113·279605·285453·283257, 2026-05-19 batch #2 — 폐지 조문 3건 + 잘못된 § 9건 정정)",
+  "crt": null
+ },
+ "audit-cases__budget-transfer-without-council-approval": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 OPEN API mcp spot check + 부정확 정정 (lawId 276363·281909·281539·276163·276357·276117·276113·279605·285453·283257, 2026-05-19 batch #2 — 폐지 조문 3건 + 잘못된 § 9건 정정)",
+  "crt": null
+ },
+ "guides__local-subsidy-complete-5": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__payment-before-inspection": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-09",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 제17조, 시행령 제67조. 운영 정합",
+  "crt": null
+ },
+ "topics__budget-execution": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-05-19"
+ },
+ "guides__local-subsidy-guide": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "tools__contract-method": {
+  "sec": "tools",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__sen-2024-school-s-construction-contract-violation": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "sen_2024_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "audit-cases__debt-management-negligence": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 OPEN API mcp spot check + 부정확 정정 (lawId 276363·281909·281539·276163·276357·276117·276113·279605·285453·283257, 2026-05-19 batch #2 — 폐지 조문 3건 + 잘못된 § 9건 정정)",
+  "crt": null
+ },
+ "audit-cases__payment-no-deduction-penalty": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-09",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 제30조, 시행령 제90조, 시행규칙 제75조. 운영 정합",
+  "crt": null
+ },
+ "guides__suui-contract-complete-7": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__contract-late-execution": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-09",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제49조. 운영 정합",
+  "crt": null
+ },
+ "guides__construction-contract-complete-9": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__double-entry-error": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 OPEN API mcp spot check + 부정확 정정 (lawId 276363·281909·281539·276163·276357·276117·276113·279605·285453·283257, 2026-05-19 batch #2 — 폐지 조문 3건 + 잘못된 § 9건 정정)",
+  "crt": null
+ },
+ "audit-cases__goe-2021-split-private-contracts": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "topics__budget-carryover": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "topics__small-amount-contract": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "tools__travel-calculator": {
+  "sec": "tools",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "guides__bid-complete-10": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "guides__year-end-settlement-guide": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__goe-2021-contract-review-omission": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "guides__travel-expense-complete-7": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "templates__18": {
+  "sec": "templates",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__double-booking-budget": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "Phase A~E batch #1~#4 mcp baseline 재확인 (2026-05-19 AuditCase verify batch #1)",
+  "crt": null
+ },
+ "audit-cases__bid-evaluation-criteria-missing": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-09",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제42조, 적격심사기준. 운영 정합",
+  "crt": null
+ },
+ "guides__travel-expense-complete-10": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__small-amount-intentional-split": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 제9조 제1항 (경쟁입찰의 원칙), 지방계약법 시행령 제25조 제1항 제5호, 지방계약법 시행령 제77조 (공사의 분할계약 금지). 운영 정합",
+  "crt": null
+ },
+ "audit-cases__goe-2021-deemed-budget-violation": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "audit-cases__split-order-monthly-to-avoid-bidding": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 제9조 제1항 (경쟁입찰의 원칙), 지방계약법 시행령 제77조 (공사의 분할계약 금지), 지방계약법 시행령 제79조 (단가계약). 운영 정합",
+  "crt": null
+ },
+ "tools__official-document": {
+  "sec": "tools",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__long-term-contract": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "audit-cases__goe-2021-condolence-money-improper": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "audit-cases__late-penalty-wrong-rate": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-09",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제90조, 시행규칙 제75조. 운영 정합",
+  "crt": null
+ },
+ "guides__budget-execution-complete-1": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "templates__22": {
+  "sec": "templates",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__bid-rebid-condition-change": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-29",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제19조(재입찰 및 재공고입찰). 운영 정합",
+  "crt": null
+ },
+ "tools__price-adjustment-calculator": {
+  "sec": "tools",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__defect-warranty": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "guides__hr-welfare-complete-5": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__accounting-officers": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "topics__edu-childcare-pay-2025-revision": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-04-29",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-04-29"
+ },
+ "guides__local-subsidy-complete-9": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__budget-carryover-violation": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 OPEN API mcp spot check + 부정확 정정 (lawId 276363·281909·281539·276163·276357·276117·276113·279605·285453·283257, 2026-05-19 batch #2 — 폐지 조문 3건 + 잘못된 § 9건 정정)",
+  "crt": null
+ },
+ "topics__public-procurement-overview": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-04-29",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-04-29"
+ },
+ "audit-cases__goe-2021-payment-processing-improper": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "tools__annual-leave-calculator": {
+  "sec": "tools",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__silmu-2026-concurrent-external-lecture-no-report": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-30",
+  "src": "silmu 자체 시드 — 공개 감사패턴(GOE 2021·SEN 2024 등) 일반화",
+  "crt": null
+ },
+ "audit-cases__sen-2025-school-s-disaster-prevention": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "sen_2025_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "topics__contingency-fund": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-04-29",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-04-29"
+ },
+ "tools__budget-transfer-checker": {
+  "sec": "tools",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "series__budget-planning-complete": {
+  "sec": "series",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__public-property-management": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-04-29",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-04-29"
+ },
+ "guides__suui-contract-complete-4": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__estimated-price-leak-incident": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-29",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 제31조 (부정당업자의 입찰 참가자격 제한), 지방계약법 시행령 제8조 (예정가격의 작성 및 비치), 형법 제129조 (수뢰죄). 운영 정합",
+  "crt": null
+ },
+ "topics__information-disclosure": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-04-29",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-04-29"
+ },
+ "audit-cases__goe-2021-budget-formation-violation": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "topics__advance-payment": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "audit-cases__family-allowance-ineligible-payment": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "Phase A~E batch #1~#4 mcp baseline 재확인 (2026-05-19 AuditCase verify batch #1)",
+  "crt": null
+ },
+ "templates": {
+  "sec": "static",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "guides__travel-expense-complete-4": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__reinstatement": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-05-21"
+ },
+ "audit-cases__sen-2025-school-i-split-private-disability": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "sen_2025_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "topics__private-contract-amount": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "topics__edu-overtime-retirement-month": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-04-29",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-04-29"
+ },
+ "topics__special-leave": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-16",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-16"
+ },
+ "audit-cases__additional-contract-limit-001": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제74조(설계변경으로 인한 계약금액의 조정), 지방자치단체 입찰 및 계약 집행기준 제6장 제2절. 운영 정합",
+  "crt": null
+ },
+ "audit-cases__goe-2021-building-registration-delay": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "guides__budget-execution-complete-2": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__budget-item-wrong-travel": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "GOE 2021 경기교육청 감사보고서 (조문번호 명시 없음 — 차후 정밀화 backlog)",
+  "crt": null
+ },
+ "audit-cases__mas-contract-non-listed-product": {
+  "sec": "audit-cases",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__goe-2021-management-allowance-mispayment": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "audit-cases__defective-construction-cover-up": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-29",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 제17조 (검사), 지방계약법 시행령 제64조 (검사), 형법 제129조 (수뢰죄), 건설산업기본법 제82조 (영업정지 등). 운영 정합",
+  "crt": null
+ },
+ "guides__hr-welfare-complete-6": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "templates__21": {
+  "sec": "templates",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__goe-2021-bad-debt-write-off-violation": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "GOE 2021 경기교육청 감사보고서 (조문번호 명시 없음 — 차후 정밀화 backlog)",
+  "crt": null
+ },
+ "tools__contingency-fund": {
+  "sec": "tools",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__goe-2021-annual-leave-compensation-mispayment": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "guides__national-vs-local-contract": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__sen-2025-school-y-facility-multi-violation": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "sen_2025_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "audit-cases__non-budgetary-funds-violation": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 OPEN API mcp spot check + 부정확 정정 (lawId 276363·281909·281539·276163·276357·276117·276113·279605·285453·283257, 2026-05-19 batch #2 — 폐지 조문 3건 + 잘못된 § 9건 정정)",
+  "crt": null
+ },
+ "audit-cases__goe-2021-clothing-expense-improper": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "guides__construction-contract-complete-6": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "guides__suui-contract-complete-8": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__goe-2021-beneficiary-cost-direct-use": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "GOE 2021 경기교육청 감사보고서 (조문번호 명시 없음 — 차후 정밀화 backlog)",
+  "crt": null
+ },
+ "templates__2": {
+  "sec": "templates",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "tools__subsidy-settlement-checker": {
+  "sec": "tools",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__accommodation-allowance-false-claim": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "Phase A~E batch #1~#4 (commits eed4ceb..35dff5d) — 법제처 OPEN API 5단계 게이트 검증",
+  "crt": null
+ },
+ "audit-cases__silmu-2026-reinstatement-late-notice": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-30",
+  "src": "silmu 자체 시드 — 공개 감사패턴(GOE 2021·SEN 2024 등) 일반화",
+  "crt": null
+ },
+ "templates__17": {
+  "sec": "templates",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "tools__allowance-calculator": {
+  "sec": "tools",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__contract-period-extension": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "audit-cases__budget-transfer-limit-violation": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 OPEN API mcp spot check + 부정확 정정 (lawId 276363·281909·281539·276163·276357·276117·276113·279605·285453·283257, 2026-05-19 batch #2 — 폐지 조문 3건 + 잘못된 § 9건 정정)",
+  "crt": null
+ },
+ "guides__travel-expense-complete-8": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__false-private-contract-reason": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 제9조 (계약의 방법), 지방계약법 시행령 제25조 (수의계약), 형법 제227조 (허위공문서작성). 운영 정합",
+  "crt": null
+ },
+ "tools__performance-bonus-calculator": {
+  "sec": "tools",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__official-leave": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-05-21"
+ },
+ "audit-cases__silmu-2026-position-suspension-discipline-pending": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-30",
+  "src": "silmu 자체 시드 — 공개 감사패턴(GOE 2021·SEN 2024 등) 일반화",
+  "crt": null
+ },
+ "tools__pdf": {
+  "sec": "tools",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__leave-of-absence": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-05-21"
+ },
+ "guides__hr-welfare-complete-10": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__goe-2021-suspense-cash-management": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "GOE 2021 경기교육청 감사보고서 (조문번호 명시 없음 — 차후 정밀화 backlog)",
+  "crt": null
+ },
+ "topics__travel-expense": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-04-29",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-04-29"
+ },
+ "audit-cases__goe-2021-private-contract-s2b-mismatch": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "topics__quote-collection-guide": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-04-29",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-04-29"
+ },
+ "topics__dual-quote": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-04-29",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-04-29"
+ },
+ "audit-cases__private-contract-price-no-negotiation": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제25조, 제30조. 운영 정합",
+  "crt": null
+ },
+ "audit-cases__defect-warranty-no-deposit": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-09",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제71조. 운영 정합",
+  "crt": null
+ },
+ "audit-cases__lowest-bid-rate-violation-award": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-29",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제42조(낙찰자 결정), 「지방자치단체 입찰 시 낙찰자 결정기준」(행정안전부 예규, 낙찰하한율), 행정안전부 예규(지방자치단체 입찰 및 계약 집행기준) 제5장 제3절. 운영 정합",
+  "crt": null
+ },
+ "guides__local-subsidy-complete-6": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__contract-period-extension-illegal": {
+  "sec": "audit-cases",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "guides": {
+  "sec": "static",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "tools__budget-estimator": {
+  "sec": "tools",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "guides__leave-of-absence-guide": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "guides__bid-complete-3": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__bid-period-insufficient": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-09",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제35조. 운영 정합",
+  "crt": null
+ },
+ "guides__private-contract-limit-guide": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "guides__bid-complete-2": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__penalty-reduction-unauthorized": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 제30조 (지연배상금 등), 지방계약법 시행령 제90조 (지연배상금), 행정안전부 예규 「지방자치단체 입찰 및 계약집행기준」 (책임 없는 사유 지체일수 제외 기준). 운영 정합",
+  "crt": null
+ },
+ "guides__local-subsidy-complete-7": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__estimated-payment": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-05-20",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-05-20"
+ },
+ "audit-cases__sen-2025-school-d-sick-leave-certificate": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "sen_2025_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "guides__budget-planning-complete-1": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__sen-2025-school-s-special-leave-evidence": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "sen_2025_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "topics__budget-item-standard": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-05-19"
+ },
+ "topics__year-end-settlement": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "audit-cases__inspection-delayed": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-09",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제66조. 운영 정합",
+  "crt": null
+ },
+ "audit-cases__budget-item-wrong-category": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 OPEN API mcp spot check + 부정확 정정 (lawId 276363·281909·281539·276163·276357·276117·276113·279605·285453·283257, 2026-05-19 batch #2 — 폐지 조문 3건 + 잘못된 § 9건 정정)",
+  "crt": null
+ },
+ "topics__bidding": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-15",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-15"
+ },
+ "audit-cases__goe-2021-private-contract-2bid-violation": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "audit-cases__contract-termination-no-notice": {
+  "sec": "audit-cases",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__subcontract-no-notice": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 건설산업기본법 제29조 제6항(하도급 통보). 운영 정합",
+  "crt": null
+ },
+ "guides__budget-execution-complete-10": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__goe-2021-vehicle-management-failure": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "guides__travel-expense-complete-9": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "templates__16": {
+  "sec": "templates",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__welfare-point-cash-conversion": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 OPEN API spot check + 부정확 정정 (lawId 001717·001565·003956·009965·009402·000696, 2026-05-19 batch #1)",
+  "crt": null
+ },
+ "audit-cases__national-subsidy-purpose-misuse": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 OPEN API mcp spot check + 부정확 정정 (lawId 276363·281909·281539·276163·276357·276117·276113·279605·285453·283257, 2026-05-19 batch #2 — 폐지 조문 3건 + 잘못된 § 9건 정정)",
+  "crt": null
+ },
+ "audit-cases__supplementary-budget-violation": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 OPEN API mcp 대조 — legal_basis 정확 확인 (lawId 276363·281909·276163·276357·276113·281539, 2026-05-19 batch #2)",
+  "crt": null
+ },
+ "updates": {
+  "sec": "static",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__goe-2021-split-after-school-program": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "audit-cases__goe-2021-foreign-teacher-housing-deposit": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "topics__direct-production-confirm": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-04-29",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-04-29"
+ },
+ "audit-cases__estimated-price-leak": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-09",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제8조, 형법 제127조(공무상 비밀누설). 운영 정합",
+  "crt": null
+ },
+ "audit-cases__expenditure-over-budget": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 OPEN API mcp 대조 — legal_basis 정확 확인 (lawId 276363·281909·276163·276357·276113·281539, 2026-05-19 batch #2)",
+  "crt": null
+ },
+ "guides__suui-contract-complete-9": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "templates__3": {
+  "sec": "templates",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "guides__construction-contract-complete-7": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__silmu-2026-position-suspension-senior-officer-review": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-30",
+  "src": "silmu 자체 시드 — 공개 감사패턴(GOE 2021·SEN 2024 등) 일반화",
+  "crt": null
+ },
+ "tools__insurance-calculator": {
+  "sec": "tools",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__goe-2021-credit-card-usage-improper": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "GOE 2021 경기교육청 감사보고서 (조문번호 명시 없음 — 차후 정밀화 backlog)",
+  "crt": null
+ },
+ "audit-cases__bid-deposit-001": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제37조(입찰보증금), 지방계약법 제9조(계약의 방법), 지방자치단체 입찰 및 계약 집행기준 제2장 제3절. 운영 정합",
+  "crt": null
+ },
+ "guides__hr-welfare-complete-7": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__private-contract-retroactive": {
+  "sec": "audit-cases",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__budget-document-error": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 OPEN API mcp spot check + 부정확 정정 (lawId 276363·281909·281539·276163·276357·276117·276113·279605·285453·283257, 2026-05-19 batch #2 — 폐지 조문 3건 + 잘못된 § 9건 정정)",
+  "crt": null
+ },
+ "templates__20": {
+  "sec": "templates",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "guides__budget-execution-complete-3": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "guides__single-quote-guide": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__silmu-2026-reinstatement-expired-no-notice": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-30",
+  "src": "silmu 자체 시드 — 공개 감사패턴(GOE 2021·SEN 2024 등) 일반화",
+  "crt": null
+ },
+ "tools": {
+  "sec": "static",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__emergency-contract": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-04-29",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-04-29"
+ },
+ "audit-cases__private-contract-purpose-mismatch": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-09",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제25조 제1항 제4호. 운영 정합",
+  "crt": null
+ },
+ "audit-cases__goe-2021-performance-bonus-mispayment": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "audit-cases__secondment-return-delay": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-29",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 국가공무원법 제32조의4(파견근무), 지방공무원법 제30조의4(파견근무), 공무원임용령 제41조(파견근무). 운영 정합",
+  "crt": null
+ },
+ "audit-cases__completion-payment-checklist-001": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제64조(검사), 제67조(대가의 지급), 지방자치단체를 당사자로 하는 계약에 관한 법률 제18조, 건설산업기본법 제28조(하자담보책임). 운영 정합",
+  "crt": null
+ },
+ "audit-cases__goe-2021-family-allowance-misdeclaration": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "guides__travel-expense-complete-5": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__sen-2025-school-s-supply-direct-prod-cert": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "sen_2025_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "audit-cases__software-dev-misclassified-as-goods": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 제9조(계약의 방법), 지방계약법 시행령 제25조(수의계약에 의할 수 있는 경우), 소프트웨어 진흥법 제2조(정의), 행정안전부 예규 제332호(지방자치단체 입찰 및 계약 집행기준) 제2장. 운영 정합",
+  "crt": null
+ },
+ "topics__audit-immunity": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-05-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-05-04"
+ },
+ "audit-cases__goe-2021-special-duty-allowance-mispayment": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "audit-cases__leave-of-absence-employment-unreported": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-29",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 국가공무원법 제64조(영리 업무 및 겸직 금지)·제73조(휴직의 효력), 지방공무원법 제63조(휴직), 국가공무원 복무규정 제25조(영리 업무의 금지). 운영 정합",
+  "crt": null
+ },
+ "guides__travel-expense-guide": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "tools__qualification-evaluation": {
+  "sec": "tools",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__national-subsidy": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-04-29",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-04-29"
+ },
+ "audit-cases__sen-2025-foundation-y-audit-omission": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "sen_2025_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "guides__suui-contract-complete-5": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__contract-guarantee-exemption": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "topics__budget-compilation": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "series__contract-complete": {
+  "sec": "series",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "tools__quote-review": {
+  "sec": "tools",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__multiple-price-manipulation": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제9조(예정가격의 결정방법), 지방계약법 시행령 제42조(낙찰자 결정), 행정안전부 예규(지방자치단체 입찰 및 계약집행기준 ±3% 복수예비가격), 지방계약법 모법 제31조(부정당업자의 입찰 참가자격 제한), 형법 제123조(직권남용). 운영 정합",
+  "crt": null
+ },
+ "audit-cases__goe-2021-football-team-extension-contract": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "audit-cases__national-local-contract-law-mix": {
+  "sec": "audit-cases",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__year-end-settlement-duplicate-deduction": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 OPEN API spot check + 부정확 정정 (lawId 001717·001565·003956·009965·009402·000696, 2026-05-19 batch #1)",
+  "crt": null
+ },
+ "audit-cases__budget-overrun": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 OPEN API mcp 대조 — legal_basis 정확 확인 (lawId 276363·281909·276163·276357·276113·281539, 2026-05-19 batch #2)",
+  "crt": null
+ },
+ "audit-cases__goe-2021-failed-bid-private-contract": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "guides__estimated-price": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__budget-unauthorized-transfer": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-29",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방재정법 제47조의2(예산의 이용·이체), 제49조(예산의 전용). 운영 정합",
+  "crt": null
+ },
+ "audit-cases__sen-2025-school-y-vehicle-leave-violation": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "sen_2025_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "tools__pension-calculator": {
+  "sec": "tools",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__performance-guarantee-waiver-loss": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제53조 (계약보증금 면제), 지방계약법 제15조 (계약보증금), 지방계약법 시행규칙 제66조 (계약보증금 면제 대상). 운영 정합",
+  "crt": null
+ },
+ "topics__travel-expense-settlement": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-05-21"
+ },
+ "templates__4": {
+  "sec": "templates",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__goe-2021-fiscal-year-independence-violation": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "GOE 2021 경기교육청 감사보고서 (조문번호 명시 없음 — 차후 정밀화 backlog)",
+  "crt": null
+ },
+ "topics__construction-completion": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "topics__performance-guarantee": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "audit-cases__guideline-abolished-project-budget": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 OPEN API mcp 대조 — legal_basis 정확 확인 (lawId 276363·281909·276163·276357·276113·281539, 2026-05-19 batch #2)",
+  "crt": null
+ },
+ "audit-cases__payment-delay-no-interest": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-09",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 제18조(대가의 지급), 시행령 제67조(대가의 지급, 5일 이내). 운영 정합",
+  "crt": null
+ },
+ "audit-cases__school-budget-deadline-violation": {
+  "sec": "audit-cases",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__position-suspension": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-05-30",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-05-30"
+ },
+ "templates__11": {
+  "sec": "templates",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__goe-2021-accounting-disorder-construction": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "GOE 2021 경기교육청 감사보고서 (조문번호 명시 없음 — 차후 정밀화 backlog)",
+  "crt": null
+ },
+ "audit-cases__sen-2025-school-v-budget-pre-execution": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "sen_2025_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "audit-cases__goe-2021-retirement-pension-mismanagement": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "GOE 2021 경기교육청 감사보고서 (조문번호 명시 없음 — 차후 정밀화 backlog)",
+  "crt": null
+ },
+ "audit-cases__sen-2025-school-d-split-private-contract": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "sen_2025_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "topics__qualification-failure": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-03",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-03"
+ },
+ "audit-cases__goe-2021-instructor-allowance-improper": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "guides__budget-execution-complete-8": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__goe-2021-improper-payee-personal-card": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "audit-cases__inspection-procedure-omission": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제64조 (검사). 운영 정합",
+  "crt": null
+ },
+ "guides__budget-planning-complete-6": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__sen-2025-school-i-temp-teacher-screening": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "sen_2025_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "topics__disciplinary-action": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-05-21"
+ },
+ "topics__overtime-allowance": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-05-21"
+ },
+ "audit-cases__accounting-officer-dual-role-fraud": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 OPEN API mcp 대조 — legal_basis 정확 확인 (lawId 276363·281909·276163·276357·276113·281539, 2026-05-19 batch #2)",
+  "crt": null
+ },
+ "audit-cases__subcontract-payment-delay": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 건설산업기본법 제34조(하도급대금 지급). 운영 정합",
+  "crt": null
+ },
+ "topics__inspection": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "guides__budget-planning-complete-10": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__overpayment-not-recovered": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-09",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제67조, 지방회계법 제49조. 운영 정합",
+  "crt": null
+ },
+ "audit-cases__contract-wrong-party": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-09",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제13조, 건설산업기본법 제9조. 운영 정합",
+  "crt": null
+ },
+ "audit-cases__annual-leave-compensation-double-payment": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-29",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 국가공무원 복무규정 제15조(연가 일수), 공무원수당 등에 관한 규정 제18조의5(연가보상비). 운영 정합",
+  "crt": null
+ },
+ "guides__civil-complaint-guide": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "guides__bid-complete-5": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__travel-expense-settlement-no-receipt": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 OPEN API spot check + 부정확 정정 (lawId 001717·001565·003956·009965·009402·000696, 2026-05-19 batch #1)",
+  "crt": null
+ },
+ "audit-cases__budget-execution-before-approval": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 OPEN API mcp 대조 — legal_basis 정확 확인 (lawId 276363·281909·276163·276357·276113·281539, 2026-05-19 batch #2)",
+  "crt": null
+ },
+ "audit-cases__private-contract-no-quote": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-09",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제25조 제1항 제5호, 제30조. 운영 정합",
+  "crt": null
+ },
+ "audit-cases__estimated-price-no-research": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-09",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제7조, 제9조. 운영 정합",
+  "crt": null
+ },
+ "audit-cases__sen-2025-school-c-electrical-separate-order": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "sen_2025_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "guides__audit-frequent-issues": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "guides__suui-contract-complete-2": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "templates__8": {
+  "sec": "templates",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__quote-collection-same-vendor-double": {
+  "sec": "audit-cases",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__instructor-allowance": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-01",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-01"
+ },
+ "guides__inspection-report": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__joint-contract-nominal": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제88조, 건설산업기본법. 운영 정합",
+  "crt": null
+ },
+ "audit-cases__supplementary-budget-before-council": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 OPEN API mcp 대조 — legal_basis 정확 확인 (lawId 276363·281909·276163·276357·276113·281539, 2026-05-19 batch #2)",
+  "crt": null
+ },
+ "tools__project-plan": {
+  "sec": "tools",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__parental-leave": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-05-21"
+ },
+ "audit-cases__defective-inspection": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제64조 (검사의 기준). 운영 정합",
+  "crt": null
+ },
+ "audit-cases__goe-2021-gift-voucher-management": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "GOE 2021 경기교육청 감사보고서 (조문번호 명시 없음 — 차후 정밀화 backlog)",
+  "crt": null
+ },
+ "guides__travel-expense-complete-2": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__local-festival-event": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-27",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-27"
+ },
+ "audit-cases__silmu-2026-position-suspension-bribery-investigation": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-30",
+  "src": "silmu 자체 시드 — 공개 감사패턴(GOE 2021·SEN 2024 등) 일반화",
+  "crt": null
+ },
+ "topics__price-negotiation": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-04-29",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-04-29"
+ },
+ "audit-cases__bid-failure-negotiation-001": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제25조(수의계약에 의할 수 있는 경우), 제30조(견적서의 제출), 지방자치단체 입찰 및 계약 집행기준 제4장 제2절. 운영 정합",
+  "crt": null
+ },
+ "audit-cases__e-bidding-offline-processed": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제39조(입찰서의 제출ㆍ접수 및 입찰의 무효), 「지방자치단체 입찰 및 계약 집행기준」(전자입찰 의무 대상). 운영 정합",
+  "crt": null
+ },
+ "topics__local-subsidy-grant": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-27",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-27"
+ },
+ "guides__budget-execution-complete-4": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "guides__budget-transfer-guide": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__public-debt-management": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-04-29",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-04-29"
+ },
+ "audit-cases__qualification-failure-wrong-award": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제42조 (낙찰자 결정), 지방계약법 시행령 제42조제2항 (적격심사 기준), 행정안전부 예규 제2023-24호 제4장 제3절 (적격심사 세부 기준). 운영 정합",
+  "crt": null
+ },
+ "topics__edu-allowance-tenure-non-eligible-career": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-04-29",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-04-29"
+ },
+ "audit-cases__safety-violation-construction": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-29",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 건설기술진흥법 제62조, 산업안전보건법 제38조. 운영 정합",
+  "crt": null
+ },
+ "audit-cases__silmu-2026-overtime-weekday-no-deduction": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-30",
+  "src": "silmu 자체 시드 — 공개 감사패턴(GOE 2021·SEN 2024 등) 일반화",
+  "crt": null
+ },
+ "guides__bid-complete-9": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "series__subsidy-complete": {
+  "sec": "series",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__e-procurement-bypass-narajangteo": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-29",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 전자조달의 이용 및 촉진에 관한 법률 제5조(조달업무의 전자적 처리)·제6조(경쟁입찰의 전자적 공고)·제7조(전자입찰), 지방계약법 시행령 제6조의2(정보처리장치의 지정·고시), 「지방자치단체 입찰 및 계약 집행기준」(전자입찰 의무 대상), 감사원 감사…. 운영 정합",
+  "crt": null
+ },
+ "audit-cases__goe-2021-contract-method-2stage-bidding": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "audit-cases__property-disposal-no-appraisal": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-29",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 공유재산법 제36조(일반재산의 매각), 동법 시행령 제27조(일반재산가격의 평정). 운영 정합",
+  "crt": null
+ },
+ "audit-cases__financial-statement-error": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 OPEN API mcp spot check + 부정확 정정 (lawId 276363·281909·281539·276163·276357·276117·276113·279605·285453·283257, 2026-05-19 batch #2 — 폐지 조문 3건 + 잘못된 § 9건 정정)",
+  "crt": null
+ },
+ "audit-cases__goe-2021-suspense-cash-embezzlement": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "tools__contract-reason": {
+  "sec": "tools",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "guides__bid-complete-8": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "guides__hr-welfare-complete-1": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "templates__26": {
+  "sec": "templates",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__budget-settlement": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "topics__penalty-reduction-procedure": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "audit-cases__sen-2025-school-v-facility-split-private": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "sen_2025_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "guides__budget-execution-complete-5": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "tools__contract-legality-check": {
+  "sec": "tools",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__long-term-contract-annual-omission": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제78조(장기계속계약), 지방계약법 시행령 제78조 제2항(각 회계연도 예산 범위 계약), 지방자치단체 입찰 및 계약 집행기준(행정안전부 예규) 제7장 장기계속계약 집행기준. 운영 정합",
+  "crt": null
+ },
+ "audit-cases__guideline-excess-budget-compilation": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "Phase A~E batch #1~#4 (commits eed4ceb..35dff5d) — 법제처 OPEN API 5단계 게이트 검증",
+  "crt": null
+ },
+ "audit-cases__bid-qualification-review-omitted": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-09",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제13조, 제42조. 운영 정합",
+  "crt": null
+ },
+ "audit-cases": {
+  "sec": "static",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__reserve-fund-violation": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 OPEN API mcp 대조 — legal_basis 정확 확인 (lawId 276363·281909·276163·276357·276113·281539, 2026-05-19 batch #2)",
+  "crt": null
+ },
+ "audit-cases__subcontract-below-cost": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 하도급법 제4조(부당한 하도급대금 결정 금지). 운영 정합",
+  "crt": null
+ },
+ "topics__private-contract-limit": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-04-29",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-04-29"
+ },
+ "audit-cases__single-quote-exceeds-limit": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-09",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제25조 제1항 제5호 (소액 수의계약), 행정안전부 지방자치단체 입찰 및 계약 집행기준 제5장 수의계약 운용요령. 운영 정합",
+  "crt": null
+ },
+ "audit-cases__goe-2021-supplies-selection-committee": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "audit-cases__goe-2021-split-care-trip-copier-paint": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "topics__joint-contract": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-04-29",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-04-29"
+ },
+ "audit-cases__silmu-2026-concurrent-for-profit-business": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-30",
+  "src": "silmu 자체 시드 — 공개 감사패턴(GOE 2021·SEN 2024 등) 일반화",
+  "crt": null
+ },
+ "guides__travel-expense-complete-3": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__split-contract-to-avoid-bidding": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 제9조 제1항 (경쟁입찰의 원칙), 지방계약법 시행령 제77조 (공사의 분할계약 금지), 지방계약법 시행령 제25조 제1항 (수의계약 기준). 운영 정합",
+  "crt": null
+ },
+ "tools__salary-calculator": {
+  "sec": "tools",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__mas-contract": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "topics__goods-vs-service-contract": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "guides__annual-leave-guide": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "faq": {
+  "sec": "static",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__goe-2021-supplies-joint-purchase": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "audit-cases__sen-2025-school-s-service-contract-violation": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "sen_2025_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "topics__design-change": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "guides__suui-contract-complete-3": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "guides__purchase-and-inspection": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__contingency-fund-purpose-misuse": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "Phase A~E batch #1~#4 (commits eed4ceb..35dff5d) — 법제처 OPEN API 5단계 게이트 검증",
+  "crt": null
+ },
+ "topics__domestic-travel-allowance": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-04-29",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-04-29"
+ },
+ "audit-cases__vehicle-travel-allowance-distance-fraud": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 OPEN API spot check + 부정확 정정 (lawId 001717·001565·003956·009965·009402·000696, 2026-05-19 batch #1)",
+  "crt": null
+ },
+ "templates__9": {
+  "sec": "templates",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__local-government-accounting": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ },
+ "topics__secondment": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-05-21"
+ },
+ "audit-cases__completion-inspection-violation": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-18",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제64조 (검사기한). 운영 정합",
+  "crt": null
+ },
+ "audit-cases__goe-2021-temporary-building-violation": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "audit-cases__contract-guarantee-exemption-wrong": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-09",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제53조. 운영 정합",
+  "crt": null
+ },
+ "audit-cases__progress-payment-over-claimed": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-09",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제66조, 제67조. 운영 정합",
+  "crt": null
+ },
+ "guides__private-contract-guide": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "guides__bidding-guide": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__budget-lapse-improper-carryover": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "Phase A~E batch #1~#4 (commits eed4ceb..35dff5d) — 법제처 OPEN API 5단계 게이트 검증",
+  "crt": null
+ },
+ "audit-cases__accounting-data-falsification": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "Phase A~E batch #1~#4 mcp baseline 재확인 (2026-05-19 AuditCase verify batch #1)",
+  "crt": null
+ },
+ "audit-cases__supervision-absent": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-09",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제63조. 운영 정합",
+  "crt": null
+ },
+ "audit-cases__accounting-evidence-missing": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 OPEN API mcp spot check + 부정확 정정 (lawId 276363·281909·281539·276163·276357·276117·276113·279605·285453·283257, 2026-05-19 batch #2 — 폐지 조문 3건 + 잘못된 § 9건 정정)",
+  "crt": null
+ },
+ "audit-cases__goe-2021-travel-expense-improper": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "guides__bid-complete-4": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "guides__local-subsidy-complete-1": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__goe-2021-improper-payee-cleaning-service": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "topics__spec-price-split-bid": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-05",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-05"
+ },
+ "privacy": {
+  "sec": "static",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__silmu-2026-reinstatement-step-recalc-missing": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-30",
+  "src": "silmu 자체 시드 — 공개 감사패턴(GOE 2021·SEN 2024 등) 일반화",
+  "crt": null
+ },
+ "guides__budget-planning-complete-7": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__direct-production-confirm-missing": {
+  "sec": "audit-cases",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "guides__budget-execution-complete-9": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__defect-warranty-short-period": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-09",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제69조. 운영 정합",
+  "crt": null
+ },
+ "guides__price-negotiation-guide": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__budget-execution-no-receipt": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "법제처 OPEN API mcp spot check + 부정확 정정 (lawId 276363·281909·281539·276163·276357·276117·276113·279605·285453·283257, 2026-05-19 batch #2 — 폐지 조문 3건 + 잘못된 § 9건 정정)",
+  "crt": null
+ },
+ "tools__cost-estimate": {
+  "sec": "tools",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "tools__budget-execution-rate": {
+  "sec": "tools",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "topics__family-allowance": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-04-29",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-04-29"
+ },
+ "audit-cases__bid-qualification-excessive": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-09",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 제9조, 시행령 제13조. 운영 정합",
+  "crt": null
+ },
+ "audit-cases__goe-2021-tenure-allowance-mispayment": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "audit-cases__goe-2021-development-fund-misclassified": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-19",
+  "src": "GOE 2021 경기교육청 감사보고서 (조문번호 명시 없음 — 차후 정밀화 backlog)",
+  "crt": null
+ },
+ "audit-cases__goe-2021-overtime-allowance-mispayment": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "templates__10": {
+  "sec": "templates",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__sen-2024-school-s-school-record-correction": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "sen_2024_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "audit-cases__bid-bond-not-submitted": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-09",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방계약법 시행령 제37조. 운영 정합",
+  "crt": null
+ },
+ "tools__contract-guarantee": {
+  "sec": "tools",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__improper-advance-payment": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-06-29",
+  "src": "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님). law.go.kr 검증 근거: 지방자치단체 입찰 및 계약 집행기준(행정안전부 예규)의 선금 지급 관련 규정, 지방계약법 제6조(계약의 원칙). 운영 정합",
+  "crt": null
+ },
+ "templates__5": {
+  "sec": "templates",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "__root": {
+  "sec": "",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__goe-2021-explicit-carryover-violation": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "goe_2021_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "guides__construction-contract-complete-1": {
+  "sec": "guides",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "series__construction-complete": {
+  "sec": "series",
+  "badge": false,
+  "rev": null,
+  "src": null,
+  "crt": null
+ },
+ "audit-cases__sen-2025-school-c-facility-design-document": {
+  "sec": "audit-cases",
+  "badge": true,
+  "rev": "2026-05-21",
+  "src": "sen_2025_audit_disclosure_dashboard",
+  "crt": null
+ },
+ "topics__supplementary-budget": {
+  "sec": "topics",
+  "badge": true,
+  "rev": "2026-06-04",
+  "src": "법제처 국가법령정보센터",
+  "crt": "2026-06-04"
+ }
+}

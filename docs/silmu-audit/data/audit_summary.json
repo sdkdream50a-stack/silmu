@@ -1,0 +1,59 @@
+{
+ "total": 549,
+ "by_type": {
+  "audit-cases": 257,
+  "tools": 37,
+  "guides": 107,
+  "topics": 114,
+  "templates": 26,
+  "series": 8
+ },
+ "by_audit_status": {
+  "UPDATE": 501,
+  "MERGE": 6,
+  "KEEP": 42
+ },
+ "by_authority": {
+  "UNVERIFIED": 206,
+  "SILMU_RECONSTRUCTED_CASE": 110,
+  "OFFICIAL_PARTIAL": 73,
+  "SILMU_INTERPRETATION": 37,
+  "SECONDARY_SOURCE": 66,
+  "OFFICIAL_VERIFIED": 57
+ },
+ "by_risk": {
+  "HIGH": 161,
+  "MEDIUM": 249,
+  "LOW": 139
+ },
+ "by_priority": {
+  "P0": 271,
+  "P1": 139,
+  "P2": 97,
+  "P3": 42
+ },
+ "by_domain": {
+  "03_보수수당": 45,
+  "04_예산회계": 107,
+  "05_계약조달": 193,
+  "02_복무": 73,
+  "99_미분류": 95,
+  "13_시설안전": 8,
+  "11_감사청렴": 4,
+  "06_재산물품": 6,
+  "09_정보공개": 2,
+  "07_보조금위탁": 15,
+  "10_개인정보기록물": 1
+ },
+ "by_jurisdiction": {
+  "UNSPECIFIED": 213,
+  "LOCAL": 206,
+  "NATIONAL": 14,
+  "BOTH": 116
+ },
+ "by_target_agency": {
+  "UNSPECIFIED": 352,
+  "LOCAL_GOVERNMENT": 21,
+  "EDUCATION_OFFICE|PUBLIC_SCHOOL": 176
+ }
+}

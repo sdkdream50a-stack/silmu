@@ -1,0 +1,572 @@
+{
+ "annual-leave": {
+  "basis": "gavel 근거 법령 open_in_new 지방공무원법 open_in_new 국가공무원법",
+  "cat": "복무",
+  "h1": "연가"
+ },
+ "local-tax-levy": {
+  "basis": "gavel 근거 법령 open_in_new 지방세기본법 open_in_new 지방세법 open_in_new 지방세징수법 open_in_new 지방세특례제한법",
+  "cat": "예산/결산",
+  "h1": "지방세 부과·징수 (취득세·재산세)"
+ },
+ "edu-allowance-temp-teacher-tenure": {
+  "basis": "gavel 근거 법령 open_in_new 공무원수당 등에 관한 규정 open_in_new 지방공무원 수당 등에 관한 규정",
+  "cat": "급여/수당",
+  "h1": "기간제 교사 정근수당 — 호봉경력 산정과 직전 6개월 관내 경력"
+ },
+ "participatory-budget": {
+  "basis": "gavel 근거 법령 open_in_new 지방재정법 제39조 open_in_new 지방재정법 시행령 제46조 open_in_new 지방자치법",
+  "cat": "예산/결산",
+  "h1": "주민참여예산 운영"
+ },
+ "edu-childcare-allowance-cap": {
+  "basis": "gavel 근거 법령 open_in_new 공무원수당 등에 관한 규정 open_in_new 지방공무원 수당 등에 관한 규정",
+  "cat": "급여/수당",
+  "h1": "육아휴직수당 상한 — 6+6 부모육아휴직제·한부모·일반 분기"
+ },
+ "split-contract-prohibition": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "분할발주 금지"
+ },
+ "retirement-allowance": {
+  "basis": "gavel 근거 법령 open_in_new 공무원수당 등에 관한 규정 open_in_new 지방공무원 수당 등에 관한 규정",
+  "cat": "급여/수당",
+  "h1": "공무원 퇴직수당"
+ },
+ "budget-compilation-guideline": {
+  "basis": "gavel 근거 법령 open_in_new 지방재정법 open_in_new 지방재정법 시행령",
+  "cat": "예산/결산",
+  "h1": "예산편성 지침"
+ },
+ "single-quote": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "1인견적"
+ },
+ "extra-budgetary-fund": {
+  "basis": "gavel 근거 법령 open_in_new 지방재정법 open_in_new 지방재정법 시행령",
+  "cat": "예산/결산",
+  "h1": "세입세출외현금"
+ },
+ "bid-deposit": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "입찰보증금"
+ },
+ "bid-qualification": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "적격심사"
+ },
+ "performance-bonus": {
+  "basis": "gavel 근거 법령 open_in_new 공무원수당 등에 관한 규정 open_in_new 지방공무원 수당 등에 관한 규정",
+  "cat": "급여/수당",
+  "h1": "성과상여금"
+ },
+ "welfare-point": {
+  "basis": "gavel 근거 법령 open_in_new 공무원수당 등에 관한 규정 open_in_new 지방공무원 수당 등에 관한 규정",
+  "cat": "급여/수당",
+  "h1": "공무원 복지포인트"
+ },
+ "multiple-price": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "복수예비가격"
+ },
+ "estimated-amount": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "추정가격·추정금액·예정가격"
+ },
+ "fence-installation": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "펜스 설치 계약"
+ },
+ "bid-participation-restriction": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "입찰 참가자격 제한 기준"
+ },
+ "contract-termination": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "계약해제·해지"
+ },
+ "payment": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "대금지급"
+ },
+ "foreign-travel": {
+  "basis": "gavel 근거 법령 open_in_new 공무원 여비 규정 open_in_new 지방공무원 여비 규정",
+  "cat": "여비/출장",
+  "h1": "공무국외여행"
+ },
+ "holiday-bonus": {
+  "basis": "gavel 근거 법령 open_in_new 공무원수당 등에 관한 규정 open_in_new 지방공무원 수당 등에 관한 규정",
+  "cat": "급여/수당",
+  "h1": "명절 휴가비"
+ },
+ "expenditure-commitment": {
+  "basis": "gavel 근거 법령 open_in_new 지방회계법 open_in_new 지방회계법 시행령",
+  "cat": "지출",
+  "h1": "지출원인행위"
+ },
+ "entertainment-expense-rules": {
+  "basis": "gavel 근거 법령 open_in_new 지방재정법 open_in_new 지방재정법 시행령",
+  "cat": "예산/결산",
+  "h1": "업무추진비 집행기준"
+ },
+ "school-budget-compilation": {
+  "basis": "gavel 근거 법령 open_in_new 지방재정법 open_in_new 지방재정법 시행령",
+  "cat": "예산/결산",
+  "h1": "학교회계 예산편성 절차"
+ },
+ "e-bidding": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "전자입찰"
+ },
+ "cost-calculation-guide": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "원가계산 체계"
+ },
+ "non-tax-revenue": {
+  "basis": "gavel 근거 법령 open_in_new 지방행정제재·부과금의 징수 등에 관한 법률 open_in_new 질서위반행위규제법 open_in_new 지방자치법",
+  "cat": "예산/결산",
+  "h1": "세외수입 부과·징수·체납관리"
+ },
+ "bid-failure-negotiation": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "유찰 후 수의계약"
+ },
+ "e-bidding-error-faq": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "전자입찰 오류 대응 FAQ"
+ },
+ "accommodation-allowance": {
+  "basis": "gavel 근거 법령 open_in_new 공무원 여비 규정 open_in_new 지방공무원 여비 규정",
+  "cat": "여비/출장",
+  "h1": "출장 숙박비 처리"
+ },
+ "additional-contract-limit": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "추가계약 한도"
+ },
+ "split-contract": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "분할계약 금지"
+ },
+ "vehicle-travel-allowance": {
+  "basis": "gavel 근거 법령 open_in_new 공무원 여비 규정 open_in_new 지방공무원 여비 규정",
+  "cat": "여비/출장",
+  "h1": "자가용 출장 여비"
+ },
+ "contract-guarantee-deposit": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "계약보증금"
+ },
+ "budget-transfer": {
+  "basis": "gavel 근거 법령 open_in_new 지방재정법 open_in_new 지방재정법 시행령",
+  "cat": "예산/결산",
+  "h1": "예산 전용·이용·이체"
+ },
+ "completion-payment-checklist": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "준공 후 대금지급 전 서류 체크리스트"
+ },
+ "unit-price-contract": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "단가계약"
+ },
+ "contract-execution": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "계약체결"
+ },
+ "estimated-price": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "예정가격"
+ },
+ "budget-lapse": {
+  "basis": "gavel 근거 법령 open_in_new 지방재정법 open_in_new 지방재정법 시행령",
+  "cat": "예산/결산",
+  "h1": "불용액 처리 및 이월"
+ },
+ "late-penalty": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "지체상금"
+ },
+ "lowest-bid-rate": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "낙찰하한율"
+ },
+ "e-procurement-guide": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "나라장터·학교장터 전자계약"
+ },
+ "sick-leave": {
+  "basis": "gavel 근거 법령 open_in_new 지방공무원법 open_in_new 국가공무원법",
+  "cat": "복무",
+  "h1": "병가"
+ },
+ "concurrent-position": {
+  "basis": "gavel 근거 법령 open_in_new 지방공무원법 open_in_new 국가공무원법",
+  "cat": "복무",
+  "h1": "영리 업무 및 겸직"
+ },
+ "contract-amount-adjustment": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "계약금액 조정 사유"
+ },
+ "goods-selection-committee": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "물품선정위원회"
+ },
+ "private-contract": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "수의계약"
+ },
+ "subcontract": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "하도급"
+ },
+ "private-contract-justification": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "수의계약 사유서 작성법"
+ },
+ "bid-announcement": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "입찰공고"
+ },
+ "price-escalation": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "물가변동"
+ },
+ "national-vs-local-contract-law": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "국가계약법과 지방계약법 비교"
+ },
+ "budget-execution": {
+  "basis": "gavel 근거 법령 open_in_new 지방재정법 open_in_new 지방재정법 시행령",
+  "cat": "예산/결산",
+  "h1": "예산 집행 절차"
+ },
+ "budget-carryover": {
+  "basis": "gavel 근거 법령 open_in_new 지방재정법 open_in_new 지방재정법 시행령",
+  "cat": "예산/결산",
+  "h1": "예산이월"
+ },
+ "small-amount-contract": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "소액수의"
+ },
+ "long-term-contract": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "장기계속계약"
+ },
+ "defect-warranty": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "하자보증"
+ },
+ "accounting-officers": {
+  "basis": "gavel 근거 법령 open_in_new 지방재정법 open_in_new 지방재정법 시행령",
+  "cat": "예산/결산",
+  "h1": "회계관계공무원 제도"
+ },
+ "edu-childcare-pay-2025-revision": {
+  "basis": "gavel 근거 법령 open_in_new 공무원수당 등에 관한 규정 open_in_new 지방공무원 수당 등에 관한 규정",
+  "cat": "급여/수당",
+  "h1": "2025.1.3 개정 — 육아휴직수당 사후지급분 폐지와 경과 사례"
+ },
+ "public-procurement-overview": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "공공조달 개론"
+ },
+ "contingency-fund": {
+  "basis": "gavel 근거 법령 open_in_new 지방재정법 open_in_new 지방재정법 시행령",
+  "cat": "예산/결산",
+  "h1": "예비비 사용 절차"
+ },
+ "public-property-management": {
+  "basis": "gavel 근거 법령 open_in_new 공유재산 및 물품 관리법",
+  "cat": "공유재산",
+  "h1": "공유재산 관리"
+ },
+ "information-disclosure": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "기타",
+  "h1": "정보공개"
+ },
+ "advance-payment": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "선금(선급금)"
+ },
+ "reinstatement": {
+  "basis": "gavel 근거 법령 open_in_new 지방공무원법 open_in_new 국가공무원법",
+  "cat": "복무",
+  "h1": "복직"
+ },
+ "private-contract-amount": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "수의계약 금액"
+ },
+ "edu-overtime-retirement-month": {
+  "basis": "gavel 근거 법령 open_in_new 공무원수당 등에 관한 규정 open_in_new 지방공무원 수당 등에 관한 규정",
+  "cat": "급여/수당",
+  "h1": "시간외수당 퇴직월 특례 — 정년·명예퇴직 1일+ 근무 시 정액분 10시간 전액"
+ },
+ "special-leave": {
+  "basis": "gavel 근거 법령 open_in_new 지방공무원법 open_in_new 국가공무원법",
+  "cat": "복무",
+  "h1": "특별휴가"
+ },
+ "contract-period-extension": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "계약기간 연장 절차"
+ },
+ "official-leave": {
+  "basis": "gavel 근거 법령 open_in_new 지방공무원법 open_in_new 국가공무원법",
+  "cat": "복무",
+  "h1": "공가"
+ },
+ "leave-of-absence": {
+  "basis": "gavel 근거 법령 open_in_new 지방공무원법 open_in_new 국가공무원법",
+  "cat": "복무",
+  "h1": "휴직"
+ },
+ "travel-expense": {
+  "basis": "gavel 근거 법령 open_in_new 공무원 여비 규정 open_in_new 지방공무원 여비 규정",
+  "cat": "여비/출장",
+  "h1": "출장비"
+ },
+ "quote-collection-guide": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "비교견적서 수집 방법"
+ },
+ "dual-quote": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "2인 이상 견적"
+ },
+ "estimated-payment": {
+  "basis": "gavel 근거 법령 open_in_new 지방재정법 open_in_new 지방재정법 시행령",
+  "cat": "예산/결산",
+  "h1": "개산급"
+ },
+ "budget-item-standard": {
+  "basis": "gavel 근거 법령 open_in_new 지방재정법 open_in_new 지방재정법 시행령",
+  "cat": "예산/결산",
+  "h1": "세출예산 목별 집행기준"
+ },
+ "year-end-settlement": {
+  "basis": "gavel 근거 법령 open_in_new 공무원수당 등에 관한 규정 open_in_new 지방공무원 수당 등에 관한 규정",
+  "cat": "급여/수당",
+  "h1": "연말정산"
+ },
+ "bidding": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "입찰"
+ },
+ "direct-production-confirm": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "직접생산확인"
+ },
+ "emergency-contract": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "긴급수의"
+ },
+ "audit-immunity": {
+  "basis": "gavel 근거 법령 open_in_new 지방공무원법 open_in_new 국가공무원법",
+  "cat": "복무",
+  "h1": "감사 면책제도 (적극행정 보호장치)"
+ },
+ "national-subsidy": {
+  "basis": "gavel 근거 법령 open_in_new 지방자치단체 보조금 관리에 관한 법률 open_in_new 보조금 관리에 관한 법률",
+  "cat": "보조금",
+  "h1": "국고보조금 관리"
+ },
+ "contract-guarantee-exemption": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "계약보증금 면제 기준"
+ },
+ "budget-compilation": {
+  "basis": "gavel 근거 법령 open_in_new 지방재정법 open_in_new 지방재정법 시행령",
+  "cat": "예산/결산",
+  "h1": "예산 편성 절차"
+ },
+ "travel-expense-settlement": {
+  "basis": "gavel 근거 법령 open_in_new 공무원 여비 규정 open_in_new 지방공무원 여비 규정",
+  "cat": "여비/출장",
+  "h1": "여비정산"
+ },
+ "construction-completion": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "공사 준공검사"
+ },
+ "performance-guarantee": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "이행보증"
+ },
+ "position-suspension": {
+  "basis": "gavel 근거 법령 open_in_new 지방공무원법 open_in_new 국가공무원법",
+  "cat": "복무",
+  "h1": "직위해제"
+ },
+ "qualification-failure": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "적격심사 탈락 사유"
+ },
+ "disciplinary-action": {
+  "basis": "gavel 근거 법령 open_in_new 지방공무원법 open_in_new 국가공무원법",
+  "cat": "복무",
+  "h1": "징계"
+ },
+ "overtime-allowance": {
+  "basis": "gavel 근거 법령 open_in_new 공무원수당 등에 관한 규정 open_in_new 지방공무원 수당 등에 관한 규정",
+  "cat": "급여/수당",
+  "h1": "시간외근무수당"
+ },
+ "inspection": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "검수·검사"
+ },
+ "instructor-allowance": {
+  "basis": "gavel 근거 법령 open_in_new 지방재정법 open_in_new 지방재정법 시행령",
+  "cat": "예산/결산",
+  "h1": "강사수당"
+ },
+ "parental-leave": {
+  "basis": "gavel 근거 법령 open_in_new 지방공무원법 open_in_new 국가공무원법",
+  "cat": "복무",
+  "h1": "육아휴직"
+ },
+ "local-festival-event": {
+  "basis": "gavel 근거 법령 open_in_new 지방재정법 open_in_new 지방자치단체 예산편성 운영기준 open_in_new 지방자치단체 보조금 관리에 관한 법률 open_in_new 지방계약법",
+  "cat": "예산/결산",
+  "h1": "지역축제·행사성 경비 운영·정산"
+ },
+ "price-negotiation": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "수의시담"
+ },
+ "local-subsidy-grant": {
+  "basis": "gavel 근거 법령 open_in_new 지방자치단체 보조금 관리에 관한 법률 open_in_new 지방자치단체 보조금 관리에 관한 법률 시행령 open_in_new 지방재정법 open_in_new 지방회계법",
+  "cat": "보조금",
+  "h1": "지방보조금 교부·정산"
+ },
+ "public-debt-management": {
+  "basis": "gavel 근거 법령 open_in_new 지방재정법 open_in_new 지방재정법 시행령",
+  "cat": "예산/결산",
+  "h1": "지방채 발행 및 관리"
+ },
+ "edu-allowance-tenure-non-eligible-career": {
+  "basis": "gavel 근거 법령 open_in_new 공무원수당 등에 관한 규정 open_in_new 지방공무원 수당 등에 관한 규정",
+  "cat": "급여/수당",
+  "h1": "정근수당 호봉 오인정 — 교육청 외 사기업·계약직 경력의 산입 금지"
+ },
+ "budget-settlement": {
+  "basis": "gavel 근거 법령 open_in_new 지방재정법 open_in_new 지방재정법 시행령",
+  "cat": "예산/결산",
+  "h1": "결산 절차"
+ },
+ "penalty-reduction-procedure": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "지체상금 감면 절차"
+ },
+ "private-contract-limit": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "수의계약 한도"
+ },
+ "joint-contract": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "공동도급"
+ },
+ "mas-contract": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "다수공급자계약(MAS)과 종합쇼핑몰"
+ },
+ "goods-vs-service-contract": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "물품구매 vs 용역계약 구분"
+ },
+ "design-change": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "설계변경"
+ },
+ "domestic-travel-allowance": {
+  "basis": "gavel 근거 법령 open_in_new 공무원 여비 규정 open_in_new 지방공무원 여비 규정",
+  "cat": "여비/출장",
+  "h1": "국내출장 여비"
+ },
+ "local-government-accounting": {
+  "basis": "gavel 근거 법령 open_in_new 지방재정법 open_in_new 지방재정법 시행령",
+  "cat": "예산/결산",
+  "h1": "지방자치단체 복식부기 회계"
+ },
+ "secondment": {
+  "basis": "gavel 근거 법령 open_in_new 지방공무원법 open_in_new 국가공무원법",
+  "cat": "복무",
+  "h1": "파견"
+ },
+ "spec-price-split-bid": {
+  "basis": "gavel 근거 법령 open_in_new 지방계약법 open_in_new 지방계약법 시행령 open_in_new 지방자치단체 입찰 및 계약집행기준",
+  "cat": "계약",
+  "h1": "규격가격 분리입찰"
+ },
+ "family-allowance": {
+  "basis": "gavel 근거 법령 open_in_new 공무원수당 등에 관한 규정 open_in_new 지방공무원 수당 등에 관한 규정",
+  "cat": "급여/수당",
+  "h1": "가족수당"
+ },
+ "supplementary-budget": {
+  "basis": "gavel 근거 법령 open_in_new 지방재정법 open_in_new 지방재정법 시행령",
+  "cat": "예산/결산",
+  "h1": "추가경정예산"
+ }
+}
