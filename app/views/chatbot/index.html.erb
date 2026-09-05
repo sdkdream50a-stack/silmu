@@ -41,6 +41,10 @@
       </div>
     </div>
 
+    <%# P1.6 §20 — 질문을 들고 온 사용자에게는 답이 먼저다.
+        검색어가 있으면 아래 보조 탐색 블록(금액검색·주제카드)을 접고 결과 프레임을 바로 보여준다.
+        검색어가 없을 때는 종전 그대로 탐색 보조로 남는다(기능 삭제 아님). %>
+    <% unless params[:q].present? %>
     <!-- 금액 기반 검색 -->
     <div class="card p-6 mt-4 shadow-soft">
       <h3 class="text-lg font-bold mb-4 text-slate-900 flex items-center gap-2">
@@ -120,6 +124,7 @@
         </a>
       </div>
     </div>
+    <% end %>
   </div>
 
   <!-- 검색 결과 영역 -->

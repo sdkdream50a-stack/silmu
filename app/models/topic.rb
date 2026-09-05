@@ -131,7 +131,10 @@ class Topic < ApplicationRecord
     token_variants = SearchQueryParser.tokens(query)
     return nil if token_variants.empty?
 
-    required = (token_variants.size / 2.0).ceil
+    # "바로 답"은 신뢰도가 가장 높은 자리다. 과반만으로는 2토큰 질문에서 토큰 1개만 맞아도
+    # 통과해 **다른 질문의 답**이 올라온다(실측: "병가 진단서" → "병가는 연 60일" 이 뽑혔다).
+    # 그래서 최소 2토큰을 요구한다(토큰이 1개뿐인 질문은 그 1개). 틀린 답보다 없는 답이 낫다.
+    required = [ (token_variants.size / 2.0).ceil, 2 ].max.clamp(1, token_variants.size)
     best = nil
 
     topics.each do |topic|

@@ -33,113 +33,60 @@
         <% end %>
       </div>
 
-      <!-- 데스크탑 메뉴 -->
+      <!-- 데스크탑 메뉴 — P1.6: 콘텐츠 종류가 아니라 업무 중심 -->
       <div class="hidden lg:flex items-center gap-1">
 
-        <%# --- 법령가이드 드롭다운 --- %>
+        <%# --- 업무찾기 드롭다운 (법령가이드·실무가이드·감사사례를 업무 아래로 재배치) --- %>
         <div class="relative"
              data-action="mouseenter->dropdown-nav#hoverOpen mouseleave->dropdown-nav#hoverClose"
-             data-dropdown-key="topics">
+             data-dropdown-key="tasks">
           <button type="button"
-                  class="<%= nav_class(:topics) %> flex items-center gap-0.5"
+                  class="<%= nav_class(:task_find) %> flex items-center gap-0.5"
                   data-action="click->dropdown-nav#toggle"
-                  data-dropdown-key="topics"
+                  data-dropdown-key="tasks"
                   aria-haspopup="true">
-            법령가이드
+            업무찾기
             <span class="material-symbols-outlined text-base transition-transform duration-200"
                   data-dropdown-nav-target="chevron"
-                  data-dropdown-key="topics"
+                  data-dropdown-key="tasks"
                   aria-hidden="true">expand_more</span>
           </button>
 
-          <div class="hidden absolute left-0 top-full pt-1 z-50 w-[min(320px,calc(100vw-2rem))]"
+          <div class="hidden absolute left-0 top-full pt-1 z-50 w-[min(380px,calc(100vw-2rem))]"
                data-dropdown-nav-target="panel"
-               data-dropdown-key="topics"
+               data-dropdown-key="tasks"
                data-action="mouseenter->dropdown-nav#panelEnter mouseleave->dropdown-nav#hoverClose"
                aria-hidden="true">
             <div class="bg-white rounded-2xl shadow-xl border border-slate-100 p-4">
-              <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 px-1">분야별 법령 가이드</p>
+              <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 px-1">업무별로 찾기</p>
               <div class="grid grid-cols-2 gap-1">
-                <% TopicsController::CATEGORY_CONFIG.each do |key, cfg| %>
-                  <%= link_to topics_category_path(key),
+                <% task_entries.each do |entry| %>
+                  <%= link_to send(*entry[:path_helper]),
                         class: "group flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition-colors" do %>
-                    <div class="w-8 h-8 rounded-lg bg-<%= cfg[:color] %>-100 group-hover:bg-<%= cfg[:color] %>-200 flex items-center justify-center transition-colors shrink-0">
-                      <span class="material-symbols-outlined text-sm text-<%= cfg[:color] %>-600" aria-hidden="true"><%= cfg[:icon] %></span>
+                    <div class="w-8 h-8 rounded-lg <%= entry[:icon_class] %> flex items-center justify-center shrink-0">
+                      <span class="material-symbols-outlined text-sm" aria-hidden="true"><%= entry[:icon] %></span>
                     </div>
-                    <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900 leading-tight"><%= cfg[:label] %></span>
+                    <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900 leading-tight"><%= entry[:label] %></span>
                   <% end %>
                 <% end %>
               </div>
-              <div class="mt-3 pt-3 border-t border-slate-100">
-                <%= link_to topics_path, class: "flex items-center justify-center gap-1 text-xs font-semibold text-editorial-navy hover:text-editorial-navy-dark transition-colors" do %>
-                  전체 법령 가이드 보기 <span class="material-symbols-outlined text-sm" aria-hidden="true">arrow_forward</span>
+              <%# 기존 콘텐츠 종류 진입점은 삭제하지 않고 2차 표면으로 유지한다(§14·§51) %>
+              <div class="mt-3 pt-3 border-t border-slate-100 grid grid-cols-3 gap-1">
+                <%= link_to topics_path, class: "text-center px-2 py-2 rounded-lg hover:bg-slate-50 text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors" do %>
+                  법령가이드
+                <% end %>
+                <%= link_to guides_path, class: "text-center px-2 py-2 rounded-lg hover:bg-slate-50 text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors" do %>
+                  실무가이드
+                <% end %>
+                <%= link_to audit_cases_path, class: "text-center px-2 py-2 rounded-lg hover:bg-slate-50 text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors" do %>
+                  감사사례
                 <% end %>
               </div>
             </div>
           </div>
         </div>
 
-        <%# --- 실무가이드 드롭다운 --- %>
-        <div class="relative"
-             data-action="mouseenter->dropdown-nav#hoverOpen mouseleave->dropdown-nav#hoverClose"
-             data-dropdown-key="guides">
-          <button type="button"
-                  class="<%= nav_class(:guides) %> flex items-center gap-0.5"
-                  data-action="click->dropdown-nav#toggle"
-                  data-dropdown-key="guides"
-                  aria-haspopup="true">
-            실무가이드
-            <span class="material-symbols-outlined text-base transition-transform duration-200"
-                  data-dropdown-nav-target="chevron"
-                  data-dropdown-key="guides"
-                  aria-hidden="true">expand_more</span>
-          </button>
-
-          <div class="hidden absolute left-0 top-full pt-1 z-50 w-[min(320px,calc(100vw-2rem))]"
-               data-dropdown-nav-target="panel"
-               data-dropdown-key="guides"
-               data-action="mouseenter->dropdown-nav#panelEnter mouseleave->dropdown-nav#hoverClose"
-               aria-hidden="true">
-            <div class="bg-white rounded-2xl shadow-xl border border-slate-100 p-4">
-              <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 px-1">완전정복 시리즈</p>
-              <div class="grid grid-cols-2 gap-1">
-                <% [
-                  ["공사계약",   "construction",    "blue",   "공사계약_완전정복"],
-                  ["수의계약",   "gavel",           "indigo", "수의계약_완전정복"],
-                  ["입찰",       "campaign",        "violet", "입찰_완전정복"],
-                  ["예산집행",   "account_balance", "amber",  "예산집행_완전정복"],
-                  ["출장여비",   "flight_takeoff",  "rose",   "출장여비_완전정복"],
-                  ["인사복무",   "badge",           "slate",  "인사복무_완전정복"],
-                  ["예산편성",   "edit_note",       "teal",   "예산편성_완전정복"],
-                  ["지방보조금", "volunteer_activism", "green", "지방보조금_완전정복"],
-                ].each do |label, icon, color, series| %>
-                  <%= link_to guides_path,
-                        class: "group flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-slate-50 transition-colors" do %>
-                    <div class="w-7 h-7 rounded-lg bg-<%= color %>-100 group-hover:bg-<%= color %>-200 flex items-center justify-center shrink-0 transition-colors">
-                      <span class="material-symbols-outlined text-sm text-<%= color %>-600" aria-hidden="true"><%= icon %></span>
-                    </div>
-                    <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900"><%= label %></span>
-                  <% end %>
-                <% end %>
-              </div>
-              <div class="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
-                <%= link_to contract_flow_path, class: "flex-1 flex items-center gap-1.5 px-3 py-2 rounded-xl hover:bg-slate-50 text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors" do %>
-                  <span class="material-symbols-outlined text-sm text-editorial-navy" aria-hidden="true">account_tree</span>계약흐름도
-                <% end %>
-                <%= link_to pre_contract_checklist_path, class: "flex-1 flex items-center gap-1.5 px-3 py-2 rounded-xl hover:bg-slate-50 text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors" do %>
-                  <span class="material-symbols-outlined text-sm text-emerald-500" aria-hidden="true">checklist_rtl</span>사전체크리스트
-                <% end %>
-              </div>
-              <div class="pt-2 border-t border-slate-100 mt-1">
-                <%= link_to guides_path, class: "flex items-center justify-center gap-1 text-xs font-semibold text-editorial-navy hover:text-editorial-navy-dark transition-colors" do %>
-                  전체 실무가이드 보기 <span class="material-symbols-outlined text-sm" aria-hidden="true">arrow_forward</span>
-                <% end %>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <%# --- 도구 드롭다운 --- %>
+        <%# --- 실무도구 드롭다운 --- %>
         <div class="relative"
              data-action="mouseenter->dropdown-nav#hoverOpen mouseleave->dropdown-nav#hoverClose"
              data-dropdown-key="tools">
@@ -148,7 +95,7 @@
                   data-action="click->dropdown-nav#toggle"
                   data-dropdown-key="tools"
                   aria-haspopup="true">
-            도구
+            실무도구
             <span class="material-symbols-outlined text-base transition-transform duration-200"
                   data-dropdown-nav-target="chevron"
                   data-dropdown-key="tools"
@@ -179,7 +126,15 @@
                   <% end %>
                 <% end %>
               </div>
-              <div class="mt-3 pt-3 border-t border-slate-100">
+              <div class="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
+                <%= link_to guide_resources_path, class: "flex-1 flex items-center gap-1.5 px-3 py-2 rounded-xl hover:bg-slate-50 text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors" do %>
+                  <span class="material-symbols-outlined text-sm text-slate-500" aria-hidden="true">folder_open</span>자료실
+                <% end %>
+                <%= link_to templates_path, class: "flex-1 flex items-center gap-1.5 px-3 py-2 rounded-xl hover:bg-slate-50 text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors" do %>
+                  <span class="material-symbols-outlined text-sm text-teal-500" aria-hidden="true">description</span>서식
+                <% end %>
+              </div>
+              <div class="pt-2 border-t border-slate-100 mt-1">
                 <%= link_to tools_path, class: "flex items-center justify-center gap-1 text-xs font-semibold text-editorial-navy hover:text-editorial-navy-dark transition-colors" do %>
                   전체 <%= tool_count %>개 도구 보기 <span class="material-symbols-outlined text-sm" aria-hidden="true">arrow_forward</span>
                 <% end %>
@@ -188,56 +143,10 @@
           </div>
         </div>
 
-        <%# --- 감사사례 드롭다운 --- %>
-        <div class="relative"
-             data-action="mouseenter->dropdown-nav#hoverOpen mouseleave->dropdown-nav#hoverClose"
-             data-dropdown-key="audit">
-          <button type="button"
-                  class="<%= nav_class(:audit_cases) %> flex items-center gap-0.5"
-                  data-action="click->dropdown-nav#toggle"
-                  data-dropdown-key="audit"
-                  aria-haspopup="true">
-            감사사례
-            <span class="material-symbols-outlined text-base transition-transform duration-200"
-                  data-dropdown-nav-target="chevron"
-                  data-dropdown-key="audit"
-                  aria-hidden="true">expand_more</span>
-          </button>
-
-          <div class="hidden absolute left-0 top-full pt-1 z-50 w-[min(320px,calc(100vw-2rem))]"
-               data-dropdown-nav-target="panel"
-               data-dropdown-key="audit"
-               data-action="mouseenter->dropdown-nav#panelEnter mouseleave->dropdown-nav#hoverClose"
-               aria-hidden="true">
-            <div class="bg-white rounded-2xl shadow-xl border border-slate-100 p-4">
-              <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 px-1">분야별 감사사례</p>
-              <div class="grid grid-cols-2 gap-1">
-                <% [
-                  ["수의계약", "gavel",          "indigo"],
-                  ["입찰",     "campaign",       "violet"],
-                  ["계약체결", "handshake",      "amber"],
-                  ["계약이행", "sync_alt",       "emerald"],
-                  ["대금지급", "payments",       "blue"],
-                  ["하도급",   "account_tree",   "rose"],
-                  ["기타",     "more_horiz",     "slate"],
-                ].each do |cat, icon, color| %>
-                  <%= link_to audit_cases_path(category: cat),
-                        class: "group flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition-colors" do %>
-                    <div class="w-8 h-8 rounded-lg bg-<%= color %>-100 group-hover:bg-<%= color %>-200 flex items-center justify-center transition-colors shrink-0">
-                      <span class="material-symbols-outlined text-sm text-<%= color %>-600" aria-hidden="true"><%= icon %></span>
-                    </div>
-                    <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900 leading-tight"><%= cat %></span>
-                  <% end %>
-                <% end %>
-              </div>
-              <div class="mt-3 pt-3 border-t border-slate-100">
-                <%= link_to audit_cases_path, class: "flex items-center justify-center gap-1 text-xs font-semibold text-editorial-navy hover:text-editorial-navy-dark transition-colors" do %>
-                  전체 감사사례 보기 <span class="material-symbols-outlined text-sm" aria-hidden="true">arrow_forward</span>
-                <% end %>
-              </div>
-            </div>
-          </div>
-        </div>
+        <%# --- 신규자 (§26 — 기존 완전정복 시리즈·온보딩 재사용) --- %>
+        <%= link_to onboarding_path, class: "#{nav_class(:newcomer)} flex items-center gap-1.5" do %>
+          신규자
+        <% end %>
 
         <%# --- 업무달력 아이콘 --- %>
         <%= link_to task_calendar_path,
@@ -270,9 +179,8 @@
                aria-hidden="true">
             <div class="bg-white rounded-2xl shadow-xl border border-slate-100 p-2">
               <% [
-                { icon: "folder_open",    title: "자료실",          path: :guide_resources_path,  badge: nil,      color: "slate" },
-                { icon: "psychology",     title: "AI 어시스턴트",  path: :ai_assistant_path,     badge: "AI",     color: "emerald" },
-                { icon: "feedback",       title: "의견보내기",      path: :feedback_path,         badge: nil,      color: "slate" },
+                { icon: "psychology",     title: "AI 어시스턴트",  path: :ai_assistant_path,     badge: "AI" },
+                { icon: "feedback",       title: "의견보내기",      path: :feedback_path,         badge: nil },
               ].each do |item| %>
                 <%= link_to send(item[:path]),
                       class: "group flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition-colors" do %>
@@ -334,47 +242,46 @@
       <% mobile_normal = "#{mobile_base} text-slate-700 hover:bg-gray-50" %>
       <% mobile_active  = "#{mobile_base} text-editorial-navy bg-editorial-navy-bg font-semibold" %>
 
-      <%# 법령가이드 아코디언 %>
+      <%# 업무찾기 아코디언 (P1.6 — 업무 중심) %>
       <div>
         <button type="button"
-                class="<%= request.path.start_with?('/topics') ? mobile_active : mobile_normal %> w-full justify-between"
+                class="<%= (request.path.start_with?('/topics') || request.path.start_with?('/audit-cases')) ? mobile_active : mobile_normal %> w-full justify-between"
                 data-action="click->dropdown-nav#toggle"
-                data-dropdown-key="mobile-topics">
+                data-dropdown-key="mobile-tasks">
           <span class="flex items-center gap-3">
-            <span class="material-symbols-outlined text-lg" aria-hidden="true">library_books</span>법령가이드
+            <span class="material-symbols-outlined text-lg" aria-hidden="true">work</span>업무찾기
           </span>
           <span class="material-symbols-outlined text-base transition-transform duration-200"
                 data-dropdown-nav-target="chevron"
-                data-dropdown-key="mobile-topics"
+                data-dropdown-key="mobile-tasks"
                 aria-hidden="true">expand_more</span>
         </button>
         <div class="hidden pl-4 pb-1"
              data-dropdown-nav-target="panel"
-             data-dropdown-key="mobile-topics">
+             data-dropdown-key="mobile-tasks">
           <div class="grid grid-cols-2 gap-1 pt-1">
-            <% TopicsController::CATEGORY_CONFIG.each do |key, cfg| %>
-              <%= link_to cfg[:label], topics_category_path(key),
+            <% task_entries.each do |entry| %>
+              <%= link_to entry[:label], send(*entry[:path_helper]),
                     class: "flex items-center gap-2 px-3 py-2 text-sm text-slate-600 hover:text-editorial-navy hover:bg-editorial-navy-bg rounded-lg transition-colors" %>
             <% end %>
           </div>
-          <%= link_to "전체 보기 →", topics_path, class: "block px-3 py-2 text-xs text-editorial-navy font-semibold" %>
+          <%# 기존 진입점 보존(§14) %>
+          <div class="flex gap-2 pt-1">
+            <%= link_to "법령가이드 →", topics_path, class: "px-3 py-2 text-xs text-editorial-navy font-semibold" %>
+            <%= link_to "실무가이드 →", guides_path, class: "px-3 py-2 text-xs text-editorial-navy font-semibold" %>
+            <%= link_to "감사사례 →", audit_cases_path, class: "px-3 py-2 text-xs text-editorial-navy font-semibold" %>
+          </div>
         </div>
       </div>
 
-      <%# 실무가이드 %>
-      <%= link_to guides_path,
-            class: (request.path.start_with?('/guides') && !request.path.start_with?('/guides/resources') ? mobile_active : mobile_normal) do %>
-        <span class="material-symbols-outlined text-lg" aria-hidden="true">menu_book</span>실무가이드
-      <% end %>
-
-      <%# 도구 아코디언 %>
+      <%# 실무도구 아코디언 %>
       <div>
         <button type="button"
                 class="<%= (request.path.start_with?('/tools') && !request.path.start_with?('/tools/task-calendar')) ? mobile_active : mobile_normal %> w-full justify-between"
                 data-action="click->dropdown-nav#toggle"
                 data-dropdown-key="mobile-tools">
           <span class="flex items-center gap-3">
-            <span class="material-symbols-outlined text-lg" aria-hidden="true">construction</span>도구
+            <span class="material-symbols-outlined text-lg" aria-hidden="true">construction</span>실무도구
           </span>
           <span class="material-symbols-outlined text-base transition-transform duration-200"
                 data-dropdown-nav-target="chevron"
@@ -395,37 +302,17 @@
               <%= link_to t[:title], send(t[:path]),
                     class: "block px-3 py-2 text-sm text-slate-600 hover:text-editorial-navy hover:bg-editorial-navy-bg rounded-lg transition-colors" %>
             <% end %>
+            <%= link_to "자료실", guide_resources_path, class: "block px-3 py-2 text-sm text-slate-600 hover:text-editorial-navy hover:bg-editorial-navy-bg rounded-lg transition-colors" %>
+            <%= link_to "서식", templates_path, class: "block px-3 py-2 text-sm text-slate-600 hover:text-editorial-navy hover:bg-editorial-navy-bg rounded-lg transition-colors" %>
             <%= link_to "전체 #{tool_count}개 도구 →", tools_path, class: "block px-3 py-2 text-xs text-editorial-navy font-semibold" %>
           </div>
         </div>
       </div>
 
-      <%# 감사사례 아코디언 %>
-      <div>
-        <button type="button"
-                class="<%= request.path.start_with?('/audit-cases') ? mobile_active : mobile_normal %> w-full justify-between"
-                data-action="click->dropdown-nav#toggle"
-                data-dropdown-key="mobile-audit">
-          <span class="flex items-center gap-3">
-            <span class="material-symbols-outlined text-lg" aria-hidden="true">find_in_page</span>감사사례
-          </span>
-          <span class="material-symbols-outlined text-base transition-transform duration-200"
-                data-dropdown-nav-target="chevron"
-                data-dropdown-key="mobile-audit"
-                aria-hidden="true">expand_more</span>
-        </button>
-        <div class="hidden pl-4 pb-1"
-             data-dropdown-nav-target="panel"
-             data-dropdown-key="mobile-audit">
-          <div class="grid grid-cols-2 gap-1 pt-1">
-            <% [["수의계약","indigo"],["입찰","violet"],["계약체결","amber"],["계약이행","emerald"],["대금지급","blue"],["하도급","rose"],["기타","slate"]].each do |cat, _color| %>
-              <%= link_to cat, audit_cases_path(category: cat),
-                    class: "flex items-center gap-2 px-3 py-2 text-sm text-slate-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" %>
-            <% end %>
-          </div>
-          <%= link_to "전체 보기 →", audit_cases_path, class: "block px-3 py-2 text-xs text-red-600 font-semibold" %>
-        </div>
-      </div>
+      <%# 신규자 %>
+      <%= link_to onboarding_path, class: (request.path == "/start" ? mobile_active : mobile_normal) do %>
+        <span class="material-symbols-outlined text-lg" aria-hidden="true">school</span>신규자
+      <% end %>
 
       <%# 업무달력 강조 %>
       <%= link_to task_calendar_path,
@@ -437,9 +324,6 @@
 
       <%# 구분선 %>
       <div class="h-px bg-gray-200 my-1"></div>
-      <%= link_to guide_resources_path, class: mobile_normal do %>
-        <span class="material-symbols-outlined text-lg" aria-hidden="true">folder_open</span>자료실
-      <% end %>
       <%= link_to ai_assistant_path, class: mobile_normal do %>
         <span class="material-symbols-outlined text-lg" aria-hidden="true">psychology</span>AI 어시스턴트
       <% end %>

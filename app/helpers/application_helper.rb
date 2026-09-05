@@ -124,6 +124,11 @@ module ApplicationHelper
     when :guides       then request.path.start_with?("/guides") && !request.path.start_with?("/guides/resources")
     when :topics       then request.path.start_with?("/topics")
     when :audit_cases  then request.path.start_with?("/audit-cases")
+    # P1.6 — 업무찾기는 법령가이드·실무가이드·감사사례를 묶은 업무 진입점이다.
+    when :task_find    then request.path.start_with?("/topics") ||
+                            request.path.start_with?("/audit-cases") ||
+                            (request.path.start_with?("/guides") && !request.path.start_with?("/guides/resources"))
+    when :newcomer     then request.path == "/start"
     when :tools        then request.path.start_with?("/tools") && !request.path.start_with?("/tools/task-calendar")
     when :task_calendar then request.path.start_with?("/tools/task-calendar")
     when :resources    then request.path.start_with?("/guides/resources")

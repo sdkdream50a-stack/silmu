@@ -37,13 +37,13 @@
 
       <!-- Headline -->
       <h1 class="heading-editorial-hero !text-amber-200 mb-6">
-        실무 가이드·도구·감사사례,<br class="sm:hidden"/> 한 번에 검색
+        공무원 업무,<br class="sm:hidden"/> 찾는 데서 해결까지
       </h1>
 
-      <!-- Lede -->
+      <%# Lede — 콘텐츠 개수 자랑을 하지 않는다(§83). 무엇을 해주는지만 말한다. %>
       <p class="lede-editorial !text-white max-w-2xl mx-auto mb-10">
-        현직 공무원이 가장 많이 찾는<br class="hidden sm:block"/>
-        <strong class="font-bold !text-white">실무 가이드 <%= @topic_count + @guide_count %>개, 감사 지적 사례 <%= @audit_case_count %>건</strong>이 여기 있습니다.
+        법령·절차·감사사례·계산도구를<br class="hidden sm:block"/>
+        <strong class="font-bold !text-white">한 번에 찾아보세요.</strong>
       </p>
 
       <!-- Search -->
@@ -55,21 +55,28 @@
           <input type="hidden" name="src" value="home_form"/>
           <input name="q" data-home-search-target="input"
                  data-action="input->home-search#inputChanged blur->home-search#blurred"
-                 aria-label="실무 가이드 검색"
-                 placeholder="예: 수의계약 한도, 출장비 정산, 보조금, 연말정산"
+                 aria-label="처리하려는 업무 검색"
+                 placeholder="무엇을 처리하려고 하세요?"
                  autocomplete="off" type="text"
                  class="flex-1 h-12 px-2 border-0 bg-transparent text-slate-900 placeholder:text-slate-400 focus:ring-0 focus:outline-none text-base"/>
           <button type="submit" class="btn-editorial h-12 px-5 shrink-0">검색</button>
         </div>
       </form>
 
-      <!-- 인기 검색어 — 전 직무 검색 직행 (계약 단계칩은 핵심 실무 도구 섹션으로 이동) -->
+      <%# 예시 질문 — 정식 법률용어를 몰라도 된다는 걸 보여준다(§17·§18).
+          ⚠️ 여기 넣는 문장은 **실제로 결과가 나오는 것만** 쓴다. 없는 업무를 예시로 걸면
+             첫 클릭이 곧바로 빈손이 된다. (정보공개는 콘텐츠가 0건이라 넣지 않았다) %>
       <div class="mb-8">
-        <p class="text-xs font-semibold text-white/80 uppercase tracking-wider mb-3">인기 검색어</p>
+        <p class="text-xs font-semibold text-white/80 uppercase tracking-wider mb-3">이렇게 물어보세요</p>
         <div class="flex flex-wrap justify-center gap-2">
-          <% %w[수의계약 연말정산 출장비 이월 기간제 보조금정산 겸직 일상경비].each do |keyword| %>
-            <%= link_to keyword, silmu_search_search_path(q: keyword, src: "home_chip"), data: { turbo: false },
-                class: "touch-target inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-white text-sm font-semibold backdrop-blur-sm transition-colors" %>
+          <% [
+            "병가 며칠 쓰면 진단서 내야 하나요",
+            "3000만원 물품 수의계약 가능한가요",
+            "출장비 얼마 지급하나",
+            "처음 계약을 맡았어요"
+          ].each do |question| %>
+            <%= link_to question, silmu_search_search_path(q: question, src: "home_chip"), data: { turbo: false },
+                class: "touch-target inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-white text-sm font-medium backdrop-blur-sm transition-colors" %>
           <% end %>
         </div>
       </div>
@@ -110,6 +117,37 @@
 </div>
 
 </div><%# /First Screen Wrapper %>
+
+<!-- ============================================================
+     TASK ENTRY — 업무 진입점 (P1.6 §24)
+     콘텐츠 종류가 아니라 "내가 처리할 일"로 들어간다.
+     커버리지가 얇은 업무는 런타임 count 게이트가 알아서 뺀다 — 빈 칸을 전시하지 않는다.
+     ============================================================ -->
+<% entries = task_entries %>
+<% if entries.any? %>
+<section class="section-editorial bg-white border-b border-slate-200" aria-labelledby="task-entry-heading">
+  <div class="container-editorial">
+    <div class="mb-6">
+      <h2 id="task-entry-heading" class="heading-editorial-section mb-2">어떤 업무를 맡고 계신가요?</h2>
+      <p class="lede-editorial">업무를 고르면 관련 법령·절차·사례·도구를 한곳에서 봅니다</p>
+    </div>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+      <% entries.each do |entry| %>
+        <%= link_to send(*entry[:path_helper]),
+              class: "group flex items-start gap-3 rounded-xl border border-slate-200 bg-white p-4 hover:border-editorial-navy-light hover:shadow-sm transition-all" do %>
+          <span class="w-10 h-10 rounded-lg <%= entry[:icon_class] %> flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-[20px]" aria-hidden="true"><%= entry[:icon] %></span>
+          </span>
+          <span class="min-w-0">
+            <span class="block text-sm font-bold text-editorial-ink group-hover:text-editorial-navy leading-tight"><%= entry[:label] %></span>
+            <span class="block text-xs text-editorial-muted mt-1 leading-snug"><%= entry[:hint] %></span>
+          </span>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</section>
+<% end %>
 
 <%# 최근 본 항목 (로컬스토리지 기반 — 기본 숨김) %>
 <section data-controller="recent-items" style="display:none"

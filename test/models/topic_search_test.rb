@@ -145,4 +145,76 @@ class TopicSearchTest < ActiveSupport::TestCase
     results = Topic.search_multiple("관인")
     assert_not_includes results.map(&:slug), "test-agency-takeover"
   end
+
+  # ---- P1.6 §21 answer_for — "바로 답"은 틀린 답보다 없는 답이 낫다 ----
+
+  def topic_with_faq!(slug:, name:, keywords:, question:, answer: "답 본문")
+    Topic.create!(name: name, slug: slug, summary: name, keywords: keywords,
+                  published: true, view_count: 1,
+                  faqs: [ { "question" => question, "answer" => answer } ])
+  end
+
+  test "answer_for: 질문 토큰이 부분만 맞으면 승격하지 않는다" do
+    # 실측된 결함: "병가 진단서" 에서 토큰 1개(병가)만 맞은 "병가는 연 60일" FAQ 가
+    # "바로 답"으로 올라왔다. 질문이 다른데 답이 확신 있게 뜨는 것이 가장 나쁜 실패다.
+    t = topic_with_faq!(slug: "test-answer-partial", name: "병가 진단서 기준",
+                        keywords: "병가, 진단서",
+                        question: "공무원 일반 병가는 연간 며칠까지 쓸 수 있나요?")
+    assert_nil Topic.answer_for("병가 진단서", [ t ])
+  end
+
+  test "answer_for: 질문 토큰이 모두 맞으면 승격한다" do
+    t = topic_with_faq!(slug: "test-answer-full", name: "병가 진단서 기준",
+                        keywords: "병가, 진단서",
+                        question: "병가에 진단서는 언제부터 제출해야 하나요?")
+    result = Topic.answer_for("병가 진단서", [ t ])
+    assert result, "전 토큰이 맞으면 바로 답이 나와야 함"
+    assert_equal "병가에 진단서는 언제부터 제출해야 하나요?", result[:question]
+  end
+
+  test "answer_for: 단일 토큰 질문은 토큰 1개로 승격한다" do
+    t = topic_with_faq!(slug: "test-answer-single", name: "수의계약 개요",
+                        keywords: "수의계약",
+                        question: "수의계약 금액 기준이 어떻게 되나요?")
+    assert Topic.answer_for("수의계약", [ t ])
+  end
+
+  test "answer_for: 게이트를 통과한 FAQ 중 매칭 토큰이 가장 많은 것을 고른다" do
+    # 3토큰(required=2)이라 두 FAQ 가 **모두 게이트를 통과**한다. 그래야 "최대 hits 선택"이
+    # 실제로 시험된다. 게이트가 하나만 남기면 이 단언은 아무것도 증명하지 못한다.
+    t = Topic.create!(name: "수의계약 한도 부가세", slug: "test-answer-best",
+                      keywords: "수의계약, 한도, 부가세", published: true,
+                      faqs: [
+                        { "question" => "수의계약 한도는 얼마인가요?",            "answer" => "A" },
+                        { "question" => "수의계약 한도에 부가세가 포함되나요?", "answer" => "B" }
+                      ])
+    result = Topic.answer_for("수의계약 한도 부가세", [ t ])
+    assert_equal "수의계약 한도에 부가세가 포함되나요?", result[:question]
+    assert_equal 3, result[:hits]
+  end
+
+  test "answer_for: 깨진 FAQ 원소가 있어도 죽지 않고 정상 FAQ 를 찾는다" do
+    # faqs 는 jsonb 이고 내부 API(api/v1/topics)로도 쓰인다 → 원소 모양을 신뢰할 수 없다.
+    t = Topic.create!(name: "수의계약 한도", slug: "test-answer-malformed",
+                      keywords: "수의계약, 한도", published: true,
+                      faqs: [
+                        [ "깨진", "배열" ],
+                        "깨진 문자열",
+                        { "question" => "수의계약 한도는 얼마인가요?", "answer" => "정상" }
+                      ])
+    result = Topic.answer_for("수의계약 한도", [ t ])
+    assert result, "깨진 원소 때문에 정상 FAQ 를 놓치면 안 된다"
+    assert_equal "정상", result[:answer]
+  end
+
+  test "answer_for: 후보가 없으면 nil" do
+    assert_nil Topic.answer_for("수의계약", [])
+    assert_nil Topic.answer_for("", [ topics(:local_private_contract) ])
+  end
+
+  test "answer_for: 연상어를 동의어로 쓰지 않는다 (진단서≠병가)" do
+    # SYNONYMS 에 진단서→병가 같은 연상 매핑이 들어오면 이 단언이 깨진다.
+    variants = SearchQueryParser.tokens("진단서").first
+    assert_not_includes variants, "병가"
+  end
 end

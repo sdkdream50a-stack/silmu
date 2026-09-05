@@ -108,4 +108,18 @@ class ChatbotControllerTest < ActionDispatch::IntegrationTest
     assert_match "다른 표현으로 찾아보기", response.body
     assert_select "a[href=?]", feedback_path
   end
+
+  test "검색어를 들고 오면 보조 탐색 블록을 접어 답을 먼저 보여준다 (§20)" do
+    get silmu_search_path(q: "수의계약 한도")
+    assert_response :success
+    assert_no_match "금액으로 계약방법 찾기", response.body
+    assert_no_match "주제별 상세 가이드", response.body
+  end
+
+  test "검색어 없이 들어오면 보조 탐색 블록은 그대로 남는다 (기능 삭제 아님)" do
+    get silmu_search_path
+    assert_response :success
+    assert_match "금액으로 계약방법 찾기", response.body
+    assert_match "주제별 상세 가이드", response.body
+  end
 end
