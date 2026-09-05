@@ -115,16 +115,27 @@ class LawContentFetcher
   def parse_law_meta(xml, fallback_name)
     return nil unless xml
 
-    # 검색 결과에서 첫 번째 법령 추출
-    # API XML 구조: <법령목록> > <법령> 또는 직접 <법령>
-    item = xml.at_css("법령")
+    # 검색 결과에서 첫 번째 법령 추출.
+    #
+    # 🔧 2026-09-06 수정 — 실제 API 응답의 항목 노드는 `<law>` 이며(자식 태그만 한글),
+    #    기존 `at_css("법령")` 은 아무것도 매칭하지 못해 항상 nil 을 반환했다.
+    #    그 결과 static_law_meta 폴백으로만 동작해 **시행일자·소관부처·법령구분·MST 를 한 번도 받지 못했다.**
+    #    운영 실측(2026-09-06): laws 테이블 15행 전부 effective_date NULL,
+    #    토픽 페이지 `_law_reference_links` 의 "(YYYY.MM.DD 시행)" 표기 0건.
+    #
+    #    실제 구조:
+    #      <LawSearch><totalCnt>1</totalCnt>
+    #        <law id="1"><법령일련번호>…</법령일련번호><시행일자>…</시행일자>…</law></LawSearch>
+    item = xml.at_xpath("//law")
     return nil unless item
 
-    mst  = item.at_css("법령일련번호")&.text&.strip
-    name = item.at_css("법령명한글")&.text&.strip || fallback_name
-    eff  = item.at_css("시행일자")&.text&.strip
-    min  = item.at_css("소관부처명")&.text&.strip
-    type = item.at_css("법령구분명")&.text&.strip
+    pick = ->(tag) { item.at_xpath("./#{tag}")&.text&.strip.presence }
+
+    mst  = pick.call("법령일련번호")
+    name = pick.call("법령명한글") || fallback_name
+    eff  = pick.call("시행일자")
+    min  = pick.call("소관부처명")
+    type = pick.call("법령구분명")
 
     # 시행일자 포맷: YYYYMMDD → YYYY. MM. DD
     effective_display = if eff&.match?(/\A\d{8}\z/)

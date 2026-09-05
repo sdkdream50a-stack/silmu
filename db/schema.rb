@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_11_202659) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_06_010200) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -30,36 +30,189 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_11_202659) do
 
   create_table "audit_cases", force: :cascade do |t|
     t.text "action_taken"
+    t.string "agency_scope_confidence"
     t.string "category"
     t.jsonb "checkpoints", default: []
     t.datetime "created_at", null: false
     t.text "detail"
+    t.date "effective_at"
+    t.string "freshness_state"
+    t.datetime "freshness_state_at"
     t.string "infographic_url"
+    t.boolean "is_reconstructed"
     t.text "issue"
+    t.string "jurisdiction"
+    t.bigint "last_change_event_id"
     t.datetime "last_verified_at"
     t.string "legal_basis"
     t.text "lesson"
     t.integer "org_type"
+    t.string "provenance_confidence"
     t.boolean "published", default: true
     t.boolean "repeated_issue", default: false
+    t.date "review_due_at"
     t.integer "sector", default: 0, null: false
     t.string "severity"
     t.string "slug"
     t.jsonb "source", default: {}
+    t.string "source_agency"
+    t.integer "source_page"
+    t.string "source_reference"
+    t.string "source_title"
+    t.string "source_type"
+    t.string "source_url"
+    t.integer "source_year"
+    t.string "target_agency", default: [], array: true
     t.string "title"
     t.string "topic_slug"
     t.datetime "updated_at", null: false
     t.string "verification_method", limit: 32
+    t.text "verification_note"
     t.string "verification_source", limit: 200
+    t.string "verification_status"
     t.integer "view_count", default: 0
+    t.index ["freshness_state"], name: "index_audit_cases_on_freshness_state"
+    t.index ["is_reconstructed"], name: "index_audit_cases_on_is_reconstructed"
+    t.index ["jurisdiction"], name: "index_audit_cases_on_jurisdiction"
     t.index ["published", "category"], name: "index_audit_cases_on_published_and_category"
     t.index ["published", "created_at"], name: "index_audit_cases_on_published_and_created_at"
     t.index ["published", "sector"], name: "index_audit_cases_on_published_and_sector"
     t.index ["published", "updated_at"], name: "index_audit_cases_on_published_and_updated_at"
+    t.index ["review_due_at"], name: "index_audit_cases_on_review_due_at"
     t.index ["sector", "org_type"], name: "index_audit_cases_on_sector_and_org_type"
     t.index ["slug"], name: "index_audit_cases_on_slug", unique: true
     t.index ["source"], name: "index_audit_cases_on_source", using: :gin
+    t.index ["source_type"], name: "index_audit_cases_on_source_type"
+    t.index ["target_agency"], name: "index_audit_cases_on_target_agency", using: :gin
     t.index ["topic_slug"], name: "index_audit_cases_on_topic_slug"
+    t.index ["verification_status"], name: "index_audit_cases_on_verification_status"
+  end
+
+  create_table "authority_change_events", force: :cascade do |t|
+    t.bigint "authority_document_id", null: false
+    t.string "change_type", null: false
+    t.datetime "created_at", null: false
+    t.datetime "detected_at", null: false
+    t.integer "diff_level"
+    t.text "diff_summary"
+    t.date "effective_at"
+    t.string "impact_status", default: "PENDING", null: false
+    t.jsonb "machine_diff", default: {}, null: false
+    t.bigint "new_version_id", null: false
+    t.bigint "old_version_id"
+    t.string "review_status", default: "OPEN", null: false
+    t.datetime "updated_at", null: false
+    t.index ["authority_document_id", "detected_at"], name: "idx_on_authority_document_id_detected_at_b0039f4ad8"
+    t.index ["authority_document_id"], name: "index_authority_change_events_on_authority_document_id"
+    t.index ["effective_at"], name: "index_authority_change_events_on_effective_at"
+    t.index ["review_status"], name: "index_authority_change_events_on_review_status"
+  end
+
+  create_table "authority_documents", force: :cascade do |t|
+    t.string "agency"
+    t.bigint "authority_source_id", null: false
+    t.datetime "created_at", null: false
+    t.bigint "current_version_id"
+    t.string "document_type", null: false
+    t.boolean "has_transitional_provision"
+    t.string "jurisdiction"
+    t.string "key", null: false
+    t.datetime "last_checked_at"
+    t.string "official_identifier"
+    t.string "region"
+    t.string "short_title"
+    t.string "status", default: "ACTIVE", null: false
+    t.string "title", null: false
+    t.boolean "transition_review_required"
+    t.datetime "updated_at", null: false
+    t.index ["authority_source_id"], name: "index_authority_documents_on_authority_source_id"
+    t.index ["current_version_id"], name: "index_authority_documents_on_current_version_id"
+    t.index ["document_type"], name: "index_authority_documents_on_document_type"
+    t.index ["jurisdiction", "region"], name: "index_authority_documents_on_jurisdiction_and_region"
+    t.index ["key"], name: "index_authority_documents_on_key", unique: true
+  end
+
+  create_table "authority_review_tasks", force: :cascade do |t|
+    t.bigint "affected_id"
+    t.string "affected_key"
+    t.string "affected_label"
+    t.string "affected_type", null: false
+    t.string "assigned_to"
+    t.bigint "authority_change_event_id", null: false
+    t.datetime "created_at", null: false
+    t.string "impact_class", default: "UNKNOWN", null: false
+    t.text "impact_reason"
+    t.integer "priority", default: 3, null: false
+    t.text "review_note"
+    t.datetime "reviewed_at"
+    t.string "status", default: "OPEN", null: false
+    t.datetime "updated_at", null: false
+    t.index ["affected_type", "affected_id"], name: "index_authority_review_tasks_on_affected_type_and_affected_id"
+    t.index ["authority_change_event_id", "affected_type", "affected_id", "affected_key"], name: "index_authority_review_tasks_uniqueness", unique: true
+    t.index ["authority_change_event_id"], name: "index_authority_review_tasks_on_authority_change_event_id"
+    t.index ["status", "priority"], name: "index_authority_review_tasks_on_status_and_priority"
+  end
+
+  create_table "authority_sources", force: :cascade do |t|
+    t.string "agency"
+    t.integer "authority_tier", default: 1, null: false
+    t.integer "check_interval_hours", default: 168, null: false
+    t.jsonb "config", default: {}, null: false
+    t.datetime "created_at", null: false
+    t.boolean "enabled", default: true, null: false
+    t.integer "failure_count", default: 0, null: false
+    t.string "fetch_strategy", null: false
+    t.string "jurisdiction"
+    t.string "key", null: false
+    t.datetime "last_checked_at"
+    t.string "last_failure_kind"
+    t.text "last_failure_message"
+    t.datetime "last_success_at"
+    t.string "name", null: false
+    t.string "official_url"
+    t.string "region"
+    t.string "source_type", null: false
+    t.datetime "updated_at", null: false
+    t.index ["enabled", "last_checked_at"], name: "index_authority_sources_on_enabled_and_last_checked_at"
+    t.index ["key"], name: "index_authority_sources_on_key", unique: true
+  end
+
+  create_table "authority_verification_events", force: :cascade do |t|
+    t.bigint "authority_review_task_id"
+    t.bigint "authority_version_id"
+    t.bigint "content_id"
+    t.string "content_key"
+    t.string "content_type", null: false
+    t.datetime "created_at", null: false
+    t.text "note"
+    t.string "result", null: false
+    t.datetime "reviewed_at", null: false
+    t.string "reviewer", null: false
+    t.datetime "updated_at", null: false
+    t.index ["content_type", "content_id"], name: "idx_on_content_type_content_id_baeb6ae538"
+    t.index ["reviewed_at"], name: "index_authority_verification_events_on_reviewed_at"
+  end
+
+  create_table "authority_versions", force: :cascade do |t|
+    t.bigint "authority_document_id", null: false
+    t.string "content_hash", null: false
+    t.datetime "created_at", null: false
+    t.date "effective_at"
+    t.date "expires_at"
+    t.datetime "fetched_at", null: false
+    t.text "normalized_content"
+    t.date "promulgated_at"
+    t.date "published_at"
+    t.jsonb "raw_metadata", default: {}, null: false
+    t.string "revision_kind"
+    t.string "revision_number"
+    t.string "source_url"
+    t.datetime "updated_at", null: false
+    t.string "version_identifier"
+    t.index ["authority_document_id", "content_hash"], name: "idx_on_authority_document_id_content_hash_4864e018d4"
+    t.index ["authority_document_id", "fetched_at"], name: "idx_on_authority_document_id_fetched_at_5fde8beb71"
+    t.index ["authority_document_id"], name: "index_authority_versions_on_authority_document_id"
+    t.index ["effective_at"], name: "index_authority_versions_on_effective_at"
   end
 
   create_table "bookmarks", force: :cascade do |t|
@@ -101,6 +254,25 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_11_202659) do
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_calendar_data_on_user_id", unique: true
+  end
+
+  create_table "content_authority_links", force: :cascade do |t|
+    t.string "article_reference"
+    t.bigint "authority_document_id", null: false
+    t.string "clause_reference"
+    t.string "confidence", default: "MEDIUM", null: false
+    t.bigint "content_id"
+    t.string "content_key"
+    t.string "content_type", null: false
+    t.datetime "created_at", null: false
+    t.string "derivation_source"
+    t.string "relationship_type", default: "GOVERNED_BY", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "verified_at"
+    t.index ["authority_document_id"], name: "index_content_authority_links_on_authority_document_id"
+    t.index ["content_type", "content_id", "content_key", "authority_document_id", "article_reference"], name: "index_content_authority_links_uniqueness", unique: true
+    t.index ["content_type", "content_id"], name: "index_content_authority_links_on_content_type_and_content_id"
+    t.index ["content_type", "content_key"], name: "index_content_authority_links_on_content_type_and_content_key"
   end
 
   create_table "content_migrations", force: :cascade do |t|
@@ -194,16 +366,23 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_11_202659) do
   end
 
   create_table "guides", force: :cascade do |t|
+    t.string "agency_scope_confidence"
     t.string "author", default: "실무팀"
     t.string "badge"
     t.string "category"
     t.string "category_color", default: "emerald"
     t.datetime "created_at", null: false
     t.text "description"
+    t.date "effective_at"
     t.string "external_link"
+    t.string "freshness_state"
+    t.datetime "freshness_state_at"
+    t.string "jurisdiction"
+    t.bigint "last_change_event_id"
     t.datetime "last_verified_at"
     t.boolean "published", default: true, null: false
     t.date "published_on"
+    t.date "review_due_at"
     t.jsonb "rich_media", default: {}
     t.jsonb "sections"
     t.integer "sector", default: 0, null: false
@@ -213,22 +392,30 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_11_202659) do
     t.integer "sort_order", default: 0, null: false
     t.text "summary"
     t.string "tag"
+    t.string "target_agency", default: [], array: true
     t.string "title", null: false
     t.string "topic_slug"
     t.datetime "updated_at", null: false
     t.string "verification_method", limit: 32
+    t.text "verification_note"
     t.string "verification_source", limit: 200
+    t.string "verification_status"
     t.integer "view_count", default: 0, null: false
     t.index ["category"], name: "index_guides_on_category"
+    t.index ["freshness_state"], name: "index_guides_on_freshness_state"
+    t.index ["jurisdiction"], name: "index_guides_on_jurisdiction"
     t.index ["published", "sector"], name: "index_guides_on_published_and_sector"
     t.index ["published", "sort_order"], name: "index_guides_on_published_and_sort_order"
     t.index ["published", "view_count"], name: "index_guides_on_published_and_view_count"
     t.index ["published"], name: "index_guides_on_published"
+    t.index ["review_due_at"], name: "index_guides_on_review_due_at"
     t.index ["rich_media"], name: "index_guides_on_rich_media", using: :gin
     t.index ["series", "series_order"], name: "index_guides_on_series_and_series_order", where: "(series IS NOT NULL)"
     t.index ["slug"], name: "index_guides_on_slug", unique: true
     t.index ["sort_order"], name: "index_guides_on_sort_order"
+    t.index ["target_agency"], name: "index_guides_on_target_agency", using: :gin
     t.index ["topic_slug"], name: "index_guides_on_topic_slug"
+    t.index ["verification_status"], name: "index_guides_on_verification_status"
   end
 
   create_table "law_change_subscriptions", force: :cascade do |t|
@@ -356,18 +543,24 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_11_202659) do
   end
 
   create_table "topics", force: :cascade do |t|
+    t.string "agency_scope_confidence"
     t.text "audit_cases"
     t.string "category"
     t.text "commentary"
     t.datetime "created_at", null: false
     t.text "decree_content"
+    t.date "effective_at"
     t.jsonb "faqs", default: []
     t.text "flowchart_mermaid"
     t.string "flowchart_url"
+    t.string "freshness_state"
+    t.datetime "freshness_state_at"
     t.jsonb "howto_steps", default: []
     t.string "infographic_url"
     t.text "interpretation_content"
+    t.string "jurisdiction"
     t.text "keywords"
+    t.bigint "last_change_event_id"
     t.datetime "last_verified_at"
     t.string "law_base_date"
     t.text "law_content"
@@ -381,19 +574,25 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_11_202659) do
     t.text "qa_content"
     t.jsonb "quick_stats", default: []
     t.text "regulation_content"
+    t.date "review_due_at"
     t.datetime "review_flagged_at"
     t.string "review_reason"
     t.text "rule_content"
     t.integer "sector", default: 0, null: false
     t.string "slug", null: false
     t.text "summary"
+    t.string "target_agency", default: [], array: true
     t.datetime "updated_at", null: false
     t.string "verification_method", limit: 32
+    t.text "verification_note"
     t.string "verification_source", limit: 200
+    t.string "verification_status"
     t.string "video_url"
     t.integer "view_count", default: 0
     t.index ["category"], name: "index_topics_on_category"
     t.index ["faqs"], name: "index_topics_on_faqs_jsonb", where: "(faqs <> '[]'::jsonb)", using: :gin
+    t.index ["freshness_state"], name: "index_topics_on_freshness_state"
+    t.index ["jurisdiction"], name: "index_topics_on_jurisdiction"
     t.index ["needs_review"], name: "index_topics_on_needs_review"
     t.index ["parent_id"], name: "index_topics_on_parent_id"
     t.index ["published", "category"], name: "index_topics_on_published_and_category"
@@ -402,8 +601,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_11_202659) do
     t.index ["published", "updated_at"], name: "index_topics_on_published_and_updated_at"
     t.index ["published", "view_count"], name: "index_topics_on_published_and_view_count"
     t.index ["published"], name: "index_topics_on_published"
+    t.index ["review_due_at"], name: "index_topics_on_review_due_at"
     t.index ["sector", "org_type"], name: "index_topics_on_sector_and_org_type"
     t.index ["slug"], name: "index_topics_on_slug", unique: true
+    t.index ["target_agency"], name: "index_topics_on_target_agency", using: :gin
+    t.index ["verification_status"], name: "index_topics_on_verification_status"
   end
 
   create_table "users", force: :cascade do |t|
@@ -428,8 +630,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_11_202659) do
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
+  add_foreign_key "authority_change_events", "authority_documents"
+  add_foreign_key "authority_change_events", "authority_versions", column: "new_version_id"
+  add_foreign_key "authority_change_events", "authority_versions", column: "old_version_id"
+  add_foreign_key "authority_documents", "authority_sources"
+  add_foreign_key "authority_documents", "authority_versions", column: "current_version_id"
+  add_foreign_key "authority_review_tasks", "authority_change_events"
+  add_foreign_key "authority_verification_events", "authority_review_tasks"
+  add_foreign_key "authority_verification_events", "authority_versions"
+  add_foreign_key "authority_versions", "authority_documents"
   add_foreign_key "bookmarks", "users"
   add_foreign_key "calendar_data", "users"
+  add_foreign_key "content_authority_links", "authority_documents"
   add_foreign_key "exam_progresses", "users"
   add_foreign_key "exam_question_comments", "users"
   add_foreign_key "law_change_subscriptions", "users"
