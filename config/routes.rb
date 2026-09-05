@@ -376,6 +376,11 @@ Rails.application.routes.draw do
     resources :topic_reviews, only: [ :index ] do
       member { patch :resolve }
     end
+
+    # P1.55 §24 — Freshness Engine 검토 큐 (콘텐츠 수정 없음, 판정만 기록)
+    resources :authority_reviews, only: [ :index ] do
+      member { post :decide }
+    end
   end
 
   # Sprint Task #5 — 사용자 만족도 1클릭 (익명 허용)
