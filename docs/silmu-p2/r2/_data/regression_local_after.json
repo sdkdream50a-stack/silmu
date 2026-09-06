@@ -1,0 +1,165 @@
+{
+  "r1": [
+    {
+      "q": "수의계약 한도",
+      "t": 3,
+      "slugs": [
+        "private-contract-limit",
+        "private-contract",
+        "estimated-amount"
+      ],
+      "ans": "수의계약 한도 금액에 부가세가 포함되나요?",
+      "tools": [
+        "계약방식 결정 도우미"
+      ]
+    },
+    {
+      "q": "수의계약한도",
+      "t": 3,
+      "slugs": [
+        "private-contract-limit",
+        "estimated-amount",
+        "private-contract"
+      ],
+      "ans": null,
+      "tools": [
+        "계약방식 결정 도우미"
+      ]
+    },
+    {
+      "q": "소액수의",
+      "t": 2,
+      "slugs": [
+        "single-quote",
+        "estimated-amount"
+      ],
+      "ans": null,
+      "tools": [
+        "계약방식 결정 도우미"
+      ]
+    },
+    {
+      "q": "분할발주",
+      "t": 2,
+      "slugs": [
+        "split-contract",
+        "additional-contract-limit"
+      ],
+      "ans": null,
+      "tools": [
+        "분할계약 판단 체크리스트"
+      ]
+    },
+    {
+      "q": "분리 발주",
+      "t": 4,
+      "slugs": [
+        "spec-price-split-bid",
+        "unit-price-contract",
+        "fence-installation",
+        "split-contract"
+      ],
+      "ans": null,
+      "tools": [
+        "분할계약 판단 체크리스트"
+      ]
+    },
+    {
+      "q": "수입인지",
+      "t": 0,
+      "slugs": [],
+      "ans": null,
+      "tools": [
+        "계약보증금 계산기"
+      ]
+    },
+    {
+      "q": "보조금정산",
+      "t": 0,
+      "slugs": [],
+      "ans": null,
+      "tools": [
+        "보조금 정산 체크리스트"
+      ]
+    },
+    {
+      "q": "국외출장",
+      "t": 1,
+      "slugs": [
+        "foreign-travel"
+      ],
+      "ans": null,
+      "tools": [
+        "여비계산기"
+      ]
+    }
+  ],
+  "p16": [
+    {
+      "q": "차비",
+      "t": 2,
+      "slugs": [
+        "travel-expense",
+        "vehicle-travel-allowance"
+      ],
+      "ans": null,
+      "tools": [
+        "여비계산기"
+      ]
+    },
+    {
+      "q": "숙박비 지급 기준",
+      "t": 2,
+      "slugs": [
+        "travel-expense",
+        "accommodation-allowance"
+      ],
+      "ans": "숙박비 지급 기준은 어떻게 되나요?",
+      "tools": []
+    },
+    {
+      "q": "지급 기준",
+      "t": 4,
+      "slugs": [
+        "instructor-allowance",
+        "travel-expense",
+        "advance-payment",
+        "sick-leave"
+      ],
+      "ans": null,
+      "tools": []
+    },
+    {
+      "q": "병가",
+      "t": 1,
+      "slugs": [
+        "sick-leave"
+      ],
+      "ans": "공무원 일반 병가는 연간 며칠까지 쓸 수 있나요?",
+      "tools": []
+    },
+    {
+      "q": "병가 진단서",
+      "t": 1,
+      "slugs": [
+        "sick-leave"
+      ],
+      "ans": "병가에 진단서는 언제부터 제출해야 하나요?",
+      "tools": []
+    },
+    {
+      "q": "출장",
+      "t": 4,
+      "slugs": [
+        "accommodation-allowance",
+        "vehicle-travel-allowance",
+        "travel-expense",
+        "foreign-travel"
+      ],
+      "ans": "자가용으로 출장 가면 유류비는 어떻게 지급되나요?",
+      "tools": [
+        "여비계산기"
+      ]
+    }
+  ]
+}

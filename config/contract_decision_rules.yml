@@ -1,0 +1,622 @@
+# 계약 판단 규칙 — 수의계약 가능성 · 견적요건 · 분할발주 위험
+#
+# 이 파일이 R2 판단의 유일한 규칙 원천이다. 코드에 임계값을 두지 않는다.
+# 모든 rule 은 authority_source + source_locator 를 가져야 하며,
+# 근거 없는 rule 은 RuleSet 로딩 단계에서 거부된다(ContractDecision::RuleSet).
+#
+# ⚠️ 여기 있는 금액·기간은 전부 조문에서 옮겨 적은 것이다. "사용자 편의를 위한" 임계값을
+#    추가하지 않는다. 근거가 없으면 UNKNOWN / REVIEW_REQUIRED 로 남긴다.
+
+meta:
+  version: "2026-09-06"
+  compiled_from: "법제처 국가법령정보 공동활용 API (open.law.go.kr)"
+  # 판정에 쓰이는 rule 은 아래 9개 field 를 모두 가져야 한다.
+  # 하나라도 없으면 RuleSet 로딩이 실패한다(fail-closed) — 근거 없는 편의 rule 을 만들지 않기 위해서다.
+  required_rule_fields:
+    - rule_id
+    - title
+    - agency_scope
+    - contract_types
+    - condition
+    - outcome
+    - authority_source
+    - source_locator
+    - effective_from
+    - verified_at
+  # 조문 재대조 기록 = docs/silmu-p2/r2/_data/articles_verified.json
+  articles_verified_at: "2026-09-06T05:13:32Z"
+
+sources:
+  LOCAL_CONTRACT_ACT:
+    title: "지방자치단체를 당사자로 하는 계약에 관한 법률"
+    short: "지방계약법"
+    doc_type: LAW
+    law_id: "010002"
+    mst: "253973"
+    effective_from: "2024-02-17"
+    verified_at: "2026-09-06"
+    url: "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=253973"
+  LOCAL_CONTRACT_DECREE:
+    title: "지방자치단체를 당사자로 하는 계약에 관한 법률 시행령"
+    short: "지방계약법 시행령"
+    doc_type: PRESIDENTIAL_DECREE
+    law_id: "010098"
+    mst: "286149"
+    effective_from: "2026-06-03"
+    verified_at: "2026-09-06"
+    url: "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=286149"
+  LOCAL_CONTRACT_RULE:
+    title: "지방자치단체를 당사자로 하는 계약에 관한 법률 시행규칙"
+    short: "지방계약법 시행규칙"
+    doc_type: MINISTERIAL_ORDINANCE
+    law_id: "010153"
+    mst: "287365"
+    effective_from: "2026-07-01"
+    verified_at: "2026-09-06"
+    url: "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=287365"
+
+# ── 적용 기관 범위 ──────────────────────────────────────────────
+# 이 규칙집은 지방계약법 체계만 적재돼 있다. 국가기관·공공기관·사립학교는
+# 다른 법 체계(국가계약법·공공기관운영법 등)를 따르므로 **판단하지 않는다.**
+# "적재돼 있지 않다"를 "해당 없음"으로 바꿔 말하지 않는다.
+agency_scopes:
+  LOCAL_GOVERNMENT:
+    label: "지방자치단체 (시·도·시·군·구)"
+    in_scope: true
+    basis: LOCAL_CONTRACT_ACT
+    locator: "제2조"
+  EDUCATION_OFFICE:
+    label: "교육청 · 교육지원청"
+    in_scope: true
+    basis: LOCAL_CONTRACT_ACT
+    locator: "제2조"
+    note: "지방자치단체인 교육·학예 사무 집행기관으로서 지방계약법 적용"
+  PUBLIC_SCHOOL:
+    label: "국·공립학교"
+    in_scope: true
+    basis: LOCAL_CONTRACT_ACT
+    locator: "제2조"
+    note: "학교회계 계약은 교육감 위임 범위에서 지방계약법 체계를 따른다. 개별 위임전결 규정을 함께 확인한다."
+  CENTRAL_GOVERNMENT:
+    label: "국가기관 (중앙행정기관)"
+    in_scope: false
+    out_of_scope_reason: "국가를 당사자로 하는 계약에 관한 법률(국가계약법) 적용 — 이 도구에 적재되지 않았다"
+  PUBLIC_INSTITUTION:
+    label: "공공기관 · 지방공기업"
+    in_scope: false
+    out_of_scope_reason: "공공기관의 운영에 관한 법률 / 지방공기업법 및 기관 자체 계약규정 적용 — 적재되지 않았다"
+  PRIVATE_SCHOOL:
+    label: "사립학교"
+    in_scope: false
+    out_of_scope_reason: "사립학교법 및 학교법인 정관·회계규칙 적용 — 적재되지 않았다"
+
+# ── 계약 유형 ──────────────────────────────────────────────────
+contract_types:
+  goods:                { label: "물품 제조·구매",        family: goods_service }
+  service:              { label: "용역",                  family: goods_service }
+  construction_general: { label: "종합공사",              family: construction }
+  construction_special: { label: "전문공사",              family: construction }
+  construction_etc:     { label: "그 밖의 공사 (전기·소방·정보통신 등)", family: construction }
+  lease_etc:            { label: "임대차 등 (공사·물품·용역이 아닌 계약)", family: other }
+
+# ── 계약상대자 유형 ────────────────────────────────────────────
+# UNKNOWN 은 "일반업체"가 아니다. 모르는 것과 아닌 것을 구분한다.
+counterparty_types:
+  UNKNOWN:
+    label: "아직 정해지지 않음 / 확인 못 함"
+    unknown: true
+  GENERAL:
+    label: "일반 업체 (아래 어디에도 해당하지 않음)"
+  YOUTH_STARTUP:
+    label: "청년창업기업"
+    basis_law: "중소기업창업 지원법 제2조제11호"
+  SMALL_ENTERPRISE:
+    label: "소기업 · 소상공인"
+    basis_law: "중소기업기본법 제2조제2항 / 소상공인기본법 제2조"
+  WOMEN:
+    label: "여성기업"
+    basis_law: "여성기업지원에 관한 법률 제2조제1호"
+  DISABLED:
+    label: "장애인기업"
+    basis_law: "장애인기업활동 촉진법 제2조제2호"
+  SOCIAL_ENTERPRISE:
+    label: "사회적기업"
+    basis_law: "사회적기업 육성법 제2조제1호"
+    requires_vulnerable_employment_ratio: true
+  SOCIAL_COOPERATIVE:
+    label: "사회적협동조합"
+    basis_law: "협동조합 기본법 제2조제3호"
+    requires_vulnerable_employment_ratio: true
+    caution: "일반 협동조합(같은 법 제2조제1호)은 해당하지 않는다"
+  SELF_SUPPORT:
+    label: "자활기업"
+    basis_law: "국민기초생활 보장법 제18조"
+    requires_vulnerable_employment_ratio: true
+  VILLAGE:
+    label: "마을기업"
+    basis_law: "도시재생 활성화 및 지원에 관한 특별법 제2조제1항제9호"
+    requires_vulnerable_employment_ratio: true
+    extra_condition: "행정안전부장관이 정하는 기준에 적합한 기업일 것"
+
+# ── 기본 원칙 ──
+# 수의계약은 예외다. 매칭되는 예외 rule 이 없으면 여기로 떨어진다.
+default_procedure:
+  rule_id: ACT-9-1
+  title: "계약의 방법 — 일반입찰이 원칙"
+  agency_scope: [LOCAL_GOVERNMENT, EDUCATION_OFFICE, PUBLIC_SCHOOL]
+  contract_types: [goods, service, construction_general, construction_special, construction_etc, lease_etc]
+  condition: "제25조·제26조·제27조의 수의계약 사유에 해당하지 않는 경우"
+  outcome: COMPETITIVE_PROCEDURE_REQUIRED
+  authority_source: LOCAL_CONTRACT_ACT
+  source_locator: "제9조제1항"
+  effective_from: "2024-02-17"
+  verified_at: "2026-09-06"
+  quote: "지방자치단체의 장 또는 계약담당자는 계약을 체결하려는 경우에는 이를 공고하여 일반입찰에 부쳐야 한다. 다만, 계약의 목적ㆍ성질ㆍ규모 및 지역특수성 등을 고려하여 필요하다고 인정되면 참가자를 지명(指名)하여 입찰에 부치거나 수의계약을 할 수 있다."
+
+# 수의계약을 체결했을 때 따라붙는 의무. 판정 결과와 무관하게 안내한다.
+disclosure_duty:
+  source_locator: "제9조제4항"
+  authority_source: LOCAL_CONTRACT_ACT
+  effective_from: "2024-02-17"
+  verified_at: "2026-09-06"
+  quote: "지방자치단체의 장 또는 계약담당자는 제1항 단서에 따라 수의계약을 체결한 경우 대통령령으로 정하는 바에 따라 수의계약 내용을 공개하여야 한다."
+
+# ── 수의계약 가능 여부 (시행령 §25①5호) ────────────────────────
+# 금액 축만으로 판정되는 rule 은 가목(공사)·나목(2천만 이하)·사목(임대차)뿐이다.
+# 나머지는 전부 계약상대자 자격 또는 계약의 성질을 조건으로 갖는다.
+private_contract_rules:
+  - rule_id: D25-1-5-가-general
+    title: "종합공사 4억원 이하"
+    agency_scope: [LOCAL_GOVERNMENT, EDUCATION_OFFICE, PUBLIC_SCHOOL]
+    condition: "추정가격이 4억원 이하인 건설공사(전문공사 제외)"
+    effective_from: "2026-06-03"
+    verified_at: "2026-09-06"
+    contract_types: [construction_general]
+    max_amount: 400000000
+    counterparties: any
+    outcome: POSSIBLE
+    authority_source: LOCAL_CONTRACT_DECREE
+    source_locator: "제25조제1항제5호가목"
+    quote: "「건설산업기본법」에 따른 건설공사(같은 법에 따른 전문공사는 제외한다)로서 추정가격이 4억원 이하인 공사"
+
+  - rule_id: D25-1-5-가-special
+    title: "전문공사 2억원 이하"
+    agency_scope: [LOCAL_GOVERNMENT, EDUCATION_OFFICE, PUBLIC_SCHOOL]
+    condition: "추정가격이 2억원 이하인 전문공사"
+    effective_from: "2026-06-03"
+    verified_at: "2026-09-06"
+    contract_types: [construction_special]
+    max_amount: 200000000
+    counterparties: any
+    outcome: POSSIBLE
+    authority_source: LOCAL_CONTRACT_DECREE
+    source_locator: "제25조제1항제5호가목"
+    quote: "같은 법에 따른 전문공사로서 추정가격이 2억원 이하인 공사"
+
+  - rule_id: D25-1-5-가-etc
+    title: "그 밖의 공사 1억6천만원 이하"
+    agency_scope: [LOCAL_GOVERNMENT, EDUCATION_OFFICE, PUBLIC_SCHOOL]
+    condition: "그 밖의 공사 관련 법령에 따른 공사로서 추정가격이 1억6천만원 이하"
+    effective_from: "2026-06-03"
+    verified_at: "2026-09-06"
+    contract_types: [construction_etc]
+    max_amount: 160000000
+    counterparties: any
+    outcome: POSSIBLE
+    authority_source: LOCAL_CONTRACT_DECREE
+    source_locator: "제25조제1항제5호가목"
+    quote: "그 밖의 공사 관련 법령에 따른 공사로서 추정가격이 1억6천만원 이하인 공사"
+
+  - rule_id: D25-1-5-나
+    title: "물품·용역 2천만원 이하"
+    agency_scope: [LOCAL_GOVERNMENT, EDUCATION_OFFICE, PUBLIC_SCHOOL]
+    condition: "추정가격이 2천만원 이하인 물품 제조·구매 또는 용역"
+    effective_from: "2026-06-03"
+    verified_at: "2026-09-06"
+    contract_types: [goods, service]
+    max_amount: 20000000
+    counterparties: any
+    outcome: POSSIBLE
+    authority_source: LOCAL_CONTRACT_DECREE
+    source_locator: "제25조제1항제5호나목"
+    quote: "추정가격이 2천만원 이하인 물품의 제조ㆍ구매계약 또는 용역계약"
+
+  - rule_id: D25-1-5-다
+    title: "청년창업기업 5천만원 이하"
+    agency_scope: [LOCAL_GOVERNMENT, EDUCATION_OFFICE, PUBLIC_SCHOOL]
+    condition: "추정가격 2천만원 초과 5천만원 이하 + 상대방이 청년창업기업"
+    effective_from: "2026-06-03"
+    verified_at: "2026-09-06"
+    contract_types: [goods, service]
+    min_amount_exclusive: 20000000
+    max_amount: 50000000
+    counterparties: [YOUTH_STARTUP]
+    outcome: POSSIBLE
+    authority_source: LOCAL_CONTRACT_DECREE
+    source_locator: "제25조제1항제5호다목"
+    quote: "추정가격이 2천만원 초과 5천만원 이하인 계약으로서 … 청년창업기업과 체결하는 물품의 제조ㆍ구매계약 또는 용역계약"
+
+  - rule_id: D25-1-5-라
+    title: "소기업·소상공인 1억원 이하"
+    agency_scope: [LOCAL_GOVERNMENT, EDUCATION_OFFICE, PUBLIC_SCHOOL]
+    condition: "추정가격 2천만원 초과 1억원 이하 + 상대방이 소기업 또는 소상공인"
+    effective_from: "2026-06-03"
+    verified_at: "2026-09-06"
+    contract_types: [goods, service]
+    min_amount_exclusive: 20000000
+    max_amount: 100000000
+    counterparties: [SMALL_ENTERPRISE]
+    outcome: POSSIBLE
+    authority_source: LOCAL_CONTRACT_DECREE
+    source_locator: "제25조제1항제5호라목"
+    quote: "추정가격이 2천만원 초과 1억원 이하인 계약으로서 … 소기업 또는 소상공인과 체결하는 물품의 제조ㆍ구매계약 또는 용역계약"
+
+  - rule_id: D25-1-5-마
+    title: "특수 지식·기술·자격 요구 계약 1억원 이하"
+    agency_scope: [LOCAL_GOVERNMENT, EDUCATION_OFFICE, PUBLIC_SCHOOL]
+    condition: "추정가격 2천만원 초과 1억원 이하 + 학술연구·원가계산·건설기술 등 특수한 지식·기술·자격을 요구하는 계약"
+    effective_from: "2026-06-03"
+    verified_at: "2026-09-06"
+    contract_types: [goods, service]
+    min_amount_exclusive: 20000000
+    max_amount: 100000000
+    counterparties: any
+    requires_special_field: true
+    outcome: POSSIBLE_WITH_CONDITIONS
+    conditions:
+      - "학술연구ㆍ원가계산ㆍ건설기술 등과 관련된 계약일 것"
+      - "특수한 지식ㆍ기술 또는 자격을 요구하는 계약일 것"
+    authority_source: LOCAL_CONTRACT_DECREE
+    source_locator: "제25조제1항제5호마목"
+    quote: "추정가격이 2천만원 초과 1억원 이하인 계약 중 학술연구ㆍ원가계산ㆍ건설기술 등과 관련된 계약으로서 특수한 지식ㆍ기술 또는 자격을 요구하는 물품의 제조ㆍ구매계약 또는 용역계약"
+
+  - rule_id: D25-1-5-바-1-2
+    title: "여성기업·장애인기업 1억원 이하"
+    agency_scope: [LOCAL_GOVERNMENT, EDUCATION_OFFICE, PUBLIC_SCHOOL]
+    condition: "추정가격 2천만원 초과 1억원 이하 + 상대방이 여성기업 또는 장애인기업"
+    effective_from: "2026-06-03"
+    verified_at: "2026-09-06"
+    contract_types: [goods, service]
+    min_amount_exclusive: 20000000
+    max_amount: 100000000
+    counterparties: [WOMEN, DISABLED]
+    outcome: POSSIBLE
+    authority_source: LOCAL_CONTRACT_DECREE
+    source_locator: "제25조제1항제5호바목1)·2)"
+    quote: "추정가격이 2천만원 초과 1억원 이하인 계약으로서 … 여성기업 / 장애인기업과 체결하는 물품의 제조ㆍ구매계약 또는 용역계약"
+
+  - rule_id: D25-1-5-바-3-6
+    title: "사회적기업 등 1억원 이하 (고용비율 조건)"
+    agency_scope: [LOCAL_GOVERNMENT, EDUCATION_OFFICE, PUBLIC_SCHOOL]
+    condition: "추정가격 2천만원 초과 1억원 이하 + 상대방이 사회적기업·사회적협동조합·자활기업·마을기업 + 취약계층 고용비율 충족"
+    effective_from: "2026-06-03"
+    verified_at: "2026-09-06"
+    contract_types: [goods, service]
+    min_amount_exclusive: 20000000
+    max_amount: 100000000
+    counterparties: [SOCIAL_ENTERPRISE, SOCIAL_COOPERATIVE, SELF_SUPPORT, VILLAGE]
+    outcome: POSSIBLE_WITH_CONDITIONS
+    conditions:
+      - "행정안전부장관이 정하여 고시하는 취약계층 고용비율을 충족할 것"
+    authority_source: LOCAL_CONTRACT_DECREE
+    source_locator: "제25조제1항제5호바목3)~6) 단서"
+    quote: "다만, 3)부터 6)까지에 해당하는 기업 또는 조합의 경우에는 행정안전부장관이 정하여 고시하는 취약계층 고용비율을 충족하여야 한다."
+
+  - rule_id: D25-1-5-사
+    title: "임대차 등 5천만원 이하"
+    agency_scope: [LOCAL_GOVERNMENT, EDUCATION_OFFICE, PUBLIC_SCHOOL]
+    condition: "추정가격이 5천만원 이하인 임대차 등 공사·물품·용역이 아닌 계약"
+    effective_from: "2026-06-03"
+    verified_at: "2026-09-06"
+    contract_types: [lease_etc]
+    max_amount: 50000000
+    counterparties: any
+    outcome: POSSIBLE
+    authority_source: LOCAL_CONTRACT_DECREE
+    source_locator: "제25조제1항제5호사목"
+    quote: "추정가격이 5천만원 이하인 임대차 계약(연액 또는 총액을 기준으로 추정가격을 산정한다) 등으로서 공사계약 또는 물품의 제조ㆍ구매계약이나 용역계약이 아닌 계약"
+
+# 금액 외 사유 (§25①1~4·6~8호). 이 도구는 금액 트랙(5호)만 판정하고
+# 나머지는 **존재를 알리고 검토로 넘긴다** — 판정하지 않는다.
+non_amount_grounds:
+  - locator: "제25조제1항제1호"
+    label: "천재지변·감염병·긴급행사·원자재 가격급등 등 입찰에 부칠 여유가 없는 경우"
+  - locator: "제25조제1항제2호"
+    label: "긴급복구가 필요한 재난 등"
+  - locator: "제25조제1항제3호"
+    label: "국가기관·다른 지방자치단체와 계약하는 경우"
+  - locator: "제25조제1항제4호"
+    label: "특정인의 기술·용역 또는 특정 위치·구조·품질·성능·효율로 경쟁할 수 없는 경우"
+  - locator: "제25조제1항제6호~제8호"
+    label: "다른 법률에 따른 특정사업자 계약 · 특정연고자·지역주민 등 · 경쟁이 비효율적인 경우"
+  - locator: "제26조"
+    label: "재공고입찰이 성립하지 않거나 낙찰자가 없는 경우"
+  - locator: "제27조"
+    label: "계약상대자의 의무 불이행으로 계약을 해제·해지한 경우"
+
+# ── 견적 요건 (시행령 §30①) ────────────────────────────────────
+# 원칙은 2인 이상이고 1인은 예외다. 순서를 뒤집지 않는다.
+quotation_rules:
+  default:
+    rule_id: D30-1-DEFAULT
+    title: "견적 요건 원칙 — 2인 이상"
+    agency_scope: [LOCAL_GOVERNMENT, EDUCATION_OFFICE, PUBLIC_SCHOOL]
+    contract_types: [goods, service, construction_general, construction_special, construction_etc, lease_etc]
+    condition: "수의계약을 체결하려는 모든 경우 (1인 예외에 해당하지 않는 한)"
+    outcome: TWO_OR_MORE
+    effective_from: "2026-06-03"
+    verified_at: "2026-09-06"
+    requirement: TWO_OR_MORE
+    authority_source: LOCAL_CONTRACT_DECREE
+    source_locator: "제30조제1항 본문"
+    quote: "수의계약을 체결하려는 경우에는 2인 이상으로부터 견적서를 받아야 한다."
+  single_quote_exceptions:
+    - rule_id: D30-1-1
+      title: "금액 외 수의계약 사유 — 1인 견적"
+      agency_scope: [LOCAL_GOVERNMENT, EDUCATION_OFFICE, PUBLIC_SCHOOL]
+      condition: "제25조제1항 각 호(제5호 제외)·제26조제1항·제2항·제27조에 따른 계약"
+      effective_from: "2026-06-03"
+      verified_at: "2026-09-06"
+      outcome: SINGLE_ALLOWED
+      trigger: NON_AMOUNT_GROUND
+      max_amount: null
+      authority_source: LOCAL_CONTRACT_DECREE
+      source_locator: "제30조제1항제1호"
+      quote: "제25조제1항 각 호(제5호는 제외한다), 제26조제1항ㆍ제2항 및 제27조에 따른 계약의 경우"
+      note: "금액과 무관하다. 다만 이 도구는 해당 사유를 판정하지 않는다."
+    - rule_id: D30-1-2-본문
+      title: "2천만원 이하 — 1인 견적"
+      agency_scope: [LOCAL_GOVERNMENT, EDUCATION_OFFICE, PUBLIC_SCHOOL]
+      condition: "추정가격이 2천만원 이하인 공사·물품 제조/구매·용역"
+      effective_from: "2026-06-03"
+      verified_at: "2026-09-06"
+      outcome: SINGLE_ALLOWED
+      trigger: AMOUNT
+      contract_types: [goods, service, construction_general, construction_special, construction_etc]
+      max_amount: 20000000
+      counterparties: any
+      authority_source: LOCAL_CONTRACT_DECREE
+      source_locator: "제30조제1항제2호 본문"
+      quote: "추정가격이 2천만원 이하인 공사, 물품의 제조ㆍ구매 및 용역의 경우"
+    - rule_id: D30-1-2-가
+      title: "청년창업·여성·장애인기업 5천만원 이하 — 1인 견적"
+      agency_scope: [LOCAL_GOVERNMENT, EDUCATION_OFFICE, PUBLIC_SCHOOL]
+      condition: "추정가격 5천만원 이하 + 상대방이 청년창업기업·여성기업·장애인기업"
+      effective_from: "2026-06-03"
+      verified_at: "2026-09-06"
+      outcome: SINGLE_ALLOWED
+      trigger: AMOUNT
+      contract_types: [goods, service, construction_general, construction_special, construction_etc]
+      max_amount: 50000000
+      counterparties: [YOUTH_STARTUP, WOMEN, DISABLED]
+      authority_source: LOCAL_CONTRACT_DECREE
+      source_locator: "제30조제1항제2호가목"
+      quote: "청년창업기업, 여성기업 또는 장애인기업 … 추정가격이 5천만원 이하인 경우로 한다"
+    - rule_id: D30-1-2-나
+      title: "사회적기업 등 5천만원 이하 — 1인 견적 (고용비율 조건)"
+      agency_scope: [LOCAL_GOVERNMENT, EDUCATION_OFFICE, PUBLIC_SCHOOL]
+      condition: "추정가격 5천만원 이하 + 상대방이 사회적기업·사회적협동조합·자활기업·마을기업 + 취약계층 고용비율 충족"
+      effective_from: "2026-06-03"
+      verified_at: "2026-09-06"
+      outcome: SINGLE_ALLOWED
+      trigger: AMOUNT
+      contract_types: [goods, service, construction_general, construction_special, construction_etc]
+      max_amount: 50000000
+      counterparties: [SOCIAL_ENTERPRISE, SOCIAL_COOPERATIVE, SELF_SUPPORT, VILLAGE]
+      conditions:
+        - "행정안전부장관이 정하여 고시하는 취약계층 고용비율을 충족할 것"
+      authority_source: LOCAL_CONTRACT_DECREE
+      source_locator: "제30조제1항제2호나목"
+      quote: "사회적기업, 사회적협동조합, 자활기업 또는 마을기업으로서 행정안전부장관이 정하는 기준에 적합한 기업 … 취약계층 고용비율을 충족하여야 한다"
+  designated_system:
+    rule_id: D30-2
+    title: "2인 이상 견적 시 지정정보처리장치 이용 의무"
+    agency_scope: [LOCAL_GOVERNMENT, EDUCATION_OFFICE, PUBLIC_SCHOOL]
+    contract_types: [goods, service, construction_general, construction_special, construction_etc, lease_etc]
+    condition: "2인 이상으로부터 견적서를 제출받는 경우"
+    outcome: DESIGNATED_SYSTEM_REQUIRED
+    effective_from: "2026-06-03"
+    verified_at: "2026-09-06"
+    authority_source: LOCAL_CONTRACT_DECREE
+    source_locator: "제30조제2항"
+    quote: "2인 이상으로부터 견적서를 제출받는 경우 … 지정정보처리장치를 이용해야 한다."
+  quote_waiver:
+    rule_id: R33-2
+    title: "견적서 제출 생략 — 200만원 미만 물품·임차·용역"
+    agency_scope: [LOCAL_GOVERNMENT, EDUCATION_OFFICE, PUBLIC_SCHOOL]
+    condition: "추정가격이 200만원 미만인 물품의 제조ㆍ구매ㆍ임차 및 용역 계약"
+    outcome: QUOTE_WAIVER_ALLOWED
+    effective_from: "2026-07-01"
+    verified_at: "2026-09-06"
+    max_amount_exclusive: 2000000
+    # 시행규칙 제33조제2호는 "물품의 제조ㆍ구매ㆍ임차 및 용역"을 열거한다 — 임대차도 포함이다.
+    contract_types: [goods, service, lease_etc]
+    authority_source: LOCAL_CONTRACT_RULE
+    source_locator: "제33조제2호"
+    quote: "추정가격이 200만원 미만인 물품의 제조ㆍ구매ㆍ임차 및 용역 계약을 체결하는 경우"
+    note: "공사는 이 조에 열거되어 있지 않다."
+
+# ── 분할발주 ───────────────────────────────────────────────────
+# 공사와 물품·용역의 법적 구조가 **다르다.** 하나의 규칙으로 합치지 않는다.
+split_procurement:
+  construction:
+    prohibition:
+      rule_id: D77-1
+      title: "공사의 분할계약 금지"
+      agency_scope: [LOCAL_GOVERNMENT, EDUCATION_OFFICE, PUBLIC_SCHOOL]
+      contract_types: [construction_general, construction_special, construction_etc]
+      condition: "동일 구조물공사 또는 단일공사로서 설계서 등에 따라 전체 사업내용이 확정된 공사"
+      outcome: HIGH_SPLIT_RISK
+      effective_from: "2026-06-03"
+      verified_at: "2026-09-06"
+      authority_source: LOCAL_CONTRACT_DECREE
+      source_locator: "제77조제1항"
+      quote: "행정안전부장관이 정하는 동일 구조물공사 또는 단일공사로서 설계서 등에 따라 전체 사업내용이 확정된 공사는 이를 시기적으로 분할하거나 공사량을 분할하여 계약할 수 없다."
+    lawful_separation_grounds:
+      - ground_id: D77-1-1
+        label: "다른 법령에 따라 다른 업종의 공사와 분리 발주할 수 있도록 규정된 공사"
+        source_locator: "제77조제1항제1호"
+        authority_source: LOCAL_CONTRACT_DECREE
+      - ground_id: D77-1-2
+        label: "공구나 구조물을 적정규모로 분할 시공하는 것이 효율적인 공사"
+        source_locator: "제77조제1항제2호"
+        authority_source: LOCAL_CONTRACT_DECREE
+        reporting_duty: true
+      - ground_id: D77-1-3-가
+        label: "설계서가 별도로 작성되는 공사 (공종 분리)"
+        source_locator: "제77조제1항제3호가목"
+        authority_source: LOCAL_CONTRACT_DECREE
+      - ground_id: D77-1-3-나
+        label: "공사 종류별로 시공의 목적물·시기·장소 등이 명확히 구분되는 공사 (공종 분리)"
+        source_locator: "제77조제1항제3호나목"
+        authority_source: LOCAL_CONTRACT_DECREE
+    avoidance_override:
+      rule_id: D77-3
+      title: "허용 사유가 있어도 수의계약 회피 목적 분할은 금지"
+      agency_scope: [LOCAL_GOVERNMENT, EDUCATION_OFFICE, PUBLIC_SCHOOL]
+      contract_types: [construction_general, construction_special, construction_etc]
+      condition: "제1항 각 호의 공사 + 제30조제1항 각 호에 따른 수의계약 체결 목적의 분할"
+      outcome: HIGH_SPLIT_RISK
+      effective_from: "2026-06-03"
+      verified_at: "2026-09-06"
+      authority_source: LOCAL_CONTRACT_DECREE
+      source_locator: "제77조제3항"
+      quote: "제1항 각 호의 공사의 경우 제30조제1항 각 호에 따른 수의계약을 체결하기 위하여 시기적으로 분할하거나 공사량을 분할하여서는 아니 된다."
+      note: "분리 사유가 있어도 수의계약 회피 목적이면 허용되지 않는다."
+    planning_duty:
+      authority_source: LOCAL_CONTRACT_DECREE
+      source_locator: "제77조제2항"
+      quote: "공사의 예산편성과 기본설계 등 사업의 계획 단계부터 제1항 각 호에 따른 분할ㆍ분리 계약 가능 여부를 검토하여야 한다."
+    reporting_duty:
+      authority_source: LOCAL_CONTRACT_DECREE
+      source_locator: "제77조제4항"
+      quote: "제1항제2호에 따른 분할계약을 체결하였을 때에는 시ㆍ군ㆍ구는 시ㆍ도지사에게, 시ㆍ도는 행정안전부장관에게 각각 보고하여야 한다."
+  goods_service:
+    # ⚠️ §77 은 공사 조항이다. 물품·용역에 §77 을 근거로 대지 않는다.
+    #    물품·용역은 "금지"가 아니라 추정가격 **합산 산정**으로 규율된다.
+    rule_id: D7-2
+    title: "물품·용역 분할 — 추정가격 합산 산정 (금지 조항 아님)"
+    agency_scope: [LOCAL_GOVERNMENT, EDUCATION_OFFICE, PUBLIC_SCHOOL]
+    contract_types: [goods, service, lease_etc]
+    condition: "개별적인 조달 요구가 복수로 이루어지거나 분할되어 이루어지는 계약"
+    outcome: ESTIMATED_PRICE_AGGREGATION
+    effective_from: "2026-06-03"
+    verified_at: "2026-09-06"
+    mechanism: ESTIMATED_PRICE_AGGREGATION
+    authority_source: LOCAL_CONTRACT_DECREE
+    source_locator: "제7조제2호"
+    quote: "개별적인 조달 요구가 복수로 이루어지거나 분할되어 이루어지는 계약의 경우: 가. 해당 계약의 직전 회계연도 또는 직전 12개월 동안 체결된 유사한 계약의 총액을 대상으로 직후 12개월 동안의 수량과 금액의 예상변동분을 고려하여 조정한 금액 / 나. 해당 회계연도 또는 그 직후 12개월 동안에 계약할 금액의 총액"
+    aggregation_window_months: 12
+    window_basis: "제7조제2호가목·나목 (직전 12개월 / 해당 회계연도 또는 직후 12개월)"
+  # §28 은 **허용** 조항이며 적용 대상이 §25①6호가목·§26·§27 로 한정된다.
+  # "물품·용역 분할의 일반 근거"가 아니다 — 조문 번호만 보고 의미를 넓히지 않는다.
+  split_private_contract_permission:
+    rule_id: D28
+    title: "분할수의계약 — 한정된 경우의 분할 허용"
+    agency_scope: [LOCAL_GOVERNMENT, EDUCATION_OFFICE, PUBLIC_SCHOOL]
+    contract_types: [goods, service, construction_general, construction_special, construction_etc, lease_etc]
+    condition: "제25조제1항제6호가목·제26조·제27조에 해당하고, 예정가격 또는 낙찰금액을 분할하여 계산할 수 있는 경우"
+    outcome: SPLIT_PERMITTED_LIMITED
+    authority_source: LOCAL_CONTRACT_DECREE
+    source_locator: "제28조"
+    effective_from: "2026-06-03"
+    verified_at: "2026-09-06"
+    quote: "제25조제1항제6호가목, 제26조 및 제27조의 경우에는 예정가격 또는 낙찰금액을 분할하여 계산할 수 있는 경우에 한정하여 그 가격이나 금액보다 불리하지 아니한 금액의 범위에서 수인(數人)에게 분할하여 계약을 할 수 있다."
+    scope_note: >
+      이 도구는 §25①6호가목·§26·§27 해당 여부를 판정하지 않는다.
+      따라서 §28 은 판정 근거로 쓰지 않고, 해당 가능성이 있을 때 검토 대상으로만 안내한다.
+
+  # ── 검토축 (§5) ────────────────────────────────────────────
+  # 계약유형별로 **근거가 있는 축과 없는 축을 갈라서** 선언한다.
+  # `factor` 가 있으면 판정에 실제로 쓰인다. `ground` 는 분리 사유 선택지로 연결된다.
+  # `basis: NONE` 은 그 유형에서 **공식 근거를 확인하지 못한 축**이고, 판정하지 않고
+  # 항상 REVIEW_REQUIRED 로 남긴다 — 근거 없이 위험/안전 어느 쪽으로도 단정하지 않는다.
+  review_axes:
+    construction:
+      - axis: SAME_PROJECT
+        label: "동일 사업·동일 수요인가 (동일 구조물공사 또는 단일공사)"
+        factor: single_project
+        authority_source: LOCAL_CONTRACT_DECREE
+        source_locator: "제77조제1항"
+      - axis: SCOPE_FIXED
+        label: "설계서 등으로 전체 사업내용이 확정되어 통합 산정이 가능한가"
+        factor: scope_fixed
+        authority_source: LOCAL_CONTRACT_DECREE
+        source_locator: "제77조제1항"
+      - axis: SAME_PURPOSE_FUNCTION
+        label: "동일한 목적·기능의 공사인가"
+        factor: single_project
+        authority_source: LOCAL_CONTRACT_DECREE
+        source_locator: "제77조제1항"
+        note: "제77조제1항의 '동일 구조물공사 또는 단일공사' 판단에 포섭된다"
+      - axis: TIMING_FORESEEABLE
+        label: "같은 시기에 필요할 것을 계획 단계에서 예측할 수 있었는가"
+        authority_source: LOCAL_CONTRACT_DECREE
+        source_locator: "제77조제2항"
+        review_only: true
+        note: "예산편성·기본설계 단계부터 분할·분리 가능 여부를 검토할 의무의 이면이다"
+      - axis: AVOIDANCE_EFFECT
+        label: "수의계약 한도·경쟁을 회피하는 효과가 있는가"
+        factor: avoidance_intent
+        authority_source: LOCAL_CONTRACT_DECREE
+        source_locator: "제77조제3항"
+      - axis: SEPARATE_ORDER_REQUIRED
+        label: "다른 법령이 분리 발주를 규정한 공사인가"
+        ground: D77-1-1
+        authority_source: LOCAL_CONTRACT_DECREE
+        source_locator: "제77조제1항제1호"
+      - axis: OBJECTIVE_SEPARATION
+        label: "공구·구조물을 적정규모로 분할 시공하는 것이 효율적인가"
+        ground: D77-1-2
+        authority_source: LOCAL_CONTRACT_DECREE
+        source_locator: "제77조제1항제2호"
+      - axis: TECHNICAL_INDEPENDENCE
+        label: "공종을 분리해도 하자책임 구분이 용이하고 품질·안전·공정 관리에 지장이 없는가"
+        ground: D77-1-3-가
+        authority_source: LOCAL_CONTRACT_DECREE
+        source_locator: "제77조제1항제3호"
+
+    goods_service:
+      - axis: SAME_DEMAND
+        label: "동일하거나 유사한 조달 요구인가"
+        factor: same_purpose
+        authority_source: LOCAL_CONTRACT_DECREE
+        source_locator: "제7조제2호"
+      - axis: TIMING_FORESEEABLE
+        label: "합산 대상 기간(직전 12개월·해당 회계연도·직후 12개월) 안인가"
+        factor: within_window
+        authority_source: LOCAL_CONTRACT_DECREE
+        source_locator: "제7조제2호가목·나목"
+      - axis: SAME_PURPOSE_FUNCTION
+        label: "동일한 목적·기능의 물품·용역인가 (유사한 계약)"
+        factor: same_purpose
+        authority_source: LOCAL_CONTRACT_DECREE
+        source_locator: "제7조제2호가목"
+      - axis: AGGREGATION_POSSIBLE
+        label: "해당 회계연도 또는 직후 12개월 계약금액 총액으로 통합 산정이 가능한가"
+        factor: within_window
+        authority_source: LOCAL_CONTRACT_DECREE
+        source_locator: "제7조제2호나목"
+      # ── 아래 4축은 물품·용역에 대해 공식 근거를 확인하지 못했다 ──
+      # §77 은 공사 조항이라 끌어다 쓰지 않는다. §28 은 §25①6호가목·§26·§27 한정 허용 규정이라
+      # 일반 분할 판단의 근거가 되지 않는다. 그래서 판정하지 않고 검토 대상으로만 남긴다.
+      - axis: AVOIDANCE_EFFECT
+        label: "수의계약 한도·경쟁을 회피하는 효과가 있는가"
+        basis: NONE
+        review_reason: "물품·용역의 분할 자체를 금지하는 조항을 확인하지 못했다. 제77조는 공사 조항이고, 제7조제2호는 금지가 아니라 추정가격 합산 규칙이다."
+      - axis: TECHNICAL_INDEPENDENCE
+        label: "기술적·일정상 독립성이 있는가"
+        basis: NONE
+        review_reason: "물품·용역에 대해 이 축을 규정한 조문을 확인하지 못했다."
+      - axis: SEPARATE_ORDER_REQUIRED
+        label: "법령상 별도 발주가 필요한가"
+        basis: NONE
+        review_reason: "물품·용역에 대한 분리 발주 규정을 확인하지 못했다(제77조제1항제1호는 공사)."
+      - axis: OBJECTIVE_SEPARATION
+        label: "별개 사업으로 볼 객관적 분리 사유가 있는가"
+        basis: NONE
+        review_reason: "물품·용역에는 제77조제1항 각 호에 대응하는 허용 사유 조항이 없다."
+
+# 위험 등급의 가중치·점수는 정의하지 않는다.
+# 공식 근거가 없는 "체크 3개 이상 = 위험 높음" 같은 임계값을 만들지 않기 위해서다(§27).
+# 판정은 조문 요건의 충족/미충족/미상 조합으로만 한다.

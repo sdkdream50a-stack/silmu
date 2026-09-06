@@ -33,7 +33,15 @@ class ContractMethodService
 
   class << self
     # 계약방식 결정
-    def determine(contract_type:, estimated_price:, special_enterprise: nil)
+    #
+    # 판정의 권위는 ContractDecision::PrivateContractEvaluator(시행령 §25·§30 규칙집)에 있다.
+    # 이 메서드가 계속 내는 :result 블록은 서류·경고·팁 같은 **부가 안내**이고,
+    # "수의계약이 되는가"라는 결론은 :decision 블록이 소유한다.
+    # 둘을 합쳐 놓았을 때 헤드라인은 "수의계약 가능"인데 같은 응답의 작은 글씨는
+    # "일반 업체는 2천만원 초과 시 경쟁입찰 대상"이라고 적히는 모순이 실제로 있었다.
+    def determine(contract_type:, estimated_price:, special_enterprise: nil,
+                  agency_scope: nil, counterparty_type: nil,
+                  special_field: false, vulnerable_ratio_met: nil)
       return invalid_result("계약 유형을 선택해주세요.") if contract_type.blank?
       type_sym = contract_type.to_sym
       return invalid_result("유효하지 않은 계약 유형입니다.") unless CONTRACT_THRESHOLDS[type_sym]
@@ -66,8 +74,18 @@ class ContractMethodService
         end
       end
 
+      decision = ContractDecision::PrivateContractEvaluator.call(
+        agency_scope: agency_scope,
+        contract_type: contract_type,
+        estimated_price: price,
+        counterparty_type: counterparty_type.presence || legacy_counterparty(special_enterprise),
+        special_field: special_field,
+        vulnerable_ratio_met: vulnerable_ratio_met
+      ).to_h
+
       {
         success: true,
+        decision: decision,
         contract_type: {
           key: type_sym,
           name: threshold[:type_display_name] || type_info[:name],
@@ -75,9 +93,11 @@ class ContractMethodService
         },
         estimated_price: price,
         formatted_price: format_currency(price),
+        # 결론 문구는 판정 결과에서만 나온다. 여기서 금액 구간표를 그대로 읽어
+        # "수의계약"이라고 적으면 판정이 "정보 부족"인데 화면은 확정으로 보인다.
         result: {
-          method: threshold[:method],
-          method_detail: threshold[:method_detail],
+          method: legacy_method_for(decision, threshold),
+          method_detail: legacy_detail_for(decision, threshold),
           basis: threshold[:basis],
           note: threshold[:note],
           special_condition: threshold[:special_condition],
@@ -126,6 +146,46 @@ class ContractMethodService
     end
 
     private
+
+    # 구 special_enterprise 키를 §25 어휘로 옮긴다.
+    # `cooperative`(일반 협동조합)는 시행령 제25조제1항제5호바목 4)의 대상이 아니다
+    # (그 조항은 협동조합 기본법 제2조제3호 '사회적협동조합'을 가리킨다).
+    # 옮길 곳이 없으므로 nil 을 돌려주고 판정은 상대방 미상으로 간다 — 없는 자격을
+    # 있다고 안내하느니 묻는 편이 낫다.
+    LEGACY_COUNTERPARTY = {
+      "women" => "WOMEN", "disabled" => "DISABLED", "social" => "SOCIAL_ENTERPRISE",
+      "social_cooperative" => "SOCIAL_COOPERATIVE", "village" => "VILLAGE",
+      "self_support" => "SELF_SUPPORT"
+    }.freeze
+
+    def legacy_counterparty(key) = LEGACY_COUNTERPARTY[key.to_s]
+
+    # 판정 상태를 기존 어휘("수의계약"·"소액수의계약"·"입찰")로 옮긴다.
+    # 판정할 수 없는 상태에는 기존 어휘가 없으므로 "확인 필요"를 쓴다 —
+    # 셋 중 하나를 억지로 고르면 그게 곧 근거 없는 단정이다.
+    UNDETERMINED_METHOD = "확인 필요"
+
+    def legacy_method_for(decision, threshold)
+      case decision[:state]
+      when "POSSIBLE", "POSSIBLE_WITH_CONDITIONS"
+        threshold[:method]
+      when "COMPETITIVE_PROCEDURE_REQUIRED"
+        "입찰"
+      else
+        UNDETERMINED_METHOD
+      end
+    end
+
+    def legacy_detail_for(decision, threshold)
+      case decision[:state]
+      when "POSSIBLE", "POSSIBLE_WITH_CONDITIONS"
+        decision.dig(:quotation, :label).presence || threshold[:method_detail]
+      when "COMPETITIVE_PROCEDURE_REQUIRED"
+        "경쟁입찰"
+      else
+        decision[:headline]
+      end
+    end
 
     def format_currency(amount)
       return "무제한" if amount == Float::INFINITY

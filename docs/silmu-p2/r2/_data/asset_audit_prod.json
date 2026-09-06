@@ -1,0 +1,676 @@
+{
+  "measured_at": "2026-09-06T03:28:46Z",
+  "mutations": 0,
+  "topics": [
+    {
+      "slug": "private-contract-limit",
+      "exists": true,
+      "name": "수의계약 한도",
+      "published": true,
+      "category": "contract",
+      "target_agency": [],
+      "effective_at": null,
+      "law_base_date": "2026.04.29",
+      "last_verified_at": "2026-06-09 09:00:00 +0900",
+      "verification_status": null,
+      "faqs": 2,
+      "faq_questions": [
+        "수의계약 한도 금액에 부가세가 포함되나요?",
+        "설계용역과 공사를 합산해서 수의계약 한도를 산정하나요?"
+      ],
+      "howto": 0,
+      "howto_names": [],
+      "law_len": 786,
+      "decree_len": 1431,
+      "rule_len": 789,
+      "qa_len": 548,
+      "quick_stats": 3
+    },
+    {
+      "slug": "split-contract",
+      "exists": true,
+      "name": "분할계약 금지",
+      "published": true,
+      "category": "contract",
+      "target_agency": [],
+      "effective_at": null,
+      "law_base_date": "2026.06.04",
+      "last_verified_at": null,
+      "verification_status": null,
+      "faqs": 5,
+      "faq_questions": [
+        "분할계약이란 무엇인가요?",
+        "분할계약에 해당하는지 어떻게 판단하나요?",
+        "수의계약 기준금액은 얼마인가요?",
+        "긴급 상황에서 추가 구매도 분할계약인가요?",
+        "분할계약 적발 시 어떤 제재를 받나요?"
+      ],
+      "howto": 0,
+      "howto_names": [],
+      "law_len": 812,
+      "decree_len": 1148,
+      "rule_len": 667,
+      "qa_len": 799,
+      "quick_stats": 4
+    },
+    {
+      "slug": "split-contract-prohibition",
+      "exists": true,
+      "name": "분할발주 금지",
+      "published": true,
+      "category": "contract",
+      "target_agency": [],
+      "effective_at": null,
+      "law_base_date": "2026.06.04",
+      "last_verified_at": null,
+      "verification_status": null,
+      "faqs": 4,
+      "faq_questions": [
+        "분할계약과 합법적인 분리발주는 어떻게 구별하나요?",
+        "분할계약이 적발되면 어떤 제재를 받나요?",
+        "비슷한 물품을 연간 여러 번 구매하면 분할계약인가요?",
+        "지속적으로 필요한 물품은 어떻게 발주해야 하나요?"
+      ],
+      "howto": 0,
+      "howto_names": [],
+      "law_len": 627,
+      "decree_len": 994,
+      "rule_len": 821,
+      "qa_len": 800,
+      "quick_stats": 4
+    },
+    {
+      "slug": "small-amount-contract",
+      "exists": true,
+      "name": "소액수의",
+      "published": true,
+      "category": "contract",
+      "target_agency": [],
+      "effective_at": null,
+      "law_base_date": "2026.06.04",
+      "last_verified_at": null,
+      "verification_status": null,
+      "faqs": 2,
+      "faq_questions": [
+        "소액수의와 특명수의의 차이점은 무엇인가요?",
+        "소액수의도 수의계약 사유서를 작성해야 하나요?"
+      ],
+      "howto": 0,
+      "howto_names": [],
+      "law_len": 416,
+      "decree_len": 2583,
+      "rule_len": 968,
+      "qa_len": 377,
+      "quick_stats": 3
+    },
+    {
+      "slug": "emergency-contract",
+      "exists": true,
+      "name": "긴급수의",
+      "published": true,
+      "category": "contract",
+      "target_agency": [],
+      "effective_at": null,
+      "law_base_date": "2026.04.29",
+      "last_verified_at": "2026-06-09 09:00:00 +0900",
+      "verification_status": null,
+      "faqs": 2,
+      "faq_questions": [
+        "예산 집행 마감이 임박하면 긴급수의가 가능한가요?",
+        "긴급수의 시에도 예정가격 작성이 필요한가요?"
+      ],
+      "howto": 0,
+      "howto_names": [],
+      "law_len": 336,
+      "decree_len": 763,
+      "rule_len": 964,
+      "qa_len": 485,
+      "quick_stats": 4
+    },
+    {
+      "slug": "quote-collection-guide",
+      "exists": true,
+      "name": "비교견적서 수집 방법",
+      "published": true,
+      "category": "contract",
+      "target_agency": [],
+      "effective_at": null,
+      "law_base_date": "2026.04.29",
+      "last_verified_at": null,
+      "verification_status": null,
+      "faqs": 4,
+      "faq_questions": [
+        "수의계약 시 견적서는 몇 곳에서 받아야 하나요?",
+        "전화로 가격을 확인한 것도 견적으로 인정되나요?",
+        "같은 법인의 지점 두 곳에서 견적을 받으면 2인 견적인가요?",
+        "비교견적 시 가장 주의할 점은 무엇인가요?"
+      ],
+      "howto": 0,
+      "howto_names": [],
+      "law_len": 639,
+      "decree_len": 1091,
+      "rule_len": 766,
+      "qa_len": 704,
+      "quick_stats": 4
+    },
+    {
+      "slug": "contract-method",
+      "exists": false
+    },
+    {
+      "slug": "goods-vs-service-contract",
+      "exists": true,
+      "name": "물품구매 vs 용역계약 구분",
+      "published": true,
+      "category": "contract",
+      "target_agency": [],
+      "effective_at": null,
+      "law_base_date": "2026.06.04",
+      "last_verified_at": "2026-06-09 09:00:00 +0900",
+      "verification_status": null,
+      "faqs": 4,
+      "faq_questions": [
+        "물품구매와 용역계약의 가장 큰 차이는 무엇인가요?",
+        "소프트웨어 계약은 물품인가요, 용역인가요?",
+        "물품과 용역(서비스)이 섞인 계약은 어떻게 분류하나요?",
+        "계약 유형을 잘못 분류하면 어떤 문제가 생기나요?"
+      ],
+      "howto": 0,
+      "howto_names": [],
+      "law_len": 426,
+      "decree_len": 700,
+      "rule_len": 1273,
+      "qa_len": 904,
+      "quick_stats": 0
+    },
+    {
+      "slug": "joint-contract",
+      "exists": true,
+      "name": "공동도급",
+      "published": true,
+      "category": "contract",
+      "target_agency": [],
+      "effective_at": null,
+      "law_base_date": "2026.04.29",
+      "last_verified_at": "2026-06-16 09:00:00 +0900",
+      "verification_status": null,
+      "faqs": 5,
+      "faq_questions": [
+        "공동도급(공동계약)이란 무엇인가요?",
+        "공동이행방식과 분담이행방식의 차이는?",
+        "공동수급체 구성원의 최소 지분율은?",
+        "지역의무공동도급이란 무엇인가요?",
+        "공동수급체 구성원이 부도나면 어떻게 되나요?"
+      ],
+      "howto": 0,
+      "howto_names": [],
+      "law_len": 890,
+      "decree_len": 1215,
+      "rule_len": 812,
+      "qa_len": 844,
+      "quick_stats": 4
+    },
+    {
+      "slug": "subcontract",
+      "exists": true,
+      "name": "하도급",
+      "published": true,
+      "category": "contract",
+      "target_agency": [],
+      "effective_at": null,
+      "law_base_date": "2026.06.04",
+      "last_verified_at": "2026-06-16 09:00:00 +0900",
+      "verification_status": null,
+      "faqs": 5,
+      "faq_questions": [
+        "하도급과 일괄하도급의 차이는 무엇인가요?",
+        "하도급 통지는 언제 해야 하나요?",
+        "재하도급은 허용되나요?",
+        "하도급대금 직접지급은 어떤 경우에 하나요?",
+        "하도급대금 지급 기한은?"
+      ],
+      "howto": 0,
+      "howto_names": [],
+      "law_len": 791,
+      "decree_len": 1300,
+      "rule_len": 1073,
+      "qa_len": 987,
+      "quick_stats": 4
+    }
+  ],
+  "search": [
+    {
+      "q": "수의계약 한도",
+      "topic_slugs": [
+        "private-contract-limit",
+        "private-contract",
+        "split-contract-prohibition",
+        "estimated-amount"
+      ],
+      "topic_count": 4,
+      "answer": null
+    },
+    {
+      "q": "수의계약한도",
+      "topic_slugs": [
+        "private-contract-limit",
+        "estimated-amount",
+        "private-contract",
+        "split-contract-prohibition"
+      ],
+      "topic_count": 4,
+      "answer": null
+    },
+    {
+      "q": "소액수의",
+      "topic_slugs": [
+        "small-amount-contract",
+        "private-contract",
+        "single-quote",
+        "estimated-amount"
+      ],
+      "topic_count": 4,
+      "answer": null
+    },
+    {
+      "q": "분할발주",
+      "topic_slugs": [
+        "split-contract-prohibition",
+        "split-contract",
+        "additional-contract-limit"
+      ],
+      "topic_count": 3,
+      "answer": null
+    },
+    {
+      "q": "분리 발주",
+      "topic_slugs": [
+        "split-contract-prohibition",
+        "unit-price-contract",
+        "split-contract",
+        "spec-price-split-bid"
+      ],
+      "topic_count": 4,
+      "answer": null
+    },
+    {
+      "q": "수입인지",
+      "topic_slugs": [],
+      "topic_count": 0,
+      "answer": null
+    },
+    {
+      "q": "보조금정산",
+      "topic_slugs": [
+        "national-subsidy"
+      ],
+      "topic_count": 1,
+      "answer": null
+    },
+    {
+      "q": "국외출장",
+      "topic_slugs": [
+        "foreign-travel"
+      ],
+      "topic_count": 1,
+      "answer": null
+    },
+    {
+      "q": "3000만원 물품 수의계약",
+      "topic_slugs": [
+        "private-contract",
+        "private-contract-limit",
+        "small-amount-contract"
+      ],
+      "topic_count": 3,
+      "answer": null
+    },
+    {
+      "q": "5000만원 용역 수의계약",
+      "topic_slugs": [
+        "private-contract",
+        "private-contract-limit",
+        "small-amount-contract"
+      ],
+      "topic_count": 3,
+      "answer": null
+    },
+    {
+      "q": "공사를 나눠 계약해도 되나",
+      "topic_slugs": [],
+      "topic_count": 0,
+      "answer": null
+    },
+    {
+      "q": "같은 물품을 여러 번 나눠 사도 되나",
+      "topic_slugs": [],
+      "topic_count": 0,
+      "answer": null
+    },
+    {
+      "q": "분리발주와 분할발주의 차이",
+      "topic_slugs": [],
+      "topic_count": 0,
+      "answer": null
+    },
+    {
+      "q": "처음 계약을 맡았어요",
+      "topic_slugs": [
+        "advance-payment",
+        "private-contract",
+        "private-contract-amount",
+        "private-contract-limit"
+      ],
+      "topic_count": 4,
+      "answer": null
+    },
+    {
+      "q": "병가",
+      "topic_slugs": [
+        "sick-leave"
+      ],
+      "topic_count": 1,
+      "answer": null
+    },
+    {
+      "q": "숙박비 지급 기준",
+      "topic_slugs": [
+        "travel-expense",
+        "domestic-travel-allowance",
+        "accommodation-allowance"
+      ],
+      "topic_count": 3,
+      "answer": null
+    },
+    {
+      "q": "차비",
+      "topic_slugs": [
+        "travel-expense",
+        "vehicle-travel-allowance"
+      ],
+      "topic_count": 2,
+      "answer": null
+    }
+  ],
+  "tools_error": "NameError: undefined local variable or method `contract_method_path' for #<Object:0x000079e10757df98>",
+  "audit_cases": [
+    {
+      "slug": "goods-selection-committee-bypassed",
+      "title": "물품선정위원회 미구성·미심의 후 수의계약 체결로 특정 업체 특혜 의혹",
+      "verification_status": "LEGAL_REFERENCE_VERIFIED",
+      "provenance": "HIGH"
+    },
+    {
+      "slug": "private-contract-no-reason",
+      "title": "수의계약 사유서 미작성",
+      "verification_status": "LEGAL_REFERENCE_VERIFIED",
+      "provenance": "HIGH"
+    },
+    {
+      "slug": "split-order-monthly-to-avoid-bidding",
+      "title": "연간 소모품 소요량을 월별로 쪼개 12건 소액 수의계약 반복 체결",
+      "verification_status": "LEGAL_REFERENCE_VERIFIED",
+      "provenance": "HIGH"
+    },
+    {
+      "slug": "private-contract-split",
+      "title": "수의계약 분할 발주 (계약 쪼개기)",
+      "verification_status": "LEGAL_REFERENCE_VERIFIED",
+      "provenance": "HIGH"
+    },
+    {
+      "slug": "sen-2025-school-y-facility-multi-violation",
+      "title": "시설공사관리 및 계약업무 집행 소홀 — 보험료 과다지급·설계변경 무절차·분할수의 3종 합본",
+      "verification_status": "OFFICIAL_SOURCE_VERIFIED",
+      "provenance": "HIGH"
+    },
+    {
+      "slug": "single-quote-exceeds-limit",
+      "title": "2천만원 초과 물품 구매를 1인 견적으로 수의계약 처리",
+      "verification_status": "LEGAL_REFERENCE_VERIFIED",
+      "provenance": "HIGH"
+    },
+    {
+      "slug": "goe-2021-split-after-school-program",
+      "title": "분할 수의계약 — 방과후컴퓨터교실 8회 분할 104,350천원",
+      "verification_status": "OFFICIAL_SOURCE_VERIFIED",
+      "provenance": "HIGH"
+    },
+    {
+      "slug": "goe-2021-split-private-contracts",
+      "title": "분할 수의계약 — 청소·물품·시설공사 동일업체·동시기 분할",
+      "verification_status": "OFFICIAL_SOURCE_VERIFIED",
+      "provenance": "HIGH"
+    },
+    {
+      "slug": "bid-failure-negotiation-001",
+      "title": "유찰 후 수의계약 시 2인 이상 견적 미징구 — 지방계약법 시행령 제25조 위반",
+      "verification_status": "LEGAL_REFERENCE_VERIFIED",
+      "provenance": "HIGH"
+    },
+    {
+      "slug": "private-contract-over-limit",
+      "title": "수의계약 한도액 초과 계약 체결",
+      "verification_status": "LEGAL_REFERENCE_VERIFIED",
+      "provenance": "HIGH"
+    },
+    {
+      "slug": "split-contract-to-avoid-bidding",
+      "title": "단일 공사를 2건으로 분할하여 입찰 금액 기준 이하로 맞춰 경쟁입찰 회피",
+      "verification_status": "LEGAL_REFERENCE_VERIFIED",
+      "provenance": "HIGH"
+    },
+    {
+      "slug": "false-private-contract-reason",
+      "title": "수의계약 요건 미충족 및 사유서 허위 작성 사건",
+      "verification_status": "LEGAL_REFERENCE_VERIFIED",
+      "provenance": "HIGH"
+    },
+    {
+      "slug": "sen-2025-school-i-split-private-disability",
+      "title": "용역계약 업무처리 부적정(분할수의계약) — 장애인기업 5천만 초과 단일사업 분할",
+      "verification_status": "OFFICIAL_SOURCE_VERIFIED",
+      "provenance": "HIGH"
+    },
+    {
+      "slug": "sen-2025-school-s-service-contract-violation",
+      "title": "용역계약 업무처리 부적정 — 1억 초과 1인 수의계약 + 계약서 미작성",
+      "verification_status": "OFFICIAL_SOURCE_VERIFIED",
+      "provenance": "HIGH"
+    },
+    {
+      "slug": "goe-2021-failed-bid-private-contract",
+      "title": "유찰 후 수의계약 체결 부적정 — 조건 변경·재공고 누락",
+      "verification_status": "OFFICIAL_SOURCE_VERIFIED",
+      "provenance": "HIGH"
+    },
+    {
+      "slug": "goe-2021-split-care-trip-copier-paint",
+      "title": "분할 수의계약 — 돌봄간식·체험학습차량·복사기·도장공사",
+      "verification_status": "OFFICIAL_SOURCE_VERIFIED",
+      "provenance": "HIGH"
+    },
+    {
+      "slug": "direct-production-confirm-missing",
+      "title": "직접생산확인증명서 미징구 상태에서 중소기업 제품 수의계약 체결",
+      "verification_status": "LEGAL_REFERENCE_VERIFIED",
+      "provenance": "HIGH"
+    },
+    {
+      "slug": "goe-2021-private-contract-s2b-mismatch",
+      "title": "수의계약 체결 부적정 — S2B 1인 수의·사전결정 위탁업체",
+      "verification_status": "OFFICIAL_SOURCE_VERIFIED",
+      "provenance": "HIGH"
+    },
+    {
+      "slug": "goe-2021-private-contract-2bid-violation",
+      "title": "수의계약 체결 부적정 — 5천만원 초과 용역 2인 견적 처리",
+      "verification_status": "OFFICIAL_SOURCE_VERIFIED",
+      "provenance": "HIGH"
+    },
+    {
+      "slug": "private-contract-retroactive",
+      "title": "소급 수의계약 (선 이행 후 계약)",
+      "verification_status": "LEGAL_REFERENCE_VERIFIED",
+      "provenance": "HIGH"
+    },
+    {
+      "slug": "sen-2025-school-d-split-private-contract",
+      "title": "용역계약 업무처리 부적정(분할수의계약) — 건축설계 2건 시기적 분할",
+      "verification_status": "OFFICIAL_SOURCE_VERIFIED",
+      "provenance": "HIGH"
+    },
+    {
+      "slug": "private-contract-same-vendor",
+      "title": "특정 업체 반복 수의계약",
+      "verification_status": "LEGAL_REFERENCE_VERIFIED",
+      "provenance": "HIGH"
+    },
+    {
+      "slug": "private-contract-purpose-mismatch",
+      "title": "수의계약 사유와 실제 계약 내용 불일치",
+      "verification_status": "LEGAL_REFERENCE_VERIFIED",
+      "provenance": "HIGH"
+    },
+    {
+      "slug": "emergency-contract-unjustified",
+      "title": "긴급수의계약 사유 부적정",
+      "verification_status": "LEGAL_REFERENCE_VERIFIED",
+      "provenance": "HIGH"
+    },
+    {
+      "slug": "public-procurement-mandatory-bid-bypassed",
+      "title": "경쟁입찰 의무 대상 사업 수의계약 처리 및 예산 낭비 사건",
+      "verification_status": "LEGAL_REFERENCE_VERIFIED",
+      "provenance": "HIGH"
+    },
+    {
+      "slug": "private-contract-no-quote",
+      "title": "2인 견적 미징구 수의계약",
+      "verification_status": "LEGAL_REFERENCE_VERIFIED",
+      "provenance": "HIGH"
+    },
+    {
+      "slug": "private-contract-split-over-limit",
+      "title": "수의계약 한도 회피를 위한 계약 분할 체결 사건 (계약 쪼개기)",
+      "verification_status": "LEGAL_REFERENCE_VERIFIED",
+      "provenance": "HIGH"
+    },
+    {
+      "slug": "small-amount-intentional-split",
+      "title": "용역 총액 1억 5천만원을 5천만원 이하 3건으로 쪼개 소액수의 반복 체결",
+      "verification_status": "LEGAL_REFERENCE_VERIFIED",
+      "provenance": "HIGH"
+    },
+    {
+      "slug": "sen-2025-school-v-facility-split-private",
+      "title": "시설공사 수의계약 부적정 — 단일사업 분할 + 예정가 낮춰 1인 수의 우회",
+      "verification_status": "OFFICIAL_SOURCE_VERIFIED",
+      "provenance": "HIGH"
+    }
+  ],
+  "audit_case_total": 257,
+  "authority": [
+    {
+      "id": 1,
+      "title": "지방자치단체를 당사자로 하는 계약에 관한 법률",
+      "type": "LAW",
+      "jurisdiction": "LOCAL",
+      "effective_at": "2024-02-17",
+      "fetched_at": "2026-09-06 00:39:13 +0900",
+      "last_checked_at": "2026-09-06 00:40:38 +0900",
+      "content_len": 127,
+      "source_url": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=253973"
+    },
+    {
+      "id": 2,
+      "title": "지방자치단체를 당사자로 하는 계약에 관한 법률 시행령",
+      "type": "PRESIDENTIAL_DECREE",
+      "jurisdiction": "LOCAL",
+      "effective_at": "2026-06-03",
+      "fetched_at": "2026-09-06 00:39:14 +0900",
+      "last_checked_at": "2026-09-06 00:40:39 +0900",
+      "content_len": 133,
+      "source_url": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=286149"
+    },
+    {
+      "id": 3,
+      "title": "지방자치단체를 당사자로 하는 계약에 관한 법률 시행규칙",
+      "type": "MINISTERIAL_ORDINANCE",
+      "jurisdiction": "LOCAL",
+      "effective_at": "2026-07-01",
+      "fetched_at": "2026-09-06 00:39:15 +0900",
+      "last_checked_at": "2026-09-06 00:40:40 +0900",
+      "content_len": 136,
+      "source_url": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=287365"
+    },
+    {
+      "id": 4,
+      "title": "지방회계법",
+      "type": "LAW",
+      "jurisdiction": "LOCAL",
+      "effective_at": "2026-01-02",
+      "fetched_at": "2026-09-06 00:39:17 +0900",
+      "last_checked_at": "2026-09-06 00:40:41 +0900",
+      "content_len": 107,
+      "source_url": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=276363"
+    },
+    {
+      "id": 5,
+      "title": "지방회계법 시행령",
+      "type": "PRESIDENTIAL_DECREE",
+      "jurisdiction": "LOCAL",
+      "effective_at": "2026-06-02",
+      "fetched_at": "2026-09-06 00:39:18 +0900",
+      "last_checked_at": "2026-09-06 00:40:43 +0900",
+      "content_len": 113,
+      "source_url": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=286643"
+    },
+    {
+      "id": 6,
+      "title": "지방공무원법",
+      "type": "LAW",
+      "jurisdiction": "LOCAL",
+      "effective_at": "2026-06-02",
+      "fetched_at": "2026-09-06 00:39:19 +0900",
+      "last_checked_at": "2026-09-06 00:40:44 +0900",
+      "content_len": 108,
+      "source_url": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=286499"
+    },
+    {
+      "id": 7,
+      "title": "지방공무원 복무규정",
+      "type": "PRESIDENTIAL_DECREE",
+      "jurisdiction": "LOCAL",
+      "effective_at": "2026-06-23",
+      "fetched_at": "2026-09-06 00:39:20 +0900",
+      "last_checked_at": "2026-09-06 00:40:45 +0900",
+      "content_len": 114,
+      "source_url": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=287219"
+    },
+    {
+      "id": 8,
+      "title": "지방공무원 보수규정",
+      "type": "PRESIDENTIAL_DECREE",
+      "jurisdiction": "LOCAL",
+      "effective_at": "2026-08-01",
+      "fetched_at": "2026-09-06 00:39:21 +0900",
+      "last_checked_at": "2026-09-06 00:40:46 +0900",
+      "content_len": 114,
+      "source_url": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=288435"
+    }
+  ],
+  "content_authority_links_by_type": {
+    "Tool": 14,
+    "AuditCase": 195
+  },
+  "totals": {
+    "topic": 114,
+    "published_topic": 114,
+    "guide": 103,
+    "audit_case": 257,
+    "faq_authored": 474,
+    "faq_nonarray": 0,
+    "search_log": 2207
+  }
+}

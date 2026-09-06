@@ -1,0 +1,280 @@
+{
+  "measured_at": "2026-09-06T03:32:36Z",
+  "special_enterprises": [
+    {
+      "key": "women",
+      "name": "여성기업"
+    },
+    {
+      "key": "disabled",
+      "name": "장애인기업"
+    },
+    {
+      "key": "social",
+      "name": "사회적기업"
+    },
+    {
+      "key": "cooperative",
+      "name": "협동조합"
+    },
+    {
+      "key": "village",
+      "name": "마을기업"
+    },
+    {
+      "key": "self_support",
+      "name": "자활기업"
+    },
+    {
+      "key": "social_cooperative",
+      "name": "사회적협동조합"
+    }
+  ],
+  "cases": [
+    {
+      "input": {
+        "t": "goods",
+        "p": 1500000,
+        "s": null
+      },
+      "success": true,
+      "method": "소액수의계약",
+      "detail": "견적서 생략 또는 1인 견적",
+      "basis": "지방계약법 시행령 제25조제1항제5호 나목, 제30조제1항·제4항, 시행규칙 제33조",
+      "note": "추정가격 200만원 이하 (200만원 미만은 견적서 생략 가능 — 시행규칙 제33조)",
+      "special_condition": null,
+      "special_applied": false,
+      "warn_titles": [
+        "수의계약 체결 제한 여부 확인"
+      ],
+      "error": null
+    },
+    {
+      "input": {
+        "t": "goods",
+        "p": 20000000,
+        "s": null
+      },
+      "success": true,
+      "method": "수의계약",
+      "detail": "1인 견적 수의계약",
+      "basis": "지방계약법 시행령 제25조제1항제5호 나목",
+      "note": "추정가격 2천만원 이하 (예정가격 작성 생략 가능 — 시행령 제9조)",
+      "special_condition": null,
+      "special_applied": false,
+      "warn_titles": [
+        "수의계약 체결 제한 여부 확인"
+      ],
+      "error": null
+    },
+    {
+      "input": {
+        "t": "goods",
+        "p": 30000000,
+        "s": null
+      },
+      "success": true,
+      "method": "수의계약",
+      "detail": "2인 이상 견적 수의계약",
+      "basis": "지방계약법 시행령 제25조제1항제5호 라목·마목",
+      "note": "추정가격 5천만원 이하 (학술연구 등 특수분야 또는 여성·장애인·사회적기업 등 해당 시). G2B 전자견적 필수",
+      "special_condition": "일반 업체와의 계약은 2천만원 초과 시 경쟁입찰 대상. 특례기업은 5천만원까지 1인 견적 가능",
+      "special_applied": false,
+      "warn_titles": [
+        "수의계약 체결 제한 여부 확인",
+        "G2B 전자견적 필수"
+      ],
+      "error": null
+    },
+    {
+      "input": {
+        "t": "goods",
+        "p": 30000000,
+        "s": "women"
+      },
+      "success": true,
+      "method": "수의계약",
+      "detail": "1인 견적 수의계약 (특례)",
+      "basis": "지방계약법 시행령 제25조제1항제5호 라목·마목",
+      "note": "여성기업 특례 적용 (50,000,000원 이하 1인 수의 가능)",
+      "special_condition": "일반 업체와의 계약은 2천만원 초과 시 경쟁입찰 대상. 특례기업은 5천만원까지 1인 견적 가능",
+      "special_applied": true,
+      "warn_titles": [
+        "수의계약 체결 제한 여부 확인",
+        "G2B 전자견적 필수"
+      ],
+      "error": null
+    },
+    {
+      "input": {
+        "t": "service",
+        "p": 50000000,
+        "s": null
+      },
+      "success": true,
+      "method": "수의계약",
+      "detail": "2인 이상 견적 수의계약",
+      "basis": "지방계약법 시행령 제25조제1항제5호 라목·마목",
+      "note": "추정가격 5천만원 이하 (학술연구 등 특수분야 또는 여성·장애인·사회적기업 등 해당 시). G2B 전자견적 필수",
+      "special_condition": "일반 업체와의 계약은 2천만원 초과 시 경쟁입찰 대상. 특례기업은 5천만원까지 1인 견적 가능",
+      "special_applied": false,
+      "warn_titles": [
+        "수의계약 체결 제한 여부 확인",
+        "G2B 전자견적 필수"
+      ],
+      "error": null
+    },
+    {
+      "input": {
+        "t": "service",
+        "p": 50000000,
+        "s": "women"
+      },
+      "success": true,
+      "method": "수의계약",
+      "detail": "1인 견적 수의계약 (특례)",
+      "basis": "지방계약법 시행령 제25조제1항제5호 라목·마목",
+      "note": "여성기업 특례 적용 (50,000,000원 이하 1인 수의 가능)",
+      "special_condition": "일반 업체와의 계약은 2천만원 초과 시 경쟁입찰 대상. 특례기업은 5천만원까지 1인 견적 가능",
+      "special_applied": true,
+      "warn_titles": [
+        "수의계약 체결 제한 여부 확인",
+        "G2B 전자견적 필수"
+      ],
+      "error": null
+    },
+    {
+      "input": {
+        "t": "service",
+        "p": 80000000,
+        "s": "women"
+      },
+      "success": true,
+      "method": "수의계약",
+      "detail": "2인 이상 견적 수의계약 (특례기업)",
+      "basis": "지방계약법 시행령 제25조제1항제5호 다목~마목",
+      "note": "여성기업 해당 시 수의계약 가능 (80,000,000원, 2인 이상 견적 필수)",
+      "special_condition": "해당 기업 확인서 필수 (중소기업확인서·여성기업확인서 등). 용역의 특성상 특정인 수의계약 가능 여부 검토 (제25조제1항제4호)",
+      "special_applied": true,
+      "warn_titles": [
+        "수의계약 체결 제한 여부 확인",
+        "G2B 전자견적 필수",
+        "중소기업 경쟁제품 확인 필요"
+      ],
+      "error": null
+    },
+    {
+      "input": {
+        "t": "service",
+        "p": 80000000,
+        "s": "cooperative"
+      },
+      "success": true,
+      "method": "수의계약",
+      "detail": "2인 이상 견적 수의계약 (특례기업)",
+      "basis": "지방계약법 시행령 제25조제1항제5호 다목~마목",
+      "note": "협동조합 해당 시 수의계약 가능 (80,000,000원, 2인 이상 견적 필수)",
+      "special_condition": "해당 기업 확인서 필수 (중소기업확인서·여성기업확인서 등). 용역의 특성상 특정인 수의계약 가능 여부 검토 (제25조제1항제4호)",
+      "special_applied": true,
+      "warn_titles": [
+        "수의계약 체결 제한 여부 확인",
+        "G2B 전자견적 필수",
+        "중소기업 경쟁제품 확인 필요"
+      ],
+      "error": null
+    },
+    {
+      "input": {
+        "t": "goods",
+        "p": 100000000,
+        "s": null
+      },
+      "success": true,
+      "method": "수의계약",
+      "detail": "2인 이상 견적 수의계약 (특례기업)",
+      "basis": "지방계약법 시행령 제25조제1항제5호 다목~마목",
+      "note": "추정가격 1억원 이하 (소기업·소상공인·여성·장애인·사회적기업 등과의 계약에 한정). G2B 전자견적 필수",
+      "special_condition": "해당 기업 확인서 필수 (중소기업확인서·여성기업확인서 등). 중소기업자간 경쟁제품 해당 여부 확인 필요",
+      "special_applied": false,
+      "warn_titles": [
+        "수의계약 체결 제한 여부 확인",
+        "G2B 전자견적 필수",
+        "중소기업 경쟁제품 확인 필요"
+      ],
+      "error": null
+    },
+    {
+      "input": {
+        "t": "construction_general",
+        "p": 300000000,
+        "s": null
+      },
+      "success": true,
+      "method": "수의계약",
+      "detail": "2인 이상 견적 수의계약",
+      "basis": "지방계약법 시행령 제25조제1항제5호 가목",
+      "note": "추정가격 4억원 이하 (2022.9 개정 반영). G2B 전자견적 필수",
+      "special_condition": "건설업 등록업체만 참여 가능",
+      "special_applied": false,
+      "warn_titles": [
+        "수의계약 체결 제한 여부 확인",
+        "G2B 전자견적 필수",
+        "건설업 등록 확인 필요"
+      ],
+      "error": null
+    },
+    {
+      "input": {
+        "t": "construction_special",
+        "p": 300000000,
+        "s": null
+      },
+      "success": true,
+      "method": "입찰",
+      "detail": "일반/제한경쟁입찰",
+      "basis": "지방계약법 제9조, 건설산업기본법",
+      "note": "추정가격 2억원 초과",
+      "special_condition": "전자입찰 필수",
+      "special_applied": false,
+      "warn_titles": [
+        "낙찰하한율 — 89.745%",
+        "건설업 등록 확인 필요",
+        "전자입찰(지정정보처리장치) 필수",
+        "유찰 시 수의계약 전환 가능"
+      ],
+      "error": null
+    },
+    {
+      "input": {
+        "t": "goods",
+        "p": 0,
+        "s": null
+      },
+      "success": false,
+      "method": null,
+      "detail": null,
+      "basis": null,
+      "note": null,
+      "special_condition": null,
+      "special_applied": null,
+      "warn_titles": [],
+      "error": "추정가격을 입력해주세요."
+    },
+    {
+      "input": {
+        "t": "",
+        "p": 30000000,
+        "s": null
+      },
+      "success": false,
+      "method": null,
+      "detail": null,
+      "basis": null,
+      "note": null,
+      "special_condition": null,
+      "special_applied": null,
+      "warn_titles": [],
+      "error": "계약 유형을 선택해주세요."
+    }
+  ]
+}

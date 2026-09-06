@@ -156,6 +156,46 @@
     color: #92400e;
   }
 
+  /* 적용 기관 선택 */
+  .scope-section { margin-bottom: 20px; }
+  .scope-label { display:flex; align-items:center; gap:6px; font-weight:700; font-size:14px; color:#334155; margin-bottom:10px; }
+  .scope-options { display:flex; flex-wrap:wrap; gap:8px; }
+  .scope-option { padding:8px 14px; border:1px solid #e2e8f0; border-radius:999px; font-size:13px; cursor:pointer; background:#fff; transition:all .15s; }
+  .scope-option:hover { border-color:#94a3b8; }
+  .scope-option.selected { background:#0f172a; color:#fff; border-color:#0f172a; }
+  .scope-hint { margin-top:10px; font-size:12px; color:#64748b; line-height:1.6; }
+  .special-req { font-size:12px; font-weight:600; color:#b45309; margin-left:6px; }
+  .special-hint { margin-top:10px; font-size:12px; color:#64748b; line-height:1.6; }
+  .special-extra { margin-top:14px; padding-top:14px; border-top:1px dashed #e2e8f0; }
+  .special-extra label { display:flex; align-items:flex-start; gap:8px; font-size:13px; color:#334155; cursor:pointer; }
+  .special-extra input[type=checkbox] { margin-top:3px; }
+
+  /* 판정 패널 */
+  .decision-card { border:2px solid #e2e8f0; border-radius:16px; padding:22px; margin-bottom:20px; background:#fff; }
+  .decision-card.ok      { border-color:#86efac; background:#f0fdf4; }
+  .decision-card.cond    { border-color:#fcd34d; background:#fffbeb; }
+  .decision-card.bid     { border-color:#93c5fd; background:#eff6ff; }
+  .decision-card.unknown { border-color:#cbd5e1; background:#f8fafc; }
+  .decision-state { display:inline-block; font-size:12px; font-weight:800; letter-spacing:.02em; padding:5px 12px; border-radius:999px; margin-bottom:10px; }
+  .decision-state.ok      { background:#166534; color:#fff; }
+  .decision-state.cond    { background:#b45309; color:#fff; }
+  .decision-state.bid     { background:#1d4ed8; color:#fff; }
+  .decision-state.unknown { background:#475569; color:#fff; }
+  .decision-headline { font-size:16px; font-weight:700; color:#0f172a; line-height:1.6; margin:0 0 16px; }
+  .decision-block { margin-top:16px; }
+  .decision-block h4 { font-size:12px; font-weight:800; color:#475569; text-transform:none; margin:0 0 8px; }
+  .decision-block ul { margin:0; padding-left:18px; }
+  .decision-block li { font-size:13px; color:#334155; line-height:1.7; margin-bottom:6px; }
+  .decision-block a { color:#1d4ed8; text-decoration:underline; }
+  .decision-quote { display:block; font-size:12px; color:#64748b; margin-top:3px; padding-left:8px; border-left:2px solid #cbd5e1; }
+  .decision-other summary { font-size:13px; font-weight:700; color:#334155; cursor:pointer; }
+  .decision-note { font-size:12px; color:#64748b; margin:8px 0; }
+  .decision-disclaimer { margin-top:18px; padding-top:14px; border-top:1px solid #e2e8f0; font-size:12px; color:#64748b; line-height:1.7; }
+  .decision-freshness { font-size:11px; color:#94a3b8; margin-top:6px; }
+  .decision-handoff { margin-top:16px; }
+  .decision-handoff-btn { display:inline-flex; align-items:center; gap:6px; padding:10px 16px; border-radius:10px; background:#0f172a; color:#fff; font-size:13px; font-weight:600; text-decoration:none; }
+  .decision-handoff-btn:hover { background:#1e293b; }
+
   /* 특례기업 선택 */
   .special-section {
     padding: 20px;
@@ -704,6 +744,23 @@
       </h2>
       <p class="subtitle">계약 유형과 추정가격을 입력하면 적정 계약방식과 필요 서류를 안내해드립니다</p>
 
+      <!-- 적용 기관 선택 (0단계) — 기관 유형에 따라 적용 법령이 다르다 -->
+      <div class="scope-section">
+        <label class="scope-label">
+          <span class="material-symbols-outlined">account_balance</span>
+          어느 기관 기준인가요?
+        </label>
+        <div class="scope-options" id="scope-options">
+          <span class="scope-option" data-scope="LOCAL_GOVERNMENT" onclick="selectScope('LOCAL_GOVERNMENT')">지방자치단체</span>
+          <span class="scope-option" data-scope="EDUCATION_OFFICE" onclick="selectScope('EDUCATION_OFFICE')">교육청</span>
+          <span class="scope-option" data-scope="PUBLIC_SCHOOL" onclick="selectScope('PUBLIC_SCHOOL')">국·공립학교</span>
+          <span class="scope-option" data-scope="CENTRAL_GOVERNMENT" onclick="selectScope('CENTRAL_GOVERNMENT')">국가기관</span>
+          <span class="scope-option" data-scope="PUBLIC_INSTITUTION" onclick="selectScope('PUBLIC_INSTITUTION')">공공기관·지방공기업</span>
+          <span class="scope-option" data-scope="PRIVATE_SCHOOL" onclick="selectScope('PRIVATE_SCHOOL')">사립학교</span>
+        </div>
+        <p class="scope-hint">이 도구는 <strong>지방계약법</strong> 체계(지방자치단체·교육청·국·공립학교)만 판단합니다. 국가기관은 국가계약법, 공공기관은 자체 계약규정이 적용되어 기준이 다릅니다.</p>
+      </div>
+
       <!-- 계약 유형 선택 (1단계) -->
       <div class="type-grid" id="type-grid-main">
         <div class="type-option" data-type="goods" onclick="selectMainType('goods')">
@@ -764,21 +821,40 @@
         </div>
       </div>
 
-      <!-- 특례기업 선택 -->
-      <details class="special-section" open>
+      <!-- 계약상대자 유형 — 시행령 제25조제1항제5호 다·라·마·바목 -->
+      <!-- 2천만원을 넘는 물품·용역은 상대방 자격이 결론을 가른다. 금액만으로 정해지지 않는다. -->
+      <details class="special-section" open id="counterparty-section">
         <summary>
           <span class="material-symbols-outlined">star</span>
-          특례기업 여부 (여성기업, 사회적기업 등)
+          계약상대자 유형 <span class="special-req" id="counterparty-req">(2천만원 초과 물품·용역은 필수)</span>
         </summary>
         <div class="special-options">
-          <span class="special-option" data-special="none" onclick="selectSpecial('none')">해당없음</span>
-          <span class="special-option" data-special="women" onclick="selectSpecial('women')">여성기업</span>
-          <span class="special-option" data-special="disabled" onclick="selectSpecial('disabled')">장애인기업</span>
-          <span class="special-option" data-special="social" onclick="selectSpecial('social')">사회적기업</span>
-          <span class="special-option" data-special="cooperative" onclick="selectSpecial('cooperative')">협동조합</span>
-          <span class="special-option" data-special="social_cooperative" onclick="selectSpecial('social_cooperative')">사회적협동조합</span>
-          <span class="special-option" data-special="village" onclick="selectSpecial('village')">마을기업</span>
-          <span class="special-option" data-special="self_support" onclick="selectSpecial('self_support')">자활기업</span>
+          <span class="special-option" data-cp="GENERAL" onclick="selectCounterparty('GENERAL')">일반 업체</span>
+          <span class="special-option" data-cp="YOUTH_STARTUP" onclick="selectCounterparty('YOUTH_STARTUP')">청년창업기업</span>
+          <span class="special-option" data-cp="SMALL_ENTERPRISE" onclick="selectCounterparty('SMALL_ENTERPRISE')">소기업·소상공인</span>
+          <span class="special-option" data-cp="WOMEN" onclick="selectCounterparty('WOMEN')">여성기업</span>
+          <span class="special-option" data-cp="DISABLED" onclick="selectCounterparty('DISABLED')">장애인기업</span>
+          <span class="special-option" data-cp="SOCIAL_ENTERPRISE" onclick="selectCounterparty('SOCIAL_ENTERPRISE')">사회적기업</span>
+          <span class="special-option" data-cp="SOCIAL_COOPERATIVE" onclick="selectCounterparty('SOCIAL_COOPERATIVE')">사회적협동조합</span>
+          <span class="special-option" data-cp="VILLAGE" onclick="selectCounterparty('VILLAGE')">마을기업</span>
+          <span class="special-option" data-cp="SELF_SUPPORT" onclick="selectCounterparty('SELF_SUPPORT')">자활기업</span>
+        </div>
+        <p class="special-hint">※ 일반 <strong>협동조합</strong>은 이 목록에 없습니다 — 시행령 제25조제1항제5호바목 4)가 가리키는 것은 「협동조합 기본법」 제2조제3호의 <strong>사회적협동조합</strong>입니다.</p>
+
+        <div class="special-extra" id="vulnerable-ratio-row" style="display:none;">
+          <label>
+            <input type="checkbox" id="vulnerable-ratio" onchange="toggleVulnerable()">
+            행정안전부장관 고시 <strong>취약계층 고용비율</strong>을 충족합니다
+          </label>
+          <p class="special-hint">사회적기업·사회적협동조합·자활기업·마을기업은 이 요건을 충족해야 해당 수의계약 사유를 적용할 수 있습니다 (제25조제1항제5호바목 단서).</p>
+        </div>
+
+        <div class="special-extra" id="special-field-row" style="display:none;">
+          <label>
+            <input type="checkbox" id="special-field" onchange="toggleSpecialField()">
+            <strong>학술연구·원가계산·건설기술</strong> 등 특수한 지식·기술·자격을 요구하는 계약입니다
+          </label>
+          <p class="special-hint">해당하면 상대방 자격과 무관하게 1억원 이하까지 수의계약 사유가 있습니다 (제25조제1항제5호마목).</p>
         </div>
       </details>
 
@@ -789,6 +865,56 @@
         <span class="material-symbols-outlined" id="btn-icon">search</span>
         <span id="btn-text">계약방식 확인하기</span>
       </button>
+    </div>
+
+    <!-- 판정 패널 — 왜 이 결과가 나왔는지 (§18) -->
+    <div class="decision-card" id="decision-section" style="display:none;">
+      <div class="decision-state" id="decision-state"></div>
+      <p class="decision-headline" id="decision-headline"></p>
+
+      <div class="decision-block" id="decision-quotation-block" style="display:none;">
+        <h4>견적 요건</h4>
+        <p id="decision-quotation"></p>
+      </div>
+
+      <div class="decision-block" id="decision-conditions-block" style="display:none;">
+        <h4>확인해야 할 조건</h4>
+        <ul id="decision-conditions"></ul>
+      </div>
+
+      <div class="decision-block" id="decision-unresolved-block" style="display:none;">
+        <h4>아직 확인되지 않은 것</h4>
+        <ul id="decision-unresolved"></ul>
+      </div>
+
+      <div class="decision-block" id="decision-basis-block" style="display:none;">
+        <h4>근거 조문</h4>
+        <ul id="decision-basis"></ul>
+      </div>
+
+      <div class="decision-block" id="decision-next-block" style="display:none;">
+        <h4>다음에 할 일</h4>
+        <ul id="decision-next"></ul>
+      </div>
+
+      <details class="decision-block decision-other" id="decision-other-block" style="display:none;">
+        <summary>금액 외에도 수의계약이 가능한 사유가 있습니다</summary>
+        <p class="decision-note">이 도구는 금액 기준(제25조제1항제5호)만 판단합니다. 아래 사유는 판정하지 않으니 해당 여부를 담당자가 확인하세요.</p>
+        <ul id="decision-other"></ul>
+      </details>
+
+      <p class="decision-disclaimer">
+        이 결과는 <strong>적법 확정이 아닙니다.</strong> 입력한 사실관계를 조문 요건에 대조한 것이며,
+        실제 계약 전에 배제사유·내부 위임전결·개별 지침을 담당자가 확인해야 합니다.
+      </p>
+      <p class="decision-freshness" id="decision-freshness"></p>
+
+      <div class="decision-handoff">
+        <a href="/tools/split-contract-checker" class="decision-handoff-btn">
+          <span class="material-symbols-outlined">rule</span>
+          혹시 한도를 피하려고 나눈 계약인가요? — 분할발주 검토하기
+        </a>
+      </div>
     </div>
 
     <!-- 결과 카드 -->
@@ -975,7 +1101,12 @@
           </tbody>
         </table>
       </div>
-      <p class="text-xs text-slate-400 mt-3">※ 추정가격(부가세 제외) 기준. * 특례기업: 소기업·소상공인·여성기업·장애인기업·사회적기업 등. 지방계약법 시행령 제25조.</p>
+      <p class="text-xs text-slate-400 mt-3">
+        ※ 추정가격(부가세 제외) 기준.<br>
+        * <strong>1인 견적 5,000만원</strong> 대상은 청년창업기업·여성기업·장애인기업, 그리고 취약계층 고용비율을 충족한 사회적기업·사회적협동조합·자활기업·마을기업입니다 (시행령 제30조제1항제2호 가·나목).
+        <strong>소기업·소상공인</strong>은 1억원까지 수의계약 사유가 되지만(제25조제1항제5호라목) 1인 견적 대상에는 열거되어 있지 않아 <strong>2인 이상 견적</strong>이 원칙입니다.<br>
+        * 청년창업기업의 수의계약 한도는 <strong>5,000만원</strong>입니다(제25조제1항제5호다목) — 1억원이 아닙니다.
+      </p>
     </div>
   </div>
 </section>
@@ -998,8 +1129,39 @@
 
 <script>
   var selectedType = null;
-  var selectedSpecial = null;
+  var selectedSpecial = null;   // 레거시 파라미터 유지 (하위 호환)
+  var selectedScope = null;
+  var selectedCounterparty = null;
   var estimatedPrice = 0;
+
+  // 취약계층 고용비율 고시를 충족해야 하는 상대방 (시행령 §25①5호바목 단서·§30①2호나목)
+  const VULNERABLE_RATIO_COUNTERPARTIES =
+    ['SOCIAL_ENTERPRISE', 'SOCIAL_COOPERATIVE', 'VILLAGE', 'SELF_SUPPORT'];
+
+  function selectScope(scope) {
+    selectedScope = scope;
+    document.querySelectorAll('.scope-option').forEach(el => {
+      el.classList.toggle('selected', el.dataset.scope === scope);
+    });
+    checkFormValid();
+  }
+
+  function selectCounterparty(cp) {
+    selectedCounterparty = cp;
+    document.querySelectorAll('.special-option').forEach(el => {
+      el.classList.toggle('selected', el.dataset.cp === cp);
+    });
+    const row = document.getElementById('vulnerable-ratio-row');
+    if (row) {
+      const needs = VULNERABLE_RATIO_COUNTERPARTIES.indexOf(cp) !== -1;
+      row.style.display = needs ? '' : 'none';
+      if (!needs) document.getElementById('vulnerable-ratio').checked = false;
+    }
+    checkFormValid();
+  }
+
+  function toggleVulnerable() { /* 상태는 제출 시점에 읽는다 */ }
+  function toggleSpecialField() { /* 상태는 제출 시점에 읽는다 */ }
 
   function selectMainType(type) {
     const subGrid = document.getElementById('construction-sub');
@@ -1013,6 +1175,10 @@
       subGrid.classList.add('show');
       specialSection.style.display = 'none';
       selectedSpecial = null;
+      selectedCounterparty = null;
+      document.querySelectorAll('.special-option').forEach(el => el.classList.remove('selected'));
+      const sfRowC = document.getElementById('special-field-row');
+      if (sfRowC) sfRowC.style.display = 'none';
       // 이전 하위 선택 초기화
       document.querySelectorAll('.type-sub-option').forEach(el => el.classList.remove('selected'));
       selectedType = null;
@@ -1021,6 +1187,8 @@
       // 물품/용역 선택 → 하위 옵션 닫기, 특례기업 보이기
       subGrid.classList.remove('show');
       specialSection.style.display = '';
+      const sfRow = document.getElementById('special-field-row');
+      if (sfRow) sfRow.style.display = '';
       document.querySelectorAll('.type-option').forEach(el => {
         el.classList.toggle('selected', el.dataset.type === type);
       });
@@ -1043,11 +1211,10 @@
     checkFormValid();
   }
 
+  // 구 특례기업 선택자. 화면에서는 계약상대자 유형으로 대체됐고,
+  // 외부에서 호출될 여지만 남겨 둔다.
   function selectSpecial(special) {
     selectedSpecial = special === 'none' ? null : special;
-    document.querySelectorAll('.special-option').forEach(el => {
-      el.classList.toggle('selected', el.dataset.special === special);
-    });
   }
 
   function formatPrice(input) {
@@ -1122,7 +1289,7 @@
 
   function checkFormValid() {
     const btn = document.getElementById('determine-btn');
-    btn.disabled = !(selectedType && estimatedPrice > 0);
+    btn.disabled = !(selectedScope && selectedType && estimatedPrice > 0);
   }
 
   function showError(message) {
@@ -1150,7 +1317,7 @@
       icon.classList.add('animate-spin');
       text.textContent = '확인 중...';
     } else {
-      btn.disabled = !(selectedType && estimatedPrice > 0);
+      btn.disabled = !(selectedScope && selectedType && estimatedPrice > 0);
       if (icon) {
         icon.setAttribute('data-icon', 'material-symbols:search');
         // [INP 최적화] icon 요소만 스캔
@@ -1202,6 +1369,13 @@
   }
 
   async function determineMethod() {
+    // 검증: 적용 기관 선택 여부 — 기관에 따라 적용 법령이 다르다
+    if (!selectedScope) {
+      showError('어느 기관 기준인지 먼저 선택해 주세요');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
     // 검증: 계약 유형 선택 여부
     if (!selectedType) {
       showError('계약 유형을 선택해 주세요');
@@ -1230,7 +1404,11 @@
         body: JSON.stringify({
           contract_type: selectedType,
           estimated_price: estimatedPrice,
-          special_enterprise: selectedSpecial
+          special_enterprise: selectedSpecial,
+          agency_scope: selectedScope,
+          counterparty_type: selectedCounterparty,
+          special_field: !!(document.getElementById('special-field') || {}).checked,
+          vulnerable_ratio_met: vulnerableRatioParam()
         })
       });
 
@@ -1249,7 +1427,96 @@
     }
   }
 
+  // 체크하지 않은 것은 "미충족"이 아니라 "미확인"이다.
+  // false 를 보내면 없는 사실을 단정하게 된다.
+  function vulnerableRatioParam() {
+    const cb = document.getElementById('vulnerable-ratio');
+    if (!cb || cb.closest('#vulnerable-ratio-row').style.display === 'none') return null;
+    return cb.checked ? true : null;
+  }
+
+  const DECISION_LABELS = {
+    POSSIBLE:                      { text: '수의계약 대상에 해당합니다',        cls: 'ok' },
+    POSSIBLE_WITH_CONDITIONS:      { text: '조건을 충족할 때만 가능합니다',      cls: 'cond' },
+    COMPETITIVE_PROCEDURE_REQUIRED:{ text: '경쟁입찰이 원칙입니다',             cls: 'bid' },
+    REVIEW_REQUIRED:               { text: '담당자 검토가 필요합니다',           cls: 'cond' },
+    INSUFFICIENT_INFORMATION:      { text: '판단에 필요한 정보가 부족합니다',    cls: 'unknown' },
+    OUT_OF_SCOPE:                  { text: '이 도구의 판단 범위가 아닙니다',     cls: 'unknown' }
+  };
+
+  function fillList(id, items, render) {
+    const ul = document.getElementById(id);
+    ul.innerHTML = '';
+    items.forEach(function (it) {
+      const li = document.createElement('li');
+      li.innerHTML = render(it);
+      ul.appendChild(li);
+    });
+    ul.closest('.decision-block').style.display = items.length ? '' : 'none';
+  }
+
+  function esc(v) {
+    return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function renderDecision(d) {
+    const card = document.getElementById('decision-section');
+    if (!d) { card.style.display = 'none'; return; }
+    card.style.display = '';
+
+    const label = DECISION_LABELS[d.state] || { text: d.state, cls: 'unknown' };
+    const stateEl = document.getElementById('decision-state');
+    stateEl.textContent = label.text;
+    stateEl.className = 'decision-state ' + label.cls;
+    card.className = 'decision-card ' + label.cls;
+    document.getElementById('decision-headline').textContent = d.headline || '';
+
+    const qBlock = document.getElementById('decision-quotation-block');
+    if (d.quotation) {
+      document.getElementById('decision-quotation').textContent =
+        d.quotation.label + (d.quotation.notes && d.quotation.notes.length ? ' — ' + d.quotation.notes.join(' ') : '');
+      qBlock.style.display = '';
+    } else {
+      qBlock.style.display = 'none';
+    }
+
+    fillList('decision-conditions', d.conditions || [], function (c) { return esc(c); });
+    fillList('decision-unresolved', d.unresolved_factors || [], function (f) {
+      return '<strong>' + esc(f.factor) + '</strong> — ' + esc(f.detail);
+    });
+    fillList('decision-basis', d.legal_basis || [], function (b) {
+      return '<a href="' + esc(b.url) + '" target="_blank" rel="noopener">' +
+             esc(b.short || b.title) + ' ' + esc(b.locator) + '</a>' +
+             (b.quote ? '<span class="decision-quote">' + esc(b.quote) + '</span>' : '');
+    });
+    fillList('decision-next', d.next_actions || [], function (a) { return esc(a); });
+
+    const otherBlock = document.getElementById('decision-other-block');
+    const showOther = d.state === 'COMPETITIVE_PROCEDURE_REQUIRED' && (d.other_grounds || []).length;
+    if (showOther) {
+      const ul = document.getElementById('decision-other');
+      ul.innerHTML = '';
+      d.other_grounds.forEach(function (g) {
+        const li = document.createElement('li');
+        li.innerHTML = '<strong>' + esc(g.locator) + '</strong> ' + esc(g.label);
+        ul.appendChild(li);
+      });
+      otherBlock.style.display = '';
+    } else {
+      otherBlock.style.display = 'none';
+    }
+
+    const fresh = (d.legal_basis || [])[0];
+    document.getElementById('decision-freshness').textContent = fresh
+      ? '적용 기준: ' + fresh.title + ' (시행 ' + fresh.effective_from + ' · 확인 ' + fresh.verified_at + ')'
+      : '';
+  }
+
   function renderResult(result) {
+    renderDecision(result.decision);
+
     // 헤더 색상 설정
     const header = document.getElementById('result-header');
     header.className = 'result-header ' + result.result.method;
@@ -1265,10 +1532,16 @@
     const detail = result.result.method_detail;
     let summaryText = '';
 
-    if (method === '입찰') {
-      summaryText = `${typeName} ${price}원은 경쟁입찰로 진행해야 합니다.`;
-    } else {
+    // 판정이 확정이 아닐 때 "진행할 수 있습니다"라고 쓰지 않는다.
+    const dstate = result.decision && result.decision.state;
+    if (dstate === 'COMPETITIVE_PROCEDURE_REQUIRED') {
+      summaryText = `${typeName} ${price}원은 경쟁입찰이 원칙입니다.`;
+    } else if (dstate === 'POSSIBLE') {
       summaryText = `${typeName} ${price}원은 "${detail}"로 진행할 수 있습니다.`;
+    } else if (dstate === 'POSSIBLE_WITH_CONDITIONS') {
+      summaryText = `${typeName} ${price}원은 위 조건을 모두 충족할 때에만 "${detail}"로 진행할 수 있습니다.`;
+    } else {
+      summaryText = `${typeName} ${price}원은 지금 입력만으로 판단할 수 없습니다. 위 "아직 확인되지 않은 것"을 채워 주세요.`;
     }
 
     document.getElementById('result-summary-text').textContent = summaryText;

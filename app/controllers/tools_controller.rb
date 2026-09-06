@@ -42,6 +42,20 @@ class ToolsController < ApplicationController
   def allowance_calculator = render_tool_page(:allowance_calculator)
   def audit_readiness_checker = render_tool_page(:audit_readiness_checker)
   def split_contract_checker = render_tool_page(:split_contract_checker)
+
+  # POST /tools/split-contract-checker/evaluate
+  # 판정을 서버에서 한다. 조문 요건을 클라이언트 JS 에 두면 테스트도 뮤테이션도
+  # 걸 수 없고, 실제로 근거 없는 임계값("체크 3개 이상 = 위험 높음")이 그렇게 들어와 있었다.
+  def split_contract_evaluate
+    result = ContractDecision::SplitProcurementEvaluator.call(
+      contract_type: params[:contract_type],
+      factors: params[:factors]&.permit!&.to_h || {},
+      separation_ground: params[:separation_ground],
+      current_amount: params[:current_amount],
+      prior_amounts: Array(params[:prior_amounts])
+    )
+    render json: { success: true }.merge(result.to_h)
+  end
   def price_adjustment_calculator = render_tool_page(:price_adjustment_calculator)
   def predetermined_price = render_tool_page(:predetermined_price)
   def budget_execution_rate = render_tool_page(:budget_execution_rate)

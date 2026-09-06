@@ -250,6 +250,7 @@ Rails.application.routes.draw do
 
   # 분할계약 판단 체크리스트
   get "tools/split-contract-checker", to: "tools#split_contract_checker", as: :split_contract_checker
+  post "tools/split-contract-checker/evaluate", to: "tools#split_contract_evaluate", as: :split_contract_evaluate
 
   # 보조금 정산 체크리스트
   get "tools/subsidy-settlement-checker", to: "tools#subsidy_settlement_checker", as: :subsidy_settlement_checker

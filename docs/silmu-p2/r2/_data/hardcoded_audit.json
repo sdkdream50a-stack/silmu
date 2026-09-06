@@ -1,0 +1,623 @@
+{
+ "total": 103,
+ "hits": [
+  {
+   "file": "app/services/contract_method_service.rb",
+   "line": 61,
+   "value": "20_000_000",
+   "context": "if price <= special_info[:threshold] && price > 20_000_000"
+  },
+  {
+   "file": "app/services/contract_method_service.rb",
+   "line": 68,
+   "value": "100_000_000",
+   "context": "elsif price > special_info[:threshold] && price <= 100_000_000 && [ :goods, :service ].include?(type_sym)"
+  },
+  {
+   "file": "app/services/contract_method_service.rb",
+   "line": 251,
+   "value": "20_000_000",
+   "context": "if threshold && threshold[:method].include?(\"수의계약\") && price > 20_000_000"
+  },
+  {
+   "file": "app/services/contract_method_service.rb",
+   "line": 261,
+   "value": "50_000_000",
+   "context": "if price > 50_000_000 && [ :goods, :service ].include?(type)"
+  },
+  {
+   "file": "app/services/contract_method_service.rb",
+   "line": 271,
+   "value": "50_000_000",
+   "context": "if [ :construction_general, :construction_special, :construction_etc ].include?(type) && price > 50_000_000"
+  },
+  {
+   "file": "app/services/contract_method_service.rb",
+   "line": 311,
+   "value": "20_000_000",
+   "context": "if price <= 20_000_000"
+  },
+  {
+   "file": "app/services/contract_method_service.rb",
+   "line": 314,
+   "value": "20_000_000",
+   "context": "if price > 20_000_000"
+  },
+  {
+   "file": "app/services/estimated_price_service.rb",
+   "line": 33,
+   "value": "120%",
+   "context": "{ id: \"overhead\", name: \"제경비\", note: \"직접인건비의 110~120%\" },"
+  },
+  {
+   "file": "app/services/estimated_price_service.rb",
+   "line": 35,
+   "value": "5%",
+   "context": "{ id: \"general_admin\", name: \"일반관리비\", note: \"직접인건비+제경비+직접경비의 5% 이내 (학술연구용역: 회계예규 §28, 시행규칙 §8 별표)\" },"
+  },
+  {
+   "file": "app/services/estimated_price_service.rb",
+   "line": 36,
+   "value": "10%",
+   "context": "{ id: \"profit\", name: \"이윤\", note: \"직접인건비+제경비+직접경비+일반관리비의 10% 이내 (학술연구용역)\" }"
+  },
+  {
+   "file": "app/services/estimated_price_service.rb",
+   "line": 44,
+   "value": "6%",
+   "context": "{ id: \"general_admin\", name: \"일반관리비\", note: \"재료비+노무비+경비의 6% 이내 (50억 미만 6.0%/50~300억 5.5%/300억 이상 5.0%, 일반건설공사, 회계예규 §20)\" },"
+  },
+  {
+   "file": "app/services/estimated_price_service.rb",
+   "line": 44,
+   "value": "6.0%",
+   "context": "{ id: \"general_admin\", name: \"일반관리비\", note: \"재료비+노무비+경비의 6% 이내 (50억 미만 6.0%/50~300억 5.5%/300억 이상 5.0%, 일반건설공사, 회계예규 §20)\" },"
+  },
+  {
+   "file": "app/services/estimated_price_service.rb",
+   "line": 44,
+   "value": "5.5%",
+   "context": "{ id: \"general_admin\", name: \"일반관리비\", note: \"재료비+노무비+경비의 6% 이내 (50억 미만 6.0%/50~300억 5.5%/300억 이상 5.0%, 일반건설공사, 회계예규 §20)\" },"
+  },
+  {
+   "file": "app/services/estimated_price_service.rb",
+   "line": 44,
+   "value": "5.0%",
+   "context": "{ id: \"general_admin\", name: \"일반관리비\", note: \"재료비+노무비+경비의 6% 이내 (50억 미만 6.0%/50~300억 5.5%/300억 이상 5.0%, 일반건설공사, 회계예규 §20)\" },"
+  },
+  {
+   "file": "app/services/estimated_price_service.rb",
+   "line": 45,
+   "value": "15%",
+   "context": "{ id: \"profit\", name: \"이윤\", note: \"노무비+경비+일반관리비의 15% 이내 (회계예규 §21, 기술료·외주가공비 제외)\" }"
+  },
+  {
+   "file": "app/services/estimated_price_service.rb",
+   "line": 55,
+   "value": "5.5%",
+   "context": "general_admin: { max: 0.06, basis: \"재료비+노무비+경비 (50억 미만 일반건설공사 / 50~300억 5.5% / 300억 이상 5.0%)\", name: \"일반관리비\" } }"
+  },
+  {
+   "file": "app/services/estimated_price_service.rb",
+   "line": 55,
+   "value": "5.0%",
+   "context": "general_admin: { max: 0.06, basis: \"재료비+노무비+경비 (50억 미만 일반건설공사 / 50~300억 5.5% / 300억 이상 5.0%)\", name: \"일반관리비\" } }"
+  },
+  {
+   "file": "app/services/estimated_price_service.rb",
+   "line": 60,
+   "value": "20_000_000",
+   "context": "goods: 20_000_000,          # 2천만원 (일반)"
+  },
+  {
+   "file": "app/services/estimated_price_service.rb",
+   "line": 61,
+   "value": "20_000_000",
+   "context": "service: 20_000_000,        # 2천만원 (일반)"
+  },
+  {
+   "file": "app/services/estimated_price_service.rb",
+   "line": 62,
+   "value": "400_000_000",
+   "context": "construction: 400_000_000   # 4억원 (종합공사 기준 - 가장 일반적 발주)"
+  },
+  {
+   "file": "app/services/estimated_price_service.rb",
+   "line": 67,
+   "value": "400_000_000",
+   "context": "general: 400_000_000,    # 종합공사 4억"
+  },
+  {
+   "file": "app/services/estimated_price_service.rb",
+   "line": 68,
+   "value": "200_000_000",
+   "context": "special: 200_000_000,    # 전문공사 2억"
+  },
+  {
+   "file": "app/services/estimated_price_service.rb",
+   "line": 69,
+   "value": "160_000_000",
+   "context": "other: 160_000_000       # 기타공사(전기·정보통신·소방시설 등) 1.6억"
+  },
+  {
+   "file": "app/services/estimated_price_service.rb",
+   "line": 141,
+   "value": "3%",
+   "context": "# 복수예비가격 시뮬레이션 (기초금액 ±3%, 15개)"
+  },
+  {
+   "file": "app/services/estimated_price_service.rb",
+   "line": 235,
+   "value": "2_000_000",
+   "context": "if price <= 2_000_000"
+  },
+  {
+   "file": "app/services/estimated_price_service.rb",
+   "line": 243,
+   "value": "20_000_000",
+   "context": "return { type: \"1인견적\", desc: \"추정가격 2천만원 이하: 1인 견적 수의계약\", basis: \"지방계약법 시행령 제30조제1항\" } if price <= 20_000_000"
+  },
+  {
+   "file": "app/services/estimated_price_service.rb",
+   "line": 253,
+   "value": "100_000_000",
+   "context": "elsif price <= 100_000_000"
+  },
+  {
+   "file": "app/services/estimated_price_service.rb",
+   "line": 261,
+   "value": "100_000_000",
+   "context": "eok = won / 100_000_000.0"
+  },
+  {
+   "file": "app/services/estimated_price_service.rb",
+   "line": 265,
+   "value": "3%",
+   "context": "# 복수예비가격 15개는 **서로 달라야** 한다. ±3% 범위 안의 정수가 15개 미만이면"
+  },
+  {
+   "file": "app/services/estimated_price_service.rb",
+   "line": 270,
+   "value": "3%",
+   "context": "# ±3% \"안쪽\"의 정수만 허용한다. floor/ceil을 바깥쪽으로 쓰면 범위를 벗어난 가격이 섞인다"
+  },
+  {
+   "file": "config/contract_thresholds.yml",
+   "line": 10,
+   "value": "2000000",
+   "context": "- max: 2000000"
+  },
+  {
+   "file": "config/contract_thresholds.yml",
+   "line": 20,
+   "value": "20000000",
+   "context": "- max: 20000000"
+  },
+  {
+   "file": "config/contract_thresholds.yml",
+   "line": 31,
+   "value": "50000000",
+   "context": "- max: 50000000"
+  },
+  {
+   "file": "config/contract_thresholds.yml",
+   "line": 46,
+   "value": "100000000",
+   "context": "- max: 100000000"
+  },
+  {
+   "file": "config/contract_thresholds.yml",
+   "line": 80,
+   "value": "2000000",
+   "context": "- max: 2000000"
+  },
+  {
+   "file": "config/contract_thresholds.yml",
+   "line": 89,
+   "value": "20000000",
+   "context": "- max: 20000000"
+  },
+  {
+   "file": "config/contract_thresholds.yml",
+   "line": 100,
+   "value": "50000000",
+   "context": "- max: 50000000"
+  },
+  {
+   "file": "config/contract_thresholds.yml",
+   "line": 115,
+   "value": "100000000",
+   "context": "- max: 100000000"
+  },
+  {
+   "file": "config/contract_thresholds.yml",
+   "line": 149,
+   "value": "2000000",
+   "context": "- max: 2000000"
+  },
+  {
+   "file": "config/contract_thresholds.yml",
+   "line": 159,
+   "value": "20000000",
+   "context": "- max: 20000000"
+  },
+  {
+   "file": "config/contract_thresholds.yml",
+   "line": 169,
+   "value": "50000000",
+   "context": "- max: 50000000"
+  },
+  {
+   "file": "config/contract_thresholds.yml",
+   "line": 185,
+   "value": "400000000",
+   "context": "- max: 400000000"
+  },
+  {
+   "file": "config/contract_thresholds.yml",
+   "line": 222,
+   "value": "2000000",
+   "context": "- max: 2000000"
+  },
+  {
+   "file": "config/contract_thresholds.yml",
+   "line": 232,
+   "value": "20000000",
+   "context": "- max: 20000000"
+  },
+  {
+   "file": "config/contract_thresholds.yml",
+   "line": 243,
+   "value": "200000000",
+   "context": "- max: 200000000"
+  },
+  {
+   "file": "config/contract_thresholds.yml",
+   "line": 279,
+   "value": "2000000",
+   "context": "- max: 2000000"
+  },
+  {
+   "file": "config/contract_thresholds.yml",
+   "line": 289,
+   "value": "20000000",
+   "context": "- max: 20000000"
+  },
+  {
+   "file": "config/contract_thresholds.yml",
+   "line": 299,
+   "value": "50000000",
+   "context": "- max: 50000000"
+  },
+  {
+   "file": "config/contract_thresholds.yml",
+   "line": 315,
+   "value": "160000000",
+   "context": "- max: 160000000"
+  },
+  {
+   "file": "config/contract_thresholds.yml",
+   "line": 350,
+   "value": "50000000",
+   "context": "threshold: 50000000"
+  },
+  {
+   "file": "config/contract_thresholds.yml",
+   "line": 354,
+   "value": "50000000",
+   "context": "threshold: 50000000"
+  },
+  {
+   "file": "config/contract_thresholds.yml",
+   "line": 358,
+   "value": "50000000",
+   "context": "threshold: 50000000"
+  },
+  {
+   "file": "config/contract_thresholds.yml",
+   "line": 362,
+   "value": "50000000",
+   "context": "threshold: 50000000"
+  },
+  {
+   "file": "config/contract_thresholds.yml",
+   "line": 366,
+   "value": "50000000",
+   "context": "threshold: 50000000"
+  },
+  {
+   "file": "config/contract_thresholds.yml",
+   "line": 370,
+   "value": "50000000",
+   "context": "threshold: 50000000"
+  },
+  {
+   "file": "config/contract_thresholds.yml",
+   "line": 374,
+   "value": "50000000",
+   "context": "threshold: 50000000"
+  },
+  {
+   "file": "config/contract_thresholds.yml",
+   "line": 377,
+   "value": "87.745%",
+   "context": "# 행안부 예규 「지방자치단체 입찰시 낙찰자 결정기준」 2026-01-30 개정: 전 구간 2%p 상향 (구기준 87.745% 등 사용 금지)"
+  },
+  {
+   "file": "config/contract_thresholds.yml",
+   "line": 382,
+   "value": "100000000000",
+   "context": "- min: 100000000000"
+  },
+  {
+   "file": "config/contract_thresholds.yml",
+   "line": 384,
+   "value": "89.745%",
+   "context": "rate: \"89.745%\""
+  },
+  {
+   "file": "config/contract_thresholds.yml",
+   "line": 386,
+   "value": "30000000000",
+   "context": "- min: 30000000000"
+  },
+  {
+   "file": "config/contract_thresholds.yml",
+   "line": 387,
+   "value": "100000000000",
+   "context": "max: 100000000000"
+  },
+  {
+   "file": "config/contract_thresholds.yml",
+   "line": 388,
+   "value": "89.495%",
+   "context": "rate: \"89.495%\""
+  },
+  {
+   "file": "config/contract_thresholds.yml",
+   "line": 391,
+   "value": "30000000000",
+   "context": "max: 30000000000"
+  },
+  {
+   "file": "config/contract_thresholds.yml",
+   "line": 392,
+   "value": "89.745%",
+   "context": "rate: \"89.745%\""
+  },
+  {
+   "file": "config/contract_thresholds.yml",
+   "line": 397,
+   "value": "20000001",
+   "context": "- min: 20000001"
+  },
+  {
+   "file": "config/contract_thresholds.yml",
+   "line": 399,
+   "value": "88.0%",
+   "context": "rate: \"88.0%\""
+  },
+  {
+   "file": "config/contract_thresholds.yml",
+   "line": 402,
+   "value": "20000000",
+   "context": "max: 20000000"
+  },
+  {
+   "file": "config/contract_thresholds.yml",
+   "line": 403,
+   "value": "90.0%",
+   "context": "rate: \"90.0%\""
+  },
+  {
+   "file": "app/views/contract_methods/index.html.erb",
+   "line": 88,
+   "value": "100%",
+   "context": "width: 100%;"
+  },
+  {
+   "file": "app/views/contract_methods/index.html.erb",
+   "line": 110,
+   "value": "50%",
+   "context": "top: 50%;"
+  },
+  {
+   "file": "app/views/contract_methods/index.html.erb",
+   "line": 111,
+   "value": "50%",
+   "context": "transform: translateY(-50%);"
+  },
+  {
+   "file": "app/views/contract_methods/index.html.erb",
+   "line": 247,
+   "value": "100%",
+   "context": "width: 100%;"
+  },
+  {
+   "file": "app/views/contract_methods/index.html.erb",
+   "line": 548,
+   "value": "100%",
+   "context": "width: 100%;"
+  },
+  {
+   "file": "app/views/contract_methods/index.html.erb",
+   "line": 811,
+   "value": "10%",
+   "context": "<span style=\"font-weight:700;\">⚠️ 확인 필요:</span> 입력하신 금액이 1천만원을 초과합니다. 부가세(VAT 10%)가 <strong>포함된 금액</strong>을 입력하셨나요? 추정가격은 반드시 <strong>부가세 제외</strong>"
+  },
+  {
+   "file": "app/views/contract_methods/index.html.erb",
+   "line": 816,
+   "value": "1000000",
+   "context": "<span class=\"quick-amount\" onclick=\"addAmount(1000000)\">+100만</span>"
+  },
+  {
+   "file": "app/views/contract_methods/index.html.erb",
+   "line": 817,
+   "value": "10000000",
+   "context": "<span class=\"quick-amount\" onclick=\"addAmount(10000000)\">+1천만</span>"
+  },
+  {
+   "file": "app/views/contract_methods/index.html.erb",
+   "line": 818,
+   "value": "50000000",
+   "context": "<span class=\"quick-amount\" onclick=\"addAmount(50000000)\">+5천만</span>"
+  },
+  {
+   "file": "app/views/contract_methods/index.html.erb",
+   "line": 819,
+   "value": "100000000",
+   "context": "<span class=\"quick-amount\" onclick=\"addAmount(100000000)\">+1억</span>"
+  },
+  {
+   "file": "app/views/contract_methods/index.html.erb",
+   "line": 1235,
+   "value": "10000000",
+   "context": "if (estimatedPrice > 10000000) {"
+  },
+  {
+   "file": "app/views/contract_methods/index.html.erb",
+   "line": 1272,
+   "value": "100000000",
+   "context": "{ value: 100000000, label: '억' },"
+  },
+  {
+   "file": "app/controllers/chatbot_controller.rb",
+   "line": 134,
+   "value": "20_000_000",
+   "context": "if price <= 20_000_000  # 2천만원 이하 (지방계약법 시행령 제30조)"
+  },
+  {
+   "file": "app/controllers/chatbot_controller.rb",
+   "line": 151,
+   "value": "50_000_000",
+   "context": "elsif price <= 50_000_000"
+  },
+  {
+   "file": "app/controllers/chatbot_controller.rb",
+   "line": 189,
+   "value": "20_000_000",
+   "context": "if price <= 20_000_000  # 2천만원 이하 (시행령 제30조)"
+  },
+  {
+   "file": "app/controllers/chatbot_controller.rb",
+   "line": 207,
+   "value": "400_000_000",
+   "context": "elsif price <= 400_000_000  # 4억원 이하 (종합공사 수의계약 한도)"
+  },
+  {
+   "file": "config/contract_decision_rules.yml",
+   "line": 132,
+   "value": "400000000",
+   "context": "max_amount: 400000000"
+  },
+  {
+   "file": "config/contract_decision_rules.yml",
+   "line": 141,
+   "value": "200000000",
+   "context": "max_amount: 200000000"
+  },
+  {
+   "file": "config/contract_decision_rules.yml",
+   "line": 150,
+   "value": "160000000",
+   "context": "max_amount: 160000000"
+  },
+  {
+   "file": "config/contract_decision_rules.yml",
+   "line": 159,
+   "value": "20000000",
+   "context": "max_amount: 20000000"
+  },
+  {
+   "file": "config/contract_decision_rules.yml",
+   "line": 168,
+   "value": "20000000",
+   "context": "min_amount_exclusive: 20000000"
+  },
+  {
+   "file": "config/contract_decision_rules.yml",
+   "line": 169,
+   "value": "50000000",
+   "context": "max_amount: 50000000"
+  },
+  {
+   "file": "config/contract_decision_rules.yml",
+   "line": 178,
+   "value": "20000000",
+   "context": "min_amount_exclusive: 20000000"
+  },
+  {
+   "file": "config/contract_decision_rules.yml",
+   "line": 179,
+   "value": "100000000",
+   "context": "max_amount: 100000000"
+  },
+  {
+   "file": "config/contract_decision_rules.yml",
+   "line": 188,
+   "value": "20000000",
+   "context": "min_amount_exclusive: 20000000"
+  },
+  {
+   "file": "config/contract_decision_rules.yml",
+   "line": 189,
+   "value": "100000000",
+   "context": "max_amount: 100000000"
+  },
+  {
+   "file": "config/contract_decision_rules.yml",
+   "line": 202,
+   "value": "20000000",
+   "context": "min_amount_exclusive: 20000000"
+  },
+  {
+   "file": "config/contract_decision_rules.yml",
+   "line": 203,
+   "value": "100000000",
+   "context": "max_amount: 100000000"
+  },
+  {
+   "file": "config/contract_decision_rules.yml",
+   "line": 212,
+   "value": "20000000",
+   "context": "min_amount_exclusive: 20000000"
+  },
+  {
+   "file": "config/contract_decision_rules.yml",
+   "line": 213,
+   "value": "100000000",
+   "context": "max_amount: 100000000"
+  },
+  {
+   "file": "config/contract_decision_rules.yml",
+   "line": 224,
+   "value": "50000000",
+   "context": "max_amount: 50000000"
+  },
+  {
+   "file": "config/contract_decision_rules.yml",
+   "line": 268,
+   "value": "20000000",
+   "context": "max_amount: 20000000"
+  },
+  {
+   "file": "config/contract_decision_rules.yml",
+   "line": 276,
+   "value": "50000000",
+   "context": "max_amount: 50000000"
+  },
+  {
+   "file": "config/contract_decision_rules.yml",
+   "line": 284,
+   "value": "50000000",
+   "context": "max_amount: 50000000"
+  },
+  {
+   "file": "config/contract_decision_rules.yml",
+   "line": 296,
+   "value": "2000000",
+   "context": "max_amount_exclusive: 2000000"
+  }
+ ]
+}

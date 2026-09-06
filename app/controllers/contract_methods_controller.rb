@@ -17,7 +17,11 @@ class ContractMethodsController < ApplicationController
     result = ContractMethodService.determine(
       contract_type: params[:contract_type],
       estimated_price: params[:estimated_price],
-      special_enterprise: params[:special_enterprise]
+      special_enterprise: params[:special_enterprise],
+      agency_scope: params[:agency_scope],
+      counterparty_type: params[:counterparty_type],
+      special_field: params[:special_field],
+      vulnerable_ratio_met: params[:vulnerable_ratio_met]
     )
 
     render json: result
