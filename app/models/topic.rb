@@ -138,6 +138,19 @@ class Topic < ApplicationRecord
     # 통과해 **다른 질문의 답**이 올라온다(실측: "병가 진단서" → "병가는 연 60일" 이 뽑혔다).
     # 그래서 최소 2토큰을 요구한다(토큰이 1개뿐인 질문은 그 1개). 틀린 답보다 없는 답이 낫다.
     required = [ (token_variants.size / 2.0).ceil, 2 ].max.clamp(1, token_variants.size)
+
+    # DISTINCTIVE TOKEN GATE (P1.6 독립검증 HIGH 2건) — 검색 결과 범위는 건드리지 않고
+    # "바로 답" 승격만 좁힌다. 일반 토큰("지급"·"기준")은 어느 업무에나 붙어서
+    # **무엇을 묻는지 특정하지 못한다.** 그것만 맞은 FAQ 를 확신 있게 올리면
+    # "차비 지급 기준" 에 "숙박비 지급 기준" 이 답으로 뜬다(실측).
+    distinctive = token_variants.reject { |variants| SearchQueryParser.generic_variants?(variants) }
+
+    # 고유 토큰이 하나도 없는 질문("지급 기준")은 어느 FAQ 를 골라도 근거가 없다.
+    # 틀린 답보다 없는 답이 낫다 — 검색 결과는 그대로 보여주고 바로 답만 포기한다.
+    # (아래 per-FAQ 게이트도 빈 distinctive 를 통과시키지 않는다. 이 줄은 정책을 눈에 보이게
+    #  적어두고 FAQ 순회를 건너뛰는 것이며, 강제의 유일한 지점이 아니다.)
+    return nil if distinctive.empty?
+
     best = nil
 
     topics.each do |topic|
@@ -155,6 +168,14 @@ class Topic < ApplicationRecord
           variants.any? { |v| v.length >= ANSWER_MIN_TOKEN && question.include?(v) }
         }
         next if hits < required
+
+        # 고유 토큰은 **낱말 경계로 완전일치**해야 한다. include? 는 경계가 없어
+        # "차비" 가 "주차비" 안에서 걸렸다(실측). 개수(hits)는 종전 기준을 그대로 쓰고,
+        # 여기서는 "사용자가 실제로 물은 것이 이 질문에 있는가"만 따로 본다.
+        question_tokens = SearchQueryParser.answer_tokens(question)
+        next unless distinctive.any? { |variants|
+          variants.any? { |v| v.length >= ANSWER_MIN_TOKEN && question_tokens.include?(v.downcase) }
+        }
 
         best = { topic: topic, question: question, answer: answer, hits: hits } if best.nil? || hits > best[:hits]
       end

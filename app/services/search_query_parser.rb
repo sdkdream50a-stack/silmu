@@ -68,6 +68,51 @@ class SearchQueryParser
   # 조사를 뗀 어간의 최소 길이 — "자가"→"자", "국가"→"국" 같은 오분리를 막는다.
   MIN_STEM = 2
 
+  # ── Answer-First 전용 (검색 recall 경로는 이 상수를 쓰지 않는다) ────────────────
+  #
+  # 일반 토큰 — 어느 업무에나 붙는 말이라 **무엇을 묻는지 특정하지 못한다.**
+  # "차비 지급 기준" 에서 "지급"·"기준"만 맞은 "숙박비 지급 기준" FAQ 가 "바로 답"으로
+  # 올라온 실측 결함(P1.6 독립검증 HIGH)이 근거다. 검색 결과 범위는 그대로 두고,
+  # 승격 판정에서만 이 토큰들을 "확신의 근거"로 세지 않는다.
+  #
+  # ⚠️ 목록을 늘리지 말 것. 실제 쿼리에서 오승격을 만든 것만 넣는다.
+  #    "얼마"·"어떻게"·"언제" 는 이미 STOPWORDS 라 content 토큰으로 도달하지 못한다.
+  GENERIC_TOKENS = %w[기준 방법 지급 신청 처리 가능 필요].freeze
+
+  # Answer-First exact hit 판정용 구분자 — **문장부호만** 넣는다.
+  # `+`·`~`·`/` 는 낱말 안에 온다("6+6 부모육아휴직제"·"11~21일"). 실측으로 확인:
+  # 구분자에 `+` 를 넣었더니 "6+6" 질문이 낱말 경계를 잃고 승격에서 탈락했다.
+  ANSWER_TOKEN_SEPARATOR = /[\s,.\u00b7\u2026\u3001;:!?()\[\]{}"'`]+/
+
+  # 변형 묶음 전체가 일반 토큰인가. 하나라도 고유어면 distinctive 로 본다.
+  def self.generic_variants?(variants)
+    Array(variants).all? { |v| generic_token?(v) }
+  end
+
+  # Answer-First 히트 판정용 토큰 집합 — FAQ 질문을 **낱말 경계로** 자른다.
+  # include? 는 경계가 없어 "차비" 가 "주차비" 안에서 걸렸다(실측). 여기서는
+  # 검색 recall 과 같은 normalize/strip_particle 경계를 재사용해 완전일치만 인정한다.
+  def self.answer_tokens(text)
+    return Set.new if text.blank?
+
+    text.split(ANSWER_TOKEN_SEPARATOR).each_with_object(Set.new) do |raw, set|
+      token = normalize(raw).presence
+      next unless token
+
+      set << token.downcase
+      stem = strip_particle(token)
+      set << stem.downcase if stem
+    end
+  end
+
+  def self.generic_token?(token)
+    t = token.to_s.downcase
+    return true if GENERIC_TOKENS.include?(t)
+
+    stem = strip_particle(t)
+    stem.present? && GENERIC_TOKENS.include?(stem)
+  end
+
   # 쿼리를 토큰별 변형 배열로 반환.
   # 예: "성과급 계산"      → [["성과급", "성과상여금"], ["계산"]]
   #     "처음 계약을 맡았어요" → [["처음"], ["계약을", "계약"]]   ("맡았어요" = stopword)
@@ -119,5 +164,5 @@ class SearchQueryParser
     raw.strip.gsub(/[?!.,"'`~;:]+\z/, "")
   end
 
-  private_class_method :variants_for, :strip_particle, :normalize
+  private_class_method :variants_for, :strip_particle, :normalize, :generic_token?
 end

@@ -241,6 +241,77 @@ class TopicSearchTest < ActiveSupport::TestCase
     assert_equal "재직기간에 따라 연가는 며칠 부여되나요?", result[:question]
   end
 
+  # ── P1.6 독립검증 재수리 · DISTINCTIVE TOKEN GATE ────────────────────────────
+  # 정책: 검색 결과 범위는 그대로 두고 "바로 답" 승격만 좁힌다.
+  #       일반 토큰("지급"·"기준")은 무엇을 묻는지 특정하지 못하므로 확신의 근거가 아니다.
+
+  test "answer_for: 일반 토큰만 맞은 FAQ 는 승격하지 않는다 (차비 지급 기준 ≠ 숙박비 지급 기준)" do
+    # 실측 결함: "차비 지급 기준" 에 "숙박비 지급 기준은 어떻게 되나요?" 가 바로 답으로 떴다.
+    # 지급·기준 두 개가 맞아 과반(required=2)을 통과했지만 정작 사용자가 물은 "차비"는 없다.
+    t = Topic.create!(name: "국내출장 여비", slug: "test-generic-majority", published: true,
+                      keywords: "여비, 숙박비", summary: "국내출장 여비",
+                      faqs: [ { "question" => "숙박비 지급 기준은 어떻게 되나요?",
+                                "answer" => "1일 상한액 범위에서 실비" } ])
+    assert_nil Topic.answer_for("차비 지급 기준", [ t ]),
+      "고유 토큰(차비) 없이 일반 토큰만으로 바로 답을 만들면 안 된다"
+  end
+
+  test "answer_for: 낱말 안쪽 부분일치는 고유 토큰 히트가 아니다 (차비 ⊄ 주차비)" do
+    # 실측 결함: "차비" 가 "주차비" 안쪽에 걸려 전혀 다른 질문의 답이 승격됐다.
+    # 2글자 가드(ANSWER_MIN_TOKEN)로는 못 막는다 — 경계가 없다는 것이 원인이다.
+    t = Topic.create!(name: "자가용 출장", slug: "test-substring-false", published: true,
+                      keywords: "주차비, 통행료", summary: "자가용 출장",
+                      faqs: [ { "question" => "자가용 출장 시 통행료와 주차비도 받을 수 있나요?",
+                                "answer" => "실비 지급" } ])
+    assert_nil Topic.answer_for("차비 얼마", [ t ]),
+      "'차비' 가 '주차비' 안쪽에 걸려 승격되면 안 된다"
+  end
+
+  test "answer_for: 고유 토큰이 하나도 없는 질문은 바로 답을 만들지 않는다 (fail-safe)" do
+    # "지급 기준" 은 전부 일반 토큰이다. 어느 FAQ 를 골라도 근거가 없으므로 NONE 이 정답이다.
+    t = Topic.create!(name: "국내출장 여비", slug: "test-generic-only", published: true,
+                      keywords: "여비, 숙박비", summary: "국내출장 여비",
+                      faqs: [ { "question" => "숙박비 지급 기준은 어떻게 되나요?",
+                                "answer" => "1일 상한액 범위에서 실비" } ])
+    assert_nil Topic.answer_for("지급 기준", [ t ])
+  end
+
+  test "distinctive 게이트는 검색 결과 범위를 좁히지 않는다" do
+    # 정책의 핵심 — 바로 답만 포기하고, 검색 결과는 종전대로 보여준다.
+    t = Topic.create!(name: "숙박비 지급 기준", slug: "test-gate-not-search", published: true,
+                      keywords: "지급, 기준", summary: "숙박비 지급 기준",
+                      faqs: [ { "question" => "숙박비 지급 기준은 어떻게 되나요?",
+                                "answer" => "1일 상한액" } ])
+    results = Topic.search_multiple("지급 기준", limit: 6)
+    assert_includes results.to_a, t, "게이트가 검색 recall 을 깎으면 안 된다"
+    assert_nil Topic.answer_for("지급 기준", results)
+  end
+
+  test "answer_for: 연상 동의어는 고유 토큰 히트를 만들지 않는다 (차비→여비 재유입 차단)" do
+    # SYNONYMS 에 차비→여비 가 다시 들어오면 이 FAQ 가 "차비" 질문의 바로 답이 된다.
+    t = Topic.create!(name: "국내출장 여비", slug: "test-assoc-syn-answer", published: true,
+                      keywords: "여비", summary: "국내출장 여비",
+                      faqs: [ { "question" => "국내출장 여비 지급 기준은 어떻게 되나요?",
+                                "answer" => "여비규정에 따름" } ])
+    assert_nil Topic.answer_for("차비 지급 기준", [ t ]),
+      "ASSOCIATION ≠ SYNONYM — 연상어를 확신 근거로 쓰면 안 된다"
+  end
+
+  test "answer_for: 자연어 질문의 정답 FAQ 는 종전대로 승격한다 (비퇴화)" do
+    t = topic_with_faq!(slug: "test-answer-nl", name: "병가", keywords: "병가, 진단서",
+                        question: "병가에 진단서는 언제부터 제출해야 하나요?")
+    result = Topic.answer_for("병가 며칠 쓰면 진단서 내야 하나요", [ t ])
+    assert result, "게이트가 정상 답까지 막으면 과교정이다"
+    assert_equal "병가에 진단서는 언제부터 제출해야 하나요?", result[:question]
+  end
+
+  test "answer_for: 동의어 변형도 낱말 경계로 맞으면 고유 토큰 히트다 (출장비→여비)" do
+    t = topic_with_faq!(slug: "test-answer-syn-hit", name: "국내출장 여비", keywords: "여비",
+                        question: "자가용으로 출장 시 여비는 어떻게 받나요?")
+    assert Topic.answer_for("출장비 얼마 지급하나", [ t ]),
+      "같은 것을 가리키는 동의어까지 막으면 과교정이다"
+  end
+
   test "SYNONYMS: 상위 범주로 확장하지 않는다 (차비≠여비)" do
     # 여비는 숙박비·식비까지 포함하는 상위 범주다. 차비→여비 매핑은
     # "차비 지급 기준" 검색에서 "숙박비 지급 기준" 을 끌어왔다(실측).

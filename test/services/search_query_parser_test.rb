@@ -84,4 +84,41 @@ class SearchQueryParserTest < ActiveSupport::TestCase
     variants = SearchQueryParser.tokens("출장비는").first
     assert_includes variants, "여비"
   end
+  # ---- P1.6 독립검증 재수리 · Answer-First 전용 프리미티브 ----
+
+  test "generic_variants?: 일반 토큰 묶음을 구분한다" do
+    assert SearchQueryParser.generic_variants?([ "지급" ])
+    assert SearchQueryParser.generic_variants?([ "기준은", "기준" ]), "조사가 붙어도 일반 토큰이다"
+    assert_not SearchQueryParser.generic_variants?([ "차비", "운임" ])
+    assert_not SearchQueryParser.generic_variants?([ "차비", "지급" ]),
+      "하나라도 고유어면 그 묶음은 distinctive 다"
+  end
+
+  test "generic_variants?: 목록을 무분별하게 넓히지 않는다" do
+    # 늘어나면 바로 답이 조용히 사라진다. 늘릴 때는 이 단언을 함께 고쳐야 한다.
+    assert_equal %w[기준 방법 지급 신청 처리 가능 필요].sort,
+                 SearchQueryParser::GENERIC_TOKENS.sort
+  end
+
+  test "answer_tokens: 낱말 경계로 자르고 조사를 뗀 형태까지 담는다" do
+    set = SearchQueryParser.answer_tokens("숙박비 지급 기준은 어떻게 되나요?")
+    assert_includes set, "숙박비"
+    assert_includes set, "기준은"
+    assert_includes set, "기준"
+  end
+
+  test "answer_tokens: 낱말 안쪽 부분문자열은 토큰이 아니다 (주차비 ⊅ 차비)" do
+    set = SearchQueryParser.answer_tokens("자가용 출장 시 통행료와 주차비도 받을 수 있나요?")
+    assert_includes set, "주차비"
+    assert_not_includes set, "차비", "경계 없는 부분일치가 되살아났다"
+  end
+
+  test "answer_tokens: 낱말 안에 오는 부호는 자르지 않는다 (6+6)" do
+    assert_includes SearchQueryParser.answer_tokens("6+6 부모육아휴직제 상한이 적용되나요?"), "6+6"
+  end
+
+  test "answer_tokens: 빈 입력은 빈 집합" do
+    assert_empty SearchQueryParser.answer_tokens(nil)
+    assert_empty SearchQueryParser.answer_tokens("   ")
+  end
 end
