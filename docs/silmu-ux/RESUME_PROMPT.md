@@ -1,8 +1,36 @@
 # RESUME_PROMPT — P1.6 이후 다음 세션 시작점
 
-> 2026-09-06 10:27 KST 갱신. **P1.6 = DEPLOYED**.
+> 2026-09-06 10:36 KST 최종. **P1.6 = DEPLOYED · CLOSED/FROZEN**.
 > 운영 리비전 `18fb7350cbd07c069775f69aef51c0ca8956982a`.
-> 이번 세션은 배포·검증까지만 하고 멈췄다. P2 는 시작하지 않았다.
+> 배포·검증·보존까지 끝났다. P2 는 시작하지 않았다.
+
+## ⛔ P1.6 BASELINE — FROZEN
+
+```
+P1_6_STATUS            DEPLOYED · CLOSED/FROZEN (2026-09-06 10:36 KST)
+PRODUCTION_REVISION    18fb7350cbd07c069775f69aef51c0ca8956982a
+ROLLBACK_REVISION      2d05bae9d99fc47518ae212ea24cd806e8fa67c2   (P1.55B · 서버에 이미지 보유)
+REMOTE_RECOVERY_BRANCH origin/feature/silmu-p16-task-first-ux @ ee2ab24
+                       (= 18fb735 + 배포기록 docs 커밋 1. 18fb735 가 원격의 조상임을 확인)
+MAIN                   무변경 — main 에 P1.6 커밋 0. merge·push 하지 않았다.
+```
+
+**P2 는 아래 파일을 baseline 으로 취급한다. 무심코 고치지 말 것.**
+고쳐야 한다면 먼저 이유를 적고, 회귀(430 runs·뮤테이션 12축)를 다시 돌린 뒤에 건드린다.
+
+| 파일 | 이 파일이 지키는 것 |
+|---|---|
+| `app/services/search_query_parser.rb` | STOPWORDS·PARTICLES(자연어 recall) · `GENERIC_TOKENS`·`answer_tokens`(Answer-First 정밀도) |
+| `app/models/topic.rb` — `search_multiple`/`relaxed_match` | 검색 recall. **654 쿼리 지문으로 불변 실증됨** — 손대면 그 지문을 다시 떠야 한다 |
+| `app/models/topic.rb` — `answer_for` | DISTINCTIVE TOKEN GATE. 일반토큰 오승격·낱말 안쪽 부분일치 차단 |
+| `app/views/shared/_solution_status.html.erb` | Freshness 를 presenter 출력으로만 표시(뷰 자체 추론 금지) |
+| `app/views/layouts/_nav_v2.html.erb` · `home/index.html.erb` | 업무 중심 IA·진입점 |
+| `test/models/topic_search_test.rb` · `test/services/search_query_parser_test.rb` | 위 성질의 회귀. **기존 skip 14건 건드리지 말 것** |
+
+특히 다음 3가지는 **되돌리면 실제 결함이 되살아난다**(전부 실측 재현 이력 있음):
+1. `answer_for` 의 distinctive 게이트 제거 → "차비 지급 기준"에 "숙박비 지급 기준"이 답으로 뜬다
+2. 낱말경계 완전일치를 `include?` 로 환원 → "차비"가 "주차비" 안쪽에서 걸린다
+3. `SYNONYMS` 에 연상어 재유입(차비→여비 등) → 상위범주 FAQ 가 확신 있게 승격된다
 
 ## 0. 세션 시작 시
 
@@ -20,7 +48,7 @@ DOCKER_CONFIG=<격리사본> bin/kamal app version   # 운영 리비전 실측
 BRANCH             feature/silmu-p16-task-first-ux
 HEAD               (git rev-parse HEAD 로 확인 — 자기 SHA 는 적지 않는다)
 BASE               fix/tool-accuracy-p1-0804 @ e0342a7
-UPSTREAM           없음 · PUSH 0
+UPSTREAM(갱신)      origin/feature/silmu-p16-task-first-ux  ← 2026-09-06 push 완료(신규 브랜치·force 아님)
 운영 리비전         18fb7350cbd07c069775f69aef51c0ca8956982a   ← P1.6
 직전 운영 리비전     2d05bae9d99fc47518ae212ea24cd806e8fa67c2   ← 롤백 지점(서버에 이미지 보유)
 워킹트리            app/test/config/db clean

@@ -2,6 +2,29 @@
 
 > `P2_GATE = CONDITIONAL` **유지**. 콘텐츠 개수가 아니라 신뢰 시스템과 도달 경로가 먼저다(§86).
 
+
+## ⛔ P1.6 BASELINE — FROZEN (P2 착수 전 필독)
+
+P1.6 은 **운영 배포 완료 후 동결**됐다(2026-09-06 10:36 KST).
+
+```
+PRODUCTION_REVISION    18fb7350cbd07c069775f69aef51c0ca8956982a
+ROLLBACK_REVISION      2d05bae9d99fc47518ae212ea24cd806e8fa67c2
+REMOTE_RECOVERY        origin/feature/silmu-p16-task-first-ux @ ee2ab24
+```
+
+P2 는 아래를 **baseline 으로 취급하고 무심코 고치지 않는다.**
+동결 대상 목록과 "되돌리면 되살아나는 결함 3종"은 `docs/silmu-ux/RESUME_PROMPT.md` 상단에 있다.
+배포·검증 실측은 `PRODUCTION_ROLLOUT.md` · `PRODUCTION_SMOKE.md`.
+
+- `app/services/search_query_parser.rb`
+- `app/models/topic.rb` (`search_multiple` · `relaxed_match` · `answer_for`)
+- `app/views/shared/_solution_status.html.erb`
+- `app/views/layouts/_nav_v2.html.erb` · `app/views/home/index.html.erb`
+- `test/models/topic_search_test.rb` · `test/services/search_query_parser_test.rb`
+
+검색 recall 은 **654 쿼리 지문 대조로 불변이 실증돼 있다**. 그 경로를 건드리면 지문을 다시 떠야 한다.
+
 ## 1. P1.6 이 남긴 것
 
 | 자산 | 상태 |
