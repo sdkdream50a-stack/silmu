@@ -73,11 +73,25 @@ module SilmuDeployBlockerFix20260906
 
   # ── Topic: slug → {필드 → 치환쌍} ────────────────────────────
   # F5 — 수의계약 한도 토픽의 법령 표제가 제1호(천재지변)로 적혀 있었다.
+  #
+  # 2026-09-06 2차 — 독립검증(agy) NONBLOCKING N-1.
+  #   긴급수의 서브토픽이 근거를 제4호로 적고 있었다. 열거한 사유
+  #   (천재지변·긴급한 행사·원자재 가격급등 등 경쟁에 부칠 여유가 없는 경우)는 정확히 **제1호** 다.
+  #   원천(`db/seeds/subtopics.rb:982`)은 `find_or_initialize_by` + `save!` 라 재실행하면 갱신되지만,
+  #   그 시드는 서브토픽 **전 행을 파일 상태로 되돌린다.** 운영에 그 부작용을 지우지 않으려고
+  #   여기 UPDATE 전용 경로로 싣는다.
+  #
   TOPIC_SUBS = {
     "private-contract-limit" => {
       law_content: [
         [ "<strong>지방계약법 시행령 제25조 제1항 제1호 (수의계약 한도)</strong>",
           "<strong>지방계약법 시행령 제25조 제1항 제5호 (수의계약 한도)</strong>" ]
+      ]
+    },
+    "emergency-contract" => {
+      law_content: [
+        [ "긴급수의계약의 구체적 사유는 <strong>시행령 제25조 제1항 제4호</strong>에서 규정합니다",
+          "긴급수의계약의 구체적 사유는 <strong>시행령 제25조 제1항 제1호</strong>에서 규정합니다" ]
       ]
     }
   }.freeze

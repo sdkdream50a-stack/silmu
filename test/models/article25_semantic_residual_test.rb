@@ -57,9 +57,10 @@ class Article25SemanticResidualTest < ActiveSupport::TestCase
 
   # 이번 semantic class 가 **아니라고 판정한** §25①1호 인용. 조용히 늘지 않게 이름으로 고정한다.
   # (같은 class 가 새로 생기면 아래 «잔여 0» 테스트가 먼저 깨진다.)
+  # 2026-09-06 2차 — `app/views/guides/resources.html.erb` 는 목록에서 **빠졌다**.
+  # 「제1호를 특정인의 기술·특허로 인용」 하던 그 자리를 이번 라운드가 제4호로 실제 정정했기 때문이다.
+  # 판정 목록은 실재와 함께 움직여야 한다 — 고친 뒤에도 남겨 두면 목록이 은신처가 된다.
   JUDGED_NON_CLASS = {
-    "app/views/guides/resources.html.erb" =>
-      "다른 오류 클래스 — 제1호를 «특정인의 기술·특허» 사유로 인용(실제 §25①4호). 금액·한도 주장이 아니다. FINDING 으로만 기록",
     "db/seeds/audit_cases/topic_goods_selection_committee.rb" =>
       "CONTEXT_AMBIGUOUS — 라벨이 «수의계약 사유» 이고 사실관계가 어느 호였는지 사례에 없다. 임의로 호를 지정하지 않는다",
     "db/seeds/budget_execution_part1.rb" =>
@@ -229,6 +230,7 @@ class Article25SemanticResidualTest < ActiveSupport::TestCase
     "db/seeds/topic_bid_failure.rb" => 1,
     "db/seeds/topic_fence_installation.rb" => 1,
     "db/seeds/topic_quick_stats_backfill_2026_06_03_batch6.rb" => 1,
+    "db/seeds/subtopics.rb" => 1,
     "db/seeds/topics.rb" => 2,
     "db/seeds/zz_auditcase_verification_2026_06_18_batch14.rb" => 1
   }.freeze
@@ -242,7 +244,9 @@ class Article25SemanticResidualTest < ActiveSupport::TestCase
       assert_operator actual.fetch(path, 0), :>=, want,
                       "#{path}: 정당한 긴급 §25①1호 인용이 #{want} → #{actual.fetch(path, 0)} 로 줄었다 (과잉정정)"
     end
-    assert_equal 11, actual.values.sum, "정당한 긴급 인용 총량이 11 에서 벗어났다: #{actual.inspect}"
+    # 11 → 12. 늘어난 1건은 `db/seeds/subtopics.rb:982` — 긴급수의 근거를 제4호에서 제1호로
+    # 정정하면서 «정당한 §25①1호 긴급 인용» 이 하나 생겼다. 과잉정정이 아니라 정정의 결과다.
+    assert_equal 12, actual.values.sum, "정당한 긴급 인용 총량이 12 에서 벗어났다: #{actual.inspect}"
   end
 
   # ── 잔여 0 ───────────────────────────────────────────────────
@@ -253,7 +257,7 @@ class Article25SemanticResidualTest < ActiveSupport::TestCase
     assert_empty offenders, "§25①1호를 금액·한도 근거로 인용하는 곳이 남아 있다: #{offenders.inspect}"
   end
 
-  test "잔여: 긴급 문맥 없이 §25①1호를 인용한 곳은 «판정된» 3건뿐이다" do
+  test "잔여: 긴급 문맥 없이 §25①1호를 인용한 곳은 «판정된» 2건뿐이다" do
     hits = scope_files.each_with_object({}) do |f, acc|
       h = unjustified_ho1_hits(File.read(f))
       acc[rel(f)] = h.map { |x| x[:line] } if h.any?

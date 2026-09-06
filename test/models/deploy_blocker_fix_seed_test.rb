@@ -23,6 +23,9 @@ class DeployBlockerFixSeedTest < ActiveSupport::TestCase
                  "(2인 이상 견적서 징구 기준), 지방계약법 시행규칙 제43조 (견적서 제출 업체 독립성)"
   OLD_CHECKPOINTS = [ "총사업비가 수의계약 한도(5천만원)를 초과하는지 사업 전체 기준으로 판단" ].to_json
   OLD_TOPIC_LAW = "<strong>지방계약법 시행령 제25조 제1항 제1호 (수의계약 한도)</strong>\n<li>가. 공사</li>"
+  # N-1 (2차) — 긴급수의 서브토픽이 근거를 제4호로 적고 있었다. 열거 사유는 정확히 제1호다.
+  OLD_EMERGENCY_LAW = "📌 긴급수의계약의 구체적 사유는 <strong>시행령 제25조 제1항 제4호</strong>에서 규정합니다: " \
+                      "천재지변, 긴급한 행사, 원자재 가격급등 등 경쟁에 부칠 여유가 없는 경우"
   # G1 — 괄호 표기가 없어 앞 라운드 탐지기를 빠져나간 같은 오용 (본문 detail)
   OLD_DETAIL_G1 = "담당자는 이 사업을 \"기성 소프트웨어 패키지 구매\"로 분류하여, " \
                   "지방계약법 시행령 제25조 제1항 제1호의 물품 수의계약 기준(2,000만원 초과 시 경쟁 원칙)을 " \
@@ -58,6 +61,7 @@ class DeployBlockerFixSeedTest < ActiveSupport::TestCase
       detail: OLD_DETAIL_G1
     )
     @topic = Topic.create!(slug: "private-contract-limit", name: "수의계약 한도", law_content: OLD_TOPIC_LAW)
+    @emergency_topic = Topic.create!(slug: "emergency-contract", name: "긴급수의", law_content: OLD_EMERGENCY_LAW)
   end
 
   setup do
@@ -65,7 +69,7 @@ class DeployBlockerFixSeedTest < ActiveSupport::TestCase
     AuditCase.where(slug: %w[private-contract-split-over-limit quote-collection-same-vendor-double
                             software-dev-misclassified-as-goods
                             test-emergency-contract-25-1-1]).delete_all
-    Topic.where(slug: "private-contract-limit").delete_all
+    Topic.where(slug: %w[private-contract-limit emergency-contract]).delete_all
     build_existing_rows!
   end
 
@@ -77,6 +81,18 @@ class DeployBlockerFixSeedTest < ActiveSupport::TestCase
     assert_equal 0, s[:created], "정정 시드가 row 를 새로 만들었다 — create 로 통과시키면 실패다"
     assert_equal before_count, AuditCase.count + Topic.count, "row 수가 변했다 = create/delete 가 일어났다"
     assert_empty s[:missing], "대상 row 를 못 찾았다: #{s[:missing].inspect}"
+  end
+
+  # 뮤테이션 M17 이 살아남아 드러난 구멍 — 위 대조는 **AuditCase** 축만 지웠다.
+  # Topic 축의 create 우회는 아무도 재고 있지 않았다.
+  test "P3: Topic 축도 없는 row 를 새로 만들지 않는다 (missing 으로 보고)" do
+    Topic.where(slug: "emergency-contract").delete_all
+    before = Topic.count
+    s = seed_module.apply!
+    assert_includes s[:missing], "Topic:emergency-contract"
+    assert_nil Topic.find_by(slug: "emergency-contract"), "없는 Topic row 를 새로 만들었다"
+    assert_equal 0, s[:created], "created 가 0 이 아니다"
+    assert_equal before, Topic.count, "Topic row 수가 변했다"
   end
 
   test "P3: 없는 row 를 새로 만들지 않는다 (missing 으로 보고)" do
@@ -130,6 +146,27 @@ class DeployBlockerFixSeedTest < ActiveSupport::TestCase
   end
 
   # ── F2 — verification_source 동기화 ──────────────────────────
+  # ── N-1 (2026-09-06 2차 독립검증) ────────────────────────────
+  test "N-1: 긴급수의 서브토픽의 근거가 제4호 → 제1호로 정정되고, 사유 열거는 보존된다" do
+    seed_module.apply!
+    lc = Topic.find_by(slug: "emergency-contract").law_content
+    assert_not_includes lc, "시행령 제25조 제1항 제4호", "긴급수의 제4호 오기 잔존"
+    assert_includes lc, "<strong>시행령 제25조 제1항 제1호</strong>", "제1호 정정문 없음"
+    # 과잉정정 0 — 조문 번호만 바뀌고 열거한 사유는 그대로여야 한다
+    assert_includes lc, "천재지변, 긴급한 행사, 원자재 가격급등 등 경쟁에 부칠 여유가 없는 경우"
+  end
+
+  test "N-1 음성 대조: 이 정정은 파일이 아니라 «운영 row» 를 바꾼다" do
+    # 원천 시드 파일만 고쳐도 운영은 그대로일 수 있다 — 그래서 정정 전 row 를 세워두고 잰다.
+    before = Topic.find_by(slug: "emergency-contract").law_content
+    assert_includes before, "제25조 제1항 제4호",
+                    "정정 전 row 에 오기가 없다 — 양성 대조가 성립하지 않는다"
+    s = seed_module.apply!
+    assert_includes s[:fields], "Topic:emergency-contract#law_content",
+                    "갱신 대상으로 보고되지 않았다"
+    assert_equal 0, s[:created], "row 를 새로 만들어 통과시켰다"
+  end
+
   test "P2: legal_basis 정정 전 verification_source 는 stale 로 검출되고, 정정 후 0 이 된다" do
     mod = seed_module
     r = AuditCase.find_by(slug: "private-contract-split-over-limit")

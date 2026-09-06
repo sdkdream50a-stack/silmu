@@ -121,9 +121,9 @@
         <td class="checkbox-group">
           <p><strong>지방계약법 시행령 제25조 제1항</strong></p>
           <label><input type="checkbox" id="legal_1"> 제1호: 천재지변, 긴급한 행사 등 경쟁에 부칠 여유가 없는 경우</label>
-          <label><input type="checkbox" id="legal_2"> 제2호: 국가기관, 다른 지방자치단체와 계약하는 경우</label>
-          <label><input type="checkbox" id="legal_3"> 제3호: 특정인의 기술/용역 또는 특정 위치/구조 등으로 경쟁 불가</label>
-          <label><input type="checkbox" id="legal_4"> 제4호: 추정가격이 수의계약 기준금액 이하인 경우</label>
+          <label><input type="checkbox" id="legal_2"> 제3호: 국가기관, 다른 지방자치단체와 계약하는 경우</label>
+          <label><input type="checkbox" id="legal_3"> 제4호: 특정인의 기술/용역 또는 특정 위치/구조 등으로 경쟁 불가</label>
+          <label><input type="checkbox" id="legal_4"> 제5호: 추정가격이 수의계약 기준금액 이하인 경우</label>
           <label><input type="checkbox" id="legal_etc"> 기타: <input type="text" id="legal_etc_text" style="width: 300px;" placeholder="기타 사유 입력"></label>
         </td>
       </tr>
@@ -133,7 +133,7 @@
       <tr>
         <th>수의계약<br>요청사유</th>
         <td>
-          <textarea id="request_reason" placeholder="예: 본 건은 추정가격 15,000,000원으로 지방계약법 시행령 제25조 제1항 제4호에 따른 물품구매 수의계약 기준금액(2,200만원) 이하에 해당하여 수의계약으로 진행하고자 합니다."></textarea>
+          <textarea id="request_reason" placeholder="예: 본 건은 추정가격 15,000,000원으로 지방계약법 시행령 제25조 제1항 제5호 나목에 따른 물품의 제조·구매계약 수의계약 기준금액(2천만원) 이하에 해당하여 수의계약으로 진행하고자 합니다."></textarea>
         </td>
       </tr>
     </table>
@@ -285,9 +285,9 @@
       // 법적근거 텍스트
       let legalBasis = [];
       if (data.legal_1) legalBasis.push('제1호: 천재지변, 긴급한 행사 등');
-      if (data.legal_2) legalBasis.push('제2호: 국가기관, 다른 지방자치단체와 계약');
-      if (data.legal_3) legalBasis.push('제3호: 특정인의 기술/용역');
-      if (data.legal_4) legalBasis.push('제4호: 추정가격이 기준금액 이하');
+      if (data.legal_2) legalBasis.push('제3호: 국가기관, 다른 지방자치단체와 계약');
+      if (data.legal_3) legalBasis.push('제4호: 특정인의 기술/용역');
+      if (data.legal_4) legalBasis.push('제5호: 추정가격이 기준금액 이하');
       if (data.legal_etc) legalBasis.push('기타: ' + (data.legal_etc_text || ''));
 
       const doc = new Document({
