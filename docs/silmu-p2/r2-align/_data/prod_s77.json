@@ -1,0 +1,105 @@
+{
+  "probed_at": "2026-09-06T10:40:33Z",
+  "total_mentions": 29,
+  "unscoped_count": 14,
+  "unscoped": [
+    {
+      "model": "Topic",
+      "id": 40,
+      "slug": "split-contract-prohibition",
+      "field": "faqs",
+      "text": "반면 하나로 발주해야 할 사업을 경쟁입찰·수의계약 한도 이하로 쪼개는 것은 위법한 분할계약입니다(지방계약법 시행령 제77조).\",\"question\":\"분할계약과 합법적인 분리발주는 어떻게 구별하나요?\"},{\"answer\":\"담당자는 징계(감봉·정직·파면 등)와 변상 책임, 경우에 따라 형사처벌(배임·직무유기)을 받을 수 있고, 계약 자체가 취소·재입찰되며 관여 업체도 입찰참가자격 제한을 받을"
+    },
+    {
+      "model": "Topic",
+      "id": 40,
+      "slug": "split-contract-prohibition",
+      "field": "faqs",
+      "text": "동일 목적의 사업은 전체 사업비를 기준으로 계약방법을 정해야 합니다(시행령 제77조 제2항).\",\"question\":\"비슷한 물품을 연간 여러 번 구매하면 분할계약인가요?\"},{\"answer\":\"연간 소요량을 예측하여 단가계약 또는 연간 구매계약 방식으로 일괄 입찰하는 것이 올바른 방법입니다."
+    },
+    {
+      "model": "Topic",
+      "id": 95,
+      "slug": "split-contract",
+      "field": "law_content",
+      "text": "| 분할금지 원칙 | 시행령 제77조 | 정당한 이유 없는 분할 금지 |"
+    },
+    {
+      "model": "Topic",
+      "id": 95,
+      "slug": "split-contract",
+      "field": "qa_content",
+      "text": "- 금지 근거: 지방계약법 시행령 제25조, 제77조"
+    },
+    {
+      "model": "Topic",
+      "id": 104,
+      "slug": "fence-installation",
+      "field": "practical_tips",
+      "text": "분할발주 위험 (시행령 §77)"
+    },
+    {
+      "model": "Topic",
+      "id": 112,
+      "slug": "estimated-amount",
+      "field": "decree_content",
+      "text": "> 이 한도를 맞추려고 하나의 계약을 여러 건으로 **쪼개면(분할계약) 시행령 §77 위반**입니다."
+    },
+    {
+      "model": "Topic",
+      "id": 112,
+      "slug": "estimated-amount",
+      "field": "regulation_content",
+      "text": "### ③ 분할계약 금지 (시행령 §77)"
+    },
+    {
+      "model": "Topic",
+      "id": 112,
+      "slug": "estimated-amount",
+      "field": "practical_tips",
+      "text": "한도 맞추기 분할계약(§77 위반)"
+    },
+    {
+      "model": "Topic",
+      "id": 112,
+      "slug": "estimated-amount",
+      "field": "faqs",
+      "text": "수의계약 한도나 입찰 방식을 회피하려고 단일 사업을 여러 건으로 쪼개는 분할계약은 시행령 §77로 금지됩니다."
+    },
+    {
+      "model": "Topic",
+      "id": 112,
+      "slug": "estimated-amount",
+      "field": "verification_source",
+      "text": "법제처 — 지방계약법 시행령 §2①(추정가격: 부가세·관급 제외), 시행규칙 §2②(추정금액: 부가세·관급 포함), 시행령 §2②(예정가격: 결정 상한)·§77(분할계약 한도회피 금지)."
+    },
+    {
+      "model": "AuditCase",
+      "id": 134,
+      "slug": "private-contract-split-over-limit",
+      "field": "issue",
+      "text": "□□도 ○○교육지원청에서 실내환경 개선사업(총사업비 1억 5천만원)을 수의계약 한도액(5천만원)을 초과한다는 이유로 동일 업체와 3개 계약(각 5천만원)으로 분할 체결하여 지방계약법 시행령 제77조의 계약 분할 금지 조항을 위반하였고, 도 종합감사에서 적발되어 계약 담당자 징계 및 업체 입찰 참가자격 제한 처분을 받음."
+    },
+    {
+      "model": "AuditCase",
+      "id": 134,
+      "slug": "private-contract-split-over-limit",
+      "field": "detail",
+      "text": "지방계약법 시행령 제77조은 다음과 같이 규정합니다:"
+    },
+    {
+      "model": "AuditCase",
+      "id": 139,
+      "slug": "small-amount-intentional-split",
+      "field": "lesson",
+      "text": "지방계약법 제9조는 경쟁입찰 원칙을 규정하며, 시행령 제77조는 분할계약을 명시적으로 금지합니다."
+    },
+    {
+      "model": "AuditCase",
+      "id": 141,
+      "slug": "split-contract-to-avoid-bidding",
+      "field": "detail",
+      "text": "단일 사업을 분할하여 금액 기준을 낮추는 행위는 지방계약법 시행령 제77조가 명시적으로 금지하는 분할계약에 해당합니다."
+    }
+  ]
+}
