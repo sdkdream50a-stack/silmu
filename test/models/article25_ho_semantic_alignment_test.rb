@@ -29,7 +29,8 @@ require "test_helper"
 #   ※ 재공고입찰 불성립·낙찰자 없음은 §25① 이 아니라 **영 제26조** 다.
 #
 class Article25HoSemanticAlignmentTest < ActiveSupport::TestCase
-  BEFORE_COMMIT = "5a70437" # 이번 공개표기 수리 직전 HEAD
+  BEFORE_COMMIT = "5a70437" # 공개 양식 표기 수리 직전 HEAD
+  THIS_ROUND_BEFORE = "96a1afb" # R-A(사유서 생성기 긴급수의)·R-H(유찰) 수리 직전 HEAD
 
   CITE = /
     (?:(?<![0-9])§\s*25\s*①\s*(?<a>\d+)\s*호)
@@ -63,16 +64,6 @@ class Article25HoSemanticAlignmentTest < ActiveSupport::TestCase
   # 이번 라운드 scope 밖으로 **판정한** 잔존. `경로:줄` 로 못박는다 —
   # 파일 이름으로만 잠그면 이미 알려진 결함 하나가 같은 파일의 새 결함을 숨겨 준다.
   ADJUDICATED_OUT_OF_SCOPE = {
-    "app/views/contract_reasons/index.html.erb:447" =>
-      "R-A 실재 오류 — 긴급 사유를 §25①2호로. `lawText` 는 §25①1호 **원문**(천재·지변·작전상 병력이동·" \
-      "긴급한 행사·원자재 가격급등)이다. 같은 오기가 예시문 3건(:450 :451 :452)에도 복제돼 있다. " \
-      "이 화면은 사유서를 **생성해 주는** 자리라 공개 양식보다 파급이 크다. 사용자가 이번 scope 를 A/B/C 로 " \
-      "동결했으므로 고치지 않았다 — 다음 라운드 1순위",
-    "app/views/guides/resources.html.erb:476" =>
-      "R-H 다른 class — 유찰(2회) 수의를 §25①2호로. 정본은 **영 제26조**(재공고입찰 불성립). " \
-      "같은 오기가 `app/controllers/faq_controller.rb:58` 과 **R2 core** `app/services/contract_method_service.rb:296` " \
-      "에도 있다. 한 곳만 고치면 세 곳이 서로 다른 말을 하고, 셋을 함께 고치면 R2_CORE_MODIFIED=0 이 깨진다. " \
-      "이 탐지기의 호↔사유 mapping(1~5호) 밖이기도 하다 → 별도 라운드",
     "db/seeds/audit_cases.rb:83" =>
       "R-B 실재 오류 — 「제2호가 정한 긴급수의 사유는 천재지변, 작전상 병력이동…」. 실제 제1호. scope 밖",
     "db/seeds/subtopics.rb:1115" =>
@@ -98,7 +89,9 @@ class Article25HoSemanticAlignmentTest < ActiveSupport::TestCase
   REPAIRED = {
     "public/forms/수의계약사유서.html" => (1..413),
     "db/seeds/subtopics.rb" => (975..990),
-    "app/views/guides/resources.html.erb" => (470..480)
+    "app/views/guides/resources.html.erb" => (470..480),
+    # R-A — 사유서를 **생성해 주는** 화면. 카드(:249)와 데이터(:447~:452)가 한 근거를 공유한다.
+    "app/views/contract_reasons/index.html.erb" => (230..460)
   }.freeze
 
   # ── 탐지기 본체 ──────────────────────────────────────────────
@@ -304,10 +297,39 @@ class Article25HoSemanticAlignmentTest < ActiveSupport::TestCase
     }.each do |frag, label|
       assert_includes line, frag, "#{label} 대응이 정본과 어긋난다"
     end
-    # (3) 유찰은 이번 라운드에서 고치지 않기로 «판정» 한 자리다. 조용히 사라지거나 바뀌면
-    # 판정 근거가 무너지므로 그 상태 그대로 있음을 못박는다(R-H).
-    assert_includes line, "2회 유찰되어 지방계약법 시행령 제25조제1항제2호",
-                    "R-H(유찰=영 제26조) 판정 대상이 바뀌었다 — 판정과 실재가 어긋난다"
+    # (3) 유찰은 이번 라운드에서 **고친** 자리다. §25① 어느 호도 아니고 영 제26조다.
+    assert_includes line, "2회 유찰되어 지방계약법 시행령 제26조제1항에 따라",
+                    "R-H(유찰=영 제26조) 수리가 가이드 예시문에 들어가지 않았다"
+    refute_includes line, "2회 유찰되어 지방계약법 시행령 제25조제1항",
+                    "유찰을 아직도 §25① 로 적는다"
+  end
+
+  # R-A — 「사유서를 만들어 주는」 화면이라 카드·근거·예시문이 한 호를 말해야 한다.
+  # §25① 축 탐지기는 이 자리를 못 본다: 뮤테이션 M1·M3·M4·M5·M7 이 살아남아 드러났다.
+  # 자기 근거도 없고 옆에 충돌 신호도 없어서 «어긋남» 자체가 계측되지 않는 모양이다.
+  # 그래서 이 화면만은 탐지기의 «없음» 이 아니라 **내용의 «있음»** 으로 잠근다.
+  test "AFTER(사유서 생성기): 카드·근거·예시문 3건이 모두 §25①1호를 가리킨다" do
+    src = Rails.root.join("app/views/contract_reasons/index.html.erb").read
+
+    card = src[%r{data-reason="urgent".*?</div>\s*</div>}m]
+    assert card, "긴급 사유 카드를 못 읽었다"
+    assert_includes card, "지방계약법 시행령 제25조제1항제1호", "카드가 §25①1호를 말하지 않는다"
+
+    block = src[/^  urgent: \{.*?^  \},/m]
+    assert block, "urgent 데이터 블록을 못 읽었다"
+    assert_includes block, "law: '지방계약법 시행령 제25조제1항제1호'"
+
+    # lawText 는 제1호 **원문**이어야 한다. 원문이 사라지면 이 화면은 근거 없는 인용이 된다.
+    [ "천재·지변", "작전상 병력이동", "긴급한 행사", "원자재의 가격급등" ].each do |t|
+      assert_includes block, t, "제1호 원문 표지 «#{t}» 가 lawText 에서 사라졌다"
+    end
+
+    # 예시문은 `law`·`lawText` 와 **한 장으로** 결재서류에 실린다(HWPX 내보내기).
+    # 서로 다른 호를 말하면 그 문서 자체가 자기모순이다.
+    hos = block.scan(/제25조제1항제(\d+)호/).flatten.uniq
+    assert_equal [ "1" ], hos, "urgent 블록 안에서 호가 갈린다: #{hos.inspect}"
+    assert_equal 3, block.scan(/제25조제1항제1호에 따라 수의계약으로 긴급 추진/).size,
+                 "예시문 3건(물품·용역·공사)이 모두 제1호를 싣지 않는다"
   end
 
   test "AFTER(폼): 새 정본 대응이 실제로 들어갔고 2,200만원이 사라졌다" do
@@ -361,19 +383,204 @@ class Article25HoSemanticAlignmentTest < ActiveSupport::TestCase
     end
   end
 
-  # ── 이 탐지기가 다루지 않는 축 (다른 class · 기록만) ──────────
-  test "유찰 수의는 §25① 이 아니라 영 제26조 — 이 탐지기의 mapping 밖이라 별도 FINDING 이다" do
-    # 정본 확인: 재공고입찰 불성립은 §26 에서 정한다
+  # ── R-H: 유찰 수의 = 영 제26조 (다른 semantic class) ──────────
+  # 앞 라운드는 이 축을 「다른 class · 기록만」으로 판정하고 넘겼다. 그 판정이 원장에 남아
+  # 세 경로가 서로 다른 말을 하는 상태를 **잠가** 버렸다 — 원장이 은신처가 된 두 번째 자리다.
+  # 이번에는 판정 대신 계측으로 바꾼다. 세 경로를 하나의 class 로 함께 본다.
+  FAILED_BID_SIG = /유찰|재공고입찰|낙찰자가\s*없|입찰이\s*성립하지|경쟁입찰이\s*성립되지/
+  ART25_HO_CITE = /제\s*25\s*조\s*제?\s*1\s*항\s*제?\s*\d+\s*호/
+
+  # 한 줄에 자료가 여러 건 들어가는 파일만 `\n\n`(이스케이프된 문단)으로 더 쪼갠다.
+  # 더 쪼개면 안 되는 파일도 있다 — faq_controller 는 한 Q&A 가 한 줄이고 「유찰」과 「근거:」 사이에
+  # `\n\n` 이 있어서, 일률적으로 쪼개면 인용이 자기 주장에서 떨어져 나가 결함이 빠져나간다.
+  FAILED_BID_UNIT = { "app/views/guides/resources.html.erb" => :escaped_paragraph }.freeze
+
+  FAILED_BID_REPAIRED = %w[
+    app/views/guides/resources.html.erb
+    app/controllers/faq_controller.rb
+    app/services/contract_method_service.rb
+  ].freeze
+
+  # 수리 전(#{THIS_ROUND_BEFORE}) 실제로 걸리던 자리. 「몇 건」이 아니라 줄로 못박는다.
+  FAILED_BID_POSITIVE = {
+    "app/views/guides/resources.html.erb" => [ 476 ],
+    "app/controllers/faq_controller.rb" => [ 58 ],
+    "app/services/contract_method_service.rb" => [ 296, 323 ]
+  }.freeze
+
+  # 한 문장 안에 「유찰」과 §25① 인용이 같이 있어도, 그 인용이 **자기 사유를 데리고 있으면**
+  # 유찰 주장의 근거가 아니다 (예: "…유찰 확정 후에야 전환 가능. 긴급의 경우 별도 요건
+  # (§25①1호·2호 — 천재지변·재난 긴급복구)을 검토"). 자기 근거는 §25① 축 탐지기의 SIG 를 그대로 쓴다.
+  SELF_JUSTIFIED_W = 90
+
+  def self_justified?(seg, m)
+    ho = m[/\d+(?=\s*호)/].to_i
+    sig = SIG[ho]
+    return false unless sig
+    i = seg.index(m)
+    # 시작에서 잘린 만큼 «뒤로» 더 보게 되면 창이 조용히 넓어진다.
+    # 길이가 아니라 양끝을 각각 계산한다.
+    lo = [ i - SELF_JUSTIFIED_W, 0 ].max
+    hi = i + m.length + SELF_JUSTIFIED_W
+    seg[lo...hi].to_s.match?(sig)
+  end
+
+  # 유찰 주장이 **인용을 달고 있는** 자리. 「파일 어딘가에 §26 이 있다」로 재면
+  # 두 자리 중 한 곳이 무너져도 통과한다(뮤테이션 M13 이 그렇게 살아남았다) — 자리마다 잰다.
+  DECREE_CITE = /시행령\s*제\s*\d+\s*조(?:\s*제?\s*\d+\s*항)?(?:\s*제?\s*\d+\s*호)?/
+
+  def failed_bid_citing_segments(src, path = nil)
+    src.lines.each_with_index.flat_map do |line, i|
+      segs = FAILED_BID_UNIT[path] == :escaped_paragraph ? line.split('\n\n') : [ line ]
+      segs.filter_map do |seg|
+        next unless seg.match?(FAILED_BID_SIG)
+        cite = seg[DECREE_CITE]
+        cite && { line: i + 1, cite: cite }
+      end
+    end
+  end
+
+  def failed_bid_mismatches(src, path = nil)
+    src.lines.each_with_index.flat_map do |line, i|
+      segs = FAILED_BID_UNIT[path] == :escaped_paragraph ? line.split('\n\n') : [ line ]
+      segs.filter_map do |seg|
+        next unless seg.match?(FAILED_BID_SIG)
+        cite = seg[ART25_HO_CITE]
+        next unless cite
+        next if self_justified?(seg, cite)
+        { line: i + 1, cite: cite }
+      end
+    end
+  end
+
+  test "정본: 재공고입찰 불성립·낙찰자 없음은 §25① 이 아니라 영 제26조다" do
     y = Rails.root.join("config/contract_decision_rules.yml").read
     assert_includes y, '- locator: "제26조"'
     assert_includes y, "재공고입찰이 성립하지 않거나 낙찰자가 없는 경우"
+    # 기본 요건이 §26① 이라는 것은 repo 안 정정 시드가 이미 확정해 둔 사실이다
+    assert_includes Rails.root.join("db/seeds/fix_law_references_2026_03.rb").read,
+                    "시행령 제26조 제1항 | 재공고입찰 유찰 후 수의계약의 기본 요건"
+  end
 
-    # 실재 확인: 세 곳이 유찰을 §25①2호로 적고 있다. 그중 하나는 **R2 core** 라
-    # 이번 라운드 제약(R2_CORE_MODIFIED=0)에서 한꺼번에 정합시킬 수 없다 → 손대지 않았다.
-    core = Rails.root.join("app/services/contract_method_service.rb").read
-    assert_includes core, "2회 유찰(재공고 포함) 시 수의계약으로 전환할 수 있습니다",
-                    "R2 core 의 유찰 안내가 사라졌다 — 이번 라운드는 이 파일을 건드리지 않는다"
-    assert_includes core, "제25조제1항제2호",
-                    "R2 core 의 유찰 근거가 바뀌었다 — 이 라운드에서 고치지 않기로 판정한 자리다"
+  test "양성 대조(R-H): 수리 전(#{THIS_ROUND_BEFORE}) 세 경로가 유찰을 §25① 로 적고 있었다" do
+    FAILED_BID_POSITIVE.each do |path, lines|
+      hits = failed_bid_mismatches(blob(THIS_ROUND_BEFORE, path), path).map { |h| h[:line] }
+      lines.each do |l|
+        assert_includes hits, l,
+                        "#{path}:#{l} — 수리 전 유찰 오기를 탐지기가 못 잡는다 (탐지기가 죽었다). 잡힌 줄: #{hits.inspect}"
+      end
+    end
+  end
+
+  test "AFTER(R-H): 세 경로의 유찰 인용이 «자리마다» 영 제26조제1항이다" do
+    FAILED_BID_REPAIRED.each do |path|
+      src = Rails.root.join(path).read
+      assert_empty failed_bid_mismatches(src, path),
+                   "#{path}: 유찰을 아직 §25① 로 적는 자리가 남아 있다"
+
+      sites = failed_bid_citing_segments(src, path)
+      refute_empty sites, "#{path}: 유찰 인용 자리를 하나도 못 찾았다 — 게이트가 헛돈다"
+      sites.each do |site|
+        assert_includes site[:cite], "제26조제1항",
+                        "#{path}:#{site[:line]} 의 유찰 근거가 «#{site[:cite]}» 다 — 한 자리만 무너져도 세 경로가 다른 말을 한다"
+      end
+    end
+    # 수리 전에는 이 자리들이 §26 을 말하지 않았다 — 게이트가 원래부터 통과하던 것이 아니다
+    FAILED_BID_REPAIRED.each do |path|
+      before = failed_bid_citing_segments(blob(THIS_ROUND_BEFORE, path), path)
+      refute before.all? { |x| x[:cite].include?("제26조제1항") },
+             "#{path}: 수리 전에도 이미 §26①이었다 — 이 게이트의 근거가 없다"
+    end
+  end
+
+  test "음성 대조(R-H): 유찰이 아닌 재난 긴급복구 예시(제2호)는 그대로다" do
+    line = Rails.root.join("app/views/guides/resources.html.erb").read.lines[475]
+    assert_includes line,
+                    "긴급 복구가 필요하여 경쟁입찰에 부칠 여유가 없으므로 지방계약법 시행령 제25조제1항제2호",
+                    "정당한 §25①2호(재난 긴급복구)까지 함께 치환됐다 — 문자열만 보고 일괄 치환한 지문"
+    # 계측기 쪽에서도 확인: 그 문단은 유찰 주장이 아니라 애초에 대상이 아니다
+    seg = line.split('\n\n').find { |x| x.include?("긴급 복구가 필요하여") }
+    refute_match FAILED_BID_SIG, seg, "재난 긴급복구 문단이 유찰 class 로 분류된다"
+  end
+
+  test "계측기 대조(R-H): 유찰 주장 없이 §25① 만 있는 줄은 세지 않는다" do
+    refute_empty failed_bid_mismatches("2회 유찰 시 지방계약법 시행령 제25조제1항제2호"),
+                 "유찰+§25① 조합을 못 잡는다"
+    assert_empty failed_bid_mismatches("천재지변으로 지방계약법 시행령 제25조제1항제1호"),
+                 "유찰 주장이 없는 줄을 잡는다"
+    assert_empty failed_bid_mismatches("2회 유찰 시 지방계약법 시행령 제26조제1항"),
+                 "이미 정본(§26)인 줄을 잡는다"
+
+    # 면제는 «바로 옆» 근거만 놓아 줘야 한다. 창이 넓어지면 한참 떨어진 무관한 낱말이
+    # 결함을 덮는다 — 창 크기를 합성 문장으로 잠근다(뮤테이션 M16).
+    cite = "제25조제1항제2호"
+    far = "2회 유찰되어 지방계약법 시행령 #{cite}에 따라 최초 입찰에 부친 조건과 " \
+          "동일한 조건으로 예정가격 이내에서 수의계약을 체결할 수 있습니다. 계약 담당자는 " \
+          "관련 서류를 갖추어 결재를 받고, 계약심사 대상 여부와 지출원인행위 시기를 함께 " \
+          "확인해야 합니다. 참고로 재난 긴급복구는 전혀 다른 절차다."
+    # 창은 인용의 «앞뒤» 로 열린다 — 뒤쪽 끝은 인용 끝 + W 다. 대조는 그 경계 밖에 놓아야 성립한다.
+    assert_operator far.index("재난") - far.index(cite), :>, SELF_JUSTIFIED_W + cite.length,
+                    "합성 대조가 성립하지 않는다 — 무관한 낱말이 이미 창 안에 있다"
+    refute_empty failed_bid_mismatches(far),
+                 "창 밖의 무관한 «재난» 이 유찰 결함을 면제해 준다"
+  end
+
+  # scope 밖 잔존 — 목록이 은신처가 되지 않도록 `경로:줄` 로 못박는다.
+  # 이번 라운드는 사용자가 R-A·R-H 3경로로 범위를 동결했으므로 아래는 **기록만** 한다.
+  FAILED_BID_OUT_OF_SCOPE = {
+    # R-J 실재 오류 — 「재공고에도 1인만 참가하면 그 1인과 수의계약(시행령 §25①5호)」.
+    # §25①5호는 **금액 기준**이고, 재공고입찰 불성립·낙찰자 없음은 영 제26조다.
+    # R-H 와 같은 semantic class 지만 사용자가 이번 scope 를 R-A + R-H 3경로로 동결했다 → 기록만.
+    "db/seeds/topic_bid_announcement.rb:54" => "R-J 실재 오류 (운영 콘텐츠 시드)",
+    "db/seeds/topic_bidding.rb:76" => "R-J 실재 오류 (한시적 특례 종료 문구)",
+    "db/seeds/topic_bidding.rb:218" => "R-J 실재 오류 (한시적 특례 종료 문구)",
+    "db/seeds/topic_bidding.rb:315" => "R-J 실재 오류 (유찰 FAQ 답변)",
+    "db/seeds/topic_restricted_bidding.rb:329" => "R-J 실재 오류 (한시적 특례 종료 문구)",
+    "db/seeds/topic_restricted_bidding.rb:405" => "R-J 실재 오류 (제한경쟁 유찰 FAQ 답변)",
+
+    # R-J 의 치환표 사본. old/new 양쪽에 같은 문장이 들어 있어 «고칠수록 숫자가 나빠지는» 자리다.
+    # 원문(위 6곳)을 먼저 고치고 그때 함께 갱신해야 한다 — 따로 고치면 앵커가 깨진다.
+    "db/seeds/topic_content_fix_2026_07_06_hansi_expiry.rb:47" => "R-J 치환표 사본",
+    "db/seeds/topic_content_fix_2026_07_06_hansi_expiry.rb:53" => "R-J 치환표 사본",
+    "db/seeds/topic_content_fix_2026_07_06_hansi_expiry.rb:76" => "R-J 치환표 사본",
+    "db/seeds/topic_content_fix_2026_07_06_hansi_expiry.rb:77" => "R-J 치환표 사본",
+    "db/seeds/topic_content_fix_2026_07_06_hansi_expiry.rb:84" => "R-J 치환표 사본",
+    "db/seeds/topic_content_fix_2026_07_06_hansi_expiry.rb:107" => "R-J 치환표 사본",
+    "db/seeds/topic_content_fix_2026_07_06_hansi_expiry.rb:108" => "R-J 치환표 사본",
+
+    # 결함이 아니다 — 「§25①6호 → §26①」 정정을 **이미 수행한** 스크립트라 정정 «전» 문자열을 들고 있다.
+    "db/seeds/fix_law_references_2026_03.rb:4" => "정정 치환표 (주석 · 결함 아님)",
+    "db/seeds/fix_law_references_2026_03.rb:63" => "정정 치환표 (old 앵커 · 결함 아님)",
+    "db/seeds/fix_law_references_2026_03.rb:76" => "정정 치환표 (old 앵커 · 결함 아님)",
+    "db/seeds/fix_law_references_2026_03.rb:111" => "정정 치환표 (old 앵커 · 결함 아님)"
+  }.freeze
+
+  test "면제 규칙은 «필요해서» 있다 — 자기 근거를 데린 인용 1건이 실제로 존재한다" do
+    src = Rails.root.join("db/seeds/topic_bid_failure.rb").read
+    line = src.lines[184]
+    assert_match FAILED_BID_SIG, line, "이 줄에 유찰 신호가 없다 — 면제 규칙의 근거가 사라졌다"
+    assert_match ART25_HO_CITE, line, "이 줄에 §25① 인용이 없다 — 면제 규칙의 근거가 사라졌다"
+    assert self_justified?(line, line[ART25_HO_CITE]),
+           "자기 근거(천재지변·재난)를 데린 인용인데 면제되지 않는다"
+    # 면제가 진짜 인용을 놓아 주지는 않는지 — 세 경로의 수리 전 자리는 여전히 잡혀야 한다
+    FAILED_BID_POSITIVE.each do |path, lines|
+      hits = failed_bid_mismatches(blob(THIS_ROUND_BEFORE, path), path).map { |h| h[:line] }
+      assert_equal lines.sort, (hits & lines).sort,
+                   "#{path}: 면제 규칙이 실제 결함까지 놓아 준다"
+    end
+  end
+
+  test "잔존(R-H): scope 밖 유찰 mismatch 는 판정 목록과 정확히 일치한다" do
+    actual = scope_files.flat_map do |f|
+      r = rel(f)
+      next [] if FAILED_BID_REPAIRED.include?(r)
+      failed_bid_mismatches(File.read(f), r).map { |x| "#{r}:#{x[:line]}" }
+    end.uniq
+
+    unknown = actual - FAILED_BID_OUT_OF_SCOPE.keys
+    assert_empty unknown, "판정되지 않은 유찰↔§25① mismatch 가 있다: #{unknown.inspect}"
+
+    stale = FAILED_BID_OUT_OF_SCOPE.keys - actual
+    assert_empty stale, "판정 목록에 있는데 실제로는 없다: #{stale.inspect}"
   end
 end

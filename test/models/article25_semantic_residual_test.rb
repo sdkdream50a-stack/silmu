@@ -223,6 +223,8 @@ class Article25SemanticResidualTest < ActiveSupport::TestCase
   # 총량만 세면 «한 곳이 줄고 다른 곳이 늘어도» 통과한다. 파일별로 잠근다.
   EMERGENCY_BASELINE = {
     "app/services/blog_legal_verifier.rb" => 1,
+    # 사유서 생성기(R-A) — 카드 1 + `law` 1 + 예시문 3. 한 근거(§25①1호)를 다섯 자리가 공유한다.
+    "app/views/contract_reasons/index.html.erb" => 5,
     "app/views/topics/flowcharts/_private_contract_justification.html.erb" => 1,
     "config/contract_decision_rules.yml" => 1,
     "db/seeds/fix_law_references_2026_03.rb" => 1,
@@ -246,7 +248,11 @@ class Article25SemanticResidualTest < ActiveSupport::TestCase
     end
     # 11 → 12. 늘어난 1건은 `db/seeds/subtopics.rb:982` — 긴급수의 근거를 제4호에서 제1호로
     # 정정하면서 «정당한 §25①1호 긴급 인용» 이 하나 생겼다. 과잉정정이 아니라 정정의 결과다.
-    assert_equal 12, actual.values.sum, "정당한 긴급 인용 총량이 12 에서 벗어났다: #{actual.inspect}"
+    # 12 → 17. 늘어난 5건은 `app/views/contract_reasons/index.html.erb` (R-A) — 사유서 생성기가
+    # 긴급수의를 §25①2호로 적던 다섯 자리를 제1호로 정정했다. 같은 이유로 «늘어난» 것이다.
+    # 총량은 «줄지 않았다» 를 재는 축이 아니다(그건 위의 파일별 >= 가 잰다). 조용한 증감을 막는 축이라
+    # 정정할 때마다 사유와 함께 갱신한다.
+    assert_equal 17, actual.values.sum, "정당한 긴급 인용 총량이 17 에서 벗어났다: #{actual.inspect}"
   end
 
   # ── 잔여 0 ───────────────────────────────────────────────────
