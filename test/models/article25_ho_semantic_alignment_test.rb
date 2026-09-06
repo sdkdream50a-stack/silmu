@@ -503,6 +503,30 @@ class Article25HoSemanticAlignmentTest < ActiveSupport::TestCase
     refute_match FAILED_BID_SIG, seg, "재난 긴급복구 문단이 유찰 class 로 분류된다"
   end
 
+  # 독립검증(2026-09-07 ROUND 2)이 잡은 자리다. R-H 로 지방 §26 을 본문에 들여오면서
+  # 「관련 법령:」 줄의 **지방** 쪽만 §26 을 더하고 **국가** 쪽은 §26 그대로 뒀다.
+  # 국가계약법에서 재공고입찰 유찰 후 수의계약은 §26 이 아니라 **§27** 이다
+  # (repo 내 독립 출처: app/models/exam_questions.rb 의 "국가계약법 시행령 제27조제1항제2호").
+  # 이 축은 `mismatches`/`failed_bid_mismatches` 가 재지 못한다 — 탐지기가 국가계약법이 섞인
+  # unit 을 통째로 제외하기 때문이다. 그래서 내용 단언으로 못박는다.
+  test "AFTER(R-H): 「관련 법령」의 국가계약법 쪽도 유찰 근거(§27)를 함께 든다" do
+    line = Rails.root.join("app/views/guides/resources.html.erb").read.lines[475]
+    related = line[/\*\*관련 법령:\*\*[^"\\]*/]
+    refute_nil related, "「관련 법령:」 줄을 못 찾았다 — 게이트가 헛돈다"
+
+    assert_includes related, "지방계약법 시행령 제25조·제26조",
+                    "본문 (3)이 지방 §26①을 근거로 드는데 관련 법령에 §26 이 없다"
+    assert_includes related, "국가계약법 시행령 제26조·제27조",
+                    "본문 (3) 유찰 수의의 국가계약법 대응 조문은 §27 이다 — §26 만 적으면 " \
+                    "국가계약법에서는 §26 이 유찰 근거인 것처럼 읽힌다: «#{related}»"
+
+    # 양성 대조 — 수리 전에는 국가 쪽이 §26 단독이었다. 이 게이트가 원래부터 통과하던 것이 아니다.
+    before = blob(THIS_ROUND_BEFORE, "app/views/guides/resources.html.erb").lines[475]
+    before_related = before[/\*\*관련 법령:\*\*[^"\\]*/]
+    refute_includes before_related.to_s, "제26조·제27조",
+                    "수리 전에도 이미 §27 이 있었다 — 이 게이트의 근거가 없다"
+  end
+
   test "계측기 대조(R-H): 유찰 주장 없이 §25① 만 있는 줄은 세지 않는다" do
     refute_empty failed_bid_mismatches("2회 유찰 시 지방계약법 시행령 제25조제1항제2호"),
                  "유찰+§25① 조합을 못 잡는다"
