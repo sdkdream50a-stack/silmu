@@ -297,6 +297,43 @@ class TopicSearchTest < ActiveSupport::TestCase
       "ASSOCIATION ≠ SYNONYM — 연상어를 확신 근거로 쓰면 안 된다"
   end
 
+  # 아래 3건은 독립검증(kimi R2)이 "테스트가 방어하지 못한다"고 지목한 생존 뮤턴트를 닫는다.
+
+  test "answer_for: 고유 토큰 히트는 FAQ 질문에서만 센다 (토픽 이름·키워드·답변 본문은 근거가 아니다)" do
+    # 히트 대상을 name/keywords/answer 까지 넓히면 질문에 없는 말로 답이 승격된다 —
+    # 이번 수리가 막으려던 것과 같은 계열의 오승격이다.
+    t = Topic.create!(name: "연차 휴가", slug: "test-hit-scope", published: true,
+                      keywords: "연차, 연가", summary: "연차 휴가",
+                      faqs: [ { "question" => "휴가 지급 기준은 어떻게 되나요?",
+                                "answer" => "연차 기준에 따라 부여" } ])
+    assert_nil Topic.answer_for("연차 지급 기준", [ t ]),
+      "질문에 없는 '연차' 를 토픽 이름·키워드·답변에서 끌어와 승격하면 안 된다"
+  end
+
+  test "answer_for: 게이트는 FAQ 마다 따로 본다 (토픽 단위로 통과시키지 않는다)" do
+    # 같은 토픽 안에 고유 토큰이 맞는 FAQ 와 안 맞는 FAQ 가 함께 있을 때,
+    # 토픽 단위로 게이트를 통과시키면 **점수만 높은 미히트 FAQ** 가 답으로 올라간다.
+    t = Topic.create!(name: "연가", slug: "test-gate-per-faq", published: true,
+                      keywords: "연가", summary: "연가",
+                      faqs: [
+                        { "question" => "연가 지급은 어떻게 되나요?",             "answer" => "A" },
+                        { "question" => "숙박비 지급 기준 신청은 어떻게 하나요?", "answer" => "B" }
+                      ])
+    result = Topic.answer_for("연가 지급 기준 신청", [ t ])
+    assert result, "고유 토큰이 맞는 FAQ 가 있으므로 바로 답은 나와야 한다"
+    assert_equal "연가 지급은 어떻게 되나요?", result[:question],
+      "히트 수가 더 많아도 고유 토큰이 안 맞은 FAQ 를 고르면 안 된다"
+  end
+
+  test "answer_for: 역방향 포함도 고유 토큰 히트가 아니다 (육아휴직 ⊅ 육아)" do
+    # 경계 판정을 양방향 include? 로 되돌리면 "육아휴직" 질문에 "육아" FAQ 가 답으로 뜬다.
+    t = Topic.create!(name: "육아 지원", slug: "test-reverse-include", published: true,
+                      keywords: "육아", summary: "육아 지원",
+                      faqs: [ { "question" => "육아 지급 기준은 어떻게 되나요?",
+                                "answer" => "육아 관련 수당" } ])
+    assert_nil Topic.answer_for("육아휴직 지급 기준", [ t ])
+  end
+
   test "answer_for: 자연어 질문의 정답 FAQ 는 종전대로 승격한다 (비퇴화)" do
     t = topic_with_faq!(slug: "test-answer-nl", name: "병가", keywords: "병가, 진단서",
                         question: "병가에 진단서는 언제부터 제출해야 하나요?")
