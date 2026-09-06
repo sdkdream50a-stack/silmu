@@ -302,6 +302,100 @@ class ContractSplitSemanticAlignmentTest < ActiveSupport::TestCase
     assert_includes subs, "소기업·소상공인", "§25①5호라목의 '소상공인'이 특례 열거에 없다"
   end
 
+  # ── 2-bis. 독립검증 blocking 수리 (B1·B2·N1 · 2026-09-06) ──────
+  #
+  # 최종 독립검증(kimi)이 잡은 2건 + 같은 수정선의 오기 1건.
+  # 공통 축은 «§25 를 하나의 숫자·하나의 호로 단정하지 않는다» 이다 —
+  # §25①5호의 한도는 계약유형(가~바목)과 상대방 요건에 따라 갈린다.
+  #
+  # 양성 대조는 정정 전 커밋(132d463)의 blob 에서 읽는다. 다 고친 뒤 워킹트리에는
+  # 결함 표본이 없으므로, 지금 남아 있는 것만으로 대조를 세우면 탐지기가 죽어도 0 이 나온다.
+  REPAIR_BEFORE_COMMIT = "132d463"
+
+  # «수의계약 한도 = 5천만원» 보편 단정. 사건 사실의 5천만원(계약금액·기관 내부통제)은 잡지 않는다.
+  D_LIMIT_5000_UNIVERSAL = /수의계약\s*한도(?:액)?\s*\(\s*5천만원\s*\)|5천만원\(용역·물품\)/
+  # §25①1호는 천재지변·긴급이다. 소액수의 체계는 제5호.
+  D_ART25_HO1_AS_SMALL   = /제25조\s*제1항\s*제1호\s*\(소액 수의계약\)/
+  # 1억원 특례의 근거를 제9호로 적은 오기. 정본은 제5호.
+  D_ART25_HO9            = /제25조제1항\(제9호\s*등\)/
+
+  AUDIT_CASE_SRC = "db/seeds/audit_cases/topic_audit_cases_batch_01.rb"
+  LIMIT_FLOWCHART = "app/views/topics/flowcharts/_private_contract_limit.html.erb"
+
+  def blob(commit, rel)
+    out = `git -C #{Rails.root} show #{commit}:#{rel} 2>/dev/null`
+    assert $?.success?, "blob 취득 실패: #{commit}:#{rel}"
+    out
+  end
+
+  # 대상 레코드 구간만 잘라낸다 — 같은 오기가 **다른 레코드**에도 있으나 이번 수리 범위가 아니다.
+  # (범위를 안 자르면 «0건» 단언이 범위 밖까지 요구하게 되고, 그건 이 수리가 한 일이 아니다)
+  def split_over_limit_record(text)
+    s = text.index("private-contract-split-over-limit")
+    assert s, "대상 레코드를 찾지 못했다"
+    e = text.index("AuditCase.find_or_create_by!", s) || text.length
+    text[s...e]
+  end
+
+  test "양성 대조: 수리 전 커밋에서 B1·B2·N1 이 실제로 검출된다" do
+    before_case = blob(REPAIR_BEFORE_COMMIT, AUDIT_CASE_SRC)
+    before_view = blob(REPAIR_BEFORE_COMMIT, LIMIT_FLOWCHART)
+
+    b1 = before_case.scan(D_LIMIT_5000_UNIVERSAL)
+    assert_operator b1.size, :>=, 5,
+                    "B1 탐지기가 수리 전 «한도 = 5천만원» 단정을 5건 미만으로 잡는다(#{b1.size}) — 탐지기가 좁다"
+    assert_match D_ART25_HO1_AS_SMALL, split_over_limit_record(before_case),
+                 "B2 탐지기가 수리 전 «§25①1호 (소액 수의계약)» 를 잡지 못한다"
+    assert_match D_ART25_HO9, before_view,
+                 "N1 탐지기가 수리 전 «제25조제1항(제9호 등)» 을 잡지 못한다"
+  end
+
+  test "B1: «수의계약 한도 = 5천만원» 보편 단정이 원천에 0건" do
+    src = Rails.root.join(AUDIT_CASE_SRC).read
+    found = src.scan(D_LIMIT_5000_UNIVERSAL)
+    assert_empty found, "«한도 = 5천만원» 단정 잔존: #{found.inspect}"
+  end
+
+  test "B1: 다른 단일 금액으로 치환하지 않고 §25①5호 적용조건으로 되돌렸다" do
+    rec = split_over_limit_record(Rails.root.join(AUDIT_CASE_SRC).read)
+    assert_includes rec, "제25조제1항제5호",
+                    "§25①5호 근거 표기가 없다"
+    assert_includes rec, "계약유형(공사 / 물품·용역)과 상대방 요건",
+                    "계약유형·상대방 요건에 따라 한도가 갈린다는 안내가 없다"
+    # 하나의 숫자로 바꿔치기하지 않았는지 — 새 한도 단정이 생기면 실패한다
+    refute_match(/수의계약\s*한도(?:액)?\s*\(\s*\d[\d,]*\s*(?:천만원|억원|만원)\s*\)/, rec,
+                 "한도를 다시 하나의 숫자로 단정했다")
+  end
+
+  test "B1 음성 대조: 사건 사실·기관 내부통제의 5천만원은 보존된다" do
+    rec = split_over_limit_record(Rails.root.join(AUDIT_CASE_SRC).read)
+    [
+      "총사업비 1억 5천만원",                       # 사건 사실
+      "5,000만원",                                  # 계약 3호 금액
+      "5천만원 이상 수의계약 전 교육지원청장 사전 승인 의무화"  # 기관 내부통제
+    ].each { |s| assert_includes rec, s, "사건 사실/내부통제 표현이 지워졌다: #{s}" }
+  end
+
+  test "B2: 대상 레코드의 legal_basis 가 §25①5호이고 세부 목을 임의 지정하지 않는다" do
+    rec = split_over_limit_record(Rails.root.join(AUDIT_CASE_SRC).read)
+    refute_match D_ART25_HO1_AS_SMALL, rec, "§25①1호를 소액 수의계약으로 인용한다"
+    assert_includes rec, "제25조 제1항 제5호 (소액 수의계약 — 세부 목은 계약유형·상대방 요건에 따라 확인)",
+                    "제5호 정정 + 세부목 미확정 표기가 없다"
+    # 사건 근거로 확정되지 않은 목을 legal_basis 에 지정하면 안 된다
+    legal_basis = rec[/ac\.legal_basis = '[^']*'/].to_s
+    refute_match(/제5호\s*[가-바]목/, legal_basis,
+                 "사건 근거 없이 §25①5호의 세부 목을 임의 지정했다: #{legal_basis}")
+  end
+
+  test "N1: 1억원 특례 근거가 제5호로 정정됐다" do
+    v = Rails.root.join(LIMIT_FLOWCHART).read
+    refute_match D_ART25_HO9, v, "«제9호 등» 오기 잔존"
+    assert_includes v, "제25조제1항제5호에 따른 상시 제도입니다", "제5호 정정문이 없다"
+    # 같은 문장의 정당한 기준들이 함께 지워지지 않았는지
+    assert_includes v, "일반 물품·용역 수의계약 한도는 2천만원, 청년창업기업은 5천만원",
+                    "같은 문장의 정당한 금액 기준이 훼손됐다"
+  end
+
   # ── 3. 엔진 ↔ 콘텐츠 의미 충돌 0 (결론 semantics 비교) ──
   # 문자열 동일성이 아니라 **결론**을 비교한다.
   test "의미 정합: 물품 분할을 엔진은 절대금지로 판정하지 않는다" do
