@@ -1,7 +1,7 @@
 # RESUME_PROMPT — P2 AUDIT 이후 다음 세션 시작점
 
-> 2026-09-06 세션 ①(감사) + ②(R1 구현).
-> **P2_AUDIT = COMPLETE · R1 = COMPLETE(repo) · 배포 대기.**
+> 2026-09-06 세션 ①(감사) + ②(R1 구현) + ③(R1 운영 배포).
+> **P2_AUDIT = COMPLETE · R1 = DEPLOYED / CLOSED.**
 >
 > ⚠️ **R1 이 감사 결과 3건을 정정했다** — 반드시 `12_R1_DATA_INTEGRITY_AND_DISCOVERABILITY.md` §0 을 먼저 읽을 것.
 > P-2(provenance 61건)·P-3(고아 category)은 **결함이 아니었고**, FAQ 도달 수치도 455→465 로 틀렸었다.
@@ -24,9 +24,10 @@ curl -sI https://silmu.kr/up | head -1
 
 ```
 BRANCH                 feature/silmu-p2-general-admin-expansion
-BASE                   f7fb1be (= origin/feature/silmu-p16-task-first-ux tip · P1.6 remote recovery)
-PRODUCTION_REVISION    18fb7350cbd07c069775f69aef51c0ca8956982a
-ROLLBACK               2d05bae9d99fc47518ae212ea24cd806e8fa67c2
+REMOTE_RECOVERY        origin/feature/silmu-p2-general-admin-expansion @ ce62d2e  (2026-09-06 push)
+BASE                   f7fb1be (= P1.6 remote recovery tip)
+PRODUCTION_REVISION    ce62d2ebee5e465bb230cccf9134e2ada9c71d20   ← R1 (2026-09-06 12:10 KST)
+ROLLBACK               18fb7350cbd07c069775f69aef51c0ca8956982a   ← P1.6 (서버에 이미지 보유)
 운영 health            200 (/up)
 P1_6_STATUS            DEPLOYED · CLOSED/FROZEN — 이 세션에서 한 줄도 건드리지 않았다
 MAIN                   무변경 · push 0 · force push 0
@@ -67,6 +68,7 @@ docs/silmu-p2/
   09_AUTHORITY_COVERAGE.md          Authority 8문서 · Topic 링크 0% · provenance 결함
   10_IMPLEMENTATION_ROADMAP.md      선행정정 P-1~3 · 추천 R1~R5 · 승인 지점
   11_MEASUREMENT_EVENTS.md          기존 계측 재사용 · 신규 3건만 · 성과 판정 기준
+  13_R1_PRODUCTION_ROLLOUT.md       배포 실측 — artifact blob 대조 · 8/8 운영 재현 · 음성대조 · 모바일/SEO
   _measure/  (6종 read-only 스크립트 — 재측정용)
   _data/     (원자료 JSON)
 ```
@@ -92,7 +94,7 @@ docs/silmu-p2/
 P-1 FAQ jsonb 정규화   ✅ 운영 적용 — 도달 465 → 474 (9건 회복) · 저작 474 불변 · 내용 창작 0
 P-2 provenance 61건    ❌ 결함 아님 — UNCHANGED 61 (분류 게이트를 출처 신뢰도로 오독했던 것)
 P-3 고아 category      ❌ 운영에 없음 — dev 전용. 데이터 무변경, 탐지기만 신설
-R1  도구 keywords      ✅ 5개 도구·7낱말 — 질의 8개 해소 · 음성대조 5→5 불변 · **배포 전까지 운영 미반영**
+R1  도구 keywords      ✅ 5개 도구·**8낱말** — **운영 배포 완료 · 8/8 질의 운영에서 재현**
 테스트                497 runs · 3,138 assertions · 0F · 0E · 14 skips · RuboCop 0 · 뮤테이션 **8/8 KILLED**
 P1.6 동결             7파일 UNCHANGED · 정밀도 가드 3종 운영 재실행 PASS
 독립검증(gemini)      CONDITIONAL_GO — 지적 7건(HIGH 2·MEDIUM 3·LOW 2) **전건 재현 확인 후 수리**
@@ -109,13 +111,13 @@ P1.6 동결             7파일 UNCHANGED · 정밀도 가드 3종 운영 재실
 
 | 후보 | 성격 | 크기 | 근거 | 동결 안전 | 상태 |
 |---|---|---|---|---|---|
-| **배포** | R1 코드를 운영에 반영 | 작음 | — | ✅ | **대기 — 이게 다음 1건** |
-| **R2** 수의계약 한도·분할발주 | Moat | 중간 | LOADED | ✅ | 미착수 |
+| ~~배포~~ | R1 코드를 운영에 반영 | — | — | — | ✅ **2026-09-06 12:10 완료 (13 문서)** |
+| **R2** 수의계약 한도·분할발주 | Moat | 중간 | LOADED | ✅ | **대기 — 이게 다음 1건** |
 | **R4** 신규자 트랙 3종 | Newcomer | 작음~중간 | — | ⚠️ guides_controller 상수만 | 미착수 |
 | **R3** DO 층 10→25 | High-value | 중간~큼 | LOADED | ✅ | 미착수 |
 | **R5** 신규 토픽 2건 | 순수 공백 | 중간 | ⚠️ NOT_LOADED — 09 선행 | ✅ | 미착수 |
 
-권장 순서: `배포 → R2 R4 → R3 → (09 적재 판단) → R5`
+권장 순서: `R2 → R4 → R3 → (09 적재 판단) → R5`
 
 **TOOL_MISSING 22 테마**(기간제 38 · 일상경비 36 · 휴가 31 · 검사검수 26 · 업무추진비 18 · 선금 16 · 겸직 15 …)는
 keyword 로 해소되지 않는다 — 07 문서의 Functional Asset 실제 제작 대상이다.
