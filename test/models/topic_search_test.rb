@@ -308,6 +308,13 @@ class TopicSearchTest < ActiveSupport::TestCase
                                 "answer" => "연차 기준에 따라 부여" } ])
     assert_nil Topic.answer_for("연차 지급 기준", [ t ]),
       "질문에 없는 '연차' 를 토픽 이름·키워드·답변에서 끌어와 승격하면 안 된다"
+
+    # 양성 대조 — 위 nil 이 "히트 수 부족" 때문이 아니라 **게이트 때문**임을 보인다.
+    # 질문에 고유 토큰이 들어오면 같은 히트 수(지급·기준+연차)로 승격된다.
+    hit = topic_with_faq!(slug: "test-hit-scope-control", name: "연차", keywords: "연차",
+                          question: "연차 지급 기준은 어떻게 되나요?")
+    assert Topic.answer_for("연차 지급 기준", [ hit ]),
+      "양성 대조가 실패하면 위 assert_nil 은 게이트를 증명하지 않는다"
   end
 
   test "answer_for: 게이트는 FAQ 마다 따로 본다 (토픽 단위로 통과시키지 않는다)" do
@@ -332,6 +339,10 @@ class TopicSearchTest < ActiveSupport::TestCase
                       faqs: [ { "question" => "육아 지급 기준은 어떻게 되나요?",
                                 "answer" => "육아 관련 수당" } ])
     assert_nil Topic.answer_for("육아휴직 지급 기준", [ t ])
+
+    # 양성 대조 — 같은 FAQ 가 "육아" 질문에는 정상 승격한다. 위 nil 은 경계 판정의 결과다.
+    assert Topic.answer_for("육아 지급 기준", [ t ]),
+      "양성 대조가 실패하면 위 assert_nil 은 경계 판정을 증명하지 않는다"
   end
 
   test "answer_for: 자연어 질문의 정답 FAQ 는 종전대로 승격한다 (비퇴화)" do
