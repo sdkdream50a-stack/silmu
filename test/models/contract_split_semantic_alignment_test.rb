@@ -311,6 +311,8 @@ class ContractSplitSemanticAlignmentTest < ActiveSupport::TestCase
   # 양성 대조는 정정 전 커밋(132d463)의 blob 에서 읽는다. 다 고친 뒤 워킹트리에는
   # 결함 표본이 없으므로, 지금 남아 있는 것만으로 대조를 세우면 탐지기가 죽어도 0 이 나온다.
   REPAIR_BEFORE_COMMIT = "132d463"
+  # F1·F5 는 그 다음 커밋(ada9b48)까지 남아 있었다
+  REPAIR_BEFORE_COMMIT_F = "ada9b48"
 
   # «수의계약 한도 = 5천만원» 보편 단정. 사건 사실의 5천만원(계약금액·기관 내부통제)은 잡지 않는다.
   D_LIMIT_5000_UNIVERSAL = /수의계약\s*한도(?:액)?\s*\(\s*5천만원\s*\)|5천만원\(용역·물품\)/
@@ -394,6 +396,92 @@ class ContractSplitSemanticAlignmentTest < ActiveSupport::TestCase
     # 같은 문장의 정당한 기준들이 함께 지워지지 않았는지
     assert_includes v, "일반 물품·용역 수의계약 한도는 2천만원, 청년창업기업은 5천만원",
                     "같은 문장의 정당한 금액 기준이 훼손됐다"
+  end
+
+  # ── 2-ter. 배포 blocker F1·F5 (독립검증 MUST_FIX · 2026-09-06) ──
+  #
+  # §25①1호 = 천재지변·감염병… 입찰에 부칠 여유가 없는 경우.  소액수의 체계 = §25①5호.
+  # F1 은 이 오기가 **다른 published 감사사례**에 남아 있던 것이고, F5 는 한도 토픽 표제였다.
+  # 대상 slug 하나만 검사하면 F1 이 또 빠져나간다 — **db/seeds 전역**으로 센다.
+  #
+  # 단 §25①1호를 «긴급계약» 문맥으로 정확히 쓴 곳은 정본이므로 잡으면 안 된다(음성 대조).
+  D_HO1_AS_SMALL_AMOUNT = /제25조\s*제1항\s*제1호[^\n]{0,40}\(\s*소액\s*수의계약/
+  D_HO1_AS_LIMIT        = /제25조\s*제1항\s*제1호[^\n]{0,40}\(\s*수의계약\s*한도/
+  D_HO1_EMERGENCY       = /제25조\s*제1항\s*제1호[^\n]{0,60}(?:천재지변|긴급|재난)/
+
+  # 정정 시드는 «치환표» 다 — old 문자열로 정정 전 문구를 **반드시** 들고 있어야 한다.
+  # 그걸 결함으로 세면 고칠수록 숫자가 나빠진다(이 프로젝트에서 실제로 겪었다).
+  # 사용자에게 나가는 콘텐츠가 아니므로 이름을 명시해 제외하되,
+  # **제외가 실제로 필요한 파일만** 목록에 둔다 — 안 걸리는 파일을 넣어두면 목록이 은신처가 된다.
+  CORRECTIVE_SEEDS = %w[
+    db/seeds/topic_deploy_blocker_fix_2026_09_06.rb
+  ].freeze
+
+  def all_seed_files
+    Dir[Rails.root.join("db/seeds/**/*.rb")]
+  end
+
+  def seed_files
+    all_seed_files.reject do |f|
+      CORRECTIVE_SEEDS.include?(Pathname.new(f).relative_path_from(Rails.root).to_s)
+    end
+  end
+
+  test "제외 목록은 «제외가 실제로 필요한» 정정 시드만이고 조용히 늘지 않는다" do
+    assert_equal 1, CORRECTIVE_SEEDS.size, "정정 시드 제외 목록이 바뀌었다 — 판정 없이 늘리지 않는다"
+    CORRECTIVE_SEEDS.each do |rel|
+      path = Rails.root.join(rel)
+      assert path.exist?, "제외 목록에 없는 파일이 있다: #{rel}"
+      src = path.read
+      # 제외 근거 = 이 파일이 실제로 탐지기에 걸린다는 것. 안 걸리면 제외할 이유가 없다.
+      assert src.match?(D_HO1_AS_SMALL_AMOUNT) || src.match?(D_HO1_AS_LIMIT),
+             "#{rel} 은 탐지기에 걸리지 않는다 — 제외 목록에 있을 이유가 없다"
+      # 그리고 «치환표» 여야 한다: 정정 후 문자열도 함께 들고 있어야 한다.
+      assert_includes src, "제25조 제1항 제5호", "#{rel} 이 치환표가 아니다(정정 후 문자열 없음)"
+    end
+  end
+
+  test "양성 대조: 수리 전 커밋에서 F1·F5 오기가 실제로 검출된다" do
+    f1 = blob(REPAIR_BEFORE_COMMIT_F, "db/seeds/audit_cases/topic_audit_cases_batch_01.rb")
+    f5 = blob(REPAIR_BEFORE_COMMIT_F, "db/seeds/subtopics.rb")
+    assert_match D_HO1_AS_SMALL_AMOUNT, f1,
+                 "F1 탐지기가 수리 전 «§25①1호 (소액 수의계약)» 를 잡지 못한다"
+    assert_match D_HO1_AS_LIMIT, f5,
+                 "F5 탐지기가 수리 전 «§25①1호 (수의계약 한도)» 를 잡지 못한다"
+  end
+
+  test "F1: db/seeds 전역에서 «§25①1호 = 소액 수의계약» 결합이 0건" do
+    offenders = seed_files.filter_map do |f|
+      src = File.read(f)
+      next unless src.match?(D_HO1_AS_SMALL_AMOUNT)
+      "#{Pathname.new(f).relative_path_from(Rails.root)}"
+    end
+    assert_empty offenders, "§25①1호를 소액 수의계약으로 인용하는 시드가 남아 있다: #{offenders.inspect}"
+  end
+
+  test "F5: db/seeds 전역에서 «§25①1호 = 수의계약 한도» 결합이 0건" do
+    offenders = seed_files.filter_map do |f|
+      src = File.read(f)
+      next unless src.match?(D_HO1_AS_LIMIT)
+      "#{Pathname.new(f).relative_path_from(Rails.root)}"
+    end
+    assert_empty offenders, "§25①1호를 수의계약 한도로 인용하는 시드가 남아 있다: #{offenders.inspect}"
+  end
+
+  test "음성 대조: §25①1호를 긴급계약으로 정확히 쓴 곳은 보존된다" do
+    # 실측(2026-09-06): 4곳. 하나라도 사라지면 과잉정정이다.
+    kept = seed_files.count { |f| File.read(f).match?(D_HO1_EMERGENCY) }
+    assert_operator kept, :>=, 4,
+                    "§25①1호의 정당한 긴급계약 인용이 줄었다(#{kept}건) — 과잉정정"
+    # 그리고 그 문맥이 F1/F5 탐지기에 걸리면 안 된다
+    [
+      "| **긴급 수의** | 시행령 제25조 제1항 제1호 | 천재지변, 긴급 행사 등 경쟁 여유 없음 |",
+      "시행령 제25조 제1항 제1호·제2호 (천재지변·재난 긴급복구)",
+      "지방자치단체를 당사자로 하는 계약에 관한 법률 시행령 제25조제1항제1호(긴급입찰)"
+    ].each do |s|
+      refute_match D_HO1_AS_SMALL_AMOUNT, s, "정당한 긴급계약 인용을 F1 결함으로 오검출한다: #{s[0, 40]}"
+      refute_match D_HO1_AS_LIMIT, s, "정당한 긴급계약 인용을 F5 결함으로 오검출한다: #{s[0, 40]}"
+    end
   end
 
   # ── 3. 엔진 ↔ 콘텐츠 의미 충돌 0 (결론 semantics 비교) ──
