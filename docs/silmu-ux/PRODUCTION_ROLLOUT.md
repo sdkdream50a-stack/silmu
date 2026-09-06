@@ -1,64 +1,79 @@
 # PRODUCTION_ROLLOUT — P1.6
 
-> 상태: **미배포**. 이 문서는 배포 절차와 전제조건만 정리한다.
+> 상태: **DEPLOYED**. 2026-09-06 10:16:46~10:18:18 KST (91.1s).
+> 이 문서는 실제 배포 실측 기록이다.
 
-## 1. 현재
+## 1. 배포 대상
 
 ```
-BRANCH        feature/silmu-p16-task-first-ux
-BASE          fix/tool-accuracy-p1-0804 @ e0342a7
-운영 리비전    2d05bae9d99fc47518ae212ea24cd806e8fa67c2 (P1.55B, 변경 없음)
-PUSH          없음
-DEPLOY        없음
+BRANCH            feature/silmu-p16-task-first-ux
+APPROVED_HEAD     18fb7350cbd07c069775f69aef51c0ca8956982a
+REMOTE_PUSH       없음 — kamal 2.11 원격 빌더는 로컬 컨텍스트를 쓰므로 push 가 배포 조건이 아니다.
+                  롤백도 서버 로컬 이미지 태그로 가능(아래 §6). 그래서 push 하지 않았다.
+PRODUCTION_BEFORE 2d05bae9d99fc47518ae212ea24cd806e8fa67c2  (P1.55B)
+PRODUCTION_AFTER  18fb7350cbd07c069775f69aef51c0ca8956982a
+DELTA             12 커밋 · app 11 파일 · test 7 파일 · docs 19 파일
+                  db/ · config/ 변경 **0** → 마이그레이션 0 · 라우트 0 · 스케줄러 설정 0
 ```
 
-## 2. 배포 전 필수 (§75)
+`2d05bae` 는 `18fb735` 의 조상이다(`git merge-base --is-ancestor` 확인) — 전진 배포, 히스토리 분기 없음.
+
+## 2. Docker preflight (P1.55B known trap 재현됨)
+
+```
+docker info                  → DOCKER_UNAVAILABLE (로컬 데몬 없음)
+pgrep -fl "Docker Desktop"   → (없음)
+~/.docker/config.json        → credsStore: "desktop"
+```
+
+P1.55A/B 가 규명한 **배포 정지 조건과 동일**. 그대로 `kamal deploy` 했다면 GHCR 푸시에서 멈췄다.
+→ `BUILDER_RECOVERY.md` 방식 C(격리 DOCKER_CONFIG)만 사용. **전역 `~/.docker/config.json` 무변경**
+(배포 전후 `credsStore: desktop` · `currentContext: desktop-linux` 동일 확인).
+
+## 3. 배포 명령
 
 ```bash
-docker info        # ← 반드시 먼저. P1.55B known trap
-```
-Docker Desktop 이 꺼져 있고 `credsStore: desktop` 이면 GHCR credential lookup 이 멈춘다.
-그때는 `docs/silmu-production-completion/BUILDER_RECOVERY.md` 의 **방식 C(격리 DOCKER_CONFIG)** 를 쓴다.
-**전역 Docker config 를 수정하지 않는다.**
-
-> BUILDER_RECOVERY §6 이월 사항: P1.55A·P1.55B 모두 방식 C 를 임시 적용했고 영구 채택은 아직이다.
-> 매 배포마다 같은 우회가 필요하므로 A/B/C 중 하나를 결정할 시점이다. P1.6 에서 결정하지 않았다.
-
-## 3. 마이그레이션
-
-**없다.** 스키마 변경 0 · 신규 컬럼 0 · 신규 테이블 0.
-→ 롤백은 이전 이미지로 되돌리는 것만으로 완결된다(데이터 되돌림 불필요).
-
-## 4. 캐시 (§71)
-
-배포 후 화면이 안 바뀌어 보이면 **DB 실패로 결론내지 않는다.**
-Cloudflare edge cache TTL ≈ 4h. 먼저 `CF-Cache-Status` 가 HIT 인지 확인한다.
-
-P1.6 이 건드리는 캐시 키:
-```
-home/task_entry_counts/v1      (신규, 1h)
-home/curated/*                 (기존)
-topics/fragment_version        (기존)
-```
-업무 카드 커버리지는 최대 1시간 지연될 수 있다 — 콘텐츠를 추가한 직후 카드가 안 보여도 정상이다.
-
-## 5. 배포 후 확인 목록
-
-```
-[ ] /                      업무 카드가 운영 콘텐츠 기준으로 렌더되는가 (dev 와 다를 수 있음)
-[ ] /silmu-search?q=병가 며칠 쓰면 진단서 내야 하나요   → 바로 답 카드
-[ ] /topics/private-contract  → 상태 칩 + 지금 해야 할 일
-[ ] /topics /guides /audit-cases /tools  전부 200
-[ ] /sitemap.xml /robots.txt /feed.rss   전부 200
-[ ] rake silmu:p1:leak_scan  → 실제 누출 0 · positive control OK
-[ ] 콘텐츠 자동 변이 0 (digest 대조)
+DOCKER_CONFIG=<격리사본> bin/kamal deploy --version=18fb7350cbd07c069775f69aef51c0ca8956982a
 ```
 
-## 6. 켜지 않는 것
+`--version` 을 명시한 이유: 워킹트리에 `.omc/` · `.claude/` · `.mcp.json` 환경 잔재가 더티로 남아 있어
+kamal 기본 버전 산출이 `<sha>_uncommitted_<hex>` 를 만든다. 그러면 운영 리비전이 승인 SHA 와
+달라지고 SHA 기반 롤백 의미가 깨진다. 환경 잔재는 **커밋하지 않았다**(다른 세션 소유분 포함).
 
 ```
-AuthorityFreshnessCheckJob 스케줄러   OFF 유지 (별도 승인 사안)
-LegacyLegalComplianceJob             영구 비활성
-푸터 문구 강화                        금지 (스케줄러 실증 전)
-main merge / push                    승인되지 않음
+INFO First web container is healthy on 141.164.53.97
+Finished all in 91.1 seconds
+EXIT=0
 ```
+
+## 4. 배포된 artifact = 18fb735 인가 (exit=0 을 성공으로 치지 않는다)
+
+컨테이너 안 파일과 `git rev-parse 18fb735:<path>` blob 해시를 대조했다.
+
+| 파일 | 판정 |
+|---|:--:|
+| `app/models/topic.rb` | MATCH |
+| `app/services/search_query_parser.rb` | MATCH |
+| `app/views/home/index.html.erb` | MATCH |
+| `app/views/layouts/_nav_v2.html.erb` | MATCH |
+
+`kamal app version` → `18fb7350cbd07c069775f69aef51c0ca8956982a`.
+
+## 5. 공개 검증 (캐시와 원본 구분)
+
+첫 평문 요청은 `cf-cache-status: UPDATING` · `age: 174` 로 **배포 전 캐시본**이었다 —
+여기서 멈췄다면 "배포 실패"로 오판했을 것이다. 유니크 쿼리로 캐시 우회(`?cb=…`) 하니
+`cf-cache-status: MISS` 로 원본이 왔고 P1.6 마커 4종이 전부 present.
+그 뒤 엣지가 stale-while-revalidate 로 스스로 갱신됐다(`HIT` · age 31 · 마커 present).
+**전체 purge 는 하지 않았다.**
+
+## 6. 롤백
+
+```
+서버 로컬 이미지  ghcr.io/sdkdream50a-stack/silmu:2d05bae9d99… (923b685818ca) 보유
+백업             /root/backups/silmu/ 63개 · 최신 prewrite 20260905_153316.dump
+마이그레이션      이번 배포 0건 → DB 롤백 불필요
+명령             bin/kamal rollback 2d05bae9d99fc47518ae212ea24cd806e8fa67c2
+```
+
+READY=YES · EXECUTED=NO (실패 조건 미발생).

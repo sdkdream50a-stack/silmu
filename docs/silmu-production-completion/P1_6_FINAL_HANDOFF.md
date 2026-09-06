@@ -2,7 +2,11 @@
 
 > §26~§28. P1.55 의 `P1_6_HANDOFF.md` 가 정본이며, 이 문서는 **운영 배포 이후 상태로 재확인**한 결과다.
 >
-> **P1.55B(2026-09-06) 재확인 완료** — 운영 리비전 `2d05bae`. 아래 public contract 는 이번 배포로 변하지 않았다.
+> **P1.6 배포 완료(2026-09-06 10:18 KST)** — 운영 리비전 `18fb7350cbd07c069775f69aef51c0ca8956982a`.
+> P1.6 은 view·파셜·검색 서비스를 바꿨으나 `AuthorityPresenter` public contract 는 **읽기만** 했다.
+> 배포·검증 실측 = `docs/silmu-ux/PRODUCTION_ROLLOUT.md` · `docs/silmu-ux/PRODUCTION_SMOKE.md`.
+>
+> **P1.55B(2026-09-06) 재확인 완료** — 직전 운영 리비전 `2d05bae`(현 롤백 지점). 아래 public contract 는 이번 배포로 변하지 않았다.
 > P1.55B 는 백엔드 알림만 추가했고 **view·presenter·파셜·라우트를 한 건도 건드리지 않았다** → 충돌 위험 증가 없음.
 
 ## 1. Public contract 재확인 (§26)
