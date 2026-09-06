@@ -1,0 +1,125 @@
+{
+ "scanned_at": "2026-09-06T10:14:12.499017+00:00",
+ "count": 24,
+ "files": {
+  "app/views/legal_compliance_mailer/monthly_deep_check.html.erb": 1,
+  "app/views/topics/flowcharts/_split_contract_prohibition.html.erb": 2,
+  "config/tool_trust.yml": 1,
+  "db/seeds/audit_cases/content_enrichment_phase2_edu_rest_14_2026_05_19.rb": 1,
+  "db/seeds/audit_cases/contract_method_violations.rb": 2,
+  "db/seeds/topic_estimated_amount.rb": 4,
+  "db/seeds/topic_faqs_backfill_2026_06_03_batch4.rb": 2,
+  "db/seeds/topic_quick_stats_backfill_2026_06_03_batch7.rb": 5,
+  "db/seeds/topic_split_contract.rb": 3,
+  "db/seeds/zz_auditcase_verification_2026_06_18_batch12.rb": 1,
+  "db/seeds/zz_guide_verification_2026_06_09_batch5.rb": 1,
+  "db/seeds/zz_topic_verification_2026_06_09_batch4.rb": 1
+ },
+ "excluded": {
+  "app/services/contract_decision/": "R2 판단 엔진 — 두 트랙으로 이미 갈라져 있다",
+  "app/views/tools/split_contract_checker": "R2 도구 — §77 은 공사 트랙에만 붙는다",
+  "app/models/exam_questions.rb": "시험문제 은행 — 정답 해설이 공사 한정을 명시한다",
+  "app/models/exam_curriculum": "시험 커리큘럼 — 국가/지방 조문 대비표",
+  "config/contract_decision_rules.yml": "R2 규칙집 — source_locator 는 조문 위치 표기지 진술이 아니다",
+  "db/seeds/topic_legacy_semantic_alignment_2026_09_06.rb": "이번 정정 시드의 헤더 주석",
+  "db/seeds/topic_fence_installation.rb": "펜스=공사. 토픽 전체가 공사 문맥이라 문장 단위로만 잡힌다(오검출)"
+ },
+ "hits": [
+  {
+   "file": "app/views/legal_compliance_mailer/monthly_deep_check.html.erb",
+   "sentence": "- 제25조(수의계약 한도), 제30조(견적 절차), 제77조(분할계약 금지), 제90조(지연배상금)"
+  },
+  {
+   "file": "app/views/topics/flowcharts/_split_contract_prohibition.html.erb",
+   "sentence": "지방계약법 시행령 제77조 (분할계약 금지) 규정에 따라 3단계로 진행됩니다."
+  },
+  {
+   "file": "app/views/topics/flowcharts/_split_contract_prohibition.html.erb",
+   "sentence": "✓ 입찰 또는 계약 방법을 회피할 목적으로 계약을 분할하면 위법입니다 (시행령 제77조)"
+  },
+  {
+   "file": "db/seeds/topic_split_contract.rb",
+   "sentence": "시행령 제77조"
+  },
+  {
+   "file": "db/seeds/topic_split_contract.rb",
+   "sentence": "**관련근거:** 시행령 제77조 (추정가격 산정)"
+  },
+  {
+   "file": "db/seeds/topic_split_contract.rb",
+   "sentence": "**관련근거:** 시행령 제25조, 제77조"
+  },
+  {
+   "file": "db/seeds/topic_estimated_amount.rb",
+   "sentence": "> 이 한도를 맞추려고 하나의 계약을 여러 건으로 **쪼개면(분할계약) 시행령 §77 위반**입니다."
+  },
+  {
+   "file": "db/seeds/topic_estimated_amount.rb",
+   "sentence": "③ 한도를 맞추려 계약을 분할 (→ 시행령 §77 위반, 중징계)"
+  },
+  {
+   "file": "db/seeds/topic_estimated_amount.rb",
+   "sentence": "수의계약 한도나 입찰 방식을 회피하려고 단일 사업을 여러 건으로 쪼개는 분할계약은 시행령 §77로 금지됩니다."
+  },
+  {
+   "file": "db/seeds/topic_estimated_amount.rb",
+   "sentence": "한도 맞추기 분할계약(§77 위반)"
+  },
+  {
+   "file": "db/seeds/zz_auditcase_verification_2026_06_18_batch12.rb",
+   "sentence": "# §60·§77 조문 제목 미확정(보수적 보류): contract-termination-no-notice·private-contract-split-over-limit 등"
+  },
+  {
+   "file": "db/seeds/zz_guide_verification_2026_06_09_batch5.rb",
+   "sentence": "\"법제처 — 지방계약법 §15(계약보증금 10%)·§18(대가 지급)·시행령 §64(검사: 통보 후 14일 이내)·§77(분할계약 금지)."
+  },
+  {
+   "file": "db/seeds/topic_quick_stats_backfill_2026_06_03_batch7.rb",
+   "sentence": "# 지방계약법(법, mst253973) §6·§9·§14·§18 / 시행령(mst286149) §2·§7·§9·§10·§25·§30·§39·§77"
+  },
+  {
+   "file": "db/seeds/topic_quick_stats_backfill_2026_06_03_batch7.rb",
+   "sentence": "# ⑤ split-contract/split-contract-prohibition: 둘 다 시행령§77(분할 금지)·소액수의 §25①5호나목"
+  },
+  {
+   "file": "db/seeds/topic_quick_stats_backfill_2026_06_03_batch7.rb",
+   "sentence": "{ \"label\" => \"수의 회피 금지\", \"value\" => \"수의계약 한도 맞추려는 분할 금지\", \"note\" => \"지방계약법 시행령 제77조제3항\" },"
+  },
+  {
+   "file": "db/seeds/topic_quick_stats_backfill_2026_06_03_batch7.rb",
+   "sentence": "{ \"label\" => \"허용 예외\", \"value\" => \"공구별 분할·하자책임 구분 용이 공종 분리 등\", \"note\" => \"지방계약법 시행령 제77조제1항 각 호\" }"
+  },
+  {
+   "file": "db/seeds/topic_quick_stats_backfill_2026_06_03_batch7.rb",
+   "sentence": "{ \"label\" => \"보고 의무\", \"value\" => \"공구 분할계약 시 상급기관 보고\", \"note\" => \"지방계약법 시행령 제77조제4항\" }"
+  },
+  {
+   "file": "db/seeds/topic_faqs_backfill_2026_06_03_batch4.rb",
+   "sentence": "반면 하나로 발주해야 할 사업을 경쟁입찰·수의계약 한도 이하로 쪼개는 것은 위법한 분할계약입니다(지방계약법 시행령 제77조).\" },"
+  },
+  {
+   "file": "db/seeds/topic_faqs_backfill_2026_06_03_batch4.rb",
+   "sentence": "동일 목적의 사업은 전체 사업비를 기준으로 계약방법을 정해야 합니다(시행령 제77조 제2항).\" },"
+  },
+  {
+   "file": "db/seeds/zz_topic_verification_2026_06_09_batch4.rb",
+   "sentence": "\"법제처 — 지방계약법 시행령 §2①(추정가격: 부가세·관급 제외), 시행규칙 §2②(추정금액: 부가세·관급 포함), 시행령 §2②(예정가격: 결정 상한)·§77(분할계약 한도회피 금지)."
+  },
+  {
+   "file": "db/seeds/audit_cases/contract_method_violations.rb",
+   "sentence": "지방계약법 제9조는 경쟁입찰 원칙을 규정하며, 시행령 제77조는 분할계약을 명시적으로 금지합니다."
+  },
+  {
+   "file": "db/seeds/audit_cases/contract_method_violations.rb",
+   "sentence": "단일 사업을 분할하여 금액 기준을 낮추는 행위는 지방계약법 시행령 제77조가 명시적으로 금지하는 분할계약에 해당합니다."
+  },
+  {
+   "file": "db/seeds/audit_cases/content_enrichment_phase2_edu_rest_14_2026_05_19.rb",
+   "sentence": "# - 지방계약법 §7(경쟁)·§9(계약방법) + 시행령 §25·§30·§77"
+  },
+  {
+   "file": "config/tool_trust.yml",
+   "sentence": "laws: \"지방계약법 시행령 제77조\""
+  }
+ ]
+}

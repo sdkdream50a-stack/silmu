@@ -61,7 +61,7 @@ QUICK_STATS_SPRINT3 = {
   "small-amount-contract" => [
     { "label" => "종합공사",  "value" => "4억원 이하",  "note" => "추정가격" },
     { "label" => "전문공사",  "value" => "2억원 이하",  "note" => "기타공사 1.6억" },
-    { "label" => "물품·용역", "value" => "2천만원 이하", "note" => "특례기업 5천만원" }
+    { "label" => "물품·용역", "value" => "2천만원 이하", "note" => "청년창업 5천만원·소기업 등 1억원" }
   ],
 
   # 예산이월 (id:28, 279회)

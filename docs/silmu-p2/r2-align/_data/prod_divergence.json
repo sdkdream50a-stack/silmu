@@ -1,0 +1,154 @@
+{
+  "probed_at": "2026-09-06T10:10:57Z",
+  "summary": {
+    "D_special_cap_5000": 11,
+    "E_missing_micro": 8,
+    "E_unqualified_1eok": 1,
+    "C_absolute_headline": 1,
+    "C_any_split_flagged": 1
+  },
+  "hits": {
+    "D_special_cap_5000": [
+      {
+        "model": "Topic",
+        "id": 21,
+        "slug": "single-quote",
+        "field": "rule_content"
+      },
+      {
+        "model": "Topic",
+        "id": 21,
+        "slug": "single-quote",
+        "field": "regulation_content"
+      },
+      {
+        "model": "Topic",
+        "id": 23,
+        "slug": "private-contract-limit",
+        "field": "summary"
+      },
+      {
+        "model": "Topic",
+        "id": 23,
+        "slug": "private-contract-limit",
+        "field": "quick_stats"
+      },
+      {
+        "model": "Topic",
+        "id": 24,
+        "slug": "private-contract-amount",
+        "field": "summary"
+      },
+      {
+        "model": "Topic",
+        "id": 24,
+        "slug": "private-contract-amount",
+        "field": "law_content"
+      },
+      {
+        "model": "Topic",
+        "id": 24,
+        "slug": "private-contract-amount",
+        "field": "quick_stats"
+      },
+      {
+        "model": "Topic",
+        "id": 25,
+        "slug": "small-amount-contract",
+        "field": "summary"
+      },
+      {
+        "model": "Topic",
+        "id": 25,
+        "slug": "small-amount-contract",
+        "field": "decree_content"
+      },
+      {
+        "model": "Topic",
+        "id": 25,
+        "slug": "small-amount-contract",
+        "field": "quick_stats"
+      },
+      {
+        "model": "Topic",
+        "id": 57,
+        "slug": "national-vs-local-contract-law",
+        "field": "decree_content"
+      }
+    ],
+    "E_missing_micro": [
+      {
+        "model": "Topic",
+        "id": 22,
+        "slug": "dual-quote",
+        "field": "law_content"
+      },
+      {
+        "model": "Topic",
+        "id": 23,
+        "slug": "private-contract-limit",
+        "field": "law_content"
+      },
+      {
+        "model": "Topic",
+        "id": 23,
+        "slug": "private-contract-limit",
+        "field": "regulation_content"
+      },
+      {
+        "model": "Topic",
+        "id": 23,
+        "slug": "private-contract-limit",
+        "field": "practical_tips"
+      },
+      {
+        "model": "Topic",
+        "id": 24,
+        "slug": "private-contract-amount",
+        "field": "law_content"
+      },
+      {
+        "model": "Topic",
+        "id": 24,
+        "slug": "private-contract-amount",
+        "field": "decree_content"
+      },
+      {
+        "model": "Topic",
+        "id": 24,
+        "slug": "private-contract-amount",
+        "field": "regulation_content"
+      },
+      {
+        "model": "Topic",
+        "id": 25,
+        "slug": "small-amount-contract",
+        "field": "regulation_content"
+      }
+    ],
+    "E_unqualified_1eok": [
+      {
+        "model": "Topic",
+        "id": 23,
+        "slug": "private-contract-limit",
+        "field": "decree_content"
+      }
+    ],
+    "C_absolute_headline": [
+      {
+        "model": "Topic",
+        "id": 23,
+        "slug": "private-contract-limit",
+        "field": "practical_tips"
+      }
+    ],
+    "C_any_split_flagged": [
+      {
+        "model": "Topic",
+        "id": 23,
+        "slug": "private-contract-limit",
+        "field": "practical_tips"
+      }
+    ]
+  }
+}

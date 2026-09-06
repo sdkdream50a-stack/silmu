@@ -399,7 +399,7 @@ A. 2인 이상 견적 대상에서 1인만 수의시담에 응한 경우, 해당
 
       <strong>2인 이상 견적 필수 대상:</strong>
       <ul style="margin-top:8px;">
-        <li>• 물품·용역: <strong>2천만원 초과 ~ 수의계약 한도</strong> (소기업·여성·장애인·사회적기업 등 1억원)</li>
+        <li>• 물품·용역: <strong>2천만원 초과 ~ 수의계약 한도</strong> (청년창업 5천만원, 소기업·소상공인·여성·장애인·사회적기업 등 1억원)</li>
         <li>• 공사: <strong>2천만원 초과 ~ 수의계약 한도</strong> (종합 4억, 전문 2억)</li>
       </ul>
     LAW
@@ -592,8 +592,8 @@ A. 2인 이상 견적 대상에서 1인만 수의시담에 응한 경우, 해당
       <div style="background:#eff6ff; padding:16px; border-radius:8px; margin-top:12px;">
         <ul style="margin:0; line-height:2;">
           <li>가. 공사: <strong style="color:#1d4ed8; font-size:1.2em;">종합 4억원, 전문 2억원, 기타 1.6억원 이하</strong></li>
-          <li>나. 물품의 제조·구매: <strong style="color:#1d4ed8; font-size:1.2em;">2천만원 이하</strong> (청년창업 5천만원, 소기업·여성·장애인·사회적기업 등 1억원)</li>
-          <li>다. 용역: <strong style="color:#1d4ed8; font-size:1.2em;">2천만원 이하</strong> (청년창업 5천만원, 소기업·여성·장애인·사회적기업 등 1억원)</li>
+          <li>나. 물품의 제조·구매: <strong style="color:#1d4ed8; font-size:1.2em;">2천만원 이하</strong> (청년창업 5천만원, 소기업·소상공인·여성·장애인·사회적기업 등 1억원)</li>
+          <li>다. 용역: <strong style="color:#1d4ed8; font-size:1.2em;">2천만원 이하</strong> (청년창업 5천만원, 소기업·소상공인·여성·장애인·사회적기업 등 1억원)</li>
         </ul>
       </div>
 
@@ -613,13 +613,13 @@ A. 2인 이상 견적 대상에서 1인만 수의시담에 응한 경우, 해당
         </tr>
         <tr>
           <td style="border:1px solid #d1d5db; padding:12px; font-weight:bold;">물품구매</td>
-          <td style="border:1px solid #d1d5db; padding:12px; color:#1d4ed8;">2천만원 (특례 1억)</td>
+          <td style="border:1px solid #d1d5db; padding:12px; color:#1d4ed8;">2천만원 (청년창업 5천만·소기업 등 1억)</td>
           <td style="border:1px solid #d1d5db; padding:12px;">2천만원 이하</td>
           <td style="border:1px solid #d1d5db; padding:12px;">2천만원 초과</td>
         </tr>
         <tr style="background:#f9fafb;">
           <td style="border:1px solid #d1d5db; padding:12px; font-weight:bold;">용역</td>
-          <td style="border:1px solid #d1d5db; padding:12px; color:#1d4ed8;">2천만원 (특례 1억)</td>
+          <td style="border:1px solid #d1d5db; padding:12px; color:#1d4ed8;">2천만원 (청년창업 5천만·소기업 등 1억)</td>
           <td style="border:1px solid #d1d5db; padding:12px;">2천만원 이하</td>
           <td style="border:1px solid #d1d5db; padding:12px;">2천만원 초과</td>
         </tr>
@@ -667,7 +667,7 @@ A. 2인 이상 견적 대상에서 1인만 수의시담에 응한 경우, 해당
             <div class="bg-white rounded-lg p-3 border">
               <div class="text-sm text-gray-500">물품/용역</div>
               <div class="text-lg font-bold text-blue-600">수의한도: 2천만원</div>
-              <div class="text-xs text-gray-400 mt-1">특례: 소기업·여성·장애인·사회적기업 등 1억</div>
+              <div class="text-xs text-gray-400 mt-1">특례: 청년창업 5천만 · 소기업·소상공인·여성·장애인·사회적기업 등 1억</div>
             </div>
             <div class="bg-white rounded-lg p-3 border">
               <div class="text-sm text-gray-500">공사</div>
@@ -680,9 +680,9 @@ A. 2인 이상 견적 대상에서 1인만 수의시담에 응한 경우, 해당
         <div class="bg-red-50 border border-red-200 rounded-xl p-4">
           <h4 class="font-bold text-red-800 flex items-center gap-2 mb-2">
             <span class="material-symbols-outlined">dangerous</span>
-            분할계약 절대 금지!
+            부당한 분할계약 금지
           </h4>
-          <p class="text-red-700">1건의 계약을 2개 이상으로 분할하면 <strong>감사 1순위 지적 대상</strong>입니다.</p>
+          <p class="text-red-700">수의계약 한도나 경쟁입찰을 회피하려고 단일 사업을 나누면 <strong>감사 1순위 지적 대상</strong>입니다. 다만 <strong>나눴다는 사실만으로 위법이 되지는 않습니다</strong> — 공사는 시행령 제77조제1항 각 호(법령상 분리발주·공구별 분할·공종 분리)의 사유가, 물품·용역은 행안부 예규(집행기준 제1장 제1절 5.라 단서, 도서 등 불가피한 사유)가 분할을 허용합니다.</p>
         </div>
       </div>
     TIPS
@@ -786,7 +786,7 @@ A. 2인 이상 견적 대상에서 1인만 수의시담에 응한 경우, 해당
       <div style="background:#eff6ff; padding:16px; border-radius:8px; margin-top:12px;">
         <strong>【수의계약 가능 금액】</strong> (추정가격 기준, 부가세 별도)
         <ul style="margin-top:8px;">
-          <li>1. 물품 구매·용역: <strong style="color:#1d4ed8;">2천만원 이하</strong> (청년창업 5천만원, 소기업·여성·장애인·사회적기업 등 1억원)</li>
+          <li>1. 물품 구매·용역: <strong style="color:#1d4ed8;">2천만원 이하</strong> (청년창업 5천만원, 소기업·소상공인·여성·장애인·사회적기업 등 1억원)</li>
           <li>2. 공사 (종합): <strong style="color:#1d4ed8;">4억원 이하</strong></li>
           <li>3. 공사 (전문): <strong style="color:#1d4ed8;">2억원 이하</strong></li>
           <li>4. 공사 (기타): <strong style="color:#1d4ed8;">1.6억원 이하</strong></li>
@@ -822,7 +822,7 @@ A. 2인 이상 견적 대상에서 1인만 수의시담에 응한 경우, 해당
           ├─ 200만원 ~ 2천만원 → <strong>1인 견적</strong> 수의계약<br>
           ├─ 2천만원 초과 ~ 한도 → <strong>2인 이상 견적</strong> 수의계약 <span style="color:#dc2626; font-weight:bold;">← G2B 전자견적 필수</span><br>
           └─ 한도 초과 → <strong>경쟁입찰</strong><br>
-          (한도: 일반 2천만원, 청년창업 5천만원, 소기업·여성·장애인 등 1억원)
+          (한도: 일반 2천만원, 청년창업 5천만원, 소기업·소상공인·여성·장애인 등 1억원)
         </div>
       </div>
 
