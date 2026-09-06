@@ -109,7 +109,15 @@ DETECT → VERSION → DIFF → IMPACT → REVIEW → VERIFY      (PUBLISH 단�
 `CafeArticle` 은 **법적 사실의 truth source 로 쓰지 않는다.** 03 의 갭 레이더도
 `SearchLog`(우리 사이트 질의)만 썼고 외부 커뮤니티를 근거로 쓰지 않았다.
 
-## 7. §19 Audit Case provenance 실측 — 결함 1건
+## 7. §19 Audit Case provenance 실측 — ~~결함 1건~~ → **결함 0건 (2026-09-06 R1 철회)**
+
+> **정정.** 이 절의 "미검증 61건이 근거 신뢰도 HIGH 로 표기 = FAIL" 판정은 **틀렸다.**
+> `provenance_confidence` 는 출처 신뢰도가 아니라 **분류 판정의 자동적용 게이트**다
+> (HIGH=자동적용 / MEDIUM=검토큐 / LOW=무변경 — `audit_case_provenance_classifier.rb` §27).
+> `UNVERIFIED + HIGH` = "출처가 없다는 분류를 확신한다" 로, 계약상 정상이며 정직한 표기다.
+> 운영에서 분류기 재실행 → 저장값 **MISMATCH 0 · MEDIUM 0**, 뷰 사용처 **0건**.
+> 나는 컬럼 의미를 코드로 확인하지 않고 이름에서 추론했다.
+> 조치 = **없음**(UNCHANGED 61). 상세 = `12_R1_DATA_INTEGRITY_AND_DISCOVERABILITY.md` §2.
 
 | provenance | 건수 | 비율 |
 |---|---:|---:|
@@ -129,9 +137,9 @@ source_type=UNVERIFIED 인데 provenance_confidence=HIGH   61   ← FAIL
 is_reconstructed = nil (미판정)                          61   ← 위 61건과 동일 집합
 ```
 
-> **미검증 61건이 "근거 신뢰도 HIGH" 로 표기돼 있다.** 재구성↔실제 오분류는 없지만
-> **미검증↔확신**의 축이 무너져 있다. 공개 화면에서 이 값을 쓰고 있다면 §19 위반이다.
-> → 10 문서 로드맵의 **선행 정정 항목**으로 올렸다. 이건 콘텐츠 확장보다 앞선다.
+> ~~미검증 61건이 "근거 신뢰도 HIGH" 로 표기돼 있다 → §19 위반~~
+> **철회.** 위 정정 참조 — 공개 화면은 이 값을 쓰지 않고(`source_type`·`is_reconstructed` 기반),
+> 컬럼 의미상 모순도 아니다. **재구성↔실제 오분류 0건은 그대로 유효**하다(PC4 PASS).
 
 ## 8. P2 가 Authority 에 대해 하지 않을 것
 

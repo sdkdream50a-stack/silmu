@@ -15,7 +15,7 @@
 | Topic | 114 | 114 | 미발행 0 |
 | Guide | 103 | 103 | 미발행 0 |
 | AuditCase | 257 | 257 | 미발행 0 |
-| **FAQ** (topic.faqs) | **464 authored** | **455 도달가능** | 9건이 파싱 실패로 소실 — §7 |
+| **FAQ** (topic.faqs) | **474 authored** | **465 도달가능** | 9건이 파싱 실패로 소실 — §7 · <br>⚠️ **2026-09-06 R1 정정**: 최초 기재 464/455 는 **배열만 센 값**이었다. `faq_list` 가 이중 인코딩 2건(FAQ 10건)을 구제하고 있어 실제 저작 474 · 도달 465 다. R1 에서 4건 정규화 후 **도달 474** |
 | HowTo step (topic.howto_steps) | 55 | 55 | 10개 토픽에만 존재 |
 | QuickStat (topic.quick_stats) | 385 | 385 | |
 | Tool | 39 (registry) / 38 (route) | — | 코드 정의. DB 아님 |
@@ -26,8 +26,13 @@
 | TaskGuide | 28 | — | 서무/시설관리/보험/세무/보고/회계 |
 | SearchLog | 2,161 | — | 2026-05-22 ~ 2026-09-06 |
 
-§7 인계 수치(Topic 114 · Guide 103 · AuditCase 257 · FAQ 455)와 **일치**한다.
-단 FAQ 는 "도달 가능 455 / 저작 464" 로 갈라야 한다 — 이유는 §7.
+§7 인계 수치(Topic 114 · Guide 103 · AuditCase 257)와 **일치**한다.
+FAQ 는 "도달 가능 / 저작"으로 갈라야 한다 — 이유는 §7.
+
+> **2026-09-06 R1 정정.** 이 문서가 처음 적은 `455`(도달) / `464`(저작)는 **배열 형태만 센 값**이었다.
+> `Topic#faq_list` 는 jsonb 가 JSON **문자열**인 경우도 `JSON.parse` 로 구제한다(운영 2토픽 · FAQ 10건).
+> 실측 정정: **저작 474 · 도달 465 · 소실 9**. R1 정규화 후 **도달 474 · 소실 0**.
+> 교훈 — 도달 가능 건수는 컬럼을 직접 세지 말고 **실제 접근자(`faq_list`)로 세야 한다.**
 
 ---
 
@@ -126,7 +131,16 @@ Topic id=2  slug=bidding          (입찰)      category=contract  published=tru
 
 성격 = **데이터 정정**(P1.6 동결 코드와 무관). 코드는 이미 방어적으로 처리하고 있다.
 
-### 7.2 provenance_confidence 가 UNVERIFIED 를 HIGH 로 표기
+### 7.2 ~~provenance_confidence 가 UNVERIFIED 를 HIGH 로 표기~~ → **철회 (결함 아님)**
+
+> **2026-09-06 R1 정정.** 아래 판정은 **틀렸다.** `provenance_confidence` 는 "출처 신뢰도"가 아니라
+> **분류 판정을 자동 적용해도 되는가**를 나타내는 게이트다(HIGH=자동적용 / MEDIUM=검토큐 / LOW=무변경).
+> 정본 = `app/services/audit_case_provenance_classifier.rb` 헤더 + `docs/silmu-p1/PROVENANCE_BACKFILL_REPORT.md` §3.
+> 운영에서 분류기를 재실행한 결과 저장값과 **MISMATCH 0 · MEDIUM 0**. 뷰 사용처도 0건이다.
+> 상세 = `12_R1_DATA_INTEGRITY_AND_DISCOVERABILITY.md` §2. **아무것도 바꾸지 않았다.**
+
+<details><summary>철회된 원문(기록 보존)</summary>
+
 
 ```
 source_type   ACTUAL_AUDIT 86 · SILMU_RECONSTRUCTED_CASE 110 · UNVERIFIED 61
@@ -138,6 +152,8 @@ is_reconstructed = nil                                        61건
 `is_reconstructed` 와 `source_type` 사이 **모순은 0건**이다(재구성 사례를 실제 감사로 표시한 건 없음 — PC4 통과).
 문제는 다른 축이다: **미검증 61건이 "근거 신뢰도 HIGH" 로 표기**돼 있다.
 §19 가 요구한 provenance 구분이 값 자체로는 무너져 있다.
+
+</details>
 
 ## 8. CONTENT_MUTATION 실증 = 0
 

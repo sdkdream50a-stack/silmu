@@ -27,9 +27,12 @@
 
 | # | 항목 | 근거 | 성격 | 크기 |
 |---:|---|---|---|---|
-| **P-1** | `bid-announcement`·`bidding` FAQ jsonb 정정 | 01 §7.1 — 공개 토픽 2건 · FAQ 9건이 파싱 실패로 소실 | 데이터 2행 | 매우 작음 |
-| **P-2** | `provenance_confidence` HIGH↔UNVERIFIED 61건 정합 | 09 §7 — 미검증이 "확신 HIGH" | 데이터 61행 + 판정 규칙 | 작음 |
-| **P-3** | `bid-notice-requirements` 의 `category="입찰"` 고아 정정 | 02 §2.2 · P2_HANDOFF §4 | 데이터 1행 | 매우 작음 |
+| ~~**P-1**~~ ✅ | `bid-announcement`·`bidding` FAQ jsonb 정정 | 01 §7.1 | 데이터 4행 | **2026-09-06 완료 — FAQ 9건 회복** |
+| ~~**P-2**~~ ❌ | `provenance_confidence` 61건 | 09 §7 | — | **철회 — 결함 아님. UNCHANGED 61** |
+| ~~**P-3**~~ ❌ | `bid-notice-requirements` category 고아 | 02 §2.2 | — | **철회 — 운영에 없음(dev 전용). 탐지기만 신설** |
+
+> **2026-09-06 R1 결과.** P-1 만 실재했다. P-2·P-3 은 감사의 오독이었고 그 정정도 문서에 남겼다.
+> 상세 = `12_R1_DATA_INTEGRITY_AND_DISCOVERABILITY.md`.
 
 **P-1 은 회귀 방지가 함께 가야 한다** — 지금은 `faq_list` 가 예외를 삼키고 `[]` 를 돌려주므로
 같은 일이 또 생겨도 조용하다. 파싱 실패 건수를 **0 으로 고정하는 검사**가 있어야
@@ -37,7 +40,7 @@
 
 ## 2. 추천 구현 TOP 5 (§28 — Quick Win / Moat / High-value / Newcomer / Tool 균형)
 
-### R1 — 도구 발견성 복구 `[Quick Win]`
+### ~~R1~~ ✅ 도구 발견성 복구 `[Quick Win]` — **2026-09-06 완료(repo). 배포 대기**
 ```
 무엇     tools_registry 의 keywords 보강 (도구 8~12개)
 왜       상위 20 중 8건이 "답을 가진 도구가 이미 있는데 질의에 안 잡힌다"(05 §4.3 · 07 §1)

@@ -51,7 +51,14 @@
 | 행정절차 "행정심판" → `information-disclosure` | 정보공개 불복 FAQ 1줄 | 제외 |
 | 시설·안전 "산업안전" → `fence-installation` | 울타리 설치 **공사계약** | 제외 |
 
-### 2.2 매핑 정정 후보 1건 (선재)
+### 2.2 ~~매핑 정정 후보 1건 (선재)~~ → **철회 (운영에 없음)**
+
+> **2026-09-06 R1 정정.** 아래는 **dev DB 기준**이었다. 운영(114 topics)에는 `bid-notice-requirements`
+> 토픽 자체가 없고, `category` 9종이 전부 라우트 허용값이며 비ASCII category 는 **0건**이다.
+> `P2_HANDOFF §4` 를 운영 재확인 없이 옮긴 자리 — 이 문서가 스스로 §6(dev ≠ prod)을 어겼다.
+> 데이터는 고치지 않고 재발 탐지기(`bin/rake silmu:category_integrity`)만 만들었다.
+> 상세 = `12_R1_DATA_INTEGRITY_AND_DISCOVERABILITY.md` §3.
+
 
 `bid-notice-requirements` 의 `category="입찰"` — 라우트 제약(topic.category 는 영문) 밖이라
 카테고리 내비에서 고아가 된다. P1.6 이 "콘텐츠 무변경" 원칙 때문에 미수정으로 넘긴 항목이며

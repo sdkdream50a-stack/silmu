@@ -1,7 +1,10 @@
 # RESUME_PROMPT — P2 AUDIT 이후 다음 세션 시작점
 
-> 2026-09-06 세션. **P2_AUDIT = COMPLETE · 구현 0건 · 콘텐츠 변이 0.**
-> 다음 세션은 §5 의 승인 1건을 받고 시작한다.
+> 2026-09-06 세션 ①(감사) + ②(R1 구현).
+> **P2_AUDIT = COMPLETE · R1 = COMPLETE(repo) · 배포 대기.**
+>
+> ⚠️ **R1 이 감사 결과 3건을 정정했다** — 반드시 `12_R1_DATA_INTEGRITY_AND_DISCOVERABILITY.md` §0 을 먼저 읽을 것.
+> P-2(provenance 61건)·P-3(고아 category)은 **결함이 아니었고**, FAQ 도달 수치도 455→465 로 틀렸었다.
 
 ---
 
@@ -83,21 +86,36 @@ docs/silmu-p2/
 
 **새 글보다 "이미 있는 자산을 답까지 연결하기"가 먼저다.**
 
+## 4-bis. R1 결과 (2026-09-06 · 완료)
+
+```
+P-1 FAQ jsonb 정규화   ✅ 운영 적용 — 도달 465 → 474 (9건 회복) · 저작 474 불변 · 내용 창작 0
+P-2 provenance 61건    ❌ 결함 아님 — UNCHANGED 61 (분류 게이트를 출처 신뢰도로 오독했던 것)
+P-3 고아 category      ❌ 운영에 없음 — dev 전용. 데이터 무변경, 탐지기만 신설
+R1  도구 keywords      ✅ 5개 도구·7낱말 — 질의 8개 해소 · 음성대조 5→5 불변 · **배포 전까지 운영 미반영**
+테스트                489 runs · 3,125 assertions · 0F · 0E · 14 skips · RuboCop 0 · 뮤테이션 4/4 KILLED
+P1.6 동결             7파일 UNCHANGED · 정밀도 가드 3종 운영 재실행 PASS
+```
+
+신규 파일: `app/services/faq_payload_normalizer.rb` · `db/content_migrations/20260906120000_faq_jsonb_normalization.rb` ·
+`lib/tasks/silmu_faq_integrity.rake` · 테스트 3종. 수정: `app/helpers/tools_helper.rb`(keywords만).
+
 ## 5. 다음 행동 — 승인 1건이 필요하다
 
 `10_IMPLEMENTATION_ROADMAP.md` §2 의 R1~R5 중 **무엇을 착수할지**.
 
-| 후보 | 성격 | 크기 | 근거 | 동결 안전 |
-|---|---|---|---|---|
-| **P-1 P-3** | 데이터 정정 (FAQ 파싱실패 2건 · 고아 category 1건) | 매우 작음 | — | ✅ |
-| **R1** 도구 keywords 보강 | Quick Win | 매우 작음 | — | ✅ 지문 재측정 불필요 |
-| **P-2** provenance 61건 정합 | 정직성 | 작음 | — | ✅ |
-| **R2** 수의계약 한도·분할발주 | Moat | 중간 | LOADED | ✅ |
-| **R4** 신규자 트랙 3종 | Newcomer | 작음~중간 | — | ⚠️ guides_controller 상수만 |
-| **R3** DO 층 10→25 | High-value | 중간~큼 | LOADED | ✅ |
-| **R5** 신규 토픽 2건 | 순수 공백 | 중간 | ⚠️ NOT_LOADED — 09 선행 | ✅ |
+| 후보 | 성격 | 크기 | 근거 | 동결 안전 | 상태 |
+|---|---|---|---|---|---|
+| **배포** | R1 코드를 운영에 반영 | 작음 | — | ✅ | **대기 — 이게 다음 1건** |
+| **R2** 수의계약 한도·분할발주 | Moat | 중간 | LOADED | ✅ | 미착수 |
+| **R4** 신규자 트랙 3종 | Newcomer | 작음~중간 | — | ⚠️ guides_controller 상수만 | 미착수 |
+| **R3** DO 층 10→25 | High-value | 중간~큼 | LOADED | ✅ | 미착수 |
+| **R5** 신규 토픽 2건 | 순수 공백 | 중간 | ⚠️ NOT_LOADED — 09 선행 | ✅ | 미착수 |
 
-권장 순서: `P-1 P-3 → R1 → P-2 → R2 R4 → R3 → (09 적재 판단) → R5`
+권장 순서: `배포 → R2 R4 → R3 → (09 적재 판단) → R5`
+
+**TOOL_MISSING 22 테마**(기간제 38 · 일상경비 36 · 휴가 31 · 검사검수 26 · 업무추진비 18 · 선금 16 · 겸직 15 …)는
+keyword 로 해소되지 않는다 — 07 문서의 Functional Asset 실제 제작 대상이다.
 
 ## 6. 시작하지 않는 것
 
