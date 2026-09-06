@@ -1,7 +1,24 @@
-# RESUME_PROMPT — SILMU P2 R2 이후 다음 세션 시작점
+# SILMU R2 — FINAL INDEPENDENT REVIEW HANDOFF
 
-> 2026-09-06 세션 ④(R2 구현). **구현·검증 완료 · 운영 배포 0 · 커밋 0.**
-> R2 는 "글을 늘리는" 작업이 아니라 **두 도구가 조문과 어긋난 결론을 내던 것을 고친** 작업이다.
+```
+CODE_TARGET          ea18c18
+STATUS               REVIEW_REQUIRED
+R-A                  FIXED
+R-H                  FIXED
+R2_CORE_MODIFIED     YES
+INDEPENDENT_REVIEW   NOT_RUN
+DEPLOY               NO
+SEED_EXECUTED        NO
+```
+
+**다음 정확한 작업 — `ea18c18` 을 대상으로 host 와 다른 vendor 독립검증 1회.**
+codex-critic 은 **2026-09-07 14:10 KST 이후**에 열린다(provider 메시지 실측).
+**검증 통과 전 deploy · seed · main merge 금지.**
+
+> 이 문서는 2026-09-07 06:5x KST shutdown-safe handoff 로 갱신됐다.
+> 이전 판(2026-09-06 세션 ④)은 `HEAD f10ad5c · R2_STATUS PRODUCTION_READY` 라고 적고 있었으나
+> 그 뒤 **커밋 6개**가 더 쌓였고 독립검증이 blocking 을 계속 냈다. 그 문구는 **폐기**한다.
+> `PRODUCTION_READY` 는 이 계보에서 아직 한 번도 성립한 적이 없다.
 
 ---
 
@@ -9,32 +26,94 @@
 
 ```bash
 date; date -u
-cd /Users/seong/project/silmu
+cd /Users/seong/project/silmu-worktrees/r2-source-quality-integration-0906   # ← 본체(~/project/silmu)가 아니다
 git status --short --branch
-git log --oneline -5
-curl -sI https://silmu.kr/up | head -1
+git log --oneline -6
 ```
 
-기억한 값보다 실측값이 우선이다.
+기억한 값보다 실측값이 우선이다. 본체 `/Users/seong/project/silmu` 는 다른 브랜치
+(`feature/silmu-p2-general-admin-expansion` @ `a1e8e25`)에 있고 **이 작업의 대상이 아니다.**
 
-## 1. 상태 (실측 · 2026-09-06)
+## 1. 상태 (실측 · 2026-09-07 06:51 KST · READ-ONLY 재측정으로 확인)
 
 ```
-BRANCH               feature/silmu-p2-general-admin-expansion
-HEAD                 f10ad5c (세션 시작 시점) — R2 변경은 아직 커밋되지 않았다
+WORKTREE             /Users/seong/project/silmu-worktrees/r2-source-quality-integration-0906
+BRANCH               fix/silmu-r2-legacy-semantic-alignment-0906
+CODE_TARGET          ea18c184156c5ea5ffbb034deee49274d71397cb  (2026-09-07 00:44:12 +0900)
+PREVIOUS_HEAD        96a1afb1cdc8ac2d1d8e266d111df6ea8017288f  (2026-09-07 00:15:52 +0900)
+DIRTY                NO  (git status --porcelain -uall = 0줄)
+PUSH                 NO  (upstream 미설정 · branch --contains ea18c18 = 로컬 1개)
+DEPLOY               NO  (ea18c18 은 어떤 remote·main 에도 없다)
+SEED_EXECUTED        NO  (이번 4파일은 앱코드/뷰 = DEPLOY_ONLY)
 PRODUCTION_REVISION  ce62d2ebee5e465bb230cccf9134e2ada9c71d20   ← R1. 운영은 그대로다
 ROLLBACK             ce62d2e
-운영 health           200 (/up)
-P1_6_STATUS          DEPLOYED · CLOSED/FROZEN — 7파일 해시 대조로 무변경 확인
-R1_STATUS            DEPLOYED · CLOSED — 8질의 도구 발견성 유지 확인
-R2_STATUS            PRODUCTION_READY (배포 승인 대기) — 근거는 11 문서
-독립검증              gemini(파일) 6건 중 5건 수리·1건 기각 · kimi(텍스트) 12건 중 3건 수리·7건 이미충족·2건 기각
-                     codex-critic 은 두 번 실측 모두 쿼터 소진(9/7 14:10 해제) — repo 전체를 본 독립 레인은 없다
-테스트                599 runs · 3,474 assertions · 0F · 0E · 14 skips (BEFORE 497/3,138/14)
-RuboCop              0 offenses
-뮤테이션              KILLED=27 · SURVIVED=0 · NOT_APPLIED=0
-콘텐츠 변이            0 · DB 마이그레이션 0 · 스키마 0 · 신규 도구 URL 0
+STATUS               REVIEW_REQUIRED
+INDEPENDENT_REVIEW   NOT_RUN — ea18c18 · 96a1afb 둘 다 외부 검증 0회
+                     마지막 = 5a70437 (2026-09-06 23:35) CONDITIONAL_GO · BLOCKING 1 → REVIEW_REQUIRED
+                     codex-critic 쿼터 해제 2026-09-07 14:10 KST
 ```
+
+### 이 계보의 커밋 연혁 (a1e8e25 이후)
+
+```
+ea18c18  09-07 00:44  R-A 사유서 생성기 §25①1호 · R-H 유찰 3경로 §26①   ← CODE_TARGET
+96a1afb  09-07 00:15  공개 양식 §25 호가 제2호부터 한 칸씩 밀려 있었다
+5a70437  09-06 22:48  §25①1호 잔여 12건 (마지막 독립검증 대상)
+29664de  09-06 21:21  배포 blocker F1·F2·F3·F5
+ada9b48  09-06 20:44  독립검증 blocking 2건 + 오기 1건
+132d463  09-06 19:47  계측기 정정
+57d1763  09-06 19:46  잔여 §77 전건 문맥 판정
+1ccf310  09-06 19:17  엔진과 본문이 반대로 말하던 5건
+93c4fd0  09-06 18:37  merge source-quality(183da50)
+a1e8e25  09-06 18:31  R2 계약 판단 Moat
+```
+
+### ea18c18 이 고친 것 (파일 실측)
+
+```
+R-A  app/views/contract_reasons/index.html.erb  :249 :447 :450 :451 :452
+     §25①2호 → §25①1호 (5자리). :448 lawText 는 원래부터 제1호 원문이었다.
+     이 화면은 결재용 사유서를 «생성» 하고 #download_hwpx 가 law·lawText 를 그대로 싣는다.
+R-H  유찰 후 수의계약 = §25① 어느 호도 아니라 영 제26조제1항. 3경로 + 가이드 동시:
+     app/controllers/faq_controller.rb:58 · app/views/guides/resources.html.erb:476 ·
+     app/services/contract_method_service.rb:296 :323  ← R2 core (R2_CORE_MODIFIED=YES)
+음성대조  resources:476 예시(2) 재해 긴급복구 = §25①2호 그대로 보존 (문자열 일괄치환 안 했다)
+계측     탐지기 대상4파일 BEFORE 9 → AFTER 0 · scope 밖 28 → 28 (부수 변화 0)
+         2026-09-07 06:51 재실행에서 after.json 과 findings 완전 일치
+```
+
+## 1-b. ⚠️ 증거 공백 — 독립검증자가 먼저 알아야 한다
+
+```
+TESTS       RECORDED_BUT_RAW_ARTIFACT_MISSING
+            기록값: targeted R2 238/1448/0F 0E · CPSC·CPEB 11/198/0F ·
+                    full 695/4646/0F 0E/14 skips · RuboCop 변경 4파일 0 offense
+            원본 출력 파일이 없다. 증거는 log.md + 커밋 메시지의 산문뿐이다.
+MUTATIONS   RECORDED_BUT_RAW_ARTIFACT_MISSING
+            기록값: 3차 KILLED 18/18 · SURVIVED 0 · NOT_APPLIED 0 · BASELINE/POST GREEN
+            harness 는 실재한다: tasks/silmu-p2-r2-final-known-blocker-cleanup-0907/
+            artifacts/mutation_run.py (mutant 18개 확인). 출력은 저장되지 않았다.
+DETECTOR    OK — before.json · after.json 이 아티팩트로 남아 있고 재실행으로 재현됨.
+```
+
+독립검증 전에 이 두 줄을 **재생성**할지, 리뷰어에게 재현을 맡길지 먼저 정한다.
+
+## 1-c. 지금 대상 밖 (건드리지 않는다)
+
+```
+R-J   재공고 1인 참가 → §25①5호 오기 6곳 + 치환표 사본 7곳 (db/seeds/*)
+      ⚠️ 운영 DB row 로 서빙된다. 파일 수정만으로는 운영이 안 바뀐다
+      (find_or_create_by! 는 기존 row 를 갱신하지 않는다 — 29664de F3 학습).
+      수리하려면 UPDATE 전용 시드가 필요하다.
+      원장 = test/models/article25_ho_semantic_alignment_test.rb FAILED_BID_OUT_OF_SCOPE (17건)
+§25① 축 잔존 7건  R-B~R-G · R-I(사람 판정) = ADJUDICATED_OUT_OF_SCOPE 그대로
+```
+
+---
+
+> 아래 §2~§7 은 **2026-09-06 세션 ④(R2 구현 라운드)의 기록**이다. 설계 의도와 함정은 여전히 유효하나,
+> 그 안의 `R2_STATUS = PRODUCTION_READY`·`HEAD f10ad5c`·테스트/뮤테이션 수치는 **이후 6커밋으로 대체됐다.**
+> 현행값은 위 §1 을 쓴다.
 
 ## 2. R2 가 실제로 고친 것
 
