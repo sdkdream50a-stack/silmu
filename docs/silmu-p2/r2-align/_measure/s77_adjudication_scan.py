@@ -32,6 +32,12 @@ EXT = (".rb", ".erb", ".yml")
 R2_CORE = ("app/services/contract_decision/", "config/contract_decision_rules.yml",
            "config/contract_thresholds.yml")
 
+# 정정 시드는 «치환표»다 — old 문자열로 정정 전 문구를 **반드시** 들고 있어야 한다.
+# 그걸 결함으로 세면 고칠수록 숫자가 늘어난다(실제로 AFTER 0 → 13 이 됐다).
+# 사용자에게 나가는 콘텐츠가 아니므로 별도 버킷으로 뺀다.
+CORRECTIVE_SEEDS = ("db/seeds/topic_s77_scope_fix_2026_09_06.rb",
+                    "db/seeds/topic_legacy_semantic_alignment_2026_09_06.rb")
+
 S77 = re.compile(r"(?:제77조(?:제\d항)?(?:제\d호)?(?:[가-힣]목)?|§\s*77(?:제\d항)?)")
 SENT = re.compile(r"(?<=[.。!?])\s+|\n")
 # 줄바꿈을 넘기면 Ruby heredoc 마커(<<~CONTENT)가 태그 시작이 되어 다음 '>' 까지 본문을
@@ -173,6 +179,8 @@ def verdict(rel, hint, strength_, kind, pol):
     """
     if rel.startswith(R2_CORE):
         return "R2_CORE_FROZEN"
+    if rel.startswith(CORRECTIVE_SEEDS):
+        return "CORRECTIVE_SEED_TABLE"
     if pol in ("scope_limiting", "two_track"):
         return "VALID_CONSTRUCTION_SCOPE"       # 적용범위를 한정하거나 근거를 갈라 적은 옳은 문장
     if strength_ == "absolute":
@@ -188,7 +196,7 @@ def analyze(text, pos, rel):
     st, kd, pol = strength(s), claim_kind(s), polarity(s)
     auto = verdict(rel, th, st, kd, pol)
     # 소스 주석은 사용자에게 나가지 않는다. 결함과 섞어 세지 않는다.
-    if auto != "R2_CORE_FROZEN" and COMMENT.match(s):
+    if auto not in ("R2_CORE_FROZEN", "CORRECTIVE_SEED_TABLE") and COMMENT.match(s):
         auto = "NO_ACTION_INTERNAL"
     ctx = text[max(0, pos - 400): pos + 400]
     final, why = apply_override(rel, s, ctx, auto)
@@ -274,7 +282,7 @@ for r in rows:
     by_file[r["file"]][r["verdict"]] += 1
 
 VERDICTS = ("VALID_CONSTRUCTION_SCOPE", "LEGACY_OVERGENERALIZATION", "CONTEXT_AMBIGUOUS",
-            "R2_CORE_FROZEN", "NO_ACTION_INTERNAL")
+            "R2_CORE_FROZEN", "NO_ACTION_INTERNAL", "CORRECTIVE_SEED_TABLE")
 print(json.dumps({
     "scanned_at": datetime.now(timezone.utc).isoformat(),
     "total_mentions": len(rows),

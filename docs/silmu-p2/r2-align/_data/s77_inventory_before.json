@@ -1,5 +1,5 @@
 {
- "scanned_at": "2026-09-06T10:35:41.110675+00:00",
+ "scanned_at": "2026-09-06T10:47:22.893218+00:00",
  "total_mentions": 132,
  "controls": {
   "P1_goods_overgeneralization": {
@@ -71,11 +71,12 @@
   "assertive": 115
  },
  "by_verdict": {
-  "VALID_CONSTRUCTION_SCOPE": 48,
+  "VALID_CONSTRUCTION_SCOPE": 47,
   "LEGACY_OVERGENERALIZATION": 18,
   "CONTEXT_AMBIGUOUS": 7,
   "R2_CORE_FROZEN": 47,
-  "NO_ACTION_INTERNAL": 12
+  "NO_ACTION_INTERNAL": 10,
+  "CORRECTIVE_SEED_TABLE": 3
  },
  "manual_overrides_applied": 29,
  "by_file": {
@@ -146,8 +147,7 @@
    "VALID_CONSTRUCTION_SCOPE": 3
   },
   "db/seeds/topic_legacy_semantic_alignment_2026_09_06.rb": {
-   "NO_ACTION_INTERNAL": 2,
-   "VALID_CONSTRUCTION_SCOPE": 1
+   "CORRECTIVE_SEED_TABLE": 3
   },
   "db/seeds/topic_national_vs_local.rb": {
    "VALID_CONSTRUCTION_SCOPE": 3
@@ -1151,8 +1151,8 @@
    "claim_strength": "citation",
    "claim_kind": "locator",
    "polarity": "two_track",
-   "auto_verdict": "NO_ACTION_INTERNAL",
-   "verdict": "NO_ACTION_INTERNAL",
+   "auto_verdict": "CORRECTIVE_SEED_TABLE",
+   "verdict": "CORRECTIVE_SEED_TABLE",
    "text": "# 배경: R2 판단 엔진(시행령 §7제2호 / §25①5호 / §30①2호 / §77)과 레거시 본문이",
    "file": "db/seeds/topic_legacy_semantic_alignment_2026_09_06.rb",
    "line": 7,
@@ -1166,8 +1166,8 @@
    "claim_strength": "citation",
    "claim_kind": "ground",
    "polarity": "assertive",
-   "auto_verdict": "NO_ACTION_INTERNAL",
-   "verdict": "NO_ACTION_INTERNAL",
+   "auto_verdict": "CORRECTIVE_SEED_TABLE",
+   "verdict": "CORRECTIVE_SEED_TABLE",
    "text": "# §77 \"공사의 분할계약 금지\" — 표제·본문 모두 공사.",
    "file": "db/seeds/topic_legacy_semantic_alignment_2026_09_06.rb",
    "line": 13,
@@ -1181,8 +1181,8 @@
    "claim_strength": "conditional",
    "claim_kind": "locator",
    "polarity": "assertive",
-   "auto_verdict": "VALID_CONSTRUCTION_SCOPE",
-   "verdict": "VALID_CONSTRUCTION_SCOPE",
+   "auto_verdict": "CORRECTIVE_SEED_TABLE",
+   "verdict": "CORRECTIVE_SEED_TABLE",
    "text": "\"다만 나눴다는 사실만으로 위법이 되지는 않습니다 — 공사는 시행령 제77조제1항 각 호\" \\",
    "file": "db/seeds/topic_legacy_semantic_alignment_2026_09_06.rb",
    "line": 62,

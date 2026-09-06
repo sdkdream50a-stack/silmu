@@ -24,6 +24,8 @@
    "옳은 문장"으로 통과시켰다 — 2건.
 3. ROOT 를 한 단계 잘못 세어 `docs/` 를 스캔했다. **0 파일을 스캔하고 0건을 냈다.**
    이제 `app/`·`db/seeds/` 존재를 assert 한다.
+4. **정정 시드의 치환표를 결함으로 셌다.** 시드는 old 로 정정 전 문구를 반드시 들고 있어야 하는데
+   그걸 세면 **고칠수록 숫자가 나빠진다**(AFTER 0 → 13). 커밋 직후 최종 확인에서 잡았다.
 
 ---
 
@@ -60,13 +62,17 @@ kind = locator          → 공사면 VALID, 아니면 AMBIGUOUS (라벨인지 �
 
 | | BEFORE (1ccf310) | AFTER |
 |---|---|---|
-| §77 언급 총계 | 132 | 128 |
+| §77 언급 총계 | 132 | 174 |
 | `R2_CORE_FROZEN` (§14 동결) | 47 | 47 |
-| `NO_ACTION_INTERNAL` (소스 주석) | 12 | 11 |
-| **`VALID_CONSTRUCTION_SCOPE`** | 48 | **67** |
+| `CORRECTIVE_SEED_TABLE` (정정 시드의 치환표) | 3 | 49 |
+| `NO_ACTION_INTERNAL` (소스 주석) | 10 | 9 |
+| **`VALID_CONSTRUCTION_SCOPE`** | 47 | **66** |
 | **`LEGACY_OVERGENERALIZATION`** | **18** | **0** |
 | **`CONTEXT_AMBIGUOUS`** | **7** | **3** |
-| 사람 판정으로 뒤집은 행 | 29 | 30 |
+
+> 총계가 늘어난 것은 이번에 만든 **정정 시드가 치환표라서** 정정 전 문구를 old 로 들고 있기 때문이다.
+> 처음엔 그것까지 결함으로 세어 **AFTER 가 0 에서 13 으로 「늘었다」** — 고칠수록 숫자가 나빠지는
+> 계측기였다. 정정 시드를 별도 버킷으로 뺐다. 이 발견은 커밋 직후 최종 확인에서 나왔다.
 
 BEFORE 는 정정 전 트리(`git archive 1ccf310`)를 **같은(수리된) 계측기**로 다시 잰 값이다.
 같은 도구로 재지 않으면 개선폭이 도구 변경분과 섞인다.
@@ -90,7 +96,7 @@ BEFORE 는 정정 전 트리(`git archive 1ccf310`)를 **같은(수리된) 계�
 정정 문구는 **항목별로 따로 썼다**(§6). 일괄 템플릿으로 덮지 않았다 —
 공사 사례(`사례 2 청사 화장실 리모델링`)는 §77 이 맞고 표제만 틀렸으므로 표제만 고쳤다.
 
-### UNMODIFIED_VALID — 67건
+### UNMODIFIED_VALID — 66건
 
 R2 도구의 공사 트랙 UI(15) · 시험문제 은행(3) · 펜스 설치 토픽(3) · 국가/지방 조문 대비표(3) ·
 `topic_split_contract` 사례 2 · `AuditCase split-contract-to-avoid-bidding`(총 공사금액 3억 4,700만원 · 전문공사) 등.
@@ -230,11 +236,12 @@ P1.6 · R1 자산은 full suite 에 포함돼 있고 이번 diff 가 건드린 �
 ## 9. STATUS
 
 ```
-RESIDUAL_CANDIDATES_BEFORE        132 언급 (판정 대상 85 · R2 core 47 동결)
-VALID_CONSTRUCTION_SCOPE          67   (수정 0)
+RESIDUAL_CANDIDATES_BEFORE        132 언급 (판정 대상 72 · R2 core 47 동결 · 주석 10 · 치환표 3)
+VALID_CONSTRUCTION_SCOPE          66   (수정 0)
 LEGACY_OVERGENERALIZATION         0    (진술 26건 정정 · 12파일)
 CONTEXT_AMBIGUOUS                 3    (수정 0 · 추가 근거 기록)
-NO_ACTION_INTERNAL                11   (소스 주석)
+NO_ACTION_INTERNAL                9    (소스 주석)
+CORRECTIVE_SEED_TABLE             49   (정정 시드의 치환표 — 사용자 비노출)
 
 SEMANTIC_DIVERGENCES_AFTER        0
 사용자-facing absolute 진술        0
