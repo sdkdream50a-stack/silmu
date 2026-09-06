@@ -165,7 +165,7 @@ dev 데이터는 고치지 않았다 — 운영이 아니고, 스테일 스냅�
 감사는 "상위 20 중 8건이 도구 미매칭"이라 했다. 실측하니 **#4·#6·#7·#12·#13·#14 는 이미 매칭되고 있었다.**
 실제 미매칭 중 **도구가 그 질의를 실제로 푸는 것**만 추렸다.
 
-### 4.2 무엇을 넣었나 (5개 도구 · 7개 낱말)
+### 4.2 무엇을 넣었나 (5개 도구 · **8개 낱말**)
 
 | 도구 | 추가 keywords | intent 근거 (구현을 읽고 확인) |
 |---|---|---|
@@ -200,6 +200,9 @@ dev 데이터는 고치지 않았다 — 운영이 아니고, 스테일 스냅�
 | 검사·검수 · 검수 | 0 | 0 | **TOOL_MISSING — 의도적 미해소** |
 
 **해소 8개 질의 · 손실 0.**
+
+> 최초 보고서에 "7개 낱말"이라 적었으나 실제는 **8개**다(한도·수의계약한도·소액수의 3 + 분할발주·분리발주 2
+> + 수입인지 1 + 보조금정산 1 + 국외출장 1). 독립검증이 diff 실물과 대조해 잡았다.
 
 ### 4.5 음성대조 (§8) — precision 이 떨어지지 않았는가
 
@@ -275,10 +278,10 @@ FAQ 9건이 후보 풀에 새로 들어왔으므로 오승격 위험을 실제�
 ## 6. 테스트
 
 ```
-targeted   59 runs · 117 assertions · 0F · 0E · 0 skips
-full       489 runs · 3,125 assertions · 0F · 0E · 14 skips
-           (P1.6 기준선 430/3,008/14 skips → 신규 59 runs·117 assertions. skip 14 그대로)
-RuboCop    7 files inspected, no offenses
+targeted   67 runs · 130 assertions · 0F · 0E · 0 skips
+full       497 runs · 3,138 assertions · 0F · 0E · 14 skips
+           (P1.6 기준선 430/3,008/14 skips → 신규 67 runs·130 assertions. skip 14 그대로)
+RuboCop    6 files inspected, no offenses
 ```
 
 ### 6.1 뮤테이션 대조 — green 은 증거가 아니다
@@ -290,7 +293,12 @@ RuboCop    7 files inspected, no offenses
 | M3 | keywords 추가분 되돌림 | 10 failures | **KILLED** |
 | M4 | `classify` 를 항상 `array_ok` 로 | 3 failures | **KILLED** |
 
-`SURVIVED 0`.
+| M5 | `in_source?` 를 날문자열 `include?` 로 되돌림 | 2 failures | **KILLED** |
+| M6 | Array 원소 검사 제거 | 3 failures | **KILLED** |
+| M7 | `분할발주/분리발주` keywords 되돌림 | 4 failures | **KILLED** |
+| M8 | category 탐지 쿼리를 `Topic.none` 으로 | 2 failures | **KILLED** |
+
+`8/8 KILLED · SURVIVED 0`. (M5~M8 은 §9 독립검증 지적을 수리한 뒤 그 수리를 지키는 방어로 추가한 것들이다.)
 
 > ⚠️ M2 는 **1차 시도에서 치환이 안 먹어 "SURVIVED" 로 보였다.**
 > `grep -c MUTANT` = 0 으로 **뮤턴트가 안 박힌 것**을 확인하고 재적용했더니 KILLED 였다.
@@ -306,6 +314,27 @@ RuboCop    7 files inspected, no offenses
 | 도구 발견성 | 8개 질의 도구 발견 | 무관 질의 12개 도구 0건 · 넓은 질의 개수 불변 |
 
 ---
+
+## 6.3 독립 검증 (gemini critic) — **CONDITIONAL_GO · 지적 7건 전건 수리**
+
+kimi 자기검증을 금지하고, codex-critic 이 같은 openai 쿼터로 unavailable 이므로 gemini 를 검증 레인으로 썼다.
+**지적 7건을 내가 하나씩 재현해 전건 확인한 뒤 고쳤다.**
+
+| 심각도 | 지적 | 내가 재현한 결과 | 조치 |
+|---|---|---|---|
+| **HIGH** | `preserves_source?` 가 이스케이프·개행에서 오작동 — 정상 복원을 `content_drift` 로 오판해 건너뛴다 | **재현됨**. `\"`·`\n` 포함 시 `false` | `in_source?` 신설 — 값을 JSON 이스케이프 표현으로도 대조 |
+| **HIGH** | 마이그레이션에 트랜잭션이 없어 중간 실패 시 **부분 적용**이 남는다 | 코드상 확인 | 쓰기를 `Topic.transaction` 으로 묶음 |
+| **MEDIUM** | 저작건수 불변식이 **동어반복** — 같은 파서로 재서 파서가 항목을 흘리면 안 보인다 | 논리 확인 | `independent_authored_count`(원문 `"question"` 출현 수, 파서 무관)로 교체 + 도달수 감소 가드 추가 |
+| **MEDIUM** | 보고서 "7개 낱말" ↔ diff 실물 **8개** | **재현됨** | 보고서·커밋 정정 |
+| **MEDIUM** | `분할발주` 추가로 **`발주` 단독 질의**가 새로 매칭(0→1) · 테스트 미포함 | **재현됨** | 매칭이 substring AND 인 한 회피 불가 → **받아들이되 BASELINE 테스트로 고정**하고 사유 명시 |
+| **LOW** | Array 입력은 원소 검사를 건너뛰어 `[1,2,3]` 도 통과 | **재현됨** | `call`·`classify` 가 배열 원소도 검사 · `:array_malformed` 신설 · lint exit 1 대상 편입 |
+| **LOW** | category 테스트가 **동어반복**(로컬 배열만 검사) | 코드상 확인 | 라우트 정본 + ActiveRecord 쿼리를 실제로 태우는 양성·음성 3케이스로 교체 |
+
+**감사 3건 정정에 대한 critic 재검증**: C-1·C-2·C-3 **전부 타당**하다고 독립 확인됐다.
+
+> 지적 중 HIGH 2건은 **운영 데이터를 해치지는 않았다** — 운영 payload 4건에 이스케이프·개행이 없어
+> 4/4 정상 적용됐고, 실패가 없어 부분 적용도 발생하지 않았다. 그러나 **가드가 틀린 채로 남아 있었다면**
+> 다음 payload에서 조용히 건너뛰거나 절반만 적용됐을 것이다.
 
 ## 7. 변이 회계 (§13)
 

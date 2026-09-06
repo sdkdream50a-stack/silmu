@@ -93,8 +93,11 @@ P-1 FAQ jsonb 정규화   ✅ 운영 적용 — 도달 465 → 474 (9건 회복)
 P-2 provenance 61건    ❌ 결함 아님 — UNCHANGED 61 (분류 게이트를 출처 신뢰도로 오독했던 것)
 P-3 고아 category      ❌ 운영에 없음 — dev 전용. 데이터 무변경, 탐지기만 신설
 R1  도구 keywords      ✅ 5개 도구·7낱말 — 질의 8개 해소 · 음성대조 5→5 불변 · **배포 전까지 운영 미반영**
-테스트                489 runs · 3,125 assertions · 0F · 0E · 14 skips · RuboCop 0 · 뮤테이션 4/4 KILLED
+테스트                497 runs · 3,138 assertions · 0F · 0E · 14 skips · RuboCop 0 · 뮤테이션 **8/8 KILLED**
 P1.6 동결             7파일 UNCHANGED · 정밀도 가드 3종 운영 재실행 PASS
+독립검증(gemini)      CONDITIONAL_GO — 지적 7건(HIGH 2·MEDIUM 3·LOW 2) **전건 재현 확인 후 수리**
+                     HIGH ①preserves_source? 이스케이프 오작동 ②마이그레이션 트랜잭션 부재
+                     상세 = 12 문서 §6.3
 ```
 
 신규 파일: `app/services/faq_payload_normalizer.rb` · `db/content_migrations/20260906120000_faq_jsonb_normalization.rb` ·

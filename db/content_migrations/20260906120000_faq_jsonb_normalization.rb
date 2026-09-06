@@ -16,6 +16,13 @@
 #
 # 멱등: 두 번째 실행은 대상 0건.
 
+# 파서와 **독립**인 저작 건수 — `"question"` 키 출현 수를 원문에서 직접 센다.
+# `authored_count` 로 재면 파서가 항목을 흘려도 before/after 가 같이 줄어 결함이 안 보인다(독립검증 MEDIUM).
+def independent_authored_count(raw)
+  return raw.size if raw.is_a?(Array)
+  raw.to_s.scan(/"question"\s*(?:=>|:)/).size
+end
+
 normalized = []
 skipped    = []
 
@@ -24,7 +31,7 @@ reachable_before = 0
 
 Topic.find_each do |topic|
   raw = topic.faqs
-  authored_before  += FaqPayloadNormalizer.authored_count(raw)
+  authored_before  += independent_authored_count(raw)
   reachable_before += topic.faq_list.size
 
   next if raw.is_a?(Array)
@@ -43,15 +50,21 @@ Topic.find_each do |topic|
     next
   end
 
-  topic.update_column(:faqs, value)
-  normalized << { slug: topic.slug, count: value.size }
+  normalized << { topic: topic, slug: topic.slug, count: value.size, value: value }
+end
+
+# 쓰기는 **한 트랜잭션 안에서** 한다. 루프 도중 실패하면 이전 갱신이 DB 에 남아
+# 절반만 정규화된 상태가 된다 — 그건 되돌릴 근거까지 흩어놓는다(독립검증 HIGH).
+Topic.transaction do
+  normalized.each { |n| n[:topic].update_column(:faqs, n[:value]) }
 end
 
 authored_after  = 0
 reachable_after = 0
 Topic.find_each do |topic|
-  authored_after  += FaqPayloadNormalizer.authored_count(topic.faqs)
-  reachable_after += topic.reload.faq_list.size
+  topic.reload
+  authored_after  += independent_authored_count(topic.faqs)
+  reachable_after += topic.faq_list.size
 end
 
 puts "    [faq-normalize] 정규화 #{normalized.size}건 / 건너뜀 #{skipped.size}건"
@@ -62,4 +75,8 @@ puts "    [faq-normalize] reachable #{reachable_before} → #{reachable_after} (
 
 if authored_before != authored_after
   raise "FAQ 저작 건수가 변했다 (#{authored_before} → #{authored_after}) — 정규화가 내용을 바꿨다"
+end
+
+if reachable_after < reachable_before
+  raise "도달 가능 FAQ 가 줄었다 (#{reachable_before} → #{reachable_after}) — 정규화가 오히려 감췄다"
 end

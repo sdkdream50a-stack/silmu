@@ -86,7 +86,13 @@ class ToolDiscoverabilityTest < ActiveSupport::TestCase
     "설계변경" => 1,
     "초과근무" => 1,
     "수도광열비" => 1,
-    "집행률" => 1
+    "집행률" => 1,
+    # 독립검증 MEDIUM — `분할발주`·`분리발주` 를 넣으면 substring 매칭 특성상
+    # **`발주` 단독 질의도 이 도구에 걸린다**(변경 전 0 → 후 1). 매칭 규칙이 토큰 AND +
+    # substring 인 한 "발주" 를 포함한 키워드로는 이 파급을 피할 수 없다.
+    # 관측상 `분할발주`(5)·`분리 발주`(3) 는 실질의이고 `발주` 단독은 후보에 오르지 못한 저빈도라
+    # 이 파급을 **받아들이되 테스트로 고정**한다 — 모르고 생긴 것과 알고 남긴 것은 다르다.
+    "발주" => 1
   }.freeze
 
   BASELINE.each do |query, count|
@@ -94,6 +100,10 @@ class ToolDiscoverabilityTest < ActiveSupport::TestCase
       assert_equal count, tool_titles_for(query).size,
                    "keyword 보강이 넓은 질의의 결과를 부풀리면 정밀도가 떨어진다"
     end
+  end
+
+  test "'발주' 단독은 분할계약 체크리스트에만 붙는다 — 알고 남긴 파급" do
+    assert_equal [ "분할계약 판단 체크리스트" ], tool_titles_for("발주")
   end
 
   test "'한도' 단독은 한도를 실제로 다루는 도구에만 붙는다" do

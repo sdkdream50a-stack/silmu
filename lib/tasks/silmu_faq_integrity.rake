@@ -26,14 +26,14 @@ namespace :silmu do
     lost = authored - reachable
 
     puts "[FAQ INTEGRITY] Topic #{Topic.count}건"
-    %i[array_ok string_parseable string_broken string_other empty].each do |kind|
+    %i[array_ok array_malformed string_parseable string_broken string_other empty].each do |kind|
       puts format("  %-18s %d", kind.to_s.upcase, buckets[kind].size)
     end
     puts "  FAQ_AUTHORED       #{authored}"
     puts "  FAQ_REACHABLE      #{reachable}"
     puts "  FAQ_LOST           #{lost}"
 
-    (buckets[:string_broken] + buckets[:string_other]).each do |topic|
+    (buckets[:string_broken] + buckets[:string_other] + buckets[:array_malformed]).each do |topic|
       status, detail = FaqPayloadNormalizer.call(topic.faqs)
       puts "  ✗ #{topic.slug} (published=#{topic.published}) — #{status}: #{detail.to_s.truncate(80)}"
     end
@@ -41,8 +41,8 @@ namespace :silmu do
       puts "  △ #{topic.slug} — jsonb 가 JSON 문자열(이중 인코딩). faq_list 가 구제 중이나 잠재 결함"
     end
 
-    if lost.positive? || buckets[:string_broken].any? || buckets[:string_other].any?
-      warn "[FAIL] 도달 불가 FAQ #{lost}건 · 복구 불가 payload #{buckets[:string_other].size}건"
+    if lost.positive? || buckets[:string_broken].any? || buckets[:string_other].any? || buckets[:array_malformed].any?
+      warn "[FAIL] 도달 불가 FAQ #{lost}건 · 복구 불가 payload #{buckets[:string_other].size}건 · 배열 오염 #{buckets[:array_malformed].size}건"
       exit 1
     end
 

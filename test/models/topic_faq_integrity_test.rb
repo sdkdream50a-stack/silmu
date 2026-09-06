@@ -80,16 +80,28 @@ class TopicFaqIntegrityTest < ActiveSupport::TestCase
   end
 
   # ── category 고아 검출기 ──
-  test "라우트 밖 category 는 고아로 검출된다" do
-    allowed = %w[contract budget expense salary subsidy property travel duty other]
+  # ⚠️ 로컬 배열에 값이 있나 없나만 보는 테스트는 동어반복이다(독립검증 LOW 지적).
+  #    lint 가 실제로 쓰는 경로 — **라우트에서 읽은 허용값 + ActiveRecord 쿼리** — 를 그대로 태운다.
+  def orphan_scope
+    allowed = Rails.application.routes.routes
+                   .find { |r| r.name == "topics_category" }
+                   .requirements[:key].source.delete("^a-z|").split("|").reject(&:empty?)
+    Topic.where.not(category: allowed).or(Topic.where(category: nil))
+  end
 
+  test "양성대조 — 라우트 밖 category 를 심으면 탐지 쿼리가 잡는다" do
     @topic.update_column(:category, "입찰")
-    @topic.reload
-    assert_not_includes allowed, @topic.category
+    assert_includes orphan_scope.pluck(:slug), @topic.slug
+  end
 
+  test "음성대조 — 허용값 category 는 탐지 쿼리에 걸리지 않는다" do
     @topic.update_column(:category, "contract")
-    @topic.reload
-    assert_includes allowed, @topic.category, "허용값을 고아로 잡으면 음성대조 실패"
+    assert_not_includes orphan_scope.pluck(:slug), @topic.slug
+  end
+
+  test "양성대조 — category 가 nil 이어도 고아로 잡힌다" do
+    @topic.update_column(:category, nil)
+    assert_includes orphan_scope.pluck(:slug), @topic.slug
   end
 
   test "topics_category 라우트 constraint 가 허용값 정본이다" do

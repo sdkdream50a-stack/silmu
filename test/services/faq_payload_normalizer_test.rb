@@ -21,6 +21,18 @@ class FaqPayloadNormalizerTest < ActiveSupport::TestCase
     '["문자열만 들어있음"]'             => :bad_shape
   }.freeze
 
+  # 독립검증 지적 — 배열이라고 무조건 통과시키면 `:bad_shape` 정의가 무의미해진다.
+  test "양성대조 — 배열이어도 원소가 FAQ 모양이 아니면 거부된다" do
+    status, = FaqPayloadNormalizer.call([ 1, 2, 3 ])
+    assert_equal :bad_shape, status
+    assert_equal :array_malformed, FaqPayloadNormalizer.classify([ 1, 2, 3 ])
+  end
+
+  test "양성대조 — 배열 안에 question 만 있는 원소도 거부된다" do
+    status, = FaqPayloadNormalizer.call([ { "question" => "q" } ])
+    assert_equal :bad_shape, status
+  end
+
   BROKEN.each do |payload, expected|
     test "양성대조 — #{payload.truncate(38)} 는 #{expected} 로 거부된다" do
       status, = FaqPayloadNormalizer.call(payload)
@@ -94,6 +106,26 @@ class FaqPayloadNormalizerTest < ActiveSupport::TestCase
     assert FaqPayloadNormalizer.preserves_source?(raw, value)
   end
 
+  # 독립검증 HIGH — 원문에는 `\\"`·`\\n` 이 2글자 이스케이프로, 파싱 결과에는 1글자로 들어온다.
+  # 날문자열 include? 로 비교하면 정상 복원을 content_drift 로 오판해 통째로 건너뛴다.
+  test "이스케이프된 따옴표가 있어도 preserves_source? 가 참이다" do
+    raw = '[{"answer"=>"그는 \\"가능\\"하다고 했다", "question"=>"q"}]'
+    status, value = FaqPayloadNormalizer.call(raw)
+
+    assert_equal :ok, status
+    assert FaqPayloadNormalizer.preserves_source?(raw, value),
+           "이스케이프 때문에 정상 복원을 오판하면 그 토픽은 영영 안 고쳐진다"
+  end
+
+  test "개행이 있어도 preserves_source? 가 참이다" do
+    raw = '[{"answer"=>"1줄\\n2줄", "question"=>"q"}]'
+    status, value = FaqPayloadNormalizer.call(raw)
+
+    assert_equal :ok, status
+    assert_equal "1줄\n2줄", value.first["answer"]
+    assert FaqPayloadNormalizer.preserves_source?(raw, value)
+  end
+
   test "preserves_source? 는 원문에 없는 값을 걸러낸다" do
     raw = '[{"answer"=>"a", "question"=>"q"}]'
     fabricated = [ { "question" => "지어낸 질문", "answer" => "지어낸 답" } ]
@@ -108,6 +140,7 @@ class FaqPayloadNormalizerTest < ActiveSupport::TestCase
     assert_equal :string_parseable,  FaqPayloadNormalizer.classify('[{"question":"q","answer":"a"}]')
     assert_equal :string_broken,     FaqPayloadNormalizer.classify('[{"answer"=>"a", "question"=>"q"}]')
     assert_equal :string_other,      FaqPayloadNormalizer.classify("not json at all")
+    assert_equal :array_malformed,   FaqPayloadNormalizer.classify([ "모양이 틀린 원소" ])
   end
 
   test "authored_count 는 복구 가능한 payload 의 건수를 센다" do

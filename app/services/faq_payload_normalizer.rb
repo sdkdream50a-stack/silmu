@@ -29,7 +29,11 @@ class FaqPayloadNormalizer
     #   status 가 :already_array / :ok 이면 value 는 정규화된 Array,
     #   그 밖이면 value 는 진단용 정보(예외 메시지·클래스명·파싱 결과)다.
     def call(raw)
-      return [ :already_array, raw ] if raw.is_a?(Array)
+      if raw.is_a?(Array)
+        # 배열이라고 무조건 통과시키지 않는다 — `[1,2,3]` 같은 오염도 배열이다(독립검증 지적).
+        return [ :bad_shape, raw ] unless raw.all? { |entry| faq_entry?(entry) }
+        return [ :already_array, raw ]
+      end
 
       source = raw.to_s
       parsed =
@@ -53,7 +57,10 @@ class FaqPayloadNormalizer
     # 반환: :empty | :array_ok | :string_parseable | :string_broken | :string_other
     def classify(raw)
       return :empty if raw.nil?
-      return raw.empty? ? :empty : :array_ok if raw.is_a?(Array)
+      if raw.is_a?(Array)
+        return :empty if raw.empty?
+        return raw.all? { |e| faq_entry?(e) } ? :array_ok : :array_malformed
+      end
 
       source = raw.to_s
       begin
@@ -72,9 +79,21 @@ class FaqPayloadNormalizer
     end
 
     # 복원 결과가 원문을 그대로 담고 있는지 — 변환이 내용을 바꾸지 않았음을 호출부가 증명할 수 있게 한다.
+    #
+    # ⚠️ 날문자열로 비교하면 안 된다(독립검증 HIGH). 원문에는 `\"`·`\n` 이 **이스케이프된 2글자**로 있고
+    #    파싱 결과에는 실제 `"`·개행 **1글자**로 들어온다. 그대로 `include?` 하면 정상 복원을
+    #    content_drift 로 오판해 건너뛴다. 그래서 **값을 다시 이스케이프해서** 원문과 맞춘다.
     def preserves_source?(raw, entries)
       source = raw.to_s
-      entries.all? { |e| source.include?(e["question"]) && source.include?(e["answer"]) }
+      entries.all? { |e| in_source?(source, e["question"]) && in_source?(source, e["answer"]) }
+    end
+
+    # 원문 어느 쪽 표현으로든 찾으면 보존된 것으로 본다 — 날문자열 / JSON 이스케이프 표현.
+    def in_source?(source, value)
+      return true if source.include?(value)
+
+      escaped = JSON.generate(value)[1..-2]   # JSON 문자열 본문(따옴표 제외) = 원문에 있는 표현
+      escaped.present? && source.include?(escaped)
     end
 
     private
