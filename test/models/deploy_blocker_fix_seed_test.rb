@@ -23,6 +23,10 @@ class DeployBlockerFixSeedTest < ActiveSupport::TestCase
                  "(2인 이상 견적서 징구 기준), 지방계약법 시행규칙 제43조 (견적서 제출 업체 독립성)"
   OLD_CHECKPOINTS = [ "총사업비가 수의계약 한도(5천만원)를 초과하는지 사업 전체 기준으로 판단" ].to_json
   OLD_TOPIC_LAW = "<strong>지방계약법 시행령 제25조 제1항 제1호 (수의계약 한도)</strong>\n<li>가. 공사</li>"
+  # G1 — 괄호 표기가 없어 앞 라운드 탐지기를 빠져나간 같은 오용 (본문 detail)
+  OLD_DETAIL_G1 = "담당자는 이 사업을 \"기성 소프트웨어 패키지 구매\"로 분류하여, " \
+                  "지방계약법 시행령 제25조 제1항 제1호의 물품 수의계약 기준(2,000만원 초과 시 경쟁 원칙)을 " \
+                  "무시하고 특정 IT 업체 A사와 직접 수의계약을 체결했습니다."
 
   # §25①1호를 **정확히** 긴급계약 문맥으로 쓴 레코드 — 건드리면 안 된다(음성 대조)
   EMERGENCY_LEGAL = "지방계약법 시행령 제25조 제1항 제1호 (천재지변·긴급 — 입찰에 부칠 여유가 없는 경우)"
@@ -49,12 +53,17 @@ class DeployBlockerFixSeedTest < ActiveSupport::TestCase
       slug: "test-emergency-contract-25-1-1", title: "긴급 수의계약", published: true,
       legal_basis: EMERGENCY_LEGAL
     )
+    @goods = AuditCase.create!(
+      slug: "software-dev-misclassified-as-goods", title: "SW 개발을 물품구매로 오분류", published: true,
+      detail: OLD_DETAIL_G1
+    )
     @topic = Topic.create!(slug: "private-contract-limit", name: "수의계약 한도", law_content: OLD_TOPIC_LAW)
   end
 
   setup do
     seed_module   # 모듈 정의만 (autorun OFF)
     AuditCase.where(slug: %w[private-contract-split-over-limit quote-collection-same-vendor-double
+                            software-dev-misclassified-as-goods
                             test-emergency-contract-25-1-1]).delete_all
     Topic.where(slug: "private-contract-limit").delete_all
     build_existing_rows!
@@ -108,6 +117,16 @@ class DeployBlockerFixSeedTest < ActiveSupport::TestCase
     lc = Topic.find_by(slug: "private-contract-limit").law_content
     assert_not_includes lc, "제25조 제1항 제1호 (수의계약 한도)"
     assert_includes lc, "제25조 제1항 제5호 (수의계약 한도)"
+  end
+
+  test "G1: 괄호 없는 §25①1호 오용이 본문에서 제5호 나목으로 정정된다" do
+    seed_module.apply!
+    d = AuditCase.find_by(slug: "software-dev-misclassified-as-goods").detail
+    assert_not_includes d, "제25조 제1항 제1호의 물품 수의계약 기준", "§25①1호 오용 잔존"
+    assert_includes d, "제25조 제1항 제5호 나목의 물품 수의계약 기준", "제5호 나목 정정문 없음"
+    # 사건 사실·금액은 보존 (과잉정정 0). 새 한도 숫자를 만들지 않았다.
+    assert_includes d, "2,000만원 초과 시 경쟁 원칙"
+    assert_includes d, "기성 소프트웨어 패키지 구매"
   end
 
   # ── F2 — verification_source 동기화 ──────────────────────────

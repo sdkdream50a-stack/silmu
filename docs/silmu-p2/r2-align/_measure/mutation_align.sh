@@ -4,7 +4,12 @@
 set -u
 cd "$(dirname "$0")/../../../.." || exit 1
 TEST=test/models/contract_split_semantic_alignment_test.rb
-KILLED=0; SURVIVED=0; NOTAPPLIED=0
+KILLED=0; SURVIVED=0; NOTAPPLIED=0; BASELINE_RED=0
+
+# 시작 베이스라인 — 빨간 상태에서 시작하면 모든 뮤턴트가 «죽은 것처럼» 보인다.
+if ! bin/rails test "$TEST" >/dev/null 2>&1; then
+  echo "BASELINE_RED_AT_START — 뮤테이션을 돌릴 수 없다"; exit 1
+fi
 
 mutate() { # name file after before
   local name="$1" file="$2" after="$3" before="$4"
@@ -24,7 +29,13 @@ PY
   else
     echo "KILLED       $name  (치환 ${n}건)"; KILLED=$((KILLED+1))
   fi
-  mv "/tmp/mut.bak.$$" "$file"
+  # 복원은 «내용»만이 아니라 «mtime»도 되돌려야 한다 — 크기가 같은 뮤턴트면
+  # (mtime,size) 로 키를 잡는 컴파일 캐시가 뮤턴트 바이트코드를 계속 물고 있다(2026-09-06 실측).
+  mv "/tmp/mut.bak.$$" "$file"; touch "$file"
+  if ! bin/rails test "$TEST" >/dev/null 2>&1; then
+    echo "BASELINE_RED $name (복원 뒤 스위트가 빨갛다 — 이 뮤턴트 판정은 믿을 수 없다)"
+    BASELINE_RED=$((BASELINE_RED+1))
+  fi
 }
 
 # A — §77 공사 한정 되돌리기
@@ -104,4 +115,4 @@ mutate "R11 N1 정당 기준 훼손(과잉정정)" "$FC" \
   '일반 물품·용역 수의계약 한도는 2천만원'
 
 echo
-echo "KILLED=$KILLED SURVIVED=$SURVIVED NOT_APPLIED=$NOTAPPLIED"
+echo "KILLED=$KILLED SURVIVED=$SURVIVED NOT_APPLIED=$NOTAPPLIED BASELINE_RED=$BASELINE_RED"

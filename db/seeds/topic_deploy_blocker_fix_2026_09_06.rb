@@ -59,6 +59,13 @@ module SilmuDeployBlockerFix20260906
     "quote-collection-same-vendor-double" => [
       [ "지방계약법 시행령 제25조 제1항 제1호 (소액 수의계약), 행정안전부 예규 제2023-24호 제5장 제3절",
         "지방계약법 시행령 #{HO5_LOCATOR}, 행정안전부 예규 제2023-24호 제5장 제3절" ]
+    ].freeze,
+    # G1 (2026-09-06 잔여 정리) — 괄호 표기가 없어 앞 라운드 탐지기를 빠져나간 같은 오용.
+    # 「제1호의 물품 수의계약 기준」 = 금액 기준을 긴급 조항에 매단 것이다.
+    # 물품 2천만원의 근거는 제5호 **나목** (config/contract_decision_rules.yml D25-1-5-나 · verified_at 2026-09-06).
+    "software-dev-misclassified-as-goods" => [
+      [ "지방계약법 시행령 제25조 제1항 제1호의 물품 수의계약 기준(2,000만원 초과 시 경쟁 원칙)",
+        "지방계약법 시행령 제25조 제1항 제5호 나목의 물품 수의계약 기준(2,000만원 초과 시 경쟁 원칙)" ]
     ].freeze
   }.freeze
 

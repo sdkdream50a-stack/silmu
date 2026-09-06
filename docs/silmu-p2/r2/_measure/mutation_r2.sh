@@ -17,10 +17,16 @@ BACKUP=$(mktemp -d)
 for f in "$RULES" "$PCE" "$SPE" "$QR" "$RS" "$CMS"; do
   mkdir -p "$BACKUP/$(dirname "$f")"; cp "$f" "$BACKUP/$f"
 done
-restore() { for f in "$RULES" "$PCE" "$SPE" "$QR" "$RS" "$CMS"; do cp "$BACKUP/$f" "$f"; done; }
+restore() { for f in "$RULES" "$PCE" "$SPE" "$QR" "$RS" "$CMS"; do cp "$BACKUP/$f" "$f"; touch "$f"; done; }
 trap 'restore; rm -rf "$BACKUP"' EXIT
 
 KILLED=0; SURVIVED=0; NOT_APPLIED=0
+
+# 시작 베이스라인 — 빨간 상태에서 시작하면 모든 뮤턴트가 «죽은 것처럼» 보인다.
+restore
+if ! bin/rails test $SUITE >/dev/null 2>&1; then
+  echo "BASELINE_RED_AT_START — 뮤테이션을 돌릴 수 없다"; exit 1
+fi
 
 run_mutant() {
   local name="$1"; shift

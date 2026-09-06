@@ -4,7 +4,12 @@
 set -u
 cd "$(dirname "$0")/../../../.." || exit 1
 TESTS="test/models/contract_split_semantic_alignment_test.rb test/models/deploy_blocker_fix_seed_test.rb"
-KILLED=0; SURVIVED=0; NOTAPPLIED=0
+KILLED=0; SURVIVED=0; NOTAPPLIED=0; BASELINE_RED=0
+
+# 시작 베이스라인 — 빨간 상태에서 시작하면 모든 뮤턴트가 «죽은 것처럼» 보인다.
+if ! bin/rails test $TESTS >/dev/null 2>&1; then
+  echo "BASELINE_RED_AT_START — 뮤테이션을 돌릴 수 없다"; exit 1
+fi
 
 mutate() { # name file after before
   local name="$1" file="$2" after="$3" before="$4"
@@ -27,7 +32,15 @@ PY
   else
     echo "KILLED       $name  (치환 ${n}건)"; KILLED=$((KILLED+1))
   fi
-  mv "$bak" "$file"
+  # 복원은 «내용»만이 아니라 «mtime»도 되돌려야 한다.
+  # cp/mv 는 백업의 mtime 을 그대로 되돌려 놓는데, 크기가 같은 뮤턴트(제5호↔제1호)면
+  # (mtime,size) 로 키를 잡는 컴파일 캐시가 **뮤턴트 바이트코드를 계속 물고 있다**.
+  # 그러면 그 뒤 뮤턴트는 전부 «이미 빨간» 베이스라인 위에서 KILLED 로 보인다(2026-09-06 실측).
+  mv "$bak" "$file"; touch "$file"
+  if ! bin/rails test $TESTS >/dev/null 2>&1; then
+    echo "BASELINE_RED $name (복원 뒤 스위트가 빨갛다 — 이 뮤턴트 판정은 믿을 수 없다)"
+    BASELINE_RED=$((BASELINE_RED+1))
+  fi
 }
 
 AC=db/seeds/audit_cases/topic_audit_cases_batch_01.rb
@@ -75,4 +88,4 @@ mutate "M8 긴급계약 §25①1호를 소액수의로 오정정" db/seeds/topic
   '| **긴급 수의** | 시행령 제25조 제1항 제1호 (소액 수의계약) | 경쟁 여유 없음 |'
 
 echo
-echo "KILLED=$KILLED SURVIVED=$SURVIVED NOT_APPLIED=$NOTAPPLIED"
+echo "KILLED=$KILLED SURVIVED=$SURVIVED NOT_APPLIED=$NOTAPPLIED BASELINE_RED=$BASELINE_RED"

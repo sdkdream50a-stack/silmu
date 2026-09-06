@@ -30,6 +30,49 @@ class BlogLegalVerifierTest < ActiveSupport::TestCase
     assert(result[:issues].any? { |i| i[:type] == "wrong_amount" })
   end
 
+  # ── §25①1호(긴급) ↔ §25①5호(소액수의 금액기준) 구분 (2026-09-06) ──
+  #
+  # 검증기는 «정답» 을 가르치는 자리다. 여기에 조문이 틀리면 본문 오류를 옳다고 고쳐 준다.
+  # 금액 기준의 근거는 §25①5호(가목 공사 · 나목 물품·용역)이지 §25①1호(천재지변·긴급)가 아니다.
+
+  test "양성 대조: 잘못된 물품·용역 한도는 §25①5호 나목을 정답으로 알려 준다" do
+    result = make_verifier.verify("물품·용역 5천만원 이하이면 수의계약이 가능합니다.")
+    issue = result[:issues].find { |i| i[:type] == "wrong_amount" }
+    assert issue, "물품·용역 한도 오류를 잡지 못한다"
+    assert_equal "물품·용역 추정가격 2천만원 이하", issue[:correct]
+    assert_includes issue[:source], "제25조 제1항 제5호 나목"
+    assert_not_includes issue[:source], "제25조 제1항 제1호"
+  end
+
+  test "양성 대조: 잘못된 공사 한도는 §25①5호 가목을 정답으로 알려 준다" do
+    result = make_verifier.verify("종합공사 6억원 이하이면 수의계약이 가능합니다.")
+    issue = result[:issues].find { |i| i[:type] == "wrong_amount" }
+    assert issue, "종합공사 한도 오류를 잡지 못한다"
+    assert_includes issue[:source], "제25조 제1항 제5호 가목"
+  end
+
+  test "음성 대조: 어떤 금액 룰도 §25①1호를 근거로 제시하지 않는다" do
+    BlogLegalVerifier::AMOUNT_CHECKS.each do |rule|
+      assert_not_includes rule[:source], "제25조 제1항 제1호",
+                          "금액 기준을 긴급 조항에 매달았다: #{rule[:correct]}"
+    end
+  end
+
+  test "음성 대조: §30 견적 룰은 §25 로 옮겨지지 않았다" do
+    s30 = BlogLegalVerifier::AMOUNT_CHECKS.select { |r| r[:source].include?("제30조") }
+    assert_equal 2, s30.size, "§30 룰 2건이 유지되지 않았다"
+    assert(s30.none? { |r| r[:source].include?("제25조") }, "§30 룰에 §25 가 섞였다")
+  end
+
+  test "컨텍스트 게이트는 조문 번호를 따라 옮겨졌다 — 보증금 면제 문맥은 여전히 통과" do
+    # 게이트는 «source 가 §25 금액 룰인가» 로 걸린다. 제1호→제5호 로 바꾸면서
+    # 게이트 문자열을 함께 옮기지 않으면 이 문맥이 오검출로 돌아온다.
+    text = "계약보증금은 시행령 제51조에 따라 물품·용역 5천만원 이하이면 면제할 수 있습니다."
+    result = make_verifier.verify(text)
+    assert_empty result[:issues].select { |i| i[:type] == "wrong_amount" },
+                 "보증금 면제 문맥을 수의계약 한도 오류로 오검출한다"
+  end
+
   # ── 인용 환각 검증 ──
 
   test "검증 대상 외 법령은 통과한다 (CITATION_LAW_RE 미포함)" do

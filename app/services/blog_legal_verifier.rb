@@ -31,13 +31,14 @@ class BlogLegalVerifier
   # 검증 기준 — 출처: regulation_verifier.rb TOOL_VERIFICATIONS + 법제처 원문
   # 형식: { pattern: Regexp, correct: "올바른 표현", source: "근거 법령" }
   AMOUNT_CHECKS = [
-    # 수의계약 한도 (지방계약법 시행령 제25조)
+    # 수의계약 한도 (지방계약법 시행령 제25조 제1항 제5호 — 소액수의 금액기준.
+    # §25①1호는 천재지변·긴급 사유이지 금액 기준이 아니다)
     {
       wrong_patterns: [ /물품.{0,10}용역.{0,10}(\d+)천만원\s*이하/,
                        /용역.{0,10}물품.{0,10}(\d+)천만원\s*이하/ ],
       correct_amount: "2천만원",
       correct: "물품·용역 추정가격 2천만원 이하",
-      source: "「지방자치단체를 당사자로 하는 계약에 관한 법률 시행령」 제25조 제1항 제1호"
+      source: "「지방자치단체를 당사자로 하는 계약에 관한 법률 시행령」 제25조 제1항 제5호 나목"
     },
     # 공사 수의계약 한도 — 전문공사
     {
@@ -45,7 +46,7 @@ class BlogLegalVerifier
                        /전문.{0,5}공사.{0,10}1억\s*이하/ ],
       correct_amount: "2억원",
       correct: "전문공사 추정가격 2억원 이하",
-      source: "「지방자치단체를 당사자로 하는 계약에 관한 법률 시행령」 제25조 제1항 제1호"
+      source: "「지방자치단체를 당사자로 하는 계약에 관한 법률 시행령」 제25조 제1항 제5호 가목"
     },
     # 공사 수의계약 한도 — 종합공사 (정답 4억원, 그 외 매칭은 false)
     # wrong_pattern은 4억이 아닌 다른 숫자 표기만 잡아야 함 — 「3억」「5억」「6억」 등
@@ -53,7 +54,7 @@ class BlogLegalVerifier
       wrong_patterns: [ /종합공사.{0,10}([1-3]|[5-9])억원?\s*이하/ ],
       correct_amount: "4억원",
       correct: "종합공사 추정가격 4억원 이하",
-      source: "「지방자치단체를 당사자로 하는 계약에 관한 법률 시행령」 제25조 제1항 제1호"
+      source: "「지방자치단체를 당사자로 하는 계약에 관한 법률 시행령」 제25조 제1항 제5호 가목"
     },
     # 1인 견적 기준 (지방계약법 시행령 제30조)
     # 올바른 기준: 2천만원 이하 → 1인 견적 가능, 2백만원 이하 → 견적 생략 가능
@@ -138,8 +139,8 @@ class BlogLegalVerifier
           captured = match.is_a?(Array) ? match.first : nil
           next if captured && amount_matches_correct?(captured, rule[:correct_amount])
 
-          # 컨텍스트 게이트: §25 제1항 제1호 룰만 적용
-          if rule[:source].to_s.include?("제25조 제1항 제1호")
+          # 컨텍스트 게이트: §25①5호(소액수의 금액기준) 룰만 적용 — §30 룰은 대상이 아니다
+          if rule[:source].to_s.include?("제25조 제1항 제5호")
             match_pos = text.index(pattern)
             if match_pos
               window_start = [ match_pos - CONTEXT_WINDOW, 0 ].max
