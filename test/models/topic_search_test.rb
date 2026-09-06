@@ -217,4 +217,35 @@ class TopicSearchTest < ActiveSupport::TestCase
     variants = SearchQueryParser.tokens("진단서").first
     assert_not_includes variants, "병가"
   end
+
+  # ── P1.6 독립검증 수리 ────────────────────────────────────────
+  test "answer_for: 1글자 토큰이 단어 안쪽에 부분일치해도 바로 답으로 승격하지 않는다" do
+    # include? 는 경계 없는 부분일치라 "차" 가 "차이는?" 안에서 걸렸다.
+    # 사용자가 묻지 않은 질문의 답이 확신 있게 뜨는 것이 가장 나쁜 실패다.
+    t = Topic.create!(name: "장기계속계약", slug: "test-answer-onechar",
+                      keywords: "장기계속계약", published: true,
+                      faqs: [ { "question" => "장기계속계약과 계속비계약의 차이는?",
+                                "answer" => "연도별 예산 확보 방식이 다릅니다" } ])
+    assert_nil Topic.answer_for("차 어떻게", [ t ]),
+      "1글자 토큰 '차' 가 '차이' 안쪽에 걸려 승격되면 안 된다"
+    assert_nil Topic.answer_for("비 얼마", [ t ])
+  end
+
+  test "answer_for: 2글자 이상 토큰은 종전대로 승격한다 (수리가 recall 을 깎지 않았다)" do
+    t = Topic.create!(name: "연가", slug: "test-answer-twochar",
+                      keywords: "연가", published: true,
+                      faqs: [ { "question" => "재직기간에 따라 연가는 며칠 부여되나요?",
+                                "answer" => "재직기간별로 11~21일" } ])
+    result = Topic.answer_for("연가 며칠", [ t ])
+    assert result, "2글자 이상 토큰까지 막으면 과교정이다"
+    assert_equal "재직기간에 따라 연가는 며칠 부여되나요?", result[:question]
+  end
+
+  test "SYNONYMS: 상위 범주로 확장하지 않는다 (차비≠여비)" do
+    # 여비는 숙박비·식비까지 포함하는 상위 범주다. 차비→여비 매핑은
+    # "차비 지급 기준" 검색에서 "숙박비 지급 기준" 을 끌어왔다(실측).
+    variants = SearchQueryParser.tokens("차비").first
+    assert_not_includes variants, "여비"
+    assert_includes variants, "운임", "같은 것을 가리키는 recall 동의어까지 없애면 과교정이다"
+  end
 end

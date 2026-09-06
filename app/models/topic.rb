@@ -121,6 +121,9 @@ class Topic < ApplicationRecord
       .limit(limit)
   end
 
+  # "바로 답" 히트로 인정하는 변형의 최소 길이 — 파서 MIN_STEM·컨트롤러 length>=2 와 같은 기준.
+  ANSWER_MIN_TOKEN = 2
+
   # 검색어에 대한 "바로 답" — **기존 FAQ 원문만** 쓴다. 요약하거나 생성하지 않는다.
   # 후보 토픽의 faq_list 중 질문에 검색어 내용 토큰이 과반 이상 들어간 항목을 고르고,
   # 과반 미달이면 nil 을 준다. 약한 매칭에 "바로 답" 딱지를 붙이면 그게 거짓 신뢰다(P1.6 §21·§32).
@@ -145,7 +148,12 @@ class Topic < ApplicationRecord
         answer   = faq["answer"].to_s
         next if question.blank? || answer.blank?
 
-        hits = token_variants.count { |variants| variants.any? { |v| question.include?(v) } }
+        # 1글자 변형은 히트로 세지 않는다(P1.6 독립검증). include? 가 경계 없는 부분일치라
+        # "차" 가 "차이는?" 안에서, "비" 가 "일비는" 안에서 걸려 **다른 질문의 답**이 승격됐다.
+        # 파서의 MIN_STEM·컨트롤러의 length>=2 와 같은 기준이다.
+        hits = token_variants.count { |variants|
+          variants.any? { |v| v.length >= ANSWER_MIN_TOKEN && question.include?(v) }
+        }
         next if hits < required
 
         best = { topic: topic, question: question, answer: answer, hits: hits } if best.nil? || hits > best[:hits]
