@@ -1,0 +1,496 @@
+{
+  "정보공개": {
+    "rows": [
+      {
+        "kw": "정보공개",
+        "topics": [
+          "information-disclosure"
+        ],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 1
+      },
+      {
+        "kw": "비공개",
+        "topics": [
+          "information-disclosure"
+        ],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 1
+      },
+      {
+        "kw": "부분공개",
+        "topics": [],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 0
+      },
+      {
+        "kw": "청구인",
+        "topics": [],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 0
+      },
+      {
+        "kw": "이의신청",
+        "topics": [
+          "information-disclosure"
+        ],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 1
+      }
+    ],
+    "topic_slugs": [
+      "information-disclosure"
+    ],
+    "guide_n": 0,
+    "audit_n": 3
+  },
+  "개인정보": {
+    "rows": [
+      {
+        "kw": "개인정보",
+        "topics": [],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 0
+      },
+      {
+        "kw": "영상정보",
+        "topics": [],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 0
+      },
+      {
+        "kw": "CCTV",
+        "topics": [],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 0
+      },
+      {
+        "kw": "파기",
+        "topics": [
+          "contract-termination"
+        ],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 0
+      },
+      {
+        "kw": "유출",
+        "topics": [],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 0
+      }
+    ],
+    "topic_slugs": [
+      "contract-termination"
+    ],
+    "guide_n": 0,
+    "audit_n": 0
+  },
+  "기록물": {
+    "rows": [
+      {
+        "kw": "기록물",
+        "topics": [],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 0
+      },
+      {
+        "kw": "문서보존",
+        "topics": [],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 0
+      },
+      {
+        "kw": "이관",
+        "topics": [],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 1
+      },
+      {
+        "kw": "편철",
+        "topics": [],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 0
+      },
+      {
+        "kw": "보존기간",
+        "topics": [],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 0
+      }
+    ],
+    "topic_slugs": [],
+    "guide_n": 0,
+    "audit_n": 1
+  },
+  "민원": {
+    "rows": [
+      {
+        "kw": "민원",
+        "topics": [],
+        "guides": [
+          "civil-complaint-guide"
+        ],
+        "guide_n": 1,
+        "audits": 1
+      },
+      {
+        "kw": "고충",
+        "topics": [],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 1
+      },
+      {
+        "kw": "반복민원",
+        "topics": [],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 0
+      },
+      {
+        "kw": "특이민원",
+        "topics": [],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 0
+      },
+      {
+        "kw": "처리기한",
+        "topics": [],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 1
+      }
+    ],
+    "topic_slugs": [],
+    "guide_n": 1,
+    "audit_n": 3
+  },
+  "행정절차·법무": {
+    "rows": [
+      {
+        "kw": "행정절차",
+        "topics": [],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 0
+      },
+      {
+        "kw": "사전통지",
+        "topics": [],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 0
+      },
+      {
+        "kw": "청문",
+        "topics": [],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 0
+      },
+      {
+        "kw": "의견제출",
+        "topics": [],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 0
+      },
+      {
+        "kw": "행정심판",
+        "topics": [
+          "information-disclosure"
+        ],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 0
+      },
+      {
+        "kw": "소송",
+        "topics": [
+          "estimated-payment"
+        ],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 0
+      }
+    ],
+    "topic_slugs": [
+      "information-disclosure",
+      "estimated-payment"
+    ],
+    "guide_n": 0,
+    "audit_n": 0
+  },
+  "시설·안전": {
+    "rows": [
+      {
+        "kw": "안전점검",
+        "topics": [],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 0
+      },
+      {
+        "kw": "시설물",
+        "topics": [],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 4
+      },
+      {
+        "kw": "산업안전",
+        "topics": [
+          "fence-installation"
+        ],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 0
+      },
+      {
+        "kw": "중대재해",
+        "topics": [],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 0
+      },
+      {
+        "kw": "소방",
+        "topics": [],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 0
+      }
+    ],
+    "topic_slugs": [
+      "fence-installation"
+    ],
+    "guide_n": 0,
+    "audit_n": 4
+  },
+  "문서·보고·위원회": {
+    "rows": [
+      {
+        "kw": "위원회",
+        "topics": [
+          "spec-price-split-bid",
+          "disciplinary-action",
+          "participatory-budget",
+          "school-budget-compilation",
+          "goods-selection-committee"
+        ],
+        "guides": [
+          "goods-selection-committee-guide"
+        ],
+        "guide_n": 1,
+        "audits": 22
+      },
+      {
+        "kw": "회의록",
+        "topics": [],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 2
+      },
+      {
+        "kw": "기안",
+        "topics": [],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 0
+      },
+      {
+        "kw": "결재",
+        "topics": [
+          "extra-budgetary-fund"
+        ],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 10
+      },
+      {
+        "kw": "공문",
+        "topics": [],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 1
+      }
+    ],
+    "topic_slugs": [
+      "spec-price-split-bid",
+      "disciplinary-action",
+      "participatory-budget",
+      "school-budget-compilation",
+      "goods-selection-committee",
+      "extra-budgetary-fund"
+    ],
+    "guide_n": 1,
+    "audit_n": 35
+  },
+  "디지털행정": {
+    "rows": [
+      {
+        "kw": "정보시스템",
+        "topics": [],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 0
+      },
+      {
+        "kw": "홈페이지",
+        "topics": [],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 1
+      },
+      {
+        "kw": "전자결재",
+        "topics": [],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 0
+      },
+      {
+        "kw": "클라우드",
+        "topics": [],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 0
+      },
+      {
+        "kw": "공공데이터",
+        "topics": [],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 0
+      }
+    ],
+    "topic_slugs": [],
+    "guide_n": 0,
+    "audit_n": 1
+  },
+  "재산·물품": {
+    "rows": [
+      {
+        "kw": "공유재산",
+        "topics": [
+          "public-property-management"
+        ],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 3
+      },
+      {
+        "kw": "물품관리",
+        "topics": [
+          "public-property-management",
+          "accounting-officers"
+        ],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 1
+      },
+      {
+        "kw": "불용",
+        "topics": [
+          "budget-lapse"
+        ],
+        "guides": [
+          "budget-execution-complete-8"
+        ],
+        "guide_n": 1,
+        "audits": 4
+      },
+      {
+        "kw": "대부",
+        "topics": [
+          "public-property-management"
+        ],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 4
+      },
+      {
+        "kw": "취득",
+        "topics": [
+          "public-property-management",
+          "local-tax-levy",
+          "goods-vs-service-contract"
+        ],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 2
+      }
+    ],
+    "topic_slugs": [
+      "public-property-management",
+      "accounting-officers",
+      "budget-lapse",
+      "local-tax-levy",
+      "goods-vs-service-contract"
+    ],
+    "guide_n": 1,
+    "audit_n": 14
+  },
+  "감사·청렴": {
+    "rows": [
+      {
+        "kw": "청렴",
+        "topics": [
+          "contract-execution"
+        ],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 0
+      },
+      {
+        "kw": "이해충돌",
+        "topics": [],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 0
+      },
+      {
+        "kw": "김영란",
+        "topics": [],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 0
+      },
+      {
+        "kw": "부패",
+        "topics": [],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 0
+      },
+      {
+        "kw": "감사수감",
+        "topics": [],
+        "guides": [],
+        "guide_n": 0,
+        "audits": 1
+      }
+    ],
+    "topic_slugs": [
+      "contract-execution"
+    ],
+    "guide_n": 0,
+    "audit_n": 1
+  }
+}

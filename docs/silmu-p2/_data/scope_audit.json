@@ -1,0 +1,287 @@
+{
+  "task_entry_counts": {
+    "contract": 246,
+    "budget": 166,
+    "duty": 35,
+    "salary": 14,
+    "travel": 16,
+    "subsidy": 12,
+    "property": 1,
+    "audit": 257,
+    "newcomer": 80
+  },
+  "task_entries_visible": [
+    "contract",
+    "budget",
+    "duty",
+    "salary",
+    "travel",
+    "subsidy",
+    "audit",
+    "newcomer"
+  ],
+  "min_coverage": 3,
+  "agency": {
+    "topic_jurisdiction": {
+      "": 99,
+      "EDUCATION": 6,
+      "LOCAL": 9
+    },
+    "topic_org_type": {
+      "school": 6,
+      "": 108
+    },
+    "topic_sector": {
+      "common": 99,
+      "local_gov": 9,
+      "edu": 6
+    },
+    "topic_target_agency_blank": 99,
+    "guide_jurisdiction": {
+      "": 103
+    },
+    "guide_sector": {
+      "common": 103
+    },
+    "audit_jurisdiction": {
+      "": 47,
+      "NATIONAL": 2,
+      "EDUCATION": 86,
+      "LOCAL": 122
+    },
+    "audit_sector": {
+      "common": 169,
+      "edu": 88
+    },
+    "topic_target_agency": {
+      "LOCAL_GOVERNMENT": 9,
+      "PUBLIC_SCHOOL": 6
+    }
+  },
+  "task_guides": [
+    {
+      "id": 1,
+      "category": "세무"
+    },
+    {
+      "id": 2,
+      "category": "보험"
+    },
+    {
+      "id": 3,
+      "category": "서무"
+    },
+    {
+      "id": 4,
+      "category": "서무"
+    },
+    {
+      "id": 5,
+      "category": "서무"
+    },
+    {
+      "id": 6,
+      "category": "서무"
+    },
+    {
+      "id": 7,
+      "category": "서무"
+    },
+    {
+      "id": 8
+    },
+    {
+      "id": 9
+    },
+    {
+      "id": 10,
+      "category": "서무"
+    },
+    {
+      "id": 11,
+      "category": "서무"
+    },
+    {
+      "id": 12,
+      "category": "서무"
+    },
+    {
+      "id": 13,
+      "category": "시설관리"
+    },
+    {
+      "id": 14,
+      "category": "서무"
+    },
+    {
+      "id": 15,
+      "category": "서무"
+    },
+    {
+      "id": 16
+    },
+    {
+      "id": 28,
+      "category": "보험"
+    },
+    {
+      "id": 17,
+      "category": "시설관리"
+    },
+    {
+      "id": 18,
+      "category": "서무"
+    },
+    {
+      "id": 19
+    },
+    {
+      "id": 20,
+      "category": "서무"
+    },
+    {
+      "id": 21,
+      "category": "서무"
+    },
+    {
+      "id": 22,
+      "category": "시설관리"
+    },
+    {
+      "id": 23,
+      "category": "서무"
+    },
+    {
+      "id": 24,
+      "category": "서무"
+    },
+    {
+      "id": 25,
+      "category": "서무"
+    },
+    {
+      "id": 26,
+      "category": "보고"
+    },
+    {
+      "id": 27,
+      "category": "회계"
+    }
+  ],
+  "task_guide_columns": [
+    "id",
+    "category",
+    "content",
+    "created_at",
+    "status",
+    "task_title",
+    "updated_at"
+  ],
+  "onboarding": [
+    "/start(.:format)"
+  ],
+  "law": [
+    {
+      "name": "지방자치단체를 당사자로 하는 계약에 관한 법률",
+      "effective_date": null
+    },
+    {
+      "name": "지방자치단체를 당사자로 하는 계약에 관한 법률 시행령",
+      "effective_date": null
+    },
+    {
+      "name": "지방자치단체를 당사자로 하는 계약에 관한 법률 시행규칙",
+      "effective_date": null
+    },
+    {
+      "name": "국가를 당사자로 하는 계약에 관한 법률",
+      "effective_date": null
+    },
+    {
+      "name": "국가를 당사자로 하는 계약에 관한 법률 시행령",
+      "effective_date": null
+    },
+    {
+      "name": "공무원 여비 규정",
+      "effective_date": null
+    },
+    {
+      "name": "지방재정법",
+      "effective_date": null
+    },
+    {
+      "name": "지방재정법 시행령",
+      "effective_date": null
+    },
+    {
+      "name": "소득세법",
+      "effective_date": null
+    },
+    {
+      "name": "공무원보수규정",
+      "effective_date": null
+    },
+    {
+      "name": "공무원수당 등에 관한 규정",
+      "effective_date": null
+    },
+    {
+      "name": "공무원연금법",
+      "effective_date": null
+    },
+    {
+      "name": "공무원연금법 시행령",
+      "effective_date": null
+    },
+    {
+      "name": "부정청탁 및 금품등 수수의 금지에 관한 법률",
+      "effective_date": null
+    },
+    {
+      "name": "부정청탁 및 금품등 수수의 금지에 관한 법률 시행령",
+      "effective_date": null
+    }
+  ],
+  "authority_documents": [
+    {
+      "id": 5,
+      "title": "지방회계법 시행령",
+      "document_type": "PRESIDENTIAL_DECREE"
+    },
+    {
+      "id": 6,
+      "title": "지방공무원법",
+      "document_type": "LAW"
+    },
+    {
+      "id": 7,
+      "title": "지방공무원 복무규정",
+      "document_type": "PRESIDENTIAL_DECREE"
+    },
+    {
+      "id": 8,
+      "title": "지방공무원 보수규정",
+      "document_type": "PRESIDENTIAL_DECREE"
+    },
+    {
+      "id": 1,
+      "title": "지방자치단체를 당사자로 하는 계약에 관한 법률",
+      "document_type": "LAW"
+    },
+    {
+      "id": 2,
+      "title": "지방자치단체를 당사자로 하는 계약에 관한 법률 시행령",
+      "document_type": "PRESIDENTIAL_DECREE"
+    },
+    {
+      "id": 3,
+      "title": "지방자치단체를 당사자로 하는 계약에 관한 법률 시행규칙",
+      "document_type": "MINISTERIAL_ORDINANCE"
+    },
+    {
+      "id": 4,
+      "title": "지방회계법",
+      "document_type": "LAW"
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "PC1_known_present": {
+    "수의계약": {
+      "topics": 6,
+      "top": "private-contract",
+      "answer": "수의계약 금액 기준이 어떻게 되나요?"
+    },
+    "출장 여비": {
+      "topics": 6,
+      "top": "travel-expense",
+      "answer": "자가용으로 출장 시 여비는 어떻게 받나요?"
+    },
+    "병가": {
+      "topics": 1,
+      "top": "sick-leave",
+      "answer": "공무원 일반 병가는 연간 며칠까지 쓸 수 있나요?"
+    }
+  },
+  "PC2_known_absent": {
+    "짜장면 곱빼기 결재": {
+      "topics": 0,
+      "guides": 0,
+      "audits": 0,
+      "top": null
+    },
+    "우주정거장 청소용역 하도급": {
+      "topics": 0,
+      "guides": 0,
+      "audits": 0,
+      "top": null
+    },
+    "zzqqxx 없는업무": {
+      "topics": 0,
+      "guides": 0,
+      "audits": 0,
+      "top": null
+    }
+  },
+  "PC3_information_disclosure": {
+    "present": true,
+    "faq": 4,
+    "category": "other",
+    "published": true
+  },
+  "PC4_provenance": {
+    "by_source_type": {
+      "ACTUAL_AUDIT": 86,
+      "SILMU_RECONSTRUCTED_CASE": 110,
+      "UNVERIFIED": 61
+    },
+    "recon_true_but_source_actual": 0,
+    "source_actual_but_recon_true": 0,
+    "recon_nil_count": 61,
+    "prov_conf_high_but_unverified": 61
+  },
+  "PC5_freshness": {
+    "topic_freshness": {
+      "": 114
+    },
+    "topic_needs_review": 0,
+    "topic_review_due_past": 0,
+    "guide_freshness": {
+      "": 103
+    },
+    "audit_freshness": {
+      "": 257
+    },
+    "law_effective_date_present": 0,
+    "law_total": 15
+  },
+  "PC6_mutation_guard": {
+    "search_log_count": 2161,
+    "search_log_max_created": "2026-09-06T10:24:05+09:00",
+    "topic_max_updated": "2026-09-06T00:37:31+09:00",
+    "guide_max_updated": "2026-05-19T13:03:07+09:00",
+    "audit_max_updated": "2026-09-06T00:37:31+09:00"
+  }
+}
