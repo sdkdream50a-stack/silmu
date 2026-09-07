@@ -14,9 +14,9 @@ AREAS = {
 out = {}
 AREAS.each do |area, kws|
   rows = kws.map do |kw|
-    t = Topic.published.where("name ILIKE ? OR keywords ILIKE ? OR summary ILIKE ?", "%#{kw}%","%#{kw}%","%#{kw}%").pluck(:slug)
-    g = Guide.published.where("title ILIKE ? OR summary ILIKE ?", "%#{kw}%","%#{kw}%").pluck(:slug)
-    a = AuditCase.published.where("title ILIKE ? OR issue ILIKE ?", "%#{kw}%","%#{kw}%").count
+    t = Topic.published.where("name ILIKE ? OR keywords ILIKE ? OR summary ILIKE ?", "%#{kw}%", "%#{kw}%", "%#{kw}%").pluck(:slug)
+    g = Guide.published.where("title ILIKE ? OR summary ILIKE ?", "%#{kw}%", "%#{kw}%").pluck(:slug)
+    a = AuditCase.published.where("title ILIKE ? OR issue ILIKE ?", "%#{kw}%", "%#{kw}%").count
     { kw: kw, topics: t, guides: g.first(4), guide_n: g.size, audits: a }
   end
   out[area] = { rows: rows,

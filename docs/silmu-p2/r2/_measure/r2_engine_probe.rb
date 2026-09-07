@@ -8,7 +8,7 @@ cases = [
   { t: "service", p: 50_000_000,  s: nil },          # 핵심: 일반업체 5천만원
   { t: "service", p: 50_000_000,  s: "women" },
   { t: "service", p: 80_000_000,  s: "women" },
-  { t: "service", p: 80_000_000,  s: "cooperative" },# 협동조합 — 바목 목록에 없음
+  { t: "service", p: 80_000_000,  s: "cooperative" }, # 협동조합 — 바목 목록에 없음
   { t: "goods",   p: 100_000_000, s: nil },
   { t: "construction_general", p: 300_000_000, s: nil },
   { t: "construction_special", p: 300_000_000, s: nil },

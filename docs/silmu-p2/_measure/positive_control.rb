@@ -2,7 +2,7 @@ require "json"
 out = {}
 # PC1: 확실히 있는 콘텐츠 — 검출기가 COVERED 를 잡는가
 pc1 = {}
-["수의계약", "출장 여비", "병가"].each do |q|
+[ "수의계약", "출장 여비", "병가" ].each do |q|
   ts = Topic.search_multiple(q, limit: 6).to_a
   a  = Topic.answer_for(q, ts)
   pc1[q] = { topics: ts.size, top: ts.first&.slug, answer: a && a[:question] }
@@ -11,7 +11,7 @@ out[:PC1_known_present] = pc1
 
 # PC2: 확실히 없는 것 — 검출기가 NO_CONTENT 를 잡는가
 pc2 = {}
-["짜장면 곱빼기 결재", "우주정거장 청소용역 하도급", "zzqqxx 없는업무"].each do |q|
+[ "짜장면 곱빼기 결재", "우주정거장 청소용역 하도급", "zzqqxx 없는업무" ].each do |q|
   ts = Topic.search_multiple(q, limit: 6).to_a
   g  = Guide.published.search_by_keyword(q).limit(5).to_a
   ac = AuditCase.search_by_query(q, limit: 5).to_a
