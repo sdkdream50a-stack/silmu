@@ -30,13 +30,16 @@ module Authority
       status_code:      "현행연혁코드"
     }.freeze
 
+    # api 는 **지연 생성**한다. `canonical_payload` 처럼 API 를 전혀 쓰지 않는 경로가 있는데,
+    # 생성자에서 LawApiService 를 즉시 만들면 credentials 없는 환경(CI 등)에서 그 경로까지 죽는다.
+    # 실제 fetch 시점에는 종전대로 credentials 를 요구한다 — 요구를 없앤 것이 아니라 **미룬** 것이다.
     def initialize(api: nil)
-      @api = api || LawApiService.new
+      @api = api
     end
 
     # 반환: Authority::FetchResult
     def fetch(document_title)
-      xml = @api.search_law(document_title, display: 1)
+      xml = api.search_law(document_title, display: 1)
       return FetchResult.failure("FETCH_FAILED", "API 응답 없음 (#{document_title})") if xml.nil?
 
       node = xml.at_xpath("//law")
@@ -79,6 +82,10 @@ module Authority
     end
 
     private
+
+      def api
+        @api ||= LawApiService.new
+      end
 
     def extract(node)
       FIELD_MAP.transform_values { |tag| node.at_xpath("./#{tag}")&.text.to_s.strip.presence }
