@@ -55,7 +55,21 @@ git -C "$DEPLOY_CHECKOUT" clean -qxdff
 
 # ── secrets ───────────────────────────────────────────────────────────
 # 값을 복사하거나 출력하지 않는다. 정본 파일을 symlink 해서 사본이 늘지 않게 한다.
-for rel in .kamal/secrets config/master.key .env; do
+#
+# 배포 전용 secret(.kamal/secrets)은 **어느 checkout 안에도 두지 않는다**.
+# 개발 checkout 에 그 파일이 있으면 거기서 `kamal deploy` 를 직접 불러
+# bin/deploy 의 게이트를 통째로 우회할 수 있기 때문이다(S3C).
+DEPLOY_SECRETS="${SILMU_DEPLOY_SECRETS:-$(dirname "$CANONICAL")/.silmu-deploy-secrets/kamal-secrets}"
+if [ ! -r "$DEPLOY_SECRETS" ]; then
+  echo "missing deploy secrets: $DEPLOY_SECRETS" >&2
+  echo "  (배포 전용 secret 은 checkout 밖 secret store 에 둔다 — 계약 문서의 SECRETS 절 참조)" >&2
+  exit 1
+fi
+mkdir -p "$DEPLOY_CHECKOUT/.kamal"
+ln -sfn "$DEPLOY_SECRETS" "$DEPLOY_CHECKOUT/.kamal/secrets"
+
+# 애플리케이션 개발에도 필요한 것들은 정본 checkout 에 그대로 두고 링크만 건다.
+for rel in config/master.key .env; do
   if [ -e "$CANONICAL/$rel" ]; then
     mkdir -p "$DEPLOY_CHECKOUT/$(dirname "$rel")"
     ln -sfn "$CANONICAL/$rel" "$DEPLOY_CHECKOUT/$rel"
