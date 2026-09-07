@@ -8,6 +8,7 @@
 # 기능:
 # - 법령 기준 검증
 # - 불일치 시 Issue 생성
+# - auto_fix=true 이면 수정 결과를 브랜치+PR 로 올린다 (main 직접 push 안 함)
 # - Slack/Email 알림 (선택적)
 
 name: 법령 자동 검증
@@ -27,7 +28,7 @@ on:
   workflow_dispatch:
     inputs:
       auto_fix:
-        description: '자동 수정 및 커밋 여부'
+        description: '자동 수정 후 PR 생성 여부 (main 직접 push 안 함)'
         required: false
         default: 'false'
         type: boolean
@@ -45,6 +46,13 @@ jobs:
   legal-check:
     name: 법령 기준 검증
     runs-on: ubuntu-latest
+
+    # auto_fix 결과를 «브랜치 + PR» 로 올리기 위한 최소 권한.
+    # main 은 branch protection 으로 잠겨 있고 GITHUB_TOKEN 은 bypass 대상이 아니므로
+    # contents:write 로도 main 에 직접 push 할 수 없다.
+    permissions:
+      contents: write
+      pull-requests: write
 
     steps:
       - name: 코드 체크아웃
@@ -94,28 +102,15 @@ jobs:
           path: tmp/legal_check_report.md
           retention-days: 30
 
-      - name: 자동 수정 및 커밋
+      - name: 자동 수정 → 브랜치 + PR
         if: |
           steps.legal_check.outputs.success == 'false' &&
           github.event.inputs.auto_fix == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           bundle exec rake legal:update
-
-          # 변경사항 확인
-          if git diff --quiet; then
-            echo "변경사항 없음"
-          else
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-            git add -A
-            git commit -m "auto: 법령 기준 자동 업데이트
-
-          - GitHub Actions 자동 검증에 의한 수정
-          - 기준일: $(date +%Y-%m-%d)
-
-          Co-Authored-By: github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
-            git push
-          fi
+          bin/legal_autofix_pr
 
       - name: Issue 생성 (오류 발생 시)
         if: |
