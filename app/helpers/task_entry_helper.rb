@@ -105,8 +105,8 @@ module TaskEntryHelper
       n  = entry[:topic_categories].sum { |c| topic_by_cat[c].to_i }
       n += entry[:guide_categories].sum { |c| guide_by_cat[c].to_i }
       n += case entry[:guide_series]
-           when :any_series then series_total
-           else Array(entry[:guide_series]).sum { |s| guide_by_ser[s].to_i }
+      when :any_series then series_total
+      else Array(entry[:guide_series]).sum { |s| guide_by_ser[s].to_i }
       end
       n += entry[:audit_categories] == :all ? audit_total : Array(entry[:audit_categories]).sum { |c| audit_by_cat[c].to_i }
       n

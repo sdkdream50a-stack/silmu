@@ -13,7 +13,7 @@ out[:totals] = {
 }
 
 # ---------- topic per category ----------
-tcat = Hash.new { |h,k| h[k] = { topics: 0, faq: 0, howto: 0, quick_stats: 0,
+tcat = Hash.new { |h, k| h[k] = { topics: 0, faq: 0, howto: 0, quick_stats: 0,
                                  topics_with_faq: 0, topics_with_howto: 0,
                                  topics_with_flowchart: 0, topics_with_law: 0,
                                  topics_with_interp: 0, topics_with_tips: 0,

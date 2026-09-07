@@ -81,8 +81,10 @@ class LawContentFetcher
                                          decree: "부정청탁 및 금품등 수수의 금지에 관한 법률 시행령" }
   }.freeze
 
+  # api 지연 생성 — 생성자에서 만들면 credentials 없는 환경(CI)에서 이 클래스를 쓰는 모든
+  # 경로가 죽는다. 실제 조회 시점에는 종전대로 credentials 를 요구한다.
   def initialize
-    @api = LawApiService.new
+    @api = nil
   end
 
   # 토픽 slug에 대한 법령 참조 정보 조회
@@ -102,7 +104,7 @@ class LawContentFetcher
     cache_key = "law_api/v2/meta/#{Digest::MD5.hexdigest(law_name)}"
 
     Rails.cache.fetch(cache_key, expires_in: 7.days, race_condition_ttl: 30) do
-      xml = @api.search_law(law_name, display: 1)
+      xml = api.search_law(law_name, display: 1)
       parse_law_meta(xml, law_name) || static_law_meta(law_name)
     end
   rescue => e
@@ -111,6 +113,10 @@ class LawContentFetcher
   end
 
   private
+
+    def api
+      @api ||= LawApiService.new
+    end
 
   def parse_law_meta(xml, fallback_name)
     return nil unless xml

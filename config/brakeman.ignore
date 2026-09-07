@@ -91,6 +91,26 @@
         89
       ],
       "note": "오탐(false positive): 보간 대상은 고정 컬럼명(title/issue/category)과 내부 생성 바인드 플레이스홀더 이름(:tN_M/:dN_M)뿐. 검색 토큰 값은 sanitize_sql_like + 바인드 파라미터(binds) 및 sanitize_sql_array로 처리. 사용자 입력 미보간."
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "debbf29d63480863064d65b219f35b13dc88414ad8d615117bc5e7655ec7b8b9",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/topic.rb",
+      "line": 119,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "published.where(\"(#{literal_clauses.map do\n \"CASE WHEN #{c} THEN 1 ELSE 0 END\"\n end.join(\" + \")}) >= #{(literal_clauses.size / 2.0).ceil}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Topic",
+        "method": "Topic.relaxed_match"
+      },
+      "user_input": "literal_clauses.map do\n \"CASE WHEN #{c} THEN 1 ELSE 0 END\"\n end.join(\" + \")",
+      "confidence": "Weak",
+      "note": "오탐(false positive): relaxed_match 가 보간하는 literal_clauses 는 전부 sanitize_sql_array([...], pattern) 결과이고(topic.rb:74·79), 검색 토큰 값은 sanitize_sql_like 로 이스케이프된 뒤 바인드로 들어간다. 보간되는 것은 고정 컬럼명(name/keywords/summary)과 sanitize 된 SQL 조각뿐이며 required 는 literal_clauses.size 로 계산한 정수다. 사용자 입력 미보간. 같은 구성의 topic.rb:88 이 이미 같은 사유로 등재돼 있다(ORDER BY 는 바인드 불가라 리터럴 절 사용)."
     }
   ],
   "brakeman_version": "8.0.4"

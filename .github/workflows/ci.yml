@@ -75,6 +75,11 @@ jobs:
 
       - name: Checkout code
         uses: actions/checkout@v6
+        with:
+          # 회귀 스위트의 «양성 대조» 테스트가 과거 커밋 blob 을 읽는다
+          # (git show <sha>:<path>). 기본 shallow(fetch-depth:1) 로는 그 이력이 없어
+          # 「blob 취득 실패」로 죽는다. 검사를 끄지 않고 이력을 준다.
+          fetch-depth: 0
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
