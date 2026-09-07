@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+#
+# legal:update 가 만든 변경을 **PR 로** 올린다. main 에 직접 push 하지 않는다.
+#
+# 전제: 호출 직전에 `bundle exec rake legal:update` 가 워킹트리를 수정했을 수 있다.
+# 변경이 없으면 아무것도 하지 않는다(커밋·push·PR 0).
+#
+# 정본 계약: docs/operations/SILMU_CI_GOVERNANCE_CONTRACT.md (PR-first)
+# 회귀:      test/scripts/legal_autofix_pr_test.rb
+# 호출자:    .github/workflows/legal_check.yml
+
+set -euo pipefail
+
+BRANCH_PREFIX="auto/legal-standards"
+BRANCH="${BRANCH_PREFIX}-$(date +%Y-%m-%d)"
+
+# main 에 쓰지 않는 것은 «가드» 가 아니라 아래 push 의 명시 refspec 이다:
+#   git push origin HEAD:refs/heads/$BRANCH   ← 현재 브랜치로 나가는 bare push 가 아니다.
+
+if git diff --quiet && git diff --cached --quiet; then
+  echo "NO_DIFF"
+  exit 0
+fi
+
+git config user.name  "github-actions[bot]"
+git config user.email "github-actions[bot]@users.noreply.github.com"
+git add -A
+git commit -q -m "auto: 법령 기준 자동 업데이트
+
+- GitHub Actions 자동 검증에 의한 수정
+- 기준일: $(date +%Y-%m-%d)
+
+Co-Authored-By: github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
+
+# lease 를 평가할 수 있도록 원격 상태를 먼저 받는다. 이 브랜치는 봇 전용이다.
+git fetch --quiet origin || true
+git push --force-with-lease --quiet origin "HEAD:refs/heads/$BRANCH"
+
+EXISTING="$(gh pr list --head "$BRANCH" --state open --json number --jq '.[0].number // empty')"
+if [ -n "$EXISTING" ]; then
+  echo "PR_UPDATED #$EXISTING $BRANCH"
+else
+  gh pr create --base main --head "$BRANCH" \
+    --title "auto: 법령 기준 자동 업데이트 ($(date +%Y-%m-%d))" \
+    --body "\`rake legal:update\` 가 만든 변경입니다. 사람이 검토한 뒤 병합하세요.
+
+main 직접 push 는 하지 않습니다 — required checks(test·lint·scan_ruby)를 거칩니다."
+  echo "PR_CREATED $BRANCH"
+fi
