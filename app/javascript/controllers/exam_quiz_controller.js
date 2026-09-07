@@ -1,6 +1,6 @@
 // exam.silmu.kr — 모의고사 문제풀이 Stimulus 컨트롤러
 import { Controller } from "@hotwired/stimulus"
-import { saveQuizScore, saveChapterQuizDone, saveWrongAnswer, removeWrongAnswer, getWrongAnswerIds, saveStreakToday, toggleBookmark, isBookmarked, getBookmarkIds } from "../exam_progress"
+import { saveQuizScore, saveChapterQuizDone, saveWrongAnswer, removeWrongAnswer, getWrongAnswerIds, saveStreakToday, toggleBookmark, isBookmarked, getBookmarkIds, saveInProgress, getInProgress, clearInProgress, getAllInProgress } from "../exam_progress"
 import { escapeHtml, getCsrfToken } from "../exam_utils"
 
 export default class extends Controller {
@@ -34,6 +34,10 @@ export default class extends Controller {
     // 키보드 단축키 등록
     this._keyHandler = this._handleKeydown.bind(this)
     document.addEventListener('keydown', this._keyHandler)
+
+    // 탭을 닫거나 다른 페이지로 떠날 때 마지막 위치를 흘리지 않는다
+    this._pagehideHandler = () => this._saveResumePoint({ keepalive: true })
+    window.addEventListener('pagehide', this._pagehideHandler)
 
     if (this.wrongModeValue) {
       const wrongIds = getWrongAnswerIds()
@@ -74,7 +78,79 @@ export default class extends Controller {
       // 진행바 total 업데이트
       if (this.hasTotalNumTarget) this.totalNumTarget.textContent = this.questionsValue.length
     }
+
+    // 레이아웃의 서버 동기화가 끝나야 다른 기기·이전 세션의 위치가 localStorage 에 들어온다.
+    // 먼저 렌더하면 «로그아웃 후 재로그인» 이 정확히 이어풀기를 놓친다.
+    if (window._examSyncReady) { try { await window._examSyncReady } catch (e) { /* 동기화 실패는 무시 */ } }
+    this._maybeResume()
+
     this.showQuestion()
+  }
+
+  // 이어풀기 키 — 문제 집합이 매번 같은 모드에서만 만든다.
+  // mini 는 매 요청 랜덤 표본, wrong/bookmark 는 사용자 상태에 따라 변해 위치가 의미 없다.
+  get _resumeKey() {
+    if (this.wrongModeValue || this.bookmarkModeValue) return null
+    const subjectId = this.element.dataset.examQuizSubjectIdValue || ""
+    if (subjectId !== "all" && !/^\d+$/.test(subjectId)) return null
+    const chapterNum = parseInt(this.element.dataset.examQuizChapterNumValue || "0")
+    return chapterNum > 0 ? `${subjectId}-c${chapterNum}` : subjectId
+  }
+
+  // 저장된 위치가 지금 문제 집합과 맞으면 이어풀기를 제안한다
+  _maybeResume() {
+    const key = this._resumeKey
+    if (!key) return
+    const saved = getInProgress(key)
+    if (!saved) return
+
+    const total = this.questionsValue.length
+    // 문항이 추가·삭제됐으면 저장된 번호를 신뢰할 수 없다
+    if (saved.total !== total) { clearInProgress(key); return }
+
+    let idx = saved.current | 0
+    if (idx <= 0 || idx >= total) { clearInProgress(key); return }
+    // 저장 당시의 문제가 같은 자리에 있는지 확인 (순서 변경 방어)
+    if (this.questionsValue[idx].id !== saved.qid) {
+      const found = this.questionsValue.findIndex(q => q.id === saved.qid)
+      if (found <= 0) { clearInProgress(key); return }
+      idx = found
+    }
+
+    if (!window.confirm(`이전에 ${idx + 1}번 문제까지 푸셨습니다. 이어서 푸시겠습니까?\n(취소 시 처음부터 새로 시작합니다)`)) {
+      clearInProgress(key)
+      return
+    }
+
+    this.currentValue = idx
+    this.scoreValue = saved.score | 0
+    this.wrongByChapter = saved.wrongByChapter || {}
+    this.totalByChapter = saved.totalByChapter || {}
+    if (saved.diffStats) this.diffStats = saved.diffStats
+    if (this.hasScoreDisplayTarget) this.scoreDisplayTarget.textContent = this.scoreValue
+  }
+
+  // 현재 위치 저장 — 로컬은 매 문제, 서버는 5문제마다와 이탈 시
+  _saveResumePoint(opts = {}) {
+    const key = this._resumeKey
+    if (!key) return
+    const idx = this.currentValue
+    if (idx <= 0 || idx >= this.questionsValue.length) return
+
+    saveInProgress(key, {
+      current: idx,
+      qid: this.questionsValue[idx].id,
+      total: this.questionsValue.length,
+      score: this.scoreValue,
+      wrongByChapter: this.wrongByChapter,
+      totalByChapter: this.totalByChapter,
+      diffStats: this.diffStats
+    })
+
+    if (!this.signedInValue) return
+    if (opts.keepalive || idx % 5 === 0) {
+      this.syncToServer(false, 0, 0, { keepalive: !!opts.keepalive })
+    }
   }
 
   // ID 배열로 서버에서 문제 fetch
@@ -150,6 +226,7 @@ export default class extends Controller {
 
   disconnect() {
     document.removeEventListener('keydown', this._keyHandler)
+    window.removeEventListener('pagehide', this._pagehideHandler)
   }
 
   _handleKeydown(e) {
@@ -261,7 +338,7 @@ export default class extends Controller {
   }
 
   // #6 서버 동기화
-  async syncToServer(quizCompleted = false, quizScore = 0, quizTotal = 0) {
+  async syncToServer(quizCompleted = false, quizScore = 0, quizTotal = 0, opts = {}) {
     try {
       const progress = JSON.parse(localStorage.getItem('exam_progress') || '{}')
       const wrongAnswers = JSON.parse(localStorage.getItem('exam_wrong_answers') || '[]')
@@ -273,6 +350,8 @@ export default class extends Controller {
 
       await fetch('/sync', {
         method: 'POST',
+        // 페이지를 떠나는 중이면 keepalive 로 요청이 잘리지 않게 한다
+        keepalive: !!opts.keepalive,
         headers: {
           'Content-Type': 'application/json',
           'X-CSRF-Token': csrfToken,
@@ -287,6 +366,8 @@ export default class extends Controller {
           streak_count: streak.count || 0,
           streak_last_date: streak.lastDate || null,
           streak_history: streak.history || [],
+          in_progress: getAllInProgress(),
+          in_progress_done: opts.done || [],
           quiz_completed: quizCompleted ? "1" : "",
           quiz_score: quizCompleted ? quizScore : 0,
           quiz_total: quizCompleted ? quizTotal : 0
@@ -511,6 +592,7 @@ export default class extends Controller {
     if (this.currentValue >= this.questionsValue.length) {
       this.showResults()
     } else {
+      this._saveResumePoint()
       this.showQuestion()
     }
   }
@@ -533,8 +615,12 @@ export default class extends Controller {
       // 학습 스트릭 업데이트
       saveStreakToday()
       this._updateNavStreakBadge()
+      // 끝냈으므로 이어풀기 기록을 지운다 — 로컬만 지우면 다음 로그인에
+      // 서버 사본이 다시 내려와 완료한 퀴즈가 «이어풀기»로 되살아난다
+      const resumeKey = this._resumeKey
+      if (resumeKey) clearInProgress(resumeKey)
       // #6 서버 동기화 (quiz_completed=true, 정답수·전체수 전송)
-      this.syncToServer(true, score, total)
+      this.syncToServer(true, score, total, { done: resumeKey ? [resumeKey] : [] })
       // GA 학습행동 이벤트 — 퀴즈 완료
       if (typeof window.gtag === 'function') window.gtag('event', 'quiz_complete', { subject_id: subjectId, chapter_num: chapterNum, score: score, total: total })
     }

@@ -12,6 +12,7 @@ module Exam
         chapters: progress.chapters || {},
         quizzes: progress.quizzes || {},
         chapter_quizzes: progress.chapter_quizzes || {},
+        in_progress: progress.in_progress || {},
         wrong_answers: progress.wrong_answers || [],
         bookmarks: progress.bookmarks || [],
         streak: {
@@ -33,8 +34,8 @@ module Exam
       data = params.permit(
         :quiz_completed, :quiz_score, :quiz_total,
         :streak_count, :streak_last_date,
-        chapters: {}, quizzes: {}, chapter_quizzes: {},
-        wrong_answers: [], bookmarks: [], streak_history: []
+        chapters: {}, quizzes: {}, chapter_quizzes: {}, in_progress: {},
+        wrong_answers: [], bookmarks: [], streak_history: [], in_progress_done: []
       ).to_h
 
       # 챕터: 서버와 로컬의 합집합 (더 많이 방문한 쪽 유지)
@@ -53,6 +54,16 @@ module Exam
         existing = merged_cq[k]
         merged_cq[k] = v if !existing || v.to_h["pct"].to_i >= existing.to_h["pct"].to_i
       end
+
+      # 이어풀기: 키별로 더 최근에 저장된 쪽 유지.
+      # 완료한 퀴즈는 in_progress_done 으로 명시 삭제한다 — 합집합만 하면
+      # 이미 끝낸 퀴즈가 서버에 남아 다음 로그인에서 다시 «이어풀기»로 되살아난다.
+      merged_in_progress = (progress.in_progress || {}).dup
+      (data["in_progress"] || {}).each do |k, v|
+        existing = merged_in_progress[k]
+        merged_in_progress[k] = v if !existing || v.to_h["savedAt"].to_i >= existing.to_h["savedAt"].to_i
+      end
+      Array(data["in_progress_done"]).each { |k| merged_in_progress.delete(k.to_s) }
 
       # 오답: 합집합
       merged_wrong = ((progress.wrong_answers || []) + (data["wrong_answers"] || [])).uniq
@@ -84,6 +95,7 @@ module Exam
         chapters: merged_chapters,
         quizzes: merged_quizzes,
         chapter_quizzes: merged_cq,
+        in_progress: merged_in_progress,
         wrong_answers: merged_wrong,
         bookmarks: merged_bookmarks
       )
