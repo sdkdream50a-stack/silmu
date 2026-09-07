@@ -1,0 +1,94 @@
+#!/usr/bin/env bash
+#
+# silmu — canonical deploy entrypoint.
+#
+#   bin/deploy                 # origin/main 의 현재 tip 을 배포
+#   bin/deploy <SHA|ref>       # 그 정확한 커밋을 배포 (롤백도 이 경로다)
+#   bin/deploy --preflight [t] # 배포하지 않고 게이트만 돌린다
+#
+# 왜 이 스크립트가 필요한가:
+#   Kamal 은 «지금 cwd 의 HEAD» 를 이미지 태그로 쓴다. 그래서 옛 리비전에 머물러 있는 개발
+#   worktree 에서 kamal deploy 를 부르면 옛 코드가 조용히 운영에 올라간다. 실제로 R2 worktree 가
+#   1481b1c 에 머문 채 운영/main 은 f927f90 까지 가 있었다.
+#   그래서 배포 소스를 개발 checkout 과 **분리**하고, 전용 detached checkout 을 대상 SHA 에 고정한다.
+#
+# 정본 계약: docs/operations/SILMU_CANONICAL_DEPLOYMENT_CONTRACT.md
+# 실제 차단은 .kamal/hooks/pre-deploy 가 한다 — 이 스크립트를 우회해도 그 훅은 남는다.
+
+set -euo pipefail
+
+# 정본 checkout = 이 저장소의 main working tree (secret 원본이 여기 있다)
+# 게이트는 «이 스크립트와 같은 커밋의 것» 을 쓴다.
+# 배포 대상 checkout 의 것을 쓰면, 게이트 도입 이전 SHA 로 롤백할 때 게이트가 조용히 사라진다.
+SELF_HOOK="$(cd "$(dirname "$0")/.." && pwd)/.kamal/hooks/pre-deploy"
+[ -x "$SELF_HOOK" ] || { echo "missing preflight hook: $SELF_HOOK" >&2; exit 1; }
+
+GIT_COMMON_DIR="$(cd "$(git rev-parse --git-common-dir)" && pwd)"
+CANONICAL="$(dirname "$GIT_COMMON_DIR")"
+DEPLOY_CHECKOUT="$(dirname "$CANONICAL")/silmu-worktrees/_deploy"
+
+PREFLIGHT_ONLY=0
+if [ "${1:-}" = "--preflight" ]; then PREFLIGHT_ONLY=1; shift; fi
+REQUESTED="${1:-origin/main}"
+
+echo "canonical checkout = $CANONICAL"
+echo "deploy checkout    = $DEPLOY_CHECKOUT"
+
+git -C "$CANONICAL" fetch --quiet origin main
+if [ "$REQUESTED" = "origin/main" ]; then
+  TARGET="$(git -C "$CANONICAL" rev-parse FETCH_HEAD)"
+else
+  TARGET="$(git -C "$CANONICAL" rev-parse --verify "${REQUESTED}^{commit}")"
+fi
+echo "target SHA         = $TARGET"
+
+# ── clean deploy checkout ──────────────────────────────────────────────
+# 개발 worktree 를 reset 해서 배포용으로 쓰지 않는다. 전용 detached worktree 를 쓴다.
+if [ ! -d "$DEPLOY_CHECKOUT/.git" ] && [ ! -f "$DEPLOY_CHECKOUT/.git" ]; then
+  mkdir -p "$(dirname "$DEPLOY_CHECKOUT")"
+  git -C "$CANONICAL" worktree add --detach "$DEPLOY_CHECKOUT" "$TARGET"
+else
+  git -C "$DEPLOY_CHECKOUT" checkout --quiet --detach "$TARGET"
+fi
+# ignored 파일까지 지운다 — 이전 배포가 남긴 것이 섞이지 않게. secret 은 바로 아래에서 다시 건다.
+git -C "$DEPLOY_CHECKOUT" clean -qxdff
+
+# ── secrets ───────────────────────────────────────────────────────────
+# 값을 복사하거나 출력하지 않는다. 정본 파일을 symlink 해서 사본이 늘지 않게 한다.
+for rel in .kamal/secrets config/master.key .env; do
+  if [ -e "$CANONICAL/$rel" ]; then
+    mkdir -p "$DEPLOY_CHECKOUT/$(dirname "$rel")"
+    ln -sfn "$CANONICAL/$rel" "$DEPLOY_CHECKOUT/$rel"
+  fi
+done
+
+HEAD_NOW="$(git -C "$DEPLOY_CHECKOUT" rev-parse HEAD)"
+DIRTY_NOW="$(git -C "$DEPLOY_CHECKOUT" status --porcelain | wc -l | tr -d ' ')"
+echo "deploy HEAD        = $HEAD_NOW (dirty=$DIRTY_NOW)"
+
+cd "$DEPLOY_CHECKOUT"
+DEPLOY_TARGET_SHA="$TARGET" KAMAL_VERSION="$TARGET" "$SELF_HOOK"
+
+if [ "$PREFLIGHT_ONLY" = "1" ]; then
+  echo "-- preflight only (no deploy) --"
+  exit 0
+fi
+
+# Kamal 도 배포 직전에 대상 checkout 의 pre-deploy 훅을 (있으면) 다시 실행한다 — 이중 방어.
+DEPLOY_TARGET_SHA="$TARGET" bin/kamal deploy
+
+# ── postdeploy readback ───────────────────────────────────────────────
+read -r PROD_HOST SSH_PORT <<<"$(ruby -ryaml -e '
+  c = YAML.unsafe_load_file("config/deploy.yml")
+  print c.dig("servers", "web", 0), " ", (c.dig("ssh", "port") || 22)
+')"
+RUNNING="$(ssh -p "$SSH_PORT" -o ConnectTimeout=10 "root@$PROD_HOST" \
+  "docker ps --filter label=service=silmu --format '{{.Image}}'" | head -1)"
+echo "production image   = $RUNNING"
+[ "${RUNNING##*:}" = "$TARGET" ] || { echo "POSTDEPLOY_FAIL: running tag != target"; exit 1; }
+
+UP="$(curl -s -o /dev/null -w '%{http_code}' https://silmu.kr/up)"
+echo "https://silmu.kr/up = $UP"
+[ "$UP" = "200" ] || { echo "POSTDEPLOY_FAIL: /up = $UP"; exit 1; }
+
+echo "DEPLOY_OK target=$TARGET"
