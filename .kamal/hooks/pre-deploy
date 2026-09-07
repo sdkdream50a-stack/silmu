@@ -1,0 +1,91 @@
+#!/usr/bin/env bash
+#
+# silmu — canonical deploy preflight (fail-closed).
+#
+# Kamal 은 deploy/redeploy/rollback 직전에 이 훅을 실행하고, 0 이 아닌 종료코드면 배포를 중단한다.
+# 그래서 이 훅은 «어느 checkout 에서 kamal 을 불렀든» 통과해야 하는 유일한 관문이다.
+#
+# 정본 계약: docs/operations/SILMU_CANONICAL_DEPLOYMENT_CONTRACT.md
+# 회귀:      test/scripts/deploy_preflight_test.rb
+#
+# 이 훅은 secret 값을 출력하지 않는다 (Kamal 은 secrets: true 로 secret 을 env 에 넣어 준다).
+# 긴급 우회는 Kamal 이 이미 제공한다: `kamal deploy --skip-hooks` — EMERGENCY_ONLY.
+
+set -uo pipefail
+
+REQUIRED_CHECKS=(test lint scan_ruby)   # S2 branch protection 과 같은 이름이어야 한다
+
+block() { echo "PREFLIGHT_BLOCK=$1" >&2; [ $# -gt 1 ] && echo "  reason: $2" >&2; exit 1; }
+note()  { echo "  $1" >&2; }
+
+echo "== silmu deploy preflight ==" >&2
+
+# ── G0 ── git checkout 이어야 한다 (버전이 커밋 SHA 에서 나온다)
+git rev-parse --git-dir >/dev/null 2>&1 || block G0_NOT_A_GIT_CHECKOUT "cwd=$(pwd)"
+
+# ── G6 ── secret 경로가 정본이어야 한다 (값은 읽지도 출력하지도 않는다)
+for f in .kamal/secrets config/master.key; do
+  [ -r "$f" ] || block G6_SECRET_PATH_INVALID "missing or unreadable: $f"
+done
+
+# ── G1 ── 배포 대상은 «명시된 정확한 SHA» 여야 한다
+TARGET="${DEPLOY_TARGET_SHA:-}"
+[ -n "$TARGET" ] || block G1_TARGET_MISMATCH "DEPLOY_TARGET_SHA is unset — deploy must name an exact SHA (use bin/deploy)"
+[[ "$TARGET" =~ ^[0-9a-f]{40}$ ]] || block G1_TARGET_MISMATCH "DEPLOY_TARGET_SHA is not a full 40-hex SHA: $TARGET"
+
+HEAD_SHA="$(git rev-parse HEAD 2>/dev/null)"
+[ "$HEAD_SHA" = "$TARGET" ] || block G1_TARGET_MISMATCH "checkout HEAD=$HEAD_SHA != DEPLOY_TARGET_SHA=$TARGET"
+
+# KAMAL_VERSION 은 Kamal 이 이 checkout 에서 유도한 이미지 태그다. 어긋나면 다른 것이 배포된다.
+if [ -n "${KAMAL_VERSION:-}" ] && [ "$KAMAL_VERSION" != "$TARGET" ]; then
+  block G1_TARGET_MISMATCH "KAMAL_VERSION=$KAMAL_VERSION != DEPLOY_TARGET_SHA=$TARGET"
+fi
+note "target  = $TARGET"
+
+# ── G2 ── working tree 가 깨끗해야 한다
+#   Kamal 은 git clone 으로 빌드하므로 uncommitted 변경은 «조용히 빠진다».
+#   즉 dirty 배포는 내용이 섞이는 게 아니라, 내 수정이 안 나간 걸 모르게 만든다.
+DIRTY="$(git status --porcelain)"
+[ -z "$DIRTY" ] || block G2_DIRTY "$(echo "$DIRTY" | wc -l | tr -d ' ') uncommitted path(s); first: $(echo "$DIRTY" | head -1)"
+
+# ── G3 ── 대상이 origin/main 계보 위에 있어야 한다
+git fetch --quiet origin main 2>/dev/null || block G3_NOT_MAIN_LINEAGE "cannot fetch origin/main"
+ORIGIN_MAIN="$(git rev-parse FETCH_HEAD 2>/dev/null)"
+[ -n "$ORIGIN_MAIN" ] || block G3_NOT_MAIN_LINEAGE "cannot resolve fetched origin/main"
+git merge-base --is-ancestor "$TARGET" "$ORIGIN_MAIN" 2>/dev/null \
+  || block G3_NOT_MAIN_LINEAGE "$TARGET is not an ancestor of origin/main ($ORIGIN_MAIN)"
+note "origin/main = $ORIGIN_MAIN"
+
+# ── G4 ── 그 SHA 에서 required checks 가 전부 success 여야 한다
+# get-url 은 url.<x>.insteadOf 재작성을 적용한다 — 선언된 원격 신원을 그대로 읽는다.
+REMOTE_URL="$(git config --get remote.origin.url 2>/dev/null)"
+SLUG="$(echo "$REMOTE_URL" | sed -E 's#^git@github\.com:##; s#^https://github\.com/##; s#\.git$##')"
+[[ "$SLUG" =~ ^[^/]+/[^/]+$ ]] || block G4_CI_NOT_GREEN "cannot derive GitHub repo slug from origin: $REMOTE_URL"
+
+CHECKS_JSON="$(gh api "repos/$SLUG/commits/$TARGET/check-runs" --paginate 2>/dev/null)" \
+  || block G4_CI_NOT_GREEN "cannot read check-runs for $TARGET (gh unavailable or unauthorized)"
+
+for name in "${REQUIRED_CHECKS[@]}"; do
+  # 같은 이름이 여러 번 돌았을 수 있다 — 가장 최근 것을 본다.
+  concl="$(echo "$CHECKS_JSON" | jq -r --arg n "$name" \
+    '[.check_runs[]? | select(.name==$n)] | sort_by(.started_at) | last | (.conclusion // "PENDING")')"
+  [ "$concl" = "success" ] || block G4_CI_NOT_GREEN "required check '$name' is '${concl:-MISSING}' at $TARGET"
+  note "check $name = success"
+done
+
+# ── G5 ── 롤백 지점(현재 운영 중인 SHA)을 확인할 수 있어야 한다
+read -r PROD_HOST SSH_PORT <<<"$(ruby -ryaml -e '
+  c = YAML.unsafe_load_file("config/deploy.yml")
+  print c.dig("servers", "web", 0), " ", (c.dig("ssh", "port") || 22)
+' 2>/dev/null)"
+[ -n "${PROD_HOST:-}" ] || block G5_ROLLBACK_UNKNOWN "cannot read servers.web[0] from config/deploy.yml"
+
+RUNNING_IMAGE="$(ssh -p "${SSH_PORT:-22}" -o ConnectTimeout=10 -o BatchMode=yes "root@$PROD_HOST" \
+  "docker ps --filter label=service=silmu --format '{{.Image}}'" 2>/dev/null | head -1)"
+ROLLBACK_SHA="${RUNNING_IMAGE##*:}"
+[[ "$ROLLBACK_SHA" =~ ^[0-9a-f]{40}$ ]] \
+  || block G5_ROLLBACK_UNKNOWN "current production image tag is not a full SHA: '${RUNNING_IMAGE:-<none>}'"
+note "rollback = $ROLLBACK_SHA (currently running)"
+
+echo "PREFLIGHT_PASS target=$TARGET rollback=$ROLLBACK_SHA" >&2
+exit 0
