@@ -81,12 +81,23 @@ production readback(이미지 태그 == 대상) → /up 200
 
 ## SECRETS 계약
 
-- 정본 위치 = **정본 checkout**(`/Users/seong/project/silmu`)의 `.kamal/secrets` · `config/master.key` · `.env`.
+배포 전용 secret 과 개발용 credential 을 **목적으로 갈라** 둔다.
+
+| 파일 | 분류 | 정본 위치 |
+|---|---|---|
+| `.kamal/secrets` | **DEPLOY_ONLY** — 레지스트리 비밀번호·서버 DB 비밀번호 등, kamal 만 읽는다 | **checkout 밖** `<project 부모>/.silmu-deploy-secrets/kamal-secrets` |
+| `config/master.key` | **APP_DEV_REQUIRED** — Rails credentials 복호화. 개발·테스트에 필요 | 정본 checkout `/Users/seong/project/silmu/config/master.key` |
+| `.env` | **APP_DEV_REQUIRED** — ANTHROPIC_API_KEY 등 | 정본 checkout |
+
+- 배포 전용 secret 을 **어느 checkout 안에도 두지 않는다.** 개발 checkout 에 그 파일이 있으면
+  거기서 `kamal deploy` 를 직접 불러 `bin/deploy` 의 게이트를 통째로 우회할 수 있다(S3C).
+- `bin/deploy` 는 배포 checkout 에 이 파일들을 **symlink** 한다 — 사본을 늘리지 않는다.
+  경로는 `SILMU_DEPLOY_SECRETS` 로 덮어쓸 수 있다.
 - 셋 다 `.gitignore` 로 봉인되어 있고 **git 이력에 들어간 적이 없다**(실측 확인).
-- 배포 checkout 은 이 파일들을 **symlink** 한다 — 사본을 늘리지 않는다. gitignore 대상이라
-  배포 checkout 의 `git status --porcelain` 은 그대로 0 이다.
 - 게이트는 존재·가독성만 본다. **값을 읽거나 출력하지 않는다.**
   (Kamal 은 `pre-deploy` 훅에 secret 을 env 로 넘긴다 — 훅은 env 를 덤프하지 않는다.)
+- 배포 전용 secret 이 없으면 Kamal 은 `Kamal::ConfigurationError: Secret '…' not found,
+  no secret files (.kamal/secrets) provided` 로 **fail-closed** 한다(서버 접속 이전 단계).
 
 ## ROLLBACK 계약
 
