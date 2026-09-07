@@ -186,6 +186,40 @@ export function getStreakCount() {
   return getStreak().count
 }
 
+// ─── 이어풀기 (진행 중 풀이 위치) ─────────────────────────────
+// 완료 점수(quizzes)와 달리 «아직 안 끝난» 위치다. 퀴즈 키별로 하나씩 보관하고
+// 완료하면 지운다. 로그인 상태면 컨트롤러가 /sync 로 서버에도 올린다.
+const IN_PROGRESS_KEY = 'exam_quiz_in_progress'
+
+function loadInProgress() {
+  try { return JSON.parse(localStorage.getItem(IN_PROGRESS_KEY)) || {} } catch { return {} }
+}
+
+function persistInProgress(map) {
+  try { localStorage.setItem(IN_PROGRESS_KEY, JSON.stringify(map)) } catch { /* 저장 실패 무시 */ }
+}
+
+export function saveInProgress(quizKey, state) {
+  const map = loadInProgress()
+  map[quizKey] = { ...state, savedAt: Date.now() }
+  persistInProgress(map)
+}
+
+export function getInProgress(quizKey) {
+  return loadInProgress()[quizKey] || null
+}
+
+export function clearInProgress(quizKey) {
+  const map = loadInProgress()
+  if (!(quizKey in map)) return
+  delete map[quizKey]
+  persistInProgress(map)
+}
+
+export function getAllInProgress() {
+  return loadInProgress()
+}
+
 // ─── 문제 북마크 ─────────────────────────────────────────────
 const BOOKMARK_KEY = 'exam_bookmarks'
 

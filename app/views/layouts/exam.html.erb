@@ -612,7 +612,8 @@
 
     <script>
     // #6 로그인 상태 확인 및 localStorage ↔ 서버 동기화
-    (async function() {
+    // 퀴즈 컨트롤러가 이어풀기 복원 전에 이 promise 를 기다린다 (exam_quiz_controller#connect)
+    window._examSyncReady = (async function() {
       try {
         const res = await fetch('/sync', { headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' } })
         if (!res.ok) return
@@ -627,6 +628,15 @@
           chapterQuizzes: mergeQuizzes(localRaw.chapterQuizzes || {}, server.chapter_quizzes || {})
         }
         localStorage.setItem('exam_progress', JSON.stringify(merged))
+
+        // 이어풀기 병합 — 키별로 더 최근에 저장된 쪽 유지
+        const localInProgress = JSON.parse(localStorage.getItem('exam_quiz_in_progress') || '{}')
+        const mergedInProgress = Object.assign({}, localInProgress)
+        Object.entries(server.in_progress || {}).forEach(([k, v]) => {
+          const cur = mergedInProgress[k]
+          if (!cur || (v.savedAt || 0) > (cur.savedAt || 0)) mergedInProgress[k] = v
+        })
+        localStorage.setItem('exam_quiz_in_progress', JSON.stringify(mergedInProgress))
 
         // 오답 병합
         const localWrong = JSON.parse(localStorage.getItem('exam_wrong_answers') || '[]')
@@ -674,6 +684,7 @@
         const wrongAnswers = JSON.parse(localStorage.getItem('exam_wrong_answers') || '[]')
         const bookmarks = JSON.parse(localStorage.getItem('exam_bookmarks') || '[]')
         const streak = JSON.parse(localStorage.getItem('exam_streak') || '{}')
+        const inProgress = JSON.parse(localStorage.getItem('exam_quiz_in_progress') || '{}')
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content
         if (!csrfToken) throw new Error('CSRF 토큰 없음')
 
@@ -684,6 +695,7 @@
             chapters: progress.chapters || {},
             quizzes: progress.quizzes || {},
             chapter_quizzes: progress.chapterQuizzes || {},
+            in_progress: inProgress,
             wrong_answers: wrongAnswers,
             bookmarks: bookmarks,
             streak_count: streak.count || 0,
