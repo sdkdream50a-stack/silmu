@@ -49,7 +49,12 @@ class ToolsController < ApplicationController
   def split_contract_evaluate
     result = ContractDecision::SplitProcurementEvaluator.call(
       contract_type: params[:contract_type],
-      factors: params[:factors]&.permit!&.to_h || {},
+      # 허용 키는 평가기의 **기존 공개 상수**에서 가져온다 — 컨트롤러에 손으로 다시 적으면
+      # 요건이 늘 때 조용히 어긋난다. (R2 core 는 §14 동결이라 건드리지 않는다)
+      factors: params[:factors]&.permit(
+        *ContractDecision::SplitProcurementEvaluator::CONSTRUCTION_FACTORS.keys,
+        *ContractDecision::SplitProcurementEvaluator::GOODS_SERVICE_FACTORS.keys
+      )&.to_h || {},
       separation_ground: params[:separation_ground],
       current_amount: params[:current_amount],
       prior_amounts: Array(params[:prior_amounts])
