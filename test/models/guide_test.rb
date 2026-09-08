@@ -1,6 +1,20 @@
 require "test_helper"
 
 class GuideTest < ActiveSupport::TestCase
+  test "search_by_query: canonical parser로 자연어 질문의 stopword·동의어를 처리한다" do
+    guide = Guide.create!(title: "명예퇴직 실무 가이드", slug: "test-guide-natural-query",
+      category: "인사", published: true, sort_order: 1)
+
+    assert Guide.published.where("title ILIKE ?", "%명예퇴직%").exists?, "양성 대조 가이드가 있어야 함"
+    assert_includes Guide.search_by_query("명퇴 관련 경우 언제 어떻게 하나요").to_a, guide
+  end
+
+  test "search_by_query: 기존 pg_search trigram 오타 내성을 유지한다" do
+    guide = guides(:two)
+    assert Guide.published.where(id: guide.id).exists?, "양성 대조 가이드가 있어야 함"
+    assert_includes Guide.search_by_query("검수조저").to_a, guide
+  end
+
   # ── series_episode_title ──────────────────────────────────────────────────
 
   test "series_episode_title: 시리즈 없는 가이드는 title 그대로 반환" do

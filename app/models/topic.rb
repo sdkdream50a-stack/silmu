@@ -60,6 +60,10 @@ class Topic < ApplicationRecord
     token_variants = SearchQueryParser.tokens(query)
     return none if token_variants.empty?
 
+    distinctive_indexes = token_variants.each_index.select do |index|
+      SearchQueryParser.relaxation_distinctive_variants?(token_variants[index])
+    end
+
     clauses = []
     binds = {}
     literal_clauses = []
@@ -100,23 +104,29 @@ class Topic < ApplicationRecord
     return matches if matches.any?
 
     # 전 토큰 AND 가 0건이면 부분집합으로 완화한다. 정확 매칭이 이미 0건이므로 순위 역전은 없다.
-    relaxed = relaxed_match(literal_clauses, rank_sql, limit)
+    relaxed = relaxed_match(literal_clauses, rank_sql, limit, distinctive_indexes: distinctive_indexes)
     return relaxed if relaxed && relaxed.any?
 
     search_by_keyword(query).merge(published).limit(limit)
   end
 
-  # 점진적 완화 — 토큰 과반 이상이 매칭되면 채택하고, 매칭 토큰 수가 많은 순으로 정렬한다.
+  # 점진적 완화 — 변별 토큰 과반 이상이 매칭되면 채택하고,
+  # 전체 매칭 토큰 수가 많은 순으로 정렬한다. 잡음 토큰은 문턱을 올리지도,
+  # 자신만으로 통과하지도 못한다.
   # 자연어 질문에서 조사·어미를 걸러도 남는 비내용어("처음" 등) 때문에 AND 가 깨지는 경우를 구한다.
   # ORDER BY 는 바인드를 받지 못하므로 sanitize 된 리터럴 절을 쓴다(binds 판본과 동일한 패턴).
-  def self.relaxed_match(literal_clauses, rank_sql, limit)
+  def self.relaxed_match(literal_clauses, rank_sql, limit, distinctive_indexes: nil)
     return nil if literal_clauses.size < 2
 
     hit_count = literal_clauses.map { |c| "CASE WHEN #{c} THEN 1 ELSE 0 END" }.join(" + ")
-    required = (literal_clauses.size / 2.0).ceil
+    distinctive_clauses = Array(distinctive_indexes || literal_clauses.each_index).filter_map { |i| literal_clauses[i] }
+    return nil if distinctive_clauses.empty?
+
+    distinctive_hit_count = distinctive_clauses.map { |c| "CASE WHEN #{c} THEN 1 ELSE 0 END" }.join(" + ")
+    required = (distinctive_clauses.size / 2.0).ceil
 
     published
-      .where("(#{hit_count}) >= #{required}")
+      .where("(#{distinctive_hit_count}) >= #{required}")
       .order(Arel.sql("(#{hit_count}) DESC, #{rank_sql} ASC, view_count DESC"))
       .limit(limit)
   end
@@ -151,6 +161,25 @@ class Topic < ApplicationRecord
     #  적어두고 FAQ 순회를 건너뛰는 것이며, 강제의 유일한 지점이 아니다.)
     return nil if distinctive.empty?
 
+    # 실질적인 변별 신호가 토픽을 지목하는 한 묶음뿐이면, 그것만으로는 그 토픽의
+    # 어느 FAQ가 질문에 직접 답하는지 알 수 없다. 원질문에 다른 말이 있었다면
+    # 그중 FAQ를 구별할 수 있는 세부 말을, 없었다면 사용자가 쓴 직접 표면형을 근거로 삼는다.
+    answer_signals = token_variants.select { |variants|
+      SearchQueryParser.relaxation_distinctive_variants?(variants)
+    }
+    single_signal_evidence = if answer_signals.one?
+      query_tokens = SearchQueryParser.answer_tokens(query)
+      remaining_query_tokens = query_tokens - answer_signals.first.map { |variant| variant.downcase }.to_set
+
+      if remaining_query_tokens.any?
+        remaining_query_tokens.select { |token| SearchQueryParser.answer_detail_token?(token) }
+      else
+        answer_signals.first.select { |variant|
+          variant.length >= ANSWER_MIN_TOKEN && query_tokens.include?(variant.downcase)
+        }
+      end
+    end
+
     best = nil
 
     topics.each do |topic|
@@ -175,6 +204,11 @@ class Topic < ApplicationRecord
         question_tokens = SearchQueryParser.answer_tokens(question)
         next unless distinctive.any? { |variants|
           variants.any? { |v| v.length >= ANSWER_MIN_TOKEN && question_tokens.include?(v.downcase) }
+        }
+
+        # 1글자 수량어·검색 완화 잡음·종결 표현은 이 근거가 될 수 없다.
+        next if single_signal_evidence && single_signal_evidence.none? { |token|
+          question_tokens.include?(token.downcase)
         }
 
         best = { topic: topic, question: question, answer: answer, hits: hits } if best.nil? || hits > best[:hits]

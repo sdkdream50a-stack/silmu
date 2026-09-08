@@ -51,7 +51,7 @@ class ChatbotController < ApplicationController
       @audit_cases = AuditCase.search_by_query(@query, limit: 5)
 
       # 3. 실무 가이드
-      @guides = Guide.published.search_by_keyword(@query).limit(5)
+      @guides = Guide.search_by_query(@query, limit: 5)
 
       # 4. 서식 템플릿 (메모리 내 검색)
       @templates = search_templates(@query)

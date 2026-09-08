@@ -41,6 +41,7 @@ class SearchQueryParser
     # "차비 지급 기준" 이 "숙박비 지급 기준" 을 "바로 답"으로 올렸다 — 위 ⚠️ 규칙 위반이다.
     "차비" => [ "운임" ],
     "견적" => [ "견적서" ],
+    "견적서" => [ "견적" ],
     "1인견적" => [ "1인 견적" ],
     "공개청구" => [ "정보공개" ]
   }.freeze
@@ -53,10 +54,18 @@ class SearchQueryParser
   STOPWORDS = %w[
     하나요 하나 한가요 인가요 되나요 될까요 있나요 없나요
     가능한가요 가능한지 해야 해도 하면 쓰면 내야 받나요 지급하나 지급하나요
-    답변은 맡았어요 맡았을 맡았는데
+    답변은 맡았어요 맡았을 맡았는데 맡았습니다 뭘
     며칠 얼마 언제 어디 누가 무엇 어떻게 어떤
     안에 이내 까지 부터 에서 에게 한테 으로
     좀 그냥 제가 저는 우리 관련 경우 그리고 또는
+  ].freeze
+
+  # 검색에서는 버리지만, 단일 토픽 신호만 남은 질문에서 FAQ 의도를 구별할 수 있는 말.
+  # "며칠 안에"·"얼마" 같은 질문의 초점은 검색 대상을 늘리지는 않아도 어떤 FAQ가
+  # 직접 답하는지는 판별한다. 반대로 "하나요" 같은 종결 표현은 근거로 세지 않는다.
+  ANSWER_DETAIL_TOKENS = %w[
+    며칠 얼마 언제 어디 누가 무엇 어떻게 어떤
+    안에 이내 까지 부터 에서 에게 한테 으로
   ].freeze
 
   # 분리 대상 조사 — 긴 것부터 검사한다(“으로” 가 “로” 보다 먼저).
@@ -79,6 +88,15 @@ class SearchQueryParser
   #    "얼마"·"어떻게"·"언제" 는 이미 STOPWORDS 라 content 토큰으로 도달하지 못한다.
   GENERIC_TOKENS = %w[기준 방법 지급 신청 처리 가능 필요].freeze
 
+  # 검색 완화 전용 잡음 토큰. STOPWORDS 처럼 질문에서 제거하지는 않되,
+  # 부분 매칭의 과반 문턱을 올리거나 단독 앵커가 되지는 못한다.
+  # 실패 질문에 실제로 들어 있던 낱말 중 길이 규칙으로 걸러지지 않는 표현만 둔다.
+  RELAXATION_NOISE_TOKENS = %w[받아야 필요한].freeze
+
+  # 관형형·연결어미의 닫힌 클래스. 긴 어미부터 검사해 "계약하는"을
+  # 조사 "는"으로 잘못 떼어 "계약하"를 만들지 않고, MIN_STEM 규율을 공유한다.
+  ENDINGS = %w[하는 했던 해야 하고 하면 인데 한 할].freeze
+
   # Answer-First exact hit 판정용 구분자 — **문장부호만** 넣는다.
   # `+`·`~`·`/` 는 낱말 안에 온다("6+6 부모육아휴직제"·"11~21일"). 실측으로 확인:
   # 구분자에 `+` 를 넣었더니 "6+6" 질문이 낱말 경계를 잃고 승격에서 탈락했다.
@@ -89,9 +107,31 @@ class SearchQueryParser
     Array(variants).all? { |v| generic_token?(v) }
   end
 
+  # 검색 완화의 문턱에 세울 수 있는 토큰인지 판정한다.
+  # Answer-First 전용 GENERIC_TOKENS 목록은 변경하지 않고, 이 경로에서만
+  # 실측된 수량어·의존명사·보조 서술어를 추가로 제외한다.
+  def self.relaxation_distinctive_variants?(variants)
+    Array(variants).none? do |variant|
+      token = variant.to_s.downcase
+      token.length < MIN_STEM || RELAXATION_NOISE_TOKENS.include?(token) || generic_token?(token)
+    end
+  end
+
+  # 단일 토픽 신호 외에 FAQ를 구별할 수 있는 원질문의 세부 토큰인가.
+  # 검색 완화에서 이미 잡음으로 판정한 보조 표현은 같은 이유로 제외한다.
+  # GENERIC_TOKENS는 앞선 고유 토큰 게이트를 통과시키지는 못하지만, 그 뒤 FAQ 질문에
+  # 실제로 함께 있으면 직접 답 여부를 보강할 수 있다("육아 지급 기준" 등).
+  def self.answer_detail_token?(token)
+    t = token.to_s.downcase
+    return false if t.length < MIN_STEM
+    return false if RELAXATION_NOISE_TOKENS.include?(t)
+
+    !STOPWORDS.include?(t) || ANSWER_DETAIL_TOKENS.include?(t)
+  end
+
   # Answer-First 히트 판정용 토큰 집합 — FAQ 질문을 **낱말 경계로** 자른다.
   # include? 는 경계가 없어 "차비" 가 "주차비" 안에서 걸렸다(실측). 여기서는
-  # 검색 recall 과 같은 normalize/strip_particle 경계를 재사용해 완전일치만 인정한다.
+  # 검색 recall 과 같은 normalize/strip_suffix 경계를 재사용해 완전일치만 인정한다.
   def self.answer_tokens(text)
     return Set.new if text.blank?
 
@@ -100,7 +140,7 @@ class SearchQueryParser
       next unless token
 
       set << token.downcase
-      stem = strip_particle(token)
+      stem = strip_suffix(token)
       set << stem.downcase if stem
     end
   end
@@ -131,14 +171,16 @@ class SearchQueryParser
     content.map { |token| variants_for(token) }
   end
 
-  # 토큰 하나의 변형 배열 — 원어 + 동의어 + 조사 분리형. 전부 가산이며 원어는 항상 남는다.
+  # 토큰 하나의 변형 배열 — 원어 + 동의어 + 조사·어미 분리형. 전부 가산이며 원어는 항상 남는다.
   def self.variants_for(token)
     variants = [ token ]
     synonyms = SYNONYMS[token.downcase]
     variants.concat(synonyms) if synonyms
 
-    stem = strip_particle(token)
-    if stem
+    # 닫힌 어미가 조사보다 우선한다. "계약하는"은 ENDINGS의 "하는"으로
+    # "계약"이 되어야 하며, PARTICLES의 "는"으로 "계약하"를 남기면 안 된다.
+    stems = [ strip_suffix(token) ].compact
+    stems.each do |stem|
       variants << stem
       stem_synonyms = SYNONYMS[stem.downcase]
       variants.concat(stem_synonyms) if stem_synonyms
@@ -159,10 +201,26 @@ class SearchQueryParser
     stem.length >= MIN_STEM ? stem : nil
   end
 
+  # 어미를 떼어낸 어간을 반환. 조사 분리와 동일하게 1글자 어간은 기각한다.
+  def self.strip_ending(token)
+    ending = ENDINGS.find { |suffix| token.end_with?(suffix) }
+    return nil unless ending
+
+    stem = token[0...-ending.length]
+    stem.length >= MIN_STEM ? stem : nil
+  end
+
+  def self.strip_suffix(token)
+    # 닫힌 어미가 맞으면 MIN_STEM 기각 뒤에도 더 짧은 조사로 재시도하지 않는다.
+    return strip_ending(token) if ENDINGS.any? { |suffix| token.end_with?(suffix) }
+
+    strip_particle(token)
+  end
+
   # 검색에 무의미한 꼬리 문장부호를 제거한다("하나요?" 가 stopword 로 안 걸리는 문제).
   def self.normalize(raw)
     raw.strip.gsub(/[?!.,"'`~;:]+\z/, "")
   end
 
-  private_class_method :variants_for, :strip_particle, :normalize, :generic_token?
+  private_class_method :variants_for, :strip_particle, :strip_ending, :strip_suffix, :normalize, :generic_token?
 end

@@ -84,6 +84,64 @@ class SearchQueryParserTest < ActiveSupport::TestCase
     variants = SearchQueryParser.tokens("출장비는").first
     assert_includes variants, "여비"
   end
+
+  test "닫힌 관형형·연결어미 클래스를 떼어 온전한 어간을 추가한다" do
+    %w[계약한 계약할 계약하는 계약했던 계약해야 계약하고 계약하면].each do |word|
+      variants = SearchQueryParser.tokens(word).first
+      assert_includes variants, word
+      assert_includes variants, "계약", "#{word}에서 계약 어간을 만들어야 함"
+      assert_not_includes variants, "계약하", "#{word}에서 불완전한 하 어간을 남기면 안 됨"
+    end
+
+    answer_tokens = SearchQueryParser.answer_tokens("계약하는")
+    assert_includes answer_tokens, "계약"
+    assert_not_includes answer_tokens, "계약하"
+  end
+
+  test "온보딩 자연어의 서술어·의문사는 버리고 처음인데는 처음으로 복원한다" do
+    tokens = SearchQueryParser.tokens("처음 계약 업무를 맡았습니다")
+    assert_not_includes tokens.flatten, "맡았습니다"
+
+    tokens = SearchQueryParser.tokens("계약 업무 처음인데 뭘 해야 하나요")
+    assert_includes tokens.flatten, "처음"
+    assert_not_includes tokens.flatten, "뭘"
+  end
+
+  test "견적과 견적서는 같은 뜻의 양방향 alias다" do
+    assert_includes SearchQueryParser.tokens("견적").first, "견적서"
+    assert_includes SearchQueryParser.tokens("견적서").first, "견적"
+  end
+
+  test "바로 답 세부어는 질문 초점을 남기고 보조용언과 종결 표현은 버린다" do
+    assert SearchQueryParser.answer_detail_token?("며칠")
+    assert SearchQueryParser.answer_detail_token?("얼마")
+    assert SearchQueryParser.answer_detail_token?("안에")
+    assert_not SearchQueryParser.answer_detail_token?("받아야")
+    assert_not SearchQueryParser.answer_detail_token?("하나요")
+    assert_not SearchQueryParser.answer_detail_token?("두")
+  end
+
+  test "어미를 떼면 1글자인 어간은 MIN_STEM 규율로 기각한다" do
+    variants = SearchQueryParser.tokens("일할").first
+    assert_includes variants, "일할"
+    assert_not_includes variants, "일"
+
+    variants = SearchQueryParser.tokens("일하는").first
+    assert_not_includes variants, "일하", "긴 어미가 기각된 뒤 짧은 조사로 재분리하면 안 됨"
+  end
+
+  test "검색 완화에서 실측 잡음과 일반 토큰을 변별 토큰으로 세지 않는다" do
+    assert SearchQueryParser.relaxation_distinctive_variants?([ "견적서" ])
+    assert_not SearchQueryParser.relaxation_distinctive_variants?([ "두" ])
+    assert_not SearchQueryParser.relaxation_distinctive_variants?([ "세" ])
+    assert_not SearchQueryParser.relaxation_distinctive_variants?([ "개" ])
+    assert_not SearchQueryParser.relaxation_distinctive_variants?([ "필요" ])
+  end
+
+  test "검색 완화 잡음 목록은 길이 규칙으로 처리할 1글자 토큰을 중복 열거하지 않는다" do
+    assert_equal %w[받아야 필요한], SearchQueryParser::RELAXATION_NOISE_TOKENS
+  end
+
   # ---- P1.6 독립검증 재수리 · Answer-First 전용 프리미티브 ----
 
   test "generic_variants?: 일반 토큰 묶음을 구분한다" do

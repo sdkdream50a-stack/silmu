@@ -1,7 +1,7 @@
 module ApplicationHelper
-  # ToolsHelper#tools_registry 항목 수와 일치해야 한다.
+  # ToolsHelper#tools_registry 중 unlisted가 아닌 공개 게재 항목 수와 일치해야 한다.
   # tools_registry는 route helper를 쓰기 때문에 상수 정의 시점에 호출할 수 없어 값을 적어 두고,
-  # test/helpers/tools_helper_test.rb 가 레지스트리 실제 개수와 대조해 갈라짐을 막는다.
+  # 회귀 테스트가 레지스트리의 게재 대상 수와 대조해 갈라짐을 막는다.
   ACTIVE_TOOL_COUNT = 39
 
   # exam.silmu.kr — 법령 가이드 slug → 한국어 레이블 맵

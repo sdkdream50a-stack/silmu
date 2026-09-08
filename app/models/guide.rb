@@ -13,6 +13,42 @@ class Guide < ApplicationRecord
       trigram: { threshold: 0.1 }
     }
 
+  # canonical parser 기반 실무 가이드 검색. 기존 pg_search 결과를 우선해
+  # trigram 오타 내성을 유지하고, 0건일 때만 조사·어미가 분리된 title
+  # 토큰으로 bounded 완화한다.
+  def self.search_by_query(query, limit: 5)
+    return none if query.blank?
+
+    token_variants = SearchQueryParser.tokens(query)
+    return none if token_variants.empty?
+
+    original = published.search_by_keyword(query).limit(limit)
+    return original if original.any?
+
+    clauses = token_variants.map do |variants|
+      variants.map { |variant|
+        sanitize_sql_array([ "title ILIKE ?", "%#{sanitize_sql_like(variant)}%" ])
+      }.join(" OR ").then { |clause| "(#{clause})" }
+    end
+    distinctive_indexes = token_variants.each_index.select do |index|
+      SearchQueryParser.relaxation_distinctive_variants?(token_variants[index])
+    end
+    distinctive_clauses = distinctive_indexes.map { |index| clauses[index] }
+    return none if distinctive_clauses.empty?
+
+    hit_count = clauses.map { |clause| "CASE WHEN #{clause} THEN 1 ELSE 0 END" }.join(" + ")
+    distinctive_hit_count = distinctive_clauses.map { |clause| "CASE WHEN #{clause} THEN 1 ELSE 0 END" }.join(" + ")
+    required = (distinctive_clauses.size / 2.0).ceil
+
+    relaxed = published
+      .where("(#{distinctive_hit_count}) >= #{required}")
+      .order(Arel.sql("(#{hit_count}) DESC"))
+      .limit(limit)
+    return relaxed if relaxed.any?
+
+    none
+  end
+
   # Sector enum (0: common 공통, 1: local_gov 지자체, 2: edu 교육행정)
   enum :sector, { common: 0, local_gov: 1, edu: 2 }, default: :common
   # "common" 또는 blank 전달 시 전체 반환 (common은 모든 sector에 공유되므로)
