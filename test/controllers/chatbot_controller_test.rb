@@ -31,6 +31,16 @@ class ChatbotControllerTest < ActionDispatch::IntegrationTest
     assert_match "공무원 수당 계산기", response.body
   end
 
+  test "Guide 레인이 canonical parser를 거쳐 자연어 질문 결과를 렌더한다" do
+    guide = Guide.create!(title: "명예퇴직 실무 가이드", slug: "test-controller-guide-natural",
+      category: "인사", published: true, sort_order: 1)
+    assert Guide.published.where(id: guide.id).exists?, "양성 대조 가이드가 있어야 함"
+
+    get silmu_search_search_path(q: "명퇴 관련 경우 언제 어떻게 하나요"), headers: TURBO_HEADERS
+    assert_response :success
+    assert_match guide.title, response.body
+  end
+
   # 2026-06-11 a827467: 전수 감사 통과로 종전 unlisted 6개 도구를 /tools 카드 목록에 게재(NEW 배지).
   # 종전 테스트는 "노출 안 됨"을 단언했으나 의도적 게재 후 stale → 현재 의도(노출됨)로 정정.
   test "감사 통과 도구(예산 과목 분류 도우미)는 tools 인덱스 카드 목록에 노출된다" do

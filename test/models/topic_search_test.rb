@@ -146,6 +146,83 @@ class TopicSearchTest < ActiveSupport::TestCase
     assert_not_includes results.map(&:slug), "test-agency-takeover"
   end
 
+  test "완화 A: 잡음 토큰이 변별 토큰 하나의 문턱을 올리지 않는다" do
+    target = Topic.create!(name: "견적서 징구 기준", slug: "test-quote-recall",
+      summary: "가격 확인 자료", keywords: "견적서", published: true, view_count: 1)
+    noise_only = Topic.create!(name: "두 개 받아야", slug: "test-quote-noise-only",
+      summary: "수량 표현", keywords: "두,개", published: true, view_count: 999)
+
+    assert Topic.published.where("name ILIKE ?", "%견적서%").exists?, "양성 대조 콘텐츠가 있어야 함"
+    results = Topic.search_multiple("견적서 두 개 받아야 하나요", limit: 10).to_a
+    assert_includes results, target
+    assert_not_includes results, noise_only, "잡음만 맞은 토픽은 문턱 하락의 수혜를 받으면 안 됨"
+  end
+
+  test "ROUND 2: 1글자 수량 토큰이 무관한 연말정산·지방세 토픽을 부활시키지 않는다" do
+    target = Topic.create!(name: "견적서 징구 기준", slug: "test-quote-one-character-anchor",
+      summary: "가격 확인 자료", keywords: "견적서", published: true, view_count: 1)
+    year_end = Topic.create!(name: "연말정산 세액 처리", slug: "test-year-end-one-character-anchor",
+      summary: "공제 안내", keywords: "연말정산,세액", published: true, view_count: 999)
+    local_tax = Topic.create!(name: "지방세 부과 징수", slug: "test-local-tax-one-character-anchor",
+      summary: "세입 안내", keywords: "지방세,세입", published: true, view_count: 998)
+
+    assert Topic.published.where(id: target.id).exists?, "양성 대조 견적서 콘텐츠가 있어야 함"
+    results = Topic.search_multiple("견적서 세 개 받아야 하나요", limit: 10).to_a
+    assert_includes results, target
+    assert_not_includes results, year_end
+    assert_not_includes results, local_tax
+  end
+
+  test "자연어 계약 질문은 찾되 학교·계약 하나만 맞는 무관 토픽은 부활시키지 않는다" do
+    target = Topic.create!(name: "학교 계약 필수 서류", slug: "test-school-contract-documents",
+      summary: "행정실 계약 서류 안내", keywords: "학교,계약,서류", published: true, view_count: 1)
+    school_only = Topic.create!(name: "학교 급식 운영", slug: "test-school-only",
+      summary: "급식 안내", keywords: "학교", published: true, view_count: 999)
+    contract_only = Topic.create!(name: "계약 일반", slug: "test-contract-only",
+      summary: "일반 안내", keywords: "계약", published: true, view_count: 998)
+
+    assert Topic.published.where("slug = ?", target.slug).exists?, "양성 대조 콘텐츠가 있어야 함"
+    results = Topic.search_multiple("학교에서 계약할 때 필요한 서류", limit: 10).to_a
+    assert_includes results, target
+    assert_not_includes results, school_only
+    assert_not_includes results, contract_only, "범용 '계약' 1개만으로 recall 풀이 과도하게 넓어지면 안 됨"
+  end
+
+  test "ROUND 2: 계약 관형형이 바뀌어도 학교 계약 서류를 찾는다" do
+    target = Topic.create!(name: "학교 계약 필수 서류", slug: "test-contract-ending-recall",
+      summary: "행정실 계약 서류 안내", keywords: "학교,계약,서류", published: true, view_count: 1)
+
+    assert Topic.published.where(id: target.id).exists?, "양성 대조 학교 계약 서류가 있어야 함"
+    assert_includes Topic.search_multiple("학교에서 계약하는 서류", limit: 10).to_a, target
+    assert_includes Topic.search_multiple("학교에서 계약한 서류", limit: 10).to_a, target
+  end
+
+  test "ROUND 2: ROUND 1의 견적서·계약 질문 recall을 유지한다" do
+    quote = Topic.create!(name: "견적서 징구 기준", slug: "test-round-one-quote-recall",
+      summary: "가격 확인 자료", keywords: "견적서", published: true, view_count: 1)
+    contract = Topic.create!(name: "학교 계약 필수 서류", slug: "test-round-one-contract-recall",
+      summary: "행정실 계약 서류 안내", keywords: "학교,계약,서류", published: true, view_count: 1)
+
+    assert Topic.published.where(id: [ quote.id, contract.id ]).count == 2,
+      "양성 대조 견적서·계약 콘텐츠가 있어야 함"
+    assert_includes Topic.search_multiple("견적서 두 개 받아야 하나요", limit: 10).to_a, quote
+    assert_includes Topic.search_multiple("학교에서 계약할 때 필요한 서류", limit: 10).to_a, contract
+  end
+
+  test "ROUND 2: 학교 급식 메뉴 추천은 검색 결과를 만들지 않는다" do
+    assert_includes Topic.search_multiple("수의계약", limit: 10).to_a, topics(:local_private_contract),
+      "양성 대조 검색은 기존 콘텐츠를 찾아야 함"
+    assert Topic.published.where("name ILIKE ? OR keywords ILIKE ?", "%학교%", "%학교%").none?,
+      "negative control을 검증할 테스트 데이터에는 학교 토픽이 없어야 함"
+    assert_empty Topic.search_multiple("학교 급식 메뉴 추천", limit: 10)
+  end
+
+  test "완화 결과에서도 진단서가 없는 병가 FAQ는 바로 답으로 승격하지 않는다" do
+    sick = topic_with_faq!(slug: "test-diagnosis-negative", name: "병가 처리 안내", keywords: "병가,처리",
+      question: "일반 병가는 연간 며칠까지 쓸 수 있나요?")
+    assert_nil Topic.answer_for("진단서 처리", [ sick ])
+  end
+
   # ---- P1.6 §21 answer_for — "바로 답"은 틀린 답보다 없는 답이 낫다 ----
 
   def topic_with_faq!(slug:, name:, keywords:, question:, answer: "답 본문")
