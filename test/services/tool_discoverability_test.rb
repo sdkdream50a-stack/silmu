@@ -15,6 +15,8 @@ require "test_helper"
 # 매칭 규칙은 ChatbotController#search_tools 와 같다 — 토큰 AND, haystack substring.
 # 컨트롤러(P1.6 인접 파일)를 수정하지 않기 위해 같은 식을 여기서 재현한다.
 class ToolDiscoverabilityTest < ActiveSupport::TestCase
+  ONBOARDING_TITLE = "신규자 첫달 계약 실무 코스"
+
   def registry
     @registry ||= Class.new do
       include ToolsHelper
@@ -116,7 +118,35 @@ class ToolDiscoverabilityTest < ActiveSupport::TestCase
     end
   end
 
-  test "도구 개수는 변하지 않는다 — R1 은 keywords 만 만진다" do
-    assert_equal ApplicationHelper::ACTIVE_TOOL_COUNT, registry.size
+  test "온보딩 코스는 기존 /start 자산을 가리키는 검색 전용 항목이다" do
+    entry = registry.find { |tool| tool[:title] == ONBOARDING_TITLE }
+
+    assert entry, "기존 온보딩 자산이 검색 registry에 있어야 한다"
+    assert_equal Rails.application.routes.url_helpers.onboarding_path, entry[:path]
+    assert_equal "시작 가이드", entry[:category]
+    assert entry[:unlisted], "온보딩을 /tools 게재 도구로 재분류하면 안 된다"
+    assert_not_includes entry[:keywords].split(/,\s*/), "발령"
+    assert_not_includes entry[:keywords].split(/,\s*/), "시작"
+  end
+
+  test "온보딩 자연어 변형은 모두 기존 /start 자산을 찾는다" do
+    [
+      "처음 계약을 맡았어요",
+      "처음 계약 업무를 맡았습니다",
+      "신규자가 계약을 처음 맡았어요",
+      "계약 업무 처음인데 뭘 해야 하나요"
+    ].each do |query|
+      assert_includes tool_titles_for(query), ONBOARDING_TITLE, "'#{query}'가 /start를 찾지 못했다"
+    end
+  end
+
+  test "온보딩 키워드는 무관한 선금·구매·학교 시간 질의에 붙지 않는다" do
+    [ "선금 지급", "계약 선금", "신규 물품 구매", "학교 시작 시간" ].each do |query|
+      assert_not_includes tool_titles_for(query), ONBOARDING_TITLE, "'#{query}'에 /start가 오매칭됐다"
+    end
+  end
+
+  test "공개 도구 개수는 검색 전용 unlisted 항목을 제외한 게재 수다" do
+    assert_equal ApplicationHelper::ACTIVE_TOOL_COUNT, registry.count { |tool| !tool[:unlisted] }
   end
 end

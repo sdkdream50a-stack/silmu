@@ -43,7 +43,9 @@ module ToolsHelper
       { title: "보조금 정산 체크리스트",        desc: "국고·지방보조금 정산 전 자가점검 항목을 감사 빈출 지적 기준으로 즉시 확인합니다.", icon: "checklist",         color: "amber",   category: "체크리스트",  domain: "예산", path: subsidy_settlement_checker_path,    badge: "NEW", keywords: "e나라도움, 국고보조금, 지방보조금, 보조금정산" },
       { title: "부서별 감사 대비 체크리스트",   desc: "담당 업무 유형별 감사 빈출 지적 기반 자가점검 체크리스트를 즉시 생성합니다.",     icon: "rule",              color: "red",     category: "체크리스트",  domain: "기타", path: audit_readiness_checker_path,       badge: "NEW", keywords: "회계감사, 감사 지적, 자가점검" },
       { title: "계약 적법성 자가진단",          desc: "계약 단계별 감사원 빈출 지적사항을 체크리스트로 즉시 점검합니다.",                icon: "fact_check",        color: "emerald", category: "체크리스트",  domain: "계약", path: contract_legality_check_path,       badge: "NEW", keywords: "감사 지적, 자가진단" },
-      { title: "이월·전용 적법성 판단기",       desc: "예산 이월·전용 요건과 절차를 법령 기준으로 자동 판단합니다.",                     icon: "swap_horiz",        color: "amber",   category: "자동화 도구", domain: "예산", path: budget_transfer_checker_path,       badge: "NEW", keywords: "명시이월, 사고이월, 계속비, 예산 전용" }
+      { title: "이월·전용 적법성 판단기",       desc: "예산 이월·전용 요건과 절차를 법령 기준으로 자동 판단합니다.",                     icon: "swap_horiz",        color: "amber",   category: "자동화 도구", domain: "예산", path: budget_transfer_checker_path,       badge: "NEW", keywords: "명시이월, 사고이월, 계속비, 예산 전용" },
+      # 기존 /start 자산의 검색 인덱스 항목. 실무 도구로 재분류하거나 /tools 목록에 게재하지 않는다.
+      { title: "신규자 첫달 계약 실무 코스",     desc: "계약 업무를 처음 맡은 신규자가 7단계를 순서대로 확인합니다.",                    icon: "route",             color: "amber",   category: "시작 가이드", domain: "계약", path: onboarding_path, unlisted: true, keywords: "신규자, 처음 계약, 처음 맡았어요, 첫달, 계약 업무 시작" }
     ]
   end
 end

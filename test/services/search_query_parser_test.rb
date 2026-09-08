@@ -98,6 +98,29 @@ class SearchQueryParserTest < ActiveSupport::TestCase
     assert_not_includes answer_tokens, "계약하"
   end
 
+  test "온보딩 자연어의 서술어·의문사는 버리고 처음인데는 처음으로 복원한다" do
+    tokens = SearchQueryParser.tokens("처음 계약 업무를 맡았습니다")
+    assert_not_includes tokens.flatten, "맡았습니다"
+
+    tokens = SearchQueryParser.tokens("계약 업무 처음인데 뭘 해야 하나요")
+    assert_includes tokens.flatten, "처음"
+    assert_not_includes tokens.flatten, "뭘"
+  end
+
+  test "견적과 견적서는 같은 뜻의 양방향 alias다" do
+    assert_includes SearchQueryParser.tokens("견적").first, "견적서"
+    assert_includes SearchQueryParser.tokens("견적서").first, "견적"
+  end
+
+  test "바로 답 세부어는 질문 초점을 남기고 보조용언과 종결 표현은 버린다" do
+    assert SearchQueryParser.answer_detail_token?("며칠")
+    assert SearchQueryParser.answer_detail_token?("얼마")
+    assert SearchQueryParser.answer_detail_token?("안에")
+    assert_not SearchQueryParser.answer_detail_token?("받아야")
+    assert_not SearchQueryParser.answer_detail_token?("하나요")
+    assert_not SearchQueryParser.answer_detail_token?("두")
+  end
+
   test "어미를 떼면 1글자인 어간은 MIN_STEM 규율로 기각한다" do
     variants = SearchQueryParser.tokens("일할").first
     assert_includes variants, "일할"

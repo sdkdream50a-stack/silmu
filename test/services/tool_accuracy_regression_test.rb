@@ -80,11 +80,16 @@ class ToolAccuracyRegressionTest < ActionDispatch::IntegrationTest
     assert_includes note, "공사 0.5/1,000로 같지만", "공사는 국가·지방 요율이 같다는 사실도 밝혀야 한다"
   end
 
-  # ── 도구 개수: 상수와 레지스트리가 갈라지던 결함 ──
-  test "ACTIVE_TOOL_COUNT는 tools_registry 실제 항목 수와 같다" do
-    registry_size = File.read(Rails.root.join("app/helpers/tools_helper.rb")).scan(/\{ title: "/).size
-    assert_equal registry_size, ApplicationHelper::ACTIVE_TOOL_COUNT,
-      "도구 수 표기(#{ApplicationHelper::ACTIVE_TOOL_COUNT})가 레지스트리(#{registry_size})와 다르다"
+  # ── 도구 개수: 검색 전용 unlisted 항목을 공개 도구 수로 세던 결함 ──
+  test "ACTIVE_TOOL_COUNT는 unlisted를 제외한 실제 게재 도구 수와 같다" do
+    registry = Class.new do
+      include ToolsHelper
+      include Rails.application.routes.url_helpers
+    end.new.tools_registry
+    listed_size = registry.count { |tool| !tool[:unlisted] }
+
+    assert_equal listed_size, ApplicationHelper::ACTIVE_TOOL_COUNT,
+      "공개 도구 수 표기(#{ApplicationHelper::ACTIVE_TOOL_COUNT})가 게재 대상(#{listed_size})과 다르다"
   end
   # ── 복수예비가격: ±3% 바깥 정수를 섞던 결함(반올림 방향 반대) ──
   test "추정가격의 복수예비가격은 ±3% 안쪽 정수 15개만 만든다" do
