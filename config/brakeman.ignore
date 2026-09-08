@@ -49,6 +49,46 @@
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
+      "fingerprint": "4787a58ed7d44a5307ab3c0158bda63b980151e9ab91a1b4b01816bc1ba9dc20",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/topic.rb",
+      "line": 129,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "published.where(\"(#{Array((distinctive_indexes or literal_clauses.each_index)).filter_map do\n literal_clauses[i]\n end.map do\n \"CASE WHEN #{c} THEN 1 ELSE 0 END\"\n end.join(\" + \")}) >= #{(Array((distinctive_indexes or literal_clauses.each_index)).filter_map do\n literal_clauses[i]\n end.size / 2.0).ceil}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Topic",
+        "method": "Topic.relaxed_match"
+      },
+      "user_input": "Array((distinctive_indexes or literal_clauses.each_index)).filter_map do\n literal_clauses[i]\n end.map do\n \"CASE WHEN #{c} THEN 1 ELSE 0 END\"\n end.join(\" + \")",
+      "confidence": "Weak",
+      "note": "오탐(false positive) · P1.7/P1.8 검색 수리에 따른 stale fingerprint 갱신 (종전 debbf29d… = 같은 메서드 Topic.relaxed_match 의 literal_clauses 판본. P1.7 에서 문턱을 distinctive_clauses 기준으로 바꾸면서 코드 문자열이 달라져 지문이 어긋났다). 경계를 만드는 sanitizer: 보간되는 literal_clauses 는 전부 sanitize_sql_array([\"name ILIKE ? OR keywords ILIKE ? OR summary ILIKE ?\", pattern×3]) 의 결과이고, 검색 토큰 값은 그 앞에서 sanitize_sql_like 로 이스케이프된다. 보간 대상은 고정 컬럼명 + sanitize 된 SQL 조각 + 정수(required = distinctive_clauses.size 로 계산)뿐이며 raw 사용자 문자열은 보간되지 않는다. positive control (2026-09-08 실측): 입력 \"수의계약'); DROP TABLE topics;--\" + \"서류\" 를 이 경로에 직접 태운 결과 생성 SQL 이 name ILIKE '%수의계약'')%' 로 작은따옴표가 '' 이스케이프되어 인용 리터럴 안에 갇혔고, DROP/TABLE/topics;-- 는 각자 별도 ILIKE 리터럴이라 문장 분리가 없었다. 실행 후 topics 테이블 존재=true(DDL 미실행). 검출기 판별력 대조: 같은 경로로 정상 질의 '학교에서 계약할 때 필요한 서류' 는 5건을 반환한다(경로가 죽어서 안전한 것이 아니다). 동일 계열 선례: topic.rb:88 · audit_case.rb:56 · related_content_resolver.rb:77,93."
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "8b003a468cece996263e82a1db609122ad6b84285bbd9c28131134538713b9c9",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/guide.rb",
+      "line": 44,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "published.where(\"(#{SearchQueryParser.tokens(query).each_index.select do\n SearchQueryParser.relaxation_distinctive_variants?(SearchQueryParser.tokens(query)[index])\n end.map do\n SearchQueryParser.tokens(query).map do\n variants.map do\n sanitize_sql_array([\"title ILIKE ?\", \"%#{sanitize_sql_like(variant)}%\"])\n end.join(\" OR \").then do\n \"(#{clause})\"\n end\n end[index]\n end.map do\n \"CASE WHEN #{clause} THEN 1 ELSE 0 END\"\n end.join(\" + \")}) >= #{(SearchQueryParser.tokens(query).each_index.select do\n SearchQueryParser.relaxation_distinctive_variants?(SearchQueryParser.tokens(query)[index])\n end.map do\n SearchQueryParser.tokens(query).map do\n variants.map do\n sanitize_sql_array([\"title ILIKE ?\", \"%#{sanitize_sql_like(variant)}%\"])\n end.join(\" OR \").then do\n \"(#{clause})\"\n end\n end[index]\n end.size / 2.0).ceil}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Guide",
+        "method": "Guide.search_by_query"
+      },
+      "user_input": "SearchQueryParser.tokens(query).each_index.select do\n SearchQueryParser.relaxation_distinctive_variants?(SearchQueryParser.tokens(query)[index])\n end.map do\n SearchQueryParser.tokens(query).map do\n variants.map do\n sanitize_sql_array([\"title ILIKE ?\", \"%#{sanitize_sql_like(variant)}%\"])\n end.join(\" OR \").then do\n \"(#{clause})\"\n end\n end[index]\n end.map do\n \"CASE WHEN #{clause} THEN 1 ELSE 0 END\"\n end.join(\" + \")",
+      "confidence": "Weak",
+      "note": "오탐(false positive) · P1.8 에서 Guide 레인을 canonical parser 로 배선하며 새로 생긴 동일 구성. 경계를 만드는 sanitizer: 보간되는 clauses 는 전부 sanitize_sql_array([\"title ILIKE ?\", pattern]) 의 결과이고 값은 sanitize_sql_like 로 이스케이프된다. 보간 대상은 고정 컬럼명(title) + sanitize 된 SQL 조각 + 정수(required)뿐. positive control (2026-09-08 실측): pg_search 가 0건이 되도록 만들어 이 완화 경로를 강제로 태웠다. 입력 \"학교'); DROP TABLE guides;--\" + \"계약 서류\" → 생성 SQL 이 title ILIKE '%학교'')%' 로 이스케이프되고 DROP/TABLE/guides;-- 는 각자 별도 리터럴. 실행 후 guides 테이블 존재=true(DDL 미실행). 검출기 판별력 대조: 같은 함수로 정상 질의 '학교에서 계약할 때 필요한 서류' 는 1건을 반환한다. 동일 계열 선례: topic.rb:88 · audit_case.rb:56."
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
       "fingerprint": "a94666bc3d56f4cc6a9e9318290c99640b129cf02f0ffee3a68423e700b44e8a",
       "check_name": "SQL",
       "message": "Possible SQL injection",
@@ -91,26 +131,6 @@
         89
       ],
       "note": "오탐(false positive): 보간 대상은 고정 컬럼명(title/issue/category)과 내부 생성 바인드 플레이스홀더 이름(:tN_M/:dN_M)뿐. 검색 토큰 값은 sanitize_sql_like + 바인드 파라미터(binds) 및 sanitize_sql_array로 처리. 사용자 입력 미보간."
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "debbf29d63480863064d65b219f35b13dc88414ad8d615117bc5e7655ec7b8b9",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/models/topic.rb",
-      "line": 119,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "published.where(\"(#{literal_clauses.map do\n \"CASE WHEN #{c} THEN 1 ELSE 0 END\"\n end.join(\" + \")}) >= #{(literal_clauses.size / 2.0).ceil}\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Topic",
-        "method": "Topic.relaxed_match"
-      },
-      "user_input": "literal_clauses.map do\n \"CASE WHEN #{c} THEN 1 ELSE 0 END\"\n end.join(\" + \")",
-      "confidence": "Weak",
-      "note": "오탐(false positive): relaxed_match 가 보간하는 literal_clauses 는 전부 sanitize_sql_array([...], pattern) 결과이고(topic.rb:74·79), 검색 토큰 값은 sanitize_sql_like 로 이스케이프된 뒤 바인드로 들어간다. 보간되는 것은 고정 컬럼명(name/keywords/summary)과 sanitize 된 SQL 조각뿐이며 required 는 literal_clauses.size 로 계산한 정수다. 사용자 입력 미보간. 같은 구성의 topic.rb:88 이 이미 같은 사유로 등재돼 있다(ORDER BY 는 바인드 불가라 리터럴 절 사용)."
     }
   ],
   "brakeman_version": "8.0.4"
