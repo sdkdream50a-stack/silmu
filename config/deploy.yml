@@ -57,6 +57,20 @@ env:
     GA_MEASUREMENT_ID: G-DGH1M308BH
     EXAM_GA_MEASUREMENT_ID: G-D3SL77M9GE
     ADSENSE_CLIENT_ID: ca-pub-6241798439911569
+
+    # EXP-SILMU-NONADS-01 — exam.silmu.kr 수험 교재 CTA (CEO 승인 2026-09-12)
+    # 무료 URL 은 조달청 발간자료 #117 «공공조달관리사 표준교재» 원문이다.
+    # 2026-09-12 실측: HTTP 200 · 「공공조달관리사 표준교재(배포용)」 첨부 · 공공누리 제3유형.
+    # 그 게시물 본문이 못박는다 — "표준교재는 해당 교재가 유일하며 타 교재는 조달청과 무관".
+    # 그래서 CTA 는 무료 원문을 1순위로 두고 시판 교재를 «필요하면» 2순위로만 보여준다.
+    EXAM_BOOK_CTA_ENABLED: "1"
+    EXAM_BOOK_FREE_URL: "https://www.pps.go.kr/kor/bbs/view.do?bbsSn=2601150031&key=00034"
+    # EXAM_BOOK_AFFILIATE_URL 은 **의도적으로 비어 있다.** 쿠팡파트너스에 exam.silmu.kr 이
+    # 채널로 등록됐는지 확인하지 못했고(브라우저 접근이 확장 안전정책으로 차단 · Open API 에
+    # 채널 엔드포인트 없음), 미등록 채널 게시는 정책 위반이다. 파티셜이 fail-closed 라
+    # 이 값이 없으면 제휴 링크와 고지 문구가 통째로 렌더되지 않는다.
+    # 값을 넣기 전 조건: ① 채널 등록 확인 ② 딥링크를 subId=sxexambook01 로 발급
+    # ③ 발급 결과를 되읽어 subId 가 실제로 박혔는지 단언. 사후 URL 문자열 치환 금지.
     ADMIN_EMAIL: sdkdream50a@gmail.com
     DB_HOST: 172.18.0.1
     # CF 우회 차단: observe(로그만) → enforce(403 차단). off로 즉시 롤백.

@@ -1,0 +1,67 @@
+<%# 공공조달관리사 교재 안내 — EXP-SILMU-NONADS-01 (2026-09-12)
+  왜 여기인가: exam.silmu.kr 은 AdSense 미커버 구간이고(_ad_slot 의 ad_enabled_controllers
+  = guides/topics/audit_cases), 30일 1,249세션·engaged 76.6% 로 미커버 중 의도가 가장 뚜렷하다.
+  제1회 시험 원서접수가 2026-09-14 라 구매 의도가 실재하는 창이다.
+
+  설계 원칙 — 정직이 전환보다 앞선다:
+    · 조달청 **무료 표준교재**를 먼저·더 크게 둔다. 공식 교재는 실제로 무료다.
+      그것을 숨기고 유료 교재를 파는 구조는 신뢰를 깎고, 이 사이트의 자산은 신뢰다.
+    · 시판 교재는 "종이책·요약본이 필요하면" 이라는 **조건부 2순위**다.
+    · 쿠팡파트너스 고지 문구는 여기에 **하드코딩**한다. 포트폴리오에서 고지 누락 전례가 있다
+      (_shared/learnings.md:3019). 문구를 지우면 회귀 테스트가 깨진다.
+
+  FAIL-CLOSED: 두 URL 은 **하드코딩하지 않는다.** ENV 가 없으면 렌더하지 않는다.
+  이유는 링크 검증 없이 배포되는 것을 구조적으로 막기 위해서다 — 특히 affiliate 링크는
+  발급 시 subId 가 실제로 박혔는지 되읽어 확인한 값만 ENV 에 넣는다
+  (artifacts/MEASUREMENT_DESIGN.md §2). %>
+<%
+  free_url = ENV["EXAM_BOOK_FREE_URL"].presence        # 조달청 표준교재 (무료)
+  aff_url  = ENV["EXAM_BOOK_AFFILIATE_URL"].presence   # subId=sxexambook01 이 박힌 딥링크
+  show_cta = ENV["EXAM_BOOK_CTA_ENABLED"] == "1" && free_url.present?
+%>
+<% if show_cta %>
+  <section class="max-w-4xl mx-auto px-4 py-6" data-surface-id="exam_book_cta">
+    <div class="rounded-2xl border border-slate-200 bg-white p-5">
+      <h2 class="text-base font-bold text-slate-900 mb-1">공공조달관리사 교재</h2>
+      <p class="text-xs text-slate-500 mb-4">
+        조달청이 표준교재를 무료로 배포합니다. 먼저 무료 교재부터 확인하세요.
+      </p>
+
+      <%# 1순위 — 무료. 수익 이벤트 없음. 신뢰 축의 대조군이기도 하다. %>
+      <a href="<%= free_url %>" target="_blank" rel="noopener"
+         data-cta-id="examfree01"
+         class="block w-full text-center py-3.5 rounded-xl bg-[#006499] text-white font-bold text-sm hover:opacity-90 transition-opacity">
+        조달청 표준교재 무료로 받기
+      </a>
+
+      <% if aff_url %>
+        <%# 2순위 — 조건부. "필요하면" 이라는 조건을 문구에서 지우지 말 것. %>
+        <p class="text-xs text-slate-500 mt-4 mb-2">종이책이나 요약본이 필요하다면</p>
+        <a href="<%= aff_url %>" target="_blank" rel="noopener sponsored"
+           data-cta-id="exambook01"
+           class="block w-full text-center py-3 rounded-xl border border-slate-300 text-slate-700 font-bold text-sm hover:bg-slate-50 transition-colors">
+          시판 수험서 보기
+        </a>
+        <%# 고지 문구 — 쿠팡파트너스 필수. 지우면 test/integration/exam_book_cta_test.rb 가 막는다. %>
+        <p class="text-[11px] text-slate-400 mt-3 leading-relaxed">
+          이 링크는 쿠팡 파트너스 활동의 일환으로, 이에 따라 일정액의 수수료를 제공받습니다.
+        </p>
+      <% end %>
+    </div>
+  </section>
+
+  <script>
+    (function () {
+      if (typeof gtag !== "function") return;
+      document.querySelectorAll("[data-cta-id]").forEach(function (el) {
+        el.addEventListener("click", function () {
+          gtag("event", "cta_click", {
+            cta_id: el.getAttribute("data-cta-id"),
+            surface_id: "exam_book_cta",
+            page_path: location.pathname
+          });
+        });
+      });
+    })();
+  </script>
+<% end %>
