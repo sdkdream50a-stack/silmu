@@ -61,7 +61,7 @@ class AdsensePlacementTest < ActionDispatch::IntegrationTest
   test "cost-justification ad label never reappears" do
     host! "silmu.kr"
 
-    ["/tools/budget-execution-rate", "/guides/#{guides(:one).slug}", "/"].each do |path|
+    [ "/tools/budget-execution-rate", "/guides/#{guides(:one).slug}", "/" ].each do |path|
       as_production { get path }
       refute_includes response.body, "비용 충당", "#{path} 에 옛 광고 라벨 문구가 되살아났다"
     end
