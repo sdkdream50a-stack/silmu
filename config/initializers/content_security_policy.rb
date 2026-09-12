@@ -17,6 +17,8 @@ Rails.application.configure do
 
     # img_src는 OpenGraph 썸네일·외부 아티클 이미지 동적 URL 대응 위해 https: 유지.
     # 추후 CDN 프록시 도입 시 축소.
+    # img_src는 OpenGraph 썸네일·외부 아티클 이미지 동적 URL 대응 위해 https: 유지.
+    # (:https 가 이미 AdSense 크리에이티브·픽셀을 포함한다 — 별도 추가 불필요)
     policy.img_src     :self, :https, :data, :blob,
                        "www.google-analytics.com",
                        "www.clarity.ms"
@@ -33,7 +35,18 @@ Rails.application.configure do
                        "www.clarity.ms",
                        "scripts.clarity.ms",
                        "static.cloudflareinsights.com",
-                       "t1.kakaocdn.net"         # Kakao 공유 SDK
+                       "t1.kakaocdn.net",        # Kakao 공유 SDK
+                       # ── AdSense (2026-09-12 재활성화) ──
+                       # 공식 문서(support.google.com/adsense/answer/16283098)는 nonce 기반 strict CSP만
+                       # "지원"한다고 명시한다. 그 방식은 'strict-dynamic'+https: 라서 위 allowlist 전체를
+                       # 무력화하고 unsafe-eval까지 열어 — 광고와 무관한 축(jsdelivr·sheetjs·clarity)의
+                       # 경화까지 함께 풀린다. 그래서 경화를 유지하는 allowlist를 먼저 쓴다.
+                       # 트레이드오프: Google이 도메인을 바꾸면 예고 없이 광고가 깨질 수 있다 →
+                       # 서빙 모니터(AdSense IMPRESSIONS)로 감지하고, 실제로 깨지면 그때 strict로 올린다.
+                       "pagead2.googlesyndication.com",
+                       "tpc.googlesyndication.com",
+                       "partner.googleadservices.com",
+                       "googleads.g.doubleclick.net"
 
     policy.style_src   :self, :unsafe_inline,
                        "cdn.jsdelivr.net",       # Pretendard
@@ -52,7 +65,22 @@ Rails.application.configure do
                        "cloudflareinsights.com",
                        "api.iconify.design",
                        "api.simplesvg.com",
-                       "api.unisvg.com"
+                       "api.unisvg.com",
+                       # ── AdSense (2026-09-12) ──
+                       "pagead2.googlesyndication.com",
+                       "googleads.g.doubleclick.net",
+                       "ep1.adtrafficquality.google",
+                       "ep2.adtrafficquality.google"
+
+    # frame_src: 지금까지 미지정이라 default_src(:self)를 상속했고 그래서 광고 iframe이 차단됐다.
+    # 광고 크리에이티브는 전부 iframe으로 렌더되므로 이 지시자 없이는 스크립트를 넣어도 광고가 0이다.
+    # :self 를 함께 적어 기존(동일출처 iframe) 동작을 보존한다.
+    policy.frame_src   :self,
+                       "googleads.g.doubleclick.net",
+                       "tpc.googlesyndication.com",
+                       "www.google.com",          # reCAPTCHA/광고 인터스티셜 경유
+                       "ep1.adtrafficquality.google",
+                       "ep2.adtrafficquality.google"
 
     policy.frame_ancestors :none
     policy.base_uri :self    # <base> 주입을 통한 relative URL 탈취 방지

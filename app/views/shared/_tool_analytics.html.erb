@@ -1,0 +1,50 @@
+<%# 도구 사용 계측 — 2026-09-12 신설
+  왜 필요한가: /tools 계산기들은 Stimulus 없이 inline onclick/oninput 으로 계산한다.
+  <form> submit 이 없으므로 GA4 향상된 측정의 form_start/form_submit 이 잡지 못한다.
+  실측(30일): budget-execution-rate 386세션·insurance-calculator 180세션이 이벤트 0건이었고,
+  travel-calculator 는 시작 161 / 완료 0 이었다. 이 상태의 form_* 를 KPI 로 쓰면
+  「이 도구는 아무도 안 쓴다」는 거짓 결론이 난다.
+
+  커버리지 (정직하게):
+    tool_start    — /tools 전체 21개. 첫 입력 상호작용 1회.
+    tool_complete — `#result-area` 관례를 쓰는 5개만
+                    (annual_leave · budget_execution_rate · contingency_fund ·
+                     overtime · price_adjustment). 나머지 16개는 **미계측**이며,
+                    그 도구의 완료율을 0 으로 읽으면 안 된다 — UNMEASURED 다.
+  기존 form_start/form_submit 은 끄지 않는다 — 전환 구간 대조군으로 남긴다. %>
+<script>
+  (function () {
+    if (typeof gtag !== "function") return;
+
+    var toolId = (location.pathname.split("/").filter(Boolean).pop() || "unknown");
+    var started = false;
+    var completed = false;
+
+    function fire(name) {
+      gtag("event", name, { tool_id: toolId, page_path: location.pathname });
+    }
+
+    // tool_start — 첫 입력 상호작용 1회만.
+    ["input", "change"].forEach(function (evt) {
+      document.addEventListener(evt, function (e) {
+        if (started) return;
+        if (!e.target.matches("input, select, textarea")) return;
+        started = true;
+        fire("tool_start");
+      }, true);
+    });
+
+    // tool_complete — 결과 영역이 hidden 을 벗는 순간. 계산 «성공» 시점이지 버튼 클릭이 아니다.
+    var result = document.getElementById("result-area");
+    if (!result) return;
+
+    new MutationObserver(function () {
+      if (completed) return;
+      if (result.classList.contains("hidden")) return;
+      completed = true;
+      // 결과가 먼저 뜨는 경로(샘플 데이터 등)에서도 퍼널이 깨지지 않게 start 를 보정한다.
+      if (!started) { started = true; fire("tool_start"); }
+      fire("tool_complete");
+    }).observe(result, { attributes: true, attributeFilter: ["class"] });
+  })();
+</script>
