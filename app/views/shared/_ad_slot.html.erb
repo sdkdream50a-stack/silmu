@@ -1,1 +1,30 @@
-<%# 광고 제거됨 %>
+<%# 광고 단위 — 2026-09-12 재설계 (과거 코드 복원 아님)
+  정책 근거: AdSense 광고 게재위치 정책은 "play buttons, download buttons, navigation buttons,
+  game windows, video players, drop-down menus, or applications" 인접 배치를 우발 클릭 위험으로 금지한다.
+  /tools 계산기는 입력·제출·결과를 가진 application 이므로 결과 영역 인접 배치(옛 'tool-result')를
+  **렌더하지 않는다**. exam(퀴즈·플래시카드)도 같은 이유로 제외한다.
+  호출부 27곳은 그대로 두고 여기서 차단한다 — 외과적 변경.
+
+  1단계 게재 대상: position 'bottom' + 읽는 콘텐츠 컨트롤러(guides/topics/audit_cases) 뿐.
+  2단계(도구·exam)는 1단계 RPM 실측 후 별도 판단. %>
+<%
+  ad_enabled_controllers = %w[guides topics audit_cases]
+  show_ad = Rails.env.production? &&
+            position.to_s == "bottom" &&
+            ad_enabled_controllers.include?(params[:controller])
+%>
+<% if show_ad %>
+  <div class="max-w-4xl mx-auto px-4 pt-6 pb-6 border-t border-gray-100">
+    <%# 중립 라벨. 옛 "AI 응답 API 비용 충당을 위해 광고가 표시됩니다" 문구는 복원하지 않는다 —
+        정책은 라벨을 "광고/Advertisements" 또는 "Sponsored Links" 로 요구하고,
+        비용을 들어 게재를 정당화하는 문구는 클릭 유도 계열로 본다. %>
+    <p class="text-xs text-gray-400 mb-2">광고</p>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-6241798439911569"
+         data-ad-slot="2611873628"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+<% end %>

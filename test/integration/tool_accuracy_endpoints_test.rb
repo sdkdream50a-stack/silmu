@@ -107,10 +107,14 @@ class ToolAccuracyEndpointsTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
   end
 
-  # ── ads.txt: 수익화하지 않으므로 승인 판매자 선언이 없어야 한다 ──
-  test "ads.txt는 더 이상 제공하지 않는다" do
+  # ── ads.txt ──
+  # 2026-08-04 광고 중단으로 404 를 고정했던 테스트. 2026-09-12 사용자 결정으로 AdSense 를
+  # 재활성화하면서 그 전제가 뒤집혔다 — 승인 판매자 선언이 다시 **있어야** 한다.
+  # 상세 회귀(pub- 접두사·TTL)는 test/controllers/ads_txt_controller_test.rb 가 소유한다.
+  test "ads.txt로 승인 판매자를 선언한다" do
     get "/ads.txt"
-    assert_response :not_found
+    assert_response :success
+    assert_includes response.body, "pub-6241798439911569"
   end
 
   # ── 적격심사 대상 판정: 기준은 예정가격이 아니라 추정가격 ──

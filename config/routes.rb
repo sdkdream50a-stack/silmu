@@ -62,7 +62,10 @@ Rails.application.routes.draw do
   # robots.txt — 컨트롤러에서 서빙 (짧은 TTL로 Cloudflare 캐시 제어)
   get "robots.txt", to: "robots#show", format: false
 
-  # ads.txt 라우트 제거 (2026-08-04) — 광고를 게재하지 않으므로 승인 판매자 선언이 없어야 맞다.
+  # ads.txt — 컨트롤러에서 서빙 (1일 TTL, Cloudflare 1년 캐시 우회)
+  # 2026-08-04 광고 중단으로 제거했다가 2026-09-12 재활성화로 복구.
+  # 정적 public/ads.txt 로 되돌리지 말 것 — Cloudflare 가 max-age=1년을 걸어 갱신이 안 먹는다(dd547a1).
+  get "ads.txt", to: "ads_txt#show", format: false
 
   # IETF AI Preferences 초안 표준 (.well-known/ai.txt) — 5차 권위자 AGO 추천
   # 기존 /ai.txt 정적 파일을 표준 위치에서도 노출
