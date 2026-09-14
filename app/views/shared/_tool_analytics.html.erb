@@ -22,12 +22,15 @@
   · calc_complete — 「결과가 실제로 만들어졌다」를 도구가 직접 신고한다: window.silmuCalcResult(signature, opts)
       signature : 유효한 결과의 입력 요약 문자열(메모리에만 · 절대 전송 안 함). 유효하지 않으면 null → 대기 취소
       opts.immediate : 명시적 제출(submit)일 때 true. 입력마다 재계산하는 도구는 입력이 멈춘 뒤(SETTLE_MS) 1회
-    같은 signature 는 한 페이지뷰에서 한 번만 보낸다(같은 결과 재클릭 = 0). 버튼 클릭·페이지 이탈 시 대기분을 즉시 보낸다.
+    같은 signature 는 한 페이지뷰에서 한 번만 보낸다(같은 결과 재클릭 = 0). 계산 버튼(onclick="calculate()") 클릭만 대기분을 즉시 보낸다.
+    페이지 이탈·다른 버튼(PDF·HWPX) 은 확정으로 보지 않는다 — 타이핑 중간값을 세느니 덜 센다.
+  · Turbo 는 방문마다 이 스크립트를 다시 실행한다. document 리스너는 세대 번호로 현재 페이지 것만 동작한다(이전 toolId 오발화 방지).
     payload = { tool_slug, source_post? } 뿐 — 금액·날짜·지역 등 입력값은 보내지 않는다. source_post 는 모르면 생략(0 아님).
     현재 신고 도구: overtime-calculator · travel-calculator · annual-leave-calculator %>
 <script>
   (function () {
     var toolId = (location.pathname.split("/").filter(Boolean).pop() || "unknown");
+    var generation = window.__silmuToolGen = (window.__silmuToolGen || 0) + 1;
     var started = false;
     var completed = false;
 
@@ -44,9 +47,12 @@
         drainTries += 1;
         if (typeof window.gtag === "function") {
           clearInterval(drainTimer);
+          drainTimer = null;
           queue.splice(0).forEach(function (ev) { window.gtag("event", ev[0], ev[1]); });
         } else if (drainTries >= 60) {
           clearInterval(drainTimer);
+          drainTimer = null;
+          drainTries = 0;
           queue = [];
         }
       }, 1000);
@@ -86,19 +92,17 @@
 
     if (!window.__silmuCalcBound) {
       window.__silmuCalcBound = true;
-      var flushCurrent = function () { if (typeof window.__silmuCalcFlush === "function") window.__silmuCalcFlush(); };
       // 계산 버튼 클릭 = 사용자가 결과를 확정한 시점. onclick 계산이 끝난 뒤에 보낸다.
       document.addEventListener("click", function (e) {
-        if (e.target.closest && e.target.closest("button")) setTimeout(flushCurrent, 0);
+        if (!e.target.closest || !e.target.closest('button[onclick^="calculate"]')) return;
+        setTimeout(function () { if (typeof window.__silmuCalcFlush === "function") window.__silmuCalcFlush(); }, 0);
       }, true);
-      window.addEventListener("pagehide", flushCurrent);
-      document.addEventListener("visibilitychange", function () { if (document.visibilityState === "hidden") flushCurrent(); });
-      document.addEventListener("turbo:before-visit", flushCurrent);
     }
 
     // tool_start — 첫 입력 상호작용 1회만.
     ["input", "change"].forEach(function (evt) {
       document.addEventListener(evt, function (e) {
+        if (generation !== window.__silmuToolGen) return;
         if (started) return;
         if (!e.target.matches("input, select, textarea")) return;
         started = true;
