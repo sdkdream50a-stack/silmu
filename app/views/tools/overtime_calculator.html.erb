@@ -265,6 +265,7 @@
     if (salary <= 0) {
       document.getElementById('result-empty').classList.remove('hidden');
       document.getElementById('result-content').classList.add('hidden');
+      if (window.silmuCalcResult) window.silmuCalcResult(null);
       return;
     }
 
@@ -333,5 +334,10 @@
     if (night > 0)     parts.push('야간 ' + formatKRW(nightPay));
     if (holiday > 0)   parts.push('휴일 ' + formatKRW(holidayPay));
     document.getElementById('total-detail').textContent = parts.join(' + ');
+
+    // calc_complete 신고 — 수당 합계가 실제로 나온 결과만(봉급만 입력 = 단가뿐이라 완료 아님). 입력값은 전송하지 않는다.
+    if (window.silmuCalcResult) {
+      window.silmuCalcResult(total > 0 ? [salary, baseRate, overtime, night, holiday].join('|') : null);
+    }
   }
 </script>

@@ -6,6 +6,9 @@ class LawChangeSubscriptionsController < ApplicationController
       topic_slug: params[:topic_slug]
     )
     is_new = sub.new_record?
+    # 글 귀속은 최초 구독 시점에만 기록한다(first-touch). 기존 행의 source 는 재구독으로 덮지도 채우지도 않는다.
+    # 광고성 수신동의(users.newsletter_agreed)는 여기서 건드리지 않는다 — 법령 개정 알림 구독과 별개다.
+    sub.source = LawChangeSubscription.normalize_source_post(params[:source_post]) if is_new
     sub.topic_name = params[:topic_name]
     sub.user = current_user
     sub.active = true

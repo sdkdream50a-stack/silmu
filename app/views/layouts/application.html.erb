@@ -307,6 +307,9 @@
       <%= yield %>
     </main>
 
+    <%# 글 귀속 전파 — 전 페이지(착지는 도구, 구독은 topics 일 수 있다) %>
+    <%= render "shared/source_attribution" %>
+
     <%# 도구 사용 계측 — /tools 에서만 %>
     <% if params[:controller] == "tools" %>
       <%= render "shared/tool_analytics" %>

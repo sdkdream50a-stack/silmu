@@ -308,6 +308,7 @@
     if (!hireDateVal) {
       document.getElementById('result-empty').classList.remove('hidden');
       document.getElementById('result-content').classList.add('hidden');
+      if (window.silmuCalcResult) window.silmuCalcResult(null);
       return;
     }
 
@@ -400,6 +401,13 @@
     document.getElementById('al-hwpx-used-leave').value    = usedLeave;
     document.getElementById('al-hwpx-monthly-wage').value  = monthlyWage || '';
     document.getElementById('al-hwpx-daily-wage').value    = dailyWage || '';
+
+    // calc_complete 신고 — 임용일이 온전한 날짜(1950년 이후 · 기준 연도 이전)일 때만. 연도 타이핑 중간값(0002 등)은 완료 아님.
+    if (window.silmuCalcResult) {
+      const hireYear = hireDate.getFullYear();
+      const plausible = !isNaN(hireYear) && hireYear >= 1950 && hireYear <= refYear;
+      window.silmuCalcResult(plausible ? [hireDateVal, refYear, usedLeave, monthlyWage, dailyWage].join('|') : null);
+    }
   }
 
   function downloadHwpx() {
