@@ -1,0 +1,49 @@
+<%# 글 귀속 전파 — 2026-09-14 (dream40a 글 → 도구 → 구독)
+  착지 URL 의 utm_content(네이버 logNo)를 탭 단위 sessionStorage 에 한 값만 둔다.
+  · 규약은 기존 그대로: utm_source=naver_blog · utm_medium=referral · utm_campaign=silmu_naver · utm_content=<logNo>
+  · 세 축이 모두 맞는 착지에서만 쓴다. content 가 logNo 형식이 아니면(cta_card 등) 지운다 — 마지막 착지가 이긴다.
+  · 쿠키 없음 · 서버로 자동 전송 없음 · 탭을 닫으면 사라진다. 개인정보가 아닌 글 번호 하나뿐이다.
+  · 소비처 두 곳: calc_complete 이벤트(shared/_tool_analytics) · 법령 개정 알림 구독 폼(source_post 숨은 필드).
+  모르면 보내지 않는다 — 서버는 NULL(=UNMEASURED)로 남긴다. %>
+<script>
+  (function () {
+    var KEY = "silmu_source_post";
+    var POST = /^\d{9,15}$/;
+
+    try {
+      var q = new URLSearchParams(location.search);
+      if (q.get("utm_source") === "naver_blog" && q.get("utm_medium") === "referral" && q.get("utm_campaign") === "silmu_naver") {
+        var content = q.get("utm_content") || "";
+        if (POST.test(content)) sessionStorage.setItem(KEY, content);
+        else sessionStorage.removeItem(KEY);
+      }
+    } catch (e) { /* 저장소 차단 — 귀속만 포기하고 페이지는 그대로 */ }
+
+    window.silmuSourcePost = function () {
+      try {
+        var v = sessionStorage.getItem(KEY);
+        return v && POST.test(v) ? v : null;
+      } catch (e) { return null; }
+    };
+
+    if (window.__silmuSourceSubmitBound) return;
+    window.__silmuSourceSubmitBound = true;
+
+    // capture 단계 — Turbo 가 FormData 를 만들기 전에 숨은 필드를 채운다.
+    document.addEventListener("submit", function (e) {
+      var form = e.target;
+      if (!form || !form.action) return;
+      if (new URL(form.action, location.href).pathname !== "/law_change_subscriptions") return;
+      var v = window.silmuSourcePost();
+      if (!v) return;
+      var input = form.querySelector('input[name="source_post"]');
+      if (!input) {
+        input = document.createElement("input");
+        input.type = "hidden";
+        input.name = "source_post";
+        form.appendChild(input);
+      }
+      input.value = v;
+    }, true);
+  })();
+</script>

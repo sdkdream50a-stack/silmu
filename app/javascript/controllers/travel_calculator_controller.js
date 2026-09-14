@@ -144,6 +144,7 @@ export default class extends Controller {
     if (tripType && tripType.value === 'international') {
       this.dateErrorTarget.textContent = '국외 출장은 아직 계산을 지원하지 않습니다. 공무원여비규정 별표 3·4를 확인해주세요.'
       this.dateErrorTarget.classList.remove('hidden')
+      this._reportCalc(null)
       return
     }
 
@@ -160,6 +161,7 @@ export default class extends Controller {
     if (days < 1) {
       this.dateErrorTarget.textContent = '도착일은 출발일 이후여야 합니다.'
       this.dateErrorTarget.classList.remove('hidden')
+      this._reportCalc(null)
       return
     }
     this.dateErrorTarget.classList.add('hidden')
@@ -213,9 +215,17 @@ export default class extends Controller {
     this.dailyDescTarget.textContent = C.dailyRate.toLocaleString() + '원 \u00D7 ' + days + '\uC77C'
     this.dailyAmountTarget.textContent = '\u20A9 ' + dailyAmount.toLocaleString()
 
+    // calc_complete 신고 — 두 도시가 목록에서 확인된 결과만(「목록에서 도시를 선택해주세요」 결과는 완료 아님). 명시적 제출이라 즉시.
+    this._reportCalc(c1 && c2 && !isNaN(days) ? [c1, c2, this.startDateTarget.value, this.endDateTarget.value, transport, needAccommodation].join('|') : null)
+
     if (window.innerWidth < 1024) {
       this.resultContentTarget.scrollIntoView({ behavior: 'smooth' })
     }
+  }
+
+  // 계측 훅(shared/_tool_analytics) — 없으면 아무 일도 하지 않는다. 입력값은 전송되지 않는다.
+  _reportCalc(signature) {
+    if (typeof window.silmuCalcResult === 'function') window.silmuCalcResult(signature, { immediate: true })
   }
 
   // ── 유틸리티 함수 ──

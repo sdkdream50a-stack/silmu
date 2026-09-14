@@ -11,22 +11,98 @@
                     (annual_leave · budget_execution_rate · contingency_fund ·
                      overtime · price_adjustment). 나머지 16개는 **미계측**이며,
                     그 도구의 완료율을 0 으로 읽으면 안 된다 — UNMEASURED 다.
-  기존 form_start/form_submit 은 끄지 않는다 — 전환 구간 대조군으로 남긴다. %>
+  기존 form_start/form_submit 은 끄지 않는다 — 전환 구간 대조군으로 남긴다.
+
+  2026-09-14 수리·추가 (silmu-lead-attribution-tool-completion-v1):
+  · 무음 결함 수리 — layout 은 gtag 를 window.load + 2.5초에 정의하는데 이 스크립트는 body 끝에서 즉시
+    `typeof gtag !== "function"` 으로 return 했다. 운영 GA4(09-01~09-13 /tools/*): form_start 76 · tool_start 0 ·
+    tool_complete 0. 이제 전송 시점에 gtag 를 찾고, 아직 없으면 잠시 대기열에 둔다(없는 환경=관리자·개발은 버린다).
+  · tool_complete 의 #result-area observer 는 overtime·annual_leave 에서도 사실상 뜨지 않는다(hidden 토글이
+    #result-content 에 있다). 대조 기록용으로 그대로 두고, 아래 calc_complete 가 3개 도구의 완료 정본이다.
+  · calc_complete — 「결과가 실제로 만들어졌다」를 도구가 직접 신고한다: window.silmuCalcResult(signature, opts)
+      signature : 유효한 결과의 입력 요약 문자열(메모리에만 · 절대 전송 안 함). 유효하지 않으면 null → 대기 취소
+      opts.immediate : 명시적 제출(submit)일 때 true. 입력마다 재계산하는 도구는 입력이 멈춘 뒤(SETTLE_MS) 1회
+    같은 signature 는 한 페이지뷰에서 한 번만 보낸다(같은 결과 재클릭 = 0). 계산 버튼(onclick="calculate()") 클릭만 대기분을 즉시 보낸다.
+    페이지 이탈·다른 버튼(PDF·HWPX) 은 확정으로 보지 않는다 — 타이핑 중간값을 세느니 덜 센다.
+  · Turbo 는 방문마다 이 스크립트를 다시 실행한다. document 리스너는 세대 번호로 현재 페이지 것만 동작한다(이전 toolId 오발화 방지).
+    payload = { tool_slug, source_post? } 뿐 — 금액·날짜·지역 등 입력값은 보내지 않는다. source_post 는 모르면 생략(0 아님).
+    현재 신고 도구: overtime-calculator · travel-calculator · annual-leave-calculator %>
 <script>
   (function () {
-    if (typeof gtag !== "function") return;
-
     var toolId = (location.pathname.split("/").filter(Boolean).pop() || "unknown");
+    var generation = window.__silmuToolGen = (window.__silmuToolGen || 0) + 1;
     var started = false;
     var completed = false;
 
+    var queue = [];
+    var drainTimer = null;
+    var drainTries = 0;
+
+    function send(name, params) {
+      if (typeof window.gtag === "function") { window.gtag("event", name, params); return; }
+      if (queue.length >= 20) return;
+      queue.push([name, params]);
+      if (drainTimer) return;
+      drainTimer = setInterval(function () {
+        drainTries += 1;
+        if (typeof window.gtag === "function") {
+          clearInterval(drainTimer);
+          drainTimer = null;
+          queue.splice(0).forEach(function (ev) { window.gtag("event", ev[0], ev[1]); });
+        } else if (drainTries >= 60) {
+          clearInterval(drainTimer);
+          drainTimer = null;
+          drainTries = 0;
+          queue = [];
+        }
+      }, 1000);
+    }
+
     function fire(name) {
-      gtag("event", name, { tool_id: toolId, page_path: location.pathname });
+      send(name, { tool_id: toolId, page_path: location.pathname });
+    }
+
+    // ── calc_complete ──
+    var SETTLE_MS = 1500;
+    var sentSignatures = {};
+    var pending = null;
+    var settleTimer = null;
+
+    function flushCalc() {
+      clearTimeout(settleTimer);
+      if (pending === null) return;
+      var signature = pending;
+      pending = null;
+      if (sentSignatures[signature]) return;
+      sentSignatures[signature] = true;
+      var params = { tool_slug: toolId };
+      var post = typeof window.silmuSourcePost === "function" ? window.silmuSourcePost() : null;
+      if (post) params.source_post = post;
+      send("calc_complete", params);
+    }
+
+    window.silmuCalcResult = function (signature, opts) {
+      clearTimeout(settleTimer);
+      if (signature === null || signature === undefined || signature === "") { pending = null; return; }
+      pending = String(signature);
+      if (opts && opts.immediate) flushCalc();
+      else settleTimer = setTimeout(flushCalc, SETTLE_MS);
+    };
+    window.__silmuCalcFlush = flushCalc;
+
+    if (!window.__silmuCalcBound) {
+      window.__silmuCalcBound = true;
+      // 계산 버튼 클릭 = 사용자가 결과를 확정한 시점. onclick 계산이 끝난 뒤에 보낸다.
+      document.addEventListener("click", function (e) {
+        if (!e.target.closest || !e.target.closest('button[onclick^="calculate"]')) return;
+        setTimeout(function () { if (typeof window.__silmuCalcFlush === "function") window.__silmuCalcFlush(); }, 0);
+      }, true);
     }
 
     // tool_start — 첫 입력 상호작용 1회만.
     ["input", "change"].forEach(function (evt) {
       document.addEventListener(evt, function (e) {
+        if (generation !== window.__silmuToolGen) return;
         if (started) return;
         if (!e.target.matches("input, select, textarea")) return;
         started = true;
