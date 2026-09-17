@@ -267,16 +267,18 @@
           </div>
 
           <!-- 관련 가이드 -->
+          <% if @related_topic %>
           <div class="border-t pt-6">
             <h3 class="font-semibold text-gray-900 mb-3">관련 가이드</h3>
-            <%= link_to guide_path(1), class: "flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors" do %>
+            <%= link_to topic_path(@related_topic.slug), class: "flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors" do %>
               <span class="material-symbols-outlined text-slate-600">menu_book</span>
               <div>
-                <p class="font-medium text-gray-900 text-sm">물품 구매 절차 가이드</p>
-                <p class="text-gray-500 text-xs">단계별 구매 절차 안내</p>
+                <p class="font-medium text-gray-900 text-sm"><%= @related_topic.name %></p>
+                <p class="text-gray-500 text-xs"><%= @related_topic.category_name %> 절차·근거 안내</p>
               </div>
             <% end %>
           </div>
+          <% end %>
         </div>
       </div>
     </div>

@@ -37,6 +37,16 @@ class TemplatesController < ApplicationController
     { id: 26, title: "예산이월요청서", desc: "예산 이월 요청 시 사용하는 양식", category: "기안문", formats: [ "HWP" ], color: "warm", badge: "NEW" }
   ].freeze
 
+  # 양식 → 관련 토픽 (업무흐름 감사 13 W-07). 종전 «관련 가이드»는 모든 양식에 guide_path(1)을 걸어 목록으로 튕겼다.
+  RELATED_TOPIC_SLUGS = {
+    1 => "contract-execution", 2 => "private-contract", 3 => "inspection", 4 => "inspection", 5 => "payment",
+    6 => "goods-vs-service-contract", 7 => "contract-execution", 8 => "inspection", 9 => "payment", 10 => "subcontract",
+    11 => "contract-execution", 12 => "construction-completion", 14 => "defect-warranty", 15 => "inspection",
+    16 => "design-change", 17 => "private-contract", 18 => "private-contract-justification", 19 => "dual-quote",
+    20 => "estimated-price", 21 => "travel-expense-settlement", 24 => "budget-compilation", 25 => "budget-execution",
+    26 => "budget-carryover"
+  }.freeze
+
   def index
     @templates = TEMPLATES
 
@@ -74,6 +84,9 @@ class TemplatesController < ApplicationController
         image: "https://silmu.kr/og-image.webp"
       }
     )
+
+    slug = RELATED_TOPIC_SLUGS[@template[:id]]
+    @related_topic = slug && Topic.published.find_by(slug: slug)
 
     # 관련 양식 (같은 카테고리에서 현재 양식 제외하고 4개)
     @related_templates = TEMPLATES

@@ -1058,8 +1058,8 @@ document.addEventListener('click', function(e) {
               </div>
             </div>
 
-          <% else %>
-            <!-- 수의계약 관련 서식 (기본) -->
+          <% elsif @topic.category == "contract" %>
+            <!-- 수의계약 관련 서식 (계약 토픽 기본) -->
             <div class="mb-10">
               <div class="flex items-center justify-between mb-5">
                 <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
@@ -1220,6 +1220,51 @@ document.addEventListener('click', function(e) {
                   </div>
                 </div>
               </div>
+            </div>
+          <% else %>
+            <!-- 계약 외 토픽: 계약 서식을 붙이지 않는다 (업무흐름 감사 13 W-05) -->
+            <div class="mb-10" data-forms-panel="neutral">
+              <div class="flex items-center justify-between mb-5">
+                <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                  <div class="icon-container icon-container-sm bg-editorial-navy-bg">
+                    <span class="material-symbols-outlined text-editorial-navy">folder_open</span>
+                  </div>
+                  서식·자료
+                </h3>
+                <%= link_to templates_path, class: "text-sm text-editorial-navy hover:text-editorial-navy-dark font-medium flex items-center gap-1 transition-colors" do %>
+                  서식 전체보기
+                  <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                <% end %>
+              </div>
+              <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 text-sm text-slate-700">
+                이 주제(<%= @topic.category_name %>) 전용 서식은 준비 중입니다. 공식 서식은 관계 법령의 별지·별표와 소속 기관(교육청·지자체) 지침에서 확인하세요.
+              </div>
+              <% if @related_tools.any? %>
+                <div class="grid sm:grid-cols-2 gap-4 mt-5">
+                  <% @related_tools.each do |tool| %>
+                    <%= link_to send("#{tool[:key]}_path"), class: "group card card-interactive p-5" do %>
+                      <div class="flex items-start gap-4">
+                        <div class="icon-container icon-container-md bg-<%= tool[:color] %>-100">
+                          <span class="material-symbols-outlined text-2xl text-<%= tool[:color] %>-600"><%= tool[:icon] %></span>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <h4 class="font-semibold text-slate-900"><%= tool[:title] %></h4>
+                          <p class="text-sm text-slate-500 mt-1"><%= tool[:desc] %></p>
+                        </div>
+                      </div>
+                    <% end %>
+                  <% end %>
+                </div>
+              <% end %>
+              <a href="https://www.law.go.kr" target="_blank" rel="noopener"
+                 class="mt-5 flex items-center gap-4 p-4 bg-white rounded-xl border border-gray-100 hover:shadow-medium transition-all duration-200">
+                <span class="material-symbols-outlined text-slate-600">balance</span>
+                <div class="flex-1 min-w-0">
+                  <div class="font-semibold text-slate-900">국가법령정보센터</div>
+                  <div class="text-sm text-slate-500">법령·행정규칙 별지 서식 원문</div>
+                </div>
+                <span class="material-symbols-outlined text-slate-300">open_in_new</span>
+              </a>
             </div>
           <% end %>
         </div>
