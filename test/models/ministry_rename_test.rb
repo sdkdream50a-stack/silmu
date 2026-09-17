@@ -4,8 +4,8 @@ require "test_helper"
 
 # 정부조직 개편(2026-01-02) 반영 회귀 — 기획재정부 → 재정경제부(계약·국유재산·국고) / 기획예산처(예산·예비타당성조사).
 class MinistryRenameTest < ActiveSupport::TestCase
-  # 소관이 확인되지 않아 NEEDS_REVIEW 로 남긴 1곳(국외여비 링크 카드)만 허용한다.
-  ALLOWED = { "app/views/topics/show.html.erb" => 1 }.freeze
+  # 국외여비 카드는 공무원 여비 규정 별표 4(소관 인사혁신처)로 확인돼 2026-09-17 정정 — 예외 없음.
+  ALLOWED = {}.freeze
 
   test "no stale 기획재정부/기재부 outside the reviewed exception" do
     counts = Dir[Rails.root.join("app/**/*.{rb,erb,js}")].to_h do |f|

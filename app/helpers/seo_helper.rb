@@ -40,7 +40,7 @@ module SeoHelper
         when "expense"  then [ "지방회계법", "지방회계법 시행령" ]
         when "duty"     then [ "지방공무원법", "국가공무원법" ]
         when "salary"   then [ "공무원수당 등에 관한 규정", "지방공무원 수당 등에 관한 규정" ]
-        when "travel"   then [ "공무원 여비 규정", "지방공무원 여비 규정" ]
+        when "travel"   then [ "공무원 여비 규정" ] # «지방공무원 여비 규정»은 법령정보센터에 없음 — 지방은 자치단체 여비 조례
         when "subsidy"  then [ "지방자치단체 보조금 관리에 관한 법률", "보조금 관리에 관한 법률" ]
         when "property" then [ "공유재산 및 물품 관리법" ]
         else
@@ -69,7 +69,7 @@ module SeoHelper
     when "local-festival-event" then { law: "지방재정법", decree: "예산편성 운영기준(훈령)", rule: "지방보조금법·지방계약법" }
     when "participatory-budget" then { law: "지방재정법 제39조", decree: "지방재정법 시행령 제46조", rule: "주민참여예산 운영 조례·지방자치법" }
     when "school-budget-compilation" then { law: "초·중등교육법 제30조의2·3", decree: "시행령(학교발전기금)", rule: "학교회계 규칙(교육부령·시도 교육규칙)" }
-    when "travel-expense"      then { law: "지방공무원법", decree: "지방공무원 여비 규정", rule: "여비 규정 별표" }
+    when "travel-expense"      then { law: "국가공무원법 제48조·지방공무원법 제46조", decree: "공무원 여비 규정", rule: "여비 규정 별표 2·4" }
     when "budget-carryover"    then { law: "지방재정법", decree: "지방재정법 시행령", rule: "예산편성 기준" }
     when "year-end-settlement" then { law: "소득세법", decree: "소득세법 시행령", rule: "연말정산 지침" }
     when "instructor-allowance" then { law: "지방재정법", decree: "세출예산 집행기준(예규)", rule: "교육비특별회계 집행기준(예규)" }
@@ -127,7 +127,7 @@ module SeoHelper
       case topic.category
       when "duty" then "지방공무원법·국가공무원법"
       when "salary" then "공무원수당 등에 관한 규정·지방공무원 수당규정"
-      when "travel" then "공무원 여비 규정·지방공무원 여비 규정"
+      when "travel" then "공무원 여비 규정·자치단체 여비 조례"
       when "subsidy" then "보조금 관리에 관한 법률·지방자치단체 보조금 관리에 관한 법률"
       when "property" then "공유재산 및 물품 관리법"
       when "budget" then "지방재정법·지방회계법"
