@@ -46,6 +46,12 @@ class AuditCaseProvenanceClassifier
 
   RECONSTRUCTED_SOURCE_STRINGS = %w[silmu-2026 silmu_seed].freeze
 
+  # 본문(issue/detail/lesson)이 재구성임을 밝히는 표현
+  BODY_RECONSTRUCTED_MARKERS = [ "가상 시나리오" ].freeze
+
+  # 원문 대조로 강등된 사례 표식 — 원문을 다시 확인하기 전에는 ACTUAL 로 되돌리지 않는다.
+  TRUST_DOWNGRADE_MARKER = "TRUST_DOWNGRADE_2026_09_17"
+
   def initialize(audit_case)
     @ac = audit_case
   end
@@ -55,6 +61,22 @@ class AuditCaseProvenanceClassifier
   def plan
     raw_source = @ac.verification_source
     note = InternalMetadataFilter.internal?(raw_source) ? raw_source : nil
+
+    # 재구성 판정이 원문 문서 존재보다 먼저다(2026-09-17 신뢰 감사).
+    # 원문 URL 이 있어도 본문이 «가상 시나리오»라고 스스로 밝히면 원문 발췌 + 재구성 혼합이다 —
+    # 종전 순서에서는 이 86건 중 52건이 «실제 감사결과»로 올라갔다. 원문 필드는 참고로 남는다(Plan.compact).
+    if reconstructed?
+      return Plan.new(
+        audit_case: @ac,
+        source_type: "SILMU_RECONSTRUCTED_CASE",
+        is_reconstructed: true,
+        verification_status: legal_reference_verified? ? "LEGAL_REFERENCE_VERIFIED" : "RECONSTRUCTED",
+        # 강등 표식을 덮어쓰면 다음 분류에서 다시 ACTUAL 로 올라간다 — 표식이 있으면 그대로 둔다.
+        verification_note: @ac.verification_note.to_s.include?(TRUST_DOWNGRADE_MARKER) ? @ac.verification_note : note,
+        confidence: "HIGH",
+        reason: "콘텐츠가 스스로 재구성 사례임을 명시 (#{reconstructed_evidence})"
+      )
+    end
 
     if (doc = document_source)
       # ── 원문 문서가 DB 에 이미 있다 → ACTUAL_AUDIT (§10 충족) ──
@@ -72,18 +94,6 @@ class AuditCaseProvenanceClassifier
         verification_note: note,
         confidence: "HIGH",
         reason: "source jsonb 에 발행기관·문서명·원문 URL·페이지가 모두 존재 (외부 조회 없이 확인 가능)"
-      )
-    end
-
-    if reconstructed?
-      return Plan.new(
-        audit_case: @ac,
-        source_type: "SILMU_RECONSTRUCTED_CASE",
-        is_reconstructed: true,
-        verification_status: legal_reference_verified? ? "LEGAL_REFERENCE_VERIFIED" : "RECONSTRUCTED",
-        verification_note: note,
-        confidence: "HIGH",
-        reason: "콘텐츠가 스스로 재구성 사례임을 명시 (#{reconstructed_evidence})"
       )
     end
 
@@ -143,6 +153,10 @@ class AuditCaseProvenanceClassifier
         "source=#{@ac.source}"
       elsif (m = RECONSTRUCTED_MARKERS.find { |k| @ac.verification_source.to_s.include?(k) })
         "verification_source 에 '#{m}'"
+      elsif @ac.verification_note.to_s.include?(TRUST_DOWNGRADE_MARKER)
+        "신뢰 강등 기록(#{TRUST_DOWNGRADE_MARKER}) — 원문 재확인 전 승격 금지"
+      elsif BODY_RECONSTRUCTED_MARKERS.any? { |k| [ @ac.issue, @ac.detail, @ac.lesson ].join(" ").include?(k) }
+        "본문이 스스로 가상 시나리오임을 밝힘"
       end
   end
 
