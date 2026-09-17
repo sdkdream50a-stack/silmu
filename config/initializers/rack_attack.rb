@@ -135,3 +135,36 @@ class Rack::Attack
     [ 429, { "Content-Type" => "text/plain" }, [ "요청이 너무 많습니다. 잠시 후 다시 시도하세요." ] ]
   end
 end
+
+# P0-6 (2026-09-18) — 스로틀 발생을 관측할 수 있게 한다.
+#
+# ── 왜
+#   429 응답은 있었지만 **기록이 없었다.** 스로틀이 걸렸는지 아닌지 사후에 알 방법이 없다.
+#   행정실장 연수(2026-09-28~10-01)에서 «느리다·안 된다» 가 스로틀 때문인지 판별해야 하고,
+#   판별 못 하면 원인 추측으로 한도를 올리게 된다. 한도를 올리기 전에 재는 수단을 먼저 만든다.
+#
+# ── 실측으로 확인한 것 (운영, 2026-09-18)
+#   `req.ip` 는 **Cloudflare 엣지 IP** 로 해석된다. 현재 시간창의 카운터 469개가
+#   **469/469 전부 Cloudflare 대역**(172.6x·172.7x·104.2x·141.101·162.158/159·198.41)이었다.
+#   trusted_proxies 설정이 없고 CF-Connecting-IP 를 쓰는 코드도 없다(repo 전수 검색).
+#
+#   ⇒ 그래서 `req/ip 500/h` 는 **사용자별 한도가 아니라 사실상 PoP별 한도**다.
+#      NAT 뒤 30명이 한 버킷을 공유하는 구조가 아니고, 대신 무관한 사용자들이 같은
+#      엣지 IP 를 공유하면 서로 영향을 준다. 최대 카운터는 18/500(3.6%) 이었다.
+#
+#   ⚠️ 키를 실제 클라이언트 IP 로 바꾸는 것이 «옳은» 수정이지만, 그러면 NAT 뒤 연수장
+#      30~50명이 한 버킷을 공유해 **연수가 오히려 막힌다**. 연수 직전에 조용히 바꾸지 않는다.
+#      보안 영향이 있는 결정이므로 별도 판단 사항으로 남긴다(P1).
+#
+# 이 블록은 **한도를 바꾸지 않는다.** 기록만 남긴다.
+ActiveSupport::Notifications.subscribe("throttle.rack_attack") do |_name, _start, _finish, _id, payload|
+  req = payload[:request]
+  next if req.nil?
+
+  data = req.env["rack.attack.match_data"] || {}
+  Rails.logger.warn(
+    "[rack-attack] throttled name=#{req.env['rack.attack.matched']} " \
+    "ip=#{req.ip} count=#{data[:count]}/#{data[:limit]} period=#{data[:period]} " \
+    "path=#{req.path} host=#{req.host}"
+  )
+end

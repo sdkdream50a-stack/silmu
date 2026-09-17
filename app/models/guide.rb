@@ -147,7 +147,11 @@ class Guide < ApplicationRecord
     Rails.cache.delete("guides/series/#{series_before_last_save}") if saved_change_to_series? && series_before_last_save.present?
     # topic_slug 또는 external_link가 topic URL인 경우 해당 topic 캐시 무효화
     t_slug = topic_slug.presence || (external_link&.start_with?("/topics/") ? external_link.delete_prefix("/topics/") : nil)
-    Rails.cache.delete("topic_guide/#{t_slug}") if t_slug.present?
+    # G-57 (2026-09-18) — 종전에 지우던 `topic_guide/<slug>` 는 **아무도 쓰지 않는 키**였다
+    #   (repo 전수 검색: 이 delete 한 줄이 유일한 등장). 실제로 쓰고 읽는 키는
+    #   topics_controller 의 `topic_guide_ext/<slug>` 다. 무효화가 허공을 지우고 있었고,
+    #   그래서 가이드 본문을 고쳐도 토픽 화면이 최대 1시간 옛 값을 서빙했다.
+    Rails.cache.delete("topic_guide_ext/#{t_slug}") if t_slug.present?
     Rails.cache.increment("home/curated_version") if saved_change_to_sector? || saved_change_to_topic_slug?
   end
 

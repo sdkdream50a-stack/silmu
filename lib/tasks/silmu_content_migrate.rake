@@ -10,6 +10,10 @@
 #   bin/rake silmu:content_migrate           # 적용 안 된 파일 실행
 #   bin/rake silmu:content_migrate:status    # 현재 적용 이력 출력
 #   bin/rake silmu:content_migrate:retry     # failed 상태 재시도
+#   bin/rake silmu:content_cache_invalidate  # 콘텐츠 파생 캐시 무효화 (G-57)
+#
+# ⚠️ content_migrate 는 적용이 1건 이상이면 끝에 ContentCache.invalidate! 를 **자동** 호출한다.
+#    migration 이 update_columns 로 쓰기 때문에 모델 after_commit 무효화 콜백이 돌지 않는다(G-57).
 namespace :silmu do
   desc "P6 — db/content_migrations/*.rb 순차 적용 (멱등, 운영 DB 거버넌스)"
   task content_migrate: :environment do
@@ -57,9 +61,30 @@ namespace :silmu do
       end
     end
 
+    # G-57 (2026-09-18) — 여기가 빠져 있었다.
+    #
+    #   content migration 은 `update_columns` 로 쓰므로 after_commit 무효화 콜백이 실행되지 않는다.
+    #   그래서 DB 는 새 값인데 Rails origin 이 최대 1시간 옛 값을 서빙했고, 복구를 운영 콘솔에서
+    #   캐시 키 784개를 손으로 지워서 했다. 그 수동 절차를 여기로 끌어들인다.
+    #
+    #   적용이 0건이면 부르지 않는다 — 아무것도 안 바뀌었는데 캐시를 비우면 불필요한 부하다.
+    if applied_count.positive?
+      report = ContentCache.invalidate!
+      puts "  [cache] 무효화 #{report}"
+      # 「지웠다」고 말했는데 0건이면 무효화가 동작하지 않은 것이다 — 조용히 넘기지 않는다.
+      warn "  [WARN] 캐시 무효화가 아무것도 지우지 못했다 — ContentCache 등록부를 확인하라" unless report.any?
+    end
+
     puts ""
     puts "[INFO] ContentMigration 완료 — applied=#{applied_count} skipped=#{skipped_count} failed=#{failed_count}"
     exit(failed_count.zero? ? 0 : 1)
+  end
+
+  desc "G-57 — 콘텐츠 파생 캐시 무효화 (배포 절차·수동 복구용)"
+  task content_cache_invalidate: :environment do
+    report = ContentCache.invalidate!
+    puts "[INFO] ContentCache 무효화 — #{report}"
+    abort "[FAIL] 아무것도 지우지 못했다 — 캐시 스토어·등록부를 확인하라" unless report.any?
   end
 
   namespace :content_migrate do
