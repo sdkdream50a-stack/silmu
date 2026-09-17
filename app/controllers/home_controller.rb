@@ -20,14 +20,16 @@ class HomeController < ApplicationController
       # 학교회계: 회계연도 3.1~다음해 2.28 (초중등교육법 제30조의2)
       # 교육비특별회계(교육청): 1.1~12.31 — budget-compilation 유지
       1  => %w[year-end-settlement budget-carryover payment inspection],
-      2  => %w[goods-selection-committee goods-selection-committee private-contract bidding],
-      3  => %w[goods-selection-committee goods-selection-committee private-contract bidding],
+      # ⚠️ 같은 slug 를 두 번 넣지 않는다 — 카드가 중복 렌더된다(2026-09-18 P0-4).
+      #    중복이던 2·3·9월 슬롯은 학교회계 전용 토픽으로 채웠다.
+      2  => %w[school-budget-compilation goods-selection-committee private-contract bidding],
+      3  => %w[school-budget-compilation goods-selection-committee private-contract bidding],
       4  => %w[goods-selection-committee estimated-price bidding contract-execution],
       5  => %w[inspection payment advance-payment contract-guarantee-deposit],
       6  => %w[inspection payment design-change],
       7  => %w[budget-carryover bidding inspection],
       8  => %w[bidding estimated-price private-contract],
-      9  => %w[goods-selection-committee bidding contract-execution goods-selection-committee],
+      9  => %w[goods-selection-committee bidding contract-execution school-budget-compilation],
       10 => %w[goods-selection-committee inspection payment late-penalty],
       11 => %w[goods-selection-committee year-end-settlement inspection],
       12 => %w[year-end-settlement budget-carryover payment]
@@ -48,8 +50,9 @@ class HomeController < ApplicationController
     }
   }.freeze
 
-  # SEASONAL_TOPICS 변경 시 이 값을 올리면 캐시 자동 무효화
-  CURATION_VERSION = 3
+  # SEASONAL_TOPICS 또는 감사사례 선택 규칙 변경 시 이 값을 올리면 캐시 자동 무효화
+  #   v4 (2026-09-18 P0-4): edu 2·3·9월 중복 slug 제거 + 감사사례 sector·출처 우선 정렬
+  CURATION_VERSION = 4
 
   def index
     @sector = resolve_sector
@@ -97,11 +100,30 @@ class HomeController < ApplicationController
       end
     end
 
-    # sector별 감사사례 (중대/보통 최신 3건)
-    @recent_audit_cases = Rails.cache.fetch("home/audit_cases/v#{curated_version}/#{@sector}", expires_in: 1.hour) do
+    # sector별 감사사례 (중대/보통 3건)
+    #
+    # P0-4 (2026-09-18) — 종전에는 created_at 최신 3건만 뽑았다. 그 결과 교육행정 탭에
+    #   silmu-2026-concurrent-*(sector=common · source_url 없음 · is_reconstructed) 겸직 사례 3건이
+    #   고정 노출됐다. 같은 조건에 sector=edu 사례가 88건(그중 원문 출처 있는 것 86건) 있는데도.
+    #   그래서 sector 탭에서는 ① 그 sector 의 사례 ② 원문 출처가 확인된 사례(비재구성)를 먼저 본다.
+    #   순위 규칙이 바뀌면 CURATION_VERSION 을 올려 캐시를 무효화한다.
+    @recent_audit_cases = Rails.cache.fetch(
+      "home/audit_cases/cv#{CURATION_VERSION}/v#{curated_version}/#{@sector}", expires_in: 1.hour
+    ) do
       scope = AuditCase.published.where(severity: %w[중대 보통])
-      scope = scope.where(sector: [ :common, @sector ]) if @sector != "common"
-      scope.order(created_at: :desc).limit(3).to_a
+
+      if @sector == "common"
+        scope.order(created_at: :desc).limit(3).to_a
+      else
+        # @sector 는 resolve_sector 의 허용목록(common/local_gov/edu)을 통과한 값이고,
+        # enum 정수로 바꿔 넣으므로 SQL 에 문자열이 그대로 들어가지 않는다.
+        sector_rank = AuditCase.sectors.fetch(@sector).to_i
+        scope.where(sector: [ :common, @sector ])
+             .order(Arel.sql("CASE WHEN audit_cases.sector = #{sector_rank} THEN 0 ELSE 1 END"))
+             .order(Arel.sql("CASE WHEN audit_cases.is_reconstructed THEN 1 ELSE 0 END"))
+             .order(created_at: :desc)
+             .limit(3).to_a
+      end
     end
 
     # 인기 가이드 (전체 sector 공통, 조회수 상위 6개)
