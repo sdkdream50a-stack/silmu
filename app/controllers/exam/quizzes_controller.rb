@@ -48,7 +48,7 @@ module Exam
 
       set_meta_tags(
         title: "공공조달관리사 실전 모의고사 — 80문제 120분 타이머",
-        description: "공공조달관리사 실전 시험 모드 — 3과목 80문제 120분 타이머. 실제 시험과 동일한 환경으로 도전하세요.",
+        description: "공공조달관리사 실전 시험 모드 — 3과목 80문제 120분 타이머. 실제 시험 문항 수·시간(80문항·120분) 기준으로 연습하세요.",
         keywords: "공공조달관리사 실전 시험, 공공조달 모의고사 타이머",
         canonical: "https://exam.silmu.kr/quiz/simulation",
         og: { image: "https://exam.silmu.kr/exam-og.png" },

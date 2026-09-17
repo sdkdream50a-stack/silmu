@@ -3,7 +3,8 @@
   <div class="max-w-4xl mx-auto">
     <div class="text-center mb-12">
       <h2 class="exam-heading-md mb-3">공공조달관리사 시험 개요</h2>
-      <p class="text-slate-500">2026년 최초 시행 예정 — 공식 일정은 조달청 공고 기준</p>
+      <div class="mb-2"><%= content_badge(:official) %></div>
+      <p class="text-slate-500">2026년 최초 시행 — 공식 일정은 <%= ExamSchedule::SOURCE_NAME %> 기준</p>
     </div>
 
     <!-- 시험 기본 정보 카드 -->
@@ -21,8 +22,8 @@
             <dd class="font-semibold text-slate-800">국가기술자격</dd>
           </div>
           <div class="flex justify-between">
-            <dt class="text-slate-500">주관 기관</dt>
-            <dd class="font-semibold text-slate-800">조달청</dd>
+            <dt class="text-slate-500">관련부처 · 시행</dt>
+            <dd class="font-semibold text-slate-800">조달청 · 한국산업인력공단</dd>
           </div>
           <div class="flex justify-between">
             <dt class="text-slate-500">시험 방식</dt>
@@ -30,7 +31,7 @@
           </div>
           <div class="flex justify-between">
             <dt class="text-slate-500">첫 시험</dt>
-            <dd class="font-semibold" style="color:#002b57">2026년 (예정)</dd>
+            <dd class="font-semibold" style="color:#002b57"><%= ExamSchedule::EXAMS.first[:on].strftime("%Y.%m.%d") %> (필기)</dd>
           </div>
         </dl>
       </div>
@@ -73,17 +74,17 @@
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div class="bg-white rounded-xl p-4 border border-slate-200">
           <div class="text-emerald-600 font-bold text-sm mb-1">1과목 · 30문항</div>
-          <div class="font-semibold text-slate-800">법제도의 이해</div>
+          <div class="font-semibold text-slate-800">공공조달과 법제도 이해</div>
           <div class="text-slate-500 text-sm mt-1">국가계약법·지방계약법·조달사업법, 나라장터</div>
         </div>
         <div class="bg-white rounded-xl p-4 border border-slate-200">
           <div class="text-blue-600 font-bold text-sm mb-1">2과목 · 20문항</div>
-          <div class="font-semibold text-slate-800">조달계획 수립 및 분석</div>
+          <div class="font-semibold text-slate-800">공공조달계획 수립 및 분석</div>
           <div class="text-slate-500 text-sm mt-1">수요·공급 분석, 예정가격 산정, 조달 전략</div>
         </div>
         <div class="bg-white rounded-xl p-4 border border-slate-200">
           <div class="text-violet-600 font-bold text-sm mb-1">3과목 · 30문항</div>
-          <div class="font-semibold text-slate-800">계약 관리</div>
+          <div class="font-semibold text-slate-800">공공계약관리</div>
           <div class="text-slate-500 text-sm mt-1">입찰·낙찰, 계약 이행, 검사·대금지급</div>
         </div>
       </div>

@@ -4,9 +4,9 @@ import { getAllProgress, getWrongAnswerCount } from "../exam_progress"
 
 // 3과목 기준 (3과목은 커리큘럼 3권+4권 챕터 합산)
 const SUBJECTS = [
-  { id: "1", title: "법제도의 이해",        short: "1과목", chapters: 7,  color: "emerald", chapterPrefixes: ["1"] },
-  { id: "2", title: "조달계획 수립 및 분석", short: "2과목", chapters: 6,  color: "blue",    chapterPrefixes: ["2"] },
-  { id: "3", title: "계약 관리",            short: "3과목", chapters: 15, color: "violet",  chapterPrefixes: ["3", "4"] }
+  { id: "1", title: "공공조달과 법제도 이해", short: "1과목", chapters: 7,  color: "emerald", chapterPrefixes: ["1"] },
+  { id: "2", title: "공공조달계획 수립 및 분석", short: "2과목", chapters: 6,  color: "blue",    chapterPrefixes: ["2"] },
+  { id: "3", title: "공공계약관리",           short: "3과목", chapters: 15, color: "violet",  chapterPrefixes: ["3", "4"] }
 ]
 
 const TOTAL_CHAPTERS = 28  // 4권 9장 추가 후 합계

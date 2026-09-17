@@ -454,7 +454,7 @@ export default class extends Controller {
       if (this.answers[i] === q.correct) examSubjectStats[esid].correct++
     })
 
-    const subjectNames = { 1: "법제도의 이해", 2: "조달계획 수립 및 분석", 3: "계약 관리" }
+    const subjectNames = { 1: "공공조달과 법제도 이해", 2: "공공조달계획 수립 및 분석", 3: "공공계약관리" }
     // Tailwind 동적 보간 방지 — 전체 클래스 문자열 사용
     const subjectTextColors = { 1: "text-emerald-600", 2: "text-blue-600", 3: "text-violet-600" }
     const subjectBgColors = { 1: "bg-emerald-500", 2: "bg-blue-500", 3: "bg-violet-500" }

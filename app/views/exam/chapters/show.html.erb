@@ -11,7 +11,7 @@
       "@type": "LearningResource",
       "@id": "https://exam.silmu.kr/subjects/<%= @subject[:id] %>/chapters/<%= @chapter[:number] %>#resource",
       "name": "<%= @subject[:number] %> 제<%= @chapter[:number] %>장: <%= @chapter[:title] %>",
-      "description": "공공조달관리사 <%= @subject[:number] %> <%= @subject[:title] %> — 제<%= @chapter[:number] %>장 <%= @chapter[:title] %>. 학습목표·핵심키워드·시험 출제 포인트 완벽 정리.",
+      "description": "공공조달관리사 <%= @subject[:number] %> <%= @subject[:title] %> — 제<%= @chapter[:number] %>장 <%= @chapter[:title] %>. 학습목표·핵심키워드·출제 예상 포인트(실무.kr 예측) 정리.",
       "url": "https://exam.silmu.kr/subjects/<%= @subject[:id] %>/chapters/<%= @chapter[:number] %>",
       "inLanguage": "ko",
       "isAccessibleForFree": true,
@@ -83,6 +83,7 @@
     <h1 class="text-3xl md:text-4xl font-extrabold text-[#f6f7ff] tracking-tight leading-tight max-w-3xl mb-6">
       <%= @chapter[:title] %>
     </h1>
+    <div class="mb-4"><%= content_badge(:textbook) %></div>
 
     <!-- 학습 정보 칩 -->
     <div class="flex flex-wrap gap-2">
@@ -310,7 +311,7 @@
                   <span class="material-symbols-outlined text-white text-base">compare</span>
                 </div>
                 <h2 class="font-bold text-slate-900">국가계약법 vs 지방계약법 조문 비교</h2>
-                <span class="text-xs bg-violet-100 text-violet-700 font-bold px-2 py-0.5 rounded-full ml-auto">빈출</span>
+                <span class="ml-auto"><%= content_badge(:prediction) %></span>
               </div>
               <div class="overflow-x-auto">
                 <table class="w-full text-sm">
@@ -375,11 +376,12 @@
   <div data-exam-tabs-target="panel" data-panel="memory" class="hidden bg-slate-50 py-10 px-4">
     <div class="max-w-5xl mx-auto space-y-5">
 
-      <!-- 시험 출제 포인트 — Stitch 퀴즈 카드 스타일 -->
+      <!-- 출제 예상 포인트 — Stitch 퀴즈 카드 스타일 -->
       <h3 class="text-2xl font-extrabold text-slate-900 tracking-tight mb-1 flex items-center gap-2">
         <span class="material-symbols-outlined text-amber-500">bolt</span>
-        시험 출제 포인트
+        출제 예상 포인트
         <span class="text-sm font-normal text-slate-400 ml-1"><%= @chapter[:exam_points].size %>개</span>
+        <%= content_badge(:prediction) %>
       </h3>
 
       <% @chapter[:exam_points].each_with_index do |point, i| %>
