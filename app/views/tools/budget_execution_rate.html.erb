@@ -1,14 +1,20 @@
 <%# 예산 집행률 계산기 %>
 
 <%
+  # P0-2 — 이 도구의 «참고선» 은 산술(균등 배분)이다. 법정 목표율이 아니다.
+  #   지방재정법 전문에 «집행률»·«목표율»·«집행 목표» 는 0건이다(2026-09-18 법령 원문 대조).
+  #   그래서 예전 분기 목표치 해시(3월 25 · 6월 50 · 9월 75 · 12월 90)는 삭제했다 —
+  #   출처가 코드 주석뿐이었고(SOURCE=NONE) 12월 90% 는 균등 배분도 아니었다.
+  #
+  # 회계연도 시작월은 기관마다 다르다: 지방자치단체 1월 / 학교회계 3월.
+  #   서버는 1월을 기본으로 렌더하고(공유 CDN 캐시 안전), 학교 분기는 클라이언트에서만 한다.
   today = Time.zone.today
   current_month = today.month
-  recommended_rate = (current_month / 12.0 * 100).round(1)
+  default_fiscal_start = 1
+  # 균등 배분 참고선 = 회계연도 경과 월수 ÷ 12
+  elapsed_months = ((current_month - default_fiscal_start) % 12) + 1
+  reference_rate = (elapsed_months / 12.0 * 100).round(1)
   year_progress = ((today.yday / (Date.new(today.year, 12, 31).yday).to_f) * 100).round(1)
-  # 분기말 권장 집행률 (3·6·9·12월)
-  quarter_targets = { 3 => 25, 6 => 50, 9 => 75, 12 => 90 }
-  next_quarter_month = [3, 6, 9, 12].find { |m| m >= current_month } || 12
-  next_quarter_target = quarter_targets[next_quarter_month]
 %>
 
 <section class="section py-10">
@@ -29,10 +35,12 @@
         </div>
         <div>
           <h1 class="text-2xl font-bold text-slate-900">예산 집행률 계산기</h1>
-          <p class="text-slate-500">예산 집행 현황과 목표 달성 여부를 즉시 파악하세요</p>
+          <p class="text-slate-500">예산 집행 현황과 균등 배분 참고선 대비 차이를 즉시 파악하세요</p>
           <%= render 'shared/use_when_badge', tool: 'budget-execution-rate' %>
         </div>
       </div>
+
+      <%= render 'shared/jurisdiction_notice', tool_key: 'budget-execution-rate' %>
 
       <details class="bg-white rounded-2xl shadow-sm border border-editorial-navy-bg mt-6">
         <summary class="px-6 py-4 cursor-pointer hover:bg-slate-50 transition-colors flex items-center gap-2 [list-style:none] [&::-webkit-details-marker]:hidden">
@@ -43,15 +51,18 @@
         <div class="px-6 pb-6 prose prose-slate prose-sm max-w-none">
           <p class="text-slate-700 leading-relaxed mb-3">
             예산 집행률은 배정예산 대비 실제 집행액의 비율로, 사업 진행도와 예산 관리 현황을 한눈에 보여주는 핵심 지표입니다.
-            지방재정법 §40(예산의 내용)·§47(예산의 목적 외 사용금지) 및 행안부 「지방자치단체 예산편성 운영기준」·「지방자치단체 예산집행 기준」에 따라 <strong>분기·연도말 집행 목표율</strong>을 달성해야 하며, 미달 시 다음 연도 예산 삭감 등의 불이익이 있습니다.
+            집행 부진은 실제로 재정 운영 점검·다음 연도 편성 심의에서 다뤄지지만, <strong>법령이 정한 분기·연도말 집행 목표율은 없습니다</strong>.
+            지방재정법 제40조는 예산의 내용, 제47조는 목적 외 사용금지를 정하며 집행률을 다루지 않습니다(법령 전문에 «집행률»·«목표율» 0건, 2026-09-18 원문 대조).
+            목표율이 있다면 그것은 소속 기관·상급기관의 <strong>당해연도 집행계획·지침</strong>에서 나옵니다.
           </p>
           <p class="text-slate-700 leading-relaxed mb-3">
-            이 도구는 예산 항목별 집행률과 잔액을 자동 계산하고, 현재 시점 기준 <strong>권장 집행률과의 차이</strong>를 바로 알 수 있도록 설계되었습니다.
-            월별 기준 집행률(연간 균등 배분 기준)과 비교하여 집행 속도가 빠른지 느린지 즉시 판단할 수 있습니다.
+            이 도구는 예산 항목별 집행률과 잔액을 자동 계산하고, <strong>균등 배분 참고선과의 차이</strong>를 바로 알 수 있도록 설계되었습니다.
+            참고선은 «회계연도 경과 월수 ÷ 12» 라는 산술이며, 공식 기준이 아닙니다.
           </p>
           <div class="bg-amber-50 border-l-4 border-amber-500 p-3 rounded-r-lg mt-4">
             <p class="text-amber-900 text-xs leading-relaxed">
-              <strong>⚠️ 참고:</strong> 권장 집행률은 월별 균등 배분 기준이며, 사업 특성(하반기 집중·계절성 등)에 따라 다를 수 있습니다. 실제 기관의 집행 계획서를 함께 참고하세요.
+              <strong>⚠️ 참고선의 성격:</strong> 이 화면의 참고선은 <strong>내부 참고용 균등 배분선</strong>입니다(공식 목표 아님).
+              사업 특성(하반기 집중·계절성·계약 시기)에 따라 정상적으로 달라지므로, 판정은 소속 기관의 집행계획서로 합니다.
             </p>
           </div>
         </div>
@@ -67,9 +78,19 @@
             예산 정보 입력
           </h2>
 
+          <!-- 회계연도 시작월 — P0-2: 학교회계는 3월 시작이라 경과 월수가 다르다 -->
+          <div class="mb-5">
+            <label for="fiscal-start-month" class="block text-sm font-semibold text-slate-700 mb-2">회계연도 시작월</label>
+            <select id="fiscal-start-month" class="form-input w-full" onchange="calculate()">
+              <option value="1"<%= ' selected' if default_fiscal_start == 1 %>>1월 — 지방자치단체·국가 (1.1~12.31)</option>
+              <option value="3"<%= ' selected' if default_fiscal_start == 3 %>>3월 — 학교회계 (3.1~다음 해 2월 말)</option>
+            </select>
+            <p class="text-xs text-slate-400 mt-1">학교·교육행정 사용자는 <strong>3월</strong>을 선택하세요. 경과 월수가 달라 참고선이 바뀝니다.</p>
+          </div>
+
           <!-- 기준 월 -->
           <div class="mb-5">
-            <label class="block text-sm font-semibold text-slate-700 mb-2">기준 월</label>
+            <label for="base-month" class="block text-sm font-semibold text-slate-700 mb-2">기준 월</label>
             <select id="base-month" class="form-input w-full" onchange="calculate()">
               <% (1..12).each do |m| %>
                 <option value="<%= m %>"<%= ' selected' if m == current_month %>><%= m %>월</option>
@@ -127,35 +148,31 @@
             집행률 분석 결과
           </h2>
 
-          <!-- 초기 안내 — 권장 집행률 reference 카드 + 샘플 시작 (Information Scent) -->
+          <!-- 초기 안내 — 균등 배분 참고선 카드 + 샘플 시작 (Information Scent) -->
           <div id="empty-state">
-            <!-- 오늘 기준 권장 집행률 카드 -->
+            <!-- 균등 배분 참고선 카드 — 공식 목표가 아니라는 것을 카드 안에서 말한다(P0-2) -->
             <div class="bg-gradient-to-br from-editorial-navy-bg to-emerald-50/40 border border-editorial-navy-light rounded-xl p-5 mb-4">
-              <div class="flex items-center gap-2 mb-3">
+              <div class="flex items-center gap-2 mb-1">
                 <span class="material-symbols-outlined text-editorial-navy" style="font-size:18px">trending_up</span>
-                <span class="text-xs font-bold text-editorial-navy uppercase tracking-wider">오늘 기준 권장 집행률</span>
+                <span class="text-xs font-bold text-editorial-navy uppercase tracking-wider">균등 배분 참고선</span>
+                <span class="text-[10px] font-semibold text-slate-600 bg-white/80 border border-slate-300 rounded-full px-2 py-0.5">참고용 · 공식 목표 아님</span>
               </div>
+              <p class="text-[11px] text-slate-500 mb-3">회계연도 경과 월수 ÷ 12 (산술)</p>
               <div class="flex items-end gap-3 mb-2">
-                <div class="text-4xl font-bold text-editorial-navy-dark"><%= recommended_rate %>%</div>
-                <div class="text-sm text-slate-500 pb-1.5"><%= current_month %>월 (균등 배분)</div>
+                <div id="reference-rate-value" class="text-4xl font-bold text-editorial-navy-dark"><%= reference_rate %>%</div>
+                <div id="reference-rate-caption" class="text-sm text-slate-500 pb-1.5"><%= current_month %>월 = 회계연도 <%= elapsed_months %>개월 경과</div>
               </div>
               <div class="bg-white/70 rounded-full h-2 overflow-hidden mb-2">
-                <div class="h-full bg-editorial-navy rounded-full" style="width: <%= recommended_rate %>%"></div>
+                <div id="reference-rate-bar" class="h-full bg-editorial-navy rounded-full" style="width: <%= reference_rate %>%"></div>
               </div>
               <div class="flex justify-between text-[11px] text-slate-500 mb-3">
-                <span>1월 0%</span>
-                <span>6월 50%</span>
-                <span>12월 100%</span>
+                <span>경과 0개월 0%</span>
+                <span>6개월 50%</span>
+                <span>12개월 100%</span>
               </div>
-              <div class="grid grid-cols-2 gap-2 text-xs">
-                <div class="bg-white/60 rounded-lg p-2">
-                  <div class="text-slate-400 text-[10px] uppercase tracking-wide">올해 경과</div>
-                  <div class="font-bold text-slate-700"><%= year_progress %>% (<%= today.strftime('%-m/%-d') %>)</div>
-                </div>
-                <div class="bg-white/60 rounded-lg p-2">
-                  <div class="text-slate-400 text-[10px] uppercase tracking-wide">다음 분기말 목표</div>
-                  <div class="font-bold text-slate-700"><%= next_quarter_month %>월 <%= next_quarter_target %>%</div>
-                </div>
+              <div class="bg-white/60 rounded-lg p-2 text-xs">
+                <div class="text-slate-400 text-[10px] uppercase tracking-wide">달력 경과 (회계연도와 다를 수 있음)</div>
+                <div class="font-bold text-slate-700"><%= year_progress %>% (<%= today.strftime('%-m/%-d') %>)</div>
               </div>
             </div>
 
@@ -183,7 +200,7 @@
               </div>
               <div class="flex justify-between text-xs text-editorial-navy-light mt-1">
                 <span>0%</span>
-                <span id="target-rate-label">권장 집행률 0%</span>
+                <span id="target-rate-label">참고선 0%</span>
                 <span>100%</span>
               </div>
             </div>
@@ -226,10 +243,10 @@
       </h3>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
         <div class="bg-green-50 rounded-xl p-4">
-          <div class="font-semibold text-green-800 mb-2">✅ 양호 집행 기준</div>
+          <div class="font-semibold text-green-800 mb-2">✅ 참고선 관리 (공식 기준 아님)</div>
           <ul class="text-green-700 space-y-1 text-xs">
-            <li>• 분기말(3·6·9월): 각 분기 목표율 달성</li>
-            <li>• 연말(12월): 90% 이상 집행 권장</li>
+            <li>• 균등 배분 참고선(경과 월수÷12) 근처를 유지</li>
+            <li>• 참고선과 벌어지면 사업 특성·계약 시기로 설명 가능해야 함</li>
             <li>• 이월 최소화: 명시이월·사고이월 사유 명확히</li>
           </ul>
         </div>
@@ -282,18 +299,57 @@
 <script>
   let itemCount = 1;
 
+  // P0-2 — 회계연도 시작월을 반영한 경과 월수. 지방자치단체 1월 시작 / 학교회계 3월 시작.
+  //   fiscalElapsedMonths(9, 1) = 9  ·  fiscalElapsedMonths(9, 3) = 7
+  function fiscalStartMonth() {
+    const el = document.getElementById('fiscal-start-month');
+    const v = el ? parseInt(el.value) : 1;
+    return (v >= 1 && v <= 12) ? v : 1;
+  }
+
+  function fiscalElapsedMonths(baseMonth, startMonth) {
+    return (((baseMonth - startMonth) % 12) + 12) % 12 + 1;
+  }
+
+  // 균등 배분 참고선(%) — 산술이다. 법정 목표율이 아니다.
+  function referenceRatePercent() {
+    const base = parseInt(document.getElementById('base-month').value);
+    return (fiscalElapsedMonths(base, fiscalStartMonth()) / 12) * 100;
+  }
+
   // 페이지 로드 시 현재 월로 기준 월 설정 (SSR ERB와 sync — JS는 fallback safety net)
+  // 학교(sector=edu) 쿠키가 있으면 회계연도 시작월을 3월로 미리 맞춘다.
+  //   ⚠️ 서버에서 하지 않는 이유 = 이 페이지는 CDN 공유 캐시(public, max-age=14400)이고
+  //      Vary 에 Cookie 가 없다. 서버 분기는 캐시를 섞는다.
   document.addEventListener('DOMContentLoaded', function() {
     const now = new Date();
     const month = now.getMonth() + 1;
     document.getElementById('base-month').value = month;
+
+    if (/(?:^|;\s*)sector=edu(?:;|$)/.test(document.cookie)) {
+      const fs = document.getElementById('fiscal-start-month');
+      if (fs) fs.value = '3';
+    }
+    updateReferenceCard();
   });
+
+  // 참고선 카드(빈 상태)를 회계연도 선택에 맞춰 갱신
+  function updateReferenceCard() {
+    const base = parseInt(document.getElementById('base-month').value);
+    const elapsed = fiscalElapsedMonths(base, fiscalStartMonth());
+    const rate = (elapsed / 12) * 100;
+    const v = document.getElementById('reference-rate-value');
+    const c = document.getElementById('reference-rate-caption');
+    const b = document.getElementById('reference-rate-bar');
+    if (v) v.textContent = rate.toFixed(1) + '%';
+    if (c) c.textContent = `${base}월 = 회계연도 ${elapsed}개월 경과`;
+    if (b) b.style.width = Math.min(rate, 100) + '%';
+  }
 
   // 샘플 데이터로 미리보기 (Empty State Work — Schoger)
   function loadSampleData() {
-    const month = parseInt(document.getElementById('base-month').value);
-    const targetRate = month / 12;
-    // 권장률 ±10% 분포로 3개 항목 — 양호·약간 부진·부진 색상이 동시 노출되도록 의도
+    const targetRate = referenceRatePercent() / 100;
+    // 참고선 ±10% 분포로 3개 항목 — 양호·약간 부진·부진 색상이 동시 노출되도록 의도
     const samples = [
       { name: '도로유지보수비', budget: 50000, rate: targetRate + 0.05 },
       { name: '청사 운영비',     budget: 30000, rate: targetRate - 0.03 },
@@ -360,7 +416,9 @@
 
   function calculate() {
     const month = parseInt(document.getElementById('base-month').value);
-    const targetRate = (month / 12) * 100;
+    const elapsedMonths = fiscalElapsedMonths(month, fiscalStartMonth());
+    const targetRate = referenceRatePercent();
+    updateReferenceCard();
 
     const items = document.querySelectorAll('.budget-item');
     let totalBudget = 0, totalExecuted = 0;
@@ -397,7 +455,7 @@
 
     // 전체 집행률
     document.getElementById('total-rate').textContent = totalRate.toFixed(1) + '%';
-    document.getElementById('target-rate-label').textContent = `권장 집행률 ${targetRate.toFixed(0)}%`;
+    document.getElementById('target-rate-label').textContent = `참고선 ${targetRate.toFixed(0)}%`;
 
     // 진행바 색상
     const bar = document.getElementById('total-bar');
@@ -414,10 +472,10 @@
     const statusEl = document.getElementById('rate-status');
     const diff = totalRate - targetRate;
     if (diff >= 5) {
-      statusEl.textContent = '▲ 목표 초과 달성';
+      statusEl.textContent = '▲ 참고선 초과';
       statusEl.className = 'text-sm font-semibold pb-1 text-green-600';
     } else if (diff >= 0) {
-      statusEl.textContent = '✅ 목표 달성';
+      statusEl.textContent = '✅ 참고선 도달';
       statusEl.className = 'text-sm font-semibold pb-1 text-green-600';
     } else if (diff >= -10) {
       statusEl.textContent = '⚡ 약간 부진';
@@ -460,16 +518,16 @@
 
     // 집행 속도 분석
     const analysis = document.getElementById('speed-analysis');
-    const remainingMonths = 12 - month;
+    const remainingMonths = 12 - elapsedMonths;
     const remainingBalance = totalBalance;
     const monthlyNeeded = remainingMonths > 0 ? remainingBalance / remainingMonths : 0;
 
     if (diff >= 0) {
       analysis.className = 'mt-4 p-4 rounded-xl border text-sm bg-green-50 border-green-200 text-green-800';
       analysis.innerHTML = `
-        <div class="font-semibold mb-1">✅ 집행 현황 양호</div>
+        <div class="font-semibold mb-1">✅ 참고선 이상</div>
         <div class="text-xs leading-relaxed">
-          현재 집행률이 권장 기준(${targetRate.toFixed(0)}%)을 달성했습니다.
+          현재 집행률이 균등 배분 참고선(${targetRate.toFixed(0)}%)에 도달했습니다. 참고선은 공식 목표가 아닙니다.
           ${remainingMonths > 0 ? `남은 ${remainingMonths}개월간 매월 약 <strong>${formatNum(Math.round(monthlyNeeded))}천원</strong> 집행 시 연말 ${((totalExecuted + remainingBalance) / totalBudget * 100).toFixed(0)}% 달성` : '연말 결산을 준비하세요.'}
         </div>
       `;
@@ -478,7 +536,7 @@
       analysis.innerHTML = `
         <div class="font-semibold mb-1">⚡ 집행 가속 필요</div>
         <div class="text-xs leading-relaxed">
-          권장 기준(${targetRate.toFixed(0)}%) 대비 <strong>${Math.abs(diff).toFixed(1)}%p</strong> 부족합니다.
+          균등 배분 참고선(${targetRate.toFixed(0)}%) 대비 <strong>${Math.abs(diff).toFixed(1)}%p</strong> 낮습니다. 사업 특성상 정상일 수 있으므로 소속 기관 집행계획서로 판정하세요.
           ${remainingMonths > 0 ? `남은 ${remainingMonths}개월간 매월 약 <strong>${formatNum(Math.round(monthlyNeeded))}천원</strong> 이상 집행이 필요합니다.` : '연도 마감 전 긴급 집행 방안을 검토하세요.'}
         </div>
       `;

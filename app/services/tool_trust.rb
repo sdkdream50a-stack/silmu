@@ -28,8 +28,19 @@ class ToolTrust
   }.freeze
 
   Info = Struct.new(:tool_key, :basis, :standard_label, :standard_version,
-                    :legal_references, :disclaimer, keyword_init: true) do
+                    :legal_references, :disclaimer, :jurisdiction, keyword_init: true) do
     def any_basis? = basis.present? || standard_version.present? || legal_references.any?
+  end
+
+  # P0-2 — 적용기관 고지. 「학교회계인가 지방자치단체 기준인가」를 계산 전에 세운다.
+  # 기준연도를 모르면 만들지 않는다 — UNVERIFIED 는 화면에서 «미표기» 로 정직하게 나간다.
+  Jurisdiction = Struct.new(:applies_to, :agency, :guideline, :standard_year,
+                            :school_differs, :school_path, :school_path_label,
+                            keyword_init: true) do
+    UNVERIFIED = "UNVERIFIED"
+
+    def standard_year_verified? = standard_year.present? && standard_year.to_s != UNVERIFIED
+    def school_note? = school_differs.present?
   end
 
   class << self
@@ -44,8 +55,15 @@ class ToolTrust
         standard_label: std&.dig(:label),
         standard_version: std ? standard_version(entry["standard"]) : nil,
         legal_references: entry["laws"].present? ? LegalReferenceResolver.resolve(entry["laws"]) : [],
-        disclaimer: config.dig("defaults", "disclaimer")
+        disclaimer: config.dig("defaults", "disclaimer"),
+        jurisdiction: build_jurisdiction(entry["jurisdiction"])
       )
+    end
+
+    def build_jurisdiction(raw)
+      return nil if raw.blank?
+
+      Jurisdiction.new(**raw.symbolize_keys.slice(*Jurisdiction.members))
     end
 
     def registered_tool_keys = config.fetch("tools", {}).keys
