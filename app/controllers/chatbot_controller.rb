@@ -118,7 +118,7 @@ class ChatbotController < ApplicationController
   # 도구 검색 — title/desc/category/domain/keywords를 합쳐 토큰 AND 매칭.
   # 각 토큰(동의어 변형 중 하나라도)이 합친 텍스트에 포함되어야 함.
   def search_tools(query)
-    token_variants = SearchQueryParser.tokens(query)
+    token_variants = SearchQueryParser.tool_tokens(query)
     return [] if token_variants.empty?
 
     view_context.tools_registry.select do |tool|

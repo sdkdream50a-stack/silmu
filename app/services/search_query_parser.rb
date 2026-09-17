@@ -158,6 +158,16 @@ class SearchQueryParser
   #     "처음 계약을 맡았어요" → [["처음"], ["계약을", "계약"]]   ("맡았어요" = stopword)
   # 빈/공백 쿼리는 [] 반환.
   # 토큰이 전부 stopword 면 원본 토큰을 그대로 쓴다(빈 결과 방지).
+  # 도구 매칭에서만 무시하는 «맥락어» — 사용자가 기관·장소를 덧붙여도(«학교 초과근무 단가») 도구가 빠지지 않게.
+  # 토픽·감사사례 검색에는 쓰지 않는다(그쪽에서는 학교 여부가 결과를 가른다). 맥락어뿐이면 거르지 않는다.
+  TOOL_CONTEXT_WORDS = %w[학교 교육청 교육지원청 행정실 우리 저희].freeze
+
+  def self.tool_tokens(query)
+    all = tokens(query)
+    kept = all.reject { |variants| TOOL_CONTEXT_WORDS.include?(variants.first.to_s) }
+    kept.empty? ? all : kept
+  end
+
   def self.tokens(query)
     return [] if query.blank?
 

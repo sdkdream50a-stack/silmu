@@ -24,14 +24,14 @@ module TopicConfig
     "payment"                 => [ :progress_inspection, :contract_documents ],
     "design-change"           => [ :design_change, :progress_inspection ],
     "price-escalation"        => [ :design_change, :estimated_price ],
-    "late-penalty"            => [ :contract_documents ],
+    "late-penalty"            => [ :contract_guarantee, :contract_documents ],  # 계약보증금 도구의 «지체상금 계산» 탭
     "defect-warranty"         => [ :contract_documents, :progress_inspection ],
     "contract-termination"    => [ :contract_documents ],
     "joint-contract"          => [ :contract_method, :contract_documents ],
     "subcontract"             => [ :contract_documents ],
     "goods-selection-committee" => [ :contract_method, :contract_documents, :quote_review ],
     "travel-expense"          => [ :travel_calculator ],
-    "budget-carryover"        => [ :budget_estimator ],
+    "budget-carryover"        => [ :budget_transfer_checker, :budget_execution_rate ],
     "year-end-settlement"     => [],
     # 2026-02-18 추가
     "advance-payment"         => [ :contract_documents, :progress_inspection ],
@@ -157,7 +157,29 @@ module TopicConfig
     progress_inspection: { icon: "engineering", title: "기성검사 체크",   desc: "기성·준공 검사 항목 확인",    color: "orange" },
     design_change:     { icon: "edit_note",    title: "설계변경 계산",   desc: "변경 금액 자동 산출",         color: "purple" },
     legal_period:      { icon: "calendar_today", title: "법정기간 계산", desc: "입찰공고 기간 자동 산출",     color: "sky" },
-    travel_calculator: { icon: "flight_takeoff", title: "여비계산기",    desc: "출장 여비 자동 계산",         color: "rose" }
+    travel_calculator: { icon: "flight_takeoff", title: "여비계산기",    desc: "출장 여비 자동 계산",         color: "rose" },
+    budget_transfer_checker: { icon: "swap_horiz", title: "이월·전용 판단기", desc: "이월·전용 요건 즉시 확인", color: "blue" },
+    budget_execution_rate: { icon: "donut_large", title: "예산 집행률",   desc: "집행률·잔액 자동 계산",       color: "blue" },
+    contingency_fund:  { icon: "savings",      title: "예비비 계산",     desc: "예비비 한도 확인",            color: "slate" },
+    budget_category_finder: { icon: "category", title: "예산과목 찾기",  desc: "지출 성격으로 과목 검색",     color: "amber" },
+    subsidy_settlement_checker: { icon: "fact_check", title: "보조금 정산 점검", desc: "정산 누락 항목 확인", color: "violet" },
+    overtime_calculator: { icon: "schedule",   title: "초과근무수당",    desc: "계급별 시간당 단가 계산",     color: "indigo" },
+    salary_calculator: { icon: "payments",     title: "봉급 계산기",     desc: "호봉별 봉급·실수령 추정",     color: "emerald" },
+    allowance_calculator: { icon: "request_quote", title: "수당 계산기", desc: "정근·가족·직급보조비",        color: "emerald" },
+    performance_bonus_calculator: { icon: "emoji_events", title: "성과상여금", desc: "계급별 지급기준액 계산", color: "amber" },
+    annual_leave_calculator: { icon: "event_available", title: "연가일수 계산", desc: "재직기간·임용연도 비례", color: "orange" }
+  }.freeze
+
+  # TOPIC_TOOLS 에 없는 토픽의 기본 도구 — 카테고리별.
+  # 종전에는 모든 토픽이 계약 도구(계약방식·서류)로 떨어져 초과근무·연가·예산 토픽에 계약 도구가 붙었다.
+  CATEGORY_DEFAULT_TOOLS = {
+    "contract" => [ :contract_method, :contract_documents ],
+    "budget"   => [ :budget_transfer_checker, :budget_execution_rate, :contingency_fund ],
+    "expense"  => [ :budget_category_finder, :budget_execution_rate ],
+    "salary"   => [ :overtime_calculator, :allowance_calculator, :salary_calculator, :performance_bonus_calculator ],
+    "subsidy"  => [ :subsidy_settlement_checker ],
+    "travel"   => [ :travel_calculator ],
+    "duty"     => [ :annual_leave_calculator, :overtime_calculator ]
   }.freeze
 
   # 계약 카테고리 토픽을 6개 서브그룹으로 분류
