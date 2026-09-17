@@ -62,6 +62,11 @@ class ChatbotController < ApplicationController
       # P1.6 §21 — "바로 답". 검증된 기존 FAQ 원문에서만 나온다(생성 금지). 없으면 nil.
       @answer = Topic.answer_for(@query, @topics)
 
+      # W-02 — "물품 1500만원"처럼 유형+금액이 함께 오면 금액검색과 같은 규칙집 판정을 결과 위에 붙인다.
+      if (amount = SearchQueryParser.contract_amount_query(@query))
+        @price_answer = calculate_contract_method(amount[:category], amount[:price])&.merge(amount)
+      end
+
       @search_log = log_search(@query, @topics, @audit_cases, @guides, @templates, @tools)
     end
 
