@@ -228,7 +228,12 @@ class ContractS77ScopeTest < ActiveSupport::TestCase
 
   # ── §14 R2 core 동결 ────────────────────────────────────────
   test "R2 판단 엔진·규칙집은 이번 정정으로 바뀌지 않았다" do
-    diff = `git -C #{Rails.root} diff --name-only 93c4fd0 -- app/services/contract_decision config/contract_decision_rules.yml config/contract_thresholds.yml`
+    diff = `git -C #{Rails.root} diff --name-only 93c4fd0 -- app/services/contract_decision config/contract_decision_rules.yml`
     assert_equal "", diff.strip, "R2 core 가 변경됐다:\n#{diff}"
+
+    # contract_thresholds.yml 은 b262a18(2026-09-17 전수감사 P0)에서 lowest_bid_rates(낙찰하한율 안내표)만
+    # 의도적으로 바꿨다 — 판정 엔진·규칙집은 위 기준 그대로다. 그 뒤로는 다시 동결한다.
+    thresholds = `git -C #{Rails.root} diff --name-only b262a18 -- config/contract_thresholds.yml`
+    assert_equal "", thresholds.strip, "contract_thresholds.yml 이 재기준 이후 변경됐다"
   end
 end
