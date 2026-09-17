@@ -4,7 +4,7 @@ module Exam
 
     def index
       @subjects = ExamCurriculum::SUBJECTS
-      @today = Time.zone.today.strftime("%Y-%m-%d")
+      @quiz_subjects = ExamQuestions::EXAM_SUBJECTS
       respond_to do |format|
         format.xml { render layout: false }
       end

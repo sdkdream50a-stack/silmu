@@ -42,7 +42,7 @@ class LlmsController < ApplicationController
 
     cache_key = [
       "llms-summary",
-      "v2", # 하위 토픽 포함(parent_id 필터 제거) — 캐시 버전 bump
+      "v3", # 요약 엔티티 해제(2026-09-17) — 캐시 버전 bump
       Topic.published.maximum(:updated_at)&.to_i,
       Guide.published.maximum(:updated_at)&.to_i,
       AuditCase.published.maximum(:updated_at)&.to_i
@@ -61,7 +61,7 @@ class LlmsController < ApplicationController
     # Topic·AuditCase의 최신 updated_at을 키에 포함해 콘텐츠 갱신 시 자동 무효화
     cache_key = [
       "llms-full",
-      "v3", # 하위 토픽 포함(parent_id 필터 제거) — 캐시 버전 bump
+      "v4", # 엔티티 해제·줄 구조 보존(2026-09-17) — 캐시 버전 bump
       Topic.published.maximum(:updated_at)&.to_i,
       AuditCase.published.maximum(:updated_at)&.to_i
     ].join("/")
@@ -150,7 +150,7 @@ class LlmsController < ApplicationController
 
     out << "## 업무 가이드 (Guides)"
     standalone_guides.each do |g|
-      desc = strip_html(g.summary.presence || g.description.to_s).truncate(120, separator: /\s/)
+      desc = strip_html(g.summary.presence || g.description.to_s, inline: true).truncate(120, separator: /\s/)
       out << "- [#{g.title}](https://silmu.kr/guides/#{g.slug})#{": #{desc}" unless desc.blank?}"
     end
     out << ""
@@ -187,7 +187,7 @@ class LlmsController < ApplicationController
   end
 
   def topic_line(topic)
-    desc = strip_html(topic.summary.to_s).truncate(140, separator: /\s/)
+    desc = strip_html(topic.summary.to_s, inline: true).truncate(140, separator: /\s/)
     base = "- [#{topic.name}](https://silmu.kr/topics/#{topic.slug})"
     desc.blank? ? base : "#{base}: #{desc}"
   end
@@ -252,9 +252,9 @@ class LlmsController < ApplicationController
       out << "URL: https://silmu.kr/audit-cases/#{ac.slug}"
       out << "분야: #{ac.category} | 심각도: #{ac.severity}"
       out << ""
-      out << "**지적사항:** #{strip_html(ac.issue.to_s).truncate(400, separator: /\s/)}" if ac.issue.present?
+      out << "**지적사항:** #{strip_html(ac.issue.to_s, inline: true).truncate(400, separator: /\s/)}" if ac.issue.present?
       out << "**법적근거:** #{ac.legal_basis}" if ac.legal_basis.present?
-      out << "**교훈:** #{strip_html(ac.lesson.to_s).truncate(400, separator: /\s/)}" if ac.lesson.present?
+      out << "**교훈:** #{strip_html(ac.lesson.to_s, inline: true).truncate(400, separator: /\s/)}" if ac.lesson.present?
       out << ""
       out << "---"
       out << ""
@@ -263,7 +263,12 @@ class LlmsController < ApplicationController
     out.join("\n")
   end
 
-  def strip_html(text)
-    ActionController::Base.helpers.strip_tags(text.to_s).gsub(/\s+/, " ").strip
+  # HTML 태그 제거 + 엔티티(&gt; 등) 해제. 기본은 줄 구조(마크다운 제목·표 행)를 보존하고
+  # 공백/탭 연속과 3줄 이상 빈 줄만 접는다. 목록 한 줄에 들어가는 요약은 inline: true로 한 줄화.
+  def strip_html(text, inline: false)
+    plain = CGI.unescapeHTML(ActionController::Base.helpers.strip_tags(text.to_s))
+    return plain.gsub(/\s+/, " ").strip if inline
+
+    plain.gsub(/\r\n?/, "\n").gsub(/[ \t]+/, " ").gsub(/ *\n */, "\n").gsub(/\n{3,}/, "\n\n").strip
   end
 end
