@@ -114,6 +114,65 @@ ROLLBACK_SHA = 배포 직전 시점에 «실제로 운영 중이던» 이미지 
 
 둘 중 하나라도 어긋나면 `bin/deploy` 는 0 이 아닌 코드로 끝난다.
 
+## CONTENT MIGRATION 계약 (G-57 · 2026-09-18 추가)
+
+### 왜 생겼나 — 실제로 일어난 일
+
+2026-09-18 배포에서 content migration 7개를 적용했다. **DB 는 전부 새 값이었다.**
+그런데 운영 화면(Rails origin, cf-cache MISS)이 옛 값을 계속 반환했다.
+복구는 운영 콘솔에서 캐시 키 **784개를 손으로** 지워서 했다.
+
+원인 3개(전부 실측):
+
+| # | 원인 |
+|---|---|
+| ① | content migration 30/40 개가 `update_columns` 로 쓴다 → 모델 `after_commit` 무효화 콜백이 **아예 실행되지 않는다** |
+| ② | 그 콜백이 돌았어도 fragment/curated 버전 증가는 `name`·`summary`·`published`·`category`·`sector` 변경에만 걸려 있다. migration 이 바꾸는 **본문 컬럼은 그 목록에 없다** |
+| ③ | `Guide#expire_cache` 가 지우던 `topic_guide/<slug>` 는 **아무도 쓰지 않는 키**였다. 실제 키는 `topic_guide_ext/<slug>` — 무효화가 허공을 지웠다 |
+
+그리고 AR 객체/목록을 담는 키(`topics/all_published_v2` 등)는 **객체의 속성값을 그대로 저장**하므로
+TTL 이 끝날 때까지 낡은 본문을 서빙한다. 이것이 «DB 는 맞는데 화면은 틀리다» 의 정체다.
+
+### 계약
+
+```
+DB 가 맞다  ≠  운영 콘텐츠가 맞다
+검증 순서 = DB → Rails origin → CDN → 브라우저
+```
+
+콘텐츠 migration 이 포함된 배포는 다음 순서를 **전부** 밟는다. 하나라도 빠지면 배포를 완료로 보지 않는다.
+
+| 단계 | 명령·행위 | 통과 조건 |
+|---|---|---|
+| BACKUP | 적용 직전 본문 덤프 저장 | 파일 존재 + 행 수 기록 |
+| DRY_RUN | `DRY_RUN=1` 로 migration 실행 | changes 수가 **기대값과 일치** |
+| APPLY | migration 실행 | changes == DRY_RUN 값 |
+| SECOND_RUN | 같은 migration 재실행 | **changes == 0** (멱등) |
+| CACHE_INVALIDATION | `bin/rake silmu:content_cache_invalidate` | `deleted` 또는 `bumped` > 0 — **0 이면 abort** |
+| CDN_PURGE | Cloudflare 퍼지 (바뀐 URL) | 응답 성공 |
+| ORIGIN_SMOKE | `curl --resolve silmu.kr:443:<origin IP>` 로 **새 값** 확인 | 새 값 존재 + 옛 값 0건 |
+| CDN_SMOKE | 일반 `curl https://silmu.kr/...` 로 확인 | 새 값 존재 (`cf-cache-status` 기록) |
+
+`bin/rake silmu:content_migrate` 는 **적용이 1건 이상이면 끝에서 `ContentCache.invalidate!` 를 자동 호출**한다
+(적용 0건이면 부르지 않는다 — 안 바뀐 걸 비우면 불필요한 부하다). 위 표의 CACHE_INVALIDATION 단계는
+migration 을 runner 밖에서(콘솔 `load`) 돌렸을 때와 사후 복구용이다.
+
+### 스모크에서 옛 값을 셀 때
+
+부분문자열로 세지 말 것. 2026-09-18 확인 중 `"1,000분의 1"` 이 신값 `"1,000분의 1.25"` 에 걸려
+**오탐**이 났다. 경계를 포함한 패턴(`"1,000분의 1 ("`·`"0.1%/일"`)으로 세고, 존재하지 않는 값으로
+음성 대조를 함께 돌려 probe 자체를 검증한다.
+
+### 상시 강제
+
+`test/services/content_cache_test.rb` 가 두 축을 막는다.
+- 새 캐시 키가 **버전을 태우지도, 등록부에 있지도, 무관하다고 명시되지도** 않으면 CI 가 실패한다.
+- 등록부가 **아무도 쓰지 않는 키**를 지우면(허공 무효화) CI 가 실패한다.
+
+뮤테이션 실측 3/3 KILLED — 미버전 키 추가 · `topic_guide/` 허공 무효화 복원 ·
+runner 의 무효화 호출 무력화. (세 번째는 처음에 **생존**했다: 검사가 문자열 존재만 봐서
+별도 태스크의 같은 문자열이 만족시켰다. 태스크 본문 범위와 호출 순서까지 보도록 고쳐 죽였다.)
+
 ## 검증 (2026-09-07)
 
 - 합성 fixture 회귀 **13 runs / 44 assertions / 0F** — `test/scripts/deploy_preflight_test.rb`
