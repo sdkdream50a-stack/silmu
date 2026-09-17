@@ -39,6 +39,14 @@ class InterpretationRepliesBatch2Test < ActiveSupport::TestCase
     assert_includes reply("private-contract-justification"), "시행령 제26조제3항"
   end
 
+  test "EDGE: 징계 출석통지는 개최일 3일 전 도달, 변상판정 재심의는 집행정지 효력이 없다" do
+    capture_io { load MIGRATION }
+    assert_includes reply("disciplinary-action"), "개최일 3일 전에 도달"
+    assert_not_includes reply("disciplinary-action"), "출석일 5일 전까지"
+    assert_includes reply("accounting-officers"), "집행정지의 효력이 없고(제36조제3항)"
+    assert_not_includes reply("accounting-officers"), "집행정지 신청을 함께 하여야 합니다"
+  end
+
   test "UPPER_BOUND: 두 번째 실행은 아무것도 바꾸지 않는다" do
     capture_io { load MIGRATION }
     out, = capture_io { load MIGRATION }
