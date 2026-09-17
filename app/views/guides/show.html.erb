@@ -346,16 +346,17 @@
             </section>
             <% end %>
 
-            <%# ── 실제 감사 지적 사례 ── %>
+            <%# ── 감사 지적 유형 예시 (원문 사례 아님 — 2026-09-17 G-37: 가이드 real_case 는 출처가 없다) ── %>
             <% if @guide.sections&.dig(:real_case).present? %>
             <section class="mb-10">
               <div class="bg-orange-50 border border-orange-200 rounded-2xl overflow-hidden">
                 <div class="bg-orange-100 px-5 py-3 flex items-center gap-2 border-b border-orange-200">
                   <span class="material-symbols-outlined text-orange-600">gavel</span>
-                  <span class="text-sm font-bold text-orange-800">실제 감사 지적 사례</span>
+                  <span class="text-sm font-bold text-orange-800">감사 지적 유형 예시</span>
                 </div>
                 <div class="p-5">
                   <p class="text-slate-700 text-sm leading-relaxed whitespace-pre-line"><%= @guide.sections[:real_case] %></p>
+                  <p class="text-xs text-slate-500 mt-3">특정 기관의 실제 감사결과 원문이 아니라 자주 지적되는 유형을 설명하기 위한 예시입니다.</p>
                 </div>
               </div>
             </section>
