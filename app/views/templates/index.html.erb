@@ -97,12 +97,12 @@
               <% end %>
             </div>
 
-            <div class="flex gap-2 mt-4">
-              <%= link_to template_path(template[:id]), class: "flex-1 text-center py-2.5 border-2 border-gray-200 rounded-xl text-sm font-medium text-slate-700 hover:bg-surface-50 hover:border-slate-300 transition-all" do %>
-                미리보기
-              <% end %>
-              <%= link_to template_path(template[:id]), class: "flex-1 py-2.5 btn btn-primary btn-sm text-center" do %>
-                다운로드
+            <%# P0-3 — «미리보기»·«다운로드» 두 버튼이 **같은 URL**(template_path)로 가고 있었다.
+                «다운로드» 를 눌러도 상세 페이지로 이동할 뿐 파일은 내려오지 않는다(파일 자체가 없다).
+                약속과 실체가 다른 라벨을 지우고 실제로 하는 일 하나만 남긴다. %>
+            <div class="mt-4">
+              <%= link_to template_path(template[:id]), class: "block w-full py-2.5 btn btn-primary btn-sm text-center" do %>
+                미리보기·인쇄
               <% end %>
             </div>
           </div>

@@ -226,43 +226,47 @@
           <h1 class="text-2xl font-bold text-gray-900 mb-2"><%= @template[:title] %></h1>
           <p class="text-gray-600 mb-6"><%= @template[:desc] %></p>
 
+          <%# «최종 수정일 2024.01.15» 를 삭제했다 — 26종 전부에 같은 날짜가 하드코딩돼 있었고
+              실제 갱신일이 어디에도 없다. 없는 날짜를 만들어 보여주지 않는다(P0-3 · R4). %>
           <div class="space-y-3 mb-6 text-sm">
-            <div class="flex justify-between">
-              <span class="text-gray-500">최종 수정일</span>
-              <span class="text-gray-900 font-medium">2024.01.15</span>
-            </div>
             <div class="flex justify-between">
               <span class="text-gray-500">파일 형식</span>
               <span class="text-gray-900 font-medium"><%= @template[:formats].join(", ") %></span>
             </div>
           </div>
 
-          <!-- 다운로드 버튼들 -->
-          <div class="space-y-2 mb-6">
-            <% @template[:formats].each_with_index do |format, index| %>
-              <% if index == 0 %>
-                <button class="w-full py-3 bg-slate-600 text-white rounded-lg font-medium hover:bg-slate-700 transition-colors flex items-center justify-center gap-2">
-                  <span class="material-symbols-outlined text-xl">download</span>
-                  <%= format %> 다운로드
-                </button>
-              <% else %>
-                <button class="w-full py-3 border border-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-2">
-                  <span class="material-symbols-outlined text-xl"><%= format == 'PDF' ? 'picture_as_pdf' : 'description' %></span>
-                  <%= format %> 다운로드
-                </button>
-              <% end %>
-            <% end %>
+          <%#
+            P0-3 (2026-09-24 연수 준비 · LECTURE_READINESS_AUDIT) — 다운로드 버튼을 되살리지 않았다.
+
+            실측 2026-09-18: 이 repo 에 .hwp/.hwpx/.xlsx/.docx/.pdf 파일이 **0개**다.
+            templates 는 ActiveStorage 첨부도 없고(TEMPLATES 는 동결 Ruby 배열) 라우트도
+            index/show 뿐이라 다운로드 엔드포인트 자체가 없다. 그런데 26종 상세에
+            «HWP 다운로드»·«PDF 다운로드» 버튼이 핸들러 없이 그려져 있었다 —
+            누르면 아무 일도 일어나지 않는다.
+
+            파일이 없는데 버튼만 동작시키면 «가짜 다운로드 성공» 이 된다. 그래서
+            제공하지 못한다는 사실을 그대로 쓰고, 실제로 되는 것(화면 인쇄)만 남긴다.
+            파일을 확보하면 이 블록을 다운로드 링크로 바꾸고 회귀 테스트를 같이 고친다.
+          %>
+          <div class="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4" role="note"
+               aria-label="서식 파일 제공 상태">
+            <div class="flex items-start gap-2">
+              <span class="material-symbols-outlined text-amber-600 text-xl" aria-hidden="true">info</span>
+              <div class="text-sm text-amber-900 leading-relaxed">
+                <p class="font-semibold mb-1">서식 파일(<%= @template[:formats].join("·") %>) 다운로드는 준비 중입니다</p>
+                <p class="text-xs">
+                  아래 <strong>미리보기 화면</strong>을 그대로 인쇄하거나, 화면 내용을 보고 기관 표준 서식에 작성하세요.
+                </p>
+              </div>
+            </div>
           </div>
 
-          <!-- 부가 기능 -->
+          <!-- 부가 기능 — 실제로 동작하는 것만 둔다 -->
           <div class="flex gap-2 mb-6">
-            <button class="flex-1 py-2 border border-gray-200 text-gray-600 rounded-lg text-sm hover:bg-gray-50 transition-colors flex items-center justify-center gap-1">
-              <span class="material-symbols-outlined text-lg">bookmark_border</span>
-              저장
-            </button>
-            <button class="flex-1 py-2 border border-gray-200 text-gray-600 rounded-lg text-sm hover:bg-gray-50 transition-colors flex items-center justify-center gap-1">
-              <span class="material-symbols-outlined text-lg">print</span>
-              인쇄
+            <button type="button" onclick="window.print()"
+                    class="flex-1 py-2 border border-gray-200 text-gray-600 rounded-lg text-sm hover:bg-gray-50 transition-colors flex items-center justify-center gap-1">
+              <span class="material-symbols-outlined text-lg" aria-hidden="true">print</span>
+              미리보기 인쇄
             </button>
           </div>
 
