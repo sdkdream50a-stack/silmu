@@ -184,7 +184,9 @@
     <!-- 주요 3 도구 -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-5">
       <% [
-        [contract_method_path,      "account_tree", "계약방식 결정",    "예산과 품목만 입력하면 법령에 맞는 최적의 계약 방식을 <strong class='text-editorial-navy'>인공지능이 추천</strong>해 드립니다."],
+        # P1-3 (2026-09-18) — «인공지능이 추천» 은 사실이 아니었다. 이 도구는 ContractMethodService 가
+        #   config/contract_decision_rules.yml 의 조문 규칙과 입력 조건을 대조하는 규칙 기반 판정이다(AI 호출 0).
+        [contract_method_path,      "account_tree", "계약방식 결정",    "예산과 품목만 입력하면 입력 조건을 <strong class='text-editorial-navy'>지방계약법령 기준표와 대조</strong>해 계약 방식을 판정합니다."],
         [contract_guarantee_path,   "percent",      "계약보증금 계산",  "계약금액만 입력하면 <strong class='text-editorial-navy'>계약·이행·하자·선금 보증금</strong>을 법령 기준에 맞게 자동 계산합니다."],
         [estimated_price_path,      "payments",     "예정가격 산정",    "시장조사 가격을 입력하면 <strong class='text-editorial-navy'>복수예비가격 85~100%</strong> 범위의 적정 예정가격을 즉시 산출합니다."]
       ].each do |path, icon, title, desc| %>
