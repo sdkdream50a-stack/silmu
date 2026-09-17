@@ -168,6 +168,40 @@ class SearchQueryParser
     kept.empty? ? all : kept
   end
 
+  # 금액+계약유형 질의 인식 (업무흐름 감사 13 W-02) — "물품 1500만원", "공사 1억5천만원".
+  # 유형어와 단위 있는 금액이 **둘 다** 있을 때만 판정한다. "2026년 공사"·"수의계약 1500만원"은 nil.
+  CONTRACT_TYPE_WORDS = { "물품" => "goods", "용역" => "service", "공사" => "construction" }.freeze
+  KOREAN_AMOUNT = /(?:(\d+(?:\.\d+)?)\s*억)?\s*(?:(?:(\d+)\s*천)?\s*(?:(\d+)\s*백)?\s*(\d+)?\s*만)?\s*원?/
+  PLAIN_WON = /(\d{1,3}(?:,\d{3})+|\d{5,})\s*원/
+
+  def self.contract_amount_query(query)
+    text = query.to_s
+    types = CONTRACT_TYPE_WORDS.select { |word, _| text.include?(word) }.values.uniq
+    return nil unless types.size == 1
+
+    price = korean_amount(text)
+    price && price.positive? ? { category: types.first, price: price } : nil
+  end
+
+  def self.korean_amount(text)
+    if (m = text.match(PLAIN_WON))
+      return m[1].delete(",").to_i
+    end
+
+    text.scan(/[\d.,천백만억원\s]+/).each do |chunk|
+      next unless chunk.match?(/[억만]/)
+
+      m = chunk.strip.delete(",").match(KOREAN_AMOUNT)
+      next unless m && m[0].match?(/[억만]/)
+
+      eok = (m[1].to_f * 100_000_000).round
+      man = m[2].to_i * 1000 + m[3].to_i * 100 + m[4].to_i
+      total = eok + man * 10_000
+      return total if total.positive?
+    end
+    nil
+  end
+
   def self.tokens(query)
     return [] if query.blank?
 
@@ -232,5 +266,5 @@ class SearchQueryParser
     raw.strip.gsub(/[?!.,"'`~;:]+\z/, "")
   end
 
-  private_class_method :variants_for, :strip_particle, :strip_ending, :strip_suffix, :normalize, :generic_token?
+  private_class_method :korean_amount, :variants_for, :strip_particle, :strip_ending, :strip_suffix, :normalize, :generic_token?
 end
