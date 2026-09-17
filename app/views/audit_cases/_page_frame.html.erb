@@ -7,7 +7,7 @@
 
   <% if @has_more %>
     <%= turbo_frame_tag "audit-cases-page",
-        src: audit_cases_path(page: @next_page, category: @category, severity: @severity, q: @search),
+        src: audit_cases_path(page: @next_page, category: @category, severity: @severity, q: @search, sector: @sector),
         loading: :lazy do %>
       <%= render "next_page_loader" %>
     <% end %>

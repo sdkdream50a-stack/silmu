@@ -50,6 +50,7 @@
       <%= form_with url: audit_cases_path, method: :get, data: { turbo_action: "replace" }, id: "search-form" do |f| %>
         <%= f.hidden_field :category, value: @category %>
         <%= f.hidden_field :severity, value: @severity %>
+        <%= f.hidden_field :sector, value: @sector %>
         <div class="relative max-w-md">
           <%= f.text_field :q,
               value: @search,
@@ -66,23 +67,31 @@
     <!-- 카테고리 탭 & 심각도 필터 -->
     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
       <div class="flex flex-wrap gap-2" id="category-tabs">
-        <%= link_to "전체", audit_cases_path(severity: @severity, q: @search),
+        <%= link_to "전체", audit_cases_path(severity: @severity, q: @search, sector: @sector),
             class: "tab-btn px-5 py-2.5 rounded-xl text-sm font-semibold transition-all #{@category.blank? ? 'bg-[#6B2A2A] text-white shadow-md' : 'bg-surface-100 text-slate-600 hover:bg-surface-200'}" %>
         <% @categories.each do |cat| %>
-          <%= link_to cat, audit_cases_path(category: cat, severity: @severity, q: @search),
+          <%= link_to cat, audit_cases_path(category: cat, severity: @severity, q: @search, sector: @sector),
               class: "tab-btn px-5 py-2.5 rounded-xl text-sm font-medium transition-all #{@category == cat ? 'bg-[#6B2A2A] text-white shadow-md' : 'bg-surface-100 text-slate-600 hover:bg-surface-200'}" %>
         <% end %>
       </div>
 
+      <!-- 기관 필터 — 학교·교육청 사례만 -->
+      <div class="flex flex-wrap gap-2 mt-3" id="sector-tabs">
+        <%= link_to "모든 기관", audit_cases_path(category: @category, severity: @severity, q: @search),
+            class: "px-4 py-2 rounded-lg text-xs font-semibold transition-all #{@sector.blank? ? 'bg-slate-700 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}" %>
+        <%= link_to "학교·교육청 사례", audit_cases_path(category: @category, severity: @severity, q: @search, sector: "edu"),
+            class: "px-4 py-2 rounded-lg text-xs font-semibold transition-all #{@sector == 'edu' ? 'bg-slate-700 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}" %>
+      </div>
+
       <!-- 심각도 필터 — 모바일에서만 표시 (데스크탑은 사이드바 필터 사용) -->
       <div class="flex gap-2 lg:hidden">
-        <%= link_to "전체", audit_cases_path(category: @category, q: @search),
+        <%= link_to "전체", audit_cases_path(category: @category, q: @search, sector: @sector),
             class: "px-4 py-2 rounded-lg text-xs font-semibold transition-all #{@severity.blank? ? 'bg-gray-200 text-gray-800' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}" %>
-        <%= link_to "중대", audit_cases_path(category: @category, severity: "중대", q: @search),
+        <%= link_to "중대", audit_cases_path(category: @category, severity: "중대", q: @search, sector: @sector),
             class: "px-4 py-2 rounded-lg text-xs font-semibold transition-all #{@severity == '중대' ? 'bg-red-600 text-white' : 'bg-red-50 text-red-700 hover:bg-red-100'}" %>
-        <%= link_to "보통", audit_cases_path(category: @category, severity: "보통", q: @search),
+        <%= link_to "보통", audit_cases_path(category: @category, severity: "보통", q: @search, sector: @sector),
             class: "px-4 py-2 rounded-lg text-xs font-semibold transition-all #{@severity == '보통' ? 'bg-orange-500 text-white' : 'bg-orange-50 text-orange-700 hover:bg-orange-100'}" %>
-        <%= link_to "경미", audit_cases_path(category: @category, severity: "경미", q: @search),
+        <%= link_to "경미", audit_cases_path(category: @category, severity: "경미", q: @search, sector: @sector),
             class: "px-4 py-2 rounded-lg text-xs font-semibold transition-all #{@severity == '경미' ? 'bg-amber-500 text-white' : 'bg-amber-50 text-amber-700 hover:bg-amber-100'}" %>
       </div>
     </div>
@@ -120,14 +129,14 @@
           <%# 다음 페이지 Turbo Frame — 뷰포트 진입 시 자동 로드 (lazy) %>
           <% if @has_more %>
             <%= turbo_frame_tag "audit-cases-page",
-                src: audit_cases_path(page: @next_page, category: @category, severity: @severity, q: @search),
+                src: audit_cases_path(page: @next_page, category: @category, severity: @severity, q: @search, sector: @sector),
                 loading: :lazy do %>
               <%= render "next_page_loader" %>
             <% end %>
             <%# SEO: 크롤러용 페이지네이션 링크 (필터 없는 기본 목록만 — 감사사례 257건 전체 크롤 도달성). JS 사용자는 위 lazy frame으로 처리 %>
             <% if @category.blank? && @severity.blank? && @search.blank? %>
               <noscript>
-                <a rel="next" href="<%= audit_cases_path(page: @next_page) %>">다음 감사사례 (페이지 <%= @next_page %>)</a>
+                <a rel="next" href="<%= audit_cases_path(page: @next_page, sector: @sector) %>">다음 감사사례 (페이지 <%= @next_page %>)</a>
               </noscript>
             <% end %>
           <% end %>
@@ -165,7 +174,7 @@
                 ["경미", "경미",       "주의·개선권고 등",    "hover:bg-amber-50",  "bg-amber-500", "group-hover:text-amber-700"]
               ].each do |sev_val, label, desc, hover_bg, dot_bg, hover_text| %>
                 <% active = sev_val.nil? ? @severity.blank? : @severity == sev_val %>
-                <% path = sev_val ? audit_cases_path(category: @category, severity: sev_val, q: @search) : audit_cases_path(category: @category, q: @search) %>
+                <% path = sev_val ? audit_cases_path(category: @category, severity: sev_val, q: @search, sector: @sector) : audit_cases_path(category: @category, q: @search, sector: @sector) %>
                 <%= link_to path, class: "w-full flex items-center gap-3 p-3 rounded-xl #{active ? 'bg-slate-100' : hover_bg} transition-colors group text-left" do %>
                   <span class="w-3 h-3 rounded-full <%= dot_bg %>"></span>
                   <div>

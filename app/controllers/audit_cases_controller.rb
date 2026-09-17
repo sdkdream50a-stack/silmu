@@ -3,6 +3,8 @@ class AuditCasesController < ApplicationController
   def index
     @category = params[:category]
     @severity = params[:severity]
+    # 학교·교육청 사례만 보기 (업무흐름 감사 13 — 학교 사용자 맥락이 홈에서 끊기던 결함). 허용값은 edu 하나.
+    @sector   = params[:sector] == "edu" ? "edu" : nil
     @search   = params[:q].to_s.strip
     @page = [ (params[:page].to_i), 1 ].max
 
@@ -18,6 +20,7 @@ class AuditCasesController < ApplicationController
     filtered = all_cases
     filtered = filtered.select { |ac| ac.category == @category } if @category.present?
     filtered = filtered.select { |ac| ac.severity == @severity } if @severity.present?
+    filtered = filtered.select { |ac| ac.sector == @sector } if @sector
     if @search.present?
       q = @search.downcase
       filtered = filtered.select { |ac| ac.title.downcase.include?(q) || ac.issue.downcase.include?(q) }
