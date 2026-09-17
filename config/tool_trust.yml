@@ -57,3 +57,44 @@ tools:
     basis: "공무원 여비 지급 기준"
     standard: legal_standards
     laws: "공무원 여비 규정, 지방공무원 여비 규정"
+
+  # ── 예산 도구 3종: 적용기관 고지 (P0-2 · LECTURE_READINESS_AUDIT R1)
+  #
+  # 이 세 도구는 **지방자치단체** 기준으로 만들어졌다. 학교(교육행정) 사용자가
+  # 학교회계 기준으로 오해하면 과목·회계연도·심의절차가 전부 틀린다.
+  # jurisdiction 블록은 그 사실을 계산 **전에** 화면에 세운다(shared/_jurisdiction_notice).
+  #
+  # ⚠️ standard_year 는 모르면 UNVERIFIED 로 둔다. 없는 기준연도를 만들지 않는다.
+  #    학교회계 쪽 근거 체계(시도교육청 학교회계 규칙 등)는 원문 미확보라 이름을 단정하지 않는다.
+  budget-category-finder:
+    basis: "지방자치단체 세출예산 과목(목·세목) 분류"
+    laws: "지방재정법"
+    jurisdiction:
+      applies_to: "지방자치단체 세출예산 편성목·통계목 분류"
+      agency: "지방자치단체(일반회계·특별회계)"
+      guideline: "지방재정법 제41조(예산의 과목 구분) · 행정안전부 「지방자치단체 예산편성 운영기준」·「지방자치단체 세출예산 집행기준」(매년 개정)"
+      standard_year: UNVERIFIED
+      school_differs: "학교회계는 세출 과목 체계가 다릅니다 — 이 도구가 추천하는 편성목(201·410~430 등)은 학교회계 과목이 아닙니다."
+      school_path: "/topics/school-budget-compilation"
+      school_path_label: "학교회계 예산편성 절차"
+  budget-execution-rate:
+    basis: "집행액 ÷ 예산액 (산식) — 지방자치단체 회계연도 1.1~12.31 가정"
+    jurisdiction:
+      applies_to: "세출예산 집행률 계산 · 균등 배분 참고선 대비 비교"
+      agency: "지방자치단체(일반회계·특별회계)"
+      guideline: "집행률 산식은 산술이며 법정 기준이 아닙니다. 지방재정법에는 분기·연도말 집행 목표율 규정이 없습니다(법령 전문 «집행률»·«목표율» 0건, 2026-09-18 대조)."
+      standard_year: UNVERIFIED
+      school_differs: "학교회계 회계연도는 3월 1일~다음 해 2월 말일입니다. 아래 «회계연도 시작월»을 3월로 바꿔야 경과 월 수가 맞습니다."
+      school_path: "/topics/school-budget-compilation"
+      school_path_label: "학교회계 예산편성 절차"
+  budget-transfer-checker:
+    basis: "지방자치단체 예산 이월·전용 요건"
+    laws: "지방재정법, 국가재정법"
+    jurisdiction:
+      applies_to: "세출예산 이월(명시·사고·계속비)·전용 요건 판단"
+      agency: "지방자치단체(지방재정법) · 국가기관(국가재정법)"
+      guideline: "지방재정법 제42조·제45조·제49조·제50조 · 국가재정법 제23조·제24조·제46조·제47조·제48조"
+      standard_year: UNVERIFIED
+      school_differs: "학교회계 이월·전용은 학교운영위원회 심의 등 절차가 달라 이 판단기의 «의회 심의» 요건이 그대로 적용되지 않습니다."
+      school_path: "/topics/school-budget-compilation"
+      school_path_label: "학교회계 예산편성 절차"
