@@ -881,9 +881,9 @@ document.addEventListener('click', function(e) {
 
               <div class="bg-surface-100 rounded-2xl p-4 space-y-3">
                 <% [
-                  { title: "국가법령정보센터", desc: "지방공무원 여비 규정 전문", icon: "balance", color: "indigo", url: "https://www.law.go.kr/법령/지방공무원여비규정" },
+                  { title: "국가법령정보센터", desc: "공무원 여비 규정 전문 (지방공무원은 소속 자치단체 여비 조례 확인)", icon: "balance", color: "indigo", url: "https://www.law.go.kr/법령/공무원여비규정" },
                   { title: "행정안전부", desc: "공무원 여비 업무 처리 지침", icon: "apartment", color: "emerald", url: "https://www.mois.go.kr" },
-                  { title: "기획재정부", desc: "공무원 국외여비 지급 규정", icon: "public", color: "blue", url: "https://www.moef.go.kr" }
+                  { title: "국가법령정보센터 별표", desc: "공무원 여비 규정 별표 2(국내)·별표 4(국외 여비 지급표)", icon: "public", color: "blue", url: "https://www.law.go.kr/법령/공무원여비규정" }
                 ].each do |link| %>
                   <a href="<%= link[:url] %>" target="_blank" rel="noopener"
                      class="flex items-center gap-4 p-4 bg-white rounded-xl border border-gray-100 hover:border-<%= link[:color] %>-300 hover:shadow-medium transition-all duration-200">
