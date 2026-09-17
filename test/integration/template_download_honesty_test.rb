@@ -16,13 +16,38 @@ class TemplateDownloadHonestyTest < ActionDispatch::IntegrationTest
   # 다운로드를 실제로 수행할 수 있는 표식 — 하나라도 있으면 «동작하는 버튼» 이다.
   ACTIONABLE = /onclick=|href=|data-(action|turbo-)|form action=/
 
+  # 서식 파일이 놓일 수 있는 위치만 본다.
+  #   ⚠️ 처음에 Rails.root 전체를 glob 했다가 **CI 에서만 실패**했다 — CI 는 gem 을
+  #      repo 안 `vendor/bundle` 에 설치하므로 combine_pdf·prawn 의 fixture PDF 가 걸렸다.
+  #      로컬은 gem 이 ~/.rbenv 에 있어 통과했다. 검사 범위를 서식이 실제로 서빙될 수 있는
+  #      경로로 좁힌다 — 「내 probe 가 보는 우주를 먼저 확인한다」.
+  ASSET_ROOTS = %w[public app/assets storage db/files lib/assets].freeze
+  FORM_EXTENSIONS = %w[hwp hwpx xlsx docx pdf].freeze
+
   test "서식 파일이 repo 에 실제로 없다는 전제가 유지된다" do
     # 전제가 바뀌면(파일이 추가되면) 이 테스트가 먼저 알려서, 아래 단정을 다시 짜게 한다.
-    patterns = %w[hwp hwpx xlsx docx pdf].map { |ext| Rails.root.join("**", "*.#{ext}").to_s }
-    found = patterns.flat_map { |p| Dir.glob(p) }
-                    .reject { |f| f.include?("/node_modules/") || f.include?("/tmp/") }
+    found = ASSET_ROOTS.flat_map do |root|
+      FORM_EXTENSIONS.flat_map { |ext| Dir.glob(Rails.root.join(root, "**", "*.#{ext}").to_s) }
+    end
+    found = found.reject { |f| f.include?("/node_modules/") || f.include?("/vendor/") }
+
     assert_empty found,
                  "서식 파일이 생겼다(#{found.first(3).inspect}) — 이제 «준비 중» 대신 실제 다운로드를 제공하고 이 테스트를 다시 짜라"
+  end
+
+  # 위 검사가 «아무 곳도 보지 않아» 통과하는 것을 막는다(양성 대조).
+  test "전제 검사가 실제로 파일을 볼 수 있는 범위를 본다" do
+    probe = Rails.root.join("public", "__form_probe__.pdf")
+    File.write(probe, "%PDF-1.4 probe")
+    begin
+      found = ASSET_ROOTS.flat_map do |root|
+        FORM_EXTENSIONS.flat_map { |ext| Dir.glob(Rails.root.join(root, "**", "*.#{ext}").to_s) }
+      end
+      assert_includes found, probe.to_s,
+                      "심어 둔 파일을 못 찾는다 — 전제 검사가 빈 우주를 보고 있다"
+    ensure
+      FileUtils.rm_f(probe)
+    end
   end
 
   test "26종 상세 전수 — 핸들러 없는 «다운로드» 버튼이 0개다" do
