@@ -946,6 +946,14 @@
             <span class="label">추정가격</span>
             <span class="value" id="info-price"></span>
           </div>
+          <div class="info-row" id="info-agency-row" style="display: none;">
+            <span class="label">기관 유형</span>
+            <span class="value" id="info-agency"></span>
+          </div>
+          <div class="info-row" id="info-counterparty-row" style="display: none;">
+            <span class="label">계약상대자</span>
+            <span class="value" id="info-counterparty"></span>
+          </div>
           <div class="info-row" id="info-special-row" style="display: none;">
             <span class="label">특례 적용</span>
             <span class="value" id="info-special"></span>
@@ -1531,6 +1539,7 @@
     const method = result.result.method;
     const detail = result.result.method_detail;
     let summaryText = '';
+    const who = [result.result.agency_scope_label, result.result.counterparty_label].filter(Boolean).join(' · ');
 
     // 판정이 확정이 아닐 때 "진행할 수 있습니다"라고 쓰지 않는다.
     const dstate = result.decision && result.decision.state;
@@ -1544,7 +1553,7 @@
       summaryText = `${typeName} ${price}원은 지금 입력만으로 판단할 수 없습니다. 위 "아직 확인되지 않은 것"을 채워 주세요.`;
     }
 
-    document.getElementById('result-summary-text').textContent = summaryText;
+    document.getElementById('result-summary-text').textContent = who ? `[${who}] ${summaryText}` : summaryText;
 
     // note 표시 (핵심 실무 정보)
     const noteEl = document.getElementById('result-summary-note');
@@ -1558,6 +1567,10 @@
     // 기본 정보
     document.getElementById('info-type').textContent = result.contract_type.name;
     document.getElementById('info-price').textContent = result.formatted_price + '원';
+    [['info-agency', result.result.agency_scope_label], ['info-counterparty', result.result.counterparty_label]].forEach(([id, label]) => {
+      document.getElementById(id + '-row').style.display = label ? 'flex' : 'none';
+      document.getElementById(id).textContent = label || '';
+    });
 
     // 특례 적용
     const specialRow = document.getElementById('info-special-row');
@@ -1626,6 +1639,12 @@
     // 필요 서류 (안전한 DOM 조작)
     const docList = document.getElementById('doc-list');
     docList.innerHTML = '';
+    if (result.result.documents.length === 0) {
+      const empty = document.createElement('div');
+      empty.className = 'doc-item';
+      empty.textContent = '판정이 확정되면 필요 서류가 표시됩니다.';
+      docList.appendChild(empty);
+    }
     result.result.documents.forEach(doc => {
       const item = document.createElement('div');
       item.className = 'doc-item';

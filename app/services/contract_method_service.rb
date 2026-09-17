@@ -31,6 +31,14 @@ class ContractMethodService
   # 관련 법령 정보
   RELATED_LAWS = CONFIG["related_laws"].freeze
 
+  # 결론이 난 판정 상태 — 이 밖(정보 부족·검토 필요·범위 밖)에는 절차 안내를 내지 않는다 (전수감사 G-51)
+  CONCLUSIVE_STATES = %w[POSSIBLE POSSIBLE_WITH_CONDITIONS COMPETITIVE_PROCEDURE_REQUIRED].freeze
+  UNDETERMINED_WARNING = {
+    level: "info",
+    title: "판정 전에는 절차·서류를 안내하지 않습니다",
+    message: "위 «아직 확인되지 않은 것»을 입력하면 수의계약 가능 여부와 필요 서류·주의사항이 함께 표시됩니다."
+  }.freeze
+
   class << self
     # 계약방식 결정
     #
@@ -91,6 +99,11 @@ class ContractMethodService
         display = type_info[:thresholds].find { |t| t[:method] == "입찰" }.merge(note: nil)
       end
 
+      # 판정이 확정되지 않은 상태(정보 부족·검토 필요·범위 밖)에서 금액 구간표의 수의계약 서류·경고·팁을 내면
+      # 사용자는 "수의계약으로 진행하면 된다"로 읽는다(전수감사 G-51). 결론이 없으면 절차 안내도 내지 않는다.
+      conclusive = CONCLUSIVE_STATES.include?(decision[:state])
+      display = { method: "", documents: [], note: nil, special_condition: nil, special_applied: false, basis: nil } unless conclusive
+
       {
         success: true,
         decision: decision,
@@ -109,14 +122,16 @@ class ContractMethodService
           basis: basis_for(decision, display),
           note: display[:note],
           special_condition: display[:special_condition],
-          documents: display[:documents],
-          special_applied: display[:special_applied] || false
+          documents: documents_for(decision, display[:documents]),
+          special_applied: display[:special_applied] || false,
+          agency_scope_label: ContractDecision::RuleSet.current.agency_scope(agency_scope)&.dig("label"),
+          counterparty_label: ContractDecision::RuleSet.current.counterparty(decision.dig(:input, :counterparty_type))&.dig("label")
         },
         special_enterprise: special_info,
-        lowest_bid_rate: calculate_lowest_bid_rate(type_sym, price, display[:method]),
+        lowest_bid_rate: conclusive ? calculate_lowest_bid_rate(type_sym, price, display[:method]) : nil,
         related_laws: RELATED_LAWS,
-        warnings: generate_warnings(type_sym, price, display[:method]),
-        tips: generate_tips(type_sym, price, display[:method])
+        warnings: conclusive ? generate_warnings(type_sym, price, display[:method]) : [ UNDETERMINED_WARNING ],
+        tips: conclusive ? generate_tips(type_sym, price, display[:method]) : []
       }
     end
 
@@ -192,6 +207,20 @@ class ContractMethodService
         "경쟁입찰"
       else
         decision[:headline]
+      end
+    end
+
+    # 서류 목록의 견적 문구는 판정의 견적 요건(시행령 §30①)을 따른다. 구간표는 일반 업체 기준이라
+    # 1인 견적이 허용되는 상대방에게도 "견적서(2인이상)"를 내던 모순이 있었다(전수감사 G-51).
+    def documents_for(decision, documents)
+      docs = Array(documents)
+      case decision.dig(:quotation, :requirement)
+      when "SINGLE_ALLOWED"
+        docs.map { |d| d == "견적서(2인이상)" ? "견적서(1인 견적 가능)" : d } - [ "견적비교표" ]
+      when "TWO_OR_MORE"
+        docs.map { |d| d == "견적서" ? "견적서(2인이상)" : d }
+      else
+        docs
       end
     end
 
