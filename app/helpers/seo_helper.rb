@@ -32,6 +32,8 @@ module SeoHelper
         [ "지방재정법", "지방자치단체 예산편성 운영기준", "지방자치단체 보조금 관리에 관한 법률", "지방자치단체를 당사자로 하는 계약에 관한 법률" ]
       when "participatory-budget"
         [ "지방재정법 제39조", "지방재정법 시행령 제46조", "지방자치법" ]
+      when "school-budget-compilation" # G-28 — 학교회계는 지방재정법이 아니라 초·중등교육법 제30조의2·3
+        [ "초ㆍ중등교육법", "국립유치원 및 초ㆍ중등학교 회계규칙" ]
       else
         case topic&.category
         when "budget"   then [ "지방재정법", "지방재정법 시행령" ]
@@ -66,6 +68,7 @@ module SeoHelper
     when "local-subsidy-grant" then { law: "지방자치단체 보조금 관리에 관한 법률", decree: "지방보조금법 시행령", rule: "보조금 관리 조례·지방재정법" }
     when "local-festival-event" then { law: "지방재정법", decree: "예산편성 운영기준(훈령)", rule: "지방보조금법·지방계약법" }
     when "participatory-budget" then { law: "지방재정법 제39조", decree: "지방재정법 시행령 제46조", rule: "주민참여예산 운영 조례·지방자치법" }
+    when "school-budget-compilation" then { law: "초·중등교육법 제30조의2·3", decree: "시행령(학교발전기금)", rule: "학교회계 규칙(교육부령·시도 교육규칙)" }
     when "travel-expense"      then { law: "지방공무원법", decree: "지방공무원 여비 규정", rule: "여비 규정 별표" }
     when "budget-carryover"    then { law: "지방재정법", decree: "지방재정법 시행령", rule: "예산편성 기준" }
     when "year-end-settlement" then { law: "소득세법", decree: "소득세법 시행령", rule: "연말정산 지침" }
