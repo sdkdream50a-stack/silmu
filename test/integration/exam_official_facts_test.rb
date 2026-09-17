@@ -17,7 +17,8 @@ class ExamOfficialFactsTest < ActionDispatch::IntegrationTest
     "ppi.re.kr",
     "pps.go.kr/kor/bbs/list.do?bbsSn=1044",
     "기획재정부·조달청",
-    "2026년 신설 예정으로"
+    "2026년 신설 예정으로",
+    "PBT"
   ].freeze
 
   test "exam-info shows the announced schedule and official pass rule, not stale claims" do
@@ -42,6 +43,15 @@ class ExamOfficialFactsTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_includes response.body, "매 과목 40점 이상, 평균 60점 이상"
     assert_not_includes response.body, "48개 이상 맞추면"
+    assert_not_includes response.body, "PBT", "실기 답안 방식(PBT)은 공식 확인 전 단정 금지"
+  end
+
+  test "practical page does not assert PBT answer format" do
+    host! "exam.silmu.kr"
+    get "/practical"
+    assert_response :success
+    assert_includes response.body, "필답형 150분"
+    assert_not_includes response.body, "PBT"
   end
 
   test "exam home hero carries every exam date for client-side D-day selection" do
