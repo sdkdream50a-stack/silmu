@@ -64,6 +64,28 @@ class JurisdictionNoticeTest < ActionDispatch::IntegrationTest
     assert_match(/참고용 · 공식 목표 아님/, response.body, "참고선 라벨 강등 표시가 없다")
   end
 
+  # ⚠️ 통합 스모크가 잡은 누락: 화면 본문만 고치고 **메타·OG·JSON-LD** 를 놔뒀다.
+  #    «판정면은 소비자가 읽는 바이트» 다 — 검색 결과도 사용자가 읽는 면이다.
+  test "메타·OG·JSON-LD 에도 근거 없는 «권장 집행률»·«집행 목표» 가 없다" do
+    meta = ToolsMeta::TOOL_METADATA[:budget_execution_rate]
+    %i[title description og_title og_description tool_name tool_description].each do |k|
+      v = meta[k].to_s
+      assert_no_match(/권장 집행률/, v, "#{k} 에 «권장 집행률» 이 남아 있다")
+      assert_no_match(/집행 목표 달성/, v, "#{k} 에 «집행 목표 달성» 단정이 남아 있다")
+    end
+    assert_match(/참고선/, meta[:description], "메타가 참고선이라고 말하지 않는다")
+    assert_match(/법정 목표가 아닙니다/, meta[:description])
+  end
+
+  test "렌더된 응답 전체(메타 포함)에 «권장 집행률» 이 0건이다" do
+    get budget_execution_rate_url
+    assert_response :success
+    # <head> 의 meta·og·JSON-LD 까지 포함한 전체 바이트를 본다.
+    assert_no_match(/권장 집행률/, response.body,
+                    "본문 어딘가(메타·OG·JSON-LD 포함)에 «권장 집행률» 이 남아 있다")
+    assert_no_match(/연말 집행 목표 달성/, response.body)
+  end
+
   # 음성 대조 — 고지를 등록하지 않은 도구에는 고지 블록이 생기지 않는다.
   test "미등록 도구(계약방식)에는 적용 범위 블록이 렌더되지 않는다" do
     get contract_method_url
