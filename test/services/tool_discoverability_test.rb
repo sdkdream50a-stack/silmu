@@ -25,7 +25,7 @@ class ToolDiscoverabilityTest < ActiveSupport::TestCase
   end
 
   def tool_titles_for(query)
-    variants = SearchQueryParser.tokens(query)
+    variants = SearchQueryParser.tool_tokens(query)
     return [] if variants.empty?
 
     registry.select { |tool|
@@ -46,7 +46,11 @@ class ToolDiscoverabilityTest < ActiveSupport::TestCase
     "수입인지"      => "계약보증금 계산기",
     "보조금정산"    => "보조금 정산 체크리스트",
     "국외출장"      => "여비계산기",
-    "국외"         => "여비계산기"
+    "국외"         => "여비계산기",
+    # 2026-09-17 업무흐름 감사 13 — 맥락어·실무 표현
+    "학교 초과근무 단가" => "초과근무수당 계산기",
+    "신규직원 연가"    => "연가일수 계산기",
+    "교육청 이월"      => "이월·전용 적법성 판단기"
   }.freeze
 
   POSITIVE.each do |query, expected|
@@ -60,7 +64,7 @@ class ToolDiscoverabilityTest < ActiveSupport::TestCase
   # 여기에 있는 질의는 P2 감사에서 TOOL_MISSING 으로 판정된 것들이다.
   # (검수·업무추진비·일상경비·겸직·선금 — 해당 판정을 하는 도구가 실제로 없다)
   NEGATIVE = %w[
-    병가 특별휴가 육아휴직 겸직 검수 선금 업무추진비 일상경비
+    병가 특별휴가 육아휴직 겸직 검수 선금 업무추진비 일상경비 학교 교육청
   ].freeze
 
   NEGATIVE.each do |query|

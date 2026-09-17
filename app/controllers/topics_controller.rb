@@ -173,7 +173,7 @@ class TopicsController < ApplicationController
     @active_keyword = params[:keyword]
 
     # 토픽별 관련 도구 (3단계: 도구 카드)
-    tool_keys = TOPIC_TOOLS[@topic.slug] || [ :contract_method, :contract_documents ]
+    tool_keys = TOPIC_TOOLS[@topic.slug] || CATEGORY_DEFAULT_TOOLS.fetch(@topic.category, [])
     @related_tools = tool_keys.map { |k| TOOL_DEFINITIONS[k]&.merge(key: k) }.compact
     @page_rendered_at = Time.current
 
