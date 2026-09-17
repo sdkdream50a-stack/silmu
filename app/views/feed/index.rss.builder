@@ -33,7 +33,7 @@ xml.rss version: "2.0", "xmlns:atom" => "http://www.w3.org/2005/Atom" do
     # 최신 감사사례
     @audit_cases.each do |audit_case|
       xml.item do
-        xml.title "#{audit_case.title} — 실제 감사 지적 사례와 대응 방법"
+        xml.title "#{audit_case.title} — #{audit_case.effective_source_type == "ACTUAL_AUDIT" ? "실제 감사 지적 사례와" : "감사 지적 유형과"} 대응 방법"
         xml.link audit_case_url(audit_case.slug)
         xml.guid audit_case_url(audit_case.slug), isPermaLink: "true"
         xml.description do
