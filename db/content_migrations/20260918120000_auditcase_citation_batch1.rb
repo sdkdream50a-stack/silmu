@@ -2,7 +2,7 @@
 #
 # 257건 970인용 전수 대조(law.go.kr 원문 93법령: 하네스 tasks/silmu-full-audit-rebuild-0917/sources/laws·laws_extra):
 #   OK 780 · WRONG_ARTICLE 80 · WRONG_CLAIM 45 · NONEXISTENT 7 · NEEDS_REVIEW 58.
-# 이 migration 은 원문으로 대체 조문이 확정된 HIGH 74건만 적용한다. 대체 조문을 확정할 수 없으면 인용을 삭제했다(창작 금지).
+# 이 migration 은 원문으로 대체 조문이 확정된 HIGH 73건만 적용한다(late-penalty-wrong-rate 임대차 요율 1건은 20260918110000 이 같은 문장을 정정하므로 제외). 대체 조문을 확정할 수 없으면 인용을 삭제했다(창작 금지).
 # 예: 지방재정법 §47(목적 외 사용금지) → §47의2(예산의 이용·이체, 2020.6.9. 신설) · 지방계약법 §7(계약사무의 위임) «경쟁의 원칙» → §9
 #     · 없는 법령 «지방공무원 여비규정» 인용 삭제 · 보조금법 목적 외 사용 벌칙 §40 → §41 · 정보공개법 비공개 이유 §11③ → §13⑤.
 # 편집 근거 전문 = 하네스 artifacts/20_AUDIT_CASE_CITATION_EDITS_0917.json (evidence·note).
@@ -61,7 +61,6 @@ edits = [
   [ "false-private-contract-reason", "lesson", "**허위 작성 시 위조공문서죄** (형법 제229조)", "**허위 작성 시 허위공문서작성죄** (형법 제227조)" ],
   [ "software-dev-misclassified-as-goods", "detail", "시행령 제25조 제1항 제1호의 물품 수의계약 기준", "시행령 제25조 제1항 제5호 나목의 물품 수의계약 기준" ],
   [ "private-contract-split-over-limit", "detail", "\"각 중앙관서의 장 또는 계약담당공무원은 수의계약의 한도금액을 초과하기 위하여 1건의 계약을 분할하여서는 아니 된다.\"", "\"지방자치단체의 장 또는 계약담당자는 행정안전부장관이 정하는 동일 구조물공사 또는 단일공사로서 설계서 등에 따라 전체 사업내용이 확정된 공사는 이를 시기적으로 분할하거나 공사량을 분할하여 계약할 수 없다.\"" ],
-  [ "late-penalty-wrong-rate", "lesson", " / 임대차: 1,000분의 1 (시행규칙 제75조)", " (시행규칙 제75조)" ],
   [ "mas-contract-non-listed-product", "detail", "| 구매 근거 | 조달법 제9조의2 |", "| 구매 근거 | 조달법 제13조 |" ],
   [ "mas-contract-non-listed-product", "detail", "1. 조달사업에 관한 법률 제9조의2 위반", "1. 조달사업에 관한 법률 제13조 위반" ],
   [ "accounting-data-falsification", "legal_basis", "형법 제355조(업무상횡령)", "형법 제356조(업무상의 횡령과 배임)" ],
