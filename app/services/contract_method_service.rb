@@ -21,7 +21,7 @@ class ContractMethodService
     v.transform_keys(&:to_sym)
   end.freeze
 
-  # 낙찰하한율 기준 (지방계약법 시행령 제42조, 지방계약법 시행규칙 별표2)
+  # 낙찰하한율 참고표 (지방계약법 시행령 제42조, 「지방자치단체 입찰시 낙찰자 결정기준」)
   LOWEST_BID_RATES = CONFIG["lowest_bid_rates"].transform_keys(&:to_sym).transform_values do |v|
     v.merge(
       "rates" => v["rates"].map { |r| r.transform_keys(&:to_sym) }
@@ -200,21 +200,30 @@ class ContractMethodService
       # 입찰이 아니면 낙찰하한율 없음
       return nil unless method == "입찰"
 
-      # 공사 vs 물품·용역 구분
-      category = [ :construction_general, :construction_special, :construction_etc ].include?(type) ? :construction : :goods_service
-      rates_info = LOWEST_BID_RATES[category]
+      rates_info, rate_data = lowest_bid_rate_for(type, price)
 
-      # 금액 구간 찾기
-      rate_data = rates_info[:rates].find { |r| price >= r[:min] && price < r[:max] }
-
-      return nil unless rate_data
+      # 단일 참고값이 없는 구간(물품·용역, 300억 이상 공사) — 숫자를 만들지 않고 공고문 확인으로 안내한다.
+      if rate_data.nil? || rate_data[:rate].nil?
+        return {
+          category: rates_info[:name],
+          rate: "공고문 확인",
+          detail: rate_data ? rate_data[:detail] : "계약 종류·금액구간별로 다름",
+          note: "낙찰하한율은 입찰공고문에서 확인하세요"
+        }
+      end
 
       {
         category: rates_info[:name],
         rate: rate_data[:rate],
         detail: rate_data[:detail],
-        note: "예정가격의 #{rate_data[:rate]} 범위 내에서 최저가 낙찰"
+        note: "적격심사 참고 낙찰하한율 — 실제 값은 입찰공고문 기준"
       }
+    end
+
+    def lowest_bid_rate_for(type, price)
+      category = [ :construction_general, :construction_special, :construction_etc ].include?(type) ? :construction : :goods_service
+      rates_info = LOWEST_BID_RATES[category]
+      [ rates_info, rates_info[:rates].find { |r| price >= r[:min] && price < r[:max] } ]
     end
 
     def generate_warnings(type, price)
@@ -233,15 +242,20 @@ class ContractMethodService
 
       # 낙찰하한율 안내 (입찰인 경우)
       if threshold && threshold[:method] == "입찰"
-        category = [ :construction_general, :construction_special, :construction_etc ].include?(type) ? :construction : :goods_service
-        rates_info = LOWEST_BID_RATES[category]
-        rate_data = rates_info[:rates].find { |r| price >= r[:min] && price < r[:max] }
+        rates_info, rate_data = lowest_bid_rate_for(type, price)
 
-        if rate_data
+        if rate_data && rate_data[:rate]
           warnings << {
             level: "info",
-            title: "낙찰하한율 — #{rate_data[:rate]}",
-            message: "#{rates_info[:name]} #{rate_data[:detail]} 입찰의 낙찰하한율은 예정가격의 #{rate_data[:rate]}입니다. 이 범위 미만으로 입찰하면 무효 처리됩니다. (지방계약법 시행령 제42조, 시행규칙 별표2)",
+            title: "낙찰하한율 참고 — #{rate_data[:rate]}",
+            message: "#{rates_info[:name]} #{rate_data[:detail]}의 적격심사 낙찰하한율 참고값은 예정가격의 #{rate_data[:rate]}입니다. 이 비율 미만 입찰자는 낙찰자로 결정되지 않으며, 실제 비율은 입찰공고문을 따릅니다. (지방계약법 시행령 제42조, 「지방자치단체 입찰시 낙찰자 결정기준」)",
+            link: nil
+          }
+        else
+          warnings << {
+            level: "info",
+            title: "낙찰하한율 — 입찰공고문 확인",
+            message: "#{rates_info[:name]} #{rate_data ? rate_data[:detail] : ''} 입찰의 낙찰하한율은 계약 종류·금액구간·낙찰자 결정방법에 따라 달라 단일 값으로 안내하지 않습니다. 입찰공고문의 값을 확인하세요.".squeeze(" "),
             link: nil
           }
         end
