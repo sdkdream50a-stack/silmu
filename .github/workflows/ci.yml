@@ -93,3 +93,47 @@ jobs:
           # RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
           # REDIS_URL: redis://localhost:6379/0
         run: bin/rails db:test:prepare test
+
+  # P0-3 (2026-09-18) — 브라우저 E2E.
+  #
+  # 왜 별도 job 인가: Rails 기본 `test` 태스크는 test/system 을 돌리지 않는다.
+  #   서식 다운로드 결함은 «HTML 에 버튼이 있다» 가 아니라 «눌러도 아무 일이 없다» 였고,
+  #   그건 실제 브라우저로만 잡힌다. chromedriver 는 Selenium Manager 가 받는다.
+  system_test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+      - name: Install packages
+        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y libpq-dev node-gyp
+
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Run system tests (headless Chrome)
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432
+        run: bin/rails db:test:prepare test:system
+
+      - name: Upload failure screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: system-test-screenshots
+          path: tmp/screenshots/
+          if-no-files-found: ignore
