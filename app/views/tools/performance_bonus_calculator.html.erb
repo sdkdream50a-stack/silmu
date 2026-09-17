@@ -18,7 +18,7 @@
         </div>
         <div>
           <h1 class="text-2xl font-bold text-slate-900">성과상여금 계산기</h1>
-          <p class="text-slate-600 mt-1">월봉급액과 소속 기관 지급률로 성과상여금 계산</p>
+          <p class="text-slate-600 mt-1">계급별 지급기준액과 소속 기관 지급률로 성과상여금 계산</p>
           <%= render 'shared/use_when_badge', tool: 'performance-bonus-calculator' %>
         </div>
       </div>
@@ -40,16 +40,25 @@
         </h2>
 
         <div class="space-y-5">
-          <!-- 월봉급액 -->
+          <!-- 계급 → 지급기준액 (수당규정 별표2의3: 계급별 기준호봉의 전년도 월봉급액) -->
           <div>
-            <label class="block text-sm font-semibold text-slate-700 mb-2">
-              기준일 현재 월봉급액
-              <span class="ml-1 text-xs text-slate-400 font-normal">원</span>
+            <label class="block text-sm font-semibold text-slate-700 mb-2" for="rank-grade">
+              계급 <span class="ml-1 text-xs text-slate-400 font-normal">(일반직)</span>
             </label>
-            <input type="number" id="monthly-salary" placeholder="예: 3800000"
-              class="w-full border border-slate-200 rounded-lg px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-amber-400 bg-slate-50"
-              oninput="calculate()">
-            <p class="text-xs text-slate-400 mt-1">※ 각종 수당 제외, 기본 봉급액만 입력</p>
+            <select id="rank-grade" onchange="calculate()"
+              class="w-full border border-slate-200 rounded-lg px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-amber-400 bg-slate-50">
+              <option value="">계급을 선택하세요</option>
+              <option value="9">9급 (10호봉)</option>
+              <option value="8">8급 (12호봉)</option>
+              <option value="7">7급 (15호봉)</option>
+              <option value="6">6급 (18호봉)</option>
+              <option value="5">5급 (18호봉)</option>
+              <option value="4">4급 (20호봉)</option>
+              <option value="3">3급 (20호봉)</option>
+              <option value="2">2급 (20호봉)</option>
+              <option value="1">1급 (20호봉)</option>
+            </select>
+            <p class="text-xs text-slate-400 mt-1">※ 본인 봉급이 아니라 계급별 기준호봉의 <strong>전년도(2025) 월봉급액</strong>이 지급기준액입니다(「공무원수당 등에 관한 규정」 별표2의3 비고). 교원·경찰·소방 등은 기준호봉이 다릅니다.</p>
           </div>
 
           <!-- 지급률 (기관 지급계획이 우선하므로 직접 입력 가능) -->
@@ -104,15 +113,7 @@
             <p class="text-xs text-slate-400 mt-1">※ 기관별로 지급 횟수가 다름</p>
           </div>
 
-          <!-- 지급 방식 -->
-          <div>
-            <label class="block text-sm font-semibold text-slate-700 mb-2">지급 방식</label>
-            <select id="pay-method" onchange="calculate()"
-              class="w-full border border-slate-200 rounded-lg px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-amber-400 bg-slate-50">
-              <option value="individual">개인 성과 방식</option>
-              <option value="group">부서 성과 포함 방식 (지급율 × 70%)</option>
-            </select>
-          </div>
+          <p class="text-xs text-slate-400">※ 부서별 차등 등 지급 방법(제7조의2제2항 제2~5호)을 쓰는 기관은 지급등급·지급액을 기관이 정합니다 — 기관 지급계획의 지급률을 입력하세요.</p>
         </div>
 
         <button onclick="calculate()"
@@ -133,7 +134,7 @@
         <div class="card p-6 bg-gradient-to-br from-amber-50 to-yellow-50 border-2 border-amber-200">
           <div class="text-sm font-semibold text-amber-700 mb-2">성과상여금 (1회 지급액)</div>
           <div id="bonus-amount" class="text-4xl font-bold text-amber-700 mb-1">0원</div>
-          <div id="bonus-formula" class="text-xs text-amber-600 mt-2">월봉급액 × 지급율</div>
+          <div id="bonus-formula" class="text-xs text-amber-600 mt-2">지급기준액 × 지급률</div>
         </div>
 
         <!-- 연간 합계 (2회 지급 시) -->
@@ -145,7 +146,7 @@
 
         <!-- 등급별 지급율 비교 -->
         <div class="card p-5">
-          <div class="text-sm font-bold text-slate-700 mb-3">등급별 지급율 비교 (5급 이상 일반직 기준)</div>
+          <div class="text-sm font-bold text-slate-700 mb-3">등급별 지급률 (수당규정 별표2의4 — 개인별 차등 지급 시)</div>
           <div class="space-y-2">
             <div class="flex items-center justify-between">
               <span class="text-sm font-semibold text-amber-700">S등급 (최우수 · 상위 20%)</span>
@@ -155,25 +156,25 @@
               <div class="bg-amber-500 h-2 rounded-full" style="width: 100%"></div>
             </div>
             <div class="flex items-center justify-between mt-2">
-              <span class="text-sm font-semibold text-amber-600">A등급 (우수 · 상위 30%)</span>
+              <span class="text-sm font-semibold text-amber-600">A등급 (상위 20% 초과 ~ 60%)</span>
               <span class="text-sm font-bold text-amber-600">125%</span>
             </div>
             <div class="w-full bg-slate-100 rounded-full h-2">
               <div class="bg-amber-400 h-2 rounded-full" style="width: 72.5%"></div>
             </div>
             <div class="flex items-center justify-between mt-2">
-              <span class="text-sm font-semibold text-slate-600">B등급 (보통 · 나머지)</span>
+              <span class="text-sm font-semibold text-slate-600">B등급 (상위 60% 초과 ~ 90%)</span>
               <span class="text-sm font-bold text-slate-600">85%</span>
             </div>
             <div class="w-full bg-slate-100 rounded-full h-2">
               <div class="bg-slate-400 h-2 rounded-full" style="width: 49.3%"></div>
             </div>
             <div class="flex items-center justify-between mt-2">
-              <span class="text-sm font-semibold text-red-400">C등급 이하</span>
+              <span class="text-sm font-semibold text-red-400">C등급 (상위 90% 초과)</span>
               <span class="text-sm font-bold text-red-400">0% (미지급)</span>
             </div>
           </div>
-          <p class="text-xs text-slate-400 mt-3">※ 계급별·기관별 지급율 상이, 위 기준은 5급 이상 일반직 적용</p>
+          <p class="text-xs text-slate-400 mt-3">※ 계급 구분 없이 적용하는 법정 기본표입니다. 기관이 인사혁신처 기준에 따라 달리 정할 수 있어(별표2의4 비고) 기관 지급계획을 우선하세요.</p>
         </div>
 
         <%= render 'shared/ad_slot', position: 'tool-result' %>
@@ -187,7 +188,7 @@
               <ul class="space-y-1 text-xs">
                 <li>• 위 지급률(S 172.5 / A 125 / B 85%)은 <strong>기본 모형 예시</strong>이며 법정 고정값이 아닙니다</li>
                 <li>• 실제 지급률·등급 구성은 <strong>기관별 성과상여금 지급계획</strong>으로 정해집니다</li>
-                <li>• 계급(5급 이상/6급 이하)·연구지도직에 따라 달라질 수 있어 지급률 직접 입력을 권장합니다</li>
+                <li>• 기관 지급계획(부서별 차등 등)에 따라 지급등급·지급액이 달라질 수 있어 지급률 직접 입력을 권장합니다</li>
               </ul>
             </div>
           </div>
@@ -219,6 +220,9 @@
   // 지급등급별 지급률은 기관의 성과상여금 지급계획으로 정해지며 계급·기관·연도에 따라 다르다.
   // 아래 값은 인사혁신처 기본 모형의 예시일 뿐 법정 고정값이 아니므로, 사용자가 직접 고칠 수 있게 한다.
   // (검증되지 않은 '6급 이하 170/120/80' 상수는 1차출처를 확인하지 못해 제거했다.)
+  // 2026년 지급분 지급기준액 = 별표2의3 기준호봉의 2025년 봉급액(공무원보수규정 별표3, 개정 2025.1.3)
+  const BONUS_BASE_2026 = { 9: 2456700, 8: 2889200, 7: 3478200, 6: 4090900, 5: 4758300, 4: 5406100, 3: 6127600, 2: 6771100, 1: 7507800 };
+
   const DEFAULT_RATES = {
     S: { label: 'S등급 (최우수)', rate: 1.725 },
     A: { label: 'A등급 (우수)',   rate: 1.25  },
@@ -252,9 +256,8 @@
   }
 
   function calculate() {
-    const salary = parseFloat(document.getElementById('monthly-salary').value) || 0;
+    const salary = BONUS_BASE_2026[parseInt(document.getElementById('rank-grade').value, 10)] || 0;
     const payCount = parseInt(document.getElementById('pay-count').value);
-    const payMethod = document.getElementById('pay-method').value;
 
     const gradeInfo = DEFAULT_RATES[selectedGrade];
     let rate = currentRate();
@@ -269,9 +272,6 @@
       return;
     }
 
-    // 부서 성과 포함 방식은 70% 적용
-    if (payMethod === 'group') rate *= 0.7;
-
     const bonusAmount = salary * rate;
     const annualAmount = bonusAmount * payCount;
 
@@ -279,12 +279,12 @@
       `${gradeInfo.label} / 지급율 ${(rate * 100).toFixed(3).replace(/0+$/,'').replace(/\.$/,'')}%`;
 
     document.getElementById('bonus-amount').textContent =
-      salary > 0 ? Math.round(bonusAmount).toLocaleString('ko-KR') + '원' : '봉급액을 입력하세요';
+      salary > 0 ? Math.round(bonusAmount).toLocaleString('ko-KR') + '원' : '계급을 선택하세요';
 
     document.getElementById('bonus-formula').textContent =
       salary > 0
         ? `${salary.toLocaleString('ko-KR')}원 × ${(rate * 100).toFixed(1)}% = ${Math.round(bonusAmount).toLocaleString('ko-KR')}원`
-        : '월봉급액 × 지급율';
+        : '지급기준액 × 지급률';
 
     if (payCount === 2 && salary > 0) {
       document.getElementById('annual-section').classList.remove('hidden');
