@@ -31,7 +31,14 @@ class GoodsSelectionCommitteeContradictionTest < ActionDispatch::IntegrationTest
     "구매 담당 부서를 구속하는 효력을 가집니다",            # interp — 법정 위원회가 아닌데 구속력 단정
     "행정안전부 예규에서는 외부 전문가 참여를 권장하고 있으나", # interp — 예규에 규정 0건
     "2억 원 이상의 물품 구매에서",                         # interp
-    "(행정안전부 유권해석)"                                # interp — 원문 미확인 출처 표기
+    "(행정안전부 유권해석)",                               # interp — 원문 미확인 출처 표기
+    # ⚠️ 통합 스모크가 잡은 누락 — 본문 탭만 보고 JSONB·해설 탭을 놓쳤다.
+    #    faqs 는 **FAQPage 구조화 데이터로도 노출**돼 검색 결과에 그대로 나간다.
+    "3~5명이 일반적이며",                                  # faqs — 인원 축
+    "500만원 이상 물품 구매 시 내부 규정으로 의무화",        # faqs — 금액 축
+    # ⚠️ commentary 원문에는 <strong> 태그가 끼어 있다 — 태그를 건너뛰는 조각으로 센다.
+    "물품 구매 시 개최하도록 내부 규정을 두고",              # commentary — 금액 축
+    "보통 500만원 미만"                                    # commentary — 금액 축
   ].freeze
 
   # regulation_content 는 허위 근거 «구조» 라 문장 치환으로 닫히지 않아 전체를 교체했다.
@@ -79,6 +86,27 @@ class GoodsSelectionCommitteeContradictionTest < ActionDispatch::IntegrationTest
     # 그리고 시행령 제43조는 «근거» 로 쓰이지 않고 «부재» 로만 언급돼야 한다.
     assert_includes src, "현행 시행령에는 제43조 자체가 없으며"
     assert_not_includes src, "「지방계약법 시행령」 제43조, 「물품관리법」 및 행정안전부 예규에 근거합니다"
+  end
+
+  test "faqs·commentary 축도 migration 이 다룬다 (JSONB·구조화 데이터 노출면)" do
+    src = MIGRATION.read
+    assert_includes src, "FAQ_SUBSTITUTIONS", "faqs 를 다루지 않는다 — 검색 결과에 옛 수치가 남는다"
+    assert_includes src, "FAQS_FINGERPRINT", "faqs 에 지문 가드가 없다"
+    assert_includes src, "COMMENTARY_SUBSTITUTIONS", "commentary 를 다루지 않는다"
+    assert_includes src, "COMMENTARY_FINGERPRINT", "commentary 에 지문 가드가 없다"
+    assert_match(/faqs still contains/, src, "faqs 치환 후 옛 문구 잔존을 단정하지 않는다")
+  end
+
+  test "본문 층 검사가 faqs·commentary 도 본다" do
+    skip "시드 환경 미설정" if Topic.count.zero?
+    topic = Topic.find_by(slug: "goods-selection-committee")
+    skip "토픽 미시드" if topic.nil?
+
+    surfaces = [ topic.faqs.to_json, topic.commentary.to_s ].join("\n")
+    [ "3~5명이 일반적이며", "500만원 이상 물품 구매 시 내부 규정으로 의무화",
+      "물품 구매 시 개최하도록 내부 규정을 두고", "보통 500만원 미만" ].each do |bad|
+      assert_not_includes surfaces, bad, "faqs/commentary 에 모순 문구 잔존: #{bad.inspect}"
+    end
   end
 
   test "migration 이 새 서술로 확인된 사실만 쓴다" do

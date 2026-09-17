@@ -119,6 +119,31 @@ SUBSTITUTIONS = [
     "(실무 예시 — 유권해석 원문 미확인)" ]
 ]
 
+# faqs 는 JSONB 이고 **FAQPage 구조화 데이터로도 노출**된다 — 검색 결과에 그대로 나간다.
+#   그래서 본문 탭과 같은 축(금액·인원)을 여기서도 닫는다.
+#   (통합 스모크에서 이 면이 먼저 잡혔다 — 뷰만 고치고 JSONB·메타를 놓쳤다.)
+FAQS_FINGERPRINT = "98945f094e7b1d27265b30aba902bb92e067b5d5568f9d21d122d00c9eb1722f"
+
+FAQ_SUBSTITUTIONS = [
+  [ "법적 의무는 아니지만, 대부분의 기관에서 500만원 이상 물품 구매 시 내부 규정으로 의무화하고 있습니다.",
+    "법적 의무는 아닙니다. 개최 의무 금액은 기관마다 내부 규정으로 정하므로, 소속 기관 규정을 확인해야 합니다(법령·예규에 정해진 금액이 없습니다)." ],
+  [ "3~5명이 일반적이며, 홀수로 구성하는 것을 권장합니다.",
+    "법령에 정해진 인원이 없습니다 — 기관 규정에서 정합니다. 홀수 구성은 가부동수를 피하는 실무 편의입니다." ]
+].freeze
+
+# commentary 는 «법적 의무가 아니라 내부 규정» 이라고 정직하게 말하는 탭이라 구조는 유지한다.
+#   다만 출처 없는 «일반적으로 500만원» 만 남아 다른 탭과 다시 충돌하므로 그 두 문장만 중립화한다.
+COMMENTARY_FINGERPRINT = "54b68d9bd7b0cb5511283251048f0b3653c774a8d9bbda46b338bf199dccdca3"
+
+COMMENTARY_SUBSTITUTIONS = [
+  # ⚠️ 원문에 <strong> 태그가 끼어 있다 — 태그를 빼고 매칭하려다 «not found once» 로 막혔다.
+  #    지문 가드가 조용한 부분적용 대신 정직하게 실패했다.
+  [ "일반적으로 <strong>500만원 이상</strong> 물품 구매 시 개최하도록 내부 규정을 두고 있습니다.",
+    "개최 기준 금액은 <strong>기관마다 내부 규정으로 정합니다</strong> — 법령·예규에 정해진 금액이 없습니다." ],
+  [ "• 소액 (기관별 기준, 보통 500만원 미만)",
+    "• 소액 (기준 금액은 기관 규정에서 확인)" ]
+].freeze
+
 dry = ENV["DRY_RUN"] == "1"
 changes = 0
 
@@ -162,6 +187,58 @@ ActiveRecord::Base.transaction do
 
     topic.update_columns(column => replaced, updated_at: Time.current) unless dry
     changes += 1
+  end
+
+  # 3) faqs (JSONB) — 배열 안 answer 문자열을 치환한다.
+  faqs = topic.reload.faqs
+  if faqs.present?
+    raw = faqs.to_json
+    pending = FAQ_SUBSTITUTIONS.reject { |old, new| raw.include?(new) && !raw.include?(old) }
+    if pending.any?
+      unless Digest::SHA256.hexdigest(raw) == FAQS_FINGERPRINT
+        raise "[goods-committee] faqs fingerprint mismatch"
+      end
+
+      updated = faqs.map do |entry|
+        e = entry.dup
+        answer = e["answer"].to_s
+        pending.each do |old, new|
+          next unless answer.include?(old)
+
+          answer = answer.sub(old) { new }
+        end
+        e["answer"] = answer
+        e
+      end
+      raise "[goods-committee] faqs substitution did not apply" if updated.to_json == raw
+
+      pending.each do |old, _|
+        raise "[goods-committee] faqs still contains #{old[0, 30].inspect}" if updated.to_json.include?(old)
+      end
+
+      topic.update_columns(faqs: updated, updated_at: Time.current) unless dry
+      changes += pending.size
+    end
+  end
+
+  # 4) commentary — 출처 없는 500만원 단정 2문장만.
+  commentary = topic.reload.commentary.to_s
+  pending_c = COMMENTARY_SUBSTITUTIONS.reject { |old, new| commentary.include?(new) && !commentary.include?(old) }
+  if pending_c.any?
+    unless Digest::SHA256.hexdigest(commentary) == COMMENTARY_FINGERPRINT
+      raise "[goods-committee] commentary fingerprint mismatch"
+    end
+
+    replaced = commentary.dup
+    pending_c.each do |old, new|
+      raise "[goods-committee] commentary: #{old[0, 30].inspect} not found once" unless replaced.scan(old).size == 1
+
+      replaced = replaced.sub(old) { new }
+    end
+    raise "[goods-committee] commentary substitution did not apply" if replaced == commentary
+
+    topic.update_columns(commentary: replaced, updated_at: Time.current) unless dry
+    changes += pending_c.size
   end
 end
 
