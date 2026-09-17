@@ -148,6 +148,7 @@ class AuditCase < ApplicationRecord
               .gsub(/^\s*[-*+]\s+/m, "")        # 리스트 마커
               .gsub(/\s+/, " ")
               .strip
+    plain = "#{seo_type_prefix}#{plain}"
     plain.length > 200 ? "#{plain[0, 197]}..." : plain
   end
 

@@ -58,9 +58,26 @@ class AuditCaseProvenanceClassifier
 
   def self.plan_for(audit_case) = new(audit_case).plan
 
+  # 원문 출처가 전혀 없는 창작 시나리오로 판정된 사례 표식 — 재분류해도 «출처 추가 검증 필요»·«재구성»으로 되돌리지 않는다.
+  SIMULATED_MARKER = "SIMULATED_LABEL_2026_09_17"
+
   def plan
     raw_source = @ac.verification_source
     note = InternalMetadataFilter.internal?(raw_source) ? raw_source : nil
+
+    # 원문 문서 없이 재구성을 자인했거나 가상 표식이 있으면 «재구성»이 아니라 «가상»이다(2026-09-17 TRUST REPAIR).
+    # «재구성»은 원문이 있는 사례에만 쓴다. «법령 근거 검증» 배지는 법령명 해석만으로 붙어 사례 검증으로 읽히므로 쓰지 않는다.
+    if @ac.verification_note.to_s.include?(SIMULATED_MARKER) || (reconstructed? && document_source.nil? && @ac.source_url.blank?)
+      return Plan.new(
+        audit_case: @ac,
+        source_type: "SILMU_SIMULATED_CASE",
+        is_reconstructed: true,
+        verification_status: "RECONSTRUCTED",
+        verification_note: @ac.verification_note.presence || note,
+        confidence: "HIGH",
+        reason: "원문 출처 없는 가상 시나리오 (#{@ac.verification_note.to_s.include?(SIMULATED_MARKER) ? SIMULATED_MARKER : reconstructed_evidence})"
+      )
+    end
 
     # 재구성 판정이 원문 문서 존재보다 먼저다(2026-09-17 신뢰 감사).
     # 원문 URL 이 있어도 본문이 «가상 시나리오»라고 스스로 밝히면 원문 발췌 + 재구성 혼합이다 —

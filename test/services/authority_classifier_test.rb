@@ -23,14 +23,15 @@ class AuthorityClassifierTest < ActiveSupport::TestCase
     assert_equal false, plan.is_reconstructed
   end
 
-  test "HIGH — 스스로 재구성이라 밝힌 콘텐츠는 재구성으로 분류한다" do
+  # 2026-09-17 TRUST REPAIR: 원문 문서 없이 재구성을 자인하면 «재구성»이 아니라 «가상 예방 시나리오»다.
+  test "HIGH — 원문 없이 스스로 재구성이라 밝힌 콘텐츠는 가상 시나리오로 분류한다" do
     [
       build_case(source: "silmu-2026"),
       build_case(verification_source: "공개 감사패턴 일반화(silmu 시드, 특정 실사례 아님).")
     ].each do |ac|
       plan = AuditCaseProvenanceClassifier.plan_for(ac)
       assert_equal "HIGH", plan.confidence
-      assert_equal "SILMU_RECONSTRUCTED_CASE", plan.source_type
+      assert_equal "SILMU_SIMULATED_CASE", plan.source_type
       assert_equal true, plan.is_reconstructed
     end
   end
