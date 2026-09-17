@@ -51,7 +51,8 @@
             data-controller="home-search" data-action="submit->home-search#submit"
             class="max-w-2xl mx-auto mb-8">
         <div class="flex items-center gap-2 p-2 bg-white rounded-xl shadow-lg">
-          <span class="material-symbols-outlined text-slate-400 pl-3">search</span>
+          <%# 패딩은 래퍼에 둔다 — Iconify SVG 에 pl-3 이 남으면 16px 박스 안에서 아이콘이 점으로 찌그러진다(전수감사 UX TOP#9). %>
+          <span class="pl-3 inline-flex shrink-0"><span class="material-symbols-outlined text-slate-400">search</span></span>
           <input type="hidden" name="src" value="home_form"/>
           <input name="q" data-home-search-target="input"
                  data-action="input->home-search#inputChanged blur->home-search#blurred"
@@ -75,7 +76,7 @@
             "출장비 얼마 지급하나",
             "처음 계약을 맡았어요"
           ].each do |question| %>
-            <%= link_to question, silmu_search_search_path(q: question, src: "home_chip"), data: { turbo: false },
+            <%= link_to question, silmu_search_path(q: question, src: "home_chip"), data: { turbo: false },
                 class: "touch-target inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-white text-sm font-medium backdrop-blur-sm transition-colors" %>
           <% end %>
         </div>

@@ -6,6 +6,20 @@ class HomeControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  # 전수감사 UX TOP#1 — 칩이 frame 전용 endpoint 로 가면 301 캐시 때문에 답 대신 기본 목록이 뜬다.
+  # 검색 폼과 같은 페이지(/silmu-search)로 보내야 폼 입력과 같은 frame 요청이 난다.
+  test "홈 예시 질문 칩은 검색 폼과 같은 URL 로 간다" do
+    get root_url
+    assert_select "a[href^='/silmu-search/search']", 0
+    assert_select "a[href^=?][href*=?]", "/silmu-search?q=", "src=home_chip", count: 4
+  end
+
+  test "홈 검색창 돋보기 아이콘에 패딩 클래스가 직접 붙지 않는다" do
+    get root_url
+    assert_select "form[action='/silmu-search'] .material-symbols-outlined", text: "search", count: 1
+    assert_select "form[action='/silmu-search'] .material-symbols-outlined.pl-3", 0
+  end
+
   test "SEASONAL_TOPICS에 정의된 모든 slug가 Topic 테이블에 존재해야 한다" do
     all_slugs = HomeController::SEASONAL_TOPICS.values.flat_map(&:values).flatten.uniq
     skip "Topic 시드 데이터가 없는 환경에서는 건너뜁니다" if Topic.count < all_slugs.size / 2

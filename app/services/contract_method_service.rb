@@ -83,6 +83,14 @@ class ContractMethodService
         vulnerable_ratio_met: vulnerable_ratio_met
       ).to_h
 
+      # 판정이 경쟁입찰인데 금액 구간표가 수의계약 구간이면(예: 일반 업체 물품 3천만원)
+      # 부제·근거·서류·경고·팁까지 수의계약용이 나와 결론과 모순된다.
+      # 판정 결론에 맞는 입찰 구간을 부가 안내의 출처로 쓴다(판정 규칙은 건드리지 않는다).
+      display = threshold
+      if decision[:state] == "COMPETITIVE_PROCEDURE_REQUIRED" && threshold[:method] != "입찰"
+        display = type_info[:thresholds].find { |t| t[:method] == "입찰" }.merge(note: nil)
+      end
+
       {
         success: true,
         decision: decision,
@@ -98,17 +106,17 @@ class ContractMethodService
         result: {
           method: legacy_method_for(decision, threshold),
           method_detail: legacy_detail_for(decision, threshold),
-          basis: threshold[:basis],
-          note: threshold[:note],
-          special_condition: threshold[:special_condition],
-          documents: threshold[:documents],
-          special_applied: threshold[:special_applied] || false
+          basis: basis_for(decision, display),
+          note: display[:note],
+          special_condition: display[:special_condition],
+          documents: display[:documents],
+          special_applied: display[:special_applied] || false
         },
         special_enterprise: special_info,
-        lowest_bid_rate: calculate_lowest_bid_rate(type_sym, price, threshold[:method]),
+        lowest_bid_rate: calculate_lowest_bid_rate(type_sym, price, display[:method]),
         related_laws: RELATED_LAWS,
-        warnings: generate_warnings(type_sym, price),
-        tips: generate_tips(type_sym, price, threshold[:method])
+        warnings: generate_warnings(type_sym, price, display[:method]),
+        tips: generate_tips(type_sym, price, display[:method])
       }
     end
 
@@ -187,6 +195,12 @@ class ContractMethodService
       end
     end
 
+    # 법령 근거는 판정이 인용한 조항을 그대로 보여준다. 판정이 근거를 내지 않는 상태(정보 부족 등)만 구간표 값을 쓴다.
+    def basis_for(decision, display)
+      cited = Array(decision[:legal_basis]).map { |b| [ b[:short], b[:locator] ].compact.join(" ") }.reject(&:blank?)
+      cited.any? ? cited.join(", ") : display[:basis]
+    end
+
     def format_currency(amount)
       return "무제한" if amount == Float::INFINITY
       amount.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse
@@ -226,12 +240,11 @@ class ContractMethodService
       [ rates_info, rates_info[:rates].find { |r| price >= r[:min] && price < r[:max] } ]
     end
 
-    def generate_warnings(type, price)
+    def generate_warnings(type, price, method)
       warnings = []
 
       # 수의계약 체결 제한 확인 경고
-      threshold = CONTRACT_THRESHOLDS[type][:thresholds].find { |t| price <= t[:max] }
-      if threshold && threshold[:method].include?("수의계약")
+      if method.include?("수의계약")
         warnings << {
           level: "warning",
           title: "수의계약 체결 제한 여부 확인",
@@ -241,7 +254,7 @@ class ContractMethodService
       end
 
       # 낙찰하한율 안내 (입찰인 경우)
-      if threshold && threshold[:method] == "입찰"
+      if method == "입찰"
         rates_info, rate_data = lowest_bid_rate_for(type, price)
 
         if rate_data && rate_data[:rate]
@@ -262,7 +275,7 @@ class ContractMethodService
       end
 
       # G2B 전자견적 의무 안내 (2천만원 초과 수의계약)
-      if threshold && threshold[:method].include?("수의계약") && price > 20_000_000
+      if method.include?("수의계약") && price > 20_000_000
         warnings << {
           level: "info",
           title: "G2B 전자견적 필수",
@@ -293,7 +306,7 @@ class ContractMethodService
 
       # 전자입찰(지정정보처리장치) 안내 — 지방계약법 시행령 §39 ①항
       # 입찰서 제출은 임계금액 없이 지정정보처리장치 이용 의무
-      if threshold && threshold[:method] == "입찰"
+      if method == "입찰"
         warnings << {
           level: "info",
           title: "전자입찰(지정정보처리장치) 필수",
@@ -303,7 +316,7 @@ class ContractMethodService
       end
 
       # 유찰→수의 전환 안내 (입찰 대상인 경우)
-      if threshold && threshold[:method] == "입찰"
+      if method == "입찰"
         warnings << {
           level: "info",
           title: "유찰 시 수의계약 전환 가능",
