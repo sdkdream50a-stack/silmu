@@ -36,8 +36,10 @@ class ChatbotController < ApplicationController
 
   def search
     # 직접 URL 접근 시 chatbot 인덱스로 리다이렉트
+    # 301 이면 브라우저가 이 URL 을 캐시해, 인덱스가 같은 URL 로 보내는 frame 요청까지
+    # 캐시된 리다이렉트를 따라가 기본 목록으로 채워진다(전수감사 UX TOP#1). 캐시되지 않는 302 를 쓴다.
     unless turbo_frame_request?
-      redirect_to silmu_search_path(q: params[:q].presence, src: params[:src].presence), status: :moved_permanently and return
+      redirect_to silmu_search_path(q: params[:q].presence, src: params[:src].presence), status: :found and return
     end
 
     set_meta_tags(robots: "noindex, follow")

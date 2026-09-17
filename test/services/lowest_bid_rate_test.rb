@@ -5,8 +5,11 @@ require "test_helper"
 # 현행 참고: 10억 미만 89.745 / 10~50억 88.745 / 50~100억 87.495 / 100~300억 81.995,
 # 300억 이상은 종합평가낙찰제(시행령 §42의3), 물품·용역은 공고문 확인.
 class LowestBidRateTest < ActiveSupport::TestCase
+  # 판정이 확정된 입력(기관·상대방 지정)이어야 부가 안내가 나온다 — 판정 전에는 하한율을 내지 않는다(G-51).
+  CONCLUSIVE = { agency_scope: "LOCAL_GOVERNMENT", counterparty_type: "GENERAL" }.freeze
+
   def rate_for(type, price)
-    ContractMethodService.determine(contract_type: type, estimated_price: price)[:lowest_bid_rate]
+    ContractMethodService.determine(contract_type: type, estimated_price: price, **CONCLUSIVE)[:lowest_bid_rate]
   end
 
   test "NORMAL: 10억~50억 공사는 88.745% 참고값" do
@@ -31,7 +34,7 @@ class LowestBidRateTest < ActiveSupport::TestCase
   test "EXCEPTION: 물품·용역 입찰에는 출처 없는 단일 하한율을 주지 않는다" do
     result = rate_for("goods", 300_000_000)
     assert_equal "공고문 확인", result[:rate]
-    warnings = ContractMethodService.determine(contract_type: "service", estimated_price: 300_000_000)[:warnings]
+    warnings = ContractMethodService.determine(contract_type: "service", estimated_price: 300_000_000, **CONCLUSIVE)[:warnings]
     floor = warnings.find { |w| w[:title].include?("낙찰하한율") }
     assert floor, "낙찰하한율 안내가 사라지면 안 된다"
     assert_no_match(/\d+\.\d+%/, floor[:title])

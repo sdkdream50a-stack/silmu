@@ -34,7 +34,7 @@
       <div class="mt-4 flex flex-wrap gap-2 items-center">
         <span class="text-sm text-slate-500 font-medium">인기 검색어:</span>
         <% %w[수의계약 연말정산 출장비 이월 기간제 보조금정산 겸직 일상경비].each do |keyword| %>
-          <%= link_to keyword, silmu_search_search_path(q: keyword),
+          <%= link_to keyword, silmu_search_path(q: keyword),
               class: "px-3 py-1.5 bg-surface-100 text-slate-700 rounded-full text-sm font-medium hover:bg-indigo-100 hover:text-indigo-700 transition-all",
               data: { turbo: false } %>
         <% end %>

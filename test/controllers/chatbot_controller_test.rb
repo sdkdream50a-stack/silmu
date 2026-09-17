@@ -22,7 +22,19 @@ class ChatbotControllerTest < ActionDispatch::IntegrationTest
 
   test "직접 접근은 silmu-search 인덱스로 리다이렉트" do
     get silmu_search_search_path(q: "여비")
-    assert_response :moved_permanently
+    assert_response :found
+    assert_redirected_to silmu_search_path(q: "여비")
+  end
+
+  # 전수감사 UX TOP#1 — 301 은 브라우저에 캐시돼 같은 URL 의 frame 요청까지 리다이렉트시킨다.
+  test "직접 접근 리다이렉트는 영구(301)가 아니다" do
+    get silmu_search_search_path(q: "3000만원 물품 수의계약 가능한가요", src: "home_chip")
+    assert_not_equal 301, response.status
+  end
+
+  test "인기 검색어 링크는 frame 전용 endpoint 가 아니라 검색 페이지로 간다" do
+    get silmu_search_path
+    assert_select "a[href^='/silmu-search/search']", 0
   end
 
   test "레지스트리 도구가 검색된다 ('가족수당' → 공무원 수당 계산기)" do

@@ -27,7 +27,7 @@
        data-controller="exam-quiz"
        data-exam-quiz-bookmark-mode-value="true"
        data-exam-quiz-subject-id-value="bookmarks"
-       data-exam-quiz-chapter-map-value="<%= @chapter_map.to_json.html_safe %>"
+       data-exam-quiz-chapter-map-value="<%= @chapter_map.to_json %>"
        data-exam-quiz-questions-api-url-value="<%= exam_quiz_questions_api_path %>">
 
     <!-- 북마크 없음 (초기에는 hidden, JS에서 제어) -->
