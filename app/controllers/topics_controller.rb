@@ -266,13 +266,16 @@ class TopicsController < ApplicationController
   end
 
   # 토픽 카테고리에 따라 적절한 법령 참조 문구를 반환
+  # <title> 의 짧은 근거 라벨. 종전에는 contract 외 카테고리(예산·지출·기타)도 "지방계약법"으로,
+  # 교육 섹터 계약 토픽은 "교육재정 법령"으로 떨어졌다 (예: local-tax-levy 제목에 지방계약법).
   def topic_law_reference(topic)
     case topic.category
+    when "contract" then "지방계약법"
     when "travel", "duty", "salary" then "공무원 법령"
     when "subsidy" then "보조금 관리법"
     when "property" then "공유재산법"
-    else
-      topic.sector == "edu" ? "교육재정 법령" : "지방계약법"
+    when "budget", "expense" then topic.sector == "edu" ? "교육재정 법령" : "지방재정 법령"
+    else "관계 법령"
     end
   end
 

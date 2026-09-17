@@ -128,10 +128,32 @@ class ChatbotController < ApplicationController
     end.first(4)
   end
 
+  # 금액 구간 안내의 한도는 판정 규칙집(config/contract_decision_rules.yml)에서만 가져온다.
+  # 종전에는 여기 금액을 따로 적어 두어 "2천만원 초과 물품도 누구나 2인 견적 수의계약" 으로 안내했다(§25①5호 위반).
+  def private_contract_limits
+    rules = ContractDecision::RuleSet.current.private_contract_rules.index_by { |r| r["rule_id"] }
+    single = ContractDecision::RuleSet.current.quotation_rules["single_quote_exceptions"].index_by { |r| r["rule_id"] }
+    {
+      single_quote: single.fetch("D30-1-2-본문")["max_amount"],
+      goods_any: rules.fetch("D25-1-5-나")["max_amount"],
+      goods_special: rules.fetch("D25-1-5-라")["max_amount"],
+      construction_etc: rules.fetch("D25-1-5-가-etc")["max_amount"],
+      construction_special: rules.fetch("D25-1-5-가-special")["max_amount"],
+      construction_general: rules.fetch("D25-1-5-가-general")["max_amount"]
+    }
+  end
+  helper_method :private_contract_limits
+
+  def conditional_private_contract(label, description, checklist, tips)
+    { method: label, method_type: "private_2", color: "blue",
+      description: description, checklist: checklist, tips: tips }
+  end
+
   def calculate_contract_method(category, price)
+    limits = private_contract_limits
     case category
     when "goods", "service" # 물품, 용역
-      if price <= 20_000_000  # 2천만원 이하 (지방계약법 시행령 제30조)
+      if price <= limits[:goods_any] # 2천만원 이하 — 상대방 무관 (지방계약법 시행령 제25조제1항제5호나목·제30조)
         {
           method: "1인 견적 수의계약",
           method_type: "private_1",
@@ -148,24 +170,17 @@ class ChatbotController < ApplicationController
             "견적서는 반드시 계약 전에 징구"
           ]
         }
-      elsif price <= 50_000_000
-        {
-          method: "2인 이상 견적 수의계약",
-          method_type: "private_2",
-          description: "2개 이상 업체에서 견적서를 받아 최저가로 계약",
-          color: "blue",
-          checklist: [
-            "예정가격 작성",
-            "2인 이상 견적서 징구 (동일 조건)",
-            "최저가 업체 선정",
-            "수의계약 사유서 작성",
-            "계약서 작성"
-          ],
-          tips: [
-            "동일한 규격/조건으로 견적 요청",
-            "견적 마감일시 명시하여 통보"
-          ]
-        }
+      elsif price <= limits[:goods_special]
+        conditional_private_contract(
+          "상대방 자격에 따라 수의계약 가능",
+          "일반 업체는 경쟁입찰 대상입니다. 청년창업기업(5천만원 이하)·소기업·소상공인(1억원 이하) 등 시행령 제25조제1항제5호의 상대방일 때만 수의계약(원칙 2인 이상 견적)이 가능합니다.",
+          [ "계약상대자 자격(청년창업·소기업·소상공인·여성·장애인·사회적기업 등) 확인서 징구",
+            "자격 미해당 시 경쟁입찰 진행",
+            "해당 시 예정가격 작성 · 2인 이상 견적서 징구(여성·장애인·청년창업 등 5천만원 이하는 1인 견적 가능)",
+            "수의계약 사유서 작성", "계약서 작성" ],
+          [ "상대방 자격별 한도는 계약방식 판정 도구에서 확인",
+            "금액만으로 수의계약 여부가 정해지지 않습니다" ]
+        )
       else
         {
           method: "경쟁입찰",
@@ -186,7 +201,7 @@ class ChatbotController < ApplicationController
         }
       end
     when "construction" # 공사
-      if price <= 20_000_000  # 2천만원 이하 (시행령 제30조)
+      if price <= limits[:single_quote] # 2천만원 이하 — 1인 견적 (시행령 제30조제1항제2호)
         {
           method: "1인 견적 수의계약",
           method_type: "private_1",
@@ -204,11 +219,11 @@ class ChatbotController < ApplicationController
             "설계변경 가능성 고려"
           ]
         }
-      elsif price <= 400_000_000  # 4억원 이하 (종합공사 수의계약 한도)
+      elsif price <= limits[:construction_etc]
         {
           method: "2인 이상 견적 수의계약",
           method_type: "private_2",
-          description: "2개 이상 업체에서 견적서를 받아 최저가로 계약",
+          description: "모든 공사 종류가 수의계약 한도 이내입니다(그 밖의 공사 1억6천만원·전문공사 2억원·종합공사 4억원). 2개 이상 업체에서 견적서를 받습니다.",
           color: "blue",
           checklist: [
             "설계서/도면 준비",
@@ -222,6 +237,16 @@ class ChatbotController < ApplicationController
             "시공능력평가액 확인"
           ]
         }
+      elsif price <= limits[:construction_general]
+        conditional_private_contract(
+          "공사 종류에 따라 수의계약 가능",
+          price <= limits[:construction_special] ?
+            "종합공사(4억원 이하)·전문공사(2억원 이하)는 수의계약이 가능하지만, 전기·정보통신·소방 등 그 밖의 공사(1억6천만원 이하)는 경쟁입찰 대상입니다." :
+            "종합공사(4억원 이하)만 수의계약이 가능합니다. 전문공사(2억원)·그 밖의 공사(1억6천만원) 한도를 넘었으므로 경쟁입찰 대상입니다.",
+          [ "공사 종류(종합·전문·전기/정보통신/소방 등) 확정", "한도 이내면 예정가격 작성 · 2인 이상 견적서 징구",
+            "한도 초과면 경쟁입찰 진행", "계약서 작성" ],
+          [ "공사 종류별 한도: 시행령 제25조제1항제5호가목", "건설업 등록증·시공능력평가액 확인" ]
+        )
       else
         {
           method: "경쟁입찰",

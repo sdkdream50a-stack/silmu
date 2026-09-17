@@ -4,12 +4,12 @@ require "test_helper"
 # 각 테스트는 교정 전 코드에서 FAIL하도록 경계값을 골랐다.
 class ToolAccuracyRegressionTest < ActionDispatch::IntegrationTest
   # ── 연가: 평균 월일수(30.44) 나눗셈이 만 1년을 11개월로 깎던 결함 ──
-  test "만 1년 재직은 12개월로 계산되어 연가 12일이 부여된다" do
+  test "만 1년 재직은 12개월로 계산되어 연가 15일이 부여된다(2024.7.2 개정표)" do
     data = PdfExportService.annual_leave_data(
       hire_date: "2025-01-01", ref_year: 2026, used_leave: 0
     )
     assert_equal 12, data[:years] * 12 + data[:months], "365일 재직이 11개월로 깎이면 안 된다"
-    assert_equal 12, data[:granted]
+    assert_equal 15, data[:granted]
   end
 
   test "임용일의 일자가 기준일보다 늦으면 한 달을 빼고 센다" do

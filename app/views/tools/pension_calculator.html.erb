@@ -32,13 +32,13 @@
         <div class="px-6 pb-6 prose prose-slate prose-sm max-w-none">
           <p class="text-slate-700 leading-relaxed mb-3">
             공무원연금 수령액은 <strong>공무원연금법 제43조 (퇴직연금 또는 퇴직연금일시금 등)</strong>에 따라 산정됩니다. <strong>재직기간 36년 한도</strong> (§43 단서).
-            2015년 개혁으로 연금지급률이 변경되어 임용 시기에 따라 다르게 적용됩니다.
+            2016~2034년 퇴직자는 <strong>퇴직 연도</strong>별 비율(부칙 제13조제1항)을, 2035년 이후 퇴직자는 1.7%(§43④)를 평균기준소득월액에 곱합니다. 연금은 <strong>10년 이상 재직</strong>해야 받습니다(§43①).
           </p>
           <div class="bg-slate-50 rounded-lg p-4 text-sm space-y-2">
             <p><strong>평균기준소득월액</strong> = 재직 기간 중 기준소득월액의 평균 (공무원보수인상률 반영하여 연금 지급 시작 시점의 현재가치로 환산)</p>
             <p><strong>퇴직 연도별 산정율</strong> (공무원연금법 부칙 — 2015.6.22 전부개정 경과조치):</p>
-            <p class="text-xs text-slate-500 ml-2">2016: 1.878% / 2017: 1.856% / 2018: 1.834% / 2019: 1.812% / 2020: 1.79% / 2021: 1.78% / 2022: 1.77% / 2023: 1.76% / 2024: 1.75% / 2025: 1.74% / <strong class="text-slate-700">2026: 1.736%</strong> / 2030: 1.72% / 2035: 1.7% (§43 본문 최종 목표)</p>
-            <p><strong>2015년 이전 임용자</strong>: 1.9% 적용 (2016년 이후 단계적 인하 시작)</p>
+            <p class="text-xs text-slate-500 ml-2">2016: 1.878% / 2017: 1.856% / 2018: 1.834% / 2019: 1.812% / 2020: 1.79% / 2021: 1.78% / 2022: 1.77% / 2023: 1.76% / 2024: 1.75% / 2025: 1.74% / <strong class="text-slate-700">2026: 1.736%</strong> / 2027: 1.732% / 2028: 1.728% / 2029: 1.724% / 2030: 1.72% / 2031: 1.716% / 2032: 1.712% / 2033: 1.708% / 2034: 1.704% / 2035년 이후: 1.7% (§43④)</p>
+            <p><strong>반영하지 않은 것</strong>: 2016년 이후 재직기간 중 1%p에 적용되는 소득재분배(부칙 제13조제2항), 2009년 이전 임용자 등의 경과조치(부칙 제11조·제12조). 이 도구는 퇴직 연도 비율을 전체 재직기간에 곱한 개략 추정입니다.</p>
             <p><strong>2026년 인상률</strong>: 2025년 물가상승률 2.1% 반영 자동 계산</p>
           </div>
           <div class="bg-amber-50 border-l-4 border-amber-500 p-3 rounded-r-lg mt-4">
@@ -61,18 +61,16 @@
             재직 정보 입력
           </h2>
 
-          <!-- 임용 시기 선택 -->
+          <!-- 퇴직(예정) 연도 선택 — 부칙 제13조제1항 -->
           <div class="mb-6">
-            <label class="block text-sm font-semibold text-slate-700 mb-3">임용 시기</label>
-            <div class="grid grid-cols-2 gap-3">
-              <button type="button" onclick="selectEra('before')"
-                      class="era-btn py-3 rounded-xl border-2 text-sm font-semibold transition-all border-violet-500 bg-violet-50 text-violet-700"
-                      data-era="before">2015년 이전 임용</button>
-              <button type="button" onclick="selectEra('after')"
-                      class="era-btn py-3 rounded-xl border-2 text-sm font-semibold transition-all border-slate-200 text-slate-500 hover:border-violet-300"
-                      data-era="after">2016년 이후 임용</button>
-            </div>
-            <p class="text-xs text-slate-400 mt-2" id="era-desc">2015년 이전 임용자: 1.9% 적용</p>
+            <label for="retire-year" class="block text-sm font-semibold text-slate-700 mb-3">퇴직(예정) 연도</label>
+            <select id="retire-year" class="form-input w-full" onchange="selectRetireYear(this.value)">
+              <% (2026..2034).each do |y| %>
+                <option value="<%= y %>"><%= y %>년</option>
+              <% end %>
+              <option value="2035">2035년 이후</option>
+            </select>
+            <p class="text-xs text-slate-400 mt-2" id="era-desc">2026년 퇴직: 1.736% (공무원연금법 부칙 제13조제1항)</p>
           </div>
 
           <!-- 재직년수 슬라이더 -->
@@ -81,11 +79,11 @@
               예상 재직년수
               <span class="text-violet-600 font-bold ml-2" id="tenure-display">20년</span>
             </label>
-            <input type="range" id="tenure-slider" min="5" max="36" value="20" step="1"
+            <input type="range" id="tenure-slider" min="10" max="36" value="20" step="1"
                    oninput="updateTenure(this.value); calculate()"
                    class="w-full h-2 bg-violet-100 rounded-lg appearance-none cursor-pointer accent-violet-600">
             <div class="flex justify-between text-xs text-slate-400 mt-1">
-              <span>최소 5년</span>
+              <span>최소 10년 (§43①)</span>
               <span>최대 36년</span>
             </div>
           </div>
@@ -263,22 +261,16 @@
 %>
 
 <script>
-let selectedEra = 'before'; // 'before' or 'after'
+// 공무원연금법 부칙 제13조제1항 — 퇴직 연도별 비율(%). 2035년 이후는 §43④ 1.7%.
+const RETIRE_YEAR_RATE = { 2026: 1.736, 2027: 1.732, 2028: 1.728, 2029: 1.724, 2030: 1.72, 2031: 1.716, 2032: 1.712, 2033: 1.708, 2034: 1.704, 2035: 1.7 };
+let selectedRetireYear = 2026;
 
-function selectEra(era) {
-  selectedEra = era;
-  document.querySelectorAll('.era-btn').forEach(function(btn) {
-    const isSelected = btn.dataset.era === era;
-    btn.classList.toggle('border-violet-500', isSelected);
-    btn.classList.toggle('bg-violet-50', isSelected);
-    btn.classList.toggle('text-violet-700', isSelected);
-    btn.classList.toggle('border-slate-200', !isSelected);
-    btn.classList.toggle('text-slate-500', !isSelected);
-  });
-  document.getElementById('era-desc').textContent =
-    era === 'before'
-      ? '2015년 이전 임용자: 1.9% 적용'
-      : '2026년 현재 적용율: 1.736% (공무원연금법 부칙 — 단계적 인하 2035년 1.7% 도달)';
+function selectRetireYear(year) {
+  selectedRetireYear = parseInt(year, 10) || 2026;
+  const pct = RETIRE_YEAR_RATE[selectedRetireYear];
+  document.getElementById('era-desc').textContent = selectedRetireYear >= 2035
+    ? '2035년 이후 퇴직: 1.7% (공무원연금법 제43조제4항)'
+    : selectedRetireYear + '년 퇴직: ' + pct + '% (공무원연금법 부칙 제13조제1항)';
   calculate();
 }
 
@@ -292,12 +284,12 @@ function setIncome(amount) {
 }
 
 function calculate() {
-  const tenure = parseInt(document.getElementById('tenure-slider').value) || 20;
+  const tenure = Math.min(36, Math.max(10, parseInt(document.getElementById('tenure-slider').value) || 20));
   const income = parseInt(document.getElementById('income-input').value) || 0;
   if (!income) return;
 
-  // 공무원연금법 부칙 (2015.6.22 전부개정) 단계적 인하율 — 2026년 현재 1.736%
-  const rate = selectedEra === 'before' ? 0.019 : 0.01736;
+  // 퇴직 연도 비율 × 전체 재직기간 (소득재분배·경과조치 미반영 개략 추정). 재직 10년 미만은 연금 없음(§43①).
+  const rate = RETIRE_YEAR_RATE[selectedRetireYear] / 100;
   const monthlyPension = Math.round(income * tenure * rate);
   const monthlyPension2026 = Math.round(monthlyPension * 1.021);
   const annualPension = monthlyPension * 12;

@@ -6,18 +6,12 @@ class ExamReminderMailer < ApplicationMailer
     @streak_count = progress.streak_count
     # wrong_answers는 JSON serialize 적용되어 있으므로 Array로 이미 역직렬화됨
     @wrong_count = Array(progress.wrong_answers).size
-    @days_until_exam = days_until_exam
+    # 시험이 모두 지나면 nil — D-day 를 쓰지 않는다(예전엔 D-0 이 영구 고정됐다).
+    @next_exam = ExamSchedule.next_exam
+    @days_until_exam = ExamSchedule.days_until_next_exam
 
-    mail(
-      to: @user.email,
-      subject: "📚 #{@days_absent}일째 공부를 쉬고 있어요 — 공공조달관리사 시험까지 D-#{days_until_exam}일"
-    )
-  end
-
-  private
-
-  def days_until_exam
-    target = Date.new(2026, 10, 3)
-    [ (target - Time.zone.today).to_i, 0 ].max
+    subject = "📚 #{@days_absent}일째 공부를 쉬고 있어요"
+    subject += " — 공공조달관리사 #{@next_exam[:label]}까지 D-#{@days_until_exam}" if @next_exam
+    mail(to: @user.email, subject: subject)
   end
 end

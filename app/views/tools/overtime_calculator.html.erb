@@ -31,12 +31,12 @@
         </summary>
         <div class="px-6 pb-6 prose prose-slate prose-sm max-w-none">
           <p class="text-slate-700 leading-relaxed mb-3">
-            공무원 초과근무수당은 <strong>공무원수당 등에 관한 규정 제15조</strong>에 따라 '월봉급액 ÷ 209 × 초과근무시간'으로 계산됩니다.
+            공무원 시간외근무수당은 <strong>공무원수당 등에 관한 규정 제15조</strong>에 따라 '봉급기준액(해당 계급 10호봉 봉급의 55%, 8급 이하 60%) ÷ 209 × 150%'를 시간당 단가로 계산합니다. 본인 호봉의 봉급이 아니라 <strong>계급별 기준호봉</strong>이 기준입니다.
             시간외근무수당 외에도 야간근무(22:00~06:00)수당과 휴일근무수당이 별도로 적용되므로, 각 유형을 정확히 구분해야 합니다.
           </p>
           <p class="text-slate-700 leading-relaxed mb-3">
             월 지급 한도는 <strong>시간외근무수당 1일 4시간 / 1개월 57시간</strong> (§15 본문)이며, 초과분은 이월되지 않습니다.
-            이 도구는 봉급액과 근무 유형·시간을 입력하면 수당을 즉시 계산하여 급여 담당자와 직원 모두 활용할 수 있습니다.
+            이 도구는 계급과 근무 유형·시간을 입력하면 수당을 즉시 계산하여 급여 담당자와 직원 모두 활용할 수 있습니다.
           </p>
           <div class="bg-amber-50 border-l-4 border-amber-500 p-3 rounded-r-lg mt-4">
             <p class="text-amber-900 text-xs leading-relaxed">
@@ -57,23 +57,23 @@
             근무 정보 입력
           </h2>
 
-          <!-- 월봉급액 -->
+          <!-- 계급 (기준호봉 = 해당 계급 10호봉, 수당규정 별표12) -->
           <div class="mb-5">
-            <label class="block text-sm font-semibold text-slate-700 mb-2">
-              월 봉급액 <span class="text-rose-500">*</span>
-              <span class="text-xs text-slate-400 font-normal ml-1">(세전, 각종 수당 제외 봉급만)</span>
+            <label for="grade-select" class="block text-sm font-semibold text-slate-700 mb-2">
+              계급 <span class="text-rose-500">*</span>
+              <span class="text-xs text-slate-400 font-normal ml-1">(일반직 및 일반직 상당)</span>
             </label>
-            <div class="relative">
-              <input type="number" id="monthly-salary" class="form-input w-full pr-8"
-                     placeholder="예: 2500000" min="0" step="1000"
-                     oninput="calculate()" />
-              <span class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">원</span>
-            </div>
-            <p class="text-xs text-slate-400 mt-1">봉급표 기준 호봉별 봉급액을 입력하세요</p>
-            <label class="flex items-center gap-2 mt-3 text-sm text-slate-700">
-              <input type="checkbox" id="is-grade9" class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500" oninput="calculate()" />
-              <span>9급(상당) — 시간외수당 60% 적용 (그 외 직급은 55%, 「공무원수당규정」 §15②)</span>
-            </label>
+            <select id="grade-select" class="form-input w-full" onchange="calculate()">
+              <option value="">계급을 선택하세요</option>
+              <option value="9">9급</option>
+              <option value="8">8급</option>
+              <option value="7">7급</option>
+              <option value="6">6급</option>
+              <option value="5">5급</option>
+              <option value="4">4급</option>
+            </select>
+            <p id="base-salary-note" class="text-xs text-slate-400 mt-1">본인 호봉과 관계없이 해당 계급 10호봉 봉급이 기준입니다(2026 봉급표). 8급 이하 60%, 7급 이상 55%(「공무원수당규정」 §15②·별표12).</p>
+            <p class="text-xs text-slate-400 mt-1">교원·경찰·소방·연구직 등은 기준호봉이 다릅니다(별표12) — 이 도구는 일반직 기준입니다.</p>
           </div>
 
           <!-- 구분선 -->
@@ -144,7 +144,7 @@
           <!-- 초기 안내 -->
           <div id="result-empty" class="text-center py-10 text-slate-400">
             <span class="material-symbols-outlined text-5xl mb-3 block opacity-40">schedule</span>
-            <p class="text-sm">월봉급액과 근무 시간을 입력하면<br>수당이 자동 계산됩니다.</p>
+            <p class="text-sm">계급과 근무 시간을 입력하면<br>수당이 자동 계산됩니다.</p>
           </div>
 
           <!-- 계산 결과 -->
@@ -157,7 +157,7 @@
                 <span id="hourly-rate">-</span>
                 <span class="text-base font-normal text-slate-500 ml-1">원/시간</span>
               </div>
-              <p class="text-xs text-slate-400 mt-1">월봉급액 ÷ 209시간</p>
+              <p class="text-xs text-slate-400 mt-1">봉급기준액 ÷ 209 × 150%</p>
             </div>
 
             <!-- 항목별 수당 -->
@@ -212,9 +212,9 @@
         <div class="mt-4 bg-slate-50 rounded-2xl p-5">
           <h3 class="text-sm font-bold text-slate-700 mb-3">계산 기준 (공무원수당 등에 관한 규정)</h3>
           <ul class="text-xs text-slate-500 space-y-1.5 leading-relaxed">
-            <li>• <strong class="text-slate-600">시간외근무수당</strong> = 월봉급액 × 55%(9급은 60%) ÷ 209 × 1.5 × 시간외근무시간 (공무원수당규정 §15②, 월 57시간 한도)</li>
-            <li>• <strong class="text-slate-600">야간근무수당</strong> = 시간당 단가 × 야간근무시간 × 0.5 (22:00~06:00)</li>
-            <li>• <strong class="text-slate-600">휴일근무수당</strong> = 봉급기준액(월봉급액 × 55%, 9급 60%) ÷ 26 × 휴일근무일수 × 1.5 (제17조 — 현업공무원등)</li>
+            <li>• <strong class="text-slate-600">시간외근무수당</strong> = 봉급기준액(해당 계급 10호봉 × 55%, 8급 이하 60%) ÷ 209 × 1.5 × 시간외근무시간 (공무원수당규정 §15②·별표12, 1일 4시간·월 57시간 한도)</li>
+            <li>• <strong class="text-slate-600">야간근무수당</strong> = 봉급기준액 ÷ 209 × 야간근무시간 × 0.5 (22:00~06:00, 제16조 — 현업공무원등)</li>
+            <li>• <strong class="text-slate-600">휴일근무수당</strong> = 봉급기준액 ÷ 26 × 휴일근무일수 × 1.5 (제17조 — 현업공무원등)</li>
             <li>• 시간외·야간·휴일이 중복되는 경우 각각 합산됩니다</li>
           </ul>
         </div>
@@ -229,7 +229,7 @@
   tool_key: 'overtime-calculator',
   next_actions: [
     { type: 'tool',  path: salary_calculator_path, label: '관련 도구',
-      title: '봉급 계산기', desc: '시간외수당 산정 기준 월봉급액 확인',
+      title: '봉급 계산기', desc: '계급별 10호봉 봉급액 확인',
       icon: 'payments', color: 'emerald' },
     { type: 'tool',  path: allowance_calculator_path, label: '관련 도구',
       title: '수당 계산기', desc: '직급보조비·정근수당 등 7종 일괄 계산',
@@ -241,6 +241,9 @@
 %>
 
 <script>
+  // 기준호봉(해당 계급 10호봉) 봉급액 — 공무원보수규정 별표3(개정 2026.1.2) · 수당규정 별표12
+  const GRADE_BASE_SALARY_2026 = { 4: 4497700, 5: 4066800, 6: 3468700, 7: 3133300, 8: 2813000, 9: 2542700 };
+
   function formatKRW(n) {
     return Math.round(n).toLocaleString('ko-KR') + '원';
   }
@@ -257,7 +260,8 @@
   }
 
   function calculate() {
-    const salary   = parseFloat(document.getElementById('monthly-salary').value) || 0;
+    const grade    = parseInt(document.getElementById('grade-select').value, 10) || 0;
+    const salary   = GRADE_BASE_SALARY_2026[grade] || 0;
     const overtime = parseFloat(document.getElementById('overtime-hours').value)  || 0;
     const night    = parseFloat(document.getElementById('night-hours').value)     || 0;
     const holiday  = parseFloat(document.getElementById('holiday-days').value)    || 0;
@@ -272,9 +276,9 @@
     document.getElementById('result-empty').classList.add('hidden');
     document.getElementById('result-content').classList.remove('hidden');
 
-    // 시간당 단가 = 봉급기준액의 55%(9급은 60%)의 209분의 1의 150% (공무원수당규정 §15②)
-    const baseRate = document.getElementById('is-grade9').checked ? 0.60 : 0.55;
-    // 봉급기준액을 209로 나눈 시간당 기본액. 시간외는 ×1.5, 야간은 ×0.5로 각각 가산한다(§19는 150% 미적용).
+    // 시간당 단가 = 기준호봉 봉급액의 55%(8급 이하 60%)의 209분의 1의 150% (공무원수당규정 §15②)
+    const baseRate = grade >= 8 ? 0.60 : 0.55;
+    // 봉급기준액을 209로 나눈 시간당 기본액. 시간외는 ×1.5, 야간은 ×0.5로 각각 가산한다(§16은 150% 미적용).
     const baseHourly = salary * baseRate / 209;
     const hourlyRate = baseHourly * 1.5;
     document.getElementById('hourly-rate').textContent = Math.round(hourlyRate).toLocaleString('ko-KR');
@@ -302,7 +306,7 @@
       document.getElementById('limit-warning').classList.add('hidden');
     }
 
-    // 야간근무수당 (공무원수당규정 §19: 봉급기준액÷209의 100분의 50. 시간외 150% 미포함)
+    // 야간근무수당 (공무원수당규정 §16②: 봉급기준액÷209의 100분의 50. 시간외 150% 미포함)
     const nightPay = baseHourly * night * 0.5;
     if (night > 0) {
       document.getElementById('row-night').classList.remove('hidden');
@@ -314,7 +318,7 @@
       document.getElementById('row-night').classList.add('hidden');
     }
 
-    // 휴일근무수당 (봉급기준액[월봉급액×55%, 9급 60%] ÷ 26 × 일수 × 1.5, 제17조 — 현업공무원등)
+    // 휴일근무수당 (봉급기준액 ÷ 26 × 일수 × 1.5, 제17조 — 현업공무원등)
     const dailyRate = salary * baseRate / 26;
     const holidayPay = dailyRate * holiday * 1.5;
     if (holiday > 0) {
