@@ -231,7 +231,8 @@
 
         <!-- 연가일수 기준표 -->
         <div class="mt-4 bg-slate-50 rounded-2xl p-5">
-          <h3 class="text-sm font-bold text-slate-700 mb-3">연가일수 기준표 (국가공무원 복무규정 제15조)</h3>
+          <h3 class="text-sm font-bold text-slate-700 mb-1">연가일수 기준표 (국가공무원 복무규정 제15조)</h3>
+          <p class="text-[11px] text-slate-500 mb-3">2024.7.2 개정 기준 · 지방공무원 복무규정 제7조 동일 · 임용 연도는 근무월수 비례(제17조제2항)</p>
           <table class="w-full text-xs text-slate-600">
             <thead>
               <tr class="border-b border-slate-200">
@@ -241,9 +242,8 @@
             </thead>
             <tbody class="divide-y divide-slate-100">
               <tr><td class="py-1.5">1개월 이상 ~ 1년 미만</td><td class="text-right font-semibold">11일</td></tr>
-              <tr><td class="py-1.5">1년 이상 ~ 2년 미만</td><td class="text-right font-semibold">12일</td></tr>
-              <tr><td class="py-1.5">2년 이상 ~ 3년 미만</td><td class="text-right font-semibold">14일</td></tr>
-              <tr><td class="py-1.5">3년 이상 ~ 4년 미만</td><td class="text-right font-semibold">15일</td></tr>
+              <tr><td class="py-1.5">1년 이상 ~ 3년 미만</td><td class="text-right font-semibold">15일</td></tr>
+              <tr><td class="py-1.5">3년 이상 ~ 4년 미만</td><td class="text-right font-semibold">16일</td></tr>
               <tr><td class="py-1.5">4년 이상 ~ 5년 미만</td><td class="text-right font-semibold">17일</td></tr>
               <tr><td class="py-1.5">5년 이상 ~ 6년 미만</td><td class="text-right font-semibold">20일</td></tr>
               <tr><td class="py-1.5">6년 이상</td><td class="text-right font-semibold text-editorial-navy">21일</td></tr>
@@ -286,17 +286,30 @@
     }
   })();
 
-  // 재직 기간 → 부여 연가일수 반환
+  // 재직 기간 → 부여 연가일수 반환 (국가공무원 복무규정 §15① 표, 개정 2024.7.2)
   function getLeaveByYears(totalMonths) {
     if (totalMonths < 1)  return { days: 0,  label: '1개월 미만 — 연가 없음' };
     if (totalMonths < 12) return { days: 11, label: '1개월 이상 ~ 1년 미만 → 11일' };
     const years = Math.floor(totalMonths / 12);
-    if (years < 2)  return { days: 12, label: '1년 이상 ~ 2년 미만 → 12일' };
-    if (years < 3)  return { days: 14, label: '2년 이상 ~ 3년 미만 → 14일' };
-    if (years < 4)  return { days: 15, label: '3년 이상 ~ 4년 미만 → 15일' };
+    if (years < 3)  return { days: 15, label: '1년 이상 ~ 3년 미만 → 15일' };
+    if (years < 4)  return { days: 16, label: '3년 이상 ~ 4년 미만 → 16일' };
     if (years < 5)  return { days: 17, label: '4년 이상 ~ 5년 미만 → 17일' };
     if (years < 6)  return { days: 20, label: '5년 이상 ~ 6년 미만 → 20일' };
     return { days: 21, label: '6년 이상 → 21일' };
+  }
+
+  // 임용일부터 그 해 12월 31일까지 근무월수. 15일 이상 남으면 1개월로 센다(복무규정 §17②).
+  // 서버(PdfExportService#worked_months_in_hire_year)와 같은 규칙 — 월말 날짜는 그 달 말일로 맞춘다.
+  function addMonthsClamped(y, m, d, k) {
+    const last = new Date(Date.UTC(y, m + k + 1, 0)).getUTCDate();
+    return Date.UTC(y, m + k, Math.min(d, last));
+  }
+  function workedMonthsInHireYear(y, m, d) {
+    const yearEnd = Date.UTC(y + 1, 0, 1);
+    let months = 12 - m;
+    while (months > 0 && addMonthsClamped(y, m, d, months) > yearEnd) months--;
+    const remainderDays = Math.round((yearEnd - addMonthsClamped(y, m, d, months)) / 86400000);
+    return months + (remainderDays >= 15 ? 1 : 0);
   }
 
   function formatKRW(n) {
@@ -349,14 +362,16 @@
       hireDate.toLocaleDateString('ko-KR') + ' 임용 기준 (' + refYear + '.01.01 시점)';
 
     // 연가 계산
-    const { days, label } = getLeaveByYears(totalMonths);
-
-    // 신규 임용 연도 비례 처리: 임용 연도와 기준 연도가 같으면 월 비례
+    let { days, label } = getLeaveByYears(totalMonths);
     let grantedLeave = days;
-    if (hireDate.getFullYear() === refYear && days > 0) {
-      const hireMonth = hireDate.getMonth(); // 0-indexed
-      const remainMonths = 12 - hireMonth;   // 임용 월 포함 남은 달
-      grantedLeave = Math.ceil(days * remainMonths / 12);
+
+    // 임용 연도: 1월 1일 기준 재직이 0이라 표가 0일을 준다.
+    // 복무규정 §17② — 11일 × 그 해 근무월수 ÷ 12, 소수점 이하 반올림.
+    if (hireDate.getFullYear() === refYear) {
+      const [hy, hm, hd] = hireDateVal.split('-').map(Number);
+      const worked = workedMonthsInHireYear(hy, hm - 1, hd);
+      grantedLeave = Math.round(11 * worked / 12);
+      label = '임용 연도 — 11일 × 근무 ' + worked + '개월 ÷ 12 (복무규정 §17②)';
     }
 
     const remaining = Math.max(0, grantedLeave - usedLeave);

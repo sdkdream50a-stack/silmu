@@ -47,10 +47,11 @@ class PdfExportService
       leave_info = leave_by_months(total_months)
       granted = leave_info[:days]
 
-      # 신규 임용 연도 비례 처리
-      if hire_date.year == ref_year && granted > 0
-        remain_months = 12 - hire_date.month + 1
-        granted = (granted * remain_months / 12.0).ceil
+      # 임용 연도: 1월 1일 기준 재직이 0이라 표가 0일을 준다. 복무규정 §17②에 따라
+      # «1년 미만 연가일수 × 그 해 근무월수 ÷ 12»(15일 이상 = 1개월, 반올림)로 계산한다.
+      if hire_date.year == ref_year
+        leave_info = LEAVE_FIRST_YEAR
+        granted = (leave_info[:days] * worked_months_in_hire_year(hire_date) / 12.0).round
       end
 
       remaining = [ granted - used_leave, 0 ].max
@@ -92,16 +93,27 @@ class PdfExportService
 
     private
 
+    # 국가공무원 복무규정 §15① 표(개정 2024.7.2) · 지방공무원 복무규정 §7① 동일.
+    LEAVE_FIRST_YEAR = { days: 11, label: "1개월 이상 ~ 1년 미만 -> 11일 (임용 연도는 근무월수 비례)" }.freeze
+
     def leave_by_months(total_months)
       return { days: 0, label: "1개월 미만 - 연가 없음" } if total_months < 1
       return { days: 11, label: "1개월 이상 ~ 1년 미만 -> 11일" } if total_months < 12
       years = total_months / 12
-      return { days: 12, label: "1년 이상 ~ 2년 미만 -> 12일" } if years < 2
-      return { days: 14, label: "2년 이상 ~ 3년 미만 -> 14일" } if years < 3
-      return { days: 15, label: "3년 이상 ~ 4년 미만 -> 15일" } if years < 4
+      return { days: 15, label: "1년 이상 ~ 3년 미만 -> 15일" } if years < 3
+      return { days: 16, label: "3년 이상 ~ 4년 미만 -> 16일" } if years < 4
       return { days: 17, label: "4년 이상 ~ 5년 미만 -> 17일" } if years < 5
       return { days: 20, label: "5년 이상 ~ 6년 미만 -> 20일" } if years < 6
       { days: 21, label: "6년 이상 -> 21일" }
+    end
+
+    # 임용일부터 그 해 12월 31일까지의 근무월수. 15일 이상 남은 기간은 1개월로 센다(§17②).
+    def worked_months_in_hire_year(hire_date)
+      year_end = Date.new(hire_date.year + 1, 1, 1)
+      months = 12 - hire_date.month + 1
+      months -= 1 while months.positive? && (hire_date >> months) > year_end
+      remainder_days = (year_end - (hire_date >> months)).to_i
+      months + (remainder_days >= 15 ? 1 : 0)
     end
 
     def font_available?

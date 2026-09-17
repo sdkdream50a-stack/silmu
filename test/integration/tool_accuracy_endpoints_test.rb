@@ -95,9 +95,9 @@ class ToolAccuracyEndpointsTest < ActionDispatch::IntegrationTest
       granted_leave: "999일", remaining_leave: "999일"   # 위조 시도
     }
     # 폰트 미설치 등으로 생성 자체가 실패할 수 있으나, 어떤 경우에도
-    # 위조된 999가 채택되어서는 안 된다. 서버 재계산 결과는 12일이다.
+    # 위조된 999가 채택되어서는 안 된다. 서버 재계산 결과는 15일이다.
     assert_includes [ 200, 422 ], response.status
-    assert_equal 12, PdfExportService.annual_leave_data(
+    assert_equal 15, PdfExportService.annual_leave_data(
       hire_date: "2025-01-01", ref_year: 2026, used_leave: 0
     )[:granted]
   end
