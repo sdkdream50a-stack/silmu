@@ -35,6 +35,11 @@ module AuditCaseProvenance
       note:  "이 사례는 특정 기관의 실제 감사결과 원문을 그대로 재현한 것이 아니라, " \
              "반복적으로 발생하는 감사 지적 유형을 바탕으로 실무 예방을 위해 재구성한 사례입니다."
     },
+    "SILMU_SIMULATED_CASE" => {
+      label: "가상 예방 시나리오", icon: "lightbulb", tone: :amber,
+      note:  "실제 감사결과가 아닙니다. 감사에서 자주 지적되는 유형을 설명하려고 실무.kr이 만든 가상 시나리오이며, " \
+             "기관·인물·일시·금액·처분 내용은 모두 예시입니다. 실제 처분은 사실관계에 따라 달라집니다."
+    },
     "SECONDARY_SOURCE" => {
       label: "2차 자료", icon: "description", tone: :gray,
       note:  "해설서·실무자료 등 2차 자료에 근거합니다. 결론은 공식 원문으로 재확인하세요."
@@ -46,7 +51,14 @@ module AuditCaseProvenance
   }.freeze
 
   # 실제 사건으로 오해하면 안 되는 유형
-  RECONSTRUCTED_TYPES = %w[SILMU_RECONSTRUCTED_CASE].freeze
+  RECONSTRUCTED_TYPES = %w[SILMU_RECONSTRUCTED_CASE SILMU_SIMULATED_CASE].freeze
+
+  # 검색 결과·AI 인용은 배너 없이 제목·설명만 가져간다 — 실제 사건으로 읽히지 않도록 유형을 앞에 붙인다.
+  SEO_PREFIXES = {
+    "SILMU_SIMULATED_CASE" => "[가상 예방 시나리오] ",
+    "SILMU_RECONSTRUCTED_CASE" => "[재구성 사례] ",
+    "UNVERIFIED" => "[출처 미확정] "
+  }.freeze
   # 원문 문서가 존재해야 정당한 유형 (§10: 원문 미확인 시 승격 금지)
   DOCUMENT_BACKED_TYPES = %w[ACTUAL_AUDIT COURT_CASE OFFICIAL_INTERPRETATION OFFICIAL_GUIDELINE].freeze
 
@@ -67,6 +79,13 @@ module AuditCaseProvenance
   def provenance_note  = provenance_descriptor[:note]
   def provenance_tone  = provenance_descriptor[:tone]
   def provenance_icon  = provenance_descriptor[:icon]
+
+  def seo_type_prefix = SEO_PREFIXES.fetch(effective_source_type, "")
+
+  # 제목 접미어: 원문 근거 유형만 «사례», 나머지는 «유형»
+  def seo_title_suffix
+    document_backed? ? "감사 지적 사례와 실무 대응 방법" : "감사 지적 유형과 실무 대응 방법"
+  end
 
   def reconstructed_case?
     return true if is_reconstructed
