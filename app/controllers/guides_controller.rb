@@ -336,11 +336,11 @@ class GuidesController < ApplicationController
     canonical_url = request.original_url.split("?").first
     set_meta_tags(
       title: "공공계약 판례·유권해석·FAQ 모음",
-      description: "수의계약·입찰·계약이행 관련 대법원 판례 해설, 기획재정부·행안부 유권해석, 실무 FAQ를 한곳에서 확인하세요. 공무원 계약 담당자를 위한 공식 해석 자료 모음.",
+      description: "수의계약·입찰·계약이행 관련 대법원 판례 해설, 재정경제부·행안부 유권해석, 실무 FAQ를 한곳에서 확인하세요. 공무원 계약 담당자를 위한 공식 해석 자료 모음.",
       keywords: "공공계약 판례, 유권해석, 계약 FAQ, 수의계약 판례, 입찰 판례, 계약담당자 FAQ",
       og: {
         title: "공공계약 판례·유권해석·FAQ 모음 — 실무.kr",
-        description: "수의계약·입찰·계약이행 판례 해설과 기재부·행안부 유권해석을 한곳에서 확인하세요.",
+        description: "수의계약·입찰·계약이행 판례 해설과 재정경제부·행안부 유권해석을 한곳에서 확인하세요.",
         url: canonical_url,
         image: "https://silmu.kr/og-image.webp"
       },

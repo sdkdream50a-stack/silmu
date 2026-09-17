@@ -30,8 +30,8 @@ class GovernmentCalendarIcsService
       uid: "audit-settlement-apr@silmu.kr",
       dtstart: "20260410",
       dtend: "20260411",
-      summary: "기획재정부 결산 감사원 제출 기한",
-      description: "기획재정부 결산서를 감사원에 제출하는 법정 기한입니다. 국가회계법 제15조에 따른 의무 제출 기한을 준수하세요. 실무.kr 상세 가이드: https://silmu.kr/guides",
+      summary: "정부 결산 감사원 제출 기한",
+      description: "정부 결산서를 감사원에 제출하는 법정 기한입니다. 국가회계법 제15조에 따른 의무 제출 기한을 준수하세요. 실무.kr 상세 가이드: https://silmu.kr/guides",
       rrule: "RRULE:FREQ=YEARLY;BYMONTH=4;BYMONTHDAY=10"
     },
     {
