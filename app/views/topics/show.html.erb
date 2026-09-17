@@ -379,7 +379,7 @@
           <button onclick="showTab('interpretation'); closeMoreTabs();" data-tab="interpretation"
                   class="tab-btn more-tab-item w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-editorial-navy-bg hover:text-editorial-navy-dark flex items-center gap-2 transition-colors">
             <span class="material-symbols-outlined" style="font-size:16px">policy</span>
-            유권해석
+            <%= interpretation_tab_label(@topic) %>
           </button>
           <button onclick="showTab('qa'); closeMoreTabs();" data-tab="qa"
                   class="tab-btn more-tab-item w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-editorial-navy-bg hover:text-editorial-navy-dark flex items-center gap-2 transition-colors">
@@ -615,6 +615,9 @@ document.addEventListener('click', function(e) {
         <div class="tab-panel" data-tab="interpretation" id="panel-interpretation">
           <% if @topic.interpretation_content.present? %>
             <div class="card p-6 lg:p-8">
+              <div class="mb-5 p-4 bg-amber-50 border border-amber-200 rounded-xl text-sm text-amber-900" data-interpretation-notice="unverified">
+                아래 질의·회신은 회신 원문을 확인하지 못한 실무 해설 예시로, 공식 유권해석이 아닙니다. 적힌 회신 기관·문서번호도 확인되지 않았습니다. 실제 적용 전 법제처 법령해석례나 소관 부처 회신을 확인하세요.
+              </div>
               <div class="legal-content">
                 <%= render_legal_content(@topic.interpretation_content) %>
               </div>
