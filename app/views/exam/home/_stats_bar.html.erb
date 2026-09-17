@@ -3,8 +3,8 @@
   <div class="max-w-6xl mx-auto">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
       <div class="space-y-2">
-        <div class="text-5xl font-extrabold tracking-tighter" style="font-family:'Manrope',sans-serif;color:#002b57">1,500+</div>
-        <div class="text-xs font-bold uppercase tracking-widest text-slate-400">예상 문제</div>
+        <div class="text-5xl font-extrabold tracking-tighter" style="font-family:'Manrope',sans-serif;color:#002b57"><%= number_with_delimiter(ExamQuestions::QUESTIONS.size / 100 * 100) %>+</div>
+        <div class="text-xs font-bold uppercase tracking-widest text-slate-400">자체 제작 문항</div>
       </div>
       <div class="space-y-2">
         <div class="text-5xl font-extrabold tracking-tighter" style="font-family:'Manrope',sans-serif;color:#002b57">28장</div>

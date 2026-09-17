@@ -15,14 +15,14 @@ module ExamQuestions
         "가격은 고려하지 않고 최고 품질·최신 사양의 제품만 구매하는 원칙"
       ],
       correct: 1,
-      explanation: "VFM은 단순 최저가가 아닌 '경쟁을 통해 품질·가격·서비스를 종합 고려한 최적 가치'를 추구합니다. 공공조달의 핵심 원칙으로 출제 빈출 개념입니다."
+      explanation: "VFM은 단순 최저가가 아닌 '경쟁을 통해 품질·가격·서비스를 종합 고려한 최적 가치'를 추구합니다. 공공조달의 핵심 원칙입니다."
     },
     {
       id: 2, subject_id: 1, chapter_num: 1,
       question: "OECD 회원국 기준 정부 총지출 중 공공조달 지출이 차지하는 비중은 약 얼마인가?",
       options: [ "약 10%", "약 20%", "약 30%", "약 50%" ],
       correct: 2,
-      explanation: "OECD 기준 정부 총지출 중 공공조달 지출 비중은 약 30% 수준입니다(OECD Government at a Glance, 2021년 약 31.9%). 공공조달이 국가경제에서 차지하는 비중이 매우 크다는 것을 보여주는 수치로 자주 출제됩니다."
+      explanation: "OECD 기준 정부 총지출 중 공공조달 지출 비중은 약 30% 수준입니다(OECD Government at a Glance, 2021년 약 31.9%). 공공조달이 국가경제에서 차지하는 비중이 매우 크다는 것을 보여주는 수치입니다."
     },
     {
       id: 3, subject_id: 1, chapter_num: 1,
@@ -72,7 +72,7 @@ module ExamQuestions
         "두 법률은 동일한 기관에 동시에 적용된다"
       ],
       correct: 2,
-      explanation: "국가계약법은 국가(중앙행정기관·헌법기관 등)에, 지방계약법은 지방자치단체에 각각 적용됩니다. 두 법의 적용 대상 차이는 빈출 문제입니다."
+      explanation: "국가계약법은 국가(중앙행정기관·헌법기관 등)에, 지방계약법은 지방자치단체에 각각 적용됩니다. 두 법의 적용 대상 차이를 구분해 두어야 합니다."
     },
     {
       id: 8, subject_id: 1, chapter_num: 1,
@@ -11957,7 +11957,7 @@ module ExamQuestions
         "제90조"
       ],
       correct: 1,
-      explanation: "지방계약법 시행령 제74조가 '설계변경으로 인한 계약금액의 조정'을 규정합니다. 국가계약법 시행령에서는 제65조입니다. 국가(65)와 지방(74)의 번호가 역전된다는 점이 빈출 혼동 포인트입니다."
+      explanation: "지방계약법 시행령 제74조가 '설계변경으로 인한 계약금액의 조정'을 규정합니다. 국가계약법 시행령에서는 제65조입니다. 국가(65)와 지방(74)의 번호가 역전된다는 점이 혼동하기 쉬운 포인트입니다."
     },
     {
       id: 1005, subject_id: 1, chapter_num: 6,
@@ -12017,7 +12017,7 @@ module ExamQuestions
         "공사 수의계약 기준은 국가 5억원, 지방 4억원으로 다르다"
       ],
       correct: 2,
-      explanation: "국가계약법과 지방계약법의 수의계약 기준 금액은 동일합니다. 물품·용역 2,000만원 이하, 공사 종합 4억원·전문 2억원·기타 1.6억원 이하입니다. 두 법률에서 금액 기준이 같다는 점은 시험에서 자주 확인 문항으로 출제됩니다."
+      explanation: "국가계약법과 지방계약법의 수의계약 기준 금액은 동일합니다. 물품·용역 2,000만원 이하, 공사 종합 4억원·전문 2억원·기타 1.6억원 이하입니다. 두 법률에서 금액 기준이 같다는 점을 기억해 두세요."
     },
     {
       id: 1010, subject_id: 1, chapter_num: 6,
@@ -12066,7 +12066,7 @@ module ExamQuestions
     {
       id: 1,
       number: "1과목",
-      title: "법제도의 이해",
+      title: "공공조달과 법제도 이해",
       subtitle: "법령·나라장터 시스템 이해",
       color: "emerald",
       icon: "gavel",
@@ -12075,7 +12075,7 @@ module ExamQuestions
     {
       id: 2,
       number: "2과목",
-      title: "조달계획 수립 및 분석",
+      title: "공공조달계획 수립 및 분석",
       subtitle: "수요·공급 분석·조달 전략",
       color: "blue",
       icon: "analytics",
@@ -12084,7 +12084,7 @@ module ExamQuestions
     {
       id: 3,
       number: "3과목",
-      title: "계약 관리",
+      title: "공공계약관리",
       subtitle: "입찰·낙찰·계약이행·검사·대금",
       color: "violet",
       icon: "contract_edit",

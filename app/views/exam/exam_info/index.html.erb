@@ -88,7 +88,7 @@
     </h1>
     <p class="text-[#c8d6f5] text-lg mb-6 max-w-2xl">
       응시자격·시험 일정·과목 구성·합격기준·접수 방법까지.<br>
-      공식 발표 전까지 업데이트되는 최신 정보를 확인하세요.
+      <%= ExamSchedule::SOURCE_NAME %> 기준 정보를 확인하세요.
     </p>
     <div class="flex flex-wrap gap-3">
       <a href="#schedule" class="inline-flex items-center gap-1.5 bg-white text-[#465f88] font-bold px-5 py-2.5 rounded-full hover:bg-[#f6f7ff] transition-colors text-sm shadow-lg">
@@ -256,6 +256,7 @@
       <h2 class="text-xl font-extrabold text-slate-900 tracking-tight mb-6 flex items-center gap-3">
         <span class="w-8 h-8 bg-[#465f88] text-white rounded-lg flex items-center justify-center text-sm font-bold flex-shrink-0">03</span>
         시험 일정 <span class="text-sm font-normal text-slate-400 ml-1">(2026년 제1회)</span>
+        <%= content_badge(:official) %>
       </h2>
       <div class="relative">
         <!-- 타임라인 선 -->
@@ -460,7 +461,7 @@
         <span class="material-symbols-outlined text-emerald-600 text-xl flex-shrink-0">emoji_events</span>
         <div>
           <h3 class="font-bold text-slate-900 text-sm mb-1">필기 면제 제도</h3>
-          <p class="text-slate-600 text-sm">필기 시험 합격 후 <strong>2년 이내</strong> 실기 불합격 시, 해당 기간 동안 필기 면제 후 실기만 재응시 가능 (국가기술자격법 공통 기준 적용 예정)</p>
+          <p class="text-slate-600 text-sm">필기 시험 합격 후 <strong>2년 이내</strong> 실기 불합격 시, 해당 기간 동안 필기 면제 후 실기만 재응시 가능 (국가기술자격법 시행령 제21조① 공통 기준)</p>
         </div>
       </div>
     </section>
@@ -576,7 +577,7 @@
         <div class="absolute top-0 right-0 w-48 h-48 bg-white/5 rounded-full -mr-24 -mt-24 pointer-events-none"></div>
         <div class="text-center mb-8 relative z-10">
           <h2 class="text-2xl font-extrabold mb-3 tracking-tight text-[#f6f7ff]">지금 바로 준비 시작하세요</h2>
-          <p class="text-[#c8d6f5]">4권 28챕터 전체 커리큘럼 + 200문항 모의고사 — 모두 무료</p>
+          <p class="text-[#c8d6f5]">4권 28챕터 전체 커리큘럼 + <%= number_with_delimiter(ExamQuestions::QUESTIONS.size) %>문항 문제은행(실전 모드 80문항) — 모두 무료</p>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 relative z-10">
           <a href="<%= exam_subjects_path %>"
@@ -589,7 +590,7 @@
              class="bg-[#ffd166] text-slate-900 rounded-xl p-4 text-center hover:bg-yellow-300 transition-colors group">
             <span class="material-symbols-outlined text-3xl block mb-2 group-hover:scale-110 transition-transform">quiz</span>
             <div class="font-bold">모의고사</div>
-            <div class="text-slate-600 text-sm mt-1">200문항 즉시채점</div>
+            <div class="text-slate-600 text-sm mt-1">실전 모드 80문항 즉시채점</div>
           </a>
           <a href="<%= exam_keywords_path %>"
              class="bg-white/15 backdrop-blur-sm text-white rounded-xl p-4 text-center hover:bg-white/25 transition-colors group">
