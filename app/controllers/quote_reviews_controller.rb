@@ -11,11 +11,12 @@ class QuoteReviewsController < ApplicationController
   ALLOWED_CONTENT_TYPES = %w[application/pdf image/jpeg image/png].freeze
 
   def index
+    description = "견적서를 업로드하면 AI가 자동으로 검토해 체크리스트·필요서류·관련 규정을 안내합니다. 수의계약 견적서의 빠진 항목과 점검 포인트를 미리 확인하세요."
     set_meta_tags(
       title: "견적서 검토 시스템",
-      description: "견적서를 업로드하면 AI가 자동으로 검토해 체크리스트·필요서류·관련 규정을 안내합니다. 수의계약 견적서의 빠진 항목과 점검 포인트를 미리 확인하세요.",
+      description: description,
       keywords: "견적서, 검토, 체크리스트, 수의계약, 견적서검토",
-      og: { title: "견적서 검토 시스템 — 실무.kr", url: canonical_url }
+      og: { title: "견적서 검토 시스템 — 실무.kr", description: description, url: canonical_url }
     )
   end
 

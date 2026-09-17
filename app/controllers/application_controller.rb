@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
   rescue_from ActionController::RoutingError, with: :render_not_found
 
+  before_action :redirect_trailing_slash
   before_action :redirect_exam_shared_content_to_apex
   before_action :set_default_meta_tags
   before_action :capture_utm_params
@@ -25,14 +26,35 @@ class ApplicationController < ActionController::Base
   # 메인 공유 콘텐츠를 apex(silmu.kr)로 301 통합 — cross-host canonical(hint)을
   # directive로 격상해 중복 색인·크롤예산 누수·AI 오인용을 원천 차단.
   # exam-native 경로(/subjects·/quiz·/keywords 등)와 인증/마이페이지는 매칭되지 않아 제외.
-  EXAM_SHARED_CONTENT_PREFIXES = %w[/topics /guides /audit-cases /tools /faq /series].freeze
+  # 2026-09-17 전수감사(G-43): apex 전용 정적·양식·검색 페이지도 exam에서 200 중복 서빙되어 추가.
+  EXAM_SHARED_CONTENT_PREFIXES = %w[
+    /topics /guides /audit-cases /tools /faq /series
+    /templates /about /updates /start /silmu-search /privacy /terms /contact /feedback
+  ].freeze
 
-  def redirect_exam_shared_content_to_apex
-    return unless request.host == EXAM_HOST
+  # SEO: 비루트 경로의 끝 슬래시 변형(/topics/)이 200 중복 URL이 되지 않도록 슬래시 없는 경로로 301.
+  # GET/HEAD만 대상 — 폼 POST 등은 그대로 처리. 에셋·/up 헬스체크는 ApplicationController를 거치지 않는다.
+  def redirect_trailing_slash
     return unless request.get? || request.head?
 
-    path = request.path
-    return unless EXAM_SHARED_CONTENT_PREFIXES.any? { |p| path == p || path.start_with?("#{p}/") }
+    # 라우터가 PATH_INFO의 끝 슬래시를 정규화하므로 라우팅 전 원본 경로(original_fullpath)로 판정
+    path = request.original_fullpath.split("?").first
+    return if path == "/" || !path.end_with?("/")
+
+    target = path.sub(%r{/+\z}, "").presence || "/"
+    query = request.query_string.presence
+    # exam 호스트의 apex 공유 경로는 슬래시 정규화와 호스트 통합을 한 번에 — 2-hop(exam 슬래시 제거 → apex) 방지
+    base = exam_shared_content_path?(target) ? "https://silmu.kr" : request.base_url
+    redirect_to "#{base}#{target}#{"?#{query}" if query}", status: :moved_permanently, allow_other_host: true
+  end
+
+  def exam_shared_content_path?(path)
+    request.host == EXAM_HOST && EXAM_SHARED_CONTENT_PREFIXES.any? { |p| path == p || path.start_with?("#{p}/") }
+  end
+
+  def redirect_exam_shared_content_to_apex
+    return unless request.get? || request.head?
+    return unless exam_shared_content_path?(request.path)
 
     redirect_to "https://silmu.kr#{request.fullpath}", status: :moved_permanently, allow_other_host: true
   end
@@ -81,7 +103,8 @@ class ApplicationController < ActionController::Base
       canonical: canonical_url,
       og: { site_name: "실무.kr", type: "website", locale: "ko_KR", image: { _: og_image, width: 1200, height: 630, type: "image/webp" } },
       # twitter title/description은 OG 자동 폴백되지 않음 — 명시 출력 (Twitter Card 권장 표준)
-      twitter: { card: "summary_large_image", site: "@silmu_kr", image: og_image, title: "실무.kr", description: default_description }
+      # 심볼 참조 = 렌더 시점의 페이지 title/description 미러링(페이지가 twitter를 명시하면 그 값이 우선)
+      twitter: { card: "summary_large_image", site: "@silmu_kr", image: og_image, title: :title, description: :description }
     )
   end
 
@@ -117,7 +140,10 @@ class ApplicationController < ActionController::Base
   # 메인 콘텐츠는 항상 apex(silmu.kr)로 canonical 통합 — 교차 서브도메인 중복 색인 방지.
   # exam-native 페이지(app/controllers/exam/*)는 리터럴 canonical로 override되어 무영향.
   def canonical_url
-    @canonical_url ||= request.original_url.split("?").first.sub(%r{\Ahttps?://exam\.silmu\.kr}i, "https://silmu.kr")
+    # 끝 슬래시 변형(/topics/)은 슬래시 없는 경로로 정규화 — 루트(https://silmu.kr/)는 그대로
+    @canonical_url ||= request.original_url.split("?").first
+                              .sub(%r{\Ahttps?://exam\.silmu\.kr}i, "https://silmu.kr")
+                              .sub(%r{\A(https?://[^/]+/.*?)/+\z}, '\\1')
   end
   helper_method :canonical_url
 end
