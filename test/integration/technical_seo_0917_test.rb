@@ -81,6 +81,20 @@ class TechnicalSeo0917Test < ActionDispatch::IntegrationTest
     assert_equal "http://exam.silmu.kr/quiz", response.location
   end
 
+  test "UPPER: exam host + trailing slash on an apex-shared path goes to apex in one hop, and apex target is final" do
+    host! "exam.silmu.kr"
+    get "/start/?utm_source=qr"
+    assert_response :moved_permanently
+    assert_equal "https://silmu.kr/start?utm_source=qr", response.location
+
+    get "/topics/private-contract/"
+    assert_equal "https://silmu.kr/topics/private-contract", response.location
+
+    host! "silmu.kr"
+    get "/start"
+    assert_not_equal 301, response.status, "apex 도착지에서 다시 리다이렉트되면 루프·다중 hop"
+  end
+
   test "EXCEPTION: POST with trailing slash and /up health check are not redirected" do
     host! "silmu.kr"
     post "/feedback/", params: {}

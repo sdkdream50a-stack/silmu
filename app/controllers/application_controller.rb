@@ -43,15 +43,18 @@ class ApplicationController < ActionController::Base
 
     target = path.sub(%r{/+\z}, "").presence || "/"
     query = request.query_string.presence
-    redirect_to "#{request.base_url}#{target}#{"?#{query}" if query}", status: :moved_permanently
+    # exam 호스트의 apex 공유 경로는 슬래시 정규화와 호스트 통합을 한 번에 — 2-hop(exam 슬래시 제거 → apex) 방지
+    base = exam_shared_content_path?(target) ? "https://silmu.kr" : request.base_url
+    redirect_to "#{base}#{target}#{"?#{query}" if query}", status: :moved_permanently, allow_other_host: true
+  end
+
+  def exam_shared_content_path?(path)
+    request.host == EXAM_HOST && EXAM_SHARED_CONTENT_PREFIXES.any? { |p| path == p || path.start_with?("#{p}/") }
   end
 
   def redirect_exam_shared_content_to_apex
-    return unless request.host == EXAM_HOST
     return unless request.get? || request.head?
-
-    path = request.path
-    return unless EXAM_SHARED_CONTENT_PREFIXES.any? { |p| path == p || path.start_with?("#{p}/") }
+    return unless exam_shared_content_path?(request.path)
 
     redirect_to "https://silmu.kr#{request.fullpath}", status: :moved_permanently, allow_other_host: true
   end
