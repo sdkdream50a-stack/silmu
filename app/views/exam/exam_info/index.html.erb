@@ -14,7 +14,7 @@
           "name": "공공조달관리사 시험은 언제 시행되나요?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "2026년 최초 시행 예정입니다. 필기시험은 2026년 10월 3일, 실기시험은 11월 14일, 최종 합격 발표는 12월 18일로 예정되어 있습니다."
+            "text": "2026년 제1회 시험이 큐넷(Q-Net)에 공고되었습니다. 필기 원서접수 2026년 9월 14일~17일, 필기시험 10월 3일, 필기 합격발표 10월 12일, 실기시험 11월 14일, 최종 합격발표 12월 18일입니다."
           }
         },
         {
@@ -30,7 +30,7 @@
           "name": "공공조달관리사 시험 과목은 무엇인가요?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "필기시험은 3과목 80문항으로 구성됩니다. 1과목 공공조달의 이해, 2과목 공공조달 계획분석, 3과목 공공계약관리입니다. 각 과목 60점 이상 취득 시 합격입니다."
+            "text": "필기시험은 3과목 80문항(4지 택일)으로 구성됩니다. 공공조달과 법제도 이해 30문항, 공공조달계획 수립 및 분석 20문항, 공공계약관리 30문항입니다. 실기시험은 공공조달 관리실무 필답형입니다."
           }
         },
         {
@@ -38,7 +38,7 @@
           "name": "공공조달관리사 합격 기준은 무엇인가요?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "필기시험과 실기시험 모두 60점 이상 취득해야 합격입니다. 필기시험 합격 후 실기시험에 응시할 수 있습니다."
+            "text": "필기시험은 100점 만점 기준 매 과목 40점 이상, 전 과목 평균 60점 이상이면 합격입니다. 실기시험은 100점 만점 기준 60점 이상이면 합격이며, 필기시험 합격자만 실기시험에 응시할 수 있습니다."
           }
         },
         {
@@ -81,7 +81,7 @@
   <div class="max-w-4xl mx-auto relative z-10">
     <div class="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm text-white text-sm font-semibold px-4 py-1.5 rounded-full mb-5">
       <span class="material-symbols-outlined text-[#ffd166] text-base">verified</span>
-      국가기술자격 — 2026년 최초 시행 예정
+      국가기술자격 — 2026년 제1회 시행
     </div>
     <h1 class="text-3xl md:text-4xl font-extrabold leading-snug mb-4 tracking-tight text-[#f6f7ff]">
       공공조달관리사<br>시험 정보 완벽 정리
@@ -112,9 +112,9 @@
   <div class="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
     <div class="flex items-center gap-3">
       <span class="material-symbols-outlined text-[#465f88] text-xl flex-shrink-0">menu_book</span>
-      <span class="text-[#2c3e55] text-sm font-semibold">표준교재 4권 무료 PDF — 공공조달역량개발원 공식 발간</span>
+      <span class="text-[#2c3e55] text-sm font-semibold">표준교재 4권 무료 PDF — 조달청 발간(2026.01.16 공개)</span>
     </div>
-    <a href="https://www.pps.go.kr/kor/bbs/list.do?bbsSn=1044"
+    <a href="https://eiec.kdi.re.kr/policy/materialView.do?num=276002"
        target="_blank" rel="noopener"
        class="inline-flex items-center gap-1.5 bg-[#465f88] hover:bg-[#3a537c] text-white font-bold px-4 py-2 rounded-full text-xs transition-colors whitespace-nowrap flex-shrink-0">
       <span class="material-symbols-outlined text-sm">download</span>
@@ -127,7 +127,7 @@
 <div class="bg-amber-50 border-b border-amber-200 px-4 py-3">
   <div class="max-w-4xl mx-auto flex items-start gap-2 text-sm text-amber-800">
     <span class="material-symbols-outlined text-amber-500 text-base flex-shrink-0 mt-0.5">info</span>
-    <span>공공조달관리사 자격증은 2026년 신설 예정으로, 일부 세부 정보는 공식 시험 공고 발표 후 확정됩니다. 반드시 <strong>조달청·큐넷(Q-Net) 공식 공고</strong>를 함께 확인하세요.</span>
+    <span>제1회 시험 일정은 <a href="<%= ExamSchedule::SOURCE_URL %>" target="_blank" rel="noopener" class="underline font-semibold">큐넷(Q-Net) 공고</a> 기준입니다(<%= ExamSchedule::VERIFIED_ON.strftime("%Y.%m.%d") %> 확인). 접수·변경 사항은 반드시 큐넷 공식 공고로 최종 확인하세요.</span>
   </div>
 </div>
 
@@ -151,8 +151,8 @@
             <dd class="font-semibold text-slate-800">국가기술자격</dd>
           </div>
           <div class="flex justify-between items-start border-b border-[#f0f4f7] pb-3">
-            <dt class="text-slate-500 text-sm">주관 기관</dt>
-            <dd class="font-semibold text-slate-800 text-right">기획재정부·조달청</dd>
+            <dt class="text-slate-500 text-sm">관련 부처</dt>
+            <dd class="font-semibold text-slate-800 text-right">조달청(재정경제부 외청)</dd>
           </div>
           <div class="flex justify-between items-start border-b border-[#f0f4f7] pb-3">
             <dt class="text-slate-500 text-sm">시행 기관</dt>
@@ -191,8 +191,8 @@
             </li>
             <li class="flex items-start gap-3 border-l-4 border-[#465f88]/40 pl-3 py-1">
               <div>
-                <span class="font-semibold text-slate-900">공무원 가산점 검토 중</span>
-                <p class="text-slate-500 text-xs mt-0.5">승진·성과 평가 가산점 적용 예정</p>
+                <span class="font-semibold text-slate-900">법령상 우대 현황 없음</span>
+                <p class="text-slate-500 text-xs mt-0.5">큐넷 우대현황 기준 · 공무원 가산점 대상 아님</p>
               </div>
             </li>
             <li class="flex items-start gap-3 border-l-4 border-[#465f88]/40 pl-3 py-1">
@@ -255,19 +255,13 @@
     <section id="schedule">
       <h2 class="text-xl font-extrabold text-slate-900 tracking-tight mb-6 flex items-center gap-3">
         <span class="w-8 h-8 bg-[#465f88] text-white rounded-lg flex items-center justify-center text-sm font-bold flex-shrink-0">03</span>
-        시험 일정 <span class="text-sm font-normal text-slate-400 ml-1">(2026년 예정)</span>
+        시험 일정 <span class="text-sm font-normal text-slate-400 ml-1">(2026년 제1회)</span>
       </h2>
       <div class="relative">
         <!-- 타임라인 선 -->
         <div class="absolute left-[1.75rem] top-8 bottom-8 w-0.5 bg-[#c8d6e0] hidden sm:block"></div>
         <div class="space-y-4">
-          <% [
-            { step: "원서 접수", period: "2026년 상반기 (예정)", icon: "edit_note", detail: "조달청 또는 큐넷(Q-Net)을 통한 온라인 접수 예정" },
-            { step: "필기 시험", period: "2026년 10월 3일 (예정)", icon: "article", detail: "3과목 객관식 CBT / 총 80문항 (1과목 30·2과목 20·3과목 30) / 시험 시간 120분 / 컴퓨터 화면에서 마우스 클릭으로 응시" },
-            { step: "필기 합격 발표", period: "필기 시험 후", icon: "campaign", detail: "큐넷(Q-NET)에서 합격자 발표 / 필기 합격자에 한해 실기 시험 응시 자격 부여" },
-            { step: "실기 시험", period: "2026년 11월 14일 (예정)", icon: "assignment_turned_in", detail: "조달실무 1과목 / PBT 필답형 (시험지에 손으로 직접 작성) / 시험 시간 150분 / 6개 테마 출제 예정" },
-            { step: "최종 합격 발표", period: "2026년 12월 18일 (예정)", icon: "verified", detail: "최종 합격자에게 국가기술자격증 발급" }
-          ].each_with_index do |item, idx| %>
+          <% ExamSchedule::TIMELINE.each_with_index do |item, idx| %>
             <div class="flex items-start gap-4">
               <div class="w-14 h-14 bg-[#e1e9ee] rounded-xl flex items-center justify-center flex-shrink-0 border-4 border-[#f7f9fb] shadow-sm relative z-10">
                 <span class="material-symbols-outlined text-[#465f88] text-xl"><%= item[:icon] %></span>
@@ -285,11 +279,11 @@
       </div>
       <div class="mt-4 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 flex items-start gap-2">
         <span class="material-symbols-outlined text-amber-500 text-base flex-shrink-0 mt-0.5">warning</span>
-        <p class="text-amber-800 text-sm">위 일정은 예상 일정입니다. 정확한 시험 일정은 <strong>큐넷(Q-NET) 공식 공고</strong>를 반드시 확인하세요.</p>
+        <p class="text-amber-800 text-sm">위 일정은 <a href="<%= ExamSchedule::SOURCE_URL %>" target="_blank" rel="noopener" class="underline font-semibold">큐넷(Q-Net) 공고</a> 기준입니다(<%= ExamSchedule::VERIFIED_ON.strftime("%Y.%m.%d") %> 확인). 시간·장소 등 세부 사항은 큐넷에서 최종 확인하세요.</p>
       </div>
       <div class="mt-3 bg-[#eef2f7] rounded-xl px-4 py-3 flex items-start gap-2">
         <span class="material-symbols-outlined text-[#465f88] text-base flex-shrink-0 mt-0.5">info</span>
-        <p class="text-[#2c3e55] text-sm"><strong class="text-[#465f88]">수시 검정 방식</strong> — 공공조달관리사는 매년 정기 시험이 아닌 조달 인력 수요에 따라 수시로 시험을 시행합니다. 1회 시험 일정은 예정되어 있으나, 2회 이후 일정은 별도 공고를 확인하세요.</p>
+        <p class="text-[#2c3e55] text-sm"><strong class="text-[#465f88]">다음 회차</strong> — 제2회 이후 시험 일정은 아직 확인되지 않았습니다. 큐넷(Q-Net) 공고를 확인하세요.</p>
       </div>
     </section>
 
@@ -309,17 +303,17 @@
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <% [
             {
-              vol: "1", title: "법제도의 이해",
+              vol: "1", title: "공공조달과 법제도 이해",
               items: ["공공조달 개념·제도 체계", "국가계약법·지방계약법·조달사업법·전자조달법", "조달청 기능과 나라장터 시스템", "WTO GPA 및 국제 조달"],
               weight: "30문항"
             },
             {
-              vol: "2", title: "조달계획 수립 및 분석",
+              vol: "2", title: "공공조달계획 수립 및 분석",
               items: ["수요·공급 분석 및 조달 전략", "예산 편성과 예정가격 산정", "입찰 방식 선택 기준", "시장 분석 및 적정성 검토"],
               weight: "20문항"
             },
             {
-              vol: "3", title: "계약 관리",
+              vol: "3", title: "공공계약관리",
               items: ["경쟁입찰 절차와 낙찰 방식", "수의계약 요건·계약 체결", "보증금·이행 관리·설계변경", "검사·대금지급·지체상금"],
               weight: "30문항"
             }
@@ -357,9 +351,9 @@
       <div class="bg-[#1c2b3a] rounded-2xl p-6 text-white">
         <div class="flex items-center gap-2 mb-1">
           <span class="bg-rose-500 text-white text-xs font-bold px-3 py-1 rounded-full">실기</span>
-          <span class="text-slate-300 text-sm">조달실무 1과목 · <strong class="text-rose-300">PBT 필답형</strong> (시험지에 손으로 직접 작성) · 시험 시간 150분</span>
+          <span class="text-slate-300 text-sm">공공조달 관리실무 · <strong class="text-rose-300">필답형</strong> 20문항 내외 · 시험 시간 150분</span>
         </div>
-        <p class="text-slate-400 text-xs mb-4 pl-1">✦ 필기 합격자에 한해 실기 응시 자격 부여 · 필기와 달리 종이 시험지에 직접 답안 작성</p>
+        <p class="text-slate-400 text-xs mb-4 pl-1">✦ 필기 합격자에 한해 실기 응시 자격 부여 · 답안 작성 방식(종이/컴퓨터)은 큐넷 수험자 안내로 확인</p>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div class="bg-white/10 rounded-xl p-4">
             <h3 class="font-semibold mb-2 text-sm text-white">출제 테마 6개 (예상)</h3>
@@ -440,7 +434,7 @@
             </div>
           </div>
           <p class="text-slate-500 text-xs mt-3">* 과목당 40% 이상 취득 필수 (과락 기준: 법제도 12문제·조달계획 8문제·계약관리 12문제 이상)</p>
-          <p class="text-slate-500 text-xs mt-1">* 80문제 중 48개 이상 맞추면 평균 60점 달성 → 합격</p>
+          <p class="text-slate-500 text-xs mt-1">* 과목별 점수(100점 환산)의 평균으로 판정합니다. 과목마다 문항 수가 달라 “전체 정답 개수”만으로는 합격 여부가 정해지지 않습니다.</p>
         </div>
         <div class="bg-white rounded-2xl shadow-[0_12px_40px_rgba(42,52,57,0.06)] p-6">
           <div class="flex items-center gap-3 mb-4">
@@ -484,15 +478,15 @@
               <span class="material-symbols-outlined text-white">language</span>
             </div>
             <div>
-              <h3 class="font-bold text-slate-900">조달청</h3>
-              <p class="text-slate-400 text-xs">공식 주관 기관</p>
+              <h3 class="font-bold text-slate-900">조달청 공공조달역량개발원</h3>
+              <p class="text-slate-400 text-xs">표준교재 발간·조달 교육</p>
             </div>
           </div>
-          <p class="text-slate-600 text-sm mb-4">공공조달관리사 자격시험 공식 주관 기관. 시험 공고·접수·합격자 발표 모두 이곳에서 확인.</p>
-          <a href="https://www.ppi.re.kr" target="_blank" rel="noopener"
+          <p class="text-slate-600 text-sm mb-4">조달청이 발간한 표준교재와 공공조달 교육 정보를 확인할 수 있습니다. 시험 공고·접수·합격자 발표는 큐넷에서 확인하세요.</p>
+          <a href="https://hrd.pps.go.kr" target="_blank" rel="noopener"
              class="inline-flex items-center gap-1.5 text-[#465f88] bg-[#eef2f7] hover:bg-[#d9e4ea] rounded-full px-4 py-2 text-sm font-semibold transition-colors">
             <span class="material-symbols-outlined text-sm">open_in_new</span>
-            ppi.re.kr 방문
+            hrd.pps.go.kr 방문
           </a>
         </div>
         <div class="bg-white rounded-2xl shadow-[0_12px_40px_rgba(42,52,57,0.06)] p-6 hover:shadow-[0_16px_48px_rgba(42,52,57,0.1)] transition-shadow">
@@ -547,7 +541,7 @@
         <% [
           {
             icon: "account_balance", title: "공공기관·지자체",
-            items: ["계약 담당 공무원 역량 인증", "승진·성과 평가 가산점 (예정)", "감사 대응 전문성 강화"]
+            items: ["계약 담당 공무원 역량 인증", "공공계약 실무 역량 학습", "감사 대응 전문성 강화"]
           },
           {
             icon: "business", title: "민간 기업",
@@ -555,7 +549,7 @@
           },
           {
             icon: "school", title: "취업·경력 개발",
-            items: ["공공조달 분야 취업 차별화", "공공기관 채용 우대 (예정)", "프리랜서 조달 컨설턴트"]
+            items: ["공공조달 분야 취업 차별화", "공공조달 직무 이해도 증빙", "프리랜서 조달 컨설턴트"]
           }
         ].each do |item| %>
           <div class="bg-white rounded-xl shadow-[0_12px_40px_rgba(42,52,57,0.06)] p-5 hover:shadow-[0_16px_48px_rgba(42,52,57,0.1)] transition-shadow">

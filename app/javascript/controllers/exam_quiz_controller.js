@@ -691,7 +691,7 @@ export default class extends Controller {
           </div>
         </div>
         <p class="text-slate-600 text-sm mb-5 leading-relaxed">
-          필기 합격 후 <strong class="text-red-600">단 32일</strong> 안에 실기(필답형)가 있습니다.
+          필기 합격 발표(10.12) 후 <strong class="text-red-600">33일</strong> 뒤 실기(필답형)가 있습니다.
           플래시카드 <strong>타이핑 모드</strong>로 지금 바로 실기 대비를 시작하세요.
         </p>
         <div class="flex gap-2">
