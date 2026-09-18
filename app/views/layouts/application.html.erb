@@ -242,7 +242,25 @@
       <script>(adsbygoogle = window.adsbygoogle || []).push({ google_ad_client: "ca-pub-6241798439911569", enable_page_level_ads: false });</script>
     <% end %>
 
-    <% if Rails.env.production? && Rails.application.credentials.clarity_project_id.present? %>
+    <%# ── Microsoft Clarity — 2026-09-18 현재 «끈» 상태다 (P1-8 · LECTURE_READINESS_AUDIT) ──
+        왜: CSP `connect_src` 가 `www.clarity.ms`·`c.clarity.ms` 만 허용하는데 태그는 수집을
+        `https://e.clarity.ms/collect` 로 보낸다. 그래서 스크립트는 뜨고 녹화는 하는데 **업로드만
+        전량 차단**됐다(2026-09-18 운영 실측: 페이지마다 콘솔 CSP 오류 4건 · Clarity 수집 0).
+        대시보드가 비어 보이는 것은 「트래픽 없음」이 아니라 「측정 안 됨」이었다.
+
+        왜 CSP 를 넓히지 않고 껐나: 이 사이트에는 행정실 사용자가 이름·급여·병가·학생 정보를
+        입력한다. `*.clarity.ms` 를 열면 그 입력이 제3자(Microsoft)로 나가는 경로가 생기는데,
+        Clarity 의 입력 마스킹이 Strict 인지는 **Clarity 대시보드 로그인 없이는 확인할 수 없다**.
+        확인되지 않은 채로 경로부터 여는 것은 같은 배치의 P1-9(검색어 로그 마스킹)와 모순이다.
+        행동 데이터 자체는 GA4(가동 중)로 계속 잡는다.
+
+        되돌리는 법(마스킹 Strict 확인 후 1줄씩):
+          1) `config/initializers/content_security_policy.rb` connect_src 에 `"e.clarity.ms"` 추가
+             (Clarity 는 지역별 수집 호스트를 쓴다 — 실제 요청 호스트를 콘솔로 확인하고 그 호스트만 넣는다)
+          2) 아래 `clarity_enabled` 를 true 로
+    %>
+    <% clarity_enabled = false %>
+    <% if clarity_enabled && Rails.env.production? && Rails.application.credentials.clarity_project_id.present? %>
       <!-- Microsoft Clarity - 지연 로딩 -->
       <script>
         function loadClarity() {
@@ -310,8 +328,10 @@
     <%# 글 귀속 전파 — 전 페이지(착지는 도구, 구독은 topics 일 수 있다) %>
     <%= render "shared/source_attribution" %>
 
-    <%# 도구 사용 계측 — /tools 에서만 %>
-    <% if params[:controller] == "tools" %>
+    <%# 도구 사용 계측 — /tools 에서만.
+        contract_methods 는 URL 이 /tools/contract-method 인데 컨트롤러 이름이 달라 이 조건에서
+        빠져 있었다(P1-2). 계측 파셜은 경로 마지막 조각을 tool_id 로 쓰므로 그대로 붙는다. %>
+    <% if %w[tools contract_methods].include?(params[:controller]) %>
       <%= render "shared/tool_analytics" %>
     <% end %>
 

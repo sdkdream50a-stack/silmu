@@ -125,7 +125,7 @@
             </div>
           </div>
 
-          <button onclick="calculate()"
+          <button onclick="calculate({ reveal: true })"
                   class="w-full btn btn-point btn-md mt-2">
             <span class="material-symbols-outlined">calculate</span>
             수당 계산하기
@@ -135,7 +135,7 @@
 
       <!-- 결과 -->
       <div class="lg:w-1/2">
-        <div id="result-area" class="card p-6">
+        <div id="result-area" class="card p-6 scroll-mt-20">
           <h2 class="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
             <span class="material-symbols-outlined text-editorial-navy">receipt</span>
             계산 결과
@@ -259,7 +259,18 @@
     }
   }
 
-  function calculate() {
+  // P1-6 — 모바일에서 결과 영역이 입력 폼 «아래»로 쌓여(lg:w-1/2) 계산해도 화면 밖에 있었다.
+  // 버튼을 눌렀을 때만, 그리고 결과가 실제로 보이게 됐을 때만 스크롤한다.
+  // `oninput` 재계산은 스크롤하지 않는다 — 타이핑 중 화면이 튀면 입력을 못 한다.
+  function revealResult() {
+    if (window.matchMedia("(min-width: 1024px)").matches) return;  // lg 이상은 좌우 배치라 이미 보인다
+    var area = document.getElementById("result-area");
+    if (!area) return;
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    area.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+  }
+
+  function calculate(opts) {
     const grade    = parseInt(document.getElementById('grade-select').value, 10) || 0;
     const salary   = GRADE_BASE_SALARY_2026[grade] || 0;
     const overtime = parseFloat(document.getElementById('overtime-hours').value)  || 0;
@@ -343,5 +354,7 @@
     if (window.silmuCalcResult) {
       window.silmuCalcResult(total > 0 ? [salary, baseRate, overtime, night, holiday].join('|') : null);
     }
+
+    if (opts && opts.reveal) revealResult();
   }
 </script>

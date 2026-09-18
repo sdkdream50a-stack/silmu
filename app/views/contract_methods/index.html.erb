@@ -1687,6 +1687,17 @@
     // 결과 표시
     document.getElementById('result-section').classList.add('show');
     document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    // calc_complete 신고 (P1-2) — 이 도구는 /tools/contract-method 인데 컨트롤러가 `contract_methods`
+    // 라서 layout 의 계측 조건(`params[:controller] == "tools"`)에 걸리지 않아 **완료가 0으로 보였다**.
+    // signature 는 같은 판정을 다시 눌렀을 때 중복 전송을 막으려는 메모리 전용 값이고 전송하지 않는다.
+    // 전송되는 것은 tool_slug 뿐이다 — 금액·기관·상대방 입력값은 보내지 않는다.
+    if (window.silmuCalcResult) {
+      const sig = [result.result.method, result.result.method_detail,
+                   result.result.agency_scope_label, result.result.counterparty_label]
+                  .filter(Boolean).join('|');
+      window.silmuCalcResult(sig || null, { immediate: true });
+    }
   }
 
   function buildContractReasonUrl(result) {
