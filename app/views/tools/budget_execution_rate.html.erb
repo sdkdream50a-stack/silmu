@@ -158,6 +158,15 @@
                 <span class="text-[10px] font-semibold text-slate-600 bg-white/80 border border-slate-300 rounded-full px-2 py-0.5">참고용 · 공식 목표 아님</span>
               </div>
               <p class="text-[11px] text-slate-500 mb-3">회계연도 경과 월수 ÷ 12 (산술)</p>
+              <%# PHASE E — 이 한 문장이 «접힌 <details> 안»에만 있었다(2026-09-18 실브라우저 실측:
+                  getBoundingClientRect().width = 0). 스모크는 HTML 문자열을 grep 해서 통과했지만
+                  화면을 보는 사람은 펼치지 않으면 읽지 못한다. 「검사가 통과했다」와
+                  「사용자가 봤다」는 다른 질문이다.
+                  이 도구에서 가장 비싼 오해가 «참고선 = 법정 목표» 라서 보이는 카드 안에 세운다. %>
+              <p class="text-[11px] text-slate-600 mb-3 flex items-start gap-1">
+                <span class="material-symbols-outlined text-[13px] leading-[15px]" aria-hidden="true">info</span>
+                <span><strong>법령이 정한 분기·연도말 집행 목표율은 없습니다.</strong> 이 선은 산술 참고선입니다.</span>
+              </p>
               <div class="flex items-end gap-3 mb-2">
                 <div id="reference-rate-value" class="text-4xl font-bold text-editorial-navy-dark"><%= reference_rate %>%</div>
                 <div id="reference-rate-caption" class="text-sm text-slate-500 pb-1.5"><%= current_month %>월 = 회계연도 <%= elapsed_months %>개월 경과</div>
