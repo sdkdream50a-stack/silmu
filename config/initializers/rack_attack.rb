@@ -1,6 +1,21 @@
 # Rack::Attack — Rate Limiting + Cloudflare-Only Origin Lockdown
 require "ipaddr"
 
+# G-63 (2026-09-18) — 클라이언트가 보낸 `Forwarded:` 헤더를 신원으로 쓰지 않는다.
+#
+#   Rack 의 기본값은 `forwarded_priority = [:forwarded, :x_forwarded]` 라서
+#   요청자가 직접 넣은 `Forwarded: for=1.2.3.4` 가 `X-Forwarded-For` 보다 **우선**한다.
+#   아래 throttle 들은 전부 `req.ip` 를 키로 쓰므로, 그 헤더 하나로
+#     ① 자기 한도를 무한히 회피하고(값을 매번 바꾸면 매번 새 카운터)
+#     ② **남의 IP 로 카운터를 채워 그 사람을 차단**시킬 수 있다.
+#
+#   지금 운영에서 악용되고 있지는 않다 — Cloudflare 가 그 헤더를 제거하고
+#   CF_ORIGIN_LOCKDOWN 이 직접 접근을 막는다(운영 카운터 실측 0건). 즉 이것은
+#   «앞단 하나가 무너지면 바로 뚫리는» 축이라 방어를 한 겹 더 둔다.
+#
+#   아래 cf-lockdown 판정은 XFF 체인을 직접 스캔하므로 이 설정과 무관하게 동작한다.
+Rack::Request.forwarded_priority = [ :x_forwarded ]
+
 class Rack::Attack
   # Cloudflare 공식 IP 대역 (https://www.cloudflare.com/ips/)
   # kamal-proxy가 TCP peer를 XFF 끝자리에 append하므로, 정상 CF 요청은 XFF 끝자리가 CF 대역
