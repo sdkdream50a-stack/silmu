@@ -373,6 +373,8 @@
                   <% if ac.repeated_issue? %>
                     <span class="badge-editorial signal-critical"><span class="material-symbols-outlined text-[11px] mr-0.5">loop</span>반복</span>
                   <% end %>
+                  <%# G-65 — 카드만 보고 실제 감사 사건으로 읽히지 않게 출처 유형을 같이 세운다 %>
+                  <%= render "shared/provenance_chip", audit_case: ac %>
                 </div>
                 <h3 class="font-bold text-base text-editorial-ink group-hover:text-editorial-navy transition-colors leading-snug line-clamp-2 mb-1"><%= ac.title %></h3>
                 <p class="text-xs text-editorial-muted line-clamp-2"><%= ac.issue.truncate(90) %></p>

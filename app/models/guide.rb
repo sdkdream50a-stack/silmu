@@ -152,6 +152,12 @@ class Guide < ApplicationRecord
     #   topics_controller 의 `topic_guide_ext/<slug>` 다. 무효화가 허공을 지우고 있었고,
     #   그래서 가이드 본문을 고쳐도 토픽 화면이 최대 1시간 옛 값을 서빙했다.
     Rails.cache.delete("topic_guide_ext/#{t_slug}") if t_slug.present?
+    # G-64 (2026-09-18) — 토픽 화면의 «관련 가이드» 는 `related_content_v2/<topic_slug>/guides` 에
+    #   Guide 객체를 통째로 담는다. 위 키들은 전부 **가이드 자신의 slug** 로 갈라져 그 캐시에 닿지 않아서,
+    #   가이드를 고쳐도 토픽 화면이 TTL 동안 옛 제목·옛 목록을 서빙했다.
+    #   RelatedContentResolver 의 fallback 때문에 topic_slug 가 없는 가이드도 다른 토픽 목록에 들어간다 —
+    #   그래서 「내 topic_slug 만」이 아니라 guides kind 전체를 지운다(다른 kind 는 건드리지 않는다).
+    ContentCache.invalidate_related!(:guides)
     Rails.cache.increment("home/curated_version") if saved_change_to_sector? || saved_change_to_topic_slug?
   end
 

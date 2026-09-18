@@ -113,6 +113,30 @@ class ContentCache
       Report.new(deleted: deleted, bumped: bumped, series_deleted: series_deleted)
     end
 
+    # G-64 (2026-09-18) — **평시 save 경로**의 교차모델 무효화.
+    #
+    #   `related_content_v2/<topic>/guides` 와 `.../audit_cases` 는 **Topic slug** 로 갈라지는데
+    #   내용물은 Guide·AuditCase 객체다. 그래서 Guide 를 고쳐도 Guide 자신의 콜백
+    #   (GUIDE_SLUG_KEYS = guide_topic/<guide_slug> · guides/related/<guide_slug>)은
+    #   그 키에 닿지 않는다 — 토픽 화면이 최대 TTL 동안 옛 제목·옛 목록을 보여 준다.
+    #   migration 경로는 위 `invalidate!` 가 덮지만 관리자가 화면에서 고치는 평시 경로는 비어 있었다.
+    #
+    #   왜 `topic_slug` 하나만 지우지 않는가: RelatedContentResolver 는 직접 매칭이 모자라면
+    #   **fallback** 으로 다른 토픽의 목록에도 그 레코드를 넣는다. 즉 `topic_slug` 가 없는
+    #   가이드도 여러 토픽 캐시에 들어가 있다. 어느 토픽에 들어갔는지는 캐시 밖에서 알 수 없으므로
+    #   해당 kind 를 전 토픽에서 지운다. 관리자 저장은 드물고(운영 실측 Guide 103·AuditCase 257),
+    #   지우는 것은 해당 kind 한 종류뿐이다 — topics kind 와 다른 캐시는 건드리지 않는다.
+    def invalidate_related!(kind)
+      kind = kind.to_s
+      unless %w[guides audit_cases topics].include?(kind)
+        raise ArgumentError, "unknown related kind: #{kind}"
+      end
+
+      slugs = resolve_slugs(nil, Topic)
+      deleted = slugs.count { |slug| delete("related_content_v2/#{slug}/#{kind}") }
+      Report.new(deleted: deleted, bumped: 0, series_deleted: 0)
+    end
+
     private
 
     def resolve_slugs(given, klass)

@@ -9,6 +9,8 @@
           <%= year %><% if recent %><span class="ml-0.5 text-[9px] font-bold tracking-wide">최신</span><% end %>
         </span>
       <% end %>
+      <%# G-65 — 목록 카드도 상세 배너와 같은 원장을 읽어 출처 유형을 표시한다 %>
+      <%= render "shared/provenance_chip", audit_case: audit_case %>
     </div>
     <div class="flex items-center gap-1.5">
       <% if audit_case.repeated_issue? %>
