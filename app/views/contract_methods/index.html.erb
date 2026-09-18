@@ -37,6 +37,31 @@
     gap: 12px;
     margin-bottom: 28px;
   }
+  /* 접근성 수리(TOP8)로 칩 21개가 span/div → <button> 이 됐다.
+     버튼은 브라우저 기본 스타일(폰트 상속 안 함·회색 배경·테두리·가운데 정렬)을 갖고 있어서
+     그대로 두면 같은 클래스인데 화면이 달라진다. 아래는 «원래 보이던 대로» 되돌리는 중화이고
+     각 칩의 고유 스타일은 기존 규칙이 계속 소유한다. */
+  .scope-option, .type-option, .type-sub-option, .special-option {
+    font: inherit;
+    color: inherit;
+    appearance: none;
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  /* grid 칸을 채우던 칩만 폭을 되돌린다.
+     ⚠️ 처음에 네 종류 전부에 width:100% 를 줬다가 실측으로 잡았다 —
+     scope·special 은 flex 안에서 **내용 폭 알약**(운영 실측 96·63·89px)인데
+     100% 를 주면 한 줄 전체(770px)로 늘어난다. type·sub 만 grid 칸을 채운다. */
+  .type-option, .type-sub-option {
+    width: 100%;
+  }
+  /* 키보드 사용자가 «지금 어디에 있는지» 보이게 한다 — 마우스 클릭에는 나타나지 않는다. */
+  .scope-option:focus-visible, .type-option:focus-visible,
+  .type-sub-option:focus-visible, .special-option:focus-visible {
+    outline: 3px solid #2563eb;
+    outline-offset: 2px;
+  }
+
   .type-option {
     padding: 16px 14px;
     border: 2px solid #e2e8f0;
@@ -272,6 +297,12 @@
   }
 
   /* 결과 카드 */
+  /* 결과로 자동 스크롤될 때 sticky nav(모바일 64px · lg 72px)가 결과 제목을 덮었다
+     (17_UIUX_PERSONA_AUDIT TOP4 후반부). scroll-margin-top 으로 그만큼 비운다.
+     `block:'start'` 스크롤과 앵커 이동 양쪽에 적용된다. */
+  .result-card, #input-section {
+    scroll-margin-top: 80px;
+  }
   .result-card {
     background: white;
     border-radius: 20px;
@@ -751,49 +782,49 @@
           어느 기관 기준인가요?
         </label>
         <div class="scope-options" id="scope-options">
-          <span class="scope-option" data-scope="LOCAL_GOVERNMENT" onclick="selectScope('LOCAL_GOVERNMENT')">지방자치단체</span>
-          <span class="scope-option" data-scope="EDUCATION_OFFICE" onclick="selectScope('EDUCATION_OFFICE')">교육청</span>
-          <span class="scope-option" data-scope="PUBLIC_SCHOOL" onclick="selectScope('PUBLIC_SCHOOL')">국·공립학교</span>
-          <span class="scope-option" data-scope="CENTRAL_GOVERNMENT" onclick="selectScope('CENTRAL_GOVERNMENT')">국가기관</span>
-          <span class="scope-option" data-scope="PUBLIC_INSTITUTION" onclick="selectScope('PUBLIC_INSTITUTION')">공공기관·지방공기업</span>
-          <span class="scope-option" data-scope="PRIVATE_SCHOOL" onclick="selectScope('PRIVATE_SCHOOL')">사립학교</span>
+          <button type="button" class="scope-option" data-scope="LOCAL_GOVERNMENT" aria-pressed="false" onclick="selectScope('LOCAL_GOVERNMENT')">지방자치단체</button>
+          <button type="button" class="scope-option" data-scope="EDUCATION_OFFICE" aria-pressed="false" onclick="selectScope('EDUCATION_OFFICE')">교육청</button>
+          <button type="button" class="scope-option" data-scope="PUBLIC_SCHOOL" aria-pressed="false" onclick="selectScope('PUBLIC_SCHOOL')">국·공립학교</button>
+          <button type="button" class="scope-option" data-scope="CENTRAL_GOVERNMENT" aria-pressed="false" onclick="selectScope('CENTRAL_GOVERNMENT')">국가기관</button>
+          <button type="button" class="scope-option" data-scope="PUBLIC_INSTITUTION" aria-pressed="false" onclick="selectScope('PUBLIC_INSTITUTION')">공공기관·지방공기업</button>
+          <button type="button" class="scope-option" data-scope="PRIVATE_SCHOOL" aria-pressed="false" onclick="selectScope('PRIVATE_SCHOOL')">사립학교</button>
         </div>
         <p class="scope-hint">이 도구는 <strong>지방계약법</strong> 체계(지방자치단체·교육청·국·공립학교)만 판단합니다. 국가기관은 국가계약법, 공공기관은 자체 계약규정이 적용되어 기준이 다릅니다.</p>
       </div>
 
       <!-- 계약 유형 선택 (1단계) -->
       <div class="type-grid" id="type-grid-main">
-        <div class="type-option" data-type="goods" onclick="selectMainType('goods')">
+        <button type="button" class="type-option" data-type="goods" aria-pressed="false" onclick="selectMainType('goods')">
           <span class="material-symbols-outlined">inventory_2</span>
           <span class="name">물품</span>
-        </div>
-        <div class="type-option" data-type="service" onclick="selectMainType('service')">
+        </button>
+        <button type="button" class="type-option" data-type="service" aria-pressed="false" onclick="selectMainType('service')">
           <span class="material-symbols-outlined">support_agent</span>
           <span class="name">용역</span>
-        </div>
-        <div class="type-option" data-type="construction" onclick="selectMainType('construction')">
+        </button>
+        <button type="button" class="type-option" data-type="construction" aria-pressed="false" onclick="selectMainType('construction')">
           <span class="material-symbols-outlined">construction</span>
           <span class="name">공사</span>
-        </div>
+        </button>
       </div>
 
       <!-- 공사 세부 유형 선택 (2단계) -->
       <div class="type-sub-grid" id="construction-sub">
-        <div class="type-sub-option" data-type="construction_general" onclick="selectConstructionType('construction_general')">
+        <button type="button" class="type-sub-option" data-type="construction_general" aria-pressed="false" onclick="selectConstructionType('construction_general')">
           <span class="material-symbols-outlined">domain</span>
           <span class="name">종합공사</span>
           <span class="desc">건축·토목·조경 등 종합 시공<br>5천만원 미만 면허 불필요 · 수의 4억 이하</span>
-        </div>
-        <div class="type-sub-option" data-type="construction_special" onclick="selectConstructionType('construction_special')">
+        </button>
+        <button type="button" class="type-sub-option" data-type="construction_special" aria-pressed="false" onclick="selectConstructionType('construction_special')">
           <span class="material-symbols-outlined">engineering</span>
           <span class="name">전문공사</span>
           <span class="desc">실내건축·토공·미장·방수·도장·비계해체·철근콘크리트·기계설비·상하수도·포장·조경 등<br>1,500만원 이상 전문면허 필요 · 수의 2억 이하</span>
-        </div>
-        <div class="type-sub-option" data-type="construction_etc" onclick="selectConstructionType('construction_etc')">
+        </button>
+        <button type="button" class="type-sub-option" data-type="construction_etc" aria-pressed="false" onclick="selectConstructionType('construction_etc')">
           <span class="material-symbols-outlined">electrical_services</span>
           <span class="name">전기/소방/정보통신</span>
           <span class="desc">전기·소방·통신설비 공사<br>각 개별법 면허 필요 · 수의 1.6억 이하</span>
-        </div>
+        </button>
         <p class="type-sub-hint">※ 소규모 시설물 수선·보수는 <strong>종합공사</strong> 선택 (공사예정금액 5천만원 미만 시 건설업 등록 불필요)<br>※ 전문공사는 공사예정금액 1,500만원 이상 시 해당 전문면허 필요</p>
       </div>
 
@@ -829,15 +860,15 @@
           계약상대자 유형 <span class="special-req" id="counterparty-req">(2천만원 초과 물품·용역은 필수)</span>
         </summary>
         <div class="special-options">
-          <span class="special-option" data-cp="GENERAL" onclick="selectCounterparty('GENERAL')">일반 업체</span>
-          <span class="special-option" data-cp="YOUTH_STARTUP" onclick="selectCounterparty('YOUTH_STARTUP')">청년창업기업</span>
-          <span class="special-option" data-cp="SMALL_ENTERPRISE" onclick="selectCounterparty('SMALL_ENTERPRISE')">소기업·소상공인</span>
-          <span class="special-option" data-cp="WOMEN" onclick="selectCounterparty('WOMEN')">여성기업</span>
-          <span class="special-option" data-cp="DISABLED" onclick="selectCounterparty('DISABLED')">장애인기업</span>
-          <span class="special-option" data-cp="SOCIAL_ENTERPRISE" onclick="selectCounterparty('SOCIAL_ENTERPRISE')">사회적기업</span>
-          <span class="special-option" data-cp="SOCIAL_COOPERATIVE" onclick="selectCounterparty('SOCIAL_COOPERATIVE')">사회적협동조합</span>
-          <span class="special-option" data-cp="VILLAGE" onclick="selectCounterparty('VILLAGE')">마을기업</span>
-          <span class="special-option" data-cp="SELF_SUPPORT" onclick="selectCounterparty('SELF_SUPPORT')">자활기업</span>
+          <button type="button" class="special-option" data-cp="GENERAL" aria-pressed="false" onclick="selectCounterparty('GENERAL')">일반 업체</button>
+          <button type="button" class="special-option" data-cp="YOUTH_STARTUP" aria-pressed="false" onclick="selectCounterparty('YOUTH_STARTUP')">청년창업기업</button>
+          <button type="button" class="special-option" data-cp="SMALL_ENTERPRISE" aria-pressed="false" onclick="selectCounterparty('SMALL_ENTERPRISE')">소기업·소상공인</button>
+          <button type="button" class="special-option" data-cp="WOMEN" aria-pressed="false" onclick="selectCounterparty('WOMEN')">여성기업</button>
+          <button type="button" class="special-option" data-cp="DISABLED" aria-pressed="false" onclick="selectCounterparty('DISABLED')">장애인기업</button>
+          <button type="button" class="special-option" data-cp="SOCIAL_ENTERPRISE" aria-pressed="false" onclick="selectCounterparty('SOCIAL_ENTERPRISE')">사회적기업</button>
+          <button type="button" class="special-option" data-cp="SOCIAL_COOPERATIVE" aria-pressed="false" onclick="selectCounterparty('SOCIAL_COOPERATIVE')">사회적협동조합</button>
+          <button type="button" class="special-option" data-cp="VILLAGE" aria-pressed="false" onclick="selectCounterparty('VILLAGE')">마을기업</button>
+          <button type="button" class="special-option" data-cp="SELF_SUPPORT" aria-pressed="false" onclick="selectCounterparty('SELF_SUPPORT')">자활기업</button>
         </div>
         <p class="special-hint">※ 일반 <strong>협동조합</strong>은 이 목록에 없습니다 — 시행령 제25조제1항제5호바목 4)가 가리키는 것은 「협동조합 기본법」 제2조제3호의 <strong>사회적협동조합</strong>입니다.</p>
 
@@ -918,7 +949,7 @@
     </div>
 
     <!-- 결과 카드 -->
-    <div class="result-card" id="result-section">
+    <div class="result-card" id="result-section" role="region" aria-live="polite" aria-label="계약방식 결정 결과">
       <div class="result-header" id="result-header">
         <div class="result-method">계약방식 결정 결과</div>
         <div class="result-method-main" id="result-method"></div>
@@ -1145,6 +1176,33 @@
   // 취약계층 고용비율 고시를 충족해야 하는 상대방 (시행령 §25①5호바목 단서·§30①2호나목)
   const VULNERABLE_RATIO_COUNTERPARTIES =
     ['SOCIAL_ENTERPRISE', 'SOCIAL_COOPERATIVE', 'VILLAGE', 'SELF_SUPPORT'];
+
+  // ── 접근성 (17_UIUX_PERSONA_AUDIT TOP8) ──────────────────────────────────
+  // 기관·유형·상대방 선택 칩 21개가 `span`/`div` + onclick 이었다. 마우스 말고는 조작할 수
+  // 없었고 스크린리더는 «무엇이 선택됐는지» 를 읽을 수 없었다. 태그를 <button> 으로 바꾸면
+  // 키보드·포커스·Enter/Space 는 브라우저가 공짜로 준다. 남은 것은 «눌린 상태» 전달이다.
+  //
+  // 선택 상태는 `selected` 클래스가 소유하고 그것을 토글하는 곳이 4개 함수에 6군데 흩어져 있다.
+  // 함수마다 aria-pressed 를 손으로 넣으면 한 군데를 빠뜨리는 순간 화면과 낭독이 어긋난다.
+  // 그래서 «클래스가 진실» 이라는 기존 구조를 그대로 두고 **변화를 관찰해 따라가게** 한다.
+  // 판정 로직과 스타일은 한 줄도 건드리지 않는다.
+  (function () {
+    var SEL = '.scope-option, .type-option, .type-sub-option, .special-option';
+    function sync(el) { el.setAttribute('aria-pressed', el.classList.contains('selected') ? 'true' : 'false'); }
+    function syncAll() { document.querySelectorAll(SEL).forEach(sync); }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      syncAll();
+      var mo = new MutationObserver(function (records) {
+        records.forEach(function (r) { if (r.target.matches && r.target.matches(SEL)) sync(r.target); });
+      });
+      document.querySelectorAll(SEL).forEach(function (el) {
+        mo.observe(el, { attributes: true, attributeFilter: [ 'class' ] });
+      });
+    });
+    // Turbo 방문에서도 다시 맞춘다.
+    document.addEventListener('turbo:load', syncAll);
+  })();
 
   function selectScope(scope) {
     selectedScope = scope;

@@ -84,11 +84,11 @@
             <!-- 출발지/목적지 -->
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <label class="block text-sm font-semibold text-slate-700 mb-2">출발지</label>
+                <label for="departure" class="block text-sm font-semibold text-slate-700 mb-2">출발지</label>
                 <input type="text" id="departure" data-travel-calculator-target="departure" list="city-list" placeholder="예: 서울" class="input" required>
               </div>
               <div>
-                <label class="block text-sm font-semibold text-slate-700 mb-2">목적지</label>
+                <label for="destination" class="block text-sm font-semibold text-slate-700 mb-2">목적지</label>
                 <input type="text" id="destination" data-travel-calculator-target="destination" list="city-list" placeholder="예: 부산" class="input" required>
               </div>
             </div>
@@ -106,11 +106,11 @@
             <!-- 출장 기간 -->
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <label class="block text-sm font-semibold text-slate-700 mb-2">출발일</label>
+                <label for="start_date" class="block text-sm font-semibold text-slate-700 mb-2">출발일</label>
                 <input type="date" id="start_date" data-travel-calculator-target="startDate" class="input" required>
               </div>
               <div>
-                <label class="block text-sm font-semibold text-slate-700 mb-2">도착일</label>
+                <label for="end_date" class="block text-sm font-semibold text-slate-700 mb-2">도착일</label>
                 <input type="date" id="end_date" data-travel-calculator-target="endDate" class="input" required>
               </div>
             </div>
