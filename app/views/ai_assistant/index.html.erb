@@ -51,6 +51,19 @@
       </div>
     </div>
 
+    <%# 개인정보 경고 · AI 역할 표시 — 입력창 «위»에 둔다 (P1-4 · LECTURE_READINESS_AUDIT).
+        질문은 외부 API(Anthropic)로 전송된다. 행정실 이용자는 실명·주민번호·급여·병가·학생
+        정보를 그대로 붙여 넣기 쉬우므로, 경고를 답변 뒤가 아니라 입력 전에 세운다. %>
+    <div class="mt-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3">
+      <p class="text-xs text-amber-900 font-semibold flex items-start gap-1.5">
+        <span class="material-symbols-outlined text-[16px] leading-[18px]">privacy_tip</span>
+        <span>이름·주민등록번호·급여·병가·학생 정보를 입력하지 마세요 — 질문은 외부 AI(Anthropic)로 전송됩니다.</span>
+      </p>
+      <p class="text-xs text-amber-800 mt-1.5 pl-[22px]">
+        AI는 <strong>정리·초안</strong>까지만 합니다. <strong>판단과 확인은 담당자와 원문</strong>의 몫입니다.
+      </p>
+    </div>
+
     <!-- 입력 폼 -->
     <div class="flex gap-3 mt-2">
       <input data-ai-chat-target="input"
