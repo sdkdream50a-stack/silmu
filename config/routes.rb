@@ -153,6 +153,8 @@ Rails.application.routes.draw do
   get "guides/pre-contract-checklist", to: "guides#pre_contract_checklist", as: :pre_contract_checklist
   get "guides/resources", to: "guides#resources", as: :guide_resources
   get "start", to: "guides#onboarding", as: :onboarding
+  # P1-1 — 학교 행정실 상설 허브(기존 자산 링크만). `/start` 는 계약 코스라 이름을 바꾸지 않았다.
+  get "school-office", to: "school_office#index", as: :school_office
   resources :guides, only: [ :index, :show ], param: :slug
 
   # 업무달력 데이터 동기화

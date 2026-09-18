@@ -250,6 +250,16 @@
       <%= link_to "전체 보기 →", root_path(sector: "common", anchor: "sector-tabs"),
             class: "ml-auto shrink-0 text-xs font-semibold text-editorial-navy hover:underline underline-offset-2" %>
     </div>
+    <%# P1-1 — 학교 행정실 상설 허브 진입점. 홈은 계약·지자체 중심이라 진입점으로 쓰기 어렵다. %>
+    <% if @sector == "edu" %>
+      <div class="container-editorial pb-2.5 -mt-1">
+        <%= link_to school_office_path,
+              class: "inline-flex items-center gap-1 text-xs font-semibold text-editorial-navy hover:underline underline-offset-2" do %>
+          <span class="material-symbols-outlined text-[14px]" aria-hidden="true">apartment</span>
+          학교 행정실 바로가기 — 계약·예산·급여·복무·물품 모음
+        <% end %>
+      </div>
+    <% end %>
   </div>
 <% end %>
 
