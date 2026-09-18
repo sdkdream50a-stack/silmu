@@ -91,6 +91,36 @@ class SchoolOfficeHubTest < ActionDispatch::IntegrationTest
            "edu 홈에 허브 진입점이 없다 — sector 값이 맞는지 확인하라(edu · education 아님)"
   end
 
+  # ── PHASE B : 축 IA (artifacts/24_SCHOOL_IA_AXIS_JUDGMENT.md) ─────────────
+  test "축마다 id 가 있고 내비가 그 축을 전부 가리킨다" do
+    get school_office_url
+    body = response.body
+
+    ids = SchoolOfficeController::SECTIONS.map { |s| s[:id] }
+    assert_equal ids.uniq, ids, "축 id 가 중복됐다 — 앵커가 엉뚱한 곳으로 간다"
+    assert ids.none?(&:blank?), "id 가 없는 축이 있다"
+
+    ids.each do |id|
+      assert body.include?(%(id="#{id}")), "축 #{id} 에 앵커 대상이 없다"
+      assert body.include?(%(href="##{id}")), "축 #{id} 로 가는 내비 링크가 없다"
+    end
+  end
+
+  test "얇은 축은 얇다고 말한다" do
+    get school_office_url
+    thin = SchoolOfficeController::SECTIONS.select { |s| s[:thin].present? }
+    assert thin.any?, "NEEDS 축 표시가 하나도 없다 — 판정표(24_SCHOOL_IA_AXIS_JUDGMENT)와 어긋난다"
+    thin.each do |s|
+      assert response.body.include?(s[:thin]), "#{s[:id]} 축의 얇음 표시가 렌더되지 않았다"
+    end
+  end
+
+  test "자료가 충분한 축에는 얇음 표시를 붙이지 않는다" do  # 음성 대조
+    get school_office_url
+    fat = SchoolOfficeController::SECTIONS.find { |s| s[:id] == "contract" }
+    assert_nil fat[:thin], "계약 축(Topic 57건)에 얇음 표시가 붙었다"
+  end
+
   test "공통 홈에는 허브 링크를 넣지 않는다" do  # 음성 대조
     get root_url(sector: "common")
     assert_response :success

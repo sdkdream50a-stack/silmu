@@ -15,8 +15,15 @@
 class SchoolOfficeController < ApplicationController
   LOCALGOV_NOTE = "지방자치단체 기준 — 학교회계는 시도교육청 규칙을 확인하세요"
 
+  # PHASE B — 축 판정은 artifacts/24_SCHOOL_IA_AXIS_JUDGMENT.md 가 소유한다(운영 실측 기반).
+  #   AVAILABLE : 자산이 충분해 축으로 세운다
+  #   NEEDS     : 링크는 주되 **얇다는 사실을 화면에 적는다**. «지침을 준다» 고 포장하지 않는다
+  # 학교 IA 를 `sector: edu` 필터로 만들 수 없다는 것이 이 설계의 출발점이다 —
+  # 토픽 114건 중 edu 태그는 6건이고 행정실이 쓰는 지식은 대부분 common 에 있다.
+  # 그래서 단위가 «필터» 가 아니라 «축 + 적용 차이 표시» 다.
   SECTIONS = [
     {
+      id: "contract",
       title: "계약·감사",
       icon: "gavel",
       items: [
@@ -28,6 +35,7 @@ class SchoolOfficeController < ApplicationController
       ]
     },
     {
+      id: "budget",
       title: "예산·학교회계",
       icon: "account_balance_wallet",
       items: [
@@ -40,6 +48,7 @@ class SchoolOfficeController < ApplicationController
       ]
     },
     {
+      id: "payroll",
       title: "급여·복무",
       icon: "payments",
       items: [
@@ -57,8 +66,11 @@ class SchoolOfficeController < ApplicationController
       ]
     },
     {
+      id: "goods",
       title: "물품·검수",
       icon: "inventory_2",
+      # NEEDS — 운영 실측: Topic property 1건 · 검수/검사 감사사례 1건. 링크는 주되 얇다고 적는다.
+      thin: "이 축은 자료가 적습니다. 기관 물품관리 규칙과 교육청 지침을 함께 확인하세요.",
       items: [
         { label: "구매와 검사·검수",         path: "/guides/purchase-and-inspection" },
         { label: "검사·검수",                path: "/topics/inspection" },
@@ -70,6 +82,7 @@ class SchoolOfficeController < ApplicationController
       ]
     },
     {
+      id: "newcomer",
       title: "신규 담당자",
       icon: "school",
       items: [
