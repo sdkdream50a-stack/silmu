@@ -101,7 +101,14 @@ class ApplicationController < ActionController::Base
       reverse: true,
       description: default_description,
       canonical: canonical_url,
-      og: { site_name: "실무.kr", type: "website", locale: "ko_KR", image: { _: og_image, width: 1200, height: 630, type: "image/webp" } },
+      # PHASE D — `og:description` 이 기본값에 없어서, 페이지가 og 해시를 «부분만» 넘기면
+      #   (예: contract_methods_controller `og: { title:, url: }`) og:description 이 통째로 빠졌다.
+      #   운영 실측 2026-09-18: 도구 14개 중 4개 + /school-office 에서 누락 —
+      #   카톡·SNS 로 링크를 공유하면 설명이 빈 칸으로 나간다(연수 QR·슬라이드 링크에 직접 영향).
+      #   twitter 가 이미 쓰고 있는 심볼 참조(`:description` = 렌더 시점의 페이지 description)를
+      #   og 에도 똑같이 준다. 페이지가 자기 og:description 을 명시하면 그 값이 이긴다.
+      og: { site_name: "실무.kr", type: "website", locale: "ko_KR", description: :description,
+            image: { _: og_image, width: 1200, height: 630, type: "image/webp" } },
       # twitter title/description은 OG 자동 폴백되지 않음 — 명시 출력 (Twitter Card 권장 표준)
       # 심볼 참조 = 렌더 시점의 페이지 title/description 미러링(페이지가 twitter를 명시하면 그 값이 우선)
       twitter: { card: "summary_large_image", site: "@silmu_kr", image: og_image, title: :title, description: :description }
