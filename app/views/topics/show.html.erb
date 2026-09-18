@@ -455,6 +455,28 @@ document.addEventListener('click', function(e) {
               <% end %>
             </div>
           </div>
+        <% elsif @related_tools.any? %>
+          <%# PHASE C (17_UIUX_PERSONA_AUDIT TOP6) — 도구 CTA 가 본문 끝에만 있었다.
+              운영 실측 2026-09-18 /topics/private-contract: 보이는 첫 도구 링크가
+              8,303px 지점(문서 11,892px 의 **70%** · 모바일 9.8화면 아래)이었다.
+              읽다가 «계산은 어디서 하나» 가 생기는 지점은 본문 «앞» 이다.
+              새 데이터를 만들지 않고 이미 계산된 @related_tools 의 첫 항목을 여기서 한 번 더 낸다
+              (본문 끝 카드는 그대로 둔다 — 끝까지 읽은 사람의 다음 행동도 그대로 필요하다). %>
+          <% early_tool = @related_tools.first %>
+          <div class="mb-8 rounded-xl border border-emerald-200 bg-emerald-50/60 p-4">
+            <%# 추적 data-action 을 붙이지 않는다 — 이 블록은 아래 `data-controller="next-action"`
+                범위 «밖» 이라 Stimulus 가 잡지 못한다. 동작하지 않는 속성은 다음 사람을 속인다. %>
+            <%= link_to send("#{early_tool[:key]}_path"), class: "flex items-center gap-3 group" do %>
+              <span class="shrink-0 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100 text-emerald-700">
+                <span class="material-symbols-outlined text-[20px]" aria-hidden="true"><%= early_tool[:icon] %></span>
+              </span>
+              <span class="min-w-0 flex-1">
+                <span class="block text-[11px] font-bold uppercase tracking-wide text-emerald-700">바로 계산</span>
+                <span class="block text-sm font-semibold text-slate-900 group-hover:text-editorial-navy transition-colors truncate"><%= early_tool[:title] %></span>
+              </span>
+              <span class="material-symbols-outlined text-slate-400 group-hover:text-editorial-navy transition-colors" aria-hidden="true">arrow_forward</span>
+            <% end %>
+          </div>
         <% end %>
 
         <!-- 실무흐름도 -->
