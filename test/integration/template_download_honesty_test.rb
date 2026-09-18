@@ -30,6 +30,11 @@ class TemplateDownloadHonestyTest < ActionDispatch::IntegrationTest
       FORM_EXTENSIONS.flat_map { |ext| Dir.glob(Rails.root.join(root, "**", "*.#{ext}").to_s) }
     end
     found = found.reject { |f| f.include?("/node_modules/") || f.include?("/vendor/") }
+    # 아래 양성 대조 테스트가 심는 probe 는 제외한다.
+    # 스위트는 `parallelize(workers: :number_of_processors)` 로 도는데, probe 를 쓰는 워커와
+    # 이 glob 을 도는 워커가 겹치면 **내 테스트가 내 probe 를 결함으로 신고**한다
+    # (2026-09-18 전체 스위트 1회 실패로 실측. 서식이 늘어난 것이 아니었다).
+    found = found.reject { |f| File.basename(f).start_with?("__form_probe__") }
 
     assert_empty found,
                  "서식 파일이 생겼다(#{found.first(3).inspect}) — 이제 «준비 중» 대신 실제 다운로드를 제공하고 이 테스트를 다시 짜라"
@@ -37,7 +42,8 @@ class TemplateDownloadHonestyTest < ActionDispatch::IntegrationTest
 
   # 위 검사가 «아무 곳도 보지 않아» 통과하는 것을 막는다(양성 대조).
   test "전제 검사가 실제로 파일을 볼 수 있는 범위를 본다" do
-    probe = Rails.root.join("public", "__form_probe__.pdf")
+    # 워커마다 다른 이름을 쓴다 — 같은 이름이면 한 워커의 ensure 가 다른 워커의 probe 를 지운다.
+    probe = Rails.root.join("public", "__form_probe__#{Process.pid}.pdf")
     File.write(probe, "%PDF-1.4 probe")
     begin
       found = ASSET_ROOTS.flat_map do |root|

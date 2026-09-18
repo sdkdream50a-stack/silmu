@@ -1004,6 +1004,7 @@
   <div class="main-container">
     <!-- 왼쪽: 견적서 업로드/미리보기 -->
     <div class="viewer-panel">
+      <%= render "shared/ai_privacy_notice", what: "업로드한 견적서 파일", scope: :file %>
       <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()">
         <span class="material-symbols-outlined">cloud_upload</span>
         <h3>견적서를 업로드하세요</h3>
