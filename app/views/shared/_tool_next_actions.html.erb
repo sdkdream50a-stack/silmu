@@ -15,7 +15,12 @@
     (이 파셜은 도구 37개 전부에서 render 되므로 단일 삽입점이 된다) %>
 <%= render 'shared/tool_trust', tool_key: local_assigns[:tool_key] %>
 
-<% next_actions = Array(next_actions).compact %>
+<%# PHASE C (TOP10) — 도구 결과의 «다음 칸» 을 여기서 한 번에 잇는다.
+    운영 실측 2026-09-18: 도구 4/4 결과에 감사사례 0 · 서식 0 이었다.
+    뷰 37개를 각각 고치면 어긋나므로 **단일 삽입점인 이 파셜**에서 붙인다.
+    매핑은 ToolEvidenceHelper 가 소유하고, 손으로 확인한 도구에만 붙는다
+    (자동 유사도는 무관한 사례를 붙여 신뢰를 깎는다 — 감사 §2-G 실패 사례). %>
+<% next_actions = Array(next_actions).compact + tool_evidence_slots(local_assigns[:tool_key]) %>
 <% if next_actions.any? %>
   <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 mb-6"
            data-controller="next-action"
