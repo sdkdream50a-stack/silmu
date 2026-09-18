@@ -53,6 +53,21 @@ tools:
     basis: "지방계약법령 추정가격 산정 기준"
     standard: contract_thresholds
     laws: "지방계약법 시행령 제7조"
+  # ── 급여·복무 도구 3종 (P1-5 · G-24) ──────────────────────────────────────
+  # 교육행정직은 **지방공무원**이라 국가 규정만 인용하면 근거가 반쪽이다. 국가·지방을 병기한다.
+  # 조문은 artifacts/03a_TOOL_AUDIT_PAY_TRAVEL.md 에서 **원문 대조로 확인된 것만** 적었다.
+  # `standard:` 는 일부러 비워 뒀다 — 이 세 도구의 기준값(봉급표·별표)은 config 파일이 아니라
+  #   뷰 안에 있어서, 없는 «기준값 파일 버전»을 표시하면 거짓 기준일이 된다.
+  overtime-calculator:
+    basis: "시간외·야간·휴일근무수당 지급 기준 (기준호봉 봉급액 기준)"
+    laws: "공무원수당 등에 관한 규정 제15조, 제16조, 제17조, 지방공무원 수당 등에 관한 규정 제15조"
+  annual-leave-calculator:
+    basis: "재직기간별 연가 일수 및 연도 중 임용자 비례 부여 기준"
+    laws: "국가공무원 복무규정 제15조, 제17조, 지방공무원 복무규정 제7조"
+  allowance-calculator:
+    basis: "정근수당·명절휴가비·직급보조비 등 수당 지급 기준"
+    laws: "공무원수당 등에 관한 규정 제7조, 지방공무원 수당 등에 관한 규정 제7조"
+
   travel-calculator:
     basis: "공무원 여비 지급 기준"
     standard: legal_standards
