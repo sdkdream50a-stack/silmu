@@ -1,0 +1,17 @@
+<%# G-65 (2026-09-18) — 목록·홈 «카드» 용 압축 출처 칩.
+    `shared/_provenance_banner` 는 상세 페이지 전용이라, 카드만 본 사용자는
+    재구성·가상 사례를 실제 감사 사건으로 읽었다(운영 실측: 홈 감사사례 카드 고지 0회).
+    카드는 자리가 좁으므로 문장이 아니라 한 단어로 «실제 사건이 아님» 만 세운다.
+    전체 설명은 상세의 배너가 계속 담당한다 — 두 곳이 같은 원장(AuditCaseProvenance)을 읽는다.
+
+    사용: render "shared/provenance_chip", audit_case: ac %>
+<% ac = local_assigns[:audit_case] %>
+<% if ac.respond_to?(:effective_source_type) && !ac.document_backed? %>
+  <span class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-lg text-[11px] font-semibold
+               <%= ac.reconstructed_case? ? 'bg-amber-50 text-amber-800 border border-amber-200'
+                                          : 'bg-slate-100 text-slate-600 border border-slate-200' %>"
+        title="<%= ac.provenance_label %> — <%= ac.provenance_note %>">
+    <span class="material-symbols-outlined text-[12px] leading-none" aria-hidden="true"><%= ac.provenance_icon %></span>
+    <%= ac.reconstructed_case? ? "재구성" : "출처 확인 필요" %>
+  </span>
+<% end %>

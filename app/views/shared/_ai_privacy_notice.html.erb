@@ -1,0 +1,24 @@
+<%# 외부 AI 전송 고지 + AI 역할 한계 (P1-4 확장 · 요구서 §7·§8).
+    /ai-assistant 에만 있던 경고를 **외부로 데이터를 보내는 모든 도구**로 넓힌다.
+    quote-review·quote-auto 는 비로그인으로 **파일 자체를** api.anthropic.com 에 올린다 —
+    견적서에는 사업자등록번호·담당자 이름·연락처·계좌가 들어 있다. 경고가 0이었다.
+
+    사용: render "shared/ai_privacy_notice", what: "업로드한 파일", scope: :file %>
+<% what  = local_assigns.fetch(:what, "입력한 내용") %>
+<% scope = local_assigns.fetch(:scope, :text) %>
+<div class="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3" role="note" aria-label="개인정보·AI 이용 안내">
+  <p class="text-xs text-amber-900 font-semibold flex items-start gap-1.5">
+    <span class="material-symbols-outlined text-[16px] leading-[18px]" aria-hidden="true">privacy_tip</span>
+    <span><%= what %>은 <strong>외부 AI(Anthropic)</strong>로 전송됩니다.</span>
+  </p>
+  <p class="text-xs text-amber-800 mt-1.5 pl-[22px]">
+    <% if scope == :file %>
+      이름·주민등록번호·계좌번호·학생 정보가 담긴 파일은 올리지 마세요. 필요한 부분만 가려서 올리세요.
+    <% else %>
+      이름·주민등록번호·급여·병가·학생 정보를 입력하지 마세요.
+    <% end %>
+  </p>
+  <p class="text-xs text-amber-800 mt-1 pl-[22px]">
+    AI는 <strong>정리·초안</strong>까지만 합니다. <strong>판단과 확인은 담당자와 원문</strong>의 몫입니다.
+  </p>
+</div>

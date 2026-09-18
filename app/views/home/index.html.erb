@@ -250,6 +250,16 @@
       <%= link_to "전체 보기 →", root_path(sector: "common", anchor: "sector-tabs"),
             class: "ml-auto shrink-0 text-xs font-semibold text-editorial-navy hover:underline underline-offset-2" %>
     </div>
+    <%# P1-1 — 학교 행정실 상설 허브 진입점. 홈은 계약·지자체 중심이라 진입점으로 쓰기 어렵다. %>
+    <% if @sector == "edu" %>
+      <div class="container-editorial pb-2.5 -mt-1">
+        <%= link_to school_office_path,
+              class: "inline-flex items-center gap-1 text-xs font-semibold text-editorial-navy hover:underline underline-offset-2" do %>
+          <span class="material-symbols-outlined text-[14px]" aria-hidden="true">apartment</span>
+          학교 행정실 바로가기 — 계약·예산·급여·복무·물품 모음
+        <% end %>
+      </div>
+    <% end %>
   </div>
 <% end %>
 
@@ -373,6 +383,8 @@
                   <% if ac.repeated_issue? %>
                     <span class="badge-editorial signal-critical"><span class="material-symbols-outlined text-[11px] mr-0.5">loop</span>반복</span>
                   <% end %>
+                  <%# G-65 — 카드만 보고 실제 감사 사건으로 읽히지 않게 출처 유형을 같이 세운다 %>
+                  <%= render "shared/provenance_chip", audit_case: ac %>
                 </div>
                 <h3 class="font-bold text-base text-editorial-ink group-hover:text-editorial-navy transition-colors leading-snug line-clamp-2 mb-1"><%= ac.title %></h3>
                 <p class="text-xs text-editorial-muted line-clamp-2"><%= ac.issue.truncate(90) %></p>
