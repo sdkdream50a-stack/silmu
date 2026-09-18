@@ -398,22 +398,51 @@
 </section>
 
 <script>
+// 더보기 드롭다운은 `overflow-x-auto` 인 #topic-tabs 안에 있다.
+// CSS 상 overflow-x 가 auto 면 overflow-y 도 auto 로 계산돼 **세로로 잘린다** —
+// 2026-09-18 실브라우저 실측에서 더보기 안의 4개 항목이
+// 데스크톱(1085px)·모바일(390px) 모두 elementFromPoint 로 잡히지 않았다(클릭 불가).
+// 그래서 열 때 position:fixed 로 올려 클리핑 컨테이너 밖에 그린다.
+function positionMoreTabs() {
+  var dd = document.getElementById('more-tabs-dropdown');
+  var btn = document.getElementById('more-tabs-btn');
+  if (!dd || !btn || dd.classList.contains('hidden')) return;
+  var r = btn.getBoundingClientRect();
+  var width = dd.offsetWidth || 160;
+  var left = Math.max(8, Math.min(r.left, document.documentElement.clientWidth - width - 8));
+  dd.style.position = 'fixed';
+  dd.style.top = Math.round(r.bottom) + 'px';
+  dd.style.left = Math.round(left) + 'px';
+}
 function toggleMoreTabs() {
   var dd = document.getElementById('more-tabs-dropdown');
   var arrow = document.getElementById('more-tabs-arrow');
   dd.classList.toggle('hidden');
   arrow.style.transform = dd.classList.contains('hidden') ? '' : 'rotate(180deg)';
+  if (dd.classList.contains('hidden')) {
+    dd.style.position = ''; dd.style.top = ''; dd.style.left = '';
+  } else {
+    positionMoreTabs();
+  }
 }
 function closeMoreTabs() {
   var dd = document.getElementById('more-tabs-dropdown');
   var arrow = document.getElementById('more-tabs-arrow');
   dd.classList.add('hidden');
   arrow.style.transform = '';
+  dd.style.position = ''; dd.style.top = ''; dd.style.left = '';
 }
+// 탭 바가 sticky 라 스크롤·리사이즈 때 버튼 위치가 바뀐다 — 열려 있는 동안만 따라간다.
+window.addEventListener('scroll', positionMoreTabs, { passive: true });
+window.addEventListener('resize', positionMoreTabs);
 // 외부 클릭 시 닫기
 document.addEventListener('click', function(e) {
   var wrapper = document.getElementById('more-tabs-wrapper');
-  if (wrapper && !wrapper.contains(e.target)) closeMoreTabs();
+  var dd = document.getElementById('more-tabs-dropdown');
+  if (!wrapper) return;
+  if (wrapper.contains(e.target)) return;
+  if (dd && dd.contains(e.target)) return; // fixed 로 뜬 메뉴는 wrapper 밖 좌표일 수 있다
+  closeMoreTabs();
 });
 </script>
 

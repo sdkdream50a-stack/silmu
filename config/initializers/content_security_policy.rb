@@ -46,7 +46,13 @@ Rails.application.configure do
                        "pagead2.googlesyndication.com",
                        "tpc.googlesyndication.com",
                        "partner.googleadservices.com",
-                       "googleads.g.doubleclick.net"
+                       "googleads.g.doubleclick.net",
+                       # sodar2.js(무효 트래픽 탐지)는 ep1/ep2 에서 온다 — script_src 에 없어
+                       # 2026-09-18 운영 콘솔에서 매 페이지 차단됐다(connect_src·frame_src 에만 있었다).
+                       # 실측 위반 문구: "Loading the script
+                       # 'https://ep2.adtrafficquality.google/sodar/sodar2.js' violates ... script-src".
+                       "ep1.adtrafficquality.google",
+                       "ep2.adtrafficquality.google"
 
     policy.style_src   :self, :unsafe_inline,
                        "cdn.jsdelivr.net",       # Pretendard
