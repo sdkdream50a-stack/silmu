@@ -155,6 +155,14 @@ Rails.application.routes.draw do
   get "start", to: "guides#onboarding", as: :onboarding
   # P1-1 — 학교 행정실 상설 허브(기존 자산 링크만). `/start` 는 계약 코스라 이름을 바꾸지 않았다.
   get "school-office", to: "school_office#index", as: :school_office
+
+  # 실무 검증실 Beta — 안내(GET)는 공개, 업로드·검토·demo(POST)는 로그인 전용(ReviewLabController).
+  get  "review-lab", to: "review_lab#index", as: :review_lab
+  get  "review-lab/quote", to: "review_lab#quote", as: :review_lab_quote
+  post "review-lab/quote", to: "review_lab#quote_review"
+  get  "review-lab/package", to: "review_lab#package", as: :review_lab_package
+  post "review-lab/package", to: "review_lab#package_review"
+  post "review-lab/demo/:kind", to: "review_lab#demo", as: :review_lab_demo, constraints: { kind: /quote|package/ }
   resources :guides, only: [ :index, :show ], param: :slug
 
   # 업무달력 데이터 동기화

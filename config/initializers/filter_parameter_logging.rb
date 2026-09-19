@@ -23,3 +23,7 @@ Rails.application.config.filter_parameters += [
 Rails.application.config.filter_parameters += [
   /\Aq\z/, :question, :content, :memo, :monthly_wage, :hire_date
 ]
+
+# 실무 검증실 — 업로드 파라미터에는 원본 파일명(«홍길동_견적서.pdf» 같은 개인정보)이 들어 있다.
+# 로그·lograge params·에러 리포트에 파일 객체가 찍히지 않게 가린다.
+Rails.application.config.filter_parameters += [ :main_file, :comparison_files, /\Afiles\z/ ]

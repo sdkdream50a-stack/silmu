@@ -1,0 +1,47 @@
+<%= render "review_lab/hero", title: "견적서 검토",
+      lead: "견적서를 올리면 산술·누락을 규칙으로 검사하고, 공급가액으로 계약방식 판정기를 연결합니다. 가격이 «비싸다·적정하다» 는 판정하지 않고 가격 근거가 얼마나 있는지만 봅니다." %>
+
+<div class="container-editorial py-10 space-y-8 max-w-3xl">
+  <%= render "review_lab/notice" %>
+
+  <% if user_signed_in? %>
+    <%= form_with url: review_lab_quote_path, method: :post, multipart: true, data: { turbo: false }, class: "card-editorial space-y-5" do |f| %>
+      <div>
+        <%= f.label :main_file, "검토할 견적서 (1개)", class: "block text-sm font-semibold text-editorial-ink mb-1.5" %>
+        <%= f.file_field :main_file, required: true, accept: ".xlsx,.hwpx,.docx,.pdf,.hwp,.jpg,.jpeg,.png", class: "block w-full text-sm" %>
+      </div>
+      <div>
+        <%= f.label :comparison_files, "비교견적서 (선택 · 최대 3개)", class: "block text-sm font-semibold text-editorial-ink mb-1.5" %>
+        <%= f.file_field :comparison_files, multiple: true, accept: ".xlsx,.hwpx,.docx,.pdf,.hwp", class: "block w-full text-sm" %>
+        <p class="mt-1 text-xs text-slate-500">같은 품명·규격끼리만 가격을 나란히 보여줍니다. 규격이 다르면 비교하지 않습니다.</p>
+      </div>
+      <div class="grid gap-4 sm:grid-cols-3">
+        <div>
+          <%= f.label :contract_type, "계약 유형", class: "block text-sm font-semibold text-editorial-ink mb-1.5" %>
+          <%= f.select :contract_type, contract_type_options, { include_blank: "선택 안 함" }, class: "w-full rounded-md border-slate-300 text-sm" %>
+        </div>
+        <div>
+          <%= f.label :agency_scope, "기관", class: "block text-sm font-semibold text-editorial-ink mb-1.5" %>
+          <%= f.select :agency_scope, agency_scope_options, { include_blank: "선택 안 함" }, class: "w-full rounded-md border-slate-300 text-sm" %>
+        </div>
+        <div>
+          <%= f.label :counterparty_type, "계약상대자", class: "block text-sm font-semibold text-editorial-ink mb-1.5" %>
+          <%= f.select :counterparty_type, counterparty_options, { include_blank: "선택 안 함" }, class: "w-full rounded-md border-slate-300 text-sm" %>
+        </div>
+      </div>
+      <p class="text-xs text-slate-500">세 가지를 고르면 공급가액을 추정가격으로 가정해 계약방식·견적 요건을 판정합니다. 고르지 않으면 판정기가 «정보 부족» 을 그대로 보여줍니다.</p>
+      <div class="rounded-lg border border-slate-200 p-4 space-y-3">
+        <label class="flex items-start gap-2 text-sm text-slate-800">
+          <%= f.check_box :use_ai, { class: "mt-0.5" }, "1", "0" %>
+          <span><strong>AI로 값 읽기</strong> — 사진·스캔 견적서처럼 규칙으로 못 읽는 파일일 때만 씁니다(원본을 규칙으로 읽으면 보내지 않습니다).</span>
+        </label>
+        <%= render "shared/ai_privacy_notice", what: "선택 시 업로드한 견적서 파일", scope: :file %>
+      </div>
+      <%= f.submit "검토하기", class: "rounded-lg bg-editorial-navy px-5 py-2.5 text-sm font-semibold text-white hover:opacity-90 cursor-pointer" %>
+    <% end %>
+  <% else %>
+    <%= render "review_lab/login_gate" %>
+  <% end %>
+
+  <%= render "review_lab/formats" %>
+</div>

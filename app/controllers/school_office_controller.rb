@@ -31,7 +31,9 @@ class SchoolOfficeController < ApplicationController
         { label: "분할계약 점검",            path: "/tools/split-contract-checker" },
         { label: "계약 전 확인 목록",        path: "/guides/pre-contract-checklist" },
         { label: "학교장터·나라장터 가이드",  path: "/guides/e-procurement-guide" },
-        { label: "교육 분야 감사 지적사례",  path: "/audit-cases?sector=edu" }
+        { label: "교육 분야 감사 지적사례",  path: "/audit-cases?sector=edu" },
+        { label: "실무 검증실 Beta — 견적서·공고문 검토", path: "/review-lab",
+          note: "문서 업로드는 로그인 후 · 사전검토용(최종 판단은 담당자)" }
       ]
     },
     {
