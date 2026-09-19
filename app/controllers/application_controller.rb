@@ -30,6 +30,7 @@ class ApplicationController < ActionController::Base
   EXAM_SHARED_CONTENT_PREFIXES = %w[
     /topics /guides /audit-cases /tools /faq /series
     /templates /about /updates /start /silmu-search /privacy /terms /contact /feedback
+    /review-lab
   ].freeze
 
   # SEO: 비루트 경로의 끝 슬래시 변형(/topics/)이 200 중복 URL이 되지 않도록 슬래시 없는 경로로 301.
