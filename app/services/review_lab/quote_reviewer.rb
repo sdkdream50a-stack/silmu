@@ -101,7 +101,10 @@ module ReviewLab
       return nil if v.nil?
       return (v.to_f.finite? ? v.round : nil) if v.is_a?(Numeric)
 
-      FieldExtractor.parse_amount(v.to_s)
+      str = v.to_s.strip
+      return str.to_f.round if str.match?(/\A\d+(?:\.0+)?\z/)   # AI 가 «45000000.0» 처럼 문자열로 준 정수
+
+      FieldExtractor.parse_amount(str)
     end
 
     def value(key) = @values[key]&.value

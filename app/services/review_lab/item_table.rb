@@ -41,8 +41,9 @@ module ReviewLab
       items = []
       segs[(header_idx + 1)..].each do |seg|
         cells = seg[:cells] || [ seg[:text] ]
-        first = cells.find(&:present?).to_s
-        break if first.match?(STOP_ROW) || (cells.compact.size <= 2 && seg[:text].match?(STOP_ROW))
+        # 전각 괄호·숫자(«합계（A）»)도 같은 합계 행이다 — 판정 전에 NFKC 로 푼다.
+        first = cells.find(&:present?).to_s.unicode_normalize(:nfkc)
+        break if first.match?(STOP_ROW) || (cells.compact.size <= 2 && seg[:text].unicode_normalize(:nfkc).match?(STOP_ROW))
 
         item = build_item(cells, map, seg[:locator])
         items << item if item

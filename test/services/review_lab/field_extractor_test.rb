@@ -65,4 +65,9 @@ class ReviewLab::FieldExtractorTest < ActiveSupport::TestCase
     assert_equal 30, FE.parse_days("견적 제출일로부터 30일")[:days]
     assert_nil FE.parse_days("만료 후 14일 이내에 대금을 지급한다")
   end
+
+  test "R2 틀린 자릿수 묶음은 잘라 읽지 않고 UNKNOWN" do
+    %w[45,000,00원 1,23,456원 1234,567원].each { |raw| assert_nil FE.parse_amount(raw), raw }
+    assert_equal 45_000_000, FE.parse_amount("45,000,000원"), "양성 대조"
+  end
 end

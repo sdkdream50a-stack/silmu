@@ -169,9 +169,10 @@ class ReviewLabController < ApplicationController
   end
 
   # 비싼 구간(파일 파싱)만 슬롯으로 감싼다 — AI 네트워크 호출까지 잡고 있으면 한 사람이 모두를 503 으로 만든다.
-  # 곧바로 거절하지 않고 잠시 기다린다(파싱 상한 10초 안쪽).
+  # 기다리는 요청도 Puma 스레드(운영 3개)를 붙잡는다 — 오래 기다리게 하면 대기자 두 명이 사이트 전체를 멈춘다.
+  # 그래서 아주 잠깐(1초)만 기다리고 곧 «잠시 후» 로 돌려보낸다.
   class Busy < StandardError; end
-  cattr_accessor :slot_wait, default: 12 # 초
+  cattr_accessor :slot_wait, default: 1 # 초
 
   def with_review_slot
     raise Busy unless REVIEW_SLOT.try_acquire(1, slot_wait)

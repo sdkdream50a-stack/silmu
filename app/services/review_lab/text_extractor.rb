@@ -94,9 +94,10 @@ module ReviewLab
     rescue StandardError => e
       # 손상 파일은 파서마다 다른 예외(Zlib::DataError·NoMethodError…)를 던진다. 500 대신 «열 수 없음» 으로 끝내고,
       # 문서 내용이 섞일 수 있는 메시지는 남기지 않는다(클래스명 + 발생 위치만).
-      # 단, 발생 위치가 우리 코드(review_lab)면 우리 버그다 — 테스트에서는 숨기지 않고 터뜨린다.
+      # 단, 이름·형 오류(NoMethodError 포함 NameError · 우리 코드의 TypeError)는 우리 버그다 — 테스트에서는 숨기지 않는다.
+      # 파서의 C 예외(Zlib::DataError 등)는 손상 파일이므로 테스트에서도 «열 수 없음» 경로로 검증할 수 있어야 한다.
       origin = e.backtrace_locations&.first
-      raise if Rails.env.test? && origin&.path.to_s.include?("/review_lab/")
+      raise if Rails.env.test? && (e.is_a?(NameError) || (e.is_a?(TypeError) && origin&.path.to_s.include?("/review_lab/")))
 
       Rails.logger.info("[review-lab] extract failed: #{e.class} at #{origin&.path&.split('/')&.last}:#{origin&.lineno}")
       unsupported(format || :unknown, :broken)

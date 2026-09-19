@@ -193,9 +193,13 @@ class ReviewLabTest < ActionDispatch::IntegrationTest
       assert_includes response.body, "다른 검토가 진행 중입니다"
     ensure
       ReviewLabController::REVIEW_SLOT.release
-      ReviewLabController.slot_wait = 12
+      ReviewLabController.slot_wait = 1
     end
     post "/review-lab/demo/quote"
     assert_response :success, "슬롯이 풀리면 정상 처리(양성 대조)"
+  end
+
+  test "R1 슬롯 대기는 짧다 — 기다리는 요청이 Puma 스레드를 오래 붙잡지 않는다" do
+    assert_operator ReviewLabController.slot_wait, :<=, 1
   end
 end

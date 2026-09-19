@@ -215,4 +215,15 @@ class ReviewLab::QuoteReviewerTest < ActiveSupport::TestCase
     r = ReviewLab::QuoteReviewer.call(documents: [ image ], ai_fields: ai, today: TODAY)
     assert(r.findings.all? { |f| f.severity == "CHECK" })
   end
+
+  test "R3 AI 가 정수를 «45000000.0» 문자열로 줘도 읽는다" do
+    image = ReviewLab::TextExtractor.call(bytes: "\x89PNG\r\n\x1A\n".b, role: "quote", label: "견적서")
+    r = ReviewLab::QuoteReviewer.call(documents: [ image ], ai_fields: { "supply_amount" => "20000.0", "vat_amount" => "2000", "total_amount" => "22000" }, today: TODAY)
+    assert_match(/22,000원/, r.findings.find { |f| f.code == "Q-TOTAL" }.extracted_value.to_s)
+  end
+
+  test "R5 전각 괄호 합계 행(«합계（A）»)에서도 품목표 읽기가 멈춘다" do
+    rows = [ HEAD, *CLEAN_ROWS, [ "합계（A）", "", "", "", "", "", 20_000 ] ]
+    assert_equal 2, ReviewLab::ItemTable.parse(ReviewLab::TextExtractor.call(bytes: B.xlsx(rows), role: "quote", label: "q")).size
+  end
 end

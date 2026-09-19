@@ -65,4 +65,10 @@ class ReviewLab::AiSemanticReviewerTest < ActiveSupport::TestCase
                                        http: ->(p) { sent = p; { issues: [] }.to_json })
     %w[900101 1234-5678 9001011234567 5234567 1234.5678 234567 800101 2234567 9876 5432].each { |frag| refute_includes sent, frag }
   end
+
+  test "R4 표 칸 사이 여러 칸 공백·줄바꿈을 건너 금액을 주민번호로 가리지 않는다" do
+    assert_equal "단가 150000    1500000", ReviewLab::PiiScanner.mask("단가 150000    1500000")
+    assert_equal "단가 250000\n1250000", ReviewLab::PiiScanner.mask("단가 250000\n1250000")
+    assert_equal "[가림]", ReviewLab::PiiScanner.mask("900101 - 1234567"), "양성 대조"
+  end
 end

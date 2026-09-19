@@ -160,4 +160,11 @@ class ReviewLab::PackageReviewerTest < ActiveSupport::TestCase
     assert r.inconclusive?
     assert_match(/문제 없음/, r.headline)
   end
+
+  test "열린 질문 — 다품목 문서가 있어도 수량이 하나뿐인 문서끼리는 계속 대조한다" do
+    multi = d("spec", "규격서", [ "수량: 10대", "수량: 2대" ])
+    r = review_of(d("notice", "공고문", [ "수량: 12대" ]), d("task_order", "과업지시서", [ "수량: 15대" ]), multi)
+    assert_equal "BLOCK", found(r, "X-CONFLICT").first.severity
+    assert_equal "CHECK", found(r, "X-QTY-MULTI").first.severity
+  end
 end

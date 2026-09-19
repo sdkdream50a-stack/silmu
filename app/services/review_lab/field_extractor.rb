@@ -147,6 +147,8 @@ module ReviewLab
         small = BigDecimal(0)
         saw_unit = false
         while (m = s.match(AMOUNT_TOKEN))
+          return nil if m[1] && !well_grouped?(m[1])
+
           n = m[1] ? BigDecimal(m[1].delete(",")) : nil
           case m[2]
           when "억", "만"
@@ -160,9 +162,9 @@ module ReviewLab
           saw_unit = true
           s = m.post_match
         end
-        if (m = s.match(/\A\s*(\d{1,3}(?:,\d{3})+|\d+)(\.\d+)?/))
-          return nil if m[2] && !saw_unit   # 단위 없는 소수(«1.5»)는 뜻이 불명확
-          return nil if m[2]
+        if (m = s.match(/\A\s*(\d[\d,]*)(\.\d+)?/))
+          return nil if m[2]                      # 단위 없는 소수(«1.5»)는 뜻이 불명확
+          return nil unless well_grouped?(m[1])   # «45,000,00» 을 45,000 으로 잘라 읽지 않는다
 
           total += m[1].delete(",").to_i
           s = m.post_match
@@ -175,6 +177,9 @@ module ReviewLab
 
         total.to_i
       end
+
+      # 쉼표는 세 자리 묶음일 때만 — 틀린 묶음은 그럴듯한 틀린 값을 만들므로 UNKNOWN 으로 둔다.
+      def well_grouped?(num) = !num.include?(",") || num.match?(/\A\d{1,3}(?:,\d{3})+(?:\.\d+)?\z/)
 
       DATE_RE = /(\d{4})\s*[.\-\/년]\s*(\d{1,2})\s*[.\-\/월]\s*(\d{1,2})\s*[.일]?/
 
