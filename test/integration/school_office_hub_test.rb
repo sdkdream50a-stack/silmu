@@ -127,4 +127,30 @@ class SchoolOfficeHubTest < ActionDispatch::IntegrationTest
     assert_not response.body.include?("학교 행정실 바로가기 — "),
              "공통 홈까지 학교 전용 진입점이 붙었다"
   end
+  # 2026-09-19 연수 대상 감사(33_AUDIENCE_FIT_AUDIT) — 행정실무사(급여·물품) 진입과 정직 표시.
+  test "행정실무사 급여·물품 자산이 허브에 있다" do
+    paths = SchoolOfficeController.all_paths
+    %w[/tools/salary-calculator /tools/insurance-calculator /topics/year-end-settlement
+       /review-lab/quote /topics/dual-quote /guides/inspection-report].each do |path|
+      assert_includes paths, path, "#{path} 가 허브에서 빠졌다"
+    end
+  end
+
+  test "재구성 사례에 라벨이 붙고 없는 업무를 정직하게 말한다" do
+    get school_office_url
+    body = response.body
+    assert body.include?("재구성 사례입니다 — 실제 감사결과가 아닙니다"), "병가 재구성 사례에 라벨이 없다"
+    assert body.include?("재물조사 도구는 없습니다"), "재물조사 부재 표시가 없다"
+    assert body.include?("교육공무직 보수"), "교육공무직 보수 부재 표시가 없다"
+    assert body.include?("카드 관련 감사사례"), "있는 카드 감사사례를 없다고만 말한다"
+  end
+
+  test "허브 링크 클릭은 기존 next_action_click 으로 계측된다 — 새 이벤트 없음" do
+    get school_office_url
+    body = response.body
+    assert body.include?('data-next-action-topic-slug-value="hub:school-office"'), "계측 컨트롤러가 없다"
+    clicks = body.scan(/click-(?:>|&gt;)next-action#track/).size
+    assert_equal SchoolOfficeController.all_paths.size, clicks, "계측이 붙지 않은 허브 링크가 있다"
+    assert body.include?('data-next-action-slot-param="goods:/review-lab/quote"'), "slot 파라미터 형식이 다르다"
+  end
 end

@@ -23,7 +23,9 @@
   </nav>
 
   <% @sections.each do |section| %>
-    <section id="<%= section[:id] %>" class="scroll-mt-20">
+    <%# 계측 — 새 이벤트를 만들지 않고 기존 next_action_click 을 재사용한다(topic_slug=hub:school-office · slot=축:경로). %>
+    <section id="<%= section[:id] %>" class="scroll-mt-20"
+             data-controller="next-action" data-next-action-topic-slug-value="hub:school-office">
       <h2 class="heading-editorial-section flex items-center gap-2 mb-5">
         <span class="material-symbols-outlined text-editorial-navy" aria-hidden="true"><%= section[:icon] %></span>
         <%= section[:title] %>
@@ -38,7 +40,8 @@
       <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         <% section[:items].each do |item| %>
           <li>
-            <%= link_to item[:path], class: "card-editorial card-editorial-interactive group block h-full" do %>
+            <%= link_to item[:path], class: "card-editorial card-editorial-interactive group block h-full",
+                  data: { action: "click->next-action#track", "next-action-slot-param": "#{section[:id]}:#{item[:path]}" } do %>
               <span class="font-semibold text-editorial-ink group-hover:text-editorial-navy transition-colors">
                 <%= item[:label] %>
               </span>
@@ -61,8 +64,9 @@
   <section>
     <h2 class="heading-editorial-section mb-3">여기에 아직 없는 업무</h2>
     <p class="text-sm text-slate-600 leading-relaxed">
-      <strong>법인카드(클린카드)·시설 관리·급식</strong>은 아직 다루지 않습니다 —
+      <strong>법인카드(클린카드)·시설 관리·급식·교육공무직 보수</strong>는 아직 절차 자료가 없습니다 —
       시도교육청 지침과 업무포털에서 확인하세요.
+      법인카드는 <%= link_to "카드 관련 감사사례", "/audit-cases?sector=edu&q=카드", class: "underline" %>(재구성 사례)만 있습니다.
       <strong>결산</strong>은 <%= link_to "결산 절차", "/topics/budget-settlement", class: "underline" %>가 있지만
       지방자치단체 기준이라 학교회계 결산과 다릅니다.
     </p>
