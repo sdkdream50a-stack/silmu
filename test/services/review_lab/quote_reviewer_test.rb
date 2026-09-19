@@ -143,4 +143,60 @@ class ReviewLab::QuoteReviewerTest < ActiveSupport::TestCase
     assert_equal "CHECK", f.severity
     refute_includes f.to_h.values.join(" "), "1234-5678"
   end
+
+  # ── 독립 리뷰(정확성) 회귀 ──────────────────────────────────────────
+  test "R#4 유효기간이 날짜(«2026년 8월 31일까지»)면 그 날짜로 만료를 판정한다" do
+    rows = quote(rows: CLEAN_ROWS, supply: 20_000, vat: 2_000, total: 22_000).map do |row|
+      case row.first
+      when "견적일자" then [ "견적일자", "2026-08-20" ]
+      when "유효기간" then [ "유효기간", "2026년 8월 31일까지" ]
+      else row
+      end
+    end
+    f = review(B.xlsx(rows)).findings.find { |x| x.code == "Q-VALID" }
+    assert_equal "WARN", f.severity
+  end
+
+  test "R#7 «2천만원»·«1.5억원» 을 틀리게 읽지 않는다" do
+    assert_equal 20_000_000, ReviewLab::FieldExtractor.parse_amount("2천만원")
+    assert_equal 120_000_000, ReviewLab::FieldExtractor.parse_amount("1억2천만원")
+    assert_equal 150_000_000, ReviewLab::FieldExtractor.parse_amount("1.5억원")
+    assert_nil ReviewLab::FieldExtractor.parse_amount("1.5")
+  end
+
+  test "R#8 품목표 «합계»(소계)가 공급가액과 같으면 확정 오류가 아니라 CHECK" do
+    rows = [ [ "견적일자", "2026-09-10" ], HEAD, *CLEAN_ROWS, [ "합계", "", "", "", "", "", 20_000 ],
+             [ "공급가액", 20_000 ], [ "부가세", 2_000 ] ]
+    f = review(B.xlsx(rows)).findings.find { |x| x.code == "Q-TOTAL" }
+    assert_equal "CHECK", f.severity
+  end
+
+  test "R#8 «합계금액» 라벨이 품목표 «합계» 보다 우선한다" do
+    rows = [ [ "합계금액", 22_000 ], HEAD, *CLEAN_ROWS, [ "합계", "", "", "", "", "", 20_000 ], [ "공급가액", 20_000 ], [ "부가세", 2_000 ] ]
+    assert_equal "PASS", review(B.xlsx(rows)).findings.find { |x| x.code == "Q-TOTAL" }.severity
+  end
+
+  test "R#9 «계» 로 시작하는 품명(계량컵)에서 품목표 읽기가 멈추지 않는다" do
+    rows = [ [ "품명", "규격", "단위", "수량", "단가", "금액" ], [ "전자저울", "1kg", "개", 1, 100_000, 100_000 ],
+             [ "계량컵", "500ml", "개", 1, 150_000, 150_000 ], [ "공급가액", "", "", "", "", 250_000 ] ]
+    r = review(B.xlsx(rows))
+    assert_equal "PASS", r.findings.find { |x| x.code == "Q-SUPPLY" }.severity
+  end
+
+  test "R#13 XLSX 날짜 셀(일련번호)을 견적일로 읽는다" do
+    rows = quote(rows: CLEAN_ROWS, supply: 20_000, vat: 2_000, total: 22_000).map { |row| row.first == "견적일자" ? [ "견적일자", 46_275 ] : row }
+    r = review(B.xlsx(rows))
+    refute(r.findings.any? { |f| f.code == "Q-DATE" && f.severity == "WARN" })
+  end
+
+  test "R#15 주 견적서 품목표를 못 읽으면 가격 근거를 «규격이 달라» 로 오표기하지 않는다" do
+    r = review([ B.docx([ "견적서" ]), B.xlsx([ HEAD, [ 1, "의자", "표준형", "개", 1, 1_000, 1_000 ] ]) ])
+    assert_nil r.extras[:price_evidence]
+    assert(r.skipped_rules.any? { |s| s[:code] == "Q-PRICE-EVIDENCE" })
+  end
+
+  test "R#17 기산일이 견적일이 아니면 만료일을 지어내지 않는다" do
+    rows = quote(rows: CLEAN_ROWS, supply: 20_000, vat: 2_000, total: 22_000).map { |row| row.first == "유효기간" ? [ "유효기간", "발주일로부터 30일" ] : row }
+    assert_equal "CHECK", review(B.xlsx(rows)).findings.find { |x| x.code == "Q-VALID" }.severity
+  end
 end

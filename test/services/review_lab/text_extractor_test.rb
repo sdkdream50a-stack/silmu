@@ -74,10 +74,26 @@ class ReviewLab::TextExtractorTest < ActiveSupport::TestCase
   test "zip 해제 크기 상한 — 선언 크기와 무관하게 실제 읽은 바이트로 막는다" do
     big = "<w:document xmlns:w=\"x\"><w:body>" + ("<w:p><w:r><w:t>a</w:t></w:r></w:p>" * 10) + "</w:body></w:document>"
     bytes = B.zip("word/document.xml" => big)
-    stub_const(ReviewLab::TextExtractor, :MAX_ENTRY_BYTES, 100) do
+    stub_const(ReviewLab::TextExtractor, :MAX_TOTAL_INFLATED, 100) do
       refute extract(bytes).ok?
     end
     assert extract(bytes).ok?, "양성 대조 — 상한 안이면 읽혀야 한다"
+  end
+
+  test "보안 리뷰 #1 회귀 — 작은 HWPX 가 압축을 풀면 거대한 경우 즉시 «너무 큼» 으로 끝난다" do
+    huge = B.zip("Contents/section0.xml" => "<s>" + ("<p><t>가</t></p>" * 800_000) + "</s>")
+    assert_operator huge.bytesize, :<, 200_000, "업로드 자체는 작다(zip bomb 전제)"
+    started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+    doc = extract(huge)
+    elapsed = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
+    refute doc.ok?
+    assert_match(/너무 크거나 복잡/, doc.error)
+    assert_operator elapsed, :<, 3, "해제 예산에서 멈춰야 한다"
+  end
+
+  test "손상 파일의 어떤 예외도 500 이 아니라 «열 수 없음» 이다" do
+    doc = extract("%PDF-1.4\n garbage without xref".b)
+    refute doc.ok?
   end
 
   private

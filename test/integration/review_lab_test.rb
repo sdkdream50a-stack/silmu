@@ -176,4 +176,24 @@ class ReviewLabTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_includes response.body, "/review-lab/quote"
   end
+
+  test "보안 리뷰 #8 — files 가 문자열이어도 500 이 아니라 안내(422)" do
+    sign_in users(:one)
+    post "/review-lab/package", params: { files: "x" }
+    assert_response :unprocessable_entity
+  end
+
+  test "보안 리뷰 #6 — 다른 검토가 진행 중이면 파싱하지 않고 곧바로 503 안내" do
+    sign_in users(:one)
+    assert ReviewLabController::REVIEW_SLOT.try_acquire
+    begin
+      post "/review-lab/demo/quote"
+      assert_response :service_unavailable
+      assert_includes response.body, "다른 검토가 진행 중입니다"
+    ensure
+      ReviewLabController::REVIEW_SLOT.release
+    end
+    post "/review-lab/demo/quote"
+    assert_response :success, "슬롯이 풀리면 정상 처리(양성 대조)"
+  end
 end

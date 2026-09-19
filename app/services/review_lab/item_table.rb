@@ -18,7 +18,8 @@ module ReviewLab
       amount:     [ "금액", "금액(원)", "공급가액", "합계금액" ],
       remark:     %w[비고]
     }.freeze
-    STOP_ROW = /\A(소\s*계|합\s*계|계|공급가액|부가세|부가가치세|세액|총\s*액|합계금액|총\s*견적금액)/
+    # 합계 행 판정은 낱말 전체가 일치할 때만 — 접두 일치로 두면 «계량컵»·«계산기» 에서 표 읽기가 멈춘다.
+    STOP_ROW = /\A(?:소\s*계|합\s*계|계|공급가액(?:\s*합계)?|부가세|부가가치세|세액|총\s*액|합계금액|총\s*견적금액)\s*(?:[:：|]|\s+\d|\z)/
     NUMERIC = %i[qty unit_price amount].freeze
 
     Item = Struct.new(:name, :spec, :unit, :qty, :unit_price, :amount, :locator, :confidence, keyword_init: true)

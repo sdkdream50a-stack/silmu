@@ -115,12 +115,14 @@ module ReviewLab
 
     # ── 한 문서 안의 모순 ─────────────────────────────────────────────
     def check_internal_consistency
-      @review.rules_run += 1
+      evaluated = false
       @docs.each do |d|
-        COMPARE.each_key do |key|
+        (COMPARE.keys - [ :quantity ]).each do |key|
+          # 수량은 다품목 규격서에서 품목마다 다르게 적히는 것이 정상이라 문서 내부 모순으로 보지 않는다.
           vals = Array(@review.fields.dig(d.label, key)).select(&:known?)
+          evaluated ||= vals.any?
           distinct = vals.uniq { |f| comparable(key, f.value) }
-          next if distinct.size < 2
+          next if distinct.size < 2 || incomparable_mix?(key, distinct)
 
           add(severity: COMPARE[key], code: "X-INTERNAL", source_document: d.label,
               location: distinct.map(&:locator).join(" / "), extracted_value: distinct.map(&:raw).join(" ↔ "),
@@ -129,18 +131,19 @@ module ReviewLab
               suggested_action: "하나로 통일하세요.")
         end
       end
+      @review.rules_run += 1 if evaluated
     end
 
     # ── 문서 간 행렬 ─────────────────────────────────────────────────
     def build_matrix
-      @review.rules_run += 1
       consistent = []
       (COMPARE.keys + MATRIX_ONLY).each do |key|
         cells = @docs.to_h { |d| [ d.label, first(d.label, key) ] }
         present = cells.compact.select { |_l, f| f.known? }
         next if cells.compact.empty?
 
-        verdict = if MATRIX_ONLY.include?(key) then present.size >= 2 ? "원문 대조" : "단일"
+        multi_qty = key == :quantity && @docs.any? { |d| Array(@review.fields.dig(d.label, key)).map { |f| comparable(key, f.value) }.uniq.size > 1 }
+        verdict = if MATRIX_ONLY.include?(key) || multi_qty then present.size >= 2 ? "원문 대조" : "단일"
         elsif present.size < 2 then "단일"
         else
           groups = present.values.group_by { |f| comparable(key, f.value) }
@@ -156,6 +159,7 @@ module ReviewLab
         end
         @review.comparisons << { key: key, name: F[key][0], cells: cells, verdict: verdict }
       end
+      @review.rules_run += 1 if @review.comparisons.any? { |c| %w[일치 충돌 형식\ 다름].include?(c[:verdict]) }
 
       if consistent.any?
         add(severity: "PASS", code: "X-CONSISTENT", extracted_value: consistent.join(" · "),
@@ -196,6 +200,7 @@ module ReviewLab
         if v.key?(:qty) then v[:qty]
         elsif v.key?(:days) then [ :days, v[:days] ]
         elsif v.key?(:from) then [ :range, v[:from], v[:to] ]
+        elsif v.key?(:until) then [ :until, v[:until] ]
         elsif v.key?(:date) then [ v[:date], v[:time] ]
         else v
         end
@@ -214,7 +219,7 @@ module ReviewLab
     def incomparable_mix?(key, fields)
       vals = fields.map(&:value)
       if %i[contract_period delivery_deadline].include?(key)
-        return vals.map { |v| v.is_a?(Hash) && v.key?(:days) }.uniq.size > 1
+        return vals.map { |v| v.is_a?(Hash) ? v.keys.first : nil }.uniq.size > 1
       end
       if %i[bid_deadline opening].include?(key)
         dates = vals.map { |v| v[:date] }.uniq
@@ -251,25 +256,35 @@ module ReviewLab
       start = pick(:bid_start)&.value
       deadline = pick(:bid_deadline)&.value
       opening = pick(:opening)&.value
-      points = [ [ "공고일", ann ], [ "입찰서 제출 개시", start&.dig(:date) ], [ "입찰서 제출 마감", deadline&.dig(:date) ], [ "개찰", opening&.dig(:date) ] ]
+      points = [ [ "공고일", ann && { date: ann, time: nil } ], [ "입찰서 제출 개시", start ], [ "입찰서 제출 마감", deadline ], [ "개찰", opening ] ]
                .select { |_n, d| d }
       if points.size < 2
         @review.skip("P-ORDER", "공고일·제출기간·개찰일 중 2개 이상을 찾지 못했습니다")
         return
       end
       @review.rules_run += 1
-      bad = points.each_cons(2).select { |(_, a), (_, b)| b < a }
+      bad = points.each_cons(2).select { |(_, a), (_, b)| before?(b, a) }
       if bad.any?
         bad.each do |(na, a), (nb, b)|
-          add(severity: "BLOCK", code: "P-ORDER", extracted_value: "#{na} #{a} → #{nb} #{b}",
-              problem: "#{nb}(#{b})이 #{na}(#{a})보다 앞섭니다", why_it_matters: "입찰 일정이 성립하지 않습니다.",
+          add(severity: "BLOCK", code: "P-ORDER", extracted_value: "#{na} #{when_text(a)} → #{nb} #{when_text(b)}",
+              problem: "#{nb}(#{when_text(b)})이 #{na}(#{when_text(a)})보다 앞섭니다", why_it_matters: "입찰 일정이 성립하지 않습니다.",
               suggested_action: "일정을 바로잡으세요.")
         end
       else
-        add(severity: "PASS", code: "P-ORDER", extracted_value: points.map { |n, d| "#{n} #{d}" }.join(" → "),
+        add(severity: "PASS", code: "P-ORDER", extracted_value: points.map { |n, d| "#{n} #{when_text(d)}" }.join(" → "),
             problem: "입찰 일정 순서가 맞습니다")
       end
     end
+
+    # 날짜가 같으면 둘 다 시각이 있을 때만 시각으로 비교한다(한쪽 시각 미상은 순서를 판정하지 않는다).
+    def before?(b, a)
+      return b[:date] < a[:date] if b[:date] != a[:date]
+      return false unless b[:time] && a[:time]
+
+      b[:time] < a[:time]
+    end
+
+    def when_text(v) = [ v[:date], v[:time] ].compact.join(" ")
 
     # ── 지방계약법 시행령 §35 공고기간 ────────────────────────────────
     def check_announcement_period
@@ -291,12 +306,18 @@ module ReviewLab
       announce = ann_f.value
       deadline = dl_f.value[:date]
       gap = (deadline - announce).to_i
-      required, clause, basis_note = required_days
+      required, clause, basis_note, certain = required_days
       citation = rule_set.citation("LOCAL_CONTRACT_DECREE", clause,
                                    quote: "입찰공고는 그 입찰서 제출 마감일의 전날부터 기산하여 7일 전에 하여야 한다.")
       value = "공고일 #{announce} · 마감 #{deadline} · 간격 #{gap}일 · 기준 #{required}일(#{basis_note})"
 
-      if gap > required
+      if !certain && gap > required && gap <= MAX_REQUIRED_DAYS
+        # 기준 일수가 계약유형·추정가격에 달려 있는데 그 값을 모른다 — 최소값을 넘었다고 PASS 로 올리지 않는다.
+        add(severity: "CHECK", code: "P-35", extracted_value: value, evidence: [ citation ],
+            problem: "공고기간 기준을 확정하지 못했습니다 (#{basis_note})",
+            why_it_matters: "공사는 추정가격 구간에 따라 7·15·30·40일, 협상에 의한 계약은 10·20·40일이 기준입니다.",
+            suggested_action: "계약 유형을 고르고 공고문에 추정가격이 적혀 있는지 확인하세요.", confidence: "중간 — 기준 미확정")
+      elsif gap > required
         add(severity: "PASS", code: "P-35", extracted_value: value, evidence: [ citation ],
             problem: "공고기간이 기준(#{required}일)을 충족합니다")
       elsif gap == required
@@ -319,28 +340,38 @@ module ReviewLab
       end
     end
 
-    # => [기준 일수, 조문, 설명]
+    MAX_REQUIRED_DAYS = 40
+
+    # => [기준 일수, 조문, 설명, 확정 여부]
+    # 확정 여부 = 기준을 정하는 데 필요한 값(계약유형·추정가격)을 모두 알았는가.
     def required_days
       price = pick(:estimated_price)&.value
       if negotiation?
-        return [ 10, "제35조제5항", "협상에 의한 계약 · 추정가격 미확인 — 최소값" ] unless price
+        return [ 10, "제35조제5항", "협상에 의한 계약 · 추정가격 미확인 — 최소값", false ] unless price
 
         days = price < 100_000_000 ? 10 : price < 1_000_000_000 ? 20 : 40
-        return [ days, "제35조제5항", "협상에 의한 계약 · 추정가격 #{price.to_fs(:delimited)}원" ]
+        return [ days, "제35조제5항", "협상에 의한 계약 · 추정가격 #{price.to_fs(:delimited)}원", true ]
+      end
+      if @contract_type.nil?
+        return [ 7, "제35조제1항", "계약 유형 미선택 — 공사라면 추정가격에 따라 더 길 수 있음", false ]
       end
       if construction? && !site_briefing_mentioned?
-        return [ 7, "제35조제3항", "공사 · 추정가격 미확인 — 최소값" ] unless price
+        return [ 7, "제35조제3항", "공사 · 추정가격 미확인 — 최소값", false ] unless price
 
         days = price < 1_000_000_000 ? 7 : price < 5_000_000_000 ? 15 : 30
-        return [ days, "제35조제3항", "공사(현장설명 없음) · 추정가격 #{price.to_fs(:delimited)}원#{price >= 5_000_000_000 ? ' · 고시금액 이상이면 40일' : ''}" ]
+        return [ days, "제35조제3항", "공사(현장설명 없음) · 추정가격 #{price.to_fs(:delimited)}원#{price >= 5_000_000_000 ? ' · 고시금액 이상이면 40일' : ''}",
+                 price < 5_000_000_000 ]
       end
-      [ 7, "제35조제1항", construction? ? "공사(현장설명 있음) — 마감일 기준 최소값" : "물품·용역 기본" ]
+      [ 7, "제35조제1항", construction? ? "공사(현장설명 있음) — 마감일 기준 최소값" : "물품·용역 기본", true ]
     end
 
     def construction? = @contract_type.to_s.start_with?("construction")
 
+    # 공고문·과업지시서 어디든 계약방법·낙찰방법에 «협상» 이 적혀 있으면 협상 기준(§35⑤)을 쓴다 — 긴 쪽 기준이 보수적이다.
     def negotiation?
-      [ :contract_method, :award_method ].any? { |k| pick(k)&.value.to_s.match?(/협상에\s*의한|협상/) }
+      @docs.any? do |d|
+        [ :contract_method, :award_method ].any? { |k| Array(@review.fields.dig(d.label, k)).any? { |f| f.value.to_s.match?(/협상/) } }
+      end
     end
 
     def site_briefing_mentioned?
@@ -371,8 +402,9 @@ module ReviewLab
     end
 
     # ── 업종·면허 후보 ───────────────────────────────────────────────
+    # 후보 탐지는 보조 검사라 «실행한 규칙» 수에 넣지 않는다 — 넣으면 라벨을 하나도 못 읽은 묶음도
+    # «규칙 N개에서 문제 없음» 으로 보인다(정확성 리뷰 #14).
     def check_license_candidates
-      @review.rules_run += 1
       qual_text = [ :qualification, :license ].flat_map { |k| @docs.flat_map { |d| Array(@review.fields.dig(d.label, k)).map(&:raw) } }.join(" ")
       candidates = []
       LICENSE_HINTS.each do |hint|

@@ -42,15 +42,20 @@ class ReviewLab::PackageReviewerTest < ActiveSupport::TestCase
     assert_equal "CHECK", found(r, "X-FORMAT").first.severity
   end
 
-  test "한 문서 안의 모순도 잡는다" do
-    r = review_of(d("notice", "공고문", [ "수량: 12대", "수량: 10대" ]), d("spec", "규격서", [ "수량: 12대" ]))
+  test "한 문서 안의 모순도 잡는다 — 단, 다품목 수량은 모순이 아니다(원문 대조)" do
+    r = review_of(d("notice", "공고문", [ "추정가격: 45,000,000원", "추정가격: 40,000,000원" ]), d("spec", "규격서", [ "사업명: 가상 사업" ]))
     assert_equal "BLOCK", found(r, "X-INTERNAL").first.severity
+    multi = review_of(d("spec", "규격서", [ "가. 전자칠판", "수량: 10대", "나. 거치대", "수량: 2대" ]), d("notice", "공고문", [ "수량: 12대" ]))
+    assert_empty found(multi, "X-INTERNAL")
+    assert_empty found(multi, "X-CONFLICT")
+    assert_equal "원문 대조", multi.comparisons.find { |c| c[:key] == :quantity }[:verdict]
   end
 
   test "§35 공고기간 — 간격 8일↑ PASS · 정확히 7일 CHECK(경계) · 6일↓ WARN, 근거 조문 인용" do
-    pass = review_of(notice(ann: "2026. 10. 1.", deadline: "2026. 10. 9. 18:00"), notice)
-    edge = review_of(notice(ann: "2026. 10. 1.", deadline: "2026. 10. 8. 18:00"), notice(ann: "2026. 10. 1.", deadline: "2026. 10. 8. 18:00"))
-    short = review_of(notice(ann: "2026. 10. 5.", deadline: "2026. 10. 10. 18:00"), notice(ann: "2026. 10. 5.", deadline: "2026. 10. 10. 18:00"))
+    g = { contract_type: "goods" }
+    pass = review_of(notice(ann: "2026. 10. 1.", deadline: "2026. 10. 9. 18:00"), notice, **g)
+    edge = review_of(notice(ann: "2026. 10. 1.", deadline: "2026. 10. 8. 18:00"), notice(ann: "2026. 10. 1.", deadline: "2026. 10. 8. 18:00"), **g)
+    short = review_of(notice(ann: "2026. 10. 5.", deadline: "2026. 10. 10. 18:00"), notice(ann: "2026. 10. 5.", deadline: "2026. 10. 10. 18:00"), **g)
     assert_equal "PASS", found(pass, "P-35").first.severity
     assert_equal "CHECK", found(edge, "P-35").first.severity
     w = found(short, "P-35").first
@@ -113,5 +118,45 @@ class ReviewLab::PackageReviewerTest < ActiveSupport::TestCase
     assert_equal "PASS", found(ok, "P-PRICE").first.severity
     same = review_of(notice(extra: [ [ "기초금액", "45,000,000원" ] ]), d("spec", "규격서", [ "사업명: 가상 사업" ]))
     assert_equal "CHECK", found(same, "P-PRICE").first.severity
+  end
+
+  # ── 독립 리뷰(정확성) 회귀 ──────────────────────────────────────────
+  test "R#1 기준을 정할 값(계약유형·추정가격)을 모르면 최소 7일 초과만으로 PASS 하지 않는다" do
+    unknown_type = review_of(notice(ann: "2026. 10. 1.", deadline: "2026. 10. 10. 18:00"), d("spec", "규격서", [ "사업명: 가상 사업" ]))
+    assert_equal "CHECK", found(unknown_type, "P-35").first.severity
+    no_price = d("notice", "공고문", [ [ "기초금액", "3,300,000,000원" ], [ "공고일", "2026. 10. 1." ], [ "입찰마감", "2026. 10. 10. 18:00" ] ])
+    r = review_of(no_price, d("spec", "규격서", [ "사업명: 가상 사업" ]), contract_type: "construction_general")
+    assert_equal "CHECK", found(r, "P-35").first.severity
+  end
+
+  test "R#2 «입찰방법: 전자입찰» 은 계약방법이 아니다 — 뒤의 «협상에 의한 계약» 이 §35⑤ 를 켠다" do
+    n = d("notice", "공고문", [ [ "추정가격", "500,000,000원" ], [ "공고일", "2026. 10. 1." ], [ "입찰마감", "2026. 10. 10. 18:00" ],
+                              [ "입찰방법", "전자입찰" ], [ "계약방법", "협상에 의한 계약" ] ])
+    f = found(review_of(n, d("spec", "규격서", [ "사업명: 가상 사업" ]), contract_type: "service"), "P-35").first
+    assert_equal "WARN", f.severity
+    assert_match(/기준 20일/, f.extracted_value)
+  end
+
+  test "R#3 날짜의 «30일» 을 기간으로 읽지 않는다 — 다른 마감일은 충돌" do
+    r = review_of(d("notice", "공고문", [ "납품기한: 2026년 11월 30일까지" ]), d("spec", "규격서", [ "납품기한: 2026년 10월 30일까지" ]))
+    assert_equal "BLOCK", found(r, "X-CONFLICT").first.severity
+  end
+
+  test "R#5 «계약기간 만료 후 14일 이내» 같은 문장을 계약기간 값으로 읽지 않는다" do
+    r = review_of(d("task_order", "과업지시서", [ "계약기간: 계약일로부터 60일", "계약기간 만료 후 14일 이내에 대금을 지급한다." ]),
+                  d("spec", "규격서", [ "사업명: 가상 사업" ]))
+    assert_empty found(r, "X-INTERNAL")
+  end
+
+  test "R#10·R#11 오후 시각을 읽고, 같은 날 개찰이 마감보다 이르면 순서 오류" do
+    n = d("notice", "공고문", [ [ "공고일", "2026. 10. 1." ], [ "입찰마감", "2026. 10. 12. 오후 2시" ], [ "개찰일시", "2026. 10. 12. 13:00" ] ])
+    r = review_of(n, d("spec", "규격서", [ "사업명: 가상 사업" ]))
+    assert(found(r, "P-ORDER").any? { |f| f.severity == "BLOCK" })
+  end
+
+  test "R#14 라벨을 하나도 못 읽은 묶음은 «문제 없음» 이 아니라 검사 불가" do
+    r = review_of(d("task_order", "과업지시서", [ "그냥 설명 문장입니다." ]), d("spec", "규격서", [ "규격은 별도 협의." ]))
+    assert r.inconclusive?
+    assert_match(/문제 없음/, r.headline)
   end
 end

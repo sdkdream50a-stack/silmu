@@ -17,7 +17,12 @@ class ReviewLabController < ApplicationController
   before_action :require_login_for_ai, only: %i[quote_review package_review demo]
   before_action :no_store
   before_action :enforce_rate_limit, only: %i[quote_review package_review demo]
+  around_action :one_review_at_a_time, only: %i[quote_review package_review demo]
   before_action :remember_return_path, only: %i[index quote package]
+
+  # 문서 파싱은 CPU 를 오래 쓸 수 있다. 운영은 Puma 단일 프로세스 · 스레드 3개라 검토가 동시에 여러 건 돌면
+  # 사이트 전체가 느려진다 — 프로세스 안에서 동시에 1건만 돌리고 나머지는 곧바로 «잠시 후» 로 돌려보낸다.
+  REVIEW_SLOT = Concurrent::Semaphore.new(1)
 
   MAX_COMPARISON_QUOTES = 3
   MAX_TOTAL_BYTES = 40.megabytes
@@ -58,8 +63,10 @@ class ReviewLabController < ApplicationController
     comparisons.each_with_index { |f, i| docs << extract(f, "comparison_quote", "비교견적 #{i + 1}") }
 
     ai_fields = nil
-    if ai_requested? && !docs.first.ok?
-      # 규칙으로 못 읽은 견적서(사진·스캔)만 기존 AI 추출 경로로 읽는다 — 사용자가 선택했을 때만.
+    if ai_requested? && docs.first.format == :image
+      # 규칙으로 읽을 수 없는 **사진·스캔 이미지** 견적서만 기존 AI 추출 경로로 읽는다 — 사용자가 선택했을 때만.
+      # 이미지는 가릴 수 없으므로 원본이 그대로 전송된다(화면에 명시). PDF 는 보내지 않는다 —
+      # 규칙 추출이 실패한 PDF 에도 가리지 않은 본문이 들어 있을 수 있다.
       ai_fields = ai_quota_available? ? ai_extract_quote(main) : nil
     end
 
@@ -69,11 +76,12 @@ class ReviewLabController < ApplicationController
   end
 
   def package_review
+    raw_files = params[:files].is_a?(ActionController::Parameters) ? params[:files] : {}
     files = PACKAGE_ROLES.filter_map do |role|
-      f = params.dig(:files, role)
+      f = raw_files[role]
       [ f, role ] if uploaded?(f)
     end
-    Array(params.dig(:files, :other)).select { |f| uploaded?(f) }.first(MAX_OTHER_FILES).each { |f| files << [ f, "other" ] }
+    Array(raw_files[:other]).select { |f| uploaded?(f) }.first(MAX_OTHER_FILES).each { |f| files << [ f, "other" ] }
     return reject(:package, "문서를 2개 이상 올려 주세요(상호대조는 문서가 둘 이상일 때 의미가 있습니다).") if files.size < 2
     return reject(:package, "파일 합계가 40MB 를 넘습니다.") if total_bytes(files.map(&:first)) > MAX_TOTAL_BYTES
 
@@ -158,6 +166,20 @@ class ReviewLabController < ApplicationController
     render kind, status: :too_many_requests
   end
 
+  def one_review_at_a_time
+    unless REVIEW_SLOT.try_acquire
+      flash.now[:alert] = "다른 검토가 진행 중입니다. 몇 초 뒤에 다시 시도해 주세요."
+      kind = action_name == "package_review" ? :package : :quote
+      public_send(kind)
+      return render(kind, status: :service_unavailable)
+    end
+    begin
+      yield
+    ensure
+      REVIEW_SLOT.release
+    end
+  end
+
   def ai_quota_available?
     key = "review_lab:ai:#{current_user.id}:#{Date.current}"
     count = Rails.cache.increment(key, 1, expires_in: 1.day) || 1
@@ -173,6 +195,7 @@ class ReviewLabController < ApplicationController
     return nil unless ai_requested?
     return "원본에서 값을 규칙으로 읽었으므로 AI 로 보내지 않았습니다." if main.ok?
     return "AI 로 값을 읽었습니다. 아래 모든 결과는 원본과 대조하기 전까지 확인 필요(CHECK)입니다." if ai_fields
+    return "AI 로 값 읽기는 사진·스캔 이미지 견적서에만 씁니다. 이 파일은 AI 로 보내지 않았습니다." unless main.format == :image
 
     "AI 로 값을 읽지 못했습니다(한도 초과 또는 오류). 원본 파일(XLSX·HWPX·DOCX)로 다시 올려 주세요."
   end

@@ -118,11 +118,13 @@ module ReviewLab
       doc = @documents.find { |d| d.label == issue["document"] } ||
             @documents.find { |d| squash(PiiScanner.mask(d.full_text)).include?(squash(issue["quote"])) }
       seg = doc&.segments&.find { |s| squash(PiiScanner.mask(s[:text])).include?(squash(issue["quote"])[0, 20]) }
+      # type 은 닫힌 목록만 — 문서 속 문구가 AI 를 흔들어 «AI-확정위반» 같은 코드를 띄우지 못하게 한다.
+      type = TYPES.key?(issue["type"].to_s) ? issue["type"].to_s : "note"
       Finding.new(
-        severity: "CHECK", origin: :ai, code: "AI-#{issue['type'].to_s.upcase.presence || 'NOTE'}",
+        severity: "CHECK", origin: :ai, code: "AI-#{type.upcase}",
         source_document: doc&.label, location: seg&.dig(:locator),
         extracted_value: issue["quote"].to_s.truncate(160),
-        problem: "#{TYPES.fetch(issue['type'].to_s, 'AI 검토')}: #{issue['explanation'].to_s.truncate(200)}",
+        problem: "#{TYPES.fetch(type, 'AI 검토')}: #{issue['explanation'].to_s.truncate(200)}",
         why_it_matters: "AI 해석입니다. 법령 사실이나 확정 오류가 아닙니다.",
         suggested_action: issue["check"].to_s.truncate(200).presence,
         confidence: "AI 해석 — 원문 대조 필요"

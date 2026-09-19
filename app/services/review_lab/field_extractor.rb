@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "bigdecimal"
+
 module ReviewLab
   # 라벨 사전으로 문서에서 값을 읽는다. **규칙만 쓴다**(AI 없음).
   #
@@ -32,7 +34,7 @@ module ReviewLab
       license:          [ "업종·면허", :text, [ "업종 및 면허", "업종·면허", "업종(면허)", "면허", "업종" ] ],
       region:           [ "지역제한", :text, [ "지역제한", "지역 제한" ] ],
       award_method:     [ "낙찰방법", :text, [ "낙찰자 결정방법", "낙찰자결정방법", "낙찰방법" ] ],
-      contract_method:  [ "계약방법", :text, %w[계약방법 계약방식 입찰방법] ],
+      contract_method:  [ "계약방법", :text, %w[계약방법 계약방식] ],   # «입찰방법: 전자입찰» 은 다른 개념 — 섞으면 협상 판정을 놓친다
       joint_contract:   [ "공동수급", :text, [ "공동수급", "공동계약" ] ],
       bid_bond:         [ "입찰보증금", :text, %w[입찰보증금] ],
       required_docs:    [ "제출서류", :text, %w[제출서류] ],
@@ -82,7 +84,7 @@ module ReviewLab
             next if value.nil? && type != :text   # 숫자·날짜형은 해석될 때만 채택(설명문 오인 방지)
 
             out[key] << ExtractedField.new(key: key, value: value, raw: raw.truncate(120), document: @document.label,
-                                           locator: seg[:locator], origin: :rule)
+                                           locator: seg[:locator], origin: :rule, label: label)
           end
         end
       end
@@ -131,26 +133,48 @@ module ReviewLab
         end
       end
 
-      # «45,000,000원» «금 45,000,000원» «4,500만원» «1억 2,000만원» «₩45,000,000»
-      # 한글 수사(«금사천오백만원»)는 읽지 않는다 → nil(UNKNOWN). 틀리게 읽는 것보다 모른다가 낫다.
+      # «45,000,000원» «금 45,000,000원» «4,500만원» «1억 2,000만원» «2천만원» «1.5억원» «3천원»
+      # 한글 수사(«금사천오백만원»)·단위 없는 소수는 읽지 않는다 → nil(UNKNOWN). 틀리게 읽는 것보다 모른다가 낫다.
+      AMOUNT_UNITS = { "억" => 100_000_000, "천만" => 10_000_000, "백만" => 1_000_000, "십만" => 100_000,
+                       "만" => 10_000, "천" => 1_000 }.freeze
+      AMOUNT_TOKEN = /\A\s*(\d[\d,]*(?:\.\d+)?)\s*(억|천만|백만|십만|만|천)?/
+
       def parse_amount(raw)
         s = raw.to_s.sub(/\A\s*(?:금|₩|\\)\s*/, "")
         return nil unless s.match?(/\A\d/)
 
-        if (m = s.match(/\A(?:(\d[\d,]*)\s*억)?\s*(?:(\d[\d,]*)\s*만)?\s*(?:(\d[\d,]*))?\s*원?/)) && (m[1] || m[2])
-          eok = m[1].to_s.delete(",").to_i
-          man = m[2].to_s.delete(",").to_i
-          rest = m[3].to_s.delete(",").to_i
-          return eok * 100_000_000 + man * 10_000 + rest
+        total = 0
+        saw_unit = false
+        while (m = s.match(AMOUNT_TOKEN))
+          num = m[1].delete(",")
+          if m[2]
+            saw_unit = true
+            total += (BigDecimal(num) * AMOUNT_UNITS.fetch(m[2])).to_i
+            s = m.post_match
+          else
+            return nil if num.include?(".")   # 단위 없는 소수(«1.5»)는 뜻이 불명확
+
+            total += num.to_i
+            s = m.post_match
+            break
+          end
         end
-        m = s.match(/\A(\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?\s*(천원|원)?/) or return nil
-        n = m[1].delete(",").to_i
-        m[2] == "천원" ? n * 1_000 : n
+        rest = s.strip
+        return nil unless rest.empty? || rest.match?(%r{\A(?:원정|원|정)?(?:\z|[\s(,/·])})
+        return nil if total.zero? && !saw_unit && raw.to_s !~ /\A\s*(?:금|₩)?\s*0/
+
+        total
       end
 
       DATE_RE = /(\d{4})\s*[.\-\/년]\s*(\d{1,2})\s*[.\-\/월]\s*(\d{1,2})\s*[.일]?/
 
+      EXCEL_EPOCH = Date.new(1899, 12, 30)
+
       def parse_date(raw)
+        # XLSX 날짜 셀은 일련번호(예: 46275)로 저장된다. 날짜형 라벨 뒤의 5자리 수만 날짜로 읽는다.
+        if (serial = raw.to_s.strip[/\A(\d{5})(?:\.\d+)?\z/, 1]) && serial.to_i.between?(30_000, 80_000)
+          return EXCEL_EPOCH + serial.to_i
+        end
         m = raw.to_s.match(DATE_RE) or return nil
         Date.new(m[1].to_i, m[2].to_i, m[3].to_i)
       rescue Date::Error
@@ -168,6 +192,8 @@ module ReviewLab
 
         hour = t[1].to_i
         min = t[2].to_i
+        hour += 12 if after[0, t.begin(1)].include?("오후") && hour < 12
+        hour = 0 if after[0, t.begin(1)].include?("오전") && hour == 12
         return { date: date, time: nil } unless hour.between?(0, 24) && min.between?(0, 59)
 
         { date: date, time: format("%02d:%02d", hour, min) }
@@ -176,7 +202,11 @@ module ReviewLab
       end
 
       # «계약일로부터 30일» «착수일부터 45일 이내» «30일» → { days:, base: }
-      # «2026. 10. 1. ~ 2026. 10. 30.» → { from:, to: }
+      # «2026. 10. 1. ~ 2026. 10. 30.» → { from:, to: } · «2026년 11월 30일까지» → { until: }
+      # 일수는 값의 **맨 앞**(기산일 표현 뒤)에 있을 때만 읽는다 — «계약기간 만료 후 14일 이내 대금 지급» 같은
+      # 문장 속 «N일» 이나 날짜의 «30일» 을 기간으로 오독하지 않기 위해서다.
+      DAYS_RE = /\A\s*(?:(계약일|착수일|계약체결일|발주일|통보일|견적일)\s*(?:로부터|으로부터|부터|기준)?\s*)?(\d{1,4})\s*일(?!\s*[.)]?\s*\d)/
+
       def parse_days(raw)
         s = raw.to_s
         dates = s.scan(DATE_RE)
@@ -185,9 +215,12 @@ module ReviewLab
           to = Date.new(*dates[1].map(&:to_i)) rescue nil
           return { from: from, to: to } if from && to
         end
-        m = s.match(/(\d{1,4})\s*일/) or return nil
-        base = s[/(계약일|착수일|계약체결일|발주일|통보일|견적일)/, 1]
-        { days: m[1].to_i, base: base }
+        if dates.size == 1 && s.match?(/\A\s*#{DATE_RE.source}/o)
+          d = parse_date(s)
+          return d ? { until: d } : nil
+        end
+        m = s.match(DAYS_RE) or return nil
+        { days: m[2].to_i, base: m[1] }
       end
 
       QTY_UNITS = %w[대 개 식 EA ea 세트 SET set 본 매 권 조 개소 명 식 m ㎡ m² 롤 박스 BOX kg].freeze

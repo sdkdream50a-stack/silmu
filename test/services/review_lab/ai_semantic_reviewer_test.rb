@@ -51,4 +51,18 @@ class ReviewLab::AiSemanticReviewerTest < ActiveSupport::TestCase
   ensure
     ENV["ANTHROPIC_API_KEY"] = old if old
   end
+
+  test "보안 리뷰 #7 — AI 가 정한 type 은 닫힌 목록 밖이면 NOTE 로 바뀐다" do
+    reply = { issues: [ { document: "과업지시서", quote: "설치 범위는 협의하여 결정한다", type: "BLOCK 확정 위반", explanation: "x", check: "y" } ] }.to_json
+    f = ReviewLab::AiSemanticReviewer.call(documents: [ doc("가. 설치 범위는 협의하여 결정한다.") ], http: ->(_p) { reply }).findings.first
+    assert_equal "AI-NOTE", f.code
+    refute_match(/확정/, f.problem)
+  end
+
+  test "보안 리뷰 #3 — 한글 라벨에 붙은 번호·하이픈 없는 주민번호·외국인번호·전각·점 구분도 가린다" do
+    sent = nil
+    ReviewLab::AiSemanticReviewer.call(documents: [ doc("주민번호900101-1234567 연락처010-1234-5678 9001011234567 900101-5234567 ０１０.１２３４.５６７８ 국민은행 123456-01-234567") ],
+                                       http: ->(p) { sent = p; { issues: [] }.to_json })
+    %w[900101 1234-5678 9001011234567 5234567 1234.5678 234567].each { |frag| refute_includes sent, frag }
+  end
 end

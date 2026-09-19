@@ -33,7 +33,7 @@
       <div class="rounded-lg border border-slate-200 p-4 space-y-3">
         <label class="flex items-start gap-2 text-sm text-slate-800">
           <%= f.check_box :use_ai, { class: "mt-0.5" }, "1", "0" %>
-          <span><strong>AI로 값 읽기</strong> — 사진·스캔 견적서처럼 규칙으로 못 읽는 파일일 때만 씁니다(원본을 규칙으로 읽으면 보내지 않습니다).</span>
+          <span><strong>AI로 값 읽기</strong> — 사진·스캔 <strong>이미지</strong> 견적서(JPG·PNG)일 때만 씁니다. 이미지는 가릴 수 없어 <strong>원본이 그대로</strong> 외부 AI로 전송됩니다. 다른 파일은 보내지 않습니다.</span>
         </label>
         <%= render "shared/ai_privacy_notice", what: "선택 시 업로드한 견적서 파일", scope: :file %>
       </div>

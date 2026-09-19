@@ -58,7 +58,12 @@ module ReviewLab
       if main.ok?
         fields = FieldExtractor.extract(main, FieldExtractor::QUOTE_FIELDS)
         @review.fields[main.label] = fields
-        @values = fields.transform_values { |list| list.first }
+        # 같은 항목을 여러 라벨이 잡으면 더 구체적인 라벨(사전 순서가 앞선 것)을 쓴다 —
+        # 품목표의 «합계»(부가세 전 소계)가 «합계금액» 을 덮으면 합계 검산이 거짓 오류를 낸다.
+        @values = fields.to_h do |key, list|
+          labels = FieldExtractor::QUOTE_FIELDS.dig(key, 2) || []
+          [ key, list.each_with_index.min_by { |f, i| [ labels.index(f.label) || labels.size, i ] }&.first ]
+        end
         @items = ItemTable.parse(main)
         @from_ai = false
       elsif @ai_fields.present?
@@ -95,7 +100,11 @@ module ReviewLab
     def int_or_nil(v)
       return nil if v.nil? || v.to_s.strip.empty?
 
-      v.is_a?(Numeric) ? v.to_i : v.to_s.gsub(/[^\d-]/, "").presence&.to_i
+      return v.round if v.is_a?(Numeric)
+
+      Float(v.to_s.delete(",").delete("원").strip).round
+    rescue ArgumentError
+      nil
     end
 
     def value(key) = @values[key]&.value
@@ -224,7 +233,11 @@ module ReviewLab
 
       if supply && vat && total
         @review.rules_run += 1
-        if supply + vat == total
+        if total == supply && vat.positive?
+          add(severity: "CHECK", code: "Q-TOTAL", location: field(:total_amount)&.locator, extracted_value: won(total),
+              problem: "«합계» 로 읽은 값이 공급가액과 같습니다 — 부가세 포함 합계가 아니라 소계일 수 있습니다",
+              suggested_action: "견적서의 최종 합계(부가세 포함) 칸을 원문에서 확인하세요.", confidence: "중간")
+        elsif supply + vat == total
           add(severity: "PASS", code: "Q-TOTAL", extracted_value: won(total), problem: "합계 = 공급가액 + 부가세")
         else
           add(severity: "BLOCK", code: "Q-TOTAL", location: field(:total_amount)&.locator,
@@ -284,8 +297,11 @@ module ReviewLab
     end
 
     def validity_end(quote_date, validity)
+      return validity[:until] if validity[:until]
       return validity[:to] if validity[:to]
       return nil unless validity[:days] && quote_date
+      # 기산일이 견적일이 아니면(«발주일로부터 30일») 만료일을 계산할 수 없다 → CHECK 로 넘긴다.
+      return nil if validity[:base].present? && validity[:base] != "견적일"
 
       quote_date + validity[:days]
     end
@@ -330,6 +346,10 @@ module ReviewLab
 
     # ── 가격 근거 수준 (적정성 판정 아님) ─────────────────────────────
     def assess_price_evidence
+      if @items.empty?
+        @review.skip("Q-PRICE-EVIDENCE", "이 견적서의 품목표를 읽지 못해 비교견적과 대조하지 않았습니다")
+        return
+      end
       comparisons = @documents.drop(1).select(&:ok?).map { |d| [ d, ItemTable.parse(d) ] }
       rows = @items.map do |it|
         others = comparisons.filter_map do |doc, items|

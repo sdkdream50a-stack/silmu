@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "zip"
+require "timeout"
 
 module ReviewLab
   # 업로드 바이트 → DocumentArtifact(segments). **결정적 파싱만** 한다 — OCR·외부 AI 없음.
@@ -14,9 +15,16 @@ module ReviewLab
     MAX_BYTES = 20.megabytes
     MAX_PDF_PAGES = 60
     MAX_ZIP_ENTRIES = 3_000
-    MAX_ENTRY_BYTES = 30.megabytes   # 압축 해제 후 한 엔트리 상한 (zip bomb)
+    # zip bomb — 한 엔트리 상한만으로는 부족하다(보안 리뷰 실측: 69KB HWPX 한 개로 76초·+1.1GB).
+    # 문서 전체의 **누적** 해제 바이트에도 예산을 건다. 실제 업무 문서의 본문 XML 은 수 MB 를 넘지 않는다.
+    MAX_ENTRY_BYTES = 4.megabytes
+    MAX_TOTAL_INFLATED = 8.megabytes
     MAX_SEGMENTS = 5_000
     MAX_SHEETS = 5
+    MAX_SECTIONS = 50
+    # PDF 는 압축된 콘텐츠 스트림 하나로 파서를 수십 초 붙잡을 수 있다 — 문서당 시간·글자 예산.
+    PDF_TIME_BUDGET = 10 # 초
+    MAX_TEXT_CHARS = 400_000
 
     PDF_MAGIC = "%PDF".b
     ZIP_MAGIC = "PK\x03\x04".b
@@ -30,6 +38,7 @@ module ReviewLab
       image: "사진·스캔 이미지는 규칙 검사로 읽을 수 없습니다(문자 인식 미지원). 견적서라면 «AI로 값 읽기»를 선택하거나 원본 파일을 올려 주세요.",
       unknown: "지원하지 않는 파일 형식입니다. PDF(텍스트)·DOCX·XLSX·HWPX 만 올릴 수 있습니다.",
       too_large: "파일이 너무 큽니다(20MB 이하).",
+      too_complex: "파일 내용이 너무 크거나 복잡해 읽기를 멈췄습니다(압축을 풀면 수십 MB). 필요한 부분만 남긴 파일로 올려 주세요.",
       broken: "파일을 열 수 없습니다(손상되었거나 암호가 걸린 파일일 수 있습니다).",
       empty: "파일에서 글자를 찾지 못했습니다."
     }.freeze
@@ -80,10 +89,16 @@ module ReviewLab
       when :broken then unsupported(:unknown, :broken)
       else unsupported(:unknown, :unknown)
       end
-    rescue Zip::Error, Nokogiri::XML::SyntaxError, PDF::Reader::MalformedPDFError,
-           PDF::Reader::UnsupportedFeatureError, PDF::Reader::EncryptedPDFError, ArgumentError, IOError
+    rescue BudgetExceeded, Timeout::Error
+      unsupported(format || :unknown, :too_complex)
+    rescue StandardError => e
+      # 손상 파일은 파서마다 다른 예외(Zlib::DataError·NoMethodError…)를 던진다. 500 대신 «열 수 없음» 으로 끝내고,
+      # 문서 내용이 섞일 수 있는 메시지는 남기지 않는다(클래스명만).
+      Rails.logger.info("[review-lab] extract failed: #{e.class}")
       unsupported(format || :unknown, :broken)
     end
+
+    class BudgetExceeded < StandardError; end
 
     private
 
@@ -102,18 +117,30 @@ module ReviewLab
     # pdf-reader 는 배치를 공백으로 재현한다. 두 칸 이상 공백을 칸 경계로 보면
     # 표 행을 셀로 나눌 수 있다(확신도는 표 원본보다 낮다 — 호출 측이 locator 로 원문 대조를 안내).
     def from_pdf
-      reader = PDF::Reader.new(StringIO.new(@bytes))
       segments = []
-      reader.pages.first(MAX_PDF_PAGES).each_with_index do |page, pi|
-        page.text.to_s.each_line.with_index do |line, li|
-          text = normalize(line)
-          next if text.empty?
+      chars = 0
+      Timeout.timeout(PDF_TIME_BUDGET) do
+        reader = PDF::Reader.new(StringIO.new(@bytes))
+        reader.pages.first(MAX_PDF_PAGES).each_with_index do |page, pi|
+          text = page.text.to_s
+          chars += text.size
+          raise BudgetExceeded if chars > MAX_TEXT_CHARS
 
-          parts = line.strip.split(/\s{2,}/).map { |c| normalize(c) }.reject(&:empty?)
-          segments << { text: text, locator: "p.#{pi + 1} #{li + 1}행", cells: (parts.size >= 2 ? parts : nil) }
+          pdf_lines(text, pi, segments)
+          break if segments.size >= MAX_SEGMENTS
         end
       end
       artifact(:pdf, segments)
+    end
+
+    def pdf_lines(page_text, pi, segments)
+      page_text.each_line.with_index do |line, li|
+        text = normalize(line)
+        next if text.empty?
+
+        parts = line.strip.split(/\s{2,}/).map { |c| normalize(c) }.reject(&:empty?)
+        segments << { text: text, locator: "p.#{pi + 1} #{li + 1}행", cells: (parts.size >= 2 ? parts : nil) }
+      end
     end
 
     # ── DOCX / HWPX ─────────────────────────────────────────────────
@@ -123,12 +150,17 @@ module ReviewLab
       docs = zip_xml_entries(format)
       segments = []
       table_no = 0
+      rows_in_table = Hash.new(0)
       docs.each do |doc|
         doc.xpath(node_xpath).each do |node|
+          break if segments.size >= MAX_SEGMENTS
+
           if node.name == "tr"
             cells = node.xpath("./*[local-name()='tc']").map { |tc| normalize(text_of(tc)) }
-            table_no += 1 if node.xpath("preceding-sibling::*[local-name()='tr']").empty?
-            row_no = node.xpath("preceding-sibling::*[local-name()='tr']").size + 1
+            # 행마다 preceding-sibling 을 세면 O(n²) — 표(부모 노드)별 카운터로 센다.
+            table_key = node.parent.pointer_id
+            table_no += 1 if rows_in_table[table_key].zero?
+            row_no = (rows_in_table[table_key] += 1)
             segments << { text: cells.reject(&:empty?).join(" | "), locator: "표 #{table_no} · #{row_no}행", cells: cells }
           else
             text = normalize(own_text(node))
@@ -155,7 +187,7 @@ module ReviewLab
         names = if format == :docx
           [ "word/document.xml" ]
         else
-          zip.entries.map(&:name).grep(%r{\AContents/section\d+\.xml\z}).sort_by { |n| n[/\d+/].to_i }
+          zip.entries.map(&:name).grep(%r{\AContents/section\d+\.xml\z}).sort_by { |n| n[/\d+/].to_i }.first(MAX_SECTIONS)
         end
         names.map { |n| Nokogiri::XML(read_entry(zip, n)) { |c| c.nonet } }
       end
@@ -215,12 +247,15 @@ module ReviewLab
       yield zip
     end
 
-    # 선언 크기(entry.size)는 조작할 수 있으므로 실제로 읽은 바이트로 상한을 건다.
+    # 선언 크기(entry.size)는 조작할 수 있으므로 실제로 읽은 바이트로 상한을 건다 — 엔트리 하나와 문서 누적 둘 다.
     def read_entry(zip, name)
       entry = zip.find_entry(name) or raise Zip::Error, "missing #{name}"
-      data = entry.get_input_stream { |io| io.read(MAX_ENTRY_BYTES + 1) }.to_s
-      raise Zip::Error, "entry too large" if data.bytesize > MAX_ENTRY_BYTES
+      @inflated ||= 0
+      limit = [ MAX_ENTRY_BYTES, MAX_TOTAL_INFLATED - @inflated ].min
+      data = entry.get_input_stream { |io| io.read(limit + 1) }.to_s
+      raise BudgetExceeded, "inflate budget" if data.bytesize > limit
 
+      @inflated += data.bytesize
       data.force_encoding(Encoding::UTF_8)
     end
 
