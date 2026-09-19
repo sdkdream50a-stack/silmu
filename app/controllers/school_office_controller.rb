@@ -57,13 +57,19 @@ class SchoolOfficeController < ApplicationController
         { label: "연가 계산기",              path: "/tools/annual-leave-calculator" },
         { label: "초과근무수당 계산기",      path: "/tools/overtime-calculator" },
         { label: "수당 계산기",              path: "/tools/allowance-calculator" },
+        { label: "봉급 실수령액 계산기",     path: "/tools/salary-calculator" },
+        { label: "4대보험 정산보험료 계산기", path: "/tools/insurance-calculator" },
+        { label: "보수 체계 기초",           path: "/guides/hr-welfare-complete-6" },
+        { label: "각종 수당 기초",           path: "/guides/hr-welfare-complete-7" },
+        { label: "연말정산",                 path: "/topics/year-end-settlement" },
         { label: "병가",                     path: "/topics/sick-leave" },
         { label: "퇴직월 초과근무",          path: "/topics/edu-overtime-retirement-month" },
         { label: "기간제교사 경력 가산",     path: "/topics/edu-allowance-temp-teacher-tenure" },
         { label: "비대상 경력의 가산 여부",  path: "/topics/edu-allowance-tenure-non-eligible-career" },
         { label: "육아휴직수당 상한",        path: "/topics/edu-childcare-allowance-cap" },
         { label: "육아휴직수당 2025 개정",   path: "/topics/edu-childcare-pay-2025-revision" },
-        { label: "감사사례 — 병가 진단서",   path: "/audit-cases/sen-2025-school-d-sick-leave-certificate" },
+        { label: "감사사례 — 병가 진단서",   path: "/audit-cases/sen-2025-school-d-sick-leave-certificate",
+          note: "재구성 사례입니다 — 실제 감사결과가 아닙니다" },
         { label: "감사사례 — 특별휴가 증빙", path: "/audit-cases/sen-2025-school-s-special-leave-evidence" }
       ]
     },
@@ -72,14 +78,19 @@ class SchoolOfficeController < ApplicationController
       title: "물품·검수",
       icon: "inventory_2",
       # NEEDS — 운영 실측: Topic property 1건 · 검수/검사 감사사례 1건. 링크는 주되 얇다고 적는다.
-      thin: "이 축은 자료가 적습니다. 기관 물품관리 규칙과 교육청 지침을 함께 확인하세요.",
+      thin: "이 축은 자료가 적습니다(재물조사 도구는 없습니다). 기관 물품관리 규칙과 교육청 지침을 함께 확인하세요.",
       items: [
+        { label: "견적서 검토 — 실무 검증실 Beta", path: "/review-lab/quote",
+          note: "문서 업로드는 로그인 후 · 계산·대조까지(최종 판단은 담당자)" },
+        { label: "2인 이상 견적",            path: "/topics/dual-quote" },
         { label: "구매와 검사·검수",         path: "/guides/purchase-and-inspection" },
         { label: "검사·검수",                path: "/topics/inspection" },
         { label: "물품선정위원회",           path: "/topics/goods-selection-committee",
           note: "법정 위원회가 아닙니다 — 기관 자치법규·교육청 지침 소관" },
         { label: "물품 검사검수조서 서식",   path: "/templates/3" },
         { label: "물품 인수증 서식",         path: "/templates/4" },
+        { label: "검수조서 작성 가이드",     path: "/guides/inspection-report" },
+        { label: "물품 구매 기안문 서식",    path: "/templates/17" },
         { label: "감사사례 — 직접생산 확인", path: "/audit-cases/sen-2025-school-s-supply-direct-prod-cert" }
       ]
     },
