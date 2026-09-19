@@ -23,8 +23,11 @@ class ReviewLabDemoTest < ApplicationSystemTestCase
     set_width(width)
     login_as users(:one), scope: :user
     visit review_lab_path
+    # 에뮬레이션 전환 직후 레이아웃이 다시 잡히는 동안 누르면 «Node … does not belong to the document» 가 난다(CI 실측).
+    # 버튼이 실제로 보일 때까지 기다린 뒤 그 노드를 누른다.
+    button = find_button(kind_label, wait: 10)
     login_as users(:one), scope: :user
-    click_button kind_label
+    button.click
   end
 
   def assert_no_page_overflow
