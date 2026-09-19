@@ -9,7 +9,13 @@ require "application_system_test_case"
 class ReviewLabDemoTest < ApplicationSystemTestCase
   include Warden::Test::Helpers
 
-  teardown { Warden.test_reset! }
+  # CDP 기기 에뮬레이션과 창 크기는 브라우저 세션에 남는다 — 해제·복구하지 않으면 같은 브라우저를 쓰는
+  # 다음 system test(topic_more_tabs 의 더보기 클리핑 측정)가 이 테스트의 폭으로 돈다(CI seed 39241 로 재현).
+  teardown do
+    Warden.test_reset!
+    page.driver.browser.execute_cdp("Emulation.clearDeviceMetricsOverride")
+    page.driver.browser.manage.window.resize_to(1400, 1000) # ApplicationSystemTestCase 기본 크기
+  end
 
   # 헤드리스 Chrome 창은 폭 500px 밑으로 줄지 않는다 — 390 을 390 으로 재려면 기기 에뮬레이션을 쓴다.
   def set_width(width, height = 900)
@@ -23,8 +29,11 @@ class ReviewLabDemoTest < ApplicationSystemTestCase
     set_width(width)
     login_as users(:one), scope: :user
     visit review_lab_path
+    # 에뮬레이션 전환 직후 레이아웃이 다시 잡히는 동안 누르면 «Node … does not belong to the document» 가 난다(CI 실측).
+    # 버튼이 실제로 보일 때까지 기다린 뒤 그 노드를 누른다.
+    button = find_button(kind_label, wait: 10)
     login_as users(:one), scope: :user
-    click_button kind_label
+    button.click
   end
 
   def assert_no_page_overflow
