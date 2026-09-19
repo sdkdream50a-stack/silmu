@@ -49,6 +49,7 @@ class ReviewLab::PackageReviewerTest < ActiveSupport::TestCase
     assert_empty found(multi, "X-INTERNAL")
     assert_empty found(multi, "X-CONFLICT")
     assert_equal "원문 대조", multi.comparisons.find { |c| c[:key] == :quantity }[:verdict]
+    assert_equal "CHECK", found(multi, "X-QTY-MULTI").first.severity, "N9 — 침묵하지 않고 확인을 요청한다"
   end
 
   test "§35 공고기간 — 간격 8일↑ PASS · 정확히 7일 CHECK(경계) · 6일↓ WARN, 근거 조문 인용" do

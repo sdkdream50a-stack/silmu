@@ -49,4 +49,20 @@ class ReviewLab::FieldExtractorTest < ActiveSupport::TestCase
     f = fields("추정가격: 별도 공지")
     assert_empty f[:estimated_price]
   end
+
+  test "N2·N3 «2천5백만원» 등 천·백 계수와 문장부호·조사 종결" do
+    { "2천5백만원" => 25_000_000, "1억2천5백만원" => 125_000_000, "3백만원" => 3_000_000,
+      "45,000,000원." => 45_000_000, "45,000,000원이며" => 45_000_000, "45,000,000원;" => 45_000_000,
+      "12,000원(VAT포함)" => 12_000 }.each { |raw, want| assert_equal want, FE.parse_amount(raw), raw }
+    assert_nil FE.parse_amount("12대")
+    assert_nil FE.parse_amount("천만원"), "숫자 없이 단위로 시작하면 한글 수사와 같이 UNKNOWN"
+  end
+
+  test "N7 기산일 표현 확장 — 착공일·발주 후·괄호 일수 · 문장 속 «만료 후» 는 여전히 읽지 않는다" do
+    assert_equal 90, FE.parse_days("착공일로부터 90일")[:days]
+    assert_equal 30, FE.parse_days("발주 후 30일 이내")[:days]
+    assert_equal 30, FE.parse_days("(30일)")[:days]
+    assert_equal 30, FE.parse_days("견적 제출일로부터 30일")[:days]
+    assert_nil FE.parse_days("만료 후 14일 이내에 대금을 지급한다")
+  end
 end

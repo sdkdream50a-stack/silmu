@@ -61,8 +61,8 @@ class ReviewLab::AiSemanticReviewerTest < ActiveSupport::TestCase
 
   test "보안 리뷰 #3 — 한글 라벨에 붙은 번호·하이픈 없는 주민번호·외국인번호·전각·점 구분도 가린다" do
     sent = nil
-    ReviewLab::AiSemanticReviewer.call(documents: [ doc("주민번호900101-1234567 연락처010-1234-5678 9001011234567 900101-5234567 ０１０.１２３４.５６７８ 국민은행 123456-01-234567") ],
+    ReviewLab::AiSemanticReviewer.call(documents: [ doc("주민번호900101-1234567 연락처010-1234-5678 9001011234567 900101-5234567 ０１０.１２３４.５６７８ 국민은행 123456-01-234567 800101 - 2234567 010 - 9876 - 5432") ],
                                        http: ->(p) { sent = p; { issues: [] }.to_json })
-    %w[900101 1234-5678 9001011234567 5234567 1234.5678 234567].each { |frag| refute_includes sent, frag }
+    %w[900101 1234-5678 9001011234567 5234567 1234.5678 234567 800101 2234567 9876 5432].each { |frag| refute_includes sent, frag }
   end
 end

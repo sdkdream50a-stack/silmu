@@ -17,7 +17,7 @@ module ReviewLab
     MAX_ZIP_ENTRIES = 3_000
     # zip bomb — 한 엔트리 상한만으로는 부족하다(보안 리뷰 실측: 69KB HWPX 한 개로 76초·+1.1GB).
     # 문서 전체의 **누적** 해제 바이트에도 예산을 건다. 실제 업무 문서의 본문 XML 은 수 MB 를 넘지 않는다.
-    MAX_ENTRY_BYTES = 4.megabytes
+    MAX_ENTRY_BYTES = 6.megabytes
     MAX_TOTAL_INFLATED = 8.megabytes
     MAX_SEGMENTS = 5_000
     MAX_SHEETS = 5
@@ -93,8 +93,12 @@ module ReviewLab
       unsupported(format || :unknown, :too_complex)
     rescue StandardError => e
       # 손상 파일은 파서마다 다른 예외(Zlib::DataError·NoMethodError…)를 던진다. 500 대신 «열 수 없음» 으로 끝내고,
-      # 문서 내용이 섞일 수 있는 메시지는 남기지 않는다(클래스명만).
-      Rails.logger.info("[review-lab] extract failed: #{e.class}")
+      # 문서 내용이 섞일 수 있는 메시지는 남기지 않는다(클래스명 + 발생 위치만).
+      # 단, 발생 위치가 우리 코드(review_lab)면 우리 버그다 — 테스트에서는 숨기지 않고 터뜨린다.
+      origin = e.backtrace_locations&.first
+      raise if Rails.env.test? && origin&.path.to_s.include?("/review_lab/")
+
+      Rails.logger.info("[review-lab] extract failed: #{e.class} at #{origin&.path&.split('/')&.last}:#{origin&.lineno}")
       unsupported(format || :unknown, :broken)
     end
 

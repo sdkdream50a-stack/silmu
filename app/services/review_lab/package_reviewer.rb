@@ -142,7 +142,16 @@ module ReviewLab
         present = cells.compact.select { |_l, f| f.known? }
         next if cells.compact.empty?
 
-        multi_qty = key == :quantity && @docs.any? { |d| Array(@review.fields.dig(d.label, key)).map { |f| comparable(key, f.value) }.uniq.size > 1 }
+        multi_docs = key == :quantity ? @docs.select { |d| Array(@review.fields.dig(d.label, key)).map { |f| comparable(key, f.value) }.uniq.size > 1 } : []
+        multi_qty = multi_docs.any?
+        multi_docs.each do |d|
+          # 다품목이면 정상이고 단일 품목이면 모순이다 — 기계가 구별할 수 없으므로 침묵하지 않고 확인을 요청한다.
+          vals = Array(@review.fields.dig(d.label, key))
+          add(severity: "CHECK", code: "X-QTY-MULTI", source_document: d.label, location: vals.map(&:locator).join(" / "),
+              extracted_value: vals.map(&:raw).join(" · "),
+              problem: "한 문서에 수량이 여러 값으로 적혀 있습니다 — 품목별 수량인지, 같은 물품의 서로 다른 수량인지 확인하세요",
+              suggested_action: "단일 품목이면 하나로 통일하세요.", confidence: "중간")
+        end
         verdict = if MATRIX_ONLY.include?(key) || multi_qty then present.size >= 2 ? "원문 대조" : "단일"
         elsif present.size < 2 then "단일"
         else

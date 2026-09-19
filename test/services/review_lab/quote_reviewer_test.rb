@@ -199,4 +199,20 @@ class ReviewLab::QuoteReviewerTest < ActiveSupport::TestCase
     rows = quote(rows: CLEAN_ROWS, supply: 20_000, vat: 2_000, total: 22_000).map { |row| row.first == "유효기간" ? [ "유효기간", "발주일로부터 30일" ] : row }
     assert_equal "CHECK", review(B.xlsx(rows)).findings.find { |x| x.code == "Q-VALID" }.severity
   end
+
+  # ── 재검증(r1) 회귀 ──────────────────────────────────────────────
+  test "N1 괄호 설명이 붙은 합계 행(«공급가액(VAT별도)» «부가세(10%)»)에서 품목표 읽기가 멈춘다" do
+    rows = [ HEAD, *CLEAN_ROWS, [ "공급가액(VAT별도)", "", "", "", "", "", 20_000 ], [ "부가세(10%)", "", "", "", "", "", 2_000 ] ]
+    r = review(B.xlsx(rows))
+    assert_equal 2, ReviewLab::ItemTable.parse(ReviewLab::TextExtractor.call(bytes: B.xlsx(rows), role: "quote", label: "q")).size
+    refute(r.findings.any? { |f| f.code == "Q-SUPPLY" && f.severity == "BLOCK" })
+  end
+
+  test "N6 AI 가 무한대·지수 표기 숫자를 내도 500 이 아니다" do
+    image = ReviewLab::TextExtractor.call(bytes: "\x89PNG\r\n\x1A\n".b, role: "quote", label: "견적서")
+    ai = { "supply_amount" => "1e400", "vat_amount" => Float::INFINITY, "total_amount" => "₩12,000",
+           "items" => [ { "name" => "의자", "qty" => "1e400", "unit_price" => "12,000원(VAT포함)" } ] }
+    r = ReviewLab::QuoteReviewer.call(documents: [ image ], ai_fields: ai, today: TODAY)
+    assert(r.findings.all? { |f| f.severity == "CHECK" })
+  end
 end

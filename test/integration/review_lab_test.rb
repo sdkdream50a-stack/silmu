@@ -186,12 +186,14 @@ class ReviewLabTest < ActionDispatch::IntegrationTest
   test "보안 리뷰 #6 — 다른 검토가 진행 중이면 파싱하지 않고 곧바로 503 안내" do
     sign_in users(:one)
     assert ReviewLabController::REVIEW_SLOT.try_acquire
+    ReviewLabController.slot_wait = 0
     begin
       post "/review-lab/demo/quote"
       assert_response :service_unavailable
       assert_includes response.body, "다른 검토가 진행 중입니다"
     ensure
       ReviewLabController::REVIEW_SLOT.release
+      ReviewLabController.slot_wait = 12
     end
     post "/review-lab/demo/quote"
     assert_response :success, "슬롯이 풀리면 정상 처리(양성 대조)"

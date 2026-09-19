@@ -17,7 +17,6 @@ class ReviewLabController < ApplicationController
   before_action :require_login_for_ai, only: %i[quote_review package_review demo]
   before_action :no_store
   before_action :enforce_rate_limit, only: %i[quote_review package_review demo]
-  around_action :one_review_at_a_time, only: %i[quote_review package_review demo]
   before_action :remember_return_path, only: %i[index quote package]
 
   # 문서 파싱은 CPU 를 오래 쓸 수 있다. 운영은 Puma 단일 프로세스 · 스레드 3개라 검토가 동시에 여러 건 돌면
@@ -59,8 +58,9 @@ class ReviewLabController < ApplicationController
     comparisons = Array(params[:comparison_files]).select { |f| uploaded?(f) }.first(MAX_COMPARISON_QUOTES)
     return reject(:quote, "파일 합계가 40MB 를 넘습니다.") if total_bytes([ main, *comparisons ]) > MAX_TOTAL_BYTES
 
-    docs = [ extract(main, "quote", "견적서") ]
-    comparisons.each_with_index { |f, i| docs << extract(f, "comparison_quote", "비교견적 #{i + 1}") }
+    docs = with_review_slot do
+      [ extract(main, "quote", "견적서") ] + comparisons.each_with_index.map { |f, i| extract(f, "comparison_quote", "비교견적 #{i + 1}") }
+    end
 
     ai_fields = nil
     if ai_requested? && docs.first.format == :image
@@ -86,9 +86,11 @@ class ReviewLabController < ApplicationController
     return reject(:package, "파일 합계가 40MB 를 넘습니다.") if total_bytes(files.map(&:first)) > MAX_TOTAL_BYTES
 
     others = 0
-    docs = files.map do |f, role|
-      label = role == "other" ? "기타 첨부 #{others += 1}" : ReviewLab::DocumentArtifact::ROLES.fetch(role)
-      extract(f, role, label)
+    docs = with_review_slot do
+      files.map do |f, role|
+        label = role == "other" ? "기타 첨부 #{others += 1}" : ReviewLab::DocumentArtifact::ROLES.fetch(role)
+        extract(f, role, label)
+      end
     end
     @review = ReviewLab::PackageReviewer.call(documents: docs, contract_type: params[:contract_type], agency_scope: params[:agency_scope])
     run_ai_semantic(docs) if ai_requested?
@@ -99,10 +101,10 @@ class ReviewLabController < ApplicationController
   def demo
     case params[:kind]
     when "quote"
-      @review = ReviewLab::Demo.run_quote
+      @review = with_review_slot { ReviewLab::Demo.run_quote }
       @demo = ReviewLab::Demo.compare(@review, ReviewLab::Demo::QUOTE_EXPECTED)
     when "package"
-      @review = ReviewLab::Demo.run_package
+      @review = with_review_slot { ReviewLab::Demo.run_package }
       @demo = ReviewLab::Demo.compare(@review, ReviewLab::Demo::PACKAGE_EXPECTED)
       run_ai_semantic(@review.documents) if ai_requested?
     else
@@ -157,8 +159,8 @@ class ReviewLabController < ApplicationController
   # 사용자 단위 한도(로그인 전용이라 IP 가 아니라 user.id 로 센다 — 엣지 IP 공유(G-60)와 무관하다).
   def enforce_rate_limit
     key = "review_lab:rule:#{current_user.id}:#{Time.current.strftime('%Y%m%d%H')}"
-    count = Rails.cache.increment(key, 1, expires_in: 1.hour) || 1
-    return if count <= RULE_LIMIT_PER_HOUR
+    count = counted(key, 1.hour)
+    return if count && count <= RULE_LIMIT_PER_HOUR
 
     flash.now[:alert] = "검토 요청이 너무 많습니다. 한 시간 뒤에 다시 시도해 주세요."
     kind = action_name == "package_review" ? :package : :quote
@@ -166,13 +168,14 @@ class ReviewLabController < ApplicationController
     render kind, status: :too_many_requests
   end
 
-  def one_review_at_a_time
-    unless REVIEW_SLOT.try_acquire
-      flash.now[:alert] = "다른 검토가 진행 중입니다. 몇 초 뒤에 다시 시도해 주세요."
-      kind = action_name == "package_review" ? :package : :quote
-      public_send(kind)
-      return render(kind, status: :service_unavailable)
-    end
+  # 비싼 구간(파일 파싱)만 슬롯으로 감싼다 — AI 네트워크 호출까지 잡고 있으면 한 사람이 모두를 503 으로 만든다.
+  # 곧바로 거절하지 않고 잠시 기다린다(파싱 상한 10초 안쪽).
+  class Busy < StandardError; end
+  cattr_accessor :slot_wait, default: 12 # 초
+
+  def with_review_slot
+    raise Busy unless REVIEW_SLOT.try_acquire(1, slot_wait)
+
     begin
       yield
     ensure
@@ -180,10 +183,27 @@ class ReviewLabController < ApplicationController
     end
   end
 
+  rescue_from Busy do
+    flash.now[:alert] = "다른 검토가 진행 중입니다. 몇 초 뒤에 다시 시도해 주세요."
+    kind = action_name == "package_review" ? :package : :quote
+    public_send(kind)
+    render kind, status: :service_unavailable
+  end
+
+  # 캐시가 카운터를 못 돌려주면(장애) 한도를 연 채로 두지 않는다(fail-closed → nil).
+  # 카운터가 없는 NullStore(개발·테스트)만 예외로 1 로 본다.
+  def counted(key, ttl)
+    count = Rails.cache.increment(key, 1, expires_in: ttl)
+    return count if count
+    return 1 if Rails.cache.is_a?(ActiveSupport::Cache::NullStore)
+
+    nil
+  end
+
   def ai_quota_available?
     key = "review_lab:ai:#{current_user.id}:#{Date.current}"
-    count = Rails.cache.increment(key, 1, expires_in: 1.day) || 1
-    count <= AI_LIMIT_PER_DAY
+    count = counted(key, 1.day)
+    count.present? && count <= AI_LIMIT_PER_DAY
   end
 
   def ai_extract_quote(file)

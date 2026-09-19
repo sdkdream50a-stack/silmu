@@ -135,35 +135,45 @@ module ReviewLab
 
       # «45,000,000원» «금 45,000,000원» «4,500만원» «1억 2,000만원» «2천만원» «1.5억원» «3천원»
       # 한글 수사(«금사천오백만원»)·단위 없는 소수는 읽지 않는다 → nil(UNKNOWN). 틀리게 읽는 것보다 모른다가 낫다.
-      AMOUNT_UNITS = { "억" => 100_000_000, "천만" => 10_000_000, "백만" => 1_000_000, "십만" => 100_000,
-                       "만" => 10_000, "천" => 1_000 }.freeze
-      AMOUNT_TOKEN = /\A\s*(\d[\d,]*(?:\.\d+)?)\s*(억|천만|백만|십만|만|천)?/
+      SMALL_UNITS = { "천" => 1_000, "백" => 100, "십" => 10 }.freeze
+      AMOUNT_TOKEN = /\A\s*(\d[\d,]*(?:\.\d+)?)?\s*(억|만|천|백|십)/
 
+      # 한국식 단위는 «억·만» 묶음 안에서 «천·백·십» 계수를 모은다: «2천5백만» = (2,000+500)×10,000.
       def parse_amount(raw)
         s = raw.to_s.sub(/\A\s*(?:금|₩|\\)\s*/, "")
         return nil unless s.match?(/\A\d/)
 
-        total = 0
+        total = BigDecimal(0)
+        small = BigDecimal(0)
         saw_unit = false
         while (m = s.match(AMOUNT_TOKEN))
-          num = m[1].delete(",")
-          if m[2]
-            saw_unit = true
-            total += (BigDecimal(num) * AMOUNT_UNITS.fetch(m[2])).to_i
-            s = m.post_match
+          n = m[1] ? BigDecimal(m[1].delete(",")) : nil
+          case m[2]
+          when "억", "만"
+            coef = small + (n || 0)
+            coef = BigDecimal(1) if coef.zero?
+            total += coef * (m[2] == "억" ? 100_000_000 : 10_000)
+            small = BigDecimal(0)
           else
-            return nil if num.include?(".")   # 단위 없는 소수(«1.5»)는 뜻이 불명확
-
-            total += num.to_i
-            s = m.post_match
-            break
+            small += (n || 1) * SMALL_UNITS.fetch(m[2])
           end
+          saw_unit = true
+          s = m.post_match
         end
-        rest = s.strip
-        return nil unless rest.empty? || rest.match?(%r{\A(?:원정|원|정)?(?:\z|[\s(,/·])})
-        return nil if total.zero? && !saw_unit && raw.to_s !~ /\A\s*(?:금|₩)?\s*0/
+        if (m = s.match(/\A\s*(\d{1,3}(?:,\d{3})+|\d+)(\.\d+)?/))
+          return nil if m[2] && !saw_unit   # 단위 없는 소수(«1.5»)는 뜻이 불명확
+          return nil if m[2]
 
-        total
+          total += m[1].delete(",").to_i
+          s = m.post_match
+        end
+        total += small
+        rest = s.strip
+        # 끝은 «원…» 이거나 구분 기호 — «12대» 처럼 다른 단위가 붙으면 금액이 아니다.
+        return nil unless rest.empty? || rest.match?(%r{\A(?:원|정|[\s(,/·.;])})
+        return nil if total.zero? && raw.to_s !~ /\A\s*(?:금|₩)?\s*0/
+
+        total.to_i
       end
 
       DATE_RE = /(\d{4})\s*[.\-\/년]\s*(\d{1,2})\s*[.\-\/월]\s*(\d{1,2})\s*[.일]?/
@@ -205,7 +215,9 @@ module ReviewLab
       # «2026. 10. 1. ~ 2026. 10. 30.» → { from:, to: } · «2026년 11월 30일까지» → { until: }
       # 일수는 값의 **맨 앞**(기산일 표현 뒤)에 있을 때만 읽는다 — «계약기간 만료 후 14일 이내 대금 지급» 같은
       # 문장 속 «N일» 이나 날짜의 «30일» 을 기간으로 오독하지 않기 위해서다.
-      DAYS_RE = /\A\s*(?:(계약일|착수일|계약체결일|발주일|통보일|견적일)\s*(?:로부터|으로부터|부터|기준)?\s*)?(\d{1,4})\s*일(?!\s*[.)]?\s*\d)/
+      # 기산일은 닫힌 목록만 — 열어 두면 «만료 후 14일 이내» 같은 문장을 기간으로 읽는다.
+      DAYS_BASES = "계약\\s*체결일|계약일|착수일|착공일|발주일|통보일|견적\\s*제출일|견적일|납품\\s*요구일"
+      DAYS_RE = /\A\s*(?:(#{DAYS_BASES}|발주|계약|착공|착수)\s*(?:로부터|으로부터|부터|기준|후)?\s*)?\(?\s*(\d{1,4})\s*일(?!\s*[.)]?\s*\d)/
 
       def parse_days(raw)
         s = raw.to_s
@@ -220,7 +232,7 @@ module ReviewLab
           return d ? { until: d } : nil
         end
         m = s.match(DAYS_RE) or return nil
-        { days: m[2].to_i, base: m[1] }
+        { days: m[2].to_i, base: m[1]&.gsub(/\s/, "") }
       end
 
       QTY_UNITS = %w[대 개 식 EA ea 세트 SET set 본 매 권 조 개소 명 식 m ㎡ m² 롤 박스 BOX kg].freeze

@@ -98,13 +98,10 @@ module ReviewLab
     end
 
     def int_or_nil(v)
-      return nil if v.nil? || v.to_s.strip.empty?
+      return nil if v.nil?
+      return (v.to_f.finite? ? v.round : nil) if v.is_a?(Numeric)
 
-      return v.round if v.is_a?(Numeric)
-
-      Float(v.to_s.delete(",").delete("원").strip).round
-    rescue ArgumentError
-      nil
+      FieldExtractor.parse_amount(v.to_s)
     end
 
     def value(key) = @values[key]&.value
