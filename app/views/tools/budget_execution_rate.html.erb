@@ -7,10 +7,16 @@
   #   출처가 코드 주석뿐이었고(SOURCE=NONE) 12월 90% 는 균등 배분도 아니었다.
   #
   # 회계연도 시작월은 기관마다 다르다: 지방자치단체 1월 / 학교회계 3월.
-  #   서버는 1월을 기본으로 렌더하고(공유 CDN 캐시 안전), 학교 분기는 클라이언트에서만 한다.
+  #   쿠키 분기는 여전히 클라이언트에서만 한다 — 이 페이지는 CDN 공유 캐시이고 Vary 에 Cookie 가 없다.
+  #
+  # P0 (2026-09-20) — `?fy=` 는 서버에서 분기한다. 쿼리스트링은 Cloudflare **캐시 키에 포함**돼
+  #   캐시가 섞이지 않는다(운영 실측: 무쿼리 cf-cache-status=UPDATING / `?fy=3` MISS).
+  #   `/school-office` 는 이 링크를 `?fy=3` 으로 걸어 학교 담당자가 «바꿔서 쓰는» 단계를 없앤다.
+  #   JS 가 꺼져 있어도 3월이 선택된 채로 렌더돼야 카드에 적은 말이 참이 된다.
   today = Time.zone.today
   current_month = today.month
-  default_fiscal_start = 1
+  requested_fiscal_start = params[:fy].to_s[/\A([1-9]|1[0-2])\z/] && params[:fy].to_i
+  default_fiscal_start = requested_fiscal_start || 1
   # 균등 배분 참고선 = 회계연도 경과 월수 ÷ 12
   elapsed_months = ((current_month - default_fiscal_start) % 12) + 1
   reference_rate = (elapsed_months / 12.0 * 100).round(1)
@@ -335,7 +341,9 @@
     const month = now.getMonth() + 1;
     document.getElementById('base-month').value = month;
 
-    if (/(?:^|;\s*)sector=edu(?:;|$)/.test(document.cookie)) {
+    // 명시적인 `?fy=` 가 있으면 서버가 이미 그 값으로 렌더했다 — 쿠키로 덮지 않는다.
+    const explicitFy = /[?&]fy=([1-9]|1[0-2])(?:&|$)/.test(window.location.search);
+    if (!explicitFy && /(?:^|;\s*)sector=edu(?:;|$)/.test(document.cookie)) {
       const fs = document.getElementById('fiscal-start-month');
       if (fs) fs.value = '3';
     }
