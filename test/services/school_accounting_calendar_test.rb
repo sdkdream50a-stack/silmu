@@ -201,17 +201,25 @@ class SchoolAccountingCalendarTest < ActiveSupport::TestCase
       "20160229" => "2016.2.29",
       "20250901" => "2025.9.1",
       "623860"   => "623860",      # 8자리가 아니면 손대지 않는다
+      "20161301" => "20161301",    # 13월 — 달력에 없는 날짜는 가짜로 만들지 않는다
+      "20160230" => "20160230",    # 2월 30일
+      "00000000" => "00000000",
+      "2016111a" => "2016111a",
+      " 20161114" => " 20161114",  # 공백이 붙으면 8자리가 아니다
+      ""         => "",
       nil        => ""
     }.each do |raw, expected|
       assert_equal expected, C.format_effective_date(raw), "입력 #{raw.inspect}"
     end
   end
 
-  test "17개 규칙의 시행일자가 전부 변환된다" do  # 한 건이라도 8자리가 아니면 화면이 원문을 그대로 뱉는다
+  test "17개 규칙의 시행일자가 같은 날짜로 왕복한다" do
+    # ⚠️ 「모양이 날짜 같다」로 재면 «0000.0.0» 도 통과한다. 포맷 결과를 **다시 날짜로 되돌려**
+    #    원본 8자리와 같은 날인지 본다.
     C.regional_rules.each do |rule|
-      formatted = C.format_effective_date(rule[:effective])
-      assert_match(/\A\d{4}\.\d{1,2}\.\d{1,2}\z/, formatted,
-                   "#{rule[:code]} 의 시행일자 #{rule[:effective].inspect} 가 날짜로 안 보인다")
+      y, m, d = C.format_effective_date(rule[:effective]).split(".").map(&:to_i)
+      assert_equal Date.strptime(rule[:effective], "%Y%m%d"), Date.new(y, m, d),
+                   "#{rule[:code]} 의 시행일자 #{rule[:effective].inspect} 가 다른 날로 바뀐다"
     end
   end
 

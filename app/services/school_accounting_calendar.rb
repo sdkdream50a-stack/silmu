@@ -103,11 +103,18 @@ class SchoolAccountingCalendar
     # 법제처가 주는 날짜는 `"20161114"` 8자리 문자열이다. 화면용 표기로 바꾼다.
     # ⚠️ `scan(/\d{4}|\d{2}/)` 로 자르면 안 된다 — 대체는 왼쪽부터 시도하므로 남은 `1114` 가
     #    다시 `\d{4}` 에 걸려 «2016.1114» 가 나온다(2026-09-20 독립 리뷰 적발).
+    # 8자리가 아니거나 **달력에 없는 날짜**(0월·32일 등)면 원문을 그대로 돌려준다 —
+    # 「0000.0.0」 같은 그럴듯한 가짜 날짜를 만드는 것보다 못 읽은 값을 보여 주는 편이 정직하다.
     def format_effective_date(value)
       digits = value.to_s
-      return digits unless digits.match?(/\A\d{8}\z/)
+      parsed = begin
+        digits.match?(/\A\d{8}\z/) ? Date.strptime(digits, "%Y%m%d") : nil
+      rescue Date::Error
+        nil
+      end
+      return digits unless parsed
 
-      "#{digits[0, 4]}.#{digits[4, 2].to_i}.#{digits[6, 2].to_i}"
+      parsed.strftime("%Y.%-m.%-d")
     end
 
     # 규칙 층에서 **17개가 같은 값을 갖는 축만** 전국 기한으로 쓴다.
