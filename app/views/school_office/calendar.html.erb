@@ -1,0 +1,278 @@
+<%# P3 — 학교회계 일정 / Budget Timeline.
+    계산은 전부 SchoolAccountingCalendar(순수 날짜 산술)가 한다. 이 파일은 그 결과를 배치만 한다.
+    원칙: 법률에 없는 기한을 만들지 않는다 · 교육청별로 갈리는 것은 «갈린다» 고 적는다 · 모르면 UNKNOWN. %>
+<%
+  basis_badge = {
+    law:       { label: "법률", cls: "bg-editorial-navy text-white" },
+    edu_rule:  { label: "교육규칙", cls: "bg-amber-100 text-amber-900" },
+    guideline: { label: "교육청 지침", cls: "bg-slate-200 text-slate-700" }
+  }
+  dday = ->(m) {
+    n = m.days_from(@today)
+    n.zero? ? "오늘" : (n.positive? ? "D-#{n}" : "D+#{-n}")
+  }
+%>
+
+<section class="bg-editorial-navy text-white py-8 lg:py-12">
+  <div class="container-editorial">
+    <p class="text-white/60 text-xs font-semibold tracking-wide mb-2">
+      <%= link_to "학교 행정실 바로가기", school_office_path, class: "underline hover:text-white" %> ›
+    </p>
+    <h1 class="text-2xl lg:text-3xl font-bold mb-3"><%= SchoolOfficeController::CALENDAR_TITLE %></h1>
+    <p class="text-white/75 text-sm leading-relaxed max-w-2xl">
+      학교회계의 회계연도는 <strong class="text-white">3월 1일에 시작해 다음 해 2월 말일</strong>에 끝납니다(초·중등교육법 제30조의3제1항).
+      1~12월을 쓰는 지방자치단체·국가 회계연도와 다릅니다.
+    </p>
+  </div>
+</section>
+
+<div class="container-editorial py-8 space-y-10">
+
+  <%# ── 1. 지금 ─────────────────────────────────────────────────────────── %>
+  <section aria-labelledby="now-heading" class="rounded-2xl border border-editorial-navy-bg bg-editorial-navy-bg/40 p-5 lg:p-6">
+    <h2 id="now-heading" class="sr-only">현재 학교회계 시점</h2>
+    <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-4">
+      <span class="text-xs text-slate-500"><%= l @today, format: :long rescue @today.strftime("%Y년 %-m월 %-d일") %> 기준</span>
+      <span class="text-xl lg:text-2xl font-bold text-editorial-ink"><%= @status[:fiscal_year_label] %></span>
+      <span class="inline-flex items-center rounded-full bg-editorial-navy text-white px-2.5 py-1 text-xs font-bold">
+        <%= SchoolAccountingCalendar.phase_label(@status[:phase]) %>
+      </span>
+    </div>
+    <p class="text-sm text-slate-700 leading-relaxed mb-4">
+      <%= SchoolAccountingCalendar::PHASE_NOTES[@status[:phase]] %>
+    </p>
+    <dl class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+      <div class="rounded-xl bg-white border border-slate-200 px-2 py-3">
+        <dt class="text-[11px] text-slate-500 mb-1">회계연도</dt>
+        <dd class="text-xs font-semibold text-editorial-ink leading-snug">
+          <%= @status[:fiscal_start].strftime("%Y.%-m.%-d") %><br>~ <%= @status[:fiscal_end].strftime("%Y.%-m.%-d") %>
+        </dd>
+      </div>
+      <div class="rounded-xl bg-white border border-slate-200 px-2 py-3">
+        <dt class="text-[11px] text-slate-500 mb-1">경과</dt>
+        <dd class="text-lg font-bold text-editorial-ink"><%= @status[:days_elapsed] %><span class="text-xs font-normal">일</span></dd>
+      </div>
+      <div class="rounded-xl bg-white border border-slate-200 px-2 py-3">
+        <dt class="text-[11px] text-slate-500 mb-1">연도말까지</dt>
+        <dd class="text-lg font-bold text-editorial-ink"><%= @status[:days_remaining] %><span class="text-xs font-normal">일</span></dd>
+      </div>
+      <div class="rounded-xl bg-white border border-slate-200 px-2 py-3">
+        <dt class="text-[11px] text-slate-500 mb-1">다음 기한</dt>
+        <dd class="text-lg font-bold text-editorial-navy">
+          <%= @status[:next_milestone] ? dday.call(@status[:next_milestone]) : "—" %>
+        </dd>
+      </div>
+    </dl>
+  </section>
+
+  <%# ── 2. 다음에 할 일 ─────────────────────────────────────────────────── %>
+  <section aria-labelledby="next-heading"
+           data-controller="next-action" data-next-action-topic-slug-value="hub:school-office-calendar">
+    <h2 id="next-heading" class="heading-editorial-section mb-1">다음 법정·규칙 기한</h2>
+    <p class="text-xs text-slate-500 mb-4">가까운 순서입니다. 근거 층이 다르면 배지가 다릅니다.</p>
+
+    <ol class="space-y-3">
+      <% @status[:upcoming].first(4).each do |m| %>
+        <li class="card-editorial">
+          <div class="flex flex-wrap items-center gap-2 mb-1.5">
+            <span class="inline-flex items-center rounded-md px-1.5 py-0.5 text-[10px] font-bold <%= basis_badge[m.basis][:cls] %>">
+              <%= basis_badge[m.basis][:label] %>
+            </span>
+            <span class="text-[11px] text-slate-500"><%= m.fiscal_year %>학년도 · <%= m.actor %></span>
+            <span class="ml-auto text-sm font-bold text-editorial-navy"><%= dday.call(m) %></span>
+          </div>
+          <p class="font-semibold text-editorial-ink text-sm leading-snug"><%= m.label %></p>
+          <p class="text-xs text-slate-600 mt-1">
+            <strong><%= m.date.strftime("%Y년 %-m월 %-d일") %></strong>
+            <span class="text-slate-400">·</span> <%= m.citation %>
+            <span class="text-slate-400">·</span> 적용 <%= m.uniformity %>
+          </p>
+          <p class="mt-2 flex items-start gap-1 text-xs text-slate-700">
+            <span class="material-symbols-outlined text-[14px] leading-4 text-editorial-navy" aria-hidden="true">arrow_forward</span>
+            <span><%= m.next_action %></span>
+          </p>
+          <% if m.related.any? %>
+            <p class="mt-2 flex flex-wrap gap-2">
+              <% m.related.each do |r| %>
+                <%= link_to(r[:href] || r[:path],
+                      class: "inline-flex items-center gap-1 rounded-full border border-slate-200 px-2.5 py-1 text-[11px] font-semibold text-editorial-navy hover:border-editorial-navy",
+                      data: { action: "click->next-action#track", "next-action-slot-param": "calendar:#{r[:path]}" }) do %>
+                  <span class="material-symbols-outlined text-[13px]" aria-hidden="true">open_in_new</span><%= r[:label] %>
+                <% end %>
+              <% end %>
+            </p>
+          <% end %>
+          <% if m.derivation.present? %>
+            <p class="mt-2 text-[11px] text-slate-400">산식 — <%= m.derivation %></p>
+          <% end %>
+        </li>
+      <% end %>
+    </ol>
+  </section>
+
+  <%# ── 3. 예산 lifecycle ───────────────────────────────────────────────── %>
+  <section aria-labelledby="timeline-heading">
+    <h2 id="timeline-heading" class="heading-editorial-section mb-1"><%= @status[:fiscal_year_label] %> 예산 흐름</h2>
+    <p class="text-xs text-slate-500 mb-4">
+      편성 → 제출 → 심의 → 개시 → 집행 → 연도말 → 출납정리 → 결산 → 결산 심의.
+      아래 표는 <strong><%= @status[:fiscal_year_label] %></strong> 한 해의 기한만 보여 줍니다.
+    </p>
+    <ol class="relative border-l-2 border-slate-200 ml-2 space-y-5">
+      <% SchoolAccountingCalendar.milestones(@status[:fiscal_year]).each do |m| %>
+        <% done = m.past?(@today) %>
+        <li class="relative pl-5">
+          <span class="absolute -left-[7px] top-1.5 w-3 h-3 rounded-full <%= done ? 'bg-slate-300' : 'bg-editorial-navy' %>" aria-hidden="true"></span>
+          <div class="flex flex-wrap items-baseline gap-x-2">
+            <span class="text-xs font-bold <%= done ? 'text-slate-400' : 'text-editorial-navy' %>"><%= m.date.strftime("%Y.%-m.%-d") %></span>
+            <span class="inline-flex items-center rounded-md px-1.5 py-0.5 text-[10px] font-bold <%= basis_badge[m.basis][:cls] %>"><%= basis_badge[m.basis][:label] %></span>
+            <span class="text-[11px] <%= done ? 'text-slate-400' : 'text-slate-500' %>"><%= done ? "지남" : dday.call(m) %></span>
+          </div>
+          <p class="text-sm font-semibold <%= done ? 'text-slate-400' : 'text-editorial-ink' %> leading-snug mt-0.5"><%= m.label %></p>
+          <p class="text-[11px] text-slate-500 mt-0.5"><%= m.citation %></p>
+          <details class="mt-1">
+            <summary class="cursor-pointer text-[11px] text-editorial-navy">조문 보기</summary>
+            <p class="mt-1 rounded-lg bg-slate-50 border border-slate-200 p-2.5 text-[11px] text-slate-700 leading-relaxed"><%= m.statute_text %></p>
+          </details>
+        </li>
+      <% end %>
+    </ol>
+    <p class="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-4 text-xs text-slate-600 leading-relaxed">
+      <strong class="text-editorial-ink">여기에 없는 것</strong> — 추가경정예산·이월·전용의 <strong>법정 기한</strong>은
+      「초·중등교육법」에도 시·도 교육규칙에도 날짜로 정해져 있지 않습니다(교육청 지침과 학교운영위원회 일정에 따릅니다).
+      없는 기한을 만들어 적지 않았습니다.
+    </p>
+  </section>
+
+  <%# ── 4. 준예산 ───────────────────────────────────────────────────────── %>
+  <section aria-labelledby="provisional-heading" class="rounded-2xl border border-slate-200 bg-white p-5 lg:p-6">
+    <h2 id="provisional-heading" class="heading-editorial-section mb-1">예산이 확정되지 않았을 때 (준예산)</h2>
+    <p class="text-xs text-slate-500 mb-4">
+      법률이 집행 가능한 경비를 <strong>다섯 가지로 닫아서</strong> 열거했습니다(초·중등교육법 제30조의3제4항).
+      아래 목록이 전부이고, 실무.kr 이 항목을 늘리거나 해석하지 않습니다.
+    </p>
+    <blockquote class="rounded-xl bg-slate-50 border-l-4 border-editorial-navy p-3 text-xs text-slate-700 leading-relaxed mb-4">
+      <%= SchoolAccountingCalendar::PROVISIONAL_BUDGET_CLAUSE %>
+    </blockquote>
+
+    <%= form_with url: school_office_calendar_path, method: :get, data: { turbo: false }, class: "space-y-3" do %>
+      <% if params[:edu].present? %><%= hidden_field_tag :edu, params[:edu] %><% end %>
+      <%= hidden_field_tag :pb_submitted, "1" %>
+      <fieldset>
+        <legend class="text-sm font-semibold text-editorial-ink mb-2">지출하려는 경비가 아래 중 어디에 해당합니까?</legend>
+        <ul class="space-y-2">
+          <% SchoolAccountingCalendar::PROVISIONAL_BUDGET_ITEMS.each do |item| %>
+            <li>
+              <label class="flex items-start gap-2 rounded-xl border border-slate-200 px-3 py-2.5 text-sm text-slate-700 cursor-pointer hover:border-editorial-navy">
+                <%= check_box_tag "pb[]", item[:no], @provisional_selected.include?(item[:no]), id: "pb_#{item[:no]}", class: "mt-0.5" %>
+                <span><span class="font-semibold text-editorial-ink"><%= item[:no] %>.</span> <%= item[:text] %></span>
+              </label>
+            </li>
+          <% end %>
+          <li>
+            <label class="flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5 text-sm text-amber-900 cursor-pointer">
+              <%= check_box_tag :pb_unsure, "1", @provisional_unsure, class: "mt-0.5" %>
+              <span>어디에 해당하는지 판단이 서지 않는다</span>
+            </label>
+          </li>
+        </ul>
+      </fieldset>
+      <button type="submit" class="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 rounded-lg bg-editorial-navy px-5 py-2.5 text-sm font-bold text-white hover:bg-editorial-navy-dark">
+        <span class="material-symbols-outlined text-[18px]" aria-hidden="true">rule</span>확인
+      </button>
+    <% end %>
+
+    <% if @provisional_verdict %>
+      <div id="provisional-verdict" class="mt-4 rounded-xl border p-4 text-sm leading-relaxed
+           <%= { matched: 'border-emerald-200 bg-emerald-50 text-emerald-900',
+                 not_matched: 'border-rose-200 bg-rose-50 text-rose-900',
+                 check_required: 'border-amber-200 bg-amber-50 text-amber-900' }[@provisional_verdict] %>">
+        <p class="font-bold mb-1">
+          <%= { matched: "MATCHED_CATEGORY — 법률이 열거한 경비에 해당합니다",
+                not_matched: "NOT_MATCHED — 다섯 가지 중 어느 것도 고르지 않았습니다",
+                check_required: "CHECK_REQUIRED — 판정하지 않습니다" }[@provisional_verdict] %>
+        </p>
+        <% if @provisional_verdict == :matched %>
+          <p>해당 호: <strong><%= @provisional_selected.map { |n| "제#{n}호" }.join(", ") %></strong> —
+            예산이 확정되지 않았더라도 <strong>전년도 예산에 준하여</strong> 집행할 수 있는 경비입니다.
+            확정 후에는 확정된 예산에 따라 집행된 것으로 봅니다(같은 항 후단).</p>
+        <% elsif @provisional_verdict == :not_matched %>
+          <p>열거가 닫혀 있으므로, 다섯 가지에 해당하지 않는 경비는 예산 확정 전에 집행할 근거가 이 조항에는 없습니다.</p>
+        <% else %>
+          <p>판단이 서지 않는 경우를 실무.kr 이 대신 분류하지 않습니다. 소속 교육청 담당부서와 학교운영위원회 심의 일정을 확인하세요.</p>
+        <% end %>
+        <p class="mt-2 text-xs opacity-80">최종 판단은 담당자와 소속 교육청 지침으로 합니다.</p>
+      </div>
+    <% end %>
+  </section>
+
+  <%# ── 5. 교육청별로 다른 것 ────────────────────────────────────────────── %>
+  <section aria-labelledby="regional-heading">
+    <h2 id="regional-heading" class="heading-editorial-section mb-1">교육청별로 다른 것</h2>
+    <p class="text-xs text-slate-500 mb-4">
+      위 기한 중 <strong>법률</strong> 배지가 붙은 것은 17개 시·도에 같이 적용됩니다.
+      <strong>교육규칙</strong> 배지는 교육청마다 규칙이 달라, 실무.kr 이 17개 규칙 원문을 대조한 결과만 적습니다.
+    </p>
+
+    <div class="rounded-2xl border border-amber-200 bg-amber-50 p-4 mb-4">
+      <p class="text-sm font-bold text-amber-900 mb-1.5">출납폐쇄 시점은 전국 공통이 아닙니다</p>
+      <ul class="text-xs text-amber-900 space-y-1.5 leading-relaxed">
+        <li>· <strong>「회계연도 종료 후 20일이 되는 날에 폐쇄」</strong> —
+          <%= @closing_split["after_end_20_days"].to_a.size %>개 교육청
+          (<%= @closing_split["after_end_20_days"].to_a.join(" ") %>)</li>
+        <li>· <strong>「회계연도가 끝나는 날 폐쇄」 + 단서로 다음 연도 3월 20일까지 열거된 예외만 처리</strong> —
+          <%= @closing_split["year_end_with_exception"].to_a.size %>개 교육청
+          (<%= @closing_split["year_end_with_exception"].to_a.join(" ") %>)</li>
+      </ul>
+      <p class="text-[11px] text-amber-800 mt-2">두 유형은 폐쇄 시점 자체가 다릅니다. 하나로 합쳐 적지 않았습니다.</p>
+    </div>
+
+    <%= form_with url: school_office_calendar_path, method: :get, data: { turbo: false }, class: "flex flex-wrap items-end gap-2 mb-4" do %>
+      <div>
+        <%= label_tag :edu, "우리 교육청", class: "block text-xs font-semibold text-slate-600 mb-1" %>
+        <%= select_tag :edu,
+              options_for_select([ [ "선택하세요", "" ] ] + @rules.map { |r| [ r[:office], r[:code] ] }, params[:edu]),
+              class: "rounded-lg border border-slate-300 px-3 py-2 text-sm" %>
+      </div>
+      <button type="submit" class="rounded-lg border border-editorial-navy px-4 py-2 text-sm font-semibold text-editorial-navy hover:bg-editorial-navy hover:text-white">규칙 보기</button>
+    <% end %>
+
+    <% if @selected_rule %>
+      <div class="card-editorial">
+        <p class="font-bold text-editorial-ink text-sm mb-2"><%= @selected_rule[:office] %></p>
+        <dl class="text-xs text-slate-700 space-y-1.5">
+          <div><dt class="inline font-semibold">규칙</dt> —
+            <dd class="inline"><%= link_to @selected_rule[:rule_name], SchoolAccountingCalendar.ordinance_url(@selected_rule),
+                  class: "underline text-editorial-navy", target: "_blank", rel: "noopener noreferrer" %>
+              (시행 <%= @selected_rule[:effective].to_s.scan(/\d{4}|\d{2}/).first(3).join(".") %>)</dd></div>
+          <div><dt class="inline font-semibold">출납폐쇄</dt> —
+            <dd class="inline">제<%= @selected_rule[:closing_article] %>조 ·
+              <%= @selected_rule[:closing_type] == "after_end_20_days" ? "회계연도 종료 후 20일이 되는 날에 폐쇄" : "회계연도가 끝나는 날 폐쇄(단서로 다음 연도 3월 20일까지 열거된 예외 처리)" %></dd></div>
+          <div><dt class="inline font-semibold">예산편성 기본지침 시달</dt> —
+            <dd class="inline">제<%= @selected_rule[:guideline_article] %>조 · 회계연도 개시 <%= @selected_rule[:guideline_months_before] %>개월 전까지</dd></div>
+          <div><dt class="inline font-semibold">예산안 위원 개별 통지</dt> —
+            <dd class="inline"><%= @selected_rule[:meeting_notice_days] ? "회의 개최 #{@selected_rule[:meeting_notice_days]}일 전까지" : "이 규칙에는 조항이 없습니다 — 교육청 지침에서 정합니다" %></dd></div>
+          <div><dt class="inline font-semibold">결산 심의결과 통보</dt> —
+            <dd class="inline"><%= @selected_rule[:settlement_review_months] ? "회계연도 종료 후 #{@selected_rule[:settlement_review_months]}개월 이내" : "이 규칙에는 조항이 없습니다 — 교육청 지침에서 정합니다" %></dd></div>
+        </dl>
+      </div>
+    <% end %>
+  </section>
+
+  <%# ── 6. 근거와 한계 ──────────────────────────────────────────────────── %>
+  <section class="rounded-2xl border border-slate-200 bg-slate-50 p-5 space-y-3">
+    <h2 class="text-sm font-bold text-editorial-ink">근거와 한계</h2>
+    <ul class="text-xs text-slate-600 space-y-1.5 leading-relaxed">
+      <li>· 법률 기한은 <strong>「초·중등교육법」 제30조의3</strong>(법제처 국가법령정보 원문 대조, 2026-09-20)입니다.</li>
+      <li>· 교육규칙 기한은 <strong>17개 시·도교육청 학교회계 규칙 전문</strong>을 대조한 결과입니다(2026-09-20 수집).</li>
+      <li>· 「N일 전까지」는 <strong>회계연도 개시일에서 역산</strong>했고, 교육청 예산편성 기본지침이 같은 조문을 환산해 적은 날짜와 일치하는지 대조했습니다.</li>
+      <li>· 「끝난 후 N개월 이내」는 <strong>민법 제157조·제160조</strong>로 계산했습니다. 소속 교육청 지침이 구체 일자를 정했다면 그것이 우선합니다.</li>
+      <li>· <strong>사립학교</strong>는 「사학기관 재무·회계 규칙」이 적용되어 이 화면의 교육규칙 층이 그대로 맞지 않습니다.</li>
+      <li>· 학교회계 <strong>예산과목(세출과목) 판정</strong>은 하지 않습니다. 실무.kr 에 학교회계 과목 도구는 없습니다.</li>
+      <li>· 집행의 적정성·적법성은 판단하지 않습니다.</li>
+    </ul>
+    <p class="text-sm text-amber-900 font-semibold flex items-start gap-1.5">
+      <span class="material-symbols-outlined text-[16px] leading-[18px]" aria-hidden="true">privacy_tip</span>
+      <span>이름·주민등록번호·급여·학생 정보를 입력하지 마세요.</span>
+    </p>
+  </section>
+</div>

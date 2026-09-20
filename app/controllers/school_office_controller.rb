@@ -61,6 +61,9 @@ class SchoolOfficeController < ApplicationController
       title: "예산·학교회계",
       icon: "account_balance_wallet",
       items: [
+        # P3 — 이 축에서 유일하게 «학교회계 자체» 를 기준으로 계산하는 자산이다.
+        # 근거가 법률(초·중등교육법 §30의3)이라 조건부 표시를 붙이지 않는다.
+        { label: "학교회계 일정 — 지금 무엇을 할 때인가", path: "/school-office/calendar" },
         { label: "학교회계 예산편성 절차",   path: "/topics/school-budget-compilation" },
         # 산식(집행액÷예산액)은 기준 중립이고 **회계연도 시작월만** 다르다. 그래서 버리지 않고
         # 학교회계(3월)로 맞춘 채 연다 — 사용자에게 «바꿔서 쓰세요» 를 시키지 않는다.
@@ -140,7 +143,7 @@ class SchoolOfficeController < ApplicationController
         # 전수점검(§4)에서 새로 찾은 혼입 — 회계 일정이 1~12월 회계연도 가정이다
         # (12/31 «회계연도 마감», 1/31 «전년도 세입·세출 결산», 3·6·9월 분기결산).
         { label: "업무 달력",                path: "/tools/task-calendar", tier: :conditional,
-          note: "회계 일정은 지자체 회계연도(1~12월) 기준 — 학교회계는 3월~다음 해 2월" }
+          note: "회계 일정은 지자체 회계연도(1~12월) 기준 — 학교회계(3월~다음 해 2월) 일정은 «학교회계 일정» 에 있습니다" }
       ]
     }
   ].freeze
@@ -152,6 +155,45 @@ class SchoolOfficeController < ApplicationController
   def self.primary_items = SECTIONS.flat_map { |s| s[:items].reject { |i| i[:tier] == :reference } }
 
   def self.reference_items = SECTIONS.flat_map { |s| s[:items].select { |i| i[:tier] == :reference } }
+
+  # ── P3 (2026-09-20 · SCHOOL_ACCOUNTING_CALENDAR) ─────────────────────────────
+  # `/tools/task-calendar` 는 1~12월 회계연도를 전제한 월별 반복 업무 달력이라 학교에서는
+  # 「회계」 항목이 통째로 틀린다. 그 달력을 고치지 않고 **학교회계 전용 면**을 따로 둔다 —
+  # 한 달력에 두 회계연도를 억지로 합치면 어느 쪽 사용자에게도 거짓이 되기 때문이다.
+  #
+  # 계산은 전부 `SchoolAccountingCalendar`(순수 날짜 산술)가 한다. 이 액션은 입력을 좁히고
+  # 결과를 넘길 뿐이다. LLM·추정 없음.
+  CALENDAR_TITLE = "학교회계 일정"
+
+  def calendar
+    @today  = Time.zone.today
+    @status = SchoolAccountingCalendar.status(on: @today)
+    @rules  = SchoolAccountingCalendar.regional_rules
+    @selected_rule = SchoolAccountingCalendar.regional_rule(params[:edu].to_s)
+    @closing_split = SchoolAccountingCalendar.rule_value_split(:closing_type)
+
+    # 준예산 판정 — 사용자가 고른 «법률 각 호» 만 본다. 지출 목적 문장을 우리가 분류하지 않는다.
+    @provisional_selected = Array(params[:pb]).map(&:to_s)
+                                              .select { |n| n.match?(/\A[1-5]\z/) }
+                                              .map(&:to_i).uniq.sort
+    @provisional_unsure = params[:pb_unsure].present?
+    @provisional_answered = params[:pb_submitted].present?
+    @provisional_verdict =
+      if !@provisional_answered then nil
+      elsif @provisional_unsure then :check_required
+      elsif @provisional_selected.any? then :matched
+      else :not_matched
+      end
+
+    expires_in 5.minutes, public: true, stale_while_revalidate: 1.hour
+
+    set_meta_tags(
+      title: CALENDAR_TITLE,
+      description: "학교회계 회계연도(3월 1일~다음 해 2월 말일) 기준으로 예산안 제출·학교운영위원회 심의·결산서 제출 등 법정 기한까지 남은 일수를 계산합니다.",
+      keywords: "학교회계 일정, 학교회계 회계연도, 학교회계 예산편성 기한, 학교운영위원회 예산 심의, 학교회계 결산, 준예산",
+      canonical: request.original_url.split("?").first
+    )
+  end
 
   def index
     @sections = SECTIONS

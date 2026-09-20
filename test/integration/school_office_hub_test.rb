@@ -325,7 +325,11 @@ class SchoolOfficeHubTest < ActionDispatch::IntegrationTest
     body = response.body
     assert body.include?('data-next-action-topic-slug-value="hub:school-office"'), "계측 컨트롤러가 없다"
     clicks = body.scan(/click-(?:>|&gt;)next-action#track/).size
-    assert_equal SchoolOfficeController.all_paths.size, clicks, "계측이 붙지 않은 허브 링크가 있다"
+    # 카드 전부 + 상단 «지금» 배너 1개. 배너를 뺀 자리를 상수로 숨기면 카드 하나가 계측을
+    # 잃어도 통과하므로, 추가분은 **여기서 1 이라고 적고** 그 1 의 slot 을 따로 단정한다(P3).
+    assert_equal SchoolOfficeController.all_paths.size + 1, clicks, "계측이 붙지 않은 허브 링크가 있다"
+    assert body.include?('data-next-action-slot-param="now:/school-office/calendar"'),
+           "상단 «지금» 배너에 계측이 없다"
     assert body.include?('data-next-action-slot-param="goods:/review-lab/quote"'), "slot 파라미터 형식이 다르다"
 
     # P0 — href 에 `?fy=3` 을 붙였다. slot 값까지 같이 바뀌면 기존 GA4 시계열이 끊긴다.

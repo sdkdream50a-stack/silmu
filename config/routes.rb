@@ -155,6 +155,9 @@ Rails.application.routes.draw do
   get "start", to: "guides#onboarding", as: :onboarding
   # P1-1 — 학교 행정실 상설 허브(기존 자산 링크만). `/start` 는 계약 코스라 이름을 바꾸지 않았다.
   get "school-office", to: "school_office#index", as: :school_office
+  # P3 — 학교회계 일정. `/tools/task-calendar` 는 1~12월 회계연도 전제라 같은 면에 둘 수 없다.
+  #      도구 레지스트리(`tools_helper`)에는 넣지 않는다 — 「도구 39개」는 강의자료에 박힌 수다.
+  get "school-office/calendar", to: "school_office#calendar", as: :school_office_calendar
 
   # 실무 검증실 Beta — 안내(GET)는 공개, 업로드·검토·demo(POST)는 로그인 전용(ReviewLabController).
   get  "review-lab", to: "review_lab#index", as: :review_lab

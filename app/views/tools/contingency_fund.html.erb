@@ -47,6 +47,10 @@
       </details>
     </div>
 
+    <%# P3 — 이 도구의 1% 한도는 지방재정법 제43조이고 **학교회계에는 적용되지 않는다**.
+        계산 전에 어느 회계 체계인지 말한다(등록부 = config/tool_trust.yml). %>
+    <%= render 'shared/jurisdiction_notice', tool_key: 'contingency-fund' %>
+
     <div class="lg:flex lg:gap-8">
       <!-- 입력 폼 -->
       <div class="lg:w-1/2 mb-8 lg:mb-0">
