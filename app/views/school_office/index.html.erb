@@ -11,6 +11,33 @@
 </section>
 
 <div class="container-editorial py-10 space-y-10">
+  <%# P3 — «지금 학교회계상 어느 시점인가» 를 목록보다 먼저 답한다.
+      계산은 SchoolAccountingCalendar(순수 날짜 산술). 여기서 새 사실을 만들지 않는다. %>
+  <% now = SchoolAccountingCalendar.status %>
+  <% nxt = now[:next_milestone] %>
+  <section data-controller="next-action" data-next-action-topic-slug-value="hub:school-office">
+    <%= link_to(school_office_calendar_path,
+          class: "block rounded-2xl border border-editorial-navy-bg bg-editorial-navy-bg/40 px-4 py-4 hover:border-editorial-navy transition-colors",
+          data: { action: "click->next-action#track", "next-action-slot-param": "now:/school-office/calendar" }) do %>
+      <span class="flex flex-wrap items-center gap-x-2 gap-y-1">
+        <span class="inline-flex items-center rounded-full bg-editorial-navy text-white px-2.5 py-1 text-[11px] font-bold">
+          <%= now[:fiscal_year_label] %> <%= SchoolAccountingCalendar.phase_label(now[:phase]) %>
+        </span>
+        <span class="text-xs text-slate-600">회계연도 <%= now[:fiscal_start].strftime("%Y.%-m.%-d") %>~<%= now[:fiscal_end].strftime("%Y.%-m.%-d") %></span>
+        <span class="ml-auto inline-flex items-center gap-1 text-xs font-semibold text-editorial-navy">
+          학교회계 일정<span class="material-symbols-outlined text-[15px]" aria-hidden="true">chevron_right</span>
+        </span>
+      </span>
+      <% if nxt %>
+        <span class="mt-2 flex flex-wrap items-baseline gap-x-2 text-sm">
+          <span class="font-bold text-editorial-navy">D-<%= nxt.days_from(Date.current) %></span>
+          <span class="font-semibold text-editorial-ink"><%= nxt.label %></span>
+          <span class="text-xs text-slate-500"><%= nxt.date.strftime("%Y.%-m.%-d") %> · <%= nxt.citation %></span>
+        </span>
+      <% end %>
+    <% end %>
+  </section>
+
   <%# 범례 — 설명을 읽기 전에 «무엇이 바로 쓰는 것인가» 가 구조로 보여야 한다.
       새 섹션을 늘리지 않고 내비 위에 한 줄로 둔다. %>
   <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">

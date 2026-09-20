@@ -1,0 +1,224 @@
+# 시·도 교육규칙 — 학교회계 기한 레지스트리 (17개 교육청 전수)
+#
+# 이 파일은 손으로 옮겨 적은 것이 아니다. 법제처 국가법령정보 공동활용 API 의 **자치법규**
+# (`target=ordin`, MST=자치법규일련번호)에서 17개 규칙 전문을 내려받아 조문에서 기계 추출했다.
+# 수집·추출 절차와 원본 XML = multi-agent-harness tasks/silmu-school-accounting-calendar-p3-0920/sources/
+# 수집일 2026-09-20.
+#
+# ⚠️ 규칙 명칭은 통일돼 있지 않다(「공립학교회계 규칙」·「공립 유치원 및 학교 회계 규칙」·
+#    「전라남도립학교 회계 규칙」·「대구광역시립학교 회계 규칙」·「공립학교 회계규칙」).
+#    이름 템플릿으로는 수집할 수 없어 범위 검색(query="학교 회계")으로 17건을 회수했다.
+#
+# closing_type — **전국 공통이 아니다**(11:6).
+#   after_end_20_days      : 「회계연도 종료 후 20일이 되는 날에 폐쇄」
+#   year_end_with_exception: 「회계연도가 끝나는 날 폐쇄」 + 단서(지방회계법 §7① 등)로
+#                            다음 회계연도 3월 20일까지 열거된 예외만 처리
+#   두 유형은 폐쇄 시점 자체가 다르다. 하나로 합치면 6개 교육청에 거짓이 된다.
+#
+# 값이 비어 있으면 «그 규칙에 해당 조항이 없다» 는 실측값이다(모름이 아니다).
+# 전남은 개별통지 7일·결산심의 3개월 조항이 규칙에 없고 지침 층에서 정한다.
+rules:
+  - code: "서울"
+    office: "서울특별시교육청"
+    rule_name: "서울특별시 공립학교회계 규칙"
+    ordin_seq: 1263963
+    promulgated: "20161114"
+    effective: "20161114"
+    closing_article: "4"
+    closing_type: "after_end_20_days"
+    guideline_article: "8"
+    guideline_months_before: 3
+    meeting_notice_days: 7
+    settlement_review_months: 3
+  - code: "부산"
+    office: "부산광역시교육청"
+    rule_name: "부산광역시 공립 유치원 및 학교 회계 규칙"
+    ordin_seq: 1219560
+    promulgated: "20160229"
+    effective: "20160229"
+    closing_article: "4"
+    closing_type: "after_end_20_days"
+    guideline_article: "10"
+    guideline_months_before: 3
+    meeting_notice_days: 7
+    settlement_review_months: 3
+  - code: "대구"
+    office: "대구광역시교육청"
+    rule_name: "대구광역시립학교 회계 규칙"
+    ordin_seq: 1687159
+    promulgated: "20220228"
+    effective: "20220228"
+    closing_article: "4"
+    closing_type: "after_end_20_days"
+    guideline_article: "10"
+    guideline_months_before: 3
+    meeting_notice_days: 7
+    settlement_review_months: 3
+  - code: "인천"
+    office: "인천광역시교육청"
+    rule_name: "인천광역시 공립학교 회계 규칙"
+    ordin_seq: 1492169
+    promulgated: "20200511"
+    effective: "20200511"
+    closing_article: "4"
+    closing_type: "after_end_20_days"
+    guideline_article: "9"
+    guideline_months_before: 3
+    meeting_notice_days: 7
+    settlement_review_months: 3
+  - code: "광주"
+    office: "광주광역시교육청"
+    rule_name: "광주광역시 공립학교회계 규칙"
+    ordin_seq: 1604419
+    promulgated: "20210701"
+    effective: "20210701"
+    closing_article: "4"
+    closing_type: "after_end_20_days"
+    guideline_article: "10"
+    guideline_months_before: 3
+    meeting_notice_days: 7
+    settlement_review_months: 3
+  - code: "대전"
+    office: "대전광역시교육청"
+    rule_name: "대전광역시 공립학교회계 규칙"
+    ordin_seq: 623860
+    promulgated: "20141205"
+    effective: "20150301"
+    closing_article: "4"
+    closing_type: "after_end_20_days"
+    guideline_article: "10"
+    guideline_months_before: 3
+    meeting_notice_days: 7
+    settlement_review_months: 3
+  - code: "울산"
+    office: "울산광역시교육청"
+    rule_name: "울산광역시 공립학교회계 규칙"
+    ordin_seq: 2074201
+    promulgated: "20251030"
+    effective: "20251030"
+    closing_article: "4"
+    closing_type: "year_end_with_exception"
+    guideline_article: "9"
+    guideline_months_before: 3
+    meeting_notice_days: 7
+    settlement_review_months: 3
+  - code: "세종"
+    office: "세종특별자치시교육청"
+    rule_name: "세종특별자치시 공립학교회계 규칙"
+    ordin_seq: 1952477
+    promulgated: "20240712"
+    effective: "20240712"
+    closing_article: "4"
+    closing_type: "after_end_20_days"
+    guideline_article: "10"
+    guideline_months_before: 3
+    meeting_notice_days: 7
+    settlement_review_months: 3
+  - code: "경기"
+    office: "경기도교육청"
+    rule_name: "경기도 공립학교회계 규칙"
+    ordin_seq: 2065549
+    promulgated: "20250901"
+    effective: "20250901"
+    closing_article: "4"
+    closing_type: "year_end_with_exception"
+    guideline_article: "9"
+    guideline_months_before: 3
+    meeting_notice_days: 7
+    settlement_review_months: 3
+  - code: "강원"
+    office: "강원특별자치도교육청"
+    rule_name: "강원특별자치도 공립학교 회계규칙"
+    ordin_seq: 1802655
+    promulgated: "20230602"
+    effective: "20230611"
+    closing_article: "4"
+    closing_type: "after_end_20_days"
+    guideline_article: "9"
+    guideline_months_before: 3
+    meeting_notice_days: 7
+    settlement_review_months: 3
+  - code: "충북"
+    office: "충청북도교육청"
+    rule_name: "충청북도 공립학교회계 규칙"
+    ordin_seq: 1823413
+    promulgated: "20230623"
+    effective: "20230623"
+    closing_article: "4"
+    closing_type: "year_end_with_exception"
+    guideline_article: "10"
+    guideline_months_before: 3
+    meeting_notice_days: 7
+    settlement_review_months: 3
+  - code: "충남"
+    office: "충청남도교육청"
+    rule_name: "충청남도 공립학교회계 규칙"
+    ordin_seq: 1905493
+    promulgated: "20240220"
+    effective: "20240301"
+    closing_article: "4"
+    closing_type: "after_end_20_days"
+    guideline_article: "10"
+    guideline_months_before: 3
+    meeting_notice_days: 7
+    settlement_review_months: 3
+  - code: "전북"
+    office: "전북특별자치도교육청"
+    rule_name: "전북특별자치도 공립학교회계 규칙"
+    ordin_seq: 2122531
+    promulgated: "20260501"
+    effective: "20260501"
+    closing_article: "5"
+    closing_type: "year_end_with_exception"
+    guideline_article: "10"
+    guideline_months_before: 3
+    meeting_notice_days: 7
+    settlement_review_months: 3
+  - code: "전남"
+    office: "전라남도교육청"
+    rule_name: "전라남도립학교 회계 규칙"
+    ordin_seq: 1723383
+    promulgated: "20220826"
+    effective: "20220826"
+    closing_article: "4"
+    closing_type: "after_end_20_days"
+    guideline_article: "9"
+    guideline_months_before: 3
+    meeting_notice_days:        # 규칙에 조항 없음
+    settlement_review_months:   # 규칙에 조항 없음
+  - code: "경북"
+    office: "경상북도교육청"
+    rule_name: "경상북도 공립학교회계 규칙"
+    ordin_seq: 2111621
+    promulgated: "20260226"
+    effective: "20260226"
+    closing_article: "4"
+    closing_type: "after_end_20_days"
+    guideline_article: "10"
+    guideline_months_before: 3
+    meeting_notice_days: 7
+    settlement_review_months: 3
+  - code: "경남"
+    office: "경상남도교육청"
+    rule_name: "경상남도 공립학교회계 규칙"
+    ordin_seq: 2130887
+    promulgated: "20260604"
+    effective: "20260604"
+    closing_article: "4"
+    closing_type: "year_end_with_exception"
+    guideline_article: "10"
+    guideline_months_before: 3
+    meeting_notice_days: 7
+    settlement_review_months: 3
+  - code: "제주"
+    office: "제주특별자치도교육청"
+    rule_name: "제주특별자치도 공립학교회계 규칙"
+    ordin_seq: 1686569
+    promulgated: "20220228"
+    effective: "20220301"
+    closing_article: "4"
+    closing_type: "year_end_with_exception"
+    guideline_article: "10"
+    guideline_months_before: 3
+    meeting_notice_days: 7
+    settlement_review_months: 3
