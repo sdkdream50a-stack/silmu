@@ -108,8 +108,9 @@ module ReviewLab
       end
       bad = checkable.reject { |_d, i| (i.qty * i.unit_price - i.amount).abs <= SUM_TOLERANCE }
       if bad.empty?
-        add(severity: "PASS", code: "B-ROW", extracted_value: "#{checkable.size}개 품목",
-            problem: "모든 행에서 수량 × 단가 = 금액")
+        # «모든 행» 이라고 쓰면 바로 위의 B-ROW-COVERAGE 와 모순된다 — 검산한 행만 말한다(독립 검토 R3).
+        add(severity: "PASS", code: "B-ROW", extracted_value: "#{checkable.size}/#{rows.size}개 행",
+            problem: "검산한 #{checkable.size}개 행에서 수량 × 단가 = 금액")
         return
       end
 
@@ -132,7 +133,10 @@ module ReviewLab
       #    있으면 무엇과 견줘야 할지 정할 수 없으므로 검사하지 않고 그 사실을 적는다.
       supply = first_value(doc, :supply_amount)
       vat = first_value(doc, :vat_amount)
-      stated = supply || (vat.nil? ? (first_value(doc, :grand_total) || first_value(doc, :total_cost)) : nil)
+      # ⚠️ `total_cost`(총사업비)로 폴백하지 않는다. 총사업비는 관행상 **부가세를 포함**하므로
+      #    (같은 전제를 `comparable_total` 이 이미 쓴다) 부가세 별도인 품목 합과 견주면
+      #    **정상 문서에 거짓 BLOCK** 이 난다(독립 검토 R3). 견줄 값이 없으면 검사하지 않는다.
+      stated = supply || (vat.nil? ? first_value(doc, :grand_total) : nil)
       if items.empty? || items.any? { |i| i.amount.nil? } || stated.nil?
         reason = if items.empty?
           "품목표(품명·수량·단가 머리행)를 찾지 못했습니다"
@@ -168,9 +172,14 @@ module ReviewLab
     def check_vat
       # 둘 다 가진 문서가 있으면 그 문서다. 공급가액만 가진 문서를 먼저 집으면(사업계획서가
       # 공급가액을 적은 경우) 산출기초의 부가세·합계 검산이 통째로 사라진다(독립 리뷰 R2).
-      doc = @fields.keys.find { |d| @fields[d][:supply_amount]&.first && @fields[d][:vat_amount]&.first } ||
-            @fields.keys.find { |d| @fields[d][:supply_amount]&.first } ||
-            @fields.keys.find { |d| @fields[d][:vat_amount]&.first }
+      # 세 값(공급가액·부가세·합계)을 **다 가진** 문서가 최우선이다. 공급가액+부가세만 가진 문서를
+      # 먼저 집으면 합계를 가진 문서의 B-TOTAL 이 «합계를 찾지 못했다» 로 사라져, 실제 산술 모순이
+      # 있어도 **BLOCK 이 나지 않는다**(독립 검토 R3).
+      has = ->(d, *keys) { keys.all? { |k| @fields[d][k]&.first } }
+      doc = @fields.keys.find { |d| has.call(d, :supply_amount, :vat_amount, :grand_total) } ||
+            @fields.keys.find { |d| has.call(d, :supply_amount, :vat_amount) } ||
+            @fields.keys.find { |d| has.call(d, :supply_amount) } ||
+            @fields.keys.find { |d| has.call(d, :vat_amount) }
       supply = first_value(doc, :supply_amount)
       vat = first_value(doc, :vat_amount)
       total = first_value(doc, :grand_total)

@@ -309,4 +309,57 @@ class ReviewLab::BudgetReviewerTest < ActiveSupport::TestCase
     refute_includes text, "지방재정법"
     refute_includes text, "지방자치단체 기준"
   end
+
+  # ── R3 독립 검토 수리 회귀 ───────────────────────────────────────
+  # 이 4개는 «변이를 죽이려고» 쓴 것이 아니라 R3 가 **실제 입력으로 재현**한 결함이다.
+
+  test "R3 «총계» 로 끝나는 산출기초 — 합계 행을 품목으로 이중 계상하지 않는다" do
+    rows = [ [ 1, "책상", "표준", "개", 10, 1_000, 10_000 ], [ 2, "의자", "표준", "개", 5, 2_000, 10_000 ] ]
+    doc = basis([ [ "사업명", "총계 서식" ], [], HEADER ] + rows + [ [ "총계", "", "", "", "", "", 20_000 ] ])
+    assert_equal 2, ReviewLab::ItemTable.parse(doc).size, "«총계» 행이 품목으로 읽히면 안 된다"
+    r = review(doc)
+    assert_equal [ "PASS" ], sev(r, "B-SUM"), "정상 문서에 거짓 BLOCK 이 나면 안 된다"
+  end
+
+  test "R3 «총계» 는 FieldExtractor 가 합계로 인정하는 라벨과 같은 어휘다" do
+    # 한쪽만 알면 같은 행을 «합계» 이자 «품목» 으로 읽는다 — 그 어긋남 자체를 고정한다.
+    assert_includes ReviewLab::FieldExtractor::BUDGET_FIELDS[:grand_total][2], "총계"
+    assert "총계".match?(ReviewLab::ItemTable::STOP_ROW)
+  end
+
+  test "R3 check_vat — 세 값을 다 가진 문서를 고른다(합계 있는 문서의 산술 모순을 놓치지 않는다)" do
+    p_doc = plan([ [ "사업명", "가상초" ], [ "공급가액", "10,000원" ], [ "부가세", "1,000원" ] ])
+    b_doc = basis([ [ "사업명", "가상초" ], [], HEADER, [ 1, "책상", "표준", "개", 1, 10_000, 10_000 ],
+                    [ "공급가액", "", "", "", "", "", 10_000 ], [ "부가세", "", "", "", "", "", 1_000 ],
+                    [ "합계", "", "", "", "", "", 12_000 ] ])
+    r = review(p_doc, b_doc)
+    assert_equal [ "BLOCK" ], sev(r, "B-TOTAL"), "합계 12,000 != 공급가액+부가세 11,000 은 BLOCK 이어야 한다"
+    refute skipped?(r, "B-TOTAL")
+  end
+
+  test "R3 B-SUM 은 총사업비로 폴백하지 않는다 — 부가세 포함 관행값에 거짓 BLOCK 금지" do
+    doc = plan([ [ "사업명", "가상초" ], [ "총사업비", "11,000,000원" ], [], HEADER,
+                 [ 1, "책상", "표준", "개", 100, 100_000, 10_000_000 ] ])
+    r = review(doc)
+    assert_empty find(r, "B-SUM"), "총사업비(부가세 포함)와 품목 합(부가세 별도)을 견주면 안 된다"
+    assert skipped?(r, "B-SUM"), "검사를 못 돌렸으면 그 사실을 말해야 한다"
+  end
+
+  test "R3 B-ROW PASS 는 검산한 행만 «맞다» 고 말한다 — coverage CHECK 와 모순되지 않는다" do
+    doc = basis([ [ "사업명", "가상초" ], [], HEADER, [ 1, "책상", "표준", "개", 10, 1_000, 10_000 ],
+                  [ 2, "설치비", "운반", "식", "", "", 200_000 ], [ "공급가액", "", "", "", "", "", 210_000 ] ])
+    r = review(doc)
+    assert_equal [ "CHECK" ], sev(r, "B-ROW-COVERAGE")
+    assert_equal [ "PASS" ], sev(r, "B-ROW")
+    refute_includes find(r, "B-ROW").first.problem, "모든 행",
+                    "검산하지 못한 행이 있는데 «모든 행» 이라고 말하면 화면이 거짓을 말한다"
+    assert_includes find(r, "B-ROW").first.problem, "검산한 1개 행"
+  end
+
+  test "R3 라벨 공백 변형은 추출 전 정규화로 흡수된다(«예산  과목» 2칸)" do
+    # R3 리뷰어는 field_extractor 만 보고 «미인식» 이라 했으나, TextExtractor 가 앞서 공백을 압축한다.
+    r = review(plan([ [ "사업명", "가상초" ], [ "예산  과목", "학교운영비" ] ]))
+    assert_equal [ "CHECK" ], sev(r, "B-ACCOUNT")
+    assert_equal "학교운영비", find(r, "B-ACCOUNT").first.extracted_value
+  end
 end
