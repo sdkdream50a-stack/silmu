@@ -243,7 +243,7 @@
           <div><dt class="inline font-semibold">규칙</dt> —
             <dd class="inline"><%= link_to @selected_rule[:rule_name], SchoolAccountingCalendar.ordinance_url(@selected_rule),
                   class: "underline text-editorial-navy", target: "_blank", rel: "noopener noreferrer" %>
-              (시행 <%= @selected_rule[:effective].to_s.scan(/\d{4}|\d{2}/).first(3).join(".") %>)</dd></div>
+              (시행 <%= SchoolAccountingCalendar.format_effective_date(@selected_rule[:effective]) %>)</dd></div>
           <div><dt class="inline font-semibold">출납폐쇄</dt> —
             <dd class="inline">제<%= @selected_rule[:closing_article] %>조 ·
               <%= @selected_rule[:closing_type] == "after_end_20_days" ? "회계연도 종료 후 20일이 되는 날에 폐쇄" : "회계연도가 끝나는 날 폐쇄(단서로 다음 연도 3월 20일까지 열거된 예외 처리)" %></dd></div>

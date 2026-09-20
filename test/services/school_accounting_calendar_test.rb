@@ -193,6 +193,28 @@ class SchoolAccountingCalendarTest < ActiveSupport::TestCase
     assert_equal [ nil, 0 ], C.majority_of([ nil, nil ])
   end
 
+  # 2026-09-20 독립 리뷰(Medium) — 8자리 날짜를 `scan(/\d{4}|\d{2}/)` 로 자르면 남은 4자리가
+  # 다시 `\d{4}` 에 걸려 «2016.1114» 가 나왔다. 화면에 **틀린 시행일**이 찍히던 결함이다.
+  test "시행일자 8자리를 사람이 읽는 날짜로 바꾼다" do
+    {
+      "20161114" => "2016.11.14",
+      "20160229" => "2016.2.29",
+      "20250901" => "2025.9.1",
+      "623860"   => "623860",      # 8자리가 아니면 손대지 않는다
+      nil        => ""
+    }.each do |raw, expected|
+      assert_equal expected, C.format_effective_date(raw), "입력 #{raw.inspect}"
+    end
+  end
+
+  test "17개 규칙의 시행일자가 전부 변환된다" do  # 한 건이라도 8자리가 아니면 화면이 원문을 그대로 뱉는다
+    C.regional_rules.each do |rule|
+      formatted = C.format_effective_date(rule[:effective])
+      assert_match(/\A\d{4}\.\d{1,2}\.\d{1,2}\z/, formatted,
+                   "#{rule[:code]} 의 시행일자 #{rule[:effective].inspect} 가 날짜로 안 보인다")
+    end
+  end
+
   test "자치법규 링크가 법제처 원문을 가리킨다" do
     url = C.ordinance_url(C.regional_rule("서울"))
     assert_equal "https://www.law.go.kr/LSW/ordinInfoP.do?ordinSeq=1263963", url

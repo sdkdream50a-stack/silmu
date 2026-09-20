@@ -100,6 +100,16 @@ class SchoolAccountingCalendar
 
     def ordinance_url(rule) = "https://www.law.go.kr/LSW/ordinInfoP.do?ordinSeq=#{rule[:ordin_seq]}"
 
+    # 법제처가 주는 날짜는 `"20161114"` 8자리 문자열이다. 화면용 표기로 바꾼다.
+    # ⚠️ `scan(/\d{4}|\d{2}/)` 로 자르면 안 된다 — 대체는 왼쪽부터 시도하므로 남은 `1114` 가
+    #    다시 `\d{4}` 에 걸려 «2016.1114» 가 나온다(2026-09-20 독립 리뷰 적발).
+    def format_effective_date(value)
+      digits = value.to_s
+      return digits unless digits.match?(/\A\d{8}\z/)
+
+      "#{digits[0, 4]}.#{digits[4, 2].to_i}.#{digits[6, 2].to_i}"
+    end
+
     # 규칙 층에서 **17개가 같은 값을 갖는 축만** 전국 기한으로 쓴다.
     # 값이 갈리면 nil 을 돌려 화면이 «교육청별로 다르다» 를 말하게 한다.
     def uniform_rule_value(field)

@@ -63,6 +63,9 @@ class SchoolAccountingCalendarPageTest < ActionDispatch::IntegrationTest
     assert_includes body, "전라남도립학교 회계 규칙"
     assert_includes body, "ordinSeq=1723383"
     assert_includes body, "이 규칙에는 조항이 없습니다", "전남 규칙에 없는 조항을 있는 것처럼 적는다"
+    # 독립 리뷰가 잡은 시행일자 표기 결함(«2022.826» 류)이 화면에서 재발하지 않는가.
+    assert_includes body, "시행 2022.8.26", "전남 규칙 시행일자가 날짜로 보이지 않는다"
+    assert_no_match(/시행 \d{4}\.\d{3,}/, body, "8자리 날짜가 잘못 잘려 렌더된다")
   end
 
   test "다른 교육청을 고르면 다른 규칙이 나온다" do  # 음성 대조 — 항상 같은 값을 뿌리는 화면이면 무의미
