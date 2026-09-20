@@ -64,7 +64,7 @@ class WorkflowBindingsTest < ActiveSupport::TestCase
   # ── fail-closed 검증 (양성 대조) ────────────────────────────────────────
   # 검증기가 살아 있는지 실제로 결함을 먹여 확인한다. 통과만 보고 «검증한다» 고 하지 않는다.
   def load_stages(yaml)
-    Tempfile.create(["wb", ".yml"]) do |f|
+    Tempfile.create([ "wb", ".yml" ]) do |f|
       f.write(yaml)
       f.flush
       original = WorkflowBindings::PATH
