@@ -34,6 +34,17 @@ class LawApiService
     get("/DRF/lawService.do", params)
   end
 
+  # 자치법규(조례·규칙) 본문 조회 — 자치법규일련번호(ordinSeq)로.
+  #
+  # P4 (2026-09-20): 시·도 교육규칙 17개를 freshness engine 에 결속하려면 이 경로가 필요하다.
+  # **이름으로 찾지 않는다** — 규칙 명칭이 통일돼 있지 않아(「공립학교회계 규칙」·「공립 유치원 및 학교
+  # 회계 규칙」·「○○도립학교 회계 규칙」 …) 이름 검색은 17건 중 일부를 놓친다(P3 실측).
+  # 일련번호는 변하지 않으므로 그것을 문서의 identity 로 쓴다.
+  def fetch_ordin(ordin_seq)
+    params = { OC: @oc_id, target: "ordin", type: "XML", MST: ordin_seq }
+    get("/DRF/lawService.do", params)
+  end
+
   # 특정 조문 조회 (MST + 조번호)
   def fetch_article(mst, article_number)
     params = { OC: @oc_id, target: "lsStmd", type: "XML",

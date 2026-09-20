@@ -9,6 +9,90 @@
 #   legal_standards     → config/legal_standards.yml
 # laws: 근거 법령명 (LegalReferenceResolver 허용목록과 대조되어 링크로 승격된다)
 
+# ── P4 (2026-09-20) — 관할 전수 census ────────────────────────────────────────
+#
+# 푸는 문제: 종전에는 «관할을 표시한 도구»(6개)만 알 수 있었고, 나머지 33개가
+#   «지자체 기준인데 표시가 없다» 인지 «애초에 기관 구분이 없는 도구» 인지 **구별되지 않았다**.
+#   표시 없음 하나로 두 가지를 섞어 두면 «전수 점검했다» 고 말할 근거가 생기지 않는다.
+#
+# 그래서 활성 도구 **전부**에 대해 판정을 적는다. 모르면 `UNKNOWN` 으로 적고 **무엇이 없어서
+#   모르는지**를 함께 적는다 — 억지로 채우지 않는다(§10). `UNKNOWN` 은 결함이 아니라 작업 목록이다.
+#   테스트가 «활성 도구 수 == census 항목 수» 와 «UNKNOWN 에는 reason 이 있다» 를 강제한다.
+#
+# scope 어휘 (닫힘 · 기존 `/school-office` 판정 어휘를 그대로 쓴다 — 새 taxonomy 0)
+#   SCHOOL_DIRECT          학교 기준으로 바로 쓴다
+#   SCHOOL_WITH_CONDITION  쓸 수 있으나 학교 적용 전에 확인할 것이 있다
+#   LOCAL_GOV_ONLY         지방자치단체 기준이라 학교 기준이 아니다
+#   NATIONAL               전국 단일 법령이라 학교/지자체 구분이 없다
+#   GENERAL                법령 기준이 아니라 기관 구분 자체가 없다
+#   UNKNOWN                근거가 등록돼 있지 않아 판정하지 않았다 (reason 필수)
+#
+# ⚠️ 도메인 라벨(«계약»·«예산»)만으로 관할을 단정하지 않는다. 라벨은 분류이지 근거가 아니다.
+jurisdiction_scope:
+  # ── 지방계약법령 기반 — 17개 시·도 교육규칙이 모두 지방계약법령을 **직접 인용**한다(P3 전수 실측).
+  #    그래서 학교 계약에도 같은 법령이 적용된다 → 강등하지 않는다.
+  contract-method:              { scope: SCHOOL_DIRECT }
+  contract-documents:           { scope: SCHOOL_DIRECT }
+  contract-guarantee:           { scope: SCHOOL_DIRECT }
+  estimated-price:              { scope: SCHOOL_DIRECT }
+  predetermined-price:          { scope: SCHOOL_DIRECT }
+  split-contract-checker:       { scope: SCHOOL_DIRECT }
+  contract-legality-check:      { scope: SCHOOL_DIRECT }
+  contract-reason:              { scope: SCHOOL_DIRECT }
+  qualification-evaluation:     { scope: SCHOOL_DIRECT }
+
+  # ── 쓸 수 있으나 학교 적용 전 확인이 필요 (근거 = 각 도구의 jurisdiction.school_differs)
+  # 학교 계약에도 **같은 지방계약법령**이 적용된다(P3). 다만 수의계약 내역 공개 기준 금액 등
+  # 일부 절차를 시·도 교육규칙이 따로 정하고 화면이 그 사실을 고지한다 → 어휘 정의상
+  # «쓸 수 있으나 학교 적용 전 확인할 것이 있다». P3 의 «지방계약법이 적용된다» 를 뒤집는 것이 아니라
+  # 조건이 붙어 있다는 사실을 census 어휘로 옮긴 것이다(테스트가 두 판정의 불일치를 잡았다).
+  budget-estimator:             { scope: SCHOOL_WITH_CONDITION }
+  budget-execution-rate:        { scope: SCHOOL_WITH_CONDITION }
+  subsidy-settlement-checker:   { scope: SCHOOL_WITH_CONDITION }
+  # 교육행정직은 **지방공무원**이라 국가 규정만으로는 근거가 반쪽이다(G-24). 등록부가 국가·지방을 병기한다.
+  overtime-calculator:          { scope: SCHOOL_WITH_CONDITION }
+  annual-leave-calculator:      { scope: SCHOOL_WITH_CONDITION }
+  allowance-calculator:         { scope: SCHOOL_WITH_CONDITION }
+  # 화면 근거가 「공무원수당 등에 관한 규정」·인사혁신처 **단독**이다(2026-09-20 뷰 실측).
+  # 지방공무원 수당 규정 대응이 화면에 없다.
+  performance-bonus-calculator: { scope: SCHOOL_WITH_CONDITION }
+  # 「지방공무원 여비 규정」은 **존재하지 않는 법령**이고(G-34 실측) 지방공무원 여비는 소속
+  # 지방자치단체·교육청 조례가 정한다. 이 도구의 근거는 국가 「공무원 여비 규정」 단독이다.
+  travel-calculator:            { scope: SCHOOL_WITH_CONDITION }
+
+  # ── 지방자치단체 기준 — 학교 기준이 아니다 (근거 = 각 도구의 jurisdiction.school_differs)
+  budget-category-finder:       { scope: LOCAL_GOV_ONLY }
+  budget-transfer-checker:      { scope: LOCAL_GOV_ONLY }
+  contingency-fund:             { scope: LOCAL_GOV_ONLY }
+
+  # ── 전국 단일 법령 — 「공무원연금법」은 부담금 주체를 「국가나 지방자치단체」로 적는다
+  #    (제3조제1항제9호 · 법제처 원문 대조 2026-09-20 · MST 277137 · 시행 2026-01-02).
+  #    즉 국가·지방 공무원 공통이라 학교/지자체 구분이 발생하지 않는다.
+  pension-calculator:           { scope: NATIONAL }
+  severance-calculator:         { scope: NATIONAL }
+
+  # ── 법령 기준이 아니라 기관 구분 자체가 없는 도구
+  pdf:                          { scope: GENERAL }
+  standard-term-checker:        { scope: GENERAL }
+
+  # ── UNKNOWN — 근거가 등록부에 없다. 도메인 라벨만으로 단정하지 않는다.
+  #    아래 reason 은 «무엇을 확인하면 판정할 수 있는가» 다(작업 목록).
+  quote-review:                 { scope: UNKNOWN, reason: "tool_trust 미등록 — 견적 산술은 기관 무관으로 보이나 연결되는 계약 판정의 관할을 확인하지 않았다" }
+  quote-auto:                   { scope: UNKNOWN, reason: "tool_trust 미등록 — 생성하는 조서(예정가격·소요예산)의 근거 법령을 확인하지 않았다" }
+  cost-estimate:                { scope: UNKNOWN, reason: "tool_trust 미등록 — 물량내역서·시방서 서식의 근거를 확인하지 않았다" }
+  cost-calculation:             { scope: UNKNOWN, reason: "tool_trust 미등록 — 원가계산 기준(예규·별표)의 관할을 확인하지 않았다" }
+  design-change:                { scope: UNKNOWN, reason: "tool_trust 미등록 — 설계변경 절차 근거 조문을 확인하지 않았다" }
+  progress-inspection:          { scope: UNKNOWN, reason: "tool_trust 미등록 — 기성검사 항목의 근거를 확인하지 않았다" }
+  price-adjustment-calculator:  { scope: UNKNOWN, reason: "tool_trust 미등록 — 물가변동 조정 근거 조문을 확인하지 않았다" }
+  legal-period:                 { scope: UNKNOWN, reason: "tool_trust 미등록 — 계산하는 기한마다 근거 법령이 달라 하나로 판정할 수 없다. 기한 축별 분해가 선행되어야 한다" }
+  project-plan:                 { scope: UNKNOWN, reason: "tool_trust 미등록 — 사업계획서 서식의 근거가 기관 내부 서식인지 법정 서식인지 확인하지 않았다" }
+  "/forms/과업지시서.html":      { scope: UNKNOWN, reason: "정적 파일 도구 — layout·ToolTrust 면책이 붙지 않는다. 관할 표시 자리 자체가 없다" }
+  official-document:            { scope: UNKNOWN, reason: "tool_trust 미등록 — 행정업무운영규정 기준으로 보이나 원문 대조를 하지 않았다" }
+  task-calendar:                { scope: UNKNOWN, reason: "tool_trust 미등록 — 월별 반복업무 목록의 근거가 화면에 없다. 학교회계 3월 기산과의 관계도 미확인" }
+  audit-readiness-checker:      { scope: UNKNOWN, reason: "tool_trust 미등록 — 감사 지적 유형의 출처를 확인하지 않았다" }
+  insurance-calculator:         { scope: UNKNOWN, reason: "tool_trust 미등록 — 4대보험 요율의 출처·기준연도를 확인하지 않았다" }
+  salary-calculator:            { scope: UNKNOWN, reason: "tool_trust 미등록 — 쓰는 봉급표가 국가공무원 봉급표인지 지방공무원 보수규정 별표인지 화면에 표기가 없다" }
+
 defaults:
   disclaimer: "계산 결과는 실무 참고용입니다. 소속 기관의 최신 지침·예규와 개별 상황에 따라 달라질 수 있으니, 기안 전 표시된 공식 근거를 확인하세요."
 
@@ -18,9 +102,19 @@ tools:
     standard: contract_thresholds
     laws: "지방계약법 제9조, 지방계약법 시행령 제25조, 제30조"
   contract-guarantee:
-    basis: "지방계약법령 계약보증금·지연배상금 기준"
+    # P4 (2026-09-20) — 이 도구가 **실제로 계산하는 것**과 화면 근거를 맞춘다.
+    # 종전 laws 는 계약보증금(법 §15·영 §51·§53)과 지연배상금(영 §90)만 적었는데,
+    # `ContractGuaranteeService` 는 **하자보수보증금**(공종별 2~5% · 존속기간 1~5년)도 계산하고
+    # **인지세**도 계산한다. 계산하는 기준이 화면 근거에 없으면 사용자는 그 숫자의 출처를 확인할 수 없다.
+    # 아래 조문은 전부 법제처 원문 대조(2026-09-20 · 법 MST 253973 · 영 286149 · 규칙 287365):
+    #   법 §20(계약의 담보책임) · 법 §21(하자보수보증금)
+    #   영 §69(담보책임의 존속기간 — 1년 이상 10년 이하, 행안부령 위임)
+    #   영 §71(하자보수보증금 — 계약금액의 2/100 이상 10/100 이하, 행안부령 위임)
+    #   규칙 §68(존속기간 — 건산법 시행령 §30·별표4 등에 위임) · 규칙 §70(하자보수보증금률 6개 호)
+    #   규칙 §75(지연배상금률) · 건설산업기본법 시행령 §30(별표4 위임 조문) · 인지세법 §3(과세문서 및 세액)
+    basis: "지방계약법령 계약보증금·하자보수보증금·지연배상금·인지세 기준"
     standard: contract_thresholds
-    laws: "지방계약법 제15조, 지방계약법 시행령 제51조, 제53조, 제90조"
+    laws: "지방계약법 제15조, 제20조, 제21조, 지방계약법 시행령 제51조, 제53조, 제69조, 제71조, 제90조, 지방계약법 시행규칙 제68조, 제70조, 제75조, 건설산업기본법 시행령 제30조, 인지세법 제3조"
   estimated-price:
     basis: "지방계약법령 예정가격 결정 기준"
     standard: contract_thresholds

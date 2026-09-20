@@ -20,7 +20,13 @@ module ReviewLab
     }.freeze
     # 합계 행 판정은 낱말 전체가 일치할 때만 — 접두 일치로 두면 «계량컵»·«계산기» 에서 표 읽기가 멈춘다.
     # 뒤에 괄호 설명(«공급가액(VAT별도)» «부가세(10%)» «소계(A)»)이 붙어도 합계 행이다.
-    STOP_ROW = /\A(?:소\s*계|합\s*계|계|공급가액(?:\s*합계)?|부가세|부가가치세|세액|총\s*액|합계금액|총\s*견적금액)\s*(?:\([^)]{0,20}\))?\s*(?:[:：|]|\s+\d|\z)/
+    #
+    # ⚠️ «소계» 는 **표의 끝이 아니다**(독립 리뷰 R2). 산출기초·내역서는 구역마다 소계를 두고
+    #    그 아래로 품목이 계속된다. 소계에서 멈추면 이후 품목이 통째로 사라지고, 그 상태로 합계와
+    #    견주면 **정상 문서에 거짓 오류**가 난다. 그래서 소계는 «건너뛰되 계속» 이다.
+    #    (소계 행 자체를 품목으로 읽으면 이번엔 금액이 이중으로 더해지므로 반드시 건너뛴다.)
+    SECTION_ROW = /\A소\s*계\s*(?:\([^)]{0,20}\))?\s*(?:[:：|]|\s+\d|\z)/
+    STOP_ROW = /\A(?:합\s*계|계|공급가액(?:\s*합계)?|부가세|부가가치세|세액|총\s*액|합계금액|총\s*견적금액)\s*(?:\([^)]{0,20}\))?\s*(?:[:：|]|\s+\d|\z)/
     NUMERIC = %i[qty unit_price amount].freeze
 
     Item = Struct.new(:name, :spec, :unit, :qty, :unit_price, :amount, :locator, :confidence, keyword_init: true)
@@ -43,7 +49,9 @@ module ReviewLab
         cells = seg[:cells] || [ seg[:text] ]
         # 전각 괄호·숫자(«합계（A）»)도 같은 합계 행이다 — 판정 전에 NFKC 로 푼다.
         first = cells.find(&:present?).to_s.unicode_normalize(:nfkc)
-        break if first.match?(STOP_ROW) || (cells.compact.size <= 2 && seg[:text].unicode_normalize(:nfkc).match?(STOP_ROW))
+        text = seg[:text].unicode_normalize(:nfkc)
+        break if row_matches?(first, text, cells, STOP_ROW)
+        next if row_matches?(first, text, cells, SECTION_ROW)
 
         item = build_item(cells, map, seg[:locator])
         items << item if item
@@ -52,6 +60,11 @@ module ReviewLab
     end
 
     private
+
+    # 행 머리가 맞거나, 칸이 거의 없는 행이면 본문 전체로 판정한다(두 표기 모두 실무에 있다).
+    def row_matches?(first, text, cells, pattern)
+      first.match?(pattern) || (cells.compact.size <= 2 && text.match?(pattern))
+    end
 
     def header_map(cells)
       return nil if cells.blank?

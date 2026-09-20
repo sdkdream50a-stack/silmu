@@ -46,6 +46,12 @@ stages:
       - label: 사업계획서 생성기
         path: /tools/project-plan
         why: 품의에 붙일 사업계획서(목적·수량·예산)를 공문 서식으로 바로 만든다.
+    review_lab:
+      # P4 — 생성기가 «만들고», 검증실이 «만든 것을 검산한다». 같은 단계의 앞뒤 행동이다.
+      # 산술은 기관 무관이라 학교 강등이 필요 없다(과목 판정은 하지 않는다고 화면이 적는다).
+      - label: 사업계획·산출기초 검증 — 실무 검증실 Beta
+        path: /review-lab/budget
+        why: 결재 올리기 전에 수량×단가·합계와 본문↔첨부 금액 불일치를 먼저 잡는다.
     topics:
       - label: 물품이냐 용역이냐
         path: /topics/goods-vs-service-contract
@@ -179,6 +185,10 @@ stages:
         why: 소규모 용역의 예산 규모를 먼저 잡는다.
         school: conditional
         school_note_source: budget-estimator
+    review_lab:
+      - label: 사업계획·산출기초 검증 — 실무 검증실 Beta
+        path: /review-lab/budget
+        why: 결재 올리기 전에 수량×단가·합계와 본문↔첨부 금액 불일치를 먼저 잡는다.
     topics:
       - label: 물품이냐 용역이냐
         path: /topics/goods-vs-service-contract
@@ -278,6 +288,10 @@ stages:
         why: 소규모 공사의 사업비를 먼저 잡는다.
         school: conditional
         school_note_source: budget-estimator
+    review_lab:
+      - label: 사업계획·산출기초 검증 — 실무 검증실 Beta
+        path: /review-lab/budget
+        why: 결재 올리기 전에 수량×단가·합계와 본문↔첨부 금액 불일치를 먼저 잡는다.
 
   construction-2:
     tools:

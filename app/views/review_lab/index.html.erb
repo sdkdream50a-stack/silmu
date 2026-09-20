@@ -17,6 +17,13 @@
         <span class="mt-1.5 block text-sm text-slate-600">공고문·과업지시서·규격서를 함께 올려 금액·수량·기한·일정의 문서 간 불일치, 공고기간(지방계약법 시행령 §35), 업종·면허 후보를 확인</span>
       <% end %>
     </li>
+    <li>
+      <%= link_to review_lab_budget_path, class: "card-editorial card-editorial-interactive group block h-full" do %>
+        <span class="material-symbols-outlined text-editorial-navy" aria-hidden="true">calculate</span>
+        <span class="mt-2 block font-semibold text-editorial-ink group-hover:text-editorial-navy">사업계획·산출기초 검토</span>
+        <span class="mt-1.5 block text-sm text-slate-600">수량×단가·합계·부가세 검산, 사업계획서 총사업비와 산출기초 합계의 불일치, 사업명·사업기간 대조 (예산과목은 판정하지 않습니다)</span>
+      <% end %>
+    </li>
   </ul>
 
   <div class="card-editorial">
@@ -37,6 +44,8 @@
         <%= button_to "가상 견적서 검토", review_lab_demo_path(kind: "quote"), method: :post, form: { data: { turbo: false } },
               class: "rounded-lg border border-editorial-navy px-4 py-2 text-sm font-semibold text-editorial-navy hover:bg-slate-50" %>
         <%= button_to "가상 공고 패키지 검토", review_lab_demo_path(kind: "package"), method: :post, form: { data: { turbo: false } },
+              class: "rounded-lg border border-editorial-navy px-4 py-2 text-sm font-semibold text-editorial-navy hover:bg-slate-50" %>
+        <%= button_to "가상 사업계획·산출기초 검토", review_lab_demo_path(kind: "budget"), method: :post, form: { data: { turbo: false } },
               class: "rounded-lg border border-editorial-navy px-4 py-2 text-sm font-semibold text-editorial-navy hover:bg-slate-50" %>
       </div>
     </div>

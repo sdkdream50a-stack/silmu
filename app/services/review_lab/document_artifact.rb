@@ -12,7 +12,10 @@ module ReviewLab
     ROLES = {
       "quote" => "견적서", "comparison_quote" => "비교견적서",
       "notice" => "입찰공고문", "task_order" => "과업지시서", "spec" => "규격서(사양서)",
-      "special_terms" => "특수조건", "rfp" => "제안요청서", "cost_sheet" => "산출내역서", "other" => "기타 첨부"
+      "special_terms" => "특수조건", "rfp" => "제안요청서", "cost_sheet" => "산출내역서",
+      # P4 — 예산문서 슬라이스
+      "project_plan" => "사업계획서", "cost_basis" => "산출기초(산출내역)",
+      "other" => "기타 첨부"
     }.freeze
 
     FORMAT_LABELS = { pdf: "PDF", docx: "DOCX", xlsx: "XLSX", hwpx: "HWPX", image: "이미지" }.freeze

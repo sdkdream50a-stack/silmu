@@ -7,7 +7,8 @@ module ReviewLab
   # 검사할 값이 하나도 없었는데 finding 이 0 이면 화면은 «문제 없음» 으로 읽힌다.
   # 그 둘을 구별하려고 실행한 규칙 수와 못 돌린 규칙(이유 포함)을 같이 싣는다.
   class DocumentReview
-    KINDS = { quote: "견적서 검토", package: "입찰공고 패키지 검토" }.freeze
+    KINDS = { quote: "견적서 검토", package: "입찰공고 패키지 검토",
+              budget: "사업계획·산출기초 검토" }.freeze
 
     attr_reader :kind, :documents, :fields, :findings, :comparisons, :skipped_rules, :extras
     attr_accessor :rules_run

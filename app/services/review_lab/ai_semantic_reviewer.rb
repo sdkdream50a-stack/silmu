@@ -18,15 +18,40 @@ module ReviewLab
     MAX_CHARS_PER_DOC = 6_000
     MAX_ISSUES = 8
     TYPES = { "conflict" => "문서 간 의미 충돌", "ambiguous" => "모호한 표현", "missing" => "누락 의심",
-              "scope" => "과업범위 불완전", "mismatch" => "목적 불일치" }.freeze
+              "scope" => "과업범위 불완전", "mismatch" => "목적 불일치",
+              # P4 §7 — 예산문서 축. 이 축도 **CHECK 만** 낸다(Finding 이 구조적으로 고정).
+              "purpose_mismatch" => "사업목적과 지출내용 불일치 후보",
+              "overbroad" => "산출기초가 지나치게 포괄적",
+              "unexplained" => "설명 누락",
+              "account_recheck" => "예산과목 재확인 필요" }.freeze
+
+    # 문서 종류에 따라 **찾을 것**만 바꾼다. 금지사항·출력형식·근거 대조는 공통이다.
+    # focus 는 닫힌 목록이다 — 문서 속 문구가 프롬프트를 바꾸지 못하게 한다.
+    FOCUS = {
+      contract: <<~F,
+        - conflict: 서로 다른 문서가 같은 사항을 다른 뜻으로 적은 곳
+        - ambiguous: 해석이 둘 이상 가능한 표현(예: «등», «협의하여 결정», 기준 없는 «적정한»)
+        - missing: 과업·납품·검수에 필요한데 빠진 것으로 보이는 사항
+        - scope: 과업 범위가 불완전하거나 경계가 불분명한 곳
+        - mismatch: 사양서와 공고문의 목적·대상이 어긋나는 곳
+      F
+      budget: <<~F
+        - purpose_mismatch: 사업목적과 지출내용이 어울리지 않아 보이는 곳
+        - overbroad: 산출기초의 항목이 지나치게 포괄적이어서 무엇을 사는지 알 수 없는 곳(예: «기타 잡비 일식»)
+        - unexplained: 금액·수량이 왜 그 값인지 설명이 없는 곳
+        - conflict: 사업계획서와 산출기초가 같은 사항을 다르게 적은 곳
+        - account_recheck: 적힌 예산과목이 지출내용과 어울리지 않아 **담당자 재확인**이 필요해 보이는 곳
+      F
+    }.freeze
 
     Result = Struct.new(:findings, :dropped, :error, keyword_init: true)
 
-    def self.call(documents:, http: nil) = new(documents: documents, http: http).call
+    def self.call(documents:, http: nil, focus: :contract) = new(documents: documents, http: http, focus: focus).call
 
-    def initialize(documents:, http: nil)
+    def initialize(documents:, http: nil, focus: :contract)
       @documents = documents.select(&:ok?)
       @http = http
+      @focus = FOCUS.key?(focus&.to_sym) ? focus.to_sym : :contract
       @api_key = ENV["ANTHROPIC_API_KEY"]
     end
 
@@ -55,23 +80,20 @@ module ReviewLab
     def prompt
       docs = @documents.map { |d| "### 문서: #{d.label} (#{d.role_label})\n#{masked_text(d)}" }.join("\n\n")
       <<~PROMPT
-        당신은 한국 공공기관(학교 행정실) 입찰·계약 문서를 읽는 검토 보조자입니다.
+        당신은 한국 공공기관(학교 행정실) 계약·예산 문서를 읽는 검토 보조자입니다.
         아래 문서들을 읽고, 담당자가 **다시 확인해야 할 문장**만 찾으세요.
 
         찾을 것(type):
-        - conflict: 서로 다른 문서가 같은 사항을 다른 뜻으로 적은 곳
-        - ambiguous: 해석이 둘 이상 가능한 표현(예: «등», «협의하여 결정», 기준 없는 «적정한»)
-        - missing: 과업·납품·검수에 필요한데 빠진 것으로 보이는 사항
-        - scope: 과업 범위가 불완전하거나 경계가 불분명한 곳
-        - mismatch: 사양서와 공고문의 목적·대상이 어긋나는 곳
+        #{FOCUS.fetch(@focus).strip}
 
         하지 말 것:
         - 금액·날짜·기간을 계산하거나 비교하지 마세요(별도 규칙 검사가 합니다).
         - 법령 위반 여부나 가격이 적정한지 판정하지 마세요.
+        - 예산과목(목·세목)을 확정하거나 추천하지 마세요. «확인이 필요하다» 까지만 적으세요.
         - 문서에 없는 문장을 만들지 마세요. quote 는 문서에 있는 문장을 **글자 그대로** 복사해야 합니다.
 
         최대 #{MAX_ISSUES}건. 반드시 아래 JSON 만 출력하세요.
-        {"issues":[{"document":"문서 이름","quote":"원문 그대로","type":"conflict|ambiguous|missing|scope|mismatch","explanation":"왜 확인이 필요한지 한 문장","check":"담당자가 확인할 것 한 문장"}]}
+        {"issues":[{"document":"문서 이름","quote":"원문 그대로","type":"#{FOCUS.fetch(@focus).scan(/^- (\w+):/).flatten.join('|')}","explanation":"왜 확인이 필요한지 한 문장","check":"담당자가 확인할 것 한 문장"}]}
 
         #{docs}
       PROMPT

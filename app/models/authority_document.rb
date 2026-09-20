@@ -54,6 +54,16 @@ class AuthorityDocument < ApplicationRecord
 
   def self.document_type_for_korean(name) = KOREAN_TYPE_MAP[name.to_s.strip] || "ADMINISTRATIVE_RULE"
 
+  # fetcher 에게 넘기는 조회 키. 법령은 **이름**으로, 자치법규는 이름이 통일돼 있지 않아
+  # **일련번호**로 찾는다. 「무엇으로 찾는가」는 fetcher 를 고르는 **소스**가 소유한다 —
+  # 문서가 일련번호를 갖고 있다는 사실만으로 조회 방식을 바꾸면, 법령 문서에 일련번호를
+  # 채우는 순간 법령 조회가 조용히 깨진다(독립 리뷰 R1).
+  def fetch_key
+    return official_identifier.presence || title if authority_source&.identifier_lookup?
+
+    title
+  end
+
   def document_type_label = DOCUMENT_TYPES[document_type]
   def display_title = short_title.presence || title
 
