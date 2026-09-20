@@ -47,6 +47,12 @@ class SchoolOfficeController < ApplicationController
       title: "계약·감사",
       icon: "gavel",
       items: [
+        # P2 (2026-09-20 · CONNECTED_WORKFLOW) — 이 축의 **입구**. 종전에는 도구 6개가 나란히 있어
+        # 「무엇부터 하는가」를 화면이 답하지 않았다. 흐름도는 물품·용역·공사 각 8단계에
+        # 그 단계에서 쓸 도구·서식을 결속하고 있으므로, 개별 도구보다 먼저 온다.
+        # 학교 기준 여부: 학교 계약도 **지방계약법**이 적용된다(tool_trust budget-estimator
+        # jurisdiction.agency = 「지방자치단체 · 국·공립학교(학교장이 체결하는 계약)」). 그래서 강등하지 않는다.
+        { label: "계약 전 과정 흐름도 — 물품·용역·공사", path: "/guides/contract-flow" },
         { label: "계약방식 결정",            path: "/tools/contract-method" },
         { label: "분할계약 점검",            path: "/tools/split-contract-checker" },
         { label: "계약 전 확인 목록",        path: "/guides/pre-contract-checklist" },
