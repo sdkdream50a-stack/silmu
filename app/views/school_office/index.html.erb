@@ -1,15 +1,35 @@
-<%# P1-1 — 학교 행정실 상설 허브. 새 콘텐츠를 만들지 않고 기존 자산만 링크한다. %>
+<%# P1-1 — 학교 행정실 상설 허브. 새 콘텐츠를 만들지 않고 기존 자산만 링크한다.
+    P0(2026-09-20) — 기준이 다른 자산은 «표시» 가 아니라 «자리» 로 구분한다. 판정 = 컨트롤러 tier. %>
 <section class="bg-editorial-navy text-white py-10 lg:py-14">
   <div class="container-editorial">
     <h1 class="text-2xl lg:text-3xl font-bold mb-3">학교 행정실 바로가기</h1>
     <p class="text-white/75 text-sm lg:text-base leading-relaxed max-w-2xl">
       계약·예산·급여·복무·물품에서 자주 찾는 자료를 한 곳에 모았습니다.
-      학교회계 기준이 아닌 자료에는 그 사실을 함께 표시했습니다.
+      학교 기준이 아닌 자료는 핵심 목록에서 빼고 축마다 접어 두었습니다.
     </p>
   </div>
 </section>
 
 <div class="container-editorial py-10 space-y-10">
+  <%# 범례 — 설명을 읽기 전에 «무엇이 바로 쓰는 것인가» 가 구조로 보여야 한다.
+      새 섹션을 늘리지 않고 내비 위에 한 줄로 둔다. %>
+  <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+    <ul class="flex flex-wrap gap-x-5 gap-y-2 text-xs text-slate-600">
+      <li class="flex items-center gap-1.5">
+        <span class="inline-block w-2 h-2 rounded-full bg-editorial-navy" aria-hidden="true"></span>
+        <strong class="text-editorial-ink">카드</strong> — 학교에서 바로 사용
+      </li>
+      <li class="flex items-center gap-1.5">
+        <span class="inline-flex items-center rounded-full bg-amber-100 text-amber-900 px-1.5 py-0.5 text-[10px] font-bold"><%= SchoolOfficeController::CONDITIONAL_BADGE %></span>
+        표시가 붙은 카드 — 학교 적용 전 확인할 것이 있음
+      </li>
+      <li class="flex items-center gap-1.5">
+        <span class="material-symbols-outlined text-[14px] text-slate-400" aria-hidden="true">expand_more</span>
+        축 아래 접힌 <strong class="text-editorial-ink"><%= SchoolOfficeController::REFERENCE_HEADING %></strong> — 학교 기준 아님
+      </li>
+    </ul>
+  </div>
+
   <%# 축 내비 — 축이 여러 개면 스크롤만으로는 무엇이 어디 있는지 알 수 없다.
       앵커라서 JS 없이 동작하고, 축 이름이 곧 «여기서 다루는 업무» 의 목록이 된다. %>
   <nav aria-label="업무 축 바로가기" class="flex flex-wrap gap-2">
@@ -23,7 +43,8 @@
   </nav>
 
   <% @sections.each do |section| %>
-    <%# 계측 — 새 이벤트를 만들지 않고 기존 next_action_click 을 재사용한다(topic_slug=hub:school-office · slot=축:경로). %>
+    <%# 계측 — 새 이벤트를 만들지 않고 기존 next_action_click 을 재사용한다(topic_slug=hub:school-office · slot=축:경로).
+        slot 은 `path` 로 고정한다 — 링크 href 에 쿼리를 붙여도 기존 GA4 값이 흔들리지 않는다. %>
     <section id="<%= section[:id] %>" class="scroll-mt-20"
              data-controller="next-action" data-next-action-topic-slug-value="hub:school-office">
       <h2 class="heading-editorial-section flex items-center gap-2 mb-5">
@@ -37,14 +58,21 @@
           <span><%= section[:thin] %></span>
         </p>
       <% end %>
+
+      <%# 핵심 카드 — 학교 기준(SCHOOL_DIRECT)과 조건부(SCHOOL_WITH_CONDITION)만 여기 온다. %>
       <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        <% section[:items].each do |item| %>
+        <% section[:items].reject { |i| i[:tier] == :reference }.each do |item| %>
           <li>
-            <%= link_to item[:path], class: "card-editorial card-editorial-interactive group block h-full",
-                  data: { action: "click->next-action#track", "next-action-slot-param": "#{section[:id]}:#{item[:path]}" } do %>
+            <%= link_to(item[:href] || item[:path], class: "card-editorial card-editorial-interactive group block h-full",
+                  data: { action: "click->next-action#track", "next-action-slot-param": "#{section[:id]}:#{item[:path]}" }) do %>
               <span class="font-semibold text-editorial-ink group-hover:text-editorial-navy transition-colors">
                 <%= item[:label] %>
               </span>
+              <% if item[:tier] == :conditional %>
+                <span class="ml-1.5 inline-flex items-center rounded-full bg-amber-100 text-amber-900 px-1.5 py-0.5 text-[10px] font-bold align-middle">
+                  <%= SchoolOfficeController::CONDITIONAL_BADGE %>
+                </span>
+              <% end %>
               <% if item[:note].present? %>
                 <span class="mt-1.5 flex items-start gap-1 text-[11px] text-amber-800">
                   <span class="material-symbols-outlined text-[13px] leading-[15px]" aria-hidden="true">info</span>
@@ -55,6 +83,39 @@
           </li>
         <% end %>
       </ul>
+
+      <% refs = section[:items].select { |i| i[:tier] == :reference } %>
+      <% if refs.any? %>
+        <%# LOCAL_GOV_ONLY — 지우지는 않되 핵심 카드 자리에서 내린다.
+            접힘이 기본이라 «학교에서 바로 쓰는 것» 목록을 읽는 동안 섞이지 않는다. %>
+        <details class="mt-4 rounded-xl border border-slate-200 bg-slate-50">
+          <summary class="cursor-pointer select-none px-4 py-3 text-sm font-semibold text-slate-700 flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-[18px] text-slate-400" aria-hidden="true">expand_more</span>
+            <%= SchoolOfficeController::REFERENCE_HEADING %> (<%= refs.size %>)
+          </summary>
+          <div class="px-4 pb-4">
+            <p class="text-xs text-slate-600 mb-3 leading-relaxed"><%= SchoolOfficeController::REFERENCE_LEAD %></p>
+            <ul class="grid gap-3 sm:grid-cols-2">
+              <% refs.each do |item| %>
+                <li>
+                  <%= link_to(item[:href] || item[:path], class: "card-editorial card-editorial-interactive group block h-full",
+                        data: { action: "click->next-action#track", "next-action-slot-param": "#{section[:id]}:#{item[:path]}" }) do %>
+                    <span class="font-semibold text-editorial-ink group-hover:text-editorial-navy transition-colors">
+                      <%= item[:label] %>
+                    </span>
+                    <% if item[:note].present? %>
+                      <span class="mt-1.5 flex items-start gap-1 text-[11px] text-slate-600">
+                        <span class="material-symbols-outlined text-[13px] leading-[15px]" aria-hidden="true">info</span>
+                        <span><%= item[:note] %></span>
+                      </span>
+                    <% end %>
+                  <% end %>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        </details>
+      <% end %>
     </section>
   <% end %>
 
@@ -69,6 +130,14 @@
       법인카드는 <%= link_to "카드 관련 감사사례", "/audit-cases?sector=edu&q=카드", class: "underline" %>(재구성 사례)만 있습니다.
       <strong>결산</strong>은 <%= link_to "결산 절차", "/topics/budget-settlement", class: "underline" %>가 있지만
       지방자치단체 기준이라 학교회계 결산과 다릅니다.
+    </p>
+    <%# P0 — 뺀 것을 «없다» 로 명시한다. 도구 목록에서 조용히 사라지면 사용자는 계속 찾는다.
+        학교회계용을 급조하지 않고 없다고 말하는 것이 이 자리의 정직한 답이다. %>
+    <p class="text-sm text-slate-600 leading-relaxed mt-3">
+      <strong>학교회계 예산과목(세출과목) 찾기 도구는 없습니다.</strong>
+      실무.kr 의 <%= link_to "예산과목 찾기", "/tools/budget-category-finder", class: "underline" %>는
+      지방자치단체 세출예산 과목(편성목·통계목) 기준이라 학교회계 과목이 아니어서 이 목록에서 뺐습니다.
+      학교회계 과목은 시도교육청 학교회계 규칙과 에듀파인 과목 체계에서 확인하세요.
     </p>
   </section>
 

@@ -102,7 +102,9 @@ tools:
       agency: "지방자치단체(일반회계·특별회계)"
       guideline: "집행률 산식은 산술이며 법정 기준이 아닙니다. 지방재정법에는 분기·연도말 집행 목표율 규정이 없습니다(법령 전문 «집행률»·«목표율» 0건, 2026-09-18 대조)."
       standard_year: UNVERIFIED
-      school_differs: "학교회계 회계연도는 3월 1일~다음 해 2월 말일입니다. 아래 «회계연도 시작월»을 3월로 바꿔야 경과 월 수가 맞습니다."
+      # ⚠️ 명령문("3월로 바꾸세요")으로 쓰지 않는다 — `/school-office` 에서 `?fy=3` 으로 들어오면
+      #    이미 3월이라 그 지시가 거짓이 된다(2026-09-20 P0). 두 진입 경로 모두에서 참인 조건문으로 쓴다.
+      school_differs: "학교회계 회계연도는 3월 1일~다음 해 2월 말일입니다 — 위 «회계연도 시작월»이 3월이어야 경과 월 수가 맞습니다."
       school_path: "/topics/school-budget-compilation"
       school_path_label: "학교회계 예산편성 절차"
   budget-transfer-checker:

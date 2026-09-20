@@ -8,12 +8,32 @@
 #
 # 규칙
 #   · 여기서 새 사실을 만들지 않는다. 모든 항목은 이미 있는 페이지다.
-#   · 학교회계 기준이 아닌 자산에는 `note` 로 그 사실을 붙인다 — 빼는 대신 «다르다» 고 말한다.
-#     (감사 시점에는 예산 도구·물품선정위원회를 «수리 전이라 제외» 했는데, R1·R3 가
-#      2026-09-18 배포로 닫혀 적용기관 고지가 붙었으므로 note 를 달고 넣는다.)
 #   · 링크가 죽으면 허브 자체가 거짓이 되므로 전 경로를 테스트가 실제로 GET 한다.
+#
+# ── P0 (2026-09-20 · STANDARD_SEPARATION) ────────────────────────────────────
+# 이전 판본은 지자체 기준 자산에 `note` 만 붙이고 **핵심 카드 자리에 그대로 뒀다**.
+# 그런데 이 화면의 이름이 «학교 행정실 바로가기» 다 — 사용자는 여기 있는 것을
+# «학교에서 바로 쓰는 도구» 로 읽는다. 경고문은 그 구조적 약속을 뒤집지 못한다.
+# 그래서 표시가 아니라 **자리**를 바꾼다. 판정표 = artifacts/01_CARD_STANDARD_CENSUS.md.
+#
+#   tier: (없음)      SCHOOL_DIRECT        — 학교 기준으로 바로 쓴다. 핵심 카드.
+#         :conditional SCHOOL_WITH_CONDITION — 쓸 수 있으나 학교 적용 전에 확인할 것이 있다.
+#                                             핵심 카드에 두되 **무엇이 다른지** 카드에 적는다.
+#         :reference   LOCAL_GOV_ONLY       — 지자체 기준이라 학교 기준이 아니다.
+#                                             핵심 카드에서 빼고 접힌 참고자료로 내린다.
+#
+# 판정 근거는 추측이 아니라 코드다 — `config/tool_trust.yml` 의 `jurisdiction.school_differs`
+# 와 각 guide seed 의 `laws:` 원문. 근거를 못 찾은 자산은 강등하지 않는다(모름 ≠ 지자체).
+#
+# 아예 뺀 것: `/tools/budget-category-finder`. 등록부가 스스로
+#   «이 도구가 추천하는 편성목(201·410~430 등)은 학교회계 과목이 아닙니다» 라고 적는다.
+#   학교 사용자에게 **틀린 과목코드**를 주는 도구라 참고자료로도 가치가 없다.
+#   대신 «학교회계 과목 도구는 없다» 를 화면에 적는다 — 없는 기능을 만들지 않는다.
 class SchoolOfficeController < ApplicationController
-  LOCALGOV_NOTE = "지방자치단체 기준 — 학교회계는 시도교육청 규칙을 확인하세요"
+  # 접힌 참고자료 영역의 이름 — 축마다 같은 문구를 쓴다.
+  REFERENCE_HEADING = "지방자치단체 기준 참고자료"
+  REFERENCE_LEAD    = "학교회계 기준이 아닙니다. 절차·과목·심의 주체가 달라 그대로 적용할 수 없습니다."
+  CONDITIONAL_BADGE = "학교 적용 전 확인"
 
   # PHASE B — 축 판정은 artifacts/24_SCHOOL_IA_AXIS_JUDGMENT.md 가 소유한다(운영 실측 기반).
   #   AVAILABLE : 자산이 충분해 축으로 세운다
@@ -42,11 +62,16 @@ class SchoolOfficeController < ApplicationController
       icon: "account_balance_wallet",
       items: [
         { label: "학교회계 예산편성 절차",   path: "/topics/school-budget-compilation" },
-        { label: "예산집행 완전정복",        path: "/guides/budget-execution-complete-3", note: LOCALGOV_NOTE },
-        { label: "예산 집행률 계산기",       path: "/tools/budget-execution-rate",
-          note: "회계연도 시작월을 3월(학교회계)로 바꿔서 쓰세요" },
-        { label: "예산과목 찾기",            path: "/tools/budget-category-finder", note: LOCALGOV_NOTE },
-        { label: "이용·전용 점검",           path: "/tools/budget-transfer-checker", note: LOCALGOV_NOTE }
+        # 산식(집행액÷예산액)은 기준 중립이고 **회계연도 시작월만** 다르다. 그래서 버리지 않고
+        # 학교회계(3월)로 맞춘 채 연다 — 사용자에게 «바꿔서 쓰세요» 를 시키지 않는다.
+        # `?fy=3` 는 Cloudflare 캐시 키에 포함된다(2026-09-20 실측: 무쿼리 UPDATING / ?fy=3 MISS).
+        { label: "예산 집행률 계산기",       path: "/tools/budget-execution-rate", href: "/tools/budget-execution-rate?fy=3",
+          tier: :conditional,
+          note: "학교회계(3월 시작)로 맞춰 열립니다 · 참고선은 산술이며 법정 목표율이 아닙니다" },
+        { label: "이용·전용 점검",           path: "/tools/budget-transfer-checker", tier: :reference,
+          note: "학교회계는 학교운영위원회 심의라 이 판단기의 «의회 심의» 요건이 그대로 적용되지 않습니다" },
+        { label: "지출 품의·결의 서류 작성법", path: "/guides/budget-execution-complete-3", tier: :reference,
+          note: "지방회계법 시행령·지자체 세출예산 집행기준 기준" }
       ]
     },
     {
@@ -59,8 +84,12 @@ class SchoolOfficeController < ApplicationController
         { label: "수당 계산기",              path: "/tools/allowance-calculator" },
         { label: "봉급 실수령액 계산기",     path: "/tools/salary-calculator" },
         { label: "4대보험 정산보험료 계산기", path: "/tools/insurance-calculator" },
-        { label: "보수 체계 기초",           path: "/guides/hr-welfare-complete-6" },
-        { label: "각종 수당 기초",           path: "/guides/hr-welfare-complete-7" },
+        # 계산기 3종은 등록부가 국가·지방 규정을 병기한다(G-24). 아래 두 가이드는 본문 근거가
+        # **국가**공무원 규정 단독이라 교육행정직(지방공무원)에게는 한 단계 확인이 남는다.
+        { label: "보수 체계 기초",           path: "/guides/hr-welfare-complete-6", tier: :conditional,
+          note: "국가공무원 보수규정 기준 — 교육행정직은 지방공무원 보수규정을 확인하세요" },
+        { label: "각종 수당 기초",           path: "/guides/hr-welfare-complete-7", tier: :conditional,
+          note: "국가공무원 수당규정 기준 — 교육행정직은 지방공무원 수당규정을 확인하세요" },
         { label: "연말정산",                 path: "/topics/year-end-settlement" },
         { label: "병가",                     path: "/topics/sick-leave" },
         { label: "퇴직월 초과근무",          path: "/topics/edu-overtime-retirement-month" },
@@ -83,13 +112,15 @@ class SchoolOfficeController < ApplicationController
         { label: "견적서 검토 — 실무 검증실 Beta", path: "/review-lab/quote",
           note: "문서 업로드는 로그인 후 · 계산·대조까지(최종 판단은 담당자)" },
         { label: "2인 이상 견적",            path: "/topics/dual-quote" },
-        { label: "구매와 검사·검수",         path: "/guides/purchase-and-inspection" },
+        { label: "구매와 검사·검수",         path: "/guides/purchase-and-inspection", tier: :conditional,
+          note: "물품관리 절차는 지자체 조례 기준 — 학교는 교육청 물품관리 규칙을 확인하세요" },
         { label: "검사·검수",                path: "/topics/inspection" },
-        { label: "물품선정위원회",           path: "/topics/goods-selection-committee",
+        { label: "물품선정위원회",           path: "/topics/goods-selection-committee", tier: :conditional,
           note: "법정 위원회가 아닙니다 — 기관 자치법규·교육청 지침 소관" },
         { label: "물품 검사검수조서 서식",   path: "/templates/3" },
         { label: "물품 인수증 서식",         path: "/templates/4" },
-        { label: "검수조서 작성 가이드",     path: "/guides/inspection-report" },
+        { label: "검수조서 작성 가이드",     path: "/guides/inspection-report", tier: :conditional,
+          note: "물품관리 절차는 지자체 조례 기준 — 학교는 교육청 물품관리 규칙을 확인하세요" },
         { label: "물품 구매 기안문 서식",    path: "/templates/17" },
         { label: "감사사례 — 직접생산 확인", path: "/audit-cases/sen-2025-school-s-supply-direct-prod-cert" }
       ]
@@ -99,17 +130,28 @@ class SchoolOfficeController < ApplicationController
       title: "신규 담당자",
       icon: "school",
       items: [
-        { label: "첫달 코스",                path: "/start", note: "계약 업무 중심 코스입니다" },
-        { label: "인사·복무 기초",           path: "/guides/hr-welfare-complete-1" },
-        { label: "연가 실무",                path: "/guides/hr-welfare-complete-2" },
+        { label: "첫달 코스",                path: "/start", tier: :conditional,
+          note: "계약 업무 중심 코스입니다" },
+        { label: "인사·복무 기초",           path: "/guides/hr-welfare-complete-1", tier: :conditional,
+          note: "국가공무원법 기준 — 교육행정직은 지방공무원법을 확인하세요" },
+        { label: "연가 실무",                path: "/guides/hr-welfare-complete-2", tier: :conditional,
+          note: "국가공무원 복무규정 기준 — 교육행정직은 지방공무원 복무규정을 확인하세요" },
         { label: "자주 나오는 감사 지적",    path: "/guides/audit-frequent-issues" },
-        { label: "업무 달력",                path: "/tools/task-calendar" }
+        # 전수점검(§4)에서 새로 찾은 혼입 — 회계 일정이 1~12월 회계연도 가정이다
+        # (12/31 «회계연도 마감», 1/31 «전년도 세입·세출 결산», 3·6·9월 분기결산).
+        { label: "업무 달력",                path: "/tools/task-calendar", tier: :conditional,
+          note: "회계 일정은 지자체 회계연도(1~12월) 기준 — 학교회계는 3월~다음 해 2월" }
       ]
     }
   ].freeze
 
   # 허브가 참조하는 모든 경로 — 테스트가 이 목록을 그대로 순회한다.
   def self.all_paths = SECTIONS.flat_map { |s| s[:items].map { |i| i[:path] } }
+
+  # 핵심 카드(접힌 참고자료가 아닌 것)만. «지자체 기준이 핵심에 0건» 을 테스트가 이것으로 잰다.
+  def self.primary_items = SECTIONS.flat_map { |s| s[:items].reject { |i| i[:tier] == :reference } }
+
+  def self.reference_items = SECTIONS.flat_map { |s| s[:items].select { |i| i[:tier] == :reference } }
 
   def index
     @sections = SECTIONS
