@@ -1,0 +1,380 @@
+# P2 (2026-09-20 · CONNECTED_WORKFLOW) — 업무 단계 ↔ 기존 자산 결속 등록부.
+#
+# 왜 이 파일이 필요한가
+#   `/guides/contract-flow` 에 물품·용역·공사 각 8단계 척추가 **이미 있다**. 그런데 그 24단계 중
+#   도구·서식·감사사례로 이어지는 링크는 **0개**였다(토픽 링크만 3단계에 2종). 사용자는 단계를 읽고
+#   메뉴로 돌아가 도구를 다시 찾아야 했다. 이 파일은 그 «돌아가기» 를 없앤다.
+#
+# 왜 새 파일인가 (대안 검토 결과)
+#   · `tool_trust.yml` 확장 → 키가 **도구**다. 단계 결속은 키가 **단계**이고 토픽·서식·감사사례도
+#     담아야 한다. 뒤집으면 여러 단계에 쓰이는 도구가 중복된다.
+#   · ContractFlow service 내부 → 그런 service 가 **없다**. 척추는 view 의 `step_data` 리터럴이다.
+#     그것을 끌어내는 것은 P2 범위를 넘는 리팩터링이다(외과적 변경 원칙).
+#   · Topic/Guide metadata 재사용 → 토픽은 DB 레코드다. 단계→자산 방향의 역인덱스가 없다.
+#   → 그래서 **단계 id 를 키로 하는 얇은 데이터 파일 1개**. 단계 id 는 새로 만들지 않고
+#     척추가 이미 쓰는 `goods-1`…`construction-8` 을 그대로 쓴다. 새 분류 체계 0개.
+#
+# 무엇을 여기 적지 않는가 (중복 금지)
+#   · WHAT_TO_DO / WHY  → 척추의 `items` · `tip` 이 이미 소유한다.
+#   · OFFICIAL_BASIS    → 척추의 `laws` 가 이미 소유한다.
+#   · NEXT_STEP         → 단계 번호에서 **파생**한다(goods-3 다음은 goods-4). 적지 않는다.
+#   즉 이 파일이 새로 가진 사실은 «이 단계에서 쓸 자산» 하나뿐이다.
+#
+# 결속 규율 — RELATED != RELEVANT_ENOUGH_TO_LINK
+#   같은 주제라는 이유만으로 걸지 않는다. 다음을 통과한 것만 적는다.
+#     Q1 이 단계에서 사용자가 실제로 해야 하는 다음 행동인가
+#     Q2 눌렀을 때 «지금 업무»가 앞으로 나아가는가 (읽을거리는 Q4 로 간다)
+#     Q3 여러 단계에 반복 노출될 **필요**가 있는가 (법정기간 계산기처럼 실제로 여러 번 쓰는 것만)
+#     Q4 눌러도 되고 안 눌러도 되는 참고자료인가 → `topics`/`audit_cases` 로 분리, `tools` 에 넣지 않는다
+#     Q5 학교/지자체 기준을 혼동시키지 않는가 → `school:` 로 표시
+#   각 항목의 `why` 가 Q1·Q2 의 답이다. 답을 쓸 수 없으면 걸지 않는다.
+#
+# `school:` — 학교 surface(§9) 판정. 생략 = SCHOOL_DIRECT(강등하지 않음. 모름 ≠ 지자체).
+#   conditional : 쓸 수 있으나 학교 적용 전 확인할 것이 있다 → 핵심에 두되 무엇이 다른지 적는다
+#   reference   : 지자체 기준이라 학교 기준이 아니다 → 학교 surface 핵심에서 제외
+#   ⚠️ 이 값은 **지어내지 않는다**. `conditional`·`reference` 는 `config/tool_trust.yml` 의
+#      `jurisdiction.school_differs` 라는 **기존 판정**이 있어야만 쓸 수 있고, 테스트가 강제한다
+#      (`workflow_bindings_test.rb` — 「근거 없는 school 강등이 0건」).
+#
+# 빈 단계는 비워 둔다. 억지로 채우지 않는다 — 없는 것을 있는 것처럼 보이게 하는 것이
+# 연결이 아니라 거짓이다.
+
+stages:
+  # ── 물품 ────────────────────────────────────────────────────────────────
+  goods-1:
+    tools:
+      - label: 사업계획서 생성기
+        path: /tools/project-plan
+        why: 품의에 붙일 사업계획서(목적·수량·예산)를 공문 서식으로 바로 만든다.
+    topics:
+      - label: 물품이냐 용역이냐
+        path: /topics/goods-vs-service-contract
+        why: 유형을 잘못 잡으면 이후 8단계가 통째로 틀린다.
+    forms:
+      - label: 물품 구매 기안문
+        path: /templates/17
+        why: 품의 서식.
+
+  goods-2:
+    tools:
+      - label: 추정가격 계산기
+        path: /tools/estimated-price
+        why: 이 단계가 요구하는 계산 그 자체.
+    audit_cases:
+      - label: 가격조사 없이 예정가격을 정한 사례
+        path: /audit-cases/estimated-price-no-research
+        why: 이 단계를 건너뛰었을 때 실제로 지적된 것.
+
+  goods-3:
+    tools:
+      - label: 계약방식 결정 도우미
+        path: /tools/contract-method
+        why: 본문 팁이 «이 도구를 활용하세요» 라고 적고도 링크가 없었다.
+      - label: 분할계약 판단 체크리스트
+        path: /tools/split-contract-checker
+        why: 본문이 요구하는 «분할계약 금지 원칙 확인» 을 실제로 판정한다.
+      - label: 수의계약 사유서 생성기
+        path: /tools/contract-reason
+        why: 수의계약으로 정해지면 필요 서류 «(내)수의계약 사유서» 를 여기서 만든다.
+    topics:
+      - label: 수의계약 금액 기준
+        path: /topics/private-contract-amount
+        why: 금액 기준 판단의 근거 문서.
+    audit_cases:
+      - label: 입찰을 피하려 분할 발주한 사례
+        path: /audit-cases/split-contract-to-avoid-bidding
+        why: 이 단계의 대표 지적.
+
+  goods-4:
+    tools:
+      - label: 견적서 검토 도구
+        path: /tools/quote-review
+        why: 받은 견적서의 적정성을 이 자리에서 검토한다.
+      - label: 견적서 일괄 문서생성
+        path: /tools/quote-auto
+        why: 견적서 1장으로 사업계획서·소요예산·예정가격조서를 한 번에 만든다.
+      - label: 법정기간 계산기
+        path: /tools/legal-period
+        why: 입찰이면 공고 기간을 여기서 센다.
+    review_lab:
+      - label: 견적서 검증 — 실무 검증실 Beta
+        path: /review-lab/quote
+        why: 업로드한 견적서의 계산·대조까지 한다(최종 판단은 담당자).
+    forms:
+      - label: 견적서
+        path: /templates/19
+        why: 2인 이상 견적 표준 서식.
+    topics:
+      - label: 2인 이상 견적
+        path: /topics/dual-quote
+        why: 2천만원 초과 시 요구되는 요건.
+
+  goods-5:
+    tools:
+      - label: 계약서류 원클릭 생성기
+        path: /tools/contract-documents
+        why: 이 단계의 «계약서류 징구» 목록을 자동 생성한다.
+      - label: 계약보증금 계산기
+        path: /tools/contract-guarantee
+        why: 본문이 요구하는 «계약보증금 납부 확인·면제 검토» 를 계산한다.
+      - label: 계약 적법성 자가진단
+        path: /tools/contract-legality-check
+        why: 체결 직전 마지막 점검.
+    forms:
+      - label: 물품구매 표준계약서
+        path: /templates/1
+        why: 5천만원 초과 시 작성 의무인 계약서 서식.
+
+  goods-6:
+    # 도구 없음 — 납품 단계를 판정하는 도구는 SILMU 에 없다. 만들어진 척 링크하지 않는다.
+    forms:
+      - label: 물품 납품확인서
+        path: /templates/4
+        why: 납품 완료 확인 서식.
+
+  goods-7:
+    forms:
+      - label: 물품 검사검수조서
+        path: /templates/3
+        why: 이 단계의 산출물 서식.
+    topics:
+      - label: 검사·검수
+        path: /topics/inspection
+        why: 검수 요건·기한 근거.
+    guides:
+      - label: 검수조서 작성법
+        path: /guides/inspection-report
+        why: 서식을 받은 다음 실제로 채우는 방법.
+    audit_cases:
+      - label: 검수 없이 처리한 사례
+        path: /audit-cases/defective-inspection
+        why: 이 단계의 대표 지적.
+
+  goods-8:
+    tools:
+      - label: 법정기간 계산기
+        path: /tools/legal-period
+        why: 「청구받은 날부터 5일 이내」 지급 기한을 실제 날짜로 센다.
+    forms:
+      - label: 대금청구서
+        path: /templates/5
+        why: 지급 청구 서식.
+    topics:
+      - label: 대금 지급
+        path: /topics/payment
+        why: 지급 기한·지연이자 근거.
+    audit_cases:
+      - label: 검수 전에 지급한 사례
+        path: /audit-cases/payment-before-inspection
+        why: 이 단계의 대표 지적.
+
+  # ── 용역 ────────────────────────────────────────────────────────────────
+  service-1:
+    tools:
+      - label: 사업계획서 생성기
+        path: /tools/project-plan
+        why: 용역추진 품의서를 바로 만든다.
+      - label: 소요예산 추정기
+        path: /tools/budget-estimator
+        why: 소규모 용역의 예산 규모를 먼저 잡는다.
+        school: conditional
+        school_note_source: budget-estimator
+    topics:
+      - label: 물품이냐 용역이냐
+        path: /topics/goods-vs-service-contract
+        why: 유형 판정이 틀리면 이후 단계가 통째로 틀린다.
+
+  service-2:
+    tools:
+      - label: 계약문서 생성기 — 과업내용서
+        path: /forms/과업지시서.html
+        why: 이 단계의 산출물이 과업내용서다. 바로 작성한다.
+
+  service-3:
+    tools:
+      - label: 추정가격 계산기
+        path: /tools/estimated-price
+        why: 이 단계가 요구하는 계산.
+      - label: 원가계산서 검토 가이드
+        path: /tools/cost-calculation
+        why: 원가계산 방식을 택했을 때 항목별 적정성을 검토한다.
+    topics:
+      - label: 원가계산
+        path: /topics/cost-calculation-guide
+        why: 원가계산 항목 근거.
+    audit_cases:
+      - label: 간접비율을 과다 계상한 사례
+        path: /audit-cases/cost-calculation-indirect-cost-overrate
+        why: 이 단계의 대표 지적.
+
+  service-4:
+    tools:
+      - label: 계약방식 결정 도우미
+        path: /tools/contract-method
+        why: 이 단계가 «입찰 또는 수의계약 방식 결정» 을 요구한다.
+      - label: 계약서류 원클릭 생성기
+        path: /tools/contract-documents
+        why: 징구 서류 목록을 자동 생성한다.
+      - label: 계약보증금 계산기
+        path: /tools/contract-guarantee
+        why: 계약이행보증·면제 판단.
+      - label: 계약 적법성 자가진단
+        path: /tools/contract-legality-check
+        why: 체결 직전 마지막 점검. 물품 5단계와 같은 필요다.
+    forms:
+      - label: 용역 표준계약서
+        path: /templates/6
+        why: 이 단계의 계약서 서식.
+
+  service-5:
+    forms:
+      - label: 착수계
+        path: /templates/7
+        why: 이 단계의 제출 서식.
+
+  service-6:
+    # 도구·서식 없음 — 이행·감독을 지원하는 자산이 SILMU 에 없다.
+    audit_cases:
+      - label: 감독을 하지 않은 사례
+        path: /audit-cases/supervision-absent
+        why: 이 단계를 비웠을 때 실제로 지적된 것.
+
+  service-7:
+    forms:
+      - label: 준공계
+        path: /templates/8
+        why: 이 단계의 제출 서식.
+    topics:
+      - label: 검사·검수
+        path: /topics/inspection
+        why: 준공검사 요건·기한 근거.
+
+  service-8:
+    tools:
+      - label: 법정기간 계산기
+        path: /tools/legal-period
+        why: 「청구받은 날부터 5일 이내」 지급 기한을 센다.
+    forms:
+      - label: 대금청구서
+        path: /templates/5
+        why: 척추가 요구하는 「(외)대금 지급청구서」 서식. 물품 8단계와 같은 서류다.
+    topics:
+      - label: 선금
+        path: /topics/advance-payment
+        why: 본문이 요구하는 선금 70% 한도 근거.
+    audit_cases:
+      - label: 준공 전에 지급한 사례
+        path: /audit-cases/payment-without-completion
+        why: 이 단계의 대표 지적.
+
+  # ── 공사 ────────────────────────────────────────────────────────────────
+  construction-1:
+    tools:
+      - label: 사업계획서 생성기
+        path: /tools/project-plan
+        why: 공사추진 품의서를 바로 만든다.
+      - label: 소요예산 추정기
+        path: /tools/budget-estimator
+        why: 소규모 공사의 사업비를 먼저 잡는다.
+        school: conditional
+        school_note_source: budget-estimator
+
+  construction-2:
+    tools:
+      - label: 물량내역서+시방서 생성기
+        path: /tools/cost-estimate
+        why: 이 단계의 산출물이 물량내역서·시방서다. 바로 만든다.
+      - label: 추정가격 계산기
+        path: /tools/estimated-price
+        why: 내역서 단가로 추정가격을 산출한다.
+
+  construction-3:
+    tools:
+      - label: 계약방식 결정 도우미
+        path: /tools/contract-method
+        why: 공사 금액 기준(종합 4억/전문 2억/기타 1.6억)을 판정한다.
+      - label: 계약보증금 계산기
+        path: /tools/contract-guarantee
+        why: 계약보증금·이행보증·면제 판단.
+      - label: 계약서류 원클릭 생성기
+        path: /tools/contract-documents
+        why: 징구 서류 목록을 자동 생성한다.
+      - label: 계약 적법성 자가진단
+        path: /tools/contract-legality-check
+        why: 체결 직전 마지막 점검. 물품 5단계와 같은 필요다.
+    topics:
+      - label: 분리발주
+        path: /topics/split-contract-prohibition
+        why: 본문이 요구하는 전문공사 분리발주 판단의 근거.
+    audit_cases:
+      - label: 전문공사 면허 없는 업체에 시공시킨 사례
+        path: /audit-cases/goe-2021-specialized-construction-license
+        why: 이 단계의 대표 지적.
+
+  construction-4:
+    forms:
+      - label: 착공계
+        path: /templates/11
+        why: 이 단계의 제출 서식.
+
+  construction-5:
+    tools:
+      - label: 설계변경 검토서 도우미
+        path: /tools/design-change
+        why: 본문이 요구하는 «설계변경 사전 승인» 검토서를 만든다.
+    forms:
+      - label: 설계변경 요청서
+        path: /templates/16
+        why: 설계변경 제출 서식.
+    topics:
+      - label: 설계변경
+        path: /topics/design-change
+        why: 설계변경 요건 근거.
+    audit_cases:
+      - label: 승인 없이 설계변경한 사례
+        path: /audit-cases/design-change-unapproved
+        why: 이 단계의 대표 지적.
+
+  construction-6:
+    tools:
+      - label: 기성검사 체크리스트
+        path: /tools/progress-inspection
+        why: 이 단계의 산출물이 기성검사 항목표다.
+      - label: 물가변동 조정금액 계산기
+        path: /tools/price-adjustment-calculator
+        why: 기성 시점에 물가변동 조정 사유가 생기면 여기서 계산한다.
+    forms:
+      - label: 기성검사조서
+        path: /templates/15
+        why: 이 단계의 산출물 서식.
+    audit_cases:
+      - label: 기성금을 과다 청구한 사례
+        path: /audit-cases/progress-payment-over-claimed
+        why: 이 단계의 대표 지적.
+
+  construction-7:
+    tools:
+      - label: 계약보증금 계산기
+        path: /tools/contract-guarantee
+        why: 본문이 요구하는 하자보수보증금을 계산한다.
+    forms:
+      - label: 준공검사조서
+        path: /templates/12
+        why: 이 단계의 산출물 서식.
+      - label: 하자보증서
+        path: /templates/14
+        why: 본문이 요구하는 징구 서식.
+    topics:
+      - label: 하자담보책임
+        path: /topics/defect-warranty
+        why: 공종별 하자담보책임기간 근거.
+
+  construction-8:
+    topics:
+      - label: 하자담보책임
+        path: /topics/defect-warranty
+        why: 기간 만료·보증금 반환 판단 근거.
+    audit_cases:
+      - label: 하자보수보증금을 받지 않은 사례
+        path: /audit-cases/defect-warranty-no-deposit
+        why: 이 단계의 대표 지적.

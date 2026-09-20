@@ -308,6 +308,83 @@
   color: var(--color-emerald-400);
 }
 
+/* ── P2 (CONNECTED_WORKFLOW) — 이 단계에서 쓸 자산 · 다음 단계 ──
+   정보(amber)와 행동(emerald)을 색으로 가른다. 읽을거리와 «눌러서 진행하는 것»이
+   같은 상자에 섞이면 다음 행동이 보이지 않는다. */
+.step-detail-content .small-box.flow-bindings {
+  background: var(--color-emerald-50);
+  border-left-color: var(--color-emerald-400);
+}
+.step-detail-content .small-box.flow-bindings .material-symbols-outlined {
+  color: var(--color-emerald-600);
+}
+.step-detail-content .small-box.flow-bindings .small-label {
+  color: var(--color-emerald-800);
+  background: var(--color-emerald-100);
+}
+.flow-binding-group {
+  margin-top: 10px;
+}
+.flow-binding-group:first-of-type {
+  margin-top: 6px;
+}
+.flow-binding-list {
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.flow-binding-list li {
+  margin: 0 0 6px;
+  padding: 0;
+}
+.flow-binding-list li:last-child {
+  margin-bottom: 0;
+}
+.flow-binding-list a {
+  font-weight: 600;
+  color: var(--color-emerald-800);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  /* 손가락으로 누를 수 있어야 한다 — 모바일에서 링크가 줄바꿈 텍스트에 묻히지 않게. */
+  display: inline-block;
+  min-height: 28px;
+  line-height: 28px;
+}
+.flow-binding-list a:hover {
+  color: var(--color-emerald-900);
+}
+.flow-binding-why,
+.flow-binding-note {
+  display: block;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--color-slate-600);
+}
+.flow-binding-note {
+  margin-top: 2px;
+  color: var(--color-amber-800);
+}
+.flow-next-step {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--color-slate-300);
+  font-size: 13px;
+}
+.flow-next-step-btn {
+  font-weight: 700;
+  color: var(--color-emerald-800);
+  background: none;
+  border: none;
+  padding: 4px 0;
+  min-height: 32px;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.flow-next-step-end {
+  color: var(--color-slate-500);
+}
+
 /* 반응형 */
 @media (max-width: 768px) {
   .flow-tabs {

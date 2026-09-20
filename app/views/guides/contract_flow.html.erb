@@ -71,9 +71,14 @@ step_data = {
 } %>
 
 <section class="section py-10">
+  <%# P2 — 단계별 «지금 쓸 자산» 은 config/workflow_bindings.yml 이 소유한다. step_data 는 건드리지 않는다.
+      계측은 새 이벤트를 만들지 않고 기존 next_action_click 을 재사용한다
+      (topic_slug=flow:contract-flow · slot=<단계 id>:<도착 경로> — 단계와 도착지가 한 값에 들어간다). %>
   <div class="container-wide flow-page"
-       data-controller="contract-flow"
+       data-controller="contract-flow next-action"
        data-contract-flow-steps-value="<%= step_data.to_json %>"
+       data-contract-flow-bindings-value="<%= WorkflowBindings.payload.to_json %>"
+       data-next-action-topic-slug-value="flow:contract-flow"
        data-action="turbo:before-cache@document->contract-flow#beforeCache">
     <!-- 탭 네비게이션 -->
     <div class="flow-tabs" role="tablist" aria-label="계약 유형 선택">

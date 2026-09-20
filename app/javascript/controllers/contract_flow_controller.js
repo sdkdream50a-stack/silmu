@@ -4,8 +4,20 @@ import { Controller } from "@hotwired/stimulus"
 // 인라인 JS에서 분리 — Turbo 호환 lifecycle 자동 관리
 export default class extends Controller {
   static values = {
-    steps: Object  // stepData JSON은 data-contract-flow-steps-value로 전달
+    steps: Object,    // stepData JSON은 data-contract-flow-steps-value로 전달
+    bindings: Object  // P2 — 단계별 «지금 쓸 자산». config/workflow_bindings.yml 이 정본
   }
+
+  // 그룹 → 화면 표기. 「눌러서 일을 진행하는 것」과 「읽을거리」를 섞지 않는다.
+  static GROUP_LABELS = {
+    tools: "이 단계에서 쓸 도구",
+    review_lab: "문서 검증",
+    forms: "서식",
+    topics: "근거·설명",
+    guides: "작성법",
+    audit_cases: "이렇게 하면 지적된다"
+  }
+  static GROUP_ORDER = ["tools", "review_lab", "forms", "topics", "guides", "audit_cases"]
 
   connect() {
     this._initKeyboard()
@@ -53,7 +65,7 @@ export default class extends Controller {
     }
 
     el.classList.add('selected')
-    const panelHtml = this._buildDetailPanel(data)
+    const panelHtml = this._buildDetailPanel(data, stepKey)
 
     if (window.innerWidth < 768) {
       el.closest('.flow-steps').querySelectorAll('.step-detail-inline').forEach(p => p.remove())
@@ -109,7 +121,7 @@ export default class extends Controller {
     })
   }
 
-  _buildDetailPanel(data) {
+  _buildDetailPanel(data, stepKey) {
     const itemsHtml = data.items.map(item =>
       '<li><span class="material-symbols-outlined">check_circle</span>' + item + '</li>'
     ).join('')
@@ -140,8 +152,76 @@ export default class extends Controller {
         '<div class="tip-box"><span class="material-symbols-outlined">lightbulb</span>' + data.tip + '</div>' +
         smallHtml +
         lawsHtml +
+        this._buildBindingsHtml(stepKey) +
+        this._buildNextStepHtml(stepKey) +
       '</div>' +
     '</div>'
+  }
+
+  // ── P2 — 이 단계에서 쓸 자산 ──
+  // 결속이 없는 단계는 아무것도 그리지 않는다. 빈 상자를 그리면 «있는데 비었다» 로 읽힌다.
+  _buildBindingsHtml(stepKey) {
+    const groups = this.hasBindingsValue ? this.bindingsValue[stepKey] : null
+    if (!groups) return ''
+
+    const ctor = this.constructor
+    const sections = ctor.GROUP_ORDER.filter(g => Array.isArray(groups[g]) && groups[g].length > 0).map(group => {
+      const items = groups[group].map(item => this._buildBindingLink(stepKey, item)).join('')
+      return '<div class="flow-binding-group">' +
+        '<span class="small-label">' + this._escapeHtml(ctor.GROUP_LABELS[group]) + '</span>' +
+        '<ul class="flow-binding-list">' + items + '</ul>' +
+      '</div>'
+    }).join('')
+    if (!sections) return ''
+
+    return '<div class="small-box flow-bindings">' +
+      '<span class="material-symbols-outlined">alt_route</span>' +
+      '<div><span class="small-label">다음 행동</span>' + sections + '</div>' +
+    '</div>'
+  }
+
+  _buildBindingLink(stepKey, item) {
+    const href = this._escapeHtml(item.path)
+    // slot 에 단계와 도착지를 함께 싣는다 — 새 GA4 이벤트를 만들지 않고 workflow_stage 를 얻는다.
+    const slot = this._escapeHtml(stepKey + ':' + item.path)
+    const label = this._escapeHtml(item.label)
+    const why = item.why ? '<span class="flow-binding-why">' + this._escapeHtml(item.why) + '</span>' : ''
+    // 학교 적용 차이는 config/tool_trust.yml 의 기존 판정에서 온다(여기서 만들지 않는다).
+    const note = item.school_note
+      ? '<span class="flow-binding-note"><strong>학교 적용 전 확인</strong> ' + this._escapeHtml(item.school_note) + '</span>'
+      : ''
+    return '<li><a href="' + href + '" data-action="click->next-action#track" ' +
+      'data-next-action-slot-param="' + slot + '">' + label + '</a>' + why + note + '</li>'
+  }
+
+  // ── P2 — 다음 단계 ──
+  // 데이터로 적지 않는다. 단계 번호에서 파생한다(goods-3 다음은 goods-4).
+  _buildNextStepHtml(stepKey) {
+    const parts = String(stepKey).split('-')
+    const num = parseInt(parts[parts.length - 1], 10)
+    if (!Number.isInteger(num)) return ''
+    const nextKey = parts.slice(0, -1).join('-') + '-' + (num + 1)
+    const next = this.stepsValue[nextKey]
+    if (!next) {
+      return '<div class="flow-next-step flow-next-step-end">이 흐름의 마지막 단계입니다.</div>'
+    }
+    return '<div class="flow-next-step">' +
+      '<span class="small-label">다음 단계</span> ' +
+      '<button type="button" class="flow-next-step-btn" data-next-step-key="' + this._escapeHtml(nextKey) + '" ' +
+      'data-action="click->contract-flow#goToStep">' +
+      (num + 1) + '. ' + this._escapeHtml(next.title) +
+      '</button>' +
+    '</div>'
+  }
+
+  // 다음 단계 카드를 열어 준다 — 메뉴로 돌아가지 않게 하는 것이 이 작업의 목적이다.
+  goToStep(event) {
+    event.stopPropagation()
+    const target = event.currentTarget.dataset.nextStepKey
+    const card = this.element.querySelector('.flow-step[data-step="' + target + '"]')
+    if (!card) return
+    this.closeDetail()
+    card.click()
   }
 
   _buildDocsHtml(docs) {
