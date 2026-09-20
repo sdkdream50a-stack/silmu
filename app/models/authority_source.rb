@@ -13,7 +13,9 @@ class AuthoritySource < ApplicationRecord
     "UNSTRUCTURED_HTML" => "비구조 HTML (공지·FAQ)"
   }.freeze
 
-  FETCH_STRATEGIES = %w[law_api http_html http_pdf manual].freeze
+  # P4 — `ordin_api` 는 법제처 **자치법규** API(`target=ordin`). 법령 API 와 응답 스키마가 달라
+  # (`<자치법규기본정보>` · 시행일자만 있고 «현행연혁코드» 가 없다) 같은 fetcher 로 처리하지 않는다.
+  FETCH_STRATEGIES = %w[law_api ordin_api http_html http_pdf manual].freeze
 
   # §24 — 사이트 장애를 "법령 삭제"로 해석하면 안 된다.
   FAILURE_KINDS = %w[FETCH_FAILED PARSE_FAILED SOURCE_UNAVAILABLE].freeze
@@ -47,6 +49,13 @@ class AuthoritySource < ApplicationRecord
 
   # §7 — 현행성 판정의 근거로 삼을 수 있는 등급인가
   def usable_for_currency_judgement? = authority_tier <= 3
+
+  # 이 소스의 fetcher 가 **무엇으로** 문서를 찾는가. 법령 API 는 이름, 자치법규 API 는 일련번호다.
+  # 이 판정을 소스가 소유하지 않으면, 법령 문서에 일련번호가 채워지는 순간 법령 조회가 조용히 깨진다
+  # (독립 리뷰 R1 — 현재는 official_identifier 가 비어 있어 드러나지 않는 잠복 결함이었다).
+  IDENTIFIER_LOOKUP_STRATEGIES = %w[ordin_api].freeze
+
+  def identifier_lookup? = IDENTIFIER_LOOKUP_STRATEGIES.include?(fetch_strategy)
 
   def tier_label = TIER_LABELS[authority_tier]
 

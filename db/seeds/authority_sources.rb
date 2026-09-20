@@ -56,4 +56,57 @@ CANARY_DOCUMENTS.each do |attrs|
   doc.save!
 end
 
+# ── P4 (2026-09-20) — 학교회계 source 정규화 ──────────────────────────────────
+# P3 가 수집한 법률 1 + 시·도 교육규칙 17 을 **기존 freshness engine 에 결속**한다.
+# 새 테이블·새 잡·새 daemon 0 — 이미 있는 AuthoritySource/Document/Version 을 쓴다.
+#
+# 선언(층·관할·제목·일련번호)은 `config/school_accounting_rules.yml` 이 소유하고
+# 여기서는 그것을 읽어 등록만 한다. 두 곳에 같은 목록을 적지 않는다.
+# key 규약도 `SchoolAccountingSources.ordin_key` **하나**를 쓴다.
+
+# 법률 — 기존 법제처 소스(moleg)에 문서 1건 추가. 조회는 이름으로(법령 API 규약).
+SchoolAccountingSources.national_core.each do |rec|
+  doc = AuthorityDocument.find_or_initialize_by(key: rec.key)
+  doc.assign_attributes(authority_source: moleg, title: rec.title, short_title: nil,
+                        document_type: "LAW", agency: "교육부",
+                        jurisdiction: "NATIONAL", region: "ALL", status: "ACTIVE")
+  doc.save!
+end
+
+# 자치법규 — 별도 소스. 법령 API 와 응답 스키마가 다르고(ordin_api) 개정 주기도 훨씬 길다.
+# 24시간마다 17건을 더 치면 한 번 실행 상한(20건)을 법령 문서가 못 쓰게 된다 → 30일 주기.
+ordin = AuthoritySource.find_or_initialize_by(key: "moleg_ordin_api")
+ordin.assign_attributes(
+  name: "법제처 국가법령정보센터 — 자치법규 (공동활용 API)",
+  agency: "법제처",
+  source_type: "STRUCTURED_API",
+  authority_tier: 1,
+  jurisdiction: "EDU_OFFICE",
+  region: "ALL",
+  official_url: "https://www.law.go.kr",
+  fetch_strategy: "ordin_api",
+  enabled: true,
+  check_interval_hours: 24 * 30,
+  config: { "api" => "DRF/lawService.do?target=ordin" }
+)
+ordin.save!
+
+SchoolAccountingSources.regional_rules.each do |rec|
+  doc = AuthorityDocument.find_or_initialize_by(key: rec.key)
+  doc.assign_attributes(
+    authority_source: ordin,
+    title: rec.title,
+    short_title: "#{rec.region} 학교회계 규칙",
+    # 「규칙」 = 자치법규 종류 C0002. 기존 어휘를 그대로 쓴다 — 새 document_type 을 만들지 않는다.
+    document_type: "LOCAL_RULE",
+    agency: "#{rec.region}교육청",
+    jurisdiction: "EDU_OFFICE",
+    region: rec.region,
+    # 이름이 통일돼 있지 않아 **일련번호로 조회**한다(AuthorityDocument#fetch_key).
+    official_identifier: rec.official_identifier,
+    status: rec.status
+  )
+  doc.save!
+end
+
 puts "AuthoritySource #{AuthoritySource.count}개 · AuthorityDocument #{AuthorityDocument.count}개 등록"

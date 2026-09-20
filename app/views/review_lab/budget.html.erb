@@ -1,0 +1,48 @@
+<%= render "review_lab/hero", title: "사업계획·산출기초 검토",
+      lead: "사업계획서와 산출기초(산출내역)를 올리면 수량×단가·합계·부가세·총사업비를 규칙으로 검산하고, 두 문서의 금액·사업명·기간이 어긋나는 곳을 찾습니다." %>
+
+<div class="container-editorial py-10 space-y-8 max-w-3xl">
+  <%= render "review_lab/notice" %>
+
+  <%# P4 §7·§16 — 이 검토가 «하지 않는 것» 을 업로드 **전에** 적는다.
+      결과 화면에만 적으면 사용자는 이미 «판정해 줄 것» 으로 기대한 뒤다. %>
+  <div class="rounded-xl border border-amber-200 bg-amber-50 p-5 space-y-2" role="note" aria-label="이 검토가 하지 않는 것">
+    <p class="text-sm font-semibold text-amber-900">이 검토가 하지 않는 것</p>
+    <ul class="text-sm text-amber-900 space-y-1 list-disc pl-5">
+      <li><strong>예산과목(목·세목)을 판정하지 않습니다.</strong> 문서에 적힌 과목은 그대로 보여주기만 합니다 — 학교회계와 지방자치단체의 세출 과목 체계는 다릅니다.</li>
+      <li><strong>«적정·부적정·위법·집행 가능» 을 말하지 않습니다.</strong> 산술 모순과 문서 간 불일치까지만 찾습니다.</li>
+      <li>기관마다 다른 <strong>지출품의 전결 한도·별지 서식</strong>은 검사 대상이 아닙니다(시·도 교육규칙이 서로 다릅니다).</li>
+    </ul>
+  </div>
+
+  <% if user_signed_in? %>
+    <%= form_with url: review_lab_budget_path, method: :post, multipart: true, data: { turbo: false }, class: "card-editorial space-y-5" do |f| %>
+      <div>
+        <%= f.label :plan_file, "사업계획서 (선택)", class: "block text-sm font-semibold text-editorial-ink mb-1.5" %>
+        <%= f.file_field :plan_file, accept: ".xlsx,.hwpx,.docx,.pdf", class: "block w-full text-sm" %>
+        <p class="mt-1 text-xs text-slate-500">사업명·사업기간·총사업비·예산액·예산과목을 읽습니다.</p>
+      </div>
+      <div>
+        <%= f.label :basis_file, "산출기초(산출내역) (선택)", class: "block text-sm font-semibold text-editorial-ink mb-1.5" %>
+        <%= f.file_field :basis_file, accept: ".xlsx,.hwpx,.docx,.pdf", class: "block w-full text-sm" %>
+        <p class="mt-1 text-xs text-slate-500">품명·규격·단위·수량·단가·금액 표를 읽어 행마다 검산합니다.</p>
+      </div>
+      <p class="text-xs text-slate-500">
+        <strong>둘 다 올리면</strong> 문서 간 금액·사업명·기간까지 대조합니다. 하나만 올려도 그 문서 안의 산술은 검사하고,
+        못 돌린 검사는 결과 화면에 <strong>이유와 함께</strong> 적힙니다.
+      </p>
+      <div class="rounded-lg border border-slate-200 p-4 space-y-3">
+        <label class="flex items-start gap-2 text-sm text-slate-800">
+          <%= f.check_box :use_ai, { class: "mt-0.5" }, "1", "0" %>
+          <span><strong>AI 의미검사</strong> — 사업목적과 지출내용이 어울리는지, 산출기초가 지나치게 포괄적인지 등을 읽습니다. 결과는 <strong>전부 «추가 확인 필요»</strong> 이며 확정 오류가 되지 않습니다.</span>
+        </label>
+        <%= render "shared/ai_privacy_notice", what: "선택 시 문서 본문(개인정보 형태는 자동으로 가린 뒤)", scope: :file %>
+      </div>
+      <%= f.submit "검토하기", class: "rounded-lg bg-editorial-navy px-5 py-2.5 text-sm font-semibold text-white hover:opacity-90 cursor-pointer" %>
+    <% end %>
+  <% else %>
+    <%= render "review_lab/login_gate" %>
+  <% end %>
+
+  <%= render "review_lab/formats" %>
+</div>

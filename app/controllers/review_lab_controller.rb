@@ -14,10 +14,10 @@
 #
 # 도구 레지스트리(ToolsHelper#tools_registry)에 넣지 않는다 — «도구 39개» 는 강의자료·화면에 박힌 수다.
 class ReviewLabController < ApplicationController
-  before_action :require_login_for_ai, only: %i[quote_review package_review demo]
+  before_action :require_login_for_ai, only: %i[quote_review package_review budget_review demo]
   before_action :no_store
-  before_action :enforce_rate_limit, only: %i[quote_review package_review demo]
-  before_action :remember_return_path, only: %i[index quote package]
+  before_action :enforce_rate_limit, only: %i[quote_review package_review budget_review demo]
+  before_action :remember_return_path, only: %i[index quote package budget]
 
   # 문서 파싱은 CPU 를 오래 쓸 수 있다. 운영은 Puma 단일 프로세스 · 스레드 3개라 검토가 동시에 여러 건 돌면
   # 사이트 전체가 느려진다 — 프로세스 안에서 동시에 1건만 돌리고 나머지는 곧바로 «잠시 후» 로 돌려보낸다.
@@ -29,6 +29,8 @@ class ReviewLabController < ApplicationController
   AI_LIMIT_PER_DAY = 10
 
   PACKAGE_ROLES = %w[notice task_order spec special_terms rfp cost_sheet].freeze
+  # 순서가 곧 화면 순서다(사업계획서 → 산출기초).
+  BUDGET_ROLES = %w[project_plan cost_basis].freeze
   MAX_OTHER_FILES = 2
 
   CONTRACT_TYPE_OPTIONS = ContractDecision::RuleSet.current.contract_types
@@ -49,6 +51,27 @@ class ReviewLabController < ApplicationController
 
   def package
     set_lab_meta("입찰공고 패키지 검토 — 실무 검증실 Beta", "공고문·과업지시서·규격서를 함께 올리면 금액·수량·기한·일정의 문서 간 불일치와 공고기간을 검사합니다.")
+  end
+
+  def budget
+    set_lab_meta("사업계획·산출기초 검토 — 실무 검증실 Beta",
+                 "사업계획서와 산출기초(산출내역)를 함께 올리면 수량×단가·합계·부가세·총사업비를 규칙으로 검산하고 두 문서의 금액·사업명·기간이 어긋나는 곳을 찾습니다. 예산과목의 적정성은 판정하지 않습니다.")
+  end
+
+  # P4 §5 — 사업계획서 + 산출기초. 둘 다 없으면 검사할 것이 없으므로 1건 이상을 요구한다.
+  # 문서 간 대조는 둘 다 있을 때만 돌고, 못 돌린 규칙은 결과 화면이 이유와 함께 적는다.
+  def budget_review
+    files = [ [ params[:plan_file], BUDGET_ROLES[0] ], [ params[:basis_file], BUDGET_ROLES[1] ] ]
+            .select { |f, _role| uploaded?(f) }
+    return reject(:budget, "사업계획서 또는 산출기초 파일을 올려 주세요.") if files.empty?
+    return reject(:budget, "파일 합계가 40MB 를 넘습니다.") if total_bytes(files.map(&:first)) > MAX_TOTAL_BYTES
+
+    docs = with_review_slot do
+      files.map { |f, role| extract(f, role, ReviewLab::DocumentArtifact::ROLES.fetch(role)) }
+    end
+    @review = ReviewLab::BudgetReviewer.call(documents: docs)
+    run_ai_semantic(docs, focus: :budget) if ai_requested?
+    render :report
   end
 
   def quote_review
@@ -107,6 +130,10 @@ class ReviewLabController < ApplicationController
       @review = with_review_slot { ReviewLab::Demo.run_package }
       @demo = ReviewLab::Demo.compare(@review, ReviewLab::Demo::PACKAGE_EXPECTED)
       run_ai_semantic(@review.documents) if ai_requested?
+    when "budget"
+      @review = with_review_slot { ReviewLab::Demo.run_budget }
+      @demo = ReviewLab::Demo.compare(@review, ReviewLab::Demo::BUDGET_EXPECTED)
+      run_ai_semantic(@review.documents, focus: :budget) if ai_requested?
     else
       return head :not_found
     end
@@ -150,6 +177,15 @@ class ReviewLabController < ApplicationController
 
   def ai_requested? = params[:use_ai] == "1"
 
+  # 한도·혼잡으로 돌려보낼 때 어느 입력 화면으로 되돌릴 것인가. 새 면이 생겨도 여기 한 곳만 본다.
+  def rejected_page
+    case action_name
+    when "package_review" then :package
+    when "budget_review"  then :budget
+    else :quote
+    end
+  end
+
   def reject(page, message)
     flash.now[:alert] = message
     public_send(page)
@@ -163,7 +199,7 @@ class ReviewLabController < ApplicationController
     return if count && count <= RULE_LIMIT_PER_HOUR
 
     flash.now[:alert] = "검토 요청이 너무 많습니다. 한 시간 뒤에 다시 시도해 주세요."
-    kind = action_name == "package_review" ? :package : :quote
+    kind = rejected_page
     public_send(kind)
     render kind, status: :too_many_requests
   end
@@ -186,7 +222,7 @@ class ReviewLabController < ApplicationController
 
   rescue_from Busy do
     flash.now[:alert] = "다른 검토가 진행 중입니다. 몇 초 뒤에 다시 시도해 주세요."
-    kind = action_name == "package_review" ? :package : :quote
+    kind = rejected_page
     public_send(kind)
     render kind, status: :service_unavailable
   end
@@ -221,12 +257,12 @@ class ReviewLabController < ApplicationController
     "AI 로 값을 읽지 못했습니다(한도 초과 또는 오류). 원본 파일(XLSX·HWPX·DOCX)로 다시 올려 주세요."
   end
 
-  def run_ai_semantic(docs)
+  def run_ai_semantic(docs, focus: :contract)
     unless ai_quota_available?
       @ai_note = "오늘 AI 검토 한도(#{AI_LIMIT_PER_DAY}회)를 다 썼습니다. 규칙 검사 결과는 그대로 유효합니다."
       return
     end
-    result = ReviewLab::AiSemanticReviewer.call(documents: docs)
+    result = ReviewLab::AiSemanticReviewer.call(documents: docs, focus: focus)
     result.findings.each { |f| @review.add(f) }
     @ai_note = result.error || ("AI 가 낸 인용문 중 원문에서 찾지 못한 #{result.dropped}건은 버렸습니다." if result.dropped.positive?) ||
                "AI 검토 #{result.findings.size}건 — 모두 «추가 확인 필요» 입니다."

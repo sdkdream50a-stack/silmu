@@ -12,8 +12,9 @@ module Authority
       def failed? = status == :failed
     end
 
-    def initialize(fetcher: nil)
-      @fetchers = { "law_api" => fetcher || LawApiFetcher.new }
+    def initialize(fetcher: nil, fetchers: {})
+      @fetchers = { "law_api" => fetcher || LawApiFetcher.new,
+                    "ordin_api" => OrdinApiFetcher.new }.merge(fetchers.stringify_keys)
     end
 
     def check(document, now: Time.current)
@@ -21,7 +22,7 @@ module Authority
       fetcher = @fetchers[source.fetch_strategy]
       return failure(document, source, "PARSE_FAILED", "지원하지 않는 fetch_strategy: #{source.fetch_strategy}") if fetcher.nil?
 
-      result = fetcher.fetch(document.title)
+      result = fetcher.fetch(document.fetch_key)
       return failure(document, source, result.failure_kind, result.message) if result.failed?
 
       normalized = Normalizer.normalize(result.raw_content, format: result.format)

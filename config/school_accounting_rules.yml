@@ -17,6 +17,52 @@
 #
 # 값이 비어 있으면 «그 규칙에 해당 조항이 없다» 는 실측값이다(모름이 아니다).
 # 전남은 개별통지 7일·결산심의 3개월 조항이 규칙에 없고 지침 층에서 정한다.
+# ── P4 (2026-09-20) — SOURCE NORMALIZATION ─────────────────────────────────────
+# 이 파일은 «일회성 수집 결과» 가 아니라 **갱신 가능한 등록부**다.
+# 층(layer)·출처 종류·관할은 여기서 선언하고, «언제 받았나·해시·이전 판본» 같은
+# 시점 정보는 여기 적지 않는다 — 그건 `authority_*` 테이블(기존 freshness engine)이 소유한다.
+# 같은 사실을 두 곳에서 유지하면 반드시 갈린다. 조인은 `SchoolAccountingSources` 가 한다.
+#
+# layer — §9 의 3층. 다수결을 전국 규칙으로 올리는 것을 **구조적으로** 막는다.
+#   NATIONAL_CORE    : 법률. 전국 공통이므로 그대로 기한으로 쓴다
+#   REGIONAL_RULE    : 시·도 교육규칙. 17/17·16/17 일 때만 기한, 갈리면 «갈린다» 고 적는다
+#   ANNUAL_GUIDELINE : 교육감 예산편성 기본지침. **기한으로 쓰지 않는다**(대조용)
+provenance:
+  collected_at: "2026-09-20"
+  api: "법제처 국가법령정보 공동활용 API"
+  raw_archive: "multi-agent-harness tasks/_archive/silmu-school-accounting-calendar-p3-0920/sources/"
+
+national_core:
+  - key: "chojung_act"
+    layer: "NATIONAL_CORE"
+    source_type: "STRUCTURED_API"
+    jurisdiction: "NATIONAL"
+    region: "ALL"
+    title: "초·중등교육법"
+    law_mst: 283903
+    promulgated: "20260310"
+    effective: "20260911"
+    articles: "제30조의2(학교회계의 설치) · 제30조의3(학교회계의 운영)"
+    status: "ACTIVE"
+
+# 교육감 예산편성 기본지침 — **기한 근거로 쓰지 않는다**. 환산값 대조에만 썼다.
+# 연 1회·교육청별로 나오고 기계 판독 가능한 공개 API 가 없다 → fetch 는 UNTRACKED 다.
+annual_guidelines:
+  - key: "jne_2026_guideline"
+    layer: "ANNUAL_GUIDELINE"
+    source_type: "UNSTRUCTURED_PDF"
+    jurisdiction: "EDU_OFFICE"
+    region: "전남"
+    title: "전라남도교육청 2026학년도 학교회계 예산편성 기본지침"
+    status: "REFERENCE_ONLY"
+  - key: "bse_2026_guideline"
+    layer: "ANNUAL_GUIDELINE"
+    source_type: "UNSTRUCTURED_PDF"
+    jurisdiction: "EDU_OFFICE"
+    region: "부산"
+    title: "부산광역시교육청 2026학년도 공립 유·초·중·고·특수학교 학교회계 예산편성 기본지침"
+    status: "REFERENCE_ONLY"
+
 rules:
   - code: "서울"
     office: "서울특별시교육청"

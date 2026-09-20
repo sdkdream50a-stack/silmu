@@ -165,7 +165,9 @@ Rails.application.routes.draw do
   post "review-lab/quote", to: "review_lab#quote_review"
   get  "review-lab/package", to: "review_lab#package", as: :review_lab_package
   post "review-lab/package", to: "review_lab#package_review"
-  post "review-lab/demo/:kind", to: "review_lab#demo", as: :review_lab_demo, constraints: { kind: /quote|package/ }
+  get  "review-lab/budget", to: "review_lab#budget", as: :review_lab_budget
+  post "review-lab/budget", to: "review_lab#budget_review"
+  post "review-lab/demo/:kind", to: "review_lab#demo", as: :review_lab_demo, constraints: { kind: /quote|package|budget/ }
   resources :guides, only: [ :index, :show ], param: :slug
 
   # 업무달력 데이터 동기화

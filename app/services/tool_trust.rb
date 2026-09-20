@@ -32,6 +32,18 @@ class ToolTrust
     def any_basis? = basis.present? || standard_version.present? || legal_references.any?
   end
 
+  # ── P4 §10 — 관할 전수 census ────────────────────────────────────────────────
+  # `jurisdiction` 블록(화면에 렌더되는 고지)과 **다른 축**이다.
+  # 고지는 «사용자에게 무엇을 말할 것인가», scope 는 «이 도구가 어느 기관 기준인가» 다.
+  # 고지가 없어도 scope 는 있을 수 있고(예: 전국 단일 법령), 그 반대도 있다.
+  SCOPES = %w[SCHOOL_DIRECT SCHOOL_WITH_CONDITION LOCAL_GOV_ONLY NATIONAL GENERAL UNKNOWN].freeze
+  UNKNOWN_SCOPE = "UNKNOWN"
+
+  Scope = Struct.new(:tool_key, :scope, :reason, keyword_init: true) do
+    def known? = scope != UNKNOWN_SCOPE
+    def school_usable? = %w[SCHOOL_DIRECT SCHOOL_WITH_CONDITION NATIONAL GENERAL].include?(scope)
+  end
+
   # P0-2 — 적용기관 고지. 「학교회계인가 지방자치단체 기준인가」를 계산 전에 세운다.
   # 기준연도를 모르면 만들지 않는다 — UNVERIFIED 는 화면에서 «미표기» 로 정직하게 나간다.
   Jurisdiction = Struct.new(:applies_to, :agency, :guideline, :standard_year,
@@ -67,6 +79,21 @@ class ToolTrust
     end
 
     def registered_tool_keys = config.fetch("tools", {}).keys
+
+    # 등록되지 않은 키는 «판정 안 함» 이다 — 조용히 안전한 값으로 떨어지지 않는다.
+    def scope_for(tool_key)
+      key = tool_key.to_s.sub(/\Atool:/, "")
+      raw = jurisdiction_scope[key]
+      return Scope.new(tool_key: key, scope: UNKNOWN_SCOPE, reason: "관할 census 에 등록되지 않은 도구") if raw.nil?
+
+      value = raw["scope"].to_s
+      value = UNKNOWN_SCOPE unless SCOPES.include?(value)
+      Scope.new(tool_key: key, scope: value, reason: raw["reason"])
+    end
+
+    def jurisdiction_scope = config.fetch("jurisdiction_scope", {})
+
+    def scope_census = jurisdiction_scope.keys.index_with { |k| scope_for(k) }
 
     # 설정 파일에서 기준일을 **직접** 읽는다 → 파일이 낡으면 화면이 스스로 낡았다고 말한다.
     def standard_version(standard)
