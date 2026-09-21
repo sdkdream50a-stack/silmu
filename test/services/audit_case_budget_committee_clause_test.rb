@@ -37,7 +37,7 @@ class AuditCaseBudgetCommitteeClauseTest < ActiveSupport::TestCase
     AuditCase.create!({ title: SLUG, slug: SLUG, issue: "○○", category: "예산", detail: PROD_DETAIL, lesson: PROD_LESSON }.merge(attrs))
   end
 
-  test "probe: 수리 전 운영 본문은 모순 4건을 잡는다 (검출기 음성 대조)" do
+  test "probe: 수리 전 운영 본문의 모순 5곳(표 4행 + lesson)을 잡는다 (검출기 음성 대조)" do
     assert_equal %w[제1호=예산안 제2호=교육과정 제4호=급식 제8호=운동부 제1호=예산안],
                  clause_mismatches(PROD_DETAIL + PROD_LESSON)
   end
