@@ -122,5 +122,6 @@ class AuditCasesController < ApplicationController
         type: "article"
       }
     )
+    set_meta_tags(robots: "noindex, follow") unless @audit_case.search_indexable?
   end
 end
