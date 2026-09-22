@@ -19,7 +19,7 @@ class AuditCaseSimulatedNoindexTest < ActionDispatch::IntegrationTest
   end
 
   test "reconstructed and actual cases stay indexable" do
-    [@reconstructed, @actual].each do |ac|
+    [ @reconstructed, @actual ].each do |ac|
       get audit_case_url(ac.slug)
       assert_response :success
       assert_no_match(/<meta name="robots" content="[^"]*noindex/, response.body, ac.slug)
