@@ -1,7 +1,7 @@
 class SitemapController < ApplicationController
   def index
     @topics = Topic.published.select(:slug, :updated_at, :law_verified_at)
-    @audit_cases = AuditCase.published.select(:slug, :updated_at)
+    @audit_cases = AuditCase.published.search_indexable.select(:slug, :updated_at)
     @guides = Guide.published.select(:slug, :updated_at)
     @templates = TemplatesController::TEMPLATES
     @series_slugs = Guide::SERIES_SLUG_MAP.values

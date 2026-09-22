@@ -52,6 +52,7 @@ module AuditCaseProvenance
 
   # 실제 사건으로 오해하면 안 되는 유형
   RECONSTRUCTED_TYPES = %w[SILMU_RECONSTRUCTED_CASE SILMU_SIMULATED_CASE].freeze
+  SEARCH_NOINDEX_TYPES = %w[SILMU_SIMULATED_CASE].freeze
 
   # 검색 결과·AI 인용은 배너 없이 제목·설명만 가져간다 — 실제 사건으로 읽히지 않도록 유형을 앞에 붙인다.
   SEO_PREFIXES = {
@@ -66,7 +67,12 @@ module AuditCaseProvenance
     scope :by_source_type, ->(t) { where(source_type: t) if t.present? }
     scope :provenance_unclassified, -> { where(source_type: nil) }
     scope :reconstructed, -> { where(is_reconstructed: true) }
+    # 2026-09-22 AdSense 「가치가 별로 없는 콘텐츠」 불승인 대응 — 원문 출처 없는 가상 시나리오는
+    # 페이지는 유지하되 검색 색인(sitemap·robots)에서 뺀다. 판정은 이 한 곳에서만 한다.
+    scope :search_indexable, -> { where.not(source_type: SEARCH_NOINDEX_TYPES).or(where(source_type: nil)) }
   end
+
+  def search_indexable? = !SEARCH_NOINDEX_TYPES.include?(source_type)
 
   def effective_source_type
     return source_type if source_type.present? && SOURCE_TYPES.key?(source_type)
