@@ -1011,6 +1011,9 @@
     <!-- 왼쪽: 견적서 업로드/미리보기 -->
     <div class="viewer-panel">
       <%= render "shared/ai_privacy_notice", what: "업로드한 견적서 파일", scope: :file %>
+      <% unless user_signed_in? %>
+        <p style="margin:8px 0 12px;font-size:13px;color:#92400e;">AI 자동 분석은 <a href="<%= new_user_session_path %>" style="text-decoration:underline;font-weight:600;">로그인</a> 후 이용할 수 있습니다. 로그인하지 않아도 금액·품목은 직접 입력해 검토할 수 있습니다.</p>
+      <% end %>
       <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()">
         <span class="material-symbols-outlined">cloud_upload</span>
         <h3>견적서를 업로드하세요</h3>
