@@ -5,6 +5,9 @@
     <li>✅ <strong>HWPX · DOCX · XLSX</strong> — 표와 문단을 그대로 읽습니다(가장 정확).</li>
     <li>✅ <strong>PDF(글자가 있는 PDF)</strong> — 표는 칸 간격으로 읽어 확신도를 낮춰 표시합니다.</li>
     <li>❌ <strong>HWP(한글 기본 형식)</strong> — 아직 읽지 못합니다. 한글에서 «다른 이름으로 저장 → HWPX» 또는 PDF로 저장해 올려 주세요.</li>
-    <li>❌ <strong>스캔 PDF·사진</strong> — 문자 인식(OCR)은 지원하지 않습니다. 견적서는 «AI로 값 읽기»를 선택할 수 있습니다(외부 AI 전송).</li>
+    <%# 2026-09-27 — «스캔 PDF·사진» 을 한 줄로 묶어 두니 사진도 어디서나 안 되는지, 스캔 PDF 도 AI 로 되는지 헷갈렸다.
+        실제 동작(text_extractor · review_lab_controller#quote_review)대로 나눈다. %>
+    <li>❌ <strong>스캔 PDF(글자가 없는 PDF)</strong> — 문자 인식(OCR)을 하지 않아 세 검토 모두 읽지 못합니다. 원본 HWPX·DOCX·XLSX나, 한글·워드에서 «PDF로 저장»한 파일을 올려 주세요.</li>
+    <li>⚠️ <strong>사진(JPG·PNG)</strong> — <strong>견적서 검토</strong>에서만 «AI로 값 읽기»를 켜면 읽습니다(원본이 외부 AI로 전송). 입찰공고 패키지 검토와 사업계획·산출기초 검토는 사진을 받지 않습니다.</li>
   </ul>
 </div>

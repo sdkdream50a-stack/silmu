@@ -93,12 +93,10 @@ class SchoolOfficeController < ApplicationController
         { label: "수당 계산기",              path: "/tools/allowance-calculator" },
         { label: "봉급 실수령액 계산기",     path: "/tools/salary-calculator" },
         { label: "4대보험 정산보험료 계산기", path: "/tools/insurance-calculator" },
-        # 계산기 3종은 등록부가 국가·지방 규정을 병기한다(G-24). 아래 두 가이드는 본문 근거가
-        # **국가**공무원 규정 단독이라 교육행정직(지방공무원)에게는 한 단계 확인이 남는다.
-        { label: "보수 체계 기초",           path: "/guides/hr-welfare-complete-6", tier: :conditional,
-          note: "국가공무원 보수규정 기준 — 교육행정직은 지방공무원 보수규정을 확인하세요" },
-        { label: "각종 수당 기초",           path: "/guides/hr-welfare-complete-7", tier: :conditional,
-          note: "국가공무원 수당규정 기준 — 교육행정직은 지방공무원 수당규정을 확인하세요" },
+        # 계산기 3종은 등록부가 국가·지방 규정을 병기한다(G-24). 아래 두 가이드는 2026-09-27 콘텐츠 마이그레이션
+        # (20260927120000_hr_guides_local_civil_servant_basis)으로 근거를 지방공무원 규정으로 바꿨다.
+        { label: "보수 체계 기초",           path: "/guides/hr-welfare-complete-6" },
+        { label: "각종 수당 기초",           path: "/guides/hr-welfare-complete-7" },
         { label: "연말정산",                 path: "/topics/year-end-settlement" },
         { label: "병가",                     path: "/topics/sick-leave" },
         { label: "퇴직월 초과근무",          path: "/topics/edu-overtime-retirement-month" },
@@ -141,10 +139,9 @@ class SchoolOfficeController < ApplicationController
       items: [
         { label: "첫달 코스",                path: "/start", tier: :conditional,
           note: "계약 업무 중심 코스입니다" },
-        { label: "인사·복무 기초",           path: "/guides/hr-welfare-complete-1", tier: :conditional,
-          note: "국가공무원법 기준 — 교육행정직은 지방공무원법을 확인하세요" },
-        { label: "연가 실무",                path: "/guides/hr-welfare-complete-2", tier: :conditional,
-          note: "국가공무원 복무규정 기준 — 교육행정직은 지방공무원 복무규정을 확인하세요" },
+        # 1·2편도 같은 마이그레이션으로 지방공무원법·지방공무원 복무규정 기준이 됐다.
+        { label: "인사·복무 기초",           path: "/guides/hr-welfare-complete-1" },
+        { label: "연가 실무",                path: "/guides/hr-welfare-complete-2" },
         { label: "자주 나오는 감사 지적",    path: "/guides/audit-frequent-issues" },
         # 전수점검(§4)에서 새로 찾은 혼입 — 회계 일정이 1~12월 회계연도 가정이다
         # (12/31 «회계연도 마감», 1/31 «전년도 세입·세출 결산», 3·6·9월 분기결산).
