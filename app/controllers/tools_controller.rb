@@ -1,6 +1,13 @@
 class ToolsController < ApplicationController
   include SeoHelper
   include ToolsMeta
+  include RequestOriginVerifiable
+
+  # 2026-09-28 — 도구 화면은 CDN 에 공개 캐시(아래 expires_in public)되므로 화면에 박힌 CSRF 토큰이 방문자 세션과 맞지 않아
+  # 연가 PDF·HWPX 다운로드가 운영에서 422 로 실패했다. 두 동작은 저장·변경 없이 입력값으로 문서만 계산해 돌려주므로
+  # CSRF 토큰 대신 요청 출처(Origin/Referer)를 검사한다 — quote-reviews·quote-documents 와 같은 방식.
+  skip_forgery_protection only: %i[annual_leave_pdf annual_leave_hwpx]
+  before_action :verify_request_origin, only: %i[annual_leave_pdf annual_leave_hwpx]
 
   # 모든 도구 페이지는 JS 기반 계산기 (서버 측 동적 데이터 없음)
   before_action -> { expires_in 1.hour, public: true, stale_while_revalidate: 1.day }

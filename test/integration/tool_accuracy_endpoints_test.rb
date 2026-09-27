@@ -93,7 +93,7 @@ class ToolAccuracyEndpointsTest < ActionDispatch::IntegrationTest
     post "/tools/annual-leave/hwpx", params: {
       hire_date: "2025-01-01", ref_year: 2026, used_leave: 0,
       granted_leave: "999일", remaining_leave: "999일"   # 위조 시도
-    }
+    }, headers: { "Origin" => "http://www.example.com" }
     # 폰트 미설치 등으로 생성 자체가 실패할 수 있으나, 어떤 경우에도
     # 위조된 999가 채택되어서는 안 된다. 서버 재계산 결과는 15일이다.
     assert_includes [ 200, 422 ], response.status
@@ -103,7 +103,7 @@ class ToolAccuracyEndpointsTest < ActionDispatch::IntegrationTest
   end
 
   test "HWPX는 임용일이 잘못되면 생성하지 않는다" do
-    post "/tools/annual-leave/hwpx", params: { hire_date: "2026/01/01", ref_year: 2026 }
+    post "/tools/annual-leave/hwpx", params: { hire_date: "2026/01/01", ref_year: 2026 }, headers: { "Origin" => "http://www.example.com" }
     assert_response :unprocessable_entity
   end
 
