@@ -5,7 +5,8 @@ class ContractGuaranteeService
     general: { name: "일반 계약", rate: 0.10, note: "계약금액의 10% 이상" },
     construction: { name: "공사 계약", rate: 0.10, note: "계약금액의 10% 이상 (이행보증서 제출 가능)" },
     service: { name: "용역 계약", rate: 0.10, note: "계약금액의 10% 이상" },
-    lease: { name: "임대차 계약", rate: 0.05, note: "계약금액의 5% 이상" },
+    # 2026-09-28 — 시행령 §51⑤: 공사를 제외한 물품·용역 «등» 은 10% 이상. 5% 는 행안부가 기간을 정해 고시한 경우(같은 항 단서)뿐.
+    lease: { name: "임대차 계약", rate: 0.10, note: "계약금액의 10% 이상 (행정안전부 고시 기간에는 5%)" },
     # 면제 기준은 시행령 제53조 제1항 제2호의 계약금액 5천만원 이하 상시 기준이다.
     small_private: { name: "소액계약 (5천만원 이하 면제)", rate: 0.0, note: "면제 가능 (지방계약법 시행령 제53조)" }
   }.freeze

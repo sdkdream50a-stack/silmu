@@ -127,7 +127,7 @@
 
         <h3 class="text-lg font-bold text-slate-900 mt-6 mb-3">주요 기능</h3>
         <ul class="list-disc list-inside space-y-2 text-slate-700 mb-4">
-          <li>계약금액 입력 시 계약보증금 자동 계산 (일반 10%, 임대차 5%, 소액수의 면제 등)</li>
+          <li>계약금액 입력 시 계약보증금 자동 계산 (공사·물품·용역·임대차 10%, 소액 면제 등)</li>
           <li>공사 계약 시 공종별(구조체·방수·전기·설비 등) 하자보수보증금 개별 산출</li>
           <li>하자보증 기간(1~5년) 및 보증금률(2~5%) 자동 적용</li>
           <li>계약금액 구간별 인지세 자동 계산 (공동작성자 연대납부 — 당사자 분담 비율은 계약서 약정 사항)</li>
@@ -549,7 +549,7 @@ document.addEventListener('turbo:load', function() {
       html += '<div class="cg-detail-grid">';
       html += '<div class="cg-detail-item"><div class="cg-detail-label">계약 유형</div><div class="cg-detail-value">' + cgEsc(cg.type_name) + '</div></div>';
       html += '<div class="cg-detail-item"><div class="cg-detail-label">보증금률 <span style="font-size:11px;color:#818cf8;">(지방계약법 시행령 제51조 — 계약의 이행보증)</span></div><div class="cg-detail-value">' + cg.rate + '%</div></div>';
-      html += '<div class="cg-detail-item"><div class="cg-detail-label">계약보증금 <span style="font-size:11px;color:#818cf8;">(§37①)</span></div><div class="cg-detail-value" style="color:#4338ca;">' + cgComma(cg.amount) + '원</div></div>';
+      html += '<div class="cg-detail-item"><div class="cg-detail-label">계약보증금 <span style="font-size:11px;color:#818cf8;">(§51)</span></div><div class="cg-detail-value" style="color:#4338ca;">' + cgComma(cg.amount) + '원</div></div>';
       html += '<div class="cg-detail-item"><div class="cg-detail-label">비고</div><div class="cg-detail-value" style="font-size:14px;">' + cgEsc(cg.note) + '</div></div>';
       html += '</div>';
     }

@@ -99,14 +99,14 @@ class QualificationEvaluationsController < ApplicationController
       }
     end
 
-    floor_price = estimated_price * (floor_rate / 100.0)
+    floor_price = floor_price_for(estimated_price, floor_rate)
 
     # 적격심사와 같은 이유로 가격점수를 산출하지 않는다 —
     # 종합심사낙찰제 입찰금액 평점도 예규 별표 산식을 따르며, 최저가 대비 비율이 아니다.
     # 비가격(시공실적·능력·경영·사회적책임) 합계만 그대로 제공한다.
     scored = bidders.map do |b|
       non_price = b[:construction] + b[:capacity] + b[:management] + b[:social]
-      below = floor_price > 0 && b[:bid_price] < floor_price
+      below = below_floor?(b[:bid_price], floor_price)
 
       b.merge(
         price_score: nil,
@@ -117,7 +117,7 @@ class QualificationEvaluationsController < ApplicationController
         non_price_total: non_price.round(2),
         total_score: nil,
         is_qualified: nil,
-        floor_price: floor_price
+        floor_price: floor_price.to_f
       )
     end.sort_by { |b| b[:bid_price] }
 
@@ -131,7 +131,7 @@ class QualificationEvaluationsController < ApplicationController
       metadata: {
         estimated_price: estimated_price,
         floor_rate: floor_rate,
-        floor_price: floor_price,
+        floor_price: floor_price.to_f,
         score_structure: COMPREHENSIVE_SCORE_STRUCTURE
       }
     }
@@ -150,6 +150,17 @@ class QualificationEvaluationsController < ApplicationController
                            "적격심사 기준을 적용할 수 없습니다. 상단의 「종합심사낙찰제」 탭으로 전환해 확인하세요.".freeze
 
   private
+
+  # 2026-09-28 — 하한가 «이상» 판정을 Float 로 하면 예정가격 10억·하한율 89.745% 의 하한가가
+  # 897,450,000.0000001 이 되어, 하한가와 정확히 같은 입찰(가장 흔한 투찰점)을 «미달» 로 오판했다.
+  # 하한율은 소수 셋째 자리까지 주어지므로 BigDecimal(문자열) 로 정확히 곱하고 비교한다.
+  def floor_price_for(estimated_price, floor_rate)
+    BigDecimal(estimated_price.to_s) * BigDecimal(floor_rate.to_s) / 100
+  end
+
+  def below_floor?(bid_price, floor_price)
+    floor_price.positive? && BigDecimal(bid_price.to_s) < floor_price
+  end
 
   # 낙찰하한율은 이 도구의 유일한 판정 기준이다. 비었거나 범위를 벗어나면 추정하지 않고 거부한다.
   def parse_floor_rate(raw)
@@ -179,19 +190,19 @@ class QualificationEvaluationsController < ApplicationController
   # 경쟁자 구성이 바뀌면 같은 입찰가의 점수가 달라져 실제 제도와 어긋난다.
   # 별표·금액구간 입력이 없는 상태에서 숫자를 내놓으면 입찰 판단을 오도하므로 산출하지 않는다.
   def calculate_price_scores(bidders, estimated_price, floor_rate, price_max)
-    floor_price = estimated_price * (floor_rate / 100.0)
+    floor_price = floor_price_for(estimated_price, floor_rate)
 
     # 하한 미달 업체를 목록에서 빼면 이 도구의 유일한 기능(미달 여부 확인)이 불가능해진다.
     # 제거하지 않고 below_floor로 표시해 사용자가 직접 확인하게 한다.
     bidders.map do |bidder|
-      below = floor_price > 0 && bidder[:bid_price] < floor_price
+      below = below_floor?(bidder[:bid_price], floor_price)
       bidder.merge(
         price_score: nil,
         price_score_unavailable: true,
         bid_ratio: estimated_price > 0 ? (bidder[:bid_price] / estimated_price * 100).round(3) : nil,
         below_floor: below,
         is_valid: !below,
-        floor_price: floor_price
+        floor_price: floor_price.to_f
       )
     end
   end
