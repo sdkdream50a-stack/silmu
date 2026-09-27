@@ -43,6 +43,14 @@ class LegalPeriodService
 
   ANNOUNCEMENT_URGENT_DAYS = 5
 
+  # 2026-09-28 — 관공서 공휴일(2026). 업무 달력(app/views/tools/task_calendar.html.erb)과 같은 목록.
+  # 다른 연도는 토·일만 제외하고 결과에 «공휴일 미반영» 을 적는다(추정하지 않는다).
+  PUBLIC_HOLIDAYS_2026 = %w[
+    2026-01-01 2026-02-16 2026-02-17 2026-02-18 2026-03-01 2026-03-02 2026-05-05 2026-05-24 2026-05-25
+    2026-06-06 2026-08-15 2026-08-17 2026-09-24 2026-09-25 2026-09-26 2026-10-03 2026-10-05 2026-10-09 2026-12-25
+  ].map { |d| Date.parse(d) }.to_set.freeze
+  HOLIDAY_YEARS = [ 2026 ].freeze
+
   # 계약체결 기한 (영업일)
   CONTRACT_SIGNING_DEADLINE = 10
 
@@ -50,7 +58,7 @@ class LegalPeriodService
   # base = 기산일의 성격. 유형마다 다르므로 입력값을 검사완료일로 고정하면 지방·선금·하도급이 틀린다.
   PAYMENT_DEADLINES = {
     national: { name: "국가기관", days: 5, base: "대가 지급 청구일", note: "검사 완료 후 대가 지급 청구를 받은 날부터 5일 이내 (국가계약법 시행령 제58조)" },
-    local: { name: "지방자치단체", days: 5, base: "대가 지급 청구일", note: "검사 완료 후 대가 지급 청구를 받은 날부터 5일 이내 (지방계약법 제18조, 시행령 제67조)" },
+    local: { name: "지방자치단체", days: 5, base: "대가 지급 청구일", note: "검사 완료 후 대가 지급 청구를 받은 날부터 5일(공휴일·토요일 제외) 이내 (지방계약법 제18조, 시행령 제67조①)" },
     advance: { name: "선금 지급", days: 14, base: "선금 지급 청구일", note: "청구일로부터 14일 이내" },
     subcontract: { name: "하도급 대금", days: 15, base: "원수급인의 대금 수령일", note: "원수급인 대금 수령 후 15일 이내 (하도급법 제13조)" }
   }.freeze
@@ -115,8 +123,9 @@ class LegalPeriodService
         period_label = period ? "#{period[:label]} (#{period[:days]}일)" : "7일"
       end
 
-      end_date = start_date + days
-      end_date = adjust_weekend(end_date)
+      # 시행령 §35 «입찰서 제출 마감일의 전날부터 기산하여 N일 전에» — 마감 전날부터 역산한 N일이 공고일 다음 날부터
+      # 차야 하므로 가장 이른 마감일은 공고일 + N + 1일이다(종전 +N 은 하루 모자랐다). 휴일이면 다음 근무일.
+      end_date = next_business_day(start_date + days + 1)
 
       {
         success: true,
@@ -129,7 +138,7 @@ class LegalPeriodService
           end_date: format_date(end_date),
           end_weekday: weekday_name(end_date),
           urgent: urgent,
-          note: urgent ? "긴급입찰: 긴급한 행사·재해 예방·복구 등 (지방계약법 시행령 제35조 제4항)" : "일반입찰 공고기간 (지방계약법 시행령 제35조)"
+          note: (urgent ? "긴급입찰: 긴급한 행사·재해 예방·복구 등 (지방계약법 시행령 제35조 제4항)" : "공사입찰(현장설명 없음) 공고기간 (지방계약법 시행령 제35조 제3항 — 물품·용역 일반입찰은 제1항 7일)") + ". 마감일 전날부터 기산하여 #{days}일 전 공고 → 가장 이른 마감일은 공고일 다음 날부터 #{days + 1}일째" + holiday_note(end_date)
         }
       }
     end
@@ -162,8 +171,12 @@ class LegalPeriodService
       return { success: false, error: "유효하지 않은 지급유형입니다." } unless PAYMENT_DEADLINES.key?(payment_type)
 
       info = PAYMENT_DEADLINES[payment_type]
-      deadline = base_date + info[:days]
-      deadline = adjust_weekend(deadline)
+      # 지방계약법 시행령 §67① 은 5일에서 «공휴일과 토요일은 제외» 한다(국가계약법 시행령 §58① 에는 이 문구가 없다).
+      deadline = if payment_type == :local
+        add_business_days(base_date, info[:days])
+      else
+        adjust_weekend(base_date + info[:days])
+      end
 
       {
         success: true,
@@ -281,6 +294,25 @@ class LegalPeriodService
 
     def weekday_name(date)
       WEEKDAY_NAMES[date.wday]
+    end
+
+    def holiday?(date)
+      date.saturday? || date.sunday? || PUBLIC_HOLIDAYS_2026.include?(date)
+    end
+
+    def next_business_day(date)
+      date += 1 while holiday?(date)
+      date
+    end
+
+    # 청구일은 넣지 않고(초일 불산입) 다음 날부터 근무일만 센다.
+    def add_business_days(date, n)
+      n.times { date = next_business_day(date + 1) }
+      date
+    end
+
+    def holiday_note(date)
+      HOLIDAY_YEARS.include?(date.year) ? "" : " (#{date.year}년 공휴일은 반영하지 않았습니다 — 토·일만 제외)"
     end
 
     def adjust_weekend(date)
