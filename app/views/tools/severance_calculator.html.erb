@@ -210,20 +210,25 @@
     calculate();
   }
 
+  // 2026-09-28 — 공무원연금법 §25①: 재직기간 = 임명된 날이 속하는 달부터 «퇴직한 날의 전날» 이 속하는 달까지의 연월수.
+  // 종전에는 총일수÷365·나머지÷30 으로 계산해 5·10·15·20년 비율 경계에서 등급이 뒤집혔다(예: 2020-03-31~2025-03-01 → 4년 11개월).
+  // 날짜 문자열을 그대로 쪼개 계산한다(new Date 의 시간대 변환 회피).
+  function serviceMonths(hireStr, retireStr) {
+    const [hy, hm] = hireStr.split('-').map(Number);
+    const [ry, rm, rd] = retireStr.split('-').map(Number);
+    const dayBefore = new Date(Date.UTC(ry, rm - 1, rd - 1));
+    return (dayBefore.getUTCFullYear() * 12 + dayBefore.getUTCMonth() + 1) - (hy * 12 + hm) + 1;
+  }
+
   function calculateFromDates() {
-    const hire = new Date(document.getElementById('hire-date').value);
-    const retire = new Date(document.getElementById('retire-date').value);
-    if (!hire || !retire || isNaN(hire) || isNaN(retire)) return;
-    if (retire <= hire) return;
+    const hireStr = document.getElementById('hire-date').value;
+    const retireStr = document.getElementById('retire-date').value;
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(hireStr) || !/^\d{4}-\d{2}-\d{2}$/.test(retireStr)) return;
+    if (retireStr <= hireStr) return;
 
-    const diffMs = retire - hire;
-    const totalDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-    const years = Math.floor(totalDays / 365);
-    const remainingDays = totalDays - (years * 365);
-    const months = Math.floor(remainingDays / 30);
-
-    document.getElementById('service-years').value = years;
-    document.getElementById('service-months').value = months;
+    const total = serviceMonths(hireStr, retireStr);
+    document.getElementById('service-years').value = Math.floor(total / 12);
+    document.getElementById('service-months').value = total % 12;
     calculate();
   }
 
