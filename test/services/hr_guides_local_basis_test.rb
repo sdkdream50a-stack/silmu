@@ -48,6 +48,12 @@ class HrGuidesLocalBasisTest < ActiveSupport::TestCase
     assert_includes body("hr-welfare-complete-6"), "그 밖의 지방공무원은 매월 20일"
     assert_not_includes body("hr-welfare-complete-6"), "지방 20일·교육청 소속은 교육부 지급일"
     assert_includes body("hr-welfare-complete-7"), "2021. 1. 5. 삭제"
+    # 독립 법령검증(2026-09-27) 지적: 지방 보수규정에는 봉급표가 없다 — 제4조제3항이 공무원보수규정 별표 3 을 준용한다.
+    assert_includes body("hr-welfare-complete-6"), "「공무원보수규정」 별표 3(일반직)을 준용"
+    assert_not_includes body("hr-welfare-complete-6"), "「지방공무원 보수규정」 별표에 있고"
+    # 삭제된 제7조의10제2항은 «일수 상한» 이 아니라 «10년 내 미사용 소멸» 이었다.
+    assert_includes body("hr-welfare-complete-2"), "10년 안에 쓰지 않으면 소멸하던"
+    assert_not_includes body("hr-welfare-complete-2"), "저축 일수 상한을 두던"
   end
 
   test "EDGE: 지방공무원 규정과 다른 옛 수치(저축 30일·2년 소멸·일할 계산·S 20/30/50)가 남지 않는다" do
