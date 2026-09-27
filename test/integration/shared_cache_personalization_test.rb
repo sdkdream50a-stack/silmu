@@ -27,6 +27,18 @@ class SharedCachePersonalizationTest < ActionDispatch::IntegrationTest
     end
   end
 
+  # 시험 사이트 layout 은 로그인 사용자의 이메일 앞부분을 nav 에 찍는다 — 운영 exam.silmu.kr/subjects 캐시본에서 실측.
+  test "시험 사이트 로그인 화면도 공유 캐시에 남지 않는다" do
+    host! "exam.silmu.kr"
+    sign_in users(:one)
+    get "/subjects"
+    assert_response :success
+    assert_equal "no-store", response.headers["Cache-Control"]
+    sign_out :user
+    get "/subjects"
+    assert_includes response.headers["Cache-Control"], "public"
+  end
+
   test "업무달력은 누구에게나 no-store 다" do
     get "/tools/task-calendar"
     assert_equal "no-store", response.headers["Cache-Control"]
