@@ -149,6 +149,7 @@
     }
     .file-type.image { background: #dbeafe; color: #1e40af; }
     .file-type.pdf { background: #fce7f3; color: #9d174d; }
+    .upload-limits { margin-top: 12px; font-size: 12px; color: #64748b; }
     .file-type.excel { background: #dcfce7; color: #166534; }
 
     .preview-container { display: none; }
@@ -1015,11 +1016,14 @@
         <h3>견적서를 업로드하세요</h3>
         <p>파일을 드래그하거나 클릭하여 업로드</p>
         <div class="file-types">
-          <span class="file-type image">📷 이미지</span>
-          <span class="file-type pdf">📑 PDF</span>
+          <span class="file-type image">📷 JPG·PNG</span>
+          <span class="file-type pdf">📑 글자가 있는 PDF</span>
           <span class="file-type excel">📊 Excel</span>
         </div>
-        <input type="file" id="file-input" accept="image/*,.pdf,.xlsx,.xls" onchange="handleFileSelect(event)">
+        <%# 2026-09-28 — 서버는 JPG·PNG·PDF 만 받고(QuoteReviewsController::ALLOWED_CONTENT_TYPES) PDF 는 글자만 읽는다
+            (DocumentAnalyzerService#analyze_pdf). «이미지 전반·PDF 전반» 으로 보이던 안내와 accept 를 실제에 맞춘다. %>
+        <p class="upload-limits">스캔본 PDF는 글자를 읽지 못합니다 — 사진(JPG·PNG)으로 올려 주세요 · 파일당 최대 20MB</p>
+        <input type="file" id="file-input" accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls" onchange="handleFileSelect(event)">
       </div>
 
       <div class="preview-container" id="preview-container">
@@ -1432,7 +1436,19 @@
       if (file) handleFile(file);
     }
 
+    // 드래그 앤 드롭은 accept 를 거치지 않으므로 여기서도 막는다. 값은 컨트롤러 상수와 같다.
+    const QR_IMAGE_TYPES = ['image/jpeg', 'image/png'];
+    const QR_MAX_BYTES = 20 * 1024 * 1024;
+
     function handleFile(file) {
+      if (file.type.startsWith('image/') && !QR_IMAGE_TYPES.includes(file.type)) {
+        showToast('사진은 JPG·PNG만 읽을 수 있습니다. JPG나 PNG로 저장해 올려 주세요.');
+        return;
+      }
+      if (file.size > QR_MAX_BYTES) {
+        showToast('파일 크기는 20MB 이하여야 합니다.');
+        return;
+      }
       const previewContainer = document.getElementById('preview-container');
       const previewContent = document.getElementById('preview-content');
       const uploadZone = document.getElementById('upload-zone');
