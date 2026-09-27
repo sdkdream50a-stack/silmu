@@ -43,7 +43,10 @@ class HrGuidesLocalBasisTest < ActiveSupport::TestCase
       refute_match(/국가공무원|공무원임용령|(?<!지방)공무원보수규정 제|(?<!지방)공무원수당 등에 관한 규정|인사혁신처/, text, "#{slug} 에 국가공무원 기준이 남았다")
     end
     assert_includes body("hr-welfare-complete-2"), "지방공무원 복무규정 제7조의10"
-    assert_includes body("hr-welfare-complete-6"), "매월 20일"
+    # 학교행정실 독자 기준: 교육감 임용 지방공무원 = 별표 30 교육부 17일. «20일» 만 보이면 틀리게 읽힌다(2026-09-27 재검증).
+    assert_includes body("hr-welfare-complete-6"), "학교·교육청 소속처럼 교육감이 임용권을 가진 지방공무원은 매월 17일"
+    assert_includes body("hr-welfare-complete-6"), "그 밖의 지방공무원은 매월 20일"
+    assert_not_includes body("hr-welfare-complete-6"), "지방 20일·교육청 소속은 교육부 지급일"
     assert_includes body("hr-welfare-complete-7"), "2021. 1. 5. 삭제"
   end
 
