@@ -38,7 +38,7 @@
             <li><strong>공무원연금기여금</strong>: 기준소득월액의 9% (공무원연금법 제67조 ②항 — 기여금 본조)</li>
             <li><strong>건강보험료</strong>: 봉급의 3.595% 본인 부담 (2026년 건강보험료율 7.19% × 1/2, 국민건강보험법 시행령 — 매년 변동)</li>
             <li><strong>장기요양보험료</strong>: 건강보험료의 13.14% (2026년 장기요양보험료율 0.9448% ÷ 건강보험료율 7.19%, 노인장기요양보험법 시행령 — 매년 변동)</li>
-            <li><strong>소득세·지방소득세</strong>: 근로소득 간이세액표 추정값 (소득세법 시행령, 월 공제 합계 기준)</li>
+            <li><strong>소득세·지방소득세</strong>: 연간 세액을 소득세법대로 계산해 12로 나눈 추정값 — 근로소득공제(제47조)·인적공제(본인과 체크한 배우자·자녀)·연금보험료·건강보험료 공제, 세율(제55조), 근로소득세액공제(제59조) 또는 표준세액공제(제59조의4제9항) 중 유리한 쪽 반영. 자녀세액공제·보험료·의료비·교육비 공제는 빠져 있어 실제 세금은 이보다 적을 수 있습니다. 매월 원천징수액은 간이세액표로 정해지고 연말정산에서 정산됩니다.</li>
           </ul>
           <div class="bg-amber-50 border-l-4 border-amber-500 p-3 rounded-r-lg mt-4">
             <p class="text-amber-900 text-xs leading-relaxed">
@@ -120,12 +120,11 @@
               <span class="text-xs text-slate-400 font-normal ml-1">(정근수당 가산금 반영)</span>
             </label>
             <select id="tenure-select" onchange="calculate()" class="form-input w-full bg-white">
-              <option value="0">1년 미만</option>
-              <option value="30000">1년 이상 5년 미만 (+30,000원)</option>
+              <option value="30000">5년 미만 (+30,000원)</option>
               <option value="50000">5년 이상 10년 미만 (+50,000원)</option>
               <option value="60000">10년 이상 15년 미만 (+60,000원)</option>
               <option value="80000">15년 이상 20년 미만 (+80,000원)</option>
-              <option value="110000">20년 이상 25년 미만 (+110,000원)</option> <!-- 공무원수당규정 별표2의2 정근수당가산금: 20~25년 110,000원(기본100k+추가10k), 2026 현행 -->
+              <option value="110000">20년 이상 25년 미만 (+110,000원)</option> <!-- 지방공무원 수당 등에 관한 규정 제6조제3항·별표 2 정근수당 가산금(5년 미만 30,000원부터): 20~25년 110,000원(기본100k+추가10k) -->
 
               <option value="130000">25년 이상 (+130,000원)</option>
             </select>
@@ -255,7 +254,7 @@
 <script>
 // 2026년 공무원 봉급표 (일반직 기준, 단위: 원)
 // 출처: 인사혁신처 / 공무원보수규정 별표 3 (대통령령 제36147호 2026.02.27 공포, 봉급 인상분 2026.01.01 소급 적용)
-// 직급별 최대 호봉: 9급·8급·7급 31호봉, 6급 32호봉, 5급 30호봉, 4급 28호봉, 3급 26호봉, 2급 25호봉, 1급 23호봉
+// 직급별 최대 호봉: 9급·8급·7급 31호봉, 6급 32호봉, 5급 30호봉, 4급 28호봉, 3급 27호봉, 2급 25호봉, 1급 23호봉
 const SALARY_TABLE = {
   9: [0, 2133000, 2147600, 2168000, 2194000, 2226100, 2264600, 2309900, 2367500, 2456700,
       2542700, 2624400, 2705900, 2783900, 2859800, 2932300, 3002300, 3070800, 3134500, 3197300,
@@ -282,7 +281,7 @@ const SALARY_TABLE = {
       5595300, 5669800, 5739700, 5805400, 5867300, 5923800, 5971800, 6015900, 6058300],
   3: [0, 3781700, 3921600, 4065700, 4210800, 4358300, 4507200, 4658000, 4809000, 4961400,
       5113600, 5266200, 5424200, 5571200, 5707600, 5833400, 5950500, 6059400, 6160700, 6254300,
-      6342100, 6423300, 6498500, 6567800, 6632800, 6685800, 6736700],
+      6342100, 6423300, 6498500, 6567800, 6632800, 6685800, 6736700, 6783800],
   2: [0, 4191600, 4347100, 4504700, 4663700, 4825100, 4986500, 5150200, 5313600, 5478200,
       5642500, 5807700, 5978600, 6150500, 6306200, 6449600, 6581000, 6702000, 6812700, 6914900,
       7008100, 7093400, 7171600, 7243100, 7301700, 7357600],
@@ -292,7 +291,7 @@ const SALARY_TABLE = {
 };
 
 // 직급별 최대 호봉 (공무원보수규정 별표 3, 2026년 기준)
-const MAX_HOBON = {9:31, 8:31, 7:31, 6:32, 5:30, 4:28, 3:26, 2:25, 1:23};
+const MAX_HOBON = {9:31, 8:31, 7:31, 6:32, 5:30, 4:28, 3:27, 2:25, 1:23};
 
 let selectedGrade = 9;
 
@@ -344,7 +343,9 @@ function calculate() {
   const pensionContrib = Math.round(baseSalary * 0.09);          // 공무원연금기여금 9% (봉급 기준)
   const healthInsurance = Math.round(baseSalary * 0.03595);       // 건강보험 3.595% (2026년 7.19% × 1/2)
   const careInsurance = Math.round(healthInsurance * 0.1314);     // 장기요양 13.14% (2026년 0.9448% ÷ 건강보험료율 7.19%)
-  const incomeTax = estimateIncomeTax(grossSalary);               // 소득세 추정
+  const dependents = ['allowance-spouse', 'allowance-child1', 'allowance-child2', 'allowance-child3']
+    .filter(function(id) { return document.getElementById(id).checked; }).length;
+  const incomeTax = estimateIncomeTax(grossSalary, pensionContrib, healthInsurance + careInsurance, dependents); // 소득세 추정
   const localTax = Math.round(incomeTax * 0.1);                   // 지방소득세 10%
   const totalTax = incomeTax + localTax;
 
@@ -370,16 +371,51 @@ function calculate() {
   document.getElementById('result-placeholder').classList.add('hidden');
 }
 
-// 소득세 간이세액 추정 (단순화된 계산, 공제 전 월급여 기준)
-function estimateIncomeTax(grossMonthly) {
-  const annual = grossMonthly * 12;
-  // 근로소득공제 + 기본공제 반영한 근사 추정
-  let tax = 0;
-  if (annual <= 14000000) tax = 0;
-  else if (annual <= 50000000) tax = (annual - 14000000) * 0.15 - 1080000;
-  else if (annual <= 88000000) tax = (annual - 50000000) * 0.24 + 4260000;
-  else tax = (annual - 88000000) * 0.35 + 13380000;
-  return Math.max(0, Math.round(tax / 12));
+// 소득세 추정: 연간 결정세액을 소득세법대로 계산해 12로 나눈다 (매월 원천징수는 간이세액표, 연말정산에서 정산).
+// 자녀세액공제·특별세액공제(보험료·의료비·교육비)는 입력이 없어 반영하지 않는다 → 실제보다 크게 나올 수 있다.
+function earnedIncomeDeduction(total) {            // 소득세법 제47조제1항 (2천만원 한도)
+  let d;
+  if (total <= 5000000) d = total * 0.7;
+  else if (total <= 15000000) d = 3500000 + (total - 5000000) * 0.4;
+  else if (total <= 45000000) d = 7500000 + (total - 15000000) * 0.15;
+  else if (total <= 100000000) d = 12000000 + (total - 45000000) * 0.05;
+  else d = 14750000 + (total - 100000000) * 0.02;
+  return Math.min(d, 20000000);
+}
+
+function progressiveTax(base) {                    // 소득세법 제55조제1항
+  const brackets = [[14000000, 0, 0.06], [50000000, 840000, 0.15], [88000000, 6240000, 0.24],
+                    [150000000, 15360000, 0.35], [300000000, 37060000, 0.38], [500000000, 94060000, 0.40],
+                    [1000000000, 174060000, 0.42], [Infinity, 384060000, 0.45]];
+  let floor = 0;
+  for (const [upper, fixed, rate] of brackets) {
+    if (base <= upper) return fixed + (base - floor) * rate;
+    floor = upper;
+  }
+}
+
+function earnedIncomeTaxCredit(computed, total) {  // 소득세법 제59조제1항·제2항
+  const credit = computed <= 1300000 ? computed * 0.55 : 715000 + (computed - 1300000) * 0.3;
+  let cap;
+  if (total <= 33000000) cap = 740000;
+  else if (total <= 70000000) cap = Math.max(740000 - (total - 33000000) * 0.008, 660000);
+  else if (total <= 120000000) cap = Math.max(660000 - (total - 70000000) / 2, 500000);
+  else cap = Math.max(500000 - (total - 120000000) / 2, 200000);
+  return Math.min(credit, cap);
+}
+
+function estimateIncomeTax(grossMonthly, pensionMonthly, insuranceMonthly, dependents) {
+  const total = grossMonthly * 12;
+  const income = total - earnedIncomeDeduction(total);
+  const personal = 1500000 * (1 + dependents);      // 제50조 기본공제 — 체크한 가족을 기본공제대상자로 가정
+  const annualTax = function(specialDeduction, standardCredit) {
+    const base = Math.max(0, income - personal - pensionMonthly * 12 - specialDeduction);
+    const computed = progressiveTax(base);
+    return Math.max(0, computed - earnedIncomeTaxCredit(computed, total) - standardCredit);
+  };
+  // 건강·장기요양보험료 소득공제(제52조)와 표준세액공제 13만원(제59조의4제9항)은 택일 — 유리한 쪽.
+  const annual = Math.min(annualTax(insuranceMonthly * 12, 0), annualTax(0, 130000));
+  return Math.round(annual / 12);
 }
 
 // 페이지 초기화
