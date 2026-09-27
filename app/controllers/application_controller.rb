@@ -11,6 +11,7 @@ class ApplicationController < ActionController::Base
   before_action :set_default_meta_tags
   before_action :capture_utm_params
   before_action :configure_permitted_parameters, if: :devise_controller?
+  after_action :keep_signed_in_pages_out_of_shared_cache
 
   # Lograge payload 확장 — remote_ip, user_id를 JSON 로그에 주입
   def append_info_to_payload(payload)
@@ -20,6 +21,17 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
+  # 2026-09-28 — 공개 캐시(public) 화면은 nav 로그인 상태와 세션 CSRF 토큰을 담는다. 로그인 사용자 응답이 Cloudflare 에
+  # 캐시되면 그 사람의 «마이페이지·로그아웃» 과 토큰이 모든 방문자에게 나갔다(운영 /tools/* 실측). 홈이 이미 쓰는 규칙
+  # (로그인 = no-store, 비로그인 = public)을 모든 컨트롤러에 적용한다.
+  def keep_signed_in_pages_out_of_shared_cache
+    return unless user_signed_in?
+    return unless response.cache_control[:public] || response.headers["Cache-Control"].to_s.include?("public")
+
+    response.cache_control.replace(no_store: true)
+    response.headers["Cache-Control"] = "no-store"
+  end
 
   EXAM_HOST = "exam.silmu.kr"
   # exam 서브도메인(공공조달관리사 시험 사이트)이 단일 앱 구조상 복제 서빙하던

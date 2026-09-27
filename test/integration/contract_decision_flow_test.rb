@@ -12,7 +12,9 @@ class ContractDecisionFlowTest < ActionDispatch::IntegrationTest
   end
 
   def split(params)
-    post "/tools/split-contract-checker/evaluate", params: params, as: :json
+    # 브라우저 fetch 는 Origin 을 보낸다 — 이 엔드포인트는 CSRF 토큰 대신 요청 출처를 검사한다(공개 캐시 화면).
+    post "/tools/split-contract-checker/evaluate", params: params, as: :json,
+         headers: { "Origin" => "http://www.example.com" }
     JSON.parse(response.body)
   end
 
