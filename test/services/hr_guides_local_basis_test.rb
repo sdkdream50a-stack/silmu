@@ -54,6 +54,11 @@ class HrGuidesLocalBasisTest < ActiveSupport::TestCase
     # 삭제된 제7조의10제2항은 «일수 상한» 이 아니라 «10년 내 미사용 소멸» 이었다.
     assert_includes body("hr-welfare-complete-2"), "10년 안에 쓰지 않으면 소멸하던"
     assert_not_includes body("hr-welfare-complete-2"), "저축 일수 상한을 두던"
+    # 연가일수 표 = 지방공무원 복무규정 §7① 2024. 7. 2. 개정 6단계(11·15·16·17·20·21). 옛 12·14일 구간이 남으면 안 된다.
+    assert_includes body("hr-welfare-complete-2"), "1년 이상 3년 미만: 15일"
+    assert_includes body("hr-welfare-complete-2"), "3년 이상 4년 미만: 16일"
+    assert_not_includes body("hr-welfare-complete-2"), ": 12일"
+    assert_not_includes body("hr-welfare-complete-2"), ": 14일"
   end
 
   test "EDGE: 지방공무원 규정과 다른 옛 수치(저축 30일·2년 소멸·일할 계산·S 20/30/50)가 남지 않는다" do
