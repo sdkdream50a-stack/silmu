@@ -452,6 +452,7 @@ var CR_SMALL_AMOUNT_LIMITS_GOODS_SERVICE = {
   self_reliance: 100000000,
   village_enterprise: 100000000
 };
+var CR_VULNERABLE_EMPLOYMENT_RATIO_TYPES = ['social_enterprise', 'social_coop', 'self_reliance', 'village_enterprise'];
 var CR_CONSTRUCTION_SAFE_LIMIT = 160000000; // 기타공사 기준(가장 낮은 한도) — 이 이하면 공사 종류 무관하게 소액수의 해당
 
 function crCounterpartyType() {
@@ -485,7 +486,14 @@ function crCheckSmallAmountEligibility(contractType, amountWon, counterpartyType
   var limit = CR_SMALL_AMOUNT_LIMITS_GOODS_SERVICE[type] || CR_SMALL_AMOUNT_LIMITS_GOODS_SERVICE.unknown;
 
   if (amountWon <= limit) {
-    return { eligible: true, limitWon: limit, note: '' };
+    // 시행령 제25조제1항제5호바목 단서: 사회적기업·사회적협동조합·자활기업·마을기업은 행정안전부장관 고시
+    // 취약계층 고용비율을 충족해야 2천만원 초과 한도가 적용된다.
+    var needsEmploymentRatio = CR_VULNERABLE_EMPLOYMENT_RATIO_TYPES.indexOf(type) !== -1 && amountWon > CR_SMALL_AMOUNT_LIMITS_GOODS_SERVICE.unknown;
+    return {
+      eligible: true,
+      limitWon: limit,
+      note: needsEmploymentRatio ? '이 유형은 행정안전부장관이 고시하는 취약계층 고용비율을 충족해야 2천만원 초과 한도가 적용됩니다(시행령 제25조제1항제5호바목 단서). 충족 여부를 확인하세요.' : ''
+    };
   }
 
   if (type === 'unknown' && amountWon <= CR_SMALL_AMOUNT_LIMITS_GOODS_SERVICE.small_biz) {

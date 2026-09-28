@@ -44,4 +44,17 @@ class ContractReasonCounterpartyTest < ApplicationSystemTestCase
     assert small_amount_btn[:class].include?("selected"),
       "여성기업 특례 한도(1억원) 이내 금액은 소액수의로 자동 선택되어야 합니다"
   end
+
+  # 시행령 제25조제1항제5호바목 단서 — 사회적기업·사회적협동조합·자활기업·마을기업은 취약계층 고용비율 충족이 조건.
+  test "사회적기업 등 4개 유형은 2천만원 초과 시 취약계층 고용비율 조건을 안내한다" do
+    visit "/tools/contract-reason"
+
+    note = ->(type, amount) { page.evaluate_script("crCheckSmallAmountEligibility('goods', #{amount}, '#{type}').note") }
+
+    %w[social_enterprise social_coop self_reliance village_enterprise].each do |type|
+      assert_includes note.(type, 80_000_000), "취약계층 고용비율", type
+    end
+    assert_equal "", note.("woman_biz", 80_000_000), "여성기업에는 고용비율 단서가 없다"
+    assert_equal "", note.("social_enterprise", 15_000_000), "일반 한도(2천만원) 이내면 단서가 필요 없다"
+  end
 end
