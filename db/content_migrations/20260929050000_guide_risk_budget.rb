@@ -25,7 +25,7 @@
 #
 # 운영 적용(배포 후):
 #   bin/kamal app exec --reuse 'DRY_RUN=1 bin/rails runner "load Rails.root.join(%q{db/content_migrations/20260929050000_guide_risk_budget.rb})"'
-#   → 기대: changes=91 (laws 4 + 문장 87) · 두 번째 실행 changes=0
+#   → 기대: changes=92 (laws 4 + 문장 88 · description 1 포함) · 두 번째 실행 changes=0
 #   bin/kamal app exec --reuse 'bin/rails silmu:content_migrate'   (적용 + 캐시 무효화)
 # 롤백: laws 는 old 배열로, edits 는 new → old 역적용.
 
@@ -190,6 +190,11 @@ edits = [
   [ "budget-execution-complete-4", "rich_media",
     "감독기관에 이의 제기 가능. 단, 재무관 거부를 우회하거나 압박하는 방식은 절대 금지.",
     "근거 법령·서류를 갖춰 회계부서와 협의(실무 관행) — 별도 법정 이의제기 절차는 없음. 반려를 우회하거나 결재를 압박하는 방식은 금지." ],
+
+  # 3차(coordinator 후속): 메타 description 의 없는 법적 권한(«거부권 행사 조건») — 본문 정정에 맞춘다(title·slug 불변).
+  [ "budget-execution-complete-4", "description",
+    "재무관의 역할, 반드시 확인해야 할 7가지 항목, 거부권 행사 조건을 명확히 정리합니다.",
+    "재무관의 역할, 결재 전 점검 7가지(실무), 서류 반려 사유와 지출원 확인(시행령 제33조)을 정리합니다." ],
 
   # ── 예산집행 6편: 자산취득비 «100만원·2년» 기준(bec6-C04) ───────────────
   [ "budget-execution-complete-6", "sections",
@@ -412,7 +417,7 @@ ActiveRecord::Base.transaction(requires_new: true) do
     next unless guide
 
     to_write = {}
-    %w[sections rich_media].each do |field|
+    %w[sections rich_media description].each do |field|
       original = guide.read_attribute(field)
       original = original.deep_stringify_keys if original.is_a?(Hash)
       value = original

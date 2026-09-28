@@ -18,13 +18,14 @@ class GuideRiskBudgetTest < ActiveSupport::TestCase
       g = Guide.find_by!(slug: slug)
       rm = g.rich_media.deep_stringify_keys.slice("flowchart", "flashcards") # 운영엔 comparison_table 이 없다
       [ slug, { "sections" => g.read_attribute(:sections).deep_stringify_keys, "rich_media" => rm,
-                "title" => g.title, "view_count" => g.view_count } ]
+                "title" => g.title, "description" => g.description, "view_count" => g.view_count } ]
     end
     SLUGS.each do |slug|
       sections = @expected[slug]["sections"]
       sections = sections.merge("laws" => LAWS[slug][0]) if LAWS.key?(slug)
       Guide.find_by!(slug: slug).update_columns(sections: revert(sections, slug, "sections"),
-                                                rich_media: revert(@expected[slug]["rich_media"], slug, "rich_media"))
+                                                rich_media: revert(@expected[slug]["rich_media"], slug, "rich_media"),
+                                                description: revert(@expected[slug]["description"], slug, "description"))
     end
   end
 
@@ -44,12 +45,12 @@ class GuideRiskBudgetTest < ActiveSupport::TestCase
 
   def body(slug)
     g = Guide.find_by!(slug: slug)
-    [ g.read_attribute(:sections).to_json, g.rich_media.to_json ].join
+    [ g.read_attribute(:sections).to_json, g.rich_media.to_json, g.description.to_json ].join
   end
 
   STALE = {
     "budget-execution-complete-4" => [ "재무관이 확인해야 할 7가지", "지출관의 지휘를 받지 않습니다", "독립적 확인 권한", "재무관이 확인해야 할 사항의 구체적 범위", "집행기준 제4장",
-                                      "거부권을 행사", "감독기관에 이의", "재무관 확인 서명", "출납원 지급 가능", "독립성", "재무관은 반려 의무" ],
+                                      "거부권을 행사", "감독기관에 이의", "재무관 확인 서명", "출납원 지급 가능", "독립성", "재무관은 반려 의무", "거부권 행사 조건" ],
     "budget-execution-complete-5" => [ "기금운용계획 집행지침" ],
     "budget-execution-complete-6" => [ "100만 원", "100만원", "89만", "내용연수 2년 이상", "운영기준 제4장" ],
     "budget-execution-complete-7" => [ "3요건", "세 가지 모두 충족", "법령상 금지", "금지②", "금지③", "금지⑤", "운영기준 제5장" ],
@@ -64,7 +65,8 @@ class GuideRiskBudgetTest < ActiveSupport::TestCase
 
   FRESH = {
     "budget-execution-complete-4" => [ "지방회계법 시행령 제33조", "회계관리에 관한 훈령 제4장(지출)", "지방회계법 제36조", "시행령 제46조",
-                                      "시행령 제33조 후 지급", "별도 법정 이의제기 절차는 없음" ],
+                                      "시행령 제33조 후 지급", "별도 법정 이의제기 절차는 없음",
+                                      "서류 반려 사유와 지출원 확인(시행령 제33조)" ],
     "budget-execution-complete-5" => [ "지방회계법 시행령 제33조" ],
     "budget-execution-complete-6" => [ "운영기준 405-01", "별표2 16-1", "G{정수·재물조사 대상?}", "운영기준 제6조·별표 9~11" ],
     "budget-execution-complete-7" => [ "지방재정법 제43조①", "실무 판단 기준", "법령상 명시적 금지 조항은 없음", "별표 11 편성목 801" ],
@@ -85,6 +87,7 @@ class GuideRiskBudgetTest < ActiveSupport::TestCase
     assert_includes body("budget-planning-complete-5"), "0~50%"
     assert_includes body("budget-planning-complete-5"), "무보수 휴직자는 편성 제외"
     assert_includes body("budget-execution-complete-4"), "출납원 지급 가능"
+    assert_includes body("budget-execution-complete-4"), "거부권 행사 조건"
   end
 
   test "NORMAL: 마이그레이션 결과가 정정된 시드와 같고 title·slug·view_count 는 그대로다" do
@@ -94,6 +97,7 @@ class GuideRiskBudgetTest < ActiveSupport::TestCase
       assert_equal @expected[slug]["sections"], g.read_attribute(:sections).deep_stringify_keys, "#{slug} sections"
       assert_equal @expected[slug]["rich_media"], g.rich_media.deep_stringify_keys.slice("flowchart", "flashcards"), "#{slug} rich_media"
       assert_equal @expected[slug]["title"], g.title
+      assert_equal @expected[slug]["description"], g.description, "#{slug} description"
       assert_equal @expected[slug]["view_count"], g.view_count
     end
   end
@@ -131,15 +135,15 @@ class GuideRiskBudgetTest < ActiveSupport::TestCase
   end
 
   test "UPPER_BOUND: 전 항목이 한 번씩 바뀌고 두 번째 실행은 아무것도 바꾸지 않는다" do
-    assert_equal 91, LAWS.size + EDITS.size
-    assert_match(/changes=91\b/, migrate)
+    assert_equal 92, LAWS.size + EDITS.size
+    assert_match(/changes=92\b/, migrate)
     assert_match(/changes=0\b/, migrate)
   end
 
   test "LOWER_BOUND: DRY_RUN 은 세기만 하고 쓰지 않는다" do
     before = SLUGS.map { |s| body(s) }
     out = migrate("DRY_RUN" => "1")
-    assert_match(/DRY_RUN changes=91\b/, out)
+    assert_match(/DRY_RUN changes=92\b/, out)
     assert_match(%r{Guide/budget-execution-complete-6 fields_to_change=sections,rich_media}, out)
     assert_equal before, SLUGS.map { |s| body(s) }
   end

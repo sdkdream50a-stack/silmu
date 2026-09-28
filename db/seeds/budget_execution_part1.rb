@@ -255,7 +255,7 @@ BUDGET_EXECUTION_EPISODES_PART1 = [
   {
     slug: "budget-execution-complete-4",
     title: "재무관 확인 의무 체크리스트 — 왕초보 완전정복 4편",
-    description: "재무관의 역할, 반드시 확인해야 할 7가지 항목, 거부권 행사 조건을 명확히 정리합니다.",
+    description: "재무관의 역할, 결재 전 점검 7가지(실무), 서류 반려 사유와 지출원 확인(시행령 제33조)을 정리합니다.",
     category: "예산",
     series_order: 4,
     sections: {
