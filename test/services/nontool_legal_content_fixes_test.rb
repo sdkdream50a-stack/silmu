@@ -138,4 +138,14 @@ class NontoolLegalContentFixesTest < ActiveSupport::TestCase
     assert_not_includes Rails.root.join("db/seeds/audit_cases/topic_audit_cases_batch_01.rb").read, "제2023-24호"
     assert_not_includes Rails.root.join("db/seeds/topic_quick_stats_backfill_2026_06_03_batch2.rb").read, "국가공무원법 제72조 · 봉급"
   end
+
+  # 동일 업체 «연간 수의계약 누적 한도»는 현행 법령에 없다(2026-09-28 원문 대조) — 시험 해설·뉴스레터에도 남기지 않는다.
+  test "시험 문제·뉴스레터 체크포인트에 없는 «연간 수의계약 누적 한도»를 전제하지 않는다" do
+    %w[app/models/exam_questions.rb config/newsletter_checkpoints.yml].each do |path|
+      src = Rails.root.join(path).read
+      [ "연간 수의계약 한도", "연간 한도 회피", "누적 한도", "누적 금액이 한도" ].each do |phrase|
+        assert_not_includes src, phrase, "#{path} 가 없는 연간 누적 한도를 전제함: #{phrase}"
+      end
+    end
+  end
 end
