@@ -55,7 +55,8 @@
         <span class="material-symbols-outlined text-emerald-600">edit_note</span>
         검사할 텍스트 입력
       </h2>
-      <%= form_with url: standard_term_checker_path, method: :post, local: true do |f| %>
+      <%# Turbo 는 폼 POST 의 200 응답을 버린다(리다이렉트·4xx 만 렌더) — 결과가 보이지 않던 원인(2026-09-28). 일반 POST 로 보낸다. %>
+      <%= form_with url: standard_term_checker_path, method: :post, local: true, data: { turbo: false } do |f| %>
         <%= f.text_area :text,
               value: @input_text,
               class: "form-input w-full font-mono text-sm",
@@ -73,6 +74,14 @@
 
     <!-- 결과 -->
     <% if @result.present? %>
+      <% if request.post? %>
+        <%# 서버가 렌더한 결과 = 앞 페이지에서 사용자가 제출한 것. 새 페이지라 조작 이벤트가 없으므로 submitted 로 알린다. %>
+        <script>
+          document.addEventListener("DOMContentLoaded", function () {
+            if (typeof window.silmuCalcResult === "function") window.silmuCalcResult("standard-term", { immediate: true, submitted: true });
+          }, { once: true });
+        </script>
+      <% end %>
       <div class="card p-6 mb-6">
         <div class="flex items-center justify-between mb-4">
           <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">

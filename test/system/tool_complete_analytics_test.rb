@@ -182,4 +182,24 @@ class ToolCompleteAnalyticsTest < ApplicationSystemTestCase
     assert_equal 1, count("tool_start")
     assert_equal 0, count("tool_complete")
   end
+
+  # ── 서버 렌더 판정기(표준어 검사기) ──
+  # 폼 POST 에 200 HTML 을 돌려주는 도구다. Turbo 는 POST 의 200 응답을 버리므로(리다이렉트·4xx 만 렌더) 운영에서
+  # 결과가 한 번도 보이지 않았다(2026-09-28 실측). 제출 뒤 새 페이지에서 결과와 complete 1 을 본다.
+  test "표준어 검사기: 제출 → 결과 표시 · 결과 페이지 complete 1 · 다시 GET 은 0" do
+    visit "/tools/standard-term-checker"
+    find("textarea[name='text']").fill_in(with: "계약 상대자에게 대가 지급을 완료했습니다.")
+    press("input[type='submit'][value='표준어 검사']")
+    assert_text "검사 결과"
+    arm_gtag # 새 페이지 — partial 은 gtag 가 생길 때까지 대기열에 둔다(1초 간격)
+    sleep SETTLE
+    assert_equal 1, count("tool_complete")
+    assert_equal 0, count("tool_start"), "tool_start 는 입력한 폼 페이지에서 이미 나갔다 — 결과 페이지에서 또 세지 않는다"
+
+    visit "/tools/standard-term-checker"
+    arm_gtag
+    sleep SETTLE
+    assert_no_text "검사 결과"
+    assert_equal 0, count("tool_complete")
+  end
 end

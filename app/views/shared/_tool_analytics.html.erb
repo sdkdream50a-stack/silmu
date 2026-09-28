@@ -38,7 +38,8 @@
   · 신고 전에 tool_start 가 없었으면(버튼·샘플만 누른 경로) 먼저 보정해 퍼널을 유지한다(옛 observer 와 같은 규칙).
   · tool_complete 는 이 페이지에서 사용자 조작(input·change·click·submit)이 있은 뒤에만 나간다 —
     페이지 로드 중 자동 계산(브라우저가 복원한 입력값 등)은 완료가 아니다. calc_complete 는 이 조건을 받지 않는다(대조군 불변).
-  · 신고 도구 36개 / 해당 37개(/tools 38개 − 결과 없는 task-calendar). 빠진 1개 standard-term-checker 는 결과가 Turbo 에서 렌더되지 않아(200 POST) 신고 지점이 없다 — 별도 결함. %>
+  · 신고 도구 37개 / 해당 37개(/tools 38개 − 결과 없는 task-calendar). standard-term-checker 는 Turbo 가 200 POST 결과를 버려
+    결과 자체가 안 보였다 → 폼 data-turbo=false + 결과 페이지에서 submitted 신고. %>
 <script>
   (function () {
     var toolId = (location.pathname.split("/").filter(Boolean).pop() || "unknown");
@@ -105,6 +106,8 @@
       clearTimeout(settleTimer);
       if (signature === null || signature === undefined || signature === "") { pending = null; return; }
       pending = String(signature);
+      // submitted — 일반 POST 로 서버가 렌더한 결과 페이지(표준어 검사기). 조작과 tool_start 는 앞 폼 페이지에서 이미 있었다.
+      if (opts && opts.submitted) { interacted = true; started = true; }
       if (opts && opts.immediate) flushCalc();
       else settleTimer = setTimeout(flushCalc, SETTLE_MS);
     };
