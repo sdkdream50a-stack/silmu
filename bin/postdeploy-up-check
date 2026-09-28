@@ -1,0 +1,94 @@
+#!/usr/bin/env bash
+#
+# bin/deploy 의 배포 후 /up 확인.
+#
+# 왜 따로 있나 (2026-09-28):
+#   ad5270f 배포는 Kamal 성공 + 운영 이미지 태그 일치까지 확인됐는데, 마지막 `curl https://silmu.kr/up`
+#   한 번이 로컬 DNS 조회 실패(curl exit 6)로 끝났고 `set -e` 가 그 exit 6 을 그대로 스크립트 종료 코드로
+#   만들어 «배포 실패» 처럼 보였다. 이 Mac 의 리졸버는 ISP 서버 하나(fallback 없음)라 일시 실패가 곧바로
+#   판정 실패가 됐다.
+#
+# 판정:
+#   TARGET_UP        공개 URL 이 200 (시스템 DNS 또는 공개 리졸버로 다시 푼 주소)      → exit 0
+#   TARGET_DOWN      주소는 풀렸는데 200 이 아니거나 연결이 계속 실패                  → exit 1
+#   DNS_TEMP_FAILURE 모든 경로에서 이름을 못 풀었다 — 원본(서버 안) 확인이 200 이면 exit 0 (배포는 성공,
+#                    공개 경로는 이 Mac 에서 미확인), 원본 확인도 없거나 실패면 exit 1
+#
+# IP 를 코드에 적지 않는다. 대체 경로는 «공개 리졸버에 다시 묻기» 와 «운영 서버 안에서 확인» 둘뿐이다.
+#
+# 환경변수 (테스트·수동 실행용):
+#   UP_URL                 기본 https://silmu.kr/up
+#   UP_ATTEMPTS            기본 5
+#   UP_BACKOFF             재시도 간격 초, 기본 3
+#   UP_FALLBACK_RESOLVERS  기본 "1.1.1.1 8.8.8.8"
+#   PROD_HOST / SSH_PORT   있으면 원본 확인(ssh 로 서버 안에서 --resolve 127.0.0.1)
+
+set -uo pipefail
+
+URL="${UP_URL:-https://silmu.kr/up}"
+ATTEMPTS="${UP_ATTEMPTS:-5}"
+BACKOFF="${UP_BACKOFF:-3}"
+RESOLVERS="${UP_FALLBACK_RESOLVERS:-1.1.1.1 8.8.8.8}"
+HOST="$(printf '%s' "$URL" | sed -E 's#^https?://([^/:]+).*#\1#')"
+
+# curl 한 번 → "<exit> <http_code>"
+probe() {
+  local code rc
+  code="$(curl -s -o /dev/null -m 15 -w '%{http_code}' "$@")"
+  rc=$?
+  echo "$rc ${code:-000}"
+}
+
+last_rc=0
+last_code=000
+for i in $(seq 1 "$ATTEMPTS"); do
+  read -r last_rc last_code <<<"$(probe "$URL")"
+  echo "up_check attempt=$i curl_exit=$last_rc http=$last_code"
+  if [ "$last_rc" = "0" ] && [ "$last_code" = "200" ]; then
+    echo "UP_CHECK=TARGET_UP path=system_dns"
+    exit 0
+  fi
+  [ "$i" -lt "$ATTEMPTS" ] && sleep "$BACKOFF"
+done
+
+# 마지막 시도에서 이름은 풀렸고 서버가 응답했는데 200 이 아니면 대상 쪽 문제다.
+if [ "$last_rc" = "0" ]; then
+  echo "UP_CHECK=TARGET_DOWN http=$last_code"
+  exit 1
+fi
+# DNS(6) 가 아닌 curl 실패(연결 거부·시간 초과 등)도 대상 쪽이다.
+if [ "$last_rc" != "6" ]; then
+  echo "UP_CHECK=TARGET_DOWN curl_exit=$last_rc"
+  exit 1
+fi
+
+echo "system DNS failed $ATTEMPTS times (curl exit 6) — 공개 리졸버로 다시 푼다"
+for r in $RESOLVERS; do
+  ip="$(dig +short +time=3 +tries=1 @"$r" "$HOST" A 2>/dev/null | grep -E '^[0-9.]+$' | head -1)"
+  [ -n "$ip" ] || { echo "resolver $r: no answer"; continue; }
+  read -r rc code <<<"$(probe --resolve "$HOST:443:$ip" "$URL")"
+  echo "resolver $r → curl_exit=$rc http=$code"
+  if [ "$rc" = "0" ] && [ "$code" = "200" ]; then
+    echo "UP_CHECK=TARGET_UP path=fallback_resolver($r) local_dns=DNS_TEMP_FAILURE"
+    exit 0
+  fi
+  if [ "$rc" = "0" ]; then
+    echo "UP_CHECK=TARGET_DOWN http=$code path=fallback_resolver($r)"
+    exit 1
+  fi
+done
+
+if [ -n "${PROD_HOST:-}" ]; then
+  origin="$(ssh -p "${SSH_PORT:-22}" -o ConnectTimeout=10 "root@$PROD_HOST" \
+    "curl -sk -o /dev/null -m 15 -w '%{http_code}' --resolve $HOST:443:127.0.0.1 $URL" 2>/dev/null)"
+  echo "origin (server-local) http=${origin:-none}"
+  if [ "$origin" = "200" ]; then
+    echo "UP_CHECK=DNS_TEMP_FAILURE origin=TARGET_UP public=UNVERIFIED_FROM_THIS_HOST"
+    exit 0
+  fi
+  echo "UP_CHECK=TARGET_DOWN origin_http=${origin:-none}"
+  exit 1
+fi
+
+echo "UP_CHECK=DNS_TEMP_FAILURE origin=UNCHECKED"
+exit 1
