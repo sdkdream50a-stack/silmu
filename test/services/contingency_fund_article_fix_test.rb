@@ -52,17 +52,27 @@ class ContingencyFundArticleFixTest < ActiveSupport::TestCase
     assert_equal "예비비", t.name
     assert_equal 321, t.view_count
     assert_equal OLD_FAQS.map { |f| f["question"] }, t.faqs.map { |f| f["question"] }
-    assert_includes t.faqs.last["answer"], "의회가 삭감한 사업에는 예비비를 사용할 수 없습니다."
+  end
+
+  test "법령에 없는 의무 문구가 사라지고 제43조제3항 금지는 법적 서술로 남는다" do
+    migrate
+    text = topic_text
+    assert_not_includes text, "신규 사업 추진이나"
+    assert_not_includes text, "모두 충족"
+    assert_includes text, "신규 사업은 실무상 예비비 대신 추가경정예산으로 처리하는 것이 일반적입니다."
+    assert_includes text, "긴급·예산부족·목적적합(실무 검토)"
+    answer = Topic.find_by!(slug: "contingency-fund").faqs.last["answer"]
+    assert_includes answer, "폐지되거나 감액된 지출항목에는 예비비를 사용할 수 없습니다(같은 조 제3항)."
   end
 
   test "DRY_RUN 은 쓰지 않는다 · 적용 2건 · 재실행 0건" do
     out = migrate("DRY_RUN" => "1")
     assert_includes out, "fields_to_change=faqs"
     assert_includes out, "fields_to_change=quick_stats"
-    assert_includes out, "DRY_RUN changes=2"
+    assert_includes out, "DRY_RUN changes=4"
     assert_includes topic_text, WRONG
 
-    assert_includes migrate, "changes=2"
+    assert_includes migrate, "changes=4"
     assert_includes migrate, "changes=0"
   end
 
@@ -76,6 +86,8 @@ class ContingencyFundArticleFixTest < ActiveSupport::TestCase
     %w[db/seeds/topic_faqs_backfill_2026_06_03_batch5.rb db/seeds/topic_quick_stats_backfill_2026_06_03_batch1.rb].each do |path|
       src = Rails.root.join(path).read
       assert_not_includes src, "지방재정법 시행령 제65조", path
+      assert_not_includes src, "신규 사업 추진이나", path
+      assert_not_includes src, "목적적합 모두 충족", path
       assert_includes src, "지방재정법 제43조제1항", path
     end
   end
