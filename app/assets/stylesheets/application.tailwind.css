@@ -1096,9 +1096,11 @@
     color: inherit;
   }
 
-  /* 카드, 입력필드, 테이블 */
+  /* 카드, 입력필드, 테이블
+     2026-09-27 — 버튼형 input(submit·button·reset)은 뺀다. 넣으면 OS 다크모드에서
+     «검토하기»·«로그인» 제출 버튼의 남색 배경이 지워져 글자처럼 보였다. */
   .card, .qd-card, .qd-doc, .qd-input,
-  input, select, textarea, table, th, td {
+  input:not([type="submit"]):not([type="button"]):not([type="reset"]), select, textarea, table, th, td {
     background-color: inherit !important;
     color: inherit !important;
     border-color: #e5e7eb !important;
