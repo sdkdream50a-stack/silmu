@@ -182,11 +182,17 @@
       quSetField('cr-company', f.company_name);
       quSetField('cr-business-no', f.business_no);
       if (f.delivery_period) quSetField('cr-delivery', f.delivery_period);
-      // 소액수의 자동 선택
+      // 소액수의 자동 선택 — 상대방 유형에 따라 한도(2천만/5천만/1억원)가 다르므로
+      // 상대방을 모르는 상태(기본값)에서는 일반 한도(2천만원)만 적용한다.
+      // (감사 결함: 상대방 무관 1억원 정액으로 자동 선택하던 것을 수정 — 2026-09-28)
       var amt = totalAmt;
-      if (amt > 0 && amt <= 100000000) {
-        var smallBtn = document.querySelector('[data-reason="small_amount"]');
-        if (smallBtn && typeof crSelectReason === 'function') crSelectReason(smallBtn);
+      if (amt > 0) {
+        var elig = crCheckSmallAmountEligibility(crState.type, amt, crCounterpartyType());
+        if (elig.eligible === true) {
+          var smallBtn = document.querySelector('[data-reason="small_amount"]');
+          if (smallBtn && typeof crSelectReason === 'function') crSelectReason(smallBtn);
+        }
+        crUpdateSmallAmountNote();
       }
       // 세부 정보 섹션 표시
       var detailSection = document.getElementById('cr-detail-section');
@@ -258,6 +264,25 @@
         <div class="cr-law-box" id="cr-law-box">
           <div class="cr-law-title" id="cr-law-title"></div>
           <div class="cr-law-text" id="cr-law-text"></div>
+        </div>
+
+        <!-- 상대방 유형 (소액수의 특례 한도 판정용) -->
+        <div style="margin-top:14px;">
+          <label class="cr-label" for="cr-counterparty-type">
+            상대방 유형 <span style="font-weight:400; color:#94a3b8;">(소액수의 특례 한도 확인용 — 모르면 "해당 없음"으로 두세요)</span>
+          </label>
+          <select class="cr-input" id="cr-counterparty-type" onchange="crUpdateSmallAmountNote()">
+            <option value="unknown">해당 없음 / 모름</option>
+            <option value="youth_startup">청년창업기업</option>
+            <option value="small_biz">소기업·소상공인</option>
+            <option value="woman_biz">여성기업</option>
+            <option value="disability_biz">장애인기업</option>
+            <option value="social_enterprise">사회적기업</option>
+            <option value="social_coop">사회적협동조합</option>
+            <option value="self_reliance">자활기업</option>
+            <option value="village_enterprise">마을기업</option>
+          </select>
+          <div id="cr-counterparty-note" style="font-size:12px; color:#64748b; margin-top:6px;"></div>
         </div>
       </div>
 
@@ -411,6 +436,92 @@ var crTypeLabels = {
   construction: '공사'
 };
 
+// 소액수의 추정가격 한도 (지방계약법 시행령 제25조제1항제5호) — 상대방 유형별.
+// 물품·용역: 일반 2천만원 / 청년창업기업 5천만원 / 소기업·소상공인·여성기업·장애인기업·
+// 사회적기업·사회적협동조합·자활기업·마을기업 1억원 (시행령 제25조제1항제5호 및 하위 목).
+// 공사는 종합·전문·기타공사 구분에 따라 한도(1.6억~4억원)가 다르고 위 특례와 무관하여
+// 이 표에 포함하지 않는다 — construction은 별도 분기로 처리한다.
+var CR_SMALL_AMOUNT_LIMITS_GOODS_SERVICE = {
+  unknown: 20000000,
+  youth_startup: 50000000,
+  small_biz: 100000000,
+  woman_biz: 100000000,
+  disability_biz: 100000000,
+  social_enterprise: 100000000,
+  social_coop: 100000000,
+  self_reliance: 100000000,
+  village_enterprise: 100000000
+};
+var CR_VULNERABLE_EMPLOYMENT_RATIO_TYPES = ['social_enterprise', 'social_coop', 'self_reliance', 'village_enterprise'];
+var CR_CONSTRUCTION_SAFE_LIMIT = 160000000; // 기타공사 기준(가장 낮은 한도) — 이 이하면 공사 종류 무관하게 소액수의 해당
+
+function crCounterpartyType() {
+  var el = document.getElementById('cr-counterparty-type');
+  return (el && el.value) || 'unknown';
+}
+
+// 계약 종류·추정가격·상대방 유형으로 소액수의(추정가격 기준) 해당 여부를 판정한다.
+// 반환: { eligible: true|false|null, limitWon: number|null, note: string }
+// eligible === null 은 "한도가 상대방/공사구분에 따라 달라 자동 판정 불가" — 이 경우
+// 소액수의 사유를 자동 선택하지 않는다(모름을 소액수의로 자동 확정하면 안 됨).
+function crCheckSmallAmountEligibility(contractType, amountWon, counterpartyType) {
+  if (!amountWon || amountWon <= 0) return { eligible: null, limitWon: null, note: '' };
+
+  if (contractType === 'construction') {
+    if (amountWon <= CR_CONSTRUCTION_SAFE_LIMIT) {
+      return {
+        eligible: true,
+        limitWon: CR_CONSTRUCTION_SAFE_LIMIT,
+        note: '공사 소액수의 한도(기타공사 기준 1.6억원 이하) 이내로 판단됩니다. 종합·전문공사는 한도가 더 높을 수 있습니다(시행령 제25조제1항제5호).'
+      };
+    }
+    return {
+      eligible: null,
+      limitWon: null,
+      note: '공사는 종합·전문·기타공사 구분에 따라 소액수의 한도(1.6억~4억원)가 달라 자동 판정하지 않습니다. 공사 구분을 확인하세요.'
+    };
+  }
+
+  var type = counterpartyType || 'unknown';
+  var limit = CR_SMALL_AMOUNT_LIMITS_GOODS_SERVICE[type] || CR_SMALL_AMOUNT_LIMITS_GOODS_SERVICE.unknown;
+
+  if (amountWon <= limit) {
+    // 시행령 제25조제1항제5호바목 단서: 사회적기업·사회적협동조합·자활기업·마을기업은 행정안전부장관 고시
+    // 취약계층 고용비율을 충족해야 2천만원 초과 한도가 적용된다.
+    var needsEmploymentRatio = CR_VULNERABLE_EMPLOYMENT_RATIO_TYPES.indexOf(type) !== -1 && amountWon > CR_SMALL_AMOUNT_LIMITS_GOODS_SERVICE.unknown;
+    return {
+      eligible: true,
+      limitWon: limit,
+      note: needsEmploymentRatio ? '이 유형은 행정안전부장관이 고시하는 취약계층 고용비율을 충족해야 2천만원 초과 한도가 적용됩니다(시행령 제25조제1항제5호바목 단서). 충족 여부를 확인하세요.' : ''
+    };
+  }
+
+  if (type === 'unknown' && amountWon <= CR_SMALL_AMOUNT_LIMITS_GOODS_SERVICE.small_biz) {
+    return {
+      eligible: null,
+      limitWon: null,
+      note: '추정가격이 일반 소액수의 한도(2천만원)를 초과합니다. 상대방이 청년창업기업(5천만원 이하)·소기업/소상공인·여성기업·장애인기업·사회적기업 등(1억원 이하) 특례 대상이면 소액수의가 가능할 수 있으니 "상대방 유형"을 선택하세요.'
+    };
+  }
+
+  return {
+    eligible: false,
+    limitWon: limit,
+    note: '추정가격이 해당 상대방 유형의 소액수의 한도(' + limit.toLocaleString('ko-KR') + '원)를 초과합니다. 다른 수의계약 사유 또는 입찰이 필요할 수 있습니다.'
+  };
+}
+
+// 상대방 유형/금액/계약구분이 바뀔 때 한도 안내 문구만 갱신한다(사유 자동 변경은 하지 않음).
+function crUpdateSmallAmountNote() {
+  var noteEl = document.getElementById('cr-counterparty-note');
+  if (!noteEl) return;
+  var budgetEl = document.getElementById('cr-budget');
+  var amt = budgetEl ? Number(budgetEl.value.replace(/[^\d]/g, '')) : 0;
+  if (!amt) { noteEl.textContent = ''; return; }
+  var elig = crCheckSmallAmountEligibility(crState.type, amt, crCounterpartyType());
+  noteEl.textContent = elig.note || (elig.eligible === true ? '소액수의 한도(' + (elig.limitWon || 0).toLocaleString('ko-KR') + '원) 이내입니다.' : '');
+}
+
 var crReasonData = {
   small_amount: {
     title: '소액수의계약 (추정가격 기준 이하)',
@@ -472,6 +583,7 @@ function crSelectType(el) {
   if (crState.reason) {
     crUpdateLawBox();
   }
+  crUpdateSmallAmountNote();
 }
 
 function crSelectReason(el) {
@@ -505,6 +617,7 @@ function crFormatBudget(el) {
   } else {
     document.getElementById('cr-budget-text').textContent = '';
   }
+  crUpdateSmallAmountNote();
 }
 
 function crNumberToKorean(n) {
