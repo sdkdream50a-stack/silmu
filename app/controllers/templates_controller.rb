@@ -54,8 +54,8 @@ class TemplatesController < ApplicationController
     expires_in 1.day, public: true, stale_while_revalidate: 7.days
 
     set_meta_tags(
-      title: "문서 양식 — 계약서·검수조서·기안문 26종 무료 다운로드",
-      description: "공무원 계약·예산 업무에 필요한 문서 양식 26종을 무료로 제공합니다. 물품계약서, 용역계약서, 수의계약 사유서, 검수조서, 예산요구서 등 HWP·PDF·XLSX 형식으로 즉시 다운로드하세요.",
+      title: "문서 양식 — 계약서·검수조서·기안문 26종 미리보기",
+      description: "공무원 계약·예산 업무에 필요한 문서 양식 26종을 화면에서 바로 확인합니다. 물품계약서, 용역계약서, 수의계약 사유서, 검수조서, 예산요구서 등을 미리보기 화면으로 인쇄하거나 참고해 작성하세요.",
       keywords: "문서 양식, 계약서, 검수조서, 기안문, 수의계약 사유서, 견적서, 예정가격조서",
       og: {
         title: "문서 양식 — 실무.kr",
@@ -75,7 +75,7 @@ class TemplatesController < ApplicationController
 
     set_meta_tags(
       title: @template[:title],
-      description: "#{@template[:desc]} — #{@template[:formats].join(', ')} 형식 무료 다운로드",
+      description: "#{@template[:desc]} — #{@template[:formats].join(', ')} 형식 양식 미리보기 (다운로드는 준비 중)",
       keywords: "#{@template[:title]}, #{@template[:category]}, 양식 다운로드",
       og: {
         title: "#{@template[:title]} — 실무.kr",

@@ -13,7 +13,7 @@ class TechnicalSeo0917Test < ActionDispatch::IntegrationTest
     get "/templates"
 
     assert_response :success
-    assert_equal "문서 양식 — 계약서·검수조서·기안문 26종 무료 다운로드", meta_content("name", "twitter:title")
+    assert_equal "문서 양식 — 계약서·검수조서·기안문 26종 미리보기", meta_content("name", "twitter:title")
     assert_equal meta_content("name", "description"), meta_content("name", "twitter:description")
   end
 

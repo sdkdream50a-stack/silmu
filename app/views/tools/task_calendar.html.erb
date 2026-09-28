@@ -68,6 +68,7 @@
     1 => [
       { day: 10, cat: "세무", title: "원천세 신고·납부" },
       { day: 10, cat: "보험", title: "4대보험료 납부" },
+      { day: 31, cat: "세무", title: "지방세 납부(등록면허세·면허분)" }, # 지방세법 §35②(조례로 정하는 납기, 통상 1/16~1/31) — 4월이 아니다
       { day: 31, cat: "보고", title: "일용근로소득 지급명세서 제출(전월 지급분, 매월 말일)" }, # 소득세법 §164의3: 지급일이 속한 달의 다음 달 말일까지(매월 반복)
       { day: 17, cat: "급여", title: "급여 지급 준비 (공제내역 확인)" },
       { day: 25, cat: "급여", title: "급여 지급" },
@@ -77,7 +78,6 @@
     2 => [
       { day: 10, cat: "세무", title: "원천세 신고·납부" },
       { day: 10, cat: "보험", title: "4대보험료 납부" },
-      { day: 15, cat: "보험", title: "건강보험 정산(보수총액 신고)" },
       { day: 17, cat: "급여", title: "급여 지급 준비" },
       { day: 25, cat: "급여", title: "급여 지급" },
       { day: 28, cat: "세무", title: "연말정산 환급·추징 처리" },
@@ -88,9 +88,10 @@
       { day: 10, cat: "세무", title: "원천세 신고·납부" },
       { day: 10, cat: "보험", title: "4대보험료 납부" },
       { day: 10, cat: "보고", title: "근로소득 지급명세서 제출" },
+      { day: 10, cat: "보험", title: "건강보험 정산(보수총액 신고)" }, # 국민건강보험법 시행령 §37: 매년 3/10까지 전년도 보수총액 신고
+      { day: 15, cat: "보험", title: "고용·산재보험 보수총액 신고" }, # 고용산재보험료징수법 시행령 §16: 매년 3/15까지
       { day: 17, cat: "급여", title: "급여 지급 준비" },
       { day: 25, cat: "급여", title: "급여 지급" },
-      { day: 25, cat: "보험", title: "고용·산재보험 보수총액 신고" },
       { day: 31, cat: "회계", title: "1분기 결산 준비" },
     ],
     4 => [
@@ -100,7 +101,6 @@
       { day: 17, cat: "급여", title: "급여 지급 준비" },
       { day: 20, cat: "서무", title: "상반기 물품구매계획 점검" },
       { day: 25, cat: "급여", title: "급여 지급" },
-      { day: 25, cat: "세무", title: "지방세 납부(면허세 등)" },
       { day: 30, cat: "보고", title: "1분기 업무 실적 보고" },
     ],
     5 => [
@@ -123,7 +123,7 @@
     7 => [
       { day: 10, cat: "세무", title: "원천세 신고·납부" },
       { day: 10, cat: "보험", title: "4대보험료 납부" },
-      { day: 10, cat: "세무", title: "재산세 납부(건축물)" },
+      { day: 31, cat: "세무", title: "재산세 납부(건축물)" }, # 지방세법 §115①1: 납기 7/16~7/31
       { day: 17, cat: "급여", title: "급여 지급 준비" },
       { day: 25, cat: "급여", title: "급여 지급" },
       { day: 25, cat: "보험", title: "건강보험 보수월액 변경신고" },
@@ -140,7 +140,7 @@
     9 => [
       { day: 10, cat: "세무", title: "원천세 신고·납부" },
       { day: 10, cat: "보험", title: "4대보험료 납부" },
-      { day: 15, cat: "세무", title: "재산세 납부(토지)" },
+      { day: 30, cat: "세무", title: "재산세 납부(토지)" }, # 지방세법 §115①3: 납기 9/16~9/30
       { day: 17, cat: "급여", title: "급여 지급 준비 (추석 전 조기 지급)" },
       { day: 25, cat: "급여", title: "급여 지급" },
       { day: 30, cat: "회계", title: "3분기 결산" },
@@ -1249,6 +1249,9 @@
       sidebar.classList.remove("flex", "fixed", "inset-y-0", "left-0", "z-40", "shadow-2xl");
     }
   }
+  // ":607의 <button onclick="switchView('upcoming')">는 이 IIFE 밖(전역 스코프)에서
+  // 실행되므로 window에 노출하지 않으면 ReferenceError로 죽는다.
+  window.switchView = switchView;
 
   // --- 사이드바 (switchView보다 먼저 선언 필요) ---
   const sidebar = document.getElementById("sidebar");

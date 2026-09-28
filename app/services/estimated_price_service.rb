@@ -99,6 +99,10 @@ class EstimatedPriceService
 
       # 기초금액 계산 (= 추정가격, VAT 제외)
       base_amount = calculate_base_amount(type, amounts)
+      # 0원·음수는 추정가격이 될 수 없다 — 검증 없이 두면 "수의계약 가능/견적서 생략가능"이
+      # 그대로 표시된다.
+      return { success: false, error: "추정가격은 0원보다 커야 합니다." } if base_amount <= 0
+
       vat = (base_amount * VAT_RATE).round(0)
       total_with_vat = base_amount + vat
 
@@ -231,8 +235,9 @@ class EstimatedPriceService
     # 종류 미지정이면 nil이 들어온다. 물품·용역 기준(2천만·1억)을 공사에 그대로 적용하면
     # "수의계약 가능(≤4억)"과 "1억 초과라 입찰"이 동시에 나오는 모순이 생긴다.
     def determine_estimate_requirement(type, price, threshold = nil)
-      # 견적서 생략(시행규칙 제33조)은 200만원 미만 물품·용역만 해당 — 공사는 미열거
-      if price <= 2_000_000
+      # 견적서 생략(시행규칙 제33조 2호)은 "추정가격 200만원 미만" 물품·용역만 해당 — 공사는 미열거.
+      # 200만원 정각은 "미만"이 아니므로 생략 대상이 아니다(1인 견적 대상).
+      if price < 2_000_000
         if type == :construction
           return { type: "1인견적", desc: "추정가격 2백만원 이하: 1인 견적 수의계약 (공사는 견적서 생략 대상 아님)", basis: "지방계약법 시행령 제30조제1항" }
         else

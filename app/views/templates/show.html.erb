@@ -39,11 +39,13 @@
         <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
           <div class="bg-gray-100 px-4 py-3 flex items-center justify-between border-b">
             <div class="flex items-center gap-2">
-              <button class="p-2 hover:bg-gray-200 rounded-lg transition-colors">
+              <button type="button" id="template-zoom-out" onclick="templateZoom(-10)" aria-label="미리보기 축소"
+                      class="p-2 hover:bg-gray-200 rounded-lg transition-colors">
                 <span class="material-symbols-outlined text-gray-600">zoom_out</span>
               </button>
-              <span class="text-sm text-gray-600">100%</span>
-              <button class="p-2 hover:bg-gray-200 rounded-lg transition-colors">
+              <span class="text-sm text-gray-600" id="template-zoom-label">100%</span>
+              <button type="button" id="template-zoom-in" onclick="templateZoom(10)" aria-label="미리보기 확대"
+                      class="p-2 hover:bg-gray-200 rounded-lg transition-colors">
                 <span class="material-symbols-outlined text-gray-600">zoom_in</span>
               </button>
             </div>
@@ -54,7 +56,7 @@
 
           <!-- 문서 미리보기 -->
           <div class="aspect-[1/1.414] bg-white p-6 overflow-auto">
-            <div class="w-full h-full bg-white border border-gray-300 shadow-sm p-6 text-sm text-gray-800" style="font-family: 'Malgun Gothic', sans-serif;">
+            <div id="template-preview-content" class="w-full h-full bg-white border border-gray-300 shadow-sm p-6 text-sm text-gray-800" style="font-family: 'Malgun Gothic', sans-serif; transform-origin: top left;">
               <% case @template[:category] %>
               <% when "계약서" %>
                 <!-- 계약서 양식 -->
@@ -307,3 +309,23 @@
     </section>
   </div>
 </section>
+
+<script>
+  // 확대/축소 버튼 — 핸들러가 없어 눌러도 반응이 없던 dead button 이었다 (2026-09-28 감사 P3).
+  (function () {
+    var ZOOM_MIN = 50, ZOOM_MAX = 150, ZOOM_STEP_DEFAULT = 10;
+    var zoom = 100;
+
+    window.templateZoom = function (delta) {
+      zoom = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, zoom + delta));
+      var content = document.getElementById("template-preview-content");
+      var label = document.getElementById("template-zoom-label");
+      if (content) content.style.transform = "scale(" + (zoom / 100) + ")";
+      if (label) label.textContent = zoom + "%";
+      var outBtn = document.getElementById("template-zoom-out");
+      var inBtn = document.getElementById("template-zoom-in");
+      if (outBtn) outBtn.disabled = zoom <= ZOOM_MIN;
+      if (inBtn) inBtn.disabled = zoom >= ZOOM_MAX;
+    };
+  })();
+</script>

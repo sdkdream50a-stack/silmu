@@ -58,3 +58,30 @@ test("EXCEPTION: 표에 없는 호봉을 고르면 이전 봉급을 지운다", 
   p.sandbox.updateSalary()
   assert.equal(p.el("monthly-salary").value, "")
 })
+
+// 2026-09-28 감사 P2 — 지방공무원 수당 등에 관한 규정 §10②: 부양가족은 4명 이내,
+// 다만 자녀는 4명을 초과해도 지급(한도에서 제외). 한도는 자녀가 쓰고 남은 만큼만 배우자·기타에 적용.
+test("NORMAL: 배우자+기타부양 5명 → 4명 한도(배우자+기타 3명)로 100,000원", () => {
+  const p = page({ "has-spouse": "yes", "children-count": "0", "others-count": "5" })
+  p.sandbox.calculateFamily()
+  assert.equal(won(p.el("val-family").textContent), 100000)
+})
+
+test("NORMAL: 배우자+자녀2+기타2 → 자녀는 전액, 비자녀는 한도 내 190,000원", () => {
+  const p = page({ "has-spouse": "yes", "children-count": "2", "others-count": "2" })
+  p.sandbox.calculateFamily()
+  assert.equal(won(p.el("val-family").textContent), 190000)
+})
+
+test("EDGE: 자녀만 5명(비자녀 0명)이면 한도와 무관하게 전액 지급", () => {
+  const p = page({ "has-spouse": "no", "children-count": "5", "others-count": "0" })
+  p.sandbox.calculateFamily()
+  // 50,000 + 80,000 + (5-2)*120,000 = 490,000
+  assert.equal(won(p.el("val-family").textContent), 490000)
+})
+
+test("NORMAL: 배우자+자녀1(한도 내)이면 전액 90,000원", () => {
+  const p = page({ "has-spouse": "yes", "children-count": "1", "others-count": "0" })
+  p.sandbox.calculateFamily()
+  assert.equal(won(p.el("val-family").textContent), 90000)
+})

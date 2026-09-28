@@ -118,7 +118,11 @@ export default class extends Controller {
       // 오늘로 고정하면 과거연도 정산이, 연초로 고정하면 하반기 사용자가 틀린다 →
       // 어느 시점 기준인지 사용자가 직접 고르게 하고 그 값을 쓴다.
       refDate:          this[`pensionRefDate${key}Target`]?.value || "",
-      accidentRate:     parseFloat(this[`accidentRate${key}Target`].value) / 100 || RATES[year].accident.g,
+      // 0 입력도 유효한 요율이다 — `||`는 0을 falsy로 취급해 기본값(0.786%)으로 되돌려버린다.
+      accidentRate:     (() => {
+        const raw = parseFloat(this[`accidentRate${key}Target`].value)
+        return Number.isFinite(raw) ? raw / 100 : RATES[year].accident.g
+      })(),
       employStableRate: parseFloat(this[`employStableRate${key}Target`].value) / 100 || RATES[year].employment.g_stable,
     }
 
@@ -133,7 +137,18 @@ export default class extends Controller {
       return
     }
 
-    const result = calcSettlement(input)
+    // 기준일이 국민연금 상·하한 고시 구간 밖이면 calcSettlement가 RangeError를 던진다 —
+    // 잡지 않으면 화면이 무반응 상태로 멈추고 직전 결과가 그대로 남는다.
+    let result
+    try {
+      result = calcSettlement(input)
+    } catch (err) {
+      if (err instanceof RangeError) {
+        alert(err.message)
+        return
+      }
+      throw err
+    }
     this.results[tab] = { result, input }
     this[`result${key}Target`].classList.remove("hidden")
     this.renderResult(tab, result, input.ginam)

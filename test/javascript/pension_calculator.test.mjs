@@ -20,11 +20,22 @@ const root = new URL("../../", import.meta.url)
 const erb = readFileSync(new URL("app/views/tools/pension_calculator.html.erb", root), "utf8")
 const SCRIPT = erb.match(/<script>([\s\S]*?)<\/script>/)[1]
 
-function run({ tenure, income, retireYear }) {
+function page({ tenure, income, retireYear }) {
   const values = { "tenure-slider": String(tenure), "income-input": String(income) }
   const els = new Map()
   const el = (id) => {
-    if (!els.has(id)) els.set(id, { value: values[id] ?? "", textContent: "", style: {}, classList: { add() {}, remove() {}, toggle() {} } })
+    if (!els.has(id)) {
+      const classes = new Set(["hidden"])
+      els.set(id, {
+        value: values[id] ?? "", textContent: "", style: {},
+        classList: {
+          add: (c) => classes.add(c),
+          remove: (c) => classes.delete(c),
+          toggle: (c, on) => (on === undefined ? (classes.has(c) ? classes.delete(c) : classes.add(c)) : (on ? classes.add(c) : classes.delete(c))),
+          contains: (c) => classes.has(c),
+        },
+      })
+    }
     return els.get(id)
   }
   const sandbox = { document: { getElementById: el, querySelectorAll: () => [], addEventListener() {} } }
@@ -33,6 +44,11 @@ function run({ tenure, income, retireYear }) {
   vm.runInContext(SCRIPT, sandbox)
   if (retireYear) sandbox.selectRetireYear(String(retireYear))
   sandbox.calculate()
+  return { sandbox, el }
+}
+
+function run({ tenure, income, retireYear }) {
+  const { el } = page({ tenure, income, retireYear })
   return Number(String(el("result-pension-monthly").textContent).replace(/[^0-9]/g, ""))
 }
 
@@ -55,4 +71,33 @@ test("LOWER_BOUND: 10년 미만 입력은 10년으로 올려 계산(슬라이더
 
 test("NEGATIVE: 퇴직 연도 비율을 전 기간에 곱하던 값(1,388,800원)이 아니다", () => {
   assert.notEqual(run({ tenure: 20, income: 4000000, retireYear: 2026 }), Math.round(4000000 * 20 * 0.01736))
+})
+
+// 2026-09-28 감사 P2 — 음수/0 입력이 그대로 계산되거나(음수) 직전 결과가 잔존한다(0).
+test("INVALID: 기준소득월액 음수는 계산을 거부하고 초기 안내로 되돌린다", () => {
+  const { el } = page({ tenure: 20, income: -100, retireYear: 2026 })
+  assert.equal(el("result-pension-monthly").textContent, "정보를 입력하세요")
+  assert.equal(el("result-placeholder-pension").classList.contains("hidden"), false)
+})
+
+test("INVALID: 정상 계산 후 0을 입력하면 직전 결과가 아니라 초기 안내로 되돌린다", () => {
+  const { sandbox, el } = page({ tenure: 20, income: 4000000, retireYear: 2026 })
+  assert.notEqual(el("result-pension-monthly").textContent, "정보를 입력하세요")
+  el("income-input").value = "0"
+  sandbox.calculate()
+  assert.equal(el("result-pension-monthly").textContent, "정보를 입력하세요")
+  assert.equal(el("result-pension-2026-block").classList.contains("hidden"), true)
+})
+
+// 2026-09-28 감사 P2 — "2026년 2.1% 인상 후"가 선택한 퇴직연도와 무관하게 항상 ×1.021 적용됐다.
+// 2.1%는 2025→2026 물가상승률(확정값)에만 성립하므로 2026년 퇴직 선택 시에만 보여준다.
+test("DISPLAY: 2026년 퇴직 선택 시에만 2.1% 인상 블록을 보여준다", () => {
+  const { el } = page({ tenure: 20, income: 4000000, retireYear: 2026 })
+  assert.equal(el("result-pension-2026-block").classList.contains("hidden"), false)
+  assert.equal(el("result-pension-2026").textContent, Math.round(1478800 * 1.021).toLocaleString("ko-KR") + "원")
+})
+
+test("DISPLAY: 2026년이 아닌 퇴직연도를 선택하면 미검증 2.1% 인상 블록을 숨긴다", () => {
+  const { el } = page({ tenure: 20, income: 4000000, retireYear: 2030 })
+  assert.equal(el("result-pension-2026-block").classList.contains("hidden"), true)
 })

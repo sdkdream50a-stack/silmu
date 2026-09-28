@@ -134,8 +134,10 @@
           <div class="bg-gradient-to-br from-violet-50 to-editorial-navy-bg border border-violet-100 rounded-2xl p-6 mb-6 text-center">
             <p class="text-sm text-slate-500 mb-1">월 예상 연금액 (2025년 기준)</p>
             <div class="text-3xl font-bold text-violet-700" id="result-pension-monthly">정보를 입력하세요</div>
-            <p class="text-sm text-slate-500 mt-3 mb-1">2026년 2.1% 인상 후</p>
-            <div class="text-2xl font-bold text-violet-500" id="result-pension-2026">—</div>
+            <div id="result-pension-2026-block" class="hidden">
+              <p class="text-sm text-slate-500 mt-3 mb-1">2026년 2.1% 인상 후</p>
+              <div class="text-2xl font-bold text-violet-500" id="result-pension-2026">—</div>
+            </div>
           </div>
 
           <!-- 상세 결과 -->
@@ -294,21 +296,42 @@ function setIncome(amount) {
   calculate();
 }
 
+function resetPensionResult() {
+  document.getElementById('result-pension-monthly').textContent = '정보를 입력하세요';
+  document.getElementById('result-pension-2026-block').classList.add('hidden');
+  document.getElementById('result-pension-2026').textContent = '—';
+  document.getElementById('result-detail').classList.add('hidden');
+  document.getElementById('result-placeholder-pension').classList.remove('hidden');
+}
+
 function calculate() {
   const tenure = Math.min(36, Math.max(10, parseInt(document.getElementById('tenure-slider').value) || 20));
-  const income = parseInt(document.getElementById('income-input').value) || 0;
-  if (!income) return;
+  const incomeRaw = parseInt(document.getElementById('income-input').value);
+  // 음수·0·숫자가 아닌 입력은 무효로 처리 — 직전 결과를 지우고 초기 안내로 되돌린다.
+  if (!Number.isFinite(incomeRaw) || incomeRaw <= 0) {
+    resetPensionResult();
+    return;
+  }
+  const income = incomeRaw;
 
   // 재직 연도별 비율의 합 × 평균기준소득월액 (소득재분배 제13조제2항 미반영 개략 추정). 재직 10년 미만은 연금 없음(§43①).
   const rateSum = serviceRateSum(selectedRetireYear, tenure);
   const rate = rateSum / tenure / 100; // 표시용 평균 비율
   const monthlyPension = Math.round(income * rateSum / 100);
-  const monthlyPension2026 = Math.round(monthlyPension * 1.021);
   const annualPension = monthlyPension * 12;
 
   // 결과 표시
   document.getElementById('result-pension-monthly').textContent = monthlyPension.toLocaleString('ko-KR') + '원';
-  document.getElementById('result-pension-2026').textContent = monthlyPension2026.toLocaleString('ko-KR') + '원';
+  // "2026년 2.1% 인상 후"는 2025→2026 물가상승률(확정값)에만 성립한다. 다른 퇴직연도를 선택하면
+  // 그 해의 물가상승률은 아직 고시되지 않아 검증 불가 — 2026년 선택 시에만 보여준다(퇴직연도 무관 일괄 적용 금지).
+  const block2026 = document.getElementById('result-pension-2026-block');
+  if (selectedRetireYear === 2026) {
+    const monthlyPension2026 = Math.round(monthlyPension * 1.021);
+    document.getElementById('result-pension-2026').textContent = monthlyPension2026.toLocaleString('ko-KR') + '원';
+    block2026.classList.remove('hidden');
+  } else {
+    block2026.classList.add('hidden');
+  }
 
   document.getElementById('d-income').textContent = income.toLocaleString('ko-KR') + '원';
   document.getElementById('d-tenure').textContent = tenure + '년';
