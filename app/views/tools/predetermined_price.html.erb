@@ -62,10 +62,10 @@
         <div>
           <label for="range-rate" class="block text-sm font-semibold text-slate-700 mb-2">복수예비가격 범위</label>
           <select id="range-rate" class="form-input w-full" onchange="calculatePredeterminedPrice(true)">
-            <option value="2" selected>기초금액의 +/- 2%</option>
-            <option value="3">기초금액의 +/- 3%</option>
+            <option value="3" selected>기초금액의 +/- 3% (지방계약)</option>
+            <option value="2">기초금액의 +/- 2% (국가계약)</option>
           </select>
-          <p class="text-xs text-slate-400 mt-1">공고·기관 기준에 맞는 범위를 선택하세요</p>
+          <p class="text-xs text-slate-400 mt-1">지방자치단체는 ±3% 안에서 기초금액 이상 7개·미만 8개(「지방자치단체 입찰 및 계약 집행기준」 행정안전부예규 제372호)</p>
         </div>
         <div>
           <label for="floor-rate" class="block text-sm font-semibold text-slate-700 mb-2">낙찰하한율 (%)</label>
@@ -239,7 +239,7 @@
     // 안쪽 반올림(하한 ceil·상한 floor) 기준이라 필요한 금액이 바깥쪽 반올림보다 크다.
     const upper = Math.ceil(16 / k);
     for (let b = 1; b <= upper; b++) {
-      if (spanCount(b, k) >= 15) return b;
+      if (spanCount(b, k) >= 15 && sideCounts(b, k).up >= 7 && sideCounts(b, k).down >= 8) return b;
     }
     return upper;
   }
@@ -249,19 +249,30 @@
     return Math.floor(baseAmount * (1 + k)) - Math.ceil(baseAmount * (1 - k)) + 1;
   }
 
+  // 기초금액 이상(0~+k) 쪽 정수 개수와 미만(-k~0) 쪽 정수 개수
+  function sideCounts(baseAmount, k) {
+    return { up: Math.floor(baseAmount * (1 + k)) - baseAmount + 1, down: baseAmount - Math.ceil(baseAmount * (1 - k)) };
+  }
+
+  // 복수예비가격 15개 = 기초금액 이상 7개 + 미만 8개 (지방 집행기준). ±2%(국가) 선택 시의 분할 방식은 확인하지 않아 같은 분할을 쓴다.
   function generateMultiplePrices(baseAmount, rangeRate) {
     const min = Math.ceil(baseAmount * (1 - rangeRate / 100));
     const max = Math.floor(baseAmount * (1 + rangeRate / 100));
     const used = new Set();
     const prices = [];
-
-    while (prices.length < 15) {
-      const candidate = Math.round(min + Math.random() * (max - min));
-      if (!used.has(candidate)) {
-        used.add(candidate);
-        prices.push(candidate);
+    const pick = function(lo, hi, count) {
+      let picked = 0;
+      while (picked < count) {
+        const candidate = Math.round(lo + Math.random() * (hi - lo));
+        if (!used.has(candidate)) {
+          used.add(candidate);
+          prices.push(candidate);
+          picked++;
+        }
       }
-    }
+    };
+    pick(baseAmount, max, 7);
+    pick(min, baseAmount - 1, 8);
 
     return prices.sort((a, b) => a - b);
   }
@@ -279,7 +290,7 @@
 
   function calculatePredeterminedPrice(regenerate) {
     const baseAmount = parseMoney(document.getElementById('base-amount').value);
-    const rangeRate = parseFloat(document.getElementById('range-rate').value) || 2;
+    const rangeRate = parseFloat(document.getElementById('range-rate').value) || 3;
     const floorRateInput = document.getElementById('floor-rate').value;
     const floorRate = floorRateInput === '' ? null : parseFloat(floorRateInput);
 
@@ -297,7 +308,8 @@
     // 가드가 없으면 generateMultiplePrices의 while이 끝나지 않아 탭이 멈춘다.
     const spanMin = Math.ceil(baseAmount * (1 - rangeRate / 100));
     const spanMax = Math.floor(baseAmount * (1 + rangeRate / 100));
-    if (spanMax - spanMin + 1 < 15) {
+    const sides = sideCounts(baseAmount, rangeRate / 100);
+    if (spanMax - spanMin + 1 < 15 || sides.up < 7 || sides.down < 8) {
       const needed = minimumBaseAmount(rangeRate);
       document.getElementById('pp-result-area').classList.add('hidden');
       document.getElementById('pp-empty-state').classList.remove('hidden');
