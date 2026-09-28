@@ -9,6 +9,9 @@ class GuideSourceClosureBudgetTest < ActiveSupport::TestCase
   LAWS, EDITS = eval(MIGRATION.read.split("\ncount_in = lambda").first + "\n[laws, edits]") # rubocop:disable Security/Eval
   SLUGS = LAWS.keys.freeze
   BPC7_TABLE = Rails.root.join("db/seeds/add_comparison_tables.rb").read[/slug: "budget-planning-complete-7".*?\n  \},/m].freeze
+  # 뒤이은 20260929050000(R-budget)이 같은 편을 다시 고쳤다 — 시드에서 그 변경을 먼저 되돌려 이 마이그레이션 시점의 정본을 만든다.
+  LATER = Rails.root.join("db/content_migrations/20260929050000_guide_risk_budget.rb")
+  LATER_LAWS, LATER_EDITS = eval(LATER.read.split("\ncount_in = lambda").first + "\n[laws, edits]") # rubocop:disable Security/Eval
 
   setup do
     capture_io do
@@ -18,7 +21,9 @@ class GuideSourceClosureBudgetTest < ActiveSupport::TestCase
     @expected = SLUGS.to_h do |slug|
       g = Guide.find_by!(slug: slug)
       rm = g.rich_media.deep_stringify_keys.slice("flowchart", "flashcards") # 운영엔 comparison_table 이 없다
-      [ slug, { "sections" => g.read_attribute(:sections).deep_stringify_keys, "rich_media" => rm,
+      sections = g.read_attribute(:sections).deep_stringify_keys
+      sections = sections.merge("laws" => LATER_LAWS[slug][0]) if LATER_LAWS.key?(slug)
+      [ slug, { "sections" => revert(sections, slug, "sections", LATER_EDITS), "rich_media" => revert(rm, slug, "rich_media", LATER_EDITS),
                 "title" => g.title, "view_count" => g.view_count } ]
     end
     SLUGS.each do |slug|
@@ -28,8 +33,8 @@ class GuideSourceClosureBudgetTest < ActiveSupport::TestCase
     end
   end
 
-  def revert(value, slug, field)
-    EDITS.select { |s, f, _, _| s == slug && f == field }.reverse.each do |_, _, old, new|
+  def revert(value, slug, field, edits = EDITS)
+    edits.select { |s, f, _, _| s == slug && f == field }.reverse.each do |_, _, old, new|
       value = JSON.parse(value.to_json.gsub(new.to_json[1..-2]) { old.to_json[1..-2] })
     end
     value
