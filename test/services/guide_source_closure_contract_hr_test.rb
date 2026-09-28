@@ -28,7 +28,8 @@ class GuideSourceClosureContractHrTest < ActiveSupport::TestCase
     "지방자치단체 공사계약 집행기준", "지방자치단체 계약 집행기준 제7장", "감사원법 제33조~제36조", "공사계약 일반조건 전반",
     "계속하여 7일 이상 병가", "11주 이하 5일", "공가 허용 사유 9가지", "공무상 재해로 인한 통원 치료 시간은 공가",
     "공무상 질병: 최대 3년", "공무상 질병휴직 최대 3년", "현금 지급 불가", "공무원연금법 제68조",
-    "연 최대 700만 원", "감사원법 제34조", "§17의2", "연속 7일 이상 병가", "총공사비 10% 초과 증액", "의회 동의(또는"
+    "연 최대 700만 원", "감사원법 제34조", "§17의2", "연속 7일 이상 병가", "총공사비 10% 초과 증액", "의회 동의(또는",
+    "30일 이내 계약서"
   ].freeze
 
   SLUGS = LAWS_NEW.keys.freeze
@@ -110,6 +111,8 @@ class GuideSourceClosureContractHrTest < ActiveSupport::TestCase
 
   test "NORMAL: 새 조문 문자열(positive control)과 옛 조문 부재(negative control)" do
     migrate
+    assert_includes body("construction-contract-complete-3"), "받은 날로부터 10일 이내에 계약서 서명"
+    assert_includes body("construction-contract-complete-3"), "제8장 제3절 1-가"
     assert_includes body("construction-contract-complete-5"), "검사 완료 후 5일, 지방계약법 시행령 제67조④"
     assert_includes body("construction-contract-complete-7"), "집행기준 제9장 제8절 2-가"
     assert_includes body("construction-contract-complete-7"), "지방계약법 시행령 제75조의2"
@@ -145,14 +148,14 @@ class GuideSourceClosureContractHrTest < ActiveSupport::TestCase
     end
   end
 
-  test "UPPER_BOUND: 32개 필드가 한 번 바뀌고 두 번째 실행은 아무것도 바꾸지 않는다" do
-    assert_match(/changes=32\b/, migrate)
+  test "UPPER_BOUND: 33개 필드가 한 번 바뀌고 두 번째 실행은 아무것도 바꾸지 않는다" do
+    assert_match(/changes=33\b/, migrate)
     assert_match(/changes=0\b/, migrate)
   end
 
   test "LOWER_BOUND: DRY_RUN 은 세기만 하고 쓰지 않는다" do
     before = SLUGS.map { |s| body(s) }
-    assert_match(/DRY_RUN changes=32\b/, migrate("DRY_RUN" => "1"))
+    assert_match(/DRY_RUN changes=33\b/, migrate("DRY_RUN" => "1"))
     assert_equal before, SLUGS.map { |s| body(s) }
   end
 

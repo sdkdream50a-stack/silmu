@@ -16,7 +16,8 @@
 #
 # 운영 적용(배포 후, 계약 문서 SILMU_CANONICAL_DEPLOYMENT_CONTRACT 순서):
 #   bin/kamal app exec --reuse 'DRY_RUN=1 bin/rails runner "load Rails.root.join(%q{db/content_migrations/20260929020000_guide_source_closure_contract_hr.rb})"'
-#   → 기대: changes=32 (sections 20편 — 근거 블록 포함 · rich_media 11편 · description 1편[인사복무 4편])
+#   → 기대: changes=33 (sections 20편 — 근거 블록 포함 · rich_media 12편 · description 1편[인사복무 4편])
+#   (cc3-C08 계약 체결 기한 30일 → 10일 은 독립 재판정 verified_cc3.md 근거로 추가)
 #   bin/kamal app exec --reuse 'bin/rails silmu:content_migrate'   (적용 + 캐시 무효화) → 재실행 시 changes=0
 #
 # 동작: old 는 운영 페이지(https://silmu.kr/guides/<slug>, 2026-09-29 00:04 익명 GET)에 렌더된 문자열이다.
@@ -57,6 +58,14 @@ edits = [
   [ "construction-contract-complete-2", "sections",
     "노임 단가는 반드시 최신 공표분 사용 — 구버전 적용은 예정가격 부적정 지적",
     "노임 단가는 반드시 최신 공표분 사용(실무 관행) — 구버전 적용은 예정가격 부적정 지적" ],
+
+  # ── 공사계약 3편 ── 계약 체결 기한 = 낙찰통지일부터 10일(집행기준 제8장 제3절 1-가·제9장 제2절 1-가, 불가항력 기간 불산입 1-나)
+  [ "construction-contract-complete-3", "sections",
+    "6단계 — 계약 체결: 낙찰 통보 후 30일 이내 계약서 서명",
+    "6단계 — 계약 체결: 낙찰 통보(낙찰자 결정 통지)를 받은 날로부터 10일 이내에 계약서 서명(불가항력 사유로 체결할 수 없는 기간은 산입하지 않음) — 「지방자치단체 입찰 및 계약 집행기준」 제8장 제3절 1-가" ],
+  [ "construction-contract-complete-3", "rich_media",
+    "낙찰 통보 후 30일 이내 계약서 서명 완료",
+    "낙찰 통보(낙찰자 결정 통지)를 받은 날로부터 10일 이내에 계약서 서명(불가항력 사유로 체결할 수 없는 기간은 산입하지 않음)" ],
 
   # ── 공사계약 4편 ── 감리 의무 대상(건진법 제39조②·영 제55조①, 건축법 제25조) · 이행보증 비율(영 제51조①)
   [ "construction-contract-complete-4", "sections",
