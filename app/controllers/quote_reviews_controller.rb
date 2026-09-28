@@ -5,6 +5,9 @@ class QuoteReviewsController < ApplicationController
 
   layout false, only: [ :index ]
   skip_before_action :verify_authenticity_token, only: [ :analyze ]
+  # 2026-09-28 — a0ff4d2(2026-02-11 «AI 기능 로그인 필수화 — 비용 관리 및 악용 방지»)가 AI 컨트롤러에 건 검사를
+  # 같은 날 뒤에 만들어진 이 컨트롤러만 빠뜨렸다. 화면 JS 는 이미 401·login_required 를 처리한다.
+  before_action :require_login_for_ai, only: [ :analyze ]
   before_action :verify_request_origin, only: [ :analyze ]
 
   MAX_FILE_SIZE = 20.megabytes
