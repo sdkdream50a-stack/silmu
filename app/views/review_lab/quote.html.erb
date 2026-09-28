@@ -6,13 +6,17 @@
 
   <% if user_signed_in? %>
     <%= form_with url: review_lab_quote_path, method: :post, multipart: true, data: { turbo: false }, class: "card-editorial space-y-5" do |f| %>
+      <%# 2026-09-27 — 사용자가 «파일을 어디로 올리나» 를 물었다. 파일 칸이 버튼처럼 보이지 않았고 순서도 적혀 있지 않았다. %>
+      <p class="rounded-lg bg-editorial-navy-bg px-4 py-3 text-sm text-editorial-ink">
+        <strong>올리는 방법</strong> — ① 아래 칸의 <strong>«파일 선택»</strong> 버튼을 눌러 파일을 고르고 ② 맨 아래 <strong>«검토하기»</strong>를 누르세요.
+      </p>
       <div>
         <%= f.label :main_file, "검토할 견적서 (1개)", class: "block text-sm font-semibold text-editorial-ink mb-1.5" %>
-        <%= f.file_field :main_file, required: true, accept: ".xlsx,.hwpx,.docx,.pdf,.hwp,.jpg,.jpeg,.png", class: "block w-full text-sm" %>
+        <%= f.file_field :main_file, required: true, accept: ".xlsx,.hwpx,.docx,.pdf,.hwp,.jpg,.jpeg,.png", class: "block w-full text-sm text-slate-700 rounded-lg border border-dashed border-slate-300 bg-slate-50 p-3 cursor-pointer file:mr-3 file:rounded-lg file:border-0 file:bg-editorial-navy file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white file:cursor-pointer hover:file:opacity-90" %>
       </div>
       <div>
         <%= f.label :comparison_files, "비교견적서 (선택 · 최대 3개)", class: "block text-sm font-semibold text-editorial-ink mb-1.5" %>
-        <%= f.file_field :comparison_files, multiple: true, accept: ".xlsx,.hwpx,.docx,.pdf,.hwp", class: "block w-full text-sm" %>
+        <%= f.file_field :comparison_files, multiple: true, accept: ".xlsx,.hwpx,.docx,.pdf,.hwp", class: "block w-full text-sm text-slate-700 rounded-lg border border-dashed border-slate-300 bg-slate-50 p-3 cursor-pointer file:mr-3 file:rounded-lg file:border-0 file:bg-editorial-navy file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white file:cursor-pointer hover:file:opacity-90" %>
         <p class="mt-1 text-xs text-slate-500">같은 품명·규격끼리만 가격을 나란히 보여줍니다. 규격이 다르면 비교하지 않습니다.</p>
       </div>
       <div class="grid gap-4 sm:grid-cols-3">
