@@ -15,6 +15,11 @@
 #     3.은 «일반예비비는 법령에서 제한하는 경우를 제외하고 재해·재난 관련 목적(긴급재난대책을 위한 보조금 포함)을 포함한 모든
 #     사업으로 사용가능» 이라 정한다 → «행안부 지침» 표기 삭제, 의회 삭감 항목은 법 제43조제3항으로, 나머지는 «(실무 관행)».
 #     원문: https://www.law.go.kr/DRF/lawService.do?OC=test&target=admrul&ID=2100000281550&type=XML
+# 4차(Topic regulation_content 수치·조문):
+#   «일반예비비 … 1/100 이상» → 법 제43조① «예산 총액의 100분의 1 이내».
+#   «목적예비비 … 특정 목적 · 세출예산 총액의 2/100 이내» → 법 제43조② «재해ㆍ재난 관련 목적 예비비는 별도로 예산에 계상할 수 있다»,
+#     운영기준 별표 11 편성목 801 «02. 재해·재난목적예비비 … 제43조제2항에 따른 예비비(예비비 편성 한도는 없음)». 2/100 근거 없음.
+#   «시행령 제59조»(삭제 <2016.11.29>) → 시행령 제56조③ «예비비의 지출을 결정한 때에는 세출예산으로서 배정하여야 한다».
 # 원문: 지방재정법 [MST 283145, 시행 2026. 7. 1.] 제43조
 #       https://www.law.go.kr/DRF/lawService.do?OC=test&target=law&MST=283145&type=XML
 #       지방재정법 시행령 [MST 281539, 시행 2026. 1. 2.] 제65조(재정분석 및 재정점검)·제48조·제56조
@@ -23,7 +28,7 @@
 #
 # 운영 적용(배포 후):
 #   bin/kamal app exec --reuse 'DRY_RUN=1 bin/rails runner "load Rails.root.join(%q{db/content_migrations/20260929040000_contingency_fund_article_fix.rb})"'
-#   → 기대: changes=15 (edit 단위 집계 — Topic faqs 2 · quick_stats 2 · rule_content 1 · regulation_content 5 · Guide sections 5)
+#   → 기대: changes=19 (edit 단위 집계 — Topic faqs 2 · quick_stats 2 · rule_content 1 · regulation_content 9 · Guide sections 5)
 #   bin/kamal app exec --reuse 'bin/rails silmu:content_migrate'   (적용 + 캐시 무효화) → 재실행 시 changes=0
 #
 # 동작: 필드별 old 가 정확히 1회 있어야 바꾼다. 이미 new 이면(new 가 old 를 품는 edit 포함) 건너뛴다. 하나라도 어긋나면 전체 롤백.
@@ -63,6 +68,18 @@ edits = [
   [ Topic, slug, "regulation_content",
     "연말 집중 예비비 사용은 재정분석 감점 대상",
     "(실무 관행) 연말에 예비비를 몰아 쓰는 것은 지양" ],
+  [ Topic, slug, "regulation_content",
+    "일반회계 세출예산의 1/100 이상",
+    "일반회계·교육비특별회계 예산 총액의 100분의 1 이내 (지방재정법 제43조제1항)" ],
+  [ Topic, slug, "regulation_content",
+    "특정 목적을 위해 편성",
+    "재해·재난 관련 목적 예비비 (지방재정법 제43조제2항)" ],
+  [ Topic, slug, "regulation_content",
+    "세출예산 총액의 2/100 이내",
+    "별도 계상 가능 · 편성 한도 없음 (예산편성 운영기준 별표 11 편성목 801)" ],
+  [ Topic, slug, "regulation_content",
+    "(지방재정법 제43조 및 시행령 제59조)",
+    "(지방재정법 제43조 및 시행령 제56조제3항)" ],
   [ Guide, guide_slug, "sections",
     "예비비 사용 가능 요건 3가지",
     "예비비 사용 요건 — 법령 요건 1가지와 실무 검토 요건 2가지" ],
