@@ -35,7 +35,9 @@ class GuideRiskContractTest < ActiveSupport::TestCase
     "철근콘크리트, 철골 등 주요 구조부): 10년", "설비(급·배수, 냉난방, 환기 등): 2~3년", "전기·통신·소방 설비: 2년",
     "가장 긴 기간이 보증금 유효 기간", "구조부 10년, 설비 2~3년", "계약금액의 3%. 현금",
     "10년. 철근콘크리트·철골", "(급·배수·냉난방 2~3년, 전기·통신·소방 2년)",
-    "계약 관련 서류 준공 후 10년 보존", "준공 후 10년 보존이 필요", "준공 후 10년. 하자담보"
+    "계약 관련 서류 준공 후 10년 보존", "준공 후 10년 보존이 필요", "준공 후 10년. 하자담보",
+    "종합심사", "가격(60%) + 공사수행능력(40%)", "10억 원 미만 공사에 주로 적용", "현재는 사실상 폐지",
+    "국가계약분쟁조정위원회", "지방계약분쟁조정위원회"
   ].freeze
 
   # 운영과 같은 «적용 전» 상태 = 시드(적용 후와 동일)에 edit 를 역순으로 되돌린다.
@@ -89,6 +91,7 @@ class GuideRiskContractTest < ActiveSupport::TestCase
     migrate
     EPISODES.each do |ep|
       g = Guide.find_by!(slug: ep[:slug])
+      assert_equal ep[:description], g.description, ep[:slug]
       assert_equal ep[:sections].deep_stringify_keys, g.sections, ep[:slug]
       assert_equal ep[:rich_media].deep_stringify_keys, g.rich_media, ep[:slug]
     end
@@ -149,21 +152,39 @@ class GuideRiskContractTest < ActiveSupport::TestCase
     end
   end
 
-  test "UPPER_BOUND: 75개 edit 가 한 번 적용되고 두 번째 실행은 아무것도 바꾸지 않는다" do
-    assert_match(/changes=75\b/, migrate)
+  test "UPPER_BOUND: 88개 edit 가 한 번 적용되고 두 번째 실행은 아무것도 바꾸지 않는다" do
+    assert_match(/changes=88\b/, migrate)
     assert_match(/changes=0\b/, migrate)
   end
 
   test "LOWER_BOUND: DRY_RUN 은 세기만 하고 쓰지 않는다" do
     before = SLUGS.map { |s| body(s) }
-    assert_match(/DRY_RUN changes=75\b/, migrate("DRY_RUN" => "1"))
+    assert_match(/DRY_RUN changes=88\b/, migrate("DRY_RUN" => "1"))
     assert_equal before, SLUGS.map { |s| body(s) }
   end
 
-  test "INVARIANT: slug·title·description·view_count 는 바뀌지 않는다" do
-    before = Guide.where(slug: SLUGS).order(:slug).pluck(:slug, :title, :description, :view_count)
+  test "INVARIANT: slug·title·view_count 불변 · description 은 3편 사실 오류 1건만 바뀐다" do
+    before = Guide.where(slug: SLUGS).order(:slug).pluck(:slug, :title, :view_count)
+    descriptions = Guide.where(slug: SLUGS).order(:slug).pluck(:slug, :description).to_h
     migrate
-    assert_equal before, Guide.where(slug: SLUGS).order(:slug).pluck(:slug, :title, :description, :view_count)
+    assert_equal before, Guide.where(slug: SLUGS).order(:slug).pluck(:slug, :title, :view_count)
+    after = Guide.where(slug: SLUGS).order(:slug).pluck(:slug, :description).to_h
+    assert_equal [ "construction-contract-complete-3" ], after.keys.reject { |s| after[s] == descriptions[s] }
+    assert_includes after["construction-contract-complete-3"], "최저가 낙찰 vs 종합평가낙찰제"
+  end
+
+  test "NORMAL: 3편 낙찰 방식·8편 분쟁 기관(2차 종결)" do
+    migrate
+    cc3 = body("construction-contract-complete-3")
+    assert_equal 0, cc3.scan("종합심사").size
+    assert_includes cc3, "추정가격 300억 원 미만 공사에 적용(시행령 제42조①"
+    assert_includes cc3, "300억~500억 원 미만 50점·500억~1,000억 원 미만 40점·1,000억 원 이상 35점"
+    assert_includes cc3, "N[종합평가낙찰제]"
+    assert_not_includes cc3, "60%"
+    cc8 = body("construction-contract-complete-8")
+    assert_includes cc8, "지방계약심의조정위원회"
+    assert_includes cc8, "제34조의2"
+    assert_not_includes cc8, "분쟁조정위원회"
   end
 
   test "ROLLBACK: 지문이 하나라도 없으면 한 편도 바꾸지 않는다" do
@@ -180,6 +201,7 @@ class GuideRiskContractTest < ActiveSupport::TestCase
     text = SEED_FILES.map(&:read).join
     STALE.each { |s| assert_not_includes text, s }
     [ "필요 (1억원 이상 의무)", "입찰 공고 최소 기간은 7일", "\"계약금액의 3~5%\"", "\"가능\", \"불가\", \"불가\"",
-      "하자보수보증금: 일반공사 계약금액의 3%" ].each { |s| assert_not_includes text, s }
+      "하자보수보증금: 일반공사 계약금액의 3%",
+      "\"계약금액의 10~20%\"", "추가 의회 동의", "7~14일", "종합심사낙찰제", "공사수행능력(40%)" ].each { |s| assert_not_includes text, s }
   end
 end

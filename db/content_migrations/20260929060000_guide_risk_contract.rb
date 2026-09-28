@@ -23,11 +23,12 @@
 # rich_media.comparison_table 은 운영에 없으므로(2026-09-29 운영 HTML 확인) 여기서 건드리지 않는다 — 시드 원천만 고쳤다.
 #
 # 동작: edit 는 필드(jsonb 문자열 leaf 합계, sections 는 laws 포함)에 old 가 정확히 1회 있어야 바꾼다. 이미 new 이면 건너뛴다.
-#   하나라도 어긋나면 전체 롤백. DRY_RUN=1 이면 레코드별 fields_to_change 만 출력하고 쓰지 않는다. slug·title·view_count 불변.
+#   하나라도 어긋나면 전체 롤백. DRY_RUN=1 이면 레코드별 fields_to_change 만 출력하고 쓰지 않는다. slug·title·view_count 불변
+#   (description 은 3편 «종합심사낙찰제» 사실 오류 1건만 교체).
 #
 # 운영 적용(배포 후):
 #   bin/kamal app exec --reuse 'DRY_RUN=1 bin/rails runner "load Rails.root.join(%q{db/content_migrations/20260929060000_guide_risk_contract.rb})"'
-#   → 기대: changes=75 (edit 단위 — 10편 sections 10 · rich_media 9, 재판정 61행 = 65 edit + 인접·반복 10 edit) · 두 번째 실행 changes=0
+#   → 기대: changes=88 (edit 단위 — 재판정 61행 = 65 edit + 인접·반복 10 edit + 2차 범위 밖 종결 13 edit[3편 description 1 · sections 6 · rich_media 4 · 8편 2]) · 두 번째 실행 changes=0
 #   bin/kamal app exec --reuse 'bin/rails silmu:content_migrate'   (적용 + 캐시 무효화)
 # 롤백: 같은 표의 new → old 역적용.
 
@@ -243,7 +244,51 @@ edits = [
   [ "construction-contract-complete-10", "rich_media", "D --> I[천재지변 간접비 청구 불가]", "D --> I[불가항력 연장도 실비 조정]" ],
   [ "construction-contract-complete-10", "rich_media",
     "아닙니다. 간접비는 발주처 귀책 연장 시만 해당. 천재지변은 양측 추가 비용 없음.",
-    "네. 천재지변 등 불가항력으로 연장한 경우에도 실비 범위에서 계약금액을 조정합니다(법 제22조②·집행기준 제9장 제8절 2-라). 부도 보증시공 연장만 제외." ]
+    "네. 천재지변 등 불가항력으로 연장한 경우에도 실비 범위에서 계약금액을 조정합니다(법 제22조②·집행기준 제9장 제8절 2-라). 부도 보증시공 연장만 제외." ],
+
+  # ── 2차(범위 밖 발견 → 같은 브랜치에서 종결) ──
+  # 3편 «종합심사낙찰제»(국가계약 용어·가격 60%+수행능력 40%) → 지방계약 300억 이상 = 종합평가(영 제42조①1호·제42조의3, 결정기준 제3장:
+  #   적격성 심사 90점 이상 통과 후 입찰가격 35/40/50점 + 기술능력·시공품질·직접시공 등 합산) · 적격심사 = 300억 미만(영 제42조① 본문 + 1호).
+  #   국가계약을 명시한 문장은 없음(전수 확인) → 전부 교체. description 은 사실 오류라 이 항목만 교체(title·slug 불변).
+  [ "construction-contract-complete-3", "description",
+    "적격심사, 최저가 낙찰제 vs 종합심사낙찰제까지",
+    "적격심사, 최저가 낙찰 vs 종합평가낙찰제까지" ],
+  [ "construction-contract-complete-3", "sections",
+    "행안부 예규는 적격심사·최저가·종합심사 세부 기준",
+    "행안부 예규(제373호)는 적격심사·종합평가(시행령 제42조의3) 등 세부 기준" ],
+  [ "construction-contract-complete-3", "sections",
+    "적격심사 vs 최저가 낙찰제 vs 종합심사낙찰제",
+    "적격심사 vs 최저가 낙찰 vs 종합평가낙찰제" ],
+  [ "construction-contract-complete-3", "sections",
+    "최저가 낙찰제: 예정가격 이하 최저 입찰가 업체 낙찰 — 현재는 사실상 폐지(종합심사로 대체)",
+    "최저가 낙찰: 예정가격 이하 최저가 입찰자를 곧바로 낙찰자로 정하는 방식은 물품·용역의 2단계 입찰(시행령 제18조·제42조①3호)에 한정 — 공사는 최저가 입찰자부터 계약이행능력을 심사(적격심사, 제42조① 본문)하고 300억 원 이상은 종합평가(같은 항 1호)" ],
+  [ "construction-contract-complete-3", "sections",
+    "종합심사낙찰제: 300억 원 이상 공사 적용 — 가격(60%) + 공사수행능력(40%) 종합 평가",
+    "종합평가낙찰제: 추정가격 300억 원 이상 공사 적용(시행령 제42조①1호·제42조의3) — 이행능력 적격성 심사(90점 이상) 통과 후 입찰가격(300억~500억 원 미만 50점·500억~1,000억 원 미만 40점·1,000억 원 이상 35점)과 기술능력·시공품질·직접시공 등을 합산해 최고 점수자 낙찰(「지방자치단체 입찰시 낙찰자 결정기준」 제3장)" ],
+  [ "construction-contract-complete-3", "sections",
+    "5단계 — 낙찰자 결정: 적격심사 또는 종합심사 후 낙찰자 통보",
+    "5단계 — 낙찰자 결정: 적격심사 또는 종합평가 후 낙찰자 통보" ],
+  [ "construction-contract-complete-3", "sections",
+    "적격심사·종합심사낙찰제의 적용 금액 기준을 구분할 수 있다",
+    "적격심사(300억 원 미만)·종합평가낙찰제(300억 원 이상)의 적용 금액 기준을 구분할 수 있다" ],
+  [ "construction-contract-complete-3", "rich_media", "L -->|300억 이상| N[종합심사낙찰제]", "L -->|300억 이상| N[종합평가낙찰제]" ],
+  [ "construction-contract-complete-3", "rich_media",
+    "10억 원 미만 공사에 주로 적용.",
+    "추정가격 300억 원 미만 공사에 적용(시행령 제42조① — 300억 원 이상은 종합평가)." ],
+  [ "construction-contract-complete-3", "rich_media", "종합심사낙찰제 적용 기준은?", "종합평가낙찰제 적용 기준은?" ],
+  [ "construction-contract-complete-3", "rich_media",
+    "300억 원 이상 공사. 가격(60%) + 공사수행능력(40%)을 종합 평가.",
+    "추정가격 300억 원 이상 공사(시행령 제42조①1호·제42조의3). 이행능력 적격성 심사(90점 이상) 통과 후 입찰가격(35~50점)·기술능력·시공품질·직접시공 등을 합산해 최고 점수자 낙찰(결정기준 제3장)." ],
+
+  # 8편 «국가계약분쟁조정위원회 또는 지방계약분쟁조정위원회» → 지방계약법 [MST 253973] 제35조 «…행정안전부에 지방계약심의조정위원회…를 둔다
+  #   … 3. 제34조의2제3항에 따른 조정신청…에 대한 분쟁 조정», 제34조의2② «분쟁의 해결방법은…1. 제35조에 따른 지방계약심의조정위원회의 조정
+  #   2. 「중재법」에 따른 중재 … 중 계약당사자 간 합의로 정한다», ③ «…조정을…해결방법으로 정한 계약당사자는…조정을 신청할 수 있다»
+  [ "construction-contract-complete-8", "sections",
+    "하자 분쟁 시: 국가계약분쟁조정위원회 또는 지방계약분쟁조정위원회 신청 가능",
+    "하자 분쟁 시: 계약 때 분쟁해결방법을 조정으로 합의했다면 행정안전부 지방계약심의조정위원회에 조정 신청 가능, 중재로 합의했다면 「중재법」에 따른 중재(지방계약법 제34조의2·제35조)" ],
+  [ "construction-contract-complete-8", "rich_media",
+    "국가계약분쟁조정위원회 또는 지방계약분쟁조정위원회.",
+    "행정안전부 지방계약심의조정위원회(지방계약법 제35조) — 계약 때 분쟁해결방법을 조정으로 합의한 경우(제34조의2③). 중재로 합의했다면 「중재법」에 따른 중재." ]
 ].freeze
 
 count_in = lambda do |value, needle|
@@ -272,7 +317,7 @@ ActiveRecord::Base.transaction(requires_new: true) do
     next unless guide
 
     to_write = {}
-    %w[sections rich_media].each do |field|
+    %w[description sections rich_media].each do |field|
       original = guide.read_attribute(field)
       original = original.deep_stringify_keys if original.is_a?(Hash)
       value = original
