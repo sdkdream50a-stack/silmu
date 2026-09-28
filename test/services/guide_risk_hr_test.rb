@@ -145,4 +145,30 @@ class GuideRiskHrTest < ActiveSupport::TestCase
     text = SEED_FILES.map(&:read).join
     STALE.each { |s| assert_not_includes text, s }
   end
+
+  # 운영에 렌더되지 않는 인사복무 comparison_table·rate_table 시드(재실행 시 되살아나지 않도록 원천만 정정).
+  COMPARISON_STALE = [
+    "2년차 무급", "시효 5년", "240만원", "휴직 취소", "감봉~파면", "사유별 1~20일", "1~2호봉", "700만원",
+    "9가지 사유", "7일 이상 연속", "7일 초과 시 진단서", "70% 이내", "국가공무원 복무규정", "\"12일\"", "\"14일\"",
+    "초과 1일은 소멸", "÷ 30일\",  amount: \"80,000원\"", "공무상 휴직 등은 넣음", "여행"
+  ].freeze
+
+  def hr_comparison_blocks
+    tables = Rails.root.join("db/seeds/add_comparison_tables.rb").read
+    enhancement = Rails.root.join("db/seeds/rich_media_enhancement.rb").read
+    blocks = tables.scan(/\{ slug: "hr-welfare-complete-\d+",.*?(?=\n  \{ slug: |\n  # =====)/m) +
+             enhancement.scan(/Guide\.find_by!\(slug: "hr-welfare-complete-\d+"\).*?\nputs /m)
+    blocks
+  end
+
+  test "SEED: 인사복무 비교표 시드(add_comparison_tables·rich_media_enhancement)에도 틀린 문구가 없다" do
+    blocks = hr_comparison_blocks
+    assert_equal 12, blocks.size, "인사복무 비교표 블록 수(9 + 3)"
+    text = blocks.join
+    COMPARISON_STALE.each { |s| assert_not_includes text, s }
+    assert_includes text, "1년 이하 봉급 70%, 1년 초과~2년 50%"
+    assert_includes text, "연 300만원 납입 한도, 최대 120만원"
+    assert_includes text, "견책~파면"
+    assert_includes text, "월 봉급 2,400,000원 × 86% ÷ 30일"
+  end
 end
