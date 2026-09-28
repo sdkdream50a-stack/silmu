@@ -109,6 +109,13 @@ class GuideRiskBudgetTest < ActiveSupport::TestCase
     # 틀린 수치 대조군: 운영기준·별표 2 수치와 다른 값이 NEW 에 섞이지 않았다
     assert_not_includes body("budget-planning-complete-5"), "11만"
     assert_not_includes body("budget-planning-complete-10"), "150만"
+    # 시행령 제48조: 예비비 계상 제한 대상 보조금에서 긴급재난대책 보조금은 제외된다 — 예외 없는 «보조금 불가» 단정 금지
+    assert_includes body("budget-execution-complete-10"), "업무추진비·보조금(긴급재난대책 보조금 제외, 시행령 제48조)에는 쓸 수 없습니다"
+    assert_includes body("budget-execution-complete-7"), "보조금 — 긴급재난대책 보조금 제외, 시행령 제48조)"
+    [ "budget-execution-complete-7", "budget-execution-complete-10" ].each do |slug|
+      assert_not_includes body(slug), "업무추진비·보조금에는", slug
+      assert_not_includes body(slug), "업무추진비·보조금)과", slug
+    end
     # 장 번호 인용 0: 운영기준은 제1~10조+별표뿐
     SLUGS.each do |slug|
       Guide.find_by!(slug: slug).sections[:laws].each do |l|
