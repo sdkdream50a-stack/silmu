@@ -1081,6 +1081,10 @@
         updateStepIndicator();
         showCurrentStep();
         showToast('체크리스트가 생성되었습니다!');
+        // calc_complete 신고 — 계약 금액·명칭 등 입력값은 보내지 않는다.
+        if (window.silmuCalcResult) {
+          window.silmuCalcResult([result.checklist.contract_type, selectedType].filter(Boolean).join('|') || null, { immediate: true });
+        }
       } else {
         showToast(result.error || '체크리스트 생성에 실패했습니다.');
       }

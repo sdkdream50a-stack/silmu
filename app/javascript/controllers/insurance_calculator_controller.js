@@ -142,6 +142,12 @@ export default class extends Controller {
     if (this.advancedMode && this.results.yearend && this.results.retire) {
       this.renderCombined()
     }
+
+    // calc_complete 신고 — 보수·연도 등 입력값은 보내지 않는다. 결과 영역이 id="result-area"
+    // 가 아니라 shared/_tool_analytics 의 범용 관찰자가 잡지 못해 직접 신고한다.
+    if (window.silmuCalcResult) {
+      window.silmuCalcResult(["insurance-calculator", tab].filter(Boolean).join("|") || null, { immediate: true })
+    }
   }
 
   // ── 결과 렌더링 ──

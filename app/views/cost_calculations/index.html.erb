@@ -481,6 +481,10 @@ document.addEventListener('turbo:load', function() {
     .then(function(data) {
       if (data.success) {
         ccRenderResult(data.result);
+        // calc_complete 신고 — 금액 등 입력값은 보내지 않는다.
+        if (window.silmuCalcResult) {
+          window.silmuCalcResult([data.result.type_name, data.result.summary && data.result.summary.status].filter(Boolean).join('|') || null, { immediate: true });
+        }
       }
     });
   }

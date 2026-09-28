@@ -642,6 +642,10 @@ function crGenerate() {
   document.getElementById('cr-result').classList.add('active');
   document.getElementById('cr-result').scrollIntoView({ behavior:'smooth', block:'start' });
   crShowToast('수의계약 사유서가 생성되었습니다');
+  // calc_complete 신고 — 계약건명·금액 등 입력값은 보내지 않는다.
+  if (window.silmuCalcResult) {
+    window.silmuCalcResult(['contract-reason', crState.type, crState.reason].filter(Boolean).join('|') || null, { immediate: true });
+  }
 }
 
 function crCopy() {

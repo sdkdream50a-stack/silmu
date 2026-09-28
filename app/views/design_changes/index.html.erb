@@ -484,6 +484,10 @@ document.addEventListener('turbo:load', function() {
     .then(function(data) {
       if (data.success) {
         dcRenderResult(data.review);
+        // calc_complete 신고 — 설계 내용·금액 등 입력값은 보내지 않는다.
+        if (window.silmuCalcResult) {
+          window.silmuCalcResult([data.review.legal_basis, data.review.cost_impact && data.review.cost_impact.name].filter(Boolean).join('|') || null, { immediate: true });
+        }
       }
     });
   }

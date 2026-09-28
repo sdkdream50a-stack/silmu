@@ -465,6 +465,10 @@ document.addEventListener('turbo:load', function() {
     .then(function(data) {
       if (data.success) {
         piRenderResult(data.checklist);
+        // calc_complete 신고 — 계약명·금액 등 입력값은 보내지 않는다.
+        if (window.silmuCalcResult) {
+          window.silmuCalcResult(['progress-inspection', data.checklist.inspection_info && data.checklist.inspection_info.round].filter(Boolean).join('|') || null, { immediate: true });
+        }
       }
     });
   }
