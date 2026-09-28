@@ -235,9 +235,11 @@ class CostEstimateGeneratorService
       insurance = (labor_cost * (INDIRECT_RATES[:industrial_accident][:rate] + INDIRECT_RATES[:employment_insurance][:rate] + INDIRECT_RATES[:health_pension][:rate])).round(0)
       details << { name: "보험료(산재·고용·건강·연금)", amount: insurance, note: "노무비 기준" }
 
-      # 산업안전보건관리비 (총공사금액 2천만원 이상 계상 — 고시 제3조. 입력 견적금액을 기준으로 비교)
+      # 산업안전보건관리비 (고용노동부 고시 제3조: «총공사금액» 2천만원 이상). 직접비가 아니라 산안비를 뺀
+      # 공사금액(부가세 포함)으로 비교한다 — 화면 미리보기(cost_estimates/index)와 같은 기준.
       safety = 0
-      if material_cost >= INDIRECT_RATES[:industrial_safety][:threshold]
+      pre_safety_total = ((material_cost + general + profit + insurance) * (1 + INDIRECT_RATES[:vat][:rate])).round(0)
+      if pre_safety_total >= INDIRECT_RATES[:industrial_safety][:threshold]
         safety = ((material_only + labor_cost) * INDIRECT_RATES[:industrial_safety][:rate]).round(0)
         details << { name: "산업안전보건관리비", amount: safety, note: "#{(INDIRECT_RATES[:industrial_safety][:rate] * 100).round(2)}%" }
       end

@@ -12,7 +12,8 @@
  */
 export function rounddown(value, digits) {
   const factor = Math.pow(10, -digits);
-  return Math.floor(value / factor) * factor;
+  // 보수×요율 곱의 부동소수점 오차(1,340,000×0.009 = 12059.999…)가 10원을 덜 절사하지 않도록 1e-9 만큼 보정한다.
+  return Math.floor(value / factor + 1e-9) * factor;
 }
 
 // ── T02: 보험료율 상수 ────────────────────────────────────────────────────

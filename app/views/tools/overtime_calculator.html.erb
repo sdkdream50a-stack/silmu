@@ -74,6 +74,7 @@
             </select>
             <p id="base-salary-note" class="text-xs text-slate-400 mt-1">본인 호봉과 관계없이 해당 계급 10호봉 봉급이 기준입니다(2026 봉급표). 8급 이하 60%, 7급 이상 55%(「공무원수당규정」 §15②·별표12).</p>
             <p class="text-xs text-slate-400 mt-1">교원·경찰·소방·연구직 등은 기준호봉이 다릅니다(별표12) — 이 도구는 일반직 기준입니다.</p>
+            <p id="manager-allowance-warning" class="hidden text-xs text-rose-600 mt-1">4급 이상은 관리업무수당 지급 대상(별표 12)이며, 관리업무수당을 받는 사람에게는 시간외·야간·휴일근무수당을 지급하지 않습니다(「지방공무원 수당 등에 관한 규정」 제17조의2제2항). 보직이 없는 등으로 관리업무수당을 받지 않는 경우에만 아래 금액을 참고하세요.</p>
           </div>
 
           <!-- 구분선 -->
@@ -85,7 +86,7 @@
               시간외근무 시간
               <span class="text-xs text-slate-400 font-normal ml-1">(월 한도 57시간)</span>
             </label>
-            <p class="text-xs text-slate-400 mb-2">평일 정규근무(09:00~18:00) 외 추가 근무시간</p>
+            <p class="text-xs text-slate-400 mb-2">평일 정규근무(09:00~18:00) 외 추가 근무시간 — 월 합계의 1시간 미만은 버립니다(제15조제5항)</p>
             <div class="flex items-center gap-2">
               <input type="number" id="overtime-hours" class="form-input w-28"
                      placeholder="0" min="0" max="57" step="0.5"
@@ -297,7 +298,9 @@
     let total = 0;
 
     // 시간외근무수당
-    const effectiveOvertime = Math.min(overtime, 57);
+    document.getElementById('manager-allowance-warning').classList[grade <= 4 ? 'remove' : 'add']('hidden');
+    // 월별 시간외근무시간은 분 단위까지 더한 뒤 1시간 미만을 버린다 (지방 수당규정 제15조제5항)
+    const effectiveOvertime = Math.min(Math.floor(overtime), 57);
     const overtimePay = hourlyRate * effectiveOvertime;
     if (overtime > 0) {
       document.getElementById('row-overtime').classList.remove('hidden');

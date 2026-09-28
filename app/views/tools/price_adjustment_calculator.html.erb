@@ -362,6 +362,12 @@
     calculate();
   }
 
+  // 2026-09-28 — 시행령 §73① «100분의 3 이상». 가중평균이 정확히 3% 여도 부동소수점으로 2.9999999999999947 이 되어
+  // 화면에 «3.000%» 를 보이면서 «조정 불가» 로 판정했다. 표시 정밀도(소수 셋째 자리)보다 충분히 작은 1e-9 에서 반올림해 비교한다.
+  function meetsThreshold(rate) {
+    return Math.round(Math.abs(rate) * 1e9) / 1e9 >= 3;
+  }
+
   function calculate() {
     const method = document.getElementById('method').value;
     if (method === 'index') calculateIndex();
@@ -440,7 +446,7 @@
 
     // 조정 가능 여부
     const eligEl = document.getElementById('res-eligibility');
-    const eligible = Math.abs(avgRate) >= 3;
+    const eligible = meetsThreshold(avgRate);
     eligEl.className = `mb-4 p-3 rounded-xl text-sm font-semibold ${eligible ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`;
     eligEl.textContent = eligible
       ? `✅ 등락률 ${avgRate.toFixed(3)}% — 3% 이상이므로 조정 가능 (기간 요건 90일 별도 확인 필요)`
@@ -526,7 +532,7 @@
     document.getElementById('res-final').textContent = formatNum(Math.abs(finalAmount)) + '만원 ' + (finalAmount >= 0 ? '증액' : '감액');
 
     const eligEl = document.getElementById('res-eligibility');
-    const eligible = Math.abs(rate) >= 3;
+    const eligible = meetsThreshold(rate);
     eligEl.className = `mb-4 p-3 rounded-xl text-sm font-semibold ${eligible ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`;
     eligEl.textContent = eligible
       ? `✅ 품목조정률 ${rate.toFixed(3)}% — 3% 이상이므로 조정 가능 (기간 요건 90일 별도 확인 필요)`

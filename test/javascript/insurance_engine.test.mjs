@@ -24,6 +24,13 @@ describe('T01: rounddown', () => {
   it('rounddown(음수값 -73907, -1) === -73910 (음수 내림)', () => {
     assert.strictEqual(rounddown(-73907, -1), -73910);
   });
+  // 2026-09-28 감사 P2 — 곱셈 오차로 10원 덜 절사(1만원 단위 보수월액 100만~700만 중 52%)
+  it('rounddown(1340000 × 0.009, -1) === 12060 (부동소수점 12059.999…)', () => {
+    assert.strictEqual(rounddown(1340000 * 0.009, -1), 12060);
+  });
+  it('rounddown(12059.5, -1) === 12050 (진짜 미만은 그대로 버림)', () => {
+    assert.strictEqual(rounddown(12059.5, -1), 12050);
+  });
 });
 
 import { RATES } from '../../app/javascript/insurance/engine.js';

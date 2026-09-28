@@ -15,11 +15,10 @@ class CostCalculationReviewService
       name: "학술연구용역",
       icon: "science",
       desc: "학술·정책·조사 연구",
-      profit_rate_max: 0.0,
-      profit_basis: "해당없음 (기술료 적용)",
-      note: "이윤 대신 기술료 적용 (20~40%)",
-      tech_fee: true,
-      tech_fee_range: { min: 0.20, max: 0.40, basis: "직접인건비+제경비+직접경비" }
+      profit_rate_max: 0.10,
+      profit_basis: "인건비+경비+일반관리비",
+      # 예정가격 작성기준 제24조·제28조제2항 — 학술연구용역은 인건비·경비·일반관리비·이윤. 기술료는 엔지니어링 비목이다.
+      note: "이윤 상한 10% (지방계약법 시행규칙 제8조제2항제4호)"
     },
     software: {
       name: "SW개발 용역",
@@ -33,29 +32,29 @@ class CostCalculationReviewService
       name: "설계용역",
       icon: "architecture",
       desc: "건축·토목 설계",
-      profit_rate_max: 0.10,
-      profit_basis: "직접인건비+제경비+직접경비",
-      note: "엔지니어링사업 대가기준 적용"
+      note: "기술료 (직접인건비+제경비)의 20~40%, 이윤 포함 (엔지니어링사업대가의 기준 제10조)",
+      tech_fee: true,
+      tech_fee_range: { min: 0.20, max: 0.40, basis: "직접인건비+제경비" }
     },
     supervision: {
       name: "감리용역",
       icon: "visibility",
       desc: "건설 감리·시공관리",
-      profit_rate_max: 0.10,
-      profit_basis: "직접인건비+제경비+직접경비",
-      note: "엔지니어링사업 대가기준 적용"
+      note: "기술료 (직접인건비+제경비)의 20~40%, 이윤 포함 (엔지니어링사업대가의 기준 제10조)",
+      tech_fee: true,
+      tech_fee_range: { min: 0.20, max: 0.40, basis: "직접인건비+제경비" }
     }
   }.freeze
 
   # 비용 항목별 적정 비율 범위
   EXPENSE_RATE_RANGES = {
     general: {
-      overhead: { name: "제경비(간접노무비+기타경비)", rate_range: [ 0.10, 0.20 ], basis: "직접인건비", note: "통상 110~120%" },
+      overhead: { name: "제경비(간접노무비+기타경비)", rate_range: nil, basis: "직접인건비", note: "일반용역에는 법정 제경비율이 없습니다 — 항목별 산출근거를 확인하세요" },
       direct_expense: { name: "직접경비", items: [ "여비·교통비", "인쇄·복사비", "소모품비", "회의비", "통신·우편료" ], note: "실비 산정, 통상 직접인건비의 5~15%" },
       general_admin: { name: "일반관리비", rate_range: [ 0.05, 0.06 ], basis: "재료비+노무비+경비", note: "기타 용역 상한 6% (국가계약법 시행규칙 §8①17호). 참고: 시설공사 종합공사 일반관리비는 50억 미만 8.0% / 50~300억 6.5% / 300억 이상 5.0% (계약예규 「예정가격 작성기준」 §20)" }
     },
     research: {
-      overhead: { name: "제경비", rate_range: [ 0.86, 1.20 ], basis: "직접인건비", note: "학술연구 기준 86~120%" },
+      overhead: { name: "제경비", rate_range: nil, basis: "직접인건비", present_status: "warning", note: "학술연구용역 원가계산서에는 제경비 비목이 없습니다(예정가격 작성기준 제24조 — 인건비·경비·일반관리비·이윤). 경비 항목으로 계상했는지 확인하세요" },
       direct_expense: { name: "직접경비", items: [ "여비", "유인물비", "전산처리비", "시약·재료비", "회의비", "임차료" ], note: "실비 산정" },
       general_admin: { name: "일반관리비", rate_range: [ 0.05, 0.06 ], basis: "노무비+경비", note: "해당 시 5~6%" }
     },
@@ -65,7 +64,7 @@ class CostCalculationReviewService
       general_admin: { name: "일반관리비", rate_range: [ 0.05, 0.06 ], basis: "노무비+경비", note: "5~6%" }
     },
     design: {
-      overhead: { name: "제경비", rate_range: [ 1.10, 1.20 ], basis: "직접인건비", note: "엔지니어링 기준 110~120%" },
+      overhead: { name: "제경비", rate_range: [ 1.10, 1.20 ], basis: "직접인건비", note: "엔지니어링사업대가의 기준 제9조 110~120%" },
       direct_expense: { name: "직접경비", items: [ "여비", "인쇄비", "관급자재시험비", "측량비", "모형제작비" ], note: "실비 산정" },
       general_admin: { name: "일반관리비", rate_range: [ 0.05, 0.06 ], basis: "노무비+경비", note: "해당 시 5~6%" }
     },
@@ -113,10 +112,14 @@ class CostCalculationReviewService
         reviews << { name: "직접인건비", status: "ok", detail: "노임단가 × 투입인월(M/M) 기준으로 산출. 한국엔지니어링협회 또는 SW기술자 노임단가 적용 여부 확인 필요.", amount: direct_labor }
       end
 
-      # 2. 제경비 검토
-      if direct_labor > 0
+      # 2. 제경비 검토 — 법정 비율이 있는 유형(엔지니어링 등)만 비율로 판정한다.
+      range = expense_ranges[:overhead][:rate_range]
+      if range.nil?
+        if overhead > 0
+          reviews << { name: expense_ranges[:overhead][:name], status: expense_ranges[:overhead][:present_status] || "ok", detail: expense_ranges[:overhead][:note], amount: overhead }
+        end
+      elsif direct_labor > 0
         overhead_rate = overhead.to_f / direct_labor
-        range = expense_ranges[:overhead][:rate_range]
         if overhead_rate < range[0] * 0.5
           reviews << { name: expense_ranges[:overhead][:name], status: "warning", detail: "제경비율 #{(overhead_rate * 100).round(1)}%로 기준(#{(range[0]*100).round(0)}~#{(range[1]*100).round(0)}%) 대비 매우 낮습니다. 과소 산정 여부 확인.", amount: overhead, rate: "#{(overhead_rate * 100).round(1)}%" }
         elsif overhead_rate > range[1] * 1.3
@@ -154,8 +157,8 @@ class CostCalculationReviewService
 
       # 5. 이윤/기술료 검토
       if type_info[:tech_fee]
-        # 학술연구: 기술료 검토
-        tech_basis = direct_labor + overhead + direct_expense
+        # 엔지니어링(설계·감리): 기술료 = (직접인건비+제경비) × 20~40% — 직접경비는 기준에 넣지 않는다 (대가기준 제10조)
+        tech_basis = direct_labor + overhead
         if tech_basis > 0 && profit_or_tech > 0
           tech_rate = profit_or_tech.to_f / tech_basis
           range = type_info[:tech_fee_range]

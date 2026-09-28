@@ -68,6 +68,7 @@ export default class extends Controller {
   static accommodationByRegion = { seoul: 100000, metro: 80000, other: 70000 }
   static mealRate = 25000
   static dailyRate = 25000
+  static withinDutyRate = 20000 // 근무지 내 국내 출장 4시간 이상 (공무원 여비 규정 제18조①)
   static transportNames = { train: 'KTX', bus: '고속버스', car: '자차', flight: '항공' }
 
   connect() {
@@ -178,9 +179,11 @@ export default class extends Controller {
     const regionType = this._getRegionType(destination)
     const C = this.constructor
     const accRate = C.accommodationByRegion[regionType]
-    const accAmount = needAccommodation ? accRate * nights : 0
-    const mealAmount = C.mealRate * days
-    const dailyAmount = C.dailyRate * days
+    // 같은 시·군 안 출장 = 근무지 내 국내 출장 (공무원 여비 규정 제18조): 4시간 이상 2만원(미만 1만원)을 정액 여비 대신 지급.
+    const withinDuty = !!(c1 && c2 && c1 === c2)
+    const accAmount = needAccommodation && !withinDuty ? accRate * nights : 0
+    const mealAmount = withinDuty ? 0 : C.mealRate * days
+    const dailyAmount = withinDuty ? C.withinDutyRate * days : C.dailyRate * days
     const totalAmount = fareResult.fare + accAmount + mealAmount + dailyAmount
 
     // 결과 표시
@@ -201,7 +204,7 @@ export default class extends Controller {
 
     // 숙박비
     const regionNames = { seoul: '서울', metro: '광역시', other: '기타지역' }
-    if (needAccommodation && nights > 0) {
+    if (needAccommodation && nights > 0 && !withinDuty) {
       this.accommodationRowTarget.classList.remove('hidden')
       this.accommodationDescTarget.textContent = accRate.toLocaleString() + '원(' + regionNames[regionType] + ') \u00D7 ' + nights + '\uBC15'
       this.accommodationAmountTarget.textContent = '\u20A9 ' + accAmount.toLocaleString()
@@ -210,9 +213,11 @@ export default class extends Controller {
     }
 
     // 식비/일비
-    this.mealDescTarget.textContent = C.mealRate.toLocaleString() + '원 \u00D7 ' + days + '\uC77C'
+    this.mealDescTarget.textContent = withinDuty ? '근무지 내 출장 — 식비 별도 지급 없음' : C.mealRate.toLocaleString() + '원 \u00D7 ' + days + '\uC77C'
     this.mealAmountTarget.textContent = '\u20A9 ' + mealAmount.toLocaleString()
-    this.dailyDescTarget.textContent = C.dailyRate.toLocaleString() + '원 \u00D7 ' + days + '\uC77C'
+    this.dailyDescTarget.textContent = withinDuty
+      ? '근무지 내 출장(여비 규정 제18조) 4시간 이상 ' + C.withinDutyRate.toLocaleString() + '원 \u00D7 ' + days + '\uC77C · 4시간 미만 10,000원 · 공용차량 이용 시 1만원 감액'
+      : C.dailyRate.toLocaleString() + '원 \u00D7 ' + days + '\uC77C'
     this.dailyAmountTarget.textContent = '\u20A9 ' + dailyAmount.toLocaleString()
 
     // calc_complete 신고 — 두 도시가 목록에서 확인된 결과만(「목록에서 도시를 선택해주세요」 결과는 완료 아님). 명시적 제출이라 즉시.

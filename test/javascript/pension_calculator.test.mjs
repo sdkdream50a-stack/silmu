@@ -1,6 +1,16 @@
-// 공무원연금 계산기 회귀 (2026-09-17 전수감사 P0).
-// 공무원연금법 §43①(10년 이상 재직) · §43④(1.7%, 36년 한도) · 부칙 제13조제1항(퇴직 연도별 비율).
-// "2015년 이전 임용자 1.9%" 일괄 적용은 원문에 없다 — 퇴직 연도 비율을 쓴다.
+// 공무원연금 계산기 회귀 (2026-09-17 전수감사 P0 · 2026-09-28 재직 연도별 비율로 정정).
+// 공무원연금법 §43①(10년 이상 재직) · §43④(1.7%, 36년 한도) · 부칙(법률 제13387호) 제13조.
+// 제13조제3항(«복무기간이 산입된 연도에 해당하는 비율»)·제4항(«2016년 1월 1일 이후의 재직기간에 대한 급여액»)과
+// 공단 산정식(«재직기간별 적용비율», 단계적 인하 '16년 1.878%→'35년 1.7%)대로 비율은 재직 연도마다 적용한다.
+// 2015년 이전 재직분은 종전 규정 1.9%. (9/17 판은 퇴직 연도 비율을 전 기간에 곱해 2026 퇴직 20년을 약 6% 과소 계산했다)
+const Y = { 2016: 1.878, 2017: 1.856, 2018: 1.834, 2019: 1.812, 2020: 1.79, 2021: 1.78, 2022: 1.77, 2023: 1.76, 2024: 1.75, 2025: 1.74,
+  2026: 1.736, 2027: 1.732, 2028: 1.728, 2029: 1.724, 2030: 1.72, 2031: 1.716, 2032: 1.712, 2033: 1.708, 2034: 1.704 }
+const rateOf = (y) => (y <= 2015 ? 1.9 : Y[y] ?? 1.7)
+const expected = (income, tenure, retire) => {
+  let sum = 0
+  for (let y = retire - tenure; y < retire; y++) sum += rateOf(y)
+  return Math.round(income * sum / 100)
+}
 import { test } from "node:test"
 import assert from "node:assert/strict"
 import { readFileSync } from "node:fs"
@@ -26,22 +36,23 @@ function run({ tenure, income, retireYear }) {
   return Number(String(el("result-pension-monthly").textContent).replace(/[^0-9]/g, ""))
 }
 
-test("NORMAL: 2026년 퇴직 20년 · 평균 400만원 → 1.736%", () => {
-  assert.equal(run({ tenure: 20, income: 4000000, retireYear: 2026 }), Math.round(4000000 * 20 * 0.01736))
+test("NORMAL: 2026년 퇴직 20년 · 평균 400만원 → 2006~15 1.9% + 2016~25 연도별 비율 = 1,478,800원", () => {
+  assert.equal(run({ tenure: 20, income: 4000000, retireYear: 2026 }), 1478800)
+  assert.equal(expected(4000000, 20, 2026), 1478800)
 })
 
-test("EDGE: 퇴직 연도가 바뀌면 비율이 바뀐다 (2030년 1.72%)", () => {
-  assert.equal(run({ tenure: 20, income: 4000000, retireYear: 2030 }), Math.round(4000000 * 20 * 0.0172))
+test("EDGE: 퇴직 연도가 바뀌면 재직 연도 구간이 바뀐다 (2030년 퇴직 20년)", () => {
+  assert.equal(run({ tenure: 20, income: 4000000, retireYear: 2030 }), expected(4000000, 20, 2030))
 })
 
-test("UPPER_BOUND: 36년 초과는 36년으로, 2035년 이후 1.7%", () => {
-  assert.equal(run({ tenure: 40, income: 4000000, retireYear: 2035 }), Math.round(4000000 * 36 * 0.017))
+test("UPPER_BOUND: 36년 초과는 36년으로 — 2035년 퇴직 36년(1999~2034)", () => {
+  assert.equal(run({ tenure: 40, income: 4000000, retireYear: 2035 }), expected(4000000, 36, 2035))
 })
 
-test("LOWER_BOUND: 10년 미만 입력은 10년으로 올려 계산(슬라이더 최소 10년)", () => {
-  assert.equal(run({ tenure: 5, income: 4000000, retireYear: 2026 }), Math.round(4000000 * 10 * 0.01736))
+test("LOWER_BOUND: 10년 미만 입력은 10년으로 올려 계산(슬라이더 최소 10년) — 2016~2025 연도별", () => {
+  assert.equal(run({ tenure: 5, income: 4000000, retireYear: 2026 }), expected(4000000, 10, 2026))
 })
 
-test("EXCEPTION: 1.9% 일괄 적용 경로가 없다", () => {
-  assert.ok(!/0\.019\b/.test(SCRIPT))
+test("NEGATIVE: 퇴직 연도 비율을 전 기간에 곱하던 값(1,388,800원)이 아니다", () => {
+  assert.notEqual(run({ tenure: 20, income: 4000000, retireYear: 2026 }), Math.round(4000000 * 20 * 0.01736))
 })
