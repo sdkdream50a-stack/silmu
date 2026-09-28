@@ -203,13 +203,20 @@
   function searchCategory() {
     const query = document.getElementById('search-input').value.trim().toLowerCase();
     currentFilter = null;
-    if (!query) { renderAll(); return; }
-    renderResults(BUDGET_CATEGORIES.filter(item =>
+    if (!query) {
+      renderAll();
+      if (window.silmuCalcResult) window.silmuCalcResult(null);
+      return;
+    }
+    const matches = BUDGET_CATEGORIES.filter(item =>
       item.keywords.some(k => k.includes(query) || query.includes(k)) ||
       item.sub.toLowerCase().includes(query) ||
       item.category.toLowerCase().includes(query) ||
       item.note.toLowerCase().includes(query)
-    ), query);
+    );
+    renderResults(matches, query);
+    // calc_complete·tool_complete 신고 — 추천 과목이 1건 이상 나온 검색만(0건 = 완료 아님). 검색어는 서명(메모리)에만 쓰고 전송하지 않는다.
+    if (window.silmuCalcResult) window.silmuCalcResult(matches.length ? query : null);
   }
 
   function quickSearch(term) {

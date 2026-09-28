@@ -408,6 +408,7 @@
     if (contractAmount === 0 || totalAmount === 0) {
       resultArea.classList.add('hidden');
       if (emptyCard) emptyCard.classList.remove('hidden');
+      if (window.silmuCalcResult) window.silmuCalcResult(null);
       return;
     }
     if (emptyCard) emptyCard.classList.add('hidden');
@@ -430,6 +431,7 @@
             '모든 비목을 빠짐없이 입력해야 등락률과 조정금액이 맞습니다. (차액 ' + formatNum(gap) + '만원)';
         }
       }
+      if (window.silmuCalcResult) window.silmuCalcResult(null);
       return;
     }
 
@@ -462,6 +464,8 @@
       formulas.push(`선금공제 후 = ${formatNum(adjAmount)}만원 × (1 - ${(advanceRate * 100).toFixed(0)}%) = ${formatNum(finalAmount)}만원`);
     }
     document.getElementById('res-formula').innerHTML = formulas.map(f => `<div>${f}</div>`).join('');
+    // calc_complete·tool_complete 신고 — 조정률이 실제로 나온 결과만. 금액은 서명(메모리)에만 쓰고 전송하지 않는다.
+    if (window.silmuCalcResult) window.silmuCalcResult(['index', contractAmount, advanceRate, avgRate].join('|'));
   }
 
   // === 품목조정률 ===
@@ -516,6 +520,7 @@
     if (contractAmount === 0) {
       resultArea.classList.add('hidden');
       if (emptyCard) emptyCard.classList.remove('hidden');
+      if (window.silmuCalcResult) window.silmuCalcResult(null);
       return;
     }
     if (emptyCard) emptyCard.classList.add('hidden');
@@ -547,6 +552,8 @@
       formulas.push(`선금공제 후 = ${formatNum(Math.abs(changeInMan))}만원 × (1 - ${(advanceRate * 100).toFixed(0)}%) = ${formatNum(Math.abs(finalAmount))}만원`);
     }
     document.getElementById('res-formula').innerHTML = formulas.map(f => `<div>${f}</div>`).join('');
+    // calc_complete·tool_complete 신고 — 입력값은 서명(메모리)에만 쓰고 전송하지 않는다.
+    if (window.silmuCalcResult) window.silmuCalcResult(['item', contractAmount, advanceRate, totalChange].join('|'));
   }
 
   function updateRemoveButtons(tbodyId, rowClass) {

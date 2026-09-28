@@ -30,6 +30,23 @@ const HOOKED_FILES = [
   "app/views/pdf_tools/index.html.erb",
   "app/javascript/controllers/qualification_evaluation_controller.js",
   "app/javascript/controllers/insurance_calculator_controller.js",
+  // 2026-09-28 P3 — tool_complete 정본화로 신고 훅을 새로 단 16개 (task-calendar 제외 · standard-term 은 결과 페이지 submitted 신고)
+  "app/views/tools/salary_calculator.html.erb",
+  "app/views/tools/pension_calculator.html.erb",
+  "app/views/tools/severance_calculator.html.erb",
+  "app/views/tools/performance_bonus_calculator.html.erb",
+  "app/views/tools/allowance_calculator.html.erb",
+  "app/views/tools/budget_execution_rate.html.erb",
+  "app/views/tools/contingency_fund.html.erb",
+  "app/views/tools/price_adjustment_calculator.html.erb",
+  "app/views/tools/predetermined_price.html.erb",
+  "app/views/tools/split_contract_checker.html.erb",
+  "app/views/tools/budget_transfer_checker.html.erb",
+  "app/views/tools/budget_category_finder.html.erb",
+  "app/views/tools/subsidy_settlement_checker.html.erb",
+  "app/views/tools/audit_readiness_checker.html.erb",
+  "app/views/tools/contract_legality_check.html.erb",
+  "app/views/tools/standard_term_checker.html.erb",
 ]
 
 for (const path of HOOKED_FILES) {

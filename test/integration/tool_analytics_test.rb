@@ -28,8 +28,8 @@ class ToolAnalyticsTest < ActionDispatch::IntegrationTest
     refute_includes response.body, '"tool_complete"'
   end
 
-  # tool_complete 는 #result-area 관례에 의존한다. 그 관례가 사라지면
-  # 이벤트가 조용히 0 이 되므로 앵커를 고정한다(실측: 21개 중 5개만 이 관례를 쓴다).
+  # 2026-09-28 P3 이후 tool_complete 는 #result-area observer 가 아니라 window.silmuCalcResult 신고로 나간다
+  # (test/javascript/tool_complete.test.mjs · test/system/tool_complete_analytics_test.rb). 앵커는 화면 계약으로만 남긴다.
   test "result-area anchor still exists on an instrumented tool" do
     host! "silmu.kr"
 

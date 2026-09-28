@@ -269,6 +269,7 @@
         '지급률은 소속 기관의 성과상여금 지급계획으로 정해집니다. 기본 모형 예시는 S 172.5 / A 125 / B 85%입니다.';
       const annualSec = document.getElementById('annual-section');
       if (annualSec) annualSec.classList.add('hidden');
+      if (window.silmuCalcResult) window.silmuCalcResult(null);
       return;
     }
 
@@ -292,6 +293,9 @@
     } else {
       document.getElementById('annual-section').classList.add('hidden');
     }
+
+    // calc_complete·tool_complete 신고 — 계급이 선택돼 금액이 실제로 나온 결과만. 입력값은 전송하지 않는다.
+    if (window.silmuCalcResult) window.silmuCalcResult(salary > 0 ? [salary, selectedGrade, rate, payCount].join('|') : null);
   }
 
   // 초기 계산

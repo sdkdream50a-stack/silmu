@@ -296,6 +296,7 @@
 
     if (!type) {
       result.classList.add('hidden');
+      if (window.silmuCalcResult) window.silmuCalcResult(null);
       return;
     }
 
@@ -416,6 +417,8 @@
     `;
 
     result.innerHTML = html;
+    // calc_complete·tool_complete 신고 — 보조금 유형별 체크리스트가 만들어진 순간. 금액은 서명에도 넣지 않는다(타이핑마다 새 결과로 세지 않게).
+    if (window.silmuCalcResult) window.silmuCalcResult(['subsidy', type, selfFunding, execTypes.join(',')].join('|'));
   }
 
   function updateProgress() {

@@ -344,6 +344,7 @@
     if (!type) {
       resultCard.classList.add('hidden');
       if (emptyCard) emptyCard.classList.remove('hidden');
+      if (window.silmuCalcResult) window.silmuCalcResult(null);
       return;
     }
 
@@ -380,6 +381,8 @@
       });
       const data = await res.json();
       renderResult(data);
+      // calc_complete·tool_complete 신고 — 서버 판정이 정상으로 돌아와 화면에 나온 경우만(오류 응답·네트워크 실패 = 완료 아님). 금액은 보내지 않는다.
+      if (window.silmuCalcResult) window.silmuCalcResult(res.ok && data && data.state ? ['split-contract', body.contract_type, data.state].join('|') : null);
     } catch (e) {
       console.error(e);
     }
