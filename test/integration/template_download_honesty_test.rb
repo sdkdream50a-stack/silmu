@@ -124,4 +124,20 @@ class TemplateDownloadHonestyTest < ActionDispatch::IntegrationTest
     assert_match(/물품 검사검수조서/, response.body)
     assert_match(/HWP/, response.body, "파일 형식 표기는 유지된다")
   end
+
+  # 2026-09-28 감사 P3 — 파일을 안 주는데 SERP 제목·설명이 "무료 다운로드"를 약속했다.
+  test "목록 페이지 title·description이 다운로드를 약속하지 않는다" do
+    get templates_url
+    assert_response :success
+    assert_no_match(/무료 다운로드/, response.body)
+    assert_no_match(/즉시 다운로드/, response.body)
+  end
+
+  test "상세 26종 전부 description이 다운로드를 약속하지 않는다" do
+    TemplatesController::TEMPLATES.each do |t|
+      get template_url(t[:id])
+      assert_response :success
+      assert_no_match(/형식 무료 다운로드/, response.body, "서식 #{t[:id]}: description이 여전히 다운로드를 약속한다")
+    end
+  end
 end
