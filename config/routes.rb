@@ -168,6 +168,12 @@ Rails.application.routes.draw do
   get  "review-lab/budget", to: "review_lab#budget", as: :review_lab_budget
   post "review-lab/budget", to: "review_lab#budget_review"
   post "review-lab/demo/:kind", to: "review_lab#demo", as: :review_lab_demo, constraints: { kind: /quote|package|budget/ }
+  # 숫자 id 시절(2026-02 GUIDES 해시) 가이드 URL → 이관 시드의 slug 로 301 (SO-14). id 10 은 해시에 없었다.
+  {
+    1 => "purchase-and-inspection", 2 => "inspection-report", 3 => "estimated-price",
+    4 => "private-contract-guide", 5 => "travel-expense-guide", 6 => "annual-leave-guide",
+    7 => "civil-complaint-guide", 8 => "budget-carryover-guide", 9 => "bidding-guide"
+  }.each { |id, slug| get "guides/#{id}", to: redirect("/guides/#{slug}", status: 301) }
   resources :guides, only: [ :index, :show ], param: :slug
 
   # 업무달력 데이터 동기화
