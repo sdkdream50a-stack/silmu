@@ -54,6 +54,9 @@ env:
     # 2 worker × 5 thread = 10 동시성. GVL 병목 분산 + CoW 메모리 절약.
     WEB_CONCURRENCY: 2
     RAILS_MAX_THREADS: 5
+    # Thruster 원본 캐시 끔 — 캐시 키가 쿠키를 보지 않아 익명 public 사본이 로그인 요청(Cloudflare 는 silmu_auth 로
+    # 우회)에도 나가 로그인 사용자가 비로그인 nav 를 봤다(2026-09-28). 공개 화면 캐시는 Cloudflare 가 맡는다.
+    CACHE_SIZE: 0
     GA_MEASUREMENT_ID: G-DGH1M308BH
     EXAM_GA_MEASUREMENT_ID: G-D3SL77M9GE
     ADSENSE_CLIENT_ID: ca-pub-6241798439911569
