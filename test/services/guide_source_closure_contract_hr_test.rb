@@ -99,6 +99,8 @@ class GuideSourceClosureContractHrTest < ActiveSupport::TestCase
 
   test "NORMAL: 적용 후 20편이 시드와 같고 틀린 문구가 하나도 없다" do
     migrate
+    # 시드는 이후 마이그레이션(20260929060000 공사계약 고위험 정정 — laws 문구 포함)까지 반영된 상태라 순서대로 이어 적용해 비교한다.
+    capture_io { load Rails.root.join("db/content_migrations/20260929060000_guide_risk_contract.rb") }
     EPISODES.each do |ep|
       g = Guide.find_by!(slug: ep[:slug])
       assert_equal ep[:description], g.description, ep[:slug]
