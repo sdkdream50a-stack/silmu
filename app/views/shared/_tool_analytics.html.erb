@@ -34,7 +34,9 @@
   · #result-area MutationObserver 는 제거했다 — 신고 훅과 함께 있으면 tool_complete 를 두 번 세게 되고
     (overtime·annual-leave 는 #result-area 와 신고 훅을 둘 다 가진다), 관찰자에만 기대던 3개(budget-execution-rate ·
     contingency-fund · price-adjustment-calculator)는 이번에 직접 신고한다.
-  · 이전 페이지의 대기 타이머(입력 직후 Turbo 이동)는 세대가 바뀌었으면 버린다 — 이동은 완료가 아니다.
+  · 이전 페이지의 대기 타이머(입력 직후 Turbo 이동)는 세대 또는 경로가 바뀌었으면 버린다 — 이동은 완료가 아니다.
+    이 규칙은 calc_complete 에도 적용된다(종전엔 입력 직후 1.5초 안에 이동하면 calc_complete 가 새 화면에서 나갔다) — 시계열 해석 시 참고.
+    알려진 한계: 페이지 로드 중 자동 계산 결과가 1.5초 대기 중일 때 화면 아무 곳 클릭도 «조작»으로 센다(드묾 · 후속 후보).
   · 신고 전에 tool_start 가 없었으면(버튼·샘플만 누른 경로) 먼저 보정해 퍼널을 유지한다(옛 observer 와 같은 규칙).
   · tool_complete 는 이 페이지에서 사용자 조작(input·change·click·submit)이 있은 뒤에만 나간다 —
     페이지 로드 중 자동 계산(브라우저가 복원한 입력값 등)은 완료가 아니다. calc_complete 는 이 조건을 받지 않는다(대조군 불변).
@@ -42,7 +44,8 @@
     결과 자체가 안 보였다 → 폼 data-turbo=false + 결과 페이지에서 submitted 신고. %>
 <script>
   (function () {
-    var toolId = (location.pathname.split("/").filter(Boolean).pop() || "unknown");
+    var pagePath = location.pathname;
+    var toolId = (pagePath.split("/").filter(Boolean).pop() || "unknown");
     var generation = window.__silmuToolGen = (window.__silmuToolGen || 0) + 1;
     var started = false;
 
@@ -88,6 +91,8 @@
       var signature = pending;
       pending = null;
       if (generation !== window.__silmuToolGen) return;
+      // 파셜이 없는 화면(가이드 등)으로의 Turbo 이동은 세대 번호를 바꾸지 않는다 — 경로로도 확인한다.
+      if (location.pathname !== pagePath) return;
       if (!sentSignatures[signature]) {
         sentSignatures[signature] = true;
         var params = { tool_slug: toolId };

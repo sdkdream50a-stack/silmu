@@ -84,6 +84,16 @@ test("입력이 멈추기 전에 다른 도구로 이동(Turbo) → 이전 도�
   assert.equal(p.count("calc_complete"), 0)
 })
 
+// 독립 리뷰(2026-09-28) 지적: 계측 파셜이 없는 화면(가이드 등)으로 가면 세대 번호가 그대로라 이전 도구 대기분이 새 화면에서 나갔다.
+test("입력이 멈추기 전에 도구가 아닌 화면으로 이동(파셜 없음) → tool_complete 0", async () => {
+  const p = page("/tools/overtime-calculator")
+  p.user("input")
+  p.sandbox.silmuCalcResult("typing")
+  p.sandbox.location.pathname = "/guides/some-guide" // 파셜을 다시 실행하지 않는 Turbo 방문
+  await sleep(1700)
+  assert.equal(p.count("tool_complete"), 0)
+})
+
 test("버튼만 누른 경로(샘플 등)도 tool_start 를 먼저 보정해 퍼널이 깨지지 않는다", () => {
   const p = page()
   p.user("click")
