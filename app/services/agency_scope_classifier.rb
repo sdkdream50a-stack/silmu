@@ -26,7 +26,8 @@ class AgencyScopeClassifier
   ].freeze
   # org_type=school 은 공·사립을 구분하지 못한다. 사례가 스스로 밝힌 설립 주체만 신호로 쓴다
   # (법령 인용은 신호가 아니다 — 경기 사례집처럼 공·사립 규칙을 함께 인용하는 사례가 많다).
-  PRIVATE_SCHOOL_SIGNAL = /사립\s*(?:여자?고|고등학교|고|중학교|중|초등학교|초|특성화고|유치원)|학교법인/
+  # «사립학교» 단독 표현도 신호다. 단 «사립학교법»(공립 사례도 준용 조문으로 인용)은 제외한다.
+  PRIVATE_SCHOOL_SIGNAL = /사립\s*(?:여자?고|고등학교|고|중학교|중|초등학교|초|특성화고|유치원|학교(?!법))|학교법인/
   PUBLIC_SCHOOL_SIGNAL = /공립/
 
   def initialize(record)

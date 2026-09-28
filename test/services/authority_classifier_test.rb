@@ -73,6 +73,7 @@ class AuthorityClassifierTest < ActiveSupport::TestCase
       build_case(sector: :edu, org_type: :school, issue: "해당 사립고는 2024학년도 기간제교원을 채용하면서"),
       build_case(sector: :edu, org_type: :school, issue: "해당 사립 특성화고는 예산을 사전 집행한 사실."),
       build_case(sector: :edu, org_type: :school, issue: "해당 학교법인은 감사를 실시하지 않은 사실."),
+      build_case(sector: :edu, org_type: :school, issue: "해당 사립학교는 학교운영위원회 심의를 거치지 않은 사실."),
       build_case(sector: :edu, org_type: :school, source_title: "2024년 사립 학교법인 및 고등학교 종합감사 결과 공개문(S고)")
     ].each do |ac|
       plan = AgencyScopeClassifier.plan_for(ac)
