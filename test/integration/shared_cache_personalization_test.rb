@@ -44,6 +44,31 @@ class SharedCachePersonalizationTest < ActionDispatch::IntegrationTest
     assert_equal "no-store", response.headers["Cache-Control"]
   end
 
+  # Cloudflare 캐시 규칙(요청에 silmu_auth 가 있으면 캐시 우회)의 짝 — 로그인 중에만 표시가 있어야 한다.
+  test "로그인 중에는 캐시 우회 표시를 붙이고 로그아웃하면 지운다" do
+    host! "silmu.kr" # 표시 쿠키는 세션과 같은 .silmu.kr 도메인이다
+    sign_in users(:one)
+    get "/tools/salary-calculator"
+    assert_equal "1", cookies["silmu_auth"]
+    assert_match(/silmu_auth=1;.*httponly/i, Array(response.headers["Set-Cookie"]).join("\n"))
+
+    get "/guides" # 이미 있으면 다시 보내지 않는다
+    refute_match(/silmu_auth=/, Array(response.headers["Set-Cookie"]).join("\n"))
+
+    sign_out :user
+    get "/guides"
+    assert_match(/silmu_auth=;/, Array(response.headers["Set-Cookie"]).join("\n"))
+    assert cookies["silmu_auth"].blank?
+  end
+
+  test "음성 대조 — 비로그인 공개 화면에는 Set-Cookie 가 없다(공개 캐시 유지)" do
+    PAGES.each do |path|
+      get path
+      assert_nil response.headers["Set-Cookie"], path
+      assert_includes response.headers["Cache-Control"], "public", path
+    end
+  end
+
   class StatelessPostTest < ActionDispatch::IntegrationTest
     setup do
       @forgery = ActionController::Base.allow_forgery_protection
