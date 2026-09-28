@@ -431,6 +431,17 @@
                       <% else %>
                         <span class="text-gray-600"><%= law %></span>
                       <% end %>
+                      <% if law.is_a?(Hash)
+                           law_article = law[:article].to_s
+                           law_meta = [
+                             (law_article if law_article.present? && !law_name.to_s.include?(law_article)),
+                             ("적용: #{law[:applies_to]}" if law[:applies_to].present?),
+                             ("확인 #{law[:checked_on]}" if law[:checked_on].present?)
+                           ].compact
+                         end %>
+                      <% if law.is_a?(Hash) && law_meta.any? %>
+                        <p class="text-gray-400 text-xs mt-0.5" data-law-meta><%= law_meta.join(" · ") %></p>
+                      <% end %>
                     </li>
                   <% end %>
                 </ul>
