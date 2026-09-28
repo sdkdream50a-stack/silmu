@@ -477,7 +477,7 @@ class DocumentAnalyzerService
       ### 용역 유형 추정
       - service_type: 다음 중 하나로 추정 (문서 내용 기반)
         - general (일반용역: 일반 업무 용역·위탁)
-        - research (학술연구용역: 학술·정책·조사 연구 — 기술료 적용)
+        - research (학술연구용역: 학술·정책·조사 연구 — 이윤 적용)
         - software (SW개발 용역: 소프트웨어 개발·유지보수)
         - design (설계용역: 건축·토목 설계)
         - supervision (감리용역: 건설 감리·시공관리)
@@ -487,7 +487,7 @@ class DocumentAnalyzerService
       - overhead: 제경비 (간접노무비+기타경비 또는 간접경비)
       - direct_expense: 직접경비 (여비, 인쇄비, 소모품 등 실비)
       - general_admin: 일반관리비
-      - profit_or_tech: 이윤 또는 기술료 (학술연구는 기술료)
+      - profit_or_tech: 이윤 또는 기술료 (설계·감리 등 엔지니어링은 기술료)
       - vat: 부가가치세
 
       ## 규칙
