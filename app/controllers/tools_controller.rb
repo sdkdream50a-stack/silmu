@@ -1,11 +1,21 @@
 class ToolsController < ApplicationController
   include SeoHelper
   include ToolsMeta
+  include RequestOriginVerifiable
+
+  # 2026-09-28 — 도구 화면은 CDN 에 공개 캐시(아래 expires_in public)되므로 화면에 박힌 CSRF 토큰이 방문자 세션과 맞지 않아
+  # 연가 PDF·HWPX 다운로드가 운영에서 422 로 실패했다. 두 동작은 저장·변경 없이 입력값으로 문서만 계산해 돌려주므로
+  # CSRF 토큰 대신 요청 출처(Origin/Referer)를 검사한다 — quote-reviews·quote-documents 와 같은 방식.
+  # 분할계약 판정·표준어 검사도 같은 이유로 운영에서 422 였다 — 둘 다 입력값만 계산해 돌려주고 저장하지 않는다.
+  STATELESS_POSTS = %i[annual_leave_pdf annual_leave_hwpx split_contract_evaluate standard_term_checker].freeze
+  skip_forgery_protection only: STATELESS_POSTS
+  before_action :verify_request_origin, only: STATELESS_POSTS, if: -> { request.post? }
 
   # 모든 도구 페이지는 JS 기반 계산기 (서버 측 동적 데이터 없음)
-  before_action -> { expires_in 1.hour, public: true, stale_while_revalidate: 1.day }
-  # 업무달력은 today를 서버 렌더링하므로 캐시 금지 (자정 이후 날짜 오차 방지)
-  before_action -> { response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate" }, only: :task_calendar
+  before_action -> { expires_in 1.hour, public: true, stale_while_revalidate: 1.day }, except: :task_calendar
+  # 업무달력은 today를 서버 렌더링하므로 캐시 금지 (자정 이후 날짜 오차 방지).
+  # 종전에는 헤더 문자열을 직접 넣어 위 expires_in 이 응답 확정 때 덮어써 public 1시간으로 나갔다.
+  before_action -> { response.cache_control.replace(no_store: true) }, only: :task_calendar
 
   def index
     description_text = "계약방식 결정·예정가격 계산·계약보증금·여비계산·법정기간 산출 등 공무원 업무를 자동화하는 #{ApplicationHelper::ACTIVE_TOOL_COUNT}개 실무 도구. 법령 기준으로 복잡한 계산을 원클릭으로 해결합니다. 수의계약 분할 판단·물가변동 조정까지 업무 시간을 대폭 단축하세요."
