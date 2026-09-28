@@ -179,7 +179,7 @@ export default class extends Controller {
     const regionType = this._getRegionType(destination)
     const C = this.constructor
     const accRate = C.accommodationByRegion[regionType]
-    // 같은 시·군 안 출장 = 근무지 내 국내 출장 (공무원 여비 규정 제18조): 식비·일비·숙박비 대신 4시간 이상 2만원(미만 1만원).
+    // 같은 시·군 안 출장 = 근무지 내 국내 출장 (공무원 여비 규정 제18조): 4시간 이상 2만원(미만 1만원)을 정액 여비 대신 지급.
     const withinDuty = !!(c1 && c2 && c1 === c2)
     const accAmount = needAccommodation && !withinDuty ? accRate * nights : 0
     const mealAmount = withinDuty ? 0 : C.mealRate * days
