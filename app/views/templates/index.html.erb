@@ -17,15 +17,15 @@
       </div>
       <div class="flex gap-4 lg:gap-6">
         <div class="text-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/15">
-          <div class="text-2xl font-bold">23</div>
+          <div class="text-2xl font-bold"><%= @templates.size %></div>
           <div class="text-xs text-slate-200 mt-0.5">전체 양식</div>
         </div>
         <div class="text-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/15">
-          <div class="text-2xl font-bold">5</div>
+          <div class="text-2xl font-bold"><%= @templates.map { |t| t[:category] }.uniq.size %></div>
           <div class="text-xs text-slate-200 mt-0.5">카테고리</div>
         </div>
         <div class="text-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/15">
-          <div class="text-2xl font-bold">3</div>
+          <div class="text-2xl font-bold"><%= @templates.flat_map { |t| t[:formats] }.uniq.size %></div>
           <div class="text-xs text-slate-200 mt-0.5">파일 형식</div>
         </div>
       </div>
@@ -49,7 +49,6 @@
       <button data-category="전체" class="tab-btn active px-5 py-2.5 bg-slate-800 text-white rounded-xl text-sm font-semibold shadow-md transition-all">전체</button>
       <button data-category="계약서" class="tab-btn px-5 py-2.5 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-xl text-sm font-medium transition-all">계약서</button>
       <button data-category="기안문" class="tab-btn px-5 py-2.5 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-xl text-sm font-medium transition-all">기안문</button>
-      <button data-category="품의서" class="tab-btn px-5 py-2.5 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-xl text-sm font-medium transition-all">품의서</button>
       <button data-category="검수조서" class="tab-btn px-5 py-2.5 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-xl text-sm font-medium transition-all">검수조서</button>
       <button data-category="기타" class="tab-btn px-5 py-2.5 bg-surface-100 text-slate-600 hover:bg-surface-200 rounded-xl text-sm font-medium transition-all">기타</button>
     </div>
@@ -60,7 +59,7 @@
 <section class="section py-10">
   <div class="container-wide">
     <div class="flex items-center justify-between mb-6">
-      <p class="text-slate-600">총 <span class="font-bold text-slate-900" id="item-count">23</span>개의 양식</p>
+      <p class="text-slate-600">총 <span class="font-bold text-slate-900" id="item-count"><%= @templates.size %></span>개의 양식</p>
       <select class="border-gray-200 rounded-xl text-sm focus:ring-indigo-500 focus:border-indigo-500 px-4 py-2">
         <option>최신순</option>
         <option>인기순</option>
