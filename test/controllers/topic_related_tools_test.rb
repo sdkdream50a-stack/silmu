@@ -35,6 +35,12 @@ class TopicRelatedToolsTest < ActionDispatch::IntegrationTest
     assert_includes body, "/tools/contract-guarantee"
   end
 
+  # 2026-09-28 비도구 신뢰 감사 SO-05: 분할발주 금지 토픽에 분할발주 점검 도구 링크가 0개였다.
+  test "NORMAL: split-contract-prohibition links the split-contract checker" do
+    body = show(slug: "split-contract-prohibition", category: "contract")
+    assert_includes body, "/tools/split-contract-checker"
+  end
+
   test "EXCEPTION: every tool key used anywhere resolves to a route helper" do
     keys = (TopicConfig::TOPIC_TOOLS.values.flatten + TopicConfig::CATEGORY_DEFAULT_TOOLS.values.flatten).uniq
     helpers = Rails.application.routes.url_helpers

@@ -55,7 +55,9 @@ module TopicConfig
     "instructor-allowance"    => [ :travel_calculator ],
     # 2026-06-01 추가 (SearchLog 콘텐츠 갭 — 추정가격·추정금액·예정가격)
     # estimated_price 도구 desc("부가세 포함 추정가격")가 본 토픽 핵심(추정가격=부가세 제외)과 모순 → contract_method만 연결
-    "estimated-amount"        => [ :contract_method ]
+    "estimated-amount"        => [ :contract_method ],
+    # 2026-09-28 추가 (비도구 신뢰 감사 SO-05 — 분할발주 금지 ↔ 분할발주 점검 도구 미연결)
+    "split-contract-prohibition" => [ :split_contract_checker, :contract_method, :contract_documents ]
   }.freeze
 
   # 플로차트가 있는 토픽 목록
@@ -157,6 +159,7 @@ module TopicConfig
     progress_inspection: { icon: "engineering", title: "기성검사 체크",   desc: "기성·준공 검사 항목 확인",    color: "orange" },
     design_change:     { icon: "edit_note",    title: "설계변경 계산",   desc: "변경 금액 자동 산출",         color: "purple" },
     legal_period:      { icon: "calendar_today", title: "법정기간 계산", desc: "입찰공고 기간 자동 산출",     color: "sky" },
+    split_contract_checker: { icon: "rule", title: "분할계약 판단", desc: "분할발주 감사 지적 여부 확인", color: "red" },
     travel_calculator: { icon: "flight_takeoff", title: "여비계산기",    desc: "출장 여비 자동 계산",         color: "rose" },
     budget_transfer_checker: { icon: "swap_horiz", title: "이월·전용 판단기", desc: "이월·전용 요건 즉시 확인", color: "blue" },
     budget_execution_rate: { icon: "donut_large", title: "예산 집행률",   desc: "집행률·잔액 자동 계산",       color: "blue" },
