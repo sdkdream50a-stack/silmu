@@ -24,6 +24,10 @@ class AgencyScopeClassifier
     "사립학교법", "초·중등교육법", "유아교육법", "교육공무원법",
     "지방교육자치에 관한 법률", "지방교육재정교부금법"
   ].freeze
+  # org_type=school 은 공·사립을 구분하지 못한다. 사례가 스스로 밝힌 설립 주체만 신호로 쓴다
+  # (법령 인용은 신호가 아니다 — 경기 사례집처럼 공·사립 규칙을 함께 인용하는 사례가 많다).
+  PRIVATE_SCHOOL_SIGNAL = /사립\s*(?:여자?고|고등학교|고|중학교|중|초등학교|초|특성화고|유치원)|학교법인/
+  PUBLIC_SCHOOL_SIGNAL = /공립/
 
   def initialize(record)
     @r = record
@@ -55,7 +59,10 @@ class AgencyScopeClassifier
     when "edu"
       agencies =
         if @r.respond_to?(:org_type) && @r.org_type.to_s == "school"
-          %w[PUBLIC_SCHOOL]
+          school_agencies or return Plan.new(
+            record: @r, target_agency: [], jurisdiction: nil, confidence: "LOW",
+            reason: "공·사립 사례 혼재 — UNSPECIFIED 유지 (법령 신호로도 추론하지 않음)"
+          )
         elsif @r.respond_to?(:org_type) && @r.org_type.to_s == "edu_office"
           %w[EDUCATION_OFFICE EDUCATION_SUPPORT_OFFICE]
         else
@@ -67,6 +74,14 @@ class AgencyScopeClassifier
       Plan.new(record: @r, target_agency: %w[LOCAL_GOVERNMENT], jurisdiction: "LOCAL", confidence: "HIGH",
                reason: "sector=local_gov (기존 구조적 분류값)")
     end
+  end
+
+  def school_agencies
+    text = %i[title issue source_title].filter_map { |f| @r.try(f) }.join("\n")
+    return %w[PUBLIC_SCHOOL] unless text.match?(PRIVATE_SCHOOL_SIGNAL)
+    return nil if [ text, @r.try(:legal_basis) ].join("\n").match?(PUBLIC_SCHOOL_SIGNAL)
+
+    %w[PRIVATE_SCHOOL]
   end
 
   def plan_from_legal_basis

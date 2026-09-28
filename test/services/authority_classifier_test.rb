@@ -67,6 +67,39 @@ class AuthorityClassifierTest < ActiveSupport::TestCase
     refute plan.applicable?, "구분 불가인데 기관을 추측함"
   end
 
+  # 2026-09-28 P0-1: org_type=school 은 공·사립을 구분하지 못한다 — 사립 사례 24건이 «공립학교»로 표시됐다.
+  test "HIGH — 사례가 스스로 사립학교라 밝히면 PUBLIC_SCHOOL 이 아니라 PRIVATE_SCHOOL 이다" do
+    [
+      build_case(sector: :edu, org_type: :school, issue: "해당 사립고는 2024학년도 기간제교원을 채용하면서"),
+      build_case(sector: :edu, org_type: :school, issue: "해당 사립 특성화고는 예산을 사전 집행한 사실."),
+      build_case(sector: :edu, org_type: :school, issue: "해당 학교법인은 감사를 실시하지 않은 사실."),
+      build_case(sector: :edu, org_type: :school, source_title: "2024년 사립 학교법인 및 고등학교 종합감사 결과 공개문(S고)")
+    ].each do |ac|
+      plan = AgencyScopeClassifier.plan_for(ac)
+      refute_includes Array(plan.target_agency), "PUBLIC_SCHOOL", "사립 사례를 공립학교로 표시함: #{ac.issue || ac.source_title}"
+      assert_equal %w[PRIVATE_SCHOOL], plan.target_agency
+      assert_equal "HIGH", plan.confidence
+    end
+  end
+
+  test "LOW — 공·사립 사례가 한 건에 섞이면 어느 한쪽으로 단정하지 않는다" do
+    ac = build_case(sector: :edu, org_type: :school,
+                    issue: "○○고등학교는 학교법인 교비회계 전출금을 보관. ○○초등학교는 보관금 미편입.",
+                    legal_basis: "지방재정법, 지방회계법, 사학기관 재무·회계 규칙, 경기도 공립학교회계 규칙")
+    plan = AgencyScopeClassifier.plan_for(ac)
+    refute plan.applicable?, "공·사립 혼재인데 한쪽으로 단정함(법령 신호로 새면 안 된다): #{plan.target_agency.inspect}"
+    assert_empty Array(plan.target_agency)
+  end
+
+  test "HIGH — 사립 신호가 없는 학교 사례는 여전히 PUBLIC_SCHOOL 이다" do
+    plan = AgencyScopeClassifier.plan_for(
+      build_case(sector: :edu, org_type: :school, issue: "○○중학교는 여비를 초과 지급한 사실.",
+                 legal_basis: "경기도 공립학교회계 규칙")
+    )
+    assert_equal %w[PUBLIC_SCHOOL], plan.target_agency
+    assert_equal "HIGH", plan.confidence
+  end
+
   test "LOW — 국가·지방 법령이 함께 인용되면 판정을 보류한다 (P0 TR-06)" do
     ac = build_case(sector: :common,
                     legal_basis: "지방공무원법 제65조의3 / 국가공무원법 제73조의3")
