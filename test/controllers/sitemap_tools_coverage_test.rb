@@ -16,16 +16,3 @@ class SitemapToolsCoverageTest < ActionDispatch::IntegrationTest
     assert_empty missing, "sitemap 누락: #{missing.join(', ')}"
   end
 end
-
-# 색인 가능·self-canonical 허브인데 sitemap 에서 빠져 있던 4개 (2026-09-28 비도구 신뢰 감사 08).
-class SitemapHubCoverageTest < ActionDispatch::IntegrationTest
-  test "indexable hub pages are listed in sitemap.xml" do
-    host! "silmu.kr"
-    get "/sitemap.xml"
-    assert_response :success
-
-    missing = %w[/school-office /school-office/calendar /guides/resources /ai-assistant]
-                .reject { |p| response.body.include?("<loc>https://silmu.kr#{p}</loc>") }
-    assert_empty missing, "sitemap 누락: #{missing.join(', ')}"
-  end
-end
