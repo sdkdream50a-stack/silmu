@@ -676,6 +676,8 @@ async function processSplit() {
 
     downloadBlob(blob, filename);
     hideProcessing();
+    // calc_complete 신고 — 파일명·페이지 범위는 보내지 않는다.
+    if (window.silmuCalcResult) window.silmuCalcResult('pdf-split', { immediate: true });
   } catch (error) {
     hideProcessing();
     showToast('오류: ' + error.message, true);
@@ -710,6 +712,8 @@ async function processMerge() {
     const blob = await response.blob();
     downloadBlob(blob, 'merged.pdf');
     hideProcessing();
+    // calc_complete 신고 — 파일명은 보내지 않는다.
+    if (window.silmuCalcResult) window.silmuCalcResult('pdf-merge', { immediate: true });
   } catch (error) {
     hideProcessing();
     showToast('오류: ' + error.message, true);
@@ -747,6 +751,8 @@ async function processNumbering() {
     const blob = await response.blob();
     downloadBlob(blob, 'numbered.pdf');
     hideProcessing();
+    // calc_complete 신고 — 파일명·쪽번호 설정값은 보내지 않는다.
+    if (window.silmuCalcResult) window.silmuCalcResult('pdf-numbering', { immediate: true });
   } catch (error) {
     hideProcessing();
     showToast('오류: ' + error.message, true);

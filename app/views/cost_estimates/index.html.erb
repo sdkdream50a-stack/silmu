@@ -754,6 +754,10 @@ document.addEventListener('turbo:load', function() {
         document.getElementById('ce-btn-print2').style.display = '';
         document.getElementById('ce-btn-download').style.display = '';
         document.getElementById('ce-btn-download2').style.display = '';
+        // calc_complete 신고 — 공사명·금액 등 입력값은 보내지 않는다.
+        if (window.silmuCalcResult) {
+          window.silmuCalcResult([data.estimate.type_name, data.estimate.contract_type].filter(Boolean).join('|') || null, { immediate: true });
+        }
       }
     });
   };

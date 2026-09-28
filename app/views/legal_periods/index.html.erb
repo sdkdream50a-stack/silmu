@@ -538,6 +538,10 @@ document.addEventListener('turbo:load', function() {
     .then(function(data) {
       if (data.success) {
         lpRenderResult(data.result);
+        // calc_complete 신고 — 날짜 등 입력값은 보내지 않는다.
+        if (window.silmuCalcResult) {
+          window.silmuCalcResult(['legal-period', data.result.type].filter(Boolean).join('|') || null, { immediate: true });
+        }
       } else {
         document.getElementById('lp-result-area').innerHTML = '<div style="background:#fef2f2;border:1px solid #fecaca;border-radius:12px;padding:16px;color:#991b1b;margin-top:20px;"><strong>오류:</strong> ' + lpEsc(data.error) + '</div>';
       }
