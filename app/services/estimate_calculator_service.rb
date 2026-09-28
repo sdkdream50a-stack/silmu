@@ -469,10 +469,24 @@ class EstimateCalculatorService
 
     private
 
-    # 구간별 누진 요율 계산
+    # 구간별 누진 요율 계산 — 현재 값이 속한 구간의 요율을 전체 금액에 통짜로 적용하면
+    # 구간 경계에서 공사비가 늘었는데 설계비가 줄어드는 절벽이 생긴다(예: 1억→653만원,
+    # 1억100만→555만원). 소득세 누진공제처럼 구간별 폭에 그 구간 요율을 곱해 누적하고,
+    # 그 합을 전체 값으로 나눈 가중평균 요율을 돌려준다 — 이러면 값이 늘수록 금액도 늘어난다.
     def calculate_progressive_rate(rates, value)
-      applicable_rate = rates.find { |r| value <= r[:max] }
-      applicable_rate ? applicable_rate[:rate] : rates.last[:rate]
+      return rates.last[:rate] if value <= 0
+
+      total = 0.0
+      prev_max = 0.0
+      rates.each do |r|
+        upper = [ r[:max], value ].min
+        break if upper <= prev_max
+
+        total += (upper - prev_max) * r[:rate]
+        prev_max = upper
+        break if value <= r[:max]
+      end
+      total / value
     end
 
     # 공사규모별 간접비율 반환
@@ -500,7 +514,7 @@ class EstimateCalculatorService
 
     def construction_disclaimer
       <<~DISCLAIMER
-        ※ 본 추정 금액은 일반적인 시장 단가를 기준으로 산출된 참고 자료입니다.
+        ※ 본 추정 금액은 "일반적인 시장 단가"가 아니라 #{BASE_PRICE_SOURCE_NOTE}
         ※ 실제 계약 금액은 현장 조건, 시공 난이도, 자재 품질, 업체 견적 등에 따라 달라질 수 있습니다.
         ※ 정확한 예산 산정을 위해서는 반드시 전문 업체의 현장 실사 및 정밀 견적을 받으시기 바랍니다.
         ※ 간접비 중 일반관리비·이윤·산재보험료는 「예정가격작성기준」, 산업안전보건관리비는 고용노동부 고시 「건설업 산업안전보건관리비 계상 및 사용기준」에 따른 요율을 적용하였습니다.
@@ -509,7 +523,7 @@ class EstimateCalculatorService
 
     def service_disclaimer
       <<~DISCLAIMER
-        ※ 본 추정 금액은 일반적인 용역 단가를 기준으로 산출된 참고 자료입니다.
+        ※ 본 추정 금액은 "일반적인 용역 단가"가 아니라 #{BASE_PRICE_SOURCE_NOTE}
         ※ 실제 계약 금액은 용역 범위, 수행 조건, 투입 인력 수준 등에 따라 달라질 수 있습니다.
         ※ 인건비 기준은 한국소프트웨어산업협회/엔지니어링협회 노임단가 등을 참고할 수 있습니다.
         ※ 정확한 예산 산정을 위해서는 원가계산서 작성 및 전문가 검토가 필요합니다.
@@ -518,7 +532,7 @@ class EstimateCalculatorService
 
     def goods_disclaimer
       <<~DISCLAIMER
-        ※ 본 추정 금액은 일반적인 시장 가격을 기준으로 산출된 참고 자료입니다.
+        ※ 본 추정 금액은 "일반적인 시장 가격"이 아니라 #{BASE_PRICE_SOURCE_NOTE}
         ※ 실제 구매 금액은 제조사, 모델, 구매 수량, 계약 조건 등에 따라 달라질 수 있습니다.
         ※ 조달청 나라장터(www.g2b.go.kr) 또는 디지털서비스몰 가격을 확인하시면 더 정확한 예산을 산정할 수 있습니다.
         ※ 대량 구매 시 할인이 적용될 수 있으며, 배송비가 별도로 발생할 수 있습니다.
