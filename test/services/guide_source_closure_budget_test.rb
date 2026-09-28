@@ -51,6 +51,8 @@ class GuideSourceClosureBudgetTest < ActiveSupport::TestCase
     assert_includes body("budget-planning-complete-7"), "시설비(301목)"
     assert_includes body("budget-planning-complete-5"), "2만원(첫째)"
     assert_includes body("budget-execution-complete-5"), "인건비 등"
+    assert_includes body("budget-planning-complete-4"), "401 민간이전: 민간단체 보조금"
+    assert_includes body("budget-execution-complete-6"), "일반공공행정(장)"
   end
 
   test "NORMAL: 마이그레이션 결과가 정정된 시드와 같고 title·slug·view_count 는 그대로다" do
@@ -89,6 +91,25 @@ class GuideSourceClosureBudgetTest < ActiveSupport::TestCase
     assert_not_includes body("budget-planning-complete-9"), "50억·500억"
     assert_not_includes body("budget-planning-complete-10"), "민간이전(401목)"
     assert_not_includes body("budget-planning-complete-10"), "자산취득비(303목)"
+    # 2차: 별표11 편성목 (401 시설비 및 부대비 · 307 민간이전 · 308 자치단체등이전 · 306 출연금 · 502 출자금 · 801 예비비)
+    bpc4 = body("budget-planning-complete-4")
+    [ "401 시설비 및 부대비: 공사비", "307 민간이전: 민간단체 보조금", "308 자치단체등이전", "306 출연금 / 502 출자금",
+      "801 예비비", "외래강사료는 201 일반운영비", "'민간이전(307목)'", "E2[307 민간이전", "F1[401 시설비 및 부대비" ].each do |fresh|
+      assert_includes bpc4, fresh
+    end
+    [ "301 시설비", "401 민간이전", "501 자치단체이전", "601 출자금", "701 예비비", "민간이전(401목)", "204 직무수행경비 또는 401" ].each do |stale|
+      assert_not_includes bpc4, stale
+    end
+    bpc6 = body("budget-planning-complete-6")
+    assert_includes bpc6, "시설비 및 부대비(401목)"
+    assert_includes bpc6, "시책추진업무추진비"
+    assert_includes bpc6, "민간이전(307목)"
+    [ "시설비(301목)", "시설비(301)", "민간이전(401목)", "정책사업추진비" ].each { |stale| assert_not_includes bpc6, stale }
+    bec6 = body("budget-execution-complete-6")
+    assert_includes bec6, "일반공공행정(분야)" # to_json 이 «>» 를 \u003e 로 바꾸므로 조각으로 본다
+    assert_includes bec6, "입법 및 선거관리(부문)"
+    assert_includes bec6, "분야·부문·정책사업·단위사업·세부사업·목"
+    [ "장(章) → 관(款) → 항(項) → 목(目)", "일반공공행정(장)", "(장·관·항·목)", "과목 4단계" ].each { |stale| assert_not_includes bec6, stale }
     SLUGS.each do |slug|
       laws = Guide.find_by!(slug: slug).sections[:laws]
       full = laws.select { |l| l[:checked_on].present? }
@@ -108,10 +129,17 @@ class GuideSourceClosureBudgetTest < ActiveSupport::TestCase
       "\"지방재정법 제23조\"", "\"지방재정법 제27조\"", "\"지방회계법 제6조\"" ].each do |stale|
       assert_not_includes seeded, stale
     end
-    # 4·6편의 목 코드(301·401 등)는 재판정 범위 밖이라 DEFERRED — 7·10편만 본다.
-    %w[budget-planning-complete-7 budget-planning-complete-10].each do |slug|
-      assert_not_includes @expected[slug].to_json, "시설비(301목)"
-      assert_not_includes @expected[slug].to_json, "민간이전(401목)"
+    # 2차(verified_codes): 4·6편·집행 6편 목 코드와 세출 과목 체계도 시드에서 정정됐다.
+    SLUGS.each do |slug|
+      seeded_slug = @expected[slug].to_json
+      [ "시설비(301목)", "민간이전(401목)", "401 민간이전", "301 시설비", "501 자치단체이전", "601 출자금", "701 예비비",
+        "시설비(301)", "(장→관→항→목)", "일반공공행정(장)" ].each do |stale|
+        assert_not_includes seeded_slug, stale, "#{slug}: #{stale}"
+      end
+    end
+    tables = Rails.root.join("db/seeds/add_comparison_tables.rb").read
+    [ "(→ 401목)", "label: \"301\", values: [ \"시설비\"", "label: \"401\", values: [ \"민간이전\"" ].each do |stale|
+      assert_not_includes tables, stale
     end
     assert BPC7_TABLE.present?
     [ "301목", "303목", "50억 이상: 지방투자심사", "반드시 분리 발주", "물품관리법 절차", "건설기술진흥법 위반" ].each do |stale|
@@ -121,14 +149,14 @@ class GuideSourceClosureBudgetTest < ActiveSupport::TestCase
 
   test "UPPER_BOUND: 전 항목이 한 번씩 바뀌고 두 번째 실행은 아무것도 바꾸지 않는다" do
     assert_match(/changes=#{LAWS.size + EDITS.size}\b/, migrate)
-    assert_equal 77, LAWS.size + EDITS.size
+    assert_equal 99, LAWS.size + EDITS.size
     assert_match(/changes=0\b/, migrate)
   end
 
   test "LOWER_BOUND: DRY_RUN 은 세기만 하고 쓰지 않는다" do
     before = SLUGS.map { |s| body(s) }
     out = migrate("DRY_RUN" => "1")
-    assert_match(/DRY_RUN changes=77\b/, out)
+    assert_match(/DRY_RUN changes=99\b/, out)
     assert_match(%r{Guide/budget-planning-complete-7 fields_to_change=sections,rich_media}, out)
     assert_equal before, SLUGS.map { |s| body(s) }
   end
