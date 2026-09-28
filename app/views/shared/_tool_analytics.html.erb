@@ -26,13 +26,24 @@
     페이지 이탈·다른 버튼(PDF·HWPX) 은 확정으로 보지 않는다 — 타이핑 중간값을 세느니 덜 센다.
   · Turbo 는 방문마다 이 스크립트를 다시 실행한다. document 리스너는 세대 번호로 현재 페이지 것만 동작한다(이전 toolId 오발화 방지).
     payload = { tool_slug, source_post? } 뿐 — 금액·날짜·지역 등 입력값은 보내지 않는다. source_post 는 모르면 생략(0 아님).
-    현재 신고 도구: overtime-calculator · travel-calculator · annual-leave-calculator %>
+    현재 신고 도구: overtime-calculator · travel-calculator · annual-leave-calculator
+
+  2026-09-28 (P3 · tool_complete 정본화):
+  · tool_complete 는 이제 calc_complete 와 같은 순간·같은 dedupe 로 1회 나간다(서로 다른 결과마다 1회, 같은 결과 재클릭 0).
+    calc_complete 는 대조군으로 그대로 둔다. 도구가 silmuCalcResult 를 부르지 않으면 tool_complete 도 없다.
+  · #result-area MutationObserver 는 제거했다 — 신고 훅과 함께 있으면 tool_complete 를 두 번 세게 되고
+    (overtime·annual-leave 는 #result-area 와 신고 훅을 둘 다 가진다), 관찰자에만 기대던 3개(budget-execution-rate ·
+    contingency-fund · price-adjustment-calculator)는 이번에 직접 신고한다.
+  · 이전 페이지의 대기 타이머(입력 직후 Turbo 이동)는 세대가 바뀌었으면 버린다 — 이동은 완료가 아니다.
+  · 신고 전에 tool_start 가 없었으면(버튼·샘플만 누른 경로) 먼저 보정해 퍼널을 유지한다(옛 observer 와 같은 규칙).
+  · tool_complete 는 이 페이지에서 사용자 조작(input·change·click·submit)이 있은 뒤에만 나간다 —
+    페이지 로드 중 자동 계산(브라우저가 복원한 입력값 등)은 완료가 아니다. calc_complete 는 이 조건을 받지 않는다(대조군 불변).
+  · 신고 도구 36개 / 해당 37개(/tools 38개 − 결과 없는 task-calendar). 빠진 1개 standard-term-checker 는 결과가 Turbo 에서 렌더되지 않아(200 POST) 신고 지점이 없다 — 별도 결함. %>
 <script>
   (function () {
     var toolId = (location.pathname.split("/").filter(Boolean).pop() || "unknown");
     var generation = window.__silmuToolGen = (window.__silmuToolGen || 0) + 1;
     var started = false;
-    var completed = false;
 
     var queue = [];
     var drainTimer = null;
@@ -65,6 +76,8 @@
     // ── calc_complete ──
     var SETTLE_MS = 1500;
     var sentSignatures = {};
+    var completedSignatures = {};
+    var interacted = false;
     var pending = null;
     var settleTimer = null;
 
@@ -73,12 +86,19 @@
       if (pending === null) return;
       var signature = pending;
       pending = null;
-      if (sentSignatures[signature]) return;
-      sentSignatures[signature] = true;
-      var params = { tool_slug: toolId };
-      var post = typeof window.silmuSourcePost === "function" ? window.silmuSourcePost() : null;
-      if (post) params.source_post = post;
-      send("calc_complete", params);
+      if (generation !== window.__silmuToolGen) return;
+      if (!sentSignatures[signature]) {
+        sentSignatures[signature] = true;
+        var params = { tool_slug: toolId };
+        var post = typeof window.silmuSourcePost === "function" ? window.silmuSourcePost() : null;
+        if (post) params.source_post = post;
+        send("calc_complete", params);
+      }
+      // tool_complete — 사용자 조작(입력·클릭·제출) 뒤의 결과만. 페이지 로드 중 자동 계산(복원된 입력값 등)은 완료가 아니다.
+      if (!interacted || completedSignatures[signature]) return;
+      completedSignatures[signature] = true;
+      if (!started) { started = true; fire("tool_start"); }
+      fire("tool_complete");
     }
 
     window.silmuCalcResult = function (signature, opts) {
@@ -110,17 +130,13 @@
       }, true);
     });
 
-    // tool_complete — 결과 영역이 hidden 을 벗는 순간. 계산 «성공» 시점이지 버튼 클릭이 아니다.
-    var result = document.getElementById("result-area");
-    if (!result) return;
-
-    new MutationObserver(function () {
-      if (completed) return;
-      if (result.classList.contains("hidden")) return;
-      completed = true;
-      // 결과가 먼저 뜨는 경로(샘플 데이터 등)에서도 퍼널이 깨지지 않게 start 를 보정한다.
-      if (!started) { started = true; fire("tool_start"); }
-      fire("tool_complete");
-    }).observe(result, { attributes: true, attributeFilter: ["class"] });
+    // 사용자 조작 표시 — 페이지 로드 중 자동 계산은 이벤트 없이 함수를 직접 부르므로 여기에 걸리지 않는다.
+    // isTrusted 는 보지 않는다: Selenium 의 <option> 선택처럼 정상 조작도 합성 이벤트로 오는 경로가 있다.
+    ["input", "change", "click", "submit"].forEach(function (evt) {
+      document.addEventListener(evt, function () {
+        if (generation !== window.__silmuToolGen) return;
+        interacted = true;
+      }, true);
+    });
   })();
 </script>

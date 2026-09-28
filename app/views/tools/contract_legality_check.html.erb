@@ -39,7 +39,7 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div>
           <label class="block text-sm font-semibold text-slate-700 mb-2">계약 유형</label>
-          <select id="contract-type" class="form-input w-full" onchange="renderChecklist()">
+          <select id="contract-type" class="form-input w-full" onchange="renderChecklist(true)">
             <option value="goods_service">물품·용역 계약</option>
             <option value="construction">공사 계약</option>
             <option value="private">수의계약 (공통)</option>
@@ -47,7 +47,7 @@
         </div>
         <div>
           <label class="block text-sm font-semibold text-slate-700 mb-2">현재 진행 단계</label>
-          <select id="contract-stage" class="form-input w-full" onchange="renderChecklist()">
+          <select id="contract-stage" class="form-input w-full" onchange="renderChecklist(true)">
             <option value="pre">계획·사전 단계</option>
             <option value="bidding">입찰·견적 단계</option>
             <option value="award">낙찰·계약 체결 단계</option>
@@ -221,7 +221,8 @@
     }
   };
 
-  function renderChecklist() {
+  // userAction — select 변경(true)만 사용자 결과다. 페이지 로드 시 기본 체크리스트(DOMContentLoaded)는 완료로 세지 않는다.
+  function renderChecklist(userAction) {
     const type = document.getElementById('contract-type').value;
     const stage = document.getElementById('contract-stage').value;
     const container = document.getElementById('checklist-container');
@@ -275,6 +276,8 @@
 
     html += '</div>';
     container.innerHTML = html;
+    // calc_complete·tool_complete 신고 — 사용자가 고른 계약유형·단계의 체크리스트가 만들어진 순간.
+    if (userAction === true && window.silmuCalcResult) window.silmuCalcResult(['legality', type, stage].join('|'));
   }
 
   function updateProgress() {

@@ -461,6 +461,7 @@
     if (totalBudget === 0) {
       document.getElementById('empty-state').classList.remove('hidden');
       document.getElementById('result-area').classList.add('hidden');
+      if (window.silmuCalcResult) window.silmuCalcResult(null);
       return;
     }
 
@@ -557,6 +558,11 @@
           ${remainingMonths > 0 ? `남은 ${remainingMonths}개월간 매월 약 <strong>${formatNum(Math.round(monthlyNeeded))}천원</strong> 이상 집행이 필요합니다.` : '연도 마감 전 긴급 집행 방안을 검토하세요.'}
         </div>
       `;
+    }
+
+    // calc_complete·tool_complete 신고 — 집행률이 실제로 나온 결과만. 금액은 서명(메모리)에만 쓰고 전송하지 않는다.
+    if (window.silmuCalcResult) {
+      window.silmuCalcResult([month, fiscalStartMonth(), totalBudget, totalExecuted, itemResults.length].join('|'));
     }
   }
 

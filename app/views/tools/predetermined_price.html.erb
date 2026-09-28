@@ -301,6 +301,7 @@
       document.getElementById('pp-result-area').classList.add('hidden');
       document.getElementById('pp-empty-state').classList.remove('hidden');
       if (emptyText) emptyText.textContent = DEFAULT_EMPTY_TEXT;
+      if (window.silmuCalcResult) window.silmuCalcResult(null);
       return;
     }
 
@@ -319,6 +320,7 @@
           ') 안에서 서로 다른 예비가격 15개를 만들 수 없습니다. ±' + rangeRate + '% 기준 최소 기초금액은 약 ' +
           formatWon(needed) + '입니다.';
       }
+      if (window.silmuCalcResult) window.silmuCalcResult(null);
       return;
     }
     if (emptyText) emptyText.textContent = DEFAULT_EMPTY_TEXT;
@@ -361,6 +363,11 @@
     document.getElementById('formula-floor').innerHTML = floorPrice === null
       ? '하한가: 낙찰하한율을 입력하면 계산됩니다.'
       : '하한가: ' + formatWon(predeterminedPrice) + ' x ' + floorRate.toFixed(3) + '% = <strong>' + formatWon(floorPrice) + '</strong>';
+
+    // calc_complete·tool_complete 신고 — 예정가격이 실제로 나온 결과만. 버튼(regenerate)은 즉시, 입력 중 재계산은 입력이 멈춘 뒤.
+    if (window.silmuCalcResult) {
+      window.silmuCalcResult([baseAmount, rangeRate, floorRate].join('|'), { immediate: regenerate === true });
+    }
   }
 
   function renderMultiplePriceList() {
@@ -398,6 +405,7 @@
     ppDrawn = [];
     ppLastBaseAmount = null;
     ppLastRangeRate = null;
+    if (window.silmuCalcResult) window.silmuCalcResult(null);
     document.getElementById('pp-result-area').classList.add('hidden');
     document.getElementById('pp-empty-state').classList.remove('hidden');
   }

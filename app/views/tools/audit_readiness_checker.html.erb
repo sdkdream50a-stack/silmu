@@ -317,6 +317,7 @@
     if (!selected.length) {
       result.classList.add('hidden');
       empty.classList.remove('hidden');
+      if (window.silmuCalcResult) window.silmuCalcResult(null);
       return;
     }
 
@@ -387,6 +388,8 @@
       </div>`;
 
     result.innerHTML = html;
+    // calc_complete·tool_complete 신고 — 선택한 업무 유형의 체크리스트가 만들어진 순간.
+    if (window.silmuCalcResult) window.silmuCalcResult('audit|' + selected.join(','));
   }
 
   function updateAuditProgress() {

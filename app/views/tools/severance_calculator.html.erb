@@ -257,12 +257,14 @@
     if (totalMonths < 12) {
       document.getElementById('severance-amount').textContent = '지급 대상 아님';
       document.getElementById('severance-formula').textContent = '재직기간 1년 미만은 퇴직수당 지급 제외';
+      if (window.silmuCalcResult) window.silmuCalcResult(null);
       return;
     }
 
     if (income <= 0) {
       document.getElementById('severance-amount').textContent = '소득월액을 입력하세요';
       document.getElementById('severance-formula').textContent = '';
+      if (window.silmuCalcResult) window.silmuCalcResult(null);
       return;
     }
 
@@ -295,6 +297,8 @@
     document.getElementById('severance-amount').textContent = Math.round(amount).toLocaleString('ko-KR') + '원';
     document.getElementById('severance-formula').textContent =
       `${income.toLocaleString('ko-KR')}원 × ${cappedYears.toFixed(2)}년 × ${rateLabel} = ${Math.round(amount).toLocaleString('ko-KR')}원${capNote}`;
+    // calc_complete·tool_complete 신고 — 퇴직수당이 실제로 나온 결과만. 입력값은 서명(메모리)에만 쓰고 전송하지 않는다.
+    if (window.silmuCalcResult) window.silmuCalcResult([totalMonths, income].join('|'));
   }
 
   // 초기 계산
