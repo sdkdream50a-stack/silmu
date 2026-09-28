@@ -101,8 +101,9 @@ RUNNING="$(ssh -p "$SSH_PORT" -o ConnectTimeout=10 "root@$PROD_HOST" \
 echo "production image   = $RUNNING"
 [ "${RUNNING##*:}" = "$TARGET" ] || { echo "POSTDEPLOY_FAIL: running tag != target"; exit 1; }
 
-UP="$(curl -s -o /dev/null -w '%{http_code}' https://silmu.kr/up)"
-echo "https://silmu.kr/up = $UP"
-[ "$UP" = "200" ] || { echo "POSTDEPLOY_FAIL: /up = $UP"; exit 1; }
+# 공개 /up 확인 — 로컬 DNS 일시 실패를 배포 실패로 오판하지 않게 재시도·공개 리졸버·원본 확인을 거친다.
+# 게이트와 마찬가지로 «이 스크립트와 같은 커밋의 것» 을 쓴다.
+PROD_HOST="$PROD_HOST" SSH_PORT="$SSH_PORT" "$(dirname "$SELF_HOOK")/../../bin/postdeploy-up-check" \
+  || { echo "POSTDEPLOY_FAIL: /up check"; exit 1; }
 
 echo "DEPLOY_OK target=$TARGET"

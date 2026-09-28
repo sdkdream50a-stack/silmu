@@ -154,6 +154,44 @@
 
     .preview-container { display: none; }
     .preview-container.show { display: block; }
+    /* 2026-09-28 — 파일 선택 시 즉시 전송하지 않고 버튼을 눌러야 외부 AI로 보낸다(옵트인). */
+    .ai-optin-box {
+      margin-top: 16px;
+      padding: 16px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 12px;
+    }
+    .ai-optin-box .ai-optin-text {
+      color: rgba(255,255,255,0.85);
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+    .btn-ai-analyze {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--forest-600), var(--forest-500));
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-ai-analyze:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(46, 125, 50, 0.3);
+    }
+    .btn-ai-analyze:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
     .preview-header {
       display: flex;
       justify-content: space-between;
@@ -1038,6 +1076,13 @@
           <button class="btn-remove" onclick="removeFile()">삭제</button>
         </div>
         <div id="preview-content"></div>
+        <div class="ai-optin-box" id="ai-optin-box" style="display:none;">
+          <p class="ai-optin-text">이 버튼을 누르면 위 파일이 <strong>외부 AI(Anthropic)</strong>로 전송되어 자동 분석됩니다.</p>
+          <button class="btn-ai-analyze" id="btn-ai-analyze" onclick="startAIAnalyze()">
+            <span class="material-symbols-outlined">smart_toy</span>
+            <span>AI로 읽기</span>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -1417,6 +1462,7 @@
     let selectedType = null;
     let selectedContractMethod = null;
     let fileUploaded = false;
+    let pendingAnalyzeFile = null; // «AI로 읽기» 버튼을 누르기 전까지는 아무 데도 전송되지 않는다
 
     // 드래그 앤 드롭
     const uploadZone = document.getElementById('upload-zone');
@@ -1452,6 +1498,8 @@
         showToast('파일 크기는 20MB 이하여야 합니다.');
         return;
       }
+      // 파일을 바꾸면 이전 파일에 대한 AI 옵트인 상태는 버린다.
+      hideAIOptIn();
       const previewContainer = document.getElementById('preview-container');
       const previewContent = document.getElementById('preview-content');
       const uploadZone = document.getElementById('upload-zone');
@@ -1490,9 +1538,9 @@
         uploadZone.style.display = 'none';
         previewContainer.classList.add('show');
         fileUploaded = true;
-        // 이미지/PDF는 AI 자동 분석 시작
+        // 2026-09-28 — 선택 즉시 전송하지 않는다. «AI로 읽기» 버튼을 눌러야 외부 AI로 보낸다(옵트인).
         if (file.type.startsWith('image/') || file.type === 'application/pdf') {
-          analyzeWithAI(file);
+          showAIOptIn(file);
         } else {
           showToast('견적서가 업로드되었습니다.');
         }
@@ -1650,6 +1698,7 @@
       document.getElementById('preview-content').innerHTML = '';
       document.getElementById('file-input').value = '';
       fileUploaded = false;
+      hideAIOptIn();
     }
 
     // 종류 선택
@@ -2085,7 +2134,30 @@
       setTimeout(() => toast.classList.remove('show'), 3000);
     }
 
-    // === AI 자동 분석 ===
+    // === AI 분석 (옵트인) ===
+    // 2026-09-28 — 파일을 고르거나 드롭한 순간에는 아무것도 전송하지 않는다.
+    // «AI로 읽기» 버튼을 눌러야 startAIAnalyze() → analyzeWithAI() 가 실행된다.
+
+    function showAIOptIn(file) {
+      pendingAnalyzeFile = file;
+      const box = document.getElementById('ai-optin-box');
+      const btn = document.getElementById('btn-ai-analyze');
+      if (btn) btn.disabled = false;
+      if (box) box.style.display = 'block';
+    }
+
+    function hideAIOptIn() {
+      pendingAnalyzeFile = null;
+      const box = document.getElementById('ai-optin-box');
+      if (box) box.style.display = 'none';
+    }
+
+    function startAIAnalyze() {
+      if (!pendingAnalyzeFile) return;
+      const btn = document.getElementById('btn-ai-analyze');
+      if (btn) btn.disabled = true;
+      analyzeWithAI(pendingAnalyzeFile);
+    }
 
     function showLoading(show) {
       document.getElementById('loading-overlay').classList.toggle('show', show);
@@ -2109,13 +2181,16 @@
       .then(data => {
         showLoading(false);
         if (data.success && data.fields) {
+          hideAIOptIn();
           autoFillFromAI(data.fields);
         } else {
+          reenableAIOptIn();
           showToast(data.error || 'AI 분석에 실패했습니다. 수동으로 입력해주세요.');
         }
       })
       .catch(err => {
         showLoading(false);
+        reenableAIOptIn();
         if (err.message === 'login_required') {
           showToast('로그인 후 자동 분석을 이용할 수 있습니다.');
         } else {
@@ -2123,6 +2198,11 @@
           showToast('AI 분석에 실패했습니다. 수동으로 입력해주세요.');
         }
       });
+    }
+
+    function reenableAIOptIn() {
+      const btn = document.getElementById('btn-ai-analyze');
+      if (btn && pendingAnalyzeFile) btn.disabled = false;
     }
 
     function autoFillFromAI(fields) {

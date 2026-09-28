@@ -12,6 +12,7 @@ class ApplicationController < ActionController::Base
   before_action :capture_utm_params
   before_action :configure_permitted_parameters, if: :devise_controller?
   after_action :keep_signed_in_pages_out_of_shared_cache
+  after_action :sync_signed_in_cache_bypass_cookie
 
   # Lograge payload 확장 — remote_ip, user_id를 JSON 로그에 주입
   def append_info_to_payload(payload)
@@ -31,6 +32,23 @@ class ApplicationController < ActionController::Base
 
     response.cache_control.replace(no_store: true)
     response.headers["Cache-Control"] = "no-store"
+  end
+
+  # Cloudflare 캐시 규칙은 이 쿠키가 있는 요청을 캐시에서 뺀다(위 no-store 의 이중 방어). 세션 쿠키는
+  # 비로그인 방문자도 갖게 되므로 로그인 여부를 가리킬 수 없다 — 그래서 로그인 중에만 있는 표시를 따로 둔다.
+  # 값은 «1» 뿐이고 신원 정보가 없다. 비로그인 응답에는 Set-Cookie 를 붙이지 않는다(공개 캐시 유지) —
+  # 로그아웃 뒤 남은 표시를 지울 때만 예외이며, 그 요청은 표시가 있어 이미 캐시를 거치지 않는다.
+  CACHE_BYPASS_COOKIE = "silmu_auth"
+
+  def sync_signed_in_cache_bypass_cookie
+    domain = Rails.application.config.session_options[:domain]
+    if user_signed_in?
+      return if cookies[CACHE_BYPASS_COOKIE] == "1"
+
+      cookies[CACHE_BYPASS_COOKIE] = { value: "1", domain: domain, httponly: true, secure: request.ssl?, same_site: :lax }
+    elsif cookies[CACHE_BYPASS_COOKIE].present?
+      cookies.delete(CACHE_BYPASS_COOKIE, domain: domain)
+    end
   end
 
   EXAM_HOST = "exam.silmu.kr"
