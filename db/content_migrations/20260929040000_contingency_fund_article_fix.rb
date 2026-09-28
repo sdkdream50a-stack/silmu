@@ -20,6 +20,8 @@
 #   «목적예비비 … 특정 목적 · 세출예산 총액의 2/100 이내» → 법 제43조② «재해ㆍ재난 관련 목적 예비비는 별도로 예산에 계상할 수 있다»,
 #     운영기준 별표 11 편성목 801 «02. 재해·재난목적예비비 … 제43조제2항에 따른 예비비(예비비 편성 한도는 없음)». 2/100 근거 없음.
 #   «시행령 제59조»(삭제 <2016.11.29>) → 시행령 제56조③ «예비비의 지출을 결정한 때에는 세출예산으로서 배정하여야 한다».
+#   절차 6단계 «다음 정기의회에 … 제출 및 보고» → 법 제43조④ 원문 + 지방자치법 [MST 284005] 제150조① «… 결산서와 증명서류를 작성하고
+#     … 다음 해 지방의회의 승인을 받아야 한다» (https://www.law.go.kr/DRF/lawService.do?OC=test&target=law&MST=284005&type=XML).
 # 원문: 지방재정법 [MST 283145, 시행 2026. 7. 1.] 제43조
 #       https://www.law.go.kr/DRF/lawService.do?OC=test&target=law&MST=283145&type=XML
 #       지방재정법 시행령 [MST 281539, 시행 2026. 1. 2.] 제65조(재정분석 및 재정점검)·제48조·제56조
@@ -28,7 +30,7 @@
 #
 # 운영 적용(배포 후):
 #   bin/kamal app exec --reuse 'DRY_RUN=1 bin/rails runner "load Rails.root.join(%q{db/content_migrations/20260929040000_contingency_fund_article_fix.rb})"'
-#   → 기대: changes=19 (edit 단위 집계 — Topic faqs 2 · quick_stats 2 · rule_content 1 · regulation_content 9 · Guide sections 5)
+#   → 기대: changes=20 (edit 단위 집계 — Topic faqs 2 · quick_stats 2 · rule_content 1 · regulation_content 10 · Guide sections 5)
 #   bin/kamal app exec --reuse 'bin/rails silmu:content_migrate'   (적용 + 캐시 무효화) → 재실행 시 changes=0
 #
 # 동작: 필드별 old 가 정확히 1회 있어야 바꾼다. 이미 new 이면(new 가 old 를 품는 edit 포함) 건너뛴다. 하나라도 어긋나면 전체 롤백.
@@ -80,6 +82,9 @@ edits = [
   [ Topic, slug, "regulation_content",
     "(지방재정법 제43조 및 시행령 제59조)",
     "(지방재정법 제43조 및 시행령 제56조제3항)" ],
+  [ Topic, slug, "regulation_content",
+    "다음 정기의회에 예비비 사용 명세서 제출 및 보고",
+    "「지방자치단체의 장은 예비비로 사용한 금액의 명세서를 「지방자치법」 제150조제1항에 따라 지방의회의 승인을 받아야 한다」(지방재정법 제43조제4항) — 결산서와 함께 다음 해 지방의회의 승인을 받음" ],
   [ Guide, guide_slug, "sections",
     "예비비 사용 가능 요건 3가지",
     "예비비 사용 요건 — 법령 요건 1가지와 실무 검토 요건 2가지" ],

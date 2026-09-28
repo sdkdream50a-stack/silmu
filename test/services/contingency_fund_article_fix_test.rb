@@ -36,6 +36,7 @@ class ContingencyFundArticleFixTest < ActiveSupport::TestCase
 
     #### 예비비 사용 절차 (지방재정법 제43조 및 시행령 제59조)
     1. **사용 신청**: 해당 부서에서 예비비 사용 신청서 제출
+    6. **사후 보고**: 다음 정기의회에 예비비 사용 명세서 제출 및 보고
 
     #### 예비비 사용 제한 사항 (행안부 지침)
     - 의회 의결로 삭감된 사업에 예비비 지원 금지
@@ -108,10 +109,10 @@ class ContingencyFundArticleFixTest < ActiveSupport::TestCase
     assert_includes out, "fields_to_change=rule_content"
     assert_includes out, "fields_to_change=faqs"
     assert_includes out, "fields_to_change=quick_stats"
-    assert_includes out, "DRY_RUN changes=19"
+    assert_includes out, "DRY_RUN changes=20"
     assert_includes topic_text, WRONG
 
-    assert_includes migrate, "changes=19"
+    assert_includes migrate, "changes=20"
     assert_includes migrate, "changes=0"
   end
 
@@ -145,6 +146,8 @@ class ContingencyFundArticleFixTest < ActiveSupport::TestCase
     assert_includes reg, "| 목적예비비 | 재해·재난 관련 목적 예비비 (지방재정법 제43조제2항) | 별도 계상 가능 · 편성 한도 없음 (예산편성 운영기준 별표 11 편성목 801) |"
     assert_includes reg, "#### 예비비 사용 절차 (지방재정법 제43조 및 시행령 제56조제3항)"
     assert_not_includes reg, "시행령 제48조"
+    assert_not_includes reg, "다음 정기의회"
+    assert_includes reg, "6. **사후 보고**: 「지방자치단체의 장은 예비비로 사용한 금액의 명세서를 「지방자치법」 제150조제1항에 따라 지방의회의 승인을 받아야 한다」(지방재정법 제43조제4항)"
 
     g = Guide.find_by!(slug: "budget-execution-complete-7")
     guide = g.sections.to_json
