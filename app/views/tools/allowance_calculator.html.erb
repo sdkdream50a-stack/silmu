@@ -336,18 +336,35 @@
     document.getElementById('note-jeongeun').textContent = `월봉급액 ${salary.toLocaleString()} × ${rate}% | 연간 지급: ${(amount * 2).toLocaleString()} 원 (1월 + 7월)`;
   }
 
+  // 지방공무원 수당 등에 관한 규정 §10②: "부양가족의 수는 4명 이내로 한다. 다만, 자녀의
+  // 경우에는 부양가족의 수가 4명을 초과하더라도 가족수당을 지급한다." → 자녀는 인원 제한에서
+  // 제외되고 항상 전액 지급되며, 4명 한도는 자녀를 뺀 나머지(배우자+기타)에만 적용된다
+  // (한도 중 자녀가 쓰고 남은 슬롯만큼만 배우자·기타가 지급 대상이 됨. 배우자 우선 배정).
+  function familyAllowance(hasSpouse, children, others) {
+    const nonChildCount = (hasSpouse ? 1 : 0) + others;
+    const nonChildCap = Math.max(0, 4 - children);
+    const nonChildPaid = Math.min(nonChildCount, nonChildCap);
+    const spousePaid = hasSpouse && nonChildPaid >= 1;
+    const othersPaid = nonChildPaid - (spousePaid ? 1 : 0);
+
+    let total = 0;
+    let details = [];
+    if (spousePaid) { total += 40000; details.push('배우자 40,000원'); }
+    if (children >= 1) { total += 50000; details.push('첫째 50,000원'); }
+    if (children >= 2) { total += 80000; details.push('둘째 80,000원'); }
+    if (children >= 3) { const add = (children - 2) * 120000; total += add; details.push(`셋째 이상 ${add.toLocaleString()}원`); }
+    if (othersPaid > 0) { const add = othersPaid * 20000; total += add; details.push(`기타 부양가족 ${add.toLocaleString()}원`); }
+    if (nonChildCount > nonChildPaid) { details.push(`부양가족 4명 한도 초과로 ${nonChildCount - nonChildPaid}명 제외(자녀 제외)`); }
+
+    return { total, details };
+  }
+
   function calculateFamily() {
     const hasSpouse = document.getElementById('has-spouse').value === 'yes';
     const children = parseInt(document.getElementById('children-count')?.value) || 0;
     const others = parseInt(document.getElementById('others-count')?.value) || 0;
 
-    let total = 0;
-    let details = [];
-    if (hasSpouse) { total += 40000; details.push('배우자 40,000원'); }
-    if (children >= 1) { total += 50000; details.push('첫째 50,000원'); }
-    if (children >= 2) { total += 80000; details.push('둘째 80,000원'); }
-    if (children >= 3) { const add = (children - 2) * 120000; total += add; details.push(`셋째 이상 ${add.toLocaleString()}원`); }
-    if (others > 0) { const add = others * 20000; total += add; details.push(`기타 부양가족 ${add.toLocaleString()}원`); }
+    const { total, details } = familyAllowance(hasSpouse, children, others);
 
     document.getElementById('val-family').textContent = total.toLocaleString('ko-KR') + ' 원';
     document.getElementById('detail-family').textContent = details.join(' + ') || '부양가족 정보를 입력하세요';
@@ -400,7 +417,7 @@
     const rates = [10, 10, 20, 20, 20, 25, 30, 35, 40, 45, 50];
     const rate = years >= 10 ? 50 : (rates[Math.max(0, Math.min(years, 10))] || 0);
     const jeongeun = Math.floor(salary * rate / 100);
-    let family = (hasSpouse ? 40000 : 0) + (children >= 1 ? 50000 : 0) + (children >= 2 ? 80000 : 0) + (children >= 3 ? (children - 2) * 120000 : 0) + (others * 20000);
+    const family = familyAllowance(hasSpouse, children, others).total;
     const holiday = Math.floor(salary * 0.6);
     const rank = (grade && RANK_ALLOWANCE[grade]) ? RANK_ALLOWANCE[grade] : 0;
 
