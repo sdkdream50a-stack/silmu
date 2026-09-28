@@ -336,8 +336,13 @@
 
     <%# 도구 사용 계측 — /tools 에서만.
         contract_methods 는 URL 이 /tools/contract-method 인데 컨트롤러 이름이 달라 이 조건에서
-        빠져 있었다(P1-2). 계측 파셜은 경로 마지막 조각을 tool_id 로 쓰므로 그대로 붙는다. %>
-    <% if %w[tools contract_methods].include?(params[:controller]) %>
+        빠져 있었다(P1-2). 계측 파셜은 경로 마지막 조각을 tool_id 로 쓰므로 그대로 붙는다.
+        2026-09-28 감사(10_ANALYTICS_COVERAGE.md)로 같은 이유(컨트롤러 이름 ≠ tools)에 빠져 있던
+        나머지 17개 /tools/* 도구 컨트롤러를 추가한다 — «0 이용자»와 «미계측»을 구분할 수 없었다. %>
+    <% if %w[tools contract_methods pdf_tools estimations contract_documents cost_estimates
+             design_changes progress_inspections cost_calculations quote_documents quote_reviews
+             project_plans official_documents contract_reasons estimated_prices legal_periods
+             contract_guarantees qualification_evaluations insurance_calculators].include?(params[:controller]) %>
       <%= render "shared/tool_analytics" %>
     <% end %>
 

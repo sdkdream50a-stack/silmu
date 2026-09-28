@@ -442,6 +442,10 @@ function odGenerate() {
       document.getElementById('od-result').classList.add('active');
       document.getElementById('od-result').scrollIntoView({ behavior:'smooth', block:'start' });
       odShowToast('공문서가 생성되었습니다');
+      // calc_complete 신고 — 문서 본문·수신자 등 입력값은 보내지 않는다.
+      if (window.silmuCalcResult) {
+        window.silmuCalcResult(['official-document', odState.tone, data.term_compliance_rate].filter(function (v) { return v !== undefined && v !== null && v !== ''; }).join('|') || null, { immediate: true });
+      }
     } else {
       odShowToast(data.error || '생성에 실패했습니다');
     }

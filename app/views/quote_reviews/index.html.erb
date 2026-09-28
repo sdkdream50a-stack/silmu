@@ -1969,6 +1969,10 @@
       document.getElementById('step4').classList.remove('disabled');
       goToStep(4);
       showToast('분석이 완료되었습니다!');
+      // calc_complete 신고 — 회사명·금액 등 입력값은 보내지 않는다.
+      if (window.silmuCalcResult) {
+        window.silmuCalcResult(['quote-review', grade, selectedType].filter(Boolean).join('|') || null, { immediate: true });
+      }
     }
 
     function renderReport(data) {
@@ -2268,5 +2272,7 @@
       analyzeQuotation();
     }
   </script>
+  <%# layout false 라 application.html.erb 의 계측 조건을 안 거친다 — 여기서 직접 붙인다(2026-09-28 감사). %>
+  <%= render "shared/tool_analytics" %>
 </body>
 </html>

@@ -814,6 +814,11 @@ function qdAnalyze() {
       qdPopulateFields(data.fields);
       qdGoStep(2);
       qdShowToast('견적서 분석이 완료되었습니다');
+      // calc_complete 신고 — 추출된 필드 이름만 서명에 쓰고 값은 보내지 않는다.
+      if (window.silmuCalcResult) {
+        var qdSig = 'quote-auto:' + Object.keys(data.fields || {}).sort().join(',');
+        window.silmuCalcResult(qdSig, { immediate: true });
+      }
     } else {
       qdShowError(data.error || '분석에 실패했습니다.');
     }

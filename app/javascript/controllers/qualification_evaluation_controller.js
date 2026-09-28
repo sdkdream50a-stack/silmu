@@ -330,6 +330,11 @@ export default class extends Controller {
     } else {
       this._displayQualificationResult(data)
     }
+    // calc_complete 신고 — 금액 등 입력값은 보내지 않는다. resultTarget 이 id="result-area"
+    // 가 아니라 shared/_tool_analytics 의 범용 관찰자가 잡지 못해 직접 신고한다.
+    if (window.silmuCalcResult) {
+      window.silmuCalcResult(["qualification-evaluation", data.mode].filter(Boolean).join("|") || null, { immediate: true })
+    }
   }
 
   _displayQualificationResult(data) {

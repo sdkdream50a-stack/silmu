@@ -429,6 +429,10 @@ function ppGenerate() {
   document.getElementById('pp-result').classList.add('active');
   document.getElementById('pp-result').scrollIntoView({ behavior:'smooth', block:'start' });
   ppShowToast('사업계획서가 생성되었습니다');
+  // calc_complete 신고 — 사업명·금액 등 입력값은 보내지 않는다.
+  if (window.silmuCalcResult) {
+    window.silmuCalcResult('project-plan', { immediate: true });
+  }
 }
 
 function ppEscape(str) {
