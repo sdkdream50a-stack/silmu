@@ -19,9 +19,36 @@ class ContingencyFundArticleFixTest < ActiveSupport::TestCase
     { "label" => "일반예비비 한도", "value" => "일반회계 예산총액의 1% 이내", "note" => "지방재정법 제43조" },
     { "label" => "사용 요건", "value" => "예측불가·긴급·예산부족·목적적합 모두 충족", "note" => "지방재정법 시행령 제65조" }
   ].freeze
+  OLD_RULE = <<~MD
+    ## 예비비 사용 제한 및 금지 사항
+
+    ❌ 사용 불가 사례
+    - 예산 편성 시 충분히 예측 가능했던 지출
+    - 신규 사업 추진을 위한 예산 확보
+    - 인건비 부족분 보충(별도 규정 없는 경우)
+  MD
+  OLD_REGULATION = <<~MD
+    #### 예비비 사용 제한 사항 (행안부 지침)
+    - 의회 의결로 삭감된 사업에 예비비 지원 금지
+    - 인건비 예비비 사용은 법령상 의무 지출 증가에 한정
+    - 신규 사업은 원칙적으로 추경 편성 대상 (예비비 사용 부적합)
+    - 연말 집중 예비비 사용은 재정분석 감점 대상
+  MD
+  OLD_GUIDE_SECTIONS = {
+    "step2" => { "title" => "예비비 사용 가능 요건 3가지", "items" => [
+      "요건①: 예측 불가능성 — 당초 예산 편성 시 예상할 수 없었던 사유여야 함",
+      "요건②: 긴급성 — 추경 편성이나 전용을 기다릴 시간적 여유가 없어야 함",
+      "요건③: 불가피성 — 다른 예산 과목으로 대체하거나 지출을 연기할 수 없어야 함",
+      "※ 세 요건을 모두 충족해야 예비비 사용 가능 — 하나라도 빠지면 불가"
+    ] },
+    "step3" => { "title" => "예비비 신청 절차 (5단계)", "items" => [ "1단계: 사용 요건 검토 — 예측 불가능성·긴급성·불가피성 3요건 자가 점검" ] }
+  }.freeze
 
   setup do
-    Topic.new(slug: "contingency-fund", name: "예비비", faqs: OLD_FAQS, quick_stats: OLD_QS, view_count: 321).save!(validate: false)
+    Topic.new(slug: "contingency-fund", name: "예비비", faqs: OLD_FAQS, quick_stats: OLD_QS,
+              rule_content: OLD_RULE, regulation_content: OLD_REGULATION, view_count: 321).save!(validate: false)
+    Guide.new(slug: "budget-execution-complete-7", title: "예비비 사용 완전정복 — 왕초보 완전정복 7편", category: "예산",
+              sections: OLD_GUIDE_SECTIONS, view_count: 77).save!(validate: false)
   end
 
   def migrate(env = {})
@@ -33,7 +60,7 @@ class ContingencyFundArticleFixTest < ActiveSupport::TestCase
 
   def topic_text
     t = Topic.find_by!(slug: "contingency-fund")
-    [ t.faqs.to_json, t.quick_stats.to_json ].join
+    [ t.faqs.to_json, t.quick_stats.to_json, t.rule_content, t.regulation_content ].join
   end
 
   test "옛 값에는 오인용이 있다 (대조군)" do
@@ -67,12 +94,15 @@ class ContingencyFundArticleFixTest < ActiveSupport::TestCase
 
   test "DRY_RUN 은 쓰지 않는다 · 적용 2건 · 재실행 0건" do
     out = migrate("DRY_RUN" => "1")
+    assert_includes out, "Guide/budget-execution-complete-7 fields_to_change=sections"
+    assert_includes out, "fields_to_change=regulation_content"
+    assert_includes out, "fields_to_change=rule_content"
     assert_includes out, "fields_to_change=faqs"
     assert_includes out, "fields_to_change=quick_stats"
-    assert_includes out, "DRY_RUN changes=4"
+    assert_includes out, "DRY_RUN changes=15"
     assert_includes topic_text, WRONG
 
-    assert_includes migrate, "changes=4"
+    assert_includes migrate, "changes=15"
     assert_includes migrate, "changes=0"
   end
 
@@ -80,6 +110,36 @@ class ContingencyFundArticleFixTest < ActiveSupport::TestCase
     Topic.find_by!(slug: "contingency-fund").update_columns(quick_stats: [ { "label" => "사용 요건", "note" => "다른 값" } ])
     assert_raises(RuntimeError) { migrate }
     assert_includes Topic.find_by!(slug: "contingency-fund").faqs.to_json, WRONG
+  end
+
+  test "사용 불가 사례·«행안부 지침» 제한 사항·가이드 3요건이 법(제43조①③)과 실무로 나뉜다" do
+    migrate
+    t = Topic.find_by!(slug: "contingency-fund")
+    assert_includes t.rule_content, "신규 사업 추진을 위한 예산 확보 (실무 관행 — 법령상 금지 조항은 없으나 실무상 추경 대상)"
+    assert_equal 1, t.rule_content.scan("신규 사업 추진을 위한 예산 확보").size
+    reg = t.regulation_content
+    assert_not_includes reg, "행안부 지침"
+    assert_not_includes reg, "재정분석 감점"
+    assert_not_includes reg, "원칙적으로 추경 편성 대상"
+    assert_includes reg, "예비비 사용 불가 (지방재정법 제43조제3항)"
+    assert_includes reg, "별표 11은 일반예비비를 «법령에서 제한하는 경우를 제외하고 … 모든 사업으로 사용가능»"
+    assert_equal 3, reg.scan("(실무 관행)").size
+
+    g = Guide.find_by!(slug: "budget-execution-complete-7")
+    guide = g.sections.to_json
+    assert_not_includes guide, "하나라도 빠지면 불가"
+    assert_not_includes guide, "모두 충족"
+    assert_includes guide, "법령 요건①: 예측 불가능성 — 「예측할 수 없는 예산 외의 지출 또는 예산 초과 지출」에 충당 (지방재정법 제43조제1항)"
+    assert_includes guide, "실무 검토 요건②: 긴급성"
+    assert_includes guide, "실무 검토 요건③: 불가피성"
+    assert_equal OLD_GUIDE_SECTIONS["step3"], g.sections["step3"]
+    assert_equal 77, g.view_count
+  end
+
+  test "가이드 값이 예상과 다르면 토픽 정정까지 전부 롤백한다" do
+    Guide.find_by!(slug: "budget-execution-complete-7").update_columns(sections: { "step2" => { "title" => "다른 값", "items" => [] } })
+    assert_raises(RuntimeError) { migrate }
+    assert_includes Topic.find_by!(slug: "contingency-fund").regulation_content, "행안부 지침"
   end
 
   test "seed 원본에도 오인용이 없다" do
@@ -90,5 +150,7 @@ class ContingencyFundArticleFixTest < ActiveSupport::TestCase
       assert_not_includes src, "목적적합 모두 충족", path
       assert_includes src, "지방재정법 제43조제1항", path
     end
+    assert_not_includes Rails.root.join("db/seeds/budget_execution_part2.rb").read, "하나라도 빠지면 불가"
+    assert_includes Rails.root.join("db/seeds/topics/contingency_fund.rb").read, "법령상 금지 조항은 없으나 실무상 추경 대상"
   end
 end
