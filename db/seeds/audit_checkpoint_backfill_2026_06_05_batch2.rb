@@ -64,7 +64,7 @@ CHECKPOINTS = {
   ],
   "sen-2025-school-d-split-private-contract" => [
     { "icon" => "call_split", "title" => "단일 사업 분할 금지", "desc" => "2천만원 초과 단일 사업을 시기적으로 쪼개면 합산 후 적발된다." },
-    { "icon" => "search",     "title" => "3요소 점검",        "desc" => "동일 업체·동일 시기·동일 목적 중 2개 이상 일치하면 분할로 간주된다." },
+    { "icon" => "search",     "title" => "시기 분할 점검",        "desc" => "계약 시기를 나눠 동일 업체와 여러 건으로 체결하면 부당 분할로 지적된다." },
     { "icon" => "verified",   "title" => "초과 시 2인 견적",   "desc" => "2천만원 초과는 G2B로 2인 이상 견적서를 제출받는다." }
   ],
   "goe-2021-overtime-allowance-mispayment" => [
