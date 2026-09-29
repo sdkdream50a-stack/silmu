@@ -14,11 +14,11 @@ class AuditTruthG3Test < ActiveSupport::TestCase
 
   # 원문(사례집 PDF)·현행 법령과 모순되던 값 — 마이그레이션 뒤 해당 사례에 남으면 안 된다.
   STALE = {
-    "goe-2021-family-allowance-misdeclaration" => [ "모두 깨져야", "세대 분리만 되면 환수 안 됨", "인사혁신처 예규", "(p.127)" ],
+    "goe-2021-family-allowance-misdeclaration" => [ "모두 깨져야", "세대 분리만 되면 환수 안 됨", "인사혁신처 예규", "(p.127)", "규정 별표 5(지방" ],
     "goe-2021-fiscal-year-independence-violation" => [ "세입·세출 사무 폐쇄 | 3월 20일", "3.20은 사무 폐쇄일", "사고 사실 입증서 + 학교운영위 보고", "2024-03-28" ],
     "goe-2021-football-team-extension-contract" => [ "위탁사업의 후속 사업", "1억 원 초과 사업은 학교운영위 사전 심의", "5천만원 이하 (학술연구" ],
     "goe-2021-foreign-teacher-housing-deposit" => [ "보증금을 공유재산의 일종", "시·도 교육청별 「원어민" ],
-    "goe-2021-gift-voucher-management" => [ "2024.7월", "4년 후", "7일 이내", "7일 절차", "90일 미루지", "서명 없음" ],
+    "goe-2021-gift-voucher-management" => [ "2024.7월", "4년 후", "7일 이내", "7일 절차", "90일 미루지" ],
     "goe-2021-misc-allowance-improper" => [ "명목 4종", "회의수당·자문료·여비·강사료" ],
     "goe-2021-payment-processing-improper" => [ "30일 이내 지출결의", "100~187일" ],
     "goe-2021-performance-bonus-mispayment" => [ "30일 이상", "공로연수", "§7의3 ① 4호·7호에 따른 휴직", "(p.124)" ],
@@ -35,7 +35,8 @@ class AuditTruthG3Test < ActiveSupport::TestCase
 
   # 원문 인용이 있는 새 근거 문구 — 마이그레이션 뒤 있어야 한다.
   PRESENT = {
-    "goe-2021-family-allowance-misdeclaration" => [ "두 요건을 모두 충족해야 부양가족이므로", "(p.128)" ],
+    "goe-2021-family-allowance-misdeclaration" => [ "두 요건을 모두 충족해야 부양가족이므로", "(p.128)", "직계존속 중 공무원의 배우자와 세대를 같이 하는 사람",
+                                                 "감사 당시 사례집(p.128) 기준", "지방공무원 수당 등에 관한 규정 제10조제1항에서 확인" ],
     "goe-2021-fiscal-year-independence-violation" => [ "경기도 공립학교회계 규칙 제4조", "제19조②" ],
     "goe-2021-gift-voucher-management" => [ "20××.7월", "과오지급액(60,000원) 회수" ],
     "goe-2021-management-allowance-mispayment" => [ "관련자 경고, 관리자(교장) 주의", "일할단가를 적용하지 않고 임의의 금액" ],
@@ -114,7 +115,7 @@ class AuditTruthG3Test < ActiveSupport::TestCase
   end
 
   test "UPPER_BOUND: 전 항목이 한 번씩 바뀌고 두 번째 실행은 아무것도 바꾸지 않는다" do
-    assert_equal 113, TOTAL
+    assert_equal 112, TOTAL
     assert_match(/changes=#{TOTAL}\b/, migrate)
     after = SLUGS.map { |s| snapshot(s) }
     assert_match(/changes=0\b/, migrate)
@@ -157,6 +158,25 @@ class AuditTruthG3Test < ActiveSupport::TestCase
     c.update_columns(lesson: "#{c.lesson}\n#{fixed}\n")
     migrate
     assert_equal 1, AuditCase.find_by!(slug: "goe-2021-football-team-extension-contract").lesson.scan(fixed).size
+  end
+
+  test "gift 수령인 자필 서명 행은 원문 근거가 있어 운영·시드 모두 유지된다" do
+    row = "| 수령인 서명 | 자필 서명 (불가 시 사유 + 중간 수령인 서명) | 서명 없음 |"
+    c = AuditCase.find_by!(slug: "goe-2021-gift-voucher-management")
+    c.update_columns(detail: "#{c.detail}#{row}\n")
+    migrate
+    assert_includes AuditCase.find_by!(slug: "goe-2021-gift-voucher-management").detail, row
+    assert EDITS.none? { |_, _, old, _| old.include?("| 수령인 서명 | 자필 서명") }
+    body = Rails.root.join("db/seeds/audit_cases/content_enrichment_phase2_edu_accounting_rest_10_2026_05_18.rb").read
+    start = body.index(%(slug: "goe-2021-gift-voucher-management"))
+    assert_includes body[start...(body.index(/^\s*slug: "/, start + 1) || body.size)], row
+  end
+
+  test "family 단가 근거는 지방공무원 수당 규정 제10조제1항만 인용한다(별표 5 는 국가 규정)" do
+    migrate
+    lesson = AuditCase.find_by!(slug: "goe-2021-family-allowance-misdeclaration").lesson
+    assert_includes lesson, "지방공무원 수당 등에 관한 규정 제10조제1항"
+    assert_not_includes lesson, "별표 5"
   end
 
   test "시드 원천(사례 블록)에도 옛 문구가 남지 않는다" do
