@@ -122,12 +122,12 @@ cases = [
       관련자 주의, 과소지급액 추가 지급 및 과다지급액 회수.
     DETAIL
     lesson: <<~LESSON
-      ## 확인사항 (PDF §확인사항)
+      ## 근거 요지(원문 p.126 관련자 요건)
       - 정근수당은 매년 1월·7월 보수지급일에 지급, 지급월 전 6개월 중 실제 근무한 기간 산정, 월봉급액의 5~50%.
 
       ## silmu Phase A 토픽 매핑
-      - edu-allowance-temp-teacher-tenure (Phase A #1): 기간제 교사 정근수당 — 호봉경력·직전 6개월 산정 (회의자료 ① 2,000,270원 과소)
-      - edu-allowance-tenure-non-eligible-career (Phase A #5): 정근수당 호봉 오인정 — 사기업 계약직 산입 불가 경력 (회의자료 ② 1,008,200원 과다)
+      - edu-allowance-temp-teacher-tenure (Phase A #1): 기간제 교사 정근수당 — 호봉경력·직전 6개월 산정
+      - edu-allowance-tenure-non-eligible-career (Phase A #5): 정근수당 호봉 오인정 — 사기업 계약직 산입 불가 경력
     LESSON
   },
   {
