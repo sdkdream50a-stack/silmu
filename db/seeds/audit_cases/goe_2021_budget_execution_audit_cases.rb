@@ -422,7 +422,7 @@ cases = [
   {
     slug: "goe-2021-credit-card-self-inspection",
     title: "신용카드 자체점검 부적정 — 2년 9개월간 분임재무관 보고 누락",
-    page: 86,
+    page: 87,
     section_category: "예산집행",
     category: "회계",
     severity: "경미",
