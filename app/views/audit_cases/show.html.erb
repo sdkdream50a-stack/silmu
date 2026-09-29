@@ -155,21 +155,23 @@
             </div>
           </div>
 
-          <!-- 조치내용 -->
-          <div id="section-improvement" class="bg-white border border-gray-200 rounded-xl p-5 lg:p-6">
-            <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide flex items-center gap-1.5 mb-3">
-              <span class="w-1.5 h-1.5 rounded-full bg-slate-400 shrink-0"></span>
-              조치내용
-            </h2>
-            <div class="text-sm text-slate-700 leading-relaxed space-y-2">
-              <% @audit_case.action_taken.to_s.split(',').map(&:strip).reject(&:blank?).each do |action| %>
-                <div class="flex items-start gap-2">
-                  <span class="material-symbols-outlined text-slate-400 text-sm mt-0.5 flex-shrink-0">check_circle</span>
-                  <span><%= action %></span>
-                </div>
-              <% end %>
+          <!-- 조치내용 (비어 있으면 숨김 — 빈 칸 렌더 방지) -->
+          <% if @audit_case.action_taken.present? %>
+            <div id="section-improvement" class="bg-white border border-gray-200 rounded-xl p-5 lg:p-6">
+              <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide flex items-center gap-1.5 mb-3">
+                <span class="w-1.5 h-1.5 rounded-full bg-slate-400 shrink-0"></span>
+                조치내용
+              </h2>
+              <div class="text-sm text-slate-700 leading-relaxed space-y-2">
+                <% @audit_case.action_taken.to_s.split(',').map(&:strip).reject(&:blank?).each do |action| %>
+                  <div class="flex items-start gap-2">
+                    <span class="material-symbols-outlined text-slate-400 text-sm mt-0.5 flex-shrink-0">check_circle</span>
+                    <span><%= action %></span>
+                  </div>
+                <% end %>
+              </div>
             </div>
-          </div>
+          <% end %>
 
           <!-- 교훈/시사점 -->
           <div id="section-lesson" class="bg-white border border-gray-200 rounded-xl p-5 lg:p-6">
@@ -287,7 +289,9 @@
             <nav class="space-y-0.5 text-sm" id="toc-nav">
               <a href="#section-finding" class="toc-link block py-1.5 px-2 rounded-lg text-gray-600 hover:bg-editorial-navy-bg hover:text-editorial-navy-dark transition-colors">지적사항</a>
               <a href="#section-law" class="toc-link block py-1.5 px-2 rounded-lg text-gray-600 hover:bg-editorial-navy-bg hover:text-editorial-navy-dark transition-colors">근거 법령</a>
-              <a href="#section-improvement" class="toc-link block py-1.5 px-2 rounded-lg text-gray-600 hover:bg-editorial-navy-bg hover:text-editorial-navy-dark transition-colors">조치내용</a>
+              <% if @audit_case.action_taken.present? %>
+                <a href="#section-improvement" class="toc-link block py-1.5 px-2 rounded-lg text-gray-600 hover:bg-editorial-navy-bg hover:text-editorial-navy-dark transition-colors">조치내용</a>
+              <% end %>
               <a href="#section-lesson" class="toc-link block py-1.5 px-2 rounded-lg text-gray-600 hover:bg-editorial-navy-bg hover:text-editorial-navy-dark transition-colors">교훈 및 시사점</a>
               <% if @audit_case.checkpoint_list.any? %>
                 <a href="#section-checkpoint" class="toc-link block py-1.5 px-2 rounded-lg text-gray-600 hover:bg-editorial-navy-bg hover:text-editorial-navy-dark transition-colors">실무 체크포인트</a>

@@ -80,11 +80,16 @@ namespace :silmu do
       puts "  (DB 변경 없음)"
     end
 
-    desc "적용 기관 범위 backfill (HIGH confidence 만)"
+    desc "적용 기관 범위 backfill (HIGH confidence 만 · 빈 칸만 채움)"
     task agency_backfill: :environment do
       [ AuditCase, Topic, Guide ].each do |klass|
         applied = skipped = 0
         klass.order(:id).find_each do |rec|
+          # 원문 대조로 정정한 값(기관 코드 · [] + LOW)은 분류기가 덮어쓰지 않는다 (2026-09-29 감사사례 truth closure)
+          if rec.target_agency.present? || rec.agency_scope_confidence == "LOW"
+            skipped += 1
+            next
+          end
           plan = AgencyScopeClassifier.plan_for(rec)
           unless plan.applicable?
             skipped += 1
