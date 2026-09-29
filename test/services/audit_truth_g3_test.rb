@@ -143,6 +143,22 @@ class AuditTruthG3Test < ActiveSupport::TestCase
     assert_equal %w[PRIVATE_SCHOOL], AuditCase.find_by!(slug: "goe-2021-reserve-fund-improper").target_agency
   end
 
+  test "football 특례기업 1인 견적 한도: 시드도 운영(20260918110000 적용분)과 같이 5천만원이고, 이 마이그레이션은 건드리지 않는다" do
+    stale = "| 물품·용역 1인 견적 수의계약 | 2천만원 이하 | 2천만원 이하 (동일) |"
+    fixed = "| 물품·용역 1인 견적 수의계약 | 2천만원 이하 | 5천만원 이하 (청년창업·여성·장애인·사회적기업 등, 시행령 제30조 제1항 제2호 단서) |"
+    body = Rails.root.join("db/seeds/audit_cases/content_enrichment_phase2_edu_private_contract_7_2026_05_18.rb").read
+    start = body.index(%(slug: "goe-2021-football-team-extension-contract"))
+    block = body[start...(body.index(/^\s*slug: "/, start + 1) || body.size)]
+    assert_not_includes block, stale
+    assert_includes block, fixed
+    assert EDITS.none? { |_, _, old, _| old.include?("2천만원 이하 (동일)") }, "운영에 없는 문구를 fingerprint 로 쓰면 운영 적용이 실패한다"
+
+    c = AuditCase.find_by!(slug: "goe-2021-football-team-extension-contract")
+    c.update_columns(lesson: "#{c.lesson}\n#{fixed}\n")
+    migrate
+    assert_equal 1, AuditCase.find_by!(slug: "goe-2021-football-team-extension-contract").lesson.scan(fixed).size
+  end
+
   test "시드 원천(사례 블록)에도 옛 문구가 남지 않는다" do
     files = Dir[Rails.root.join("db/seeds/**/*.rb")].to_h { |f| [ f, File.read(f) ] }
     EDITS.each do |slug, _, old, new|
