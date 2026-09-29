@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-# 감사사례 P2/P3 잔여 정정(같은 판정 오류가 다른 필드에 남은 7문장) 회귀 — 2026-09-29.
+# 감사사례 P2/P3 잔여 정정(같은 판정 오류가 다른 필드에 남은 11문장) 회귀 — 2026-09-29.
 # 운영 모양 = 시드(정정 후)에서 edits 를 되돌린 상태. 마이그레이션 결과가 시드와 같아야 한다.
 class AuditTruthP2p3ResidualTest < ActiveSupport::TestCase
   MIGRATION = Rails.root.join("db/content_migrations/20260929122000_audit_truth_p2p3_residual.rb")
@@ -14,7 +14,8 @@ class AuditTruthP2p3ResidualTest < ActiveSupport::TestCase
              content_enrichment_phase2_edu_private_contract_7_2026_05_18
              sen_2025_school_accounting_audit_cases sen_2025_contracts_audit_cases].freeze
   STALE = [ "사업 종료 10일 이내 정산·공개 절차가 누락", "입찰 공고 1주일 +", "1주일 이상 게시했는가",
-            "변상 책임 + 징계 동시", "변상 책임 + 견책 이상", "모든 안건 적법성 다툼", "입찰 공정성 훼손 (기초금액" ].freeze
+            "변상 책임 + 징계 동시", "변상 책임 + 견책 이상", "모든 안건 적법성 다툼", "입찰 공정성 훼손 (기초금액",
+            "정확한 분기점 분할 | 의도성 명백", "의도성 입증이 가장 명확한 증거" ].freeze
 
   setup do
     capture_io { SEEDS.each { |f| load Rails.root.join("db/seeds/audit_cases/#{f}.rb") } }
@@ -53,7 +54,7 @@ class AuditTruthP2p3ResidualTest < ActiveSupport::TestCase
   end
 
   test "NORMAL: 결과가 정정된 시드와 같고 옛 문구는 사라진다" do
-    assert_includes migrate, "changes=7"
+    assert_includes migrate, "changes=11"
     SLUGS.each { |s| assert_equal @expected[s], snap(s), s }
     all = SLUGS.map { |s| body(s) }.join("\n")
     STALE.each { |s| refute_includes all, s }
@@ -65,7 +66,7 @@ class AuditTruthP2p3ResidualTest < ActiveSupport::TestCase
   end
 
   test "재실행 changes=0 · DRY_RUN 은 쓰지 않는다" do
-    assert_includes migrate("DRY_RUN" => "1"), "DRY_RUN changes=7"
+    assert_includes migrate("DRY_RUN" => "1"), "DRY_RUN changes=11"
     assert_includes body("goe-2021-failed-bid-private-contract"), "변상 책임 + 징계 동시"
     migrate
     assert_includes migrate, "changes=0"

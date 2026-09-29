@@ -14,7 +14,7 @@
 # old 는 운영 페이지(https://silmu.kr/audit-cases/<slug>, 2026-09-29 익명 GET)의 렌더 문자열과 같다(마크다운 기호 제외).
 # edits 는 필드에 old 가 정확히 1회 있어야 바꾼다. 이미 new 면 건너뛴다. 하나라도 어긋나면 전체 롤백.
 # agency 는 target_agency=["PUBLIC_SCHOOL"]·HIGH 일 때만 바꾼다(운영 «적용 대상: 공립학교»). 기관 혼재 = [] + LOW(표시 안 함).
-#   ⚠ `silmu:p1:agency_backfill`(수동 rake)을 다시 돌리면 이 사례들을 PUBLIC_SCHOOL 로 되돌린다.
+#   `silmu:p1:agency_backfill`(수동 rake)은 빈 칸만 채우도록 가드됨(이 PR) — [] + LOW 는 보존된다.
 # DRY_RUN=1 이면 레코드별 fields_to_change 만 출력한다. view_count·slug·title 불변.
 #
 # 운영 적용(배포 후):
