@@ -38,8 +38,9 @@ class TopicMoreTabsTest < ApplicationSystemTestCase
   test "더보기 항목이 전부 화면에서 눌릴 수 있다 (데스크톱)" do
     open_more_menu
 
-    # 양성대조: 항목이 실제로 4개 렌더된다 — 0개면 «잘린 것»이 아니라 «안 만든 것»이고 이 판정은 무의미하다.
-    assert_equal 4, all(".more-tab-item", visible: :all).size
+    # 양성대조: 항목이 실제로 렌더된다 — 0개면 «잘린 것»이 아니라 «안 만든 것»이고 이 판정은 무의미하다.
+    # 질의·회신 탭은 F1 containment(2026-10-05)로 기본 비공개 → 3개.
+    assert_equal 3, all(".more-tab-item", visible: :all).size
 
     assert_empty page.evaluate_script(UNREACHABLE_JS),
                  "더보기 메뉴 항목이 잘려 클릭되지 않는다(overflow 클리핑)"
