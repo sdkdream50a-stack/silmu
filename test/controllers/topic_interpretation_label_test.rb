@@ -1,7 +1,11 @@
 require "test_helper"
 
 # 유권해석 탭: 문서번호 없는 [회신]을 공식 해석처럼 표시하던 회귀 (2026-09-17 G-38).
+# 2026-10-05 F1 containment: 기본은 비공개(SILMU_INTERPRETATION_TAB != on). 아래 기존 라벨 테스트는 스위치를 켠 상태의 계약이다.
 class TopicInterpretationLabelTest < ActionDispatch::IntegrationTest
+  setup { @prev_tab_env = ENV["SILMU_INTERPRETATION_TAB"]; ENV["SILMU_INTERPRETATION_TAB"] = "on" }
+  teardown { ENV["SILMU_INTERPRETATION_TAB"] = @prev_tab_env }
+
   def page(slug, interpretation)
     Rails.cache.clear
     Topic.create!(name: "해석 #{slug}", slug: slug, category: "budget", sector: "common", summary: "요약",
@@ -38,5 +42,14 @@ class TopicInterpretationLabelTest < ActionDispatch::IntegrationTest
     body = page("interp-empty", nil)
     assert_includes body, "유권해석 정보가 준비 중입니다."
     assert_not_includes body, "질의·회신 예시"
+  end
+
+  test "CONTAINMENT: switch off (default) renders neither the tab nor the reply text" do
+    ENV.delete("SILMU_INTERPRETATION_TAB")
+    body = page("interp-off", "**[회신]** 행정안전부 계약제도과-3102 회신에 따르면 증액 소송이 가능합니다.")
+    assert_not_includes body, "계약제도과-3102"
+    assert_not_includes body, 'data-tab="interpretation"'
+    assert_not_includes body, "질의·회신 예시"
+    assert_includes body, 'data-tab="regulation"' # 양성대조: 나머지 더보기 탭은 그대로 있다
   end
 end

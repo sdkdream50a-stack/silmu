@@ -376,11 +376,13 @@
             <span class="material-symbols-outlined" style="font-size:16px">description</span>
             예규/지침
           </button>
+          <% if interpretation_tab_public? %>
           <button onclick="showTab('interpretation'); closeMoreTabs();" data-tab="interpretation"
                   class="tab-btn more-tab-item w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-editorial-navy-bg hover:text-editorial-navy-dark flex items-center gap-2 transition-colors">
             <span class="material-symbols-outlined" style="font-size:16px">policy</span>
             <%= interpretation_tab_label(@topic) %>
           </button>
+          <% end %>
           <button onclick="showTab('qa'); closeMoreTabs();" data-tab="qa"
                   class="tab-btn more-tab-item w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-editorial-navy-bg hover:text-editorial-navy-dark flex items-center gap-2 transition-colors">
             <span class="material-symbols-outlined" style="font-size:16px">forum</span>
@@ -661,7 +663,8 @@ document.addEventListener('click', function(e) {
         </div>
         <% end %>
 
-        <!-- 유권해석 -->
+        <!-- 유권해석 (F1 containment 2026-10-05: 공개 스위치가 꺼져 있으면 탭·본문 모두 렌더하지 않는다) -->
+        <% if interpretation_tab_public? %>
         <% cache [@topic, "interpretation_tab", @topic.updated_at.to_i] do %>
         <div class="tab-panel" data-tab="interpretation" id="panel-interpretation">
           <% if @topic.interpretation_content.present? %>
@@ -680,6 +683,7 @@ document.addEventListener('click', function(e) {
             </div>
           <% end %>
         </div>
+        <% end %>
         <% end %>
 
         <!-- 감사사례 -->
