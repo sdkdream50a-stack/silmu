@@ -46,7 +46,8 @@ class SitemapPingJob < ApplicationJob
       urls << "https://#{HOST}/topics/#{topic.slug}"
     end
 
-    AuditCase.published.where("updated_at > ?", WINDOW.ago).find_each do |ac|
+    # 가상(SIMULATED) 사례는 noindex·sitemap 제외 대상이라 IndexNow 에도 제출하지 않는다 (F4 후속)
+    AuditCase.published.search_indexable.where("updated_at > ?", WINDOW.ago).find_each do |ac|
       urls << "https://#{HOST}/audit-cases/#{ac.slug}"
     end
 

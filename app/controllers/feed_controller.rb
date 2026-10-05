@@ -10,8 +10,8 @@ class FeedController < ApplicationController
     fresh_topics  = Topic.published.where(needs_review: false).order(updated_at: :desc).limit(20 - review_topics.size)
     @topics = review_topics.to_a + fresh_topics.to_a
 
-    # 최신 감사사례 10개
-    @audit_cases = AuditCase.published.order(created_at: :desc).limit(10)
+    # 최신 감사사례 10개 — 가상(SIMULATED·noindex) 사례는 피드에 싣지 않는다 (F4 후속)
+    @audit_cases = AuditCase.published.search_indexable.order(created_at: :desc).limit(10)
 
     @updated_at = [ @topics.map(&:updated_at).max, @audit_cases.maximum(:created_at) ].compact.max
 

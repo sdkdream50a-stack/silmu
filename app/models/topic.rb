@@ -291,7 +291,7 @@ class Topic < ApplicationRecord
 
   # 관련 감사사례 (DB 기반)
   def related_audit_cases
-    AuditCase.published.where(topic_slug: slug).recent
+    AuditCase.published.search_indexable.where(topic_slug: slug).recent
   end
 
   # FAQ 배열로 반환 (jsonb는 이미 Array, 레거시 String은 JSON.parse)
