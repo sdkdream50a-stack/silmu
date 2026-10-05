@@ -52,7 +52,8 @@ class HomeController < ApplicationController
 
   # SEASONAL_TOPICS 또는 감사사례 선택 규칙 변경 시 이 값을 올리면 캐시 자동 무효화
   #   v4 (2026-09-18 P0-4): edu 2·3·9월 중복 slug 제거 + 감사사례 sector·출처 우선 정렬
-  CURATION_VERSION = 4
+  #   v5 (2026-10-05 F4 후속): 홈 감사사례 카드에서 가상(SIMULATED·noindex) 사례 제외
+  CURATION_VERSION = 5
 
   def index
     @sector = resolve_sector
@@ -110,7 +111,7 @@ class HomeController < ApplicationController
     @recent_audit_cases = Rails.cache.fetch(
       "home/audit_cases/cv#{CURATION_VERSION}/v#{curated_version}/#{@sector}", expires_in: 1.hour
     ) do
-      scope = AuditCase.published.where(severity: %w[중대 보통])
+      scope = AuditCase.published.search_indexable.where(severity: %w[중대 보통])
 
       if @sector == "common"
         scope.order(created_at: :desc).limit(3).to_a

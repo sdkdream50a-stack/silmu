@@ -61,14 +61,14 @@ class LlmsController < ApplicationController
     # Topic·AuditCase의 최신 updated_at을 키에 포함해 콘텐츠 갱신 시 자동 무효화
     cache_key = [
       "llms-full",
-      "v4", # 엔티티 해제·줄 구조 보존(2026-09-17) — 캐시 버전 bump
+      "v5", # v4 엔티티 해제·줄 구조 보존(2026-09-17) · v5 가상(SIMULATED) 사례 제외(2026-10-05)
       Topic.published.maximum(:updated_at)&.to_i,
       AuditCase.published.maximum(:updated_at)&.to_i
     ].join("/")
 
     content = Rails.cache.fetch(cache_key, expires_in: 6.hours) do
       @topics = Topic.published.order(:category, :name).limit(TOPIC_LIMIT)
-      @audit_cases = AuditCase.published.order(updated_at: :desc).limit(AUDIT_LIMIT)
+      @audit_cases = AuditCase.published.search_indexable.order(updated_at: :desc).limit(AUDIT_LIMIT)
       build_content
     end
 

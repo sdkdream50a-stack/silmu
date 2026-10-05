@@ -103,8 +103,10 @@ class AuditCasesController < ApplicationController
     @related_topic = Rails.cache.fetch("audit_case_topic/#{@audit_case.slug}", expires_in: 1.hour) do
       @audit_case.related_topic
     end
+    # F4 후속: 같은 분류 목록에서 가상(SIMULATED·noindex) 사례 제외.
+    #   키는 ContentCache::AUDIT_CASE_SLUG_KEYS·AuditCase#expire_count_cache 와 맞춰 그대로 둔다(TTL 1h).
     @related_cases = Rails.cache.fetch("audit_case_related/#{@audit_case.slug}", expires_in: 1.hour) do
-      AuditCase.published
+      AuditCase.published.search_indexable
                .where(category: @audit_case.category)
                .where.not(id: @audit_case.id)
                .limit(4)
