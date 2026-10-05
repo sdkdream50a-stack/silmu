@@ -21,6 +21,9 @@
       <div class="min-w-0">
         <p class="text-sm font-bold <%= title_c %> leading-tight"><%= a.provenance_label %></p>
         <p class="text-xs <%= body_c %> mt-1 leading-relaxed"><%= a.provenance_note %></p>
+        <% if (basis = a.reconstruction_basis_text).present? %>
+          <p class="text-xs <%= body_c %> mt-1 leading-relaxed font-semibold">출처: <%= basis %></p>
+        <% end %>
         <% if a.reconstructed? %>
           <p class="text-[11px] <%= body_c %> mt-1.5 font-semibold">
             ⚠️ 본문의 기관명·인물·금액은 실무 이해를 돕기 위한 예시입니다.

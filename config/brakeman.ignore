@@ -89,13 +89,13 @@
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
-      "fingerprint": "a94666bc3d56f4cc6a9e9318290c99640b129cf02f0ffee3a68423e700b44e8a",
+      "fingerprint": "ee6b905f2376db45da278d1f5dfa3ff38f95d892ca0bc30be34c41cad916191d",
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/services/related_content_resolver.rb",
-      "line": 93,
+      "line": 95,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "AuditCase.published.recent.where.not(:slug => exclude_slugs).where(\"category IN (:cats) OR (#{keyword_or_clause(:title)})\", :cats => ((AUDIT_CATEGORY_MAP[topic.category.to_s] or [])), **keyword_binds)",
+      "code": "AuditCase.published.search_indexable.recent.where.not(:slug => exclude_slugs).where(\"category IN (:cats) OR (#{keyword_or_clause(:title)})\", :cats => ((AUDIT_CATEGORY_MAP[topic.category.to_s] or [])), **keyword_binds)",
       "render_path": null,
       "location": {
         "type": "method",

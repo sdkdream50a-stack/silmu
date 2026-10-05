@@ -30,7 +30,7 @@
       <div class="flex gap-4 lg:gap-6">
         <div class="text-center px-4 py-2 bg-white/10 rounded-xl border border-white/15">
           <div class="text-2xl font-bold"><%= @total_count %></div>
-          <div class="text-xs text-white/80 mt-0.5">전체 사례</div>
+          <div class="text-xs text-white/80 mt-0.5"><%= @kind ? "가상 예방 시나리오" : "실제·재구성 사례" %></div>
         </div>
         <div class="text-center px-4 py-2 bg-white/10 rounded-xl border border-white/15">
           <div class="text-2xl font-bold"><%= @categories.size %></div>
@@ -51,6 +51,7 @@
         <%= f.hidden_field :category, value: @category %>
         <%= f.hidden_field :severity, value: @severity %>
         <%= f.hidden_field :sector, value: @sector %>
+        <%= f.hidden_field :kind, value: @kind %>
         <div class="relative max-w-md">
           <%= f.text_field :q,
               value: @search,
@@ -67,31 +68,40 @@
     <!-- 카테고리 탭 & 심각도 필터 -->
     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
       <div class="flex flex-wrap gap-2" id="category-tabs">
-        <%= link_to "전체", audit_cases_path(severity: @severity, q: @search, sector: @sector),
+        <%= link_to "전체", audit_cases_path(severity: @severity, q: @search, sector: @sector, kind: @kind),
             class: "tab-btn px-5 py-2.5 rounded-xl text-sm font-semibold transition-all #{@category.blank? ? 'bg-[#6B2A2A] text-white shadow-md' : 'bg-surface-100 text-slate-600 hover:bg-surface-200'}" %>
         <% @categories.each do |cat| %>
-          <%= link_to cat, audit_cases_path(category: cat, severity: @severity, q: @search, sector: @sector),
+          <%= link_to cat, audit_cases_path(category: cat, severity: @severity, q: @search, sector: @sector, kind: @kind),
               class: "tab-btn px-5 py-2.5 rounded-xl text-sm font-medium transition-all #{@category == cat ? 'bg-[#6B2A2A] text-white shadow-md' : 'bg-surface-100 text-slate-600 hover:bg-surface-200'}" %>
         <% end %>
       </div>
 
       <!-- 기관 필터 — 학교·교육청 사례만 -->
       <div class="flex flex-wrap gap-2 mt-3" id="sector-tabs">
-        <%= link_to "모든 기관", audit_cases_path(category: @category, severity: @severity, q: @search),
+        <%= link_to "모든 기관", audit_cases_path(category: @category, severity: @severity, q: @search, kind: @kind),
             class: "px-4 py-2 rounded-lg text-xs font-semibold transition-all #{@sector.blank? ? 'bg-slate-700 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}" %>
-        <%= link_to "학교·교육청 사례", audit_cases_path(category: @category, severity: @severity, q: @search, sector: "edu"),
+        <%= link_to "학교·교육청 사례", audit_cases_path(category: @category, severity: @severity, q: @search, sector: "edu", kind: @kind),
             class: "px-4 py-2 rounded-lg text-xs font-semibold transition-all #{@sector == 'edu' ? 'bg-slate-700 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}" %>
+      </div>
+
+      <%# F4b (2026-10-05) — 가상 예방 시나리오는 기본 목록에서 빠진다. 이 필터를 직접 고를 때만 보인다(noindex·광고 없음). %>
+      <div class="flex flex-wrap gap-2 mt-3" id="kind-tabs">
+        <%= link_to "실제·재구성 사례", audit_cases_path(category: @category, severity: @severity, q: @search, sector: @sector),
+            class: "px-4 py-2 rounded-lg text-xs font-semibold transition-all #{@kind.blank? ? 'bg-slate-700 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}" %>
+        <%= link_to "가상 예방 시나리오", audit_cases_path(category: @category, severity: @severity, q: @search, sector: @sector, kind: "scenario"),
+            rel: "nofollow",
+            class: "px-4 py-2 rounded-lg text-xs font-semibold transition-all #{@kind == 'scenario' ? 'bg-amber-600 text-white' : 'bg-amber-50 text-amber-800 hover:bg-amber-100'}" %>
       </div>
 
       <!-- 심각도 필터 — 모바일에서만 표시 (데스크탑은 사이드바 필터 사용) -->
       <div class="flex gap-2 lg:hidden">
-        <%= link_to "전체", audit_cases_path(category: @category, q: @search, sector: @sector),
+        <%= link_to "전체", audit_cases_path(category: @category, q: @search, sector: @sector, kind: @kind),
             class: "px-4 py-2 rounded-lg text-xs font-semibold transition-all #{@severity.blank? ? 'bg-gray-200 text-gray-800' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}" %>
-        <%= link_to "중대", audit_cases_path(category: @category, severity: "중대", q: @search, sector: @sector),
+        <%= link_to "중대", audit_cases_path(category: @category, severity: "중대", q: @search, sector: @sector, kind: @kind),
             class: "px-4 py-2 rounded-lg text-xs font-semibold transition-all #{@severity == '중대' ? 'bg-red-600 text-white' : 'bg-red-50 text-red-700 hover:bg-red-100'}" %>
-        <%= link_to "보통", audit_cases_path(category: @category, severity: "보통", q: @search, sector: @sector),
+        <%= link_to "보통", audit_cases_path(category: @category, severity: "보통", q: @search, sector: @sector, kind: @kind),
             class: "px-4 py-2 rounded-lg text-xs font-semibold transition-all #{@severity == '보통' ? 'bg-orange-500 text-white' : 'bg-orange-50 text-orange-700 hover:bg-orange-100'}" %>
-        <%= link_to "경미", audit_cases_path(category: @category, severity: "경미", q: @search, sector: @sector),
+        <%= link_to "경미", audit_cases_path(category: @category, severity: "경미", q: @search, sector: @sector, kind: @kind),
             class: "px-4 py-2 rounded-lg text-xs font-semibold transition-all #{@severity == '경미' ? 'bg-amber-500 text-white' : 'bg-amber-50 text-amber-700 hover:bg-amber-100'}" %>
       </div>
     </div>
@@ -101,7 +111,11 @@
 <section class="section py-10">
   <div class="container-wide">
     <p class="mb-6 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-      대부분의 사례는 감사에서 자주 지적되는 유형을 설명하려고 만든 가상 예방 시나리오 또는 공개 자료를 재구성한 사례로, 기관·인물·일시·금액·처분은 예시입니다. 각 사례 상단의 출처 유형 표시를 확인하세요 — «실제 감사결과»만 공개된 감사결과 원문에 근거합니다.
+      <% if @kind %>
+        이 목록은 감사에서 자주 지적되는 유형을 설명하려고 실무.kr이 만든 가상 예방 시나리오입니다. 실제 감사결과가 아니며 기관·인물·일시·금액·처분은 모두 예시입니다.
+      <% else %>
+        기본 목록에는 가상 예방 시나리오가 들어 있지 않습니다. 재구성 사례는 공개 자료를 바탕으로 기관·인물·금액 등 일부를 각색했습니다. 각 사례 상단의 출처 유형 표시를 확인하세요 — «실제 감사결과»만 공개된 감사결과 원문에 근거합니다. 가상 예방 시나리오는 «가상 예방 시나리오» 필터에서 따로 볼 수 있습니다.
+      <% end %>
     </p>
     <div class="lg:flex lg:gap-10">
       <!-- 메인 콘텐츠 -->
@@ -129,14 +143,14 @@
           <%# 다음 페이지 Turbo Frame — 뷰포트 진입 시 자동 로드 (lazy) %>
           <% if @has_more %>
             <%= turbo_frame_tag "audit-cases-page",
-                src: audit_cases_path(page: @next_page, category: @category, severity: @severity, q: @search, sector: @sector),
+                src: audit_cases_path(page: @next_page, category: @category, severity: @severity, q: @search, sector: @sector, kind: @kind),
                 loading: :lazy do %>
               <%= render "next_page_loader" %>
             <% end %>
             <%# SEO: 크롤러용 페이지네이션 링크 (필터 없는 기본 목록만 — 감사사례 257건 전체 크롤 도달성). JS 사용자는 위 lazy frame으로 처리 %>
             <% if @category.blank? && @severity.blank? && @search.blank? %>
               <noscript>
-                <a rel="next" href="<%= audit_cases_path(page: @next_page, sector: @sector) %>">다음 감사사례 (페이지 <%= @next_page %>)</a>
+                <a rel="next" href="<%= audit_cases_path(page: @next_page, sector: @sector, kind: @kind) %>">다음 감사사례 (페이지 <%= @next_page %>)</a>
               </noscript>
             <% end %>
           <% end %>
@@ -174,7 +188,7 @@
                 ["경미", "경미",       "주의·개선권고 등",    "hover:bg-amber-50",  "bg-amber-500", "group-hover:text-amber-700"]
               ].each do |sev_val, label, desc, hover_bg, dot_bg, hover_text| %>
                 <% active = sev_val.nil? ? @severity.blank? : @severity == sev_val %>
-                <% path = sev_val ? audit_cases_path(category: @category, severity: sev_val, q: @search, sector: @sector) : audit_cases_path(category: @category, q: @search, sector: @sector) %>
+                <% path = sev_val ? audit_cases_path(category: @category, severity: sev_val, q: @search, sector: @sector, kind: @kind) : audit_cases_path(category: @category, q: @search, sector: @sector, kind: @kind) %>
                 <%= link_to path, class: "w-full flex items-center gap-3 p-3 rounded-xl #{active ? 'bg-slate-100' : hover_bg} transition-colors group text-left" do %>
                   <span class="w-3 h-3 rounded-full <%= dot_bg %>"></span>
                   <div>

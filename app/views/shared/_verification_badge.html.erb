@@ -36,6 +36,10 @@
   # 신선도 경과 시 색을 낮춘다 — 화면이 스스로 낡음을 고발해야 한다(P0 TR-05).
   # ⚠️ Tailwind JIT 는 소스에 리터럴로 존재하는 클래스만 생성한다.
   #    "bg-#{accent}-50" 처럼 동적으로 조립하면 CSS 가 만들어지지 않는다 → 전부 리터럴로 둔다.
+  # F3 (2026-10-05) — `verified` 아이콘은 원문 근거(REAL = document_backed?) 감사사례에만 쓴다.
+  #   운영에서 «재구성 콘텐츠» 라벨에 초록 `verified` 가 붙어 사례 자체가 검증된 것으로 읽혔다.
+  #   provenance 가 없는 레코드(가이드·토픽)는 대상이 아니다 — 기존 표시 그대로.
+  provenance_unbacked = record.respond_to?(:effective_source_type) && !record.document_backed?
   c = if stale
     { box: "bg-amber-50 border-amber-200", icon: "text-amber-600", title: "text-amber-900",
       meta: "text-amber-700", dim: "text-amber-500", body: "text-amber-800",
@@ -49,6 +53,7 @@
       pill: "bg-emerald-50 text-emerald-800 border-emerald-200", pill_icon: "text-emerald-600",
       pill_time: "text-emerald-700", sym: "verified" }
   end
+  c = c.merge(sym: "info") if provenance_unbacked && c[:sym] == "verified"
 %>
 <% if date.present? || presenter.present? %>
   <% case variant %>
