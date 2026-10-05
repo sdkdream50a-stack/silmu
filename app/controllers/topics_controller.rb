@@ -1,6 +1,9 @@
 class TopicsController < ApplicationController
   include TopicConfig
 
+  # F9 — 이보다 적은 토픽만 가진 카테고리 hub 는 noindex
+  MIN_INDEXABLE_CATEGORY_TOPICS = 3
+
   # 카테고리 키 → OG 이미지 카테고리 매핑
   OG_CATEGORY_MAP = {
     "contract"  => "contract",
@@ -83,8 +86,10 @@ class TopicsController < ApplicationController
     # 카테고리별 fragment cache 키로 활용 가능한 버전 힌트
     @fragment_version = Rails.cache.read("topics/fragment_version") || 0
 
-    # 서브그룹 필터 URL은 중복 색인 방지
-    @meta_robots = params[:subgroup].present? ? "noindex, follow" : nil
+    # 서브그룹 필터 URL은 중복 색인 방지. F9(2026-10-05) — 항목이 MIN_INDEXABLE_CATEGORY_TOPICS 미만인
+    # 거의 빈 분류 hub(예: /topics/other)도 색인하지 않는다(페이지는 유지).
+    thin_category = @topics.size < MIN_INDEXABLE_CATEGORY_TOPICS
+    @meta_robots = params[:subgroup].present? || thin_category ? "noindex, follow" : nil
 
     expires_in 5.minutes, public: true, stale_while_revalidate: 1.hour
 
