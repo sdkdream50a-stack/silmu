@@ -66,8 +66,9 @@ module AuditCaseProvenance
   # F3 (2026-10-05 AdSense readiness) — 출처 페이지가 있는 «재구성» 사례 본문 꼬리 문구 정정.
   # 운영 본문: "…「2021 감사사례집」(p.76) 패턴을 기반으로 학습용으로 재구성한 **가상 시나리오**입니다.
   #             특정 학교의 실제 사례가 아니며 학습·실무 적용을 위한 교육용 자료입니다."
-  # 이 사례들은 공개 사례집의 실제 지적을 재구성한 것이라 «가상 시나리오»는 사실과 다르고(가상 = SIMULATED),
-  # 머리의 «재구성» 표시와도 모순된다. 출처 인용 「…」(…p.N…) 이 바로 앞에 있을 때만 바꾼다 —
+  # 사이트 분류상 이들은 RECONSTRUCTED(공개 사례집 지적 유형 기반)이고 «가상 시나리오»는 SIMULATED 의 이름이라 머리 표시와 모순된다.
+  # 단 본문의 기관·날짜·금액·건수는 생성된 예시다(예: 2021 사례집 인용인데 «2024년 9월»·«357건») — 그래서 새 문구도
+  # «특정 학교의 실제 사례가 아님»과 «예시»를 유지한다(리뷰 R2 HIGH, 2026-10-05). 출처 인용 「…」(…p.N…) 이 바로 앞에 있을 때만 바꾼다 —
   # 페이지 번호는 본문에 이미 있는 것만 쓴다(새로 만들지 않는다). 운영 데이터 정정은
   # db/content_migrations/20261005120000_audit_reconstructed_tail_wording.rb 가 같은 규칙을 쓴다.
   RECONSTRUCTION_TAIL_PATTERN = /
@@ -75,7 +76,7 @@ module AuditCaseProvenance
     패턴을\s기반으로\s학습용으로\s재구성한\s(?:\*\*)?가상\s시나리오(?:\*\*)?\s?입니다\.
     (?:\s*특정\s[^\s.]+의\s실제\s사례가\s아니며,?\s*학습·실무\s적용을\s위한\s교육용\s자료입니다\.)?
   /x
-  RECONSTRUCTION_TAIL_REPLACEMENT = '\1 공개 사례를 기반으로 재구성한 사례입니다. 기관·인물·금액 등 일부는 각색했습니다.'
+  RECONSTRUCTION_TAIL_REPLACEMENT = '\1 지적 유형을 바탕으로 학습용으로 재구성한 사례입니다. 기관·인물·날짜·금액·건수는 예시이며 특정 학교의 실제 사례가 아닙니다.'
 
   def self.normalize_reconstruction_tail(text)
     return text if text.blank?

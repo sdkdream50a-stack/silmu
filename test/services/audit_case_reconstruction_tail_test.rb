@@ -3,7 +3,7 @@
 require "test_helper"
 
 # F3 (2026-10-05 AdSense readiness) — 출처가 있는 «재구성» 사례의 꼬리 문구가 «가상 시나리오»라고 말하던 모순.
-# 규칙: RECONSTRUCTED + 출처 인용 「…」(…p.N…) 이 있을 때만 «공개 사례를 기반으로 재구성한 사례 · 일부 각색» 으로 바꾼다.
+# 규칙: RECONSTRUCTED + 출처 인용 「…」(…p.N…) 이 있을 때만 «지적 유형을 바탕으로 학습용으로 재구성한 사례 · 일부 각색» 으로 바꾼다.
 #       가상(SIMULATED)은 그대로 «가상 시나리오». 페이지 번호는 본문에 있던 값만 쓴다.
 class AuditCaseReconstructionTailTest < ActiveSupport::TestCase
   MIGRATION = Rails.root.join("db/content_migrations/20261005120000_audit_reconstructed_tail_wording.rb")
@@ -22,7 +22,7 @@ class AuditCaseReconstructionTailTest < ActiveSupport::TestCase
     out = build("SILMU_RECONSTRUCTED_CASE").presentable_text("본문\n\n#{TAIL}")
     refute_includes out, "가상 시나리오"
     refute_includes out, "실제 사례가 아니며"
-    assert_includes out, "「2021 감사사례집」(p.76) 공개 사례를 기반으로 재구성한 사례입니다. 기관·인물·금액 등 일부는 각색했습니다."
+    assert_includes out, "「2021 감사사례집」(p.76) 지적 유형을 바탕으로 학습용으로 재구성한 사례입니다. 기관·인물·날짜·금액·건수는 예시이며 특정 학교의 실제 사례가 아닙니다."
     assert_includes out, "현행 법령 기준일: 지방계약법 2024-02-17 시행본."
   end
 
@@ -30,7 +30,7 @@ class AuditCaseReconstructionTailTest < ActiveSupport::TestCase
     variant = "※ 본 사례는 경기도교육청 「2021 감사사례집」(S고등학교 p.9) 패턴을 기반으로 학습용으로 재구성한 **가상 시나리오**입니다. " \
               "특정 교직원의 실제 사례가 아니며, 학습·실무 적용을 위한 교육용 자료입니다."
     out = AuditCaseProvenance.normalize_reconstruction_tail(variant)
-    assert_equal "※ 본 사례는 경기도교육청 「2021 감사사례집」(S고등학교 p.9) 공개 사례를 기반으로 재구성한 사례입니다. 기관·인물·금액 등 일부는 각색했습니다.", out
+    assert_equal "※ 본 사례는 경기도교육청 「2021 감사사례집」(S고등학교 p.9) 지적 유형을 바탕으로 학습용으로 재구성한 사례입니다. 기관·인물·날짜·금액·건수는 예시이며 특정 학교의 실제 사례가 아닙니다.", out
   end
 
   # ── 음성대조: 가상·출처 없음·실제는 건드리지 않는다 ──
@@ -97,13 +97,13 @@ class AuditCaseReconstructionTailTest < ActiveSupport::TestCase
     assert_includes out, "rows=1 changes=1"
     assert_includes out, "[residual] recon-f3-nocite", "출처 없는 재구성 잔여 문구를 보고하지 않았다"
     refute_includes recon.reload.detail, "가상 시나리오"
-    assert_includes recon.detail, "(p.76) 공개 사례를 기반으로 재구성한 사례입니다."
+    assert_includes recon.detail, "(p.76) 지적 유형을 바탕으로 학습용으로 재구성한 사례입니다."
     assert_includes sim.reload.detail, "가상 시나리오", "가상 사례 본문을 바꿨다"
     assert_equal NO_CITE_TAIL, recon_nocite.reload.detail
 
     out, = capture_io { load MIGRATION }
     assert_includes out, "rows=0 changes=0"
   ensure
-    FileUtils.rm_f(Dir[Rails.root.join("tmp/content_migration_backups/20261005120000_audit_reconstructed_tail_wording-*.json")])
+    FileUtils.rm_f(Dir[Rails.root.join("storage/content_migration_backups/20261005120000_audit_reconstructed_tail_wording-*.json")])
   end
 end

@@ -48,7 +48,7 @@ class AuditCaseSimulatedExposureTest < ActionDispatch::IntegrationTest
     get audit_case_url(@reconstructed.slug)
     assert_response :success
     refute_includes response.body, "가상 시나리오"
-    assert_includes response.body, "(p.76) 공개 사례를 기반으로 재구성한 사례입니다."
+    assert_includes response.body, "(p.76) 지적 유형을 바탕으로 학습용으로 재구성한 사례입니다."
     assert_includes response.body, "경기도교육청 감사관실 「감사사례집」(2021) p.76 기반 재구성 · 기관·인물·금액 등 일부 각색"
   end
 

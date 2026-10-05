@@ -47,9 +47,9 @@ class AuditCaseProvenanceClassifier
   RECONSTRUCTED_SOURCE_STRINGS = %w[silmu-2026 silmu_seed].freeze
 
   # 본문(issue/detail/lesson)이 재구성임을 밝히는 표현
-  # «공개 사례를 기반으로 재구성한 사례» = F3(2026-10-05) 정정 후 문구. 이 표식이 빠지면 꼬리 문구를 고친 재구성 사례가
+  # «지적 유형을 바탕으로 학습용으로 재구성한 사례» = F3(2026-10-05) 정정 후 문구. 이 표식이 빠지면 꼬리 문구를 고친 재구성 사례가
   # 재분류 때 원문 URL 만 보고 ACTUAL_AUDIT 로 다시 올라간다.
-  BODY_RECONSTRUCTED_MARKERS = [ "가상 시나리오", "공개 사례를 기반으로 재구성한 사례" ].freeze
+  BODY_RECONSTRUCTED_MARKERS = [ "가상 시나리오", "지적 유형을 바탕으로 학습용으로 재구성한 사례" ].freeze
 
   # 원문 대조로 강등된 사례 표식 — 원문을 다시 확인하기 전에는 ACTUAL 로 되돌리지 않는다.
   TRUST_DOWNGRADE_MARKER = "TRUST_DOWNGRADE_2026_09_17"
