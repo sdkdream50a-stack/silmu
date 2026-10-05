@@ -21,6 +21,7 @@ class LegalWrongAmountPatternsTest < ActiveSupport::TestCase
     assert_not_empty errors_for("2인 견적 물품 = 55,000,000원")
     assert_not_empty errors_for("1인 견적 수의계약은 2,200만원 이하")
     assert_not_empty errors_for("2인 견적 수의계약은 5,500만원 이하")
+    assert_not_empty errors_for("5,500만원 초과 시 면제 불가")
   end
 
   test "큰 금액 속 숫자·220만원 단위·면제 불가 예시는 오류가 아니다(음성 대조)" do

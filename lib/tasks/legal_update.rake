@@ -64,7 +64,7 @@ namespace :legal do
       line_exemptions: %w[부가세 공급가 VAT 합계 추정가격 계약금액] },
     { pattern: /2천2백만원/, correct: "2천만원", desc: "2천만원 (오류: 2천2백만원)" },
     { pattern: /5,?500만원/, correct: "5천만원", desc: "5천만원 (오류: 5,500만원)",
-      line_exemptions: [ "부가세 포함", "최종 계약금액", "추가계약", "최대 5,500만원", "5,500만원.*최대", "면제 불가" ] },
+      line_exemptions: [ "부가세 포함", "최종 계약금액", "추가계약", "최대 5,500만원", "5,500만원.*최대", "→ 금액 기준으로는 면제 불가" ] },
     # 여비 금액 오류 (구 기준)
     { pattern: /숙박비[^0-9]*80[,_]?000(?!\d).*서울/m, correct: nil, desc: "서울 숙박비 확인 필요 (현행: 10만원)", warning_only: true }
   ].freeze
