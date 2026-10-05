@@ -39,7 +39,8 @@ on:
         type: boolean
 
 env:
-  RUBY_VERSION: '3.2'
+  # Ruby 버전은 .ruby-version 이 정본(ci.yml 과 동일). 여기서 '3.2' 로 고정했던 탓에
+  # standardwebhooks(>= 3.3) 등 bundle 이 깨져 09-14~10-05 매주 Ruby 설정(bundler-cache) 단계에서 실패했다.
   RAILS_ENV: test
 
 jobs:
@@ -64,7 +65,6 @@ jobs:
       - name: Ruby 설정
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: ${{ env.RUBY_VERSION }}
           bundler-cache: true
 
       - name: 의존성 설치
@@ -75,11 +75,12 @@ jobs:
         id: legal_check
         continue-on-error: true
         run: |
-          bundle exec rake legal:ci_check > legal_result.json 2>&1 || true
+          # stderr 를 섞으면 jq 가 깨져 success 가 비고 Issue 단계가 조용히 건너뛰어진다 — stdout(JSON)만 받는다.
+          bundle exec rake legal:ci_check > legal_result.json || true
           cat legal_result.json
 
           # 결과 파싱
-          if [ -f legal_result.json ]; then
+          if [ -f legal_result.json ] && jq -e . legal_result.json >/dev/null 2>&1; then
             SUCCESS=$(cat legal_result.json | jq -r '.success // false')
             ERRORS=$(cat legal_result.json | jq -r '.errors | length // 0')
             echo "success=$SUCCESS" >> $GITHUB_OUTPUT
