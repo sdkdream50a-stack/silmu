@@ -47,6 +47,18 @@ class TemplatesController < ApplicationController
     26 => "budget-carryover"
   }.freeze
 
+  # F6 (2026-10-05 AdSense 준비도) — 양식 상세 26종은 실제 서식 파일 없이 범주별 공통 미리보기 틀만 있어
+  # 운영 실측에서 전부 «다운로드 준비 중»·본문 470~780자였다. 실제 파일이 있는 양식만 색인·sitemap 에 넣는다.
+  # 파일을 확보하면 해당 항목에 `files: ["templates/<파일명>"]`(public/ 기준 경로)을 적으면 자동으로 색인된다.
+  def self.downloadable?(template)
+    Array(template[:files]).any? do |path|
+      rel = path.to_s.delete_prefix("/")
+      rel.present? && !rel.include?("..") && File.file?(Rails.root.join("public", rel))
+    end
+  end
+
+  def self.indexable_templates = TEMPLATES.select { |t| downloadable?(t) }
+
   def index
     @templates = TEMPLATES
 
@@ -73,6 +85,7 @@ class TemplatesController < ApplicationController
       return
     end
 
+    set_meta_tags(robots: "noindex, follow") unless self.class.downloadable?(@template)
     set_meta_tags(
       title: @template[:title],
       description: "#{@template[:desc]} — #{@template[:formats].join(', ')} 형식 양식 미리보기 (다운로드는 준비 중)",

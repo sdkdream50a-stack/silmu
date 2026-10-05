@@ -38,8 +38,9 @@ class TopicMoreTabsTest < ApplicationSystemTestCase
   test "더보기 항목이 전부 화면에서 눌릴 수 있다 (데스크톱)" do
     open_more_menu
 
-    # 양성대조: 항목이 실제로 4개 렌더된다 — 0개면 «잘린 것»이 아니라 «안 만든 것»이고 이 판정은 무의미하다.
-    assert_equal 4, all(".more-tab-item", visible: :all).size
+    # 양성대조: 항목이 실제로 렌더된다 — 0개면 «잘린 것»이 아니라 «안 만든 것»이고 이 판정은 무의미하다.
+    # 질의·회신 탭은 F1 containment(2026-10-05)로 기본 비공개 → 3개.
+    assert_equal 3, all(".more-tab-item", visible: :all).size
 
     assert_empty page.evaluate_script(UNREACHABLE_JS),
                  "더보기 메뉴 항목이 잘려 클릭되지 않는다(overflow 클리핑)"
@@ -63,7 +64,7 @@ class TopicMoreTabsTest < ApplicationSystemTestCase
   end
 
   # 음성대조 — 이 판정기가 «잘림»을 실제로 잡는지 증명한다.
-  # 수리 전 상태(= absolute 로 되돌리기)를 만들면 같은 스크립트가 4개 전부를 «못 누른다»고 말해야 한다.
+  # 수리 전 상태(= absolute 로 되돌리기)를 만들면 같은 스크립트가 렌더된 항목 전부(F1 containment 이후 3개)를 «못 누른다»고 말해야 한다.
   # 이게 없으면 위 assert_empty 는 «측정이 안 된 것»과 구별되지 않는다.
   test "음성대조: absolute 로 되돌리면 항목이 잘려 잡힌다" do
     open_more_menu
@@ -71,7 +72,7 @@ class TopicMoreTabsTest < ApplicationSystemTestCase
       const dd = document.getElementById('more-tabs-dropdown');
       dd.style.position = 'absolute'; dd.style.top = ''; dd.style.left = '';
     JS
-    assert_equal 4, page.evaluate_script(UNREACHABLE_JS).size,
+    assert_equal 3, page.evaluate_script(UNREACHABLE_JS).size,
                  "수리 전 상태를 재현했는데도 «잘림»이 잡히지 않는다 — 판정기가 죽어 있다"
   end
 

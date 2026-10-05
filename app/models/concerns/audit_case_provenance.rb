@@ -93,6 +93,33 @@ module AuditCaseProvenance
     scope :search_indexable, -> { where.not(source_type: SEARCH_NOINDEX_TYPES).or(where(source_type: nil)) }
   end
 
+  # 2026-10-05 AdSense F5 — /about 이 «감사사례 257 · 검증 완료 246건» 으로 사례 전체가 검증된 것처럼 읽혔다.
+  # 출처 종류별 실제 건수를 이 원장에서만 센다(화면에 숫자를 하드코딩하지 않는다).
+  #   actual        = 실제 감사결과 + 원문 URL (document_backed? 와 같은 기준 — 원문 없으면 실제로 세지 않는다)
+  #   reconstructed = 공식 자료(사례집 등) 기반 재구성
+  #   simulated     = 예방교육용 가상 시나리오
+  #   other         = 그 밖의 유형(판례·유권해석·출처 미확정 등) — 위 셋에 억지로 넣지 않는다
+  PROVENANCE_BREAKDOWN_COLUMNS = %i[id source_type source_url source is_reconstructed].freeze
+
+  class_methods do
+    def provenance_breakdown
+      counts = { actual: 0, reconstructed: 0, simulated: 0, other: 0 }
+      select(*PROVENANCE_BREAKDOWN_COLUMNS).each do |ac|
+        counts[ac.provenance_bucket] += 1
+      end
+      counts
+    end
+  end
+
+  def provenance_bucket
+    case effective_source_type
+    when "SILMU_SIMULATED_CASE" then :simulated
+    when "SILMU_RECONSTRUCTED_CASE" then :reconstructed
+    when "ACTUAL_AUDIT" then document_backed? ? :actual : :other
+    else :other
+    end
+  end
+
   def search_indexable? = !SEARCH_NOINDEX_TYPES.include?(source_type)
 
   def effective_source_type
