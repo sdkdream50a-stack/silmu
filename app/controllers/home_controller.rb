@@ -176,7 +176,8 @@ class HomeController < ApplicationController
     @topic_count            = Rails.cache.fetch("stats/topic_count", expires_in: 30.minutes) { Topic.published.count }
     @guide_count            = Rails.cache.fetch("stats/guide_count", expires_in: 30.minutes) { Guide.published.count }
     @audit_case_count       = Rails.cache.fetch("stats/audit_case_count", expires_in: 30.minutes) { AuditCase.published.count }
-    @audit_case_verified    = Rails.cache.fetch("stats/audit_case_verified", expires_in: 30.minutes) { AuditCase.published.where.not(last_verified_at: nil).count }
+    # F5 (2026-10-05) — «검증 완료 N건»(last_verified_at 존재 수)은 사례 사실관계 검증으로 읽혔다. 출처 종류별 건수로 바꾼다.
+    @audit_case_breakdown   = Rails.cache.fetch("stats/audit_case_provenance/v1", expires_in: 30.minutes) { AuditCase.published.provenance_breakdown }
     @template_count         = TemplatesController::TEMPLATES.count
     @tool_count             = ApplicationHelper::ACTIVE_TOOL_COUNT
     @guide_total            = @topic_count + @guide_count
