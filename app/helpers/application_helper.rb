@@ -4,6 +4,17 @@ module ApplicationHelper
   # 회귀 테스트가 레지스트리의 게재 대상 수와 대조해 갈라짐을 막는다.
   ACTIVE_TOOL_COUNT = 39
 
+  # AdSense 게재 대상 컨트롤러 — layout(로더)와 shared/_ad_slot(광고 단위)이 같은 판정을 쓴다.
+  AD_ENABLED_CONTROLLERS = %w[guides topics audit_cases].freeze
+
+  # F4c (2026-10-05) — 컨트롤러가 @suppress_ads 를 세운 페이지(noindex 가상 감사사례·가상 시나리오 목록)는
+  # 로더도 광고 단위도 렌더하지 않는다. 검색에서 뺀 페이지가 광고 심사 표면으로 남지 않게 한다.
+  def adsense_page?
+    Rails.env.production? &&
+      AD_ENABLED_CONTROLLERS.include?(params[:controller]) &&
+      !@suppress_ads
+  end
+
   # exam.silmu.kr — 법령 가이드 slug → 한국어 레이블 맵
   # chapters/show.html.erb에서 related_topic_slugs 렌더링 시 사용
   TOPIC_SLUG_LABELS = {

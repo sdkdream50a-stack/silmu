@@ -6,6 +6,9 @@ class AuditCasesController < ApplicationController
     # 학교·교육청 사례만 보기 (업무흐름 감사 13 — 학교 사용자 맥락이 홈에서 끊기던 결함). 허용값은 edu 하나.
     @sector   = params[:sector] == "edu" ? "edu" : nil
     @search   = params[:q].to_s.strip
+    # F4b (2026-10-05) — 가상 예방 시나리오(SIMULATED·noindex)는 기본 목록에서 뺀다.
+    #   사용자가 «가상 예방 시나리오» 필터를 직접 고를 때만 그것만 보여 준다. 허용값은 "scenario" 하나.
+    @kind     = params[:kind] == "scenario" ? "scenario" : nil
     @page = [ (params[:page].to_i), 1 ].max
 
     # 전체를 캐싱 후 Ruby에서 필터링 → DB 쿼리 0 (캐시 히트 시)
@@ -15,9 +18,10 @@ class AuditCasesController < ApplicationController
       cats  = cases.map(&:category).compact.uniq.sort
       [ cases, cats ]
     end
-    @total_count = all_cases.size
+    pool = all_cases.select { |ac| @kind ? !ac.search_indexable? : ac.search_indexable? }
+    @total_count = pool.size
 
-    filtered = all_cases
+    filtered = pool
     filtered = filtered.select { |ac| ac.category == @category } if @category.present?
     filtered = filtered.select { |ac| ac.severity == @severity } if @severity.present?
     filtered = filtered.select { |ac| ac.sector == @sector } if @sector
@@ -61,7 +65,9 @@ class AuditCasesController < ApplicationController
         url: canonical_url
       }
     }
-    meta[:robots] = "noindex, follow" if @category.present? || @severity.present? || @search.present?
+    meta[:robots] = "noindex, follow" if @category.present? || @severity.present? || @search.present? || @kind
+    # F4c — 가상 시나리오 목록은 noindex 이고 광고도 싣지 않는다.
+    @suppress_ads = true if @kind
     set_meta_tags(meta)
   end
 
@@ -122,6 +128,10 @@ class AuditCasesController < ApplicationController
         type: "article"
       }
     )
-    set_meta_tags(robots: "noindex, follow") unless @audit_case.search_indexable?
+    # F4c (2026-10-05) — noindex(가상) 페이지에는 AdSense 로더·광고 단위를 렌더하지 않는다(ApplicationHelper#adsense_page?).
+    unless @audit_case.search_indexable?
+      set_meta_tags(robots: "noindex, follow")
+      @suppress_ads = true
+    end
   end
 end

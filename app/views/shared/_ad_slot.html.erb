@@ -8,10 +8,8 @@
   1단계 게재 대상: position 'bottom' + 읽는 콘텐츠 컨트롤러(guides/topics/audit_cases) 뿐.
   2단계(도구·exam)는 1단계 RPM 실측 후 별도 판단. %>
 <%
-  ad_enabled_controllers = %w[guides topics audit_cases]
-  show_ad = Rails.env.production? &&
-            position.to_s == "bottom" &&
-            ad_enabled_controllers.include?(params[:controller])
+  # 컨트롤러·환경·noindex 억제(F4c) 판정은 ApplicationHelper#adsense_page? 가 layout 로더와 함께 소유한다.
+  show_ad = position.to_s == "bottom" && adsense_page?
 %>
 <% if show_ad %>
   <div class="max-w-4xl mx-auto px-4 pt-6 pb-6 border-t border-gray-100">

@@ -41,7 +41,9 @@ class RelatedContentResolver
 
   def audit_cases
     Rails.cache.fetch(cache_key(:audit_cases), expires_in: CACHE_TTL) do
-      direct = AuditCase.published.where(topic_slug: @topic.slug).recent.to_a
+      # F4a (2026-10-05) — 가상 예방 시나리오(SIMULATED·noindex)는 색인되는 토픽 화면에 싣지 않는다.
+      #   상세 noindex 만으로는 요약 카드가 토픽 페이지에 그대로 남아 심사 표면이 된다.
+      direct = AuditCase.published.search_indexable.where(topic_slug: @topic.slug).recent.to_a
       return direct.first(AUDIT_LIMIT) if direct.size >= AUDIT_LIMIT
 
       fallback = fallback_audit_cases(exclude_slugs: direct.map(&:slug))
@@ -85,7 +87,7 @@ class RelatedContentResolver
   def fallback_audit_cases(exclude_slugs:)
     mapped = AUDIT_CATEGORY_MAP[@topic.category.to_s] || []
 
-    base = AuditCase.published.recent
+    base = AuditCase.published.search_indexable.recent
     base = base.where.not(slug: exclude_slugs) if exclude_slugs.any?
 
     if mapped.any? && @keywords.any?
