@@ -79,7 +79,7 @@ gem "omniauth-kakao"
 gem "omniauth-naver"
 gem "omniauth-rails_csrf_protection"
 gem "pagy", "~> 43.0"
-gem "meta-tags", "~> 2.23"
+gem "meta-tags", "~> 2.24"
 gem "dotenv-rails", groups: [ :development, :test ]
 gem "heroicon", "~> 1.0"
 
