@@ -137,7 +137,8 @@ class AuditCase < ApplicationRecord
   # 기존: issue.truncate(150). issue가 짧으면 description도 짧아 GSC 신호 약함.
   # 개선: detail에서 마크다운 마크업을 정리하되 가상시나리오 명시는 보존 + 첫 200자 추출 → 본문 풍부도 반영
   def seo_description
-    base = detail.presence || issue.presence || ""
+    # F3 (2026-10-05) — 재구성 사례 꼬리 문구 정정을 meta description 에도 같은 규칙으로 적용한다.
+    base = presentable_text(detail.presence || issue.presence || "")
     return "" if base.blank?
 
     plain = base

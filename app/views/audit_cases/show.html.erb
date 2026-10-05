@@ -117,7 +117,8 @@
         <% end %>
 
         <!-- 핵심 정보 카드 (fragment cache — 콘텐츠 변경 시 updated_at으로 자동 무효화) -->
-        <% cache ["audit_case/content/v1", @audit_case.id, @audit_case.updated_at, @related_topic&.id], expires_in: 1.hour do %>
+        <%# v2 (2026-10-05 F3) — 재구성 사례 꼬리 문구를 렌더 시 정정한다. 데이터가 그대로여도 옛 조각을 버리려고 버전을 올렸다. %>
+        <% cache ["audit_case/content/v2", @audit_case.id, @audit_case.updated_at, @related_topic&.id], expires_in: 1.hour do %>
         <div class="space-y-4 mb-8">
           <!-- 지적사항 -->
           <div id="section-finding" class="bg-white border border-gray-200 rounded-xl p-5 lg:p-6">
@@ -125,7 +126,7 @@
               <span class="w-1.5 h-1.5 rounded-full bg-red-400 shrink-0"></span>
               지적사항
             </h2>
-            <div class="text-sm text-slate-700 leading-relaxed"><%= simple_format(@audit_case.issue) %></div>
+            <div class="text-sm text-slate-700 leading-relaxed"><%= simple_format(@audit_case.presentable_text(@audit_case.issue)) %></div>
             <div class="mt-3 flex items-center gap-3 text-xs text-slate-500">
               <span>심각도: <strong class="text-slate-700"><%= @audit_case.severity %></strong></span>
               <span class="text-gray-300">|</span>
@@ -179,7 +180,7 @@
               <span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0"></span>
               교훈 및 시사점
             </h2>
-            <div class="text-sm text-slate-700 leading-relaxed audit-content"><%= simple_markdown(@audit_case.lesson) %></div>
+            <div class="text-sm text-slate-700 leading-relaxed audit-content"><%= simple_markdown(@audit_case.presentable_text(@audit_case.lesson)) %></div>
           </div>
 
           <!-- 실무 체크포인트 -->
@@ -219,7 +220,7 @@
                 상세 분석
               </h2>
               <div class="text-sm text-slate-700 leading-relaxed audit-content">
-                <%= simple_markdown(@audit_case.detail) %>
+                <%= simple_markdown(@audit_case.presentable_text(@audit_case.detail)) %>
               </div>
             </div>
           <% end %>

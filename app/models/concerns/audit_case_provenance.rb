@@ -63,6 +63,26 @@ module AuditCaseProvenance
   # 원문 문서가 존재해야 정당한 유형 (§10: 원문 미확인 시 승격 금지)
   DOCUMENT_BACKED_TYPES = %w[ACTUAL_AUDIT COURT_CASE OFFICIAL_INTERPRETATION OFFICIAL_GUIDELINE].freeze
 
+  # F3 (2026-10-05 AdSense readiness) — 출처 페이지가 있는 «재구성» 사례 본문 꼬리 문구 정정.
+  # 운영 본문: "…「2021 감사사례집」(p.76) 패턴을 기반으로 학습용으로 재구성한 **가상 시나리오**입니다.
+  #             특정 학교의 실제 사례가 아니며 학습·실무 적용을 위한 교육용 자료입니다."
+  # 이 사례들은 공개 사례집의 실제 지적을 재구성한 것이라 «가상 시나리오»는 사실과 다르고(가상 = SIMULATED),
+  # 머리의 «재구성» 표시와도 모순된다. 출처 인용 「…」(…p.N…) 이 바로 앞에 있을 때만 바꾼다 —
+  # 페이지 번호는 본문에 이미 있는 것만 쓴다(새로 만들지 않는다). 운영 데이터 정정은
+  # db/content_migrations/20261005120000_audit_reconstructed_tail_wording.rb 가 같은 규칙을 쓴다.
+  RECONSTRUCTION_TAIL_PATTERN = /
+    (「[^」\n]+」\s*\([^()\n]*p\.\s?\d+[^()\n]*\))\s*
+    패턴을\s기반으로\s학습용으로\s재구성한\s(?:\*\*)?가상\s시나리오(?:\*\*)?\s?입니다\.
+    (?:\s*특정\s[^\s.]+의\s실제\s사례가\s아니며,?\s*학습·실무\s적용을\s위한\s교육용\s자료입니다\.)?
+  /x
+  RECONSTRUCTION_TAIL_REPLACEMENT = '\1 공개 사례를 기반으로 재구성한 사례입니다. 기관·인물·금액 등 일부는 각색했습니다.'
+
+  def self.normalize_reconstruction_tail(text)
+    return text if text.blank?
+
+    text.gsub(RECONSTRUCTION_TAIL_PATTERN, RECONSTRUCTION_TAIL_REPLACEMENT)
+  end
+
   included do
     scope :by_source_type, ->(t) { where(source_type: t) if t.present? }
     scope :provenance_unclassified, -> { where(source_type: nil) }
@@ -78,6 +98,29 @@ module AuditCaseProvenance
     return source_type if source_type.present? && SOURCE_TYPES.key?(source_type)
 
     "UNVERIFIED"
+  end
+
+  # F3 — 화면에 내보내는 본문. «재구성» 사례만 꼬리 문구를 사실대로 바꾼다.
+  # 가상(SIMULATED)은 «가상 시나리오»가 사실이므로 그대로 둔다.
+  def presentable_text(text)
+    return text unless effective_source_type == "SILMU_RECONSTRUCTED_CASE"
+
+    AuditCaseProvenance.normalize_reconstruction_tail(text)
+  end
+
+  # F3 — 출처 필드가 있는 «재구성» 사례의 출처 한 줄. 데이터에 있는 값만 쓴다(없는 페이지를 만들지 않는다).
+  # 예: "경기도교육청 감사관실 「감사사례집」(2021) p.90 기반 재구성 · 기관·인물·금액 등 일부 각색"
+  def reconstruction_basis_text
+    return nil unless effective_source_type == "SILMU_RECONSTRUCTED_CASE"
+
+    agency = public_source_agency
+    title = public_source_title
+    return nil if agency.blank? && title.blank?
+
+    cite = [ agency, (title.present? ? "「#{title}」" : nil) ].compact.join(" ")
+    cite += "(#{public_source_year})" if public_source_year.present? && title.present?
+    cite += " p.#{public_source_page}" if public_source_page.present?
+    "#{cite} 기반 재구성 · 기관·인물·금액 등 일부 각색"
   end
 
   def provenance_descriptor = SOURCE_TYPES.fetch(effective_source_type)

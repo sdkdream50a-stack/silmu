@@ -76,6 +76,9 @@ class AuthorityPresenter
   def provenance_icon  = record.try(:provenance_icon)
   def reconstructed?   = record.try(:reconstructed_case?) || false
 
+  # F3 — 출처가 있는 재구성 사례의 «공개 사례집 p.N 기반 재구성 · 일부 각색» 한 줄 (내부 문자열 차단 경유)
+  def reconstruction_basis_text = InternalMetadataFilter.public_only(record.try(:reconstruction_basis_text))
+
   # §10 원문 미확인 시 승격 금지 — 화면에서도 강등해 표현한다.
   def document_backed? = record.try(:document_backed?) || false
 
