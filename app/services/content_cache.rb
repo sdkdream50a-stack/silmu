@@ -61,11 +61,13 @@ class ContentCache
   GUIDE_SLUG_KEYS = %w[
     guide_topic/%{slug}
     guides/related/%{slug}
+    guides/related_cases/%{slug}
   ].freeze
 
   AUDIT_CASE_SLUG_KEYS = %w[
     audit_case_topic/%{slug}
     audit_case_related/%{slug}
+    audit_case_guides/%{slug}
   ].freeze
 
   # guides/series/<series> 는 slug 가 아니라 series 값으로 갈라진다.

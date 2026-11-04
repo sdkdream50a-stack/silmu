@@ -3,7 +3,7 @@
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
-      "fingerprint": "323c5e0a949918e8dd2d8d5a565937093137f79e199d3c372d21e0cc30c49455",
+      "fingerprint": "e69cf3832e61de577526383c80f54b86e614e7c1a4d019e5eeea44e3d7a5f0f4",
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/services/related_content_resolver.rb",
@@ -89,7 +89,7 @@
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
-      "fingerprint": "ee6b905f2376db45da278d1f5dfa3ff38f95d892ca0bc30be34c41cad916191d",
+      "fingerprint": "18b98ac9c593d20165b5624d398cfda5bf475db0048c594beba8cd55e02b37ad",
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/services/related_content_resolver.rb",

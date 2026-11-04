@@ -187,4 +187,20 @@ class AuditCaseSimulatedExposureTest < ActionDispatch::IntegrationTest
     assert_response :success
     refute_includes response.body, "adsbygoogle"
   end
+
+  test "내부 링크: 가이드와 사례 화면은 실제·재구성 사례로만 이어지고 가상 사례로는 잇지 않는다" do
+    guide = Guide.create!(title: "F4 가이드", slug: "f4-guide", category: "계약", topic_slug: @topic.slug, published: true,
+                          sector: :common, sections: { why_it_matters: "이유" })
+
+    get guide_path(guide)
+    assert_response :success
+    assert_select "a[href=?]", audit_case_path(slug: @actual.slug)
+    assert_select "a[href=?]", audit_case_path(slug: @simulated.slug), count: 0
+
+    get audit_case_path(slug: @actual.slug)
+    assert_response :success
+    assert_select "a[href=?]", guide_path(guide)
+    assert_select "a[href=?]", audit_case_path(slug: @reconstructed.slug)
+    assert_select "a[href=?]", audit_case_path(slug: @simulated.slug), count: 0
+  end
 end

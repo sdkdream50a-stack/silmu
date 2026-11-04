@@ -142,6 +142,7 @@ class Guide < ApplicationRecord
     Rails.cache.delete("guides/popular")
     Rails.cache.delete("stats/guide_count")
     Rails.cache.delete("guides/related/#{slug}")
+    Rails.cache.delete("guides/related_cases/#{slug}")
     Rails.cache.delete("guide_topic/#{slug}")
     Rails.cache.delete("guides/series/#{series}") if series.present?
     Rails.cache.delete("guides/series/#{series_before_last_save}") if saved_change_to_series? && series_before_last_save.present?

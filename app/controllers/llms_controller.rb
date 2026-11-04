@@ -42,7 +42,7 @@ class LlmsController < ApplicationController
 
     cache_key = [
       "llms-summary",
-      "v3", # 요약 엔티티 해제(2026-09-17) — 캐시 버전 bump
+      "v4", # v3 요약 엔티티 해제(2026-09-17) · v4 건수·도구 수 정정 즉시 반영(2026-11-04)
       Topic.published.maximum(:updated_at)&.to_i,
       Guide.published.maximum(:updated_at)&.to_i,
       AuditCase.published.maximum(:updated_at)&.to_i
@@ -61,7 +61,7 @@ class LlmsController < ApplicationController
     # Topic·AuditCase의 최신 updated_at을 키에 포함해 콘텐츠 갱신 시 자동 무효화
     cache_key = [
       "llms-full",
-      "v5", # v4 엔티티 해제·줄 구조 보존(2026-09-17) · v5 가상(SIMULATED) 사례 제외(2026-10-05)
+      "v6", # v4 엔티티 해제·줄 구조 보존(2026-09-17) · v5 가상(SIMULATED) 사례 제외(2026-10-05) · v6 건수 정정 즉시 반영(2026-11-04)
       Topic.published.maximum(:updated_at)&.to_i,
       AuditCase.published.maximum(:updated_at)&.to_i
     ].join("/")

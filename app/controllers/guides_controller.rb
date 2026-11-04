@@ -231,10 +231,10 @@ class GuidesController < ApplicationController
     end
 
     @related_guides = Rails.cache.fetch("guides/related/#{@guide.slug}", expires_in: 1.hour) do
-      same_cat = Guide.published.where(category: @guide.category).where.not(id: @guide.id).ordered.limit(2).to_a
-      fill     = [ 3 - same_cat.size, 0 ].max
-      others   = fill > 0 ? Guide.published.where.not(category: @guide.category).where.not(id: @guide.id).ordered.limit(fill).to_a : []
-      same_cat + others
+      RelatedContentResolver.guides_for_guide(@guide)
+    end
+    @related_cases = Rails.cache.fetch("guides/related_cases/#{@guide.slug}", expires_in: 1.hour) do
+      RelatedContentResolver.audit_cases_for_guide(@guide, topic_slug: @related_topic&.slug)
     end
 
     # HTTP 캐싱: 가이드 상세 (view_count 업데이트는 DB만 영향)

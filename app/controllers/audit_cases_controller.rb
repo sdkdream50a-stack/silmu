@@ -106,11 +106,10 @@ class AuditCasesController < ApplicationController
     # F4 후속: 같은 분류 목록에서 가상(SIMULATED·noindex) 사례 제외.
     #   키는 ContentCache::AUDIT_CASE_SLUG_KEYS·AuditCase#expire_count_cache 와 맞춰 그대로 둔다(TTL 1h).
     @related_cases = Rails.cache.fetch("audit_case_related/#{@audit_case.slug}", expires_in: 1.hour) do
-      AuditCase.published.search_indexable
-               .where(category: @audit_case.category)
-               .where.not(id: @audit_case.id)
-               .limit(4)
-               .to_a
+      RelatedContentResolver.audit_cases_for_case(@audit_case)
+    end
+    @related_guides = Rails.cache.fetch("audit_case_guides/#{@audit_case.slug}", expires_in: 1.hour) do
+      RelatedContentResolver.guides_for_case(@audit_case)
     end
 
     # HTTP 캐싱: 감사사례 상세 (view_count 업데이트는 DB만 영향)
