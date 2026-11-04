@@ -332,13 +332,16 @@
     <nav class="flex gap-1 overflow-x-auto py-3 -mx-4 px-4 scrollbar-hide" id="topic-tabs">
       <%# 기본 활성 탭 결정: 흐름도가 있으면 흐름도, 없으면 법령(토픽 고유 답)을 우선.
           fuzzy 매칭된 실무절차(related_guide)는 기본 탭에서 제외 — intent mismatch 방지 %>
-      <% flowchart_default = (@has_flowchart || @topic.flowchart_mermaid.present?) && @related_guide.blank? %>
+      <% flowchart_tab = @has_flowchart || @topic.flowchart_mermaid.present? %>
+      <% flowchart_default = flowchart_tab && @related_guide.blank? %>
       <%# 실무 그룹: 실무흐름도 + 실무주의 + 실무절차 → "실무 가이드" %>
+      <% if flowchart_tab %>
       <button onclick="showTab('flowchart')" data-tab="flowchart"
               class="tab-btn px-3 py-2 <%= flowchart_default ? 'bg-editorial-navy text-white shadow-md font-semibold' : 'bg-surface-100 text-slate-600 hover:bg-surface-200 font-medium' %> rounded-lg text-sm whitespace-nowrap flex items-center gap-1.5 transition-all duration-200">
         <span class="material-symbols-outlined" style="font-size:18px">account_tree</span>
         실무흐름도
       </button>
+      <% end %>
       <% if @procedure_guide.present? %>
       <button onclick="showTab('procedure')" data-tab="procedure"
               class="tab-btn px-3 py-2 bg-surface-100 text-slate-600 hover:bg-surface-200 font-medium rounded-lg text-sm whitespace-nowrap flex items-center gap-1.5 transition-all duration-200">
@@ -511,6 +514,7 @@ document.addEventListener('click', function(e) {
         <% end %>
 
         <!-- 실무흐름도 -->
+        <% if flowchart_tab %>
         <div class="tab-panel <%= 'active' if flowchart_default %>" data-tab="flowchart">
           <% if @topic.flowchart_mermaid.present? %>
             <%# Mermaid.js 기반 다이어그램 (신규 방식) %>
@@ -520,13 +524,9 @@ document.addEventListener('click', function(e) {
           <% elsif @has_flowchart %>
             <%# 기존 수작업 HTML 흐름도 파티셜 (레거시 유지) %>
             <%= render "topics/flowcharts/#{@topic.slug.gsub('-', '_')}", topic: @topic %>
-          <% else %>
-            <div class="card p-16 text-center">
-              <span class="material-symbols-outlined text-6xl text-slate-200 mb-4">account_tree</span>
-              <p class="text-slate-500 text-lg">실무흐름도가 준비 중입니다.</p>
-            </div>
           <% end %>
         </div>
+        <% end %>
 
         <!-- 법령 3단 비교 -->
         <% cache [@topic, "law_tabs_v2", @topic.updated_at.to_i] do %>
@@ -1152,6 +1152,7 @@ document.addEventListener('click', function(e) {
               <% end %>
             </div>
 
+            <% if topic_quote_form?(@topic.slug) %>
             <!-- 실무 도구 -->
             <div class="mb-10">
               <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2 mb-5">
@@ -1183,7 +1184,9 @@ document.addEventListener('click', function(e) {
                 </div>
               </a>
             </div>
+            <% end %>
 
+            <% if topic_form_cards(@topic.slug).any? %>
             <!-- 공식 서식 다운로드 -->
             <div class="mb-10">
               <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2 mb-5">
@@ -1213,6 +1216,7 @@ document.addEventListener('click', function(e) {
                 <% end %>
               </div>
             </div>
+            <% end %>
 
             <% if topic_reason_form?(@topic.slug) %>
             <!-- 작성 가이드 -->
@@ -1409,11 +1413,11 @@ document.addEventListener('click', function(e) {
             </h3>
             <nav class="space-y-1">
               <% [
-                { tab: "flowchart", icon: "account_tree", title: "실무흐름도" },
+                ({ tab: "flowchart", icon: "account_tree", title: "실무흐름도" } if flowchart_tab),
                 { tab: "law", icon: "balance", title: "법령 3단 비교" },
                 { tab: "tips", icon: "lightbulb", title: "실무주의" },
                 { tab: "forms", icon: "draft", title: "서식/양식" }
-              ].each do |item| %>
+              ].compact.each do |item| %>
                 <button onclick="showTab('<%= item[:tab] %>')"
                         class="w-full flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-surface-100 rounded-xl transition-all duration-200 text-left group">
                   <span class="material-symbols-outlined text-slate-400 group-hover:text-editorial-navy transition-colors"><%= item[:icon] %></span>
