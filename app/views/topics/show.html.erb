@@ -725,12 +725,6 @@ document.addEventListener('click', function(e) {
                 전체 감사사례 <%= @audit_case_total %>건 보기
               <% end %>
             </div>
-          <% elsif @topic.audit_cases.present? %>
-            <div class="card p-6 lg:p-8">
-              <div class="legal-content">
-                <%= render_legal_content(@topic.audit_cases) %>
-              </div>
-            </div>
           <% else %>
             <div class="card p-16 text-center">
               <span class="material-symbols-outlined text-6xl text-slate-200 mb-4">search</span>
