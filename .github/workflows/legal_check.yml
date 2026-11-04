@@ -41,12 +41,13 @@ on:
 env:
   # Ruby 버전은 .ruby-version 이 정본(ci.yml 과 동일). 여기서 '3.2' 로 고정했던 탓에
   # standardwebhooks(>= 3.3) 등 bundle 이 깨져 09-14~10-05 매주 Ruby 설정(bundler-cache) 단계에서 실패했다.
+  # runner 는 ubuntu-24.04 고정: ubuntu-latest 가 26.04 로 넘어가며 .ruby-version(3.4.8) 빌드가 없어 10-26 부터 같은 단계에서 실패했다.
   RAILS_ENV: test
 
 jobs:
   legal-check:
     name: 법령 기준 검증
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     # auto_fix 결과를 «브랜치 + PR» 로 올리기 위한 최소 권한.
     # main 은 branch protection 으로 잠겨 있고 GITHUB_TOKEN 은 bypass 대상이 아니므로
@@ -197,7 +198,7 @@ jobs:
   #   name: Slack 알림
   #   needs: legal-check
   #   if: failure()
-  #   runs-on: ubuntu-latest
+  #   runs-on: ubuntu-24.04
   #   steps:
   #     - name: Slack 알림 전송
   #       uses: 8398a7/action-slack@v3
