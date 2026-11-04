@@ -50,6 +50,6 @@ class TopicInterpretationLabelTest < ActionDispatch::IntegrationTest
     assert_not_includes body, "계약제도과-3102"
     assert_not_includes body, 'data-tab="interpretation"'
     assert_not_includes body, "질의·회신 예시"
-    assert_includes body, 'data-tab="regulation"' # 양성대조: 나머지 더보기 탭은 그대로 있다
+    assert_includes body, 'data-tab="forms"' # 양성대조: 나머지 탭은 그대로 있다
   end
 end

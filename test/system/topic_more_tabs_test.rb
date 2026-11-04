@@ -26,6 +26,7 @@ class TopicMoreTabsTest < ApplicationSystemTestCase
   setup do
     @topic = Topic.create!(name: "더보기 탭 테스트 토픽", slug: "system-more-tabs-topic",
                            category: "contract", summary: "탭 드롭다운 회귀 테스트용",
+                           regulation_content: "예규 본문", qa_content: "질의 본문", practical_tips: "주의 본문",
                            published: true)
   end
 

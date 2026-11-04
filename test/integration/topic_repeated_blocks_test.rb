@@ -70,6 +70,27 @@ class TopicRepeatedBlocksTest < ActionDispatch::IntegrationTest
     assert_select %(.tab-panel.active[data-tab="flowchart"])
   end
 
+  test "내용 없는 탭은 싣지 않고, 내용 있는 탭만 싣는다" do
+    Topic.create!(name: "빈 탭", slug: "rb-empty", category: "duty", sector: :common, law_content: "법령 본문", published: true)
+    get "/topics/rb-empty"
+    assert_response :success
+    assert_not_includes response.body, "준비 중"
+    %w[audit regulation qa tips].each { |tab| assert_not_includes response.body, %(data-tab="#{tab}") }
+    assert_not_includes response.body, "more-tabs-wrapper"
+    assert_not_includes response.body, "showTab('tips')"
+    assert_includes response.body, %(data-forms-panel="neutral")
+
+    Topic.create!(name: "찬 탭", slug: "rb-full", category: "budget", sector: :common, published: true,
+                  law_content: "법령 본문", regulation_content: "예규 본문", qa_content: "질의 본문", practical_tips: "주의 본문")
+    AuditCase.create!(title: "탭 사례", slug: "rb-full-case", topic_slug: "rb-full", category: "예산", published: true,
+                      issue: "지적", legal_basis: "근거", severity: "보통")
+    get "/topics/rb-full"
+    assert_response :success
+    %w[regulation qa tips].each { |tab| assert_select %(.tab-panel[data-tab="#{tab}"]) }
+    assert_includes response.body, "more-tabs-wrapper"
+    assert_includes response.body, "showTab('tips')"
+  end
+
   test "직접 연결된 가이드만 실무절차 본문을 싣고, 키워드로 찾은 가이드는 링크만 남긴다" do
     create_topic("rb-direct")
     create_guide("rb-direct-guide", topic_slug: "rb-direct")

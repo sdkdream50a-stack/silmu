@@ -106,7 +106,7 @@ class AuditCaseSimulatedExposureTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     refute_includes response.body, @simulated.title
-    assert_includes response.body, "감사사례 정보가 준비 중입니다."
+    refute_includes response.body, %(data-tab="audit")
   end
 
   test "F4a: onboarding red flags skip simulated cases" do
