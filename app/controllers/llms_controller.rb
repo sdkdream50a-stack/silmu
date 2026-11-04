@@ -32,7 +32,7 @@ class LlmsController < ApplicationController
     [ "task-calendar", "업무 할일 달력", "급여·세무·보험 등 월별 반복업무 일정 관리, CSV·ICS 내보내기" ]
   ].freeze
 
-  TOOLS_TOTAL = 38
+  TOOLS_TOTAL = ApplicationHelper::ACTIVE_TOOL_COUNT
   TEMPLATES_TOTAL = 26
 
   # AI 크롤러용 요약판 (구 public/llms.txt 정적 파일의 동적 대체).
@@ -93,7 +93,7 @@ class LlmsController < ApplicationController
     topics = Topic.published.order(:name).limit(TOPIC_LIMIT).to_a
     standalone_guides = Guide.published.where(series: nil).ordered.to_a
     topic_count = topics.size
-    audit_count = AuditCase.published.count
+    audit_count = AuditCase.published.search_indexable.count
 
     out = []
     out << "# 실무.kr (silmu.kr)"
@@ -161,11 +161,11 @@ class LlmsController < ApplicationController
     out << ""
 
     out << "## 문서 양식 (Templates)"
-    out << "- [양식 자료실](https://silmu.kr/templates): 수의계약사유서, 검수조서, 견적서, 예정가격조서, 계약서, 예산요구서 등 #{TEMPLATES_TOTAL}종 양식"
+    out << "- [양식 자료실](https://silmu.kr/templates): 수의계약사유서, 검수조서, 견적서, 예정가격조서, 계약서, 예산요구서 등 #{TEMPLATES_TOTAL}종 양식 미리보기(파일 다운로드 준비 중)"
     out << ""
 
     out << "## 감사사례 (Audit Cases)"
-    out << "- [감사사례 모음](https://silmu.kr/audit-cases): 공공계약 감사에서 자주 지적되는 #{audit_count}건의 사례 (수의계약, 입찰, 계약체결, 계약이행, 대금지급, 하도급, 예산, 회계, 검수/검사)"
+    out << "- [감사사례 모음](https://silmu.kr/audit-cases): 공개 감사결과와 공식 자료의 지적 유형을 다룬 사례 #{audit_count}건 (수의계약, 입찰, 계약체결, 계약이행, 대금지급, 하도급, 예산, 회계, 검수/검사)"
     out << ""
 
     out << "## 자주 묻는 질문 요약"

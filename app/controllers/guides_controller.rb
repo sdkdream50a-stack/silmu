@@ -112,7 +112,7 @@ class GuidesController < ApplicationController
   def index
     @guides            = Rails.cache.fetch("guides/all/v2", expires_in: 1.hour) { Guide.published.ordered.to_a }
     @popular_guides    = Rails.cache.fetch("guides/popular", expires_in: 1.hour) { Guide.published.order(view_count: :desc).limit(5).to_a }
-    @audit_case_count  = Rails.cache.fetch("stats/audit_case_count", expires_in: 30.minutes) { AuditCase.published.count }
+    @audit_case_count  = Rails.cache.fetch("stats/audit_case_listed_count/v1", expires_in: 30.minutes) { AuditCase.published.search_indexable.count }
 
     # "최근 본 가이드": 이미 캐시된 @guides에서 찾기 → DB 쿼리 제거 + public 캐시 항상 활성화
     recent_slugs = JSON.parse(cookies[:recent_guides] || "[]") rescue []
@@ -382,6 +382,8 @@ class GuidesController < ApplicationController
   def resolve_onboarding_red_flag(slug)
     record = AuditCase.published.find_by(slug: slug)
     return log_missing_onboarding_item(:audit_case, slug) unless record
+    # F4a — 가상 예방 시나리오는 색인되는 화면에 «이렇게 하면 걸려요» 사례로 싣지 않는다.
+    return unless record.search_indexable?
 
     onboarding_item(record.title, audit_case_path(record.slug), record.severity.presence || "감사사례")
   end

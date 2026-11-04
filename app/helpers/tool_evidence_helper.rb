@@ -29,11 +29,6 @@ module ToolEvidenceHelper
                     "분할수의계약 지적 — 장애인기업 5천만 초과" ],
       template:   [ 18, "수의계약 사유서" ]
     },
-    "overtime-calculator" => {
-      audit_case: [ "silmu-2026-overtime-post-approval",
-                    "사후 시간외근무명령 결재 — 사전 결재 원칙 위반" ],
-      template:   nil
-    },
     "travel-calculator" => {
       audit_case: [ "goe-2021-travel-expense-improper",
                     "여비 지급 부적정 — 근무지내 출장 정액 초과·증빙 미비" ],

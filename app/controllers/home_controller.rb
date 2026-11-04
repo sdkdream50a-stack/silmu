@@ -61,7 +61,8 @@ class HomeController < ApplicationController
     # 전체 통계 카운트 (sector 무관)
     @topic_count      = Rails.cache.fetch("stats/topic_count", expires_in: 30.minutes) { Topic.published.count }
     @guide_count      = Rails.cache.fetch("stats/guide_count", expires_in: 30.minutes) { Guide.published.count }
-    @audit_case_count = Rails.cache.fetch("stats/audit_case_count", expires_in: 30.minutes) { AuditCase.published.count }
+    # /audit-cases 기본 목록과 같은 기준으로 센다(가상 시나리오 제외).
+    @audit_case_count = Rails.cache.fetch("stats/audit_case_listed_count/v1", expires_in: 30.minutes) { AuditCase.published.search_indexable.count }
     @template_count   = TemplatesController::TEMPLATES.count
 
     # sector별 콘텐츠 카운트 (Topic + AuditCase 합산) — sector 탭 칩 노출용
@@ -177,13 +178,14 @@ class HomeController < ApplicationController
     @topic_count            = Rails.cache.fetch("stats/topic_count", expires_in: 30.minutes) { Topic.published.count }
     @guide_count            = Rails.cache.fetch("stats/guide_count", expires_in: 30.minutes) { Guide.published.count }
     @audit_case_count       = Rails.cache.fetch("stats/audit_case_count", expires_in: 30.minutes) { AuditCase.published.count }
+    @audit_case_listed      = Rails.cache.fetch("stats/audit_case_listed_count/v1", expires_in: 30.minutes) { AuditCase.published.search_indexable.count }
     # F5 (2026-10-05) — «검증 완료 N건»(last_verified_at 존재 수)은 사례 사실관계 검증으로 읽혔다. 출처 종류별 건수로 바꾼다.
     @audit_case_breakdown   = Rails.cache.fetch("stats/audit_case_provenance/v1", expires_in: 30.minutes) { AuditCase.published.provenance_breakdown }
     @template_count         = TemplatesController::TEMPLATES.count
     @tool_count             = ApplicationHelper::ACTIVE_TOOL_COUNT
     @guide_total            = @topic_count + @guide_count
     # description 압축 (170자 → 약 100자) — SERP 한국어 잘림 방지
-    description_text = "공공계약·예산을 중심으로 지자체·교육행정 공무원의 실무를 돕는 법령 가이드 #{@guide_total}개, 자동화 도구 #{@tool_count}개, 감사사례 #{@audit_case_count}건, 서식 #{@template_count}개."
+    description_text = "공공계약·예산을 중심으로 지자체·교육행정 공무원의 실무를 돕는 법령 가이드 #{@guide_total}개, 자동화 도구 #{@tool_count}개, 감사사례 #{@audit_case_listed}건, 서식 미리보기 #{@template_count}개."
 
     og_title = "실무.kr 서비스 소개"
 
