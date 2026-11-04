@@ -1214,6 +1214,7 @@ document.addEventListener('click', function(e) {
               </div>
             </div>
 
+            <% if topic_reason_form?(@topic.slug) %>
             <!-- 작성 가이드 -->
             <div>
               <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2 mb-5">
@@ -1274,6 +1275,7 @@ document.addEventListener('click', function(e) {
                 </div>
               </div>
             </div>
+            <% end %>
           <% else %>
             <!-- 계약 외 토픽: 계약 서식을 붙이지 않는다 (업무흐름 감사 13 W-05) -->
             <div class="mb-10" data-forms-panel="neutral">
