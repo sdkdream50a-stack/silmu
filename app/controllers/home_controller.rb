@@ -183,9 +183,8 @@ class HomeController < ApplicationController
     @audit_case_breakdown   = Rails.cache.fetch("stats/audit_case_provenance/v1", expires_in: 30.minutes) { AuditCase.published.provenance_breakdown }
     @template_count         = TemplatesController::TEMPLATES.count
     @tool_count             = ApplicationHelper::ACTIVE_TOOL_COUNT
-    @guide_total            = @topic_count + @guide_count
     # description 압축 (170자 → 약 100자) — SERP 한국어 잘림 방지
-    description_text = "공공계약·예산을 중심으로 지자체·교육행정 공무원의 실무를 돕는 법령 가이드 #{@guide_total}개, 자동화 도구 #{@tool_count}개, 감사사례 #{@audit_case_listed}건, 서식 미리보기 #{@template_count}개."
+    description_text = "공공계약·예산을 중심으로 지자체·교육행정 공무원의 실무를 돕는 법령 가이드 #{@topic_count}개, 업무 가이드 #{@guide_count}개, 자동화 도구 #{@tool_count}개, 감사사례 #{@audit_case_listed}건, 서식 미리보기 #{@template_count}개."
 
     og_title = "실무.kr 서비스 소개"
 

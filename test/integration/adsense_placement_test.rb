@@ -36,6 +36,16 @@ class AdsensePlacementTest < ActionDispatch::IntegrationTest
   end
 
   # ── 음성 판정 — 위 양성대조가 통과할 때만 의미가 있다 ──
+  test "onboarding course page renders no ad loader or ad unit" do
+    host! "silmu.kr"
+
+    as_production { get "/start" }
+
+    assert_response :success
+    assert_not_includes response.body, "adsbygoogle"
+    assert_not_includes response.body, "pagead2.googlesyndication.com"
+  end
+
   test "tool pages never render an ad unit" do
     host! "silmu.kr"
 
