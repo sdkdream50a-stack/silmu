@@ -38,6 +38,7 @@ class ContentCache
     stats/topic_count
     stats/guide_count
     stats/audit_case_count
+    stats/audit_case_listed_count/v1
     stats/audit_case_provenance/v1
     stats/sector_counts/v2
     chatbot_popular_topics

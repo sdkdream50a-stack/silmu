@@ -109,6 +109,33 @@ class AuditCaseSimulatedExposureTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "감사사례 정보가 준비 중입니다."
   end
 
+  test "F4a: onboarding red flags skip simulated cases" do
+    slug = GuidesController::ONBOARDING_TRACK.flat_map { |step| step[:red_flags] }.first
+    AuditCase.create!(title: "F4 온보딩 가상 사례", slug: slug, category: "수의계약", severity: "보통", issue: "지적.",
+                      source_type: "SILMU_SIMULATED_CASE", published: true)
+
+    get onboarding_url
+
+    assert_response :success
+    refute_includes response.body, audit_case_path(slug)
+  end
+
+  test "F4a: curated tool evidence and workflow bindings link no simulated case" do
+    sim_slugs = AuditCase.where(source_type: AuditCase::SEARCH_NOINDEX_TYPES).pluck(:slug)
+    evidence = ToolEvidenceHelper::TOOL_EVIDENCE.values.filter_map { |e| e[:audit_case]&.first }
+    bound = WorkflowBindings.all_paths.grep(%r{\A/audit-cases/}).map { |path| path.delete_prefix("/audit-cases/") }
+    assert_empty (evidence + bound) & sim_slugs
+    refute_includes evidence, "silmu-2026-overtime-post-approval"
+  end
+
+  test "listed case count excludes simulated" do
+    get about_url
+    assert_response :success
+    listed = AuditCase.published.search_indexable.count
+    refute_equal listed, AuditCase.published.count, "POSITIVE CONTROL: 가상 사례가 있어야 두 건수가 갈린다"
+    assert_includes response.body, "<strong>감사사례 #{listed}건</strong>"
+  end
+
   # ── F4b ─────────────────────────────────────────────────────────
   test "F4b: default /audit-cases listing excludes simulated" do
     get audit_cases_url

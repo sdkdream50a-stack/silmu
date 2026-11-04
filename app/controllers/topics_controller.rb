@@ -135,7 +135,7 @@ class TopicsController < ApplicationController
                      Rails.cache.fetch("topic_guide_ext/#{@topic.slug}", expires_in: 1.hour) do
                        Guide.published.find_by(external_link: "/topics/#{@topic.slug}")
                      end
-    @audit_case_total = Rails.cache.fetch("stats/audit_case_count", expires_in: 30.minutes) { AuditCase.published.count }
+    @audit_case_total = Rails.cache.fetch("stats/audit_case_listed_count/v1", expires_in: 30.minutes) { AuditCase.published.search_indexable.count }
 
     # Sprint #2-D — feedback up 카운트 (Krug 사회적 증거, 5건 미만은 노출 X)
     @topic_helpful_count = Rails.cache.fetch("topic_helpful/#{@topic.slug}", expires_in: 30.minutes) do

@@ -101,7 +101,7 @@ class ReviewLabBudgetTest < ActionDispatch::IntegrationTest
     WorkflowBindings.reset!
     all = WorkflowBindings.all
     assert_equal 24, all.size
-    assert_equal 78, all.values.sum { |g| g.values.sum(&:size) }
+    assert_equal 68, all.values.sum { |g| g.values.sum(&:size) }
     assert(all["goods-4"]["review_lab"].any? { |i| i["path"] == "/review-lab/quote" })
     %w[goods-1 service-1 construction-1].each do |stage|
       assert(all[stage]["review_lab"].any? { |i| i["path"] == "/review-lab/budget" }, "#{stage} 결속 없음")

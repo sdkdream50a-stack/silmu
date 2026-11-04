@@ -89,7 +89,7 @@ class TemplatesController < ApplicationController
     set_meta_tags(
       title: @template[:title],
       description: "#{@template[:desc]} — #{@template[:formats].join(', ')} 형식 양식 미리보기 (다운로드는 준비 중)",
-      keywords: "#{@template[:title]}, #{@template[:category]}, 양식 다운로드",
+      keywords: "#{@template[:title]}, #{@template[:category]}, 양식 미리보기",
       og: {
         title: "#{@template[:title]} — 실무.kr",
         description: @template[:desc],

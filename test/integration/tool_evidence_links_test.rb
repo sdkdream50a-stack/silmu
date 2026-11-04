@@ -53,7 +53,6 @@ class ToolEvidenceLinksTest < ActionDispatch::IntegrationTest
     {
       "contract-method"         => { audit: true,  template: true },
       "travel-calculator"       => { audit: true,  template: true },
-      "overtime-calculator"     => { audit: true,  template: false },
       "budget-transfer-checker" => { audit: true,  template: false }
     }.each do |key, expect|
       get "/tools/#{key}"
