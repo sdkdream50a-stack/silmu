@@ -88,6 +88,9 @@ if [ "$PREFLIGHT_ONLY" = "1" ]; then
   exit 0
 fi
 
+# bin/kamal 은 대상 Gemfile.lock 의 gem 으로 뜬다 — 없으면 게이트 통과 후 기동에서 실패한다(2026-11-05 실측).
+bundle check >/dev/null 2>&1 || bundle install --quiet
+
 # Kamal 도 배포 직전에 대상 checkout 의 pre-deploy 훅을 (있으면) 다시 실행한다 — 이중 방어.
 DEPLOY_TARGET_SHA="$TARGET" bin/kamal deploy
 

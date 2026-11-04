@@ -208,6 +208,13 @@ runner 의 무효화 호출 무력화. (세 번째는 처음에 **생존**했다
 권장 후속(사용자 판단 필요, 이번에 하지 않음): 배포에 쓰지 않는 checkout 에서
 `.kamal/secrets` 를 치우면 그 경로는 `G6` 이전에 Kamal 단계에서 이미 fail-closed 가 된다.
 
+## 배포 호스트 (2026-11-05)
+
+기본 배포 호스트는 Studio 다. 이미지 빌드는 `builder.remote`(운영 서버)에서 하므로 Studio 에는 docker CLI 와 buildx 만
+있으면 되고 로컬 데몬은 필요 없다. Studio 진입점은 저장소 밖 `~/silmu-deploy` 이고, 게이트 전용 checkout
+`<project 부모>/silmu-worktrees/_deploy-gate` 를 origin/main 으로 맞춘 뒤 그 안의 `bin/deploy` 를 실행한다.
+서버 쪽 Kamal lock 이 동시 배포를 막으므로 Mini 경로를 남겨 두어도 충돌하지 않는다.
+
 ## 하지 않은 것
 
 자동 배포 · Kamal 교체 · GitHub Actions 재설계 · 새 배포 플랫폼 · 애플리케이션 기능 변경.
