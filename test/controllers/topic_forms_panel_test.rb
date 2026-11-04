@@ -19,10 +19,24 @@ class TopicFormsPanelTest < ActionDispatch::IntegrationTest
     assert_includes tab, 'data-forms-panel="neutral"'
   end
 
-  test "LOWER_BOUND (양성대조): contract topic keeps the contract forms" do
-    tab = forms_tab(slug: "forms-contract-topic", category: "contract")
+  test "LOWER_BOUND (양성대조): private contract topic keeps the contract forms" do
+    tab = forms_tab(slug: "private-contract", category: "contract")
     assert_includes tab, "/forms/수의계약사유서.html"
+    assert_includes tab, "수의계약 사유서 작성 가이드"
     assert_not_includes tab, 'data-forms-panel="neutral"'
+  end
+
+  test "NORMAL: other contract topic has no private contract forms or writing guide" do
+    tab = forms_tab(slug: "forms-contract-topic", category: "contract")
+    assert_not_includes tab, "/forms/수의계약사유서.html"
+    assert_not_includes tab, "수의계약 사유서 작성 가이드"
+    assert_includes tab, 'data-forms-panel="index-only"'
+  end
+
+  test "NORMAL: inspection topic shows only the inspection form" do
+    tab = forms_tab(slug: "inspection", category: "contract")
+    assert_includes tab, "/forms/검수조서.html"
+    assert_not_includes tab, "/forms/수의계약사유서.html"
   end
 
   test "EDGE: neutral panel links category tools and the template list" do

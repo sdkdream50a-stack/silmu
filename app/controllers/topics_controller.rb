@@ -131,10 +131,13 @@ class TopicsController < ApplicationController
     @related_audit_cases = resolver.audit_cases
     @related_guides      = resolver.guides
     # 단일 가이드(기존 @related_guide)는 첫 번째 가이드 또는 external_link fallback 유지 (탭 노출용)
-    @related_guide = @related_guides.first ||
-                     Rails.cache.fetch("topic_guide_ext/#{@topic.slug}", expires_in: 1.hour) do
-                       Guide.published.find_by(external_link: "/topics/#{@topic.slug}")
-                     end
+    linked_guide = @related_guides.find { |guide| guide.topic_slug == @topic.slug } ||
+                   Rails.cache.fetch("topic_guide_ext/#{@topic.slug}", expires_in: 1.hour) do
+                     Guide.published.find_by(external_link: "/topics/#{@topic.slug}")
+                   end
+    @related_guide = @related_guides.first || linked_guide
+    # 실무절차 탭은 이 토픽에 직접 연결된 가이드만 본문을 싣는다. 키워드로 찾은 가이드는 링크로만 둔다(2026-11-04).
+    @procedure_guide = linked_guide if linked_guide&.sections.present?
     @audit_case_total = Rails.cache.fetch("stats/audit_case_listed_count/v1", expires_in: 30.minutes) { AuditCase.published.search_indexable.count }
 
     # Sprint #2-D — feedback up 카운트 (Krug 사회적 증거, 5건 미만은 노출 X)
