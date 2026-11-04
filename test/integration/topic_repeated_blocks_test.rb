@@ -76,7 +76,7 @@ class TopicRepeatedBlocksTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_not_includes response.body, "준비 중"
     %w[audit regulation qa tips].each { |tab| assert_not_includes response.body, %(data-tab="#{tab}") }
-    assert_not_includes response.body, "more-tabs-wrapper"
+    assert_select "#more-tabs-wrapper", 0
     assert_not_includes response.body, "showTab('tips')"
     assert_includes response.body, %(data-forms-panel="neutral")
 
@@ -87,7 +87,7 @@ class TopicRepeatedBlocksTest < ActionDispatch::IntegrationTest
     get "/topics/rb-full"
     assert_response :success
     %w[regulation qa tips].each { |tab| assert_select %(.tab-panel[data-tab="#{tab}"]) }
-    assert_includes response.body, "more-tabs-wrapper"
+    assert_select "#more-tabs-wrapper", 1
     assert_includes response.body, "showTab('tips')"
   end
 
