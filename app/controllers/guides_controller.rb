@@ -157,6 +157,8 @@ class GuidesController < ApplicationController
   end
 
   def onboarding
+    # 링크 목록 중심의 코스 안내 페이지라 광고 심사 표면에서 뺀다(2026-11-04).
+    @suppress_ads = true
     @onboarding_steps = ONBOARDING_TRACK.map.with_index(1) do |step, index|
       step.merge(
         index: index,
