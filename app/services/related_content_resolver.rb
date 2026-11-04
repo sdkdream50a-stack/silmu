@@ -82,6 +82,17 @@ class RelatedContentResolver
     "budget"   => %w[예산 회계]
   }.freeze
 
+  # Topic.category(영문) → Guide.category(한국어). 키워드가 우연히 맞은 다른 분야 가이드를 뺀다.
+  GUIDE_CATEGORY_MAP = {
+    "contract" => %w[계약],
+    "입찰"     => %w[계약],
+    "budget"   => %w[예산],
+    "travel"   => %w[예산],
+    "subsidy"  => %w[예산],
+    "duty"     => %w[복무 인사],
+    "salary"   => %w[복무 인사]
+  }.freeze
+
   def initialize(topic)
     @topic = topic
     @keywords = topic.keyword_list
@@ -170,13 +181,12 @@ class RelatedContentResolver
   end
 
   def fallback_guides(exclude_ids:)
-    base = Guide.published
+    categories = GUIDE_CATEGORY_MAP[@topic.category.to_s]
+    return [] if categories.blank? || @keywords.empty?
+
+    base = Guide.published.where(category: categories)
     base = base.where.not(id: exclude_ids) if exclude_ids.any?
-    if @keywords.any?
-      ranked(base.where(keyword_or_clause(:title), **keyword_binds).to_a) { |g| title_hits(g) }.first(GUIDE_LIMIT)
-    else
-      base.where(category: @topic.category).limit(GUIDE_LIMIT).to_a
-    end
+    ranked(base.where(keyword_or_clause(:title), **keyword_binds).to_a) { |g| title_hits(g) }.first(GUIDE_LIMIT)
   end
 
   def keyword_or_clause(column)

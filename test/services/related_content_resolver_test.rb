@@ -271,4 +271,12 @@ class RelatedContentResolverTest < ActiveSupport::TestCase
     assert_equal [ guide ], RelatedContentResolver.guides_for_case(AuditCase.new(slug: "x", topic_slug: @host.slug))
     assert_empty RelatedContentResolver.guides_for_case(AuditCase.new(slug: "x", topic_slug: nil))
   end
+
+  test "guides: 키워드가 맞아도 다른 분야 가이드는 뺀다" do
+    host = Topic.create!(name: "기금", slug: "rc-fund", category: "budget", sector: :common, keywords: "보증금", published: true)
+    budget = Guide.create!(title: "보증금 예산 처리", slug: "rc-fund-budget", category: "예산", sector: :common, published: true)
+    Guide.create!(title: "입찰 보증금 안내", slug: "rc-fund-bid", category: "계약", sector: :common, published: true)
+
+    assert_equal [ budget ], RelatedContentResolver.new(host).guides
+  end
 end
