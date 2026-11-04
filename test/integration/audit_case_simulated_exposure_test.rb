@@ -95,6 +95,20 @@ class AuditCaseSimulatedExposureTest < ActionDispatch::IntegrationTest
     refute_includes response.body, @simulated.title
   end
 
+  # 운영 500 (2026-11-04): 연결된 사례가 SIMULATED 뿐이고 분류 fallback 도 없는 토픽(복무·여비·급여)은 @related_audit_cases 가
+  # 비어 show 의 옛 분기로 빠졌고, 거기서 has_many 를 문자열로 렌더하다 터졌다.
+  test "F4a: topic whose only linked case is simulated still renders" do
+    topic = Topic.create!(name: "F4 복무 토픽", slug: "f4-duty-topic", category: "duty", sector: :common,
+                          keywords: "겹치지않는키워드", summary: "복무 요약", published: true)
+    @simulated.update_columns(topic_slug: topic.slug)
+
+    get topic_url(topic.slug)
+
+    assert_response :success
+    refute_includes response.body, @simulated.title
+    assert_includes response.body, "감사사례 정보가 준비 중입니다."
+  end
+
   # ── F4b ─────────────────────────────────────────────────────────
   test "F4b: default /audit-cases listing excludes simulated" do
     get audit_cases_url
