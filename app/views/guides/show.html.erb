@@ -1002,6 +1002,23 @@
         </section>
         <% end %>
 
+        <!-- 함께 볼 감사사례 -->
+        <% if @related_cases.present? %>
+        <section class="mt-12">
+          <h2 class="text-lg font-bold text-gray-900 mb-6">함께 볼 감사사례</h2>
+          <ul class="space-y-3">
+            <% @related_cases.each do |ac| %>
+              <li>
+                <%= link_to audit_case_path(slug: ac.slug), class: "block bg-white rounded-xl border border-gray-200 p-4 hover:shadow-lg transition-shadow" do %>
+                  <span class="text-sm font-semibold text-gray-900"><%= ac.title %></span>
+                  <span class="block text-xs text-gray-500 mt-1"><%= ac.category %></span>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+        </section>
+        <% end %>
+
         <!-- 추천 가이드 -->
         <section class="mt-12">
           <h2 class="text-lg font-bold text-gray-900 mb-6">관련 가이드</h2>

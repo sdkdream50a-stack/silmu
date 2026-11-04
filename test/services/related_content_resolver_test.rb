@@ -59,18 +59,17 @@ class RelatedContentResolverTest < ActiveSupport::TestCase
   end
 
   # ── score_topic ─────────────────────────────────────────────────────────
-  test "score_topic: same_category +10, same_sector +5, keyword 교집합 ×3, view_count ×0.001" do
+  test "score_topic: same_category +10, same_sector +5, keyword 교집합 ×3 (조회수는 반영 안 함)" do
     resolver = RelatedContentResolver.new(@host)
 
-    # same_cat_kw_hit: same_cat(10) + same_sec(5) + 키워드 2개(수의계약·입찰) ×3 + 5×0.001
-    score = resolver.send(:score_topic, @same_cat_kw_hit)
-    assert_in_delta 21.005, score, 0.0001
+    # same_cat_kw_hit: same_cat(10) + same_sec(5) + 키워드 2개(수의계약·입찰) ×3
+    assert_equal 21, resolver.send(:score_topic, @same_cat_kw_hit)
 
-    # same_cat_only: same_cat(10) + same_sec(5) + 키워드 1개(낙찰) ×3 + 1×0.001
-    assert_in_delta 18.001, resolver.send(:score_topic, @same_cat_only), 0.0001
+    # same_cat_only: same_cat(10) + same_sec(5) + 키워드 1개(낙찰) ×3
+    assert_equal 18, resolver.send(:score_topic, @same_cat_only)
 
-    # same_sec_only: same_sec(5) + 키워드 0개 + 200×0.001
-    assert_in_delta 5.2, resolver.send(:score_topic, @same_sec_only), 0.0001
+    # same_sec_only: same_sec(5) + 키워드 0개 (조회수 200 이어도 점수는 그대로)
+    assert_equal 5, resolver.send(:score_topic, @same_sec_only)
   end
 
   # ── topics ──────────────────────────────────────────────────────────────
@@ -212,5 +211,64 @@ class RelatedContentResolverTest < ActiveSupport::TestCase
 
     result = RelatedContentResolver.new(@host).topics
     refute_includes result.map(&:slug), "rc-unpublished"
+  end
+
+  # ── 내부 링크 재배치 (2026-11-04) ────────────────────────────────────────
+  test "topics: 조회수가 높아도 점수가 같으면 링크가 한 토픽에 쏠리지 않는다" do
+    popular = Topic.create!(name: "인기", slug: "rc-popular", category: "subsidy", sector: :edu, keywords: "쏠림", view_count: 99_999, published: true)
+    plain = Array.new(8) do |i|
+      Topic.create!(name: "일반 #{i}", slug: "rc-plain-#{i}", category: "subsidy", sector: :edu, keywords: "쏠림", view_count: 0, published: true)
+    end
+    firsts = plain.map { |host| RelatedContentResolver.new(host).topics.first.slug }
+
+    assert_operator firsts.uniq.size, :>, 1, "페이지마다 첫 추천이 달라야 함: #{firsts.inspect}"
+    assert_operator firsts.count(popular.slug), :<, firsts.size
+  end
+
+  test "topics: 링크에 쓰지 않는 본문 컬럼은 캐시에 싣지 않는다" do
+    topic = RelatedContentResolver.new(@host).topics.first
+
+    refute topic.has_attribute?(:law_content)
+    assert_equal topic.name, Topic.find(topic.id).name
+  end
+
+  test "audit_cases: fallback 은 제목에 키워드가 더 많이 맞는 사례를 앞세운다" do
+    AuditCase.create!(title: "수의계약 입찰 위반", slug: "rc-hit-2", category: "수의계약", sector: :common, published: true)
+    AuditCase.create!(title: "관련 없는 제목", slug: "rc-hit-0", category: "수의계약", sector: :common, published: true)
+
+    slugs = RelatedContentResolver.new(@host).audit_cases.map(&:slug)
+    assert_operator slugs.index("rc-hit-2"), :<, slugs.index("rc-hit-0") if slugs.include?("rc-hit-0")
+    assert_includes slugs, "rc-hit-2"
+  end
+
+  test "spread: 같은 입력이면 순서가 같고, 기준 페이지가 달라지면 순서가 달라진다" do
+    records = Array.new(10) { |i| Guide.new(slug: "rc-spread-#{i}") }
+
+    assert_equal RelatedContentResolver.spread(records, "a"), RelatedContentResolver.spread(records.reverse, "a")
+    refute_equal RelatedContentResolver.spread(records, "a"), RelatedContentResolver.spread(records, "b")
+  end
+
+  test "guides_for_guide: 같은 토픽 → 같은 분류 순서이고, 본문 없는 가이드와 자신은 뺀다" do
+    full = { sections: { requirements: [ "준비" ] }, published: true, sector: :common }
+    host = Guide.create!(full.merge(title: "기준", slug: "rc-g-host", category: "복무", topic_slug: @host.slug))
+    same_topic = Guide.create!(full.merge(title: "같은 토픽", slug: "rc-g-topic", category: "예산", topic_slug: @host.slug))
+    same_cat = Guide.create!(full.merge(title: "같은 분류", slug: "rc-g-cat", category: "복무"))
+    Guide.create!(title: "본문 없음", slug: "rc-g-empty", category: "복무", topic_slug: @host.slug, published: true, sector: :common)
+
+    result = RelatedContentResolver.guides_for_guide(host)
+
+    assert_equal same_topic, result.first
+    assert_equal same_cat, result.second
+    refute_includes result.map(&:slug), "rc-g-empty"
+    refute_includes result, host
+  end
+
+  test "guides_for_case: 같은 토픽의 본문 있는 가이드만, 토픽이 없으면 빈 목록" do
+    guide = Guide.create!(title: "사례용", slug: "rc-c-guide", category: "계약", topic_slug: @host.slug, published: true,
+                          sector: :common, sections: { requirements: [ "준비" ] })
+    Guide.create!(title: "본문 없음", slug: "rc-c-empty", category: "계약", topic_slug: @host.slug, published: true, sector: :common)
+
+    assert_equal [ guide ], RelatedContentResolver.guides_for_case(AuditCase.new(slug: "x", topic_slug: @host.slug))
+    assert_empty RelatedContentResolver.guides_for_case(AuditCase.new(slug: "x", topic_slug: nil))
   end
 end

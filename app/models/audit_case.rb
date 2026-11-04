@@ -164,6 +164,7 @@ class AuditCase < ApplicationRecord
     Rails.cache.delete("audit_cases/all_published_v2")
     Rails.cache.delete("audit_case_topic/#{slug}")
     Rails.cache.delete("audit_case_related/#{slug}")
+    Rails.cache.delete("audit_case_guides/#{slug}")
     # G-64 (2026-09-18) — 토픽 화면의 «관련 감사사례» 는 `related_content_v2/<topic_slug>/audit_cases`
     #   에 AuditCase 객체를 담는데, 위 키들은 감사사례 자신의 slug 로만 갈라져 거기에 닿지 않는다.
     #   fallback 으로 topic_slug 없는 사례도 다른 토픽 목록에 들어가므로 audit_cases kind 전체를 지운다.

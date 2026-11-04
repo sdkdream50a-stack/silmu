@@ -242,6 +242,21 @@
           <% end %>
         <% end %>
 
+        <!-- 관련 실무 가이드 -->
+        <% if @related_guides.present? %>
+          <div class="mb-8">
+            <h2 class="text-lg font-bold text-slate-900 mb-4">관련 실무 가이드</h2>
+            <div class="grid gap-4 sm:grid-cols-2">
+              <% @related_guides.each do |guide| %>
+                <%= link_to guide_path(guide), class: "block p-4 bg-white rounded-xl border border-gray-200 hover:border-editorial-navy-light hover:shadow-md transition-all" do %>
+                  <p class="font-semibold text-slate-800 text-sm leading-snug line-clamp-2"><%= guide.title %></p>
+                  <p class="text-xs text-slate-500 mt-1.5 line-clamp-2"><%= guide.summary.to_s.truncate(60) %></p>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+
         <!-- 유사 감사사례 추천 -->
         <% if @related_cases.present? && @related_cases.length > 0 %>
           <div class="mt-10 pt-8 border-t border-gray-200">
