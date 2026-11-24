@@ -1037,6 +1037,14 @@ cases = [
   }
 ]
 
+# 2026-11-24 법령 정정본(db/content_migrations/data/20261124_mas_settlement/audit-*)이 있으면 그 값을 쓴다.
+fix_dir = Rails.root.join("db/content_migrations/data/20261124_mas_settlement")
+cases.each do |c|
+  Dir[fix_dir.join("audit-#{c[:slug]}", "*.md")].each do |path|
+    c[File.basename(path, ".md").to_sym] = File.read(path, encoding: "UTF-8")
+  end
+end
+
 cases.each do |c|
   audit = AuditCase.find_or_initialize_by(slug: c[:slug])
   audit.assign_attributes(
