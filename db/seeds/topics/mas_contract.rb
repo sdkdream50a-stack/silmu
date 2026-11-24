@@ -309,6 +309,13 @@ attrs = {
   HTML
 }
 
+# 2026-11-24 법령 정정본으로 덮어쓴다 — 운영 반영 파일과 같은 원본(시드가 옛 오류를 되살리지 않도록).
+# 원본: db/content_migrations/data/20261124_mas_settlement/mas-contract/  (근거 조문은 같은 이름의 content_migration 주석)
+Dir[Rails.root.join("db/content_migrations/data/20261124_mas_settlement/mas-contract/*")].sort.each do |path|
+  raw = File.read(path, encoding: "UTF-8")
+  attrs[File.basename(path).sub(/\.(md|json)\z/, "").to_sym] = path.end_with?(".json") ? JSON.parse(raw) : raw
+end
+
 topic = Topic.find_or_initialize_by(slug: attrs[:slug])
 topic.assign_attributes(attrs.except(:faqs, :practical_tips))
 topic.faqs = attrs[:faqs] if attrs[:faqs]
