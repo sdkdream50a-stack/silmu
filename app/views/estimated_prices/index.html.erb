@@ -81,7 +81,37 @@
   .no-print { display:none !important; }
 }
 
+.ep-step-no { font-size:12px; font-weight:700; color:#059669; margin-bottom:4px; }
+.ep-opt { font-size:11px; font-weight:400; color:#94a3b8; }
+.ep-guide { background:#eff6ff; border:1px solid #bfdbfe; border-radius:12px; padding:14px 18px; margin-bottom:20px; font-size:14px; color:#334155; line-height:1.6; }
+.ep-guide-title { display:flex; align-items:center; gap:6px; font-weight:700; color:#1e40af; margin-bottom:6px; }
+.ep-guide ol { list-style:decimal; padding-left:20px; margin:0; }
+.ep-guide-note { font-size:12px; color:#64748b; margin-top:8px; }
+.ep-quote-box { background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:16px; margin-bottom:16px; }
+.ep-quote-title { font-size:14px; font-weight:700; color:#1e293b; margin-bottom:10px; }
+.ep-quote-grid { display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:10px 14px; }
+.ep-quote-grid label { display:flex; flex-direction:column; gap:4px; font-size:13px; font-weight:600; color:#334155; }
+.ep-quote-grid input { border:1px solid #d1d5db; border-radius:8px; padding:9px 12px; font-size:15px; background:#fff; min-width:0; }
+.ep-quote-grid input[type=number] { text-align:right; }
+.ep-quote-check { margin-top:10px; font-size:13px; color:#475569; }
+.ep-quote-check.ok { color:#047857; }
+.ep-quote-check.warn { color:#b45309; }
+.ep-basis-table { width:100%; border-collapse:collapse; font-size:14px; }
+.ep-basis-table th, .ep-basis-table td { padding:8px 10px; border-bottom:1px solid #f1f5f9; text-align:left; vertical-align:top; }
+.ep-basis-table th { width:42%; color:#475569; font-weight:600; background:#f8fafc; }
+.ep-basis-table td.num { text-align:right; font-variant-numeric:tabular-nums; }
+.ep-basis-formula { margin-top:12px; background:#f0fdf4; border-radius:10px; padding:12px 14px; font-size:14px; color:#065f46; line-height:1.7; }
+
 @media (max-width:640px) {
+  .ep-step-card { padding:18px 14px; }
+  .ep-section-title { font-size:19px; }
+  .ep-quote-grid { grid-template-columns:1fr; }
+  .ep-cost-table th:nth-child(3), .ep-cost-table td:nth-child(3) { display:none; }
+  .ep-cost-table { table-layout:fixed; width:100%; }
+  .ep-cost-table th, .ep-cost-table td { padding:8px 6px; width:auto !important; }
+  .ep-cost-table th:first-child, .ep-cost-table td:first-child { width:38% !important; }
+  .ep-cost-table td input { font-size:15px; padding:8px 10px; width:100%; max-width:100%; box-sizing:border-box; min-width:0; }
+  .ep-total-row td, .ep-cost-table .total-row td { word-break:keep-all; }
   .ep-type-grid { grid-template-columns:1fr; gap:10px; }
   .ep-type-btn { padding:16px 10px; }
   .ep-price-hero .ep-price-value { font-size:28px; }
@@ -138,19 +168,19 @@
         </li>
         <li class="flex items-start gap-2">
           <span class="material-symbols-outlined text-emerald-500 text-xl mt-0.5">arrow_right</span>
-          <span>이 도구에는 파일 업로드가 없습니다 — 견적서 사진·PDF에서 값을 읽으려면 <a href="/tools/quote-auto" class="underline">견적서 자동 추출</a> 도구를 쓰세요</span>
+          <span>파일을 올리지 않습니다 — 견적서를 보면서 공급가액·부가세·합계를 직접 옮겨 적습니다</span>
         </li>
         <li class="flex items-start gap-2">
           <span class="material-symbols-outlined text-emerald-500 text-xl mt-0.5">arrow_right</span>
-          <span>추정가격(VAT 제외) 자동 계산 및 견적가격과 비교 분석</span>
+          <span>견적서 합계에서 부가세를 뺀 추정가격(VAT 제외) 자동 계산, 공급가액+부가세=합계 대조</span>
         </li>
         <li class="flex items-start gap-2">
           <span class="material-symbols-outlined text-emerald-500 text-xl mt-0.5">arrow_right</span>
-          <span>복수 견적서 비교표 자동 생성 (최저가, 적정가 선정 지원)</span>
+          <span>수의계약 가능 여부·견적 요건(1인/2인 이상) 안내</span>
         </li>
         <li class="flex items-start gap-2">
           <span class="material-symbols-outlined text-emerald-500 text-xl mt-0.5">arrow_right</span>
-          <span>엑셀/PDF 다운로드 → 결재 첨부용 추정가격 산출 근거 자료</span>
+          <span>결재 첨부용 산출 근거(입력값·계산식) — 인쇄(PDF 저장) 또는 글로 복사</span>
         </li>
       </ul>
 
@@ -170,46 +200,19 @@
   </div>
 </section>
 
-<section class="py-6 bg-gradient-to-b from-white to-slate-50">
-  <div class="container-wide max-w-4xl">
-    <%= render 'shared/monthly_indicators' %>
-  </div>
-</section>
-
 <section class="py-10">
   <div class="container-wide max-w-4xl">
 
-    <!-- 견적서 업로드 자동입력 -->
-    <%= render 'shared/quote_upload_zone', tool_id: 'ep' %>
-    <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:10px; padding:12px 16px; margin-top:-12px; margin-bottom:16px; display:flex; align-items:flex-start; gap:8px;">
-      <span class="material-symbols-outlined" style="color:#3b82f6; font-size:18px; flex-shrink:0; margin-top:1px;">info</span>
-      <div style="font-size:13px; color:#475569; line-height:1.6;">
-        <strong style="color:#1e40af;">견적서 = 시장조사 자료</strong><br>
-        추정가격 산정 시 업체 견적서는 시장조사(견적가격)의 기초 자료로 활용됩니다.
-        견적서의 공급가액(VAT 제외)을 기준으로 추정가격을 산정합니다.
-        <span style="color:#64748b; font-size:12px;">(지방계약법 시행령 제7조~제9조)</span>
-      </div>
+    <!-- 사용 순서 (파일 업로드 없음) -->
+    <div class="ep-guide" id="ep-guide">
+      <div class="ep-guide-title"><span class="material-symbols-outlined" style="font-size:18px;">checklist</span> 이렇게 쓰세요 — 파일은 올리지 않습니다</div>
+      <ol>
+        <li><strong>계약 유형</strong>을 고릅니다 (물품·용역·공사).</li>
+        <li>견적서를 옆에 두고 <strong>공급가액·부가세·합계</strong>를 옮겨 적습니다. 추정가격은 <strong>부가세를 뺀 금액</strong>입니다.</li>
+        <li>결과의 <strong>산출 근거</strong>를 인쇄하거나 복사해 결재 문서에 붙입니다.</li>
+      </ol>
+      <div class="ep-guide-note">견적서는 시장조사(견적가격)의 기초 자료이며, 추정가격은 부가가치세가 빠진 금액입니다(산정: 지방계약법 시행령 제7조 · 시행령 제30조③은 «추정가격에 부가가치세를 포함한 금액»으로 따로 구분).</div>
     </div>
-    <script>
-    function quMapFields_ep(f) {
-      // 물품 기본 선택 (가장 흔한 1인 수의)
-      var goodsBtn = document.querySelector('#ep-type-grid [data-type="goods"]');
-      if (goodsBtn && typeof epSelectType === 'function') epSelectType(goodsBtn);
-
-      if (f.items && f.items.length > 0) {
-        var firstItem = f.items[0];
-        // 단가 × 수량
-        if (firstItem.unit_price) quSetField('ep-unit_price', firstItem.unit_price);
-        if (firstItem.qty) quSetField('ep-quantity', firstItem.qty);
-      } else if (f.supply_amount) {
-        quSetField('ep-unit_price', f.supply_amount);
-      }
-      // Step 2로 이동
-      var btnStep1 = document.getElementById('ep-btn-step1');
-      if (btnStep1) btnStep1.disabled = false;
-      setTimeout(function() { if (typeof epGoStep === 'function') epGoStep(2); }, 500);
-    }
-    </script>
 
     <div class="ep-step-indicator" id="ep-steps">
       <div class="ep-step-dot active"></div>
@@ -219,6 +222,7 @@
 
     <!-- Step 1: 계약유형 선택 -->
     <div class="ep-step-card active" id="ep-step1">
+      <div class="ep-step-no">1/3단계</div>
       <h2 class="ep-section-title">계약 유형 선택</h2>
       <p class="ep-section-desc">추정가격을 산출할 계약의 유형을 선택하세요. 유형별로 원가항목이 달라집니다.</p>
 
@@ -258,19 +262,32 @@
 
     <!-- Step 2: 원가항목 입력 -->
     <div class="ep-step-card" id="ep-step2">
-      <h2 class="ep-section-title">원가항목 입력</h2>
-      <p class="ep-section-desc">각 항목의 금액을 입력하세요. 소계와 부가세가 자동으로 계산됩니다.</p>
+      <div class="ep-step-no">2/3단계</div>
+      <h2 class="ep-section-title">금액 입력</h2>
+      <p class="ep-section-desc">모든 금액은 <strong>부가세를 뺀 금액</strong>으로 넣습니다. 아래 합계가 곧 추정가격입니다.</p>
 
       <!-- 물품구매 -->
       <div class="ep-input-panel" id="ep-panel-goods" style="display:none;">
+        <div class="ep-quote-box">
+          <div class="ep-quote-title">① 견적서 금액 옮겨 적기</div>
+          <div class="ep-quote-grid">
+            <label><span>견적 업체 <span class="ep-opt">(선택)</span></span><input type="text" id="ep-q-vendor" maxlength="60" placeholder="예: ○○상사" autocomplete="off"></label>
+            <label><span>견적일 <span class="ep-opt">(선택)</span></span><input type="date" id="ep-q-date"></label>
+            <label><span>공급가액 <span class="ep-opt">(부가세 제외)</span></span><input type="number" inputmode="numeric" id="ep-q-supply" min="0" placeholder="예: 1000000" oninput="epQuoteChanged()"></label>
+            <label><span>부가세</span><input type="number" inputmode="numeric" id="ep-q-vat" min="0" placeholder="예: 100000" oninput="epQuoteChanged()"></label>
+            <label><span>합계 <span class="ep-opt">(부가세 포함)</span></span><input type="number" inputmode="numeric" id="ep-q-total" min="0" placeholder="예: 1100000" oninput="epQuoteChanged()"></label>
+          </div>
+          <div class="ep-quote-check" id="ep-q-check" aria-live="polite">견적서의 <strong>공급가액</strong>을 넣으면 아래 단가에 자동으로 옮겨집니다(수량 1).</div>
+        </div>
+        <div class="ep-quote-title" style="margin-top:4px;">② 단가·수량·부대비용 확인</div>
         <table class="ep-cost-table">
           <thead><tr><th style="width:180px;">항목</th><th style="width:200px;">금액 (원)</th><th>비고</th></tr></thead>
           <tbody>
-            <tr><td class="label-cell">단가</td><td><input type="number" id="ep-unit_price" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">물품 1개당 가격</td></tr>
-            <tr><td class="label-cell">수량</td><td><input type="number" id="ep-quantity" placeholder="1" min="1" value="1" oninput="epCalcSubtotal()"></td><td class="note-cell">구매 수량</td></tr>
-            <tr><td class="label-cell">운반비</td><td><input type="number" id="ep-delivery_fee" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">운송·하역 비용 (해당시)</td></tr>
-            <tr><td class="label-cell">설치비</td><td><input type="number" id="ep-install_fee" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">설치·시운전 비용 (해당시)</td></tr>
-            <tr class="total-row"><td>기초금액</td><td id="ep-subtotal-goods" style="text-align:right; padding-right:14px;">0 원</td><td></td></tr>
+            <tr><td class="label-cell">단가 <span class="ep-opt">(부가세 제외)</span></td><td><input type="number" inputmode="numeric" id="ep-unit_price" placeholder="0" min="0" oninput="epUnitPriceEdited(); epCalcSubtotal()"></td><td class="note-cell">물품 1개당 공급가액</td></tr>
+            <tr><td class="label-cell">수량</td><td><input type="number" inputmode="numeric" id="ep-quantity" placeholder="1" min="1" value="1" oninput="epCalcSubtotal()"></td><td class="note-cell">구매 수량</td></tr>
+            <tr><td class="label-cell">운반비</td><td><input type="number" inputmode="numeric" id="ep-delivery_fee" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">운송·하역 비용 (해당시)</td></tr>
+            <tr><td class="label-cell">설치비</td><td><input type="number" inputmode="numeric" id="ep-install_fee" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">설치·시운전 비용 (해당시)</td></tr>
+            <tr class="total-row"><td>합계 (부가세 제외)</td><td id="ep-subtotal-goods" style="text-align:right; padding-right:14px;">0 원</td><td></td></tr>
           </tbody>
         </table>
         <div class="ep-quick-bar">
@@ -291,11 +308,11 @@
         <table class="ep-cost-table">
           <thead><tr><th style="width:180px;">항목</th><th style="width:200px;">금액 (원)</th><th>비고</th></tr></thead>
           <tbody>
-            <tr><td class="label-cell">직접인건비</td><td><input type="number" id="ep-direct_labor" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">노임단가 × 투입 M/M</td></tr>
-            <tr><td class="label-cell">제경비</td><td><input type="number" id="ep-overhead" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">직접인건비의 110~120%</td></tr>
-            <tr><td class="label-cell">직접경비</td><td><input type="number" id="ep-direct_expense" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">여비·인쇄비 등 실비</td></tr>
-            <tr><td class="label-cell">일반관리비</td><td><input type="number" id="ep-general_admin" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">노무비+경비의 5~6%</td></tr>
-            <tr><td class="label-cell">이윤</td><td><input type="number" id="ep-profit" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">노무비+경비+관리비의 10% 이내</td></tr>
+            <tr><td class="label-cell">직접인건비</td><td><input type="number" inputmode="numeric" id="ep-direct_labor" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">노임단가 × 투입 M/M</td></tr>
+            <tr><td class="label-cell">제경비</td><td><input type="number" inputmode="numeric" id="ep-overhead" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">직접인건비의 110~120%</td></tr>
+            <tr><td class="label-cell">직접경비</td><td><input type="number" inputmode="numeric" id="ep-direct_expense" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">여비·인쇄비 등 실비</td></tr>
+            <tr><td class="label-cell">일반관리비</td><td><input type="number" inputmode="numeric" id="ep-general_admin" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">노무비+경비의 5~6%</td></tr>
+            <tr><td class="label-cell">이윤</td><td><input type="number" inputmode="numeric" id="ep-profit" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">노무비+경비+관리비의 10% 이내</td></tr>
             <tr class="total-row"><td>기초금액</td><td id="ep-subtotal-service" style="text-align:right; padding-right:14px;">0 원</td><td></td></tr>
           </tbody>
         </table>
@@ -317,13 +334,13 @@
         <table class="ep-cost-table">
           <thead><tr><th style="width:180px;">항목</th><th style="width:200px;">금액 (원)</th><th>비고</th></tr></thead>
           <tbody>
-            <tr><td class="label-cell">재료비</td><td><input type="number" id="ep-material" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">자재·부재료비</td></tr>
-            <tr><td class="label-cell">직접노무비</td><td><input type="number" id="ep-c-direct_labor" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">직접 시공 인건비</td></tr>
-            <tr><td class="label-cell">간접노무비</td><td><input type="number" id="ep-indirect_labor" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">직접노무비의 일정비율</td></tr>
-            <tr><td class="label-cell">산재보험료</td><td><input type="number" id="ep-industrial_insurance" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">노무비의 일정비율</td></tr>
-            <tr><td class="label-cell">경비</td><td><input type="number" id="ep-expense" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">기계경비·가설비·운반비 등</td></tr>
-            <tr><td class="label-cell">일반관리비</td><td><input type="number" id="ep-c-general_admin" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">재+노+경의 6% 이내</td></tr>
-            <tr><td class="label-cell">이윤</td><td><input type="number" id="ep-c-profit" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">노+경+관의 15% 이내</td></tr>
+            <tr><td class="label-cell">재료비</td><td><input type="number" inputmode="numeric" id="ep-material" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">자재·부재료비</td></tr>
+            <tr><td class="label-cell">직접노무비</td><td><input type="number" inputmode="numeric" id="ep-c-direct_labor" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">직접 시공 인건비</td></tr>
+            <tr><td class="label-cell">간접노무비</td><td><input type="number" inputmode="numeric" id="ep-indirect_labor" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">직접노무비의 일정비율</td></tr>
+            <tr><td class="label-cell">산재보험료</td><td><input type="number" inputmode="numeric" id="ep-industrial_insurance" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">노무비의 일정비율</td></tr>
+            <tr><td class="label-cell">경비</td><td><input type="number" inputmode="numeric" id="ep-expense" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">기계경비·가설비·운반비 등</td></tr>
+            <tr><td class="label-cell">일반관리비</td><td><input type="number" inputmode="numeric" id="ep-c-general_admin" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">재+노+경의 6% 이내</td></tr>
+            <tr><td class="label-cell">이윤</td><td><input type="number" inputmode="numeric" id="ep-c-profit" placeholder="0" min="0" oninput="epCalcSubtotal()"></td><td class="note-cell">노+경+관의 15% 이내</td></tr>
             <tr class="total-row"><td>기초금액</td><td id="ep-subtotal-construction" style="text-align:right; padding-right:14px;">0 원</td><td></td></tr>
           </tbody>
         </table>
@@ -360,8 +377,9 @@
 
     <!-- Step 3: 결과 -->
     <div class="ep-step-card" id="ep-step3">
+      <div class="ep-step-no">3/3단계</div>
       <h2 class="ep-section-title">추정가격 산출 결과</h2>
-      <p class="ep-section-desc">입력하신 원가항목을 기반으로 산출된 추정가격입니다.</p>
+      <p class="ep-section-desc">입력값과 계산식을 확인한 뒤 산출 근거를 인쇄하거나 복사해 결재 문서에 붙이세요.</p>
 
       <div id="ep-result-area"></div>
 
@@ -369,12 +387,23 @@
         <button class="ep-btn ep-btn-secondary" onclick="epGoStep(2)">
           <span class="material-symbols-outlined text-lg">arrow_back</span> 수정
         </button>
-        <button class="ep-btn ep-btn-success" onclick="window.print()">
-          <span class="material-symbols-outlined text-lg">print</span> 인쇄
-        </button>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="ep-btn ep-btn-secondary" id="ep-copy-btn" onclick="epCopyBasis()">
+            <span class="material-symbols-outlined text-lg">content_copy</span> 산출 근거 복사
+          </button>
+          <button class="ep-btn ep-btn-success" onclick="window.print()">
+            <span class="material-symbols-outlined text-lg">print</span> 인쇄·PDF
+          </button>
+        </div>
       </div>
     </div>
 
+  </div>
+</section>
+
+<section class="pb-6">
+  <div class="container-wide max-w-4xl">
+    <%= render 'shared/monthly_indicators' %>
   </div>
 </section>
 
@@ -492,6 +521,93 @@ document.addEventListener('turbo:load', function() {
     document.getElementById('ep-total-display').textContent = epComma(sub) + ' 원';
   };
 
+  // 견적서 금액 → 단가 자동 입력 (사용자가 단가를 직접 고치면 더 이상 덮어쓰지 않음)
+  var epUnitAuto = true;
+  function epNum(id) { var v = document.getElementById(id); return v && v.value !== '' ? (parseInt(v.value, 10) || 0) : null; }
+  window.epUnitPriceEdited = function() { epUnitAuto = false; };
+  window.epQuoteChanged = function() {
+    var s = epNum('ep-q-supply'), v = epNum('ep-q-vat'), t = epNum('ep-q-total');
+    var box = document.getElementById('ep-q-check');
+    box.className = 'ep-quote-check';
+    if (s !== null && v !== null && t !== null) {
+      if (s + v === t) { box.className += ' ok'; box.textContent = '✓ 공급가액 ' + epComma(s) + ' + 부가세 ' + epComma(v) + ' = 합계 ' + epComma(t) + '원 — 견적서 금액이 맞습니다.'; }
+      else { box.className += ' warn'; box.textContent = '⚠ 공급가액+부가세(' + epComma(s + v) + '원)가 합계(' + epComma(t) + '원)와 다릅니다. 견적서를 다시 확인하세요.'; }
+    } else if (s === null && t !== null) {
+      box.className += ' warn'; box.textContent = '합계에는 부가세가 들어 있습니다. 견적서의 공급가액(부가세 제외)을 찾아 넣으세요.';
+    } else if (s !== null) {
+      box.textContent = '공급가액 ' + epComma(s) + '원을 단가에 옮겼습니다(수량 1). 부가세·합계도 넣으면 서로 맞는지 확인합니다.';
+    }
+    if (s !== null && epUnitAuto) {
+      document.getElementById('ep-unit_price').value = s;
+      document.getElementById('ep-quantity').value = 1;
+      epCalcSubtotal();
+    }
+  };
+
+  // 산출 근거(결재 첨부용) — 화면 표와 복사용 글을 같은 자료로 만든다.
+  var epBasisText = '';
+  function epBasisRows(r) {
+    var rows = [];
+    var vendor = (document.getElementById('ep-q-vendor') || {}).value;
+    var qdate = (document.getElementById('ep-q-date') || {}).value;
+    var s = epNum('ep-q-supply'), v = epNum('ep-q-vat'), t = epNum('ep-q-total');
+    if (epSelectedType === 'goods') {
+      if (vendor) rows.push(['견적 업체', vendor]);
+      if (qdate) rows.push(['견적일', qdate]);
+      if (s !== null) rows.push(['견적 공급가액 (부가세 제외)', epComma(s) + '원']);
+      if (v !== null) rows.push(['견적 부가세', epComma(v) + '원']);
+      if (t !== null) rows.push(['견적 합계 (부가세 포함)', epComma(t) + '원']);
+      var up = epNum('ep-unit_price') || 0, qty = epNum('ep-quantity') || 1, df = epNum('ep-delivery_fee') || 0, inf = epNum('ep-install_fee') || 0;
+      rows.push(['단가 × 수량', epComma(up) + '원 × ' + qty]);
+      if (df) rows.push(['배송비', epComma(df) + '원']);
+      if (inf) rows.push(['설치비', epComma(inf) + '원']);
+    } else {
+      var panel = document.getElementById('ep-panel-' + epSelectedType);
+      var trs = panel ? panel.querySelectorAll('tr') : [];
+      for (var i = 0; i < trs.length; i++) {
+        var inp = trs[i].querySelector('input[type="number"]');
+        if (!inp || !inp.value) continue;
+        rows.push([trs[i].querySelector('.label-cell').textContent.trim(), epComma(parseInt(inp.value, 10) || 0) + '원']);
+      }
+    }
+    return { rows: rows, s: s, v: v, t: t };
+  }
+  function epBasisHtml(r) {
+    var b = epBasisRows(r);
+    var html = '<div class="ep-result-section" id="ep-basis"><div class="ep-result-title"><span class="material-symbols-outlined" style="color:#059669;">fact_check</span> 산출 근거 (결재 첨부용)</div>';
+    html += '<table class="ep-basis-table"><tbody>';
+    html += '<tr><th>계약 유형</th><td>' + epEsc(r.type_name) + '</td></tr>';
+    for (var i = 0; i < b.rows.length; i++) html += '<tr><th>' + epEsc(b.rows[i][0]) + '</th><td class="num">' + epEsc(b.rows[i][1]) + '</td></tr>';
+    html += '</tbody></table>';
+    var formula = epSelectedType === 'goods' ? '추정가격 = 단가 × 수량 + 배송비 + 설치비 (모두 부가세 제외)' : '추정가격 = 입력한 원가항목의 합 (부가세 제외)';
+    html += '<div class="ep-basis-formula">' + epEsc(formula) + '<br><strong>= ' + epComma(r.base_amount) + '원</strong>';
+    if (epSelectedType === 'goods' && b.t !== null && b.v !== null) html += '<br>견적 합계 ' + epComma(b.t) + '원 − 부가세 ' + epComma(b.v) + '원 = ' + epComma(b.t - b.v) + '원' + (b.t - b.v === r.base_amount ? ' (일치)' : ' (단가·부대비용 입력과 다름 — 확인 필요)');
+    html += '<br><span style="font-size:12px;color:#64748b;">근거: 지방계약법 시행령 제7조(추정가격 산정) · 부가세는 추정가격에 포함하지 않음(시행령 제30조③ 참조) · 참고 VAT 포함 ' + epComma(r.estimated_price) + '원</span></div>';
+    html += '</div>';
+
+    var lines = ['[추정가격 산출 근거]', '계약 유형: ' + r.type_name];
+    for (var j = 0; j < b.rows.length; j++) lines.push(b.rows[j][0] + ': ' + b.rows[j][1]);
+    lines.push('산식: ' + formula);
+    lines.push('추정가격(부가세 제외): ' + epComma(r.base_amount) + '원');
+    if (epSelectedType === 'goods' && b.t !== null && b.v !== null) lines.push('대조: 견적 합계 ' + epComma(b.t) + '원 − 부가세 ' + epComma(b.v) + '원 = ' + epComma(b.t - b.v) + '원');
+    lines.push('참고: 부가세 포함 ' + epComma(r.estimated_price) + '원');
+    lines.push('근거: 지방계약법 시행령 제7조(추정가격 산정), 부가세 제외(시행령 제30조③ 참조)');
+    epBasisText = lines.join('\n');
+    return html;
+  }
+  window.epCopyBasis = function() {
+    var btn = document.getElementById('ep-copy-btn');
+    var done = function(ok) { btn.lastChild.textContent = ok ? ' 복사됨' : ' 복사 실패 — 인쇄를 쓰세요'; setTimeout(function() { btn.lastChild.textContent = ' 산출 근거 복사'; }, 2000); };
+    if (!epBasisText) return done(false);
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(epBasisText).then(function() { done(true); }, function() { done(false); });
+    } else {
+      var ta = document.createElement('textarea'); ta.value = epBasisText; document.body.appendChild(ta); ta.select();
+      var ok = false; try { ok = document.execCommand('copy'); } catch (e) {}
+      document.body.removeChild(ta); done(ok);
+    }
+  };
+
   function epCalculate() {
     var body = { contract_type: epSelectedType };
     var ctSel = document.getElementById('ep-construction-type');
@@ -549,6 +665,8 @@ document.addEventListener('turbo:load', function() {
     html += '<div class="ep-price-sub" style="color:#64748b;">참고: VAT 포함 시 ' + epComma(r.estimated_price) + '원</div>';
     html += '</div>';
 
+    html += epBasisHtml(r);
+
     // 상세 내역
     html += '<div class="ep-detail-grid">';
     html += '<div class="ep-detail-item"><div class="ep-detail-label">추정가격 (VAT 제외)</div><div class="ep-detail-value">' + epComma(r.base_amount) + '원</div></div>';
@@ -603,7 +721,7 @@ document.addEventListener('turbo:load', function() {
     // 법령 안내
     html += '<div class="ep-result-section"><div class="ep-result-title"><span class="material-symbols-outlined" style="color:#f59e0b;">info</span> 관련 법령</div>';
     html += '<div class="ep-ref-box" style="line-height:1.8;">';
-    html += '• 추정가격 산정: 「지방자치단체를 당사자로 하는 계약에 관한 법률 시행령」 제7조 (부가가치세 제외 기준)<br>';
+    html += '• 추정가격 산정: 「지방자치단체를 당사자로 하는 계약에 관한 법률 시행령」 제7조 (추정가격 산정 — 부가가치세 제외, 제30조③ 참조)<br>';
     html += '• 예정가격 작성기준: 동 시행령 제9조 + 시행규칙 제11조의2 (원가계산 기준)<br>';
     html += '• 수의계약 기준: 동 시행령 제25조 (수의계약 대상)<br>';
     html += '<strong style="color:#dc2626;">• 공사 종류별 수의계약 한도 (시행령 제25조 제1항 제5호):</strong><br>';

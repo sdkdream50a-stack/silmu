@@ -21,15 +21,18 @@ class MasSettlementCorrectionTest < ActiveSupport::TestCase
     assert_includes text, "최고 점수"
   end
 
-  test "결산 정정본·감사사례에 8월 31일 기한이 없고 5월 31일 제출·다음 해 승인이 있다" do
+  test "결산 정정본·감사사례에 8월 31일 기한이 없고 5월 31일 제출·제1차 정례회 승인이 있다" do
     %w[budget-settlement audit-settlement-report-delayed].each do |dir|
       text = text_of(dir)
       refute_match(/8월\s*31일(?!인가요)/, text, dir) # "8월 31일인가요? 아닙니다" 반박 문항만 허용
       refute_match(/2월\s*10일\s*출납\s*폐쇄/, text, dir)
       assert_includes text, "5월 31일", dir
+      assert_includes text, "제1차 정례회", dir
+      assert_includes text, "시행령 제82조", dir
+      refute_match(/날짜는\s*(법에\s*)?없/, text, dir)
+      refute_match(/승인[^\n]{0,4}"다음 해"/, text, dir)
     end
     text = text_of("budget-settlement")
-    assert_includes text, "다음 해"
     assert_includes text, "학교운영위원회"
     assert_includes text, "교육부장관"
   end
