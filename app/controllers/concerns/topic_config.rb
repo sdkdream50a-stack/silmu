@@ -31,6 +31,9 @@ module TopicConfig
     "subcontract"             => [ :contract_documents ],
     "goods-selection-committee" => [ :contract_method, :contract_documents, :quote_review ],
     "travel-expense"          => [ :travel_calculator ],
+    # 2026-11-24: 조회 상위 여비 토픽이 기본값(계약 도구)으로 빠져 있었다 → 여비계산기로 연결
+    "domestic-travel-allowance" => [ :travel_calculator ],
+    "vehicle-travel-allowance"  => [ :travel_calculator ],
     "budget-carryover"        => [ :budget_transfer_checker, :budget_execution_rate ],
     "year-end-settlement"     => [],
     # 2026-02-18 추가
