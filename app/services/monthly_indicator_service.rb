@@ -1,5 +1,6 @@
-# 이달의 계약 실무 지표 서비스
-# 매월 수동 업데이트: INDICATORS 상수의 값과 REFERENCE_MONTH를 갱신하세요.
+# 계약 실무 참고 지표 서비스
+# 값은 수동 입력이며 자동 갱신 작업이 없다. 화면에는 REFERENCE_MONTH를 "○○ 기준"으로 그대로 보여 주고
+# "이달"·"매월 업데이트"처럼 최신인 듯한 표현을 쓰지 않는다. 값을 고칠 때 REFERENCE_MONTH도 함께 바꾼다.
 class MonthlyIndicatorService
   REFERENCE_MONTH = "2026년 1월".freeze
 
