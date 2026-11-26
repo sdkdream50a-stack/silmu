@@ -12,7 +12,7 @@ module Exam
         keywords: "공공조달관리사, 시험 일정, 응시자격, 합격기준, 시험 과목, 국가기술자격, 공공조달 자격증",
         og: {
           title: "공공조달관리사 시험 정보",
-          description: "2026년 첫 시험 — 응시자격·일정·과목·합격기준 완벽 정리",
+          description: "제1회 일정 기록·응시자격·과목·합격기준 정리",
           url: "https://exam.silmu.kr/exam-info",
           image: "https://exam.silmu.kr/exam-og.png"
         },

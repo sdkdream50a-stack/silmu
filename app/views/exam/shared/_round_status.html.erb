@@ -1,0 +1,30 @@
+<%# 제1회 진행 상태 카드. 남은 시험이 있으면 D-day 카드가 맡으므로 그리지 않는다.
+    페이지가 HTTP 캐시되므로 발표 시각이 지나면 JS 가 «발표 완료» 문구로 바꾼다.
+    다음 회차는 큐넷 공고 전이라 날짜를 쓰지 않는다. %>
+<% status = ExamSchedule.round_status %>
+<% unless status == :upcoming %>
+<% hero = variant == :hero %>
+<% announce = ExamSchedule::FINAL_ANNOUNCEMENT_AT %>
+<div data-round-status data-announce-at="<%= announce.iso8601 %>"
+     class="<%= hero ? 'bg-white/10 backdrop-blur-sm rounded-2xl px-5 py-4 w-full max-w-xs border border-white/15 text-left' : 'mb-5 bg-white rounded-xl shadow-[0_4px_16px_rgba(42,52,57,0.05)] px-4 py-4' %>">
+  <p class="text-xs font-bold <%= hero ? 'text-yellow-300' : 'text-[#465f88]' %>">제1회 시험 종료 · 실기 2026.11.14</p>
+  <p class="mt-1 text-sm font-semibold <%= hero ? 'text-white' : 'text-slate-900' %>">
+    <span data-round-status-pending class="<%= 'hidden' if status == :results_announced %>">최종 합격자 발표 <%= announce.strftime("%Y.%m.%d") %>(금) 09:00 예정</span>
+    <span data-round-status-done class="<%= 'hidden' unless status == :results_announced %>">최종 합격자 발표 완료(<%= announce.strftime("%Y.%m.%d") %>)</span>
+    — <a href="<%= ExamSchedule::SCHEDULE_URL %>" target="_blank" rel="noopener" class="underline">큐넷에서 확인</a>
+  </p>
+  <p class="mt-1 text-xs <%= hero ? 'text-blue-100/70' : 'text-slate-500' %>">
+    다음 회차 일정은 큐넷 공고 전입니다.<% if hero %> <a href="<%= exam_exam_info_path %>" class="underline">제1회 일정 기록</a><% end %>
+  </p>
+</div>
+<script>
+(function() {
+  document.querySelectorAll('[data-round-status]').forEach(function(el) {
+    if (Date.now() < Date.parse(el.dataset.announceAt)) return
+    var p = el.querySelector('[data-round-status-pending]'), d = el.querySelector('[data-round-status-done]')
+    if (p) p.classList.add('hidden')
+    if (d) d.classList.remove('hidden')
+  })
+})()
+</script>
+<% end %>
