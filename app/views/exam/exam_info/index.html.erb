@@ -14,7 +14,7 @@
           "name": "공공조달관리사 시험은 언제 시행되나요?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "2026년 제1회 시험이 큐넷(Q-Net)에 공고되었습니다. 필기 원서접수 2026년 9월 14일~17일, 필기시험 10월 3일, 필기 합격발표 10월 12일, 실기시험 11월 14일, 최종 합격발표 12월 18일입니다."
+            "text": "2026년 제1회 시험이 큐넷(Q-Net)에 공고되었습니다. 필기 원서접수 2026년 9월 14일~17일, 필기시험 10월 3일, 필기 합격발표 10월 12일, 실기시험 11월 14일, 최종 합격발표 12월 18일 오전 9시입니다."
           }
         },
         {
@@ -258,6 +258,7 @@
         시험 일정 <span class="text-sm font-normal text-slate-400 ml-1">(2026년 제1회)</span>
         <%= content_badge(:official) %>
       </h2>
+      <%= render "exam/shared/round_status", variant: :info %>
       <div class="relative">
         <!-- 타임라인 선 -->
         <div class="absolute left-[1.75rem] top-8 bottom-8 w-0.5 bg-[#c8d6e0] hidden sm:block"></div>
@@ -280,7 +281,7 @@
       </div>
       <div class="mt-4 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 flex items-start gap-2">
         <span class="material-symbols-outlined text-amber-500 text-base flex-shrink-0 mt-0.5">warning</span>
-        <p class="text-amber-800 text-sm">위 일정은 <a href="<%= ExamSchedule::SOURCE_URL %>" target="_blank" rel="noopener" class="underline font-semibold">큐넷(Q-Net) 공고</a> 기준입니다(<%= ExamSchedule::VERIFIED_ON.strftime("%Y.%m.%d") %> 확인). 시간·장소 등 세부 사항은 큐넷에서 최종 확인하세요.</p>
+        <p class="text-amber-800 text-sm">위 일정은 <a href="<%= ExamSchedule::SCHEDULE_URL %>" target="_blank" rel="noopener" class="underline font-semibold">큐넷(Q-Net) 시험일정</a> 기준입니다(<%= ExamSchedule::VERIFIED_ON.strftime("%Y.%m.%d") %> 확인). 시간·장소 등 세부 사항은 큐넷에서 최종 확인하세요.</p>
       </div>
       <div class="mt-3 bg-[#eef2f7] rounded-xl px-4 py-3 flex items-start gap-2">
         <span class="material-symbols-outlined text-[#465f88] text-base flex-shrink-0 mt-0.5">info</span>
