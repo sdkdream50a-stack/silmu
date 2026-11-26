@@ -32,7 +32,7 @@
         <span class="mt-2 flex flex-wrap items-baseline gap-x-2 text-sm">
           <span class="font-bold text-editorial-navy">D-<%= nxt.days_from(Date.current) %></span>
           <span class="font-semibold text-editorial-ink"><%= nxt.label %></span>
-          <span class="text-xs text-slate-500"><%= nxt.date.strftime("%Y.%-m.%-d") %> · <%= nxt.citation %></span>
+          <span class="text-xs text-slate-500"><%= nxt.date.strftime("%Y.%-m.%-d") %><%= " (#{nxt.date_note})" if nxt.date_note %> · <%= nxt.citation %></span>
         </span>
       <% end %>
     <% end %>
