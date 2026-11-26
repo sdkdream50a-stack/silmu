@@ -84,6 +84,7 @@
           <p class="font-semibold text-editorial-ink text-sm leading-snug"><%= m.label %></p>
           <p class="text-xs text-slate-600 mt-1">
             <strong><%= m.date.strftime("%Y년 %-m월 %-d일") %></strong>
+            <% if m.date_note %><span class="text-amber-700">(<%= m.date_note %>)</span><% end %>
             <span class="text-slate-400">·</span> <%= m.citation %>
             <span class="text-slate-400">·</span> 적용 <%= m.uniformity %>
           </p>
@@ -129,6 +130,7 @@
           </div>
           <p class="text-sm font-semibold <%= done ? 'text-slate-400' : 'text-editorial-ink' %> leading-snug mt-0.5"><%= m.label %></p>
           <p class="text-[11px] text-slate-500 mt-0.5"><%= m.citation %></p>
+          <% if m.date_note %><p class="text-[11px] text-amber-700 mt-0.5"><%= m.date_note %> — 실제 일정은 소속 교육청 공문으로 확인</p><% end %>
           <details class="mt-1">
             <summary class="cursor-pointer text-[11px] text-editorial-navy">조문 보기</summary>
             <p class="mt-1 rounded-lg bg-slate-50 border border-slate-200 p-2.5 text-[11px] text-slate-700 leading-relaxed"><%= m.statute_text %></p>

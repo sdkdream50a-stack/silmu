@@ -228,6 +228,17 @@ class SchoolAccountingCalendarTest < ActiveSupport::TestCase
     assert_equal "https://www.law.go.kr/LSW/ordinInfoP.do?ordinSeq=1263963", url
   end
 
+  test "지침 시달 날짜는 규칙상 기한(계산값)으로만 표시하고 실제 게시·수령일처럼 보이지 않는다" do
+    g = C.milestones(2027).find { |m| m.key == :guideline }
+    assert_equal Date.new(2026, 12, 1), g.date            # 2027.3.1 − 3개월
+    assert_includes g.label, "기한(규칙상)"
+    assert_includes g.date_note, "실제 게시·수령일 아님"
+    assert_includes g.derivation, "수령일이 아닙니다"
+    assert_includes g.next_action, "소속 교육청 공문"
+    others = C.milestones(2027).reject { |m| m.key == :guideline }
+    assert others.all? { |m| m.date_note.nil? }, "다른 기한에는 주석을 붙이지 않는다"
+  end
+
   # ── 국면 ───────────────────────────────────────────────────────────────
   test "국면 경계는 기한에서 나온다" do
     {

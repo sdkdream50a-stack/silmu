@@ -66,7 +66,7 @@ class SchoolAccountingCalendar
 
   Milestone = Struct.new(
     :key, :label, :date, :fiscal_year, :actor, :basis, :citation,
-    :statute_text, :derivation, :next_action, :related, :uniformity,
+    :statute_text, :derivation, :next_action, :related, :uniformity, :date_note,
     keyword_init: true
   ) do
     def days_from(today) = (date - today).to_i
@@ -154,12 +154,17 @@ class SchoolAccountingCalendar
 
       if guideline_months
         list << Milestone.new(
-          key: :guideline, label: "교육감 → 학교: 예산편성 기본지침 시달",
+          # 이 날짜는 규칙의 «개시 N개월 전까지»를 개시일에서 N개월 빼서 계산한 **기한**이다.
+          # 교육청이 실제로 게시한 날도, 개별 학교가 받은 날도 아니다 — 화면이 그렇게 읽히지 않게 date_note 를 붙인다.
+          key: :guideline, label: "교육감 → 학교: 예산편성 기본지침 시달 기한(규칙상)",
           date: start.prev_month(guideline_months), fiscal_year: year, actor: "교육감(교육장)",
           basis: :edu_rule, citation: "시·도 교육규칙 — 17개 교육청 전부 «회계연도 개시 #{guideline_months}개월 전까지»",
-          statute_text: "교육감은 매년 예산편성 기본지침을 작성하여 회계연도 개시 #{guideline_months}개월 전까지 학교의 장에게 시달하여야 한다.",
-          derivation: "회계연도 개시일(#{start.strftime('%Y-%m-%d')})에서 #{guideline_months}개월 전",
-          next_action: "우리 교육청 지침이 왔는지 확인하고 과목·단가 변경분을 먼저 본다",
+          statute_text: "(요지) 교육감은 매년 예산편성 기본지침을 작성하여 회계연도 개시 #{guideline_months}개월 전까지 학교의 장에게 알려야 한다. " \
+                        "— 예: 경상남도 공립학교회계 규칙 제10조. 조문 표현은 교육청마다 조금 다릅니다.",
+          derivation: "회계연도 개시일(#{start.strftime('%Y-%m-%d')})에서 #{guideline_months}개월을 뺀 규칙상 기한 — " \
+                      "교육청의 실제 게시일이나 우리 학교 수령일이 아닙니다",
+          date_note: "규칙상 계산 기한 · 실제 게시·수령일 아님",
+          next_action: "소속 교육청 공문으로 지침 수령을 확인 → 변경 내용(과목·단가 등) 확인 → 학교 예산안 편성",
           related: [ { label: "학교회계 예산편성 절차", path: "/topics/school-budget-compilation" } ],
           uniformity: "17/17"
         )
